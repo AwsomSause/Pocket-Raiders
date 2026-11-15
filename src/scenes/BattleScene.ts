@@ -117,7 +117,7 @@ import { Bar, badge, drawPanel, Menu } from '../ui/widgets';
 import { sceneForRun } from './routing';
 import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, type BoxSpec, type MenuLayout, type MenuSpec, type Rect } from '../ui/battleStyles';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
-import { battleView, panelOf, splitChoice, type BattleBox, type BattleModel, type BattlePanel } from '../ui/redux/screens/battle';
+import { battleView, panelOf, splitChoice, type BattleBox, type BattleEvolve, type BattleLevel, type BattleModel, type BattlePanel } from '../ui/redux/screens/battle';
 import { artOf, monFile } from '../ui/redux/game';
 import { versusView, type VersusModel } from '../ui/redux/screens/versus';
 import { rxFileOf } from '../ui/redux/assets';
@@ -323,7 +323,11 @@ export class BattleScene extends Phaser.Scene {
   private rxGim: { choices: TransformRequest[]; tera: string } | null = null;
   /** New UI: where the target menu is aiming (the mock-ups' TARGET tag), and the Exp each Pokémon just earned. */
   private rxAim: { x: number; y: number } | null = null;
-  private rxExp = new Map<string, { amount: number; level: number | null }>();
+  private rxExp = new Map<string, { amount: number; level: number | null; was?: PokemonInstance }>();
+  /** New UI: the level-up window and the evolution picture now showing. */
+  private rxLevel: BattleLevel | null = null;
+  private rxLevels = new Map<string, number>();
+  private rxEvolve: BattleEvolve | null = null;
   /** New UI: the Item window's open pocket. */
   private rxPocket = 0;
   private playerBox!: InfoBox;
@@ -1693,7 +1697,9 @@ export class BattleScene extends Phaser.Scene {
       const { maxLevel, highLevelXp } = content.balance.difficulty;
       const rate = getSpecies(content, m.speciesId).growthRate;
       const lo = xpForLevel(rate, m.level, highLevelXp), hi = xpForLevel(rate, m.level + 1, highLevelXp);
-      return [{ name: this.speciesName(m), file: monFile(this, m.speciesId, 'front', !!m.shiny), text: g.level ? `Level up! ${g.level}` : `+${g.amount} Exp`, xp: m.level >= maxLevel ? 1 : Phaser.Math.Clamp((m.xp - lo) / Math.max(1, hi - lo), 0, 1), up: g.level !== null }];
+      // The state is already past the battle's end: the row shows the Pokémon as it was when it earned the Exp (before an evolution).
+      const look = g.was ?? m;
+      return [{ name: this.speciesName(look), file: monFile(this, look.speciesId, 'front', !!look.shiny), text: g.level ? `Level up! ${g.level}` : `+${g.amount} Exp`, xp: m.level >= maxLevel ? 1 : Phaser.Math.Clamp((m.xp - lo) / Math.max(1, hi - lo), 0, 1), up: g.level !== null }];
     });
     const tabs = this.tabs.view;
     const list = this.picker;
@@ -1714,6 +1720,8 @@ export class BattleScene extends Phaser.Scene {
       marks: [...(this.rxAim && menu ? [{ ...this.rxAim, text: 'TARGET' }] : []), ...this.reachTags.filter((t) => t.active).map((t) => ({ x: t.x, y: t.y - 10, text: 'OUT OF REACH' }))],
       shadow: !!menu && !!this.run.battle && !this.duo && !!this.activeMon().shadow,
       exp: exp.length && !menu && !list ? exp : null,
+      level: this.rxLevel && !menu && !list ? this.rxLevel : null,
+      evolve: this.rxEvolve,
       panels: this.infoPanel ? this.rxPanels : null,
       panelAt: this.rxPanelAt,
       log: this.historyView ? { tabs: LOG_TABS.map((t) => t.label), index: LOG_TABS.findIndex((t) => t.id === this.logTab), lines: filterLog(this.history, this.logTab).slice(-12) } : null,
@@ -2599,6 +2607,18 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
+  /** New UI: what the level-up window shows for this Pokémon reaching `level` (its stats then, and the step from the level before). */
+  private levelWindow(uid: string, from: number, level: number, old?: PokemonInstance): BattleLevel | null {
+    const { content } = services().session;
+    // As it was before the battle's end changed it (an evolution comes after the level).
+    const now0 = this.run.party.find((m) => m.uid === uid);
+    const real = now0 ? { ...now0, speciesId: old?.speciesId ?? now0.speciesId } : undefined;
+    if (!real) return null;
+    const now = calcStats(content, { ...real, level }), was = calcStats(content, { ...real, level: Math.max(1, from) });
+    const names: [keyof typeof now, string][] = [['hp', 'HP'], ['atk', 'Attack'], ['def', 'Defense'], ['spa', 'Sp. Atk'], ['spd', 'Sp. Def'], ['spe', 'Speed']];
+    return { name: this.speciesName(real), file: monFile(this, real.speciesId, 'front', !!real.shiny), from: Math.max(1, from), to: level, stats: names.map(([k, label]) => [label, now[k], now[k] - was[k]] as const) };
+  }
+
   /** New UI: the versus card as a beat (a key or a click moves on). Null when motion is off for an ordinary Trainer. */
   private rxVersus(plain: boolean): Beat | null {
     const battle = this.run.battle!;
@@ -3384,6 +3404,7 @@ export class BattleScene extends Phaser.Scene {
   private showRootMenu(): void {
     this.clearMenus();
     this.rxExp.clear();
+    this.rxLevel = null;
     const content = services().session.content;
     // Transformations: a fourth option that cycles off -> Mega -> Tera -> Z-Move -> Dynamax -> off. (Gigantamax happens by itself.)
     const ctx = this.battleCtx();
@@ -4173,9 +4194,11 @@ export class BattleScene extends Phaser.Scene {
     for (const evo of end.evolutions) {
       const fromName = getSpecies(content, evo.from).name;
       const toName = getSpecies(content, evo.to).name;
+      const real = result.run.party.find((m) => m.uid === evo.uid);
+      // New UI: the mock-ups' evolution picture takes the screen until this evolution's last line.
+      if (this.rx) this.rxEvolve = { from: monFile(this, evo.from, 'front', !!real?.shiny), to: monFile(this, evo.to, 'front', !!real?.shiny), done: false };
       await this.say(`What? ${fromName} is evolving!`);
       // The evolution sequence on the evolving Pokémon itself (shown in its old form first).
-      const real = result.run.party.find((m) => m.uid === evo.uid);
       if (real) {
         const shownMon = { ...structuredClone(real), speciesId: evo.from };
         const sprite = this.showSprite('player', shownMon, false);
@@ -4192,8 +4215,10 @@ export class BattleScene extends Phaser.Scene {
         );
       } else await burstReveal(this, PLAYER_POS.x, PLAYER_POS.y - 100, 0x9fe8ff, this.motion).done;
       playCue(this, 'st_evolution_moment', 'me.evo_success');
+      if (this.rxEvolve) this.rxEvolve = { ...this.rxEvolve, done: true };
       await this.say(`Congratulations! Your ${fromName} evolved into ${toName}!`);
       for (const m of evo.learnedMoves) await this.say(`${toName} learned ${content.moves.get(m)!.name}!`);
+      this.rxEvolve = null;
     }
     for (const t of end.bondTaught ?? []) {
       const mon = result.run.party.find((m) => m.uid === t.uid);
@@ -4491,6 +4516,8 @@ export class BattleScene extends Phaser.Scene {
     const cues = battleAnimations === 'off' ? planned : applyCueHooks(planned, events);
 
     for (const [index, e] of events.entries()) {
+      // New UI: the level-up window stays through that Pokémon's level and move lines, then leaves.
+      if (this.rxLevel && e.type !== 'levelUp' && e.type !== 'learnedMove' && e.type !== 'wantsMove') this.rxLevel = null;
       // "Charmander used Ember!" goes up before its animation; other messages follow theirs.
       if (e.type === 'move') {
         this.message.setText(eventText(content, this.names(trainer), e) ?? '');
@@ -4908,7 +4935,7 @@ export class BattleScene extends Phaser.Scene {
           if (e.caught) await this.fx.flourish('enemy', 'interaction.catch', ENEMY_POS);
           break;
         case 'xp':
-          if (this.rx) this.rxExp.set(e.uid, { amount: (this.rxExp.get(e.uid)?.amount ?? 0) + e.amount, level: this.rxExp.get(e.uid)?.level ?? null });
+          if (this.rx) this.rxExp.set(e.uid, { amount: (this.rxExp.get(e.uid)?.amount ?? 0) + e.amount, level: this.rxExp.get(e.uid)?.level ?? null, was: this.rxExp.get(e.uid)?.was ?? before.party.find((m) => m.uid === e.uid) });
           if (e.uid === this.shown.player.uid) {
             this.shown.player.xp += e.amount;
             playSfx(this, 'se.exp', 0.6);
@@ -4917,7 +4944,13 @@ export class BattleScene extends Phaser.Scene {
           break;
         case 'levelUp':
           playSfx(this, 'se.level_up');
-          if (this.rx) this.rxExp.set(e.uid, { amount: this.rxExp.get(e.uid)?.amount ?? 0, level: e.level });
+          if (this.rx) this.rxExp.set(e.uid, { amount: this.rxExp.get(e.uid)?.amount ?? 0, level: e.level, was: this.rxExp.get(e.uid)?.was ?? before.party.find((m) => m.uid === e.uid) });
+          if (this.rx) {
+            // The step shown starts at the level it had before this Exp (several levels can come at once).
+            const was = this.rxLevels.get(e.uid) ?? before.party.find((m) => m.uid === e.uid)?.level ?? e.level - 1;
+            this.rxLevel = this.levelWindow(e.uid, Math.min(was, e.level - 1), e.level, before.party.find((m) => m.uid === e.uid));
+            this.rxLevels.set(e.uid, e.level);
+          }
           if (e.uid === this.shown.player.uid) {
             const real = this.run.party.find((m) => m.uid === e.uid);
             this.shown.player.level = e.level;

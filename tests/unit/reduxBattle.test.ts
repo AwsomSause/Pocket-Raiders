@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BATTLE_LIST_ROWS, battleListView, battleView, trayHeight, type BattleBox, type BattleListModel, type BattleListRow, type BattleModel, type BattleOption, panelOf, splitChoice, windowTitle } from '../../src/ui/redux/screens/battle';
+import { BATTLE_LIST_ROWS, battleListView, battleView, evolveView, levelView, trayHeight, type BattleBox, type BattleListModel, type BattleListRow, type BattleModel, type BattleOption, panelOf, splitChoice, windowTitle } from '../../src/ui/redux/screens/battle';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 
 // The New UI battle HUD is a pure function from what the battle shows to HTML, in four layouts.
@@ -295,5 +295,45 @@ describe('New UI battle field tags, Shadow tray and Exp panel', () => {
     const html = battleView(ctx(0), model({ foes: [foe(), foe({ name: 'Gengar' })], mine: [me(), me({ name: 'Pikachu' })] }));
     const at = (name: string): number => Number(/bottom:(\d+)px/.exec(html.slice(html.lastIndexOf('<div class="win', html.indexOf(`>${name}<`))))?.[1]);
     expect(at('Pikachu')).toBe(at('Lucario') + 58);
+  });
+});
+
+describe('New UI level-up window and evolution picture', () => {
+  const level = { name: 'Lucario', file: null, from: 50, to: 51, stats: [['HP', 163, 3], ['Attack', 148, 4], ['Defense', 96, 2], ['Sp. Atk', 151, 4], ['Sp. Def', 95, 1], ['Speed', 127, 0]] as [string, number, number][] };
+
+  it('shows the Pokémon, its level step and what each stat gained, over a dimmed field', () => {
+    const html = levelView(ctx(0), level);
+    for (const t of ['Lucario', 'Lv 50 → 51', 'Attack', '148', '+4', 'Speed', '+0']) expect(html).toContain(t);
+    expect(html).toContain('class="shade"');
+    expect(count(html, 'class="row"')).toBe(7);
+    expect(html).toContain('right:30px;top:50px;width:340px');
+    expect(levelView(ctx(1), level)).toContain('left:310px;top:50px;width:340px');
+    expect(levelView(ctx(0), { ...level, name: '<b>x</b>' })).not.toContain('<b>x</b>');
+  });
+
+  for (const layout of [0, 1, 2, 3]) {
+    it(`layout ${layout}: the battle shows the level window in place of the Exp panel and the run header`, () => {
+      const exp = [{ name: 'Lucario', file: null, text: 'Level up! 51', xp: 0.1, up: true }];
+      const html = battleView(ctx(layout), model({ menu: null, text: 'Lucario grew to Lv. 51!', header: 'Stage 3', level, exp }));
+      expect(html).toContain('Lv 50 → 51');
+      expect(html).toContain('Lucario grew to Lv. 51!');
+      expect(html).not.toContain('Level up! 51');
+      expect(html).not.toContain('Stage 3');
+    });
+
+    it(`layout ${layout}: an evolution takes the whole picture, with the battle's words under it`, () => {
+      const html = battleView(ctx(layout), model({ text: 'What? Charmeleon is evolving!', evolve: { from: null, to: null, done: false } }));
+      expect(html).toContain('class="burst"');
+      expect(html).toContain('What? Charmeleon is evolving!');
+      // No boxes, no menu: the picture is alone on the screen.
+      expect(html).not.toContain('win glass');
+      expect(html).not.toContain('data-act="pick"');
+    });
+  }
+
+  it('the side-by-side layout draws the arrow between the two forms; the other shows one Pokémon alone', () => {
+    expect(evolveView(ctx(1), { from: null, to: null, done: true }, 'x')).toContain('→');
+    expect(evolveView(ctx(0), { from: null, to: null, done: true }, 'x')).not.toContain('→');
+    expect(evolveView(ctx(0), { from: null, to: null, done: true }, 'a <b>b</b>\nc')).toContain('a &lt;b&gt;b&lt;/b&gt;<br>c');
   });
 });

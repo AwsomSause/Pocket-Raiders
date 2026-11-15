@@ -2,7 +2,7 @@
 // the choices), the page tabs and the small lines over the field. It is drawn over the canvas, which keeps the arena,
 // the Pokémon and every animation. Pure drawing; BattleScene keeps the rules, the input and the state.
 
-import { act, esc, facts, hpb, img, mini, TYPE_COLORS, ty, W } from '../kit';
+import { act, esc, facts, foot, hpb, img, mini, mon, TX, TYPE_COLORS, ty, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { type Art, pic, scrollStart } from '../templates';
 
@@ -48,6 +48,10 @@ export interface BattleModel {
   shadow?: boolean;
   /** Exp just earned, one row per Pokémon (the results panel, top right). */
   exp?: readonly BattleExp[] | null;
+  /** A Pokémon just grew a level: the stat window over the dimmed field. */
+  level?: BattleLevel | null;
+  /** An evolution is playing: its own picture takes the screen, with the battle's words under it. */
+  evolve?: BattleEvolve | null;
   /** The transform buttons over the move menu (Mega, Tera, Dynamax, Z-Move): the ones this Pokémon can use now. */
   gim?: readonly BattleGimmick[] | null;
   /** The info panel (I): one window per section, left of the field; a single move's details show as the mock-ups' tooltip. */
@@ -55,6 +59,42 @@ export interface BattleModel {
   panelAt?: 'left' | 'tip';
   /** The battle log (H): its filter tabs and the lines of the open one. */
   log?: { tabs: readonly string[]; index: number; lines: readonly string[] } | null;
+}
+
+export interface BattleLevel {
+  name: string;
+  file: string | null;
+  from: number;
+  to: number;
+  /** Each stat: its name, its new value and how much it grew. */
+  stats: readonly (readonly [string, number, number])[];
+}
+
+export interface BattleEvolve {
+  /** The old and the new form's pictures. */
+  from: string | null;
+  to: string | null;
+  /** The new form is out. */
+  done: boolean;
+}
+
+/** The mock-ups' level-up window: the Pokémon, its level step and what each stat gained. */
+export function levelView(c: ReduxCtx, d: BattleLevel): string {
+  const rows = d.stats.map(([s, n, p]) => `<div class="row"><span class="grow">${esc(s)}</span><b>${n}</b><span class="acc" style="width:44px;text-align:right">${p >= 0 ? '+' : ''}${p}</span></div>`).join('');
+  return '<div class="shade"></div>' + W(`<div class="row">${d.file ? mini(d.file, 60) : ''}<div class="col" style="gap:2px"><b style="font-size:21px">${esc(d.name)}</b><span class="acc">Lv ${d.from} → ${d.to}</span></div></div>${rows}`, `position:absolute;${c.v(2) ? 'left:310px' : 'right:30px'};top:50px;width:340px;display:flex;flex-direction:column;gap:7px;z-index:4`);
+}
+
+/**
+ * The mock-ups' evolution picture: a burst behind the Pokémon alone, or the old form and the new one side by side with
+ * an arrow. Until the new form is out it stays a silhouette (the alone layout shows the old form).
+ */
+export function evolveView(c: ReduxCtx, d: BattleEvolve, text: string): string {
+  const pic = (f: string | null, k: number, sil: boolean): string => (f ? mon(f, k, sil ? 'sil' : '', true) : '');
+  const pair = c.v(2) === 1;
+  const body = pair
+    ? foot(300, 330, pic(d.from, 3, d.done)) + '<b class="abs acc" style="left:455px;top:210px;font-size:54px">→</b>' + foot(660, 340, pic(d.to, 3, !d.done))
+    : foot(480, 350, pic(d.done ? d.to : d.from, 3.4, false));
+  return `<div class="fill" style="background:radial-gradient(circle at 50% 46%,var(--p2),#000 70%)"></div><div class="burst"></div>${body}` + TX(esc(text).replace(/\n/g, '<br>'));
 }
 
 export interface BattleExp {
@@ -145,6 +185,7 @@ export function trayHeight(v: number, n: number): number {
 }
 
 export function battleView(c: ReduxCtx, d: BattleModel): string {
+  if (d.evolve) return evolveView(c, d.evolve, d.text);
   const v = c.v(4), opts = d.menu?.options ?? [], n = opts.length, on = d.menu?.index ?? -1;
   const many = v === 3 ? n > 4 : Math.ceil(n / 2) > 2;
   const cell = (o: BattleOption, k: number, st = ''): string => {
@@ -213,7 +254,8 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
   const exp = rows.length ? `<div class="abs col" style="right:20px;top:20px;width:330px;gap:${tight ? 4 : 8}px;z-index:4">${rows.map((r) => W(`${r.file ? mini(r.file, tight ? 28 : 38) : ''}<div class="col grow" style="gap:4px"><div class="row"><b class="grow" style="font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r.name)}</b><span class="sm">${esc(r.text)}</span></div>${hpb(pct(r.xp), 0, ' xp')}</div>`, `display:flex;align-items:center;gap:8px;padding:${tight ? '3px 10px' : '6px 10px'}`, r.up ? 'sel' : '')).join('')}</div>` : '';
   const shade = d.shadow ? '<div class="fill" style="background:radial-gradient(#0000 40%,#3a0a5a90);pointer-events:none"></div>' : '';
   const body = d.shadow ? `<div style="--p2:#3a1a5a;--acc:#c070ff;--pa:#1c0a2c;--pai:#f0e0ff;--tf:#8a40c8">${tray}</div>` : tray;
-  return shade + head + body + tabs + gim + marks + (rows.length ? '' : header + momentum) + status + note + pin + panels + log + exp;
+  const level = d.level ? levelView(c, d.level) : '';
+  return shade + level + head + body + tabs + gim + marks + (rows.length || level ? '' : header + momentum) + status + note + pin + panels + log + (level ? '' : exp);
 }
 
 export interface BattleListRow {

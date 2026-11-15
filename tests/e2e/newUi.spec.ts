@@ -618,6 +618,48 @@ test('New UI: a Trainer battle opens on the mock-up versus card; a click moves o
   expect(errors).toEqual([]);
 });
 
+test('New UI: a win shows the Exp panel, the level-up window and the evolution picture from the mock-ups', async ({ page }) => {
+  test.setTimeout(120_000);
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Battle');
+  await toCommands(page);
+  // One hit wins, and the Exp banked is enough for several levels: a Caterpie evolves on the way.
+  await page.evaluate(() => {
+    const run = (window as any).__pkr.session.run;
+    run.battle.enemyTeam.forEach((m: any) => (m.hp = 1));
+    const mon = run.party[0];
+    mon.speciesId = 'caterpie';
+    mon.moves[0] = { ...mon.moves[0], id: 'tackle', pp: 35 };
+    mon.xp = 7000;
+  });
+  const stages = view(page, 'Battle');
+  const count = (sel: string, text?: RegExp) => async () => (await (text ? stages.locator(sel, { hasText: text }) : stages.locator(sel)).count()) > 0;
+  await stages.locator('[data-act="pick"]', { hasText: 'Fight' }).click();
+  await expect(stages.locator('.btn.mv').first()).toBeVisible();
+  await page.waitForTimeout(250);
+  await stages.locator('.btn.mv').first().click();
+  // The Exp panel names the Pokémon that earned it, as it was in the fight.
+  await confirmUntil(page, count('.win', /\+\d+ Exp|Level up!/), 40_000);
+  await expect(stages.locator('.win', { hasText: /\+\d+ Exp|Level up!/ }).first()).toContainText('Caterpie');
+  // The level-up window: the step from the level it had, and six stats.
+  await confirmUntil(page, count('.win', /Lv \d+ → \d+/), 40_000);
+  const level = stages.locator('.win', { hasText: /Lv \d+ → \d+/ });
+  await expect(level).toContainText('Caterpie');
+  await expect(level).toContainText('Lv 5 →');
+  for (const stat of ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed']) await expect(level).toContainText(stat);
+  // The evolution takes the whole picture: no boxes, the words under it.
+  await confirmUntil(page, count('.burst'), 60_000);
+  await expect(stages.locator('.win.glass')).toHaveCount(0);
+  await expect(stages.locator('.txt')).toContainText(/evolving|evolved/);
+  // Then the run goes on, a new species in the party.
+  await confirmUntil(page, async () => (await page.evaluate(() => (window as any).__pkr.activeScene())) !== 'Battle', 60_000);
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.party[0].speciesId)).not.toBe('caterpie');
+  expect(errors).toEqual([]);
+});
+
 test('UI style: Old shows no New layer; the address can ask for either', async ({ page }) => {
   const errors = watch(page);
   // An automated browser gets Old by default (the older specs rely on it).
