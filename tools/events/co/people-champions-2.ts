@@ -514,8 +514,12 @@ const noName: Json[] = [
     [variant('absol', [NN.is('absol')], { notice: 'The Absol lifts its head and looks at you, then at Mirel, and settles again with its chin on her boot. The one that keeps finding her.' })]),
 ];
 
+// The old Invitation opened a pseudo stage (the League Exhibition); C3 opens the Hall of Past Champions instead, so it is no pseudo gate.
+for (const e of invitation) if (e.id === 'ev-champions-invitation') e.pseudo = false;
 export const EVENTS: Json[] = [...lunch, ...arrives, ...invitation, ...silentCap, ...tower, ...plant, ...seafoam, ...travel, ...sisters, ...mirror, ...galen, ...glass, ...aurelio, ...noName];
-export const REMOVE: string[] = [];
+// The old Invitation was the only way into the League Exhibition's gate room (category places, ledger MERGE into SF115). C3 no longer opens it,
+// so it is retired here (kept loadable for saved runs, never drawn); a co file that rebuilds the id wins over this.
+export const REMOVE: string[] = ['ps-league-exhibition-gate'];
 
 /** Where each event is scripted (for docs/status/co-people.md). */
 export const DOC: Record<string, string> = {

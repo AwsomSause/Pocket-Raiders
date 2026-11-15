@@ -1124,6 +1124,11 @@
          "importance": 80
         },
         {
+         "kind": "flag",
+         "key": "lore-champions-chair",
+         "amount": 1
+        },
+        {
          "kind": "addEvent",
          "eventId": "retired-champion-spar-after"
         }
@@ -2108,7 +2113,7 @@
    "id": "dungeon-victory-hall",
    "name": "Victory Hall",
    "group": "Landmark Dungeons",
-   "stop": "dungeon",
+   "stop": "event",
    "rarity": "rare",
    "types": [
     "fighting",
@@ -2190,7 +2195,7 @@
    "id": "dungeon-victory-hall-courage",
    "name": "Victory Hall: Courage",
    "group": "Landmark Dungeons",
-   "stop": "dungeon",
+   "stop": "event",
    "rarity": "uncommon",
    "types": [
     "fighting",
@@ -2293,7 +2298,7 @@
    "id": "dungeon-victory-hall-memory",
    "name": "Victory Hall: Memory",
    "group": "Landmark Dungeons",
-   "stop": "dungeon",
+   "stop": "event",
    "rarity": "uncommon",
    "types": [
     "fighting",
@@ -2345,7 +2350,7 @@
    "id": "dungeon-victory-hall-memory-pick",
    "name": "Victory Hall: Whose Statue",
    "group": "Landmark Dungeons",
-   "stop": "dungeon",
+   "stop": "event",
    "rarity": "uncommon",
    "types": [
     "fighting",

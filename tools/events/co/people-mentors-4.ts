@@ -507,7 +507,7 @@ const ysolde: Json[] = [
     intro:
       'When it is over, Ysolde recalls her guardians one by one, murmuring something to each, and the hum goes out of the stones. She turns to you with her braid coming loose in the wind. ' +
       'Ysolde: "The old ones would be pleased with you. I am." From her satchel she takes a thick bundle of pages tied with string: all four hundred, in her own cramped hand.',
-    choices: [graduate('The pages are heavy, and every margin is full of notes on where the old ones sleep and what wakes them. Ysolde rests her hand on the bundle one last time, then on your head, briefly, like a blessing. Then she goes back to her ruin.', item('ysoldes-pages'), moment('Ysolde gave you her four hundred pages', 70))],
+    choices: [graduate('The pages are heavy, and every margin is full of notes on where the old ones sleep and what wakes them. Ysolde rests her hand on the bundle one last time, then on your head, briefly, like a blessing. Then she goes back to her ruin.', { kind: 'flag', key: 'ysolde-pages', amount: 1 }, moment('Ysolde gave you her four hundred pages', 70))],
   }),
 ];
 
@@ -532,6 +532,7 @@ export const DOC: Record<string, string> = {
 
 // Every story decision flag is read by its mentor's Final Lesson room; these are the other systems the doc says read them later.
 export const AFTERSTORY: { match: string; readBy: string }[] = [
+  { match: 'ysolde-pages', readBy: 'Needs engine: The 400 Pages show the conditions of this run\'s Legendary Signs once Legendary Signs exist (SF5 B12 farewell gift; an item once the system is built)' },
   { match: 'sable-(league|joy)', readBy: 'Sable in the Elite Four this run, harder League and a warmer battle; joy adds a Pokémon Sable never used (SF5 B9 Story; needs engine: League roster)' },
   { match: 'vesper-(promise|soft)', readBy: 'Vesper\'s real League battle at full strength or held back (SF5 B11 Story; needs engine: League roster). Read now by her Final Lesson room' },
   { match: 'ravi-light', readBy: 'A2\'s lighthouse lamp, if relit (SF5 B8 Story; cross-doc). Read now by Ravi\'s Final Lesson room' },

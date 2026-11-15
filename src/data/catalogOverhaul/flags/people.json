@@ -13,6 +13,10 @@
    "readBy": "The next meeting (m2), and the All-Star Tournament and Final Reunion (done): ROAD_ROSTER.md, How the Roster runs"
   },
   {
+   "match": "lore-[a-z-]+",
+   "readBy": "Lore fragments (src/data/npcStory.json lore; the lore book reads lore-<id>)"
+  },
+  {
    "match": "rep",
    "readBy": "\"Reputation +1\" (STANDARDS.md pack words): a run flag until the per-region reputation system reads it"
   },
@@ -87,6 +91,10 @@
   {
    "match": "mentor-galen",
    "readBy": "A thirteenth mentor, Galen, \"the long game\", for future runs (SF8 D4 M3 Teach; cross-run, not built)"
+  },
+  {
+   "match": "dayoff-mustard-kubfu",
+   "readBy": "SF27 Kubfu questline (galar-kubfu-disciple): Mustard sent you to Master Hiro (cross-doc; not an engine read yet)"
   },
   {
    "match": "dayoff-[a-z]+-helped",
@@ -199,6 +207,10 @@
   {
    "match": "linden-(lab|self|kept)",
    "readBy": "D1 The Delta Study: the Delta Lens at once, the paper with the player's name (D1 afterstory), Delta habitats protected for the save (cross-doc / cross-run, not built)"
+  },
+  {
+   "match": "ysolde-pages",
+   "readBy": "Needs engine: The 400 Pages show the conditions of this run's Legendary Signs once Legendary Signs exist (SF5 B12 farewell gift; an item once the system is built)"
   },
   {
    "match": "sable-(league|joy)",

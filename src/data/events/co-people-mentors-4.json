@@ -3167,9 +3167,9 @@
         "stamp": "region"
        },
        {
-        "kind": "item",
-        "id": "ysoldes-pages",
-        "count": 1
+        "kind": "flag",
+        "key": "ysolde-pages",
+        "amount": 1
        },
        {
         "kind": "moment",

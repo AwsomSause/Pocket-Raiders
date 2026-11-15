@@ -32,6 +32,15 @@ describe('people: built scenes', () => {
     expect(mine.every(Boolean)).toBe(true);
   });
 
+  it('every placed id is a real event, and placement reads it', () => {
+    const placed = Object.keys(json<Record<string, unknown>>('src/data/catalogOverhaul/placement/people.json')).filter((id) => !id.startsWith('$'));
+    expect(placed.length).toBeGreaterThan(0);
+    for (const id of placed) {
+      expect(content.events.has(id), id).toBe(true);
+      expect(content.coPlacement?.has(id), id).toBe(true);
+    }
+  });
+
   it('every item, species and move named exists', () => {
     const bad: string[] = [];
     const species = (id: string | undefined, where: string) => { if (id && !content.species.has(id)) bad.push(`${where}: species ${id}`); };

@@ -177,16 +177,16 @@ describe("Tobias's lesson: shopWorthIt and shopDeal", () => {
 });
 
 describe('gifts from people (itemCatalog/people-gifts.json)', () => {
-  it('loads all four; The 400 Pages waits for Legendary Signs; none is ever offered in a draft', () => {
+  it('loads all three (The 400 Pages waits for Legendary Signs, so it is not an item yet); none is ever offered in a draft', () => {
     const run = newRun();
-    for (const id of ['marigolds-shell', 'tobias-satchel', 'lindens-notebook', 'ysoldes-pages']) {
+    for (const id of ['marigolds-shell', 'tobias-satchel', 'lindens-notebook']) {
       const entry = content.catalog.get(id)!;
       expect(entry, id).toBeDefined();
       expect(entry.giftOnly).toBe(true);
       const reward = content.rewards.get(`item:${id}`);
       if (reward) expect(isRewardEligible(content, run, reward)).toBe(false);
     }
-    expect(content.catalog.get('ysoldes-pages')!.status).toBe('pending');
+    expect(content.catalog.get('ysoldes-pages')).toBeUndefined();
   });
 
   it("Marigold's Shell: an Egg hatches one battle sooner, never before one has passed", () => {

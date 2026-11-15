@@ -247,7 +247,7 @@ const borrowedBadge: Json[] = [
     'The bend before the Gym again, the last stretch of road before the doors. A stage ago you lent a badge to a boy called Jem Aldane without asking why. You wait by the signpost a while, watching the road from the next town, and wonder whether he meant it.',
     [
       ch('Wait at the bend.', out('Jem comes jogging up the road, red in the face, and puts your badge back in your hand still wrapped in its clean handkerchief. Tucked in with it: a Sitrus Berry and a note in careful writing. "Thank you. He held it all afternoon. — J." He is gone again before you can say anything.', item('sitrus-berry'), flag('borrowed-badge-back'), stageDone(BB, 2)),
-        { chance: 0.75, fail: out('Jem does not come. Nobody comes. The note on the signpost is a tradesman\'s, not his. Later, a stallholder lets slip that a badge like yours went across a counter at the Black Market, and tells you where; it can\'t be lost for good, only found again.', flag('honest-trusted-badly'), flag('borrowed-badge-at-market'), room('black-market'), stageDone(BB, 2)) }),
+        { chance: 0.75, fail: out('Jem does not come. Nobody comes. The note on the signpost is a tradesman\'s, not his. Later, a stallholder lets slip that a badge like yours went across a counter at the Black Market, and tells you where; it can\'t be lost for good, only found again.', flag('honest-trusted-badly'), flag('borrowed-badge-at-market'), again('black-market'), stageDone(BB, 2)) }),
     ]),
   side(`${BB}-hospital`, 'The Borrowed Badge: The Hospital',
     'A ward with a window full of sky. An old man propped on three pillows, a badge in his hand, turning it, turning it, so the light runs round its edge. He looks up at you, and his eyes are perfectly clear. ' +

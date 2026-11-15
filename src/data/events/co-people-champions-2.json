@@ -1,7 +1,9 @@
 {
  "catalogOverhaul": "people",
  "override": true,
- "remove": [],
+ "remove": [
+  "ps-league-exhibition-gate"
+ ],
  "events": [
   {
    "id": "champion-lunch",
@@ -164,7 +166,7 @@
     "Story",
     "Region"
    ],
-   "pseudo": true,
+   "pseudo": false,
    "minStage": 3,
    "requires": [
     {

@@ -316,7 +316,7 @@ const mustard = leader({
     'The training hall is huge and spotless and empty. Your footsteps echo. Mustard looks around it, still smiling, but softer. Mustard: "My students are all grown up. The place is so quiet."',
   choices: [
     ch('"Train."', out('A whole day of training: stances at dawn, sparring at noon, sweeping the floor at dusk. By the end your lead has picked up a Fighting move from Mustard, and he gives you a Black Belt from a box of old ones.', ...met('mustard'), { kind: 'train', what: 'learnMove', type: 'fighting' }, item('black-belt'))),
-    ch('"Ask about Kubfu."', out('Mustard\'s eyes light up. One of his old students, Master Hiro, has a Kubfu with him on the road, and it follows only the sincere. Mustard writes down where to find him, and gives you a Black Belt for luck.', ...met('mustard'), item('black-belt'), room('galar-kubfu-disciple'))),
+    ch('"Ask about Kubfu."', out('Mustard\'s eyes light up. One of his old students, Master Hiro, has a Kubfu with him on the road, and it follows only the sincere. Mustard writes down where to find him, and gives you a Black Belt for luck.', ...met('mustard'), item('black-belt'), { kind: 'flag', key: 'dayoff-mustard-kubfu', amount: 1 })),
     mustardStudents('You round up every trainer you have met on the road who owes you a favour, and a good few who do not, and march them up the hill.'),
   ],
   remembers: [
@@ -452,6 +452,7 @@ export const DOC: Record<string, string> = {
 
 /** Flags nothing in this file reads: where the doc says they come back (merged into src/data/catalogOverhaul/flags/people.json). */
 export const AFTERSTORY: { match: string; readBy: string }[] = [
+  { match: 'dayoff-mustard-kubfu', readBy: 'SF27 Kubfu questline (galar-kubfu-disciple): Mustard sent you to Master Hiro (cross-doc; not an engine read yet)' },
   { match: 'dayoff-[a-z]+-helped', readBy: 'Needs engine: that Leader\'s Gym battle or exhibition in a later region opens with thanks, and their ace leaves its counter slot empty (SF8 Day Off frame Payoff; GL1 Remembers)' },
   { match: 'dayoff-(met|misty)', readBy: 'GL9 Remembers "if the player completed any Leader\'s Day Off" (people-leaders-2); dayoff-misty is the Day Off frame flag dayoff.<leader>' },
   { match: 'dayoff-(elesa-teacher|iono-rest|poppy-sad|lenora-toured)', readBy: 'No reader named in the doc (SF8 B3, B9, B7, B4 flags); kept for the Leader\'s later Gym battle or exhibition' },

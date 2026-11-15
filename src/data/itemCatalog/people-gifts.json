@@ -11,7 +11,17 @@
     "icon": "shoal-shell",
     "status": "supported",
     "giftOnly": true,
-    "effect": { "kind": "perk", "lasts": { "for": "run" }, "perks": [{ "perk": "eggSooner" }] }
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "run"
+      },
+      "perks": [
+        {
+          "perk": "eggSooner"
+        }
+      ]
+    }
   },
   {
     "id": "tobias-satchel",
@@ -25,7 +35,23 @@
     "icon": "loot-sack",
     "status": "supported",
     "giftOnly": true,
-    "effect": { "kind": "perk", "lasts": { "for": "run" }, "perks": [{ "perk": "runModifier", "modifiers": [{ "kind": "itemSlotOffset", "value": 2 }] }] }
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "run"
+      },
+      "perks": [
+        {
+          "perk": "runModifier",
+          "modifiers": [
+            {
+              "kind": "itemSlotOffset",
+              "value": 2
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "id": "lindens-notebook",
@@ -39,20 +65,16 @@
     "icon": "journal",
     "status": "supported",
     "giftOnly": true,
-    "effect": { "kind": "perk", "lasts": { "for": "run" }, "perks": [{ "perk": "wildMoves" }] }
-  },
-  {
-    "id": "ysoldes-pages",
-    "name": "The 400 Pages",
-    "family": "Gifts from people",
-    "description": "Ysolde's notes: will show the conditions of this run's Legendary Signs once Legendary Signs are in the game",
-    "rarity": "epic",
-    "stacksOn": "player",
-    "max": 1,
-    "how": "passive",
-    "icon": "rule-book",
-    "status": "pending",
-    "giftOnly": true,
-    "needs": ["events"]
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "run"
+      },
+      "perks": [
+        {
+          "perk": "wildMoves"
+        }
+      ]
+    }
   }
 ]

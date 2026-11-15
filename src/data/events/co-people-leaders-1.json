@@ -3984,8 +3984,9 @@
         "count": 1
        },
        {
-        "kind": "addEvent",
-        "eventId": "galar-kubfu-disciple"
+        "kind": "flag",
+        "key": "dayoff-mustard-kubfu",
+        "amount": 1
        }
       ]
      }
@@ -4270,8 +4271,9 @@
         "count": 1
        },
        {
-        "kind": "addEvent",
-        "eventId": "galar-kubfu-disciple"
+        "kind": "flag",
+        "key": "dayoff-mustard-kubfu",
+        "amount": 1
        }
       ]
      }

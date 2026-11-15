@@ -13,7 +13,7 @@ function side(parent: string, name: string, title: string, intro: string, choice
   const old = oldOf(parent);
   const sc = (old.scene as Json | undefined) ?? {};
   return scene(`${parent}-${name}`, title, {
-    group: (old.group as string | undefined) ?? 'Past Champions and Leaders', ...(old.stop ? { stop: old.stop as string } : {}), rarity: 'uncommon', types: (old.types as string[] | undefined) ?? [],
+    group: (old.group as string | undefined) ?? 'Past Champions and Leaders', ...(old.stop ? { stop: (o.room ?? true) && old.stop === 'dungeon' ? 'event' : (old.stop as string) } : {}), rarity: 'uncommon', types: (old.types as string[] | undefined) ?? [],
     minStage: (old.minStage as number | undefined) ?? 1, requires: o.requires ?? [], room: o.room ?? true, ...(o.callback ? { callback: true } : {}),
     cast: o.cast ?? (sc.cast as string[] | undefined) ?? [], ...(sc.tint ? { tint: sc.tint as string } : {}), effect: (sc.effect as string | undefined) ?? 'none', ...(o.remembers ? { remembers: o.remembers } : {}),
   }, intro, choices);
@@ -210,7 +210,7 @@ const sable: Json[] = [
     'Now she turns. Her eyes are calm, and very sharp. Sable: "Spar with me. If you can stand your ground, I\'ll tell you something nobody tells you."',
     [
       ch('"Spar."', fight('Sable steps away from the fence and lets six Poké Balls drop from her sleeve into her hand. She moves slowly, deliberately, like she has all the time in the world. It is a Champion\'s team, and she plays it like one.',
-        spar('Sable Oakridge', { team: sableTeam, size: 6, lv: 2, win: [moment('You stood your ground against Sable Oakridge, and won', 80), room(`${SA}-after`)], lose: [moment('Sable Oakridge beat you, and said you stood your ground anyway', 65), room(`${SA}-after`)] }))),
+        spar('Sable Oakridge', { team: sableTeam, size: 6, lv: 2, win: [moment('You stood your ground against Sable Oakridge, and won', 80), flag('lore-champions-chair'), room(`${SA}-after`)], lose: [moment('Sable Oakridge beat you, and said you stood your ground anyway', 65), room(`${SA}-after`)] }))),
       ch('"What did nobody tell you?"', out('Sable looks back at the long grass for a while. Sable: "That you\'re allowed to stop." She says it gently, like she is handing you something breakable. Then she goes back to watching the field.')),
       ch('"Do you miss it?"', out('Sable: "Every day." A long pause. A Pidgey lands on the fence, looks at the two of you, and leaves. Sable: "Not the winning."')),
     ]),
@@ -314,7 +314,7 @@ const vhChamp = (who: string, boss: string): Json =>
   ch(`"${who}."`, fight(`The keeper says the name aloud, and a statue at the far end of the room turns to face you: ${who}, with the team they won with.`,
     spar(who, { boss, size: 6, lv: 2, win: [flag('victory-hall-name'), moment('Your name is cut into the wall of Victory Hall, and you took a Champion\'s ribbon', 85)], lose: [moment(`${who}'s statue beat you in Victory Hall's last room`, 60)] })));
 const victoryHall: Json[] = [
-  scene(VH, 'Victory Hall', { room: true },
+  scene(VH, 'Victory Hall', { room: true, stop: 'event' }, // a room now (PC6 "Donate." opens it), so never drawn as a Landmark Dungeon
     'A long stone hall where challengers have trained for years. The flagstones are worn into shallow dips where people have stood and planted their feet. At the far end, three doors. ' +
     'An old hall keeper sits on a stool by the first one with a lantern. Hall keeper: "Three rooms. Each harder. The prize is a name on the wall." ' +
     'The first room is Patience. In the middle of it stands a statue Champion, perfectly still. It only moves when your Pokémon stands still.',

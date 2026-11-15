@@ -1690,7 +1690,7 @@
         "amount": 1
        },
        {
-        "kind": "addEvent",
+        "kind": "seeAgain",
         "eventId": "black-market"
        },
        {
