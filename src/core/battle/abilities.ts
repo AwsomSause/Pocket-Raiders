@@ -192,7 +192,7 @@ export const ABILITY_FORMS = new Set<string>([
 /** Abilities the battle engine runs. */
 const SUPPORTED = new Set<string>([
   'cute-charm', 'rivalry', 'wise-eye', 'eye-of-the-gale', 'grid-surfer',
-  'dread-jaws', 'storm-talons', 'clinging-dust', 'sovereign-plumage', 'coral-veil', 'eyespot-glare', 'dynamo-down', 'gem-orbit', 'tailwind-rider', 'rune-sigil', 'twin-maw', 'silent-cloak', 'champions-fury', 'champions-entrance',
+  'dread-jaws', 'storm-talons', 'clinging-dust', 'sovereign-plumage', 'coral-veil', 'eyespot-glare', 'dynamo-down', 'gem-orbit', 'tailwind-rider', 'rune-sigil', 'twin-maw', 'silent-cloak', 'champions-fury', 'champions-entrance', 'stopgap',
   'thorn-ballad', 'encore-amp', 'adaptive-plating', 'plague-bulwark', 'soul-kindling', 'neon-circuit',
   // Beta 0.7 batch (Galarian lines).
   'basalt-shell', 'scavenger', 'parcel-guard', 'landfill', 'kitchen-heat', 'neon-camouflage', 'ripe-bloom', 'thunderhead', 'venom-jaws', 'foam-shell', 'royal-disdain', 'hoop-focus',

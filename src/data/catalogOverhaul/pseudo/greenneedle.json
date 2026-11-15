@@ -82,6 +82,15 @@
    "tint": "#3b2f52",
    "mood": "festival lanterns",
    "start": "opened"
+  },
+  {
+   "id": "ps_gn_factory",
+   "name": "The Polluted Factory",
+   "entry": "gn-17-door",
+   "themeId": "poison-steel",
+   "tint": "#4a4a2a",
+   "mood": "smog",
+   "start": "opened"
   }
  ]
 }

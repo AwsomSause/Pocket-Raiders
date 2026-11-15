@@ -109,6 +109,7 @@ import { roleEntryBoost } from '../legendary/roles';
 import { rivalStrikeDamage } from '../raid/rivalAlly';
 import { finaleStrikeDamage } from '../rivals/living';
 import { absorbHit, advanceRaid, botMend, botStrike, chargedDamage, cheerProblem, coopOwner, crowdStep, hazardDamage, playerHits, puzzleProgress, raidBot, raidDef, type Cheer, CHEER_TURNS, HEALING_CHEER, raidFieldMultiplier, raidItemProblem, raidRoleMultiplier, supportHeal, reinforcementDue, takeExtraAction } from '../raid/raid';
+import { FACTORY_RULES, factoryTurnEnd } from '../greenneedle/factory';
 import type { RaidPhase } from '../raid/schema';
 import { allyDue, allyLevel, getTotem } from '../totem/totem';
 import { enemyLastResort } from './lastResort';
@@ -1088,6 +1089,8 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
       return;
     }
   }
+  // The Polluted Factory (gn.17): burst pipes, the Molten Sludge, the splitting Magmuk and the burning floor.
+  if (content && rule.gn && FACTORY_RULES.has(rule.gn)) factoryTurnEnd(content, battle, mine, events);
   if (rule.thinLight && content && battle.turn > 0 && battle.turn % 3 === 0) {
     // A glimpse: which side is hashed from the battle and turn (no RNG), and it never knocks anything out.
     const foe = currentEnemy(battle);
@@ -1577,7 +1580,7 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
     if (special !== undefined) return special;
     if (ctx.battle.kind !== 'wild') return "You can't catch another trainer's Pokémon!";
     if (ctx.catchBlocked) return ctx.catchBlocked;
-    if (ctx.battle.eventRule?.noCatch) return "It won't be caught. It fights for its Squad.";
+    if (ctx.battle.eventRule?.noCatch) return FACTORY_RULES.has(ctx.battle.eventRule.gn ?? '') ? "It can't be caught. It's barely holding itself together." : "It won't be caught. It fights for its Squad.";
     if (ctx.battle.totem) return "A Totem can't be caught mid-fight. Beat it and something rare may follow!";
     if (ctx.battle.raid) {
       // S409 Boss Pokémon Capture: some bosses can be caught once they are worn down (not a called minion).
@@ -4129,6 +4132,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (userAbility === 'dynamo-down' && moveType === 'electric' && user.vol.dynamoBoost) { powerMult *= 1.5; user.vol.dynamoBoost = false; }
       if (userAbility === 'reckless' && fx.recoil) powerMult *= 1.2;
       if (ctx.battle.eventRule?.typeBoost?.type === moveType) powerMult *= 1 + ctx.battle.eventRule.typeBoost.pct / 100;
+      // The Polluted Factory's furnace (gn.17): Water moves go up as steam, at half power (and clear the Molten Sludge: greenneedle/factory.ts).
+      if (ctx.battle.eventRule?.gn === 'furnace' && moveType === 'water') powerMult *= 0.5;
       if (ctx.battle.field.waterSport > 0 && moveType === 'fire') powerMult *= 1 / 3;
       if (ctx.battle.field.mudSport > 0 && moveType === 'electric') powerMult *= 1 / 3;
       if (userAbility && TYPE_BOOST[userAbility] === moveType) powerMult *= 1.5;
@@ -4532,13 +4537,13 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   if (target.mon.hp > 0 && !sheerForce && !shielded) {
     if (fx.randomStatus && roll(fx.randomStatus.chance)) {
       const id = fx.randomStatus.ids[rng.int(0, fx.randomStatus.ids.length - 1)]!;
-      tryInflictStatus(ctx, user, target, id, move, events, false);
+      if (!(canGetStatus(ctx, user, target, id) && stopgapTakes(ctx, target, id, move, events))) tryInflictStatus(ctx, user, target, id, move, events, false);
     }
-    if (fx.status && roll(fx.status.chance, fx.status.id)) tryInflictStatus(ctx, user, target, fx.status.id, move, events, false);
-    if (fx.flinchFirstUse && user.vol.firstUseNow && movedFirst) flinch(ctx, user, target);
-    else if (fx.flinchChance && movedFirst && roll(fx.flinchChance)) flinch(ctx, user, target);
+    if (fx.status && roll(fx.status.chance, fx.status.id) && !(canGetStatus(ctx, user, target, fx.status.id) && stopgapTakes(ctx, target, fx.status.id, move, events))) tryInflictStatus(ctx, user, target, fx.status.id, move, events, false);
+    if (fx.flinchFirstUse && user.vol.firstUseNow && movedFirst) { if (!stopgapTakes(ctx, target, null, move, events)) flinch(ctx, user, target); }
+    else if (fx.flinchChance && movedFirst && roll(fx.flinchChance)) { if (!stopgapTakes(ctx, target, null, move, events)) flinch(ctx, user, target); }
     else if (!fx.flinchChance && userAbility === 'stench' && movedFirst && rng.chance(0.1)) flinch(ctx, user, target);
-    if (fx.confuse && roll(fx.confuse.chance, 'confusion')) tryConfuse(ctx, user, target, events, false);
+    if (fx.confuse && roll(fx.confuse.chance, 'confusion') && !stopgapTakes(ctx, target, null, move, events)) tryConfuse(ctx, user, target, events, false);
     // Ring Toss: the target may turn drowsy (Yawn: asleep at the end of the next turn).
     if (fx.drowsy && target.vol.yawn === 0 && !target.mon.status && roll(fx.drowsy.chance, 'slp') && canGetStatus(ctx, user, target, 'slp')) {
       target.vol.yawn = 2;
@@ -4563,6 +4568,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (sheerForce && (change.target === 'enemy' || change.chance < 100)) continue;
     if (shielded && change.target === 'enemy') continue;
     if (!rolls.has(change.chance)) rolls.set(change.chance, roll(change.chance));
+    // Stopgap takes a drop that came with a damaging hit (its chance under 100: an extra effect, not the move's purpose).
+    if (rolls.get(change.chance) && change.target === 'enemy' && change.stages < 0 && change.chance < 100 && stopgapTakes(ctx, target, null, move, events)) continue;
     if (rolls.get(change.chance)) changeStage(ctx, user, recipient, change.stat, change.stages, events);
   }
   // Max Moves set the weather after they hit (Max Flare: sun).
@@ -6399,6 +6406,28 @@ function veilBlock(ctx: BattleContext, source: Combatant, target: Combatant, sta
  * Returns true if the status was applied. `announceFailure` is for status
  * moves. Synchronize passes burn, poison and paralysis back to the source.
  */
+/**
+ * Stopgap (gn.17's Muk): once per battle, when a move's extra effect would land on one of its side, this Pokémon takes it instead:
+ * a status it can carry becomes its own, anything else it shrugs off. No roll: it always steps in while unused.
+ */
+function stopgapTakes(ctx: BattleContext, target: Combatant, status: StatusId | null, move: Move | undefined, events: BattleEvent[]): boolean {
+  const team = target.side === 'player' ? ctx.party : ctx.battle.enemyTeam;
+  const holder = team.find((m) => m !== target.mon && m.hp > 0 && abilityOf(ctx.content, m) === 'stopgap' && !ctx.battle.storyEffects.includes(`stopgap:${m.uid}`));
+  if (!holder) return false;
+  ctx.battle.storyEffects.push(`stopgap:${holder.uid}`);
+  const { ruleset } = ctx.content;
+  const takes = !!status && !holder.status && !isStatusImmune(status, getSpecies(ctx.content, holder.speciesId).types, move);
+  if (takes) {
+    holder.status = { id: status };
+    if (status === 'slp') holder.status.turns = ruleset.sleepTurnsMin;
+    const length = status === 'brn' ? ruleset.burnTurns : status === 'psn' ? ruleset.poisonTurns : 0;
+    if (length > 0) holder.status.left = length;
+  }
+  const name = getSpecies(ctx.content, holder.speciesId).name;
+  events.push({ type: 'raid', tone: 'info', text: takes ? `${name} throws itself in the way and takes it instead!` : `${name} throws itself in the way and shrugs it off!` });
+  return true;
+}
+
 function tryInflictStatus(
   ctx: BattleContext,
   source: Combatant,

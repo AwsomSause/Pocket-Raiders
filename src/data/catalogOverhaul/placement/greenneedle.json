@@ -587,5 +587,75 @@
    "Tournament Episode"
   ],
   "tags": []
+ },
+ "gn-17-door": {
+  "gn": "gn.17",
+  "shape": "Door",
+  "earliest": "A6",
+  "home": 8,
+  "window": [
+   6,
+   11
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A+1; the raid at A+2",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Polluted Factory",
+   "kantoStage": "The coast road near Fuchsia (the canon space)",
+   "elsewhere": "The Polluted Factory"
+  },
+  "note": "Badge: a smokestack. Six nodes ending in a three-phase raid. Kanto shows it through cs-kanto-fuchsia-factory.",
+  "kinds": [
+   "Pseudo Stage",
+   "Raid"
+  ],
+  "tags": []
+ },
+ "gn-17-float": {
+  "gn": "gn.17",
+  "shape": "Door",
+  "earliest": "A6",
+  "home": 8,
+  "window": [
+   6,
+   11
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "level": "A+1; the raid at A+2",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Polluted Factory",
+   "kantoStage": "The coast road near Fuchsia (the canon space)",
+   "elsewhere": "The Polluted Factory"
+  },
+  "note": "The same door, must-see, when the player took the stamped float at the Kaiju (gn.11): Mr. Scrimshaw opens the gate and gives the valve order.",
+  "kinds": [
+   "Pseudo Stage",
+   "Raid"
+  ],
+  "tags": []
+ },
+ "gn-17-fishing": {
+  "gn": "gn.17",
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 14,
+  "window": [
+   9,
+   20
+  ],
+  "sits": "optional",
+  "level": "A+0",
+  "often": "run",
+  "note": "Only after the line was shut down, later the same region.",
+  "kinds": [
+   "Afterstory"
+  ],
+  "tags": []
  }
 }

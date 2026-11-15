@@ -1,8 +1,8 @@
 // Greenneedle, part 4: events gn.16 to gn.20 (doc GREENNEEDLE_REWORKED_PLACED_4.md).
 // In Kanto the Saffron canon space opens the same Tournament ("The Greenneedle version is the only version"); its old rooms are retired below.
 // Build: npm run co:build -- greenneedle-4   then   npm run co:gn
-import { $, ch, fight, flag, heal, item, leave, out, room, trainer, type Json } from '../dsl.ts';
-import { bond, gev, gn, is, kindness, laterStage, moment, not, notThisRegion, rm, say, setTo, stampRegion, when, type Placement } from './_gn.ts';
+import { $, anyType, ch, fight, flag, heal, hurt, item, join, leave, out, room, trainer, wild, type Json } from '../dsl.ts';
+import { bond, chIf, eitherWay, gev, gn, inside, intel, is, kindness, laterStage, leavePseudo, moment, not, notThisRegion, rm, say, scene, setTo, stampRegion, stampStage, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -162,11 +162,217 @@ function lastBout(): Json {
 }
 const KANTO_TOURNEY: Json = { ...withBracket(gev('cs-kanto-saffron-tournament', 'The Fighting Tournament', ring(0, { stop: 'event', rarity: 'common', types: ['fighting'], requires: [is('kanto-mankey'), { kind: 'partyLine', species: 'mankey' }, not('kanto-tournament-won'), not('tournament-out'), notThisRegion('tournament-at')] }), DOOR16, SIGN_UP)), canon: 'cs.kanto.saffron.tournament' };
 
-export const EVENTS: Json[] = [...gn16, KANTO_TOURNEY];
+// =====================================================================================================================
+// gn.17  THE POLLUTED FACTORY  (Pseudo Stage: six nodes ending in a three-phase raid; step 8, optional, instead of the battle;
+// must-see when the player took the stamped float at the Kaiju, gn.11). The fight rules are core/greenneedle/factory.ts (burst pipes,
+// the Molten Sludge, the splitting Magmuk, the burning floor) and gnBattleStart (the Muk's shield, Toxic Spikes, the core).
+// =====================================================================================================================
+const FACTORY_TINT = '#4a4a2a';
+const plant = (o: Json = {}): Json => ({ tint: FACTORY_TINT, tags: ['Combat', 'Pokémon', 'Story'], effect: 'fog', pokemon: 'grimer', ...o });
+/** The pool (doc): Grimer, Koffing, Trubbish, Stunky, Gulpin and their regional and Delta forms; evolved ones come with the level. */
+const FACTORY_POOL = ['grimer', 'grimer-alola', 'grimer-delta', 'koffing', 'trubbish', 'stunky', 'gulpin'];
+/** Every wild battle here has Sludge on the field: Poison moves +10% for everyone. */
+const SLUDGE: Json = { typeBoost: { type: 'poison', pct: 10 } };
+const MARK = 'factory-in';
+/** A lost raid: the factory locks down. Wild Pokémon caught inside are lost; the party you came in with is safe. */
+const LOCKDOWN: Json[] = [
+  gn('dropUnmarked', { key: MARK }), flag('factory-lost'),
+  when('factory-lost', { min: 1 }, [], 'Shutters slam down over every door. A siren. The factory locks down, and you are put out on the coast road. Anything you caught in there stays in there.'),
+];
+const ENTER: Json[] = [flag('factory-entered'), stampStage('factory-at'), gn('markParty', { key: MARK }), room('gn-17-pipes')];
+const SCRIMSHAW = say(
+  'A chain-link gate, a smokestack, and a smell like a struck match dropped in a drain.',
+  '**Foreman, Mr. Scrimshaw:** "Visitors sign the waiver. It says we\'re not liable. For anything. It\'s a very thorough waiver."',
+  'He holds out a clipboard. The pen is chained to it. The chain is corroded green.',
+);
+const GATE: Json[] = [
+  ch('Sign.', out('You sign. Mr. Scrimshaw files it without reading it, under a stack of others nobody read either. The gate rattles open.', ...ENTER)),
+  ch('Read it first.', out(say(
+    'You read it. All of it. Mr. Scrimshaw shifts from foot to foot.',
+    'Page four, in very small print: "solvent residue may be released into the river during normal operation." It\'s a File, now. You keep it.',
+  ), flag('factory-file'), intel(1), ...ENTER)),
+  ch('Climb the fence.', out('You go over the fence while he\'s still holding out the pen. Your sleeve tears on the wire. He doesn\'t chase you. He just writes something down.', hurt(0.05), ...ENTER)),
+];
+const FLOAT_GATE = say(
+  'A chain-link gate, a smokestack, and the smell of the same slick you saw on the sea.',
+  'You hold up the float from the Kaiju\'s net. The stamp is the factory\'s own: a ball inside a cog.',
+  '**Mr. Scrimshaw:** "...That\'s ours. That\'s one of ours. I told them the nets would drift."',
+  'He looks at it a long time. Then he unlocks the gate himself.',
+  '**Mr. Scrimshaw:** "Control room valves. Ignore the labels. Black stain first, then green, then yellow. Don\'t tell them I told you."',
+);
+/** A raid phase: the Magmuk, uncatchable, at A+2. */
+const magmuk = (rule: string, win: Json[]): Json => inside({ ...wild({ species: ['muk-delta-fire'], lv: 2, win }), rule: { gn: rule, noCatch: true }, lose: LOCKDOWN });
+/** Once in the raid, the Muk that was helped takes the first attack of the phase the player picks. */
+const MUK_IN_FRONT = (text: string, battle: Json): Json =>
+  chIf([is('factory-muk-helped'), not('factory-muk-used')], 'Send the Muk in front.', fight(text, battle, setTo('factory-muk-now', 1), flag('factory-muk-used')));
+const WON = (text: string, ...more: Json[]): Json[] => [flag('kanto-factory-cleared'), item('black-sludge'), moment(text, 75), ...more, when('factory-shutdown', { min: 0, max: 0 }, [flag('factory-left-running')]), scene('gn-17-pick')];
+/** After the pick: the research, if it was taken, then out. */
+const PICKED = (n: number): Json[] => [setTo('kanto-factory-pick', n), when('factory-research', { min: 1 }, [scene('gn-17-research')]), when('factory-research', { min: 0, max: 0 }, [leavePseudo()])];
+/** A valve: the right one (by the stain) closes; a wrong one bangs, sprays and opens the others again. */
+const valve = (label: string, right: boolean, next: string): Json =>
+  ch(label, right
+    ? out('It turns hard, then all at once. Somewhere below, a pipe stops roaring.', flag('factory-valves'), scene(next))
+    : out('Wrong one. The pipes bang like a door kicked in, a hot spray hits your arm, and the valves you closed spin open again.', hurt(0.1), setTo('factory-valves', 0), scene('gn-17-control')));
+
+const gn17: Json[] = [
+  gev('gn-17-door', 'The Polluted Factory', plant({ stop: 'event', rarity: 'rare', types: ['poison'], requires: [not('factory-entered'), not('kaiju-stamp')] }), SCRIMSHAW, GATE),
+  gev('gn-17-float', 'The Polluted Factory', plant({ stop: 'event', rarity: 'rare', types: ['poison'], requires: [not('factory-entered'), is('kaiju-stamp')] }), FLOAT_GATE, [
+    ch('Go in.', out('Mr. Scrimshaw writes the valve order on the back of your hand in marker, so you won\'t forget.', flag('factory-valve-order'), ...ENTER)),
+  ]),
+  rm('gn-17-pipes', 'The Polluted Factory: The Pipes', plant({ pokemon: 'koffing' }), say(
+    '*The pipes are labelled: IN. OUT. DON\'T ASK.*',
+    'They sweat and tick in the heat. Something in the dark between them shifts, and coughs.',
+  ), [ch('Go through.', fight('A pipe groans overhead as something comes out of the dark.', PIPE_FIGHT([scene('gn-17-pipes-2')])))]),
+  rm('gn-17-pipes-2', 'The Polluted Factory: The Pipes', plant({ pokemon: 'stunky' }), say(
+    'Further in, the pipes get lower. You have to stoop.',
+    'A drip lands on your neck. It\'s warm. Something else is down here, and it\'s heard you.',
+  ), [ch('Keep going.', fight('It comes at you from under a pipe marked DON\'T ASK.', PIPE_FIGHT([room('gn-17-line')])))]),
+  rm('gn-17-line', 'The Polluted Factory: The Line', plant({ pokemon: 'magnemite' }), say(
+    'The production line. Half-made Poké Balls ride a belt, cheap red shells, thin as eggshell.',
+    '**Scientist, Dr. Stroud:** "Do you know what a Poké Ball costs to make *properly?* Nobody can afford properly."',
+    'He says it like he has said it to himself many times, and has never once believed it.',
+  ), [
+    ch('Fight him.', fight('He sighs, and reaches for a Ball off the belt.', inside(trainer('Dr. Stroud', { cls: 'scientist', size: 2, types: ['poison'], lv: 1, win: [$(800), scene('gn-17-desk')] })))),
+    ch('Walk past him.', out('He doesn\'t stop you. He goes back to his clipboard. His desk is behind him, unlocked.', scene('gn-17-desk'))),
+  ]),
+  rm('gn-17-desk', "The Polluted Factory: Dr. Stroud's Desk", plant({ pokemon: 'magnemite' }), say(
+    'The desk drawer is full of research. Solvent counts. River samples. A graph that only goes up.',
+    'At the bottom, in pencil: "Proper would cost 4x. Tell them."',
+  ), [
+    ch('Take the research.', out('You take it. Dr. Stroud watches you do it and says nothing at all.', flag('factory-research'), room('gn-17-pits'))),
+    ch('Leave it.', out('You shut the drawer. Someone else can carry that.', room('gn-17-pits'))),
+  ]),
+  rm('gn-17-pits', 'The Polluted Factory: The Sludge Pits', plant({ pokemon: 'grimer' }), say(
+    'The sludge pits. Three Grimer slide up out of the muck to meet you.',
+    'And in the pits, stuck fast, six Pokémon that wandered in and couldn\'t get out. One of them is still trying.',
+    'Each of yours could pull one free. It would take two goes, with the Grimer at your back.',
+  ), [
+    ch('Pull them out.', out('Your team wades in and pulls. The muck lets go with a sound like a boot in mud. The Grimer don\'t wait.', gn('addParty', { key: 'factory-freed' }), cap('factory-freed', 6), hurt(0.15), scene('gn-17-pits-2'))),
+    ch('Fight the Grimer first.', fight('The three Grimer come on together, slow and sure.', HORDE())),
+  ]),
+  rm('gn-17-pits-2', 'The Polluted Factory: The Sludge Pits', plant({ pokemon: 'grimer' }), say(
+    'Some are out, shaking off the sludge on the walkway. Some are still in.',
+    'The Grimer are closing in.',
+  ), [
+    ch('Keep pulling.', fight('One more heave, all together. Then you turn to the Grimer.', HORDE(), gn('addParty', { key: 'factory-freed' }), cap('factory-freed', 6), hurt(0.15))),
+    chIf([not('trubbish-kept')], "That's enough.", fight('You leave the rest. You turn to the Grimer.', HORDE())),
+    chIf([is('trubbish-kept')], "That's enough.", fight(say(
+      'Your Trubbish won\'t come. It stays in the pit, up to its middle, pulling.',
+      'It won\'t leave the sludge pits until every one\'s out. It knows what it is to be left. All six come out.',
+    ), HORDE(), setTo('factory-freed', 6))),
+  ]),
+  rm('gn-17-muk', 'The Polluted Factory: The Muk in the Wall', plant({ pokemon: 'muk' }), say(
+    'A Muk is pressed against a split in the pipe wall, holding a leak shut with its own body.',
+    'It\'s been there for days. Its edges have dried and cracked. It doesn\'t look at you. It can\'t afford to.',
+  ), [
+    { ...ch('Seal the pipe for it (a Steel-, Fire- or Rock-type).', out(say(
+      'Your Pokémon seals the split, a weld that glows and cools.',
+      '*It slides off the wall. It leaves its shape there, in the grime. It looks at the place where it was.*',
+      '*It looks at you. It\'s never been thanked, so it doesn\'t know what this is.*',
+      'It follows you. Quietly, a little behind.',
+    ), flag('factory-muk-helped'), kindness(1), moment('You sealed a pipe so a Muk could finally let go of the wall.', 70), room('gn-17-control')), { requires: [anyType('steel', 'fire', 'rock')] }) },
+    ch('Feed it.', out('You hold food up to it. It eats from your hand without moving off the wall. It still can\'t leave. But it\'s a little less tired.', kindness(1), room('gn-17-control'))),
+    ch('Leave it.', out('You walk on. Behind you, it holds the leak shut. It will go on holding it.', room('gn-17-control'))),
+  ]),
+  rm('gn-17-control', 'The Polluted Factory: The Control Room', plant({ pokemon: 'magneton' }), say(
+    'The control room. Dials, all in the red. Three big wheel valves on the wall.',
+    'A window looks down into the furnace. Something down there glows.',
+  ), [
+    chIf([is('factory-valves', 0, 2)], 'Close the valves.', out('You go to the valves.', setTo('factory-valves', 0), scene('gn-17-valve1'))),
+    chIf([not('factory-scientist')], 'Fight the scientist.', fight('A second scientist steps out from behind the dials. "You can\'t be in here!"', inside(trainer('Scientist', { cls: 'scientist', size: 2, types: ['poison', 'steel'], lv: 1, win: [$(600), flag('factory-scientist'), scene('gn-17-control')] })))),
+    ch('Look through the glass.', out('You go to the window. The lever is beside it, behind its own pane.', flag('factory-saw-form'), scene('gn-17-glass'))),
+    ch('Go down to the furnace.', out('A metal stair, down into the heat.', room('gn-17-raid1'))),
+  ]),
+  rm('gn-17-glass', 'The Polluted Factory: Through the Glass', plant({ pokemon: 'muk', effect: 'fire' }), say(
+    'Through the glass: something in the furnace, moving. A Muk of Ground and Fire, glowing at the seams.',
+    'It isn\'t angry. It hurts. It rolls over in the heat like something trying to sleep on a burn.',
+    'Beside the window, behind its own glass: LINE STOP.',
+  ), [
+    chIf([not('factory-shutdown')], 'Break the glass.', out('You break the glass. The lever is cold. Once it\'s pulled, the line stops, and it doesn\'t start again.', scene('gn-17-lever'))),
+    ch('Step back.', out('You step back from the window. The glow stays on your eyes a while.', scene('gn-17-control'))),
+  ]),
+  rm('gn-17-lever', 'The Polluted Factory: Line Stop', plant({ pokemon: 'magneton' }), say('Your hand is on the lever. It can\'t be undone.'), [
+    ch('Pull it.', out(say(
+      'The line stops. The belt grinds to a halt. Every half-made Ball rolls off the end and onto the floor.',
+      'Somewhere below, the river stops getting worse.',
+    ), stampRegion('factory-shutdown'), moment('You pulled the lever and stopped the factory line for good.', 70), scene('gn-17-control'))),
+    ch('Not yet.', out('You take your hand off it.', scene('gn-17-control'))),
+  ]),
+  rm('gn-17-valve1', 'The Polluted Factory: The Valves', plant({ pokemon: 'magneton' }), say(
+    'Three valves, labelled COOLANT, STEAM and WATER. The labels are wrong. The stains on the floor are right.',
+    'Under COOLANT, the floor is black and eaten through. Under WATER, a green crust. Under STEAM, a thin yellow film.',
+  ), [valve('The valve marked COOLANT.', true, 'gn-17-valve2'), valve('The valve marked STEAM.', false, ''), valve('The valve marked WATER.', false, '')]),
+  rm('gn-17-valve2', 'The Polluted Factory: The Valves', plant({ pokemon: 'magneton' }), say('One down. The pipes shudder. The green crust under WATER has started to bubble.'), [
+    valve('The valve marked STEAM.', false, ''), valve('The valve marked WATER.', true, 'gn-17-valve3'),
+  ]),
+  rm('gn-17-valve3', 'The Polluted Factory: The Valves', plant({ pokemon: 'magneton' }), say('Two down. Only STEAM is left, over its thin yellow film.'), [
+    ch('The valve marked STEAM.', out('The last one closes. The whole building goes quiet, like it\'s holding its breath.', flag('factory-valves'), scene('gn-17-control'))),
+  ]),
+  rm('gn-17-raid1', 'The Polluted Factory: The Furnace', plant({ pokemon: 'muk', effect: 'fire' }), say(
+    'The Magmuk. Huge, slow, spreading across the floor like a spill that decided to stand up.',
+    'Wherever it touches, the floor glows. It lays Molten Sludge on its first turn.',
+    'Spread moves split it. Each one makes a small one that has to be beaten too. Hit it once at a time.',
+  ), [
+    ch('Fight.', fight('It rears up. The heat comes off it in waves.', magmuk('sludge', [scene('gn-17-raid2')]))),
+    MUK_IN_FRONT('Your Muk flows out in front of everyone, without being asked.', magmuk('sludge', [scene('gn-17-raid2')])),
+  ]),
+  rm('gn-17-raid2', 'The Polluted Factory: The Furnace Burns', plant({ pokemon: 'muk', effect: 'fire' }), say(
+    'It\'s burning now, and so is the floor. Anything that isn\'t a Fire-type may catch a burn each turn.',
+    'Water moves go up as steam: half damage. But they clear the Molten Sludge.',
+  ), [
+    ch('Fight.', fight('The floor glows under your feet.', magmuk('furnace', [scene('gn-17-core')]))),
+    MUK_IN_FRONT('Your Muk flows out in front, its edges hissing on the floor.', magmuk('furnace', [scene('gn-17-core')])),
+  ]),
+  rm('gn-17-core', 'The Polluted Factory: The Core', plant({ pokemon: 'grimer' }), say(
+    'It\'s small now. Small, fast and frightened. The size of a Grimer, backing into a corner.',
+    '*It\'s pressed against the furnace door. It keeps looking at the pipe it came out of.*',
+  ), [
+    ch('Finish it.', fight('It only has weak moves left. It uses them anyway.', magmuk('core', WON('You finished the Magmuk in the Polluted Factory.')))),
+    ch('Stop attacking.', out(say(
+      'You call your team back. It stays in the corner. One turn. Two.',
+      'Then it slides into the pipe it came out of, and is gone.',
+    ), ...WON('You stopped attacking, and the Magmuk went home down its pipe.'))),
+    chIf([is('factory-muk-helped')], 'Let the Muk go to it.', out(say(
+      'Your Muk slides over. It puts an arm round it.',
+      'The small one stops shaking. They go into the pipe together. Neither looks back.',
+    ), flag('factory-magmuk-calmed'), kindness(2), ...WON('The Muk you freed took the Magmuk home.'))),
+  ]),
+  rm('gn-17-pick', 'The Polluted Factory: After', plant({ pokemon: 'grimer' }), say(
+    'The furnace ticks as it cools. On the floor, a lump of Black Sludge, still warm.',
+    'Out of the pits and the pipes, a few of the ones you passed are watching you. One of them could come along.',
+  ), [
+    ch('Alolan Grimer', out('The Alolan Grimer slides up, all bright colours, and sticks to your boot.', join({ species: ['grimer-alola'] }), ...PICKED(1))),
+    ch('Delta Grimer', out('The Delta Grimer, dry and sandy, nudges your hand.', join({ species: ['grimer-delta'] }), ...PICKED(2))),
+    ch('Trubbish', out('The Trubbish rolls over to you and waits to be picked up.', join({ species: ['trubbish'] }), ...PICKED(3))),
+    chIf([is('factory-muk-helped'), not('factory-magmuk-calmed')], 'The Muk', out('Your Muk doesn\'t wait to be asked. It\'s already beside you. It knows how to hold something shut for someone else.',
+      { ...join({ species: ['muk'] }), ability: 'stopgap' }, ...PICKED(4))),
+  ]),
+  rm('gn-17-research', "The Polluted Factory: Dr. Stroud's Research", plant({ pokemon: 'magnemite' }), say(
+    'You still have Dr. Stroud\'s research. It\'s worth a lot to the right people.',
+  ), [
+    ch('Sell it.', out('A buyer pays a lot, in cash, without asking where it came from. They\'ll build another factory, somewhere further on.', $(5000), flag('factory-research-sold'), leavePseudo())),
+    ch('Hand it to a professor.', out('The professor reads it twice and goes pale. "This changes how we make Balls." They send you a special one to try.', item('dream-ball', 3), flag('factory-research-given'), leavePseudo())),
+  ]),
+  gev('gn-17-fishing', 'A River with Fish in It', plant({ stop: 'event', rarity: 'uncommon', pokemon: 'magikarp', effect: 'none', tint: '#2a5a6a', tags: ['Pokémon', 'Story'], requires: [is('factory-shutdown'), { kind: 'gn', test: 'thisRegion', key: 'factory-shutdown' }, laterStage('factory-at'), not('factory-fished')] }), say(
+    'On the riverbank, a man in a foreman\'s jacket with the badge torn off. Mr. Scrimshaw. Out of a job.',
+    'His line is in the water. The water is clear. Something tugs.',
+    '**Mr. Scrimshaw:** "Fish in it. Can you believe that? There are fish in it."',
+  ), [ch('Sit with him.', out('You sit. He catches nothing for an hour and doesn\'t mind at all.', moment('Mr. Scrimshaw, fishing in a river with fish in it.', 55), kindness(1), flag('factory-fished')))]),
+];
+function PIPE_FIGHT(win: Json[]): Json {
+  return inside(eitherWay({ ...wild({ types: ['poison'], species: FACTORY_POOL, lv: 1, win }), rule: { gn: 'pipes', ...SLUDGE } }));
+}
+function HORDE(): Json {
+  return inside(eitherWay({ ...wild({ format: 'triples', species: ['grimer'], lv: 1, win: [scene('gn-17-muk')] }), rule: SLUDGE }));
+}
+const KANTO_FACTORY: Json = { ...gev('cs-kanto-fuchsia-factory', 'The Polluted Factory', plant({ stop: 'event', rarity: 'common', types: ['poison'], requires: [not('factory-entered')] }), SCRIMSHAW, GATE), canon: 'cs.kanto.fuchsia.factory' };
+
+export const EVENTS: Json[] = [...gn16, KANTO_TOURNEY, ...gn17, KANTO_FACTORY];
 
 /** The old Kanto canon builds of these stories (moved to Greenneedle): kept for saved runs, never shown again. */
 export const REMOVE: string[] = [
   ...['tc', 't1', 'tm1', 't2', 'tm2', 't3', 'tm3', 't4', 'tm4', 't5a', 't5b', 't5c', 't-win1', 't-win2', 't-win3', 'rival-return'].map((n) => `cs-kanto-saffron-${n}`),
+  ...['n1', 'n2', 'n3', 'n4', 'n5a', 'n5b', 'n5c', 'n6', 'pick'].map((n) => `cs-kanto-fuchsia-factory-${n}`),
 ];
 
 export const PLACEMENT: Record<string, Placement> = {
@@ -175,6 +381,19 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'Every foe scaled exactly to your Mankey or Primeape', often: 'run', dressing: { kanto: 'The Fighting Tournament', kantoStage: 'Saffron (the canon space)', elsewhere: 'The Fighting Tournament' },
     note: 'Badge: a belt. The stage after gn.15, with its Mankey in the party. Until towns exist it sits on step 15. Kanto shows it through cs-kanto-saffron-tournament.',
   },
+  'gn-17-door': {
+    gn: 'gn.17', shape: 'Door', earliest: 'A6', home: 8, window: [6, 11], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage', 'Raid'],
+    level: 'A+1; the raid at A+2', often: 'run', badge: 'own', dressing: { kanto: 'The Polluted Factory', kantoStage: 'The coast road near Fuchsia (the canon space)', elsewhere: 'The Polluted Factory' },
+    note: 'Badge: a smokestack. Six nodes ending in a three-phase raid. Kanto shows it through cs-kanto-fuchsia-factory.',
+  },
+  'gn-17-float': {
+    gn: 'gn.17', shape: 'Door', earliest: 'A6', home: 8, window: [6, 11], sits: 'must-see', attaches: 'instead', tags: ['Pseudo Stage', 'Raid'],
+    level: 'A+1; the raid at A+2', often: 'run', badge: 'own', dressing: { kanto: 'The Polluted Factory', kantoStage: 'The coast road near Fuchsia (the canon space)', elsewhere: 'The Polluted Factory' },
+    note: 'The same door, must-see, when the player took the stamped float at the Kaiju (gn.11): Mr. Scrimshaw opens the gate and gives the valve order.',
+  },
+  'gn-17-fishing': { gn: 'gn.17', shape: 'Single', earliest: 'A6', home: 14, window: [9, 20], sits: 'optional', tags: ['Afterstory'], level: 'A+0', often: 'run', note: 'Only after the line was shut down, later the same region.' },
 };
 
-export const CHAINS: Json[] = [];
+export const CHAINS: Json[] = [
+  { id: 'ps_gn_factory', name: 'The Polluted Factory', entry: 'gn-17-door', themeId: 'poison-steel', tint: FACTORY_TINT, mood: 'smog', start: 'opened' },
+];

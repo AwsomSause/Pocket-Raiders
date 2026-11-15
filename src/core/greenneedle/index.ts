@@ -6,10 +6,11 @@ import type { Content } from '../contentSchema';
 import type { PlayerAction } from '../battle/engine';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import type { GnCond, GnEffect } from './schema';
-import { addLevels, isUsableMove, maxHp } from '../pokemon';
+import { addLevels, getSpecies, isUsableMove, maxHp } from '../pokemon';
 import { addItem } from '../items';
 import { typeEffectiveness } from '../battle/damage';
 import type { TypeName } from '../contentSchema';
+import { SLUDGE_TURNS } from './factory';
 
 type Cue = { type: 'spectacle'; kind: 'arena'; side: 'player' | 'enemy'; text: string; uid?: string };
 const cue = (side: 'player' | 'enemy', text: string, uid?: string): Cue => ({ type: 'spectacle', kind: 'arena', side, text, ...(uid ? { uid } : {}) });
@@ -215,6 +216,21 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       }
       return '';
     }
+    case 'addParty':
+      setGnFlag(run, e.key!, gnFlag(run, e.key!) + run.party.filter((m) => m.hp > 0).length);
+      return '';
+    case 'markParty':
+      for (const mon of [...run.party, ...run.box]) mon.gn = [...(mon.gn ?? []).filter((t) => t !== e.key), e.key!];
+      return '';
+    case 'dropUnmarked': {
+      const kept = (m: PokemonInstance) => !!m.gn?.includes(e.key!);
+      // Never an empty party: if nobody carries the mark (an old save), the party stays as it is.
+      const lost = [...(run.party.some(kept) ? run.party : []), ...run.box].filter((m) => !kept(m));
+      if (run.party.some(kept)) run.party = run.party.filter(kept);
+      run.box = run.box.filter(kept);
+      for (const mon of [...run.party, ...run.box]) if (mon.gn) mon.gn = mon.gn.filter((t) => t !== e.key);
+      return lost.length ? `Lost: ${lost.map((m) => getSpecies(content, m.speciesId).name).join(', ')}` : '';
+    }
     case 'partyHas':
       setGnFlag(run, e.key!, run.party.some((m) => e.species!.includes(m.speciesId)) ? 1 : 0);
       return '';
@@ -270,12 +286,47 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (battle.eventRule?.gn === 'hawlucha') battle.storyEffects.push(`${FOE_WAITS}The Hawlucha poses for the front row. Its swing misses. On purpose.`, `${FOE_WAITS}The Hawlucha blows a kiss to the stands and misses again. On purpose. The crowd loves it.`);
   // The final: at Crowd 5 the hall chants its name, and its first move goes first.
   if (battle.eventRule?.gn === 'final' && lead && gnFlag(run, 'tournament-crowd') >= 5) battle.storyEffects.push(`kind:${lead.uid}`);
+  // The Polluted Factory (gn.17).
+  const rule = battle.eventRule?.gn;
+  if (rule === 'pipes' || rule === 'sludge' || rule === 'furnace' || rule === 'core') factoryStart(content, run, battle, rule);
   // The last exchange: both fighters are under a quarter of their HP. "You choose." with Bond 3 or more: its first move goes first.
   if (battle.eventRule?.gn === 'lastExchange') {
     const foe = battle.enemyTeam[0];
     if (foe) foe.hp = Math.max(1, Math.floor(maxHp(content, foe) * 0.2));
     if (lead && gnFlag(run, 'tc-you-choose') > 0 && lead.friendship >= BOND_THREE) battle.storyEffects.push(`kind:${lead.uid}`);
   }
+}
+
+/** The Magmuk's moves (doc gn.17), and the weak ones it is left with in its core. */
+const MAGMUK_MOVES = ['earth-power', 'flamethrower', 'gunk-shot', 'sludge-wave'];
+const CORE_MOVES = ['ember', 'mud-slap', 'acid'];
+const setMoves = (content: Content, mon: PokemonInstance, ids: readonly string[]): void => {
+  const moves = ids.filter((id) => content.moves.has(id)).map((id) => ({ id, pp: content.moves.get(id)!.pp }));
+  if (moves.length) mon.moves = moves;
+};
+
+/**
+ * The Polluted Factory raid (gn.17): the Muk that was helped takes one phase's first attack (the phase the player picked), the
+ * Molten Sludge lasts six turns less one per Pokémon freed from the pits, the raid opens on Toxic Spikes unless all three valves
+ * were closed, and in its core the Magmuk is small, at a third of its HP, with only weak moves.
+ */
+function factoryStart(content: Content, run: RunState, battle: BattleState, rule: 'pipes' | 'sludge' | 'furnace' | 'core'): void {
+  if (rule === 'pipes') return;
+  const boss = battle.enemyTeam[0];
+  if (gnFlag(run, 'factory-muk-now') > 0) {
+    battle.storyEffects.push(`${FOE_WAITS}Your Muk flows in front of the party and takes the first blow. It doesn't make a sound.`);
+    setGnFlag(run, 'factory-muk-now', 0);
+  }
+  if (rule === 'core') {
+    if (boss) {
+      boss.hp = Math.max(1, Math.floor(maxHp(content, boss) / 3));
+      setMoves(content, boss, CORE_MOVES);
+    }
+    return;
+  }
+  if (boss) setMoves(content, boss, MAGMUK_MOVES);
+  battle.storyEffects.push(`${SLUDGE_TURNS}${Math.max(0, 6 - gnFlag(run, 'factory-freed'))}`);
+  if (rule === 'sludge' && gnFlag(run, 'factory-valves') < 3) battle.sideEffects.player.toxicSpikes = 1;
 }
 
 /** A type's own boosting item: what a trainer who thought about it would give the ace to hold. */
