@@ -41,6 +41,10 @@ export interface PickerRow {
   hint?: string;
   /** The item this row stands for, when it is one (the New UI's Bag shows who in the party it would help). */
   item?: string;
+  /** A Pokémon row: its look, its HP left (0 to 1) and a short mark ("IN BATTLE", "FNT"). The New UI's battle window draws these. */
+  mon?: { speciesId: string; shiny: boolean; hp: number; mark: string };
+  /** A board row said outright (the New UI's Bond screen): the line under the name, a bar (0 to 100) and a tag. */
+  board?: { title: string; sub: string; pct: number; tag: string };
 }
 
 export interface PickerConfig {
@@ -71,6 +75,8 @@ export interface PickerConfig {
   tabs?: { labels: readonly string[]; index: number; onChange: (index: number) => void };
   /** Battle: draw the list only inside the bottom bar (no full-screen panel), so the arena, sprites and HP boxes stay visible. */
   dock?: boolean;
+  /** New UI battle look: with `dock`, the list shows as the mock-ups' small window over the field (at `top`) and the canvas dock is left out of the picture. */
+  window?: { top?: number };
   /** Screens redesign: the screen this list belongs to; it draws in that screen's picked look (original look when none). */
   screen?: ScreenId;
   /** A redesigned look (screens redesign): the backdrop, frame and row colours. Leave out for the original look. */
@@ -260,7 +266,9 @@ export class Picker implements PickerLike {
     }
     const first = config.rows.findIndex((r) => !r.problem);
     this.focus(config.start !== undefined && config.start < config.rows.length ? config.start : first >= 0 ? first : 0, false);
-    if (!dock && reduxOn()) {
+    const win = dock && config.window ? config.window : null;
+    if ((!dock || win) && reduxOn()) {
+      if (win) scene.cameras.main.ignore(this.root);
       this.rx = mountPickerView(scene, {
         title: config.title,
         rows: config.rows.length,
@@ -269,6 +277,9 @@ export class Picker implements PickerLike {
         problem: (i) => config.rows[i]?.problem ?? null,
         hint: (i) => config.rows[i]?.hint ?? '',
         item: (i) => config.rows[i]?.item,
+        mon: (i) => config.rows[i]?.mon,
+        board: (i) => config.rows[i]?.board,
+        top: win?.top,
         tabs: config.tabs,
         canBack: Boolean(config.onBack),
         backLabel: config.backLabel,
@@ -276,8 +287,14 @@ export class Picker implements PickerLike {
         pick: (i) => { if (this.closed) return; this.focus(i); this.confirm(); },
         hover: (i) => { if (!this.closed && !this.summary && i !== this.index && !config.rows[i]?.problem) this.focus(i, false); },
         back: () => this.handle('back'),
-      });
+      }, win ? 'window' : undefined);
     }
+  }
+
+  /** What the focused row says at the bottom: why it can't be picked, else its hint ('' for an empty list). */
+  get note(): string {
+    const row = this.config.rows[this.index];
+    return row ? row.problem ?? row.hint ?? '' : '';
   }
 
   /** The row now highlighted (used to pin Bag items to the hotbar). */
@@ -508,9 +525,16 @@ export function partyRow(content: Content, mon: PokemonInstance, problem: string
   const emotion = run ? emotionOf(content, run, mon.uid) : null;
   const feeling = emotion ? `Feeling: ${emotion.name}.` : '';
   const extra = [holding && `Holding: ${holding}.`, boosts && `${boosts}.`, feeling].filter(Boolean).join(' ');
+  const sign = opts.preview ? ({ good: '✔', fainted: '✖', already: '●', blocked: '✖' })[opts.preview.mark] : '';
   return {
     problem,
     hint: [opts.hint ?? abilityHint(content, mon), extra].filter(Boolean).join('  ') || undefined,
+    mon: {
+      speciesId: lookSpecies(content, mon).id,
+      shiny: !!mon.shiny,
+      hp: Math.max(0, Math.min(1, mon.hp / Math.max(1, calcStats(content, mon).hp))),
+      mark: opts.preview ? `${sign} ${opts.preview.short}` : [mon.hp <= 0 ? 'FNT' : mon.status ? STATUS_LABELS[mon.status.id]?.label : undefined, opts.tag].filter(Boolean).join(' · '),
+    },
     draw: (scene, box, w, h) => {
       // The lower line sits 18px above the row's bottom, so short rows (battle: 70) keep it inside.
       const low = Math.min(58, h - 18);

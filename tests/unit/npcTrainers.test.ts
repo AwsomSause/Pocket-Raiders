@@ -6,7 +6,8 @@ import { describe, expect, it } from 'vitest';
 import { trainerGame, trainerRegion } from '../../src/core/trainerSort';
 import { createProfile } from '../../src/core/profile';
 import { applyRunToProfile } from '../../src/core/progress';
-import { eventBattleWon } from '../../src/core/events';
+import { applyEffect } from '../../src/core/events';
+import { hashSeed, Rng } from '../../src/core/rng';
 import { createRun } from '../../src/core/run';
 import { defaultPrep } from '../../src/core/runPrep';
 import { content } from './helpers';
@@ -49,20 +50,33 @@ describe('NPC trainer origins', () => {
 });
 
 describe('NPC trainer recruit events', () => {
-  it('every NPC has a meet event that recruits them, by battle win or by asking', () => {
+  // Catalog Overhaul (ROAD_ROSTER.md): each NPC's meet event is now a three-meeting arc (`npc-meet-<x>`, `-m2`, `-m3`, plus side scenes);
+  // finishing the arc is what recruits them (tools/events/co/_people.ts, withRecruit).
+  const recruitsIn = (e: { choices: { success: { effects: unknown[]; battle?: { win?: unknown[]; lose?: unknown[] } } }[]; remembers?: { addChoices: { success: { effects: unknown[]; battle?: { win?: unknown[]; lose?: unknown[] } } }[] }[] }, trainer: string) => {
+    const all = [...e.choices, ...(e.remembers ?? []).flatMap((v) => v.addChoices)];
+    return all.flatMap((c, i) => [...c.success.effects, ...(c.success.battle?.win ?? []), ...(c.success.battle?.lose ?? [])].some((x) => JSON.stringify(x) === JSON.stringify({ kind: 'recruit', trainer })) ? [i] : []);
+  };
+
+  it('every NPC has a meet arc, and finishing it recruits them (by battle or by talking)', () => {
     for (const a of npcs) {
-      const e = content.events.get(`npc-meet-${a.id.slice('npc-'.length)}`);
-      expect(e, a.id).toBeDefined();
-      const wins = e!.choices[0]!.success.battle!.win;
-      expect(wins, a.id).toContainEqual({ kind: 'recruit', trainer: a.id });
-      expect(e!.choices[1]!.success.effects, a.id).toContainEqual({ kind: 'recruit', trainer: a.id });
+      const base = `npc-meet-${a.id.slice('npc-'.length)}`;
+      expect(content.events.get(base), a.id).toBeDefined();
+      const arc = [...content.events.values()].filter((e) => e.id === base || e.id.startsWith(`${base}-`));
+      expect(arc.some((e) => recruitsIn(e as never, a.id).length > 0), a.id).toBe(true);
+      // The first meeting never recruits on its own: the arc does.
+      expect(recruitsIn(content.events.get(base)! as never, a.id), a.id).toEqual([]);
     }
   });
 
-  it('winning the battle recruits the trainer for good when the run ends, once', () => {
+  it('finishing the arc recruits the trainer for good when the run ends, once', () => {
     const joey = content.archetypes.get('npc-youngster-joey')!;
     const run = createRun(content, { runId: 'r', seed: 'recruit', archetypeId: 'red', prep: defaultPrep(content) });
-    eventBattleWon(content, run, { eventId: 'npc-meet-youngster-joey', choiceIndex: 0, success: true, sideId: 'a' } as never);
+    // Joey's last meeting: the Rattata Club fight; finishing it (the outcome that sets `roster-joey-done`) carries the recruit.
+    const finale = content.events.get('npc-meet-youngster-joey-m3')!;
+    const recruit = finale.choices.flatMap((c) => [...c.success.effects, ...(c.success.battle?.win ?? [])]).find((x) => x.kind === 'recruit')!;
+    expect(recruit).toEqual({ kind: 'recruit', trainer: 'npc-youngster-joey' });
+    applyEffect(content, run, recruit, new Rng(hashSeed('recruit')));
+    applyEffect(content, run, recruit, new Rng(hashSeed('recruit')));
     expect(run.itemCounters?.['recruit:npc-youngster-joey']).toBe(1);
     const profile = createProfile(content, 'p');
     expect(profile.unlockedArchetypes).not.toContain(joey.id);

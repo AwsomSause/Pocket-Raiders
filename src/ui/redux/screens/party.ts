@@ -6,6 +6,7 @@ import { rxUrl } from '../assets';
 import { act, type Area, B, esc, facts, H, hpb, mini, mon, TX, ty, TYPE_COLORS, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { pic, scrollStart, type Art } from '../templates';
+import { type BattlePanel, tipWindow } from './battle';
 
 type Hints = readonly (readonly [string, string])[];
 
@@ -88,12 +89,14 @@ export interface SummaryModel {
   text: string;
   /** The action menu over the screen (Make lead, Care…), or null. */
   menu: { options: { label: string; off: boolean }[]; index: number } | null;
+  /** The tooltip of the move the pointer rests on (the mock-ups' move tooltip for any menu), or null. */
+  tip?: BattlePanel | null;
 }
 
 const lines = (l: readonly string[], st = ''): string => l.map((t) => `<div class="sm" style="line-height:18px;${st}">${esc(t)}</div>`).join('');
 
 function bodyOf(b: SummaryBody): string {
-  if (b.kind === 'overview') return `<b class="acc">${esc(b.ability?.name ?? 'No ability')}</b>${b.ability ? `<div class="sm" style="line-height:20px">${esc(b.ability.text)}</div>` : ''}${facts(b.facts)}${b.note ? `<div class="sm" style="line-height:18px">${esc(b.note)}</div>` : ''}<div class="row" style="flex-wrap:wrap;gap:6px">${b.moves.map((m) => `<span class="ty" style="--tc:${typeColor(m.type)};font-size:13px;padding:4px 9px">${esc(m.name)}</span>`).join('')}</div>`;
+  if (b.kind === 'overview') return `<b class="acc">${esc(b.ability?.name ?? 'No ability')}</b>${b.ability ? `<div class="sm" style="line-height:20px">${esc(b.ability.text)}</div>` : ''}${facts(b.facts)}${b.note ? `<div class="sm" style="line-height:18px">${esc(b.note)}</div>` : ''}<div class="row" style="flex-wrap:wrap;gap:6px">${b.moves.map((m, k) => `<span class="ty" style="--tc:${typeColor(m.type)};font-size:13px;padding:4px 9px" data-tip="move:${k}">${esc(m.name)}</span>`).join('')}</div>`;
   if (b.kind === 'stats') {
     return `<div class="row sm" style="font-weight:700"><span style="width:90px">Stat</span><span style="width:42px">Value</span><span class="grow"></span><span style="width:34px">IV</span><span style="width:40px">EV</span>${b.versus ? '<span style="width:40px;text-align:right">±</span>' : ''}</div>${b.rows.map((r) => `<div class="row"><span style="width:90px;white-space:nowrap" class="${r.up ? 'acc' : ''}">${esc(r.label)}${r.up ? ' ▲' : ''}</span><b style="width:42px">${r.value}</b>${hpb(Math.max(0, Math.min(100, r.pct)), 0, ' gold')}<span style="width:34px" class="${r.perfect ? 'acc' : ''}">${esc(r.iv)}</span><span style="width:40px">${r.ev}</span>${b.versus ? `<b style="width:40px;text-align:right">${esc(r.delta)}</b>` : ''}</div>`).join('')}<div class="row sm"><span class="grow" style="line-height:18px">${esc(b.foot)}</span></div>${b.versus ? `<div class="sm">${esc(b.versus)}</div>` : ''}`;
   }
@@ -127,5 +130,5 @@ export function summaryView(c: ReduxCtx, d: SummaryModel): string {
     menu = `<div class="shade" style="z-index:8"${act('menuBack')}></div>` + W(`${d.menu.options.slice(from, from + size).map((o, q) => B(esc(o.label), from + q === d.menu!.index, `height:32px;font-size:15px;flex:none${o.off ? ';opacity:.5' : ''}`, '', `${act('menu', from + q)} data-over="menuOver"`)).join('')}${n > size ? `<span class="sm" style="text-align:right">${from > 0 ? '▲ ' : ''}${d.menu.index + 1} of ${n}${from + size < n ? ' ▼' : ''}</span>` : ''}`, 'position:absolute;left:350px;top:84px;width:270px;display:flex;flex-direction:column;gap:5px;padding:12px;z-index:9');
   }
   // With the action menu open the text box stays lit: it explains the focused action.
-  return H(d.title, 'party', d.hints) + left + tabs + body + TX(esc(d.text), '', d.menu ? 'z-index:9' : '') + menu;
+  return H(d.title, 'party', d.hints) + left + tabs + body + TX(esc(d.text), '', d.menu ? 'z-index:9' : '') + menu + (d.tip && !d.menu ? tipWindow(d.tip) : '');
 }

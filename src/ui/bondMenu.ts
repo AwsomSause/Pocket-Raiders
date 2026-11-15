@@ -19,6 +19,7 @@ import { Picker, type PickerRow } from './partyPanel';
 import { pokemonIcon } from './sprites';
 import { textStyle } from './theme';
 import type { FieldMenuHost } from './fieldMenus';
+import { reduxOn } from './redux/stage';
 
 const cap = (s: string) => s[0]!.toUpperCase() + s.slice(1);
 
@@ -26,9 +27,12 @@ function bondRow(content: Content, run: RunState, mon: PokemonInstance, motion: 
   const species = content.species.get(mon.speciesId)!;
   const bond = bondOf(run, mon.uid);
   const mood = MOOD_LOOK[bondMood(bond)];
+  // New UI: the mock-ups' Bond board. Trust is the row's bar; the other values are read out in the text box.
+  const rest = BOND_BARS.filter((b) => b.key !== 'trust').map((b) => `${b.label} ${bond[b.key]}`).join(' · ');
   return {
     problem: null,
-    hint: bondHint(content, run, mon),
+    hint: reduxOn() ? `${rest}. ${bondHint(content, run, mon)}` : bondHint(content, run, mon),
+    board: { title: `${species.name}  Lv${mon.level}`, sub: [`Trust ${bond.trust}`, `“${cap(bond.trait)}”`, mood.text, heartbondLabel(run, mon.uid), partyRoles(content, mon).join(' / ')].filter(Boolean).join(' · '), pct: bond.trust, tag: bond.trust >= 100 ? 'Max' : '' },
     draw: (scene, box, w) => {
       const icon = pokemonIcon(scene, species, 32, 34, 1.4);
       box.add(icon);
@@ -82,7 +86,8 @@ export function openBondMenu(host: FieldMenuHost): void {
   const motion = session.settings.battleAnimations;
   const picker: Picker = new Picker(host.scene, {
     glass: true,
-    title: `Bonds: how your Pokémon feel (${[cultureLine(run), ...teamTags(session.content, run).map((t) => `${t.name} ${t.lift}`)].join(' · ')})`,
+    // New UI: the name goes in the band and the rest become chips beside it.
+    title: reduxOn() ? ['Bonds', cultureLine(run), ...teamTags(session.content, run).map((t) => `${t.name} ${t.lift}`)].join(' · ') : `Bonds: how your Pokémon feel (${[cultureLine(run), ...teamTags(session.content, run).map((t) => `${t.name} ${t.lift}`)].join(' · ')})`,
     columns: 2,
     rowHeight: 148,
     rows: run.party.map((mon, i) => bondRow(session.content, run, mon, motion, i)),

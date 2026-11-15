@@ -88,6 +88,18 @@ export class BattleTabs {
     return this.page;
   }
 
+  /** The strip as words, for a screen that draws it its own way (the New UI): the pages, then Auto and Info. */
+  get view(): { labels: string[]; index: number; auto: boolean; autoOff: boolean; shown: boolean } {
+    return { labels: [...PAGES.map((p) => p.label), 'Auto', 'i'], index: this.page ? PAGES.findIndex((p) => p.id === this.page) : -1, auto: this.auto, autoOff: this.autoOff, shown: this.root.visible };
+  }
+
+  /** A click on tab `i` from outside the canvas. */
+  press(i: number): void {
+    if (i >= 0 && i < PAGES.length) this.config.onPage(PAGES[i]!.id);
+    else if (i === PAGES.length) this.config.onAuto();
+    else if (i === PAGES.length + 1) this.config.onInfo();
+  }
+
   /** The Auto tab: on or off, or greyed out when Auto-Battle can't play this battle. */
   setAuto(on: boolean, unavailable = false): void {
     if (on === this.auto && unavailable === this.autoOff) return;

@@ -158,6 +158,8 @@ export interface MenuOption {
   detail?: string;
   /** Tooltip shown after the hover delay (Settings > Tooltip delay). */
   tip?: string;
+  /** The New UI's own picture of this option (a move's type colour, a small second line). The canvas menu ignores it. */
+  rx?: { type?: string; sub?: string };
 }
 
 export interface MenuConfig {
@@ -459,6 +461,22 @@ export class Menu {
     playSfx(this.scene, 'ui.select');
     this.wii.press();
     this.config.onSelect(this.index);
+  }
+
+  /** What the menu offers, for a screen that draws the same choices its own way (the New UI). */
+  get options(): readonly MenuOption[] {
+    return this.config.options;
+  }
+
+  get cols(): number {
+    return this.columns;
+  }
+
+  /** A click on option `i` from outside the canvas: focus it and choose it, as a click on its row does. */
+  press(i: number): void {
+    if (!this.enabled || !this.config.options[i] || this.config.options[i]!.disabled) return;
+    this.focus(i, false);
+    this.confirm();
   }
 
   handle(action: InputAction): void {

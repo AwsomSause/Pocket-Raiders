@@ -91,6 +91,8 @@ export function evolve(content: Content, mon: PokemonInstance, to: string): Evol
   const target = getSpecies(content, to);
   const oldMax = maxHp(content, mon);
   mon.speciesId = to;
+  // Fenwick's lesson: the bonus for holding back lasts only until it evolves.
+  delete mon.evoDeclineBoost;
   mon.hp = Math.min(maxHp(content, mon), mon.hp + (maxHp(content, mon) - oldMax));
   const learnedMoves: string[] = [];
   const wantsToLearn: string[] = [];
