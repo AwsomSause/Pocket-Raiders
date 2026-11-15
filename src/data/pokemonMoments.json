@@ -4115,6 +4115,163 @@
    },
    "effectText": "It gets back up at 25% HP with its Speed doubled.",
    "presentation": "A small squeak in the dark, a spark, another | [Name] won't let it end like this."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "id": "pa4-the-little-ones",
+   "name": "The Little Ones",
+   "scope": {
+    "tags": [
+     "baby"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "layer": "archetype",
+   "requires": {
+    "foeLevelAbove": 15,
+    "flagBelow": {
+     "key": "pm-brave-count:{uid}",
+     "n": 3
+    }
+   },
+   "effect": {
+    "braveBond": 2
+   },
+   "effectText": "Against a foe 15 or more levels higher: if it lands any move, +2 Bond after the battle, win or lose.",
+   "presentation": "It hides behind your leg | [Name] is scared. It goes anyway."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "id": "pa4-the-little-ones-grown",
+   "name": "The Little Ones",
+   "scope": {
+    "tags": [
+     "baby"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "layer": "archetype",
+   "requires": {
+    "flagAtLeast": {
+     "key": "pm-brave-count:{uid}",
+     "n": 3
+    }
+   },
+   "effect": {
+    "resolute": true
+   },
+   "effectText": "It was brave three times this run: Resolute at the start of every battle for the rest of the run.",
+   "presentation": "It steps out in front | [Name] doesn't look back at you this time."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "limited",
+   "id": "pa6-the-slow-road",
+   "name": "The Slow Road",
+   "scope": {
+    "groups": [
+     "pseudo-legendaries"
+    ]
+   },
+   "trigger": "evolve",
+   "chance": 1,
+   "layer": "archetype",
+   "requires": {
+    "finalForm": true
+   },
+   "effect": {
+    "bond": 2
+   },
+   "effectText": "It reaches its final form: +2 Bond. Once per Pokémon. (Limited: the tutor move for using it every stage is not built yet.)",
+   "presentation": "The evolution finishes, then one more shot | [Name] looks back at you. It remembers being small."
+  },
+  {
+   "limit": "run",
+   "tier": "major",
+   "status": "supported",
+   "id": "pa9-what-it-becomes",
+   "name": "What It Becomes",
+   "scope": {
+    "species": [
+     "butterfree",
+     "beedrill",
+     "beautifly",
+     "dustox",
+     "vivillon"
+    ]
+   },
+   "trigger": "evolve",
+   "chance": 1,
+   "layer": "archetype",
+   "requires": {
+    "fromCocoon": true
+   },
+   "effect": {
+    "bond": 2,
+    "evAll": 1
+   },
+   "effectText": "It spent a full stage or more as a cocoon: +1 effort in every stat and +2 Bond.",
+   "presentation": "A crack of light, wings scatter across the screen | [Name] waited a long time in the dark. It's here now."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "id": "pa11-sleeps-by-the-fire",
+   "name": "Not From Here",
+   "scope": {
+    "groups": [
+     "ultra-beasts"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "layer": "archetype",
+   "requires": {
+    "flagAtLeast": {
+     "key": "pa11-sleeps",
+     "n": 1
+    }
+   },
+   "effect": {
+    "boostBest": 1
+   },
+   "effectText": "It stopped looking at the sky (sat with it three times at camp): Beast Boost at the start of every battle, best stat +1.",
+   "presentation": "It doesn't look up any more | [Name] is here. Only here."
+  },
+  {
+   "limit": "region",
+   "tier": "major",
+   "status": "limited",
+   "id": "pa14-the-promised-ones",
+   "name": "The Promised Ones",
+   "scope": {
+    "tags": [
+     "mythical"
+    ]
+   },
+   "trigger": "rest",
+   "chance": 1,
+   "layer": "archetype",
+   "requires": {
+    "promiseKept": true
+   },
+   "effect": {
+    "giveItem": {
+     "mew": "leftovers",
+     "jirachi": "star-piece",
+     "celebi": "revive"
+    }
+   },
+   "effectText": "Its promise is kept: once per region it comes back from the night with something (Mew a Leftovers, Jirachi a Star Piece, Celebi a Revive).",
+   "presentation": "It's gone when you wake. Then back, with something | It went somewhere you can't follow. It came back."
   }
  ],
  "counterparts": {

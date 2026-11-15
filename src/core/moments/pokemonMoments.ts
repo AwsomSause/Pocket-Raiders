@@ -14,7 +14,7 @@ import { Rng, hashSeed } from '../rng';
 import type { Content, Species } from '../contentSchema';
 import type { PokemonInstance } from '../state';
 
-export const MOMENT_TRIGGERS = ['runEnd', 'lethal', 'faint', 'ally', 'start', 'low', 'ko', 'enter', 'super', 'crit', 'weather', 'status', 'rest', 'catch', 'turn', 'allyLethal'] as const;
+export const MOMENT_TRIGGERS = ['runEnd', 'lethal', 'faint', 'ally', 'start', 'low', 'ko', 'enter', 'super', 'crit', 'weather', 'status', 'rest', 'catch', 'turn', 'allyLethal', 'evolve'] as const;
 export type MomentTrigger = (typeof MOMENT_TRIGGERS)[number];
 
 /** Triggers in priority order: when several moments could be the cinematic of one battle, the earlier one wins. */
@@ -124,6 +124,12 @@ export const MomentEffectSchema = z.object({
   packStat: z.number().int().min(1).max(25).optional(),
   /** Its Protosynthesis or Quark Drive is on without sun or terrain. */
   paradoxDrive: z.boolean().optional(),
+  /** The Little Ones (PA4): if it lands a move this battle, it gains this much Bond afterwards, win or lose. */
+  braveBond: z.number().int().min(1).max(5).optional(),
+  /** Every stat's effort +N. */
+  evAll: z.number().int().min(1).max(10).optional(),
+  /** Rest moments: an item tied to the species (by species id). */
+  giveItem: z.record(z.string(), z.string()).optional(),
   /** Names the opponent's ace (its strongest Pokémon) before it comes out. */
   revealAce: z.boolean().optional(),
   /** Haunting: after it faints it stays as a spirit for `turns` turns, striking with its best move at `pct`% power each turn; it can't be hit. */
@@ -179,6 +185,18 @@ export const PokemonMomentSchema = z.object({
       notVsOwnTrio: z.boolean().optional(),
       /** Only the run's chosen starter. */
       starter: z.boolean().optional(),
+      /** The foe in front is at least this many levels higher. */
+      foeLevelAbove: z.number().int().min(1).max(100).optional(),
+      /** A run flag (with `{uid}` standing for this Pokémon) is at least `n`. */
+      flagAtLeast: z.object({ key: z.string(), n: z.number().int().min(1) }).optional(),
+      /** The same kind of run flag is still below `n` (PA4: a baby that hasn't grown brave yet). */
+      flagBelow: z.object({ key: z.string(), n: z.number().int().min(1) }).optional(),
+      /** Evolution moments: it has reached the final form of its line. */
+      finalForm: z.boolean().optional(),
+      /** Evolution moments: it came out of a cocoon it had been in since an earlier stage. */
+      fromCocoon: z.boolean().optional(),
+      /** Its Mythical promise is kept. */
+      promiseKept: z.boolean().optional(),
       /** A named opponent: a trainer battle, not a wild one. */
       named: z.boolean().optional(),
       /** The opponent's ace (its strongest Pokémon) has one of these types. */
@@ -197,7 +215,8 @@ export const PokemonMomentSchema = z.object({
   chancePlus: z.object({ species: z.array(z.string()), plus: z.number().min(0).max(1) }).optional(),
   /** Run-end order (pack §0.3): individual, species, group, archetype, type. Lower goes first. */
   layer: z.enum(['individual', 'species', 'group', 'archetype', 'type']).optional(),
-  limit: z.enum(['battle', 'run']),
+  /** `region`: once per region (rest moments). */
+  limit: z.enum(['battle', 'run', 'region']),
   tier: z.enum(['minor', 'major', 'landmark']),
   status: z.enum(['supported', 'limited', 'disabled']),
   effectText: z.string(),

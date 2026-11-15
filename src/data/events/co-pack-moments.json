@@ -1,0 +1,187 @@
+{
+ "catalogOverhaul": "new-events",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "pa11-not-from-here",
+   "name": "Not From Here",
+   "group": "Ultra Beasts",
+   "stop": "rest",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "partyGroup",
+     "group": "ultra-beasts"
+    },
+    {
+     "kind": "flag",
+     "key": "pa11-sleeps",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#141a2e",
+    "effect": "none"
+   },
+   "intro": "The fire is low and the team is asleep. All but one.\n\n{group:ultra-beasts} is standing apart at the edge of the light, looking up at the sky. Not at the stars. Past them.\n\nIt is looking at a place that isn't here.",
+   "choices": [
+    {
+     "label": "Sit with it.",
+     "success": {
+      "text": "You sit down beside {group:ultra-beasts} in the cold grass and look up where it is looking. There is nothing there. Just stars, and the dark between them.\n\nIt doesn't look away from the sky. But after a while, it leans a little of its weight against you. Not much. Enough.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "species": [
+          "nihilego",
+          "buzzwole",
+          "pheromosa",
+          "xurkitree",
+          "celesteela",
+          "kartana",
+          "guzzlord",
+          "poipole",
+          "naganadel",
+          "stakataka",
+          "blacephalon"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "pa11-sat",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it be.",
+     "success": {
+      "text": "You leave {group:ultra-beasts} to its watching. Some things a person can't help with.\n\nWhen you look back from the fire it is still there, small against the sky, staring at a place that isn't here.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Relationship",
+    "Recovery"
+   ],
+   "remembers": [
+    {
+     "id": "pa11-second-night",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pa11-sat",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "It is looking up again. The same patch of sky. When it hears you, it shifts over, just a little, and leaves room.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Sit with it.",
+       "success": {
+        "text": "You sit down beside {group:ultra-beasts} in the cold grass and look up where it is looking. There is nothing there. Just stars, and the dark between them.\n\nThis time it glances at you before it looks up again. As if checking you came. As if it had hoped you would.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "bond": 1,
+          "who": {
+           "species": [
+            "nihilego",
+            "buzzwole",
+            "pheromosa",
+            "xurkitree",
+            "celesteela",
+            "kartana",
+            "guzzlord",
+            "poipole",
+            "naganadel",
+            "stakataka",
+            "blacephalon"
+           ]
+          }
+         },
+         {
+          "kind": "flag",
+          "key": "pa11-sat",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "pa11-third-night",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pa11-sat",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "It is looking up again. But it keeps glancing back at the fire. At the team. At you.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Sit with it.",
+       "success": {
+        "text": "You sit down beside it, the way you always do. It looks up at the sky for a long moment.\n\nThen {group:ultra-beasts} turns its back on the sky. It walks to the fire, curls up between the others, and closes its eyes.\n\nIt doesn't look up again. Not that night. Not any night after. Whatever it was waiting for, it has stopped waiting.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "bond": 3,
+          "who": {
+           "species": [
+            "nihilego",
+            "buzzwole",
+            "pheromosa",
+            "xurkitree",
+            "celesteela",
+            "kartana",
+            "guzzlord",
+            "poipole",
+            "naganadel",
+            "stakataka",
+            "blacephalon"
+           ]
+          }
+         },
+         {
+          "kind": "flag",
+          "key": "pa11-sat",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "pa11-sleeps",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "The Ultra Beast stopped looking at the sky and slept by the fire.",
+          "importance": 70
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -19,6 +19,8 @@ import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
+import { BRAVE_COUNT, BRAVE_HIT } from './battle/pokemonMoments';
+import { bondFriendship } from './co/who';
 import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug } from './instrumentality/flightNorth';
 import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
 import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
@@ -3619,6 +3621,14 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (share > 0) for (const m of run.party) if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * share));
   }
   noteSwapFaint(run);
+  // Pack Pokémon Moments (PA4 The Little Ones): a scared baby that landed a move gains Bond, win or lose, and counts it.
+  for (const tag of battle.storyEffects.filter((t) => t.startsWith(BRAVE_HIT))) {
+    const [uid, bond] = tag.slice(BRAVE_HIT.length).split(':') as [string, string];
+    const baby = run.party.find((m) => m.uid === uid);
+    if (!baby) continue;
+    changeFriendship(content, baby, bondFriendship(content, Number(bond), 'picked'));
+    run.story.flags[`${BRAVE_COUNT}${uid}`] = Number(run.story.flags[`${BRAVE_COUNT}${uid}`] ?? 0) + 1;
+  }
   // Catalog Overhaul (new events): the run's first Z-Move is remembered (NE8's old man in the crowd waits for it).
   if (battle.transform?.used.player.includes('zmove') && !run.story.flags['ev:z-move-used']) run.story.flags['ev:z-move-used'] = 1;
   // Nuzlocke: the fallen are lost for good.

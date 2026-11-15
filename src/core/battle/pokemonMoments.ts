@@ -40,6 +40,11 @@ const GUARDED = 'pm-guarded:';
 const SUPERCUT = 'pm-supercut:';
 const STATPCT = 'pm-statpct:';
 const PARADOX = 'pm-paradox:';
+const BRAVE = 'pm-brave:';
+/** PA4: a baby that landed a move this battle (run.ts reads it when the battle ends). */
+export const BRAVE_HIT = 'pm-brave-hit:';
+/** PA4: how many times a baby has been brave this run (a run flag, `pm-brave-count:<uid>`). */
+export const BRAVE_COUNT = 'pm-brave-count:';
 
 /** One seeded number in [0, 1) for a moment's own pick (a move to learn). Stateless: same inputs, same answer. */
 function momentUnit(ctx: BattleContext, id: string, uid: string, turn: number): number {
@@ -170,6 +175,16 @@ function foeAce(ctx: BattleContext): PokemonInstance {
   return team.reduce((best, m) => (m.level >= best.level ? m : best), team[0]!);
 }
 
+/** The Little Ones (PA4): a scared baby landed a move. Its Bond is paid when the battle ends. */
+export function noteBraveHit(ctx: Pick<BattleContext, 'battle'>, c: Pick<Combatant, 'side' | 'mon'>): void {
+  if (c.side !== 'player') return;
+  const prefix = `${BRAVE}${c.mon.uid}:`;
+  const tag = ctx.battle.storyEffects.find((t) => t.startsWith(prefix));
+  if (!tag) return;
+  ctx.battle.storyEffects = ctx.battle.storyEffects.filter((t) => t !== tag);
+  ctx.battle.storyEffects.push(`${BRAVE_HIT}${c.mon.uid}:${tag.slice(prefix.length)}`);
+}
+
 /** The boosted hit landed: the waiting boost is spent. */
 export function spendMomentBoost(ctx: BattleContext, c: Combatant, moveType: string): void {
   if (c.side !== 'player') return;
@@ -283,6 +298,7 @@ function applyEffect(ctx: BattleContext, c: Combatant, fx: MomentEffect, m: Poke
     (ctx.momentQueue ??= []).push({ type: 'raid', tone: 'info', text: `${content.species.get(c.mon.speciesId)?.name ?? 'It'} already knows: the last one will be ${content.species.get(ace.speciesId)?.name ?? ace.speciesId}, Lv. ${ace.level}.` });
   }
   if (fx.guardNext) add(`${GUARD_NEXT}${c.mon.uid}`);
+  if (fx.braveBond) add(`${BRAVE}${c.mon.uid}:${fx.braveBond}`);
   if (fx.firstSuperCut) add(`${SUPERCUT}${c.mon.uid}:${fx.firstSuperCut}`);
   if (fx.paradoxDrive) add(`${PARADOX}${c.mon.uid}`);
   if (fx.packStat) {
@@ -454,6 +470,9 @@ function requirementsMet(ctx: BattleContext, m: PokemonMoment, c?: Combatant): b
     if (!types || !r.foeTypes.every((t) => types.includes(t))) return false;
   }
   if (r.named && ctx.battle.kind !== 'trainer') return false;
+  if (r.foeLevelAbove && !(c && currentEnemy(ctx.battle).level - c.mon.level >= r.foeLevelAbove)) return false;
+  if (r.flagAtLeast && !(c && Number(ctx.moments?.flags[r.flagAtLeast.key.replace('{uid}', c.mon.uid)] ?? 0) >= r.flagAtLeast.n)) return false;
+  if (r.flagBelow && !(c && Number(ctx.moments?.flags[r.flagBelow.key.replace('{uid}', c.mon.uid)] ?? 0) < r.flagBelow.n)) return false;
   if (r.starter && !(c && ctx.moments?.starterUid === c.mon.uid)) return false;
   if (r.notVsOwnTrio && c) {
     const trios = Object.entries(MOMENT_GROUPS).filter(([g, ids]) => g.startsWith('trio-') && ids.includes(c.mon.speciesId)).map(([, ids]) => ids);

@@ -119,7 +119,7 @@ import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, 
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
 import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
-import { momentGuardHit, momentParadoxDrive, momentSuperCut, tryAllyLethalMoment, hauntAccuracyCut, momentGroundTypes, momentNoConfuse, momentRooted, momentStatMult, noteContactHit, tryHauntStrikes, momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
+import { noteBraveHit, momentGuardHit, momentParadoxDrive, momentSuperCut, tryAllyLethalMoment, hauntAccuracyCut, momentGroundTypes, momentNoConfuse, momentRooted, momentStatMult, noteContactHit, tryHauntStrikes, momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
 import type { MomentHooks } from '../moments/pokemonMoments';
 import { quirkAccuracy, quirkDamageMult, quirkEntryStages, quirkGuard, quirkNoCrits, quirkOf, quirkPriority, quirkSurvives } from '../co/quirks';
 import { reapplyBoost } from '../instrumentality/secondChance';
@@ -148,7 +148,7 @@ export type BattleEvent =
   /** Became confused; `confusion` is the "is confused!" check at the start of its move; `confusionEnd` snapped out. */
   | { type: 'confused'; side: Side }
   /** A Pokémon moment (core/moments): `cinematic` false means it is told as a plain line; `scene` is the full-screen run-end revive. */
-  | { type: 'pmoment'; side: Side; uid: string; speciesId: string; id: string; name: string; tier: 'minor' | 'major' | 'landmark'; hpAfter: number; cinematic: boolean; scene: boolean; trigger: 'runEnd' | 'lethal' | 'faint' | 'start' | 'enter' | 'ally' | 'low' | 'ko' | 'super' | 'crit' | 'weather' | 'status' | 'rest' | 'catch' | 'turn' | 'allyLethal' }
+  | { type: 'pmoment'; side: Side; uid: string; speciesId: string; id: string; name: string; tier: 'minor' | 'major' | 'landmark'; hpAfter: number; cinematic: boolean; scene: boolean; trigger: 'runEnd' | 'lethal' | 'faint' | 'start' | 'enter' | 'ally' | 'low' | 'ko' | 'super' | 'crit' | 'weather' | 'status' | 'rest' | 'catch' | 'turn' | 'allyLethal' | 'evolve' }
   | { type: 'confusion'; side: Side }
   | { type: 'confusionEnd'; side: Side }
   | { type: 'confusionHit'; side: Side; amount: number; hpAfter: number }
@@ -4647,6 +4647,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   }
   if (landed > 0 && ctx.moments) {
     spendMomentBoost(ctx, user, moveType);
+    noteBraveHit(ctx, user);
     if (contact) noteContactHit(ctx, target);
     // Toxic Blood: a contact hit on the Pokémon poisons the attacker.
     if (contact && user.mon.hp > 0 && momentContactPoison(ctx, target) && !user.mon.status && canGetStatus(ctx, target, user, 'psn')) tryInflictStatus(ctx, target, user, 'psn', undefined, events, false);

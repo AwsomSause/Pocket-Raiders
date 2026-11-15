@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { createBattle, resolveTurn, switchProblem, type BattleContext, type BattleEvent } from '../../src/core/battle/engine';
 import { pokemonMoment, type MomentHooks } from '../../src/core/moments/pokemonMoments';
-import { restMoments } from '../../src/core/moments/runMoments';
+import { evolveMoments, noteCocoon, restMoments } from '../../src/core/moments/runMoments';
+import { conditionMet, conditionText } from '../../src/core/events';
+import { fillCoText } from '../../src/core/events/coToolkit';
 import { calcStats, createPokemon } from '../../src/core/pokemon';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { hashSeed, Rng } from '../../src/core/rng';
@@ -401,5 +403,96 @@ describe('pack archetype moments: battle', () => {
       expect(ctx.party[1]!.hp).toBeLessThan(calcStats(content, ctx.party[1]!).hp);
       return true;
     });
+  });
+});
+
+describe('pack archetype moments: milestones, camp and gifts (batch 2b)', () => {
+  const runWith = (id: string, party: PokemonInstance[]) => {
+    let run = createRun(content, { runId: id, seed: id, archetypeId: 'red' });
+    run = chooseStarter(content, run, 0);
+    run.party = party;
+    return run;
+  };
+  const withFlags = (seed: string, party: PokemonInstance[], enemies: PokemonInstance[], flags: Record<string, number>) => {
+    const f = fight(seed, party, enemies, 'wild');
+    f.ctx.moments!.flags = flags;
+    return f;
+  };
+
+  it('PA4 The Little Ones: a baby facing a foe 15+ levels higher is noted brave when it lands a move; not against an even foe', () => {
+    const { ctx, battle } = withFlags('pa4', [mon('pichu', 10, 'p', ['thunder-shock'])], [mon('geodude', 30, 'g', ['splash'])], {});
+    const events = move(ctx);
+    expect(played(events, 'pa4-the-little-ones')).toBe(true);
+    expect(played(events, 'pa4-the-little-ones-grown')).toBe(false);
+    const even = withFlags('pa4-even', [mon('pichu', 10, 'p', ['thunder-shock'])], [mon('rattata', 20, 'r', ['splash'])], {});
+    expect(played(move(even.ctx), 'pa4-the-little-ones')).toBe(false);
+    expect(battle.storyEffects.some((t) => t.startsWith('pm-brave-hit:p'))).toBe(false); // Ground: the shock did not land
+    const lands = withFlags('pa4-hit', [mon('pichu', 10, 'p', ['thunder-shock'])], [mon('pidgeotto', 30, 'w', ['splash'])], {});
+    move(lands.ctx);
+    expect(lands.battle.storyEffects.some((t) => t.startsWith('pm-brave-hit:p'))).toBe(true);
+  });
+
+  it('PA4 grown: after three brave battles it plays Resolute instead of hiding', () => {
+    const { ctx } = withFlags('pa4-grown', [mon('pichu', 10, 'p', ['thunder-shock'])], [mon('pidgeotto', 30, 'w', ['splash'])], { 'pm-brave-count:p': 3 });
+    const events = move(ctx);
+    expect(played(events, 'pa4-the-little-ones-grown')).toBe(true);
+    expect(played(events, 'pa4-the-little-ones')).toBe(false);
+  });
+
+  it('PA6 The Slow Road: reaching the final form gives Bond once; a middle form does not', () => {
+    const drago = mon('dragonite', 55, 'd', ['tackle']);
+    const run = runWith('pa6', [drago]);
+    const before = drago.friendship;
+    expect(evolveMoments(content, run, drago, 'dragonair').some((l) => l.includes('The Slow Road'))).toBe(true);
+    expect(drago.friendship).toBeGreaterThan(before);
+    expect(evolveMoments(content, run, drago, 'dragonair')).toEqual([]);
+    const mid = mon('dragonair', 30, 'm', ['tackle']);
+    expect(evolveMoments(content, runWith('pa6-mid', [mid]), mid, 'dratini')).toEqual([]);
+  });
+
+  it('PA9 What It Becomes: out of a cocoon held a full stage, +1 effort in every stat; straight through, nothing', () => {
+    const pod = mon('metapod', 10, 'c', ['harden']);
+    const run = runWith('pa9', [pod]);
+    noteCocoon(run, pod);
+    run.regionIndex += 1; // a later stage
+    pod.speciesId = 'butterfree';
+    expect(evolveMoments(content, run, pod, 'metapod').some((l) => l.includes('What It Becomes'))).toBe(true);
+    expect(pod.evs?.atk).toBe(1);
+    expect(pod.evs?.spe).toBe(1);
+    const quick = mon('metapod', 10, 'q', ['harden']);
+    const r2 = runWith('pa9-quick', [quick]);
+    noteCocoon(r2, quick);
+    quick.speciesId = 'butterfree';
+    expect(evolveMoments(content, r2, quick, 'metapod')).toEqual([]);
+  });
+
+  it('PA11 Not From Here: the camp scene needs an Ultra Beast and names it; after three nights its Beast Boost fires at battle start', () => {
+    const run = runWith('pa11', [mon('pikachu', 30, 'k', ['tackle']), mon('buzzwole', 50, 'b', ['tackle'])]);
+    const c = { kind: 'partyGroup', group: 'ultra-beasts' } as const;
+    expect(conditionMet(content, run, c)).toBe(true);
+    expect(conditionText(content, c)).toContain('ultra beasts');
+    expect(fillCoText(content, run, '{group:ultra-beasts} looks up.')).toBe('Buzzwole looks up.');
+    run.party = [mon('pikachu', 30, 'k', ['tackle'])];
+    expect(conditionMet(content, run, c)).toBe(false);
+    const ev = content.events.get('pa11-not-from-here')!;
+    expect(ev.stop).toBe('rest');
+    expect(ev.requires.some((r) => r.kind === 'partyGroup')).toBe(true);
+    const asleep = withFlags('pa11-b', [mon('buzzwole', 50, 'b', ['splash'])], [mon('caterpie', 5, 'c', ['string-shot'])], { 'pa11-sleeps': 1 });
+    expect(played(move(asleep.ctx), 'pa11-sleeps-by-the-fire')).toBe(true);
+    const awake = withFlags('pa11-a', [mon('buzzwole', 50, 'b', ['splash'])], [mon('caterpie', 5, 'c', ['string-shot'])], {});
+    expect(played(move(awake.ctx), 'pa11-sleeps-by-the-fire')).toBe(false);
+  });
+
+  it('PA14 The Promised Ones: a kept promise brings its item once per region; no promise, nothing', () => {
+    const mew = mon('mew', 40, 'mw', ['pound']);
+    const run = runWith('pa14', [mew]);
+    expect(restMoments(content, run).some((l) => l.includes('The Promised Ones'))).toBe(false);
+    run.story.histories[mew.uid] = { ...(run.story.histories[mew.uid] ?? {}), hyper: { 'promise-kept': 1 } } as never;
+    expect(restMoments(content, run).some((l) => l.includes('The Promised Ones'))).toBe(true);
+    expect(run.inventory.leftovers).toBe(1);
+    expect(restMoments(content, run).some((l) => l.includes('The Promised Ones'))).toBe(false);
+    run.regionIndex += 1;
+    expect(restMoments(content, run).some((l) => l.includes('The Promised Ones'))).toBe(true);
+    expect(run.inventory.leftovers).toBe(2);
   });
 });

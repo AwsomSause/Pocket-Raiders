@@ -39,6 +39,7 @@ import { championTeam, retiredTeam } from './story/championDefense';
 import { oldFoe } from './story/promises';
 import { featuredRival, rivalBeaten, rivalFightTeam, rivalLastResult, rivalPath } from './rivals/living';
 import { monRivalState } from './rivals/monRivals';
+import { MOMENT_GROUPS } from './moments/pokemonMoments';
 import { openFeud, settleFeud } from './story/feud';
 import { apprenticeLevelBonus, applyMentorEffect, getMentor, mentorConditionMet, mentorConditionText, mentorStopEvent } from './mentors';
 import { noteEventMorality } from './story/nemesis';
@@ -318,6 +319,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return legacyEggWaiting(run);
     case 'partyTag':
       return run.party.some((m) => content.species.get(m.speciesId)?.tags.includes(c.tag));
+    case 'partyGroup':
+      return run.party.some((m) => MOMENT_GROUPS[c.group]?.includes(m.speciesId) ?? false);
     case 'photos':
       return (run.camp?.photos.length ?? 0) >= c.atLeast;
     case 'bond':
@@ -477,6 +480,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Needs a rival you have fought ${c.atLeast} time${c.atLeast === 1 ? '' : 's'}`;
     case 'partyTag':
       return `Needs a ${c.tag} Pokémon in your party`;
+    case 'partyGroup':
+      return `Needs one of the ${c.group.replace(/-/g, ' ')} in your party`;
     case 'starter':
       return 'Needs a particular starter';
     case 'photos':

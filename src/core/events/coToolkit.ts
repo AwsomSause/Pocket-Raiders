@@ -7,6 +7,7 @@ import data from '../../data/catalogOverhaul/familiesC.json';
 import type { Content, EventCondition, EventEffect } from '../contentSchema';
 import { getSpecies, maxHp } from '../pokemon';
 import { hashSeed, Rng } from '../rng';
+import { MOMENT_GROUPS } from '../moments/pokemonMoments';
 import type { PokemonInstance, RunState } from '../state';
 
 const RULES: { multiplier: { veryBad: number; bad: number; even: number; favours: number }; words: Record<string, string> } = data.rules;
@@ -62,7 +63,9 @@ export function fillCoText(content: Content, run: Run, text: string): string {
     // New events (NE41): the run's last region.
     finalRegion: () => content.regions.get(run.regionOrder[run.regionOrder.length - 1] ?? '')?.name ?? 'the League',
   };
-  return text.replace(/\{(lead|starter|most|least|impostorType|nextRegion|finalRegion|lowestBond)\}/g, (_, k: string) => table[k]!()).replace(/\{flag:([a-z][a-z0-9-]*)\}/g, (_, k: string) => String(num(run, k)));
+  return text.replace(/\{(lead|starter|most|least|impostorType|nextRegion|finalRegion|lowestBond)\}/g, (_, k: string) => table[k]!())
+    // Pokémon Moments (PA11): the first party Pokémon from a moment group, by name (the lead when none is in the party).
+    .replace(/\{group:([a-z0-9-]+)\}/g, (_, g: string) => nameOf(content, run.party.find((m) => MOMENT_GROUPS[g]?.includes(m.speciesId)) ?? lead)).replace(/\{flag:([a-z][a-z0-9-]*)\}/g, (_, k: string) => String(num(run, k)));
 }
 
 // ---------- SF72 rule battles: "How bad is it for me?" ----------
