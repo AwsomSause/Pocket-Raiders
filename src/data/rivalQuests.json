@@ -1,0 +1,639 @@
+{
+  "note": "Catalog Overhaul Pack rival questlines R1 to R24 (QUESTLINES_RIVALS.md, RIVALS_PLACED.md). arcs: the engine's eight arc ids matched to the pack's eight arcs. table: the 'Which questlines a run uses' table. A run uses 3 to 5 managed lines, two active at once; unmanaged lines (R10, R12, R17 to R20, R22, R24) run beside anything or have their own trigger.",
+  "arcs": {
+    "showboat-finds-meaning": "race",
+    "burnout-rediscovers-joy": "fall",
+    "underdog-finds-their-method": "student",
+    "loner-learns-to-trust": "temptation",
+    "perfectionist-accepts-failure": "inheritance",
+    "prodigy-learns-humility": "wall",
+    "rivals-become-friends": "truce",
+    "friends-become-rivals": "goodbye"
+  },
+  "table": {
+    "race": {
+      "always": [
+        "R1"
+      ],
+      "often": [
+        "R14",
+        "R23"
+      ],
+      "sometimes": [
+        "R19"
+      ]
+    },
+    "fall": {
+      "always": [
+        "R4"
+      ],
+      "often": [
+        "R9"
+      ],
+      "sometimes": [
+        "R2"
+      ]
+    },
+    "student": {
+      "always": [
+        "R6"
+      ],
+      "often": [
+        "R12"
+      ],
+      "sometimes": [
+        "R13"
+      ]
+    },
+    "temptation": {
+      "always": [
+        "R15"
+      ],
+      "often": [
+        "R2"
+      ],
+      "sometimes": [
+        "R11"
+      ]
+    },
+    "inheritance": {
+      "always": [
+        "R9"
+      ],
+      "often": [
+        "R5"
+      ],
+      "sometimes": [
+        "R17"
+      ]
+    },
+    "wall": {
+      "always": [
+        "R19"
+      ],
+      "often": [
+        "R1"
+      ],
+      "sometimes": [
+        "R8"
+      ]
+    },
+    "truce": {
+      "always": [
+        "R3"
+      ],
+      "often": [
+        "R22",
+        "R20"
+      ],
+      "sometimes": [
+        "R21"
+      ]
+    },
+    "goodbye": {
+      "always": [
+        "R3"
+      ],
+      "often": [
+        "R10"
+      ],
+      "sometimes": [
+        "R18"
+      ]
+    }
+  },
+  "fill": [
+    "R2",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8",
+    "R9",
+    "R11",
+    "R13",
+    "R14",
+    "R16",
+    "R21",
+    "R23"
+  ],
+  "budget": {
+    "min": 3,
+    "max": 5,
+    "active": 2
+  },
+  "circuit": {
+    "rivalWinPct": 72
+  },
+  "handshakePct": 3,
+  "names": {
+    "first": {
+      "champion-chaser": "rookie",
+      "bitter-challenger": "you",
+      "enthusiast": "partner",
+      "idealist": "traveller",
+      "strategist": "the variable",
+      "protector": "kid",
+      "prodigy": "{player}, said wrong",
+      "underdog": "hey, um, you"
+    },
+    "marks": {
+      "first-blood": {
+        "*": "First Blood",
+        "champion-chaser": "Lucky Shot",
+        "enthusiast": "Champ",
+        "underdog": "the one who won"
+      },
+      "by-a-thread": {
+        "*": "{short}"
+      },
+      "left-standing": {
+        "*": "Trainer {player}"
+      },
+      "the-hand-up": {
+        "*": "Lantern",
+        "bitter-challenger": "Nuisance",
+        "enthusiast": "Sunny",
+        "protector": "Small One"
+      }
+    }
+  },
+  "youngNames": [
+    "Ember",
+    "Pip",
+    "Echo"
+  ],
+  "lines": {
+    "R1": {
+      "name": "The Circuit",
+      "span": 40,
+      "beats": {
+        "open": {
+          "event": "rival-gauntlet-entry",
+          "minStage": 2
+        }
+      }
+    },
+    "R2": {
+      "name": "A Rival in Trouble",
+      "span": 9,
+      "beats": {
+        "open": {
+          "event": "living-rival-rescue",
+          "minStage": 3,
+          "slot": true
+        },
+        "favour": {
+          "event": "living-rival-returns-favor",
+          "after": "open"
+        },
+        "bitter": {
+          "event": "rival-asks-help-grudge",
+          "after": "open",
+          "offset": 1
+        },
+        "anon": {
+          "event": "rq-r2-anonymous",
+          "after": "open",
+          "offset": 2
+        },
+        "finale": {
+          "event": "rq-r2-finale",
+          "after": "open",
+          "when": "regionEnd",
+          "slot": true,
+          "final": true
+        },
+        "amends": {
+          "event": "ev-rival-emergency",
+          "after": "open",
+          "when": "nextRegion",
+          "stageIndex": 3,
+          "late": true,
+          "slot": true
+        }
+      }
+    },
+    "R3": {
+      "name": "The Promise Past the Ridge",
+      "span": 17,
+      "beats": {
+        "open": {
+          "event": "living-rival-promise",
+          "minStage": 2
+        },
+        "train1": {
+          "event": "living-rival-montage",
+          "after": "open",
+          "when": "nextRegion",
+          "stageIndex": 2
+        },
+        "train2": {
+          "event": "ev-rival-sighted",
+          "after": "open",
+          "when": "nextRegion",
+          "stageIndex": 5
+        },
+        "finale": {
+          "event": "living-rival-promise-kept",
+          "after": "open",
+          "when": "nextRegionEnd",
+          "strict": true,
+          "slot": true,
+          "final": true
+        },
+        "note": {
+          "event": "rival-map-note",
+          "after": "open",
+          "when": "afterNextRegion",
+          "final": true
+        }
+      }
+    },
+    "R4": {
+      "name": "The Stone on the Hill",
+      "beats": {
+        "open": {
+          "event": "rival-memorial",
+          "minStage": 6,
+          "slot": true
+        },
+        "cautious": {
+          "event": "rq-r4-cautious",
+          "after": "open",
+          "offset": 1,
+          "slot": true
+        },
+        "finale": {
+          "event": "rq-r4-finale",
+          "after": "cautious",
+          "offset": 1,
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R5": {
+      "name": "Their Mentor Comes Calling",
+      "beats": {
+        "open": {
+          "event": "rival-mentor-appears",
+          "minStage": 5,
+          "slot": true
+        },
+        "apology": {
+          "event": "rq-r5-sorry",
+          "after": "open",
+          "offset": 1,
+          "slot": true,
+          "final": true
+        },
+        "train": {
+          "event": "rq-r5-walk",
+          "after": "open",
+          "offset": 1,
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R6": {
+      "name": "The Post-Mortem",
+      "personalities": [
+        "strategist",
+        "prodigy",
+        "idealist"
+      ],
+      "beats": {
+        "open": {
+          "event": "rival-coaching",
+          "minStage": 3,
+          "slot": true
+        },
+        "finale": {
+          "event": "rq-r6-finale",
+          "after": "open",
+          "when": "regionEnd",
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R7": {
+      "name": "Wearing Each Other's Colours",
+      "personalities": [
+        "underdog",
+        "prodigy",
+        "champion-chaser",
+        "idealist"
+      ],
+      "beats": {
+        "open": {
+          "event": "rival-cosplay",
+          "minStage": 4,
+          "slot": true
+        },
+        "finale": {
+          "event": "rival-swap",
+          "after": "open",
+          "offset": 1,
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R8": {
+      "name": "The Fake Lead",
+      "personalities": [
+        "strategist"
+      ],
+      "beats": {
+        "open": {
+          "event": "rival-mind-games",
+          "minStage": 5,
+          "slot": true
+        },
+        "sign": {
+          "event": "rq-r8-signpost",
+          "after": "open",
+          "offset": 1
+        },
+        "report": {
+          "event": "rival-eavesdrop",
+          "after": "sign",
+          "offset": 1
+        },
+        "finale": {
+          "event": "living-rival-acknowledges-rival",
+          "after": "report",
+          "offset": 1,
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R9": {
+      "name": "A Rival's Bad Day",
+      "beats": {
+        "open": {
+          "event": "living-rival-bad-day",
+          "minStage": 4,
+          "slot": true
+        },
+        "report1": {
+          "event": "rq-r9-report-1",
+          "after": "open",
+          "offset": 1
+        },
+        "report2": {
+          "event": "rq-r9-report-2",
+          "after": "report1",
+          "offset": 1
+        },
+        "photo": {
+          "event": "rq-r9-photo",
+          "after": "report2",
+          "offset": 1,
+          "final": true
+        }
+      }
+    },
+    "R10": {
+      "name": "Three Photographs",
+      "managed": false,
+      "span": 40,
+      "beats": {
+        "album": {
+          "event": "rq-r10-album",
+          "minStage": 4,
+          "late": true
+        }
+      }
+    },
+    "R11": {
+      "name": "Two Rivals, One Argument",
+      "beats": {
+        "open": {
+          "event": "rival-feud",
+          "minStage": 7,
+          "slot": true
+        },
+        "bench": {
+          "event": "rq-r11-bench",
+          "after": "open",
+          "offset": 1,
+          "slot": true
+        },
+        "outside": {
+          "event": "rq-r11-outside",
+          "after": "bench",
+          "offset": 1,
+          "slot": true
+        },
+        "finale": {
+          "event": "rq-r11-finale",
+          "after": "outside",
+          "offset": 1,
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R12": {
+      "name": "The Fellow Apprentice",
+      "managed": false,
+      "span": 20,
+      "beats": {
+        "open": {
+          "event": "rq-r12-camp",
+          "minStage": 2
+        },
+        "confession": {
+          "event": "rq-r12-confession",
+          "after": "open",
+          "offset": 1
+        },
+        "finale": {
+          "event": "rq-r12-final",
+          "after": "confession",
+          "offset": 1,
+          "final": true
+        },
+        "nurse": {
+          "event": "rq-r12-nurse",
+          "after": "finale",
+          "when": "nextRegion",
+          "late": true
+        },
+        "third": {
+          "event": "rq-r12-third",
+          "after": "finale",
+          "when": "nextRegion",
+          "late": true
+        }
+      }
+    },
+    "R13": {
+      "name": "The One Who Follows",
+      "beats": {
+        "open": {
+          "event": "w4-wandering-trainer",
+          "minStage": 4
+        },
+        "walk": {
+          "event": "w4-wanderer-visit",
+          "after": "open",
+          "offset": 1
+        },
+        "finale": {
+          "event": "rq-r13-question",
+          "after": "walk",
+          "offset": 1,
+          "final": true
+        },
+        "next": {
+          "event": "rq-r13-rival",
+          "after": "finale",
+          "when": "nextRegion",
+          "late": true
+        }
+      }
+    },
+    "R14": {
+      "name": "Emptied Shelves",
+      "personalities": [
+        "champion-chaser",
+        "prodigy"
+      ],
+      "beats": {
+        "open": {
+          "event": "rival-buyout",
+          "minStage": 5,
+          "slot": true
+        },
+        "package": {
+          "event": "rival-care-package",
+          "after": "open",
+          "when": "regionEnd"
+        },
+        "never": {
+          "event": "rq-r14-never",
+          "after": "open",
+          "offset": 1,
+          "final": true
+        }
+      }
+    },
+    "R15": {
+      "name": "A Gift You Should Question",
+      "beats": {
+        "open": {
+          "event": "rival-trap-gift",
+          "minStage": 6,
+          "slot": true
+        },
+        "decoy": {
+          "event": "rq-r15-decoy",
+          "after": "open",
+          "offset": 1
+        },
+        "finale": {
+          "event": "rq-r15-sponsor",
+          "after": "open",
+          "when": "regionEnd",
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R16": {
+      "name": "I Have to Get Stronger",
+      "beats": {
+        "open": {
+          "event": "rq-kieran-1",
+          "minStage": 4
+        },
+        "watch": {
+          "event": "rq-kieran-2",
+          "after": "open",
+          "offset": 1
+        },
+        "again": {
+          "event": "rq-kieran-3",
+          "after": "watch",
+          "offset": 1
+        },
+        "finale": {
+          "event": "rq-kieran-finale",
+          "after": "again",
+          "offset": 1,
+          "final": true
+        },
+        "next": {
+          "event": "rq-r16-again",
+          "after": "finale",
+          "when": "nextRegion",
+          "late": true
+        },
+        "better": {
+          "event": "rq-r16-better",
+          "after": "finale",
+          "when": "nextRegion",
+          "late": true
+        }
+      }
+    },
+    "R17": {
+      "name": "The Pen Pal",
+      "managed": false,
+      "beats": {}
+    },
+    "R18": {
+      "name": "The Last Battle of the Year",
+      "managed": false,
+      "beats": {}
+    },
+    "R19": {
+      "name": "The Rival Who Became Champion",
+      "managed": false,
+      "beats": {}
+    },
+    "R20": {
+      "name": "Greetings Between Teams",
+      "managed": false,
+      "beats": {}
+    },
+    "R21": {
+      "name": "The Long Night at the Inn",
+      "beats": {
+        "open": {
+          "event": "rq-r21-inn",
+          "minStage": 6,
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R22": {
+      "name": "One for the Road",
+      "managed": false,
+      "beats": {}
+    },
+    "R23": {
+      "name": "The Race for First Pick",
+      "beats": {
+        "open": {
+          "event": "rival-race",
+          "minStage": 3,
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R24": {
+      "name": "What They Call You",
+      "managed": false,
+      "beats": {}
+    }
+  }
+}

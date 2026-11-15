@@ -86,3 +86,25 @@ describe('run save v44', () => {
     expect(back.status === 'ok' && back.data.party[0]).toMatchObject({ quirk: 'homesick', marks: ['alpha'], ot: 'Sienna' });
   });
 });
+
+describe('Part 3 quirks: Protector and Dreamer', () => {
+  it('Protector takes one lethal hit for a teammate per battle, and never a second (boundary)', async () => {
+    const { quirkGuard } = await import('../../src/core/co/quirks');
+    const run = freshRun();
+    const lead = run.party[0]!;
+    const guard = { ...lead, uid: 'pangoro', speciesId: 'pangoro', quirk: 'protector', hp: 50 };
+    const effects: string[] = [];
+    expect(quirkGuard([lead, guard], lead, effects)?.uid).toBe('pangoro');
+    expect(quirkGuard([lead, guard], lead, effects)).toBeNull();
+    // It never guards itself, and a guard at 1 HP can't step in (failure case).
+    expect(quirkGuard([guard], guard, [])).toBeNull();
+    expect(quirkGuard([lead, { ...guard, hp: 1 }], lead, [])).toBeNull();
+  });
+  it('Dreamer: a Poliwhirl becomes a Politoed at 36, not before', async () => {
+    const { evolutionTarget } = await import('../../src/core/evolution');
+    const mon = { ...freshRun().party[0]!, speciesId: 'poliwhirl', quirk: 'dreamer', level: 35 };
+    expect(evolutionTarget(content, mon)).not.toBe('politoed');
+    expect(evolutionTarget(content, { ...mon, level: 36 })).toBe('politoed');
+    expect(evolutionTarget(content, { ...mon, level: 36, quirk: undefined })).not.toBe('politoed');
+  });
+});

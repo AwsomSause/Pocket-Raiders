@@ -1,5 +1,6 @@
 // Map events ("?" stops): placement, choices, checks, battles, event items and saves.
 
+import { CO_BUDGET, positioned } from '../../src/core/co/placement';
 import { describe, expect, it } from 'vitest';
 import { applyCatalog, getCatalogEntry } from '../../src/core/catalog';
 import { addEventStops, eligibleEvents, choiceRisk, chooseEvent, eventView, stopIsHidden } from '../../src/core/events';
@@ -74,7 +75,10 @@ describe('placing event stops', () => {
     expect(rests).toHaveLength(content.balance.events.restPerStage);
     expect(stops.length - rests.length).toBeGreaterThanOrEqual(content.balance.events.perStage[0]);
     const quotaMax = Object.values(content.balance.events.stopQuotas).reduce((sum, [, hi]) => sum + hi, 0);
-    expect(stops.length - rests.length).toBeLessThanOrEqual(content.balance.events.perStage[1] + quotaMax);
+    // Catalog Overhaul: events with a placement block are placed on their own step on top of the draws, inside the pack's own budget.
+    const placed = stops.filter((s) => { const p = content.coPlacement?.get(s.side.eventId!); return !!p && positioned(p); });
+    expect(new Set(placed.map((s) => s.side.eventId)).size).toBeLessThanOrEqual(CO_BUDGET.events);
+    expect(stops.length - rests.length - placed.length).toBeLessThanOrEqual(content.balance.events.perStage[1] + quotaMax);
     for (const s of stops) expect(s.node.kind).not.toBe('gym');
     expect(JSON.stringify(newRun('place').stage!.map)).toBe(JSON.stringify(run.stage!.map));
   });
@@ -239,7 +243,7 @@ describe('choosing at an event', () => {
   });
 
   it('a held-item gift goes to a Pokémon that can hold it', () => {
-    const run = atEvent(newRun('gift'), 'card-key-silph');
+    const run = atEvent(newRun('gift'), 'deliver-parcel');
     const result = chooseEvent(content, run, 'test-event', 0);
     expect(result.changes[0]).toMatch(/for |sold for/);
   });

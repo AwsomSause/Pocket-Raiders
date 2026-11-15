@@ -62,7 +62,22 @@ export const EvilTeamSchema = z.object({
   /** The Legendary they are after: it stirs once the team is stopped. */
   legendary: z.array(z.string()).min(1),
   /** The operations they run, one per region (in order, wrapping). */
-  ops: z.array(z.object({ id: z.string().regex(/^[a-z][a-z0-9-]*$/), kind: EvilOpKindSchema, name: z.string().min(1), text: z.string().min(1) })).min(3),
+  ops: z.array(z.object({
+    id: z.string().regex(/^[a-z][a-z0-9-]*$/), kind: EvilOpKindSchema, name: z.string().min(1), text: z.string().min(1),
+    /** Catalog Overhaul SF13 Part D: what the region is left with when this Operation happens (replaces the by-kind consequence). `effects` last until the region is left; `flags` are remembered keys other events read. */
+    lasting: z.object({
+      text: z.string().min(1),
+      effects: z.array(ArchetypeModifierSchema).max(3).default([]),
+      /** Remembered keys other events read (`key`, or `{ key, amount }` for a number such as a starting Severity). */
+      flags: z.array(z.union([z.string().regex(/^[a-z][a-z0-9-]*$/), z.object({ key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().min(1) })])).default([]),
+      /** The region's crisis rises by this much (core/story/crisis.ts). */
+      crisis: z.number().int().min(1).max(4).optional(),
+    }).optional(),
+  })).min(3),
+  /** Catalog Overhaul SF13: regions this team calls home (Rocket in Kanto and Johto). A region's story goes to a home team first. */
+  home: z.array(z.string()).default([]),
+  /** SF13 Part C: the Operation the colleague stops from inside when they defect (`half`: its lasting effect is only halved). */
+  inside: z.object({ op: z.string(), half: z.boolean().default(false) }).optional(),
   /** Story Overhaul Part IV: one of the six original teams. Only Story Runs draw it, and Story Runs draw only these (Classic rolls never move). */
   storyOnly: z.boolean().default(false),
   /** Beta 0.6 Grand Arc: a roaming team (Cipher, Rocket Remnants, Team Snag'em). It is never drawn as a run's team; events field it with `evilTeam` on a trainer battle. */
@@ -94,6 +109,8 @@ export const EvilFileSchema = z.object({
     levelsPerSuccess: z.number().int().min(0),
     /** Extra levels per time a recurring villain has met you. */
     levelsPerMeeting: z.number().int().min(0),
+    /** Catalog Overhaul SF13 A4: the lieutenant studies you. On a rematch their team gains the species here that beats your party's most common type. */
+    counters: z.record(z.string(), z.string()).default({}),
   }),
   consequences: z.record(EvilOpKindSchema, OpConsequenceSchema),
   teams: z.array(EvilTeamSchema),
@@ -132,15 +149,23 @@ export const EvilStateSchema = z.object({
   /** How hard the team pushes back. */
   heat: z.number().int().min(0),
   /** One operation per region. */
-  ops: z.array(z.object({ id: z.string(), region: z.number().int().min(0), outcome: EvilOpOutcomeSchema })),
+  ops: z.array(z.object({ id: z.string(), region: z.number().int().min(0), outcome: EvilOpOutcomeSchema, /** SF13: held back a stage by Officer Jenny (it does not happen at the Hideout door). */ delayed: z.boolean().optional() })),
   /** Recurring villains by rank. */
   villains: z.record(z.string(), VillainRecordSchema),
   /** A member defected to your side. */
   defector: z.boolean(),
   end: z.enum(EVIL_ENDS),
+  /** Catalog Overhaul SF13 (optional, so no save bump): the region this team's story runs in (-1 on older runs: the story is run-long, as before). */
+  region: z.number().int().min(-1).default(-1),
+  /** Teams whose story is over, one per earlier region. */
+  past: z.array(z.object({ teamId: z.string(), region: z.number().int().min(0), end: z.enum(EVIL_ENDS) })).default([]),
+  /** The Operation the player chose to stop first at The Plan. */
+  planFirst: z.string().nullable().default(null),
+  /** Lasting effects of Operations that happened, by region: taken off the run when that region is left. */
+  mods: z.array(z.object({ region: z.number().int().min(0), effects: z.array(ArchetypeModifierSchema) })).default([]),
 });
 export type EvilState = z.infer<typeof EvilStateSchema>;
-export const freshEvil = (): EvilState => ({ teamId: null, beat: 0, stages: 0, nextAt: 0, heat: 0, ops: [], villains: {}, defector: false, end: 'none' });
+export const freshEvil = (): EvilState => ({ teamId: null, beat: 0, stages: 0, nextAt: 0, heat: 0, ops: [], villains: {}, defector: false, end: 'none', region: -1, past: [], planFirst: null, mods: [] });
 
 /** A significant decision, in the run's choice history (spec §17). Weight 1 = small, 3 = run-defining. */
 export const ChoiceRecordSchema = z.object({

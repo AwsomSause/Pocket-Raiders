@@ -33,7 +33,9 @@ export const PseudoRecordSchema = z.object({
 });
 export type PseudoRecord = z.infer<typeof PseudoRecordSchema>;
 /** A pseudo-stage made from an existing chain of story events (Flight North, Sabrina's Labyrinth, Route 25, the Fighting Tournament): the map is drawn from the events' own links, so none of their text, fights or rules change. */
-export const ChainSchema = z.object({ id: z.string().regex(/^ps_[a-z0-9_]+$/), name: z.string().min(1), entry: z.string().min(1), themeId: z.string(), tint: z.string().regex(/^#[0-9a-f]{6}$/i), mood: z.string(), /** `opened`: the player starts on the room the entry's chosen choice opened (a questline whose first choice picks the route). Without it the map lets the player pick among every room the entry opens. */ start: z.enum(['opened']).optional(), /** Evil Team hideouts (evil-story): the team this chain belongs to. */ team: z.string().optional() });
+export const ChainSchema = z.object({ id: z.string().regex(/^ps_[a-z0-9_]+$/), name: z.string().min(1), entry: z.string().min(1), themeId: z.string(), tint: z.string().regex(/^#[0-9a-f]{6}$/i), mood: z.string(), /** `opened`: the player starts on the room the entry's chosen choice opened (a questline whose first choice picks the route). Without it the map lets the player pick among every room the entry opens. */ start: z.enum(['opened']).optional(), /** Evil Team hideouts (evil-story): the team this chain belongs to. */ team: z.string().optional(),
+  /** Evil Team hideouts (evil-story): the rooms by column instead of the events' own links. Every room is open to every room of the next column, so the map reads like a stage and the player picks the path. Ids may name the team (`evil-{teamId}-rescue`). */
+  layout: z.array(z.array(z.string().min(1)).min(1)).optional() });
 export type PseudoChain = z.infer<typeof ChainSchema>;
 export const PseudoFileSchema = z.object({
   chains: z.array(ChainSchema).default([]),
@@ -138,7 +140,7 @@ export function leavePseudoStage(run: RunState): void {
 // ---------- chain pseudo-stages ----------
 
 /** Every event id an event can open next (`addEvent` / `addEventFrom` anywhere in its choices, battle wins and losses included). */
-export function opensNext(event: Pick<EventDef, 'choices'>): string[] {
+export function opensNext(event: Pick<EventDef, 'choices'>, team?: string): string[] {
   const out: string[] = [];
   const walk = (o: unknown): void => {
     if (!o || typeof o !== 'object') return;
@@ -148,35 +150,41 @@ export function opensNext(event: Pick<EventDef, 'choices'>): string[] {
     for (const v of Object.values(x)) walk(v);
   };
   walk(event.choices);
-  return [...new Set(out)];
+  return [...new Set(out.flatMap((id) => (id.includes('{teamId}') ? (team ? [id.replaceAll('{teamId}', team)] : []) : [id])))];
 }
 
 const chainOfEntry = (event: string) => PSEUDO_CHAINS.find((c) => c.entry === event);
 export const chainById = (id: string): PseudoChain | undefined => PSEUDO_CHAINS.find((c) => c.id === id);
 
+/** Whether a room holds a fight (a trainer fight wins over a wild one), for the map's node kind. */
+function battleOfRoom(content: Content, id: string): 'trainer' | 'wild' | null {
+  let found: 'trainer' | 'wild' | null = null;
+  for (const c of content.events.get(id)!.choices) for (const o of [c.success, c.failure]) if (o?.battle) found = found === 'trainer' || o.battle.kind === 'trainer' ? 'trainer' : 'wild';
+  return found;
+}
+
 /** The chain's rooms: the events its entry opens (column 1) and everything they open, by shortest distance from the entry. */
 export function chainRooms(content: Content, chain: PseudoChain): { event: string; depth: number; next: string[]; battle: 'trainer' | 'wild' | null }[] {
   const entry = content.events.get(chain.entry);
   if (!entry) return [];
+  if (chain.layout) {
+    const columns = chain.layout.map((col) => col.map((id) => (chain.team ? id.replaceAll('{teamId}', chain.team) : id)).filter((id) => content.events.has(id)));
+    return columns.flatMap((col, i) => col.map((event) => ({ event, depth: i + 1, battle: battleOfRoom(content, event), next: columns[i + 1] ?? [] })));
+  }
   const depth = new Map<string, number>();
   const order: string[] = [];
-  let level = opensNext(entry).filter((id) => content.events.has(id) && !chainOfEntry(id));
+  let level = opensNext(entry, chain.team).filter((id) => content.events.has(id) && !chainOfEntry(id));
   for (let d = 1; level.length > 0; d++) {
     const nextLevel: string[] = [];
     for (const id of level) {
       if (depth.has(id)) continue;
       depth.set(id, d);
       order.push(id);
-      nextLevel.push(...opensNext(content.events.get(id)!).filter((x) => content.events.has(x) && !chainOfEntry(x) && !depth.has(x)));
+      nextLevel.push(...opensNext(content.events.get(id)!, chain.team).filter((x) => content.events.has(x) && !chainOfEntry(x) && !depth.has(x)));
     }
     level = nextLevel;
   }
-  const battleOf = (id: string): 'trainer' | 'wild' | null => {
-    let found: 'trainer' | 'wild' | null = null;
-    for (const c of content.events.get(id)!.choices) for (const o of [c.success, c.failure]) if (o?.battle) found = found === 'trainer' || o.battle.kind === 'trainer' ? 'trainer' : 'wild';
-    return found;
-  };
-  return order.map((event) => ({ event, depth: depth.get(event)!, battle: battleOf(event), next: opensNext(content.events.get(event)!).filter((x) => depth.get(x) === depth.get(event)! + 1) }));
+  return order.map((event) => ({ event, depth: depth.get(event)!, battle: battleOfRoom(content, event), next: opensNext(content.events.get(event)!, chain.team).filter((x) => depth.get(x) === depth.get(event)! + 1) }));
 }
 
 /** The stage map of a chain pseudo-stage, drawn like any stage. Rooms are the chain's own events, so the story plays exactly as written. */
@@ -209,9 +217,11 @@ export function routeChainEvent(content: Content, run: RunState, eventId: string
   const st = run.stage;
   if (!st) return false;
   if (!st.pseudo) {
-    const chain = PSEUDO_CHAINS.find((c) => chainRooms(content, c).some((r) => r.depth === 1 && r.event === eventId));
+    // Several Hideouts share their first room: the region's own team's chain wins.
+    const fits = PSEUDO_CHAINS.filter((c) => chainRooms(content, c).some((r) => r.depth === 1 && r.event === eventId));
+    const chain = fits.find((c) => c.team !== undefined && c.team === run.story.evil?.teamId) ?? fits.find((c) => c.team === undefined);
     // Only the entry's own targets step in; the entry event stays on the parent node.
-    if (!chain || !opensNext(content.events.get(chain.entry)!).includes(eventId)) return false;
+    if (!chain || !opensNext(content.events.get(chain.entry)!, chain.team).includes(eventId)) return false;
     run.pseudoParent = structuredClone(st);
     run.stage = buildChainStage(content, chain, st);
     if (chain.start === 'opened') {

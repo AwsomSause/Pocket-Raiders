@@ -29,6 +29,7 @@ import { hasPerk } from '../core/mapItems';
 import Phaser from 'phaser';
 import { wildBehavior } from '../core/wildBehavior';
 import { enemyIntent, foePreviewIntent, trainerTaunt } from '../core/battle/intent';
+import { nextSwitchLine } from '../core/rivals/questlines';
 import { explainMoment, explanationText, FAMILY_NAMES, unseenKeys } from '../core/story/hyperRules';
 import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
 import { armFeat, featCharged } from '../core/story2/feats';
@@ -3469,6 +3470,8 @@ export class BattleScene extends Phaser.Scene {
     // Boss intent (#117): bosses, raids and totems telegraph the move they value most.
     // Mentor lesson Foe Move Preview: on turn one the foe's chosen move is shown instead.
     const intent = this.run.battle && !this.run.battle.doubles ? (foePreviewIntent(content, this.run.battle) ?? enemyIntent(content, this.run.battle, this.activeMon(), this.run.party) ?? trainerTaunt(content, this.run.battle, this.activeMon(), this.run.party)) : null;
+    // R5 the mentor's lesson: "look at the one that's waiting" (the enemy Pokémon that comes in next, for the rest of the region).
+    const waiting = this.run.battle ? nextSwitchLine(content, this.run, this.run.battle) : null;
     const battleNow = this.run.battle!;
     const canRally = !this.duo && rallyProblem(content, battleNow) === null;
     if (!canRally) this.rallyChoice = false;
@@ -3481,7 +3484,7 @@ export class BattleScene extends Phaser.Scene {
     // A Shadow's preview adds lines: shrink the text so the box never clips (restored for every other prompt).
     this.msgBaseSize ??= String(this.message.style.fontSize);
     this.message.setFontSize(shadow ? '20px' : this.msgBaseSize);
-    this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${featLine}${shadow ? `${shadowPreviewLine((id) => content.moves.get(id)?.name ?? id, this.activeMon(), battleNow.turn, this.run.rng.battle, heartStage(content, shadow.heart))}\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
+    this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${waiting ? `${waiting}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${featLine}${shadow ? `${shadowPreviewLine((id) => content.moves.get(id)?.name ?? id, this.activeMon(), battleNow.turn, this.run.rng.battle, heartStage(content, shadow.heart))}\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
     const options = [{ label: 'Fight' }, { label: 'Bag' }, { label: 'Pokémon' }];
     const label = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z', dynamax: 'Max', mega: 'Mega' })[c.kind];
     const onLabel = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z-Move', dynamax: 'Dynamax', mega: 'Mega Evolution' })[c.kind];

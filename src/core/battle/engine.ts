@@ -122,7 +122,7 @@ import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
 import { momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
 import type { MomentHooks } from '../moments/pokemonMoments';
-import { quirkAccuracy, quirkDamageMult, quirkEntryStages, quirkNoCrits, quirkOf, quirkPriority, quirkSurvives } from '../co/quirks';
+import { quirkAccuracy, quirkDamageMult, quirkEntryStages, quirkGuard, quirkNoCrits, quirkOf, quirkPriority, quirkSurvives } from '../co/quirks';
 import { reapplyBoost } from '../instrumentality/secondChance';
 import { freshHyperBattle, rollHyper, type EnemyRage, type HyperContext, type HyperEligibility } from './hyper';
 import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtras, maxMoveTerrain, maxMoveWeather, stabMultiplier, teraPower, tickDynamax, transformProblem, zMoveFor, type TransformEvent, type TransformRequest, type TransformStepEvent } from './transform';
@@ -1135,6 +1135,27 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
     if (fell.length > 0) battle.outcome = fell.some((e) => e.side === 'enemy') ? 'win' : 'lose';
   }
   if (!battle.outcome && rule.surviveTurns && battle.turn > rule.surviveTurns) battle.outcome = 'win';
+  if (!battle.outcome && rule.calm && !events.some((e) => e.type === 'damage' && e.side === 'enemy')) {
+    // R16 Wants to Stop: a turn the foe is not hurt fills its meter; full, it sits down (`calm:done` tells the scene how it ended).
+    battle.storyEffects.push('calm');
+    const n = battle.storyEffects.filter((s) => s === 'calm').length;
+    events.push({ type: 'raid', tone: 'info', text: n >= rule.calm ? 'It sits down. It looks at its trainer. It does not get up.' : `Wants to Stop: ${n} of ${rule.calm}.` });
+    if (n >= rule.calm) {
+      battle.storyEffects.push('calm:done');
+      battle.outcome = 'win';
+    }
+  }
+  if (!battle.outcome && rule.clock && party && content) {
+    // R18 the midnight clock: whoever is ahead when it runs out wins (Pokémon standing, then HP share).
+    const left = rule.clock - battle.turn;
+    if (left > 0) events.push({ type: 'raid', tone: 'info', text: left === 2 ? 'Eleven fifty-eight. Both of you glance at the sky.' : left === 1 ? 'One minute to midnight.' : `${left} minutes to midnight.` });
+    else {
+      const side = (team: PokemonInstance[]) => [team.filter((m) => m.hp > 0).length, team.reduce((a, m) => a + Math.max(0, m.hp) / maxHp(content, m), 0)] as const;
+      const [mine, theirs] = [side(party), side(battle.enemyTeam)];
+      events.push({ type: 'raid', tone: 'info', text: 'Midnight. Both of you stop and look up as the first firework goes up.' });
+      battle.outcome = mine[0] > theirs[0] || (mine[0] === theirs[0] && mine[1] >= theirs[1]) ? 'win' : 'lose';
+    }
+  }
   if (!battle.outcome && rule.weatherCycle) battle.weather = { id: rule.weatherCycle[(battle.turn - 1) % rule.weatherCycle.length]!, turns: 5 };
 }
 
@@ -2819,11 +2840,28 @@ function takeHp(
   // Catalog Overhaul quirks: a Pokémon that has weathered this type before hangs on at 1 HP (once per battle).
   const quirkType = hit !== null ? ctx.quirkHitType : undefined;
   if (hit !== null) ctx.quirkHitType = undefined;
+  // Event rule foeEndures (NE54): the foe hangs on at 1 HP until your Nth hit, whatever the damage.
+  if (hit !== null && c.side === 'enemy' && lost > 0 && ctx.battle.eventRule?.foeEndures) {
+    const n = ctx.battle.storyEffects.filter((t) => t === 'foe-endure-hit').length + 1;
+    ctx.battle.storyEffects.push('foe-endure-hit');
+    if (n < ctx.battle.eventRule.foeEndures && lost >= c.mon.hp) {
+      lost = c.mon.hp - 1;
+      c.mon.hp = 1;
+      return { lost, lastStand: null, hyper: null, knockedDown: false, stand: false };
+    }
+  }
   if (hit !== null && c.side === 'player' && lost > 0 && lost >= c.mon.hp && c.mon.hp > 1 && quirkSurvives(c.mon, quirkType, ctx.battle.storyEffects)) {
     lost = c.mon.hp - 1;
     c.mon.hp = 1;
     (ctx.momentQueue ??= []).push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, c.mon.speciesId).name} has been through worse. It hangs on!` });
     return { lost, lastStand: null, hyper: null, knockedDown: false, stand: false };
+  }
+  // Quirk Protector: a teammate takes the hit instead (once per battle), and drops no lower than 1 HP doing it.
+  const guard = hit !== null && c.side === 'player' && lost > 0 && lost >= c.mon.hp ? quirkGuard(ctx.party, c.mon, ctx.battle.storyEffects) : null;
+  if (guard) {
+    guard.hp = Math.max(1, guard.hp - lost);
+    (ctx.momentQueue ??= []).push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, guard.speciesId).name} throws itself in the way and takes the hit!` });
+    return { lost: 0, lastStand: null, hyper: null, knockedDown: false, stand: false };
   }
   // Beta 0.6 Pokémon moments: a species, line, type or group may hang on (core/moments). A Hyper moment this turn comes first.
   if (hit !== null && c.side === 'player' && lost > 0 && lost >= c.mon.hp) {
@@ -3912,7 +3950,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (foeAbility === 'tangled-feet' && target.vol.confusion > 0) accuracy *= 0.5;
       if (ctx.battle.field.gravity > 0) accuracy *= 5 / 3;
       if (ctx.battle.accuracyMult) accuracy *= ctx.battle.accuracyMult;
-      if (ctx.battle.eventRule?.accuracyMult) accuracy *= ctx.battle.eventRule.accuracyMult;
+      if (ctx.battle.eventRule?.accuracyMult && (!ctx.battle.eventRule.accuracyTurns || ctx.battle.turn <= ctx.battle.eventRule.accuracyTurns)) accuracy *= ctx.battle.eventRule.accuracyMult;
       if (user.side === 'player') accuracy *= quirkAccuracy(user.mon, ctx.period);
       if (target.side === 'player') accuracy /= evasionPerk(ctx.perks, getSpecies(content, target.mon.speciesId).types) * growthEvasionMultiplier(content.balance.overhaulGrowth, target.mon, target.mon.hp / Math.max(1, calcStats(content, target.mon).hp));
       if (foeAbility === 'wonder-skin' && move.category === 'status') accuracy = Math.min(accuracy, 0.5);

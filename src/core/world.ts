@@ -72,7 +72,7 @@ export interface Front {
 /** The fronts of this stage: its own (from the seed, none in the League) and any an event brought in. */
 export function stageFronts(content: Content, run: RunState): Front[] {
   const stage = run.stage;
-  if (!stage || stage.kind !== 'stage') return [];
+  if (!stage || stage.kind !== 'stage' || stage.clearSky) return [];
   const w = worldOf(content);
   const rng = new Rng(hashSeed(`${run.seed}::fronts::${stageKey(run)}`));
   const fronts: Front[] = [];

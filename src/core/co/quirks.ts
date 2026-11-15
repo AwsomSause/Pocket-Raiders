@@ -35,6 +35,10 @@ export const QuirkHookSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('weatherStage'), weather: WeatherSchema, stat: Stat, stages: z.number().int().min(-2).max(2) }),
   /** Its moves never land critical hits (a careful fighter). */
   z.object({ kind: z.literal('noCrits') }),
+  /** Once per battle it takes a hit that would knock out a teammate (the Pangoro that guards the weak). It drops no lower than 1 HP doing it. */
+  z.object({ kind: z.literal('guardAlly'), perBattle: z.number().int().min(1).max(2).default(1) }),
+  /** When it is `from` and reaches `level`, it evolves into `to` (the Dreamer Poliwag becomes a Politoed if given the chance). */
+  z.object({ kind: z.literal('evolvesInto'), from: z.string().min(1), to: z.string().min(1), level: z.number().int().min(1).max(100) }),
 ]);
 export type QuirkHook = z.infer<typeof QuirkHookSchema>;
 
@@ -122,6 +126,29 @@ export function quirkSurvives(mon: PokemonInstance, moveType: string | undefined
     }
   }
   return false;
+}
+
+/** The tag that counts a guardAlly use in this battle (battle.storyEffects). */
+export const guardTag = (uid: string, n: number) => `quirk-guard:${uid}:${n}`;
+
+/** A hit would knock out `target`: the teammate whose quirk takes it instead (the use is counted), or null. */
+export function quirkGuard(party: readonly PokemonInstance[], target: PokemonInstance, storyEffects: string[]): PokemonInstance | null {
+  for (const mon of party) {
+    if (mon === target || mon.uid === target.uid || mon.hp <= 1) continue;
+    for (const h of hooksOf(mon, 'guardAlly')) {
+      for (let n = 1; n <= h.perBattle; n++) {
+        if (storyEffects.includes(guardTag(mon.uid, n))) continue;
+        storyEffects.push(guardTag(mon.uid, n));
+        return mon;
+      }
+    }
+  }
+  return null;
+}
+
+/** The species its quirk evolves it into at its level now, or null. */
+export function quirkEvolution(mon: PokemonInstance): string | null {
+  return hooksOf(mon, 'evolvesInto').find((h) => h.from === mon.speciesId && mon.level >= h.level)?.to ?? null;
 }
 
 /** Stat stages it comes out with: quirk `stats` hooks (until Bond / until a flag) and `weatherStage` in that weather. */

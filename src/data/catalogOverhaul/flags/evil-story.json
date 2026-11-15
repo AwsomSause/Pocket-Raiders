@@ -1,0 +1,12 @@
+{
+ "category": "evil-story",
+ "note": "Run flags the evil-story events read that another row of the Catalog Overhaul writes. Each stays here only until that row's events are on the branch (then tests/unit/eventMemory.test.ts finds the writer itself).",
+ "external": {
+  "front-exposed": "markets (the front's booth exposed)",
+  "shelf-kit": "SF50 (Kit Arden's files on the shelf)",
+  "flare-bribed": "the Stone Harvest questline (M2: Flare paid you a stone)",
+  "promise-jirachi": "Jirachi's Promise",
+  "blessing-influence": "legends (the run's blessing, Influence)",
+  "blessing-*": "legends (the run's blessing, one per legend)"
+ }
+}
