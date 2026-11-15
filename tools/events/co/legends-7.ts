@@ -1,7 +1,7 @@
 // Catalog Overhaul Pack, legends: Mythical Visits MY1 to MY12 (QUESTLINES_MYTHICAL.md). Pack questlines: status `extra`.
 // Each is the Visit scene of a believed Mythical (three Tellings): it opens when `believed-<id>` is set and no Mythical has visited this
 // run, never forces a battle, and ends in the Promise room (_legendsKit.ts `promiseRoom`), which makes it the Guest. One per run.
-// Cut by the run-memory rule: Keepsakes, the Parting, anything from a past run (Manaphy's later-run egg, Arceus, Marshadow's save gate).
+// Cut by the run-memory rule: Keepsakes, the Parting, anything from a past run (Manaphy's later-run egg, Marshadow's save gate); MY11 Arceus is a same-run version.
 import { $, at, better, br, ch, ev, fight, flag, flagIs, fr, good, heal, item, leave, lose, moveFlag, out, ptype, room, takeNode, wild, type Json } from '../dsl.ts';
 import { promiseRoom, visitable } from './_legendsKit.ts';
 
@@ -198,6 +198,41 @@ const my10: Json[] = [
     ]),
 ];
 
+// ---------------------------------------------------------------- MY11. Arceus: The Sixteen Pedestals (same-run version)
+// The pack's Arceus needs ten Promises kept across past runs and judges the NEXT run; both are cut by the run-memory rule. Here it
+// comes at the last rest before the League to a run whose Guest still walks beside it with the Promise never broken (`guest-true`),
+// and its Judgment covers the rest of this run: three commandments for the League, a Plate for the starter, and one rule rewritten.
+// The Plate's power for the starter's type: the team-wide catalog Plate where one exists, else that type's own charm (the items.json
+// Plates of the same names are Rage items and would win the lookup in giveItem, so those seven types use the charm).
+const PLATES: Json = { normal: 'silk-scarf', fighting: 'black-belt', flying: 'sky-plate', poison: 'toxic-plate', ground: 'earth-plate', rock: 'stone-plate', bug: 'insect-plate', ghost: 'spooky-plate', steel: 'iron-plate', fire: 'charcoal', water: 'splash-plate', grass: 'miracle-seed', electric: 'magnet', psychic: 'twistedspoon', ice: 'icicle-plate', dragon: 'draco-plate', dark: 'dark-ribbon', fairy: 'fairy-feather' };
+const regionsLeft = (atMost: number): Json => ({ kind: 'regionsLeft', atMost });
+const COMMANDMENTS = (n: 2 | 3): Json => ({ kind: 'tempEffect', label: n === 3 ? 'The Judgment: three commandments' : 'The Judgment: two commandments', until: 'region',
+  effects: [{ kind: 'healingMultiplier', value: 0.85 }, { kind: 'priceMultiplier', value: 1.2 }, ...(n === 3 ? [{ kind: 'captureMultiplier', value: 0.8 }] : [])] });
+const judgment = (id: string, n: 2 | 3): Json => ev(id, 'Arceus: The Judgment', G, { ...R, pokemon: 'arceus', tint: '#f0e8c0', effect: 'sparkle' },
+  `The voice: "Then hear the Judgment. ${n === 3 ? 'Three' : 'Two'} commandments, for the rest of your road: ${n === 3 ? 'heal less, pay more, and hold fewer' : 'heal less, and pay more'}. Keep them to the end, as you kept your word."\n\nThe sixteenth pedestal is empty. A Plate rises from it, and its power goes to your first partner's type. Then the voice asks you to change one rule of the world. Only one.`,
+  [
+    ch('"Let revival be as common as it used to be."', out('Your bag is heavier.', COMMANDMENTS(n), { kind: 'typeItem', who: 'starter', table: PLATES }, item('revive', 3), item('max-revive'), flag('arceus-judged'), moment('Arceus judged you at the sixteen pedestals. You asked for revival to be common again.', 95))),
+    ch('"Raise them."', out('Your whole party feels it: three levels, all at once.', COMMANDMENTS(n), { kind: 'typeItem', who: 'starter', table: PLATES }, { kind: 'levels', amount: 3, who: 'party' }, flag('arceus-judged'), moment('Arceus judged you at the sixteen pedestals. You asked for your Pokémon to be raised.', 95))),
+    ch('"Set every rival back to the start."', out('Somewhere, every rival you have feels the ground move under them.', COMMANDMENTS(n), { kind: 'typeItem', who: 'starter', table: PLATES }, { kind: 'tempEffect', label: 'Arceus set the rivals back', until: 'region', effects: [{ kind: 'rivalLevelOffset', value: -5 }] }, flag('arceus-judged'), moment('Arceus judged you at the sixteen pedestals. You asked for every rival to be set back.', 95))),
+  ]);
+const PEDESTALS = 'A dark hall. Sixteen pedestals. Each has a Plate on it except one.\n\nA voice from everywhere: "You have kept your word. To one of mine, all the way here."\nThe voice: "What do you bring to the seventeenth?"';
+const my11: Json[] = [
+  ev('co-my11-pedestals', 'The Sixteen Pedestals', G, { rarity: 'rare', requires: [flagIs('promises-on'), flagIs('guest-true'), regionsLeft(0), not('arceus-judged')], pokemon: 'arceus', tint: '#f0e8c0', effect: 'sparkle' },
+    `At the last rest before the League, a plate of stone lies half-buried, carved with a circle of sixteen. You brush the dirt off it, and the rest is gone.\n\n${PEDESTALS}`,
+    [
+      ch('"Myself."', out('The voice is silent for a long time.', room('co-my11-judgment'))),
+      ch('"My Pokémon."', out('The voice: "They are not yours to bring." It waits for another answer.', room('co-my11-again'))),
+      ch('"Nothing."', out('The voice: "Good."', room('co-my11-judgment-light'))),
+    ]),
+  ev('co-my11-again', 'The Sixteen Pedestals', G, { ...R, pokemon: 'arceus', tint: '#f0e8c0', effect: 'sparkle' }, `${PEDESTALS}\n\nIt is still waiting.`,
+    [
+      ch('"Myself."', out('The voice is silent for a long time.', room('co-my11-judgment'))),
+      ch('"Nothing."', out('The voice: "Good."', room('co-my11-judgment-light'))),
+    ]),
+  judgment('co-my11-judgment', 3),
+  judgment('co-my11-judgment-light', 2),
+];
+
 // ---------------------------------------------------------------- MY12. Pecharunt: Three Wishes for a Small Favour
 const my12: Json[] = [
   ev('co-my12-shrine', 'Three Wishes for a Small Favour', G, {
@@ -219,5 +254,5 @@ const my12: Json[] = [
   promiseRoom('pecharunt', 'Pecharunt holds out a mochi, glistening. It is very sweet. It smells like a promise.', 'Pecharunt climbs onto your bag. "Every gift," it says. "Every one."', '#a060c0'),
 ];
 
-export const EVENTS: Json[] = [...my1, ...my2, ...my3, ...my4, ...my5, ...my6, ...my7, ...my8, ...my9, ...my10, ...my12];
+export const EVENTS: Json[] = [...my1, ...my2, ...my3, ...my4, ...my5, ...my6, ...my7, ...my8, ...my9, ...my10, ...my11, ...my12];
 export const REMOVE: string[] = [];

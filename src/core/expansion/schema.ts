@@ -53,6 +53,8 @@ export const ExpansionSettingsSchema = z.object({
   blessingsEnabled: z.boolean().default(true),
   /** Beta 0.7 U1 Ultra Beast Incursions: on by default (Kice, 2026-11-15, catalog overhaul legends). Read when a run starts. */
   ultraBeastsEnabled: z.boolean().default(true),
+  /** Catalog Overhaul (legends) Whole Run Events: 35% of runs follow one story from Stage 2 to the Champion. On by default (Kice: every legends piece on). Read when a run starts. */
+  wholeRunEvents: z.boolean().default(true),
   /** Beta 0.7 S1 Second Chance: the percent chance a run-ending loss is turned into a revive, once per run (0 = off). Read when a run starts. */
   secondChancePct: z.number().min(0).max(100).default(5),
   /** H1 heated-moment moves (BALANCE 6): the Hyper slot move needs the conditions, a 6% roll and the per-region/per-run caps. Read when a run starts. */

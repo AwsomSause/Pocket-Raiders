@@ -2285,6 +2285,559 @@
    ]
   },
   {
+   "id": "co-my11-pedestals",
+   "name": "The Sixteen Pedestals",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "promises-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "guest-true",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "regionsLeft",
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "arceus-judged",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "arceus",
+    "tint": "#f0e8c0",
+    "effect": "sparkle"
+   },
+   "intro": "At the last rest before the League, a plate of stone lies half-buried, carved with a circle of sixteen. You brush the dirt off it, and the rest is gone.\n\nA dark hall. Sixteen pedestals. Each has a Plate on it except one.\n\nA voice from everywhere: \"You have kept your word. To one of mine, all the way here.\"\nThe voice: \"What do you bring to the seventeenth?\"",
+   "choices": [
+    {
+     "label": "\"Myself.\"",
+     "success": {
+      "text": "The voice is silent for a long time.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my11-judgment"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"My Pokémon.\"",
+     "success": {
+      "text": "The voice: \"They are not yours to bring.\" It waits for another answer.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my11-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Nothing.\"",
+     "success": {
+      "text": "The voice: \"Good.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my11-judgment-light"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my11-again",
+   "name": "The Sixteen Pedestals",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "arceus",
+    "tint": "#f0e8c0",
+    "effect": "sparkle"
+   },
+   "intro": "A dark hall. Sixteen pedestals. Each has a Plate on it except one.\n\nA voice from everywhere: \"You have kept your word. To one of mine, all the way here.\"\nThe voice: \"What do you bring to the seventeenth?\"\n\nIt is still waiting.",
+   "choices": [
+    {
+     "label": "\"Myself.\"",
+     "success": {
+      "text": "The voice is silent for a long time.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my11-judgment"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Nothing.\"",
+     "success": {
+      "text": "The voice: \"Good.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my11-judgment-light"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my11-judgment",
+   "name": "Arceus: The Judgment",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "arceus",
+    "tint": "#f0e8c0",
+    "effect": "sparkle"
+   },
+   "intro": "The voice: \"Then hear the Judgment. Three commandments, for the rest of your road: heal less, pay more, and hold fewer. Keep them to the end, as you kept your word.\"\n\nThe sixteenth pedestal is empty. A Plate rises from it, and its power goes to your first partner's type. Then the voice asks you to change one rule of the world. Only one.",
+   "choices": [
+    {
+     "label": "\"Let revival be as common as it used to be.\"",
+     "success": {
+      "text": "Your bag is heavier.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Judgment: three commandments",
+        "until": "region",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 0.85
+         },
+         {
+          "kind": "priceMultiplier",
+          "value": 1.2
+         },
+         {
+          "kind": "captureMultiplier",
+          "value": 0.8
+         }
+        ]
+       },
+       {
+        "kind": "typeItem",
+        "who": "starter",
+        "table": {
+         "normal": "silk-scarf",
+         "fighting": "black-belt",
+         "flying": "sky-plate",
+         "poison": "toxic-plate",
+         "ground": "earth-plate",
+         "rock": "stone-plate",
+         "bug": "insect-plate",
+         "ghost": "spooky-plate",
+         "steel": "iron-plate",
+         "fire": "charcoal",
+         "water": "splash-plate",
+         "grass": "miracle-seed",
+         "electric": "magnet",
+         "psychic": "twistedspoon",
+         "ice": "icicle-plate",
+         "dragon": "draco-plate",
+         "dark": "dark-ribbon",
+         "fairy": "fairy-feather"
+        }
+       },
+       {
+        "kind": "item",
+        "id": "revive",
+        "count": 3
+       },
+       {
+        "kind": "item",
+        "id": "max-revive",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "arceus-judged",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Arceus judged you at the sixteen pedestals. You asked for revival to be common again.",
+        "importance": 95
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Raise them.\"",
+     "success": {
+      "text": "Your whole party feels it: three levels, all at once.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Judgment: three commandments",
+        "until": "region",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 0.85
+         },
+         {
+          "kind": "priceMultiplier",
+          "value": 1.2
+         },
+         {
+          "kind": "captureMultiplier",
+          "value": 0.8
+         }
+        ]
+       },
+       {
+        "kind": "typeItem",
+        "who": "starter",
+        "table": {
+         "normal": "silk-scarf",
+         "fighting": "black-belt",
+         "flying": "sky-plate",
+         "poison": "toxic-plate",
+         "ground": "earth-plate",
+         "rock": "stone-plate",
+         "bug": "insect-plate",
+         "ghost": "spooky-plate",
+         "steel": "iron-plate",
+         "fire": "charcoal",
+         "water": "splash-plate",
+         "grass": "miracle-seed",
+         "electric": "magnet",
+         "psychic": "twistedspoon",
+         "ice": "icicle-plate",
+         "dragon": "draco-plate",
+         "dark": "dark-ribbon",
+         "fairy": "fairy-feather"
+        }
+       },
+       {
+        "kind": "levels",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "arceus-judged",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Arceus judged you at the sixteen pedestals. You asked for your Pokémon to be raised.",
+        "importance": 95
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Set every rival back to the start.\"",
+     "success": {
+      "text": "Somewhere, every rival you have feels the ground move under them.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Judgment: three commandments",
+        "until": "region",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 0.85
+         },
+         {
+          "kind": "priceMultiplier",
+          "value": 1.2
+         },
+         {
+          "kind": "captureMultiplier",
+          "value": 0.8
+         }
+        ]
+       },
+       {
+        "kind": "typeItem",
+        "who": "starter",
+        "table": {
+         "normal": "silk-scarf",
+         "fighting": "black-belt",
+         "flying": "sky-plate",
+         "poison": "toxic-plate",
+         "ground": "earth-plate",
+         "rock": "stone-plate",
+         "bug": "insect-plate",
+         "ghost": "spooky-plate",
+         "steel": "iron-plate",
+         "fire": "charcoal",
+         "water": "splash-plate",
+         "grass": "miracle-seed",
+         "electric": "magnet",
+         "psychic": "twistedspoon",
+         "ice": "icicle-plate",
+         "dragon": "draco-plate",
+         "dark": "dark-ribbon",
+         "fairy": "fairy-feather"
+        }
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Arceus set the rivals back",
+        "until": "region",
+        "effects": [
+         {
+          "kind": "rivalLevelOffset",
+          "value": -5
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "arceus-judged",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Arceus judged you at the sixteen pedestals. You asked for every rival to be set back.",
+        "importance": 95
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my11-judgment-light",
+   "name": "Arceus: The Judgment",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "arceus",
+    "tint": "#f0e8c0",
+    "effect": "sparkle"
+   },
+   "intro": "The voice: \"Then hear the Judgment. Two commandments, for the rest of your road: heal less, and pay more. Keep them to the end, as you kept your word.\"\n\nThe sixteenth pedestal is empty. A Plate rises from it, and its power goes to your first partner's type. Then the voice asks you to change one rule of the world. Only one.",
+   "choices": [
+    {
+     "label": "\"Let revival be as common as it used to be.\"",
+     "success": {
+      "text": "Your bag is heavier.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Judgment: two commandments",
+        "until": "region",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 0.85
+         },
+         {
+          "kind": "priceMultiplier",
+          "value": 1.2
+         }
+        ]
+       },
+       {
+        "kind": "typeItem",
+        "who": "starter",
+        "table": {
+         "normal": "silk-scarf",
+         "fighting": "black-belt",
+         "flying": "sky-plate",
+         "poison": "toxic-plate",
+         "ground": "earth-plate",
+         "rock": "stone-plate",
+         "bug": "insect-plate",
+         "ghost": "spooky-plate",
+         "steel": "iron-plate",
+         "fire": "charcoal",
+         "water": "splash-plate",
+         "grass": "miracle-seed",
+         "electric": "magnet",
+         "psychic": "twistedspoon",
+         "ice": "icicle-plate",
+         "dragon": "draco-plate",
+         "dark": "dark-ribbon",
+         "fairy": "fairy-feather"
+        }
+       },
+       {
+        "kind": "item",
+        "id": "revive",
+        "count": 3
+       },
+       {
+        "kind": "item",
+        "id": "max-revive",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "arceus-judged",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Arceus judged you at the sixteen pedestals. You asked for revival to be common again.",
+        "importance": 95
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Raise them.\"",
+     "success": {
+      "text": "Your whole party feels it: three levels, all at once.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Judgment: two commandments",
+        "until": "region",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 0.85
+         },
+         {
+          "kind": "priceMultiplier",
+          "value": 1.2
+         }
+        ]
+       },
+       {
+        "kind": "typeItem",
+        "who": "starter",
+        "table": {
+         "normal": "silk-scarf",
+         "fighting": "black-belt",
+         "flying": "sky-plate",
+         "poison": "toxic-plate",
+         "ground": "earth-plate",
+         "rock": "stone-plate",
+         "bug": "insect-plate",
+         "ghost": "spooky-plate",
+         "steel": "iron-plate",
+         "fire": "charcoal",
+         "water": "splash-plate",
+         "grass": "miracle-seed",
+         "electric": "magnet",
+         "psychic": "twistedspoon",
+         "ice": "icicle-plate",
+         "dragon": "draco-plate",
+         "dark": "dark-ribbon",
+         "fairy": "fairy-feather"
+        }
+       },
+       {
+        "kind": "levels",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "arceus-judged",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Arceus judged you at the sixteen pedestals. You asked for your Pokémon to be raised.",
+        "importance": 95
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Set every rival back to the start.\"",
+     "success": {
+      "text": "Somewhere, every rival you have feels the ground move under them.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Judgment: two commandments",
+        "until": "region",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 0.85
+         },
+         {
+          "kind": "priceMultiplier",
+          "value": 1.2
+         }
+        ]
+       },
+       {
+        "kind": "typeItem",
+        "who": "starter",
+        "table": {
+         "normal": "silk-scarf",
+         "fighting": "black-belt",
+         "flying": "sky-plate",
+         "poison": "toxic-plate",
+         "ground": "earth-plate",
+         "rock": "stone-plate",
+         "bug": "insect-plate",
+         "ghost": "spooky-plate",
+         "steel": "iron-plate",
+         "fire": "charcoal",
+         "water": "splash-plate",
+         "grass": "miracle-seed",
+         "electric": "magnet",
+         "psychic": "twistedspoon",
+         "ice": "icicle-plate",
+         "dragon": "draco-plate",
+         "dark": "dark-ribbon",
+         "fairy": "fairy-feather"
+        }
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Arceus set the rivals back",
+        "until": "region",
+        "effects": [
+         {
+          "kind": "rivalLevelOffset",
+          "value": -5
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "arceus-judged",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Arceus judged you at the sixteen pedestals. You asked for every rival to be set back.",
+        "importance": 95
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
    "id": "co-my12-shrine",
    "name": "Three Wishes for a Small Favour",
    "group": "Story: Mythical",

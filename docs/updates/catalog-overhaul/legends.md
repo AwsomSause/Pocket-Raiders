@@ -16,3 +16,7 @@ Source: `catalog_overhaul_pack/catalog_overhaul/QUESTLINES_ALPHAS_AND_ANOMALIES.
 - Most Mythical Wonders and Promise rules are still the Beta 0.7 limits: only Zarude's Wonder and rule act in the game.
 - Mega Anomaly M7 waits on the rivals' rival slot; A1, L1 and L16 are built by another thread.
 - 117 RULE ids stay live on purpose (pseudo stages, the Shadow chain, past-run Archive pieces, rival scenes, keys and form items).
+
+### Whole Run Events and Arceus
+- About one run in three now follows one long story from Stage 2 to the Champion: Guidance of Giratina, the Weather War, the Made One, the Seven Days, or the Weapon and the Flower. Ten beats each, choices that change how it ends, and an ending that changes the League. Switch it off under Settings > Gameplay > Whole Run Events.
+- Arceus (the Sixteen Pedestals) can now appear at the last rest before the League, if your Mythical Guest is still with you and you never broke its Promise.

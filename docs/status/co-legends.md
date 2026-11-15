@@ -109,7 +109,7 @@ Each Visit opens for a believed Mythical (`believed-<id>`, three Tellings) while
 | MY8 Meloetta | three notes (sound move for the third), 3 = dance, 1-2 = corrected, 0 = gone | |
 | MY9 Hoopa | three rings over three stages, the sandwich scene at the third | stolen-item return not tracked |
 | MY10 Marshadow | the shadow spar / ask / look away | no Promise: Marshadow is disabled (its Visit needs past runs) |
-| MY11 Arceus | not built | needs ten kept Promises on the save and a next-run Judgment: cut by the run-memory rule |
+| MY11 Arceus | co-my11-pedestals (2026-11-15) | same-run version: comes at the last rest before the League (last region) to a run whose Guest still walks with it, Promise never broken (`guest-true`); "My Pokémon" is refused and asked again; "Nothing" = two commandments instead of three. The Judgment covers the rest of THIS run (heal less, pay more, catch less), gives the starter's type its Plate power (catalog Plate, or that type's charm where the items.json Plate is a Rage item), and one rewrite (revives / +3 levels / rivals -5 levels for the region). Cut: ten Promises on the save, the next-run Judgment, the Azure Flute keepsake, the remembers lines (all past-run) |
 | MY12 Pecharunt | favour / yes / no (it comes back next stage); "Ah. One of mine." with a Loyal blessing | "kept by breaking it" not built; the Honest Trade Card is the markets row's |
 | MY13 Darkrai | at Night: tell a nightmare (heal) / watch / ask about the pale shape; Cresselia variant | "+10% over max HP" is a full heal; double forgiveness not built |
 | MY14 Keldeo | one-on-one, win or lose ends in the Promise; Swords variant | Resolute form not built |
@@ -160,9 +160,24 @@ Tests: `tests/unit/coLegendsRules.test.ts`. Old tests changed for the retired ev
 | Legendary Blessings (`LEGENDARY_BLESSINGS.md`) | blessing roll, tiers, Influence never falls, the ladder (Echoes 3, Trial 5, Recognition 7, Presence 9), Communion on catching its Legendary; now also Signs, Sign stops, Presence on the gate, Legend weeks | "Aligned choices" (+1) and "defeats its guardian" (+2) are not counted; the Trial is placed by the questline, not unlocked by Influence 5 |
 | Mythical Promises (`MYTHICAL_PROMISES.md`) | Tellings (3 believe), one Mythical per run, the Promise, forgive-once, the Guest; now Visit scenes and Telling stops for every Mythical not disabled | Wonders and Promise rules only for Zarude (the rest are `limited`); Keepsakes, Storybook, Arceus, Marshadow cut (past runs) |
 | Ultra Beast Incursions (`ULTRA_BEAST_INCURSIONS.md`) | Appetites, Static, Tears, Crossings, Incursions, Beast Balls, Homesickness; now questlines U1-U9 and mirror flags | Faller rank is a run flag only (raised by home worlds); Souvenirs and the Faller's Log cut |
-| Whole-Run Events (`WHOLE_RUN_EVENTS.md`) | not in the game | Guidance of Giratina, the Weather War, the Made One, the Seven Days, the Weapon and the Flower are not built (a slice of their own) |
+| Whole-Run Events (`WHOLE_RUN_EVENTS.md`) | built 2026-11-15: see "Whole Run Events" below | |
 
 ## Where I stopped (paused 2026-11-15, Kice: five threads at a time)
 - Resumed 2026-11-15 (merged ui-mockups; shared pieces are in the base now). Alphas, Megas, Deltas, Z, Legendary L2-L15 and Mythical MY1-MY22, Ultra U1-U9 and the RULE ids done; next the Beta 0.7 check, update fragment, PR ready.
 - Still to build: M7 (rivals slot), the 382 RULE ids (ladder Trial/Recognition/Presence), placement/flags/status files, update fragment, PR.
 - Run the full `npm run check` before opening the PR.
+
+## Whole Run Events (built 2026-11-15, `tools/events/co/legends-11.ts`, `legends-12.ts`; engine `src/core/legends/wholeRun.ts`)
+- Setting **Whole Run Events** (Gameplay, on by default; schema default, no save bump). Automated browsers on fresh settings keep it off, like Blessings.
+- 35% of runs draw one of five at run start (stream `whole-run-event`), marked by flags `wre-on`, `wre-<id>`. Run genesis keeps the setting, so a replay draws the same.
+- Ten beats each on the pack's skeleton (placement/legends.json: Beat 1 home step 2; 2-3 first region; 4-6 a region later; 7-9 two later; Beat 10 last region, before the Champion). A beat waits for the one before it, so a late beat catches up; the climax needs only Beat 1.
+- Threads are run flags (`gg-faith`, `gg-doubt`, `gg-curse`, `gg-w`, `gg-names`, `gg-lost`; `ww-sea/land/trust/sky`; `mo-purpose/kindness/leash/tools`; `sd-wishes/cost/kept`; `wf-grief/beauty/key/flower`). Endings set `<p>-end-<name>` and a for-the-region effect on the League (boss damage, healing and similar). Nothing ends a run: wild fights pseudo, trainer fights friendly. Tests: `tests/unit/coLegendsWholeRun.test.ts`.
+
+| Story | Beats | Limits |
+|---|---|---|
+| Guidance of Giratina | all 10, Beat 4 as three rooms (Looker, Rowan, Cynthia), Ghetsis's offer after the Baptism, climax in 3 phases + 3 acts (10/7/4/1 turns) and 6 endings | "the Pokémon obtained most recently" is the lowest-level one (the trade-away effect); the Curse is a region of slightly worse catching and healing, not a per-stage misfortune; outside hooks built: Renegade blessing (Faith starts higher), Ghost-type before Beat 2, Giratina in the party at Beat 8, lying (no Cyrus); not built: releases, evil-team stand, never losing a Pokémon; the Champion's arena and opening line do not change (the ending's effect stands in); the Usurper does not skip the Champion (nothing ends a run); Intensity "Reduced" text not written (Off = switch the setting off) |
+| The Weather War | 10 beats, dam third answer, climax survive 8 turns in rain/sun or pick a side; Balance / Drowned / Dry / Long Storm | map nodes do not flood or dry with the Threads |
+| The Made One | 10 beats, climax by what it learned (tools: it decides against you; else its makers); Chooses / Stays (Mewtwo joins) / Obeys / Against Us | outside hooks (releases, forced evolutions) not wired |
+| The Seven Days | 10 beats, five real wishes each paid by a named person; Blank Tag / Given Away / Seven for One / Goodnight | Jirachi-as-Guest hook not wired |
+| The Weapon and the Flower | 10 beats; Buried / Fired Once More / Beautiful World / Still Walking | outside hooks (revives at a cost, blessings) not wired |
+- Pack outlines for the last four were written up to full scenes here (the pack gives them at outline depth). Same-run only: the pack's "shuffled bag so all five are seen before a repeat" is a plain draw per run.

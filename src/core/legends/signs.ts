@@ -100,6 +100,8 @@ export function syncLegendFlags(run: Pick<RunState, 'story' | 'expansion' | 'reg
       setFlag(run, `believed-${m.id}`, (p.tellings[m.id] ?? 0) >= 3 ? 1 : 0);
     }
     setFlag(run, 'mythical-visited', p.visited ? 1 : 0);
+    // MY11 Arceus (same-run version): a Guest still walking with you whose Promise was never broken, not even once forgiven.
+    setFlag(run, 'guest-true', p.guest && !p.guest.forgiven ? 1 : 0);
   }
   // Ultra Beast Incursions: `ultra-on` (the system is on this run), `ultra-static` (a Static or later contact has happened),
   // `ultra-beast-<species>` (that Beast was met this run). Read by the Ultra questlines (co legends-9).
