@@ -67,7 +67,7 @@ export const statusLead = (s: 'poison' | 'burn' | 'paralysis' | 'sleep'): Json =
 export const cure = (): Json => ({ kind: 'cure' });
 export const status = (s: 'poison' | 'burn' | 'paralysis' | 'sleep'): Json => ({ kind: 'status', status: s });
 /** Catalog Overhaul: which Pokémon an effect lands on (core/co/who.ts). An object is the first able Pokémon that fits. */
-export type Who = 'lead' | 'party' | 'picked' | 'starter' | 'top' | 'firstCatch' | 'newest' | { types?: string[]; moveFlag?: string; species?: string[] };
+export type Who = 'lead' | 'party' | 'picked' | 'starter' | 'top' | 'firstCatch' | 'newest' | { types?: string[]; moveFlag?: string; species?: string[]; every?: boolean };
 export const fr = (amount: number, who: Who = 'party'): Json => ({ kind: 'friendship', amount, who });
 /** The pack's "+N Bond": +5 friendship per point on one Pokémon, +3 each for the whole party (balance.co). */
 export const bondUp = (points = 1, who: Who = 'lead'): Json => fr(points * (who === 'party' ? 3 : 5), who);
