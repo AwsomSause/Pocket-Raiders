@@ -8,6 +8,8 @@
     "cs-kanto-celadon-gamecorner-back",
     "cs-kanto-celadon-mansion-study",
     "cs-kanto-cerulean-burglary",
+    "cs-kanto-cerulean-recruiter",
+    "cs-kanto-cerulean-recruiter-ask",
     "cs-kanto-cinnabar-mansion-n2",
     "cs-kanto-cinnabar-mansion-n3",
     "cs-kanto-cinnabar-mansion-n4",
@@ -15,9 +17,26 @@
     "cs-kanto-cinnabar-mansion-n6",
     "cs-kanto-fuchsia-snag",
     "cs-kanto-fuchsia-zoo",
+    "cs-kanto-lavender-radio",
     "cs-kanto-lavender-tower-f7a",
+    "cs-kanto-pewter-afterhours-amber",
+    "cs-kanto-pewter-serum",
+    "cs-kanto-pewter-seymour",
     "cs-kanto-saffron-lament-flash",
-    "cs-kanto-saffron-silph"
+    "cs-kanto-saffron-silph",
+    "cs-kanto-vermilion-photographer"
+   ]
+  },
+  {
+   "key": "kanto-aj-lost",
+   "setBy": [
+    "cs-kanto-cerulean-aj-won"
+   ]
+  },
+  {
+   "key": "kanto-ally-stall-girl",
+   "setBy": [
+    "cs-kanto-cerulean-stall"
    ]
   },
   {
@@ -27,9 +46,23 @@
    ]
   },
   {
+   "key": "kanto-bike-paid",
+   "setBy": [
+    "cs-kanto-cerulean-bike"
+   ]
+  },
+  {
    "key": "kanto-burglary-solved",
    "setBy": [
     "cs-kanto-cerulean-burglary"
+   ]
+  },
+  {
+   "key": "kanto-capsized-air",
+   "setBy": [
+    "cs-kanto-vermilion-capsized-door",
+    "cs-kanto-vermilion-capsized-hull",
+    "cs-kanto-vermilion-capsized-stairs"
    ]
   },
   {
@@ -42,6 +75,60 @@
    "key": "kanto-cave-first",
    "setBy": [
     "cs-kanto-cerulean-cave-n3"
+   ]
+  },
+  {
+   "key": "kanto-cerulean-aj",
+   "setBy": [
+    "cs-kanto-cerulean-aj-lost",
+    "cs-kanto-cerulean-aj-won"
+   ]
+  },
+  {
+   "key": "kanto-cerulean-ballet",
+   "setBy": [
+    "cs-kanto-cerulean-ballet-bow",
+    "cs-kanto-cerulean-ballet-fail"
+   ]
+  },
+  {
+   "key": "kanto-cerulean-bike",
+   "setBy": [
+    "cs-kanto-cerulean-bike",
+    "cs-kanto-cerulean-bike-shop"
+   ]
+  },
+  {
+   "key": "kanto-cerulean-bike-debt",
+   "setBy": [
+    "cs-kanto-cerulean-bike-shop"
+   ]
+  },
+  {
+   "key": "kanto-cerulean-gyarados",
+   "setBy": [
+    "cs-kanto-cerulean-gyarados-docks",
+    "cs-kanto-cerulean-gyarados-harness",
+    "cs-kanto-cerulean-gyarados-stopped"
+   ]
+  },
+  {
+   "key": "kanto-cerulean-recruiter",
+   "setBy": [
+    "cs-kanto-cerulean-recruiter",
+    "cs-kanto-cerulean-recruiter-ask"
+   ]
+  },
+  {
+   "key": "kanto-cerulean-stall",
+   "setBy": [
+    "cs-kanto-cerulean-stall"
+   ]
+  },
+  {
+   "key": "kanto-cerulean-tech",
+   "setBy": [
+    "cs-kanto-cerulean-tech-after"
    ]
   },
   {
@@ -63,6 +150,14 @@
    "key": "kanto-coins-played",
    "setBy": [
     "cs-kanto-celadon-gamecorner"
+   ]
+  },
+  {
+   "key": "kanto-convertible-right",
+   "setBy": [
+    "cs-kanto-viridian-convertible-q1",
+    "cs-kanto-viridian-convertible-q2",
+    "cs-kanto-viridian-convertible-q3"
    ]
   },
   {
@@ -164,6 +259,33 @@
    ]
   },
   {
+   "key": "kanto-lavender-offering",
+   "setBy": [
+    "cs-kanto-lavender-offering",
+    "cs-kanto-lavender-offering-one"
+   ]
+  },
+  {
+   "key": "kanto-lavender-orphan",
+   "setBy": [
+    "cs-kanto-lavender-orphan",
+    "cs-kanto-lavender-orphan-w2",
+    "cs-kanto-lavender-orphan-w3"
+   ]
+  },
+  {
+   "key": "kanto-lavender-pulse",
+   "setBy": [
+    "cs-kanto-lavender-radio"
+   ]
+  },
+  {
+   "key": "kanto-lavender-vigil",
+   "setBy": [
+    "cs-kanto-lavender-vigil-done"
+   ]
+  },
+  {
    "key": "kanto-mansion-diary",
    "setBy": [
     "cs-kanto-cinnabar-mansion-n2",
@@ -203,6 +325,12 @@
    ]
   },
   {
+   "key": "kanto-moe-takings",
+   "setBy": [
+    "cs-kanto-vermilion-portavista-jobs"
+   ]
+  },
+  {
    "key": "kanto-museum-amber",
    "setBy": [
     "cs-kanto-pewter-museum-a3"
@@ -211,6 +339,7 @@
   {
    "key": "kanto-museum-registry",
    "setBy": [
+    "cs-kanto-pewter-afterhours-amber",
     "cs-kanto-pewter-museum-hall"
    ]
   },
@@ -234,8 +363,15 @@
    ]
   },
   {
+   "key": "kanto-orphan-cubone",
+   "setBy": [
+    "cs-kanto-lavender-orphan-w3"
+   ]
+  },
+  {
    "key": "kanto-parcel-found",
    "setBy": [
+    "cs-kanto-viridian-nightmarket-lost",
     "cs-kanto-viridian-parcel-nest"
    ]
   },
@@ -268,6 +404,59 @@
    ]
   },
   {
+   "key": "kanto-pewter-afterhours",
+   "setBy": [
+    "cs-kanto-pewter-afterhours-amber",
+    "cs-kanto-pewter-afterhours-fail"
+   ]
+  },
+  {
+   "key": "kanto-pewter-fossil-registered",
+   "setBy": [
+    "cs-kanto-pewter-afterhours-amber"
+   ]
+  },
+  {
+   "key": "kanto-pewter-ladder",
+   "setBy": [
+    "cs-kanto-pewter-ladder",
+    "cs-kanto-pewter-ladder-r2",
+    "cs-kanto-pewter-ladder-r3",
+    "cs-kanto-pewter-ladder-r4"
+   ]
+  },
+  {
+   "key": "kanto-pewter-serum",
+   "setBy": [
+    "cs-kanto-pewter-serum-after",
+    "cs-kanto-pewter-serum-fail"
+   ]
+  },
+  {
+   "key": "kanto-pewter-seymour",
+   "setBy": [
+    "cs-kanto-pewter-seymour-chamber"
+   ]
+  },
+  {
+   "key": "kanto-pewter-siblings",
+   "setBy": [
+    "cs-kanto-pewter-siblings-home"
+   ]
+  },
+  {
+   "key": "kanto-pewter-wheel",
+   "setBy": [
+    "cs-kanto-pewter-wheel"
+   ]
+  },
+  {
+   "key": "kanto-photographer-on",
+   "setBy": [
+    "cs-kanto-vermilion-photographer"
+   ]
+  },
+  {
    "key": "kanto-pidgeotto-both",
    "setBy": [
     "cs-kanto-route-pidgeotto"
@@ -277,6 +466,13 @@
    "key": "kanto-pidgeotto-released",
    "setBy": [
     "cs-kanto-route-pidgeotto"
+   ]
+  },
+  {
+   "key": "kanto-police-tip",
+   "setBy": [
+    "cs-kanto-cerulean-recruiter",
+    "cs-kanto-cerulean-recruiter-ask"
    ]
   },
   {
@@ -296,6 +492,12 @@
    "key": "kanto-prank-friend",
    "setBy": [
     "cs-kanto-lavender-prank-r3"
+   ]
+  },
+  {
+   "key": "kanto-recruiter-card",
+   "setBy": [
+    "cs-kanto-cerulean-recruiter"
    ]
   },
   {
@@ -358,6 +560,26 @@
    "key": "kanto-seafoam-articuno",
    "setBy": [
     "cs-kanto-cinnabar-seafoam-pillar"
+   ]
+  },
+  {
+   "key": "kanto-serum-calmed",
+   "setBy": [
+    "cs-kanto-pewter-serum-after"
+   ]
+  },
+  {
+   "key": "kanto-siblings-score",
+   "setBy": [
+    "cs-kanto-pewter-siblings-cook",
+    "cs-kanto-pewter-siblings-find",
+    "cs-kanto-pewter-siblings-mend"
+   ]
+  },
+  {
+   "key": "kanto-sighting-rainbow",
+   "setBy": [
+    "cs-kanto-viridian-spearow-after"
    ]
   },
   {
@@ -428,6 +650,16 @@
    ]
   },
   {
+   "key": "kanto-tech-marks",
+   "setBy": [
+    "cs-kanto-cerulean-tech-q1",
+    "cs-kanto-cerulean-tech-q2",
+    "cs-kanto-cerulean-tech-q3",
+    "cs-kanto-cerulean-tech-q4",
+    "cs-kanto-cerulean-tech-q5"
+   ]
+  },
+  {
    "key": "kanto-tournament-poster",
    "setBy": [
     "cs-kanto-route-poster"
@@ -437,6 +669,12 @@
    "key": "kanto-tower-cleared",
    "setBy": [
     "cs-kanto-lavender-tower-f7"
+   ]
+  },
+  {
+   "key": "kanto-tower-escort",
+   "setBy": [
+    "cs-kanto-lavender-vigil-done"
    ]
   },
   {
@@ -477,7 +715,92 @@
    "setBy": [
     "cs-kanto-celadon-perfume",
     "cs-kanto-celadon-perfume-decide",
+    "cs-kanto-cerulean-ballet-finale",
     "cs-kanto-fuchsia-tauros-rock"
+   ]
+  },
+  {
+   "key": "kanto-trio-rep",
+   "setBy": [
+    "cs-kanto-cerulean-ballet-bow",
+    "cs-kanto-vermilion-capsized-surface",
+    "cs-kanto-vermilion-photographer-album",
+    "cs-kanto-viridian-center-end"
+   ]
+  },
+  {
+   "key": "kanto-vermilion-capsized",
+   "setBy": [
+    "cs-kanto-vermilion-capsized-surface"
+   ]
+  },
+  {
+   "key": "kanto-vermilion-dam",
+   "setBy": [
+    "cs-kanto-vermilion-dam",
+    "cs-kanto-vermilion-dam-valley"
+   ]
+  },
+  {
+   "key": "kanto-vermilion-itemfinder",
+   "setBy": [
+    "cs-kanto-vermilion-itemfinder",
+    "cs-kanto-vermilion-itemfinder-again"
+   ]
+  },
+  {
+   "key": "kanto-vermilion-naptime",
+   "setBy": [
+    "cs-kanto-vermilion-naptime-after",
+    "cs-kanto-vermilion-naptime-club"
+   ]
+  },
+  {
+   "key": "kanto-vermilion-photographer",
+   "setBy": [
+    "cs-kanto-vermilion-photographer",
+    "cs-kanto-vermilion-photographer-album"
+   ]
+  },
+  {
+   "key": "kanto-vermilion-portavista",
+   "setBy": [
+    "cs-kanto-vermilion-portavista-contest"
+   ]
+  },
+  {
+   "key": "kanto-vigil-calm",
+   "setBy": [
+    "cs-kanto-lavender-vigil",
+    "cs-kanto-lavender-vigil-second",
+    "cs-kanto-lavender-vigil-third"
+   ]
+  },
+  {
+   "key": "kanto-viridian-center-saved",
+   "setBy": [
+    "cs-kanto-viridian-center-end"
+   ]
+  },
+  {
+   "key": "kanto-viridian-convertible",
+   "setBy": [
+    "cs-kanto-viridian-convertible",
+    "cs-kanto-viridian-convertible-end"
+   ]
+  },
+  {
+   "key": "kanto-viridian-healer",
+   "setBy": [
+    "cs-kanto-viridian-healer",
+    "cs-kanto-viridian-healer-ask"
+   ]
+  },
+  {
+   "key": "kanto-viridian-spearow",
+   "setBy": [
+    "cs-kanto-viridian-spearow",
+    "cs-kanto-viridian-spearow-after"
    ]
   },
   {
@@ -526,16 +849,25 @@
     "cs-kanto-celadon-rooftop-mother",
     "cs-kanto-cerulean-burglary",
     "cs-kanto-cerulean-burglary-after",
+    "cs-kanto-cerulean-tech",
     "cs-kanto-cinnabar-mansion-n6",
     "cs-kanto-cinnabar-mansion-n6b",
-    "cs-kanto-cinnabar-volcano-top"
+    "cs-kanto-cinnabar-volcano-top",
+    "cs-kanto-vermilion-dam-valley",
+    "cs-kanto-vermilion-naptime-club",
+    "cs-kanto-vermilion-photographer-album"
    ]
   },
   {
    "key": "rep",
    "setBy": [
     "cs-kanto-celadon-perfume",
-    "cs-kanto-celadon-perfume-decide"
+    "cs-kanto-celadon-perfume-decide",
+    "cs-kanto-cerulean-ballet-bow",
+    "cs-kanto-cerulean-bike",
+    "cs-kanto-cerulean-gyarados-harness",
+    "cs-kanto-pewter-serum-after",
+    "cs-kanto-viridian-center-end"
    ]
   },
   {

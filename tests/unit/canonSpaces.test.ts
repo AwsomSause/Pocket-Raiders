@@ -8,7 +8,7 @@ const menu = (seed: string, slot: string, flags: string[] = [], completed: strin
 describe('Kanto canon spaces catalog', () => {
   it('is clean and has the documented counts', () => {
     expect(canonSpaceGaps(canonKanto)).toEqual([]);
-    expect(canonKanto.spaces.length).toBe(80); // 71 + Haunter's Prank (KANTO_PLACED_1) + the Route 23 Badge Check and seven game route moments (KANTO_PLACED_2)
+    expect(canonKanto.spaces.length).toBe(109); // 71 + Haunter's Prank (KANTO_PLACED_1) + the Badge Check and seven game route moments (KANTO_PLACED_2) + 29 Volume II spaces (KANTO_PLACED_3)
   });
   it('keeps the director\'s mandatory spaces always placed', () => {
     for (const id of ['cs.kanto.vermilion.flightnorth', 'cs.kanto.saffron.route25', 'cs.kanto.pewter.forest', 'cs.kanto.pewter.moon', 'cs.kanto.lavender.tower']) expect(byId.get(id)?.appears).toBe('always');

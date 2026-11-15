@@ -11,14 +11,15 @@ import { content } from './helpers';
 const begin = (seed: string) => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', expansion: { kantoCanon: true } }), 0);
 const P = 'cs-kanto-vermilion-';
 const room = (id: string) => content.events.get(id)!;
-const targets = (id: string) => room(id).choices.flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? [])])
-  .flatMap((e) => (e.kind === 'addEvent' ? [e.eventId] : e.kind === 'addEventFrom' ? e.ids : []));
+const targets = (id: string) => room(id).choices.flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])])
+  .flatMap((e) => (e.kind === 'addEvent' || e.kind === 'laterEvent' ? [e.eventId] : e.kind === 'addEventFrom' ? e.ids : []));
 
 describe('Vermilion canon: the event graph', () => {
   it('every target exists and every room opens from a gate', () => {
     const ids = [...content.events.values()].filter((e) => e.id.startsWith(P) && !e.disabled).map((e) => e.id);
     for (const id of ids) for (const t of targets(id)) expect(content.events.has(t), `${id} -> ${t}`).toBe(true);
-    const gates = ['flight', 'market', 'fishclub', 'maiden', 'ssanne'].map((g) => P + g);
+    // Every entry event (it carries a catalog id) is a gate; Volume II (KANTO_PLACED_3) adds more.
+    const gates = [...['flight', 'market', 'fishclub', 'maiden', 'ssanne'].map((g) => P + g), ...ids.filter((id) => room(id).canon)];
     const reach = new Set<string>(gates);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) if (!reach.has(t)) { reach.add(t); again = true; } }
     expect([...reach].sort()).toEqual(ids.sort());

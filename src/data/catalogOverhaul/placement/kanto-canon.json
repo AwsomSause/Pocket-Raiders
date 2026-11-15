@@ -1090,5 +1090,551 @@
   ],
   "levelApplied": true,
   "own": true
+ },
+ "cs-kanto-viridian-spearow": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 5,
+  "window": [
+   2,
+   6
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "badge": "A storm cloud",
+  "tags": [],
+  "level": "A-1",
+  "often": "region",
+  "canon": "cs.kanto.viridian.spearow",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-viridian-center": {
+  "shape": "Door",
+  "earliest": "A1",
+  "home": 2,
+  "window": [
+   1,
+   4
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A cross with a crack in it",
+  "tags": [],
+  "level": "A-1",
+  "often": "region",
+  "canon": "cs.kanto.viridian.center",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-viridian-healer": {
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 3,
+  "window": [
+   2,
+   6
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A straw hat",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.viridian.healer",
+  "kantoStages": [
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-viridian-convertible": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 3,
+  "sits": "optional",
+  "attaches": "before",
+  "badge": "A pom-pom",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.viridian.convertible",
+  "kantoStages": [
+   1,
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-viridian-nightmarket": {
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 2,
+  "sits": "optional",
+  "attaches": "town",
+  "badge": "A lantern",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.viridian.nightmarket",
+  "kantoStages": [
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-pewter-siblings": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A row of small faces",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.pewter.siblings",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-pewter-wheel": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A wheel",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.pewter.wheel",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-pewter-afterhours": {
+  "shape": "Door",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "side-branch",
+  "attaches": "town",
+  "badge": "A bone, with eyes",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.pewter.afterhours",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-pewter-ladder": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 9,
+  "window": [
+   7,
+   11
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "badge": "A ladder",
+  "tags": [],
+  "level": "A-1",
+  "often": "region",
+  "canon": "cs.kanto.pewter.ladder",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-pewter-seymour": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 11,
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A lab coat",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.pewter.seymour",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-pewter-serum": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "None",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.pewter.serum",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-cerulean-ballet": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 17,
+  "sits": "optional",
+  "attaches": "town",
+  "badge": "A mermaid's tail",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.cerulean.ballet",
+  "kantoStages": [
+   2
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-cerulean-tech": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 6,
+  "window": [
+   4,
+   8
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "badge": "A mortarboard",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.cerulean.tech",
+  "kantoStages": [
+   2
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-cerulean-aj": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 4,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "badge": "A tent with a number on it",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.cerulean.aj",
+  "kantoStages": [
+   2
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-cerulean-bike": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 2,
+  "sits": "optional",
+  "attaches": "town",
+  "badge": "A bicycle",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.cerulean.bike",
+  "kantoStages": [
+   2
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-cerulean-recruiter": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 11,
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A business card",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.cerulean.recruiter",
+  "kantoStages": [
+   2
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-cerulean-stall": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A price tag",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.cerulean.stall",
+  "kantoStages": [
+   2
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-cerulean-gyarados": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 12,
+  "window": [
+   10,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "badge": "A harness",
+  "tags": [],
+  "level": "A+2",
+  "often": "region",
+  "canon": "cs.kanto.cerulean.gyarados",
+  "kantoStages": [
+   2
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-vermilion-capsized": {
+  "shape": "Door",
+  "earliest": "A3",
+  "home": 6,
+  "sits": "must-see",
+  "attaches": "instead",
+  "badge": "A ship, upside down",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.vermilion.capsized",
+  "kantoStages": [
+   3
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-vermilion-portavista": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 13,
+  "window": [
+   11,
+   15
+  ],
+  "sits": "side-branch",
+  "attaches": "rest",
+  "badge": "A beach umbrella",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.vermilion.portavista",
+  "kantoStages": [
+   3
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-vermilion-naptime": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 11,
+  "window": [
+   9,
+   13
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A swinging pendulum",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.vermilion.naptime",
+  "kantoStages": [
+   3
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-vermilion-dam": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 8,
+  "window": [
+   6,
+   10
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "badge": "A hard hat on a molehill",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.vermilion.dam",
+  "kantoStages": [
+   3
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-vermilion-photographer": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 1,
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A camera",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.vermilion.photographer",
+  "kantoStages": [
+   3
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-vermilion-itemfinder": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A small antenna",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.vermilion.itemfinder",
+  "kantoStages": [
+   3
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-lavender-namerater": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 1,
+  "sits": "optional",
+  "attaches": "town",
+  "badge": "A name tag",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.lavender.namerater",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-lavender-radio": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 2,
+  "sits": "optional",
+  "attaches": "town",
+  "badge": "A radio mast",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.lavender.radio",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-lavender-vigil": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 3,
+  "sits": "optional",
+  "attaches": "before",
+  "badge": "Three candles",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.lavender.vigil",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-lavender-orphan": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 1,
+  "sits": "optional",
+  "attaches": "town",
+  "badge": "None",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.lavender.orphan",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-lavender-offering": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 1,
+  "sits": "optional",
+  "attaches": "town",
+  "badge": "A folded cloth",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.lavender.offering",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true,
+  "own": true
  }
 }

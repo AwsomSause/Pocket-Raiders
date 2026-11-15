@@ -73,6 +73,30 @@
    "themeId": "psychic-dark",
    "tint": "#2f5f8a",
    "mood": "still water, and something standing in it"
+  },
+  {
+   "id": "ps_cs_kanto_viridian_center",
+   "name": "The Pokémon Center Siege",
+   "entry": "cs-kanto-viridian-center",
+   "themeId": "normal-poison",
+   "tint": "#3f6b3a",
+   "mood": "glass on the floor, and the machine still humming in the dark"
+  },
+  {
+   "id": "ps_cs_kanto_pewter_afterhours",
+   "name": "The Museum After Hours",
+   "entry": "cs-kanto-pewter-afterhours",
+   "themeId": "water-rock",
+   "tint": "#6b6257",
+   "mood": "moonlight through the roof, and something old turning over"
+  },
+  {
+   "id": "ps_cs_kanto_vermilion_capsized",
+   "name": "The Capsized Liner",
+   "entry": "cs-kanto-vermilion-capsized",
+   "themeId": "water-dark",
+   "tint": "#2f5d73",
+   "mood": "the chandelier standing up out of the floor, and water at every porthole"
   }
  ]
 }

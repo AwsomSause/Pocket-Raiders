@@ -144,7 +144,7 @@ const file: CanonSpacesFile = {
   region: 'kanto',
   townRoll: { early: 2, late: 3, maxPseudoStages: 2 },
   towns: [...TOWNS.map(([, id, name]) => ({ id, name })), ...EXTRA_TOWNS.map((id) => ({ id, name: TOWN_NAMES[id] ?? id }))],
-  slots: SLOTS.map(([slot, town, stage]) => ({ slot, town, stage, always: slot === 'stage-8' ? ['cs.kanto.viridian.route22', 'cs.kanto.viridian.oldman', 'cs.kanto.route.badge-check'] : null })),
+  slots: SLOTS.map(([slot, town, stage]) => ({ slot, town, stage, always: slot === 'stage-8' ? ['cs.kanto.viridian.route22', 'cs.kanto.viridian.oldman', 'cs.kanto.route.badge-check', 'cs.kanto.viridian.nightmarket'] : null })),
   spaces,
 };
 const parsed = CanonSpacesFileSchema.safeParse(file);

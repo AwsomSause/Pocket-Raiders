@@ -20,7 +20,7 @@ const ids = FILES.flatMap((f) => f.events.map((e) => e.id));
 const mine: EventDef[] = ids.map((id) => content.events.get(id)!);
 const outcomes = (e: EventDef): EventOutcome[] => [...e.choices, ...e.remembers.flatMap((v) => v.addChoices)].flatMap((c) => [c.success, ...(c.failure ? [c.failure] : [])]);
 const effects = (e: EventDef): EventEffect[] => outcomes(e).flatMap((o) => [...o.effects, ...(o.battle?.win ?? []), ...((o.battle as { lose?: EventEffect[] } | undefined)?.lose ?? [])]);
-const opened = (e: EventDef): string[] => effects(e).flatMap((x) => (x.kind === 'addEvent' ? [x.eventId] : x.kind === 'addEventFrom' ? x.ids : []));
+const opened = (e: EventDef): string[] => effects(e).flatMap((x) => (x.kind === 'addEvent' || x.kind === 'laterEvent' ? [x.eventId] : x.kind === 'addEventFrom' ? x.ids : []));
 const conditions = (e: EventDef) => [...e.requires, ...e.choices.flatMap((c) => c.requires), ...e.remembers.flatMap((v) => [...v.when, ...v.addChoices.flatMap((c) => c.requires)])];
 
 function freshRun(): RunState {
@@ -59,7 +59,8 @@ describe('kanto-canon: data', () => {
       const open = e.choices.filter((c) => c.requires.length === 0);
       const variantOpen = e.remembers.some((v) => v.addChoices.some((c) => c.requires.length === 0));
       // Events whose every choice has a requirement must cover both sides of it (has / has not).
-      if (open.length === 0 && !variantOpen) expect(['cs-kanto-lavender-tower-f7', 'cs-kanto-saffron-silph-gift'], `${e.id} has only locked choices`).toContain(e.id);
+      if (open.length === 0 && !variantOpen) // The last three score rooms gate on complementary ranges (one of the two always opens).
+      expect(['cs-kanto-lavender-tower-f7', 'cs-kanto-saffron-silph-gift', 'cs-kanto-viridian-convertible-end', 'cs-kanto-pewter-siblings-home', 'cs-kanto-vermilion-capsized-surface'], `${e.id} has only locked choices`).toContain(e.id);
     }
   });
 

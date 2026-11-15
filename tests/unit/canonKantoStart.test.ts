@@ -72,7 +72,7 @@ describe('Viridian before Stage 1, the Plateau finale and the road events in a r
       const open = [...new Set(stops(run, 'cx-open'))];
       expect(open).toContain('cs-kanto-viridian-oldman');
       expect(open).toContain('cs-kanto-viridian-route22');
-      expect(open.length).toBeLessThanOrEqual(4);
+      expect(open.length).toBeLessThanOrEqual(5); // two Always, two from the Roll, and the Spearow Storm (a Trigger, KANTO_PLACED_3)
       expect(run.expansion!.canon!.menus['interlude-0']!.slice(0, 2)).toEqual(['cs.kanto.viridian.oldman', 'cs.kanto.viridian.route22']);
     }
   });

@@ -24,7 +24,8 @@ describe('Lavender canon: the event graph', () => {
   it('every room opens from a gate, and every target exists', () => {
     const ids = [...content.events.values()].filter((e) => e.id.startsWith(P) && !e.disabled).map((e) => e.id);
     for (const id of ids) for (const t of targets(id)) expect(content.events.has(t) && !content.events.get(t)!.disabled, `${id} -> ${t}`).toBe(true);
-    const reach = new Set<string>(GATES.map((s) => `${P}${s}`));
+    // Every entry event (it carries a catalog id) is a gate; Volume II (KANTO_PLACED_3) adds more.
+    const reach = new Set<string>([...GATES.map((s) => `${P}${s}`), ...ids.filter((id) => room(id).canon)]);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) if (!reach.has(t)) { reach.add(t); again = true; } }
     expect([...reach].sort()).toEqual(ids.sort());
   });
