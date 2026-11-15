@@ -1050,7 +1050,7 @@ export const ItemEffectSchema = z.discriminatedUnion('kind', [
   z.object({
     kind: z.literal('catch'),
     multiplier: z.number().positive(),
-    rule: z.enum(['level', 'lure', 'dive', 'net', 'moon', 'love', 'heavy', 'fast', 'nest', 'repeat', 'timer', 'quick', 'dusk', 'dream', 'beast', 'safari', 'sport', 'flyer', 'weight100', 'weight300', 'snag', 'bless']).optional(),
+    rule: z.enum(['level', 'lure', 'dive', 'net', 'moon', 'love', 'heavy', 'fast', 'nest', 'repeat', 'timer', 'quick', 'dusk', 'dream', 'beast', 'safari', 'sport', 'flyer', 'weight100', 'weight300', 'snag', 'bless', 'weakened']).optional(),
     after: z.enum(['friend', 'luxury', 'heal']).optional(),
     /** Nature Balls: the caught Pokémon has this nature. */
     nature: z.enum(NATURE_IDS).optional(),
@@ -3038,6 +3038,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('status'), status: z.enum(['poison', 'burn', 'paralysis', 'sleep']), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
   z.object({ kind: z.literal('friendship'), amount: z.number().int(), who: CoWhoSchema.default('party') }),
   /** Catalog Overhaul: "(a node)" as a cost. The next `nodes` ordinary nodes on the path are spent on the work (no battle, no reward; core/co/takeNode.ts). `back`: "a node back", which costs nothing (battles already won are not refought). */
+  /** Catalog Overhaul (SF93): a permanent type shift: the chosen Pokémon's second type becomes `type` (core/co/typeShift.ts). */
+  z.object({ kind: z.literal('typeShift'), type: TypeNameSchema, who: CoWhoSchema.default('top') }),
   z.object({ kind: z.literal('takeNode'), nodes: z.number().int().min(1).max(3).default(1), back: z.boolean().default(false) }),
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, amount: z.number().int() }),
   /** Research Points, paid at the end of the run. */

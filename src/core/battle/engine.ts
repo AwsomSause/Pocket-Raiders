@@ -1771,6 +1771,7 @@ function ballBonusBase(ctx: BattleContext, effect: Extract<ItemEffect, { kind: '
     case 'flyer': return species.types.includes('flying') ? base : 1;
     case 'weight100': return (species.weight ?? 50) >= 100 ? base : 1;
     case 'weight300': return (species.weight ?? 50) >= 300 ? base : 1;
+    case 'weakened': return enemy.hp * 2 <= maxHp(ctx.content, enemy) ? base : 1;
     default: return base;
   }
 }

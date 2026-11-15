@@ -1,123 +1,132 @@
 {
- "category": "places",
- "note": "The Delves (catalog overhaul pack, STORY_FAMILIES_14.md) as chain pseudo-stages: the map is drawn from the rooms' own links. entry = the gate event (tools/events/co/places-1..4.ts).",
- "chains": [
-  {
-   "id": "ps_delve_abandoned_mine_shaft",
-   "name": "The Abandoned Mine Shaft",
-   "entry": "delve-gate-abandoned-mine-shaft",
-   "themeId": "ground-rock",
-   "tint": "#3a2f26",
-   "mood": "old mine",
-   "start": "opened"
-  },
-  {
-   "id": "ps_delve_dense_forest_path",
-   "name": "The Dense Forest Path",
-   "entry": "delve-gate-dense-forest-path",
-   "themeId": "grass-bug",
-   "tint": "#1f3a26",
-   "mood": "deep forest",
-   "start": "opened"
-  },
-  {
-   "id": "ps_delve_coastal_cove",
-   "name": "The Coastal Cove",
-   "entry": "delve-gate-coastal-cove",
-   "themeId": "water-flying",
-   "tint": "#1f3d4a",
-   "mood": "hidden cove",
-   "start": "opened"
-  },
-  {
-   "id": "ps_delve_mountain_pass",
-   "name": "The Mountain Pass",
-   "entry": "delve-gate-mountain-pass",
-   "themeId": "flying-rock",
-   "tint": "#3b4250",
-   "mood": "high pass",
-   "start": "opened"
-  },
-  {
-   "id": "ps_delve_desert_well",
-   "name": "The Desert Well",
-   "entry": "delve-gate-desert-well",
-   "themeId": "water-ground",
-   "tint": "#4a3d24",
-   "mood": "dry well",
-   "start": "opened"
-  },
-  {
-   "id": "ps_delve_marsh_boardwalk",
-   "name": "The Marsh Boardwalk",
-   "entry": "delve-gate-marsh-boardwalk",
-   "themeId": "water-poison",
-   "tint": "#2a3a2c",
-   "mood": "still marsh",
-   "start": "opened"
-  },
-  {
-   "id": "ps_delve_sky_bridge",
-   "name": "The Sky Bridge",
-   "entry": "delve-gate-sky-bridge",
-   "themeId": "flying-fairy",
-   "tint": "#3d5266",
-   "mood": "rope bridge",
-   "start": "opened"
-  },
-  {
-   "id": "ps_delve_deep_mine",
-   "name": "The Deep Mine",
-   "entry": "delve-gate-deep-mine",
-   "themeId": "rock-steel",
-   "tint": "#2e2a2a",
-   "mood": "lamp-lit mine",
-   "start": "opened"
-  },
-  {
-   "id": "ps_delve_frozen_cavern",
-   "name": "The Frozen Cavern",
-   "entry": "delve-gate-frozen-cavern",
-   "themeId": "ice-rock",
-   "tint": "#2c4860",
-   "mood": "blue ice",
-   "start": "opened"
-  },
-  {
-   "id": "ps_delve_volcanic_core",
-   "name": "The Volcanic Core",
-   "entry": "delve-gate-volcanic-core",
-   "themeId": "fire-rock",
-   "tint": "#4a231c",
-   "mood": "old fire",
-   "start": "opened"
-  },
-  {
-   "id": "ps_delve_deep_ocean",
-   "name": "The Deep Ocean",
-   "entry": "delve-gate-deep-ocean",
-   "themeId": "water-dark",
-   "tint": "#12263a",
-   "mood": "deep water",
-   "start": "opened"
-  },
-  {
-   "id": "ps_delve_overgrown_forest",
-   "name": "The Overgrown Forest",
-   "entry": "delve-gate-overgrown-forest",
-   "themeId": "grass-ghost",
-   "tint": "#22352a",
-   "mood": "swallowed town",
-   "start": "opened"
-  },
-  {
-   "id": "ps_delve_celestial_observatory",
-   "name": "The Celestial Observatory",
-   "entry": "delve-gate-celestial-observatory",
-   "themeId": "psychic-fairy",
-   "tint": "#221c40",
-   "mood": "old glass dome",
-   "start": "opened"
-  }
- ]
+  "category": "places",
+  "note": "The Delves (catalog overhaul pack, STORY_FAMILIES_14.md) as chain pseudo-stages: the map is drawn from the rooms' own links. entry = the gate event (tools/events/co/places-1..4.ts).",
+  "chains": [
+    {
+      "id": "ps_delve_abandoned_mine_shaft",
+      "name": "The Abandoned Mine Shaft",
+      "entry": "delve-gate-abandoned-mine-shaft",
+      "themeId": "ground-rock",
+      "tint": "#3a2f26",
+      "mood": "old mine",
+      "start": "opened"
+    },
+    {
+      "id": "ps_delve_dense_forest_path",
+      "name": "The Dense Forest Path",
+      "entry": "delve-gate-dense-forest-path",
+      "themeId": "grass-bug",
+      "tint": "#1f3a26",
+      "mood": "deep forest",
+      "start": "opened"
+    },
+    {
+      "id": "ps_delve_coastal_cove",
+      "name": "The Coastal Cove",
+      "entry": "delve-gate-coastal-cove",
+      "themeId": "water-flying",
+      "tint": "#1f3d4a",
+      "mood": "hidden cove",
+      "start": "opened"
+    },
+    {
+      "id": "ps_delve_mountain_pass",
+      "name": "The Mountain Pass",
+      "entry": "delve-gate-mountain-pass",
+      "themeId": "flying-rock",
+      "tint": "#3b4250",
+      "mood": "high pass",
+      "start": "opened"
+    },
+    {
+      "id": "ps_delve_desert_well",
+      "name": "The Desert Well",
+      "entry": "delve-gate-desert-well",
+      "themeId": "water-ground",
+      "tint": "#4a3d24",
+      "mood": "dry well",
+      "start": "opened"
+    },
+    {
+      "id": "ps_delve_marsh_boardwalk",
+      "name": "The Marsh Boardwalk",
+      "entry": "delve-gate-marsh-boardwalk",
+      "themeId": "water-poison",
+      "tint": "#2a3a2c",
+      "mood": "still marsh",
+      "start": "opened"
+    },
+    {
+      "id": "ps_delve_sky_bridge",
+      "name": "The Sky Bridge",
+      "entry": "delve-gate-sky-bridge",
+      "themeId": "flying-fairy",
+      "tint": "#3d5266",
+      "mood": "rope bridge",
+      "start": "opened"
+    },
+    {
+      "id": "ps_delve_deep_mine",
+      "name": "The Deep Mine",
+      "entry": "delve-gate-deep-mine",
+      "themeId": "rock-steel",
+      "tint": "#2e2a2a",
+      "mood": "lamp-lit mine",
+      "start": "opened"
+    },
+    {
+      "id": "ps_delve_frozen_cavern",
+      "name": "The Frozen Cavern",
+      "entry": "delve-gate-frozen-cavern",
+      "themeId": "ice-rock",
+      "tint": "#2c4860",
+      "mood": "blue ice",
+      "start": "opened"
+    },
+    {
+      "id": "ps_delve_volcanic_core",
+      "name": "The Volcanic Core",
+      "entry": "delve-gate-volcanic-core",
+      "themeId": "fire-rock",
+      "tint": "#4a231c",
+      "mood": "old fire",
+      "start": "opened"
+    },
+    {
+      "id": "ps_delve_deep_ocean",
+      "name": "The Deep Ocean",
+      "entry": "delve-gate-deep-ocean",
+      "themeId": "water-dark",
+      "tint": "#12263a",
+      "mood": "deep water",
+      "start": "opened"
+    },
+    {
+      "id": "ps_delve_overgrown_forest",
+      "name": "The Overgrown Forest",
+      "entry": "delve-gate-overgrown-forest",
+      "themeId": "grass-ghost",
+      "tint": "#22352a",
+      "mood": "swallowed town",
+      "start": "opened"
+    },
+    {
+      "id": "ps_delve_celestial_observatory",
+      "name": "The Celestial Observatory",
+      "entry": "delve-gate-celestial-observatory",
+      "themeId": "psychic-fairy",
+      "tint": "#221c40",
+      "mood": "old glass dome",
+      "start": "opened"
+    },
+    {
+      "id": "ps_crystal_hollow",
+      "name": "The Crystal Hollow",
+      "entry": "crystal-hollow-entrance",
+      "themeId": "ice-rock",
+      "tint": "#2c4860",
+      "mood": "singing quartz",
+      "start": "opened"
+    }
+  ]
 }

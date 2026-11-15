@@ -47,6 +47,7 @@ import { clampStage } from './damage';
 import { teraTypeOf } from '../items';
 import type { Perks } from '../archetypes';
 import { abilityOf, calcStats, getSpecies } from '../pokemon';
+import { ownTypes } from '../co/typeShift';
 import { effectiveHeld } from './held';
 import { zMoveDelayTurns, megaDelayTurns, megaPartyLimit, permanentMegaFriendship } from '../trainerPerks';
 import type { BattleState, PokemonInstance } from '../state';
@@ -581,7 +582,7 @@ export function battleTypes(content: Content, battle: BattleState, mon: PokemonI
   const tera = battle.transform.teraTypes[mon.uid];
   if (tera) return [tera];
   const vol = battle.enemyTeam.includes(mon) ? battle.enemyVolatile : battle.playerVolatile;
-  const base: readonly TypeName[] = vol?.typeList ? (vol.typeList as TypeName[]) : vol?.typeShift ? [vol.typeShift] : getSpecies(content, mon.speciesId).types;
+  const base: readonly TypeName[] = vol?.typeList ? (vol.typeList as TypeName[]) : vol?.typeShift ? [vol.typeShift] : ownTypes(content, mon);
   const mimic = battle.terrain && abilityOf(content, mon) === 'mimicry' ? ({ electric: 'electric', grassy: 'grass', misty: 'fairy', psychic: 'psychic' } as Record<string, TypeName>)[battle.terrain.id] : undefined;
   if (mimic && !vol?.typeList) return [mimic];
   if (abilityOf(content, mon) === 'multitype' && !vol?.typeList) {
@@ -599,7 +600,7 @@ export function battleTypes(content: Content, battle: BattleState, mon: PokemonI
 /** The STAB multiplier for a move of this type (1 = none), counting Terastallization. */
 export function stabMultiplier(content: Content, battle: BattleState, mon: PokemonInstance, moveType: TypeName): number {
   const base = content.ruleset.stabMultiplier;
-  const own = getSpecies(content, mon.speciesId).types.includes(moveType);
+  const own = ownTypes(content, mon).includes(moveType);
   const tera = battle.transform.teraTypes[mon.uid];
   if (tera === moveType) return own ? 2 : base;
   return own ? base : 1;

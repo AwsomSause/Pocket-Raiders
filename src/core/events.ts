@@ -963,6 +963,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `${e.who === 'lead' ? 'lead' : 'party'} ${e.status === 'paralysis' ? 'paralysed' : e.status === 'sleep' ? 'asleep' : e.status === 'burn' ? 'burned' : 'poisoned'}`;
     case 'friendship':
       return `${e.who === 'party' ? '' : `${whoWords(e.who)}: `}friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
+    case 'typeShift':
+      return `a lasting type shift: ${e.type[0]!.toUpperCase()}${e.type.slice(1)}`;
     case 'takeNode':
       return e.back ? 'a step back along the road (nothing is refought)' : `takes your next ${e.nodes === 1 ? 'node' : `${e.nodes} nodes`} (no battle there)`;
     case 'attribute': {
@@ -1251,6 +1253,12 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const who = whoOf(content, run, e.who, tradeUid);
       for (const m of who) changeFriendship(content, m, e.amount, e.amount > 0 ? gain : 1);
       return who.length > 0 ? effectWords(content, e) : '';
+    }
+    case 'typeShift': {
+      const mon = whoOf(content, run, e.who, tradeUid)[0];
+      if (!mon) return '';
+      mon.shiftType = e.type;
+      return `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} is part ${e.type[0]!.toUpperCase()}${e.type.slice(1)} now.`;
     }
     case 'takeNode':
       if (!e.back) oweNodes(run, e.nodes);

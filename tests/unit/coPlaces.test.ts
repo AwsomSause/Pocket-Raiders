@@ -7,6 +7,11 @@ import { visibleChoices } from '../../src/core/eventMemory';
 import { PSEUDO_CHAINS, chainRooms } from '../../src/core/dungeon/pseudo';
 import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
+import { ballBonus, createBattle, type BattleContext } from '../../src/core/battle/engine';
+import { battleTypes } from '../../src/core/battle/transform';
+import { ownTypes } from '../../src/core/co/typeShift';
+import { createPokemon, getSpecies, maxHp } from '../../src/core/pokemon';
+import { hashSeed, Rng } from '../../src/core/rng';
 import { content } from './helpers';
 
 const newRun = (seed: string): RunState => {
@@ -24,7 +29,7 @@ const open = (run: RunState, eventId: string): string => {
 };
 /** Picks the visible choice with this label at the open event on the current node. */
 const pick = (run: RunState, label: string): RunState => {
-  const side = here(run).sides.find((x) => x.kind === 'event' && !x.used)!;
+  const side = [...here(run).sides].reverse().find((x) => x.kind === 'event' && !x.used)!;
   const event = content.events.get(side.eventId!)!;
   const at = visibleChoices(content, run, event).findIndex((c) => c.choice.label === label);
   if (at < 0) throw new Error(`${event.id}: no visible choice "${label}" (has: ${visibleChoices(content, run, event).map((c) => c.choice.label).join(' | ')})`);
@@ -116,5 +121,59 @@ describe('catalog overhaul: the Delves (STORY_FAMILIES_14)', () => {
     expect(run.stage!.current).toBe(parent);
     expect(flagOf(run, 'delve-abandoned-mine-shaft-garnet')).toBe(1);
     expect(flagOf(run, 'delve-abandoned-mine-shaft-done')).toBe(0);
+  });
+});
+
+describe('catalog overhaul: Crystal Hollow and the Devon ball (STORY_FAMILIES_15)', () => {
+  it('the Crystal Hollow is a drawn three-room pseudo-stage whose Heart Crystal shifts the partner\'s second type for good', () => {
+    const chain = PSEUDO_CHAINS.find((c) => c.id === 'ps_crystal_hollow')!;
+    expect(chainRooms(content, chain).map((r) => r.event)).toEqual(['crystal-hollow-1', 'crystal-hollow-2', 'crystal-hollow-final']);
+    let run = newRun('crystal');
+    open(run, 'crystal-hollow-entrance');
+    run = pick(run, 'Go in.');
+    expect(run.stage!.pseudo?.id).toBe('ps_crystal_hollow');
+    run = pick(run, '"Show me."');
+    run = pick(run, 'Walk the ice.');
+    const top = [...run.party].sort((a, b) => b.friendship - a.friendship)[0]!;
+    const before = ownTypes(content, top);
+    run = pick(run, 'Accept the shift.');
+    expect(run.stage!.pseudo).toBeUndefined();
+    const after = run.party.find((m) => m.uid === top.uid)!;
+    expect(after.shiftType).toBeDefined();
+    expect(ownTypes(content, after)).toEqual([before[0], after.shiftType]);
+    expect(flagOf(run, 'crystal-hollow-done')).toBe(1);
+  });
+
+  it('smashing the mirror silences the hum, so the stepping-stones by ear are gone', () => {
+    let run = newRun('crystal-smash');
+    open(run, 'crystal-hollow-entrance');
+    run = pick(run, 'Go in.');
+    run = pick(run, 'Smash the mirror.');
+    expect(() => pick(run, 'Step on the stones in order of the hum.')).toThrow();
+  });
+
+  it('a shifted type changes battle typing; a plain Pokémon keeps its species types', () => {
+    const mon = createPokemon(content, 'pikachu', 20, 'p');
+    expect(ownTypes(content, mon)).toEqual(getSpecies(content, 'pikachu').types);
+    mon.shiftType = 'fairy';
+    expect(ownTypes(content, mon)).toEqual(['electric', 'fairy']);
+    mon.shiftType = 'electric';
+    expect(ownTypes(content, mon)).toEqual(['electric']);
+    const pidgey = createPokemon(content, 'pidgey', 20, 'q');
+    pidgey.shiftType = 'rock';
+    expect(battleTypes(content, createBattle('wild', [pidgey], 0, mon.uid, null), pidgey)).toEqual(['normal', 'rock']);
+  });
+
+  it('the Devon prototype ball only works on a wild foe at half HP or less', () => {
+    const player = createPokemon(content, 'pikachu', 20, 'p');
+    const enemy = createPokemon(content, 'rattata', 20, 'e');
+    const ctx: BattleContext = { content, battle: createBattle('wild', [enemy], 0, player.uid, null), party: [player], inventory: {}, rng: new Rng(hashSeed('devon')), captureRng: new Rng(hashSeed('devon-c')), catchMultiplier: 1 };
+    const effect = content.items.get('devon-ball')!.effect;
+    if (effect.kind !== 'catch') throw new Error('not a ball');
+    const at = (hp: number) => { enemy.hp = hp; return ballBonus(ctx, effect, enemy, getSpecies(content, 'rattata')); };
+    const full = maxHp(content, enemy);
+    expect(at(full)).toBe(1);
+    expect(at(Math.floor(full / 2) + 1)).toBe(1);
+    expect(at(Math.floor(full / 2))).toBeGreaterThan(20);
   });
 });
