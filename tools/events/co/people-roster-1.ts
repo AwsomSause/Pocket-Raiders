@@ -87,3 +87,8 @@ export const DOC: Record<string, string> = {
   'npc-meet-youngster-joey': 'RR1 M1', 'npc-meet-youngster-joey-m2': 'RR1 M2', 'npc-meet-youngster-joey-m3': 'RR1 M3',
   'npc-meet-youngster-joey-contest': 'RR1 M3 (Judge)', 'npc-meet-youngster-joey-speech': 'RR1 M3 (Speech)',
 };
+
+/** Flags nothing in this file reads: where the doc says they come back (merged into src/data/catalogOverhaul/flags/people.json). */
+export const AFTERSTORY: { match: string; readBy: string }[] = [
+  { match: 'roster-joey-(club|battled|sign)', readBy: 'Final Reunion: Joey brings the whole club and the line on the sign (RR1 Afterstory)' },
+];
