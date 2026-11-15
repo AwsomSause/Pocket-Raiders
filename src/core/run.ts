@@ -101,7 +101,7 @@ import { bumpEventCounters } from './eventToolkit';
 import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsksToJoin } from './trainerEvolution';
 import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
-import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
+import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -858,6 +858,22 @@ function enterLeague(content: Content, run: RunState): void {
   takeCheckpoint(run);
 }
 
+/** Catalog Overhaul (people): "for the region" bonuses (`tempEffect` with `until: 'region'`) end when the run moves on (mutates `run`). */
+export function endRegionTempEffects(run: RunState): void {
+  const kept: RunState['tempEffects'] = [];
+  for (const temp of run.tempEffects) {
+    if (temp.until !== 'region') {
+      kept.push(temp);
+      continue;
+    }
+    for (const effect of temp.effects) {
+      const at = run.perkEffects.findIndex((m) => JSON.stringify(m) === JSON.stringify(effect));
+      if (at >= 0) run.perkEffects.splice(at, 1);
+    }
+  }
+  run.tempEffects = kept;
+}
+
 /** Signature effects that run out: counts this battle against each and removes the finished ones from the run's perks (mutates `run`). */
 export function tickTempEffects(run: RunState, battle: BattleState, boss: boolean): void {
   const kept: RunState['tempEffects'] = [];
@@ -923,6 +939,7 @@ function enterNextRegion(content: Content, run: RunState): void {
   }
   run.regionIndex += 1;
   run.log.charmUsedInRegion = false;
+  endRegionTempEffects(run);
   shiftPartyLevels(content, run, regionLevelOffset(runArchetype(content, run).modifiers));
   // Pass Orbs turn into money in each new region.
   const orbMoney = regionMoneyFromItems(content, run);
@@ -3296,6 +3313,12 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, clubLost: true };
   }
+  if (battle.outcome === 'lose' && battle.event && isFriendlyBattle(content, battle.event)) {
+    friendlyLost(content, run);
+    eventBattleLost(content, run, battle.event);
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, clubLost: true };
+  }
   if (battle.outcome === 'lose' && battle.event && isApprenticeBattle(content, battle.event)) {
     apprenticeLost(content, run);
     recordChanges(content, current, run, 'battle');
@@ -4463,6 +4486,17 @@ function assignField(content: Content, run: RunState, boss: boolean): void {
 }
 
 /** W7 rule P5: a loss inside a pseudo stage sends the party back to the map, partly healed (fainted Pokémon at the failure share of their HP), and the run goes on. */
+/** Catalog Overhaul: a friendly event fight was lost (`friendly: true`). Nobody is out: the party gets back on its feet and the run goes on from the same node. */
+export function friendlyLost(content: Content, run: RunState): void {
+  for (const m of run.party) {
+    const floor = Math.max(1, Math.floor(maxHp(content, m) * PSEUDO.rules.failureHeal));
+    if (m.hp < floor) m.hp = floor;
+    m.status = null;
+  }
+  run.battle = null;
+  run.phase = 'map';
+}
+
 export function pseudoLost(content: Content, run: RunState): void {
   // Flight North: a loss inside the Bug-type's stage sends you home with your own team back.
   restoreStash(run);

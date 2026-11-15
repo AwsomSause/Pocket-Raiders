@@ -85,11 +85,17 @@ export const eggMove = (): Json => ({ kind: 'eggMove' });
 export const better = (extra = 0): Json => ({ kind: 'betterDraft', extra });
 export const gym = (): Json => ({ kind: 'gymPreview' });
 export const flag = (key: string, amount = 1): Json => ({ kind: 'flag', key, amount });
+/** Sets a flag and, the first time, remembers the region it was set in (`<key>-at`), so a later scene can wait with `flagAgo`. */
+export const flagAt = (key: string, amount = 1): Json => ({ kind: 'flag', key, amount, stamp: 'region' });
+/** A bonus that lasts until the run moves on to the next region ("for the region"). */
+export const forRegion = (label: string, ...effects: Json[]): Json => ({ kind: 'tempEffect', label, effects, until: 'region' });
 export const reveal = (): Json => ({ kind: 'revealStops' });
 /** Fog of war: the map shows this many more columns ahead for the rest of the stage. */
 export const scout = (columns: number): Json => ({ kind: 'scout', columns });
 /** Another event stop opens beside this node (the next room of a landmark). */
 export const room = (eventId: string): Json => ({ kind: 'addEvent', eventId });
+/** This event may be drawn again later in the run ("Maybe later"). */
+export const again = (eventId: string): Json => ({ kind: 'seeAgain', eventId });
 /** The next room is one of these, picked at random (a Mystery Dungeon floor). */
 export const roomFrom = (...ids: string[]): Json => ({ kind: 'addEventFrom', ids });
 /** A weather front rolls in over the columns ahead. */
@@ -116,6 +122,10 @@ export const inRegion = (...ids: string[]): Json => ({ kind: 'region', ids });
 export const relic = (id: string, name: string, effects: Json[]): Json => ({ kind: 'relic', id, name, effects });
 /** A story flag condition: at least / at most. */
 export const flagIs = (key: string, atLeast = 1, atMost = 99): Json => ({ kind: 'flag', key, atLeast, atMost });
+/** A flag set with `flagAt` at least this many regions ago (a three-meeting arc's "one region later"). */
+export const flagAgo = (key: string, regions = 1): Json => ({ kind: 'flag', key, atLeast: 1, atMost: 99, regionsAgo: regions });
+/** A flag set with `flagAt` in this same region ("for the region"; `most` regions later at the latest). */
+export const flagThisRegion = (key: string, most = 0): Json => ({ kind: 'flag', key, atLeast: 1, atMost: 99, regionsAgoMost: most });
 /** A party Pokémon with one of these abilities. */
 export const ability = (label: string, ...abilities: string[]): Json => ({ kind: 'partyAbility', abilities, label });
 
@@ -134,8 +144,16 @@ export const wild = (o: { format?: 'doubles' | 'triples'; species?: string[]; ty
   shinyMultiplier: o.shiny ?? 1,
   win: o.win ?? [],
 });
-export const trainer = (name: string, o: { format?: 'doubles' | 'triples'; cls?: string; boss?: string; size?: number; types?: string[]; lv?: number; win?: Json[]; ghost?: boolean; retired?: boolean; rival?: boolean; ally?: string; chain?: number; mirror?: boolean; team?: string[]; special?: string } = {}): Json => ({
+export const trainer = (name: string, o: { format?: 'doubles' | 'triples'; cls?: string; boss?: string; size?: number; types?: string[]; lv?: number; win?: Json[]; ghost?: boolean; retired?: boolean; rival?: boolean; ally?: string; chain?: number; mirror?: boolean; team?: string[]; special?: string; friendly?: boolean; lose?: Json[]; foeMoves?: string[]; rule?: Json; sprite?: string; apprentice?: boolean; chainHeal?: number; counter?: Json } = {}): Json => ({
   kind: 'trainer',
+  ...(o.friendly ? { friendly: true } : {}),
+  ...(o.lose ? { lose: o.lose } : {}),
+  ...(o.foeMoves ? { foeMoves: o.foeMoves } : {}),
+  ...(o.rule ? { rule: o.rule } : {}),
+  ...(o.sprite ? { sprite: o.sprite } : {}),
+  ...(o.apprentice ? { apprentice: true } : {}),
+  ...(o.chainHeal !== undefined ? { chainHeal: o.chainHeal } : {}),
+  ...(o.counter ? { counter: o.counter } : {}),
   ...(o.team ? { team: o.team } : {}),
   ...(o.special ? { special: o.special } : {}),
   ...(o.format ? { format: o.format } : {}),
