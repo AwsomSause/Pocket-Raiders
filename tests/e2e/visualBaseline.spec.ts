@@ -21,6 +21,8 @@ async function startDevRun(page: Page, seed: string) {
     await waitForScene(page, next);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
+  // A plain first fight: no event (Kanto's attached ones) opens before it.
+  await page.evaluate(() => { for (const n of (window as any).__pkr.session.run.stage.map.nodes) if (n.column === 1) n.sides = []; });
 }
 
 /** Stops every running scene and starts `key` with `data`, after `prep` changed the run. */
@@ -104,8 +106,6 @@ test('repeated battles do not pile up textures, objects or tweens', async ({ pag
     await confirmToMenu(page);
     await page.waitForTimeout(400);
   };
-  // A plain first fight: no placed event opens before it.
-  await page.evaluate(() => { for (const n of (window as any).__pkr.session.run.stage.map.nodes) if (n.column === 1) n.sides = []; });
   await page.keyboard.press('Enter'); // the first node: a battle
   await waitForScene(page, 'Battle');
   // Warm up: lazy art for the first battle (animation sheets, fallbacks) can still be arriving after the first restart on a
