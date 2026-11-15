@@ -53,7 +53,18 @@ let lastBox = '';
 let gone = { key: '', at: 0 };
 
 /** True while the New UI is chosen (Settings > Display > UI style). */
-export const reduxOn = (): boolean => services().session.settings.uiStyle === 'new';
+/**
+ * `?ui=new` or `?ui=old` in the address picks the style for this page load, over the saved setting (handy for
+ * comparing the two). A browser driven by automation (the Playwright tests) gets Old unless it asks for New:
+ * the older browser tests click and read the canvas, which the New UI layer covers. New has its own specs.
+ */
+const forced: 'new' | 'old' | null = (() => {
+  if (typeof location === 'undefined') return null;
+  const q = new URLSearchParams(location.search).get('ui');
+  if (q === 'new' || q === 'old') return q;
+  return typeof navigator !== 'undefined' && navigator.webdriver ? 'old' : null;
+})();
+export const reduxOn = (): boolean => (forced ?? services().session.settings.uiStyle) === 'new';
 
 function skinCss(): string {
   return REDUX_SKINS.map((s, i) => {
