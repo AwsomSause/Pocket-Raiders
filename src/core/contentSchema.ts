@@ -2795,6 +2795,10 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** A meter leaning one way: Rage (positive ragePeace) / Peace (negative), Good (positive goodEvil) / Evil (negative). */
   z.object({ kind: z.literal('meter'), key: z.enum(['ragePeace', 'goodEvil']), side: z.enum(['positive', 'negative']), atLeast: z.number().int().min(0) }),
   z.object({ kind: z.literal('item'), id: z.string(), /** Copies needed (default 1). */ count: z.number().int().min(1).optional() }),
+  /** Catalog Overhaul (families-b): the lead (the first Pokémon able to fight) is of this type. */
+  z.object({ kind: z.literal('leadType'), type: TypeNameSchema }),
+  /** Catalog Overhaul (families-b): the Pokémon the last "pick a Pokémon" choice named (remembered for the run, core/co/pickMemory.ts) is still in the party and is one of these types / is the starter. */
+  z.object({ kind: z.literal('picked'), types: z.array(TypeNameSchema).max(6).default([]), starter: z.boolean().optional() }),
   z.object({ kind: z.literal('partyType'), type: TypeNameSchema, /** True: holds only when NO Pokémon of this type is in the party. */ absent: z.boolean().optional() }),
   /** Ideas W4: the run calendar's season (core/clock.ts seasonOf) is one of these. */
   z.object({ kind: z.literal('season'), in: z.array(z.enum(['Spring', 'Summer', 'Autumn', 'Winter'])).min(1) }),
@@ -3023,7 +3027,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('express') }),
   /** Ideas W4 time rift: the map shows the battle waiting at each next node for the rest of the stage. */
   z.object({ kind: z.literal('riftPreview') }),
-  z.object({ kind: z.literal('heal'), share: z.number().min(0).max(1) }),
+  z.object({ kind: z.literal('heal'), share: z.number().min(0).max(1), /** 'picked': only the Pokémon a pick choice named. */ who: z.enum(['party', 'picked']).default('party') }),
   /** Camp: time together. Every pair of party Pokémon gains chemistry and loses tension; optionally old grudges are let go. */
   z.object({ kind: z.literal('campBond'), chemistry: z.number().int().min(0).max(30), calm: z.number().int().min(0).max(30), settle: z.boolean().default(false) }),
   /** The run clock: sleep until the next morning (a new day begins). */
@@ -3031,7 +3035,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** The run clock: today's milestone celebration is held (so it pays once). */
   z.object({ kind: z.literal('celebrate') }),
   /** `who` lead hits only the first Pokémon able to fight; `except` spares Pokémon of these types (Beta 0.6 biome hazards). */
-  z.object({ kind: z.literal('damage'), share: z.number().min(0).max(1), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
+  z.object({ kind: z.literal('damage'), share: z.number().min(0).max(1), who: z.enum(['party', 'lead', 'picked']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
   z.object({ kind: z.literal('cure') }),
   /** Records a Story Raid's result once (core/raid/storyRaids.ts): its levers, Operational Strength, track step and a lost raid's costs. */
   z.object({ kind: z.literal('storyRaid'), n: z.number().int().min(1).max(6), result: z.enum(['triumph', 'success', 'partial', 'failure', 'declined']) }),
@@ -3050,7 +3054,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('research'), amount: z.number().int().positive() }),
   z.object({ kind: z.literal('levels'), amount: z.number().int().positive(), who: z.union([z.literal('weakest'), CoWhoSchema]).default('lead') }),
   /** A Pokémon joins (or goes to storage when the party is full): a listed species, or one of the types, or the stage's theme. */
-  z.object({ kind: z.literal('join'), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional(), /** Anime Forms art (core/animeLooks.ts; the Squad Squirtle). Presentation only. */ look: z.enum(ANIME_LOOKS).optional(), /** Beta 0.6 Vermilion: it joins at exactly this level (Flight North's Caterpie is level 5), not the stage's event level. */ level: z.number().int().min(1).max(100).optional(), /** Beta 0.6 Vermilion: it joins knowing these moves too (the Kaiju Tentacool's Liquidation); a full moveset loses its last move. */ moves: z.array(z.string()).max(4).default([]), /** Beta 0.6 Vermilion: it goes straight into the party with no accept prompt (a companion for a stage; the lone Bug-type of Flight North). */ direct: z.boolean().default(false), /** Beta 0.7 Route 25: it joins fonder of you, with this much extra friendship (the troop's thanks when the food came back). */ friendship: z.number().int().min(1).max(100).optional() }),
+  z.object({ kind: z.literal('join'), /** Catalog Overhaul (families-b): the wild Pokémon that beat your team earlier this run joins (the `oldFoe`), else `species` / `types`. */ recall: z.boolean().default(false), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional(), /** Anime Forms art (core/animeLooks.ts; the Squad Squirtle). Presentation only. */ look: z.enum(ANIME_LOOKS).optional(), /** Beta 0.6 Vermilion: it joins at exactly this level (Flight North's Caterpie is level 5), not the stage's event level. */ level: z.number().int().min(1).max(100).optional(), /** Beta 0.6 Vermilion: it joins knowing these moves too (the Kaiju Tentacool's Liquidation); a full moveset loses its last move. */ moves: z.array(z.string()).max(4).default([]), /** Beta 0.6 Vermilion: it goes straight into the party with no accept prompt (a companion for a stage; the lone Bug-type of Flight North). */ direct: z.boolean().default(false), /** Beta 0.7 Route 25: it joins fonder of you, with this much extra friendship (the troop's thanks when the food came back). */ friendship: z.number().int().min(1).max(100).optional() }),
   /** A seedling grows in the Berry Garden (core/berries.ts): a held-berry plot, optionally mutated; the garden must have room. */
   z.object({ kind: z.literal('seedling'), berry: z.string().min(1), mutated: z.boolean().default(false) }),
   /** A sanctuary's blessing (shadowWorld.json): a few battles of a small, narrow boost. */
@@ -3143,6 +3147,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('timeMachine'), era: z.enum(['past', 'future']) }),
   /** Clone Core (New Island): your lead's moves are copied onto the other party Pokémon you pick (the lowest-level one when none is picked). */
   z.object({ kind: z.literal('copyMoves') }),
+  /** Catalog Overhaul (families-b): the Pokémon a pick choice named goes to the front of the party ("Send out the one it beat"). */
+  z.object({ kind: z.literal('leadPicked') }),
   /** Dossier (E1): meets a cast character (adds them to the Dossier) or changes their status. `id` is an `sc.*` id from the expansion cast. */
   z.object({ kind: z.literal('cast'), id: z.string().regex(/^sc\.[a-z0-9-]+\.[a-z0-9-]+$/), status: z.enum(['at large', 'beaten', 'turned', 'ally']).optional() }),
   /** Living Rival: writes a line to the run's Chronicle / journal (a photo, a promise, a letter). */
@@ -3452,6 +3458,9 @@ export const EventChoiceSchema = z.object({
   /** Catalog Overhaul: the player picks one party Pokémon for this choice ("Who soaks first?"). Effects with `who: 'picked'` land on it
    *  (the lead when nothing was picked). `types` narrows the list. The screens show it with the trade picker. */
   pick: z.object({ types: z.array(TypeNameSchema).max(4).default([]), /** Only Pokémon that know a move with this flag ("a Pokémon with a sound move"). */ moveFlag: z.enum(CO_MOVE_FLAGS).optional(), /** Only Pokémon at this Bond level or above. */ bond: z.number().int().min(1).max(5).optional() }).optional(),
+  /** Catalog Overhaul (families-b): on success, the first branch whose conditions all hold replaces the outcome's text and effects (the battle, if any, stays).
+   *  Checked after a pick is remembered, so `{ kind: 'picked', types }` reads the Pokémon just picked ("what comes in the night, by the watcher's type"). */
+  branches: z.array(z.object({ when: z.array(EventConditionSchema).min(1), text: z.string().min(1), effects: z.array(EventEffectSchema).default([]) })).max(8).default([]),
   success: EventOutcomeSchema,
   /** What happens when the check or chance fails (needed when there is one). */
   failure: EventOutcomeSchema.optional(),

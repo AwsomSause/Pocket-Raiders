@@ -797,7 +797,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const knownItem = (id: string) => content.items.has(id) || content.catalog.has(id);
   for (const e of content.events.values()) {
     const where = `event "${e.id}"`;
-    const effects = e.choices.flatMap((c) => [c.success, ...(c.failure ? [c.failure] : [])]).flatMap((o) => [...o.effects, ...(o.battle?.win ?? [])]);
+    const effects = e.choices.flatMap((c) => [c.success, ...(c.failure ? [c.failure] : [])]).flatMap((o) => [...o.effects, ...(o.battle?.win ?? [])]).concat(e.choices.flatMap((c) => c.branches.flatMap((b) => b.effects)));
     for (const f of effects) {
       if (f.kind === 'item' && !knownItem(f.id)) problems.push(`${where} gives unknown item "${f.id}"`);
       if (f.kind === 'loseItem' && f.id && !knownItem(f.id)) problems.push(`${where} uses unknown item "${f.id}"`);
