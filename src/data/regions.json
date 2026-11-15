@@ -198,6 +198,22 @@
  {
   "id": "galar",
   "name": "Galar",
+  "wildSpecies": [
+   "galarian-grimer",
+   "galarian-spearow",
+   "galarian-azurill",
+   "galarian-trubbish",
+   "galarian-lotad",
+   "galarian-magnemite",
+   "galarian-tangela",
+   "galarian-chikorita",
+   "galarian-cyndaquil",
+   "galarian-totodile",
+   "galarian-larvitar",
+   "galarian-onix",
+   "galarian-slugma",
+   "galarian-snivy"
+  ],
   "gymLeaders": [
    "milo",
    "nessa",

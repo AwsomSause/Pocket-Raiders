@@ -8,6 +8,7 @@ import { CONDITION_EVOLUTIONS } from '../../src/core/conditionEvolution';
 import { createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { VolatileSchema } from '../../src/core/state';
+import { typesPool } from '../../src/core/themes';
 import { content } from './helpers';
 
 const root = join(__dirname, '..', '..');
@@ -279,5 +280,26 @@ describe('Beta 0.7 Jet batch: signature moves in battle', () => {
       if (d.battle.enemyVolatile.yawn > 0 || d.enemy.status?.id === 'slp') drowsy += 1;
     }
     expect(drowsy).toBeGreaterThan(4);
+  });
+});
+
+describe('Beta 0.7 Jet batch: Galar wild pools', () => {
+  const galarian = ['galarian-grimer', 'galarian-spearow', 'galarian-azurill', 'galarian-trubbish', 'galarian-lotad', 'galarian-magnemite', 'galarian-tangela', 'galarian-chikorita', 'galarian-cyndaquil', 'galarian-totodile', 'galarian-larvitar', 'galarian-onix', 'galarian-slugma', 'galarian-snivy'];
+
+  it('the first stages of the Galarian lines roam Galar, and only Galar', () => {
+    expect(content.regions.get('galar')!.wildSpecies).toEqual(galarian);
+    for (const id of galarian) {
+      const types = content.species.get(id)!.types;
+      expect(typesPool(content, types, 'galar').some((p) => p.speciesId === id), id).toBe(true);
+      expect(typesPool(content, types, 'kanto').some((p) => p.speciesId === id), `${id} in Kanto`).toBe(false);
+      expect(typesPool(content, types).some((p) => p.speciesId === id), `${id} with no region`).toBe(false);
+    }
+  });
+
+  it('they are native in Galar (heavier odds than a non-native first stage)', () => {
+    const pool = typesPool(content, ['poison'], 'galar');
+    const w = (id: string) => pool.find((p) => p.speciesId === id)!.weight;
+    expect(w('galarian-grimer')).toBeGreaterThan(0);
+    expect(pool.some((p) => p.speciesId === 'galarian-muk')).toBe(false);
   });
 });
