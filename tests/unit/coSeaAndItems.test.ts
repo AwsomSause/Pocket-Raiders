@@ -58,3 +58,13 @@ describe("the captain's compass", () => {
     expect(node.sides.find((s) => s.id === 'd')!.hidden).toBe(true);
   });
 });
+
+describe('the Mirror Lake: passed-by species', () => {
+  it('lists seen-but-never-caught species, most recent first, without the party', async () => {
+    const { passedBy } = await import('../../src/core/co/mirror');
+    const run = setup();
+    run.log.speciesSeen = ['pidgey', 'rattata', run.party[0]!.speciesId, 'zubat', 'pidgey'];
+    run.log.speciesCaught = ['rattata'];
+    expect(passedBy(run)).toEqual(['pidgey', 'zubat']);
+  });
+});

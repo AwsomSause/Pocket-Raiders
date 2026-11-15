@@ -13,6 +13,7 @@ import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { rememberPick, rememberedPick } from './co/pickMemory';
 import { compassReveal } from './co/compass';
+import { passedBy } from './co/mirror';
 import { PSEUDO, enterPseudoStage, leavePseudoStage, routeChainEvent } from './dungeon/pseudo';
 import { addMark, overhaulOf, type FeelingKey } from './rivals/overhaul';
 import { friendName, friendTeam, pseudoRivalBeat } from './rivals/live';
@@ -1291,7 +1292,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'join': {
       const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
-      const speciesId = (e.recall ? oldFoe(run) : null) ?? pickSpecies(content, run, e.species, e.types, rng, 'reward');
+      const speciesId = (e.recall ? oldFoe(run) : null) ?? (e.uncaught ? passedBy(run)[0] : null) ?? pickSpecies(content, run, e.species, e.types, rng, 'reward');
       // No event lifts the party's level cap (Balancing Phase 7).
       const level = e.level ?? Math.max(1, Math.min(runLevelCap(content, run), eventLevel(content, run, node, rng) + e.levelBonus));
       const mon = newMon(content, run, e.level ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'p');
@@ -1703,7 +1704,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     // S274 Mirror Match: a copy of your team (your lead first, then the others still standing, up to the fight's size), with your moves.
     const mirrored = b.mirror ? [run.party[activeIndex]!, ...run.party.filter((p, i) => i !== activeIndex && p.hp > 0)].slice(0, Math.max(1, b.kind === 'trainer' ? b.size : 1)) : [];
     const leadTypes = getSpecies(content, run.party[activeIndex]!.speciesId).types as TypeName[];
-    const fixedIds = b.counter && typeEffectiveness(content.typeChart, b.counter.weakTo, leadTypes) > 1 ? b.counter.team : b.team ?? [];
+    const fixedIds = b.kind === 'trainer' && b.uncaught ? passedBy(run).slice(0, b.size) : b.counter && typeEffectiveness(content.typeChart, b.counter.weakTo, leadTypes) > 1 ? b.counter.team : b.team ?? [];
     const team = fixedIds.length > 0 ? fixedIds.map((id) => newMon(content, run, id, Math.min(cap, Math.max(1, base)), 'e')) : mirrored.length > 0 ? mirrored.map((src) => {
       const copy = newMon(content, run, src.speciesId, Math.min(cap, Math.max(1, src.level + b.levelBonus)), 'e');
       copy.moves = src.moves.map((s) => ({ id: s.id, pp: content.moves.get(s.id)?.pp ?? s.pp }));
