@@ -1567,6 +1567,7 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
     if (special !== undefined) return special;
     if (ctx.battle.kind !== 'wild') return "You can't catch another trainer's Pokémon!";
     if (ctx.catchBlocked) return ctx.catchBlocked;
+    if (ctx.battle.eventRule?.noCatch) return "It won't be caught. It fights for its Squad.";
     if (ctx.battle.totem) return "A Totem can't be caught mid-fight. Beat it and something rare may follow!";
     if (ctx.battle.raid) {
       // S409 Boss Pokémon Capture: some bosses can be caught once they are worn down (not a called minion).
@@ -3444,7 +3445,8 @@ function powerFromRule(ctx: BattleContext, rule: PowerRule, base: number, user: 
     case 'targetSpeed': return Math.min(150, Math.floor((25 * targetStats.spe) / Math.max(1, userStats.spe)) + 1);
     case 'userHp': return Math.max(1, Math.floor((base * user.mon.hp) / userStats.hp));
     case 'targetHp': return Math.max(1, Math.floor((120 * target.mon.hp) / targetStats.hp));
-    case 'doubleTargetStatus': return target.mon.status ? base * 2 : base;
+    // The Squirtle Squad recruit (gn.08): its Hex treats confusion as a status condition.
+    case 'doubleTargetStatus': return target.mon.status || (user.mon.look?.startsWith('squad') && target.vol.confusion > 0) ? base * 2 : base;
     case 'doubleUserStatus': return user.mon.status ? base * 2 : base;
     case 'doubleTargetPoison': return target.mon.status?.id === 'psn' ? base * 2 : base;
     case 'rainBoost': return weatherNow(ctx) === 'rain' ? Math.floor(base * 1.5) : base;

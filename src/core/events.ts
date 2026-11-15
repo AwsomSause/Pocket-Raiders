@@ -609,6 +609,16 @@ function placeEarnedCoBeats(content: Content, run: RunState): void {
   coPut(run, planCoStage(stage.map, moved, `${run.seed}::co-beat::${stageKey(run)}`, ahead));
 }
 
+/** An event fight's rule may open it with stat stages: `stages` on both sides, `myStages` on the player's, `foeStages` on the foe's. */
+function ruleStages(battle: NonNullable<RunState['battle']>, rule: { stages?: Partial<Record<string, number>>; myStages?: Partial<Record<string, number>>; foeStages?: Partial<Record<string, number>> }): void {
+  for (const [stat, n] of Object.entries(rule.stages ?? {})) {
+    battle.playerStages[stat as 'atk'] = n!;
+    battle.enemyStages[stat as 'atk'] = n!;
+  }
+  for (const [stat, n] of Object.entries(rule.myStages ?? {})) battle.playerStages[stat as 'atk'] = n!;
+  for (const [stat, n] of Object.entries(rule.foeStages ?? {})) battle.enemyStages[stat as 'atk'] = n!;
+}
+
 /** Events that can appear on the current stage (key-item events only while the key item is held). */
 export function eligibleEvents(content: Content, run: RunState): EventDef[] {
   const n = stageNumber(content, run);
@@ -820,6 +830,8 @@ export function stopIsHidden(content: Content, run: RunState, node: MapNode, sid
   // A secret path shows itself to a Pokémon that can open it.
   const secret = side.eventId ? content.events.get(side.eventId)?.secret : undefined;
   if (secret && secret.length > 0 && secret.some((c) => conditionMet(content, run, c))) return false;
+  // Bill's Recorder: the first hidden stop on the map (in map order) shows itself.
+  if (hasPerk(content, run, 'revealOne') && run.stage?.map.nodes.flatMap((n) => n.sides).find((s) => s.hidden)?.id === side.id) return false;
   return !hasPerk(content, run, 'revealEvents');
 }
 
@@ -1446,12 +1458,9 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (e.held) mon.held = { [e.held]: 1 };
       if (e.look) mon.look = e.look;
       if (e.friendship) mon.friendship = Math.min(255, mon.friendship + e.friendship);
-      for (const id of e.moves) {
-        const mv = content.moves.get(id);
-        if (!mv || mon.moves.some((m) => m.id === id)) continue;
-        if (mon.moves.length < 4) mon.moves.push({ id, pp: mv.pp });
-        else mon.moves[3] = { id, pp: mv.pp };
-      }
+      // A full moveset gives up its last moves, one for each new one; every taught move stays (the Squad recruit's Swagger, Hex and Shades Down).
+      const taught = e.moves.filter((id, i) => content.moves.has(id) && e.moves.indexOf(id) === i && !mon.moves.some((m) => m.id === id)).slice(0, 4);
+      if (taught.length > 0) mon.moves = [...mon.moves.slice(0, 4 - taught.length), ...taught.map((id) => ({ id, pp: content.moves.get(id)!.pp }))];
       discover(run, mon.speciesId, true);
       count(run, 'pokemonCaught');
       if (e.direct) {
@@ -1867,7 +1876,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     run.battle = createBattle('wild', [enemy, ...others], activeIndex, run.party[activeIndex]!.uid);
     if (b.special) assignSpecialTrait(run.battle.extra.traits, [enemy, ...others], b.special);
     if (b.weather) run.battle.weather = { id: b.weather, turns: 999 };
-    if (b.rule) run.battle.eventRule = b.rule;
+    if (b.rule) { run.battle.eventRule = b.rule; ruleStages(run.battle, b.rule); }
     if (b.aura) for (const s of ['atk', 'def', 'spa', 'spd', 'spe'] as const) run.battle.enemyStages[s] = 1;
   } else {
     const boss = b.bossId ? content.bosses.get(b.bossId) : undefined;
@@ -1943,12 +1952,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       run.battle.eventRule = b.rule;
       if (b.rule.weatherCycle) run.battle.weather = { id: b.rule.weatherCycle[0]!, turns: 5 };
       if (b.rule.foeAsleep) for (const mon of team) mon.status = { id: 'slp', turns: 3 };
-      for (const [stat, n] of Object.entries(b.rule.stages ?? {})) {
-        run.battle.playerStages[stat as 'atk'] = n;
-        run.battle.enemyStages[stat as 'atk'] = n;
-      }
-      for (const [stat, n] of Object.entries(b.rule.myStages ?? {})) run.battle.playerStages[stat as 'atk'] = n;
-      for (const [stat, n] of Object.entries(b.rule.foeStages ?? {})) run.battle.enemyStages[stat as 'atk'] = n;
+      ruleStages(run.battle, b.rule);
     }
     if (b.ally && content.species.has(b.ally) && team.length >= 2) {
       // A temporary ally joins the party for this fight only (finishBattle sends it home).

@@ -1455,6 +1455,8 @@ export const PerkSchema = z.discriminatedUnion('perk', [
   z.object({ perk: z.literal('extraStop'), kind: z.enum(['heal', 'shop', 'fish', 'event']), where: z.enum(['stage', 'nextNode']) }),
   /** Every hidden "?" stop shows what it is (Silph Scope). */
   z.object({ perk: z.literal('revealEvents') }),
+  /** One hidden "?" stop on each stage shows what it is: the first on the map (Bill's Recorder, Greenneedle gn.09). */
+  z.object({ perk: z.literal('revealOne') }),
   /** Torch and Dungeon Key: nothing happens on their own; dungeon rooms (core/dungeon/compile.ts) offer to spend one. */
   z.object({ perk: z.literal('dungeonSupply') }),
   /** The next event shows each choice's odds and outcome before you choose (Inquiry Mail). */

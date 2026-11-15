@@ -12,7 +12,7 @@
     "Rival",
     "Pokémon"
    ],
-   "stop": "dungeon",
+   "stop": "event",
    "rarity": "rare",
    "forced": true,
    "minStage": 1,
@@ -1360,7 +1360,7 @@
     "Pokémon",
     "Treasure"
    ],
-   "stop": "dungeon",
+   "stop": "event",
    "rarity": "rare",
    "forced": true,
    "minStage": 1,

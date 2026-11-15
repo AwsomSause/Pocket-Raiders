@@ -66,6 +66,7 @@ export interface GnHost {
 
 /** A Greenneedle condition. */
 export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage: number): boolean {
+  if (c.test === 'lookAtLevel') return run.party.some((m) => m.look === c.types![0] && m.level >= gnFlag(run, c.key!));
   if (c.test === 'notRegion') return !c.types!.includes(run.regionOrder[run.regionIndex] ?? '');
   if (c.test === 'noMoveType') return !run.party.some((m) => m.moves.some((s) => c.types!.includes(content.moves.get(s.id)?.type ?? '')));
   const stamped = gnFlag(run, c.key!);
@@ -165,6 +166,12 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       delete canon.stash;
       return 'Your team comes back';
     }
+    case 'markLook':
+      for (const mon of run.party) if (mon.look === e.type) mon.gn = [...(mon.gn ?? []).filter((t) => t !== e.key), e.key!];
+      return '';
+    case 'setLook':
+      for (const mon of run.party) if (mon.gn?.includes(e.key!)) mon.look = e.type as PokemonInstance['look'];
+      return '';
     case 'noFaint':
       if (run.party.every((m) => m.hp > 0)) setGnFlag(run, e.key!, gnFlag(run, e.key!) + e.n!);
       return '';
@@ -213,6 +220,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (battle.eventRule?.gn === 'bex') battle.storyEffects.push(`${FOE_WAITS}Bex is looking for the attack one. "TOP LEFT!" shouts Damian, from the back.`);
   if (battle.eventRule?.gn === 'damian') trainAce(content, battle.enemyTeam[battle.enemyTeam.length - 1], battle.eventRule.ace ?? 1);
   const lead = run.party[battle.activeIndex];
+  // The Squirtle Squad (gn.08): the Leader's level is what a Lesser recruit has to reach before it may go back and challenge it.
+  if (battle.event?.eventId === 'gn-08-leader' && battle.enemyTeam[0]) setGnFlag(run, 'squad-leader-level', battle.enemyTeam[0].level);
   // Cold Night's Rain (gn.07), Flame 5: the Fire-type fights the owner's last Pokémon itself, worn down already, with one move. It is enough.
   if (battle.eventRule?.gn === 'lastflame' && lead) {
     const foe = battle.enemyTeam[battle.enemyTeam.length - 1];

@@ -3,7 +3,10 @@ import { describe, expect, it } from 'vitest';
 import { chainRooms, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
-import { createBattle, resolveTurn, type BattleEvent } from '../../src/core/battle/engine';
+import { conditionMet, stopIsHidden } from '../../src/core/events';
+import { runPerks } from '../../src/core/archetypes';
+import { boxCapacity } from '../../src/core/trainerPerks';
+import { createBattle, itemProblem, resolveTurn, type BattleEvent } from '../../src/core/battle/engine';
 import { createPokemon } from '../../src/core/pokemon';
 import { Rng, hashSeed } from '../../src/core/rng';
 import { choose, flagOf, gnRun, lose, open, openSide, scene, setFlag, win } from './helpers/gnPlay';
@@ -287,5 +290,326 @@ describe("gn.07 Cold Night's Rain", () => {
   it('Kanto: the canon space on the road out of Cerulean opens it; the old scenes are retired', () => {
     expect(content.events.get('cs-kanto-cerulean-rain')!.canon).toBe('cs.kanto.cerulean.rain');
     expect(content.events.get('cs-kanto-cerulean-rain-charmander-owner')!.disabled).toBe(true);
+  });
+});
+
+describe('gn.08 The Squirtle Squad', () => {
+  /** Into town on a seed that opens with the pranksters (standoff 0) or the standoff (1). */
+  const town = (standoff: number): RunState => {
+    for (let i = 0; i < 60; i++) {
+      const run = gnRun(`gn08-${i}`);
+      open(run, 'gn-08-town');
+      const r = choose(run, 'gn-08-town', 'Walk into town.').run;
+      if (flagOf(r, 'squad-standoff') === standoff) return r;
+    }
+    throw new Error('no seed');
+  };
+  /** The pranksters' road up to the Leader, with the right response everywhere it is offered. */
+  const toLeader = (right: boolean): RunState => {
+    let run = choose(town(0), 'gn-08-pranks', 'Shake the water off, and face them.').run;
+    run = win(choose(run, 'gn-08-fight-1', 'Take on the next one.').run);
+    run = choose(run, 'gn-08-specs', right ? 'Hand it a spare pair.' : 'Tell it where they are.').run;
+    run = win(choose(run, 'gn-08-fight-2', 'Take on the next one.').run);
+    run = choose(run, 'gn-08-tank', right ? 'Lose, on purpose, with a straight face.' : 'Win.').run;
+    run = win(choose(run, 'gn-08-fight-3', 'Take on the next one.').run);
+    run = choose(run, 'gn-08-smoulder', 'Let your team go where they like.').run;
+    return choose(run, 'gn-08-star', right ? 'Watch all of it. Clap.' : 'Look away halfway through.').run;
+  };
+  const toRecruit = (right: boolean, fire: string, level = 1): RunState => {
+    let run = win(choose(toLeader(right), 'gn-08-leader', 'Fight the Leader.').run);
+    run = choose(run, 'gn-08-salute', right ? 'Salute back.' : 'Wave.').run;
+    run.party.forEach((m) => { m.level = level; });
+    run = choose(run, 'gn-08-after', 'It was only the wind.').run;
+    return choose(run, 'gn-08-fire', fire).run;
+  };
+  const recruit = (run: RunState) => {
+    const done = win(choose(run, 'gn-08-recruit', 'Take the shades.').run);
+    return { run: done, mon: [...done.party, ...(done.box ?? [])].find((m) => m.look?.startsWith('squad'))! };
+  };
+
+  it('optional at step 7 (window 5 to 11), once per run, from A3; "Keep to the road" costs nothing', () => {
+    expect(content.coPlacement!.get('gn-08-town')).toMatchObject({ home: 7, window: [5, 11], sits: 'optional', often: 'run', earliest: 3 });
+    expect(content.events.get('gn-08-town')!.choices.map((c) => c.label)).toEqual(['Walk into town.', 'Keep to the road.']);
+  });
+
+  it('is 65% the pranksters and 35% a standoff', () => {
+    let standoff = 0;
+    for (let i = 0; i < 100; i++) {
+      const run = gnRun(`gn08-odds-${i}`);
+      open(run, 'gn-08-town');
+      const r = choose(run, 'gn-08-town', 'Walk into town.').run;
+      standoff += flagOf(r, 'squad-standoff');
+      const sides = r.stage!.map.nodes.flatMap((n) => n.sides).filter((x) => !x.used).map((x) => x.eventId);
+      expect(sides).toContain(flagOf(r, 'squad-standoff') ? 'gn-08-standoff' : 'gn-08-pranks');
+    }
+    expect(standoff).toBeGreaterThan(20);
+    expect(standoff).toBeLessThan(50);
+  });
+
+  it('the hose: every Squad battle opens with the lead at Speed -1, and says so', () => {
+    const run = choose(town(0), 'gn-08-pranks', 'Shake the water off, and face them.').run;
+    const fight = choose(run, 'gn-08-fight-1', 'Take on the next one.');
+    expect(fight.text).toContain('The Squad opens with the hose!');
+    expect(fight.run.battle!.playerStages.spe).toBe(-1);
+    expect(fight.run.battle!.enemyTeam[0]!.look).toBe('squad-lesser');
+    // Squad members fight for the Squad: none can be caught (one joins at the end, by choice).
+    expect(itemProblem({ content, battle: fight.run.battle!, party: fight.run.party, inventory: { 'poke-ball': 1 } }, 'poke-ball')).toContain("won't be caught");
+  });
+
+  it('the standoff skips the Lesser fights: you talk with Specs, Tank, Smoulder and Star, then the Leader', () => {
+    let run = choose(town(1), 'gn-08-standoff', 'Sit down with the Lesser members first.').run;
+    expect(openSide(run)!.eventId).toBe('gn-08-specs');
+    run = choose(run, 'gn-08-specs', 'Hand it a spare pair.').run;
+    expect(openSide(run)!.eventId).toBe('gn-08-tank');
+    run = choose(run, 'gn-08-tank', 'Win.').run;
+    expect(openSide(run)!.eventId).toBe('gn-08-smoulder');
+    run = choose(run, 'gn-08-smoulder', 'Let your team go where they like.').run;
+    run = choose(run, 'gn-08-star', 'Watch all of it. Clap.').run;
+    expect(openSide(run)!.eventId).toBe('gn-08-leader');
+    expect(run.battle).toBeFalsy();
+  });
+
+  it('each right response is 1 Respect; the Fire-type can only be kept back when there is one', () => {
+    expect(flagOf(toLeader(true), 'squad-respect')).toBe(3);
+    expect(flagOf(toLeader(false), 'squad-respect')).toBe(0);
+    const smoulder = content.events.get('gn-08-smoulder')!.choices[0]!;
+    expect(smoulder.label).toBe('Keep your Fire-type back, without a word.');
+    expect(smoulder.requires).toContainEqual({ kind: 'partyType', type: 'fire' });
+    expect(flagOf(toRecruit(true, 'Smoulder, with me.'), 'squad-respect')).toBe(5);
+  });
+
+  it('the fifth fight: Mega Squad Blastoise far above the stage, the Leader Blastoise at 3+, else only the wind', () => {
+    const at = (level: number) => {
+      let run = win(choose(toLeader(true), 'gn-08-leader', 'Fight the Leader.').run);
+      run = choose(run, 'gn-08-salute', 'Salute back.').run;
+      run.party.forEach((m) => { m.level = level; });
+      return scene(run, 'gn-08-after').labels;
+    };
+    expect(at(100)).toEqual(['Face the Mega Squad Blastoise.']);
+    expect(at(1)).toEqual(['It was only the wind.']);
+    const mid = Array.from({ length: 100 }, (_, i) => i + 1).map(at).find((l) => l[0] === 'Face the Leader Blastoise.');
+    expect(mid).toEqual(['Face the Leader Blastoise.']);
+  });
+
+  it('the town\'s fire: three exact choices, each remembered', () => {
+    expect(content.events.get('gn-08-fire')!.choices.map((c) => c.label)).toEqual(["You're the fire brigade, aren't you?", "I'll handle it.", 'Smoulder, with me.']);
+    expect(flagOf(toRecruit(false, "You're the fire brigade, aren't you?"), 'squad-fire-brigade')).toBe(1);
+    expect(flagOf(toRecruit(false, "I'll handle it."), 'squad-fire-player')).toBe(1);
+    expect(flagOf(toRecruit(false, 'Smoulder, with me.'), 'squad-fire-smoulder')).toBe(1);
+  });
+
+  it('the recruit: Contrary, Swagger, Hex and Shades Down, holding Cool Shades; Respect 0-2 is always a Lesser member', () => {
+    const { run, mon } = recruit(toRecruit(false, "You're the fire brigade, aren't you?"));
+    expect(mon.speciesId).toBe('squirtle');
+    expect(mon.look).toBe('squad-lesser');
+    expect(mon.fixedAbility).toBe('contrary');
+    expect(mon.moves.map((m) => m.id)).toEqual(expect.arrayContaining(['swagger', 'hex', 'shades-down']));
+    expect(mon.held).toEqual({ 'cool-shades': 1 });
+    expect(flagOf(run, 'kanto-squad-joined')).toBe(1);
+    expect(flagOf(run, 'squad-lesser-joined')).toBe(1);
+  });
+
+  it('Respect 3+ is a coin flip for the Leader; "I\'ll handle it" always gives a Lesser member', () => {
+    let leaders = 0;
+    let handled = 0;
+    for (let i = 0; i < 24; i++) {
+      const brigade = toRecruit(true, "You're the fire brigade, aren't you?");
+      brigade.seed = `gn08-coin-${i}`;
+      if (recruit(brigade).mon.look === 'squad-leader') leaders++;
+      const mine = toRecruit(true, "I'll handle it.");
+      mine.seed = `gn08-coin-${i}`;
+      if (recruit(mine).mon.look === 'squad-leader') handled++;
+    }
+    expect(leaders).toBeGreaterThan(3);
+    expect(leaders).toBeLessThan(21);
+    expect(handled).toBe(0);
+  });
+
+  it('Shades Down is Dark, special, 90 power and lowers the user\'s Sp. Atk; Hex counts confusion for a Squad member', () => {
+    expect(content.moves.get('shades-down')).toMatchObject({ type: 'dark', category: 'special', power: 90 });
+    const hex = (look?: 'squad-lesser') => {
+      const a = createPokemon(content, 'squirtle', 50, 'a');
+      a.moves = [{ id: 'hex', pp: 99 }];
+      if (look) a.look = look;
+      const b = createPokemon(content, 'slowpoke', 50, 'b');
+      b.moves = [{ id: 'splash', pp: 99 }];
+      b.hp = 9999;
+      const battle = createBattle('trainer', [b], 0, a.uid, { classId: 'ace-trainer', name: 'x', leaderId: null });
+      battle.enemyVolatile.confusion = 3;
+      const ctx = { content, battle, party: [a], inventory: {}, rng: new Rng(hashSeed('hx')), captureRng: new Rng(hashSeed('hc')), catchMultiplier: 1 };
+      const events: BattleEvent[] = resolveTurn(ctx, { kind: 'move', index: 0 });
+      return (events.find((e) => e.type === 'damage' && e.side === 'enemy') as { amount: number } | undefined)?.amount ?? 0;
+    };
+    expect(hex('squad-lesser')).toBeGreaterThan(hex() * 1.5);
+  });
+
+  it('afterstory: a Lesser recruit at the Leader\'s level challenges it, and wins the Leader\'s shades', () => {
+    let { run, mon } = recruit(toRecruit(false, "You're the fire brigade, aren't you?"));
+    setFlag(run, 'squad-leader-level', 30);
+    mon.level = 29;
+    expect(content.events.get('gn-08-challenge')!.requires.every((c) => conditionMet(content, run, c))).toBe(false);
+    mon.level = 30;
+    expect(content.events.get('gn-08-challenge')!.requires.every((c) => conditionMet(content, run, c))).toBe(true);
+    if (!run.party.includes(mon)) { run.party.push(mon); }
+    open(run, 'gn-08-challenge');
+    run = win(choose(run, 'gn-08-challenge', 'Let it go and challenge it.').run);
+    const after = [...run.party, ...(run.box ?? [])].find((m) => m.uid === mon.uid)!;
+    expect(after.look).toBe('squad-leader');
+    expect(flagOf(run, 'squad-challenge-done')).toBe(1);
+  });
+
+  it('Kanto: the town on the road from Cerulean is its canon space; the old Squad scenes are retired', () => {
+    expect(content.events.get('cs-kanto-cerulean-squad')!.canon).toBe('cs.kanto.cerulean.squad');
+    expect(content.events.get('cs-kanto-cerulean-squad')!.choices.map((c) => c.label)).toEqual(['Walk into town.', 'Keep to the road.']);
+    expect(content.events.get('cs-kanto-cerulean-squad-reward')!.disabled).toBe(true);
+    expect(content.events.get('gn-08-town')!.requires).toContainEqual({ kind: 'gn', test: 'notRegion', types: ['kanto'] });
+  });
+});
+
+describe("gn.09 Bill's Lighthouse", () => {
+  const enter = (seed: string): RunState => {
+    const run = gnRun(seed);
+    open(run, 'gn-09-door');
+    return choose(run, 'gn-09-door', 'Look for the lighthouse.').run;
+  };
+  /** Reads the five signs: `right[i]` true takes the right reading of sign i+1 (a wrong one walks, and wins, the long way round). */
+  const search = (run: RunState, right: boolean[]): RunState => {
+    for (const [i, r] of right.entries()) {
+      if (flagOf(run, 'bill-clues') >= 3) break;
+      run = choose(run, 'gn-09-search', 'Read the next sign.').run;
+      const labels = scene(run, `gn-09-clue-${i + 1}`).labels;
+      run = choose(run, `gn-09-clue-${i + 1}`, labels[r ? 0 : 1]!).run;
+      if (!r) run = win(choose(run, 'gn-09-walk', 'Push on.').run);
+    }
+    return run;
+  };
+  const toLamp = (seed: string): RunState => {
+    let run = search(enter(seed), [true, true, true]);
+    run = choose(run, 'gn-09-search', 'Follow the beacon.').run;
+    run = choose(run, 'gn-09-shore', 'Go up to the lighthouse.').run;
+    run = choose(run, 'gn-09-cottage', 'Leave them.').run;
+    return choose(run, 'gn-09-stairs', 'Climb to the lamp room.').run;
+  };
+  const toDawn = (seed: string): RunState => {
+    let run = choose(toLamp(seed), 'gn-09-lamp', 'Press the button.').run;
+    run = choose(run, 'gn-09-signal-1', 'A low call, like a horn.').run;
+    run = choose(run, 'gn-09-signal-2', 'A rising song.').run;
+    run = choose(run, 'gn-09-signal-3', "Something that isn't in the Pokédex.").run;
+    run = choose(run, 'gn-09-lamp', 'Go out onto the gallery.').run;
+    return choose(run, 'gn-09-gallery', 'Watch the water.').run;
+  };
+
+  it('a door at step 16 (window 14 to 18), optional, needs water; a search, then five nodes', () => {
+    expect(content.coPlacement!.get('gn-09-door')).toMatchObject({ home: 16, window: [14, 18], sits: 'optional', often: 'run', earliest: 3 });
+    expect(content.events.get('gn-09-door')!.choices.map((c) => c.label)).toEqual(['Look for the lighthouse.', 'Not tonight.']);
+    const chain = PSEUDO_CHAINS.find((c) => c.id === 'ps_gn_lighthouse')!;
+    expect(chainRooms(content, chain).map((r) => r.event)).toEqual(['gn-09-search', 'gn-09-shore', 'gn-09-cottage', 'gn-09-stairs', 'gn-09-lamp', 'gn-09-gallery']);
+    expect(enter('gn09-in').stage!.pseudo?.id).toBe('ps_gn_lighthouse');
+  });
+
+  it('three right readings find the beacon; a wrong one costs a walk (a fight); too many wrong and the night is lost', () => {
+    const found = search(enter('gn09-s1'), [true, false, true, true]);
+    expect(flagOf(found, 'bill-clues')).toBe(3);
+    expect(scene(found, 'gn-09-search').labels).toEqual(['Follow the beacon.']);
+    const lost = search(enter('gn09-s2'), [false, false, false, true, true]);
+    expect(scene(lost, 'gn-09-search').labels).toEqual(['Give up for tonight.']);
+    const gone = choose(lost, 'gn-09-search', 'Give up for tonight.').run;
+    expect(gone.stage!.pseudo).toBeFalsy();
+    expect(choose(enter('gn09-s3'), 'gn-09-search', 'Read the next sign.').run.stage!.map.nodes.flatMap((n) => n.sides).some((x) => x.eventId === 'gn-09-clue-1' && !x.used)).toBe(true);
+  });
+
+  it('the shore: standing with them is Bond +1; the cottage and the stairs in the doc\'s words', () => {
+    let run = search(enter('gn09-shore'), [true, true, true]);
+    run = choose(run, 'gn-09-search', 'Follow the beacon.').run;
+    expect(scene(run, 'gn-09-shore').labels).toEqual(['Stand with them.', 'Go up to the lighthouse.']);
+    const before = run.party[0]!.friendship;
+    const stood = choose(run, 'gn-09-shore', 'Stand with them.').run;
+    expect(stood.party[0]!.friendship).toBeGreaterThan(before);
+    expect(scene(stood, 'gn-09-cottage').labels).toEqual(['Look closer.', 'Leave them.']);
+    const closer = choose(stood, 'gn-09-cottage', 'Look closer.');
+    expect(closer.text).toContain('before it hatched');
+    expect(scene(closer.run, 'gn-09-stairs').intro).toContain('i told it about my dog');
+  });
+
+  it('the stairs remember a fog you told your name: the child wrote one more line', () => {
+    const run = toLamp('gn09-fog');
+    setFlag(run, 'fog-named');
+    open(run, 'gn-09-stairs');
+    expect(scene(run, 'gn-09-stairs').intro).toContain('they were nice to it too');
+  });
+
+  it('the lamp room: three ways to the button, then the signal puzzle (no penalty for a wrong match), then the gallery', () => {
+    const run = toLamp('gn09-lamp');
+    expect(scene(run, 'gn-09-lamp').labels).toEqual(['Press the button.', 'Laugh first.', 'Ask the Clefairy to dance.']);
+    for (const label of ['Press the button.', 'Laugh first.', 'Ask the Clefairy to dance.']) expect(choose(run, 'gn-09-lamp', label).text).toContain("I didn't mind it.");
+    let r = choose(run, 'gn-09-lamp', 'Laugh first.').run;
+    r = choose(r, 'gn-09-signal-1', 'A rising song.').run;
+    expect(flagOf(r, 'bill-matched')).toBe(0);
+    r = choose(r, 'gn-09-signal-2', 'A rising song.').run;
+    r = choose(r, 'gn-09-signal-3', "Something that isn't in the Pokédex.").run;
+    expect(flagOf(r, 'bill-matched')).toBe(2);
+    expect(scene(r, 'gn-09-lamp').labels).toEqual(['Go out onto the gallery.']);
+  });
+
+  it('dawn: Dragonite 40%, a Lapras pod 35%, a Wailord 24%, a silhouette 1%', () => {
+    const seen = [0, 0, 0, 0, 0];
+    for (let i = 0; i < 60; i++) {
+      const run = toLamp(`gn09-dawn-${i}`);
+      let r = choose(run, 'gn-09-lamp', 'Press the button.').run;
+      for (const n of [1, 2, 3]) r = choose(r, `gn-09-signal-${n}`, 'A rising song.').run;
+      r = choose(r, 'gn-09-lamp', 'Go out onto the gallery.').run;
+      seen[flagOf(choose(r, 'gn-09-gallery', 'Watch the water.').run, 'bill-surfaced')]!++;
+    }
+    expect(seen[0]).toBe(0);
+    expect(seen[1]! + seen[2]! + seen[3]!).toBeGreaterThan(50);
+    expect(seen[1]).toBeGreaterThan(10);
+    expect(seen[3]).toBeGreaterThan(5);
+  });
+
+  it("three endings, each remembered; every one pays Bill's PC, the S.S. Anne Ticket, his Recorder and an egg move", () => {
+    const run = toDawn('gn09-end');
+    expect(scene(run, 'gn-09-dawn').labels).toEqual(['Answer it, one more time.', 'Turn the lamp off.', 'Leave it on. Let it keep coming.']);
+    for (const [label, key] of [['Answer it, one more time.', 'bill-answered'], ['Turn the lamp off.', 'bill-lamp-off'], ['Leave it on. Let it keep coming.', 'bill-kept-on']] as const) {
+      const done = choose(run, 'gn-09-dawn', label);
+      const after = win(done.run);
+      expect(flagOf(after, key)).toBe(1);
+      expect(flagOf(after, 'kanto-bill-pc')).toBe(1);
+      expect(flagOf(after, 'kanto-ssanne-ticket')).toBe(1);
+      expect(after.passives?.['bills-pc'] ?? after.inventory['bills-pc']).toBeTruthy();
+      expect(after.passives?.['ss-ticket'] ?? after.inventory['ss-ticket']).toBeTruthy();
+      expect(after.passives?.['bills-recorder'] ?? after.inventory['bills-recorder']).toBeTruthy();
+      expect(after.stage!.pseudo).toBeFalsy();
+    }
+  });
+
+  it("Bill's PC gives a PC on the road; the Recorder shows one hidden stop per stage", () => {
+    const run = gnRun('gn09-pc');
+    expect(boxCapacity(runPerks(content, run))).toBe(0);
+    run.passives = { ...run.passives, 'bills-pc': 1 };
+    expect(boxCapacity(runPerks(content, run))).toBeGreaterThan(0);
+    const sides = run.stage!.map.nodes.flatMap((n) => n.sides.map((side) => ({ node: n, side })));
+    sides.forEach(({ side }) => { side.hidden = true; });
+    const far = sides.filter(({ node }) => node.id !== run.stage!.current);
+    const hiddenBefore = far.filter(({ node, side }) => stopIsHidden(content, run, node, side)).length;
+    run.passives = { ...run.passives, 'bills-recorder': 1 };
+    const hiddenAfter = far.filter(({ node, side }) => stopIsHidden(content, run, node, side)).length;
+    expect(hiddenBefore - hiddenAfter).toBe(1);
+  });
+
+  it('afterstory: Bill writes once from a later region; after the lamp went off, he has built a bigger lamp', () => {
+    const run = win(choose(toDawn('gn09-letter'), 'gn-09-dawn', 'Turn the lamp off.').run);
+    const letter = content.events.get('gn-09-letter')!;
+    expect(letter.requires.every((c) => conditionMet(content, run, c))).toBe(false);
+    run.regionIndex += 1;
+    expect(letter.requires.every((c) => conditionMet(content, run, c))).toBe(true);
+    open(run, 'gn-09-letter');
+    expect(scene(run, 'gn-09-letter').intro).toContain('bigger lamp');
+  });
+
+  it('Kanto: the cape north of Cerulean is its canon space; the old lighthouse rooms are retired', () => {
+    expect(content.events.get('cs-kanto-cerulean-bill')!.canon).toBe('cs.kanto.cerulean.bill');
+    expect(content.events.get('cs-kanto-cerulean-bill')!.choices.map((c) => c.label)).toEqual(['Look for the lighthouse.', 'Not tonight.']);
+    expect(content.events.get('cs-kanto-cerulean-bill-house')!.disabled).toBe(true);
+    expect(content.events.get('gn-09-door')!.requires).toContainEqual({ kind: 'gn', test: 'notRegion', types: ['kanto'] });
   });
 });

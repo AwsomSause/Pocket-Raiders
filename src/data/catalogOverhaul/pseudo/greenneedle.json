@@ -21,6 +21,15 @@
    "start": "opened"
   },
   {
+   "id": "ps_gn_lighthouse",
+   "name": "Bill's Lighthouse",
+   "entry": "gn-09-door",
+   "themeId": "water-dragon",
+   "tint": "#1c2a44",
+   "mood": "night sea",
+   "start": "opened"
+  },
+  {
    "id": "ps_gn_rain",
    "name": "Cold Night's Rain",
    "entry": "gn-07-door",

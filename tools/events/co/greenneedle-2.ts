@@ -4,7 +4,7 @@
 // gn-06-bridge on step 10. The old canon sub-scenes are retired (CANON_SPACES_KANTO_MOVED_TO_GREENNEEDLE.md: "The Greenneedle version is the only version").
 // Build: npm run co:build -- greenneedle-2
 import { ch, fight, flag, heal, item, join, leave, out, room, trainer, wild, type Json } from '../dsl.ts';
-import { chIf, eitherWay, gev, gn, inside, intel, is, leavePseudo, moment, not, partyHas, pick, rm, roll, say, scene, setTo, when, type Placement } from './_gn.ts';
+import { bond, chIf, eitherWay, gev, gn, inside, intel, is, leavePseudo, moment, not, partyHas, pick, regionChanged, rm, roll, say, scene, setTo, stampRegion, stampStage, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -110,7 +110,7 @@ const OFFER_YES = (): Json => ch('Yes.', fight(
 
 const gn06: Json[] = [
   gev('gn-06-bridge', 'Bridge Crossing', bridge({
-    stop: 'dungeon', rarity: 'rare', forced: true, types: ['normal', 'water'], effect: 'none', requires: [notRegion('kanto')],
+    stop: 'event', rarity: 'rare', forced: true, types: ['normal', 'water'], effect: 'none', requires: [notRegion('kanto')],
     remembers: [{ id: 'told', when: [is('village-told')], notice: 'At the near end, someone has nailed a new sign to the post. It points straight down. **THE HIDDEN VILLAGE · SOUVENIRS**' }],
   }), BRIDGE_TEXT('A gorge with no name on the map'), [CROSS()]),
 
@@ -554,7 +554,7 @@ const ownerScene = (key: OwnerKey): Json[] => {
 };
 
 const gn07: Json[] = [
-  gev('gn-07-door', "Cold Night's Rain", rainy({ stop: 'dungeon', rarity: 'rare', forced: true, types: ['fire', 'water'], requires: [notRegion('kanto'), not('rain-entered'), not('rain-walked')] }),
+  gev('gn-07-door', "Cold Night's Rain", rainy({ stop: 'event', rarity: 'rare', forced: true, types: ['fire', 'water'], requires: [notRegion('kanto'), not('rain-entered'), not('rain-walked')] }),
     RAIN_DOOR_TEXT('A road at dusk'), [SAVE_IT(), { ...WALK_ON(), success: { ...(WALK_ON().success as Json), effects: WALKED } }]),
   rm('gn-07-rock', 'The Rock', rainy(), say(
     'It weighs almost nothing. Its tail hisses in the rain.',
@@ -613,16 +613,255 @@ const gn07: Json[] = [
 const KANTO_RAIN: Json = { ...gev('cs-kanto-cerulean-rain', "Cold Night's Rain", rainy({ stop: 'event', rarity: 'common', types: ['fire', 'water'], requires: [not('rain-entered'), not('rain-walked')] }),
   RAIN_DOOR_TEXT('The road out of Cerulean'), [SAVE_IT(), { ...WALK_ON(), success: { ...(WALK_ON().success as Json), effects: WALKED } }]), canon: 'cs.kanto.cerulean.rain' };
 
-export const EVENTS: Json[] = [...gn06, ...starterEpisodes, KANTO_BRIDGE, ...gn07, KANTO_RAIN];
+// =====================================================================================================================
+// gn.08  THE SQUIRTLE SQUAD  (Single: a gauntlet with scenes between; step 7, optional; once per run)
+// =====================================================================================================================
+const SQUAD_TINT = '#2b4a63';
+const squad = (o: Json = {}): Json => ({ tint: SQUAD_TINT, tags: ['Pokémon', 'Combat', 'Story'], pokemon: 'squirtle', ...o });
+const RESPECT: Json[] = [flag('squad-respect'), cap('squad-respect', 5)];
+/** The Fire Brigade Prank: on the first turn of each Squad battle, the hose hits your lead (Speed -1). Squad members can't be caught: one joins at the end. */
+const HOSE = { myStages: { spe: -1 }, noCatch: true };
+const HOSE_LINE = '*The Squad opens with the hose!* A jet of cold water hits your lead square in the face. It is slower for it.';
+const lesser = (win: Json[]): Json => ({ ...inside(eitherWay({ ...wild({ species: ['squirtle'], lv: -1, win }), look: 'squad-lesser' })), rule: HOSE, pseudo: false, friendly: true });
+const squadFight = (n: number, next: string, label = 'Take on the next one.'): Json =>
+  rm(`gn-08-fight-${n}`, `The Squad: Fight ${n}`, squad({ cast: [] }), say(
+    n === 1 ? 'One of them hops down off the wall, pushes its shades up its nose, and points at you. A challenge. The others cheer.' : 'Another one hops down. The others cheer exactly as loudly as last time.',
+  ), [ch(label, fight(HOSE_LINE, lesser([scene(next)])))]);
+
+const gn08: Json[] = [
+  gev('gn-08-town', 'The Squirtle Squad', squad({ stop: 'event', rarity: 'rare', types: ['water'], requires: [notRegion('kanto'), not('squad-done')] }), say(
+    'A small town on the road, with its shutters down in the middle of the afternoon.',
+    'Somebody has painted a turtle in sunglasses on the side of the fire station. Somebody else has tried to scrub it off, and given up halfway.',
+  ), [
+    ch('Walk into town.', out('The street is very quiet. Too quiet, for a town with this much paint on it.', flag('squad-done'), setTo('squad-respect', 0), roll('squad-standoff', 35),
+      when('squad-standoff', { min: 1 }, [scene('gn-08-standoff')]), when('squad-standoff', { min: 0, max: 0 }, [scene('gn-08-pranks')]))),
+    ch('Keep to the road.', leave('You keep to the road. Behind you, faintly, something that sounds a lot like a bucket hits the ground.')),
+  ]),
+  rm('gn-08-pranks', 'The Pranksters', squad(), say(
+    'A bucket falls on your head. It is full of water. Of course it is.',
+    '*Five Squirtle in pointed shades on a wall. The one in the middle folds its arms.*',
+    'That one is the Leader: a Wartortle, in fact, a head taller than the rest. It looks at you over the top of its shades. The others look at it.',
+  ), [ch('Shake the water off, and face them.', out('The Leader nods once, as if you have agreed to something.', scene('gn-08-fight-1')))]),
+  rm('gn-08-standoff', 'The Standoff', squad(), say(
+    'Officer Jenny has already rounded up the Lesser members. They sit in a row on the kerb, shades off, sulking.',
+    'Only the Leader is left: a Wartortle, on the roof of the fire station, arms folded. It is not coming down.',
+    '**Officer Jenny:** "It won\'t come down for me. Maybe it\'ll come down for a trainer."',
+  ), [ch('Sit down with the Lesser members first.', out('You sit on the kerb. They shuffle along to make room, suspicious.', setTo('squad-standoff-talk', 1), scene('gn-08-specs')))]),
+
+  squadFight(1, 'gn-08-specs'),
+  rm('gn-08-specs', 'Specs', squad(), say(
+    'One of them is patting its face, looking for its shades. They are on the back of its head.',
+    'The others are trying very hard not to laugh.',
+  ), [
+    ch('Tell it where they are.', out('It reaches round, finds them, and goes very red. The others laugh after all. It does not look at you again.', when('squad-standoff-talk', { min: 1 }, [scene('gn-08-tank')]), when('squad-standoff-talk', { min: 0, max: 0 }, [scene('gn-08-fight-2')]))),
+    ch('Hand it a spare pair.', out('You hand it a spare pair of sunglasses, and say nothing. It puts them on. Now it has two. It looks extremely cool. It knows.', ...RESPECT, when('squad-standoff-talk', { min: 1 }, [scene('gn-08-tank')]), when('squad-standoff-talk', { min: 0, max: 0 }, [scene('gn-08-fight-2')]))),
+  ]),
+  squadFight(2, 'gn-08-tank'),
+  rm('gn-08-tank', 'Tank', squad(), say(
+    'The biggest one plants its elbow on an upturned crate and looks at you. An arm-wrestle. It is very sure it is the strongest.',
+    'It isn\'t.',
+  ), [
+    ch('Lose, on purpose, with a straight face.', out('You strain. You grit your teeth. You lose. *(It flexes. It looks at the others. They\'re impressed. It looks at you, and, very slightly, nods.)*', ...RESPECT, when('squad-standoff-talk', { min: 1 }, [scene('gn-08-smoulder')]), when('squad-standoff-talk', { min: 0, max: 0 }, [scene('gn-08-fight-3')]))),
+    ch('Win.', out('You win, easily. It stares at its own arm as if it has betrayed it. Nobody says anything for a while.', when('squad-standoff-talk', { min: 1 }, [scene('gn-08-smoulder')]), when('squad-standoff-talk', { min: 0, max: 0 }, [scene('gn-08-fight-3')]))),
+  ]),
+  squadFight(3, 'gn-08-smoulder'),
+  rm('gn-08-smoulder', 'Smoulder', squad(), say(
+    'One of them stands very close to the others. Closer than it needs to. When your team comes near, it edges behind the biggest one.',
+    'It is looking at one of your Pokémon in particular. The warm one.',
+  ), [
+    ch('Keep your Fire-type back, without a word.', out('You move your Fire-type behind you, as if by accident. The little one lets out a breath it has been holding for a long time.', ...RESPECT, scene('gn-08-star')), { requires: [{ kind: 'partyType', type: 'fire' }] }),
+    ch('Let your team go where they like.', out('Your team wanders where it likes. The little one spends the whole time behind the others, shaking, pretending it is not.', scene('gn-08-star'))),
+  ]),
+  rm('gn-08-star', 'Star', squad(), say(
+    'One of them has climbed onto a crate. It clears its throat. It has a routine.',
+    'It is not ready. You can tell from the first spin.',
+  ), [
+    ch('Watch all of it. Clap.', out('You watch every second of it. You clap at the end. *(It bows too low and falls off the crate. It gets up as if that was the ending.)*', ...RESPECT,
+      when('squad-standoff-talk', { min: 1 }, [scene('gn-08-leader')]), when('squad-standoff-talk', { min: 0, max: 0 }, [scene('gn-08-leader')]))),
+    ch('Look away halfway through.', out('You look away at the wrong moment. When you look back it is sitting on the crate, very still, and the routine is over.', scene('gn-08-leader'))),
+  ]),
+  rm('gn-08-leader', 'The Leader', squad({ pokemon: 'wartortle' }), say(
+    'The Leader comes down at last, and stands in front of you, and takes off its shades. It folds them. It puts them in its shell.',
+    'Then it raises its fists.',
+  ), [ch('Fight the Leader.', fight(HOSE_LINE, { ...inside(eitherWay({ ...wild({ species: ['wartortle'], lv: 0, win: [scene('gn-08-salute')] }), look: 'squad-leader' })), rule: HOSE, pseudo: false, friendly: true }))]),
+  rm('gn-08-salute', 'The Leader', squad({ pokemon: 'wartortle' }), say(
+    'It picks itself up. It puts its shades back on. Then it stands to attention, very straight, and salutes you.',
+  ), [
+    ch('Salute back.', out('You salute back. It holds the salute a moment longer than you, as is proper. The whole Squad stands up a little straighter.', ...RESPECT, scene('gn-08-after'))),
+    ch('Wave.', out('You wave. It lowers its hand slowly, as if you have said something in a language it does not speak.', scene('gn-08-after'))),
+  ]),
+  rm('gn-08-after', 'Something Bigger', squad({ pokemon: 'blastoise' }), say(
+    'The Squad parts. Something big is coming down the street, slowly, the ground shaking a little with each step.',
+  ), [
+    chIf([{ kind: 'partyLevelOver', over: 8 }], 'Face the Mega Squad Blastoise.', fight(HOSE_LINE, { ...inside(eitherWay({ ...wild({ species: ['blastoise-mega'], lv: 1, win: [scene('gn-08-fire')] }), look: 'squad-leader' })), rule: HOSE, pseudo: false, friendly: true, foeMoves: ['skull-bash', 'water-spout'] })),
+    chIf([{ kind: 'partyLevelOver', over: 3 }, { kind: 'partyLevelOver', over: 8, absent: true }], 'Face the Leader Blastoise.', fight(HOSE_LINE, { ...inside(eitherWay({ ...wild({ species: ['blastoise'], lv: 1, win: [scene('gn-08-fire')] }), look: 'squad-leader' })), rule: HOSE, pseudo: false, friendly: true, foeMoves: ['skull-bash', 'water-spout'] })),
+    chIf([{ kind: 'partyLevelOver', over: 3, absent: true }], 'It was only the wind.', out('It was only a delivery cart, and a very large Slowpoke pulling it. The Squad looks embarrassed on its behalf.', scene('gn-08-fire'))),
+  ]),
+  rm('gn-08-fire', "The Town's Fire", squad({ effect: 'fire' }), say(
+    'Smoke. A real fire, three streets over, going up into the sky in a thick grey rope.',
+    '*The Squad looks at the smoke. They look at the Leader. Smoulder\'s shaking.*',
+  ), [
+    ch("You're the fire brigade, aren't you?", out('The Leader salutes. They put it out in a line, passing water hand to hand, as if they have always known how. One by one, the town opens its shutters.', flag('squad-fire-brigade'), scene('gn-08-recruit'))),
+    ch("I'll handle it.", out('Your Water-types do it. The Squad stands in the street and watches. They are quieter, after.', flag('squad-fire-player'), scene('gn-08-recruit'))),
+    ch('Smoulder, with me.', out('It goes, behind your leg, the whole way. And at the end, when there is one flame left, it steps out and puts it out itself.', flag('squad-fire-smoulder'), ...RESPECT, scene('gn-08-recruit'))),
+  ]),
+  rm('gn-08-recruit', 'One of the Squad', squad(), say(
+    'Later, the Squad lines up in front of you. One of them steps forward and holds out its shades.',
+  ), [ch('Take the shades.', out('It slides on a second pair, grins, and falls in beside you.',
+    roll('squad-leader-coin', 50),
+    when('squad-respect', { min: 0, max: 2 }, [setTo('squad-pick', 1)]),
+    when('squad-respect', { min: 3 }, [setTo('squad-pick', 1), when('squad-leader-coin', { min: 1 }, [setTo('squad-pick', 2)])]),
+    when('squad-fire-player', { min: 1 }, [setTo('squad-pick', 1)]),
+    when('squad-pick', { min: 1, max: 1 }, [{ ...join({ species: ['squirtle'] }), ability: 'contrary', look: 'squad-lesser', moves: ['swagger', 'hex', 'shades-down'], held: 'cool-shades' }, flag('squad-lesser-joined'), stampStage('squad-joined-stage')], 'It is one of the Lesser members.'),
+    when('squad-pick', { min: 2, max: 2 }, [{ ...join({ species: ['wartortle'] }), ability: 'contrary', look: 'squad-leader', moves: ['swagger', 'hex', 'shades-down'], held: 'cool-shades' }, flag('squad-leader-joined')], 'It is the Leader. The Squad salutes it as it goes.'),
+    flag('kanto-squad-joined'), moment('A member of the Squirtle Squad joined you, in its shades.', 70),
+  ))]),
+  // ---- afterstory: a Lesser recruit that reaches the Leader's level goes back to challenge it ----
+  gev('gn-08-challenge', "The Leader's Shades", squad({ stop: 'event', rarity: 'uncommon', callback: true, pokemon: 'wartortle', requires: [is('squad-lesser-joined'), not('squad-challenge-done'), { kind: 'gn', test: 'lookAtLevel', types: ['squad-lesser'], key: 'squad-leader-level' }] }), say(
+    'The road goes past a fire station with a turtle in sunglasses painted on its side. Your Squirtle stops dead.',
+    'On the roof, arms folded, the Leader. Your Squirtle looks at it, and then at you. It has caught up. It knows it has.',
+  ), [
+    ch('Let it go and challenge it.', fight('Your Squirtle walks out alone into the middle of the street, and pushes its shades up its nose.', {
+      ...{ ...wild({ species: ['wartortle'], lv: 0, win: [gn('setLook', { key: 'squad-challenger', type: 'squad-leader' }), gn('unmark', { key: 'squad-challenger' }), flag('squad-challenge-done')] }), look: 'squad-leader' },
+      friendly: true, rule: { leadMark: 'squad-challenger', noSwitch: true, noCatch: true }, lose: [gn('unmark', { key: 'squad-challenger' }), flag('squad-challenge-done')],
+    }, gn('markLook', { key: 'squad-challenger', type: 'squad-lesser' }))),
+    ch('Not today.', leave('Your Squirtle watches the roof until the road bends. Then it pushes its shades up its nose, and walks on.')),
+  ]),
+];
+
+// ---- Kanto: the canon space in the town on the road from Cerulean (cs.kanto.cerulean.squad) ----
+const KANTO_SQUAD: Json = { ...gev('cs-kanto-cerulean-squad', 'The Squirtle Squad', squad({ stop: 'event', rarity: 'common', types: ['water'], requires: [not('squad-done')] }), (gn08[0] as { intro: string }).intro, (gn08[0] as { choices: Json[] }).choices), canon: 'cs.kanto.cerulean.squad' };
+
+// =====================================================================================================================
+// gn.09  BILL'S LIGHTHOUSE  (Pseudo Stage: a search, then five nodes; Door at step 16, optional; needs water; once per run)
+// =====================================================================================================================
+const BILL_TINT = '#1c2a44';
+const cape = (o: Json = {}): Json => ({ tint: BILL_TINT, tags: ['Dungeon', 'Mystery', 'Story'], effect: 'none', ...o });
+const BILL_DOOR_TEXT = say(
+  'A lighthouse on a cape, far out past the last houses. Its lamp is not turning. It is blinking: a signal, out to sea.',
+  'Something out there is answering.',
+  'At night, the wild Pokémon of the coast come down to the shore and stand on the sand, all facing the water.',
+);
+const BILL_DOOR_CHOICES: Json[] = [
+  ch('Look for the lighthouse.', out('You wait for dark. The beacon is only visible at night, and even then only from the right places.', flag('bill-done'), room('gn-09-search'))),
+  ch('Not tonight.', leave('You leave the cape behind you. Out at sea, the blinking goes on without you.')),
+];
+/** The search: five signs, three right readings find the beacon; a wrong one costs a node of walking. */
+const CLUES: [string, string, string, string, string][] = [
+  ['A Light on the Sea', 'A light out on the sea, blinking. It looks like a ship. It looks like it is the beacon.', 'Follow the gaps, not the flashes.', 'Follow the flashes.', 'It is a reflection. The gaps between the flashes line up with something on land, further round the cape.'],
+  ["A Ship's Horn", "A ship's horn, out in the dark. Long, and low.", 'Turn round.', 'Walk towards the horn.', 'It is answering something behind you. You turn round, and there, faint on the headland, is a blink of light.'],
+  ['A Line of Wingull', 'A line of Wingull, flying low over the water in a hurry, crying.', 'Go where they came from.', 'Follow the Wingull.', 'They are flying away from it. You walk the way they came, against the wind.'],
+  ['Krabby on the Rocks', 'Krabby on the rocks, dozens of them, all facing one way. None of them moves when you pass.', 'Go the way they face.', 'Go the way they turn their backs on.', 'You go the way they face. A few of them shuffle round to keep facing it as you pass.'],
+  ['The Tide', 'The tide, going out. You can hear it pulling at the stones.', "Follow the tide's pull, to the point.", 'Keep to the high-water line.', 'It is pulling toward the point. You follow it out across the wet sand.'],
+];
+const clueRoom = (n: number): Json => {
+  const [name, intro, right, wrong, rightText] = CLUES[n - 1]!;
+  return rm(`gn-09-clue-${n}`, `The Search: ${name}`, cape(), intro, [
+    ch(right, out(rightText, flag('bill-clues'), flag('bill-read'), scene('gn-09-search'))),
+    ch(wrong, out('You go the wrong way, and you only know it after an hour of walking.', flag('bill-read'), scene('gn-09-walk'))),
+  ]);
+};
+const SIGNAL_CRIES = ['A low call, like a horn.', 'A rising song.', "Something that isn't in the Pokédex."];
+const signalRoom = (n: number, pattern: string, next: Json[]): Json => rm(`gn-09-signal-${n}`, 'The Signal', cape({ pokemon: 'clefairy' }), say(
+  `A light pattern from the sea: *${pattern}*.`,
+  '**Bill:** "Three patterns. Three cries on the machine. Match them. Take your time; it does."',
+), SIGNAL_CRIES.map((cry, i) => ch(cry, i === n - 1
+  ? out('You play the cry out to sea. Far off, something answers in the same voice, and goes quiet, satisfied. Bill writes it down.', flag('bill-matched'), ...next)
+  : out('The wrong cry goes out over the water. The thing answers anyway, puzzled, a little slower. Bill writes that down too.', ...next))));
+const BILL_REWARD: Json[] = [
+  flag('kanto-bill-pc'), flag('kanto-ssanne-ticket'), item('bills-pc'), item('ss-ticket'), item('bills-recorder'), { kind: 'eggMove' },
+  stampRegion('bill-region'), moment("You saw what answers Bill's lighthouse.", 70), leavePseudo(),
+];
+const SURFACED = [
+  'A very large Dragonite. It stands in the shallows, taller than the lighthouse, and looks at the lamp as if it were a face.',
+  'A Lapras pod: nine of them. The largest one sings. It is the third pattern.',
+  'A Wailord. It rises, and rises, until it blocks out the sunrise.',
+  'A silhouette. Bill puts his hand over your notebook. **Bill:** "No. Don\'t write that down. Don\'t ask me."',
+];
+
+const gn09: Json[] = [
+  gev('gn-09-door', "Bill's Lighthouse", cape({ stop: 'event', rarity: 'rare', types: ['water'], requires: [notRegion('kanto'), not('bill-done')] }), BILL_DOOR_TEXT, BILL_DOOR_CHOICES),
+  rm('gn-09-search', 'The Search', cape(), say(
+    'The beacon is only visible at night, and only from the right places. There are signs, if you can read them.',
+    'Five signs. Three right readings will lead you there. A wrong one costs a long walk.',
+  ), [
+    chIf([is('bill-clues', 3)], 'Follow the beacon.', out('There it is: the lamp, on the point, blinking. You can see the path up to it now.', room('gn-09-shore'))),
+    chIf([is('bill-clues', 0, 2), is('bill-read', 0, 4)], 'Read the next sign.', out('You look for the next sign.', ...CLUES.map((_, i) => when('bill-read', { min: i, max: i }, [scene(`gn-09-clue-${i + 1}`)])))),
+    chIf([is('bill-clues', 0, 2), is('bill-read', 5)], 'Give up for tonight.', out('The sky goes grey before you find it. The beacon fades into the morning, and the cape is just a cape again.', leavePseudo())),
+  ]),
+  ...[1, 2, 3, 4, 5].map(clueRoom),
+  rm('gn-09-walk', 'The Long Way Round', cape(), say(
+    'The wrong way is a long way. The shore goes on in the dark, and something on it does not want you there.',
+  ), [ch('Push on.', fight('A wild Pokémon comes up out of the surf at you.', inside(eitherWay(wild({ types: ['water'], lv: -1, win: [scene('gn-09-search')] })))))]),
+  rm('gn-09-shore', 'The Shore', cape(), say(
+    '*Thirty wild Pokémon on the sand, facing the sea. None of them looks round.*',
+    '*Under the surface, something passes. It takes a long time to finish passing.*',
+  ), [
+    ch('Stand with them.', out('You stand with them. After a while your lead comes and stands beside you, and faces the sea too. It will not say why.', bond(1), room('gn-09-cottage'))),
+    ch('Go up to the lighthouse.', out('You leave them to it and climb the path. Not one of them watches you go.', room('gn-09-cottage'))),
+  ]),
+  rm('gn-09-cottage', "The Keeper's Cottage", cape(), say(
+    'The keeper\'s cottage at the foot of the tower. Old photographs on every wall.',
+    '*A man and a Dragonite, forty years ago. A child on a Lapras. And some that shouldn\'t be here: Pokémon from regions you have already finished, in places you have been.*',
+  ), [
+    ch('Look closer.', out('One photograph has your lead in the background, small and out of focus, looking at the camera. The date on the back is from before it hatched. Your lead looks at it for a long time.', room('gn-09-stairs'))),
+    ch('Leave them.', out('You leave them on the walls. Some things are easier not to look at closely.', room('gn-09-stairs'))),
+  ]),
+  rm('gn-09-stairs', 'The Stairs', cape({
+    remembers: [{ id: 'kind', when: [is('fog-named')], notice: 'Under the crayon, one more line, newer: *"someone else came. they were nice to it too."*' }],
+  }), say(
+    'Research logs, pinned up all the way round the spiral stairs. Three hands.',
+    '**The first hand, neat:** *"Signal sent 2100. No reply."*',
+    '**The second, hurried:** *"Reply at 2140. Not a ship. Not anything I\'ve a name for."*',
+    '**The third, a child\'s, in crayon:** *"it says hello back. it is sad. i told it about my dog."*',
+  ), [ch('Climb to the lamp room.', out('You climb the last of the stairs. Somebody up there is talking to themselves.', room('gn-09-lamp')))]),
+  rm('gn-09-lamp', 'The Lamp Room', cape({ pokemon: 'clefairy' }), say(
+    'The lamp room. A machine as big as a wardrobe, humming. And at the console, a Clefairy.',
+    '**The Clefairy, in a man\'s voice:** "Don\'t laugh. I\'m Bill. There was a mishap. The red button. No, the other red button."',
+  ), [
+    chIf([not('bill-signal-done')], 'Press the button.', out('You press the other red button. There is a flash, and a pop, and a man sitting on the floor where the Clefairy was, and a Clefairy sitting next to him, looking just as surprised.\n\n**Bill:** "Thank you. I\'ve been a Clefairy since Tuesday. The worst part is, I didn\'t mind it."', scene('gn-09-signal-1'))),
+    chIf([not('bill-signal-done')], 'Laugh first.', out('You laugh. You can\'t help it. The Clefairy folds its arms and waits until you have finished, then points at the button, and you press it.\n\n**Bill:** "Thank you. I\'ve been a Clefairy since Tuesday. The worst part is, I didn\'t mind it."', scene('gn-09-signal-1'))),
+    chIf([not('bill-signal-done')], 'Ask the Clefairy to dance.', out('It does a small, dignified dance. Halfway through, its foot catches the button. A flash, a pop: a man and a Clefairy, both mid-step.\n\n**Bill:** "Thank you. I\'ve been a Clefairy since Tuesday. The worst part is, I didn\'t mind it."', scene('gn-09-signal-1'))),
+    chIf([is('bill-signal-done')], 'Go out onto the gallery.', out('The sky outside is going grey. Bill picks up a flask of tea and two cups. "Come on. It\'s nearly time."', room('gn-09-gallery'))),
+  ]),
+  signalRoom(1, 'long, long, short', [scene('gn-09-signal-2')]),
+  signalRoom(2, 'short, short, short, long', [scene('gn-09-signal-3')]),
+  signalRoom(3, 'one long, held', [setTo('bill-signal-done', 1), scene('gn-09-lamp')]),
+  rm('gn-09-gallery', 'The Gallery, at Dawn', cape({ effect: 'sparkle' }), say(
+    'The gallery round the top of the tower. Cold wind. The sea going from black to grey.',
+    '**Bill:** "It comes at first light. It\'s come every morning for a year. I\'ve never been sure it\'s real."',
+  ), [ch('Watch the water.', out('The sea goes still. Then it surfaces.', pick('bill-surfaced', 40, 35, 24, 1), ...SURFACED.map((t, i) => when('bill-surfaced', { min: i + 1, max: i + 1 }, [], t)), scene('gn-09-dawn')))]),
+  rm('gn-09-dawn', 'The Gallery, at Dawn', cape({ effect: 'sparkle' }), say(
+    '**Bill:** "It was looking for something its own size. That\'s all. I built a light, and it thought I was one."',
+  ), [
+    ch('Answer it, one more time.', out('Bill sends the signal one more time. It answers. Then it goes, slowly, the way it came.', flag('bill-answered'), ...BILL_REWARD)),
+    ch('Turn the lamp off.', out('Bill turns the lamp off. It waits a long time in the grey water. Then it goes. Bill doesn\'t turn the lamp back on for a week.', flag('bill-lamp-off'), ...BILL_REWARD)),
+    ch('Leave it on. Let it keep coming.', out('You leave it on. It will come every dawn. Bill isn\'t alone, and neither is it.', flag('bill-kept-on'), ...BILL_REWARD)),
+  ]),
+  // ---- afterstory: Bill writes once, in a later region ----
+  gev('gn-09-letter', 'A Letter from Bill', cape({ stop: 'event', rarity: 'uncommon', callback: true, requires: [is('kanto-bill-pc'), not('bill-letter'), regionChanged('bill-region')],
+    remembers: [{ id: 'lamp-off', when: [is('bill-lamp-off')], notice: '*P.S. I\'ve built a bigger lamp. I don\'t know yet if I\'ll turn it on.*' }],
+  }), say(
+    'A letter catches up with you, the envelope gone soft with travelling. Bill\'s handwriting, small and fast.',
+    '*"I heard it again last night. Further out. I think it was saying goodbye, or hello. I wrote it down both ways."*',
+  ), [ch('Fold the letter away.', out('You fold it carefully and keep it.', flag('bill-letter')))]),
+];
+
+// ---- Kanto: the canon space on the cape north of Cerulean (cs.kanto.cerulean.bill) ----
+const KANTO_BILL: Json = { ...gev('cs-kanto-cerulean-bill', "Bill's Lighthouse", cape({ stop: 'event', rarity: 'common', types: ['water'], requires: [not('bill-done')] }), BILL_DOOR_TEXT, BILL_DOOR_CHOICES), canon: 'cs.kanto.cerulean.bill' };
+
+export const EVENTS: Json[] = [...gn06, ...starterEpisodes, KANTO_BRIDGE, ...gn07, KANTO_RAIN, ...gn08, KANTO_SQUAD, ...gn09, KANTO_BILL];
 
 /** The old Kanto canon builds of this story (moved to Greenneedle): kept for saved runs, never shown again. */
 export const REMOVE: string[] = [
+  'cs-kanto-cerulean-squad-n1', 'cs-kanto-cerulean-squad-n2', 'cs-kanto-cerulean-squad-n3', 'cs-kanto-cerulean-squad-reward',
   ...['charmander', 'growlithe', 'vulpix', 'ponyta', 'cyndaquil', 'torchic', 'chimchar', 'tepig', 'fennekin', 'litten', 'scorbunny', 'fuecoco'].flatMap((f) => ['open', 'r1', 'r2', 'r3', 'owner'].map((n) => `cs-kanto-cerulean-rain-${f}-${n}`)),
   'cs-kanto-cerulean-rain-lost',
   'cs-kanto-cerulean-bridge-n1', 'cs-kanto-cerulean-bridge-n2', 'cs-kanto-cerulean-bridge-n3',
   'cs-kanto-cerulean-village', 'cs-kanto-cerulean-hv-n1', 'cs-kanto-cerulean-hv-n2', 'cs-kanto-cerulean-hv-n3', 'cs-kanto-cerulean-hv-pick',
   'cs-kanto-cerulean-hv-t1', 'cs-kanto-cerulean-hv-t2', 'cs-kanto-cerulean-hv-t3', 'cs-kanto-cerulean-hv-t4', 'cs-kanto-cerulean-hv-t5',
   'cs-kanto-cerulean-hv-t6', 'cs-kanto-cerulean-hv-t7', 'cs-kanto-cerulean-hv-t8', 'cs-kanto-cerulean-hv-t9', 'cs-kanto-cerulean-hv-exit',
+  ...['n1', 'n2', 'n3', 'n4', 'n5', 'final', 'house'].map((n) => `cs-kanto-cerulean-bill-${n}`),
 ];
 
 export const PLACEMENT: Record<string, Placement> = {
@@ -636,9 +875,19 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'A+1', often: 'run', dressing: { kanto: "Cold Night's Rain", kantoStage: 'The road out of Cerulean (the canon space)', elsewhere: "Cold Night's Rain" },
     note: 'Kanto shows it through cs-kanto-cerulean-rain. The opening can not be skipped: "Go on your way" ends it at once.',
   },
+  'gn-08-town': {
+    gn: 'gn.08', shape: 'Single', earliest: 'A3', home: 7, window: [5, 11], sits: 'optional', tags: ['Miniature Episode', 'Community Episode'],
+    level: 'Lesser A-1, the Leader A+0, the Blastoise A+1', often: 'run', dressing: { kanto: 'The Squirtle Squad', kantoStage: 'A town on the road from Cerulean (the canon space)', elsewhere: 'The Squirtle Squad' },
+  },
+  'gn-09-door': {
+    gn: 'gn.09', shape: 'Door', earliest: 'A3', home: 16, window: [14, 18], sits: 'optional', tags: ['Pseudo Stage', 'Mystery Episode'], needs: ['water'],
+    level: 'A-1', often: 'run', dressing: { kanto: "Bill's Lighthouse", kantoStage: 'The cape north of Cerulean (the canon space)', elsewhere: "Bill's Lighthouse" },
+    note: 'Better at night: the search is always played at night. Kanto shows it through cs-kanto-cerulean-bill.',
+  },
 };
 
 export const CHAINS: Json[] = [
+  { id: 'ps_gn_lighthouse', name: "Bill's Lighthouse", entry: 'gn-09-door', themeId: 'water-dragon', tint: BILL_TINT, mood: 'night sea', start: 'opened' },
   { id: 'ps_gn_rain', name: "Cold Night's Rain", entry: 'gn-07-door', themeId: 'water-ghost', tint: RAIN_TINT, mood: 'rain', start: 'opened' },
   { id: 'ps_gn_gorge', name: 'The Gorge and the Hidden Village', entry: 'gn-06-bridge', themeId: 'water-grass', tint: GORGE_TINT, mood: 'woodsmoke', start: 'opened' },
 ];

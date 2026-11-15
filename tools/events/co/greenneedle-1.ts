@@ -24,7 +24,7 @@ const SAMURAI_DUEL = (win: Json[], lose: Json[]): Json => ({
 
 const gn03: Json[] = [
   gev('gn-03-door', "Viridian Forest: The Samurai's Challenge", forest({
-    stop: 'dungeon', rarity: 'rare', forced: true, minStage: 1, types: ['bug', 'grass'], effect: 'float', requires: [not('gn-03-entered')],
+    stop: 'event', rarity: 'rare', forced: true, minStage: 1, types: ['bug', 'grass'], effect: 'float', requires: [not('gn-03-entered')],
     remembers: [{
       id: 'kanto', when: [inRegion('kanto')],
       intro: say(
@@ -315,7 +315,7 @@ const GO_IN = (kanto: boolean): Json => ch('Go in.', out(
 
 const gn04: Json[] = [
   gev('gn-04-door', 'Mt. Moon', moon({
-    stop: 'dungeon', rarity: 'rare', forced: true, minStage: 1, types: ['rock', 'ground', 'fairy'], effect: 'sparkle', requires: [not('gn-04-entered')],
+    stop: 'event', rarity: 'rare', forced: true, minStage: 1, types: ['rock', 'ground', 'fairy'], effect: 'sparkle', requires: [not('gn-04-entered')],
     remembers: [{
       id: 'kanto', when: [inRegion('kanto')],
       intro: say(

@@ -68,7 +68,10 @@ describe('placing event stops', () => {
     expect(rests).toHaveLength(content.balance.events.restPerStage);
     expect(stops.length - rests.length).toBeGreaterThanOrEqual(content.balance.events.perStage[0]);
     const quotaMax = Object.values(content.balance.events.stopQuotas).reduce((sum, [, hi]) => sum + hi, 0);
-    expect(stops.length - rests.length).toBeLessThanOrEqual(content.balance.events.perStage[1] + quotaMax);
+    // Catalog Overhaul placed events (core/co/placement.ts) go on their own steps first, outside the drawn count.
+    const placed = stops.filter((s) => s.side.id.startsWith('event-co-'));
+    for (const s of placed) expect(content.coPlacement?.has(s.side.eventId!), s.side.eventId).toBe(true);
+    expect(stops.length - rests.length - placed.length).toBeLessThanOrEqual(content.balance.events.perStage[1] + quotaMax);
     for (const s of stops) expect(s.node.kind).not.toBe('gym');
     expect(JSON.stringify(newRun('place').stage!.map)).toBe(JSON.stringify(run.stage!.map));
   });

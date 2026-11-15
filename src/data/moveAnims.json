@@ -23053,6 +23053,14 @@
       "flash": null,
       "hitStopMs": 68,
       "telegraph": "normal"
+    },
+    "shades-down": {
+      "anim": "dark-pulse",
+      "source": "type",
+      "shake": 2,
+      "flash": null,
+      "hitStopMs": 67,
+      "telegraph": "normal"
     }
   },
   "commonPack": {

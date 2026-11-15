@@ -2,6 +2,13 @@
  "catalogOverhaul": "greenneedle",
  "override": true,
  "remove": [
+  "cs-kanto-cerulean-bill-final",
+  "cs-kanto-cerulean-bill-house",
+  "cs-kanto-cerulean-bill-n1",
+  "cs-kanto-cerulean-bill-n2",
+  "cs-kanto-cerulean-bill-n3",
+  "cs-kanto-cerulean-bill-n4",
+  "cs-kanto-cerulean-bill-n5",
   "cs-kanto-cerulean-bridge-n1",
   "cs-kanto-cerulean-bridge-n2",
   "cs-kanto-cerulean-bridge-n3",
@@ -80,6 +87,10 @@
   "cs-kanto-cerulean-rain-vulpix-r1",
   "cs-kanto-cerulean-rain-vulpix-r2",
   "cs-kanto-cerulean-rain-vulpix-r3",
+  "cs-kanto-cerulean-squad-n1",
+  "cs-kanto-cerulean-squad-n2",
+  "cs-kanto-cerulean-squad-n3",
+  "cs-kanto-cerulean-squad-reward",
   "cs-kanto-cerulean-village"
  ],
  "events": [
@@ -91,7 +102,7 @@
     "Story",
     "Trainer"
    ],
-   "stop": "dungeon",
+   "stop": "event",
    "rarity": "rare",
    "forced": true,
    "types": [
@@ -6209,7 +6220,7 @@
     "Pokémon",
     "Story"
    ],
-   "stop": "dungeon",
+   "stop": "event",
    "rarity": "rare",
    "forced": true,
    "types": [
@@ -10418,6 +10429,2816 @@
     }
    ],
    "canon": "cs.kanto.cerulean.rain"
+  },
+  {
+   "id": "gn-08-town",
+   "name": "The Squirtle Squad",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notRegion",
+     "types": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "squad-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "squirtle",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "A small town on the road, with its shutters down in the middle of the afternoon.\n\nSomebody has painted a turtle in sunglasses on the side of the fire station. Somebody else has tried to scrub it off, and given up halfway.",
+   "choices": [
+    {
+     "label": "Walk into town.",
+     "success": {
+      "text": "The street is very quiet. Too quiet, for a town with this much paint on it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "squad-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "squad-respect",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "squad-standoff",
+        "n": 35
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-standoff",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-08-standoff"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-standoff",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-08-pranks"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep to the road.",
+     "success": {
+      "text": "You keep to the road. Behind you, faintly, something that sounds a lot like a bucket hits the ground.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-08-pranks",
+   "name": "The Pranksters",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "squirtle",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "A bucket falls on your head. It is full of water. Of course it is.\n\n*Five Squirtle in pointed shades on a wall. The one in the middle folds its arms.*\n\nThat one is the Leader: a Wartortle, in fact, a head taller than the rest. It looks at you over the top of its shades. The others look at it.",
+   "choices": [
+    {
+     "label": "Shake the water off, and face them.",
+     "success": {
+      "text": "The Leader nods once, as if you have agreed to something.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-08-fight-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-08-standoff",
+   "name": "The Standoff",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "squirtle",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "Officer Jenny has already rounded up the Lesser members. They sit in a row on the kerb, shades off, sulking.\n\nOnly the Leader is left: a Wartortle, on the roof of the fire station, arms folded. It is not coming down.\n\n**Officer Jenny:** \"It won't come down for me. Maybe it'll come down for a trainer.\"",
+   "choices": [
+    {
+     "label": "Sit down with the Lesser members first.",
+     "success": {
+      "text": "You sit on the kerb. They shuffle along to make room, suspicious.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "squad-standoff-talk",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-08-specs"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-08-fight-1",
+   "name": "The Squad: Fight 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "squirtle",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "One of them hops down off the wall, pushes its shades up its nose, and points at you. A challenge. The others cheer.",
+   "choices": [
+    {
+     "label": "Take on the next one.",
+     "success": {
+      "text": "*The Squad opens with the hose!* A jet of cold water hits your lead square in the face. It is slower for it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "squirtle"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-08-specs"
+        }
+       ],
+       "look": "squad-lesser",
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-08-specs"
+        }
+       ],
+       "pseudo": false,
+       "rule": {
+        "myStages": {
+         "spe": -1
+        },
+        "noCatch": true
+       },
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-08-specs",
+   "name": "Specs",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "squirtle",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "One of them is patting its face, looking for its shades. They are on the back of its head.\n\nThe others are trying very hard not to laugh.",
+   "choices": [
+    {
+     "label": "Tell it where they are.",
+     "success": {
+      "text": "It reaches round, finds them, and goes very red. The others laugh after all. It does not look at you again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-standoff-talk",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-08-tank"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-standoff-talk",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-08-fight-2"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hand it a spare pair.",
+     "success": {
+      "text": "You hand it a spare pair of sunglasses, and say nothing. It puts them on. Now it has two. It looks extremely cool. It knows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "squad-respect",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "squad-respect",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-standoff-talk",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-08-tank"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-standoff-talk",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-08-fight-2"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-08-fight-2",
+   "name": "The Squad: Fight 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "squirtle",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "Another one hops down. The others cheer exactly as loudly as last time.",
+   "choices": [
+    {
+     "label": "Take on the next one.",
+     "success": {
+      "text": "*The Squad opens with the hose!* A jet of cold water hits your lead square in the face. It is slower for it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "squirtle"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-08-tank"
+        }
+       ],
+       "look": "squad-lesser",
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-08-tank"
+        }
+       ],
+       "pseudo": false,
+       "rule": {
+        "myStages": {
+         "spe": -1
+        },
+        "noCatch": true
+       },
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-08-tank",
+   "name": "Tank",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "squirtle",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "The biggest one plants its elbow on an upturned crate and looks at you. An arm-wrestle. It is very sure it is the strongest.\n\nIt isn't.",
+   "choices": [
+    {
+     "label": "Lose, on purpose, with a straight face.",
+     "success": {
+      "text": "You strain. You grit your teeth. You lose. *(It flexes. It looks at the others. They're impressed. It looks at you, and, very slightly, nods.)*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "squad-respect",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "squad-respect",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-standoff-talk",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-08-smoulder"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-standoff-talk",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-08-fight-3"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Win.",
+     "success": {
+      "text": "You win, easily. It stares at its own arm as if it has betrayed it. Nobody says anything for a while.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-standoff-talk",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-08-smoulder"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-standoff-talk",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-08-fight-3"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-08-fight-3",
+   "name": "The Squad: Fight 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "squirtle",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "Another one hops down. The others cheer exactly as loudly as last time.",
+   "choices": [
+    {
+     "label": "Take on the next one.",
+     "success": {
+      "text": "*The Squad opens with the hose!* A jet of cold water hits your lead square in the face. It is slower for it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "squirtle"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-08-smoulder"
+        }
+       ],
+       "look": "squad-lesser",
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-08-smoulder"
+        }
+       ],
+       "pseudo": false,
+       "rule": {
+        "myStages": {
+         "spe": -1
+        },
+        "noCatch": true
+       },
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-08-smoulder",
+   "name": "Smoulder",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "squirtle",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "One of them stands very close to the others. Closer than it needs to. When your team comes near, it edges behind the biggest one.\n\nIt is looking at one of your Pokémon in particular. The warm one.",
+   "choices": [
+    {
+     "label": "Keep your Fire-type back, without a word.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "You move your Fire-type behind you, as if by accident. The little one lets out a breath it has been holding for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "squad-respect",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "squad-respect",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-08-star"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your team go where they like.",
+     "success": {
+      "text": "Your team wanders where it likes. The little one spends the whole time behind the others, shaking, pretending it is not.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-08-star"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-08-star",
+   "name": "Star",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "squirtle",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "One of them has climbed onto a crate. It clears its throat. It has a routine.\n\nIt is not ready. You can tell from the first spin.",
+   "choices": [
+    {
+     "label": "Watch all of it. Clap.",
+     "success": {
+      "text": "You watch every second of it. You clap at the end. *(It bows too low and falls off the crate. It gets up as if that was the ending.)*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "squad-respect",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "squad-respect",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-standoff-talk",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-08-leader"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-standoff-talk",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-08-leader"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look away halfway through.",
+     "success": {
+      "text": "You look away at the wrong moment. When you look back it is sitting on the crate, very still, and the routine is over.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-08-leader"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-08-leader",
+   "name": "The Leader",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "wartortle",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "The Leader comes down at last, and stands in front of you, and takes off its shades. It folds them. It puts them in its shell.\n\nThen it raises its fists.",
+   "choices": [
+    {
+     "label": "Fight the Leader.",
+     "success": {
+      "text": "*The Squad opens with the hose!* A jet of cold water hits your lead square in the face. It is slower for it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "wartortle"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-08-salute"
+        }
+       ],
+       "look": "squad-leader",
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-08-salute"
+        }
+       ],
+       "pseudo": false,
+       "rule": {
+        "myStages": {
+         "spe": -1
+        },
+        "noCatch": true
+       },
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-08-salute",
+   "name": "The Leader",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "wartortle",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "It picks itself up. It puts its shades back on. Then it stands to attention, very straight, and salutes you.",
+   "choices": [
+    {
+     "label": "Salute back.",
+     "success": {
+      "text": "You salute back. It holds the salute a moment longer than you, as is proper. The whole Squad stands up a little straighter.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "squad-respect",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "squad-respect",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-08-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave.",
+     "success": {
+      "text": "You wave. It lowers its hand slowly, as if you have said something in a language it does not speak.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-08-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-08-after",
+   "name": "Something Bigger",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "blastoise",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "The Squad parts. Something big is coming down the street, slowly, the ground shaking a little with each step.",
+   "choices": [
+    {
+     "label": "Face the Mega Squad Blastoise.",
+     "success": {
+      "text": "*The Squad opens with the hose!* A jet of cold water hits your lead square in the face. It is slower for it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "blastoise-mega"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-08-fire"
+        }
+       ],
+       "look": "squad-leader",
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-08-fire"
+        }
+       ],
+       "pseudo": false,
+       "rule": {
+        "myStages": {
+         "spe": -1
+        },
+        "noCatch": true
+       },
+       "friendly": true,
+       "foeMoves": [
+        "skull-bash",
+        "water-spout"
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "partyLevelOver",
+       "over": 8
+      }
+     ]
+    },
+    {
+     "label": "Face the Leader Blastoise.",
+     "success": {
+      "text": "*The Squad opens with the hose!* A jet of cold water hits your lead square in the face. It is slower for it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "blastoise"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-08-fire"
+        }
+       ],
+       "look": "squad-leader",
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-08-fire"
+        }
+       ],
+       "pseudo": false,
+       "rule": {
+        "myStages": {
+         "spe": -1
+        },
+        "noCatch": true
+       },
+       "friendly": true,
+       "foeMoves": [
+        "skull-bash",
+        "water-spout"
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "partyLevelOver",
+       "over": 3
+      },
+      {
+       "kind": "partyLevelOver",
+       "over": 8,
+       "absent": true
+      }
+     ]
+    },
+    {
+     "label": "It was only the wind.",
+     "success": {
+      "text": "It was only a delivery cart, and a very large Slowpoke pulling it. The Squad looks embarrassed on its behalf.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-08-fire"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "partyLevelOver",
+       "over": 3,
+       "absent": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-08-fire",
+   "name": "The Town's Fire",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "squirtle",
+    "tint": "#2b4a63",
+    "effect": "fire"
+   },
+   "intro": "Smoke. A real fire, three streets over, going up into the sky in a thick grey rope.\n\n*The Squad looks at the smoke. They look at the Leader. Smoulder's shaking.*",
+   "choices": [
+    {
+     "label": "You're the fire brigade, aren't you?",
+     "success": {
+      "text": "The Leader salutes. They put it out in a line, passing water hand to hand, as if they have always known how. One by one, the town opens its shutters.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "squad-fire-brigade",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-08-recruit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'll handle it.",
+     "success": {
+      "text": "Your Water-types do it. The Squad stands in the street and watches. They are quieter, after.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "squad-fire-player",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-08-recruit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Smoulder, with me.",
+     "success": {
+      "text": "It goes, behind your leg, the whole way. And at the end, when there is one flame left, it steps out and puts it out itself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "squad-fire-smoulder",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "squad-respect",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "squad-respect",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-08-recruit"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-08-recruit",
+   "name": "One of the Squad",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "squirtle",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "Later, the Squad lines up in front of you. One of them steps forward and holds out its shades.",
+   "choices": [
+    {
+     "label": "Take the shades.",
+     "success": {
+      "text": "It slides on a second pair, grins, and falls in beside you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "squad-leader-coin",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-respect",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "squad-pick",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-respect",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "squad-pick",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "squad-leader-coin",
+          "min": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "squad-pick",
+            "n": 2
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-fire-player",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "squad-pick",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-pick",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "squirtle"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "contrary",
+          "look": "squad-lesser",
+          "moves": [
+           "swagger",
+           "hex",
+           "shades-down"
+          ],
+          "held": "cool-shades"
+         },
+         {
+          "kind": "flag",
+          "key": "squad-lesser-joined",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "stampStage",
+          "key": "squad-joined-stage"
+         }
+        ],
+        "text": "It is one of the Lesser members."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-pick",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "wartortle"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "contrary",
+          "look": "squad-leader",
+          "moves": [
+           "swagger",
+           "hex",
+           "shades-down"
+          ],
+          "held": "cool-shades"
+         },
+         {
+          "kind": "flag",
+          "key": "squad-leader-joined",
+          "amount": 1
+         }
+        ],
+        "text": "It is the Leader. The Squad salutes it as it goes."
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-squad-joined",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A member of the Squirtle Squad joined you, in its shades.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-08-challenge",
+   "name": "The Leader's Shades",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "squad-lesser-joined",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "squad-challenge-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "lookAtLevel",
+     "types": [
+      "squad-lesser"
+     ],
+     "key": "squad-leader-level"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wartortle",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "The road goes past a fire station with a turtle in sunglasses painted on its side. Your Squirtle stops dead.\n\nOn the roof, arms folded, the Leader. Your Squirtle looks at it, and then at you. It has caught up. It knows it has.",
+   "choices": [
+    {
+     "label": "Let it go and challenge it.",
+     "success": {
+      "text": "Your Squirtle walks out alone into the middle of the street, and pushes its shades up its nose.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "markLook",
+        "key": "squad-challenger",
+        "type": "squad-lesser"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "wartortle"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setLook",
+         "key": "squad-challenger",
+         "type": "squad-leader"
+        },
+        {
+         "kind": "gn",
+         "op": "unmark",
+         "key": "squad-challenger"
+        },
+        {
+         "kind": "flag",
+         "key": "squad-challenge-done",
+         "amount": 1
+        }
+       ],
+       "look": "squad-leader",
+       "friendly": true,
+       "rule": {
+        "leadMark": "squad-challenger",
+        "noSwitch": true,
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "unmark",
+         "key": "squad-challenger"
+        },
+        {
+         "kind": "flag",
+         "key": "squad-challenge-done",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Your Squirtle watches the roof until the road bends. Then it pushes its shades up its nose, and walks on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-cerulean-squad",
+   "name": "The Squirtle Squad",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "squad-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "squirtle",
+    "tint": "#2b4a63",
+    "effect": "none"
+   },
+   "intro": "A small town on the road, with its shutters down in the middle of the afternoon.\n\nSomebody has painted a turtle in sunglasses on the side of the fire station. Somebody else has tried to scrub it off, and given up halfway.",
+   "choices": [
+    {
+     "label": "Walk into town.",
+     "success": {
+      "text": "The street is very quiet. Too quiet, for a town with this much paint on it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "squad-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "squad-respect",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "squad-standoff",
+        "n": 35
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-standoff",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-08-standoff"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "squad-standoff",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-08-pranks"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep to the road.",
+     "success": {
+      "text": "You keep to the road. Behind you, faintly, something that sounds a lot like a bucket hits the ground.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.squad"
+  },
+  {
+   "id": "gn-09-door",
+   "name": "Bill's Lighthouse",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notRegion",
+     "types": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "bill-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "A lighthouse on a cape, far out past the last houses. Its lamp is not turning. It is blinking: a signal, out to sea.\n\nSomething out there is answering.\n\nAt night, the wild Pokémon of the coast come down to the shore and stand on the sand, all facing the water.",
+   "choices": [
+    {
+     "label": "Look for the lighthouse.",
+     "success": {
+      "text": "You wait for dark. The beacon is only visible at night, and even then only from the right places.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-09-search"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not tonight.",
+     "success": {
+      "text": "You leave the cape behind you. Out at sea, the blinking goes on without you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-09-search",
+   "name": "The Search",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "The beacon is only visible at night, and only from the right places. There are signs, if you can read them.\n\nFive signs. Three right readings will lead you there. A wrong one costs a long walk.",
+   "choices": [
+    {
+     "label": "Follow the beacon.",
+     "success": {
+      "text": "There it is: the lamp, on the point, blinking. You can see the path up to it now.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-09-shore"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "bill-clues",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Read the next sign.",
+     "success": {
+      "text": "You look for the next sign.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "bill-read",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-09-clue-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "bill-read",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-09-clue-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "bill-read",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-09-clue-3"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "bill-read",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-09-clue-4"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "bill-read",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-09-clue-5"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "bill-clues",
+       "atLeast": 0,
+       "atMost": 2
+      },
+      {
+       "kind": "flag",
+       "key": "bill-read",
+       "atLeast": 0,
+       "atMost": 4
+      }
+     ]
+    },
+    {
+     "label": "Give up for tonight.",
+     "success": {
+      "text": "The sky goes grey before you find it. The beacon fades into the morning, and the cape is just a cape again.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "bill-clues",
+       "atLeast": 0,
+       "atMost": 2
+      },
+      {
+       "kind": "flag",
+       "key": "bill-read",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-09-clue-1",
+   "name": "The Search: A Light on the Sea",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "A light out on the sea, blinking. It looks like a ship. It looks like it is the beacon.",
+   "choices": [
+    {
+     "label": "Follow the gaps, not the flashes.",
+     "success": {
+      "text": "It is a reflection. The gaps between the flashes line up with something on land, further round the cape.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-clues",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bill-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-search"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the flashes.",
+     "success": {
+      "text": "You go the wrong way, and you only know it after an hour of walking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-walk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-09-clue-2",
+   "name": "The Search: A Ship's Horn",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "A ship's horn, out in the dark. Long, and low.",
+   "choices": [
+    {
+     "label": "Turn round.",
+     "success": {
+      "text": "It is answering something behind you. You turn round, and there, faint on the headland, is a blink of light.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-clues",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bill-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-search"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk towards the horn.",
+     "success": {
+      "text": "You go the wrong way, and you only know it after an hour of walking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-walk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-09-clue-3",
+   "name": "The Search: A Line of Wingull",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "A line of Wingull, flying low over the water in a hurry, crying.",
+   "choices": [
+    {
+     "label": "Go where they came from.",
+     "success": {
+      "text": "They are flying away from it. You walk the way they came, against the wind.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-clues",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bill-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-search"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the Wingull.",
+     "success": {
+      "text": "You go the wrong way, and you only know it after an hour of walking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-walk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-09-clue-4",
+   "name": "The Search: Krabby on the Rocks",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "Krabby on the rocks, dozens of them, all facing one way. None of them moves when you pass.",
+   "choices": [
+    {
+     "label": "Go the way they face.",
+     "success": {
+      "text": "You go the way they face. A few of them shuffle round to keep facing it as you pass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-clues",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bill-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-search"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go the way they turn their backs on.",
+     "success": {
+      "text": "You go the wrong way, and you only know it after an hour of walking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-walk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-09-clue-5",
+   "name": "The Search: The Tide",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "The tide, going out. You can hear it pulling at the stones.",
+   "choices": [
+    {
+     "label": "Follow the tide's pull, to the point.",
+     "success": {
+      "text": "It is pulling toward the point. You follow it out across the wet sand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-clues",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bill-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-search"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep to the high-water line.",
+     "success": {
+      "text": "You go the wrong way, and you only know it after an hour of walking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-walk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-09-walk",
+   "name": "The Long Way Round",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "The wrong way is a long way. The shore goes on in the dark, and something on it does not want you there.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "A wild Pokémon comes up out of the surf at you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "water"
+       ],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-09-search"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-09-search"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-09-shore",
+   "name": "The Shore",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "*Thirty wild Pokémon on the sand, facing the sea. None of them looks round.*\n\n*Under the surface, something passes. It takes a long time to finish passing.*",
+   "choices": [
+    {
+     "label": "Stand with them.",
+     "success": {
+      "text": "You stand with them. After a while your lead comes and stands beside you, and faces the sea too. It will not say why.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-09-cottage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go up to the lighthouse.",
+     "success": {
+      "text": "You leave them to it and climb the path. Not one of them watches you go.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-09-cottage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-09-cottage",
+   "name": "The Keeper's Cottage",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "The keeper's cottage at the foot of the tower. Old photographs on every wall.\n\n*A man and a Dragonite, forty years ago. A child on a Lapras. And some that shouldn't be here: Pokémon from regions you have already finished, in places you have been.*",
+   "choices": [
+    {
+     "label": "Look closer.",
+     "success": {
+      "text": "One photograph has your lead in the background, small and out of focus, looking at the camera. The date on the back is from before it hatched. Your lead looks at it for a long time.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-09-stairs"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You leave them on the walls. Some things are easier not to look at closely.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-09-stairs"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-09-stairs",
+   "name": "The Stairs",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "kind",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fog-named",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Under the crayon, one more line, newer: *\"someone else came. they were nice to it too.\"*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "Research logs, pinned up all the way round the spiral stairs. Three hands.\n\n**The first hand, neat:** *\"Signal sent 2100. No reply.\"*\n\n**The second, hurried:** *\"Reply at 2140. Not a ship. Not anything I've a name for.\"*\n\n**The third, a child's, in crayon:** *\"it says hello back. it is sad. i told it about my dog.\"*",
+   "choices": [
+    {
+     "label": "Climb to the lamp room.",
+     "success": {
+      "text": "You climb the last of the stairs. Somebody up there is talking to themselves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-09-lamp"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-09-lamp",
+   "name": "The Lamp Room",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "clefairy",
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "The lamp room. A machine as big as a wardrobe, humming. And at the console, a Clefairy.\n\n**The Clefairy, in a man's voice:** \"Don't laugh. I'm Bill. There was a mishap. The red button. No, the other red button.\"",
+   "choices": [
+    {
+     "label": "Press the button.",
+     "success": {
+      "text": "You press the other red button. There is a flash, and a pop, and a man sitting on the floor where the Clefairy was, and a Clefairy sitting next to him, looking just as surprised.\n\n**Bill:** \"Thank you. I've been a Clefairy since Tuesday. The worst part is, I didn't mind it.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-signal-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "bill-signal-done",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Laugh first.",
+     "success": {
+      "text": "You laugh. You can't help it. The Clefairy folds its arms and waits until you have finished, then points at the button, and you press it.\n\n**Bill:** \"Thank you. I've been a Clefairy since Tuesday. The worst part is, I didn't mind it.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-signal-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "bill-signal-done",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Ask the Clefairy to dance.",
+     "success": {
+      "text": "It does a small, dignified dance. Halfway through, its foot catches the button. A flash, a pop: a man and a Clefairy, both mid-step.\n\n**Bill:** \"Thank you. I've been a Clefairy since Tuesday. The worst part is, I didn't mind it.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-signal-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "bill-signal-done",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go out onto the gallery.",
+     "success": {
+      "text": "The sky outside is going grey. Bill picks up a flask of tea and two cups. \"Come on. It's nearly time.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-09-gallery"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "bill-signal-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-09-signal-1",
+   "name": "The Signal",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "clefairy",
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "A light pattern from the sea: *long, long, short*.\n\n**Bill:** \"Three patterns. Three cries on the machine. Match them. Take your time; it does.\"",
+   "choices": [
+    {
+     "label": "A low call, like a horn.",
+     "success": {
+      "text": "You play the cry out to sea. Far off, something answers in the same voice, and goes quiet, satisfied. Bill writes it down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-matched",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-signal-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A rising song.",
+     "success": {
+      "text": "The wrong cry goes out over the water. The thing answers anyway, puzzled, a little slower. Bill writes that down too.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-signal-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Something that isn't in the Pokédex.",
+     "success": {
+      "text": "The wrong cry goes out over the water. The thing answers anyway, puzzled, a little slower. Bill writes that down too.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-signal-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-09-signal-2",
+   "name": "The Signal",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "clefairy",
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "A light pattern from the sea: *short, short, short, long*.\n\n**Bill:** \"Three patterns. Three cries on the machine. Match them. Take your time; it does.\"",
+   "choices": [
+    {
+     "label": "A low call, like a horn.",
+     "success": {
+      "text": "The wrong cry goes out over the water. The thing answers anyway, puzzled, a little slower. Bill writes that down too.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-signal-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A rising song.",
+     "success": {
+      "text": "You play the cry out to sea. Far off, something answers in the same voice, and goes quiet, satisfied. Bill writes it down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-matched",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-signal-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Something that isn't in the Pokédex.",
+     "success": {
+      "text": "The wrong cry goes out over the water. The thing answers anyway, puzzled, a little slower. Bill writes that down too.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-signal-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-09-signal-3",
+   "name": "The Signal",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "clefairy",
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "A light pattern from the sea: *one long, held*.\n\n**Bill:** \"Three patterns. Three cries on the machine. Match them. Take your time; it does.\"",
+   "choices": [
+    {
+     "label": "A low call, like a horn.",
+     "success": {
+      "text": "The wrong cry goes out over the water. The thing answers anyway, puzzled, a little slower. Bill writes that down too.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "bill-signal-done",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-lamp"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A rising song.",
+     "success": {
+      "text": "The wrong cry goes out over the water. The thing answers anyway, puzzled, a little slower. Bill writes that down too.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "bill-signal-done",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-lamp"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Something that isn't in the Pokédex.",
+     "success": {
+      "text": "You play the cry out to sea. Far off, something answers in the same voice, and goes quiet, satisfied. Bill writes it down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-matched",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "bill-signal-done",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-lamp"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-09-gallery",
+   "name": "The Gallery, at Dawn",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a44",
+    "effect": "sparkle"
+   },
+   "intro": "The gallery round the top of the tower. Cold wind. The sea going from black to grey.\n\n**Bill:** \"It comes at first light. It's come every morning for a year. I've never been sure it's real.\"",
+   "choices": [
+    {
+     "label": "Watch the water.",
+     "success": {
+      "text": "The sea goes still. Then it surfaces.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "bill-surfaced",
+        "weights": [
+         40,
+         35,
+         24,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "bill-surfaced",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "A very large Dragonite. It stands in the shallows, taller than the lighthouse, and looks at the lamp as if it were a face."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "bill-surfaced",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "A Lapras pod: nine of them. The largest one sings. It is the third pattern."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "bill-surfaced",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "A Wailord. It rises, and rises, until it blocks out the sunrise."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "bill-surfaced",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "A silhouette. Bill puts his hand over your notebook. **Bill:** \"No. Don't write that down. Don't ask me.\""
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-dawn"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-09-dawn",
+   "name": "The Gallery, at Dawn",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a44",
+    "effect": "sparkle"
+   },
+   "intro": "**Bill:** \"It was looking for something its own size. That's all. I built a light, and it thought I was one.\"",
+   "choices": [
+    {
+     "label": "Answer it, one more time.",
+     "success": {
+      "text": "Bill sends the signal one more time. It answers. Then it goes, slowly, the way it came.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-answered",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-bill-pc",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-ssanne-ticket",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "bills-pc",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "ss-ticket",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "bills-recorder",
+        "count": 1
+       },
+       {
+        "kind": "eggMove"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "bill-region"
+       },
+       {
+        "kind": "moment",
+        "text": "You saw what answers Bill's lighthouse.",
+        "importance": 70
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn the lamp off.",
+     "success": {
+      "text": "Bill turns the lamp off. It waits a long time in the grey water. Then it goes. Bill doesn't turn the lamp back on for a week.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-lamp-off",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-bill-pc",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-ssanne-ticket",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "bills-pc",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "ss-ticket",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "bills-recorder",
+        "count": 1
+       },
+       {
+        "kind": "eggMove"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "bill-region"
+       },
+       {
+        "kind": "moment",
+        "text": "You saw what answers Bill's lighthouse.",
+        "importance": 70
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it on. Let it keep coming.",
+     "success": {
+      "text": "You leave it on. It will come every dawn. Bill isn't alone, and neither is it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-kept-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-bill-pc",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-ssanne-ticket",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "bills-pc",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "ss-ticket",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "bills-recorder",
+        "count": 1
+       },
+       {
+        "kind": "eggMove"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "bill-region"
+       },
+       {
+        "kind": "moment",
+        "text": "You saw what answers Bill's lighthouse.",
+        "importance": 70
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-09-letter",
+   "name": "A Letter from Bill",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-bill-pc",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "bill-letter",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "bill-region"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lamp-off",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "bill-lamp-off",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*P.S. I've built a bigger lamp. I don't know yet if I'll turn it on.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "A letter catches up with you, the envelope gone soft with travelling. Bill's handwriting, small and fast.\n\n*\"I heard it again last night. Further out. I think it was saying goodbye, or hello. I wrote it down both ways.\"*",
+   "choices": [
+    {
+     "label": "Fold the letter away.",
+     "success": {
+      "text": "You fold it carefully and keep it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-letter",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-cerulean-bill",
+   "name": "Bill's Lighthouse",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Mystery",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "bill-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a44",
+    "effect": "none"
+   },
+   "intro": "A lighthouse on a cape, far out past the last houses. Its lamp is not turning. It is blinking: a signal, out to sea.\n\nSomething out there is answering.\n\nAt night, the wild Pokémon of the coast come down to the shore and stand on the sand, all facing the water.",
+   "choices": [
+    {
+     "label": "Look for the lighthouse.",
+     "success": {
+      "text": "You wait for dark. The beacon is only visible at night, and even then only from the right places.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bill-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-09-search"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not tonight.",
+     "success": {
+      "text": "You leave the cape behind you. Out at sea, the blinking goes on without you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.bill"
   }
  ]
 }

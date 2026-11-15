@@ -7,7 +7,7 @@ import { LANDMARK_STOP, TRAVERSAL } from '../../src/core/traversal';
 import { WANDERER_CHALLENGE, WANDERER_VISIT } from '../../src/core/wanderer';
 import { TREASURE_DIG_EVENT } from '../../src/core/run';
 import { describe, expect, it } from 'vitest';
-import type { Content } from '../../src/core/contentSchema';
+import type { Content, EventEffect as Effect } from '../../src/core/contentSchema';
 import { addEventStops, chooseEvent, eligibleEvents, stopIsHidden } from '../../src/core/events';
 import { findNode, nextChoices } from '../../src/core/map';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
@@ -293,8 +293,11 @@ describe('landmarks and dungeons', () => {
     for (const e of content.events.values()) {
       for (const ch of [...e.choices, ...e.remembers.flatMap((v) => v.addChoices)]) {
         const lists = [...[ch.success, ch.failure].flatMap((o) => [o?.effects ?? [], o?.battle?.win ?? [], o?.battle?.lose ?? []]), ...(ch.branches ?? []).map((b) => b.effects)];
-        for (const ef of lists.flat()) {
+        // A Greenneedle effect (`gn`) holds more effects: a `when`'s `then`, and a `route`'s `to` (an addEventFrom); a `scene` opens room `key`.
+        const flat = (efs: Effect[]): Effect[] => efs.flatMap((ef) => (ef.kind === 'gn' ? [ef, ...flat([...(ef.then ?? []), ...(ef.to ? [ef.to] : [])] as Effect[])] : [ef]));
+        for (const ef of flat(lists.flat())) {
           if (ef.kind === 'addEvent') opened.add(ef.eventId);
+          if (ef.kind === 'gn' && ef.op === 'scene') opened.add(ef.key!); // a scene beside the current node
           if (ef.kind === 'addEventFrom') ef.ids.forEach((i) => opened.add(i));
           // Catalog Overhaul mentors: a shared scene opens the run's mentor's own `mentor-<id>-<part>` (core/mentors/lessons.ts mentorSceneId).
           // Its Recruit and Story are catalog events it can also open, so these count only as a way in to a room.
@@ -313,7 +316,11 @@ describe('landmarks and dungeons', () => {
     for (const id of content.events.keys()) if (id.startsWith('ultra-tear-')) opened.add(id);
     // Beta 0.7: Pidgey's Resolve places its join rooms from code (core/sky/story.ts pushRoom).
     for (const id of content.events.keys()) if (id.startsWith('sky.join.')) opened.add(id);
-    for (const id of opened) expect(content.events.get(id)?.room, id).toBe(true);
+    // Catalog Overhaul: a placed event (core/co/placement.ts) is put on the map at its home step, room or not.
+    for (const id of content.coPlacement?.keys() ?? []) opened.add(id);
+    // Damian's "Go again." (gn.05) opens his next meeting, an ordinary drawn event, at once; anything else opened must be a room.
+    const drawnToo = new Set(['gn-05-barn', 'gn-05-hall', 'gn-05-gym']);
+    for (const id of opened) if (!content.coPlacement?.has(id) && !drawnToo.has(id)) expect(content.events.get(id)?.room, id).toBe(true);
     // A retired room (Catalog Overhaul REMOVE: kept for saved runs, never drawn) need not be reachable.
     for (const e of content.events.values()) if (e.room && !e.disabled) expect(opened.has(e.id) || viaMentor.has(e.id), e.id).toBe(true);
   });

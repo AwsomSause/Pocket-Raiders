@@ -74,7 +74,9 @@ function placeCanonSlot(content: Content, run: RunState, slot: string): void {
 
 /** After an event is played: if it is a canon space, mark it finished and copy over the flags its choices set. */
 export function noteCanonEvent(run: RunState, event: { canon: string | null }): void {
-  if (!event.canon || !run.expansion?.canon) return;
+  if (!run.expansion?.canon) return;
+  // Any event can be a room of a finished space (a Greenneedle story its canon gate opened): its flags are copied over too.
+  if (!event.canon) return syncCanonFlags(run);
   const space = canonKanto.spaces.find((s) => s.id === event.canon);
   if (!space) return;
   const set = space.flags.filter((f) => Number(run.story.flags[evKey(f)] ?? 0) > 0);

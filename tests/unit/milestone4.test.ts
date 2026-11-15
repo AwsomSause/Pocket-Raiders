@@ -26,7 +26,7 @@ import {
 import type { RunState } from '../../src/core/state';
 import { SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
-import { content, takeAnyReward, toBattle } from './helpers';
+import { content, takeAnyReward, toBattle, withoutDoors } from './helpers';
 
 const RED = getArchetype(content, 'red');
 const FULL = content.campaigns.get('full')!;
@@ -239,7 +239,7 @@ describe('the final boss', () => {
 describe('the dev campaign, start to finish', () => {
   it('clears two regions (stages, league, champion), raises the cap, then wins the run', () => {
     // Six strong Pokémon: level 100 teams know one-hit KO moves such as Fissure.
-    let run = powerUp(newRun('dev-full', 'dev'));
+    let run = withoutDoors(powerUp(newRun('dev-full', 'dev')));
     for (let i = 1; i < content.balance.partyMax; i++) run.party.push({ ...structuredClone(run.party[0]!), uid: `extra${i}` });
     const firstRegion = run.regionOrder[0]!;
     const kinds: string[] = [];

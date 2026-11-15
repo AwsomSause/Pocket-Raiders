@@ -28,7 +28,7 @@ export const bindGnEffects = (schema: z.ZodType): void => {
  *  - `stampStage`: the run flag `key` remembers the stage number now (read with the `gn` conditions `laterStage`, `sameStage`, `notThisStage`).
  *  - `partyHas`: the run flag `key` becomes 1 when a party Pokémon is one of `species`, else 0 (a Clefairy or Clefable sees the secret dance).
  */
-export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash'] as const;
+export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook'] as const;
 export const GnEffectSchema = z.object({
   kind: z.literal('gn'),
   op: z.enum(GN_OPS),
@@ -56,6 +56,8 @@ export const GnEffectSchema = z.object({
   // noFaint: adds `n` to flag `key` when nobody in the party has fainted (a battle won "without letting anyone faint").
   .refine((e) => (e.op === 'noFaint' ? !!e.key && e.n !== undefined : true), { message: 'a noFaint needs `key` and `n`' })
   // clampFlag: holds flag `key` between `min` and `max` (the rain's Flame, 0 to 5).
+  // markLook: marks (`key`) every party Pokémon wearing anime look `type` (the Squad recruit, before its challenge). setLook: marked ones now wear `type`.
+  .refine((e) => (e.op === 'markLook' || e.op === 'setLook' ? !!e.key && !!e.type : true), { message: 'markLook / setLook need `key` (the mark) and `type` (the look)' })
   .refine((e) => (e.op === 'clampFlag' ? !!e.key && e.min !== undefined && e.max !== undefined : true), { message: 'a clampFlag needs `key`, `min` and `max`' });
 export type GnEffect = z.infer<typeof GnEffectSchema>;
 
@@ -65,12 +67,13 @@ export type GnEffect = z.infer<typeof GnEffectSchema>;
  *  - `notThisRegion`: the run flag `key` was not stamped in the region the player is in now (never stamped counts: "at most once per region").
  *  - `laterStage` / `sameStage` / `notThisStage`: against the stage stamped in `key` (`stampStage`): a later stage than it, the same stage,
  *    or any stage but it (never stamped counts as "not this stage").
+ *  - `lookAtLevel`: a party Pokémon wearing anime look `types[0]` is at least the level stored in flag `key` (the Squad recruit has caught up with its Leader).
  *  - `thisRegion`: the run flag `key` was stamped in the region the player is in now ("later in the region").
  *  - `notRegion`: the run is in none of the regions listed in `types` (a Greenneedle event that Kanto shows through its own canon space).
  *  - `noMoveType`: no party Pokémon knows a move of any of `types` (the mine's pickaxe is for a party with no Fighting, Steel or Ground move).
  */
-export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'notRegion', 'thisRegion']), key: Key.optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
-  .refine((c) => (c.test === 'noMoveType' || c.test === 'notRegion' ? !!c.types : !!c.key), { message: 'noMoveType and notRegion need `types` (move types / region ids), the others need `key`' });
+export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'notRegion', 'thisRegion', 'lookAtLevel']), key: Key.optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
+  .refine((c) => (c.test === 'noMoveType' || c.test === 'notRegion' ? !!c.types : c.test === 'lookAtLevel' ? !!c.types && !!c.key : !!c.key), { message: 'noMoveType and notRegion need `types` (move types / region ids), the others need `key`' });
 export type GnCond = z.infer<typeof GnCondSchema>;
 
 /**
@@ -97,6 +100,8 @@ export const GnRuleFields = {
   myStages: Stages.optional(),
   /** Stat stages the foe's first Pokémon starts with. */
   foeStages: Stages.optional(),
+  /** The foe can't be caught (a Squad member fights for its Squad; one joins later, by choice). */
+  noCatch: z.literal(true).optional(),
   /** With rule `damian`: how many levels the ace stands above the rest of the team. */
   ace: z.number().int().min(0).max(5).optional(),
 };

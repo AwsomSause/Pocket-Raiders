@@ -21,7 +21,25 @@ export function toBattle(run: RunState, c: Content = content): RunState {
     const pick = eventView(c, run, waiting).choices.findIndex((ch) => !ch.locked);
     return chooseEvent(c, run, waiting, Math.max(0, pick)).run;
   }
+  // Node menus: a required entry (a must-see event on this node) is played before moving on.
+  const menu = currentMenu(run);
+  const required = menu?.entries.find((e) => e.required && !entryDone(run, e));
+  if (required) {
+    const picked = pickMenuEntry(c, run, required.id);
+    if (!picked.sideId) return picked.run;
+    const pick = eventView(c, picked.run, picked.sideId).choices.findIndex((ch) => !ch.locked);
+    return chooseEvent(c, picked.run, picked.sideId, Math.max(0, pick)).run;
+  }
   const choices = mapChoices(c, run);
+  if (choices.length === 0) {
+    // Inside a chain pseudo-stage (a Greenneedle event line) the way on is the room beside this node: play its first open choice.
+    const here = run.stage?.map.nodes.find((n) => n.id === run.stage!.current);
+    const room = here?.sides.find((s) => s.kind === 'event' && !s.used && s.eventId);
+    if (room) {
+      const pick = eventView(c, run, room.id).choices.findIndex((ch) => !ch.locked);
+      return chooseEvent(c, run, room.id, Math.max(0, pick)).run;
+    }
+  }
   const node = choices.find((n) => !n.harder) ?? choices[0]!;
   const next = chooseNode(c, run, node.id);
   // Scripted fights in tests expect one foe: an SOS call is marked as already used (tests/unit/sos.test.ts covers calls).
@@ -30,6 +48,7 @@ export function toBattle(run: RunState, c: Content = content): RunState {
 }
 
 import { freshSos } from '../../src/core/battle/sos';
+import { currentMenu, entryDone, pickMenuEntry } from '../../src/core/nodeMenu/flow';
 import { waitingStop } from '../../src/core/co/attach';
 import { chooseEvent, eventView } from '../../src/core/events';
 import { rewardTargetProblem } from '../../src/core/rewards';
@@ -64,5 +83,16 @@ export function takeAnyReward(run: RunState, c: Content = content): RunState {
     if (!picked) throw new Error('No reward in the draft can be taken');
     run = picked;
   }
+  return run;
+}
+
+/**
+ * For tests about a plain stage: the Catalog Overhaul doors that replace a node's battle (placement `attaches: 'instead'`, e.g. the
+ * Greenneedle Viridian Forest and Mt. Moon) are marked seen and taken off the current map, so every node fights its own battle.
+ */
+export function withoutDoors(run: RunState, c: Content = content): RunState {
+  const doors = [...(c.coPlacement?.entries() ?? [])].filter(([, p]) => p.attaches === 'instead').map(([id]) => id);
+  run.itemCounters = { ...run.itemCounters, ...Object.fromEntries(doors.map((id) => [`event-seen:${id}`, 1])) };
+  for (const n of run.stage?.map.nodes ?? []) n.sides = n.sides.filter((s) => !doors.includes(s.eventId ?? ''));
   return run;
 }

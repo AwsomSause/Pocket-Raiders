@@ -879,5 +879,6 @@
  "wonder-room": "The user creates a bizarre area in which Pokémon's Defense and Sp. Def stats are swapped for five turns.",
  "worry-seed": "A seed that causes worry is planted on the target. It prevents sleep by making the target's Ability Insomnia.",
  "wring-out": "This move can’t be used. It’s recommended that this move is forgotten. Once forgotten, this move can’t be remembered.",
- "yawn": "The user lets loose a huge yawn that lulls the target into falling asleep on the next turn."
+ "yawn": "The user lets loose a huge yawn that lulls the target into falling asleep on the next turn.",
+ "shades-down": "The user pushes its shades down and glares through the top of them. It lowers the user's Sp. Atk."
 }

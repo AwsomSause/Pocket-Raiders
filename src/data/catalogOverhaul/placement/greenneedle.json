@@ -317,5 +317,54 @@
    "Companion Story"
   ],
   "tags": []
+ },
+ "gn-08-town": {
+  "gn": "gn.08",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 7,
+  "window": [
+   5,
+   11
+  ],
+  "sits": "optional",
+  "level": "Lesser A-1, the Leader A+0, the Blastoise A+1",
+  "often": "run",
+  "dressing": {
+   "kanto": "The Squirtle Squad",
+   "kantoStage": "A town on the road from Cerulean (the canon space)",
+   "elsewhere": "The Squirtle Squad"
+  },
+  "kinds": [
+   "Miniature Episode",
+   "Community Episode"
+  ],
+  "tags": []
+ },
+ "gn-09-door": {
+  "gn": "gn.09",
+  "shape": "Door",
+  "earliest": "A3",
+  "home": 16,
+  "window": [
+   14,
+   18
+  ],
+  "sits": "optional",
+  "level": "A-1",
+  "often": "run",
+  "dressing": {
+   "kanto": "Bill's Lighthouse",
+   "kantoStage": "The cape north of Cerulean (the canon space)",
+   "elsewhere": "Bill's Lighthouse"
+  },
+  "note": "Better at night: the search is always played at night. Kanto shows it through cs-kanto-cerulean-bill.",
+  "kinds": [
+   "Pseudo Stage",
+   "Mystery Episode"
+  ],
+  "tags": [
+   "water"
+  ]
  }
 }

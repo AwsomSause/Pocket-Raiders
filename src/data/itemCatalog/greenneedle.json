@@ -10,7 +10,12 @@
     "how": "use",
     "icon": "library/starshard1",
     "status": "supported",
-    "effect": { "kind": "money", "amount": 400, "changes": {} }
+    "giftOnly": true,
+    "effect": {
+      "kind": "money",
+      "amount": 400,
+      "changes": {}
+    }
   },
   {
     "id": "bottle-cap-badge",
@@ -23,7 +28,12 @@
     "how": "passive",
     "icon": "library/bottlecap",
     "status": "supported",
-    "effect": { "kind": "passive", "passive": "trainerMoney", "percent": 5 }
+    "giftOnly": true,
+    "effect": {
+      "kind": "passive",
+      "passive": "trainerMoney",
+      "percent": 5
+    }
   },
   {
     "id": "damian-badge",
@@ -36,6 +46,65 @@
     "how": "passive",
     "icon": "library/surgebadge",
     "status": "supported",
-    "effect": { "kind": "passive", "passive": "trainerMoney", "percent": 5 }
+    "giftOnly": true,
+    "effect": {
+      "kind": "passive",
+      "passive": "trainerMoney",
+      "percent": 5
+    }
+  },
+  {
+    "id": "bills-pc",
+    "name": "Bill's PC",
+    "family": "Key items: gadgets",
+    "description": "Bill patched you into his storage system. You can store Pokémon in a PC on the road, at any node.",
+    "rarity": "epic",
+    "stacksOn": "player",
+    "max": 1,
+    "how": "passive",
+    "icon": "library/remotepc",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "run"
+      },
+      "perks": [
+        {
+          "perk": "runModifier",
+          "modifiers": [
+            {
+              "kind": "boxCapacity",
+              "slots": 6
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "bills-recorder",
+    "name": "Bill's Recorder",
+    "family": "Key items: gadgets",
+    "description": "It picks up what the ear can't. One hidden stop on each stage shows what it is.",
+    "rarity": "epic",
+    "stacksOn": "player",
+    "max": 1,
+    "how": "passive",
+    "icon": "vs-recorder",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "run"
+      },
+      "perks": [
+        {
+          "perk": "revealOne"
+        }
+      ]
+    }
   }
 ]
