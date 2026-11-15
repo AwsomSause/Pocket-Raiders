@@ -308,7 +308,7 @@ const NE32: Json[] = [
   ne(32, 'borrowed-pokemons-thank-you', 'The Borrowed Pokémon\'s Thank-You', GROUP.ally, {
     place: { earliest: 'A3', home: 9, window: [4, 16], sits: 'optional', attaches: 'after' },
     // Only after a Pokémon fought beside you on loan or in a tag battle this run.
-    requires: [anyFlag('ditto-mirror', 'ally-travels', 'wedding-battle', 'rival-swap', 'rival-swap-one')],
+    requires: [anyFlag('ditto-mirror', 'ally-travels', 'wedding-battle', 'rival-swap')],
     tags: ['Pokémon', 'Story'], tint: '#20281c', effect: 'none',
   },
   P(
@@ -601,7 +601,7 @@ const NE39: Json[] = [
     ch(`Swap one each.`, out(P(
       `You each pick one. {rival} takes yours like a borrowed jacket, carefully, checking the pockets. You take theirs.`,
       `For a while one stranger walks with your team, and one of yours walks with theirs. Both come home with stories.`,
-    ), trust(1), flag('rival-swap-one'), { kind: 'teamSwap', mode: 'one' }, later('rq-swap-day-handback', 8)), { requires: [SWAP_READY], pick: {} }),
+    ), trust(1), flag('rival-swap'), { kind: 'teamSwap', mode: 'one' }, later('rq-swap-day-handback', 8)), { requires: [SWAP_READY], pick: {} }),
     ch(`No.`, out(P(`{rival} snorts and clips the belt back on.`, `{rival}: "Scared."`, `They're grinning when they say it, though. Mostly.`))),
   ]),
   step(39, 'rq-swap-day-handback', 'Swap Day: Handing Back', GROUP.rival, { tint: '#1c2430', effect: 'glint' },
@@ -637,7 +637,7 @@ const NE40: Json[] = [
       `You hold their eyes and say it plainly. Something in {rival}'s face breaks, and then sets again, harder and cleaner than before.`,
       `{rival}: "...Good. Then don't you dare go easy."`,
       `The gate opens. The roar comes down the tunnel like weather.`,
-    ), rivalFight(6, 2, [flag('rival-honest-won'), mark('sponsor-dropped')], [flag('rival-honest-lost')]), trust(2), flag('rival-honest-match'))),
+    ), rivalFight(6, 2, [flag('rival-honest-won'), mark('sponsor-dropped')], []), trust(2), flag('rival-honest-match'))),
     ch(`"I'll throw it."`, out(P(
       `You walk out into the light and lose. You do it carefully, the way you'd do anything you were ashamed of. The crowd doesn't notice. The round is gone.`,
       `{rival} notices. They stand in the middle of the field afterwards with their sponsor clapping them on the back, and they cannot look at you. Not once.`,
@@ -645,7 +645,7 @@ const NE40: Json[] = [
     ch(`"Let's tell the sponsor to watch a real match."`, fight(P(
       `You find the sponsor in her box, a sharp woman with a clipboard, and tell her what you want. She raises an eyebrow, and sits forward.`,
       `Then the two of you fight flat out, everything you have, in front of her and the whole roaring stand.`,
-    ), rivalFight(6, 2, [flag('sponsor-signed-both')], [flag('sponsor-signed-rival')]), trust(3), flag('rival-real-match'))),
+    ), rivalFight(6, 2, [], []), trust(3), flag('rival-real-match'))),
   ]),
   after(40, 'rq-dont-you-dare', 'Don\'t You Dare', GROUP.rival, [RIVAL, flagIs('rival-thrown'), LEAGUE()], { minStage: 7, tint: '#201820', effect: 'glint' },
     P(`The last battle of the run is close. {rival} catches you in the corridor and grabs your sleeve, hard.`, `{rival}: "Don't you dare do that again."`, `They don't say anything else. They don't have to.`), [

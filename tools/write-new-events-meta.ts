@@ -10,7 +10,7 @@ const { PLACEMENT, NE_IDS } = (await import(join(dir, '_ne.ts'))) as { PLACEMENT
 
 const sorted = <T>(o: Record<string, T>): Record<string, T> => Object.fromEntries(Object.entries(o).sort(([a], [b]) => a.localeCompare(b, 'en', { numeric: true })));
 writeFileSync(
-  join(root, 'src/data/catalogOverhaul/placement/new-events.json'),
+  join(root, 'src/data/catalogOverhaul/placement-staged/new-events.json'),
   JSON.stringify({ $note: 'Catalog Overhaul placement for the 100 new events (NEW_EVENTS_PLACED.md), keyed by event id. Written by tools/write-new-events-meta.ts.', ...sorted(PLACEMENT) }, null, 1) + '\n',
 );
 writeFileSync(

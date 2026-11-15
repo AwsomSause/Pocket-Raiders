@@ -288,6 +288,15 @@ const NE82: Json[] = [
       'They are both so offended they completely forget about each other. They come and sit on you instead, one on each side, heavy and smug.',
       'You do not get any rest for your back. You do not get much rest for anything. But they are not fighting.',
     ), bondUp(1, 'picked'), bond(6, 10), flag('camp-argument'), STILL_NOT_SPEAKING), { pick: {} }),
+  ], [
+    // Kept from the camp build: the pair from the fire (NE81) can settle it.
+    variant('the-pair-is-here', [flagIs('camp-pair')], {
+      notice: 'The pair from the fire watches from the side, ears up, tails still. They have opinions about this. They have been waiting to be asked.',
+      addChoices: [ch('Ask the pair to sort it out.', out(P(
+        'You look at the pair from the fire and nod. They trot over, unhurried, and sit down right between the two of them.',
+        'Nobody says anything. The argument just runs out of air. A minute later all four are lying in the warm spot together, and nobody is sulking at all.',
+      ), bond(12, 12, true), bondUp(1, 'party'), flag('camp-argument')))],
+    }),
   ]),
 ];
 
@@ -378,6 +387,11 @@ const NE85: Json[] = [
       'You wake everyone up and line them up for a proper one. Everybody poses. Nobody poses the same way. Someone sneezes.',
       'It is worse. It is much, much worse. You all crowd round the camera to look at it and laugh until you can\'t breathe.',
     ), bondUp(1, 'party'), flag('camp-photo'))),
+  ], [
+    // Kept from the camp build: the two who argued over the fire (NE82) are in the photo.
+    variant('the-two-in-the-photo', [flagIs('camp-argument')], {
+      notice: 'And there, right at the front: the two who argued over the fire. Nose to nose, asleep, curled around each other as if nothing had ever happened.',
+    }),
   ]),
 ];
 
