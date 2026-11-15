@@ -100,6 +100,7 @@ import { partyLifeBond } from './partyLife';
 import { celebrateToday, milestoneToday, periodOf, PERIOD_LABEL, restUntilMorning, seasonOf } from './clock';
 import { BERRIES } from './berries';
 import { choiceAt, effectiveEvent, visibleChoices } from './eventMemory';
+import { applyQuestEffect, planRivalTeam, shapeRivalMons, questConditionMet, questText, rivalAllySpecies, rivalStanding, RIVAL_QUEST_GROUP } from './rivals/questlines';
 import { getTheme, typesPool } from './themes';
 import { anyRoaming, endRoamer, healConvoy, startConvoy, partyHasAbility, placeCamp, scoutAhead, CAMP_EVENT_ID } from './world';
 import { MAX_FOES, MAX_FOES_LISTED } from './bossLimits';
@@ -213,6 +214,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       if (!rec) return false;
       return (!c.feeling || rec.feelings[c.feeling.key] >= c.feeling.atLeast) && (c.leadAtLeast === undefined || rec.lead >= c.leadAtLeast) && (c.leadAtMost === undefined || rec.lead <= c.leadAtMost) && (!c.mark || rec.marks.includes(c.mark));
     }
+    case 'rivalQuest':
+      return questConditionMet(content, run, c, (o) => conditionMet(content, run, o));
     case 'flag':
       return Number(run.story.flags[`ev:${c.key}`] ?? 0) >= c.atLeast && Number(run.story.flags[`ev:${c.key}`] ?? 0) <= c.atMost;
     case 'partyBlissful':
@@ -408,6 +411,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs the tournament bracket to be at this round';
     case 'rivalState':
       return 'Needs a rival who feels a certain way about you';
+    case 'rivalQuest':
+      return 'Needs the right moment with your rival';
     case 'flag':
       return 'Needs something you did earlier';
     case 'partyBlissful':
@@ -796,7 +801,10 @@ export function choiceKind(choice: EventChoice, chance: number | null): ChoiceKi
 export function eventView(content: Content, run: RunState, sideId: string): EventView {
   const { side } = findSide(run, sideId);
   const base = content.events.get(side.eventId!)!;
-  const event = effectiveEvent(content, run, base);
+  const seen = effectiveEvent(content, run, base);
+  // Rival questline tokens ({rival}, {say ...}) are filled for the reader; the stored event keeps them.
+  const say = (t: string): string => questText(content, run, base.id, t);
+  const event = seen.intro.includes('{') || seen.choices.some((c) => c.label.includes('{')) ? { ...seen, intro: say(seen.intro), choices: seen.choices.map((c) => (c.label.includes('{') ? { ...c, label: say(c.label) } : c)) } : seen;
   const insight = hasPerk(content, run, 'eventInsight');
   const choices = event.choices.map((c) => {
     const unmet = c.requires.find((r) => !conditionMet(content, run, r));
@@ -805,7 +813,8 @@ export function eventView(content: Content, run: RunState, sideId: string): Even
     const preview = insight ? `${outcomeWords(content, c.success)}${c.failure ? ` · if it fails: ${outcomeWords(content, c.failure)}` : ''}` : null;
     return { label: c.label, locked: missing, kind: choiceKind(c, chance), tradePicks: tradePicksOf(content, run, c), chance, attribute: c.check ?? null, attributeValue: c.check ? effectiveAttributes(content, run)[c.check] : null, preview, ...choiceRisk(content, c) };
   });
-  return { event, choices };
+  const standing = base.group === RIVAL_QUEST_GROUP ? rivalStanding(content, run) : null;
+  return { event, choices, ...(standing ? { standing } : {}) };
 }
 
 export interface EventResult {
@@ -854,6 +863,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   const chance = choice.prompt ? 1 : choiceChance(content, run, choice);
   const success = choice.prompt ? atLeast({ grade: promptGrade ?? 'miss' } as PromptResult, choice.prompt.needs) : chance === null || rng.float() < chance;
   const outcome = success ? choice.success : choice.failure!;
+  const outcomeText = questText(content, run, event.id, outcome.text);
   // The Event Director remembers important choices (and whether you took a risk).
   const risky = chance !== null || choice.prompt !== undefined;
   run.story.flags[risky ? 'choices:risky' : 'choices:safe'] = Number(run.story.flags[risky ? 'choices:risky' : 'choices:safe'] ?? 0) + 1;
@@ -885,7 +895,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
     run.afterDecisions = 'map';
     continueAfterDecisions(content, run);
   }
-  return { run, success, text: outcome.text, changes, battle };
+  return { run, success, text: outcomeText, changes, battle };
 }
 
 function useUpKeyItem(run: RunState, id: string): void {
@@ -1026,6 +1036,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'aid':
       return 'allies gathered';
     case 'rivalChange':
+    case 'rivalQuest':
     case 'flag':
       return '';
     case 'cast':
@@ -1414,6 +1425,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (e.mark) addMark(rec, e.mark);
       return '';
     }
+    case 'rivalQuest':
+      return applyQuestEffect(content, run, e);
     case 'sky':
       return applySky(content, run, e);
     case 'flag':
@@ -1649,7 +1662,9 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     const ghost = b.retired ? retiredTeam(run.story) : b.ghost ? championTeam(run.story) : [];
     const authored = ghost.length > 0 || (b.rival && featuredRival(run)) ? 'rival-ghost-team' : boss ? 'event-boss-signature' : null;
     const rival = b.rival ? featuredRival(run) : null;
-    const rivalTeam = rival && ghost.length === 0 ? rivalFightTeam(content, rival) : [];
+    const rivalRoster = rival && ghost.length === 0 ? rivalFightTeam(content, rival) : [];
+    // Rival questlines: the scene may shape the rival's team (a slot aimed at your lead, the ace first, R4's young Pokémon).
+    const rivalTeam = rival && b.kind === 'trainer' && b.quest && rivalRoster.length > 0 ? planRivalTeam(content, run, rival, rivalRoster, b.quest, run.party[activeIndex]!).map((id) => (id.startsWith('type:') ? pickSpecies(content, run, [], [id.slice(5) as TypeName], rng) : id)) : rivalRoster;
     const evil = evilBattle(content, run, b);
     const fellow = b.apprentice ? run.mentor?.fellow ?? null : null;
     const friendFoes = b.kind === 'trainer' && b.friend ? friendTeam(content, run, b.size) : [];
@@ -1687,6 +1702,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     // Beta 0.7: only a listed story boss (`seventh`) fields a 7th foe; every other team is cut to 6.
     if (team.length > MAX_FOES && !(b.kind === 'trainer' && b.seventh)) team.length = MAX_FOES;
     else if (team.length > MAX_FOES_LISTED) team.length = MAX_FOES_LISTED;
+    if (rival && rivalTeam.length > 0) shapeRivalMons(content, run, rival, team);
     if (authored) for (const mon of team) auditEncounter(content, 'event', mon, authored);
     team.slice(0, evil ? evil.shadow : b.shadow).forEach((mon) => makeShadow(mon, rollShadowHeart(content, new Rng(hashSeed(`${run.seed}::shadow-foe::${mon.uid}`)))));
     // Overhaul slice 17: Evil Team and rival fights follow their named strategy (opener, ace item, sharper AI).
@@ -1721,9 +1737,10 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
         run.battle.enemyStages[stat as 'atk'] = n;
       }
     }
-    if (b.ally && content.species.has(b.ally) && team.length >= 2) {
+    const allyId = b.ally === 'rival' ? rivalAllySpecies(content, run) : b.ally;
+    if (allyId && content.species.has(allyId) && team.length >= 2) {
       // A temporary ally joins the party for this fight only (finishBattle sends it home).
-      const ally = newMon(content, run, b.ally, Math.max(1, base), 'p');
+      const ally = newMon(content, run, allyId, Math.max(1, base), 'p');
       run.party.push(ally);
       makeDoubles(run.battle, run.party);
       run.battle.doubles!.player.index = run.party.length - 1;

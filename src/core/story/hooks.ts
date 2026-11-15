@@ -6,13 +6,14 @@
 import { spendRivalSpoils } from '../nodeMenu/special';
 import { endRivalBrain } from '../rivals/brainSetup';
 import { recordRivalBattle, registerFromRival } from '../rivals/overhaul';
+import { recordPackMarks, type PackBattleFacts } from '../rivals/questlines';
 import { grantSignatureMoves } from '../story2/signature';
 import { periodOf } from '../clock';
 import { addGrowth, bumpGrowth, doublesTurnFacts, bumpGrowthOnce, hitCounters, moveCounters, moveRoleCounters, noteGrowthKo, turnCounters, turnFacts } from '../overhaul/growth';
 import { momentsLeft, noteMoments } from './momentDirector';
 import { noteGimmickUse } from '../gimmicks';
 import { isLastStanding, type Side } from '../battle/engine';
-import { applyMastery } from '../mastery';
+import { applyMastery, familyId } from '../mastery';
 import type { Content } from '../contentSchema';
 import { CHAMPION_CLASS, ELITE_FOUR_CLASS, GYM_LEADER_CLASS } from '../encounters';
 import { maxHp } from '../pokemon';
@@ -696,6 +697,22 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
   const playerKos = kos.filter((k) => k.data.side === 'player' && k.actors[1]).map((k) => ({ fainted: k.actors[0]!, by: k.actors[1]! }));
   recordSacrifice(content, run);
   monRivalAfterBattle(content, run, playerKos);
+  // The pack's Marks (First Blood, Swept, By a Thread...) read this battle's knockouts and who was left standing.
+  const packFacts = (rival: Rival): PackBattleFacts => {
+    const most = (ids: string[]): number => Math.max(0, ...Object.values(ids.reduce<Record<string, number>>((n, id) => ({ ...n, [id]: (n[id] ?? 0) + 1 }), {})));
+    const rivalWon = result !== 'win';
+    const standing = rivalWon ? battle.enemyTeam.filter((m) => m.hp > 0) : run.party.filter((m) => m.hp > 0);
+    const top = Math.max(0, ...run.party.map((m) => m.level));
+    return {
+      rivalWon,
+      playerSweep: most(enemyKos.map((k) => k.by)),
+      rivalSweep: most(playerKos.map((k) => k.by)),
+      winnerLastShare: standing.length === 1 ? standing[0]!.hp / Math.max(1, maxHp(content, standing[0]!)) : null,
+      aceDownFirst: !!rival.ace && enemyKos.length > 0 && familyId(content, enemyKos[0]!.foeSpecies) === rival.ace && battle.enemyTeam.length > 1,
+      loserKos: rivalWon ? enemyKos.length : playerKos.length,
+      heldBack: !rivalWon && run.party.length > 1 && run.party.filter((m) => m.level === top).every((m) => !fought.includes(m.uid)),
+    };
+  };
   if (battle.kind === 'wild') {
     const cand = monRivalCandidate(content, run, playerKos);
     const foe = battle.enemyTeam[0];
@@ -718,6 +735,7 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
     // A narrative defeat (M12) is the rival's story win, not an ordinary one.
     rivalProgress(content, run, rivalBack, result === 'win' ? 'lostToPlayer' : battle.narrative ? 'narrativeWin' : 'beatPlayer');
     recordRivalBattle(run, rivalBack.id, { rivalWon: result !== 'win', stageIndex: run.stage?.index ?? 0, playerHpShare: totalHp > 0 ? hpLeft / totalHp : 0 });
+    recordPackMarks(content, run, rivalBack.id, packFacts(rivalBack));
     spendRivalSpoils(run, rivalBack.id);
     endRivalBrain(run, rivalBack.id);
     rivalBack.memory.lastBattle = { eventId: ended.id, result: result === 'win' ? 'win' : 'lose', hpLeftShare: hpShare, turns: battle.turn - 1, team: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.speciesId), foes: fought };
@@ -763,6 +781,7 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
       registerFromRival(run, major, 'main');
       rivalProgress(content, run, major, result === 'win' ? 'lostToPlayer' : 'beatPlayer');
       recordRivalBattle(run, major.id, { rivalWon: result !== 'win', stageIndex: run.stage?.index ?? 0, playerHpShare: totalHp > 0 ? hpLeft / totalHp : 0 });
+      recordPackMarks(content, run, major.id, packFacts(major));
       emit(content, run, 'rivalryFormed', { where, actors: fought, data: { rival: major.id, archetype: major.archetype, outcome: 'major' }, text: `${trainer.name} swore to keep up with you all the way. A rivalry for the whole journey has begun` });
       for (const text of learnFromBattle(content, run, major, enemyKos, where)) emit(content, run, 'rivalryFormed', { where, actors: fought, data: { rival: major.id, outcome: 'studied' }, text });
     }

@@ -2943,6 +2943,30 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     leadAtMost: z.number().int().min(-3).max(3).optional(),
     mark: z.string().optional(),
   }),
+  /** Catalog pack rival questlines (core/rivals/questlines.ts): a beat that is due now (`beat`, "R2.open"), a questline the run uses or has running, the main rival's personality or pack arc, whether a second rival exists, or a feeling of the main or second rival in a range. Never true without a registered rival. */
+  z.object({
+    kind: z.literal('rivalQuest'),
+    beat: z.string().regex(/^R\d+\.[a-z0-9-]+$/).optional(),
+    line: z.string().regex(/^R\d+$/).optional(),
+    active: z.boolean().optional(),
+    personality: z.array(z.string()).min(1).optional(),
+    arc: z.array(z.string()).min(1).optional(),
+    second: z.boolean().optional(),
+    feeling: z.object({ who: z.enum(['main', 'second']).default('main'), key: z.enum(['friendship', 'respect', 'trust', 'rivalry', 'resentment', 'admiration']), atLeast: z.number().int().min(0).max(10).optional(), atMost: z.number().int().min(0).max(10).optional() }).optional(),
+    /** A stage stamp (the `stamp` of the effect) that is not this stage: "not yet today". */
+    stale: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
+    /** The Circuit (R1): your rung, and your rung minus the rival's. */
+    circuit: z.object({ rungAtLeast: z.number().int().optional(), rungAtMost: z.number().int().optional(), rungNot: z.number().int().optional(), rivalRungAtLeast: z.number().int().optional(), gapAtLeast: z.number().int().optional(), gapAtMost: z.number().int().optional() }).optional(),
+    /** The party's HP share is under this (0 to 1). */
+    hpBelow: z.number().min(0).max(1).optional(),
+    /** The stage's weather front is one of these (the map header reads Rain). */
+    weather: z.array(WeatherSchema).min(1).optional(),
+    /** The region's last stage (the doc's "Stage 8"). */
+    lastStage: z.boolean().optional(),
+    /** A mark the main rival holds, or does not hold. */
+    mark: z.string().optional(),
+    noMark: z.string().optional(),
+  }),
   /** Permanent choices (spec §17): a choice made earlier this run (`pick`: that answer; `made: false`: not made yet). */
   z.object({ kind: z.literal('choice'), id: z.string().min(1), pick: z.string().optional(), made: z.boolean().default(true) }),
 ]);
@@ -3104,6 +3128,29 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     lead: z.number().int().min(-3).max(3).default(0),
     mark: z.string().optional(),
   }),
+  /** Catalog pack rival questlines (core/rivals/questlines.ts): `done` records a played beat (its stage, the rival slot, the line's start and end); `end` closes a line; `feelings` and `mark` move the main rival, or the second rival with `who: 'second'`. */
+  z.object({
+    kind: z.literal('rivalQuest'),
+    done: z.string().regex(/^R\d+\.[a-z0-9-]+$/).optional(),
+    end: z.string().regex(/^R\d+$/).optional(),
+    who: z.enum(['main', 'second']).default('main'),
+    feelings: z.partialRecord(z.enum(['friendship', 'respect', 'trust', 'rivalry', 'resentment', 'admiration']), z.number().int().min(-10).max(10)).optional(),
+    mark: z.string().optional(),
+    /** Sets a stage stamp (flag `ev:<key>` = this stage's number), read by the condition's `stale`. */
+    stamp: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
+    /** These events may be drawn again this run (a Circuit match, One for the Road). */
+    again: z.array(z.string()).optional(),
+    /** The Circuit (R1): `open` starts the board without you, `enter` puts you on rung 1 (`late`: two rungs behind the rival), `win` climbs one rung. */
+    circuit: z.enum(['open', 'enter', 'late', 'win']).optional(),
+    /** Sets a flag to an exact value (the `flag` effect only adds). */
+    set: z.object({ key: z.string().regex(/^[a-z][a-z0-9-]*$/), value: z.number().int().min(0) }).optional(),
+    /** R4: fixes which of the rival's Pokémon was lost (one that is not their ace). */
+    lost: z.boolean().optional(),
+    /** R3: your lead learns one move the rival's lead knows (one it can learn itself). */
+    learn: z.boolean().optional(),
+    /** R3: the handshake: both aces +3% to every stat for the run (balance in rivalQuests.json). */
+    handshake: z.boolean().optional(),
+  }),
   /**
    * Saffron canon spaces (core/expansion/canonSaffron.ts). `solo` / `unsolo`: the party waits in a stash while one Pokémon of `species` fights alone (Fighting Tournament).
    * `ghostStart` / `ghostLevel` / `ghostFree` / `ghostEnd` / `ghostReturn` / `labRoom` (level = the next room's number) / `labRetry` (after a loss, opens the first room, or with the accessibility setting the room where you fell): Sabrina's Labyrinth and the ghost that joins in the next region. `champion`: the Tournament title.
@@ -3229,6 +3276,8 @@ export const EventRuleSchema = z.object({
   /** Blackout's Seal (Beta 0.6 E4): no voluntary switching on the first turn of the fight. */
   /** Beta 0.7 Sinnoh (Whiteout): accuracy for both sides is multiplied by this in the fight. */
   accuracyMult: z.number().min(0.5).max(1).optional(),
+  /** With `accuracyMult`: only for this many turns from the start (the Circuit's blackout: the lights come back). */
+  accuracyTurns: z.number().int().min(1).max(10).optional(),
   noSwitchFirstTurn: z.boolean().optional(),
   /** Beta 0.7 Route 25: the foe stands guard and does not attack for this many turns (the fifth Mankey, in front of the other four). */
   foeStands: z.number().int().min(1).max(3).optional(),
@@ -3380,6 +3429,9 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     chainHeal: z.number().min(0).max(1).optional(),
     /** Run events B: special rules for this fight (see EventRuleSchema). */
     rule: EventRuleSchema.optional(),
+    /** Catalog pack rival questlines (core/rivals/questlines.ts planRivalTeam), with `rival`: how the rival builds this fight's team. `counter: 'lead'` aims one slot at your lead's weakness, `'seen'` at a Pokémon of yours they have fought, `'owed'` by what R2 remembers (helped: none; abandoned: lead; else seen); `aceFirst` sends their ace out first; `young` adds R4's young Pokémon (the species they lost) as their opener; `full` brings all six. */
+    quest: z.object({ counter: z.enum(['none', 'lead', 'seen', 'owed']).optional(), aceFirst: z.boolean().optional(), young: z.boolean().optional(), full: z.boolean().optional() }).optional(),
+    /** With `ally`: "rival" lends the rival's ace as your partner for the fight (a tag battle beside them). */
     /** Run events B: `win` effects used instead of `win` when the fight took longer than `rule.turnLimit` turns. */
     slowWin: z.array(EventEffectSchema).optional(),
     win: z.array(EventEffectSchema).default([]),
