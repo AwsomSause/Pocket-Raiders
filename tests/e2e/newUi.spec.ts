@@ -451,6 +451,21 @@ test('New UI: a lost run ends on the mock-up page; Witness the Rest, the report,
   expect(errors).toEqual([]);
 });
 
+/**
+ * Through the opening lines to the battle's first choice. The game keeps a key press for a moment, so an Enter sent
+ * during the last opening line can land on the commands and open Fight; this steps back, so every run starts there.
+ */
+async function toCommands(page: Page) {
+  await confirmToMenu(page);
+  await page.waitForTimeout(400);
+  const tab = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').tabs.current as string | null);
+  if ((await tab()) !== null) {
+    await page.keyboard.press('Escape');
+    await expect.poll(tab).toBeNull();
+    await page.waitForTimeout(250);
+  }
+}
+
 test('New UI: the battle shows the mock-up boxes, text box and menus over the live field; a move chosen by click plays the turn', async ({ page }) => {
   const errors = watch(page);
   await start(page, 'ui=new&seed=newui-e2e');
@@ -461,8 +476,8 @@ test('New UI: the battle shows the mock-up boxes, text box and menus over the li
   await expect(hud).toBeVisible();
   // The HUD is see-through: the canvas keeps the arena and the Pokémon, and no longer draws its own boxes.
   await expect(hud).toHaveClass(/clear/);
-  // Through the opening lines to the first choice (the shared helper never presses Enter while the menu is up).
-  await confirmToMenu(page);
+  // Through the opening lines to the first choice.
+  await toCommands(page);
   const fight = hud.locator('[data-act="pick"]', { hasText: 'Fight' });
   await expect(fight).toBeVisible();
   await expect(hud.locator('.win.glass')).toHaveCount(2);
@@ -507,7 +522,7 @@ test('New UI: the battle\'s Party and Item tabs open the mock-up windows over th
   await toMap(page);
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Battle');
-  await confirmToMenu(page);
+  await toCommands(page);
   // Two kinds of medicine and the starting balls, and a hurt Pokémon so the Potion can be used.
   await page.evaluate(() => {
     const run = (window as any).__pkr.session.run;

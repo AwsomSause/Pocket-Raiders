@@ -117,7 +117,8 @@ import { Bar, badge, drawPanel, Menu } from '../ui/widgets';
 import { sceneForRun } from './routing';
 import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, type BoxSpec, type MenuLayout, type MenuSpec, type Rect } from '../ui/battleStyles';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
-import { battleView, panelOf, type BattleBox, type BattleModel, type BattlePanel } from '../ui/redux/screens/battle';
+import { battleView, panelOf, splitChoice, type BattleBox, type BattleModel, type BattlePanel } from '../ui/redux/screens/battle';
+import { monFile } from '../ui/redux/game';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { KIT_LAYOUTS, KitBar, kitTexturesReady, type GaugeLike } from '../ui/battleUiStyles';
 import { loadAssets, partySpecies, pokemonArtIds, preloadPokemon, queueAssets } from '../ui/lazyAssets';
@@ -317,6 +318,9 @@ export class BattleScene extends Phaser.Scene {
   private rxPanelAt: 'left' | 'tip' = 'left';
   /** New UI: the transformations the move menu offers now (the mock-ups' row of buttons). */
   private rxGim: { choices: TransformRequest[]; tera: string } | null = null;
+  /** New UI: where the target menu is aiming (the mock-ups' TARGET tag), and the Exp each Pokémon just earned. */
+  private rxAim: { x: number; y: number } | null = null;
+  private rxExp = new Map<string, { amount: number; level: number | null }>();
   /** New UI: the Item window's open pocket. */
   private rxPocket = 0;
   private playerBox!: InfoBox;
@@ -1671,14 +1675,23 @@ export class BattleScene extends Phaser.Scene {
     const side = (s: Side, main: InfoBox): InfoBox[] => (this.duo ? this.duo.slots[s].map((o) => (o ? o.box : main)) : [main]);
     const foes = side('enemy', this.enemyBox), mine = side('player', this.playerBox);
     // The canvas keeps building its HUD (the scene's logic reads and moves it); it is only left out of the picture.
-    for (const o of [...foes.map((b) => b.container), ...mine.map((b) => b.container), this.header, this.momentumText, this.status, this.storyBar?.container, this.commandWindow, this.message, this.moveInfo, this.moveBadges, this.tabs.root, this.note, this.menu?.container, this.infoPanel, this.historyView, this.actionTabUi?.container]) {
+    for (const o of [...foes.map((b) => b.container), ...mine.map((b) => b.container), this.header, this.momentumText, this.status, this.storyBar?.container, this.commandWindow, this.message, this.moveInfo, this.moveBadges, this.tabs.root, this.note, this.menu?.container, this.infoPanel, this.historyView, this.actionTabUi?.container, ...this.reachTags]) {
       if (o && !this.rxHidden.has(o)) {
         cam.ignore(o);
         this.rxHidden.add(o);
       }
     }
     const boxes = (list: InfoBox[]): BattleBox[] => list.filter((b) => b.container.visible && b.rx).map((b) => ({ ...b.rx!, hp: Math.round(b.rx!.hp * 200) / 200 }));
-    const menu = this.menu && this.menu.container.visible ? { options: this.menu.options.map((o) => ({ label: o.label, sub: o.rx?.sub ?? o.detail, type: o.rx?.type, off: !!o.disabled })), index: this.menu.index } : null;
+    const menu = this.menu && this.menu.container.visible ? { options: this.menu.options.map((o) => ({ ...(o.rx?.sub ?? o.detail ? { label: o.label, sub: o.rx?.sub ?? o.detail } : splitChoice(o.label)), type: o.rx?.type, off: !!o.disabled })), index: this.menu.index } : null;
+    const content = services().session.content;
+    const exp = [...this.rxExp].flatMap(([uid, g]) => {
+      const m = this.run.party.find((x) => x.uid === uid);
+      if (!m) return [];
+      const { maxLevel, highLevelXp } = content.balance.difficulty;
+      const rate = getSpecies(content, m.speciesId).growthRate;
+      const lo = xpForLevel(rate, m.level, highLevelXp), hi = xpForLevel(rate, m.level + 1, highLevelXp);
+      return [{ name: this.speciesName(m), file: monFile(this, m.speciesId, 'front', !!m.shiny), text: g.level ? `Level up! ${g.level}` : `+${g.amount} Exp`, xp: m.level >= maxLevel ? 1 : Phaser.Math.Clamp((m.xp - lo) / Math.max(1, hi - lo), 0, 1), up: g.level !== null }];
+    });
     const tabs = this.tabs.view;
     const list = this.picker;
     const data: BattleModel = {
@@ -1695,6 +1708,9 @@ export class BattleScene extends Phaser.Scene {
       auto: this.autoRunning,
       party: { n: this.run.party.length, out: this.run.party.filter((m) => m.hp <= 0).length },
       gim: this.rxGim && menu ? this.rxGim.choices.map((c) => ({ kind: c.kind, on: this.transformChoice?.kind === c.kind, ...(c.kind === 'tera' ? { row: TERA_ICON_ROW[this.rxGim!.tera] ?? 0 } : {}) })) : null,
+      marks: [...(this.rxAim && menu ? [{ ...this.rxAim, text: 'TARGET' }] : []), ...this.reachTags.filter((t) => t.active).map((t) => ({ x: t.x, y: t.y - 10, text: 'OUT OF REACH' }))],
+      shadow: !!menu && !!this.run.battle && !this.duo && !!this.activeMon().shadow,
+      exp: exp.length && !menu && !list ? exp : null,
       panels: this.infoPanel ? this.rxPanels : null,
       panelAt: this.rxPanelAt,
       log: this.historyView ? { tabs: LOG_TABS.map((t) => t.label), index: LOG_TABS.findIndex((t) => t.id === this.logTab), lines: filterLog(this.history, this.logTab).slice(-12) } : null,
@@ -2285,6 +2301,7 @@ export class BattleScene extends Phaser.Scene {
     this.reticle = null;
     for (const t of this.reachTags) t.destroy();
     this.reachTags = [];
+    this.rxAim = null;
     this.menu?.destroy();
     this.menu = null;
     this.picker?.close();
@@ -2958,6 +2975,7 @@ export class BattleScene extends Phaser.Scene {
       const t = choices[i]!.target;
       const at = this.posOf(t.side, t.spot as Spot);
       reticle.aimAt(at.x, at.y - 50);
+      this.rxAim = { x: at.x, y: at.y - 150 };
     };
     aim(0);
     this.reticle = reticle;
@@ -3314,6 +3332,7 @@ export class BattleScene extends Phaser.Scene {
 
   private showRootMenu(): void {
     this.clearMenus();
+    this.rxExp.clear();
     const content = services().session.content;
     // Transformations: a fourth option that cycles off -> Mega -> Tera -> Z-Move -> Dynamax -> off. (Gigantamax happens by itself.)
     const ctx = this.battleCtx();
@@ -4838,6 +4857,7 @@ export class BattleScene extends Phaser.Scene {
           if (e.caught) await this.fx.flourish('enemy', 'interaction.catch', ENEMY_POS);
           break;
         case 'xp':
+          if (this.rx) this.rxExp.set(e.uid, { amount: (this.rxExp.get(e.uid)?.amount ?? 0) + e.amount, level: this.rxExp.get(e.uid)?.level ?? null });
           if (e.uid === this.shown.player.uid) {
             this.shown.player.xp += e.amount;
             playSfx(this, 'se.exp', 0.6);
@@ -4846,6 +4866,7 @@ export class BattleScene extends Phaser.Scene {
           break;
         case 'levelUp':
           playSfx(this, 'se.level_up');
+          if (this.rx) this.rxExp.set(e.uid, { amount: this.rxExp.get(e.uid)?.amount ?? 0, level: e.level });
           if (e.uid === this.shown.player.uid) {
             const real = this.run.party.find((m) => m.uid === e.uid);
             this.shown.player.level = e.level;

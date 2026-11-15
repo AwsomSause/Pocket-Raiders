@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BATTLE_LIST_ROWS, battleListView, battleView, trayHeight, type BattleBox, type BattleListModel, type BattleListRow, type BattleModel, type BattleOption, panelOf, windowTitle } from '../../src/ui/redux/screens/battle';
+import { BATTLE_LIST_ROWS, battleListView, battleView, trayHeight, type BattleBox, type BattleListModel, type BattleListRow, type BattleModel, type BattleOption, panelOf, splitChoice, windowTitle } from '../../src/ui/redux/screens/battle';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 
 // The New UI battle HUD is a pure function from what the battle shows to HTML, in four layouts.
@@ -240,5 +240,60 @@ describe('New UI battle info panel, log and transform buttons', () => {
     expect(battleView(ctx(0), model({ panels: [], gim: [], log: null }))).toBe(plain);
     const html = battleView(ctx(0), model({ panels: [{ head: '<b>h</b>', tag: '<i>t</i>', chips: [], lead: ['<u>l</u>'], facts: [['<s>k</s>', '<em>v</em>']], lines: ['<p>x</p>'] }] }));
     for (const t of ['<b>h</b>', '<i>t</i>', '<u>l</u>', '<s>k</s>', '<em>v</em>', '<p>x</p>']) expect(html).not.toContain(t);
+  });
+});
+
+describe('New UI battle field tags, Shadow tray and Exp panel', () => {
+  it('reads the note in brackets off a target choice', () => {
+    expect(splitChoice('▶ Charizard (best)')).toEqual({ label: 'Charizard', sub: 'best' });
+    expect(splitChoice('Pikachu (ally, left)')).toEqual({ label: 'Pikachu', sub: 'ally, left' });
+    expect(splitChoice('Gengar (Centre)')).toEqual({ label: 'Gengar', sub: 'Centre' });
+    expect(splitChoice('Gengar')).toEqual({ label: 'Gengar' });
+    expect(splitChoice('▶ Gengar')).toEqual({ label: 'Gengar' });
+    expect(splitChoice('')).toEqual({ label: '' });
+  });
+
+  it('puts a tag over the field for each mark, and none without marks', () => {
+    const html = battleView(ctx(0), model({ marks: [{ x: 648.4, y: 90, text: 'TARGET' }, { x: 778, y: 110, text: 'OUT OF REACH' }] }));
+    expect(html).toContain('left:648px;top:90px');
+    expect(html).toContain('>TARGET<');
+    expect(html).toContain('>OUT OF REACH<');
+    expect(battleView(ctx(0), model())).not.toContain('TARGET');
+  });
+
+  for (const layout of [0, 1, 2, 3]) {
+    it(`layout ${layout}: a Shadow Pokémon turns the tray purple and darkens the edges; others do not`, () => {
+      const html = battleView(ctx(layout), model({ shadow: true }));
+      expect(html).toContain('--acc:#c070ff');
+      expect(html).toContain('radial-gradient(#0000 40%,#3a0a5a90)');
+      expect(count(html, 'data-act="pick"')).toBe(4);
+      const plain = battleView(ctx(layout), model());
+      expect(plain).not.toContain('--acc:#c070ff');
+      expect(plain).not.toContain('radial-gradient(#0000 40%');
+    });
+
+    it(`layout ${layout}: the Exp panel lists who earned Exp, lights a level up, and the run header steps aside`, () => {
+      const exp = [{ name: 'Charizard', file: null, text: 'Level up! 51', xp: 0.92, up: true }, { name: '<b>Lucario</b>', file: null, text: '+412 Exp', xp: 0.4, up: false }];
+      const html = battleView(ctx(layout), model({ menu: null, text: 'You defeated Hiker Marcos!', header: 'Stage 3', exp }));
+      expect(html).toContain('right:20px;top:20px;width:330px');
+      expect(html).toContain('Level up! 51');
+      expect(html).toContain('+412 Exp');
+      expect(count(html, 'win sel')).toBe(1);
+      expect(html).not.toContain('<b>Lucario</b>');
+      expect(html).not.toContain('Stage 3');
+      expect(battleView(ctx(layout), model({ header: 'Stage 3', exp: [] }))).toContain('Stage 3');
+    });
+  }
+
+  it('packs more than four Exp rows tighter so they stay over the field', () => {
+    const row = (i: number) => ({ name: `Mon ${i}`, file: null, text: '+10 Exp', xp: 0.5, up: false });
+    expect(battleView(ctx(0), model({ exp: [0, 1, 2, 3].map(row) }))).toContain('padding:6px 10px');
+    expect(battleView(ctx(0), model({ exp: [0, 1, 2, 3, 4, 5].map(row) }))).toContain('padding:3px 10px');
+  });
+
+  it('stacks your Pokémon upwards from the tray in a double battle, the first one lowest', () => {
+    const html = battleView(ctx(0), model({ foes: [foe(), foe({ name: 'Gengar' })], mine: [me(), me({ name: 'Pikachu' })] }));
+    const at = (name: string): number => Number(/bottom:(\d+)px/.exec(html.slice(html.lastIndexOf('<div class="win', html.indexOf(`>${name}<`))))?.[1]);
+    expect(at('Pikachu')).toBe(at('Lucario') + 58);
   });
 });

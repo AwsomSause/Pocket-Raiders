@@ -2,7 +2,7 @@
 // the choices), the page tabs and the small lines over the field. It is drawn over the canvas, which keeps the arena,
 // the Pokémon and every animation. Pure drawing; BattleScene keeps the rules, the input and the state.
 
-import { act, esc, facts, hpb, img, TYPE_COLORS, ty, W } from '../kit';
+import { act, esc, facts, hpb, img, mini, TYPE_COLORS, ty, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { type Art, pic, scrollStart } from '../templates';
 
@@ -42,6 +42,12 @@ export interface BattleModel {
   auto: boolean;
   /** Your own party as balls (the top-bar layout shows them under your name): how many, and how many have fainted. */
   party: { n: number; out: number } | null;
+  /** Tags over the field: "TARGET" over the Pokémon being aimed at, "OUT OF REACH" over one a move can't reach. */
+  marks?: readonly { x: number; y: number; text: string }[];
+  /** The one choosing is a Shadow Pokémon: the tray turns purple and the field darkens at the edges. */
+  shadow?: boolean;
+  /** Exp just earned, one row per Pokémon (the results panel, top right). */
+  exp?: readonly BattleExp[] | null;
   /** The transform buttons over the move menu (Mega, Tera, Dynamax, Z-Move): the ones this Pokémon can use now. */
   gim?: readonly BattleGimmick[] | null;
   /** The info panel (I): one window per section, left of the field; a single move's details show as the mock-ups' tooltip. */
@@ -49,6 +55,24 @@ export interface BattleModel {
   panelAt?: 'left' | 'tip';
   /** The battle log (H): its filter tabs and the lines of the open one. */
   log?: { tabs: readonly string[]; index: number; lines: readonly string[] } | null;
+}
+
+export interface BattleExp {
+  name: string;
+  /** The Pokémon's picture file, or null. */
+  file: string | null;
+  /** "+412 Exp", or "Level up! 51". */
+  text: string;
+  /** Exp towards the next level, 0 to 1. */
+  xp: number;
+  /** It grew a level: the row is lit. */
+  up: boolean;
+}
+
+/** "▶ Charizard (best)" and "Pikachu (ally)": the name, and the note in brackets as the small word at the right. */
+export function splitChoice(label: string): { label: string; sub?: string } {
+  const m = /^(?:▶\s*)?(.+?)\s*\(([^()]{1,24})\)\s*$/.exec(label);
+  return m ? { label: m[1]!, sub: m[2]! } : { label: label.replace(/^▶\s*/, '') };
 }
 
 export interface BattleGimmick {
@@ -150,7 +174,7 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
   const duo = d.foes.length > 1 || d.mine.length > 1;
   if (duo) {
     const gy = Math.max(v === 1 ? 138 : v === 2 ? 148 : 128, top + (d.tabs ? 34 : 0));
-    head = d.foes.map((b, k) => box(b, true, `left:20px;top:${20 + k * 58}px`, true)).join('') + d.mine.map((b, k) => box(b, false, `right:20px;bottom:${gy + 12 + (d.mine.length - 1 - k) * 58}px`, true)).join('');
+    head = d.foes.map((b, k) => box(b, true, `left:20px;top:${20 + k * 58}px`, true)).join('') + d.mine.map((b, k) => box(b, false, `right:20px;bottom:${gy + 12 + k * 58}px`, true)).join('');
   } else if (v === 2) {
     const me = d.mine[0], foe = d.foes[0];
     const half = (b: BattleBox | undefined, flip: boolean): string => {
@@ -183,7 +207,13 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
   // The transform buttons sit over the tray, across from the page tabs.
   const gimAt = v === 2 ? 'right:40px;bottom:132px' : v === 3 ? `right:20px;bottom:${Math.max(222, top + 8) + 42}px` : `left:20px;bottom:${Math.max(v === 1 ? 138 : 128, top + 8)}px`;
   const gim = d.gim?.length ? `<div class="abs row" style="${gimAt};gap:8px;z-index:3">${d.gim.map((g, k) => `<div class="btn${g.on ? ' on' : ''}" style="height:34px;font-size:14px;padding:0 10px"${act('gim', k)}>${gimIcon(g)}${GIM_NAMES[g.kind]}</div>`).join('')}</div>` : '';
-  return head + tray + tabs + gim + header + momentum + status + note + pin + panels + log;
+  const marks = (d.marks ?? []).map((m) => `<div class="abs tg" style="left:${Math.round(m.x)}px;top:${Math.round(m.y)}px;transform:translateX(-50%);z-index:2;pointer-events:none">${esc(m.text)}</div>`).join('');
+  // Exp just earned: one window per Pokémon at the top right (the run header steps aside for it).
+  const rows = d.exp ?? [], tight = rows.length > 4;
+  const exp = rows.length ? `<div class="abs col" style="right:20px;top:20px;width:330px;gap:${tight ? 4 : 8}px;z-index:4">${rows.map((r) => W(`${r.file ? mini(r.file, tight ? 28 : 38) : ''}<div class="col grow" style="gap:4px"><div class="row"><b class="grow" style="font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r.name)}</b><span class="sm">${esc(r.text)}</span></div>${hpb(pct(r.xp), 0, ' xp')}</div>`, `display:flex;align-items:center;gap:8px;padding:${tight ? '3px 10px' : '6px 10px'}`, r.up ? 'sel' : '')).join('')}</div>` : '';
+  const shade = d.shadow ? '<div class="fill" style="background:radial-gradient(#0000 40%,#3a0a5a90);pointer-events:none"></div>' : '';
+  const body = d.shadow ? `<div style="--p2:#3a1a5a;--acc:#c070ff;--pa:#1c0a2c;--pai:#f0e0ff;--tf:#8a40c8">${tray}</div>` : tray;
+  return shade + head + body + tabs + gim + marks + (rows.length ? '' : header + momentum) + status + note + pin + panels + log + exp;
 }
 
 export interface BattleListRow {
