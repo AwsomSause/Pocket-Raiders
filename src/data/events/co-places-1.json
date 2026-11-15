@@ -1032,14 +1032,14 @@
       "text": "You wedge the hive back into the fork of the tree and hold it while they seal it with wax. It takes a long while. They leave two combs of Honey at your feet and will not hear of you refusing.",
       "effects": [
        {
+        "kind": "flag",
+        "key": "co-take-node-pending",
+        "amount": 1
+       },
+       {
         "kind": "item",
         "id": "honey",
         "count": 2
-       },
-       {
-        "kind": "attribute",
-        "key": "goodEvil",
-        "amount": 1
        },
        {
         "kind": "friendship",
@@ -1338,13 +1338,13 @@
        },
        {
         "kind": "flag",
-        "key": "kind-helped-stranger",
+        "key": "co-take-node-pending",
         "amount": 1
        },
        {
         "kind": "attribute",
         "key": "goodEvil",
-        "amount": 3
+        "amount": 2
        },
        {
         "kind": "moment",

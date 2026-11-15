@@ -1,0 +1,3152 @@
+{
+ "catalogOverhaul": "places",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "delve-gate-desert-well",
+   "name": "The Desert Well",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "types": [
+    "ground",
+    "water"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delve-desert-well-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d24",
+    "effect": "none"
+   },
+   "intro": "A stone well stands alone in the sand, its rope long gone. The town says it has been dry for a hundred years. Small tracks from every direction lead to it, and none lead away thirsty.",
+   "choices": [
+    {
+     "label": "Climb down the well.",
+     "success": {
+      "text": "You go down hand over hand on your own rope. The air gets cooler the deeper you go. That should not happen in a dry well.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-desert-well-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on through the sand.",
+     "success": {
+      "text": "You leave the well behind. A Trapinch passes you going the other way, in no doubt at all about where the water is.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ]
+  },
+  {
+   "id": "dg-desert-well-a",
+   "name": "Desert Well",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sandile",
+    "effect": "none",
+    "tint": "#4a3d24"
+   },
+   "intro": "A stone well, dry for a hundred years. A Sandile pokes its head over the rim, hisses at you like a kettle, and blocks the way down with its whole small body.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It snaps at your ankles. It is guarding something.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "sandile"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-desert-well-b"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Climb down past it.",
+     "success": {
+      "text": "You swing a leg over the rim. The Sandile hisses the whole way down after you, scandalised, but it does not bite.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-desert-well-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Drop a stone.",
+     "success": {
+      "text": "You drop a stone and count. One. Two. Three. Four. It falls a very long way. And then, impossibly, it splashes. The Sandile looks at you as if you have learned a family secret.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-desert-well-splash",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-desert-well-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Desert Well will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-desert-well-b",
+   "name": "Desert Well: trap",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3d24"
+   },
+   "intro": "The floor of the shaft opens into a tunnel, and the tunnel floor looks wrong: too smooth, with scuff marks where others turned back. Quicksand.",
+   "choices": [
+    {
+     "label": "Test with a stick.",
+     "success": {
+      "text": "You prod ahead step by step. The stick vanishes to your wrist twice. Between those places runs a spine of firm ground, and you walk it like a rope.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-desert-well-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Ground-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "Your Ground-type walks out onto the sand, feels it with its feet, and stamps a safe path for the rest of you. It looks back, proud, sand to the knees.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-desert-well-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk across.",
+     "success": {
+      "text": "Three steps in, the floor swallows you to the waist. Everybody hauls everybody else out, spitting sand, hearts hammering.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-desert-well-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Desert Well will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-desert-well-c",
+   "name": "Desert Well: den",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "krookodile",
+    "effect": "none",
+    "tint": "#4a3d24"
+   },
+   "intro": "Claw marks and nests line the walls. This is somebody's home. An Alpha Krookodile lies across the passage down, huge, cracked at the lips. It is not angry. It is thirsty, and it is standing guard over the last water in the desert.",
+   "choices": [
+    {
+     "label": "Calm it with a Fresh Water.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "fresh-water"
+      }
+     ],
+     "success": {
+      "text": "You uncap the bottle and roll it across the stone. The Krookodile drinks it in one long swallow, eyes closed. When it opens them the red has gone. It shifts its tail aside, and lets you pass to what it guards.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "fresh-water"
+       },
+       {
+        "kind": "flag",
+        "key": "delve-desert-well-resident-calmed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-desert-well-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It rises to keep you from the water, and it fights like the last thing standing between a desert and its death.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "krookodile"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "delve-desert-well-muddied",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-desert-well-d"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back away and leave water.",
+     "success": {
+      "text": "You back up slowly, pour your own canteen into a hollow of the rock, and sit down where it can see you. It watches you for a long time. Then it drinks what you left, to the last drop, and moves its tail out of your way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-desert-well-left-water",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-desert-well-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Desert Well will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-desert-well-d",
+   "name": "Desert Well: cache",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3d24"
+   },
+   "intro": "A battered chest of old explorers' gear, half sunk in sand. On top lies a map with this well circled twice in red: \"WATER, 300 FT.\" They knew. They never made it down.",
+   "choices": [
+    {
+     "label": "Take the gear.",
+     "success": {
+      "text": "Rope gone to dust, a cracked lamp, and one thing still good: a Ground TM with DIG on the case.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "tm-ground",
+        "count": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-desert-well-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the map.",
+     "success": {
+      "text": "You unroll it. Two more wells are marked across this country in the same red ink, each with a depth beside it. Somebody spent a lifetime finding these.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "desert-wells-marked",
+        "amount": 2
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-desert-well-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Both.",
+     "success": {
+      "text": "You take the TM and roll the map carefully into your pack. Two more red circles. Two more wells nobody believes in.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "tm-ground",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "desert-wells-marked",
+        "amount": 2
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-desert-well-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Desert Well will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-desert-well-e",
+   "name": "Desert Well: exit",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "whiscash",
+    "effect": "none",
+    "tint": "#4a3d24"
+   },
+   "intro": "The bottom. A cool cave, and a pool as still as glass. An ancient Whiscash drifts in it, whiskers trailing, and all around the edge the desert's Pokémon are drinking side by side: hunters beside the hunted, nobody afraid.",
+   "choices": [
+    {
+     "label": "Drink.",
+     "success": {
+      "text": "You kneel between a Cacnea and a Trapinch and drink. Nothing has ever tasted like it. The Whiscash watches everyone get their share.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-desert-well-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a Water-type's gift.",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon pours clean water into the pool until it laps a hand higher on the stone. Every drinker looks up. The old Whiscash rises, and bows until its whiskers touch the surface. When you turn to go, a small Barboach is swimming after you up the runnel, determined.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-desert-well-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-desert-well-resident-gift",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "barboach"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "You refilled the hidden pool under the Desert Well.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the town above.",
+     "success": {
+      "text": "You tell them. By evening the whole town is at the well with buckets and cheering. The Whiscash sinks out of sight. In a year the pool will be gone, and the tracks in the sand will lead nowhere.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-desert-well-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-desert-well-resident-told",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "moment",
+        "text": "You told the town about the water under the Desert Well.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Don't tell.",
+     "success": {
+      "text": "You climb out and say nothing to anyone. Behind you a hundred small tracks still lead to a well that is dry for a hundred years, and the desert stays alive.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-desert-well-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-desert-well-resident-kept",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You kept the Desert Well's secret.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "muddied",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-desert-well-muddied",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The pool is clouded brown: the fight above shook silt down into it. The drinkers wait at the edge for it to clear. The Whiscash looks at you, and you look away."
+    },
+    {
+     "id": "calmed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-desert-well-resident-calmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Behind you the Krookodile has come down to drink at last, now that someone else is keeping watch."
+    },
+    {
+     "id": "left",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-desert-well-left-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Krookodile follows you down and drinks beside the smallest ones. It was only ever making sure there would be enough."
+    }
+   ]
+  },
+  {
+   "id": "delve-desert-well-marked",
+   "name": "A Marked Well",
+   "group": "Dungeons",
+   "stop": "heal",
+   "rarity": "uncommon",
+   "types": [
+    "ground"
+   ],
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "desert-wells-marked",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d24",
+    "effect": "none"
+   },
+   "intro": "A ring of stones in the sand, exactly where the explorers' red circle said it would be. Everyone who passes thinks it is dry. You drop a stone, and count, and it splashes.",
+   "choices": [
+    {
+     "label": "Draw water and rest.",
+     "success": {
+      "text": "You haul up a bucket so cold it hurts your teeth. Everyone drinks, and sleeps in the well's thin shade. You tick the red circle off the map.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "desert-wells-marked",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it for the desert.",
+     "success": {
+      "text": "You leave the bucket full on the rim for whoever comes on four legs tonight, and fold the map away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "desert-wells-marked",
+        "amount": -1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Recovery",
+    "Exploration"
+   ]
+  },
+  {
+   "id": "delve-gate-marsh-boardwalk",
+   "name": "The Marsh Boardwalk",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "types": [
+    "water",
+    "poison"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delve-marsh-boardwalk-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a2c",
+    "effect": "none"
+   },
+   "intro": "Rotten planks run out over still, black water and vanish into mist. A hand-painted board is nailed to the first post: \"FERRY. FREE. ASK FOR HADDON.\"",
+   "choices": [
+    {
+     "label": "Step onto the boardwalk.",
+     "success": {
+      "text": "The first plank sags and holds. Somewhere out in the mist a pole knocks against wood, slow and regular.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-marsh-boardwalk-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep to dry land.",
+     "success": {
+      "text": "You go round by the road. Out on the water, an old man on a raft of Lotad lifts his hat to you anyway.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ]
+  },
+  {
+   "id": "dg-marsh-boardwalk-a",
+   "name": "Marsh Boardwalk",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "croagunk",
+    "effect": "none",
+    "tint": "#2a3a2c"
+   },
+   "intro": "Rotten planks over still water, and then a gap where six of them have gone. A Croagunk croaks at you from a stump, cheeks pulsing, enjoying your problem.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It hops down onto the last good plank to argue about it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "croagunk"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-marsh-boardwalk-b"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Step over the gap.",
+     "success": {
+      "text": "You jump. The far plank cracks, tilts, and holds. The Croagunk looks disappointed.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-marsh-boardwalk-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for the ferry.",
+     "success": {
+      "text": "A pole knocks, and out of the mist comes an old man standing on a raft of living Lotad. \"Ride? Free. Always free.\" He steadies you aboard with a hand like tree root. \"Haddon. Mind your feet, they're ticklish.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-marsh-boardwalk-met",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-marsh-boardwalk-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Marsh Boardwalk will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-marsh-boardwalk-b",
+   "name": "Marsh Boardwalk: wild",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gloom",
+    "effect": "none",
+    "tint": "#2a3a2c"
+   },
+   "intro": "A patch of Gloom has taken over the walkway, swaying, drooling, pleased to see anyone. The smell arrives before they do. Haddon poles alongside holding his nose. \"Mind the Glooms. They're friendly. They stink.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "They take it as a game. The smell gets worse.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "gloom"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-marsh-boardwalk-c"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Hold breath and pass.",
+     "chance": 0.5,
+     "success": {
+      "text": "You go through at a run with your cheeks puffed out. The Gloom wave. You make it to clean air with your eyes streaming and nobody the worse.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-marsh-boardwalk-c"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You almost make it. Your lead takes one breath too early, in the thick of it, and comes out the far side green.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison",
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-marsh-boardwalk-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Feed them.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "You hold out an Oran Berry. They crowd round it, delighted, and shuffle off the planks to share it in the reeds. Haddon nods. \"That's all they wanted. Somebody to stop.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-marsh-boardwalk-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Marsh Boardwalk will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-marsh-boardwalk-c",
+   "name": "Marsh Boardwalk: mystery",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "litwick",
+    "effect": "none",
+    "tint": "#2a3a2c"
+   },
+   "intro": "A faint light pulses over the water: a Litwick, drifting on nothing, turning slowly as if it has forgotten which way it was going. Haddon takes his hat off. \"They come here when no one's lit their candle.\"",
+   "choices": [
+    {
+     "label": "Light a candle for it.",
+     "success": {
+      "text": "Haddon has a stub in his pocket; he always has. You light it and set it on a post. The Litwick stops turning. It drifts to your shoulder and stays there, steady now, a small cold flame that knows someone remembered.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hollow-lantern-clue",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-marsh-boardwalk-candle",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-marsh-boardwalk-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "It drifts into the ball without protest. Being kept is, at least, being somewhere.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "litwick"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-marsh-boardwalk-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it turning over the black water. Haddon puts his hat back on and says nothing.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-marsh-boardwalk-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Marsh Boardwalk will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-marsh-boardwalk-d",
+   "name": "Marsh Boardwalk: rest",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2a3a2c"
+   },
+   "intro": "A dry corner: the porch of Haddon's hut, on stilts in the middle of nowhere. He makes tea on a spirit stove. \"Fifty years ferrying. Nobody pays. I like it that way. Nobody owes me anything.\"",
+   "choices": [
+    {
+     "label": "Rest.",
+     "success": {
+      "text": "You sleep on his porch to the sound of Lotad breathing under the floor. In the morning there is tea again, and he will not let you wash the cup.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-marsh-boardwalk-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay him anyway.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "He pushes your money back across the table three times. In the end he takes a single Oran Berry, turns it over, and puts it on the shelf beside a row of other things he could not refuse. \"Don't tell anyone.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "flag",
+        "key": "delve-marsh-boardwalk-paid",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-marsh-boardwalk-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask why.",
+     "success": {
+      "text": "He is quiet for a while. \"Fifty years ago I poled my wife's coffin across this marsh. Nobody else would take her. Got to the far side and couldn't think what to do next.\" He shrugs. \"So I went back for the living. Still going back.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-marsh-boardwalk-why",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-marsh-boardwalk-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Marsh Boardwalk will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "both",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-marsh-boardwalk-paid",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "delve-marsh-boardwalk-why",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Haddon tops up your cup. Your berry sits on his shelf in the row.",
+     "hide": [
+      1,
+      2
+     ]
+    },
+    {
+     "id": "paid",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-marsh-boardwalk-paid",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your berry sits on his shelf, at the end of a long row.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "why",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-marsh-boardwalk-why",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Haddon watches the water as if it might answer him one day.",
+     "hide": [
+      2
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dg-marsh-boardwalk-e",
+   "name": "Marsh Boardwalk: exit",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lotad",
+    "effect": "none",
+    "tint": "#2a3a2c"
+   },
+   "intro": "Daylight on the far shore, firm ground under your boots at last. Behind you Haddon is already turning the raft around, to go back for whoever is next.",
+   "choices": [
+    {
+     "label": "Thank Haddon.",
+     "success": {
+      "text": "He waves it off, then wades after you with something wrapped in a wet leaf. \"One of mine laid this. Raise it kind.\" A Lotad egg, cool and green.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "lotad"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "delve-marsh-boardwalk-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-marsh-boardwalk-resident-thanked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer to pole the raft back for him.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You find the rhythm: push, lift, glide. Haddon sits down on his own raft for the first time in fifty years and watches the marsh go by like a passenger. Halfway across he starts to laugh, and cannot stop.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-marsh-boardwalk-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-marsh-boardwalk-resident-ferried",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You poled the raft so Old Haddon could ride his own ferry.",
+        "importance": 60
+       }
+      ]
+     },
+     "failure": {
+      "text": "You catch a crab on the first stroke and nearly go in. Haddon laughs until he has to sit down on his own raft, which he has not done in fifty years. You get him across in the end, zigzag.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-marsh-boardwalk-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-marsh-boardwalk-resident-ferried",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You poled the raft, badly, so Old Haddon could ride his own ferry.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You raise a hand. He raises his pole. The mist closes between you, and the knocking of wood on wood goes on behind you for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-marsh-boardwalk-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "candle",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-marsh-boardwalk-candle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Litwick on your shoulder burns steady and small. Haddon looks at it, and nods to it like a neighbour."
+    }
+   ]
+  },
+  {
+   "id": "delve-gate-sky-bridge",
+   "name": "The Sky Bridge",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "types": [
+    "flying",
+    "fairy"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delve-sky-bridge-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3d5266",
+    "effect": "none"
+   },
+   "intro": "A rope bridge hangs between two cliffs, so long its middle is lost in cloud. Every plank has words carved into it. A sign at the near end: \"TOLL: ONE STORY.\"",
+   "choices": [
+    {
+     "label": "Set foot on the bridge.",
+     "success": {
+      "text": "The first plank reads: \"I crossed to see my daughter married.\" The second: \"I ran from something and stopped running here.\" You keep reading, and keep walking.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-sky-bridge-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find another way across.",
+     "success": {
+      "text": "You take the goat track down into the gorge instead. Above you the bridge creaks in the wind, full of other people's stories.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ]
+  },
+  {
+   "id": "dg-sky-bridge-a",
+   "name": "Sky Bridge",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "swablu",
+    "effect": "none",
+    "tint": "#3d5266"
+   },
+   "intro": "A rope bridge between two cliffs. A flock of Swablu has nested all along the hand ropes, so the whole bridge looks strung with cloud. They watch you with bright, uneasy eyes.",
+   "choices": [
+    {
+     "label": "Walk carefully.",
+     "success": {
+      "text": "You go one slow plank at a time, hands off the ropes, whispering apologies. Not one Swablu leaves its nest.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-sky-bridge-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The flock lifts off the ropes in one white burst.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "swablu"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-sky-bridge-b"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let a Flying-type carry me.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type lifts you clear over the nests and sets you down in the middle of the bridge. The Swablu sing as you pass over. You did not wake a single chick.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-sky-bridge-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Sky Bridge will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-sky-bridge-b",
+   "name": "Sky Bridge: trainer",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d5266"
+   },
+   "intro": "Someone is waiting mid-span, arms folded, a carving knife at her belt: Isaura, the tollkeeper. \"Toll's one story. True ones only. Lie and I'll know.\"",
+   "choices": [
+    {
+     "label": "Tell a story.",
+     "success": {
+      "text": "She sits down cross-legged on the planks, over a thousand feet of air, and takes out the knife. \"Go on, then. Which one?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-sky-bridge-telling",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-sky-bridge-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle instead.",
+     "success": {
+      "text": "\"Some people would rather bleed than talk. Fine.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Tollkeeper Isaura",
+       "team": [
+        "altaria",
+        "noivern"
+       ],
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "classId": "bird-keeper",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "delve-sky-bridge-toll-paid",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-sky-bridge-c"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask about the bridge.",
+     "success": {
+      "text": "\"My grandmother built it. Every rope, every plank, forty years.\" Isaura runs a thumb along the hand rope. \"For a Pokémon that couldn't fly. She never told us which one. Toll's still one story.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-sky-bridge-asked-bridge",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-sky-bridge-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Sky Bridge will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "telling",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-sky-bridge-telling",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Isaura waits, knife in hand, a blank plank across her knees. The wind has dropped to listen. \"Which story? A true one.\"",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "The day my first partner chose me.",
+       "success": {
+        "text": "You tell her how it began: the three of them waiting, and the one that looked back at you. She carves as you speak, and does not look up until the end. \"True,\" she says. The plank goes into the bridge. Walk on.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delve-sky-bridge-toll-paid",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delve-sky-bridge-story-carved",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Your story is carved on a plank of the Sky Bridge.",
+          "importance": 50
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "dg-sky-bridge-c"
+         }
+        ]
+       }
+      },
+      {
+       "label": "The flock in your ropes, an hour ago.",
+       "success": {
+        "text": "You tell her about a bridge strung with cloud, and trying not to wake it. Isaura laughs, the first time. \"That's today. Nobody tells me today.\" She carves it anyway, the newest story on the oldest bridge.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delve-sky-bridge-toll-paid",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delve-sky-bridge-story-carved",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Your story is carved on a plank of the Sky Bridge.",
+          "importance": 50
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "dg-sky-bridge-c"
+         }
+        ]
+       }
+      },
+      {
+       "label": "The hardest fight on my road so far.",
+       "success": {
+        "text": "You tell it straight: who nearly fell, who stood back up, what it cost. She listens with her whole face. \"True,\" she says quietly, and carves it deep, so the weather will take longer over it.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delve-sky-bridge-toll-paid",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delve-sky-bridge-story-carved",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Your story is carved on a plank of the Sky Bridge.",
+          "importance": 50
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "dg-sky-bridge-c"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-sky-bridge-asked-bridge",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Isaura is still waiting, thumb on the hand rope her grandmother tied.",
+     "hide": [
+      2
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dg-sky-bridge-c",
+   "name": "Sky Bridge: hidden",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d5266"
+   },
+   "intro": "Where the bridge meets a spur of cliff there is a sealed chamber cut into the rock, its lock cold and old. The keyhole is not a keyhole. It is the shape of a wing.",
+   "choices": [
+    {
+     "label": "Put a feather in it.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "silver-wing"
+      }
+     ],
+     "success": {
+      "text": "The Silver Wing slides into the lock as if it was cast for it. Stone turns on stone. Inside, on a shelf, a gift left for whoever came with the sky's blessing; and as you take it, a huge shadow crosses the gorge and is gone.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "sign-bird",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-sky-bridge-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Force it.",
+     "success": {
+      "text": "You put your shoulder to it, then your whole team's. It holds. It was built by the woman who built the bridge. It will hold longer than you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-sky-bridge-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave the wing-shaped lock for someone carrying the right feather.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-sky-bridge-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Sky Bridge will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rainbow",
+     "when": [
+      {
+       "kind": "item",
+       "id": "rainbow-wing"
+      }
+     ],
+     "notice": "The Rainbow Wing in your pack has gone warm.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Put a feather in it.",
+       "success": {
+        "text": "The Rainbow Wing fits the lock, and seven colours run round the edge of the door as it opens. Inside, on a shelf, a gift left for whoever came with the sky's blessing; and as you take it, a huge shadow crosses the gorge and is gone.",
+        "effects": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "focus-sash",
+           "choice-band",
+           "choice-specs",
+           "choice-scarf",
+           "life-orb",
+           "eviolite",
+           "rocky-helmet"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "sign-bird",
+          "amount": 1
+         },
+         {
+          "kind": "research",
+          "amount": 2
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "dg-sky-bridge-d"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dg-sky-bridge-d",
+   "name": "Sky Bridge: cache",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d5266"
+   },
+   "intro": "A battered chest lashed to the bridge post. Inside, wrapped in oilcloth: the grandmother's journal. The first page is a drawing of a Swablu, one wing bound in a splint made from a spoon.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "\"She cannot fly and will not be carried. Her flock is on the far cliff. So I will make the cliff come to her.\" Forty years of rope lengths and plank counts follow. The last entry is one line: \"She crossed today. On her own feet.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-sky-bridge-read",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-sky-bridge-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the chest's gift.",
+     "success": {
+      "text": "Under the journal, pressed flat between two boards: one Soft Feather, white as cloud, kept for forty years.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soft-feather",
+        "count": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-sky-bridge-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show Isaura.",
+     "success": {
+      "text": "You carry the journal back along the bridge. Isaura has never seen it. She reads it standing, in silence, the wind turning the pages for her. When she finishes she holds it against her chest and looks at the far cliff for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-sky-bridge-showed",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "You showed Isaura her grandmother's journal.",
+        "importance": 50
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-sky-bridge-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Sky Bridge will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-sky-bridge-e",
+   "name": "Sky Bridge: exit",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "altaria",
+    "effect": "none",
+    "tint": "#3d5266"
+   },
+   "intro": "Daylight on the far cliff. At the bridge's end, in a nest woven into the last post, an old Altaria is asleep, its cloud gone thin and grey. One wing sits a little crooked. It is the Swablu.",
+   "choices": [
+    {
+     "label": "Let it sleep.",
+     "success": {
+      "text": "You step round the nest without a sound. Something small and white flutters down from the post and lands on your pack: a Swablu chick, which has decided you are going somewhere interesting.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "swablu"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-sky-bridge-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-sky-bridge-resident-slept",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wake it gently.",
+     "success": {
+      "text": "You touch its wing. It opens one eye, sees a traveller who crossed its bridge, and sings: one long, clear, unhurried song that carries back over the whole span. Every Swablu on the ropes answers.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "delve-sky-bridge-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-sky-bridge-resident-sang",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell Isaura.",
+     "success": {
+      "text": "You call back along the bridge. Isaura crosses it, all the way, for the first time in years, and stops at the nest. She knows that crooked wing from the drawing or from somewhere older. She sits down beside the old Altaria, and it shifts in its sleep to lean on her.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-sky-bridge-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-sky-bridge-resident-told",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Isaura sat down beside the Altaria her grandmother built a bridge for.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "showed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-sky-bridge-showed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Isaura has followed you across with the journal under her arm. She is looking at the nest, and has stopped walking."
+    },
+    {
+     "id": "carved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-sky-bridge-story-carved",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Behind you, your own story is one more plank in the bridge it crossed on."
+    }
+   ]
+  },
+  {
+   "id": "delve-gate-deep-mine",
+   "name": "The Deep Mine",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "types": [
+    "rock",
+    "steel"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delve-deep-mine-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2e2a2a",
+    "effect": "none"
+   },
+   "intro": "The big mine closed years ago; the gates are chained and the company is gone. But through the chained gates, down the main drift, you can see lamps. All of them lit. Every single one.",
+   "choices": [
+    {
+     "label": "Slip through the gates.",
+     "success": {
+      "text": "You squeeze between the bars. The lamps stretch away into the dark in a perfect line, trimmed and burning, waiting for a shift.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the mine chained.",
+     "success": {
+      "text": "You walk on. Behind the gates a small purple flame moves from lamp to lamp, checking each one.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ]
+  },
+  {
+   "id": "dg-deep-mine-a",
+   "name": "Deep Mine",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "roggenrola",
+    "effect": "none",
+    "tint": "#2e2a2a"
+   },
+   "intro": "Lamps hang on beams nobody has checked in years. A family of Roggenrola huddles in the pool of light under one of them, as if round a fire.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The biggest one rolls out of the light to meet you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "roggenrola"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-deep-mine-b"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Pass quietly.",
+     "success": {
+      "text": "You keep to the dark side of the drift. The Roggenrola do not stir. The light is all they want.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look at the lamp.",
+     "success": {
+      "text": "The glass is clean. The wick is new. The oil is full to the line, and the brass has been polished by something that does not have hands. Somebody is keeping these. Somebody has never stopped.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-lamp",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Deep Mine will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-deep-mine-b",
+   "name": "Deep Mine: cache",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2e2a2a"
+   },
+   "intro": "A battered chest in the pay office: the last shift's wages, never collected. Forty brown envelopes, each with a name in clerk's copperplate, each still sealed.",
+   "choices": [
+    {
+     "label": "Take the money.",
+     "success": {
+      "text": "You slit them open one by one. It adds up. So do the names, as you drop each empty envelope on the floor.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 2000
+       },
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-took-wages",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the names.",
+     "success": {
+      "text": "Abel. Brannigan. Cole and Cole, brothers. Forty miners who went home one evening and were told not to come back. You read every name aloud, and the lamp outside the door burns a little higher.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-names",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You close the lid. In the doorway a small purple flame hangs watching you, and then it bobs once, like a nod, and drifts away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-left-wages",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Deep Mine will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-deep-mine-c",
+   "name": "Deep Mine: trap",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2e2a2a"
+   },
+   "intro": "The floor's wrong: boards laid over something, gone soft and grey, with scuffs where others turned back. Under the rot, an old shaft drops into nothing.",
+   "choices": [
+    {
+     "label": "Test it.",
+     "success": {
+      "text": "You tap ahead with a pick handle. Two boards hold. You cross on those, not breathing.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Rock-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "rock"
+      }
+     ],
+     "success": {
+      "text": "Your Rock-type walks out, the boards groan, and it simply stands across the gap like a bridge until everyone is over. Then it steps off, unconcerned.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Jump it.",
+     "success": {
+      "text": "You run and jump. The far edge crumbles under you and you land hard on your knees, everyone piling in behind.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Deep Mine will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-deep-mine-d",
+   "name": "Deep Mine: den",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "durant",
+    "effect": "none",
+    "tint": "#2e2a2a"
+   },
+   "intro": "Claw marks and nests line the walls. This is somebody's home. The miners' tunnels are full of Durant now, and in the widest gallery waits the colony queen, an Alpha, red-eyed, jaws ringing on the rails.",
+   "choices": [
+    {
+     "label": "Calm it with an Iron Ball.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "iron-ball"
+      }
+     ],
+     "success": {
+      "text": "You roll the Iron Ball down the rails. The queen catches it, tastes it, and the whole colony goes still. She carries it away like treasure, and the columns part to let you through.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "iron-ball"
+       },
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-queen-calmed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The queen screams and the walls come alive.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "durant"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 2
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-deep-mine-e"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back away.",
+     "success": {
+      "text": "You back out step by step and take the narrow air shaft round the gallery instead. It costs skin off your elbows. The queen never moves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Deep Mine will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "steel",
+     "when": [
+      {
+       "kind": "partyMoveType",
+       "type": "steel"
+      }
+     ],
+     "notice": "The queen's head turns toward your Pokémon that knows steel.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Calm it: ring Steel moves off the walls.",
+       "success": {
+        "text": "Your Pokémon strikes the iron walls, not the colony: one clean note, then another. The Durant stop. To them it is the sound of the mine working again. The queen lowers her jaws, and the columns part.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delve-deep-mine-queen-calmed",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "calmed-alpha",
+          "amount": 1
+         },
+         {
+          "kind": "research",
+          "amount": 3
+         },
+         {
+          "kind": "friendship",
+          "amount": 2,
+          "who": "party"
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "dg-deep-mine-e"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dg-deep-mine-e",
+   "name": "Deep Mine: wild",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lampent",
+    "effect": "none",
+    "tint": "#2e2a2a"
+   },
+   "intro": "A Lampent floats from beam to beam down the gallery, touching each cold lamp alight, tidy and unhurried. It notices you. It stops, mid-air, like someone caught talking to themselves.",
+   "choices": [
+    {
+     "label": "Follow it.",
+     "success": {
+      "text": "It decides you are with the shift. It leads you round every bad board and loose prop in the gallery, lighting the way a few lamps ahead, glancing back to count you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-followed",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-f"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "It goes into the ball looking back at the lamps it has not finished. All down the gallery the unlit ones stay dark.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "lampent"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-caught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-f"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask it why.",
+     "success": {
+      "text": "It cannot tell you. It shows you. It floats to one lamp, older than the rest, brass worn thin from a thousand trimmings, and lights that one first and most carefully: the shift foreman's station. It hangs there a while.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-why",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-f"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Deep Mine will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-deep-mine-f",
+   "name": "Deep Mine: rest",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2e2a2a"
+   },
+   "intro": "A dry corner: the miners' break room. Forty cups still on the table, each with a ring of dried tea. A stove, cold. A calendar stopped on a Friday.",
+   "choices": [
+    {
+     "label": "Rest.",
+     "success": {
+      "text": "You sit at the long table in somebody's chair and sleep with your head on your arms.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-g"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wash the cups.",
+     "success": {
+      "text": "You wash all forty and stand them upside down in a row to dry. In the doorway the Lampent watches. Its flame, which has burned too high for years, dims a little. It looks, for the first time, relieved.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-cups",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-g"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Light the stove.",
+     "success": {
+      "text": "The stove catches at the first match, as if it had only been waiting to be asked. Warmth fills the room, and the chairs, and you.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-g"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Deep Mine will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-deep-mine-g",
+   "name": "Deep Mine: boss",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "steelix",
+    "effect": "none",
+    "tint": "#2e2a2a"
+   },
+   "intro": "The deepest room. An Alpha Steelix lies coiled, link upon link, round the mine's last lamp: the foreman's, on its iron hook. Nothing has got past it in years, and it has not gone out.",
+   "choices": [
+    {
+     "label": "Calm it with a Metal Coat.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "metal-coat"
+      }
+     ],
+     "success": {
+      "text": "You hold up the Metal Coat. The Steelix lowers its head and takes it, and something in that huge body unclenches. It uncoils. Under it, kept safe: the foreman's lamp, and beside it his brass badge.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "metal-coat"
+       },
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-badge",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-resident-calmed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-h"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It rises until its head scrapes the roof. It will not let the last lamp go dark.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "steelix"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "delve-deep-mine-resident-fought",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 4
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-deep-mine-h"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask the Lampent.",
+     "success": {
+      "text": "The Lampent floats past you, straight up to the Steelix's great face, and touches its flame to the iron brow. The Steelix lowers its head to the floor. They have kept this lamp together. It was the foreman's Steelix. It still is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-badge",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-resident-asked",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "The Lampent and the foreman's Steelix let you through to the last lamp.",
+        "importance": 55
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-deep-mine-h"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Deep Mine will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-deep-mine-h",
+   "name": "Deep Mine: exit",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lampent",
+    "effect": "none",
+    "tint": "#2e2a2a"
+   },
+   "intro": "Daylight. By the mine entrance stands a memorial board with forty names, and one unlit lamp on a hook beneath it. The Lampent has followed you up, and hangs at the edge of the sun, uncertain.",
+   "choices": [
+    {
+     "label": "Light the last lamp.",
+     "success": {
+      "text": "The Lampent drifts out of the mine, into daylight, and touches the lamp under the forty names. It catches. The shift is over. The little flame shudders, and unfolds, arm after arm of soft fire, into a Chandelure, right there in the sun. It bows to the board, and to you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-resident-lit",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Lamp-Keeper lit the last lamp and left the Deep Mine as a Chandelure.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring the wages.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "delve-deep-mine-took-wages",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You carry the forty envelopes down to the town and post every one, to forty doors. Some of the names are answered by grandchildren. It takes the best part of a day. Nobody in that town will forget who brought them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-resident-wages",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "co-take-node-pending",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You delivered forty miners' wages, years late.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the Lampent with me.",
+     "success": {
+      "text": "You hold out a hand. The Lampent looks back down the drift once. One by one, all the way down, the lamps go out, gently, like a house going to bed. Then it comes to you. The mine is dark, and at peace.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-deep-mine-resident-joined",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "lampent"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Lamp-Keeper let the Deep Mine go dark, and came with you.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "caught-took",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-deep-mine-caught",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "delve-deep-mine-took-wages",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your Lampent has let itself out of its ball to look at the board. The envelopes' money is heavy in your pack.",
+     "hide": [
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Bring the wages back.",
+       "requires": [
+        {
+         "kind": "money",
+         "atLeast": 2000
+        }
+       ],
+       "success": {
+        "text": "You count out every coin you took, seal it up again, and post all forty to forty doors. It takes the best part of a day, and it is the least you could do.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delve-deep-mine-done",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delve-deep-mine-resident-wages",
+          "amount": 1
+         },
+         {
+          "kind": "money",
+          "amount": -2000
+         },
+         {
+          "kind": "flag",
+          "key": "co-take-node-pending",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "rep",
+          "amount": 2
+         },
+         {
+          "kind": "moment",
+          "text": "You gave back forty miners' wages and delivered them.",
+          "importance": 60
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "caught",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-deep-mine-caught",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your Lampent has let itself out of its ball. It hangs before the forty names, and looks at the unlit lamp.",
+     "hide": [
+      2
+     ]
+    },
+    {
+     "id": "took",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-deep-mine-took-wages",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Forty names. The money from their envelopes is heavy in your pack.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Bring the wages back.",
+       "requires": [
+        {
+         "kind": "money",
+         "atLeast": 2000
+        }
+       ],
+       "success": {
+        "text": "You count out every coin you took, seal it up again, and post all forty to forty doors. It takes the best part of a day, and it is the least you could do.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delve-deep-mine-done",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delve-deep-mine-resident-wages",
+          "amount": 1
+         },
+         {
+          "kind": "money",
+          "amount": -2000
+         },
+         {
+          "kind": "flag",
+          "key": "co-take-node-pending",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "rep",
+          "amount": 2
+         },
+         {
+          "kind": "moment",
+          "text": "You gave back forty miners' wages and delivered them.",
+          "importance": 60
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

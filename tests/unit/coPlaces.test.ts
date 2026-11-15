@@ -4,8 +4,8 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { chooseEvent } from '../../src/core/events';
 import { visibleChoices } from '../../src/core/eventMemory';
-import { PSEUDO, chainRooms } from '../../src/core/dungeon/pseudo';
-import { chooseNode, chooseStarter, createRun } from '../../src/core/run';
+import { PSEUDO_CHAINS, chainRooms } from '../../src/core/dungeon/pseudo';
+import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
 
@@ -34,7 +34,7 @@ const flagOf = (run: RunState, key: string): number => Number(run.story.flags[`e
 
 const files = readdirSync(join(import.meta.dirname, '../../src/data/events')).filter((f) => /^co-places-\d+\.json$/.test(f));
 const built = files.flatMap((f) => (JSON.parse(readFileSync(join(import.meta.dirname, '../../src/data/events', f), 'utf8')) as { events: { id: string }[] }).events.map((e) => e.id));
-const DELVES = PSEUDO.chains.filter((c) => c.id.startsWith('ps_delve_'));
+const DELVES = PSEUDO_CHAINS.filter((c) => c.id.startsWith('ps_delve_'));
 
 describe('catalog overhaul: places (schema and reach)', () => {
   it('every built event is live, has text that stays under the engine limits, and no choice is a dead end without words', () => {
@@ -87,11 +87,9 @@ describe('catalog overhaul: the Delves (STORY_FAMILIES_14)', () => {
 
   it('the Forest Path: resting and feeding the Path Keeper both happen in one room, and then it comes along', () => {
     let run = newRun('delve-forest');
-    const parent = run.stage!.current;
     open(run, 'delve-gate-dense-forest-path');
     run = pick(run, 'Take the path.');
     expect(run.stage!.pseudo?.id).toBe('ps_delve_dense_forest_path');
-    run = chooseNode(content, run, run.stage!.map.nodes.find((n) => n.column === 1)!.id);
     run = pick(run, 'Ignore it.');
     expect(here(run).roomEvent).toBe('dg-dense-forest-path-b');
     run = pick(run, 'Follow the leaf.');
@@ -112,7 +110,6 @@ describe('catalog overhaul: the Delves (STORY_FAMILIES_14)', () => {
     const parent = run.stage!.current;
     open(run, 'delve-gate-abandoned-mine-shaft');
     run = pick(run, 'Follow the track in.');
-    run = chooseNode(content, run, run.stage!.map.nodes.find((n) => n.column === 1)!.id);
     run = pick(run, 'Follow the lamp.');
     run = pick(run, 'Turn back toward the daylight.');
     expect(run.stage!.pseudo).toBeUndefined();

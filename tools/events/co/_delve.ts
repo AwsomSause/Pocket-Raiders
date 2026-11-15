@@ -35,7 +35,7 @@ export interface Next {
   f: (name: string) => string;
 }
 
-export interface DelveDef { slug: string; name: string; rooms: string; types: string[]; tint: string; minStage: number; /** The Pokémon drawn in a room, by letter. */ mons?: Record<string, string>; gate: { intro: string; enter: string; enterText: string; pass: string; passText: string } }
+export interface DelveDef { slug: string; name: string; rooms: string; types: string[]; tint: string; minStage: number; /** The Pokémon drawn in a room, by letter. */ mons?: Record<string, string>; /** The words of "Turn back" (a dive surfaces). */ back?: { label: string; text: string }; gate: { intro: string; enter: string; enterText: string; pass: string; passText: string } }
 
 /** One Delve: returns its gate event and a room builder. `rooms` is the letters in order ("abcde"). */
 export function delve(d: DelveDef): { gate: Json; room: (letter: string, intro: string, mk: (n: Next) => Json[], remembers?: (n: Next) => Json[]) => Json; f: (name: string) => string } {
@@ -56,7 +56,7 @@ export function delve(d: DelveDef): { gate: Json; room: (letter: string, intro: 
       stay: (text, ...fx) => out(text, ...fx, room(id(letter))),
       wild: (text, o, ...fx) => ({ text, effects: fx, battle: { kind: 'wild', pseudo: true, species: o.species, types: [], levelBonus: o.lv ?? 0, shinyMultiplier: 1, ...(o.chain ? { chain: o.chain } : {}), ...(o.format ? { format: o.format } : {}), win: [...(o.win ?? []), ...onward] } }),
       trainer: (text, name, o, ...fx) => ({ text, effects: fx, battle: { kind: 'trainer', pseudo: true, name, team: o.team, size: o.team.length, types: [], levelBonus: o.lv ?? 0, ...(o.cls ? { classId: o.cls } : {}), win: [...(o.win ?? []), ...onward] } }),
-      back: ch('Turn back toward the daylight.', out(`You keep everything you carry and walk back out. ${d.name} will wait.`, leaveP)),
+      back: ch(d.back?.label ?? 'Turn back toward the daylight.', out(d.back?.text ?? `You keep everything you carry and walk back out. ${d.name} will wait.`, leaveP)),
       f,
     };
     const rem = remembers ? remembers(n) : [];
