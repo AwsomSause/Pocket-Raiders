@@ -49,8 +49,19 @@ export function fitLine(text: Phaser.GameObjects.Text, maxW: number, minSize = 1
 /** A wrapped block no wider than `maxW` and no taller than `maxH`: whole lines, last one ends with "...". */
 export function fitBlock(text: Phaser.GameObjects.Text, maxW: number, maxH: number, newText?: string): Phaser.GameObjects.Text {
   const full = newText ?? text.text;
+  const base = (text.getData('fitBlockSize') as number | undefined) ?? (parseInt(String(text.style.fontSize), 10) || 16);
+  text.setData('fitBlockSize', base);
+  if (parseInt(String(text.style.fontSize), 10) !== base) text.setFontSize(base);
   text.setWordWrapWidth(maxW, true);
   text.setText(full);
+  // A smaller crisp size first (never below 11), then "..." as the last resort.
+  let size = base;
+  while (text.height > maxH && size > 11) {
+    const next = pixelFont(Math.round((size - 8) / 0.75)).size;
+    if (next >= size) break;
+    size = next;
+    text.setFontSize(size);
+  }
   if (text.height <= maxH) return text;
   text.setText(cut(full, (c) => (text.setText(c), text.height <= maxH)));
   return text;

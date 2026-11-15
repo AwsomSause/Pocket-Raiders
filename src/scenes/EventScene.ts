@@ -45,6 +45,11 @@ export class EventScene extends Phaser.Scene {
   private index = 0;
   private phase: 'choose' | 'pick' | 'outcome' = 'choose';
   private busy = false;
+  private outcomeStep: 'text' | 'rewards' = 'text';
+  private inputReady = false;
+  private leaving = false;
+  private outcomeBox: Phaser.GameObjects.Container | null = null;
+  private outcomeHint: Phaser.GameObjects.Text | null = null;
   private picker: { box: Phaser.GameObjects.Container; rows: Phaser.GameObjects.Text[]; picks: { uid: string; label: string }[]; at: number } | null = null;
   private result: EventResult | null = null;
   private calm = false;
@@ -66,6 +71,10 @@ export class EventScene extends Phaser.Scene {
     this.phase = 'choose';
     this.picker = null;
     this.result = null;
+    this.leaving = false;
+    this.fullLayer = null;
+    this.outcomeBox = null;
+    this.outcomeHint = null;
     this.calm = session.settings.battleAnimations !== 'full';
     playMusicLazy(this, 'bgm.event');
     const view = eventView(content, run, this.sideId);
@@ -127,6 +136,7 @@ export class EventScene extends Phaser.Scene {
         drawChampionStage(this, content, champ?.speciesId ?? 'primeape', Number(run.story.flags['ev:r25-food'] ?? 0) > 0, this.calm);
       }
     }
+    this.offerFullText(view.event.intro);
     if (!this.calm) this.ambient(scene.effect, area, layers.fx);
     if (area.w < GAME_WIDTH || area.h < GAME_HEIGHT) layers.fx.setMask(this.make.graphics({}, false).fillRect(area.x, area.y, area.w, area.h).createGeometryMask());
     this.cards = this.layout.widgets.map((w, i) => ({ box: w.box, view: view.choices[i]!, widget: w }));
@@ -158,14 +168,57 @@ export class EventScene extends Phaser.Scene {
     }
   }
 
+  /** If the style's text card had to cut the intro, a "Read all" button opens the full text (nothing is ever hidden for good). */
+  private offerFullText(intro: string): void {
+    const all: Phaser.GameObjects.Text[] = [];
+    const walk = (list: Phaser.GameObjects.GameObject[]) => list.forEach((o) => {
+      if (o.type === 'Text') all.push(o as Phaser.GameObjects.Text);
+      const kids = (o as Phaser.GameObjects.Container).list;
+      if (kids) walk(kids);
+    });
+    walk(this.children.list);
+    const flat = (t: string) => t.replace(/\s+/g, ' ').trim();
+    const full = flat(intro);
+    const cut = all.some((t) => {
+      const shown = flat(t.text);
+      return shown.endsWith('...') && shown.length > 12 && full.startsWith(shown.slice(0, -3).trimEnd()) && shown.length < full.length;
+    });
+    if (!cut) return;
+    const btn = this.add.text(16, GAME_HEIGHT - 14, 'Read full text  (R)', textStyle(14, '#f8e8a0', { stroke: '#101010', strokeThickness: 3 })).setOrigin(0, 1).setDepth(45).setName('event-read-all');
+    btn.setInteractive({ useHandCursor: true }).on('pointerdown', () => this.toggleFull(intro));
+    this.input.keyboard?.on('keydown-R', () => this.toggleFull(intro));
+  }
+
+  private fullLayer: Phaser.GameObjects.Container | null = null;
+
+  private toggleFull(intro: string): void {
+    if (this.fullLayer) {
+      this.fullLayer.destroy();
+      this.fullLayer = null;
+      return;
+    }
+    if (this.phase !== 'choose') return;
+    const layer = this.add.container(0, 0).setDepth(80);
+    const shade = this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.8).setOrigin(0).setInteractive();
+    shade.on('pointerdown', () => this.toggleFull(intro));
+    const body = this.add.text(GAME_WIDTH / 2, 40, intro, textStyle(20, COLORS.textLight, { align: 'center', wordWrap: { width: GAME_WIDTH - 140 } })).setOrigin(0.5, 0);
+    const hint = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 16, 'Enter / click: close', textStyle(14, COLORS.textMuted)).setOrigin(0.5, 1);
+    layer.add([shade, body, hint]);
+    this.fullLayer = layer;
+  }
+
   private handle(action: InputAction): void {
     if (this.bracketPanel) {
       this.bracketPanel.destroy();
       this.bracketPanel = null;
       return;
     }
+    if (this.fullLayer) {
+      if (action === 'confirm' || action === 'back') this.toggleFull('');
+      return;
+    }
     if (this.phase === 'outcome') {
-      if (action === 'confirm' || action === 'back') this.leave();
+      if (action === 'confirm' || action === 'back') this.advanceOutcome();
       return;
     }
     if (this.phase === 'pick') {
@@ -270,22 +323,72 @@ export class EventScene extends Phaser.Scene {
     this.time.delayedCall(wait, () => this.showOutcome());
   }
 
-  /** The outcome panel rises; each change pops in with a bounce. */
+  /**
+   * The outcome plays in two beats, each waiting for the player: the outcome text first (it stays until Enter/click),
+   * then, once that text is gone, the rewards pop in (they stay until Enter/click, which leaves the scene).
+   */
   private showOutcome(): void {
     const r = this.result!;
     playSfx(this, r.success ? 'se.level_up' : 'ui.error', 0.5);
-    const box = this.add.container(GAME_WIDTH / 2, GAME_HEIGHT + 120).setDepth(30);
+    this.outcomeStep = 'text';
+    this.inputReady = false;
+    this.time.delayedCall(this.calm ? 0 : 450, () => (this.inputReady = true));
+    this.input.on('pointerdown', () => this.advanceOutcome());
+    const chips = r.changes;
+    const lastHint = r.battle ? 'Enter: battle!' : 'Enter: continue';
+    const text = this.add.text(0, 0, r.text, textStyle(18, COLORS.textLight, { align: 'center', wordWrap: { width: 720 } })).setOrigin(0.5, 0);
+    const head = r.success ? '' : 'It didn’t go your way…';
+    const h = Math.max(164, text.height + 98);
+    const box = this.add.container(GAME_WIDTH / 2, GAME_HEIGHT + h).setDepth(30);
     const g = this.add.graphics();
-    paintGlass(g, -380, -82, 760, 164, { rim: r.success ? 0x60d070 : 0xf07070, radius: 20 });
+    paintGlass(g, -380, -h / 2, 760, h, { rim: r.success ? 0x60d070 : 0xf07070, radius: 20 });
     box.add(g);
-    box.add(this.add.text(0, -62, r.success ? '' : 'It didn’t go your way…', textStyle(15, COLORS.bad)).setOrigin(0.5, 0));
-    box.add(this.add.text(0, -40, r.text, textStyle(18, COLORS.textLight, { align: 'center', wordWrap: { width: 720 } })).setOrigin(0.5, 0));
-    this.tweens.add({ targets: box, y: 450, duration: this.calm ? 1 : 520, ease: 'Back.easeOut' });
+    box.add(this.add.text(0, -h / 2 + 20, head, textStyle(15, COLORS.bad)).setOrigin(0.5, 0));
+    text.setPosition(0, -h / 2 + 42);
+    box.add(text);
+    this.outcomeBox = box;
+    this.tweens.add({ targets: box, y: GAME_HEIGHT - h / 2 - 30, duration: this.calm ? 1 : 520, ease: 'Back.easeOut' });
+    const hint = this.add.text(GAME_WIDTH - 52, GAME_HEIGHT - 20, chips.length ? 'Enter: continue' : lastHint, textStyle(15, COLORS.textMuted, { stroke: '#101010', strokeThickness: 3 })).setOrigin(1, 1).setDepth(31);
+    if (!this.calm) this.tweens.add({ targets: hint, alpha: 0.4, duration: 600, yoyo: true, repeat: -1 });
+    this.outcomeHint = hint;
+  }
+
+  /** One input moves the outcome on: text -> rewards -> leave. Ignored until the panel has settled. */
+  private advanceOutcome(): void {
+    if (this.phase !== 'outcome' || !this.inputReady) return;
+    const r = this.result!;
+    if (this.outcomeStep === 'text' && r.changes.length) {
+      this.outcomeStep = 'rewards';
+      this.inputReady = false;
+      playSfx(this, 'ui.select', 0.4);
+      const old = this.outcomeBox;
+      if (old) {
+        this.tweens.add({ targets: old, y: GAME_HEIGHT + 260, duration: this.calm ? 1 : 260, ease: 'Quad.easeIn', onComplete: () => old.destroy() });
+      }
+      this.time.delayedCall(this.calm ? 0 : 280, () => this.showRewards());
+      return;
+    }
+    this.leave();
+  }
+
+  /** Rewards only: they appear after the text is gone and stay until the next input. */
+  private showRewards(): void {
+    const r = this.result!;
     const chips = r.changes;
     const per = Math.min(4, Math.max(1, chips.length));
+    const rows = Math.ceil(chips.length / per);
+    const h = 70 + rows * 32;
+    const box = this.add.container(GAME_WIDTH / 2, GAME_HEIGHT + h).setDepth(30);
+    const g = this.add.graphics();
+    paintGlass(g, -380, -h / 2, 760, h, { rim: r.success ? 0x60d070 : 0xf07070, radius: 20 });
+    box.add(g);
+    box.add(this.add.text(0, -h / 2 + 12, 'Results', textStyle(14, COLORS.textMuted)).setOrigin(0.5, 0));
+    this.outcomeBox = box;
+    this.tweens.add({ targets: box, y: GAME_HEIGHT - h / 2 - 30, duration: this.calm ? 1 : 360, ease: 'Back.easeOut' });
+    const baseY = -h / 2 + 52;
     chips.forEach((text, i) => {
       const cx = ((i % per) - (per - 1) / 2) * 180;
-      const cy = 26 + Math.floor(i / per) * 28;
+      const cy = baseY + Math.floor(i / per) * 32;
       const good = !/^(−|Lost|party loses|party (poisoned|burned|paralysed|asleep)|Evil|Rage)/.test(text);
       const chip = this.add.text(cx, cy, text, textStyle(15, good ? COLORS.good : COLORS.bad, { backgroundColor: '#0c2a44', padding: { x: 10, y: 3 } })).setOrigin(0.5).setName('event-chip');
       chip.setScale(this.calm ? 1 : 0);
@@ -294,21 +397,22 @@ export class EventScene extends Phaser.Scene {
         targets: chip,
         scale: 1,
         duration: 320,
-        delay: 600 + i * 160,
+        delay: 360 + i * 160,
         ease: 'Back.easeOut',
         onStart: () => playSfx(this, 'se.exp', 0.3),
         onComplete: () => {
           if (this.calm) return;
           this.chipAck(box, cx, cy, good);
-          if (good) this.flyGain(text, GAME_WIDTH / 2 + cx, 450 + cy);
+          if (good) this.flyGain(text, GAME_WIDTH / 2 + cx, GAME_HEIGHT - h / 2 - 30 + cy);
         },
       });
     });
     // The money pill counts to the new total once the chips have landed.
     const money = r.run.money;
-    this.time.delayedCall(this.calm ? 0 : 600 + chips.length * 160, () => this.countMoney(money));
-    const next = this.add.text(GAME_WIDTH - 52, GAME_HEIGHT - 20, r.battle ? 'Enter: battle!' : 'Enter: continue', textStyle(15, COLORS.textMuted, { stroke: '#101010', strokeThickness: 3 })).setOrigin(1, 1).setDepth(30);
-    if (!this.calm) this.tweens.add({ targets: next, alpha: 0.4, duration: 600, yoyo: true, repeat: -1 });
+    this.time.delayedCall(this.calm ? 0 : 360 + chips.length * 160, () => this.countMoney(money));
+    this.outcomeHint?.setText(r.battle ? 'Enter: battle!' : 'Enter: continue');
+    // Wait for the chips to land (and a beat to read them) before Enter can leave.
+    this.time.delayedCall(this.calm ? 0 : 360 + chips.length * 160 + 300, () => (this.inputReady = true));
   }
 
   private moneyPill(money: number, at = { x: GAME_WIDTH - 172, y: 14 }): void {
@@ -359,6 +463,8 @@ export class EventScene extends Phaser.Scene {
   }
 
   private leave(): void {
+    if (this.leaving) return;
+    this.leaving = true;
     const run = services().session.run!;
     this.cameras.main.fadeOut(this.calm ? 1 : 260);
     this.time.delayedCall(this.calm ? 10 : 270, () => this.scene.start(sceneForRun(run)));

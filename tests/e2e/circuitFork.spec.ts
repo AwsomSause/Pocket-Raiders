@@ -42,6 +42,8 @@ test('the gym node asks which Leader to face, and the chosen door sets the gym',
   await page.screenshot({ path: 'test-results/circuit-fork.png' });
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Enter');
+  await page.waitForTimeout(600);
+  await page.keyboard.press('Enter'); // the result waits for an input
   await expect.poll(() => scene(page), { timeout: 10_000 }).toBe('Map');
   const after = await page.evaluate(() => {
     const run = (window as any).__pkr.session.run;

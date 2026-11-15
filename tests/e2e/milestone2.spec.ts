@@ -123,6 +123,8 @@ test('throw a ball from the Bag, catch the Pokémon and add it to the party', as
   await page.screenshot({ path: 'test-results/m2-caught.png' });
 
   await page.keyboard.press('Enter'); // Add to party
+  await page.waitForTimeout(600);
+  await page.keyboard.press('Enter'); // the result waits for an input
   await expect.poll(() => scene(page), { timeout: 40_000 }).toBe('Reward');
   const after = await run(page);
   expect(after.party).toHaveLength(2);
@@ -181,7 +183,9 @@ test('switch Pokémon from the party menu, and give a reward to a chosen Pokémo
       await page.keyboard.press('ArrowDown');
       await page.keyboard.press('Enter'); // "Don't learn"
       await page.keyboard.press('Enter'); // Yes
-      await page.waitForTimeout(1600);
+      await page.waitForTimeout(600);
+      await page.keyboard.press('Enter'); // the result waits for an input
+      await page.waitForTimeout(1000);
     } else await page.waitForTimeout(250);
   }
   await waitForScene(page, 'Reward');

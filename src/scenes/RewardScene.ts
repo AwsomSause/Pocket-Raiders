@@ -40,6 +40,7 @@ export class RewardScene extends Phaser.Scene {
   private picker: PickerLike | null = null;
   private notice: Phaser.GameObjects.Text | null = null;
   private chosen = false;
+  private dismiss: (() => void) | null = null;
   private layoutHandle: RewardLayoutHandle | null = null;
 
   constructor() {
@@ -60,6 +61,7 @@ export class RewardScene extends Phaser.Scene {
     this.cursors = [];
     this.picker = null;
     this.chosen = false;
+    this.dismiss = null;
     this.cards = [];
 
     // Screens redesign (Group B): a picked reward look repaints the backdrop and cards (core/presentation/screenStyles.ts).
@@ -205,7 +207,10 @@ export class RewardScene extends Phaser.Scene {
         this.picker.handle(action);
         return;
       }
-      if (this.chosen) return;
+      if (this.chosen) {
+        if (this.dismiss && (action === 'confirm' || action === 'back')) this.dismiss();
+        return;
+      }
       const cards = draft.length;
       const total = cards + buttons.length;
       if (action === 'left') this.focus((this.index + total - 1) % total);
@@ -352,6 +357,18 @@ export class RewardScene extends Phaser.Scene {
       this.tweens.add({ targets: plate, alpha: 1, duration: 200 });
       this.tweens.add({ targets: text, scale: 1, duration: 300, ease: 'Back.easeOut' });
     }
-    this.time.delayedCall(1500, () => this.scene.start(sceneForRun(result.run)));
+    // The result stays until the player gives an input (a short beat first so the choosing key does not dismiss it).
+    const hint = this.add.text(GAME_WIDTH - 40, GAME_HEIGHT - 24, 'Enter: continue', textStyle(15, COLORS.textLight)).setOrigin(1, 1).setDepth(53);
+    let leaving = false;
+    const go = (): void => {
+      if (leaving) return;
+      leaving = true;
+      this.scene.start(sceneForRun(result.run));
+    };
+    this.time.delayedCall(300, () => {
+      this.dismiss = go;
+      this.input.once('pointerdown', go);
+      if (this.motion === 'full') this.tweens.add({ targets: hint, alpha: 0.4, duration: 600, yoyo: true, repeat: -1 });
+    });
   }
 }
