@@ -9,11 +9,11 @@ type Json = Record<string, unknown>;
 const P = 'cs-kanto-saffron-';
 const events: Json[] = [];
 
-interface Opts { canon?: string; room?: boolean; stop?: 'event' | 'delve'; tint?: string; effect?: string; pokemon?: string }
+interface Opts { tourney?: number; canon?: string; room?: boolean; stop?: 'event' | 'delve'; tint?: string; effect?: string; pokemon?: string }
 function ev(id: string, name: string, intro: string, choices: Json[], o: Opts = {}): void {
   events.push({
     id: P + id, name, group: 'Canon Spaces: Kanto', stop: o.stop ?? (o.room ? 'delve' : 'event'), rarity: 'common', minStage: 1, types: [], requires: [],
-    scene: { cast: [], ...(o.pokemon ? { pokemon: o.pokemon } : {}), effect: o.effect ?? 'none', tint: o.tint ?? '#5b3a6e' },
+    scene: { cast: [], ...(o.pokemon ? { pokemon: o.pokemon } : {}), ...(o.tourney !== undefined ? { tourney: o.tourney } : {}), effect: o.effect ?? 'none', tint: o.tint ?? '#5b3a6e' },
     intro, choices, ...(o.canon ? { canon: o.canon } : {}), ...(o.room ? { room: true } : {}),
   });
 }
@@ -80,13 +80,13 @@ const entry = (species: string) => ({
 });
 ev('tournament', 'Saffron Fighting Tournament',
   'A banner stretched across the dojo yard: THE SAFFRON FIGHTING TOURNAMENT. Thirty-two fighters, Fighting types only, one Pokémon each. The organizer, a woman with a clipboard and a bruise on her chin, looks at your Mankey the way a coach looks at a student they have not met yet. "Only that one steps in," she says. "Everything the rest of you know has to stay at the rail."',
-  [entry('mankey'), entry('primeape'), leave('You leave it for the next trainer.')], { canon: 'cs.kanto.saffron.tournament', room: true, tint: TS });
+  [entry('mankey'), entry('primeape'), leave('You leave it for the next trainer.')], { canon: 'cs.kanto.saffron.tournament', room: true, tint: TS, tourney: 0 });
 ev('tc', 'Tournament: The Crowd',
   'A bell. The gate opens. A noise comes up out of the stands like a wave breaking, and over the PA, a voice that has been waiting all year to say this: "Ladies and gentlemen, thirty-two fighters, five rounds, one belt!" A commentary desk beside the mat has two seats: a retired champion with a broken nose, and a young announcer who has never once stopped talking.',
   [
     { label: 'Look to the stands', requires: [FOOD], success: { text: 'Row after row of brown fur. The whole Mankey troop came down from Route 25 and is standing on the benches, stamping their feet. Someone has hung a sack of grain from the rail like a banner. Your Mankey sees them and does not move for a long moment.', effects: [add('t1')] } },
     { label: 'Look to the stands', requires: [NOFOOD], success: { text: 'You scan the rows for brown fur and find none. No one is there for your Mankey. It stands very straight, and it has stopped looking.', effects: [add('t1')] } },
-  ], { room: true, tint: TS });
+  ], { room: true, tint: TS, tourney: 0 });
 const ROUNDS = [
   { n: 1, bracket: 'Round of 32', species: ['machop'], prize: 'muscle-band', name: 'Machop', rule: {}, intro: 'Round of 32. A Machop with a twin on the rail: the twin is a coach, bellowing instructions and flinching at every hit. "That one is somebody\'s whole family," says the young announcer. "Do not take it personally."', win: 'It goes down fighting, and its twin leaps the rail and carries it out in its arms. The crowd applauds that harder than the knockout.' },
   { n: 2, bracket: 'Round of 16', species: ['hawlucha'], prize: 'protein', name: 'Hawlucha', rule: { fanClub: true }, intro: 'Round of 16. A Hawlucha who spends more time on the ropes than on the mat. It points at people in the crowd, it blows kisses, it waves at the cameras. "It plays to the crowd," says the old champion, "and it is better than it pretends. Watch its feet."', win: 'It bows to the crowd in defeat, then, quietly, bows to you. The pose was a mask for something sharper.' },
@@ -113,10 +113,10 @@ for (const r of ROUNDS) {
         win: [{ kind: 'item', id: r.prize, count: 1 }, { kind: 'heal', share: 0.4 }, add(`tm${r.n}`)], lose: [canon('unsolo')],
       },
     },
-  }], { room: true, tint: TS });
+  }], { room: true, tint: TS, tourney: r.n });
   const final = r.n === 4;
   ev(`tm${r.n}`, `Tournament: Training Montage ${r.n}`, `${r.win} ${MONTAGE[r.n - 1]![0]} Pick what to train: ${left} ${left === 1 ? 'fight is' : 'fights are'} still ahead.`,
-    PICKS.map((p, i) => ({ label: p.label, success: { text: `${p.text} ${MONTAGE[r.n - 1]![1]}`, effects: [{ kind: 'tempEffect', label: `Training: ${p.label}`, effects: p.fx, battles: left, until: 'battle' }, final ? { kind: 'addEventFrom', ids: [P + 't5a', P + 't5b', P + 't5c'] } : add(`t${r.n + 1}`)] } })), { room: true, tint: TS });
+    PICKS.map((p, i) => ({ label: p.label, success: { text: `${p.text} ${MONTAGE[r.n - 1]![1]}`, effects: [{ kind: 'tempEffect', label: `Training: ${p.label}`, effects: p.fx, battles: left, until: 'battle' }, final ? { kind: 'addEventFrom', ids: [P + 't5a', P + 't5b', P + 't5c'] } : add(`t${r.n + 1}`)] } })), { room: true, tint: TS, tourney: r.n + 1 });
 }
 const RIVALS = [
   { id: 't5a', intro: 'The final. Across the mat stands a fighter of your own kind. Its trainer is a tired woman who runs a dojo with a leaking roof. The belt is prize money. If it wins, the dojo stays open and nine children keep their lessons. It looks at your fighter the way you look at your own, and neither of you wants to hurt the other.', name: 'The Dojo Rival' },
@@ -128,11 +128,22 @@ for (const rv of RIVALS) {
     label: 'Step into the ring', success: {
       text: 'The crowd chants for both of you. In the stands, nobody sits.', effects: [], battle: {
         kind: 'trainer', name: rv.name, size: 1, mirror: true, types: ['fighting'], pseudo: true, rule: { evolveMid: true, fanClub: true },
-        win: [canon('champion', { species: ['mankey', 'primeape'] }), flag('kanto-tournament-won'), { kind: 'moment', text: 'Won the Saffron Fighting Tournament and the belt: the title, Dynamic Punch and Champion\'s Entrance.', importance: 80 }, canon('unsolo')], lose: [canon('unsolo')],
+        win: [canon('champion', { species: ['mankey', 'primeape'] }), flag('kanto-tournament-won'), { kind: 'moment', text: 'Won the Saffron Fighting Tournament and the belt: the title, Dynamic Punch and Champion\'s Entrance.', importance: 80 }, canon('unsolo'), add('t-win1')], lose: [canon('unsolo')],
       },
     },
-  }], { room: true, tint: TS });
+  }], { room: true, tint: TS, tourney: 5 });
 }
+
+// The winning cutscene (spec 16 "the title"): three beats on the champion's podium, each needing an input to move on.
+ev('t-win1', 'Tournament: The Bell', 'The bell rings, and for one heartbeat the whole building holds its breath. Then the noise comes down like a roof falling in. The young announcer has run out of words, and says so, loudly, three times. The old champion beside him takes off his broken-nosed grin, stands, and starts to clap, slowly, and the stadium catches it.',
+  [{ label: 'Lift your fighter\'s paw', success: { text: 'You lift it. The crowd lifts with you.', effects: [add('t-win2')] } }], { room: true, tint: TS, tourney: 6, effect: 'confetti' });
+ev('t-win2', 'Tournament: The Belt',
+  'The organizer walks out on to the mat with the belt across both her forearms like something asleep. She does not make a speech. She says your fighter\'s name, and then your name, and then, quieter: "I watched every round." She buckles it around your fighter, who stands very still, trying not to cry, failing. Dynamic Punch is waiting in its paws, and something new in its chest: Champion\'s Entrance. Nobody will ever walk into a ring the same way again.',
+  [{ label: 'Let it keep the belt', requires: [FOOD], success: { text: 'In the stands, the whole Mankey troop is on its feet, hands over their heads, shrieking a name that is not quite your fighter\'s name and is exactly right. They came down from Route 25 to watch their own go up on the highest step. The sack of grain is still hanging from the rail.', effects: [add('t-win3')] } },
+   { label: 'Let it keep the belt', requires: [NOFOOD], success: { text: 'It looks to the stands for the troop it never fed. There is no brown fur in the rows. It looks at you instead, and its grip on the belt does not loosen. You are the only crowd that matters now, and you are loud.', effects: [add('t-win3')] } }], { room: true, tint: TS, tourney: 6, effect: 'confetti' });
+ev('t-win3', 'Tournament: The Rival Bows',
+  'Before the lights go down, the rival walks across the mat. It does not offer a hand. It bows, from the waist, and holds the bow. Then it straightens, takes something from around its own waist, and shows it to your fighter: a strip of red cloth, knotted. "Next time," its trainer says. Your fighter nods once. The belt is heavier than it looks, and it is not heavy enough to hold the sound of the crowd that does not stop for a long time.',
+  [{ label: 'Walk out under the lights', success: { text: 'You walk out with your fighter beside you, belt on its hips. Your team is waiting at the rail, every one of them. Nobody says anything. Nobody has to.', effects: [] } }], { room: true, tint: TS, tourney: 6, effect: 'confetti' });
 ev('rival-return', 'A Familiar Belt',
   'On the path ahead a fighter of your own kind stands very straight, its arms folded across a belt it made itself: red cloth, knotted, bleached with the sun. It does not look at the stands this time. It looks at you, and bows, once, from the waist.',
   [

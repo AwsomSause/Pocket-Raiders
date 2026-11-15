@@ -422,3 +422,32 @@ export function victoryPose(scene: Phaser.Scene, target: Phaser.GameObjects.Game
       return run({ scaleX: home.sx * 1.1, scaleY: home.sy * 1.1, angle: 6, duration: 240, yoyo: true, repeat: 1, ease: 'Sine.easeInOut' });
   }
 }
+
+/**
+ * Beta 0.7 Flight North: a Pokémon swoops onto the field, glows, and holds for a moment (the shiny rescue, the Bug-type's return).
+ * `sprite` is already built by the scene; this only moves and lights it. Presentation only.
+ */
+export function cameoBeat(scene: Phaser.Scene, sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.Container, to: { x: number; y: number }, kind: 'rescue' | 'return', motion: MotionLevel): Beat {
+  const W = scene.scale.width;
+  const glow = kind === 'rescue' ? 0xfff2a8 : 0x9fd8ff;
+  const flash = scene.add.circle(to.x, to.y - 40, 40, glow, 0.8).setDepth(954);
+  sprite.setDepth(956);
+  if (motion === 'off') {
+    sprite.setPosition(to.x, to.y);
+    flash.destroy();
+    return beat(scene, [sprite], 900);
+  }
+  if (motion === 'reduced') {
+    sprite.setPosition(to.x, to.y).setAlpha(0);
+    scene.tweens.add({ targets: sprite, alpha: 1, duration: 200, yoyo: true, hold: 900 });
+    flash.destroy();
+    return beat(scene, [sprite], 1500);
+  }
+  sprite.setPosition(-W * 0.2, to.y - 260).setScale(sprite.scale * 0.4);
+  const big = sprite.scale / 0.4;
+  scene.tweens.add({ targets: sprite, x: to.x, y: to.y, scale: big, duration: 520, ease: 'Cubic.easeOut' });
+  scene.tweens.add({ targets: flash, scale: 7, alpha: 0, duration: 700, delay: 480, ease: 'Cubic.easeOut' });
+  scene.tweens.add({ targets: sprite, y: to.y - 18, duration: 260, yoyo: true, repeat: 2, delay: 600, ease: 'Sine.easeInOut' });
+  scene.tweens.add({ targets: sprite, x: W * 1.3, alpha: 0, duration: 380, delay: 1700, ease: 'Cubic.easeIn' });
+  return beat(scene, [sprite, flash], 2150);
+}

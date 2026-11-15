@@ -16,3 +16,7 @@ None. Optional `run.expansion.flightNorth` and `battle.flightNorth`; older saves
 - The sky silhouette is a helper (`skySilhouette`) and is not drawn on a screen yet. A "released" Bug-type is not met again.
 - The return is available only in a Kanto run that played the stage. Odds shifts for the 50% check are not built.
 - Retired by #1292 via `RETIRED_SPACES`; this build replaces it, so remove `cs.kanto.vermilion.flightnorth` from that set when #1292 is in.
+
+## Showcase fix (Kice's trailer review)
+- "The Bully" now shows the **Spearow** (every stage room shows the Bug-type's current form instead) and is a **real battle** against it, so the stage has six real fights per line (Spearow, tall grass, stream, Pidgey flock, Meowth, Venomoth).
+- The **shiny rescuer** now swoops onto the field on screen (gold glow) when it knocks out the Venomoth, and the Bug-type's **return** swoops in as Mega Beedrill / Gigantamax-sized Butterfree before its fight and again on its first strike (blue glow). Battle events carry an optional `cameo`; presentation only (respects motion settings: off, reduced, full). Cameo art failing to load only skips the picture.

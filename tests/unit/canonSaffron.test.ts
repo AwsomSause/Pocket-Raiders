@@ -6,6 +6,7 @@ import { chooseStarter, createRun, debugForceEvent, takeTurn } from '../../src/c
 import { hashSeed, Rng } from '../../src/core/rng';
 import { applyCanonEffect, ghostReturnEvent, ghostReturns, labRetryEvent, leaveCanonStash, nearestBst, restoreStash, ruleEvolution } from '../../src/core/expansion/canonSaffron';
 import { falseSlotFor } from '../../src/core/expansion/labyrinth';
+import { tourneyBracket, TOURNEY_ROUNDS } from '../../src/core/expansion/tourney';
 import { evolutionTarget } from '../../src/core/evolution';
 import { RunStateSchema } from '../../src/core/state';
 import { content } from './helpers';
@@ -452,5 +453,40 @@ describe('Saved shapes', () => {
     const run = withParty('SV', ['pikachu', 'eevee']);
     eff(run, 'ghostStart');
     expect(RunStateSchema.safeParse(JSON.parse(JSON.stringify(run))).success).toBe(true);
+  });
+});
+
+describe('Fighting Tournament bracket and winning cutscene', () => {
+  const run = () => withParty('TB', ['mankey']);
+  it('every tournament event shows the bracket strip; the win beats show the champion podium', () => {
+    const now = (id: string) => room(id).scene.tourney;
+    expect(['tournament', 'tc'].map(now)).toEqual([0, 0]);
+    expect([1, 2, 3, 4].map((n) => now(`t${n}`))).toEqual([1, 2, 3, 4]);
+    expect([1, 2, 3, 4].map((n) => now(`tm${n}`))).toEqual([2, 3, 4, 5]);
+    expect(['t5a', 't5b', 't5c'].map(now)).toEqual([5, 5, 5]);
+    expect(['t-win1', 't-win2', 't-win3'].map(now)).toEqual([6, 6, 6]);
+  });
+  it('the final leads into the winning cutscene, three beats, after the title is given', () => {
+    const win = (room('t5a').choices[0]!.success.battle as unknown as { win: { kind: string; eventId?: string }[] }).win;
+    expect(win.findIndex((w) => w.kind === 'canon')).toBeLessThan(win.findIndex((w) => w.eventId === `${P}t-win1`));
+    expect(targets('t-win1')).toEqual([`${P}t-win2`]);
+    expect(targets('t-win2')).toEqual([`${P}t-win3`, `${P}t-win3`]);
+  });
+  it('the bracket has 32 entrants, you at the top, the named competitors in order, and the same every time', () => {
+    const a = tourneyBracket(content, run(), 1);
+    const b = tourneyBracket(content, run(), 1);
+    expect(a.entrants).toHaveLength(32);
+    expect(a.entrants[0]).toMatchObject({ you: true, species: 'mankey' });
+    expect(JSON.stringify(a)).toBe(JSON.stringify(b));
+    expect(a.survivors.map((c) => c.length)).toEqual([32, 16, 8, 4, 2, 1]);
+    expect(a.opponents.map((o) => o?.species)).toEqual(['machop', 'hawlucha', 'throh', 'hitmonchan', 'mankey']);
+    expect(a.opponents[4]).toMatchObject({ named: true, name: 'Rival Mankey' });
+    expect(TOURNEY_ROUNDS).toHaveLength(5);
+  });
+  it('rounds already played show who is out; the champion is the one left', () => {
+    const v = tourneyBracket(content, run(), 3);
+    expect(v.entrants.filter((e) => e.outIn > 0 && e.outIn <= 2)).toHaveLength(32 - 8);
+    const done = tourneyBracket(content, run(), 6);
+    expect(done.survivors[5]![0]).toMatchObject({ you: true });
   });
 });

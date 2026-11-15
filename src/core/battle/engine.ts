@@ -173,7 +173,7 @@ export type BattleEvent =
   | { type: 'fatigue'; side: Side }
   | { type: 'weather'; weather: Weather }
   /** A raid message: shield up/broken, a new phase, a charged attack, the timer. */
-  | { type: 'raid'; tone: 'shield' | 'phase' | 'warn' | 'info'; text: string }
+  | { type: 'raid'; tone: 'shield' | 'phase' | 'warn' | 'info'; text: string; /** Beta 0.7 Flight North: a Pokémon swoops onto the field for this line (the shiny rescue, the Bug-type's return). Presentation only. */ cameo?: { speciesId: string; shiny: boolean; kind: 'rescue' | 'return' } }
   /** A Substitute took a hit (and `broke`). */
   | { type: 'substituteHit'; side: Side; broke: boolean }
   /** Perish Song countdown. */
@@ -1153,7 +1153,7 @@ function finaleAssistStrike(ctx: BattleContext, player: Combatant, enemy: Combat
   if (!assist || assist.strikesLeft <= 0 || battle.outcome || player.mon.hp <= 0 || enemy.mon.hp <= 1) return;
   const hit = finaleStrikeDamage(content, assist, enemy.mon);
   assist.strikesLeft -= 1;
-  events.push({ type: 'raid', tone: 'info', text: `${assist.name}'s ${getSpecies(content, assist.speciesId).name} strikes ${battle.trainer?.leaderId ? 'the boss' : battle.kind === 'wild' ? 'the wild Pokémon' : 'your opponent'}!` });
+  events.push({ type: 'raid', tone: 'info', text: `${assist.name}'s ${getSpecies(content, assist.speciesId).name} strikes ${battle.trainer?.leaderId ? 'the boss' : battle.kind === 'wild' ? 'the wild Pokémon' : 'your opponent'}!` , ...(assist.id === 'flight-north' && assist.strikesLeft === 5 ? { cameo: { speciesId: assist.speciesId, shiny: false, kind: 'return' as const } } : {}) });
   const amount = Math.min(enemy.mon.hp - 1, absorbHit(content, battle, enemy.mon, hit.amount));
   if (amount > 0) {
     enemy.mon.hp -= amount;
@@ -6741,7 +6741,7 @@ function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
     const hero = ctx.party[battle.activeIndex];
     if (hero && hero.hp > 0 && hero.hp * 4 < calcStats(ctx.content, hero).hp) {
       battle.storyEffects.push('shiny-rescue');
-      events.push({ type: 'raid', tone: 'phase', text: `A shiny ${nameOf(ctx, hero)} swoops in and knocks out ${getSpecies(ctx.content, enemy.speciesId).name} with one move!` });
+      events.push({ type: 'raid', tone: 'phase', text: `A shiny ${nameOf(ctx, hero)} swoops in and knocks out ${getSpecies(ctx.content, enemy.speciesId).name} with one move!`, cameo: { speciesId: hero.speciesId, shiny: true, kind: 'rescue' } });
       enemy.hp = 0;
     }
   }
