@@ -131,6 +131,27 @@ function ensureHost(game: Phaser.Game): HTMLDivElement {
   return host;
 }
 
+
+// A press that began on the layer (it ends with the release, wherever that lands).
+let pressOnLayer = false;
+let pressWatch = false;
+
+/**
+ * Keeps a press on the layer from also pressing the canvas under it. Phaser listens on the window for presses and
+ * releases outside its canvas (so a drag can end anywhere) and would press whatever canvas button lies at that spot:
+ * a click on the log window over the title used to choose a title entry too. A release is only kept back when its
+ * press began on the layer, so a drag that began on the canvas still ends.
+ */
+function shield(el: HTMLElement): void {
+  if (!pressWatch && typeof window !== 'undefined') {
+    pressWatch = true;
+    // Capture runs first; the flag drops after the release has been handled by the layer.
+    for (const ev of ['mouseup', 'touchend', 'touchcancel'] as const) window.addEventListener(ev, () => setTimeout(() => { pressOnLayer = false; }, 0), true);
+  }
+  for (const ev of ['pointerdown', 'mousedown', 'touchstart'] as const) el.addEventListener(ev, (e) => { pressOnLayer = true; e.stopPropagation(); });
+  for (const ev of ['mouseup', 'touchend'] as const) el.addEventListener(ev, (e) => { if (pressOnLayer) e.stopPropagation(); });
+}
+
 /**
  * One layer over every scene's view, for what belongs to no screen: notifications, toasts, the interaction log.
  * It lives as long as the game, wears the current look, takes clicks only on `[data-act]`, and draws nothing in Old.
@@ -157,7 +178,7 @@ export function mountOverlay(game: Phaser.Game, o: Pick<ReduxOptions, 'render' |
     const fn = t && el.contains(t) ? o.acts?.[t.dataset.act!] : undefined;
     if (fn) fn(t!.dataset.arg ?? '');
   });
-  el.addEventListener('pointerdown', (e) => e.stopPropagation());
+  shield(el);
   views.add({ redraw });
   lastBox = '';
   place();
@@ -227,8 +248,7 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     o.tip?.(now);
   };
   if (o.tip) window.addEventListener('pointermove', onTip);
-  // A press on the stage must not also reach whatever page element sits under it.
-  el.addEventListener('pointerdown', (e) => e.stopPropagation());
+  shield(el);
 
   const hide = (): void => { el.style.display = 'none'; };
   const show = (): void => { el.style.display = ''; };

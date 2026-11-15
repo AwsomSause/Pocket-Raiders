@@ -804,6 +804,8 @@ test('New UI: notifications, an achievement toast and the interaction log show o
   await expect(log).toBeVisible();
   await page.keyboard.press('l');
   await expect(log).toHaveCount(0);
+  // Those clicks stayed on the layer: the title under it did not take them as a press on one of its own entries.
+  expect(await scene(page)).toBe('MainMenu');
   // An achievement toast: its kicker and name; a tap opens what it was for and holds it, a second tap closes it.
   const first = await page.evaluate(() => { const p = (window as any).__pkr; const a = [...p.session.content.achievements.values()][0]; p.achievementToast(1); return { name: a.name as string, description: a.description as string }; });
   const toast = over.locator('[data-act="toast"]');
@@ -821,7 +823,8 @@ test('New UI: notifications, an achievement toast and the interaction log show o
   // The notices have run out by themselves by now, and the layer is gone with them.
   await expect(notices).toHaveCount(0, { timeout: 8000 });
   await expect(over).toBeHidden();
-  // The keyboard still drives the screen under it (the pointer may have moved the cursor, so any way on counts).
+  // The title is still the screen under it, and the keyboard still drives it.
+  expect(await scene(page)).toBe('MainMenu');
   await page.keyboard.press('Enter');
   await expect.poll(() => scene(page), { timeout: 20_000 }).not.toBe('MainMenu');
   expect(errors).toEqual([]);
