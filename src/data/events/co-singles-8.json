@@ -1412,11 +1412,11 @@
     {
      "label": "Stone, sea, sky.",
      "success": {
-      "text": "The portal coughs out a puff of dust and a single forgotten Potion. That is all it does.",
+      "text": "The portal coughs out a puff of dust and a single forgotten Poké Ball. That is all it does.",
       "effects": [
        {
         "kind": "item",
-        "id": "potion",
+        "id": "poke-ball",
         "count": 1
        }
       ]

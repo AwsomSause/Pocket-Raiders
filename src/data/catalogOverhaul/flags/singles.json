@@ -375,6 +375,86 @@
    "key": "whistle-right",
    "setBy": "rf-slide-whistle-safe (Low.), rf-whistle-2 (Middle.)",
    "readBy": "rf-whistle-3 (High. opens it; spent there)"
+  },
+  {
+   "key": "ace-loan",
+   "setBy": "face-ace-scouting (Take the loan.)",
+   "readBy": "face-ace-scouting-return (spent there)"
+  },
+  {
+   "key": "chant-real",
+   "setBy": "face-announcer (My real name.)",
+   "readBy": "nobody yet: for crowd lines this region"
+  },
+  {
+   "key": "chant-nickname",
+   "setBy": "face-announcer (A nickname.)",
+   "readBy": "nobody yet: for crowd lines this region"
+  },
+  {
+   "key": "dex-habitat",
+   "setBy": "file-data-card (Hand it over.)",
+   "readBy": "nobody yet: the Dex habitat view"
+  },
+  {
+   "key": "gym-secret",
+   "setBy": "face-badge-collector (Tell me.)",
+   "readBy": "nobody yet: a Gym bonus for winning without the lead fainting"
+  },
+  {
+   "key": "jenny-raid",
+   "setBy": "face-jenny-key (Tell her everything.)",
+   "readBy": "evil-story row (SF13 step 7 is easier)"
+  },
+  {
+   "key": "pace-fast",
+   "setBy": "milestone-* (Fast.)",
+   "readBy": "nobody yet"
+  },
+  {
+   "key": "pace-careful",
+   "setBy": "milestone-* (Careful.)",
+   "readBy": "nobody yet"
+  },
+  {
+   "key": "pace-rich",
+   "setBy": "milestone-* (Rich.)",
+   "readBy": "nobody yet"
+  },
+  {
+   "key": "press-heart",
+   "setBy": "face-journalist (+2, +3): kind answers",
+   "readBy": "rivals row (one rival line next region)"
+  },
+  {
+   "key": "press-bold",
+   "setBy": "face-journalist (+2, +3): bold answers",
+   "readBy": "rivals row (one rival line next region)"
+  },
+  {
+   "key": "press-light",
+   "setBy": "face-journalist (+2): light answers",
+   "readBy": "rivals row (one rival line next region)"
+  },
+  {
+   "key": "professor-pet",
+   "setBy": "face-professor-pet (Take it.), stamped with the region",
+   "readBy": "face-professor-checkin (a region later)"
+  },
+  {
+   "key": "professor-checkin-seen",
+   "setBy": "face-professor-checkin",
+   "readBy": "face-professor-checkin (once per run)"
+  },
+  {
+   "key": "quiet-pair",
+   "setBy": "quiet-bond (Leave them be.)",
+   "readBy": "nobody yet"
+  },
+  {
+   "key": "safari-pass",
+   "setBy": "return-gold-teeth (Give them back.)",
+   "readBy": "the Safari row (SF113): free entry"
   }
  ]
 }

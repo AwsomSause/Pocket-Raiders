@@ -230,7 +230,7 @@ const SF149: Json[] = [
     intro: 'Three switches and a dead portal, all cobwebs and quiet. A plaque: **"Sky before sea, and sea before stone."**',
     choices: [
       ch('Sky, sea, stone.', out('Sky, then sea, then stone. The portal shudders, crackles and opens on a swirl of light. You step through with your team holding on to you, and step out two whole stops further down the road.', skip2, moment('Took the old portal.', 30))),
-      ch('Stone, sea, sky.', out('The portal coughs out a puff of dust and a single forgotten Potion. That is all it does.', item('potion'))),
+      ch('Stone, sea, sky.', out('The portal coughs out a puff of dust and a single forgotten Poké Ball. That is all it does.', item('poke-ball'))),
       ch('Sea, sky, stone.', fight('The portal flickers and spits out a very confused Porygon, which takes it personally.', wild({ species: ['porygon'] }))),
     ],
   },

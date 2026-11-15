@@ -162,6 +162,22 @@ describe('catalog overhaul: singles', () => {
     expect(applyEffect(content, run, { kind: 'coFog', action: 'give', count: 2 }, new Rng(hashSeed('f')))).toBe('');
   });
 
+  it('the ace scout\'s loaned Pokémon joins, and the return room takes it back (or hears it is gone)', () => {
+    const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'co-loan', archetypeId: 'red' }), 0);
+    run.stage!.current = run.stage!.map.nodes[0]!.id;
+    const loan = content.events.get('face-ace-scouting')!.choices[0]!.success.effects;
+    for (const e of loan.filter((x) => x.kind === 'join')) applyEffect(content, run, e, new Rng(hashSeed('l')));
+    expect(run.party.some((m) => ['riolu', 'lucario'].includes(m.speciesId))).toBe(true);
+    const back = content.events.get('face-ace-scouting-return')!.choices[0]!;
+    const gone = back.branches[0]!.when[0]!;
+    expect(conditionMet(content, run, gone)).toBe(false);
+    for (const e of back.success.effects.filter((x) => x.kind === 'tradeAway')) applyEffect(content, run, e, new Rng(hashSeed('l')));
+    expect(run.party.some((m) => ['riolu', 'lucario'].includes(m.speciesId))).toBe(false);
+    // Boundary: with no Lucario left, the "it's gone" words take over and nothing else is taken.
+    expect(conditionMet(content, run, gone)).toBe(true);
+    expect(run.party).toHaveLength(1);
+  });
+
   it('a written line becomes the run epitaph, naming the picked Pokémon', () => {
     const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'co-epitaph', archetypeId: 'red' }), 0);
     const mon = run.party[0]!;

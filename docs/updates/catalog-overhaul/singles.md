@@ -34,4 +34,9 @@
 - "Who's that Pokémon?" three times in a row, and the last silhouette is your own lead.
 - A pinball table whose bonus lane is always the left ramp, a mirror maze where one reflection is a window, and a portal that skips two stops.
 
+**Batch 9: famous faces, returns, milestones and quiet moments (38 events).**
+- An Elite Four member cooks for you, practises with you, and teaches your lead her ace's move if you win.
+- A scout lends you a Pokémon and comes back for it; a professor gives you a Protean Eevee and checks on it a region later; a reporter's three questions end up in the paper.
+- Milestones ask how you want to travel: fast, careful, or rich. Quiet moments let your team rest, hold your hand, or dream.
+
 Known limits: "confused" and "Charged" for one battle are a damage change, the balloon lands two stops ahead (you cannot pick the spot), the Wooloo rolls on any day, and a few "shown before you choose" previews describe the Pokémon without naming it. Full list: `docs/status/co-singles.md`.

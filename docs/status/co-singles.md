@@ -14,7 +14,8 @@ Content: `tools/events/co/singles-<n>.ts` -> `src/data/events/co-singles-<n>.jso
 | 6 | SF144 Challenges, SF145 Shops and Workshops | 39 | built, re-read 2026-11-15 |
 | 7 | SF146 Study Stops, SF147 Evil-Team Pressure, SF148 Puzzles | 29 | built, re-read 2026-11-15 |
 | 8 | SF149 Puzzle Gates | 24 | built, re-read 2026-11-15 |
-| later | SF150 to SF161 | 203 | not started (old events still play) |
+| 9 | SF150 Famous Faces, SF151 Item Returns, SF152 Milestones, SF153 Quiet Moments | 38 | built, re-read 2026-11-15 |
+| later | SF154 to SF161 | 165 | not started (old events still play) |
 
 SF158 to SF160 (82 calendar weeks) live in `gameEvents.json` and SF161 (15 battle moments) in `dramaEvents.json`, not in the event files; they need their own build path.
 
@@ -49,8 +50,12 @@ All checked 2026-11-15 against `STORY_FAMILIES_19.md` and `_20.md`.
 | SF147 | vt-contraband-detector, vt-contraband-gate (room), vt-gadget-sabotage, vt-mind-control-helmet, vt-ransom-note, rescued-callback, dz-sky-route |
 | SF148 | rf-bingo-1/2/3 (each opens the next two nodes on), rf-crossword-cave (+ `rf-crossword-room`), rf-fossil-puzzle, rf-gear-box, rf-jigsaw-legend, rf-lantern-riddle, rf-map-sudoku, rf-mirror-beam, rf-mole-hunt, rf-move-trivia-1/2/3 (each opens the next) |
 | SF149 | rf-odd-one-out, rf-painting-alignment, rf-pinball (+ `rf-pinball-ball`), rf-rune-tiles, rf-silhouette-1/2/3, rf-slide-whistle-safe (+ `rf-whistle-2/3`), rf-sonar-cave, rf-speed-typing, rf-star-chart, rf-tide-gauge (+ `rf-tide-2/3`), rf-tilt-maze, rf-weighted-scales (+ `rf-scales-2`), w4-express-train, w4-forest-maze, w4-lab-terminal, w4-mirror-maze, w4-pressure-plates, w4-plates-2/3, w4-portal-switches, w4-riddle-signpost, w4-sundial |
+| SF150 | ev-elite-four-exhibition, face-e4-chef, face-e4-practice, face-ace-scouting (+ `face-ace-scouting-return`, six nodes on), face-announcer, face-badge-collector, face-breeders-convention, face-chef-throwdown, face-coach-whistle, face-doctor-checkup, face-fisherman-legend, face-hiker-story, face-idol-backstage, face-jenny-checkpoint (+ `face-jenny-key`), face-journalist (+ `face-journalist-2/3`), face-mascot-costume, face-nurse-reunion, face-professor-pet (+ callback `face-professor-checkin`, a region later), face-ranger-escort |
+| SF151 | file-data-card, fix-machine-part, penny-hack, return-gold-teeth, return-lost-item, trade-scanner |
+| SF152 | milestone-crossroads, milestone-dawn, milestone-embers (+ `milestone-embers-trainer`, next node), milestone-summit |
+| SF153 | quiet-bond, rk-birthday, rk-counting-sheep, rk-mood-swing, rk-perfect-day, rk-rest-day, rk-terrible-day, hold-the-hand, dream-memory |
 
-SF137 to SF149: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
+SF137 to SF153: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
 Buttons match the doc word for word, except `w4-balloon` (the doc says "pick a reachable node", not a button text): "Hop in, and pick where to land."
 Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callback), `festival-gift-swap`, `shimmering-grass-close`, `hidden-grotto-den`, `gmax-den-*` (5), `w4-graffiti-tag`, `r145-bonsly-railings`.
 
@@ -100,3 +105,17 @@ Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callba
 | Silhouettes: "three names" (the region's starter, Gym 1's ace) | The buttons describe the answer ("This region's Grass starter.", "The first Gym Leader's ace."); the third is your lead by name | Per-region name buttons |
 | Rune tiles: "a Sign" | Flag `sign-own` (a Sign for whichever Legendary blesses the run; the legends row turns it into Influence) | Nothing |
 | Step puzzles (slide whistle, tide gauge, scales) | One room per step; a wrong step carries on but cannot win | Nothing |
+| "Reputation +1" (Famous faces) | Run flag `rep`, the same one the people row uses | The per-region reputation, when it lands |
+| E4 chef "their ace's moves shown" | Named in the text (Dragon Dance, Outrage, Extreme Speed) | An Elite Four preview |
+| Ace scout "a loan Pokémon for one stage, returned after" | A Riolu-line Pokémon joins (3 levels up); six nodes on, the scout's room takes it back | A true end-of-stage return |
+| Badge collector "a Gym's hidden requirement" | Shows the Gym team and names the rule (win without the lead fainting); flag `gym-secret` | A Gym bonus for meeting it |
+| Journalist "each answer changes a rival line" | Flags `press-heart` / `press-bold` / `press-light` | The rivals row reading them |
+| Ranger escort "the next two nodes can't be ambushes" | The next two nodes are scouted | An ambush guard |
+| Data card "the Dex shows habitat" | ₽500 and flag `dex-habitat` | A Dex habitat view |
+| Penny "one more held-item slot in storage" | Each Pokémon can hold one more item (run relic) | A storage slot, if Kice means that |
+| Gold teeth "a Safari pass (SF113)" | Flag `safari-pass` | The Safari row reading it |
+| Milestones "Fast: one fewer node per stage" | Skips one node now (this stage) | A per-stage length change |
+| Milestones "Rich: more trainers, more prizes" | For the region: money ×1.25, a bonus-reward chance, foes +1 level | More trainer nodes |
+| Quiet bond "paired +1 Speed when both battle together" | Your top-Bond Pokémon gets a lasting Speed boost | A pair rule |
+| Birthday "real birthday (if the save has one)" | Any day | A birthday in the profile |
+| Dream memory "an earlier scene replays, with the other choice" | Your most-used Pokémon's moment, told in words | A scene replay |

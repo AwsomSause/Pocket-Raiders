@@ -36,7 +36,7 @@ describe('run events K', () => {
   it('resolves every choice of every event (checks, chances and trades included)', () => {
     let resolved = 0;
     for (const e of RK) {
-      for (let i = 0; i < e.choices.length; i++) {
+      for (let i = 0; i < content.events.get(e.id)!.choices.length; i++) {
         const run = runAt(e.id, `rk-${e.id}-${i}`);
         const gated = (content.events.get(e.id)!.choices[i]!.requires ?? []).length > 0;
         try {

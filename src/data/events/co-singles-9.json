@@ -1,0 +1,2259 @@
+{
+ "catalogOverhaul": "singles",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "ev-elite-four-exhibition",
+   "name": "Elite Four Exhibition",
+   "group": "Famous faces",
+   "rarity": "epic",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "badges",
+     "atLeast": 6
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A member of the Elite Four waves you into an empty exhibition court. Up close she is smaller than on television and her eyes are kinder. \"An exhibition. Nothing is lost, win or lose. I just want to see what you have.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"Good. Show me.\" She sends out her first Pokémon with a flick of the wrist, and you understand in the first exchange how far there still is to go, and how much fun it will be getting there.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Elite Four Member",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "dragon"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Held your own against the Elite Four in an exhibition.",
+         "importance": 55
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Watch them train.",
+     "success": {
+      "text": "You sit in the empty stands and watch her train for an hour. She never wastes a move. Every switch sets up the next, every attack leaves the foe one choice. By the end you can see her style as plainly as a map: patient, then sudden, then over.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Watched an Elite Four member train.",
+        "importance": 40
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-e4-chef",
+   "name": "Elite Four Chef",
+   "group": "Famous Faces",
+   "rarity": "rare",
+   "minStage": 4,
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#3a2a1e",
+    "effect": "sparkle"
+   },
+   "intro": "The Elite Four's dragon trainer is wearing an apron and a very serious face. \"I cook before every league day. It calms the dragons. It calms me. Sit down. Eat.\"",
+   "choices": [
+    {
+     "label": "Eat.",
+     "success": {
+      "text": "She feeds your whole team until nobody can move: dragon-fruit stew, spiced rice, a cake shaped like a Dragonite that your team demolishes with respect. Everyone comes away whole and warm and half asleep.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help cook.",
+     "success": {
+      "text": "You chop, she stirs, and while she stirs she talks: about her ace, how it opens with Dragon Dance when it is safe, then Outrage, then Extreme Speed to finish anything left standing. \"Now you know,\" she says. \"Knowing is not the same as stopping it.\" She is smiling.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Cooked with an Elite Four member and learned her ace's moves.",
+        "importance": 45
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-e4-practice",
+   "name": "Elite Four Practice Match",
+   "group": "Famous Faces",
+   "rarity": "rare",
+   "minStage": 5,
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "A member of the Elite Four is warming up on an empty court. \"Practice only. Lose and nothing is lost. Win, and I will teach your lead the move my ace is proudest of.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"Come on, then.\" She does not hold back much. She does not need to.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Elite Four Member",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "dragon"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "teachMove",
+         "move": "dragon-pulse"
+        },
+        {
+         "kind": "moment",
+         "text": "Won a practice match against the Elite Four.",
+         "importance": 55
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-ace-scouting",
+   "name": "Ace Trainer Scouting",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_f"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "An ace trainer has been watching you battle from a distance, and walks up at last. \"I scout talent for a living. You've got it. Take one of mine on loan for this stretch: from my Lucario line, a few levels above your team. I'll find you and take it back when the stage is done.\"",
+   "choices": [
+    {
+     "label": "Take the loan.",
+     "success": {
+      "text": "The loaned Pokémon looks you over, decides you will do, and falls in beside your team as if it had always been there. \"Look after it,\" the scout says. \"It'll look after you.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "lucario"
+        ],
+        "types": [],
+        "levelBonus": 3,
+        "shinyMultiplier": 1,
+        "direct": true
+       },
+       {
+        "kind": "flag",
+        "key": "ace-loan",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "face-ace-scouting-return",
+        "nodes": 6
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Fair enough. Your team, your way.\" The scout tips their cap and goes back to watching.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-ace-scouting-return",
+   "name": "The Scout Comes Back",
+   "group": "Famous faces",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The ace scout is waiting by the road, exactly as promised. \"Stage done. Time for my Pokémon to come home.\" It looks between the two of you, and for a moment it does not move.",
+   "choices": [
+    {
+     "label": "Give it back.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyLine",
+         "species": "riolu",
+         "absent": true
+        }
+       ],
+       "text": "The loaned Pokémon is not with you any more, and you tell the scout what happened. They are quiet for a long moment. \"That's the job,\" they say at last. \"Thanks for telling me straight.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "ace-loan",
+         "amount": -1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You say thank you, properly, and it touches its paw to your hand before it goes. \"It liked you,\" the scout says, surprised. \"It doesn't like anybody.\"",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "The loaned Pokémon",
+         "species": [
+          "riolu",
+          "lucario"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ace-loan",
+        "amount": -1
+       },
+       {
+        "kind": "moment",
+        "text": "Gave back a loaned Pokémon.",
+        "importance": 40
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-announcer",
+   "name": "Tournament Announcer",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#3a2e3a",
+    "effect": "none"
+   },
+   "intro": "A microphone on a stick pokes into your face. A man in a glittering jacket: \"Ladies and gentlemen, our next challenger! And what does the crowd call you?\"",
+   "choices": [
+    {
+     "label": "My real name.",
+     "success": {
+      "text": "You say your name into the microphone, and the crowd shouts it back, and keeps shouting it. For the rest of this region, wherever you battle, somebody in the stands is going to chant it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "chant-real",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The crowd learned your name.",
+        "importance": 45
+       }
+      ]
+     }
+    },
+    {
+     "label": "A nickname.",
+     "success": {
+      "text": "You give them a nickname on the spot. The announcer loves it. The crowd loves it more. For the rest of this region it is the only name anyone in the stands will use for you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "chant-nickname",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The crowd gave you a nickname.",
+        "importance": 45
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-badge-collector",
+   "name": "Gym Badge Collector",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#2e2e1e",
+    "effect": "none"
+   },
+   "intro": "A collector with a vest covered in glass-cased badges taps one with a fingernail. \"Every Gym has a hidden requirement, you know. Beat it a certain way and the Leader gives you something extra. Want to know this one's?\"",
+   "choices": [
+    {
+     "label": "Tell me.",
+     "success": {
+      "text": "\"Win without your lead fainting. That's it. She respects a trainer who protects their first Pokémon.\" He shows you the Leader's team, too, ticking them off on his fingers. \"Go on. Make me proud.\"",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "flag",
+        "key": "gym-secret",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-breeders-convention",
+   "name": "Breeder's Convention",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonbreeder"
+    ],
+    "tint": "#2e3a1e",
+    "effect": "none"
+   },
+   "intro": "Rows of folding tables, all covered in egg cartons and photographs of very proud parents. A banner reads: BREEDERS UNITE.",
+   "choices": [
+    {
+     "label": "Ask about eggs.",
+     "success": {
+      "text": "A breeder with a cardigan full of pins talks to you for half an hour about eggs: how warm, how long, why you should always sing to them. You come away knowing far more than you expected and feeling oddly moved.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show my team.",
+     "success": {
+      "text": "You line up your team on the table. A breeder looks them over with a jeweller's eye, stops at one, and smiles. \"This one could learn something its parents knew. Here, let me show you.\" Your Pokémon learns an egg move it should never have been able to.",
+      "effects": [
+       {
+        "kind": "eggMove"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-chef-throwdown",
+   "name": "Celebrity Chef Throwdown",
+   "group": "Famous Faces",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "tint": "#3a1e1e",
+    "effect": "fire"
+   },
+   "intro": "A celebrity chef slams a knife into a cutting board. \"A cook-off! Taste decides. You, me, one dish, one judge. Pick your flavour.\"",
+   "choices": [
+    {
+     "label": "Spicy.",
+     "chance": 0.34,
+     "success": {
+      "text": "Your curry makes the judge cry, in the good way. \"Spicy,\" she gasps. \"I always go for spicy.\" You win: the crowd cheers, and the chef hands over a Big Malasada with real grace.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "big-malasada",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The judge takes one bite and fans her mouth. \"Too hot! I'm a sweet person, really.\" The chef wins, and shakes your hand anyway.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Sweet.",
+     "chance": 0.33,
+     "success": {
+      "text": "Your berry pie makes the judge close her eyes. \"Sweet. I'm a sweet person, really.\" You win, and the chef hands over a Big Malasada.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "big-malasada",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The judge smiles politely. \"Lovely. But I'm a hearty eater.\" The chef wins, and gives your team the leftovers.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Hearty.",
+     "chance": 0.33,
+     "success": {
+      "text": "Your stew is gone in four spoonfuls. \"Hearty! That's what I like.\" You win, and the chef hands over a Big Malasada.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "big-malasada",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The judge pushes the bowl away. \"Filling. But I want something with fire in it.\" The chef wins, and pats you on the back.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-coach-whistle",
+   "name": "Coach's Whistle",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2e2e1e",
+    "effect": "none"
+   },
+   "intro": "A coach blows a whistle right by your ear. \"You! Your lead! Ten laps! No, wait, decide NOW: speed, power, or nerves?\"",
+   "choices": [
+    {
+     "label": "Speed.",
+     "success": {
+      "text": "Sprints, until your lead is a blur and the coach is hoarse. A little faster, for good.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "spe",
+        "percent": 5,
+        "who": "lead",
+        "until": "run"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Power.",
+     "success": {
+      "text": "Boulder-pushing, until your lead stands a little broader. A little stronger, for good.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "atk",
+        "percent": 5,
+        "who": "lead",
+        "until": "run"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nerves.",
+     "success": {
+      "text": "The coach blows the whistle, over and over, closer and closer, until your lead stops flinching at all. A little steadier, for good.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "spd",
+        "percent": 5,
+        "who": "lead",
+        "until": "run"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-doctor-checkup",
+   "name": "Pokémon Doctor Check-Up",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2e3a3a",
+    "effect": "none"
+   },
+   "intro": "A doctor with a stethoscope and a clipboard stops you on the road. \"Free check-up. Two minutes. I promise.\"",
+   "choices": [
+    {
+     "label": "Yes.",
+     "success": {
+      "text": "She checks every one of them, ears, paws, teeth, and clears up every little ailment. Then she taps her clipboard. \"One more thing. {least} hasn't been in a battle in a while. It's restless. It wants to help. Let it.\"",
+      "effects": [
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-fisherman-legend",
+   "name": "Fisherman's Legend",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#1e2e3a",
+    "effect": "rain"
+   },
+   "intro": "An old fisherman reels in nothing and smiles at you. \"Once upon a tide I hooked a Gyarados. It hooked me back. Care to hear it?\"",
+   "choices": [
+    {
+     "label": "Tell me.",
+     "success": {
+      "text": "He tells it the long way: the storm, the line singing, three days and three nights, and the moment the Gyarados looked him in the eye and let him go. \"Never caught it. Never needed to.\" He hands you his old rod. \"Your turn.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "good-rod",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Heard the fisherman's Gyarados story.",
+        "importance": 35
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-hiker-story",
+   "name": "Hiker Veteran Story",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2e2a1e",
+    "effect": "none"
+   },
+   "intro": "A weathered hiker sits on a rock, cleaning a compass. \"Thirty years of caves. Want to hear which ones lie?\"",
+   "choices": [
+    {
+     "label": "Tell me.",
+     "success": {
+      "text": "He tells you about every cave between here and the Gym, and which way out of each is the one nobody uses. \"The next one has a back door,\" he says. \"Follow the cold air.\"",
+      "effects": [
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-idol-backstage",
+   "name": "Idol Concert Backstage",
+   "group": "Famous Faces",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "boss.iono"
+    ],
+    "tint": "#3a1e3a",
+    "effect": "sparkle"
+   },
+   "intro": "A guard waves you through by mistake. Backstage, a pop star is stretching, and spots your Pokémon. Her whole face lights up. \"Oh! Can I meet them? Please?\"",
+   "choices": [
+    {
+     "label": "Yes.",
+     "success": {
+      "text": "She meets every one of them properly, sitting on the floor in her stage costume, and every one of them is a little in love with her by the end. She signs your bag. Word gets round.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Only the lead.",
+     "success": {
+      "text": "She kneels in front of your lead and talks to it like an old friend, and it leans into her hand. She signs your bag on the way out. Word gets round.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-jenny-checkpoint",
+   "name": "Officer Jenny Checkpoint",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1e2a3a",
+    "effect": "none"
+   },
+   "intro": "A police officer flags you down at a road barrier. \"Routine check. Anything to declare?\"",
+   "choices": [
+    {
+     "label": "Nothing.",
+     "success": {
+      "text": "She looks at your bag, looks at you, and waves you through. \"Safe travels.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "A key from a hideout.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "evil-key",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You hold up the key you took from the evil team. Her face changes. \"Where did you get this?\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "face-jenny-key"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-jenny-key",
+   "name": "Where Is It From?",
+   "group": "Famous faces",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The officer turns the key over in her fingers. \"This opens one of theirs, doesn't it. Where?\"",
+   "choices": [
+    {
+     "label": "Tell her everything.",
+     "success": {
+      "text": "You tell her everything: the gate, the grunts, the way in. She writes it all down, then looks up. \"We'll raid it tonight. When you get there, there'll be fewer of them.\" She shakes your hand like she means it. Word gets round.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "jenny-raid",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Told the police where the evil team's hideout is.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say you found it.",
+     "success": {
+      "text": "\"Found it.\" She does not believe you, and does not push. She gives the key back. \"Be careful.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-journalist",
+   "name": "Journalist Interview",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "boss.npc_scientist"
+    ],
+    "tint": "#2e2e3a",
+    "effect": "none"
+   },
+   "intro": "A reporter with a notepad leaps out of a bush. \"Three questions for the paper! First: why do you battle?\"",
+   "choices": [
+    {
+     "label": "For my team.",
+     "success": {
+      "text": "\"For my team.\" She writes it down. \"Second question, coming up.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "press-heart",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "face-journalist-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "To be the best.",
+     "success": {
+      "text": "\"To be the best.\" She grins and writes it down. \"Second question.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "press-bold",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "face-journalist-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Honestly? For fun.",
+     "success": {
+      "text": "\"For fun.\" She laughs. \"Second question.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "press-light",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "face-journalist-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-journalist-2",
+   "name": "Second Question",
+   "group": "Famous faces",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "\"Second: what do you think of your rivals?\"",
+   "choices": [
+    {
+     "label": "They push me.",
+     "success": {
+      "text": "\"They push me.\" She underlines it. \"Last one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "press-heart",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "face-journalist-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'll beat them all.",
+     "success": {
+      "text": "\"I'll beat them all.\" She underlines it twice. \"Last one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "press-bold",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "face-journalist-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "They're funny.",
+     "success": {
+      "text": "\"They're funny.\" She bites her pen to keep from laughing. \"Last one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "press-light",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "face-journalist-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-journalist-3",
+   "name": "Last Question",
+   "group": "Famous faces",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "\"Last one: who's your favourite Pokémon?\"",
+   "choices": [
+    {
+     "label": "{lead}.",
+     "success": {
+      "text": "\"{lead}.\" Your lead puffs up. The reporter snaps a photo. The interview is printed the next morning, and you hear that your rivals have all read it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "press-heart",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "Gave an interview to the paper.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "All of them.",
+     "success": {
+      "text": "\"All of them.\" Your whole team looks at you. The interview is printed the next morning, and you hear that your rivals have all read it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "press-heart",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "Gave an interview to the paper.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Whoever wins.",
+     "success": {
+      "text": "\"Whoever wins.\" The reporter whistles. The interview is printed the next morning, and you hear that your rivals have all read it, and that one of them pinned it to a wall.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "press-bold",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Gave an interview to the paper.",
+        "importance": 40
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-mascot-costume",
+   "name": "Mascot Costume Event",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#3a3a1e",
+    "effect": "sparkle"
+   },
+   "intro": "A giant foam Pokémon head sits on a bench, looking hopeful. A harassed woman with a clipboard: \"Our mascot called in sick. Could you... possibly...?\"",
+   "choices": [
+    {
+     "label": "Wear it.",
+     "success": {
+      "text": "You put on the head. It smells of every summer fair there has ever been. You dance, you wave, you get hugged by forty children, and when you take it off the woman hands you a little foam head of your own, for keeps. Word gets round.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Danced in the mascot costume.",
+        "importance": 35
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Pokémon wear it.",
+     "success": {
+      "text": "Your lead wears the head. It is a triumph. The crowd goes wild, your lead refuses to take it off for an hour, and the woman gives it a little foam head of its own to keep. Word gets round.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-nurse-reunion",
+   "name": "Nurse Joy Reunion",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#3a2e2e",
+    "effect": "hearts"
+   },
+   "intro": "A nurse waves from a clinic door, beaming. \"It's you! I remember your team from the very first Center you ever walked into. Come in, come in. On the house.\"",
+   "choices": [
+    {
+     "label": "Come in.",
+     "success": {
+      "text": "She treats every one of them like an old friend, and tells you how much they have grown. Everyone comes out whole, and you come out with a lump in your throat.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-professor-pet",
+   "name": "Professor's Pet Project",
+   "group": "Famous Faces",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "boss.oak"
+    ],
+    "tint": "#2e3a2e",
+    "effect": "none"
+   },
+   "intro": "A professor presses a Poké Ball into your hands. \"A prototype. An Eevee with an ability no Eevee is supposed to have: Protean. It changes type to match its move. Do not ask how. Take it for the road? I'll check in on it.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "The Eevee pops out, looks at you, and turns a different colour from nose to tail just to show off. The professor writes your name in a notebook. \"I'll find you. Next region, probably.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "eevee"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "protean"
+       },
+       {
+        "kind": "flag",
+        "key": "professor-pet",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Quite right. Very sensible.\" The professor looks a little disappointed anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-professor-checkin",
+   "name": "The Professor Checks In",
+   "group": "Famous faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "professor-pet",
+     "atLeast": 1,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "professor-checkin-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "The professor from last region comes hurrying up the road with a clipboard. \"There you are! How is my prototype? Is it eating? Is it happy?\"",
+   "choices": [
+    {
+     "label": "Show it to her.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyLine",
+         "species": "eevee",
+         "absent": true
+        }
+       ],
+       "text": "The Eevee is not with you any more, and you tell her so. She nods slowly, and writes it down. \"Thank you for telling me. Every result matters.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "professor-checkin-seen",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She checks its eyes, its paws, its readings, and then just sits and watches it for a while. \"It's happy,\" she says quietly. \"That's the result I hoped for.\" She leaves you a gift and a long list of notes.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "species": [
+          "eevee",
+          "vaporeon",
+          "jolteon",
+          "flareon",
+          "espeon",
+          "umbreon",
+          "leafeon",
+          "glaceon",
+          "sylveon"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "professor-checkin-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-ranger-escort",
+   "name": "Pokémon Ranger Escort",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonranger_m"
+    ],
+    "tint": "#1e2e22",
+    "effect": "none"
+   },
+   "intro": "A ranger in a green vest falls in beside you. \"Mind if I walk with you a stretch? The paths aren't safe lately. Anything waiting to jump you, I'll see first.\"",
+   "choices": [
+    {
+     "label": "Please.",
+     "success": {
+      "text": "The ranger walks ahead the whole way, and calls back what is waiting at the next two stops before you ever get there. Nothing takes you by surprise.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 2
+       },
+       {
+        "kind": "moment",
+        "text": "A ranger walked you safely down the road.",
+        "importance": 30
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "file-data-card",
+   "name": "The Data Card",
+   "group": "Story items",
+   "keyItem": "data-card",
+   "scene": {
+    "cast": [],
+    "tint": "#103040",
+    "effect": "glint"
+   },
+   "intro": "A researcher with a scanner the size of a shoebox spots the Data Card in your bag. \"Is that... may I? It would help the whole Pokédex project.\"",
+   "choices": [
+    {
+     "label": "Hand it over.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "data-card"
+      }
+     ],
+     "success": {
+      "text": "She scans it, gasps, and pays you on the spot. \"Look at this! Habitats, the whole region!\" She uploads it, and the Pokédex starts showing you where things live.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "data-card"
+       },
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "dex-habitat",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You keep it. She understands, sort of.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fix-machine-part",
+   "name": "The Broken Machine",
+   "group": "Story items",
+   "rarity": "uncommon",
+   "keyItem": "machine-part",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "effect": "rattle"
+   },
+   "intro": "A shop's register is jammed shut, and the shopkeeper is close to tears. \"If only I had that one machine part...\"",
+   "choices": [
+    {
+     "label": "Give the part.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "machine-part"
+      }
+     ],
+     "success": {
+      "text": "You hand over the part from your bag. Click, whirr, ding: the register opens. \"Take anything from the shelf behind me, on the house.\" You take a PP Up, ₽1,000 on the tag.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "machine-part"
+       },
+       {
+        "kind": "item",
+        "id": "pp-up",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You leave the shopkeeper with the register.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "penny-hack",
+   "name": "Penny's Hack",
+   "group": "Famous faces",
+   "scene": {
+    "cast": [
+     "trainer.penny"
+    ],
+    "effect": "flicker"
+   },
+   "intro": "Penny looks up from a laptop covered in stickers. \"I can... improve your storage. Probably. Let me?\"",
+   "choices": [
+    {
+     "label": "Let her.",
+     "success": {
+      "text": "She types for a long time, mutters, types some more, and slaps the laptop shut. \"There. Your storage now lets each of your Pokémon hold one more item. Don't ask how.\"",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "penny-storage-slot",
+        "name": "Penny's Storage Hack",
+        "effects": [
+         {
+          "kind": "itemSlotOffset",
+          "value": 1
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "return-gold-teeth",
+   "name": "The Gold Teeth",
+   "group": "Story items",
+   "keyItem": "gold-teeth",
+   "scene": {
+    "cast": [],
+    "tint": "#302810",
+    "effect": "sparkle"
+   },
+   "intro": "The old Safari warden is tapping his jaw sadly. Then he sees what is in your hand. \"My teeth! You found my gold teeth!\"",
+   "choices": [
+    {
+     "label": "Give them back.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "gold-teeth"
+      }
+     ],
+     "success": {
+      "text": "He pops them in, beams a golden beam, and presses a card into your hand. \"A Safari pass. Free entry, any time. You've earned it.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "gold-teeth"
+       },
+       {
+        "kind": "flag",
+        "key": "safari-pass",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Gave the Safari warden his teeth back.",
+        "importance": 35
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Somewhere behind you, the warden is still looking.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "return-lost-item",
+   "name": "The Lost Item",
+   "group": "Story items",
+   "rarity": "uncommon",
+   "keyItem": "lost-item",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "The woman at the Lost and Found counter spots the thing in your bag. \"Oh! Someone has been looking everywhere for that.\"",
+   "choices": [
+    {
+     "label": "Return it.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "lost-item"
+      }
+     ],
+     "success": {
+      "text": "The owner is called in. They hold it like something they thought was gone for good, and they cry a little, and then they give you something rare they had been saving, because what else could they do.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "lost-item"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You keep it. The counter woman looks at you for a long moment.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "trade-scanner",
+   "name": "The Scanner Collector",
+   "group": "Story items",
+   "rarity": "rare",
+   "keyItem": "scanner",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A collector at the dock spots your Scanner and holds up his Honest Trade Card. \"I'll be straight with you. That's worth ₽2,000. I'll give you a Nugget and a PP Up for it, which is exactly that.\"",
+   "choices": [
+    {
+     "label": "Trade.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "scanner"
+      }
+     ],
+     "success": {
+      "text": "A fair trade, honestly made. He shakes your hand and goes off happy with his Scanner.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "scanner"
+       },
+       {
+        "kind": "item",
+        "id": "nugget",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "pp-up",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "\"Fair enough. If you change your mind, you know where the dock is.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "milestone-crossroads",
+   "name": "The Crossroads",
+   "group": "Run Milestones",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#242a30",
+    "effect": "sparkle"
+   },
+   "intro": "Four roads meet at a worn stone. One is short and steep, one is slow and safe, one is busy with trainers. There is no hurry. But there is a choice.",
+   "choices": [
+    {
+     "label": "Fast.",
+     "success": {
+      "text": "The short road. You take the quick way: the next stretch goes by in a blur.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "flag",
+        "key": "pace-fast",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Careful.",
+     "success": {
+      "text": "The safe road. You take it slow and safe, and a little way on there is a Center you had not seen on the map.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "flag",
+        "key": "pace-careful",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rich.",
+     "success": {
+      "text": "The busy road. You take the road where the trainers are, and the prizes. Harder fights, bigger purses, for the rest of the region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Rich road: harder trainers, bigger prizes",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.25
+         },
+         {
+          "kind": "bonusRewardChance",
+          "chance": 0.15
+         },
+         {
+          "kind": "enemyLevelOffset",
+          "value": 1
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "pace-rich",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "milestone-dawn",
+   "name": "A Checkpoint at Dawn",
+   "group": "Run Milestones",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2430",
+    "effect": "sparkle"
+   },
+   "intro": "A pale sun rises over a clearing, and your team stretches in the first light. A good place to decide how the next stretch goes.",
+   "choices": [
+    {
+     "label": "Fast.",
+     "success": {
+      "text": "You set off at a run. You take the quick way: the next stretch goes by in a blur.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "flag",
+        "key": "pace-fast",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Careful.",
+     "success": {
+      "text": "You set off slowly. You take it slow and safe, and a little way on there is a Center you had not seen on the map.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "flag",
+        "key": "pace-careful",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rich.",
+     "success": {
+      "text": "You set off toward the noise of battles. You take the road where the trainers are, and the prizes. Harder fights, bigger purses, for the rest of the region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Rich road: harder trainers, bigger prizes",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.25
+         },
+         {
+          "kind": "bonusRewardChance",
+          "chance": 0.15
+         },
+         {
+          "kind": "enemyLevelOffset",
+          "value": 1
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "pace-rich",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "milestone-embers",
+   "name": "Embers of the Last Camp",
+   "group": "Run Milestones",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#30241d",
+    "effect": "sparkle"
+   },
+   "intro": "Someone else camped here before you. The fire is still warm, and there are footprints leading away, and Pokémon tracks beside them.",
+   "choices": [
+    {
+     "label": "Fast.",
+     "success": {
+      "text": "You kick dirt over the embers. You take the quick way: the next stretch goes by in a blur.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "flag",
+        "key": "pace-fast",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Careful.",
+     "success": {
+      "text": "You sit by the warm fire a while. You take it slow and safe, and a little way on there is a Center you had not seen on the map.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "flag",
+        "key": "pace-careful",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rich.",
+     "success": {
+      "text": "You head for the town. You take the road where the trainers are, and the prizes. Harder fights, bigger purses, for the rest of the region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Rich road: harder trainers, bigger prizes",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.25
+         },
+         {
+          "kind": "bonusRewardChance",
+          "chance": 0.15
+         },
+         {
+          "kind": "enemyLevelOffset",
+          "value": 1
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "pace-rich",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow their tracks.",
+     "success": {
+      "text": "You follow the footprints and the Pokémon tracks. They lead somewhere: whoever camped here is just ahead, and they will be waiting when you catch up.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "milestone-embers-trainer",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "milestone-embers-trainer",
+   "name": "Whoever Camped There",
+   "group": "Milestones",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The trainer from the campfire is sitting on a fence, waiting, as if they knew you would follow. \"Took you long enough. Battle?\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"Good. I was getting bored.\" They hop down off the fence.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Road Roster Trainer",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "milestone-summit",
+   "name": "A Quiet Summit",
+   "group": "Run Milestones",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1d2a2a",
+    "effect": "sparkle"
+   },
+   "intro": "You are at the top of a long climb. The whole region is laid out below you, roads and rivers and towns, and somewhere down there, your rival.",
+   "choices": [
+    {
+     "label": "Fast.",
+     "success": {
+      "text": "You take the steep way down. You take the quick way: the next stretch goes by in a blur.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "flag",
+        "key": "pace-fast",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Careful.",
+     "success": {
+      "text": "You take the long way down. You take it slow and safe, and a little way on there is a Center you had not seen on the map.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "flag",
+        "key": "pace-careful",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rich.",
+     "success": {
+      "text": "You head for the busiest town. You take the road where the trainers are, and the prizes. Harder fights, bigger purses, for the rest of the region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Rich road: harder trainers, bigger prizes",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.25
+         },
+         {
+          "kind": "bonusRewardChance",
+          "chance": 0.15
+         },
+         {
+          "kind": "enemyLevelOffset",
+          "value": 1
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "pace-rich",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look for the rival.",
+     "success": {
+      "text": "You look for a long time, and there: a little figure on the road ahead, with a Pokémon you would know anywhere. Now you know where they are, and every battle between you and them.",
+      "effects": [
+       {
+        "kind": "riftPreview"
+       },
+       {
+        "kind": "moment",
+        "text": "Spotted your rival from the summit.",
+        "importance": 35
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "quiet-bond",
+   "name": "Two Who Understand Each Other",
+   "group": "Event Director events",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "bond"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a1d",
+    "effect": "hearts"
+   },
+   "intro": "Two of your Pokémon have drifted away from the group and sit together, watching the sunset, not making a sound.",
+   "choices": [
+    {
+     "label": "Leave them be.",
+     "success": {
+      "text": "You leave them to it. When they come back to the fire, they come back together, and from then on they fight side by side as if they had planned it.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "spe",
+        "percent": 5,
+        "who": "top",
+        "until": "run"
+       },
+       {
+        "kind": "flag",
+        "key": "quiet-pair",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with them.",
+     "success": {
+      "text": "You sit down between them. Nobody says anything. Nobody needs to. When the sun is gone, both of them lean on you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-birthday",
+   "name": "It's Your Birthday!",
+   "group": "Run-Wide Modifiers",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "milestone"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a3a",
+    "effect": "sparkle"
+   },
+   "intro": "Everyone you have helped on this run lines the road with streamers. Somebody wheels out a cake with far too many candles. \"Happy birthday, trainer!\"",
+   "choices": [
+    {
+     "label": "Blow out the candles.",
+     "success": {
+      "text": "You blow them all out in one go, and everyone cheers, and your team gets cake on every single face. People you helped weeks ago come up to shake your hand. It is a very good day.",
+      "effects": [
+       {
+        "kind": "celebrate"
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "Celebrated a birthday on the road with everyone you helped.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-counting-sheep",
+   "name": "Counting Sheep",
+   "group": "Run-Wide Modifiers",
+   "stop": "rest",
+   "scene": {
+    "cast": [],
+    "tint": "#20202a",
+    "effect": "float"
+   },
+   "intro": "A grassy hill. Nothing is happening. Nothing at all. A sleepy Mareep is counting something under its breath.",
+   "choices": [
+    {
+     "label": "Count with it.",
+     "success": {
+      "text": "One Wooloo... two Wooloo... you wake up an hour later with your whole team asleep around you and every one of them clear-eyed and rested.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nap.",
+     "success": {
+      "text": "You just lie down in the grass. It is the best nap of the whole run.",
+      "effects": [
+       {
+        "kind": "rest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-mood-swing",
+   "name": "Mood Swing",
+   "group": "Run-Wide Modifiers",
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c2a",
+    "effect": "float"
+   },
+   "intro": "A strange breeze rolls over the team. Everyone's mood tips, some up, some down. One of them is very down.",
+   "choices": [
+    {
+     "label": "Ride it out.",
+     "success": {
+      "text": "You ride it out together. By evening the breeze has passed and everyone is themselves again.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Cheer them up.",
+     "success": {
+      "text": "You go round each of them, and spend longest with the one who needs it most. By evening, everyone is in a better mood, and the low one is lying with its head on your foot.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-perfect-day",
+   "name": "A Perfect Day",
+   "group": "Run-Wide Modifiers",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a2a",
+    "effect": "sparkle"
+   },
+   "intro": "The sun is warm, the breeze is soft, and everyone on this road is smiling at you. Nothing here can go wrong.",
+   "choices": [
+    {
+     "label": "Enjoy it.",
+     "success": {
+      "text": "You enjoy it. All of it. You let the day be what it is, and your team does the same, and by evening every one of them is rested and closer to you than ever.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-rest-day",
+   "name": "A Perfect Rest Day",
+   "group": "Run-Wide Modifiers",
+   "stop": "rest",
+   "scene": {
+    "cast": [],
+    "tint": "#18281c",
+    "effect": "float"
+   },
+   "intro": "A meadow with nothing in it but soft grass and a warm sun. Nothing is scheduled. Nobody will find you here.",
+   "choices": [
+    {
+     "label": "Rest.",
+     "success": {
+      "text": "You rest. The whole day. Nobody finds you.",
+      "effects": [
+       {
+        "kind": "rest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-terrible-day",
+   "name": "A Terrible Day",
+   "group": "Run-Wide Modifiers",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#1a1a24",
+    "effect": "rain"
+   },
+   "intro": "Dark clouds, a broken cart wheel, and a bag strap that snaps. Nothing here is going to go right today.",
+   "choices": [
+    {
+     "label": "Push through it.",
+     "success": {
+      "text": "You push through it, and it takes all day, and every one of you is soaked. But at the end, in the wreck of the cart, you find something the storm uncovered: something rare.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit it out.",
+     "success": {
+      "text": "You sit it out under a ledge, the whole team in a heap. When the storm finally passes it has washed something rare down the hill, right to your feet.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hold-the-hand",
+   "name": "The Dark Crossing",
+   "group": "Set Pieces",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#101020",
+    "effect": "none"
+   },
+   "intro": "A scary stretch of road. Strange noises in the trees. Your lead grips your sleeve and does not let go.",
+   "choices": [
+    {
+     "label": "Keep going together.",
+     "success": {
+      "text": "You keep going, together, one step at a time, and it holds on the whole way. On the other side, it does not let go for a long while after.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back.",
+     "success": {
+      "text": "You turn back and find another way round. Your lead looks relieved, and a little ashamed. You scratch its ears to tell it that is fine.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dream-memory",
+   "name": "A Dream After Rest",
+   "group": "Set Pieces",
+   "stop": "rest",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#101030",
+    "effect": "sparkle"
+   },
+   "intro": "You close your eyes by the fire, and the road fades, and you see something from earlier in the run, as clearly as if it were happening again.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You watch it again: {most} standing in front of the rest of the team when it mattered. And in the dream you see, for a moment, how it would have gone if you had chosen differently. You wake glad of the choice you made.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "top"
+       },
+       {
+        "kind": "moment",
+        "text": "Dreamed of an earlier moment of the run.",
+        "importance": 35
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
