@@ -3095,6 +3095,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
    * `pool` whose base stat total is within `bst` of the one given up, with a random Nature. The choice stays locked while nothing fits.
    */
   /** Catalog Overhaul: the Honest Trade Card (core/co/tradeCard.ts). The player picks one of their Pokémon that fits `wants` and gets `gives` (or a draw from trade pool `pool`, made from the run's seed, so the card shows exactly what arrives). Sets `trade-<id>`. `askedFirst`: the player heard its story first, so it arrives at Bond 3, not 2.*/
+  /** Catalog Overhaul: the trade-back service (TRADES.md 4.3, T030). The player picks a Pokémon that evolves by trade (a Linking Cord evolver, or one holding its trade item); it is traded over and straight back, evolved. */
+  z.object({ kind: z.literal('tradeBack') }),
   z.object({ kind: z.literal('honestTrade'), id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/), wants: TradeWantSchema.optional(), gives: HonestGivesSchema.optional(), pool: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(), askedFirst: z.boolean().default(false), /** A gift: nothing is taken (Nell's Sneasel). */ gift: z.boolean().default(false) }),
   z.object({ kind: z.literal('tradeFor'), want: TradeWantSchema, table: z.record(z.string(), z.string()).default({}), similar: z.object({ pool: z.array(z.string()).min(1), bst: z.number().int().min(0).max(200) }).optional() }),
   /** Beta 0.6 Vermilion Flight North: the whole party is taken away (kept in run.expansion.canon.stash) until `restoreParty` or a lost fight inside the stage hands it back. */

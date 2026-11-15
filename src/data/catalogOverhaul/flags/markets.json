@@ -56,6 +56,51 @@
    "key": "glass-forest-ticket",
    "setBy": "markets sets it (ticket-tout); The Glass Forest (SF41.4, ovc-glass-forest-s1, families) should open for it",
    "readBy": "(families row)"
+  },
+  {
+   "key": "teller-wennick",
+   "setBy": "Hermit Wennick's story (SF44, families)",
+   "readBy": "trade-t024"
+  },
+  {
+   "key": "delta-journal",
+   "setBy": "The Delta journal (Dr. Linden Vale, D1/B6)",
+   "readBy": "trade-t091"
+  },
+  {
+   "key": "marsh-vent",
+   "setBy": "The Hot Marsh (D6): the vent fixed",
+   "readBy": "trade-t093"
+  },
+  {
+   "key": "delta-ditto-colony",
+   "setBy": "The Ditto Colony (D4) done",
+   "readBy": "trade-t094"
+  },
+  {
+   "key": "delta-factory-dump",
+   "setBy": "The factory dump (D5) done",
+   "readBy": "trade-t096"
+  },
+  {
+   "key": "badge-challenged",
+   "setBy": "Sorrel's Gym (GL7, questlines)",
+   "readBy": "trade-t106"
+  },
+  {
+   "key": "apprentice-friend",
+   "setBy": "The Apprentice (SF2, families): Tib is a friend",
+   "readBy": "trade-t107"
+  },
+  {
+   "key": "nobody-escaped",
+   "setBy": "Nell's story (SF20, families): she escaped",
+   "readBy": "trade-t108"
+  },
+  {
+   "key": "dog-home",
+   "setBy": "Biscuit's story (SF46, families): the dog got home",
+   "readBy": "trade-t110"
   }
  ]
 }

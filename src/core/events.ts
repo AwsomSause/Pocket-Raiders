@@ -95,7 +95,7 @@ import { climaxCutOf } from './arc/climaxExtended';
 import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
 import { checkFlagKeys } from './shadow2/keys';
 import { bondFriendship, bondLevel, bondLevelMet, fitsMatch, whoOf, whoWords } from './co/who';
-import { fitsWant, honestCardFor, honestOffer, honestWant, shapeArrival, type HonestCard } from './co/tradeCard';
+import { fitsWant, honestCardFor, honestOffer, honestWant, shapeArrival, TRADE_HELD_ITEMS, tradeEvolution, type HonestCard } from './co/tradeCard';
 import { oweNodes } from './co/takeNode';
 import { clearNodeHold, setNodeBattle } from './co/attach';
 import { noteSpecial } from './expansion/fieldNotes';
@@ -349,6 +349,7 @@ function tradePicksOf(content: Content, run: RunState, choice: EventChoice): Tra
     const { types, moveFlag, bond } = choice.pick;
     return run.party.filter((m) => fitsMatch(content, m, { ...(types.length > 0 ? { types } : {}), ...(moveFlag ? { moveFlag } : {}) }) && (bond === undefined || bondLevel(content, m) >= bond)).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
   }
+  if (choice.success.effects.some((f) => f.kind === 'tradeBack')) return tradeBackCandidates(content, run).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}`, gets: tradeEvolution(content, m.speciesId, heldOf(m)) }));
   // Catalog Overhaul: the Honest Trade Card. Each pick carries its full card (both sides, fair value, the trader's warning).
   const honest = choice.success.effects.find((f) => f.kind === 'honestTrade');
   if (honest?.kind === 'honestTrade') {
@@ -371,6 +372,7 @@ function tradeMissing(content: Content, run: RunState, choice: EventChoice): str
   if (choice.pick && tradePicksOf(content, run, choice)?.length === 0) return 'Needs a Pokémon that fits';
   if (choice.success.effects.some((e) => e.kind === 'copyMoves') && run.party.length < 2) return 'Needs 2 Pokémon in your party';
   for (const e of choice.success.effects) {
+    if (e.kind === 'tradeBack' && tradeBackCandidates(content, run).length === 0) return 'Needs a Pokémon that evolves by trade';
     if (e.kind === 'honestTrade') {
       const want = honestWant(content, run, e);
       if (!honestOffer(content, run, e)) return 'This trade is not ready';
@@ -1105,6 +1107,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `swap ${e.want.label}`;
     case 'honestTrade':
       return e.gift ? '' : 'trade a Pokémon';
+    case 'tradeBack':
+      return 'a trade evolution';
     case 'pond':
       return '';
     case 'stashParty':
@@ -1385,6 +1389,20 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'honestTrade':
       return applyHonestTrade(content, run, e, tradeUid);
+    case 'tradeBack': {
+      const fits = tradeBackCandidates(content, run);
+      const mon = fits.find((m) => m.uid === tradeUid) ?? fits[0];
+      const to = mon ? tradeEvolution(content, mon.speciesId, heldOf(mon)) : null;
+      if (!mon || !to) return '';
+      const from = content.species.get(mon.speciesId)?.name ?? mon.speciesId;
+      const held = heldOf(mon);
+      evolve(content, mon, to);
+      // The trade item is used up by the evolution (a Metal Coat, an Up-Grade).
+      if (held && mon.held?.[held] && TRADE_HELD_ITEMS.has(held)) delete mon.held[held];
+      if (mon.held && Object.keys(mon.held).length === 0) delete mon.held;
+      discover(run, to, true);
+      return `${from} came back as ${content.species.get(to)?.name ?? to}!`;
+    }
     case 'tradeFor': {
       const fits = tradeCandidates(content, run, e.want);
       const mon = fits.find((m) => m.uid === tradeUid) ?? fits[0];
@@ -2311,4 +2329,10 @@ function applyHonestTrade(content: Content, run: RunState, e: Extract<EventEffec
     run.pending.push({ kind: 'caught', mon: fresh });
   }
   return words;
+}
+
+const heldOf = (m: PokemonInstance): string | undefined => (m.held ? Object.keys(m.held)[0] : undefined);
+/** Party Pokémon that would evolve if traded (TRADES.md 4.3). */
+function tradeBackCandidates(content: Content, run: RunState): RunState['party'] {
+  return run.party.filter((m) => tradeEvolution(content, m.speciesId, heldOf(m)) !== null);
 }
