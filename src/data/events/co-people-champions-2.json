@@ -1,0 +1,5072 @@
+{
+ "catalogOverhaul": "people",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "champion-lunch",
+   "name": "Lunch with a Champion",
+   "group": "Famous faces",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "effect": "hearts"
+   },
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "intro": "A park in the early afternoon, the grass still damp from a morning shower. At a picnic table under a wide oak, the Champion of this region sits behind a hamper big enough to hide a Snorlax in, and waves you over like an old friend who is running late. Their Pokémon lie sprawled in the sun around the table, every one of them with crumbs on its face. Champion: \"Sit. I've too many sandwiches. My Pokémon think I'm feeding an army.\" A plate slides across to you before you have finished sitting down, then a cup of something warm from a flask. For a while you just eat, and it is very good. Then the Champion leans their elbows on the table, and the easy smile turns thoughtful. Champion: \"What's the hardest thing about the road? Honestly.\"",
+   "choices": [
+    {
+     "label": "\"Losing.\"",
+     "success": {
+      "text": "The Champion nods slowly, as if they knew. They look past you at their own team, dozing in the grass. Champion: \"It never stops being hard. It stops being the end.\" Then they open the hamper's second lid, which turns out to be full of medicine, and tend to every one of your Pokémon with their own hands, every scrape and burn and ache, until your whole team is as good as new.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Being alone.\"",
+     "success": {
+      "text": "The Champion does not laugh, though you half expected them to. They tip their head at the Poké Balls on the bench beside you. Champion: \"You're not. You've got six.\" They let your team out onto the grass, and soon your Pokémon are sharing sandwiches with theirs and tumbling over each other in the sun. When you call them back, every one of them comes a little quicker than before.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Choosing.\"",
+     "success": {
+      "text": "The Champion laughs, a big warm laugh that startles a Pidgey out of the oak. Champion: \"Then choose and don't look back. Or do. Both work.\" Then they lean in and lower their voice, as if the trees might be listening, and tell you one true thing about their ace. Champion: \"You didn't hear that from me.\" You tuck it away for the League.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "champion-ace-hint",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Over lunch, the Champion told you a secret about their ace",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-champions-challenge",
+   "name": "The Champion Arrives",
+   "group": "Famous faces",
+   "rarity": "epic",
+   "tags": [
+    "Combat",
+    "Story"
+   ],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rep",
+     "category": "champion",
+     "atLeast": "known"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "A quiet stretch of route, wind moving through the long grass. You hear the footsteps before you see anyone: unhurried, certain. Then the Champion is simply there on the path ahead of you, alone, unannounced, no cameras and no entourage, cape folded over one arm because the day is too warm for it. Across the field, people have stopped to stare. The Champion does not look at them. Champion: \"I've heard your name. One battle. No ceremony.\" A Poké Ball turns between their fingers, easy as breathing. Champion: \"If you win, nothing changes. If you lose, nothing changes. I just want to see.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "The Champion nods once, as if you have answered a question. Three Poké Balls leave their hand together, and three Pokémon land on the route at full strength, the same three that guard the League. The grass flattens around them. Across the field, the watchers forget to breathe.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "champ-met",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The Champion tested you on an open road, and you saw what the top looks like",
+         "importance": 60
+        }
+       ],
+       "name": "The Champion",
+       "bossId": "lance",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "champ-won",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat the Champion in a battle with no ceremony",
+         "importance": 75
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Why me?\"",
+     "success": {
+      "text": "The Champion tilts their head, almost amused. Champion: \"Three people told me about you this week.\" They do not say who, and they do not need to. They look at you the way you check a story against the real thing, and your face goes warm. Then they nod, satisfied, and walk on down the route without another word.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "champ-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "The Champion studies you, then smiles properly for the first time. Champion: \"Good answer.\" The Poké Ball goes away. They walk past you, close enough that you feel the air move, and lift a hand over their shoulder without looking back. They will be waiting at the League, and now you both know it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-champions-invitation",
+   "name": "The Invitation",
+   "group": "Famous faces",
+   "rarity": "epic",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Region"
+   ],
+   "pseudo": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rep",
+     "category": "champion",
+     "atLeast": "known"
+    },
+    {
+     "kind": "badges",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "A courier in League colours finds you at a crossroads, out of breath, presses a heavy envelope into your hands and jogs away before you can ask anything. The seal is red wax stamped with the League crest, and the paper is so thick it barely bends. Inside is a single card in looping silver ink: \"You are invited to an exhibition of past Champions' teams. Bring your own. Dress optional.\" On the back, someone has drawn a little map in pencil, to a hall you have only ever heard about in stories.",
+   "choices": [
+    {
+     "label": "\"Go.\"",
+     "success": {
+      "text": "You follow the pencilled map to a pair of great bronze doors, which open before you knock. The Hall of Past Champions should not open for you yet, but the card is all the key it needs. An old caretaker reads it, raises an eyebrow and stamps it. Caretaker: \"An invitation. Your first statue is on the house.\" No donation in the tin this time: he leads you straight to the first wing.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mr-hall-champions-wing-1"
+       },
+       {
+        "kind": "moment",
+        "text": "The League invited you to the Hall of Past Champions",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Send it back.\"",
+     "success": {
+      "text": "You slide the card back into its envelope, write RETURN TO SENDER across the front in your neatest letters, and drop it into the next post box you pass. Somewhere, a League clerk is going to be very confused. The road ahead is the same road it was.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Bring the rival.\"",
+     "requires": [
+      {
+       "kind": "rivalMet",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "You send word, and your rival turns up at the bronze doors an hour later, out of breath and pretending they just happened to be nearby. Inside, the caretaker looks at the two of you, then at two statues standing side by side, and pulls a lever. Stone cracks, dust falls, and two Champions' aces step down together. For once your rival is watching your back instead of your weak spots.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Two Champion statues beat you and your rival, and you laughed about it after",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "dragonite",
+        "garchomp"
+       ],
+       "format": "doubles",
+       "name": "Two Champion Statues",
+       "ally": "eevee",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You and your rival beat two Champion statues together",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-captain-cameo",
+   "name": "The Silent Cap",
+   "group": "Famous Faces",
+   "rarity": "rare",
+   "minStage": 5,
+   "scene": {
+    "cast": [
+     "boss.red-masters"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "types": [],
+   "requires": [],
+   "intro": "A quiet stretch of path between two hills. Someone stands in the middle of it, very still: a small figure in a red cap pulled low and a red jacket two sizes too big, hands in pockets. They say nothing. They tilt the brim, exactly so, and a Poké Ball opens. Out pops a Pikachu wearing a tiny red cap of its own, held on with string. It is not Red. It is a kid of about nine who has watched every recording of Red there is, copying him perfectly. Their lip is trembling with the effort of not speaking. The Pikachu looks up at its trainer, then at you, as if apologising in advance.",
+   "choices": [
+    {
+     "label": "\"Battle in silence.\"",
+     "success": {
+      "text": "You say nothing either. You just reach for a Poké Ball, and the kid's eyes go huge under the cap. The whole battle passes without a word from either side, no calls and no cheers, only the wind and the sound of moves landing. When it is over, the kid nods to you once, solemnly, exactly like a real Champion would.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "A kid copying Red beat you in perfect silence",
+         "importance": 60
+        }
+       ],
+       "rule": {
+        "silent": true
+       },
+       "team": [
+        "pikachu",
+        "charmeleon",
+        "ivysaur"
+       ],
+       "name": "The Kid in the Red Cap",
+       "size": 3,
+       "types": [],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat a kid copying Red, and neither of you said a word",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Say hi.\"",
+     "success": {
+      "text": "You say hi. The kid holds out for two heroic seconds. Kid: \"...Hi.\" Then it all comes out at once, in one breath, the cap pushed back and the whole face lit up. Kid: \"I'm being Red can you tell I'm being Red\" The Pikachu sighs and sits down. You promise them you could absolutely tell.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Tip my own cap.\"",
+     "success": {
+      "text": "You touch the brim of a cap you are not wearing. The kid beams so wide that the act cracks right down the middle, then remembers, and solemnly tips theirs back. The battle is fought as seriously as any League match. Afterwards they dig in a pocket and hand you a folded sheet of paper: a crayon drawing of Red on a mountain, with a Pikachu twice his size.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "A kid in a red cap gave you their drawing of Red",
+        "importance": 60
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The kid in the red cap beat you, fair and square",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "pikachu",
+        "charmeleon",
+        "ivysaur"
+       ],
+       "name": "The Kid in the Red Cap",
+       "size": 3,
+       "types": [],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the kid in the red cap",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "met-red-battled",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "red-battled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A quiet stretch of path between two hills. Someone stands in the middle of it, very still: a small figure in a red cap pulled low and a red jacket two sizes too big, hands in pockets. They say nothing. They tilt the brim, exactly so, and a Poké Ball opens. Out pops a Pikachu wearing a tiny red cap of its own, held on with string. It is not Red. It is a kid of about nine who has watched every recording of Red there is, copying him perfectly. Their lip is trembling with the effort of not speaking. The Pikachu looks up at its trainer, then at you, as if apologising in advance. Then the kid looks left, and right, and leans in, and whispers so quietly that nobody else on the whole empty path could possibly hear. Kid: \"Did you meet him? Was he cool?\"",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "\"Yes.\"",
+       "success": {
+        "text": "The kid makes a small noise like a kettle about to boil and has to turn round in a full circle to cope with it. The Pikachu pats their leg. When they face you again they are back in character, but their eyes are shining.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "face-captain-cameo-after"
+         }
+        ]
+       }
+      },
+      {
+       "label": "\"He's very quiet.\"",
+       "success": {
+        "text": "The kid nods hard, thrilled, as if you have confirmed the most important thing in the world. Kid: \"I knew it.\" Then they straighten up and go very, very quiet, out of respect.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "face-captain-cameo-after"
+         }
+        ]
+       }
+      },
+      {
+       "label": "\"He's just a person.\"",
+       "success": {
+        "text": "The kid thinks about that for a long moment, frowning under the brim. Then the frown softens into something like relief. Kid: \"So I could be one too.\" They tug the cap down again, gently this time.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "face-captain-cameo-after"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "met-red-sat",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "red-sat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A quiet stretch of path between two hills. Someone stands in the middle of it, very still: a small figure in a red cap pulled low and a red jacket two sizes too big, hands in pockets. They say nothing. They tilt the brim, exactly so, and a Poké Ball opens. Out pops a Pikachu wearing a tiny red cap of its own, held on with string. It is not Red. It is a kid of about nine who has watched every recording of Red there is, copying him perfectly. Their lip is trembling with the effort of not speaking. The Pikachu looks up at its trainer, then at you, as if apologising in advance. Then the kid looks left, and right, and leans in, and whispers so quietly that nobody else on the whole empty path could possibly hear. Kid: \"Did you meet him? Was he cool?\"",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "\"Yes.\"",
+       "success": {
+        "text": "The kid makes a small noise like a kettle about to boil and has to turn round in a full circle to cope with it. The Pikachu pats their leg. When they face you again they are back in character, but their eyes are shining.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "face-captain-cameo-after"
+         }
+        ]
+       }
+      },
+      {
+       "label": "\"He's very quiet.\"",
+       "success": {
+        "text": "The kid nods hard, thrilled, as if you have confirmed the most important thing in the world. Kid: \"I knew it.\" Then they straighten up and go very, very quiet, out of respect.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "face-captain-cameo-after"
+         }
+        ]
+       }
+      },
+      {
+       "label": "\"He's just a person.\"",
+       "success": {
+        "text": "The kid thinks about that for a long moment, frowning under the brim. Then the frown softens into something like relief. Kid: \"So I could be one too.\" They tug the cap down again, gently this time.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "face-captain-cameo-after"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "face-captain-cameo-after",
+   "name": "The Silent Cap: The Brim Tilts",
+   "group": "Famous Faces",
+   "rarity": "rare",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.red-masters"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "The kid tugs the brim back down and goes silent again, but the act sits easier on them now, and the Pikachu is grinning. They take one step back and hold up a Poké Ball, waiting to see what you will do.",
+   "choices": [
+    {
+     "label": "\"Battle in silence.\"",
+     "success": {
+      "text": "You say nothing either. You just reach for a Poké Ball, and the kid's eyes go huge under the cap. The whole battle passes without a word from either side, no calls and no cheers, only the wind and the sound of moves landing. When it is over, the kid nods to you once, solemnly, exactly like a real Champion would.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "A kid copying Red beat you in perfect silence",
+         "importance": 60
+        }
+       ],
+       "rule": {
+        "silent": true
+       },
+       "team": [
+        "pikachu",
+        "charmeleon",
+        "ivysaur"
+       ],
+       "name": "The Kid in the Red Cap",
+       "size": 3,
+       "types": [],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat a kid copying Red, and neither of you said a word",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Tip my own cap.\"",
+     "success": {
+      "text": "You touch the brim of a cap you are not wearing. The kid beams so wide that the act cracks right down the middle, then remembers, and solemnly tips theirs back. The battle is fought as seriously as any League match. Afterwards they dig in a pocket and hand you a folded sheet of paper: a crayon drawing of Red on a mountain, with a Pikachu twice his size.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "A kid in a red cap gave you their drawing of Red",
+        "importance": 60
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The kid in the red cap beat you, fair and square",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "pikachu",
+        "charmeleon",
+        "ivysaur"
+       ],
+       "name": "The Kid in the Red Cap",
+       "size": 3,
+       "types": [],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the kid in the red cap",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-pokemon-tower",
+   "name": "The Tower",
+   "group": "Landmark Dungeons",
+   "stop": "dungeon",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1030",
+    "effect": "shake"
+   },
+   "requires": [],
+   "intro": "A tall grave-tower rises over the town like a finger pointing at the sky. Inside, thin candles burn on every step, hundreds of them, and the air smells of wax and old flowers. Voices drift down the stairwell, though you cannot see who is speaking. Three floors, each with a trainer who won't leave. On the first floor, between rows of small stone markers, a Channeler in a white robe kneels before one stone with a Growlithe carved on it. She looks up slowly, as if waking. Channeler: \"I came to visit my Growlithe. I've been here a year.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "The Channeler rises without a word, and her ghosts rise with her, pale shapes unfolding out of the candle smoke. She fights like someone who has forgotten there is anything else to do. When it is over she sits back down beside the stone, and you climb past her to the second floor.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-pokemon-tower-floor-2"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "A Channeler's ghosts beat you in the Pokémon Tower",
+         "importance": 60
+        }
+       ],
+       "name": "Channeler",
+       "size": 2,
+       "types": [
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat a Channeler in the Pokémon Tower",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Help her go home.\"",
+     "success": {
+      "text": "You sit down beside her on the cold floor. For a long time she talks about the Growlithe: how it chased the post van, how it slept across the doorway, how warm it was. You listen to all of it. When she runs out of words she touches the carved stone, says goodbye properly, and walks down the stairs into daylight for the first time in a year. You climb on.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "You helped a Channeler leave the Pokémon Tower",
+        "importance": 60
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-pokemon-tower-floor-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-pokemon-tower-floor-2",
+   "name": "The Tower: The Second Floor",
+   "group": "Landmark Dungeons",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1030",
+    "effect": "shake"
+   },
+   "intro": "The second floor is colder. A boy of about ten sits on the top step with his knees drawn up, and in his arms a small Cubone is crying, a thin, worn-out sound that echoes off every stone. Its bone club lies forgotten at his feet. Ro: \"My Cubone won't stop crying. Its mother's here somewhere.\"",
+   "choices": [
+    {
+     "label": "\"Find the mother.\"",
+     "success": {
+      "text": "You and Ro search the second floor row by row, reading every name on every stone while the Cubone hiccups in his arms. Nothing. Then, from above, a sound: a low, hollow knock, bone on stone. The Cubone goes silent and stares up the stairs. All three of you climb.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-pokemon-tower-floor-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Comfort the Cubone.\"",
+     "success": {
+      "text": "You kneel and hold out a hand. The Cubone flinches, then leans its skull helmet into your palm, and the crying slows to small shuddering breaths. Ro stares. Ro: \"It never lets anyone do that.\" Then a hollow knock sounds from the top floor, and the Cubone lifts its head. You climb together.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ptower-comforted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-pokemon-tower-floor-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-pokemon-tower-floor-3",
+   "name": "The Tower: The Top Floor",
+   "group": "Landmark Dungeons",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1030",
+    "effect": "shake"
+   },
+   "intro": "The top floor is open to the sky, and the candles gutter in the wind. At the far end, before a plain grey stone, stands a Marowak, or what is left of one: pale and see-through, its bone club raised. It is guarding the stone. When it sees the Cubone, the club wavers.",
+   "choices": [
+    {
+     "label": "\"Battle it.\"",
+     "success": {
+      "text": "The ghost drops into a guard and swings. It fights with everything it has, not to win but to keep you from the stone. When the battle ends it sinks back into the grey stone like water into sand, and the Cubone stands quietly where it stood. Ro carries it home in his arms.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The Marowak's ghost held the top of the Tower against you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "marowak"
+       ],
+       "name": "The Marowak's Ghost",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You laid the Marowak's ghost to rest in the Pokémon Tower",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Let the Cubone go to it.\"",
+     "success": {
+      "text": "Ro sets the Cubone down. It walks across the floor on unsteady legs, all the way to the ghost, and stops. The Marowak looks at it for a long time. Then it lowers its club, reaches out and touches the Cubone's head, gently, once. It fades like breath on a cold window. The Cubone stops crying.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-pokemon-tower-marowak"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "comforted",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ptower-comforted",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Cubone walks on its own feet now, holding on to the hem of your jacket instead of Ro's arm."
+    }
+   ]
+  },
+  {
+   "id": "dungeon-pokemon-tower-marowak",
+   "name": "The Tower: The Lonely Cubone",
+   "group": "Landmark Dungeons",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1030",
+    "effect": "shake"
+   },
+   "intro": "The Cubone stands alone in front of the grey stone, perfectly quiet, holding its bone club again. Ro wipes his face on his sleeve. Then the Cubone turns and looks at you, and then at Ro, as if it is waiting for someone to decide.",
+   "choices": [
+    {
+     "label": "\"Take Cubone.\"",
+     "success": {
+      "text": "Ro's chin wobbles, but he nods. Ro: \"It looked at you first.\" The Cubone walks over and taps its club against your boot, once, like knocking on a door. It is coming with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "cubone"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Cubone from the Pokémon Tower joined you",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give it to Ro.\"",
+     "success": {
+      "text": "You shake your head and nudge the Cubone back toward the boy. It runs to him, and he scoops it up, laughing and crying at once. On the way down the stairs he presses something heavy into your hands: a polished Thick Club. Ro: \"It was its mother's. We want you to have it.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "thick-club",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You gave the Cubone back to Ro, and he gave you a Thick Club",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-power-plant",
+   "name": "The Power Plant",
+   "group": "Landmark Dungeons",
+   "stop": "dungeon",
+   "rarity": "rare",
+   "types": [
+    "electric"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2810",
+    "effect": "shake"
+   },
+   "requires": [],
+   "intro": "A power plant gone quiet, its fences rusted and its windows dark, humming anyway. Somewhere deep inside the generators still turn, and the corridors are lit only by sparks jumping between the cables. Three halls, three guards. In the first hall a guard in a hard hat stands very still, sweating, a Poké Ball held out at arm's length. Beside him an Electrode is glowing brighter and brighter, twitching, nearly exploding every few seconds and then, with a shudder, not. Guard: \"Don't. Make. Sudden. Moves.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "The guard swallows hard and points at you. The Electrode rolls forward, crackling, and the battle is fast and loud and very bright. At least it spends its charge on the battle instead of the building. Afterwards the guard sags with relief and waves you through to the second hall.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-power-plant-hall-2"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The Power Plant guard's Electrode lit up the whole hall",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "electrode",
+        "voltorb"
+       ],
+       "name": "Plant Guard",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the guard of the Power Plant",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Calm the Electrode.\"",
+     "success": {
+      "text": "You crouch, slowly, and talk to the Electrode the way you would to a frightened animal: low, steady, meaningless words. Its glow pulses, flickers and fades to a sleepy hum. The guard lets out a breath he has been holding for an hour and waves you through to the second hall.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-power-plant-hall-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-power-plant-hall-2",
+   "name": "The Power Plant: The Second Hall",
+   "group": "Landmark Dungeons",
+   "rarity": "rare",
+   "types": [
+    "electric"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2810",
+    "effect": "shake"
+   },
+   "intro": "The second hall is alive with sparks. A swarm of Magneton hangs in the air between you and the far door, a slow spinning cloud of steel and static, and every cable on the walls crackles in time with them. The hair on your arms stands up.",
+   "choices": [
+    {
+     "label": "\"Push through.\"",
+     "chance": 0.9,
+     "success": {
+      "text": "You put your head down and run. Sparks snap at your heels, a Magneton swings past close enough to taste the metal, and then you are through the far door, breathing hard, everyone in one piece.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-power-plant-hall-3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You put your head down and run, and nearly make it. A last arc of static leaps from the swarm and catches your lead square in the back. It staggers through the far door, paralysed and twitching.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "paralysis",
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-power-plant-hall-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Use a Ground-type.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "You send out your Ground-type and walk it ahead of you down the middle of the hall. The sparks bend toward it and vanish into it harmlessly, again and again, as if it were drinking them. The Magneton drift aside, baffled, and you reach the far door without a single shock.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-power-plant-hall-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-power-plant-hall-3",
+   "name": "The Power Plant: The Control Room",
+   "group": "Landmark Dungeons",
+   "rarity": "rare",
+   "types": [
+    "electric"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2810",
+    "effect": "shake"
+   },
+   "intro": "The third hall is the control room. Every screen is dark, and the air smells of ozone and burnt dust. On the control desk, among the dead switches, lies a single golden feather as long as your arm, still crackling with tiny blue sparks. The windows behind it are scorched in the shape of a great bird.",
+   "choices": [
+    {
+     "label": "\"Take it.\"",
+     "success": {
+      "text": "You pick it up. The feather crackles against your palm, warm and alive, and every light in the plant flickers on for one second, then off again. Far away, thunder rolls across a clear sky. Zapdos knows you have it: a Zapdos Sign.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "legend-zapdos-sign",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You took a Zapdos feather from the Power Plant",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave it.\"",
+     "success": {
+      "text": "You leave the feather where it lies. As you step out into the evening, a shadow passes overhead, huge and jagged, and you look up in time to see Zapdos itself wheel once above the chimneys in a crown of lightning. Then it is gone. It saw you leave its feather, and it will remember.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "legend-zapdos-influence",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You saw Zapdos above the Power Plant",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-seafoam-depths",
+   "name": "Seafoam Depths",
+   "group": "Landmark Dungeons",
+   "stop": "dungeon",
+   "rarity": "rare",
+   "types": [
+    "ice",
+    "water"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#102838",
+    "effect": "shake"
+   },
+   "requires": [],
+   "intro": "Caves of ice and surf under the sea cliffs. The floor slides under your boots, the tide pulls at the lower passages, and cold-loving trainers wait on each ledge with their breath smoking. Three chambers. The first is a long sheet of blue ice crossed by a rushing current of seawater, the exit somewhere on the far side. Frozen boulders sit at the edges like spectators.",
+   "choices": [
+    {
+     "label": "\"Slide.\"",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You push off and steer, leaning left, leaning right, your team sliding behind you in a laughing line. You stop exactly at the far exit, which surprises you more than anyone. The second chamber is waiting.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-seafoam-depths-chamber-2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You push off, misjudge the first turn, spin, and slide round the whole cave twice before you bump to a stop near the exit, dizzy and soaked. Your team thinks it was the best thing that ever happened. On to the second chamber.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-seafoam-depths-chamber-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Push a boulder to stop the current.\"",
+     "success": {
+      "text": "You and your strongest Pokémon put your shoulders to a frozen boulder and heave. It groans, scrapes, and tips into the channel with an enormous splash. The current breaks around it and slows to a trickle, and you walk across the ice like a road to the second chamber.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-seafoam-depths-chamber-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-seafoam-depths-chamber-2",
+   "name": "Seafoam Depths: The Ice Slope",
+   "group": "Landmark Dungeons",
+   "rarity": "rare",
+   "types": [
+    "ice",
+    "water"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#102838",
+    "effect": "shake"
+   },
+   "intro": "The second chamber opens onto a wide frozen slope with a dark pool at the bottom. A Skier in a bright orange jacket leans on her poles beside a Lapras that seems to be wearing a saddle. She pushes her goggles up and grins. Skier: \"Ever skied on a Lapras?\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "The Skier snaps her goggles down. Her Lapras slides into place and the ice rings with every move. When it is over she points you to steps cut into the ice, down toward the third chamber.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-seafoam-depths-chamber-3"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "A Skier and her Lapras beat you on the ice",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "lapras",
+        "cloyster"
+       ],
+       "name": "Skier",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat a Skier in the Seafoam Depths",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Ski.\"",
+     "success": {
+      "text": "You climb onto the Lapras behind the Skier, and it launches down the slope like a sled, faster than anything should go on ice. You shoot past three ledges and through a tunnel you would never have found, and come out at the bottom laughing and shaking, already far ahead of where you should be.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-seafoam-depths-chamber-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-seafoam-depths-chamber-3",
+   "name": "Seafoam Depths: The Frost Wings",
+   "group": "Landmark Dungeons",
+   "rarity": "rare",
+   "types": [
+    "ice",
+    "water"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#102838",
+    "effect": "shake"
+   },
+   "intro": "The third chamber is silent. Cold air pours down from a hole high in the ceiling, colder than anything else in the caves, and frost covers every surface: the walls, the stones, your own sleeves. All of it has grown in the shape of wings.",
+   "choices": [
+    {
+     "label": "\"Look up.\"",
+     "success": {
+      "text": "You tip your head back and look up through the hole. For one breath, high above, something vast and pale blue crosses the circle of sky, trailing snow that glitters in the sun. A single frost-white feather drifts down into your hands and does not melt: an Articuno Sign.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "legend-articuno-sign",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "An Articuno feather fell to you in the Seafoam Depths",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave a Berry.\"",
+     "success": {
+      "text": "You take a Berry from your bag and set it on a ledge under the hole, where the frost is thickest. Nothing happens. Then, as you turn to go, the cold air from above grows gentle, almost warm, and the frost wings on the walls glitter as if something far above has noticed you, and approves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "legend-articuno-influence",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You left a Berry for Articuno in the Seafoam Depths",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-traveling-trainer-s1",
+   "name": "The Travelling Trainer: Three's All I Need",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "travel-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A dusty crossroads with a signpost leaning every which way. A trainer sits on a battered rucksack beneath it, her boots worn through at the toes and her map folded and refolded until it has gone soft as cloth. Three Poké Balls hang on her belt, and only three. She looks you up and down, counting your team at a glance. Bryony: \"Three's all I need. Fight me.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Bryony is on her feet before you finish nodding. A Pidgeotto, a Growlithe and an Ivysaur, and she knows exactly where each of them will be before they get there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "travel-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Bryony's three were all she needed",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "pidgeotto",
+        "growlithe",
+        "ivysaur"
+       ],
+       "name": "Traveller Bryony",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "travel-won",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Bryony's three",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Only three?\"",
+     "success": {
+      "text": "Bryony pats each Poké Ball on her belt in turn, like checking on sleeping children. Bryony: \"Three I know, not six I don't.\" Then she stands, the three come out, and you find out exactly how well she knows them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "travel-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Bryony's three were all she needed",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "pidgeotto",
+        "growlithe",
+        "ivysaur"
+       ],
+       "name": "Traveller Bryony",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "travel-won",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Bryony's three",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Pass.\"",
+     "success": {
+      "text": "You shake your head and walk on. Bryony shrugs and goes back to her map. The road is long, and she is in no hurry.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-traveling-trainer-s2",
+   "name": "The Travelling Trainer: Back for More",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "travel-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "travel-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "Bryony again, on a different road, with the same rucksack and the same soft map. She spots you from a long way off and grins, and her three Poké Balls are exactly where they were, not one more. She looks very pleased with herself. Bryony: \"Back for more? Same three. Didn't need to change.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "The same three come out, a little stronger and a lot cockier, as if beating you once taught them they could do it again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "travel-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Bryony's same three beat you twice",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "pidgeotto",
+        "growlithe",
+        "ivysaur"
+       ],
+       "name": "Traveller Bryony",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Bryony's same three again",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"How did you know my type?\"",
+     "success": {
+      "text": "Bryony taps the side of her nose. Bryony: \"I watched.\" Then the same three come out, stronger than you remember.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "travel-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Bryony's same three beat you twice",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "pidgeotto",
+        "growlithe",
+        "ivysaur"
+       ],
+       "name": "Traveller Bryony",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Bryony's same three again",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "won",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "travel-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Bryony again, on a different road, and something about her has changed. She is standing instead of sitting, and her Pokémon have grown: a Pidgeot on her shoulder, an Arcanine at her heel, a Venusaur blocking half the road. They look at your team as if they remember it. Bryony: \"I evolved them. And I added something for that favourite type of yours.\"",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "\"Battle.\"",
+       "success": {
+        "text": "Bryony's grown team comes at you all at once, and every one of them has been training for exactly this.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "travel-m2",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "Bryony's evolved team took its revenge",
+           "importance": 60
+          }
+         ],
+         "team": [
+          "pidgeot",
+          "arcanine",
+          "venusaur"
+         ],
+         "name": "Traveller Bryony",
+         "size": 3,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "moment",
+           "text": "You beat Bryony's evolved team",
+           "importance": 60
+          }
+         ]
+        }
+       }
+      },
+      {
+       "label": "\"How did you know my type?\"",
+       "success": {
+        "text": "Bryony taps the side of her nose. Bryony: \"I watched.\" Every battle you fought since the crossroads, she was somewhere in the crowd. Then her evolved team steps forward.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "travel-m2",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "Bryony's evolved team took its revenge",
+           "importance": 60
+          }
+         ],
+         "team": [
+          "pidgeot",
+          "arcanine",
+          "venusaur"
+         ],
+         "name": "Traveller Bryony",
+         "size": 3,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "moment",
+           "text": "You beat Bryony's evolved team",
+           "importance": 60
+          }
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ovc-traveling-trainer-s3",
+   "name": "The Travelling Trainer: Six Now",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "travel-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "travel-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "Bryony is waiting for you this time, sitting on a stone wall at the edge of a town and swinging her boots. There are six Poké Balls on her belt. She hops down and holds them up one at a time, introducing each by name with a small proud smile. Bryony: \"Six now. I know all six. You taught me to.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Six against six, and it is the best battle either of you has had in weeks. Bryony calls every move like she has known these six all her life. When it is over she crosses the field and shakes your hand, hard, two pumps, like sealing a deal.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "travel-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Bryony's six beat you, and she shook your hand anyway",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "pidgeot",
+        "arcanine",
+        "venusaur",
+        "lapras",
+        "jolteon",
+        "machamp"
+       ],
+       "name": "Traveller Bryony",
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Bryony's full team, and she shook your hand",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Travel together a while.\"",
+     "success": {
+      "text": "Bryony grins and swings her rucksack onto her shoulder. Bryony: \"Thought you'd never ask.\" For the rest of the region she walks beside you, map in hand, arguing about routes and fighting at your side whenever a battle calls for two.",
+      "effects": [
+       {
+        "kind": "wandererFriend",
+        "stages": 3
+       },
+       {
+        "kind": "flag",
+        "key": "travel-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-crossroads-duelist-s1",
+   "name": "The Crossroads Duelist: The Custom",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "teshe-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "Four roads meet at a stone marker worn smooth by hands. A duelist stands on top of it, a young woman in a long grey coat with a single Poké Ball at her hip and the stillness of someone who has stood there a long time. She steps down as you come near and blocks the way, not unkindly. Teshe: \"One Pokémon. One battle. That's the custom here.\"",
+   "choices": [
+    {
+     "label": "\"Accept.\"",
+     "success": {
+      "text": "Teshe nods, satisfied, and lets her Gallade out. It bows to your lead before the duel, and your lead, a little startled, bows back. Then neither of them holds anything back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "teshe-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Teshe's Gallade won the duel at the crossroads",
+         "importance": 60
+        }
+       ],
+       "rule": {
+        "noSwitch": true
+       },
+       "team": [
+        "gallade"
+       ],
+       "name": "Duelist Teshe",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You won Teshe's one-on-one duel at the crossroads",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Whose custom?\"",
+     "success": {
+      "text": "Teshe: \"Mine. I made it up. It's still a custom.\" She says it with a perfectly straight face, and then the corner of her mouth twitches. You accept. Her Gallade steps out and bows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "teshe-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Teshe's Gallade won the duel at the crossroads",
+         "importance": 60
+        }
+       ],
+       "rule": {
+        "noSwitch": true
+       },
+       "team": [
+        "gallade"
+       ],
+       "name": "Duelist Teshe",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You won Teshe's one-on-one duel at the crossroads",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Go round.\"",
+     "success": {
+      "text": "You leave the road and go the long way round, through brambles, across a stream and over a field of very opinionated Tauros. It costs you the better part of a day. When you look back from the far hill, Teshe is still standing on her stone, watching you go.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-crossroads-duelist-s2",
+   "name": "The Crossroads Duelist: Two on Two",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "teshe-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "teshe-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "The crossroads again. Teshe waits on her stone, but she is not alone: across the junction, as far from her as the roads allow, a second woman in a grey coat leans on the other marker with her arms folded. Same coat. Same jaw. Not looking at each other. Teshe: \"Two on two. Bring your rival. I'll bring mine.\" She tilts her head at the other woman without turning. Slowly you understand: Teshe's rival is her sister, and her sister will not speak to her.",
+   "choices": [
+    {
+     "label": "\"Bring my rival.\"",
+     "requires": [
+      {
+       "kind": "rivalMet",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "Your rival turns up within the hour, and inside five minutes they and Teshe's sister are getting on famously, swapping stories and laughing at the same jokes, which makes both duelists absolutely furious. The tag battle that follows is fought with real heat on one side and real giggling on the other.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "teshe-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Teshe and her sister beat you and your rival, together",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "gallade",
+        "gardevoir"
+       ],
+       "format": "doubles",
+       "name": "Teshe and Her Sister",
+       "ally": "eevee",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You and your rival beat Teshe and her sister",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Fight alone.\"",
+     "success": {
+      "text": "You step into the junction alone. Teshe and her sister glance at each other for the first time, a flicker, and send out four Pokémon between them. Two trainers against one, and they fight better together than either would ever admit.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "teshe-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Two duelists against one was too much, even for you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "gallade",
+        "gardevoir",
+        "medicham",
+        "hitmonlee"
+       ],
+       "format": "doubles",
+       "name": "Teshe and Her Sister",
+       "size": 4,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat both duelists alone",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Why won't she speak to you?\"",
+     "success": {
+      "text": "Teshe is quiet for a long moment. Teshe: \"I left home for the crossroads.\" She says it to her boots. Across the junction, her sister has stopped pretending not to listen. There is room, just about, for someone to carry a word between them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "teshe-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ovc-crossroads-duelist-broker"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-crossroads-duelist-broker",
+   "name": "The Crossroads Duelist: Between Sisters",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "You walk across the junction to the sister. Up close she looks tired, and younger than Teshe. She is looking over your shoulder at her sister, not at you. Sister: \"She left without saying goodbye. She just went.\"",
+   "choices": [
+    {
+     "label": "\"She misses you.\"",
+     "success": {
+      "text": "The sister's face does something complicated. She walks across the crossroads, slowly, and stops one step short of Teshe. Nobody says anything. Then Teshe says something too quiet to hear, and her sister laughs, wet and surprised.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "teshe-brokered",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tell her yourself.\"",
+     "success": {
+      "text": "The sister glares at you, then at Teshe. Then she marches across the junction and tells her, at length and at volume, exactly what she thinks of people who leave without a word. Teshe listens to every bit of it. When it is over they are standing much closer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "teshe-brokered",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-crossroads-duelist-s3",
+   "name": "The Crossroads Duelist: Going Home",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "teshe-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "teshe-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "The crossroads, early morning. Teshe is not on her stone. She sits on a packed bag beside it with her coat buttoned to the chin, and stands as soon as she sees you, as if she has been waiting a while. Teshe: \"I'm going home. My sister asked. Take this.\" She holds out a Choice Band, its grey cloth worn soft from years on her Gallade.",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "You take the Band. Teshe nods, once, the same nod she gave you before the first duel. Then she shoulders her bag and walks down the road home, and does not look back, and does not need to.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "choice-band",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "teshe-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Keep the custom going.\"",
+     "success": {
+      "text": "Teshe looks at you for a long moment. Then, very formally, she steps aside and gestures at the stone. Teshe: \"Then it's yours. One Pokémon. One battle.\" She knots the Band round your wrist herself. From today, you are the crossroads duelist.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "choice-band",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Teshe named you the new crossroads duelist",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "teshe-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "brokered",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "teshe-brokered",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Her sister waits a little way down the home road with two bags of her own. Teshe catches you noticing and almost smiles. Teshe: \"You started that.\""
+    }
+   ]
+  },
+  {
+   "id": "ovc-mirror-trainer-s1",
+   "name": "The Mirror Trainer: Same Types",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ves-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A still lake on a windless day, the water so flat it holds the whole sky. A trainer stands at the edge, about your age and about your height, and when you look at their belt your stomach gives a small strange turn: their team is yours, type for type, in the same order. Ves looks just as unsettled. Ves: \"Same types. Different choices. Let's see.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Ves sends out the first one, and it is your lead's mirror image, standing on the shore like a reflection that climbed out of the lake. Every move you think of, it seems to think of too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ves-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Ves beat you with your own reflection",
+         "importance": 60
+        }
+       ],
+       "name": "Mirror Trainer Ves",
+       "mirror": true,
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You won a mirror battle against Ves",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Did you copy me?\"",
+     "success": {
+      "text": "Ves shakes their head quickly. Ves: \"No. We're just alike. It's unnerving.\" They rub the back of their neck, exactly the way you do. Then the battle: a mirror match neither of you can quite read.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ves-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Ves beat you with your own reflection",
+         "importance": 60
+        }
+       ],
+       "name": "Mirror Trainer Ves",
+       "mirror": true,
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You won a mirror battle against Ves",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Walk on.\"",
+     "success": {
+      "text": "You walk on along the shore. When you glance back, Ves is watching you go, and in the still water their reflection and yours stand side by side.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-mirror-trainer-s2",
+   "name": "The Mirror Trainer: The Other Thing",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ves-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ves-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "Ves is back, and they have been busy. Their notebook is full of diagrams, and they look at your team like a puzzle they have nearly solved. Their own Pokémon have grown stronger since the lake. Ves: \"I've been thinking about what you'd do. Then doing the other thing.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Ves sends out the mirror of your lead again, stronger now, and you can see them trying every turn to do the opposite of whatever you would do. It is like fighting your own habits turned inside out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ves-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Ves did the other thing, and it worked",
+         "importance": 60
+        }
+       ],
+       "name": "Mirror Trainer Ves",
+       "mirror": true,
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Ves, even turned inside out",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Let's swap a Pokémon.\"",
+     "success": {
+      "text": "Ves holds out a Poké Ball, hesitates, then holds it out properly. You both open your hands at the same moment, and the two Pokémon change places in plain sight: same type, different trainers, nothing hidden. Ves: \"Honest trade. Look after mine.\"",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "table": {
+         "bulbasaur": "oddish",
+         "ivysaur": "roselia",
+         "venusaur": "roserade",
+         "venusaur-mega": "venusaur",
+         "venusaur-gmax": "venusaur",
+         "charmander": "chimchar",
+         "charmeleon": "quilava",
+         "charizard": "talonflame",
+         "charizard-mega-x": "gouging-fire",
+         "charizard-mega-y": "charizard",
+         "charizard-gmax": "charizard",
+         "squirtle": "froakie",
+         "wartortle": "croconaw",
+         "blastoise": "dondozo",
+         "blastoise-mega": "wishiwashi-school",
+         "blastoise-gmax": "blastoise",
+         "caterpie": "wurmple",
+         "metapod": "cascoon",
+         "butterfree": "beautifly",
+         "butterfree-gmax": "beautifly",
+         "weedle": "kakuna",
+         "kakuna": "weedle",
+         "beedrill": "ariados",
+         "beedrill-mega": "scolipede",
+         "pidgey": "starly",
+         "pidgeotto": "rufflet",
+         "pidgeot": "staraptor",
+         "pidgeot-mega": "braviary",
+         "rattata": "yungoos",
+         "rattata-alola": "zigzagoon-galar",
+         "raticate": "dunsparce",
+         "raticate-alola": "linoone-galar",
+         "spearow": "hoothoot",
+         "fearow": "noctowl",
+         "ekans": "nidoran-f",
+         "arbok": "seviper",
+         "pikachu": "voltorb",
+         "pikachu-gmax": "pikachu",
+         "raichu": "boltund",
+         "raichu-alola": "raichu",
+         "raichu-mega-x": "xurkitree",
+         "raichu-mega-y": "xurkitree",
+         "sandshrew": "trapinch",
+         "sandshrew-alola": "sandslash-alola",
+         "sandslash": "dugtrio",
+         "sandslash-alola": "sandshrew-alola",
+         "nidoran-f": "nidoran-m",
+         "nidorina": "nidorino",
+         "nidoqueen": "nidoking",
+         "nidoran-m": "nidoran-f",
+         "nidorino": "nidorina",
+         "nidoking": "nidoqueen",
+         "clefairy": "fidough",
+         "clefable": "comfey",
+         "clefable-mega": "togekiss",
+         "vulpix": "fennekin",
+         "vulpix-alola": "snorunt",
+         "ninetales": "rapidash",
+         "ninetales-alola": "beartic",
+         "jigglypuff": "igglybuff",
+         "wigglytuff": "jigglypuff",
+         "zubat": "golbat",
+         "golbat": "crobat",
+         "oddish": "bulbasaur",
+         "gloom": "roselia",
+         "vileplume": "victreebel",
+         "paras": "sewaddle",
+         "parasect": "wormadam",
+         "venonat": "venipede",
+         "venomoth": "scolipede",
+         "diglett": "trapinch",
+         "diglett-alola": "dugtrio-alola",
+         "dugtrio": "marowak",
+         "dugtrio-alola": "stunfisk-galar",
+         "meowth": "ditto",
+         "meowth-alola": "purrloin",
+         "meowth-galar": "klink",
+         "meowth-gmax": "meowth",
+         "persian": "kecleon",
+         "persian-alola": "liepard",
+         "psyduck": "goldeen",
+         "golduck": "clawitzer",
+         "mankey": "machop",
+         "primeape": "hitmonchan",
+         "growlithe": "magby",
+         "growlithe-hisui": "magcargo",
+         "arcanine": "magmortar",
+         "arcanine-hisui": "magcargo",
+         "poliwag": "remoraid",
+         "poliwhirl": "wailmer",
+         "poliwrath": "quaquaval",
+         "abra": "slowpoke-galar",
+         "kadabra": "wobbuffet",
+         "alakazam": "gothitelle",
+         "alakazam-mega": "espeon",
+         "machop": "mankey",
+         "machoke": "gurdurr",
+         "machamp": "conkeldurr",
+         "machamp-gmax": "conkeldurr",
+         "bellsprout": "foongus",
+         "weepinbell": "gloom",
+         "victreebel": "vileplume",
+         "victreebel-mega": "venusaur",
+         "tentacool": "qwilfish",
+         "tentacruel": "qwilfish",
+         "geodude": "larvitar",
+         "geodude-alola": "graveler-alola",
+         "graveler": "onix",
+         "graveler-alola": "geodude-alola",
+         "golem": "pupitar",
+         "golem-alola": "iron-thorns",
+         "ponyta": "braixen",
+         "ponyta-galar": "wobbuffet",
+         "rapidash": "simisear",
+         "rapidash-galar": "hatterene",
+         "slowpoke": "bruxish",
+         "slowpoke-galar": "abra",
+         "slowbro": "slowking",
+         "slowbro-mega": "starmie",
+         "slowbro-galar": "slowking-galar",
+         "magnemite": "togedemaru",
+         "magneton": "togedemaru",
+         "farfetchd": "tranquill",
+         "farfetchd-galar": "mienfoo",
+         "doduo": "swablu",
+         "dodrio": "pidgeot",
+         "seel": "krabby",
+         "dewgong": "arctovish",
+         "grimer": "trubbish",
+         "grimer-alola": "stunky",
+         "muk": "weezing",
+         "muk-alola": "drapion",
+         "shellder": "corphish",
+         "cloyster": "lapras",
+         "gastly": "haunter",
+         "haunter": "gastly",
+         "gengar": "haunter",
+         "gengar-mega": "gengar",
+         "gengar-gmax": "gengar",
+         "onix": "graveler",
+         "drowzee": "spoink",
+         "hypno": "beheeyem",
+         "krabby": "seel",
+         "kingler": "alomomola",
+         "kingler-gmax": "kingler",
+         "voltorb": "pikachu",
+         "voltorb-hisui": "electrode-hisui",
+         "electrode": "boltund",
+         "electrode-hisui": "rotom-mow",
+         "exeggcute": "exeggutor",
+         "exeggutor": "iron-leaves",
+         "exeggutor-alola": "hydrapple",
+         "cubone": "silicobra",
+         "marowak": "dugtrio",
+         "marowak-alola": "ceruledge",
+         "hitmonlee": "hitmonchan",
+         "hitmonchan": "hitmonlee",
+         "lickitung": "munchlax",
+         "koffing": "trubbish",
+         "weezing": "muk",
+         "weezing-galar": "slowbro-galar",
+         "rhyhorn": "rhydon",
+         "rhydon": "rhyperior",
+         "chansey": "purugly",
+         "tangela": "sunflora",
+         "kangaskhan": "bouffalant",
+         "kangaskhan-mega": "blissey",
+         "horsea": "tympole",
+         "seadra": "seaking",
+         "goldeen": "popplio",
+         "seaking": "palafin",
+         "staryu": "clamperl",
+         "starmie": "slowbro",
+         "starmie-mega": "starmie",
+         "mr-mime": "rapidash-galar",
+         "mr-mime-galar": "jynx",
+         "scyther": "yanmega",
+         "jynx": "mr-mime-galar",
+         "electabuzz": "boltund",
+         "magmar": "simisear",
+         "pinsir": "accelgor",
+         "pinsir-mega": "yanmega",
+         "tauros": "bouffalant",
+         "tauros-paldea-combat-breed": "passimian",
+         "tauros-paldea-blaze-breed": "passimian",
+         "tauros-paldea-aqua-breed": "passimian",
+         "magikarp": "feebas",
+         "gyarados": "mantine",
+         "gyarados-mega": "greninja-ash",
+         "lapras": "cloyster",
+         "lapras-gmax": "lapras",
+         "ditto": "meowth",
+         "eevee": "teddiursa",
+         "eevee-gmax": "eevee",
+         "vaporeon": "samurott",
+         "jolteon": "luxray",
+         "flareon": "cinderace",
+         "porygon": "delcatty",
+         "omanyte": "kabuto",
+         "omastar": "kabutops",
+         "kabuto": "omanyte",
+         "kabutops": "omastar",
+         "aerodactyl": "minior-core",
+         "aerodactyl-mega": "archeops",
+         "snorlax": "blissey",
+         "snorlax-gmax": "blissey",
+         "articuno": "delibird",
+         "articuno-galar": "braviary-hisui",
+         "zapdos": "rotom-fan",
+         "zapdos-galar": "hawlucha",
+         "moltres": "charizard",
+         "moltres-galar": "iron-jugulis",
+         "dratini": "bagon",
+         "dragonair": "shelgon",
+         "dragonite": "salamence",
+         "dragonite-mega": "dragonite",
+         "mewtwo": "espeon",
+         "mewtwo-mega-x": "gallade",
+         "mewtwo-mega-y": "espeon",
+         "mew": "espeon",
+         "chikorita": "turtwig",
+         "bayleef": "grotle",
+         "meganium": "leafeon",
+         "meganium-mega": "whimsicott",
+         "cyndaquil": "charmander",
+         "quilava": "charmeleon",
+         "typhlosion": "cinderace",
+         "typhlosion-hisui": "skeledirge",
+         "totodile": "froakie",
+         "croconaw": "frogadier",
+         "feraligatr": "blastoise",
+         "feraligatr-mega": "walking-wake",
+         "sentret": "happiny",
+         "furret": "dunsparce",
+         "hoothoot": "spearow",
+         "noctowl": "swellow",
+         "ledyba": "combee",
+         "ledian": "yanma",
+         "spinarak": "venipede",
+         "ariados": "beedrill",
+         "crobat": "golbat",
+         "chinchou": "lanturn",
+         "lanturn": "chinchou",
+         "pichu": "pawmi",
+         "cleffa": "togepi",
+         "igglybuff": "azurill",
+         "togepi": "milcery",
+         "togetic": "togekiss",
+         "natu": "woobat",
+         "xatu": "oricorio-pau",
+         "mareep": "tynamo",
+         "flaaffy": "luxio",
+         "ampharos": "eelektross",
+         "ampharos-mega": "raging-bolt",
+         "bellossom": "simisage",
+         "marill": "azumarill",
+         "azumarill": "primarina",
+         "sudowoodo": "boldore",
+         "politoed": "clawitzer",
+         "hoppip": "rowlet",
+         "skiploom": "rowlet",
+         "jumpluff": "tropius",
+         "aipom": "loudred",
+         "sunkern": "bounsweet",
+         "sunflora": "thwackey",
+         "yanma": "ledian",
+         "wooper": "barboach",
+         "wooper-paldea": "clodsire",
+         "quagsire": "marshtomp",
+         "espeon": "alakazam",
+         "umbreon": "zoroark",
+         "murkrow": "vullaby",
+         "slowking": "slowbro",
+         "slowking-galar": "slowbro-galar",
+         "misdreavus": "banette",
+         "unown": "elgyem",
+         "wobbuffet": "kadabra",
+         "girafarig": "oranguru",
+         "pineco": "grubbin",
+         "forretress": "durant",
+         "dunsparce": "furret",
+         "gligar": "gliscor",
+         "steelix": "aegislash",
+         "steelix-mega": "steelix",
+         "snubbull": "flabebe",
+         "granbull": "aromatisse",
+         "qwilfish": "tentacruel",
+         "qwilfish-hisui": "overqwil",
+         "scizor": "escavalier",
+         "scizor-mega": "scizor",
+         "shuckle": "kleavor",
+         "heracross": "buzzwole",
+         "heracross-mega": "buzzwole",
+         "sneasel": "weavile",
+         "sneasel-hisui": "sneasler",
+         "teddiursa": "eevee",
+         "ursaring": "stoutland",
+         "slugma": "charcadet",
+         "magcargo": "growlithe-hisui",
+         "swinub": "piloswine",
+         "piloswine": "mamoswine",
+         "corsola": "tirtouga",
+         "corsola-galar": "misdreavus",
+         "remoraid": "poliwag",
+         "octillery": "gorebyss",
+         "delibird": "cetoddle",
+         "mantine": "swanna",
+         "skarmory": "celesteela",
+         "skarmory-mega": "celesteela",
+         "houndour": "houndoom",
+         "houndoom": "houndour",
+         "houndoom-mega": "houndoom",
+         "kingdra": "dracovish",
+         "phanpy": "hippopotas",
+         "donphan": "mudsdale",
+         "porygon2": "lickilicky",
+         "stantler": "cinccino",
+         "smeargle": "bidoof",
+         "tyrogue": "makuhita",
+         "hitmontop": "hitmonchan",
+         "smoochum": "jynx",
+         "elekid": "luxio",
+         "magby": "growlithe",
+         "miltank": "bouffalant",
+         "blissey": "snorlax",
+         "raikou": "xurkitree",
+         "entei": "arcanine",
+         "suicune": "milotic",
+         "larvitar": "geodude",
+         "pupitar": "graveler",
+         "tyranitar": "iron-boulder",
+         "tyranitar-mega": "tyranitar",
+         "lugia": "braviary-hisui",
+         "ho-oh": "charizard",
+         "celebi": "espeon",
+         "treecko": "grookey",
+         "grovyle": "bayleef",
+         "sceptile": "rillaboom",
+         "sceptile-mega": "hydrapple",
+         "torchic": "fuecoco",
+         "combusken": "monferno",
+         "blaziken": "emboar",
+         "blaziken-mega": "infernape",
+         "mudkip": "quaxly",
+         "marshtomp": "palpitoad",
+         "swampert": "seismitoad",
+         "swampert-mega": "swampert",
+         "poochyena": "nickit",
+         "mightyena": "persian-alola",
+         "zigzagoon": "whismur",
+         "zigzagoon-galar": "rattata-alola",
+         "linoone": "castform",
+         "linoone-galar": "raticate-alola",
+         "wurmple": "caterpie",
+         "silcoon": "cascoon",
+         "beautifly": "butterfree",
+         "cascoon": "metapod",
+         "dustox": "beedrill",
+         "lotad": "lombre",
+         "lombre": "lotad",
+         "ludicolo": "lombre",
+         "seedot": "bounsweet",
+         "nuzleaf": "cacturne",
+         "shiftry": "cacturne",
+         "taillow": "pikipek",
+         "swellow": "noctowl",
+         "wingull": "ducklett",
+         "pelipper": "swanna",
+         "ralts": "kirlia",
+         "kirlia": "mime-jr",
+         "gardevoir": "hatterene",
+         "gardevoir-mega": "gardevoir",
+         "surskit": "wimpod",
+         "masquerain": "ninjask",
+         "shroomish": "steenee",
+         "breloom": "lilligant-hisui",
+         "slakoth": "lillipup",
+         "vigoroth": "kecleon",
+         "slaking": "blissey",
+         "nincada": "wormadam-sandy",
+         "ninjask": "masquerain",
+         "shedinja": "wimpod",
+         "whismur": "zigzagoon",
+         "loudred": "aipom",
+         "exploud": "bouffalant",
+         "makuhita": "tyrogue",
+         "hariyama": "falinks",
+         "azurill": "igglybuff",
+         "nosepass": "boldore",
+         "skitty": "patrat",
+         "delcatty": "porygon",
+         "sableye": "morgrem",
+         "sableye-mega": "sableye",
+         "mawile": "klefki",
+         "mawile-mega": "klefki",
+         "aron": "lairon",
+         "lairon": "aggron",
+         "aggron": "lairon",
+         "aggron-mega": "klinklang",
+         "meditite": "medicham",
+         "medicham": "meditite",
+         "medicham-mega": "medicham",
+         "electrike": "blitzle",
+         "manectric": "raichu",
+         "manectric-mega": "xurkitree",
+         "plusle": "eelektrik",
+         "minun": "eelektrik",
+         "volbeat": "illumise",
+         "illumise": "volbeat",
+         "roselia": "gloom",
+         "gulpin": "ekans",
+         "swalot": "garbodor",
+         "carvanha": "sharpedo",
+         "sharpedo": "crawdaunt",
+         "sharpedo-mega": "greninja",
+         "wailmer": "croconaw",
+         "wailord": "clawitzer",
+         "numel": "camerupt",
+         "camerupt": "numel",
+         "camerupt-mega": "camerupt",
+         "torkoal": "darmanitan",
+         "spoink": "drowzee",
+         "grumpig": "meowstic",
+         "spinda": "aipom",
+         "trapinch": "sandshrew",
+         "vibrava": "flygon",
+         "flygon": "vibrava",
+         "cacnea": "skiddo",
+         "cacturne": "shiftry",
+         "swablu": "doduo",
+         "altaria": "dragonite",
+         "altaria-mega": "roaring-moon",
+         "zangoose": "greedent",
+         "seviper": "swalot",
+         "lunatone": "solrock",
+         "solrock": "lunatone",
+         "barboach": "wooper",
+         "whiscash": "gastrodon",
+         "corphish": "oshawott",
+         "crawdaunt": "sharpedo",
+         "baltoy": "claydol",
+         "claydol": "baltoy",
+         "lileep": "cradily",
+         "cradily": "lileep",
+         "anorith": "armaldo",
+         "armaldo": "anorith",
+         "feebas": "magikarp",
+         "milotic": "blastoise",
+         "castform": "linoone",
+         "castform-sunny": "raboot",
+         "castform-rainy": "brionne",
+         "castform-snowy": "vanillish",
+         "kecleon": "persian",
+         "shuppet": "duskull",
+         "banette": "dusclops",
+         "banette-mega": "dusknoir",
+         "duskull": "shuppet",
+         "dusclops": "banette",
+         "tropius": "jumpluff",
+         "chimecho": "meowstic",
+         "chimecho-mega": "espeon",
+         "absol": "thievul",
+         "absol-mega": "umbreon",
+         "absol-mega-z": "sableye",
+         "wynaut": "flittle",
+         "snorunt": "vulpix-alola",
+         "glalie": "darmanitan-galar-standard",
+         "glalie-mega": "vanilluxe",
+         "spheal": "sealeo",
+         "sealeo": "spheal",
+         "walrein": "iron-bundle",
+         "clamperl": "staryu",
+         "huntail": "gorebyss",
+         "gorebyss": "huntail",
+         "relicanth": "drednaw",
+         "luvdisc": "buizel",
+         "bagon": "dratini",
+         "shelgon": "dragonair",
+         "salamence": "dragonite",
+         "salamence-mega": "dragonite",
+         "beldum": "bronzor",
+         "metang": "bronzong",
+         "metagross": "iron-crown",
+         "metagross-mega": "metagross",
+         "regirock": "gigalith",
+         "regice": "vanilluxe",
+         "registeel": "klinklang",
+         "latias": "baxcalibur",
+         "latias-mega": "baxcalibur",
+         "latios": "baxcalibur",
+         "latios-mega": "baxcalibur",
+         "kyogre": "palafin-hero",
+         "kyogre-primal": "palafin-hero",
+         "groudon": "hippowdon",
+         "groudon-primal": "great-tusk",
+         "rayquaza": "dragonite",
+         "rayquaza-mega": "dragonite",
+         "jirachi": "metagross",
+         "deoxys": "espeon",
+         "deoxys-attack": "espeon",
+         "deoxys-defense": "espeon",
+         "deoxys-speed": "espeon",
+         "turtwig": "chikorita",
+         "grotle": "bayleef",
+         "torterra": "leafeon",
+         "chimchar": "charmander",
+         "monferno": "combusken",
+         "infernape": "blaziken",
+         "piplup": "froakie",
+         "prinplup": "croconaw",
+         "empoleon": "basculegion",
+         "starly": "pidgey",
+         "staravia": "pidgeotto",
+         "staraptor": "toucannon",
+         "staraptor-mega": "hawlucha",
+         "bidoof": "smeargle",
+         "bibarel": "chatot",
+         "kricketot": "caterpie",
+         "kricketune": "spidops",
+         "shinx": "yamper",
+         "luxio": "flaaffy",
+         "luxray": "jolteon",
+         "budew": "foongus",
+         "roserade": "venusaur",
+         "cranidos": "naclstack",
+         "rampardos": "garganacl",
+         "shieldon": "bastiodon",
+         "bastiodon": "probopass",
+         "burmy": "spewpa",
+         "wormadam": "parasect",
+         "wormadam-sandy": "nincada",
+         "wormadam-trash": "forretress",
+         "mothim": "vivillon",
+         "combee": "ledyba",
+         "vespiquen": "ninjask",
+         "pachirisu": "eelektrik",
+         "buizel": "clauncher",
+         "floatzel": "simipour",
+         "cherubi": "petilil",
+         "cherrim": "carnivine",
+         "shellos": "krabby",
+         "gastrodon": "whiscash",
+         "ambipom": "komala",
+         "drifloon": "oricorio-sensu",
+         "drifblim": "oricorio-sensu",
+         "buneary": "aipom",
+         "lopunny": "komala",
+         "lopunny-mega": "bewear",
+         "mismagius": "houndstone",
+         "honchkrow": "mandibuzz",
+         "glameow": "tandemaus",
+         "purugly": "chansey",
+         "chingling": "gothita",
+         "stunky": "grimer-alola",
+         "skuntank": "drapion",
+         "bronzor": "beldum",
+         "bronzong": "metang",
+         "bonsly": "nacli",
+         "mime-jr": "kirlia",
+         "happiny": "sentret",
+         "chatot": "squawkabilly",
+         "spiritomb": "cofagrigus",
+         "gible": "gabite",
+         "gabite": "gible",
+         "garchomp": "gabite",
+         "garchomp-mega": "garchomp",
+         "garchomp-mega-z": "goodra",
+         "munchlax": "lickitung",
+         "riolu": "machop",
+         "lucario": "annihilape",
+         "lucario-mega": "lucario",
+         "lucario-mega-z": "lucario",
+         "hippopotas": "phanpy",
+         "hippowdon": "sandaconda",
+         "skorupi": "stunky",
+         "drapion": "muk-alola",
+         "croagunk": "toxicroak",
+         "toxicroak": "croagunk",
+         "carnivine": "cherrim",
+         "finneon": "buizel",
+         "lumineon": "basculin",
+         "mantyke": "ducklett",
+         "snover": "abomasnow",
+         "abomasnow": "snover",
+         "abomasnow-mega": "abomasnow",
+         "weavile": "sneasel",
+         "magnezone": "magneton",
+         "lickilicky": "porygon2",
+         "rhyperior": "rhydon",
+         "tangrowth": "gogoat",
+         "electivire": "jolteon",
+         "magmortar": "typhlosion",
+         "togekiss": "togetic",
+         "yanmega": "scyther",
+         "leafeon": "meganium",
+         "glaceon": "cetitan",
+         "gliscor": "gligar",
+         "mamoswine": "piloswine",
+         "porygon-z": "blissey",
+         "gallade": "gardevoir",
+         "gallade-mega": "gallade",
+         "probopass": "bastiodon",
+         "dusknoir": "cursola",
+         "froslass": "darmanitan-galar-standard",
+         "froslass-mega": "froslass",
+         "rotom": "morpeko",
+         "rotom-heat": "rotom-fan",
+         "rotom-wash": "rotom-fan",
+         "rotom-frost": "arctozolt",
+         "rotom-fan": "kilowattrel",
+         "rotom-mow": "electrode-hisui",
+         "uxie": "espeon",
+         "mesprit": "espeon",
+         "azelf": "espeon",
+         "dialga": "archaludon",
+         "dialga-origin": "archaludon",
+         "palkia": "walking-wake",
+         "palkia-origin": "walking-wake",
+         "heatran": "gouging-fire",
+         "heatran-mega": "gouging-fire",
+         "regigigas": "slaking",
+         "giratina": "flutter-mane",
+         "giratina-origin": "flutter-mane",
+         "cresselia": "espeon",
+         "phione": "octillery",
+         "manaphy": "wishiwashi-school",
+         "darkrai": "umbreon",
+         "darkrai-mega": "umbreon",
+         "shaymin": "tangrowth",
+         "shaymin-sky": "jumpluff",
+         "arceus": "slaking",
+         "victini": "espeon",
+         "snivy": "grookey",
+         "servine": "floragato",
+         "serperior": "rillaboom",
+         "tepig": "charmander",
+         "pignite": "combusken",
+         "emboar": "blaziken",
+         "emboar-mega": "infernape",
+         "oshawott": "corphish",
+         "dewott": "pyukumuku",
+         "samurott": "blastoise",
+         "samurott-hisui": "greninja",
+         "patrat": "lechonk",
+         "watchog": "castform",
+         "lillipup": "skwovet",
+         "herdier": "aipom",
+         "stoutland": "ursaring",
+         "purrloin": "meowth-alola",
+         "liepard": "persian-alola",
+         "pansage": "chikorita",
+         "simisage": "bellossom",
+         "pansear": "darumaka",
+         "simisear": "rapidash",
+         "panpour": "finizen",
+         "simipour": "clawitzer",
+         "munna": "gothita",
+         "musharna": "beheeyem",
+         "pidove": "pikipek",
+         "tranquill": "trumbeak",
+         "unfezant": "staraptor",
+         "blitzle": "electrike",
+         "zebstrika": "bellibolt",
+         "roggenrola": "nacli",
+         "boldore": "nosepass",
+         "gigalith": "garganacl",
+         "woobat": "natu",
+         "swoobat": "xatu",
+         "drilbur": "hippopotas",
+         "excadrill": "stunfisk-galar",
+         "excadrill-mega": "iron-treads",
+         "audino": "chansey",
+         "audino-mega": "wigglytuff",
+         "timburr": "machop",
+         "gurdurr": "machoke",
+         "conkeldurr": "machamp",
+         "tympole": "horsea",
+         "palpitoad": "marshtomp",
+         "seismitoad": "swampert",
+         "throh": "sawk",
+         "sawk": "throh",
+         "sewaddle": "paras",
+         "swadloon": "parasect",
+         "leavanny": "wormadam",
+         "venipede": "spinarak",
+         "whirlipede": "dustox",
+         "scolipede": "venomoth",
+         "scolipede-mega": "scolipede",
+         "cottonee": "morelull",
+         "whimsicott": "shiinotic",
+         "petilil": "cherubi",
+         "lilligant": "lurantis",
+         "lilligant-hisui": "breloom",
+         "basculin": "basculin-white-striped",
+         "basculin-white-striped": "basculin",
+         "sandile": "krokorok",
+         "krokorok": "sandile",
+         "krookodile": "krokorok",
+         "darumaka": "pansear",
+         "darumaka-galar": "cubchoo",
+         "darmanitan": "heatmor",
+         "darmanitan-zen": "delphox",
+         "darmanitan-galar-standard": "glalie",
+         "darmanitan-galar-zen": "vanilluxe",
+         "maractus": "eldegoss",
+         "dwebble": "crustle",
+         "crustle": "kleavor",
+         "scraggy": "scrafty",
+         "scrafty": "scraggy",
+         "scrafty-mega": "scrafty",
+         "sigilyph": "oricorio-pau",
+         "yamask": "gimmighoul",
+         "yamask-galar": "golett",
+         "cofagrigus": "houndstone",
+         "tirtouga": "corsola",
+         "carracosta": "drednaw",
+         "archen": "minior",
+         "archeops": "aerodactyl",
+         "trubbish": "grimer",
+         "garbodor": "swalot",
+         "garbodor-gmax": "garbodor",
+         "zorua": "maschiff",
+         "zorua-hisui": "zoroark-hisui",
+         "zoroark": "mabosstiff",
+         "zoroark-hisui": "zorua-hisui",
+         "minccino": "tandemaus",
+         "cinccino": "maushold",
+         "gothita": "solosis",
+         "gothorita": "kadabra",
+         "gothitelle": "reuniclus",
+         "solosis": "gothita",
+         "duosion": "hattrem",
+         "reuniclus": "gothitelle",
+         "ducklett": "wingull",
+         "swanna": "mantine",
+         "vanillite": "cubchoo",
+         "vanillish": "castform-snowy",
+         "vanilluxe": "glaceon",
+         "deerling": "sawsbuck",
+         "sawsbuck": "deerling",
+         "emolga": "oricorio-pom-pom",
+         "karrablast": "shelmet",
+         "escavalier": "scizor",
+         "foongus": "bellsprout",
+         "amoonguss": "victreebel",
+         "frillish": "jellicent",
+         "jellicent": "basculegion",
+         "alomomola": "kingler",
+         "joltik": "charjabug",
+         "galvantula": "vikavolt",
+         "ferroseed": "ferrothorn",
+         "ferrothorn": "kartana",
+         "klink": "meowth-galar",
+         "klang": "perrserker",
+         "klinklang": "copperajah",
+         "tynamo": "tadbulb",
+         "eelektrik": "minun",
+         "eelektross": "ampharos",
+         "eelektross-mega": "xurkitree",
+         "elgyem": "unown",
+         "beheeyem": "hypno",
+         "litwick": "lampent",
+         "lampent": "litwick",
+         "chandelure": "lampent",
+         "chandelure-mega": "chandelure",
+         "axew": "bagon",
+         "fraxure": "dragonair",
+         "haxorus": "druddigon",
+         "cubchoo": "vanillite",
+         "beartic": "avalugg",
+         "cryogonal": "avalugg",
+         "shelmet": "grubbin",
+         "accelgor": "pinsir",
+         "stunfisk": "stunfisk-galar",
+         "stunfisk-galar": "excadrill",
+         "mienfoo": "pancham",
+         "mienshao": "sirfetchd",
+         "druddigon": "sliggoo",
+         "golett": "yamask-galar",
+         "golurk": "runerigus",
+         "golurk-mega": "golurk",
+         "pawniard": "bisharp",
+         "bisharp": "kingambit",
+         "bouffalant": "dubwool",
+         "rufflet": "pidgeotto",
+         "braviary": "unfezant",
+         "braviary-hisui": "sigilyph",
+         "vullaby": "murkrow",
+         "mandibuzz": "honchkrow",
+         "heatmor": "darmanitan",
+         "durant": "escavalier",
+         "deino": "zweilous",
+         "zweilous": "deino",
+         "hydreigon": "guzzlord",
+         "larvesta": "volcarona",
+         "volcarona": "larvesta",
+         "cobalion": "celesteela",
+         "terrakion": "iron-boulder",
+         "virizion": "chesnaught",
+         "tornadus": "corvisquire",
+         "tornadus-therian": "corvisquire",
+         "thundurus": "rotom-fan",
+         "thundurus-therian": "rotom-fan",
+         "reshiram": "baxcalibur",
+         "zekrom": "baxcalibur",
+         "landorus": "gliscor",
+         "landorus-therian": "gliscor",
+         "kyurem": "baxcalibur",
+         "kyurem-black": "baxcalibur",
+         "kyurem-white": "baxcalibur",
+         "keldeo": "quaquaval",
+         "keldeo-resolute": "quaquaval",
+         "meloetta": "wyrdeer",
+         "meloetta-pirouette": "bewear",
+         "genesect": "scizor",
+         "chespin": "grookey",
+         "quilladin": "bayleef",
+         "chesnaught": "decidueye-hisui",
+         "chesnaught-mega": "chesnaught",
+         "fennekin": "tepig",
+         "braixen": "ponyta",
+         "delphox": "darmanitan-zen",
+         "delphox-mega": "darmanitan-zen",
+         "froakie": "piplup",
+         "frogadier": "croconaw",
+         "greninja": "samurott-hisui",
+         "greninja-ash": "greninja",
+         "greninja-mega": "greninja-ash",
+         "bunnelby": "whismur",
+         "diggersby": "castform",
+         "fletchling": "taillow",
+         "fletchinder": "oricorio",
+         "talonflame": "oricorio",
+         "scatterbug": "cascoon",
+         "spewpa": "nymble",
+         "vivillon": "mothim",
+         "litleo": "pyroar",
+         "pyroar": "litleo",
+         "pyroar-mega": "pyroar",
+         "flabebe": "snubbull",
+         "floette": "spritzee",
+         "floette-eternal": "florges",
+         "floette-mega": "florges",
+         "florges": "floette-eternal",
+         "skiddo": "cacnea",
+         "gogoat": "rillaboom",
+         "pancham": "mienfoo",
+         "pangoro": "hawlucha",
+         "furfrou": "cinccino",
+         "espurr": "duosion",
+         "meowstic": "meowstic-female",
+         "meowstic-female": "meowstic",
+         "meowstic-male-mega": "espeon",
+         "meowstic-female-mega": "espeon",
+         "honedge": "doublade",
+         "doublade": "aegislash",
+         "aegislash": "aegislash-blade",
+         "aegislash-blade": "aegislash",
+         "spritzee": "swirlix",
+         "aromatisse": "granbull",
+         "swirlix": "spritzee",
+         "slurpuff": "clefable",
+         "inkay": "malamar",
+         "malamar": "inkay",
+         "malamar-mega": "malamar",
+         "binacle": "kabuto",
+         "barbaracle": "kabutops",
+         "barbaracle-mega": "tyranitar",
+         "skrelp": "mareanie",
+         "dragalge": "naganadel",
+         "dragalge-mega": "naganadel",
+         "clauncher": "buizel",
+         "clawitzer": "golduck",
+         "helioptile": "heliolisk",
+         "heliolisk": "helioptile",
+         "tyrunt": "tyrantrum",
+         "tyrantrum": "tyrunt",
+         "amaura": "aurorus",
+         "aurorus": "amaura",
+         "sylveon": "floette-eternal",
+         "hawlucha": "conkeldurr",
+         "hawlucha-mega": "hawlucha",
+         "dedenne": "emolga",
+         "carbink": "barbaracle",
+         "goomy": "bagon",
+         "sliggoo": "dragonair",
+         "sliggoo-hisui": "duraludon",
+         "goodra": "haxorus",
+         "goodra-hisui": "archaludon",
+         "klefki": "mawile",
+         "phantump": "pumpkaboo",
+         "trevenant": "gourgeist",
+         "pumpkaboo": "pumpkaboo-large",
+         "pumpkaboo-small": "pumpkaboo",
+         "pumpkaboo-large": "pumpkaboo",
+         "pumpkaboo-super": "pumpkaboo",
+         "gourgeist": "gourgeist-large",
+         "gourgeist-small": "gourgeist",
+         "gourgeist-large": "gourgeist",
+         "gourgeist-super": "gourgeist",
+         "bergmite": "cubchoo",
+         "avalugg": "cryogonal",
+         "avalugg-hisui": "avalugg",
+         "noibat": "noivern",
+         "noivern": "noibat",
+         "xerneas": "florges",
+         "yveltal": "iron-jugulis",
+         "zygarde": "garchomp",
+         "zygarde-complete": "garchomp",
+         "zygarde-10": "gabite",
+         "zygarde-mega": "garchomp",
+         "diancie": "carbink",
+         "diancie-mega": "carbink",
+         "hoopa": "espeon",
+         "hoopa-unbound": "espeon",
+         "volcanion": "gouging-fire",
+         "rowlet": "skiploom",
+         "dartrix": "jumpluff",
+         "decidueye": "sinistcha",
+         "decidueye-hisui": "chesnaught",
+         "litten": "pansear",
+         "torracat": "castform-sunny",
+         "incineroar": "blaziken",
+         "popplio": "goldeen",
+         "brionne": "castform-rainy",
+         "primarina": "azumarill",
+         "pikipek": "pidove",
+         "trumbeak": "tranquill",
+         "toucannon": "staraptor",
+         "yungoos": "rattata",
+         "gumshoos": "castform",
+         "grubbin": "shelmet",
+         "charjabug": "galvantula",
+         "vikavolt": "galvantula",
+         "crabrawler": "pancham",
+         "crabominable": "grapploct",
+         "crabominable-mega": "crabominable",
+         "oricorio": "talonflame",
+         "oricorio-pom-pom": "kilowattrel",
+         "oricorio-pau": "xatu",
+         "oricorio-sensu": "drifblim",
+         "cutiefly": "ribombee",
+         "ribombee": "cutiefly",
+         "rockruff": "nacli",
+         "lycanroc": "lycanroc-dusk",
+         "lycanroc-midnight": "lycanroc",
+         "lycanroc-dusk": "lycanroc",
+         "wishiwashi": "feebas",
+         "wishiwashi-school": "palafin-hero",
+         "mareanie": "skrelp",
+         "toxapex": "skrelp",
+         "mudbray": "dugtrio",
+         "mudsdale": "donphan",
+         "dewpider": "araquanid",
+         "araquanid": "dewpider",
+         "fomantis": "gossifleur",
+         "lurantis": "lilligant",
+         "morelull": "cottonee",
+         "shiinotic": "whimsicott",
+         "salandit": "salazzle",
+         "salazzle": "salandit",
+         "stufful": "bewear",
+         "bewear": "stufful",
+         "bounsweet": "seedot",
+         "steenee": "shroomish",
+         "tsareena": "simisage",
+         "comfey": "clefable",
+         "oranguru": "farigiraf",
+         "passimian": "tauros-paldea-combat-breed",
+         "wimpod": "surskit",
+         "golisopod": "surskit",
+         "golisopod-mega": "scizor",
+         "sandygast": "palossand",
+         "palossand": "sandygast",
+         "pyukumuku": "quaxwell",
+         "type-null": "porygon-z",
+         "silvally": "blissey",
+         "minior": "archen",
+         "minior-core": "aerodactyl",
+         "komala": "lopunny",
+         "turtonator": "gouging-fire",
+         "togedemaru": "magneton",
+         "mimikyu": "mimikyu-busted",
+         "mimikyu-busted": "mimikyu",
+         "bruxish": "veluza",
+         "drampa": "staraptor",
+         "drampa-mega": "drampa",
+         "dhelmise": "gourgeist",
+         "jangmo-o": "bagon",
+         "hakamo-o": "kommo-o",
+         "kommo-o": "hakamo-o",
+         "tapu-koko": "dedenne",
+         "tapu-lele": "gardevoir",
+         "tapu-bulu": "whimsicott",
+         "tapu-fini": "primarina",
+         "cosmog": "flittle",
+         "cosmoem": "kadabra",
+         "solgaleo": "espeon",
+         "lunala": "espeon",
+         "nihilego": "glimmora",
+         "buzzwole": "pheromosa",
+         "pheromosa": "buzzwole",
+         "xurkitree": "electivire",
+         "celesteela": "skarmory",
+         "kartana": "ferrothorn",
+         "guzzlord": "hydreigon",
+         "necrozma": "espeon",
+         "necrozma-dusk": "espeon",
+         "necrozma-dawn": "espeon",
+         "necrozma-ultra": "espeon",
+         "magearna": "klefki",
+         "magearna-mega": "klefki",
+         "magearna-original-mega": "klefki",
+         "marshadow": "annihilape",
+         "poipole": "arbok",
+         "naganadel": "dragalge",
+         "stakataka": "probopass",
+         "blacephalon": "typhlosion-hisui",
+         "zeraora": "xurkitree",
+         "zeraora-mega": "xurkitree",
+         "meltan": "klink",
+         "melmetal": "klinklang",
+         "melmetal-gmax": "klinklang",
+         "grookey": "sprigatito",
+         "thwackey": "sunflora",
+         "rillaboom": "sceptile",
+         "rillaboom-gmax": "rillaboom",
+         "scorbunny": "fuecoco",
+         "raboot": "castform-sunny",
+         "cinderace": "typhlosion",
+         "cinderace-gmax": "cinderace",
+         "sobble": "mudkip",
+         "drizzile": "brionne",
+         "inteleon": "blastoise",
+         "inteleon-gmax": "blastoise",
+         "skwovet": "lillipup",
+         "greedent": "zangoose",
+         "rookidee": "corvisquire",
+         "corvisquire": "rookidee",
+         "corviknight": "flamigo",
+         "corviknight-gmax": "corviknight",
+         "blipbug": "kricketot",
+         "dottler": "rabsca",
+         "orbeetle": "rabsca",
+         "orbeetle-gmax": "orbeetle",
+         "nickit": "poochyena",
+         "thievul": "liepard",
+         "gossifleur": "fomantis",
+         "eldegoss": "maractus",
+         "wooloo": "lillipup",
+         "dubwool": "bouffalant",
+         "chewtle": "arrokuda",
+         "drednaw": "relicanth",
+         "drednaw-gmax": "drednaw",
+         "yamper": "tadbulb",
+         "boltund": "electabuzz",
+         "rolycoly": "nacli",
+         "carkol": "coalossal",
+         "coalossal": "carkol",
+         "coalossal-gmax": "coalossal",
+         "applin": "appletun",
+         "flapple": "appletun",
+         "flapple-gmax": "appletun",
+         "appletun": "dipplin",
+         "appletun-gmax": "appletun",
+         "silicobra": "cubone",
+         "sandaconda": "donphan",
+         "sandaconda-gmax": "sandaconda",
+         "cramorant": "cramorant-gorging",
+         "cramorant-gulping": "cramorant",
+         "cramorant-gorging": "cramorant",
+         "arrokuda": "chewtle",
+         "barraskewda": "floatzel",
+         "toxel": "toxtricity",
+         "toxtricity": "toxtricity-low-key",
+         "toxtricity-low-key": "toxtricity",
+         "toxtricity-amped-gmax": "toxtricity",
+         "toxtricity-low-key-gmax": "toxtricity",
+         "sizzlipede": "centiskorch",
+         "centiskorch": "sizzlipede",
+         "centiskorch-gmax": "centiskorch",
+         "clobbopus": "machop",
+         "grapploct": "hariyama",
+         "sinistea": "yamask",
+         "polteageist": "cursola",
+         "hatenna": "wynaut",
+         "hattrem": "duosion",
+         "hatterene": "gardevoir",
+         "hatterene-gmax": "hatterene",
+         "impidimp": "morgrem",
+         "morgrem": "impidimp",
+         "grimmsnarl": "morgrem",
+         "grimmsnarl-gmax": "grimmsnarl",
+         "obstagoon": "linoone-galar",
+         "perrserker": "klang",
+         "cursola": "polteageist",
+         "sirfetchd": "conkeldurr",
+         "mr-rime": "mr-mime-galar",
+         "runerigus": "golurk",
+         "milcery": "togepi",
+         "alcremie": "comfey",
+         "alcremie-gmax": "alcremie",
+         "falinks": "hariyama",
+         "falinks-mega": "mienshao",
+         "pincurchin": "eelektrik",
+         "snom": "frosmoth",
+         "frosmoth": "snom",
+         "stonjourner": "lycanroc",
+         "eiscue": "eiscue-noice",
+         "eiscue-noice": "eiscue",
+         "indeedee": "indeedee-female",
+         "indeedee-female": "indeedee",
+         "morpeko": "morpeko-hangry",
+         "morpeko-hangry": "morpeko",
+         "cufant": "klink",
+         "copperajah": "klinklang",
+         "copperajah-gmax": "copperajah",
+         "dracozolt": "raging-bolt",
+         "arctozolt": "rotom-frost",
+         "dracovish": "kingdra",
+         "arctovish": "cloyster",
+         "duraludon": "archaludon",
+         "duraludon-gmax": "duraludon",
+         "dreepy": "drakloak",
+         "drakloak": "dreepy",
+         "dragapult": "drakloak",
+         "zacian": "florges",
+         "zacian-crowned": "tinkaton",
+         "zamazenta": "mienshao",
+         "zamazenta-crowned": "lucario",
+         "eternatus": "naganadel",
+         "eternatus-eternamax": "naganadel",
+         "kubfu": "farfetchd-galar",
+         "urshifu": "pangoro",
+         "urshifu-rapid-strike": "tauros-paldea-aqua-breed",
+         "urshifu-single-strike-gmax": "pangoro",
+         "urshifu-rapid-strike-gmax": "tauros-paldea-aqua-breed",
+         "zarude": "hydreigon",
+         "regieleki": "xurkitree",
+         "regidrago": "goodra",
+         "glastrier": "vanilluxe",
+         "spectrier": "dusknoir",
+         "calyrex": "alakazam",
+         "calyrex-ice": "espeon",
+         "calyrex-shadow": "espeon",
+         "wyrdeer": "farigiraf",
+         "kleavor": "shuckle",
+         "ursaluna": "ursaluna-bloodmoon",
+         "ursaluna-bloodmoon": "ursaluna",
+         "basculegion": "basculegion-female",
+         "basculegion-female": "basculegion",
+         "sneasler": "sneasel-hisui",
+         "overqwil": "qwilfish-hisui",
+         "enamorus": "togekiss",
+         "enamorus-therian": "togekiss",
+         "sprigatito": "grookey",
+         "floragato": "servine",
+         "meowscarada": "brute-bonnet",
+         "fuecoco": "scorbunny",
+         "crocalor": "ponyta",
+         "skeledirge": "typhlosion-hisui",
+         "quaxly": "mudkip",
+         "quaxwell": "pyukumuku",
+         "quaquaval": "poliwrath",
+         "lechonk": "patrat",
+         "oinkologne": "oinkologne-female",
+         "oinkologne-female": "oinkologne",
+         "tarountula": "nymble",
+         "spidops": "kricketune",
+         "nymble": "tarountula",
+         "lokix": "venomoth",
+         "pawmi": "shinx",
+         "pawmo": "pawmot",
+         "pawmot": "pawmo",
+         "tandemaus": "glameow",
+         "maushold": "cinccino",
+         "maushold-family-of-three": "cinccino",
+         "fidough": "flabebe",
+         "dachsbun": "slurpuff",
+         "smoliv": "dolliv",
+         "dolliv": "smoliv",
+         "arboliva": "dolliv",
+         "squawkabilly": "chatot",
+         "nacli": "rockruff",
+         "naclstack": "cranidos",
+         "garganacl": "rampardos",
+         "charcadet": "slugma",
+         "armarouge": "delphox",
+         "ceruledge": "skeledirge",
+         "tadbulb": "yamper",
+         "bellibolt": "zebstrika",
+         "wattrel": "emolga",
+         "kilowattrel": "oricorio-pom-pom",
+         "maschiff": "zorua",
+         "mabosstiff": "zoroark",
+         "shroodle": "grafaiai",
+         "grafaiai": "shroodle",
+         "bramblin": "poltchageist",
+         "brambleghast": "sinistcha",
+         "toedscool": "toedscruel",
+         "toedscruel": "toedscool",
+         "klawf": "stonjourner",
+         "capsakid": "snivy",
+         "scovillain": "appletun",
+         "scovillain-mega": "scovillain",
+         "rellor": "pineco",
+         "rabsca": "orbeetle",
+         "flittle": "wynaut",
+         "espathra": "hypno",
+         "tinkatink": "tinkatuff",
+         "tinkatuff": "tinkatink",
+         "tinkaton": "tinkatuff",
+         "wiglett": "arrokuda",
+         "wugtrio": "brionne",
+         "bombirdier": "corviknight",
+         "finizen": "froakie",
+         "palafin": "basculin",
+         "palafin-hero": "wishiwashi-school",
+         "varoom": "revavroom",
+         "revavroom": "varoom",
+         "cyclizar": "altaria",
+         "orthworm": "copperajah",
+         "glimmet": "glimmora",
+         "glimmora": "nihilego",
+         "glimmora-mega": "nihilego",
+         "greavard": "duskull",
+         "houndstone": "cofagrigus",
+         "flamigo": "corviknight",
+         "cetoddle": "darumaka-galar",
+         "cetitan": "glaceon",
+         "veluza": "bruxish",
+         "dondozo": "blastoise",
+         "tatsugiri": "druddigon",
+         "tatsugiri-curly-mega": "tatsugiri",
+         "tatsugiri-droopy-mega": "tatsugiri",
+         "tatsugiri-stretchy-mega": "tatsugiri",
+         "annihilape": "lucario",
+         "clodsire": "nidoking",
+         "farigiraf": "wyrdeer",
+         "dudunsparce": "dudunsparce-three-segment",
+         "dudunsparce-three-segment": "dudunsparce",
+         "kingambit": "bisharp",
+         "great-tusk": "iron-treads",
+         "scream-tail": "florges",
+         "brute-bonnet": "meowscarada",
+         "flutter-mane": "mimikyu",
+         "slither-wing": "buzzwole",
+         "sandy-shocks": "xurkitree",
+         "iron-treads": "excadrill",
+         "iron-bundle": "walrein",
+         "iron-hands": "annihilape",
+         "iron-jugulis": "mandibuzz",
+         "iron-moth": "blacephalon",
+         "iron-thorns": "golem-alola",
+         "frigibax": "arctibax",
+         "arctibax": "frigibax",
+         "baxcalibur": "arctibax",
+         "baxcalibur-mega": "baxcalibur",
+         "gimmighoul": "gimmighoul-roaming",
+         "gimmighoul-roaming": "gimmighoul",
+         "gholdengo": "aegislash",
+         "wo-chien": "guzzlord",
+         "chien-pao": "weavile",
+         "ting-lu": "guzzlord",
+         "chi-yu": "houndoom",
+         "roaring-moon": "baxcalibur",
+         "iron-valiant": "scream-tail",
+         "koraidon": "iron-hands",
+         "miraidon": "raging-bolt",
+         "walking-wake": "kingdra",
+         "iron-leaves": "exeggutor",
+         "dipplin": "appletun",
+         "poltchageist": "bramblin",
+         "sinistcha": "decidueye",
+         "okidogi": "toxicroak",
+         "munkidori": "slowbro-galar",
+         "fezandipiti": "weezing-galar",
+         "ogerpon": "tangrowth",
+         "ogerpon-wellspring-mask": "hydrapple",
+         "ogerpon-hearthflame-mask": "scovillain",
+         "ogerpon-cornerstone-mask": "hydrapple",
+         "archaludon": "goodra-hisui",
+         "hydrapple": "exeggutor-alola",
+         "gouging-fire": "turtonator",
+         "raging-bolt": "dracozolt",
+         "iron-boulder": "lunatone",
+         "iron-crown": "metagross",
+         "terapagos": "chansey",
+         "terapagos-terastal": "blissey",
+         "terapagos-stellar": "slaking",
+         "pecharunt": "naganadel"
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ves-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-mirror-trainer-s3",
+   "name": "The Mirror Trainer: Last Time",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ves-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ves-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "The still lake again, at dusk this time, the water gone gold. Ves stands exactly where they stood the first day, notebook closed, hands empty. Ves: \"Last time. No tricks. Same as you, as best I can.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "No diagrams and no counters: just your lead and its mirror, face to face on the shore with the gold water behind them. If you win, Ves has a held item ready for you, made for your lead's own type.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ves-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Ves won the last mirror battle by a hair",
+         "importance": 60
+        }
+       ],
+       "name": "Mirror Trainer Ves",
+       "mirror": true,
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ves-owed-type-item",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You won the last mirror battle, and Ves gave you a held item for your lead's type",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Call it a draw.\"",
+     "success": {
+      "text": "You both start laughing at the same moment, which only makes it worse. Ves: \"A draw, then.\" They give you the item anyway: a held item made for your lead's own type, chosen with care from a pouch full of them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ves-owed-type-item",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ves-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-silver-trainer-s1",
+   "name": "The Silver Trainer: Your Strongest",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "galen-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "The road narrows between two standing stones, and between them waits a figure in full silver armour, plate on plate, visor down, gleaming even under cloud. It does not move as you approach. A gauntleted hand rises and points past you, at your belt. The voice inside the helm is hollow and clipped. The Silver Trainer: \"Your strongest. Only.\"",
+   "choices": [
+    {
+     "label": "\"Send my strongest.\"",
+     "success": {
+      "text": "You put your strongest at the front. The armoured figure nods, approving, and its answer steps out from behind a standing stone: a Metagross, silver as the armour, four legs ringing on the road. One against one, and nobody holds back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galen-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The Silver Trainer's Metagross beat your strongest",
+         "importance": 60
+        }
+       ],
+       "rule": {
+        "noSwitch": true
+       },
+       "team": [
+        "metagross"
+       ],
+       "name": "The Silver Trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Your strongest beat the Silver Trainer's Metagross",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Send another.\"",
+     "success": {
+      "text": "You reach for a different Poké Ball. The visor turns toward it, then back to you, and the voice goes flat with disappointment. The Silver Trainer: \"That's not your strongest.\" The armour turns, clanking, and walks away down the road without looking back.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Refuse.\"",
+     "success": {
+      "text": "You shake your head. The armoured figure stands there a long moment, then lowers its hand and steps aside, silent, to let you pass.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-silver-trainer-s2",
+   "name": "The Silver Trainer: Under the Visor",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "galen-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "galen-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "The silver armour again, on a different road, but something is wrong with it: a long crack runs down the breastplate and the visor hangs open on one broken hinge. Under it is a face, very old and deeply lined, a white beard tucked into the collar. The old man flinches when he sees you looking and tries to push the visor shut, and it will not stay. You know that face from the old League books. He was a Champion before your parents were born, and he has been hiding it because he is ashamed of how old he is. Galen: \"I only fight the strong ones now. To be sure I still can.\"",
+   "choices": [
+    {
+     "label": "\"You still can.\"",
+     "success": {
+      "text": "Galen's eyes go bright behind the broken visor. He calls out his Metagross, then a Skarmory, then a Steelix, and he is good, properly good: patient, precise, reading your team three moves ahead. Whatever age has taken from him, it has not taken this.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galen-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Galen proved he still can",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "metagross",
+        "skarmory",
+        "steelix"
+       ],
+       "name": "Galen",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Galen, a Champion from long ago, and he was good",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Fight my weakest.\"",
+     "success": {
+      "text": "You choose your weakest Pokémon. Galen hesitates, looking at it, and something in his face softens. Then he battles it gently with his oldest Pokémon, never cruel, always one step slower than he could be, showing each move before he uses it. By the end your weakest stands straighter, and it has learned more in ten minutes than in ten battles.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "weakest"
+       },
+       {
+        "kind": "flag",
+        "key": "galen-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Galen gave your weakest Pokémon a gentle lesson",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "metagross"
+       ],
+       "name": "Galen",
+       "size": 1,
+       "types": [],
+       "levelBonus": -3,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Galen gave your weakest Pokémon a lesson",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Take the armour off.\"",
+     "success": {
+      "text": "You ask him to take it off. Galen looks at you for a long time. Then, piece by piece, he does: the cracked helm, the gauntlets, the heavy plates, until he stands on the road in a plain shirt, an old man in the sun. He breathes, deep and slow, as if he has not breathed in years. He looks younger.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galen-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "galen-unmasked",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-silver-trainer-s3",
+   "name": "The Silver Trainer: I'd Rather Watch",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "galen-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "galen-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "Galen sits on a fence by the road with no armour at all, just a coat and a walking stick, his Metagross resting in the grass beside him like a sleeping dog. He lifts a hand when he sees you, and his smile is easy. Galen: \"I'm done fighting to prove it. I'd rather watch.\"",
+   "choices": [
+    {
+     "label": "\"Watch me battle.\"",
+     "success": {
+      "text": "Galen follows you to your next battle and sits on a crate at the edge of it with his stick across his knees, watching every move with bright, sharp eyes. When it is over he claps, slowly and loudly, the only person in the whole place doing it, and he does not care who sees.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galen-watching",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Galen, a Champion from long ago, clapped for your battle",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "galen-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Teach instead.\"",
+     "success": {
+      "text": "Galen turns his stick in his hands for a long time. Then he nods. Galen: \"The long game. Nobody teaches that anymore.\" He writes in a little book and tears out the page for you: a list of things never to rush. Somewhere out there, a new student is going to be very lucky.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-galen",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Galen decided to teach the long game",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "galen-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "unmasked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galen-unmasked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The silver armour is nowhere to be seen. Galen catches you looking for it and laughs. Galen: \"Sold it. Bought a fence to sit on.\""
+    }
+   ]
+  },
+  {
+   "id": "ovc-glass-trainers-s1",
+   "name": "The Glass Trainers: Across the Field",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "glass-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A wide field of long grass in the late afternoon, the light coming in low and gold. On the far side, along the treeline, stand five trainers, and the sun goes straight through them. They are translucent, like figures made of glass, each with a Pokémon at their side just as clear. They don't move. They are watching you. Then one of them, the smallest, lifts a hand and waves.",
+   "choices": [
+    {
+     "label": "\"Wave back.\"",
+     "success": {
+      "text": "You wave back. For a moment nothing happens. Then all five of them wave together, some shyly and some with their whole arms, and their glass Pokémon bob and hop beside them. When you look again they are still watching, but it feels friendlier now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "glass-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "glass-waved",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Walk over.\"",
+     "success": {
+      "text": "You start across the field toward them. As you come close they step back, all five at once, politely, the way people make room on a crowded path. However far you walk, the gap stays the same. You stop. They stop. One of them gives you a small, apologetic shrug.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "glass-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ignore them.\"",
+     "success": {
+      "text": "You turn away and walk on. When you look over your shoulder an hour later, they are there: five glass figures at the edge of sight, following at a distance. They are still there at sunset. They never come closer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "glass-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "glass-followed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-glass-trainers-s2",
+   "name": "The Glass Trainers: One Battle That Counts",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "glass-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "glass-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "The five glass trainers wait in the middle of the road this time, close enough to touch, close enough to see the light bend through their faces. Their Pokémon are as clear as water. The one who waved steps forward, and her voice sounds as if it comes from very far away. Glass trainer: \"We're the ones who didn't make it to the League. Every year, five. We'd like one battle that counts.\"",
+   "choices": [
+    {
+     "label": "\"Battle all five.\"",
+     "success": {
+      "text": "All five step up, one after another. Each battle is short and fierce, and each glass trainer fights as if it were the last battle of their life, because in a way it was. The first three come back to back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "glass-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-glass-trainers-last-two"
+        }
+       ],
+       "chain": 3,
+       "name": "The Glass Trainers",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-glass-trainers-last-two"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Battle the one who waved.\"",
+     "success": {
+      "text": "The others step back, and the one who waved comes forward alone. Behind her the other four start to cheer, glass hands clapping without a sound and then with one, louder and louder, until the whole road rings with it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "glass-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The glass trainer who waved finally won one",
+         "importance": 60
+        }
+       ],
+       "name": "The Glass Trainer Who Waved",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You gave a glass trainer one battle that counts",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Why didn't you make it?\"",
+     "success": {
+      "text": "They look at one another. Then, one by one, each tells you one thing. The one who waved: \"I got sick the week of the League.\" A tall boy: \"My Pokémon was hurt, and I wouldn't make it fight.\" An old woman: \"I lost on the last day. One hit.\" A boy in a cap: \"I was scared.\" A young man: \"I just ran out of road.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ovc-glass-trainers-why"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "waved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "glass-waved",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The one who waved smiles at you first. Glass trainer: \"You waved back. Nobody waves back.\""
+    },
+    {
+     "id": "followed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "glass-followed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You realise they have been with you all along, a little way behind, on every road since the field."
+    }
+   ]
+  },
+  {
+   "id": "ovc-glass-trainers-why",
+   "name": "The Glass Trainers: Five or One",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The five glass trainers stand in a row, their stories hanging in the air between you. Nobody says anything else. The one who waved looks at you, and waits.",
+   "choices": [
+    {
+     "label": "\"Battle all five.\"",
+     "success": {
+      "text": "All five step up, one after another. Each battle is short and fierce, and each glass trainer fights as if it were the last battle of their life, because in a way it was. The first three come back to back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "glass-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-glass-trainers-last-two"
+        }
+       ],
+       "chain": 3,
+       "name": "The Glass Trainers",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-glass-trainers-last-two"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Battle the one who waved.\"",
+     "success": {
+      "text": "The others step back, and the one who waved comes forward alone. Behind her the other four start to cheer, glass hands clapping without a sound and then with one, louder and louder, until the whole road rings with it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "glass-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The glass trainer who waved finally won one",
+         "importance": 60
+        }
+       ],
+       "name": "The Glass Trainer Who Waved",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You gave a glass trainer one battle that counts",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-glass-trainers-last-two",
+   "name": "The Glass Trainers: The Last Two",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Two glass trainers still wait their turn: the one who waved, and a tall boy holding a cracked badge case. They have watched every move. The boy nods to you, and the girl takes a breath she does not need.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "The last two step up, one after the other, and fight with everything they never got to use. When the final Pokémon falls, the road is quiet, and all five of them are smiling.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The glass trainers won some of their five battles at last",
+         "importance": 60
+        }
+       ],
+       "chain": 2,
+       "name": "The Glass Trainers",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You fought all five glass trainers, one battle each",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-glass-trainers-s3",
+   "name": "The Glass Trainers: For the Ones Who Almost",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "glass-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "glass-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "The field again, at dawn, with mist lying low over the grass. The five glass trainers stand in a row, fainter than before, the light passing through them almost without bending. They are leaving. As they go, each one's Pokémon turns and looks at the matching Pokémon on your team, type to type, and nods, slowly, as if passing something on.",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "You say it out loud. The one who waved smiles, and as the five of them fade into the mist something drops into the grass where she stood with a small, clear chime: a Soothe Bell, solid and real and warm from the sun.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soothe-bell",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "glass-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll remember you.\"",
+     "success": {
+      "text": "You tell them you will remember them. All five turn back at once, and for a moment they look almost solid. Then they are gone. Later, in the Hall of Past Champions, a small brass plaque appears beneath the statues, with five names you never heard spoken aloud and five words: \"For the ones who almost\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "glass-plaque",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You promised to remember the glass trainers",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "glass-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-trainer-who-never-lost-s1",
+   "name": "The Trainer Who Never Lost: Want to Be First?",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aurelio-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A training ground behind a town hall, the dirt raked perfectly smooth. A young man in a pressed white jacket stands at its centre with a gold ribbon pinned to his chest, embroidered UNDEFEATED. He has a crowd. He always has a crowd. He sees you and smiles the smile of someone who has never once been surprised. Aurelio: \"Never. Not once. Want to be first?\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Aurelio's Dragonite lands in the dirt like a dropped anvil, and the crowd cheers before anything has even happened. It is a very hard battle, the hardest in weeks, and he fights it without a single wasted move. If he falls, nobody here has any idea what his face will do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aurelio-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Aurelio stayed undefeated, for now",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "dragonite",
+        "tyranitar",
+        "salamence"
+       ],
+       "name": "Aurelio",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aurelio-won",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "You were the first ever to beat Aurelio, and he just stood there, stunned",
+         "importance": 75
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Never?\"",
+     "success": {
+      "text": "You ask if that is really true. Aurelio's smile stays exactly where it is. Aurelio: \"Never.\" But his hands, folded behind his back, shake a little, and he sees you notice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aurelio-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Good for you.\"",
+     "success": {
+      "text": "You tell him good for him, and mean it, and walk on. Behind you the crowd goes back to cheering. Aurelio watches you go, frowning slightly, as if nobody has ever said that to him and just walked away.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-trainer-who-never-lost-s2",
+   "name": "The Trainer Who Never Lost: I Haven't Slept",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aurelio-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "aurelio-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "Aurelio again, though you almost don't recognise him. The white jacket is creased. The gold ribbon is gone; there is a pale little rectangle on the cloth where it used to be. There is no crowd. He sits on the edge of a fountain, staring into the water, and when he speaks it comes out flat. Aurelio: \"Someone beat me. A kid. I haven't slept.\"",
+   "choices": [
+    {
+     "label": "\"It's okay to lose.\"",
+     "success": {
+      "text": "Aurelio looks at you as if you have spoken another language. He nods, politely, the way you nod at a stranger giving directions to somewhere you will never go. He doesn't believe it. Not yet. But after you fall quiet, you hear him say the words again under his breath.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aurelio-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Rematch.\"",
+     "success": {
+      "text": "Aurelio is on his feet too fast. His Dragonite is still strong, but Aurelio is not: he is tense and rushing, second-guessing every call and flinching at every hit. He is worse than he was, and he knows it, and knowing it makes him worse.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aurelio-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Aurelio beat you, and it did not seem to help",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "dragonite",
+        "tyranitar",
+        "salamence"
+       ],
+       "name": "Aurelio",
+       "size": 3,
+       "types": [],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Aurelio again, and it hurt to watch",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"How did it feel?\"",
+     "success": {
+      "text": "He is quiet so long you think he will not answer. Then: Aurelio: \"...Light. That's the worst part. It felt light.\" He turns his hand over in the sunlight as if looking for the weight he carried all those years, and cannot find it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aurelio-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "aurelio-light",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "beat-him",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aurelio-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Aurelio again, though you almost don't recognise him. The white jacket is creased. The gold ribbon is gone; there is a pale little rectangle on the cloth where it used to be. There is no crowd. He sits on the edge of a fountain, and when he sees you he goes very still. Aurelio: \"You. You took it. I haven't slept.\""
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-trainer-who-never-lost-s3",
+   "name": "The Trainer Who Never Lost: Kids Who've Never Won",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aurelio-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "aurelio-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "A dusty little training ground at the edge of a town, with chalk lines and a rickety bench. Aurelio stands in the middle of it in a faded T-shirt, surrounded by a dozen small children with a dozen small, scruffy Pokémon, all talking at once. He is laughing. When he sees you he waves you over with both arms. Aurelio: \"I'm teaching now. Kids who've never won. I'm good at it.\"",
+   "choices": [
+    {
+     "label": "\"Battle your students.\"",
+     "success": {
+      "text": "Three of Aurelio's students step up one after another, each clutching a Poké Ball in both hands. Every one of them tries something brave: a move they have never landed, a switch they were too scared to make. Aurelio shouts encouragement at all three, and at you too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aurelio-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Aurelio's students beat you, and they will never forget it",
+         "importance": 60
+        }
+       ],
+       "chain": 3,
+       "name": "Aurelio's Students",
+       "size": 1,
+       "types": [],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You battled three of Aurelio's students, and each tried something brave",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Battle you.\"",
+     "success": {
+      "text": "Aurelio grins and calls his Dragonite down out of the sky. It is a real battle, hard and fast, and when he loses he throws his head back and laughs, really laughs, while his students mob him from every side.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aurelio-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Aurelio beat you, and you both laughed about it",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "dragonite",
+        "tyranitar",
+        "salamence"
+       ],
+       "name": "Aurelio",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Aurelio lost to you, and laughed",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Proud of you.\"",
+     "success": {
+      "text": "Aurelio goes pink to the ears. He digs in a pocket and holds out the gold ribbon, the one embroidered UNDEFEATED, a little crumpled now. Aurelio: \"Take it. I don't need it anymore.\" You pin it to your bag.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Aurelio gave you his old undefeated ribbon",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "aurelio-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "light",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aurelio-light",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Aurelio catches your eye over the children's heads. Aurelio: \"Still light. I'm getting used to it.\""
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-trainer-with-no-name-s1",
+   "name": "The Trainer with No Name: Names Are for People Who Stay",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mirel-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A camp at the edge of a wood: one tent, one small fire, a pack already half loaded as if ready to leave at any moment. A trainer in a dark travelling cloak sits by the fire with six Poké Balls lined up on a log, an Absol lying close to the flames. You ask their name. They look at you over the fire for a long time. Trainer: \"No name. Names are for people who stay.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "The trainer stands, scatters the fire with one boot, and sends out the Absol, white as frost, its horn catching the last of the light. A Houndoom and a Weavile follow. They fight like a team used to leaving before anything can catch them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirel-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The trainer with no name beat you and was gone by morning",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "absol",
+        "houndoom",
+        "weavile"
+       ],
+       "name": "The Trainer with No Name",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the trainer with no name",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"I'll call you something.\"",
+     "success": {
+      "text": "You tell them you are going to call them something anyway. The trainer scowls at you over the fire, and the Absol lifts its head, curious to hear what you come up with.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirel-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ovc-the-trainer-with-no-name-nickname"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Fine.\"",
+     "success": {
+      "text": "You shrug. Fine. The trainer nods, as if that is the first sensible thing anyone has said to them in months, and turns back to the fire. When you look back from the trees, the tent is already coming down.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-trainer-with-no-name-nickname",
+   "name": "The Trainer with No Name: A Name for Now",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The trainer folds their arms and waits, plainly ready to hate whatever you come up with. The Absol watches you with its red eyes.",
+   "choices": [
+    {
+     "label": "\"Frost.\"",
+     "success": {
+      "text": "The trainer scowls. Trainer: \"Terrible.\" But the Absol's tail thumps the ground once, and when you say it again an hour later, the trainer looks up. They keep it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirel-named",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Wren.\"",
+     "success": {
+      "text": "The trainer scowls. Trainer: \"That's a bird.\" But they say it over to themselves when they think you are not listening, and they keep it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirel-named",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Kit.\"",
+     "success": {
+      "text": "The trainer scowls so hard their whole face folds. Trainer: \"No.\" But at dawn, when you call it out, they turn round. They keep it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirel-named",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-trainer-with-no-name-s2",
+   "name": "The Trainer with No Name: I Don't Keep Things",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mirel-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mirel-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "The cloaked trainer again, by a different fire on a different road. The pack is the same. The Poké Balls on the log are not: three of the six are gone, and three new ones sit in their place, still shiny. The Absol is still there, lying close to the flames. Trainer: \"I let them go. I don't keep things.\"",
+   "choices": [
+    {
+     "label": "\"Why not?\"",
+     "success": {
+      "text": "The trainer pokes the fire, and a spray of sparks goes up into the dark. Trainer: \"Things leave anyway.\" They say it like a fact about the weather. The Absol shifts a little closer to their boots.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirel-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Three strangers and the Absol. The new team fights well but not together, not yet; only the Absol moves as if it knows its trainer's mind.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirel-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The trainer with no name beat you with a team they did not mean to keep",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "absol",
+        "zoroark",
+        "skarmory"
+       ],
+       "name": "The Trainer with No Name",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the trainer with no name and their new team",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Do they know where you are?\"",
+     "success": {
+      "text": "The trainer is silent a long time. Then they glance down at the Absol by the fire, which has not taken its eyes off them once. Trainer: \"...One keeps finding me.\" The Absol lays its chin on their boot, as if it heard.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirel-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mirel-absol",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "named",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mirel-named",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You greet them by the name you gave them. The trainer scowls, exactly like last time. But they answer to it."
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-trainer-with-no-name-s3",
+   "name": "The Trainer with No Name: It's Mirel",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mirel-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mirel-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "Night, and a fire, and the trainer sitting on the far side of it with the hood of the cloak down for the first time. The Absol lies across their feet. They have clearly been waiting for you, and clearly been arguing with themselves about it. At last, without looking up: Trainer: \"It's Mirel.\" A pause, the fire crackling. It was a parent's name, Mirel says, a parent lost on the road years ago. She took it to remember them by, and she has never told it to anyone who stayed.",
+   "choices": [
+    {
+     "label": "\"That's a good name.\"",
+     "success": {
+      "text": "Mirel smiles, once, quickly, as if it got away from her. Then she takes something from her pocket and tosses it across the fire to you: a little carved charm in the shape of an Absol's Poké Ball, worn smooth. Her spare. Mirel: \"Keep it.\"",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Mirel gave you her spare Absol Ball charm",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "mirel-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stay a while.\"",
+     "success": {
+      "text": "Mirel looks at you, then at the fire, then unrolls her bedroll on your side of it without a word. You camp together that night, and your team rests and mends by the warm coals. In the morning you wake to find the Absol curled up asleep beside your starter, nose to tail, as if they have known each other for years.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "mirel-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Keep moving if you need to.\"",
+     "success": {
+      "text": "Mirel looks up sharply, as if she expected you to argue. Then her face loosens. Mirel: \"Thanks for not stopping me.\" Before she shoulders her pack she presses a little carved Absol Ball charm into your hand, worn smooth, her spare.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Mirel gave you her spare Absol Ball charm",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "mirel-done",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "absol",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mirel-absol",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Absol lifts its head and looks at you, then at Mirel, and settles again with its chin on her boot. The one that keeps finding her."
+    }
+   ]
+  }
+ ]
+}

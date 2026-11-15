@@ -1,4 +1,4 @@
-// Catalog Overhaul Pack, people: the mentors' shared scenes MS1-MS12 (STORY_FAMILIES_5.md, Part A). MS9 (The Familiar Face) is PA4, in people-allies-1.ts.
+// Catalog Overhaul Pack, people: the mentors' shared scenes MS1-MS12 (STORY_FAMILIES_5.md, Part A). MS9 (The Familiar Face) is PA4, `mentor-familiar-face` in people-champions-1.ts.
 // One event for all twelve mentors: {mentor} is this run's mentor, {mentorDrill} their Training drill (src/core/mentors/lessons.ts).
 // Build: npm run co:build -- people-mentors-1
 import { again, ch, fight, heal, item, out, room, stat, type Json } from '../dsl.ts';

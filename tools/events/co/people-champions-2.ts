@@ -1,11 +1,10 @@
-// @ts-nocheck: work in progress (stopped 2026-11-15 when Kice capped running threads at five); rename to people-*.ts to build.
 // Catalog Overhaul Pack, people: Past Champions cameos, the Landmark Delves and the three-stage trainer stories (STORY_FAMILIES_8.md,
 // Part C (C1, C2, C3, C5, C6) and Part D (D1 to D7), lines 439-801). C4 Victory Hall is built elsewhere (people-champions-1).
 // Each delve (C6) is a chain of rooms; each three-stage story (D1-D7) keeps its old ids `-s1..-s3`, a stage waiting one region after the last.
 // Build: npm run co:build -- people-champions-2
 import { readFileSync } from 'node:fs';
 import { join as pathJoin } from 'node:path';
-import { ch, companion, cure, ferry, fight, flag, flagAgo, flagAt, heal, item, join, out, ptype, room, statusLead, type Json } from '../dsl.ts';
+import { ch, companion, cure, ferry, fight, flag, flagAgo, flagAt, heal, item, join, out, ptype, room, statusLead, takeNode, type Json } from '../dsl.ts';
 import { bond, CATEGORY as CAT, is, moment, not, oldOf, scene, spar, variant } from './_people.ts';
 
 export const CATEGORY = CAT;
@@ -54,8 +53,9 @@ const invitation: Json[] = [
     'A courier in League colours finds you at a crossroads, out of breath, presses a heavy envelope into your hands and jogs away before you can ask anything. The seal is red wax stamped with the League crest, and the paper is so thick it barely bends. ' +
       'Inside is a single card in looping silver ink: "You are invited to an exhibition of past Champions\' teams. Bring your own. Dress optional." On the back, someone has drawn a little map in pencil, to a hall you have only ever heard about in stories.',
     [
-      ch('"Go."', out('You follow the pencilled map to a pair of great bronze doors, which open before you knock. The Hall of Past Champions should not open for you yet, but the card is all the key it needs. An old caretaker reads it, raises an eyebrow and stamps it. Caretaker: "An invitation. Your first statue is on the house." The first statue fight costs you nothing.',
-        room('mr-hall-champions'), flag('champ-invite-free-statue'), moment('The League invited you to the Hall of Past Champions'))),
+      ch('"Go."', out('You follow the pencilled map to a pair of great bronze doors, which open before you knock. The Hall of Past Champions should not open for you yet, but the card is all the key it needs. An old caretaker reads it, raises an eyebrow and stamps it. Caretaker: "An invitation. Your first statue is on the house." No donation in the tin this time: he leads you straight to the first wing.',
+        // PC6's statue fights cost a donation at the door (people-champions-1); the invitation opens the first wing directly, for free.
+        room('mr-hall-champions-wing-1'), moment('The League invited you to the Hall of Past Champions'))),
       ch('"Send it back."', out('You slide the card back into its envelope, write RETURN TO SENDER across the front in your neatest letters, and drop it into the next post box you pass. Somewhere, a League clerk is going to be very confused. The road ahead is the same road it was.')),
       // TODO(engine): the ally should be the rival's own lead; `ally` takes one fixed species.
       ch('"Bring the rival."', fight('You send word, and your rival turns up at the bronze doors an hour later, out of breath and pretending they just happened to be nearby. Inside, the caretaker looks at the two of you, then at two statues standing side by side, and pulls a lever. Stone cracks, dust falls, and two Champions\' aces step down together. For once your rival is watching your back instead of your weak spots.',
@@ -272,8 +272,7 @@ const sisters: Json[] = [
     [
       ch('"Accept."', fight('Teshe nods, satisfied, and lets her Gallade out. It bows to your lead before the duel, and your lead, a little startled, bows back. Then neither of them holds anything back.', tesheDuel(), D.set('m1'))),
       ch('"Whose custom?"', fight('Teshe: "Mine. I made it up. It\'s still a custom." She says it with a perfectly straight face, and then the corner of her mouth twitches. You accept. Her Gallade steps out and bows.', tesheDuel(), D.set('m1'))),
-      // TODO(takeNode): "Go round: a node lost" (the shared takeNode effect is not merged yet).
-      ch('"Go round."', out('You leave the road and go the long way round, through brambles, across a stream and over a field of very opinionated Tauros. It costs you the better part of a day. When you look back from the far hill, Teshe is still standing on her stone, watching you go.')),
+      ch('"Go round."', out('You leave the road and go the long way round, through brambles, across a stream and over a field of very opinionated Tauros. It costs you the better part of a day. When you look back from the far hill, Teshe is still standing on her stone, watching you go.', takeNode(1))),
     ]),
   D.stage(2, 'Two on Two',
     'The crossroads again. Teshe waits on her stone, but she is not alone: across the junction, as far from her as the roads allow, a second woman in a grey coat leans on the other marker with her arms folded. Same coat. Same jaw. Not looking at each other. ' +
@@ -538,7 +537,6 @@ export const DOC: Record<string, string> = {
 export const AFTERSTORY: { match: string; readBy: string }[] = [
   { match: 'champ-(met|won)', readBy: 'The League Champion battle opens with "You again. Good." when the player won (SF8 C2 Remembers; needs engine: a League battle line)' },
   { match: 'champion-ace-hint', readBy: 'Needs engine: a hint about the region\'s Champion\'s ace (SF8 C1 Choosing)' },
-  { match: 'champ-invite-free-statue', readBy: 'PC6 Hall of Past Champions (mr-hall-champions, people-champions-1): one statue fight free (SF8 C3 Go)' },
   { match: 'glass-plaque', readBy: 'PC6 Hall of Past Champions (people-champions-1): the plaque "For the ones who almost" (SF8 D5 M3 Remember)' },
   { match: 'legend-(zapdos|articuno)-(sign|influence)', readBy: 'Needs engine: Legendary Blessings, a Sign or +2 Influence (SF8 C6 Power Plant hall 3, Seafoam chamber 3; QUESTLINES_LEGENDARY)' },
   { match: 'ves-owed-type-item', readBy: 'Needs engine: the type-boosting held item for the lead\'s type (SF8 D3 M3)' },
