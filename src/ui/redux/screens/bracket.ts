@@ -3,7 +3,8 @@
 // Pure drawing and pure model building; the scene keeps the state and the input.
 
 import type { TourneyView } from '../../../core/expansion/tourney';
-import { act, esc, H, mini, TX, W } from '../kit';
+import type { BracketTree } from '../../../core/galarTournament';
+import { act, esc, H, mini, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 
 export interface BracketSlot { name: string; file: string | null; you: boolean; out: boolean; named: boolean }
@@ -14,6 +15,8 @@ export interface BracketModel {
   pages: string[];
   page: number;
   text: string;
+  /** One more chip after the pages (Galar: watch a match). */
+  extra?: string;
 }
 
 const X = [24, 260, 496, 732] as const;
@@ -23,9 +26,12 @@ export function bracketView(_c: ReduxCtx, d: BracketModel): string {
     s
       ? W(`<div class="row" style="gap:6px"><span style="width:28px;height:28px;flex:none;display:flex;align-items:center;justify-content:center">${s.file ? mini(s.file, 28) : ''}</span><b style="font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0"${s.you && !last ? ' class="acc"' : ''}>${s.you ? '★ ' : ''}${esc(s.name)}</b></div>`, `padding:5px 10px${s.out ? ';opacity:.45' : ''}`, last ? 'sel' : '')
       : W('<div class="row" style="gap:6px;height:28px"><b style="font-size:14px;opacity:.6">?</b></div>', 'padding:5px 10px;opacity:.55');
-  const cols = d.columns.slice(0, 4).map((col, i) => `<div class="abs sm" style="left:${X[i]}px;top:54px;width:${i === 3 ? 204 : 200}px;text-align:center${col.now ? ';opacity:1;color:var(--acc);font-weight:700' : ''}">${esc(col.name)}</div><div class="abs col" style="left:${X[i]}px;top:76px;bottom:110px;width:${i === 3 ? 204 : 200}px;justify-content:space-around">${col.slots.map((s) => slot(s, i === 3)).join('')}</div>`).join('');
-  const tabs = d.pages.length > 1 ? `<div class="abs row" style="left:24px;right:24px;bottom:74px;gap:8px;justify-content:center">${d.pages.map((p, k) => `<span class="tg${k === d.page ? '' : ' no'}" style="cursor:pointer"${act('bracketPage', k)}>${esc(p)}</span>`).join('')}</div>` : '';
-  return `<div class="fill"${act('bracket')}></div>` + H(d.title, 'map', [['◀ ▶', 'group'], ['B', 'close']]) + cols + tabs + TX(esc(d.text));
+  // A long text (Galar's next opponent and the big-screen line) wraps onto a second line: the columns end higher,
+  // and the page chips sit on the text box whatever its height.
+  const long = d.text.length > 92;
+  const cols = d.columns.slice(0, 4).map((col, i) => `<div class="abs sm" style="left:${X[i]}px;top:54px;width:${i === 3 ? 204 : 200}px;text-align:center${col.now ? ';opacity:1;color:var(--acc);font-weight:700' : ''}">${esc(col.name)}</div><div class="abs col" style="left:${X[i]}px;top:76px;bottom:${long ? 136 : 110}px;width:${i === 3 ? 204 : 200}px;justify-content:space-around${long ? ';gap:2px' : ''}">${col.slots.map((s) => slot(s, i === 3)).join('')}</div>`).join('');
+  const chips = d.pages.length > 1 ? `<div class="row" style="gap:8px;justify-content:center">${d.pages.map((p, k) => `<span class="tg${k === d.page ? '' : ' no'}" style="cursor:pointer"${act('bracketPage', k)}>${esc(p)}</span>`).join('')}${d.extra ? `<span class="tg" style="cursor:pointer;margin-left:12px"${act('bracketWatch')}>${esc(d.extra)}</span>` : ''}</div>` : '';
+  return `<div class="fill"${act('bracket')}></div>` + H(d.title, 'map', [['◀ ▶', 'group'], ['B', 'close']]) + cols + `<div class="abs col" style="left:20px;right:20px;bottom:16px;gap:13px">${chips}<div class="txt">${esc(d.text)}</div></div>`;
 }
 
 const GROUPS = ['Group A', 'Group B', 'Group C', 'Group D'] as const;
@@ -59,6 +65,31 @@ export function tourneyPage(view: TourneyView, fileOf: (species: string) => stri
   const text = view.now === 6 ? 'Champion! The whole bracket is decided.' : view.now === 0 ? '32 fighters have signed up. The bracket is drawn.' : `${left} still in. Next: ${round}${opp ? ` against ${opp.name}` : ''}.`;
   return { title, columns, pages: [...GROUPS, 'Finals'], page: p, text };
 }
+
+/**
+ * One page of Galar's Champion Tournament as the same 8/4/2/1 columns (core/galarTournament.ts bracketTree): pages 0
+ * to 3 are the four groups, page 4 the finals. `text` is what the old five-card pop-up said about the next opponent.
+ */
+export function galarPage(tree: BracketTree, fileOf: (species: string) => string | null, page: number, text: string): BracketModel {
+  const p = Math.max(0, Math.min(4, Math.floor(page)));
+  const finals = p === 4;
+  const names = finals ? ['Quarterfinal', 'Semifinal', 'Final', 'Champion'] : ['Round of 32', 'Round of 16', 'Quarterfinal', 'Group winner'];
+  const columns = [8, 4, 2, 1].map((n, i) => {
+    const c = finals ? i + 2 : i;
+    const line = tree.lines[c] ?? [];
+    const next = new Set((tree.lines[c + 1] ?? []).map((e) => e.id));
+    const from = finals ? 0 : p * n;
+    const slots = Array.from({ length: n }, (_, k): BracketSlot | null => {
+      const e = c <= tree.wins ? line[from + k] : undefined;
+      return e ? { name: e.name, file: e.ace ? fileOf(e.ace) : null, you: e.you, named: true, out: c < tree.wins && !next.has(e.id) } : null;
+    });
+    return { name: names[i]!, now: tree.wins === c, slots };
+  });
+  return { title: 'Champion Tournament', columns, pages: [...GROUPS, 'Finals'], page: p, text };
+}
+
+/** The page Galar's bracket opens on: the player's group (always the first) until the quarter-final, then the finals. */
+export const galarHome = (tree: BracketTree): number => (tree.wins >= 2 ? 4 : 0);
 
 /** The five rounds as the strip over a tournament event: won, next (with the opponent) or still ahead. */
 export interface RoundChip { name: string; who: string; state: 'won' | 'next' | 'ahead' }

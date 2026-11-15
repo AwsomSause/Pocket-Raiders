@@ -873,6 +873,164 @@ test('New UI on a phone held sideways: the on-screen pad lies over the screens a
   await context.close();
 });
 
+test('New UI: the map\'s Rival Report, Notebook, Dossier and Field Notes open as the mock-up pages; keys and clicks steer them', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  // A run that has met two rivals and some of Team Rocket, seen the Kanto track move and found a few notes.
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    const run = pkr.session.run;
+    run.regionOrder[run.regionIndex] = 'kanto';
+    const cast = (id: string, status: string) => [id, { status, metAt: 3 }];
+    const traits = { ambition: 50, pride: 50, empathy: 50, adaptability: 50, vindictiveness: 50, resilience: 50 };
+    const rival = (id: string, classId: string, name: string) => ({
+      id, classId, name, archetype: 'proud', style: 'rush', traits, rivalPotential: 20, state: 'recurring', arc: null, away: 0, cooldown: 0, progress: 0,
+      encounters: 2, setbacks: 0, adaptations: [], seen: [], bonds: {}, offscreen: [], origin: { eventId: `e-${id}`, where: { region: 0, stage: 0, level: 1, node: null, battle: 0, turn: null }, path: 'spark' },
+      memory: { lastBattle: { eventId: 'x', result: 'win', hpLeftShare: 0.5, turns: 5, team: ['rattata'] } },
+    });
+    const feelings = (friendship: number) => ({ friendship, respect: 5, trust: 3, rivalry: 8 - friendship, resentment: 1, admiration: 2 });
+    run.story.rivals = [rival('u', 'youngster', 'Joey'), rival('v', 'lass', 'Mira')];
+    run.expansion = {
+      ...(run.expansion ?? {}),
+      tracks: true,
+      track: { kanto: { step: 2, peak: 3, applied: [], log: [] } },
+      dossier: Object.fromEntries([cast('sc.rocket.matori', 'at large'), cast('sc.rocket.triad-surge', 'at large'), cast('sc.rocket.triad-koga', 'beaten'), cast('sc.rocket.madame-boss', 'at large'), cast('sc.aqua.amber', 'at large')]),
+      grandArc: { roms: ['K'], late: [], stock: [1], left: [] },
+      fieldNotes: { special: ['sv.rocket.roadblock', 'sv.rocket.ledger'], shadow: { 'ss.rocket.amberjack': 2 } },
+      rival: {
+        u: { role: 'main', personality: 'champion-chaser', style: 'rush', arc: 'x', lead: 1, marks: ['owes-you-one'], feelings: feelings(2), pityLosses: 0, presence: { '0': { meetings: 2, stepIn: true } } },
+        v: { role: 'friend', personality: 'kind', style: 'rush', arc: 'x', lead: -1, marks: [], feelings: feelings(7), pityLosses: 0 },
+      },
+    };
+    pkr.game.scene.getScene('Map').scene.restart({ focus: 0 });
+  });
+  await waitForScene(page, 'Map');
+  const state = () => page.evaluate(() => { const m = (window as any).__pkr.game.scene.getScene('Map'); return { busy: m.busy as boolean, index: m.index as number, canvas: Boolean(m.report || m.fieldNotes) }; });
+  await expect.poll(async () => (await state()).busy, { timeout: 15_000 }).toBe(false);
+  const map = view(page, 'Map').first();
+  const head = map.locator('.hd');
+  const home = (await state()).index;
+  const closed = async () => {
+    await expect(head).not.toContainText(/Rival Report|Notebook|Dossier|Field Notes/);
+    expect(await state()).toEqual({ busy: false, index: home, canvas: false });
+  };
+
+  // Rival Report (R): the rival's card, the Lead steps, feelings and meetings; a chip or an arrow changes rival.
+  await page.keyboard.press('r');
+  await expect(head).toContainText('Rival Report');
+  await expect(map).toContainText('Joey is ahead by 1');
+  await expect(map).toContainText('Champion Chaser');
+  await expect(map).toContainText('Owes You One');
+  await expect(map).toContainText('2 meetings, stepped in');
+  await expect(map.locator('.hp.gold')).toHaveCount(4);
+  await map.locator('[data-act="popPick"]', { hasText: 'Mira' }).click();
+  await expect(map).toContainText('You lead by 1');
+  await expect(map).toContainText('No marks yet');
+  await page.keyboard.press('ArrowRight');
+  await expect(map).toContainText('Joey is ahead by 1');
+  expect((await state()).canvas).toBe(false);
+  await page.keyboard.press('r');
+  await closed();
+
+  // Notebook track page (T): the step the region is on and what people say; Esc closes.
+  await page.keyboard.press('t');
+  await expect(head).toContainText('Notebook');
+  await expect(map).toContainText('The Ledger Fills');
+  await expect(map).toContainText('House Rules');
+  await expect(map).toContainText('Civilians say');
+  await page.keyboard.press('Escape');
+  await closed();
+
+  // Dossier (D): D is also "right", and that same press must not change folder. Arrows change folder and person.
+  await page.keyboard.press('d');
+  await expect(head).toContainText('Dossier');
+  const tabs = map.locator('.tabs span');
+  await expect(tabs).toHaveText(['Aqua', 'Rocket']);
+  await expect(map.locator('.tabs span.on')).toHaveText('Aqua');
+  await page.keyboard.press('ArrowRight');
+  await expect(map.locator('.tabs span.on')).toHaveText('Rocket');
+  await expect(map).toContainText('Overheard:');
+  await expect(map).toContainText('Madame Boss');
+  await expect(map).toContainText('Stop 4');
+  await map.locator('[data-act="popPick"]', { hasText: 'Matori' }).click();
+  await expect(map.locator('b', { hasText: 'Matori' }).last()).toBeVisible();
+  await expect(map).toContainText('Executive');
+  await tabs.first().click();
+  await expect(map.locator('.tabs span.on')).toHaveText('Aqua');
+  await page.keyboard.press('d');
+  await closed();
+
+  // Field Notes (F): four tabs; the Shadow tab shows hint pips; Enter closes.
+  await page.keyboard.press('f');
+  await expect(head).toContainText('Field Notes');
+  await expect(map.locator('[data-act="popTab"]')).toHaveCount(4);
+  await expect(map).toContainText('LEDGER');
+  await page.keyboard.press('ArrowDown');
+  await expect(map).toContainText('Snorlax');
+  await map.locator('[data-act="popTab"]').nth(1).click();
+  await expect(map).toContainText('Amberjack');
+  await expect(map).toContainText('Hints');
+  await page.keyboard.press('ArrowRight');
+  await expect(map.locator('.txt')).toContainText(/ROM/);
+  await page.keyboard.press('Enter');
+  await closed();
+  expect(errors).toEqual([]);
+});
+
+test('New UI: Galar\'s Champion Tournament bracket opens on the map as the mock-up tree; pages turn and a match can be watched', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const run = session.run;
+    run.regionOrder = ['galar', ...run.regionOrder.filter((r: string) => r !== 'galar')];
+    run.regionIndex = 0;
+    session.debugJumpToLeague();
+    const stage = session.run.stage;
+    stage.visited = stage.map.nodes.map((n: any) => n.id).slice(0, 2);
+    for (const s of game.scene.getScenes(true)) game.scene.stop(s.scene.key);
+    game.scene.start('Map');
+  });
+  await waitForScene(page, 'Map');
+  const busy = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy as boolean);
+  await expect.poll(busy, { timeout: 15_000 }).toBe(false);
+  const map = view(page, 'Map').first();
+  await page.keyboard.press('b');
+  await expect(map.locator('.hd')).toContainText('Champion Tournament');
+  // Two rounds won: it opens on the finals page with the eight who are left, and nothing later is given away.
+  const chips = map.locator('[data-act="bracketPage"]');
+  await expect(chips).toHaveCount(5);
+  await expect(map.locator('[data-act="bracketPage"]:not(.no)')).toHaveText('Finals');
+  await expect(map.locator('.txt')).toContainText('8 of 32 still in. Next: Quarterfinal against');
+  await expect(map).toContainText('★ You');
+  await expect(map.locator('.win', { hasText: '?' })).toHaveCount(7);
+  await chips.first().click();
+  await expect(map.locator('[data-act="bracketPage"]:not(.no)')).toHaveText('Group A');
+  await page.keyboard.press('ArrowRight');
+  await expect(map.locator('[data-act="bracketPage"]:not(.no)')).toHaveText('Group B');
+  // Watching a match plays on the canvas: the layer steps aside and comes back when it ends.
+  const watching = () => page.evaluate(() => { const m = (window as any).__pkr.game.scene.getScene('Map'); return m.children.list.some((o: any) => o.name === 'match-watch'); });
+  await page.keyboard.press('w');
+  await expect.poll(watching).toBe(true);
+  await expect(map).toBeHidden();
+  await page.waitForTimeout(300);
+  expect(await watching()).toBe(true);
+  await page.keyboard.press('Escape');
+  await expect.poll(watching).toBe(false);
+  await expect(map).toBeVisible();
+  await expect(map.locator('.hd')).toContainText('Champion Tournament');
+  await map.locator('[data-act="bracketWatch"]').click();
+  await expect.poll(watching).toBe(true);
+  await page.keyboard.press('Escape');
+  await expect.poll(watching).toBe(false);
+  await page.keyboard.press('b');
+  await expect(map.locator('.hd')).not.toContainText('Champion Tournament');
+  expect(await busy()).toBe(false);
+  expect(errors).toEqual([]);
+});
+
 test('UI style: Old shows no New layer; the address can ask for either', async ({ page }) => {
   const errors = watch(page);
   // An automated browser gets Old by default (the older specs rely on it).
