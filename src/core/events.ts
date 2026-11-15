@@ -714,9 +714,17 @@ export interface ChoiceView {
   kind: ChoiceKind;
 }
 
+/** A small "standing" panel beside the event text (Trust with a rival, a rank on a ladder): a rank label and up to three named meters. */
+export interface EventStanding {
+  rank: string;
+  meters: { label: string; value: number; max: number }[];
+}
+
 export interface EventView {
   event: EventDef;
   choices: ChoiceView[];
+  /** Shown beside the event text when set (the New UI draws it; see `src/ui/redux/screens/event.ts`). */
+  standing?: EventStanding | null;
 }
 
 function findSide(run: RunState, sideId: string): { node: MapNode; side: SideStop } {

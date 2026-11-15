@@ -200,6 +200,7 @@ export class EventScene extends Phaser.Scene {
             pick: this.picker ? { labels: this.picker.picks.map((x) => x.label), at: this.picker.at } : null,
             countdown: this.rxClock,
             timer: this.rxClock && view.event.countdown ? this.rxLeft / view.event.countdown : null,
+            standing: view.standing ?? null,
           });
         },
         acts: {
