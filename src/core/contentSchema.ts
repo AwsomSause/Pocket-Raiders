@@ -3199,7 +3199,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
    */
   z.object({
     kind: z.literal('market'),
-    action: z.enum(['comeBack', 'effort', 'prize', 'sell', 'pawn', 'redeem', 'rebate', 'deposit', 'withdraw', 'feed', 'mend', 'advise', 'buyPoint', 'cashPoint', 'service', 'forget', 'relearn', 'xp', 'teachOr']),
+    action: z.enum(['comeBack', 'effort', 'prize', 'sell', 'pawn', 'redeem', 'rebate', 'deposit', 'withdraw', 'feed', 'mend', 'advise', 'buyPoint', 'cashPoint', 'service', 'forget', 'relearn', 'xp', 'teachOr', 'stash', 'stolen']),
     event: z.string().optional(),
     key: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
     stat: z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'highest', 'lowest']).optional(),

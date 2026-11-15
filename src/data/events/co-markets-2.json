@@ -3632,6 +3632,7 @@
       ],
       "battle": {
        "kind": "trainer",
+       "friendly": true,
        "name": "Your Shadow",
        "mirror": true,
        "size": 1,
@@ -3715,6 +3716,7 @@
       ],
       "battle": {
        "kind": "trainer",
+       "friendly": true,
        "team": [
         "hitmonchan"
        ],

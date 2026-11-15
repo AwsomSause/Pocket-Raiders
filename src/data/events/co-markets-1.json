@@ -3990,7 +3990,8 @@
        "types": [],
        "levelBonus": -1,
        "shinyMultiplier": 1,
-       "win": []
+       "win": [],
+       "friendly": true
       }
      }
     },

@@ -305,11 +305,11 @@ export const EVENTS: Json[] = [
     ['Let a Ground-type dig.', 'Your Ground-type goes into the sand like a diver into water. It surfaces twice, with a disc each time in its teeth, and drops the better one at your feet.', [item('tm-ground')], { node: true, requires: [ptype('ground')], chance: 0.75, failText: 'Your Ground-type digs two long tunnels and comes up empty both times, sneezing sand. Grubb gives it a biscuit anyway.' }]),
   // 15
   drill('shadow-boxing', 'Shadow Boxing', 'A dojo with one lamp, set low, so that every shadow is twice its owner\'s size. Sensei Mirro gestures at the wall. "Beat yourself." Cost: a battle against your lead\'s own copy. Gain: win, and your lead\'s best stat gains +1 effort.',
-    ['Fight the shadow.', 'The shadow steps off the wall. It knows every move your lead knows, and it is not afraid.', [], { battle: trainer('Your Shadow', { mirror: true, size: 1, win: [mk('effort', { stat: 'highest', amount: 1 })] }) }],
+    ['Fight the shadow.', 'The shadow steps off the wall. It knows every move your lead knows, and it is not afraid.', [], { battle: trainer('Your Shadow', { friendly: true, mirror: true, size: 1, win: [mk('effort', { stat: 'highest', amount: 1 })] }) }],
     idle('Bow to it.', 'Your lead bows to its own shadow. The shadow bows back. Sensei Mirro lets out a breath. "Most never think to."', bond(1))),
   // 16
   drill('sparring-partner', 'Sparring', 'A ring marked in rope. Black Belt Kenji tightens his belt, and his Hitmonchan shadow-boxes the air beside him. "My Hitmonchan wants a go." Cost: a battle. Gain: experience.',
-    ['Spar.', 'Kenji bows. His Hitmonchan bows. Then nobody is polite for a while.', [flag('roster-kenji-sparred')], { battle: trainer('Black Belt Kenji', { cls: 'black-belt', team: ['hitmonchan'], size: 1, types: ['fighting'], win: [mk('xp', { factor: 0.5, who: 'party' })] }) }],
+    ['Spar.', 'Kenji bows. His Hitmonchan bows. Then nobody is polite for a while.', [flag('roster-kenji-sparred')], { battle: trainer('Black Belt Kenji', { friendly: true, cls: 'black-belt', team: ['hitmonchan'], size: 1, types: ['fighting'], win: [mk('xp', { factor: 0.5, who: 'party' })] }) }],
     idle('Decline.', 'Kenji nods. "Another day. He\'ll still want a go." The Hitmonchan looks crushed, and then punches the air some more.')),
   // 17
   drill('speed-lane-treadmill', 'Speed Lane', 'A long belt of rubber, rolling. The attendant holds a clock the size of a dinner plate. "Beat the clock and keep your pace." Cost: a node. Gain: +1 Speed effort for your lead.',

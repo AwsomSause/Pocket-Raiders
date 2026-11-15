@@ -161,7 +161,7 @@ const pawnPrefix = (key: string): string => `market:pawn:${key}:`;
 
 /** What a pawnbroker holds for you under `key`: the item and what was paid for it. */
 export function pawned(run: RunState, key: string): { item: string; paid: number } | null {
-  const hit = Object.entries(run.itemCounters ?? {}).find(([k, v]) => k.startsWith(pawnPrefix(key)) && v > 0);
+  const hit = Object.entries(run.itemCounters ?? {}).find(([k, v]) => k.startsWith(pawnPrefix(key)) && v >= 0);
   return hit ? { item: hit[0].slice(pawnPrefix(key).length), paid: hit[1] } : null;
 }
 
@@ -176,6 +176,31 @@ function pawn(content: Content, run: RunState, e: MarketEffect): string {
   counters(run)[`${pawnPrefix(key)}${best.id}`] = paid;
   setFlag(run, `pawn-${key}`, 1);
   return `Pawned ${nameOf(content, best.id)} for ₽${paid}`;
+}
+
+/**
+ * A con's takings, put away where they can be found again (the next Hideout's vault). Silent: the money itself
+ * already left through the price the player saw. A Hideout pays it back with `withdraw` on the same key.
+ */
+function stash(run: RunState, e: MarketEffect): string {
+  const key = e.key ?? 'hideout-vault';
+  const amount = Math.max(0, e.amount ?? 0);
+  if (amount <= 0) return '';
+  counters(run)[`market:deposit:${key}`] = (counters(run)[`market:deposit:${key}`] ?? 0) + amount;
+  setFlag(run, `deposit-${key}`, flagOf(run, `deposit-${key}`) + 1);
+  return '';
+}
+
+/** A thief takes the most valuable item (the same one a pawnshop would): held under `key` like a free pawn ticket, so `redeem` with factor 0 gives it back. */
+function stolen(content: Content, run: RunState, e: MarketEffect): string {
+  const key = e.key ?? 'hideout-vault';
+  if (pawned(run, key)) return '';
+  const best = sellable(content, run)[0];
+  if (!best) return 'They got nothing: your pockets were empty';
+  take(run, best.id, 1);
+  counters(run)[`${pawnPrefix(key)}${best.id}`] = 0;
+  setFlag(run, `pawn-${key}`, 1);
+  return `Your ${nameOf(content, best.id)} is gone`;
 }
 
 function redeem(content: Content, run: RunState, e: MarketEffect): string {
@@ -377,6 +402,10 @@ export function applyMarket(content: Content, run: RunState, e: MarketEffect, rn
       return sell(content, run, e);
     case 'pawn':
       return pawn(content, run, e);
+    case 'stash':
+      return stash(run, e);
+    case 'stolen':
+      return stolen(content, run, e);
     case 'redeem':
       return redeem(content, run, e);
     case 'rebate': {
@@ -430,6 +459,10 @@ export function marketWords(e: MarketEffect): string {
       return e.pick === 'stack' ? 'sell your biggest stack' : e.pick === 'curio' ? 'sell your curios' : 'sell some junk';
     case 'pawn':
       return 'pawn your most valuable item';
+    case 'stash':
+      return '';
+    case 'stolen':
+      return 'your most valuable item is taken';
     case 'redeem':
       return e.forfeit ? 'the pawned item is gone' : 'buy your item back';
     case 'rebate':

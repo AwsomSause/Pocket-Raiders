@@ -52,7 +52,7 @@ describe('co markets: content', () => {
   });
 
   it('every flag an event reads is set by a markets event or listed as external', () => {
-    const set = new Set(events.flatMap((e) => effectsOf(e).flatMap((x) => (x.kind === 'flag' ? [x.key] : x.kind === 'market' ? [...(x.table ?? []).flatMap((r) => (r.flag ? [r.flag] : [])), ...(x.key && (x.action === 'pawn' || x.action === 'redeem') ? [`pawn-${x.key}`] : []), ...(x.key && (x.action === 'deposit' || x.action === 'withdraw') ? [`deposit-${x.key}`] : []), ...(x.action === 'forget' ? ['move-forgotten'] : [])] : []))));
+    const set = new Set(events.flatMap((e) => effectsOf(e).flatMap((x) => (x.kind === 'flag' ? [x.key] : x.kind === 'market' ? [...(x.table ?? []).flatMap((r) => (r.flag ? [r.flag] : [])), ...(x.key && (x.action === 'pawn' || x.action === 'redeem') ? [`pawn-${x.key}`] : []), ...(x.key && (x.action === 'deposit' || x.action === 'withdraw') ? [`deposit-${x.key}`] : []), ...(x.action === 'forget' ? ['move-forgotten'] : []), ...(x.action === 'stash' ? [`deposit-${x.key}`] : []), ...(x.action === 'stolen' ? [`pawn-${x.key}`] : [])] : []))));
     for (const e of events) for (const c of conditionsOf(e)) if (c.kind === 'flag') expect(set.has(c.key) || external.has(c.key), `${e.id} reads flag ${c.key}, which nothing sets`).toBe(true);
   });
 

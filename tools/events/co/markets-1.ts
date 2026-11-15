@@ -384,7 +384,7 @@ export const EVENTS: Json[] = [
     intro: 'A machine glows by the empty road, humming to itself. Something rattles inside. A sticker on the glass, printed and official: "1 IN 10: A SECOND DRINK DROPS." A drink is ₽200.',
     choices: [
       ch('Buy a drink.', out('The machine thinks about it. Then clunk, and clunk again. Two bottles roll into the tray, cold and beaded. The rattle inside sounds almost pleased.', pay(200), item('fresh-water', 2)), { requires: need(200).requires, chance: 0.1, fail: out('Clunk. One bottle, cold and beaded, exactly as promised.', pay(200), item('fresh-water')) }),
-      ch('Shake it.', fight('You shake it. The humming stops. A Rotom bursts out of the coin slot, sparking with outrage at being woken, and it is not going to let this go.', wild({ species: ['rotom'], lv: -1 }))),
+      ch('Shake it.', fight('You shake it. The humming stops. A Rotom bursts out of the coin slot, sparking with outrage at being woken, and it is not going to let this go.', { ...wild({ species: ['rotom'], lv: -1 }), friendly: true })),
       ch('Look behind it.', out('Dust, a dead leaf, and a coin somebody dropped and never missed. You pick it up. The machine hums on.', $(100))),
     ],
   },
