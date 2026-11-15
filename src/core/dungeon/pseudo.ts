@@ -162,14 +162,16 @@ export function chainRooms(content: Content, chain: PseudoChain): { event: strin
   if (!entry) return [];
   const depth = new Map<string, number>();
   const order: string[] = [];
-  let level = opensNext(entry).filter((id) => content.events.has(id) && !chainOfEntry(id));
+  // A room is never another chain's entry, nor a canon space's gate (a gate stands on the map: Route 25's last rooms open the Tournament's).
+  const stops = (id: string): boolean => !!chainOfEntry(id) || !!content.events.get(id)?.canon;
+  let level = opensNext(entry).filter((id) => content.events.has(id) && !stops(id));
   for (let d = 1; level.length > 0; d++) {
     const nextLevel: string[] = [];
     for (const id of level) {
       if (depth.has(id)) continue;
       depth.set(id, d);
       order.push(id);
-      nextLevel.push(...opensNext(content.events.get(id)!).filter((x) => content.events.has(x) && !chainOfEntry(x) && !depth.has(x)));
+      nextLevel.push(...opensNext(content.events.get(id)!).filter((x) => content.events.has(x) && !stops(x) && !depth.has(x)));
     }
     level = nextLevel;
   }

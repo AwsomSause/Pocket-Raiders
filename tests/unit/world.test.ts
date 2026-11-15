@@ -291,6 +291,7 @@ describe('landmarks and dungeons', () => {
     // Openers: outcome effects, a battle's win and lose effects (a friendly fight's loss still opens its room), choice branches,
     // and the choices a Remembers variant adds.
     for (const e of content.events.values()) {
+      if (e.disabled) continue; // a retired event (kept for saved runs) opens nothing
       for (const ch of [...e.choices, ...e.remembers.flatMap((v) => v.addChoices)]) {
         const lists = [...[ch.success, ch.failure].flatMap((o) => [o?.effects ?? [], o?.battle?.win ?? [], o?.battle?.lose ?? []]), ...(ch.branches ?? []).map((b) => b.effects)];
         // A Greenneedle effect (`gn`) holds more effects: a `when`'s `then`, and a `route`'s `to` (an addEventFrom); a `scene` opens room `key`.
@@ -318,6 +319,8 @@ describe('landmarks and dungeons', () => {
     for (const id of content.events.keys()) if (id.startsWith('sky.join.')) opened.add(id);
     // gn.14: the Labyrinth ghost's return is placed by code (core/expansion/canonRun.ts addGhostReturnStop).
     opened.add('gn-14-return');
+    // gn.16: the Tournament rival's return is placed by code too (addRivalReturnStop).
+    opened.add('gn-16-rival-return');
     // Catalog Overhaul: a placed event (core/co/placement.ts) is put on the map at its home step, room or not.
     for (const id of content.coPlacement?.keys() ?? []) opened.add(id);
     // Damian's "Go again." (gn.05) opens his next meeting, an ordinary drawn event, at once; anything else opened must be a room.

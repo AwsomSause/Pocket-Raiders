@@ -192,12 +192,14 @@ describe('Beta 0.7 the Kanto event lines are pseudo stages', () => {
     settleChain(run);
     expect(run.stage).toEqual(parent);
   });
-  it('Route 25 handing over to the Tournament leaves the stage so the Tournament opens on the parent node as before', () => {
+  it('the retired Kanto chains (Route 25, the Tournament: Greenneedle gn.15 and gn.16 now) never take in a Greenneedle room', () => {
+    for (const id of ['ps_route_25', 'ps_fighting_tournament', 'ps_sabrinas_labyrinth', 'ps_flight_north']) {
+      const c = PSEUDO.chains.find((x) => x.id === id)!;
+      expect(chainRooms(content, c).some((r) => r.event.startsWith('gn-')), id).toBe(false);
+    }
     const run = newRun('ps-chain-link');
     run.stage!.current = run.stage!.map.nodes.find((n) => n.column === 1)!.id;
-    routeChainEvent(content, run, 'cs-kanto-saffron-r25-1');
-    expect(run.stage!.pseudo?.id).toBe('ps_route_25');
-    expect(routeChainEvent(content, run, 'cs-kanto-saffron-tournament')).toBe(false);
+    expect(routeChainEvent(content, run, 'gn-16-r1')).toBe(false);
     expect(run.stage!.pseudo).toBeUndefined();
   });
 });

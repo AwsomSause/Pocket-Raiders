@@ -30,7 +30,7 @@ export const bindGnEffects = (schema: z.ZodType, conditions?: z.ZodType): void =
  *  - `stampStage`: the run flag `key` remembers the stage number now (read with the `gn` conditions `laterStage`, `sameStage`, `notThisStage`).
  *  - `partyHas`: the run flag `key` becomes 1 when a party Pokémon is one of `species`, else 0 (a Clefairy or Clefable sees the secret dance).
  */
-export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead'] as const;
+export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check'] as const;
 export const GnEffectSchema = z.object({
   kind: z.literal('gn'),
   op: z.enum(GN_OPS),
@@ -45,6 +45,8 @@ export const GnEffectSchema = z.object({
   then: z.array(z.lazy(() => effectSchema)).max(8).optional(),
   /** gn.13: a roll's chance moves by `n` percent for each line whose conditions all hold (a Squad member in the party -5, high Heat -5...). */
   mods: z.array(z.object({ when: z.array(z.lazy(() => conditionSchema)).min(1).max(3), n: z.number().int().min(-50).max(50) })).max(4).optional(),
+  /** gn.16: `check` sets flag `key` to 1 when every one of these holds, else 0 (no roll). */
+  if: z.array(z.lazy(() => conditionSchema)).min(1).max(3).optional(),
   /** Written as an `addEventFrom` so the pseudo-stage map (core/dungeon/pseudo.ts opensNext) sees every room a route can open. */
   to: z.object({ kind: z.literal('addEventFrom'), ids: z.array(z.string().min(1)).min(1).max(16) }).optional(),
 }).refine((e) => (e.op === 'route' ? !!e.to && !!e.key : true), { message: 'a route needs `key` and `to`' })
@@ -52,6 +54,7 @@ export const GnEffectSchema = z.object({
   .refine((e) => (e.op === 'pick' ? !!e.key && !!e.weights : true), { message: 'a pick needs `key` and `weights`' })
   .refine((e) => (e.op === 'roll' || e.op === 'capFlag' || e.op === 'setFlag' || e.op === 'stageMod' ? !!e.key && e.n !== undefined : true), { message: 'needs `key` and `n`' })
   .refine((e) => (e.op === 'scene' || e.op === 'ahead' || e.op === 'fossil' || e.op === 'stampRegion' || e.op === 'stampStage' ? !!e.key : true), { message: 'needs `key`' })
+  .refine((e) => (e.op === 'check' ? !!e.key && !!e.if : true), { message: 'a check needs `key` and `if`' })
   .refine((e) => (e.op === 'partyHas' ? !!e.key && !!e.species : true), { message: 'a partyHas needs `key` and `species`' })
   // leadBoost: the lead's next battle opens with stat `type` at `n` stages ("the lead starts its next battle at -1 Speed").
   .refine((e) => (e.op === 'leadBoost' ? ['atk', 'def', 'spa', 'spd', 'spe', 'acc'].includes(e.type ?? '') && !!e.n : true), { message: 'a leadBoost needs a stat `type` and `n`' })
@@ -78,9 +81,10 @@ export type GnEffect = z.infer<typeof GnEffectSchema>;
  *  - `cutter`: a conscious party Pokémon knows a slicing move or a claw move (gn.11: cut the net).
  *  - `moveType`: a conscious party Pokémon knows a damaging move of one of `types` (gn.11's pylons: a Fighting, Rock or Steel move).
  *  - `noMoveType`: no party Pokémon knows a move of any of `types` (the mine's pickaxe is for a party with no Fighting, Steel or Ground move).
+ *  - `hurtLead`: the first party Pokémon able to fight is at half its HP or less (gn.16: a win from behind).
  */
-export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'moveType', 'cutter', 'holdsBerry', 'notRegion', 'thisRegion', 'lookAtLevel']), key: Key.optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
-  .refine((c) => (c.test === 'noMoveType' || c.test === 'moveType' || c.test === 'notRegion' ? !!c.types : c.test === 'lookAtLevel' ? !!c.types && !!c.key : c.test === 'cutter' || c.test === 'holdsBerry' ? true : !!c.key), { message: 'noMoveType and notRegion need `types` (move types / region ids), the others need `key`' });
+export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'moveType', 'cutter', 'holdsBerry', 'notRegion', 'thisRegion', 'lookAtLevel', 'hurtLead']), key: Key.optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
+  .refine((c) => (c.test === 'noMoveType' || c.test === 'moveType' || c.test === 'notRegion' ? !!c.types : c.test === 'lookAtLevel' ? !!c.types && !!c.key : c.test === 'cutter' || c.test === 'holdsBerry' || c.test === 'hurtLead' ? true : !!c.key), { message: 'noMoveType and notRegion need `types` (move types / region ids), the others need `key`' });
 export type GnCond = z.infer<typeof GnCondSchema>;
 
 /**
@@ -92,7 +96,7 @@ export type GnCond = z.infer<typeof GnCondSchema>;
  *  - `damian`: Damian himself (gn.05). His last Pokémon is the ace he actually trained: `ace` levels higher, a held item that fits its type,
  *    and two moves that cover its weaknesses.
  */
-export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame'] as const;
+export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame', 'hawlucha', 'final', 'lastExchange'] as const;
 export const GnRuleSchema = z.enum(GN_RULES);
 export type GnRule = z.infer<typeof GnRuleSchema>;
 

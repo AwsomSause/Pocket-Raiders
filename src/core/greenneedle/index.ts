@@ -68,6 +68,8 @@ export interface GnHost {
 
 /** A Greenneedle condition. */
 export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage: number): boolean {
+  // gn.16: the fighter won from behind (the first Pokémon able to fight is at half its HP or less).
+  if (c.test === 'hurtLead') { const lead = run.party.find((m) => m.hp > 0); return !!lead && lead.hp * 2 <= maxHp(content, lead); }
   if (c.test === 'lookAtLevel') return run.party.some((m) => !!m.look && c.types!.includes(m.look) && m.level >= gnFlag(run, c.key!));
   if (c.test === 'notRegion') return !c.types!.includes(run.regionOrder[run.regionIndex] ?? '');
   if (c.test === 'holdsBerry') return run.party.some((m) => Object.entries(m.held ?? {}).some(([id, n]) => n > 0 && id.endsWith('-berry')));
@@ -112,6 +114,9 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'unmark':
       if (e.key === 'duelist') setGnFlag(run, FOREST.duelist, 0);
       for (const mon of run.party) if (mon.gn) mon.gn = mon.gn.filter((t) => t !== e.key && !t.startsWith(`${e.key}:`));
+      return '';
+    case 'check':
+      setGnFlag(run, e.key!, e.if!.every((c) => host.met?.(c) ?? false) ? 1 : 0);
       return '';
     case 'roll': {
       const odds = e.n! + (e.mods ?? []).filter((m) => m.when.every((c) => host.met?.(c) ?? false)).reduce((sum, m) => sum + m.n, 0);
@@ -259,6 +264,18 @@ export function gnBattleStart(content: Content, run: RunState): void {
     lead.moves = [fire ?? { id: 'ember', pp: content.moves.get('ember')?.pp ?? 25 }];
   }
   if (battle.eventRule?.gn === 'samurai' && lead && lead.friendship >= BOND_THREE) battle.storyEffects.push(`kind:${lead.uid}`);
+  // The Fighting Tournament (gn.16): no potions in the ring, for either side.
+  if (battle.event?.eventId.startsWith('gn-16-')) battle.enemyItemsUsed = 99;
+  // The Fighting Tournament (gn.16). The Hawlucha poses and misses on purpose, twice; from its third turn it stops pretending.
+  if (battle.eventRule?.gn === 'hawlucha') battle.storyEffects.push(`${FOE_WAITS}The Hawlucha poses for the front row. Its swing misses. On purpose.`, `${FOE_WAITS}The Hawlucha blows a kiss to the stands and misses again. On purpose. The crowd loves it.`);
+  // The final: at Crowd 5 the hall chants its name, and its first move goes first.
+  if (battle.eventRule?.gn === 'final' && lead && gnFlag(run, 'tournament-crowd') >= 5) battle.storyEffects.push(`kind:${lead.uid}`);
+  // The last exchange: both fighters are under a quarter of their HP. "You choose." with Bond 3 or more: its first move goes first.
+  if (battle.eventRule?.gn === 'lastExchange') {
+    const foe = battle.enemyTeam[0];
+    if (foe) foe.hp = Math.max(1, Math.floor(maxHp(content, foe) * 0.2));
+    if (lead && gnFlag(run, 'tc-you-choose') > 0 && lead.friendship >= BOND_THREE) battle.storyEffects.push(`kind:${lead.uid}`);
+  }
 }
 
 /** A type's own boosting item: what a trainer who thought about it would give the ace to hold. */

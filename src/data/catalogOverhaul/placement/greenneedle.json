@@ -563,5 +563,29 @@
    "Mystery Episode"
   ],
   "tags": []
+ },
+ "gn-16-door": {
+  "gn": "gn.16",
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 15,
+  "window": [
+   13,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "Every foe scaled exactly to your Mankey or Primeape",
+  "often": "run",
+  "dressing": {
+   "kanto": "The Fighting Tournament",
+   "kantoStage": "Saffron (the canon space)",
+   "elsewhere": "The Fighting Tournament"
+  },
+  "note": "Badge: a belt. The stage after gn.15, with its Mankey in the party. Until towns exist it sits on step 15. Kanto shows it through cs-kanto-saffron-tournament.",
+  "kinds": [
+   "Tournament Episode"
+  ],
+  "tags": []
  }
 }

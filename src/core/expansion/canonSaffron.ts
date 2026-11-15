@@ -232,8 +232,8 @@ export function ghostReturns(content: Content, run: RunState, level: number): st
   return `${nameOf(content, mon)} asks to join your team.`;
 }
 
-/** Tournament afterstory: the id of the event where the rival returns, wearing a home-made belt. */
-export const RIVAL_RETURN_EVENT = 'cs-kanto-saffron-rival-return';
+/** Tournament afterstory (gn.16): the id of the event where the rival returns, wearing a home-made belt. */
+export const RIVAL_RETURN_EVENT = 'gn-16-rival-return';
 
 /** At a stage start in the region after the Tournament: the first stage offers the rival's return (once). Returns the event id, or null. */
 export function rivalReturnEvent(content: Content, run: RunState): string | null {

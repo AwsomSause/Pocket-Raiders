@@ -672,7 +672,7 @@
     {
       "id": "ps_fighting_tournament",
       "name": "The Fighting Tournament",
-      "entry": "cs-kanto-saffron-tournament",
+      "entry": "cs-kanto-saffron-tc",
       "themeId": "fighting-dragon",
       "tint": "#4a2a1a",
       "mood": "arena"

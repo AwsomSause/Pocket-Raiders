@@ -1078,6 +1078,16 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
   const rule = battle.eventRule;
   if (!rule || battle.outcome) return;
   const mine = party?.[battle.activeIndex];
+  // The Fighting Tournament final (gn.16): when both fighters are below a quarter of their HP, the game slows for the last exchange.
+  if (rule.gn === 'final' && content && mine && mine.hp > 0) {
+    const foe = currentEnemy(battle);
+    if (foe.hp > 0 && mine.hp * 4 < maxHp(content, mine) && foe.hp * 4 < maxHp(content, foe)) {
+      battle.storyEffects.push('gn-last-exchange');
+      events.push({ type: 'raid', tone: 'phase', text: 'Both fighters are on their last legs. The hall goes quiet. The game slows.' });
+      battle.outcome = 'win';
+      return;
+    }
+  }
   if (rule.thinLight && content && battle.turn > 0 && battle.turn % 3 === 0) {
     // A glimpse: which side is hashed from the battle and turn (no RNG), and it never knocks anything out.
     const foe = currentEnemy(battle);

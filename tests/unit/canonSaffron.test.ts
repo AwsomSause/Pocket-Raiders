@@ -4,7 +4,7 @@ import { chooseEvent, conditionMet, eventBattleLost, eventBattleWon } from '../.
 import { createPokemon, abilityOf } from '../../src/core/pokemon';
 import { chooseStarter, createRun, debugForceEvent, takeTurn } from '../../src/core/run';
 import { hashSeed, Rng } from '../../src/core/rng';
-import { applyCanonEffect, ghostReturnEvent, ghostReturns, labRetryEvent, leaveCanonStash, nearestBst, restoreStash, ruleEvolution } from '../../src/core/expansion/canonSaffron';
+import { RIVAL_RETURN_EVENT, applyCanonEffect, ghostReturnEvent, ghostReturns, labRetryEvent, leaveCanonStash, nearestBst, restoreStash, ruleEvolution } from '../../src/core/expansion/canonSaffron';
 import { falseSlotFor } from '../../src/core/expansion/labyrinth';
 import { tourneyBracket, TOURNEY_ROUNDS } from '../../src/core/expansion/tourney';
 import { evolutionTarget } from '../../src/core/evolution';
@@ -24,9 +24,9 @@ const targets = (id: string): string[] => room(id).choices.flatMap((c) => [c.suc
 
 describe('Saffron canon: the event graph', () => {
   it('every addEvent target exists, and every room is reached from a gate', () => {
-    // The Labyrinth's rooms moved to Greenneedle gn.14 (the old ones are retired, kept for saved runs): the Kanto gate opens gn-14-lost.
+    // The Labyrinth (gn.14), Route 25 (gn.15) and the Tournament (gn.16) moved to Greenneedle (the old rooms are retired, kept for saved runs).
     const ids = [...content.events.values()].filter((e) => e.id.startsWith(P) && !e.disabled).map((e) => e.id.slice(P.length));
-    const gates = ['r25', 'tournament', 'dojo', 'copycat', 'silph', 'train', 'labyrinth', 'rival-return'];
+    const gates = ['r25', 'tournament', 'dojo', 'copycat', 'silph', 'train', 'labyrinth'];
     const reach = new Set<string>(gates);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) { expect(content.events.has(t), `${id} -> ${t}`).toBe(true); if (t.startsWith(P) && !reach.has(t.slice(P.length))) { reach.add(t.slice(P.length)); again = true; } } }
     expect([...reach].sort()).toEqual(ids.sort());
@@ -91,7 +91,8 @@ describe('Route 25: The Angry Mankey', () => {
 describe('Fighting Tournament', () => {
   it('only Mankey or Primeape may enter, and entering stashes everyone else', () => {
     const run = withParty('T1', ['mankey', 'pikachu', 'eevee']);
-    expect(room('tournament').choices[0]!.requires).toEqual([{ kind: 'partySpecies', species: 'mankey' }]);
+    // Greenneedle gn.16: the gate itself needs the Route 25 Mankey (its line) in the party.
+    expect(room('tournament').requires).toContainEqual(expect.objectContaining({ kind: 'partyLine', species: 'mankey' }));
     expect(conditionMet(content, run, { kind: 'partySpecies', species: 'mankey' })).toBe(true);
     expect(conditionMet(content, run, { kind: 'partySpecies', species: 'primeape' })).toBe(false);
     eff(run, 'solo', { species: ['mankey', 'primeape'] });
@@ -132,7 +133,7 @@ describe('Fighting Tournament', () => {
     const run = withParty('T5', ['mankey']);
     eff(run, 'champion', { species: ['mankey'] });
     expect(run.expansion!.canon!.rival).toMatchObject({ species: 'mankey', returned: false });
-    expect(room('rival-return')).toBeTruthy();
+    expect(content.events.get(RIVAL_RETURN_EVENT)).toBeTruthy();
   });
   it('losing a round gives the party back', () => {
     const run = withParty('T3', ['mankey', 'pikachu']);

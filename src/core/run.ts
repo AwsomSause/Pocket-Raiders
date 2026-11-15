@@ -4008,6 +4008,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (returnOffer) run.pending.push({ kind: 'returnProtege', mon: returningPokemon(content, run, returnOffer, nextUid(run, 'p')), mentorUid: returnOffer.mentorUid, reason: returnOffer.reason });
   const leadAsk = !run.victory && battle.outcome === 'win' && !mentorOffer ? planAskLead(content, run) : null;
   if (leadAsk) run.pending.push({ kind: 'askLead', ...leadAsk });
+  // gn.16: the tournament final paused for the last exchange (the win effects read this flag).
+  if (battle.event && battle.eventRule?.gn === 'final') run.story.flags['ev:tc-last-exchange'] = battle.storyEffects.includes('gn-last-exchange') ? 1 : 0;
   // An event battle you won pays its own rewards.
   const chained = outcome === 'win' && !!battle.event && eventChainNext(content, run, battle.event);
   const eventRewards = outcome === 'win' && battle.event && !chained ? (battle.event.eventId === 'plaza:club' ? plazaClubWon(content, run) : eventBattleWon(content, run, battle.event, battle.turn - 1)) : outcome === 'caught' && battle.event ? eventBattleCaught(content, run, battle.event) : [];
