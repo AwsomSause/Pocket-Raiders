@@ -1327,7 +1327,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'train':
       return applyTrainEffect(content, run, e, rng);
     case 'market':
-      return applyMarket(content, run, e, rng);
+      return applyMarket(content, run, e, rng, tradeUid, (x) => applyEffect(content, run, x, rng, tradeUid));
     case 'eggMove': {
       const lead = run.party.find((m) => m.hp > 0);
       if (!lead) return '';

@@ -7,7 +7,9 @@ import type { Content, EventEffect } from './contentSchema';
 import { changeFriendship } from './friendship';
 import { addItem } from './items';
 import { NATURES } from './natures';
-import { maxHp } from './pokemon';
+import { teachEggMove } from './mastery';
+import { gainXp, getSpecies, maxHp, maxPp, usableLearnset, xpForLevel } from './pokemon';
+import { levelCap } from './regions';
 import type { Rng } from './rng';
 import type { RunState } from './state';
 
@@ -56,6 +58,13 @@ const setFlag = (run: RunState, key: string, value: number): void => {
   run.story.flags[`ev:${key}`] = Math.max(0, value);
 };
 const flagOf = (run: RunState, key: string): number => Number(run.story.flags[`ev:${key}`] ?? 0);
+/** Who an action is for: the picked Pokémon (a `pick` choice), the lead (first able to fight) or the whole party. */
+function targets(run: RunState, e: MarketEffect, uid?: string): Mon[] {
+  if (e.who === 'party') return run.party;
+  const picked = e.who === 'picked' ? run.party.find((m) => m.uid === uid) : undefined;
+  const one = picked ?? run.party.find((m) => m.hp > 0) ?? run.party[0];
+  return one ? [one] : [];
+}
 
 function effortStat(content: Content, m: Mon, stat: MarketEffect['stat'], cap: number): Stat | null {
   const base = content.species.get(m.speciesId)?.baseStats;
@@ -68,11 +77,10 @@ function effortStat(content: Content, m: Mon, stat: MarketEffect['stat'], cap: n
   return stat && room.includes(stat) ? stat : null;
 }
 
-function effort(content: Content, run: RunState, e: MarketEffect): string {
+function effort(content: Content, run: RunState, e: MarketEffect, uid?: string): string {
   const cap = content.balance.vitaminMaxStacks;
-  const targets = e.who === 'party' ? run.party : run.party.filter((m) => m.hp > 0).slice(0, 1);
   const lines: string[] = [];
-  for (const m of targets) {
+  for (const m of targets(run, e, uid)) {
     const typed = e.type !== undefined && (content.species.get(m.speciesId)?.types ?? []).includes(e.type);
     const amount = e.type === undefined ? e.amount ?? 1 : typed ? e.typeAmount ?? e.amount ?? 1 : e.typeAmount === undefined ? 0 : e.amount ?? 1;
     if (amount <= 0) continue;
@@ -230,22 +238,114 @@ function feed(content: Content, run: RunState, e: MarketEffect): string {
 }
 
 /** Out-of-battle healing by a share of max HP for the lead or the whole party (never revives). */
-function mend(content: Content, run: RunState, e: MarketEffect): string {
+function mend(content: Content, run: RunState, e: MarketEffect, uid?: string): string {
   const share = e.factor ?? 0.1;
-  const who = e.who === 'party' ? run.party : run.party.filter((m) => m.hp > 0).slice(0, 1);
-  for (const m of who) if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * share));
+  for (const m of targets(run, e, uid)) if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * share));
   return `${e.who === 'party' ? 'the party' : 'the lead'} heals ${Math.round(share * 100)}%`;
 }
 
-/** Honest advice, said from what is really in the party (`stone`: which of the four stones would evolve something). */
-function advise(content: Content, run: RunState, e: MarketEffect): string {
-  const stones = e.only ?? ['fire-stone', 'water-stone', 'thunder-stone', 'leaf-stone'];
-  const hits: string[] = [];
-  for (const m of run.party) {
-    const evo = content.species.get(m.speciesId)?.evolutions.find((x) => x.item !== undefined && stones.includes(x.item));
-    if (evo?.item) hits.push(`${monName(content, m)} would evolve with a ${nameOf(content, evo.item)}`);
+/**
+ * Honest advice, said from what is really in the party. `stone`: which stone (`only`) would evolve something. `abilities`: both normal abilities.
+ * `evolutions`: how and when each one changes. `nature`: what its Nature is and favours.
+ */
+function advise(content: Content, run: RunState, e: MarketEffect, uid?: string): string {
+  const who = e.who === 'party' || e.key === 'stone' ? run.party : targets(run, e, uid);
+  const lines: string[] = [];
+  for (const m of who) {
+    const sp = content.species.get(m.speciesId);
+    if (!sp) continue;
+    const name = monName(content, m);
+    if (e.key === 'abilities') {
+      const names = sp.abilities.normal.map((id) => content.abilities.get(id)?.name ?? id);
+      lines.push(names.length < 2 ? `${name} has only ${names[0] ?? 'one ability'}: nothing to swap` : `${name}: ${names.join(' or ')}`);
+    } else if (e.key === 'evolutions') {
+      if (sp.evolutions.length === 0) lines.push(`${name} is as grown as it will ever be`);
+      else lines.push(`${name} becomes ${sp.evolutions.map((x) => `${content.species.get(x.to)?.name ?? x.to} ${x.item ? `with a ${nameOf(content, x.item)}` : `at level ${x.level}`}`).join(', or ')}`);
+    } else if (e.key === 'nature') {
+      const [up, down] = NATURES[m.nature as keyof typeof NATURES] ?? ['atk', 'atk'];
+      lines.push(up === down ? `${name} is ${m.nature}: it leans no way at all` : `${name} is ${m.nature}: more ${STAT_NAMES[up]}, less ${STAT_NAMES[down]}`);
+    } else {
+      const stones = e.only ?? ['fire-stone', 'water-stone', 'thunder-stone', 'leaf-stone'];
+      const evo = sp.evolutions.find((x) => x.item !== undefined && stones.includes(x.item));
+      if (evo?.item) lines.push(`${name} would evolve with a ${nameOf(content, evo.item)}`);
+    }
   }
-  return hits.length > 0 ? `"${hits.join('. ')}."` : '"None. Keep your money."';
+  return lines.length > 0 ? `"${lines.join('. ')}."` : '"None. Keep your money."';
+}
+
+/** A service done for one Pokémon: the plain lead-only effects, applied to the Pokémon the player picked. */
+function service(content: Content, run: RunState, e: MarketEffect, uid: string | undefined, apply: (x: EventEffect) => string): string {
+  const mon = targets(run, e, uid)[0];
+  if (!mon) return '';
+  if (mon.hp <= 0) return `${monName(content, mon)} has fainted and cannot take part`;
+  const effects: EventEffect[] =
+    e.what === 'abilitySwap' ? [{ kind: 'train', what: 'abilitySwap' }]
+    : e.what === 'natureNudge' ? [{ kind: 'train', what: 'natureNudge', stat: e.stat === 'hp' || e.stat === 'highest' || e.stat === 'lowest' ? undefined : e.stat }]
+    : e.what === 'eggMove' ? [{ kind: 'eggMove' }]
+    : e.what === 'hyper' ? [{ kind: 'item', id: 'bottle-cap', count: 1 }]
+    : e.what === 'learnMove' ? (e.types ?? [undefined]).map((type) => ({ kind: 'train', what: 'learnMove', ...(type ? { type } : {}) }) as EventEffect)
+    : [];
+  // The plain effects act on the first Pokémon able to fight: stand the picked one there for a moment.
+  const order = run.party.map((m) => m.uid);
+  run.party = [mon, ...run.party.filter((m) => m !== mon)];
+  let said = '';
+  for (const x of effects) {
+    said = apply(x);
+    if (said) break;
+  }
+  run.party = order.map((id) => run.party.find((m) => m.uid === id)).filter((m): m is Mon => !!m).concat(run.party.filter((m) => !order.includes(m.uid)));
+  return said || `${monName(content, mon)} has nothing new to learn here`;
+}
+
+const forgotPrefix = (uid: string): string => `market:forgot:${uid}:`;
+
+/** The Move Forgetter: the picked Pokémon forgets its last move (never its only one). The Move Tutor can bring it back. */
+function forget(content: Content, run: RunState, e: MarketEffect, uid?: string): string {
+  const mon = targets(run, e, uid)[0];
+  if (!mon) return '';
+  if (mon.moves.length <= 1) return `${monName(content, mon)} knows only one move and keeps it`;
+  const gone = mon.moves.pop()!;
+  counters(run)[`${forgotPrefix(mon.uid)}${gone.id}`] = 1;
+  setFlag(run, 'move-forgotten', flagOf(run, 'move-forgotten') + 1);
+  return `${monName(content, mon)} forgot ${content.moves.get(gone.id)?.name ?? gone.id}`;
+}
+
+function relearn(content: Content, run: RunState, e: MarketEffect, uid?: string): string {
+  const mon = targets(run, e, uid)[0];
+  if (!mon) return '';
+  const key = Object.keys(run.itemCounters ?? {}).find((k) => k.startsWith(forgotPrefix(mon.uid)) && (run.itemCounters?.[k] ?? 0) > 0);
+  if (!key) return `${monName(content, mon)} has forgotten nothing`;
+  const id = key.slice(forgotPrefix(mon.uid).length);
+  delete counters(run)[key];
+  setFlag(run, 'move-forgotten', flagOf(run, 'move-forgotten') - 1);
+  if (mon.moves.some((m) => m.id === id)) return '';
+  if (mon.moves.length < 4) mon.moves.push({ id, pp: maxPp(content, { id, pp: 0 }) });
+  else if (!teachEggMove(content, mon, id, [])) return '';
+  return `${monName(content, mon)} remembered ${content.moves.get(id)?.name ?? id}`;
+}
+
+/** Experience worth `factor` of each Pokémon's next level. */
+function xp(content: Content, run: RunState, e: MarketEffect, uid?: string): string {
+  const cap = levelCap(content, run.regionIndex);
+  let n = 0;
+  for (const m of targets(run, e, uid)) {
+    if (m.hp <= 0) continue;
+    const rate = getSpecies(content, m.speciesId).growthRate;
+    const step = xpForLevel(rate, m.level + 1) - xpForLevel(rate, m.level);
+    gainXp(content, m, Math.max(1, Math.round(step * (e.factor ?? 1))), cap);
+    n++;
+  }
+  return n > 0 ? `experience for ${n === 1 ? 'one Pokémon' : `${n} Pokémon`}` : '';
+}
+
+/** Teaches `move` when the Pokémon can learn it; otherwise the drill becomes effort in `stat`. */
+function teachOr(content: Content, run: RunState, e: MarketEffect, uid?: string): string {
+  const mon = targets(run, e, uid)[0];
+  if (!mon || !e.move) return '';
+  const sp = getSpecies(content, mon.speciesId);
+  const can = usableLearnset(content, sp).some((x) => x.move === e.move) || (content.learnables.get(sp.id) ?? []).includes(e.move);
+  if (can && !mon.moves.some((m) => m.id === e.move) && teachEggMove(content, mon, e.move, [])) return `${monName(content, mon)} learned ${content.moves.get(e.move)?.name ?? e.move}!`;
+  return effort(content, run, e, uid);
 }
 
 /** Frontier (Battle) Points bought or cashed at a posted rate: `amount` is the money for one point. */
@@ -264,13 +364,13 @@ function points(run: RunState, e: MarketEffect, buy: boolean): string {
 }
 
 /** Applies a market effect (mutates `run`) and says what changed. */
-export function applyMarket(content: Content, run: RunState, e: MarketEffect, rng: Rng): string {
+export function applyMarket(content: Content, run: RunState, e: MarketEffect, rng: Rng, uid?: string, apply: (x: EventEffect) => string = () => ''): string {
   switch (e.action) {
     case 'comeBack':
       if (e.event && run.itemCounters) delete run.itemCounters[`event-seen:${e.event}`];
       return '';
     case 'effort':
-      return effort(content, run, e);
+      return effort(content, run, e, uid);
     case 'prize':
       return prize(content, run, e, rng);
     case 'sell':
@@ -294,9 +394,19 @@ export function applyMarket(content: Content, run: RunState, e: MarketEffect, rn
     case 'feed':
       return feed(content, run, e);
     case 'mend':
-      return mend(content, run, e);
+      return mend(content, run, e, uid);
     case 'advise':
-      return advise(content, run, e);
+      return advise(content, run, e, uid);
+    case 'service':
+      return service(content, run, e, uid, apply);
+    case 'forget':
+      return forget(content, run, e, uid);
+    case 'relearn':
+      return relearn(content, run, e, uid);
+    case 'xp':
+      return xp(content, run, e, uid);
+    case 'teachOr':
+      return teachOr(content, run, e, uid);
     case 'buyPoint':
       return points(run, e, true);
     case 'cashPoint':
@@ -311,7 +421,7 @@ export function marketWords(e: MarketEffect): string {
       return '';
     case 'effort': {
       const stat = e.stat === 'highest' ? 'best stat' : e.stat === 'lowest' || !e.stat ? 'weakest stat' : STAT_NAMES[e.stat];
-      const who = e.who === 'party' ? 'the party' : 'the lead';
+      const who = e.who === 'party' ? 'the party' : e.who === 'picked' ? 'the one you pick' : 'the lead';
       return e.type ? `${stat} effort (${e.type}-types +${e.typeAmount ?? e.amount ?? 1})` : `${stat} effort +${e.amount ?? 1} for ${who}`;
     }
     case 'prize':
@@ -334,6 +444,16 @@ export function marketWords(e: MarketEffect): string {
       return `${e.who === 'party' ? 'the party' : 'the lead'} heals ${Math.round((e.factor ?? 0.1) * 100)}%`;
     case 'advise':
       return 'honest advice';
+    case 'service':
+      return e.what === 'abilitySwap' ? 'its ability changes' : e.what === 'natureNudge' ? 'its Nature changes' : e.what === 'eggMove' ? 'it learns an egg move' : e.what === 'hyper' ? 'its weakest stat is hyper trained' : 'it learns a move';
+    case 'forget':
+      return 'it forgets its last move';
+    case 'relearn':
+      return 'it remembers a forgotten move';
+    case 'xp':
+      return e.who === 'party' ? 'experience for the party' : 'experience';
+    case 'teachOr':
+      return `learns ${e.move ?? 'a move'} if it can`;
     case 'buyPoint':
       return `₽${e.amount ?? 500} for 1 Battle Point`;
     case 'cashPoint':

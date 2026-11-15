@@ -3184,12 +3184,16 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
    */
   z.object({
     kind: z.literal('market'),
-    action: z.enum(['comeBack', 'effort', 'prize', 'sell', 'pawn', 'redeem', 'rebate', 'deposit', 'withdraw', 'feed', 'mend', 'advise', 'buyPoint', 'cashPoint']),
+    action: z.enum(['comeBack', 'effort', 'prize', 'sell', 'pawn', 'redeem', 'rebate', 'deposit', 'withdraw', 'feed', 'mend', 'advise', 'buyPoint', 'cashPoint', 'service', 'forget', 'relearn', 'xp', 'teachOr']),
     event: z.string().optional(),
     key: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
     stat: z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'highest', 'lowest']).optional(),
     amount: z.number().int().min(0).optional(),
-    who: z.enum(['lead', 'party']).default('lead'),
+    who: z.enum(['lead', 'party', 'picked']).default('lead'),
+    /** `service`: what is done for the Pokémon; `types`: move types tried in order for `learnMove`; `move`: the move `teachOr` teaches. */
+    what: z.enum(['abilitySwap', 'natureNudge', 'eggMove', 'hyper', 'learnMove']).optional(),
+    types: z.array(TypeNameSchema).min(1).optional(),
+    move: z.string().optional(),
     type: TypeNameSchema.optional(),
     typeAmount: z.number().int().min(1).optional(),
     factor: z.number().positive().optional(),
