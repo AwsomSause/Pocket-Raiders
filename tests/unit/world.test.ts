@@ -300,6 +300,14 @@ describe('landmarks and dungeons', () => {
           if (ef.kind === 'addEvent') opened.add(ef.eventId);
           if (ef.kind === 'laterEvent') queued.add(ef.eventId);
           if (ef.kind === 'addEventFrom') ef.ids.forEach((i) => opened.add(i));
+          // A later beat (queueLaterEvent): the room opens a set number of nodes further on.
+          if (ef.kind === 'laterEvent') opened.add(ef.eventId);
+          // Rival questlines (core/rivals/questlines.ts): the first scene whose conditions hold, or stops further along the map.
+          // These may also open a scheduled beat (not a room), so they only count as a way into a room.
+          if (ef.kind === 'rivalQuest') {
+            ef.openFirst?.forEach((i) => questOpened.add(i));
+            ef.ahead?.forEach((a) => questOpened.add(a.event));
+          }
           // Catalog Overhaul mentors: a shared scene opens the run's mentor's own `mentor-<id>-<part>` (core/mentors/lessons.ts mentorSceneId).
           // Its Recruit and Story are catalog events it can also open, so these count only as a way in to a room.
           if (ef.kind === 'mentorScene') for (const m of MENTORS) viaMentor.add(`mentor-${m.id}-${ef.part}`);

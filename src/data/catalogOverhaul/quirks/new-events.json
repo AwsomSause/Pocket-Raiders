@@ -1,0 +1,58 @@
+{
+  "quirks": [
+    {
+      "id": "homesick",
+      "name": "Homesick",
+      "line": "It watches the wrong part of the sky every night. It fights like it, until it trusts you.",
+      "hooks": [{ "kind": "stats", "stages": -1, "untilBond": 3 }]
+    },
+    {
+      "id": "smoke-crier",
+      "name": "Smoke Crier",
+      "line": "It cries white smoke whenever you win a badge. It is crying from joy, and it grows fonder each time.",
+      "hooks": [{ "kind": "bondOn", "on": "badge", "points": 1 }]
+    },
+    {
+      "id": "victory-dancer",
+      "name": "Victory Dancer",
+      "line": "It dances every time you beat a Gym, and it grows fonder of you each time.",
+      "hooks": [{ "kind": "bondOn", "on": "gymWin", "points": 1 }]
+    },
+    {
+      "id": "wont-fall",
+      "name": "Won't Fall",
+      "line": "It flew through the storm once. Once per battle an Electric move that would knock it out leaves it at 1 HP.",
+      "hooks": [{ "kind": "surviveType", "type": "electric", "perBattle": 1 }]
+    },
+    {
+      "id": "slow-kindling",
+      "name": "Slow Kindling",
+      "line": "Its flames won't catch at the start of a fight. Its Fire moves are 20% weaker until Bond 3, then 10% stronger for good.",
+      "hooks": [{ "kind": "moveTypeDamage", "type": "fire", "pct": -20, "untilBond": 3, "afterPct": 10 }]
+    },
+    {
+      "id": "dreamer",
+      "name": "Dreamer",
+      "line": "It watches the fish and wants to be something else. As a Poliwhirl it becomes a Politoed at level 36, without a King's Rock.",
+      "hooks": [{ "kind": "evolvesInto", "from": "poliwhirl", "to": "politoed", "level": 36 }]
+    },
+    {
+      "id": "protector",
+      "name": "Protector",
+      "line": "It guards the weak. Once per battle it takes a hit that would knock out a teammate, and holds on at 1 HP or more.",
+      "hooks": [{ "kind": "guardAlly", "perBattle": 1 }]
+    },
+    {
+      "id": "slow-to-trust",
+      "name": "Slow to Trust",
+      "line": "It has been let down before. Its Bond grows at half speed until Bond 3, then twice as fast.",
+      "hooks": [{ "kind": "bondGain", "before": 0.5, "after": 2, "untilBond": 3 }]
+    },
+    {
+      "id": "old-hand",
+      "name": "Old Hand",
+      "line": "It's slow. It's clever. Its first move after coming out has +1 priority.",
+      "hooks": [{ "kind": "firstMovePriority", "amount": 1 }]
+    }
+  ]
+}
