@@ -13,6 +13,10 @@ import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu } from '../ui/widgets';
 import { glassPanel as drawPanel } from '../ui/aero';
 import { sceneForRun } from './routing';
+import { arenaFor, getTheme } from '../core/themes';
+import { artOf, partyChips } from '../ui/redux/game';
+import { mountRedux, reduxOn } from '../ui/redux/stage';
+import { gameView } from '../ui/redux/screens/minigame';
 
 const MEDAL_SFX: Record<string, string> = { gold: 'se.shiny', silver: 'se.level_up', bronze: 'se.level_up', none: 'ui.error' };
 const MEDAL_COLOR: Record<string, number> = { gold: 0xf5c842, silver: 0xd0d8e0, bronze: 0xd08848, none: 0x707080 };
@@ -41,6 +45,7 @@ export class MinigameScene extends Phaser.Scene {
     else aeroBackdrop(this, motion, 0x58c0e8);
     const def = getMinigame(session.content, run.minigame.id);
     const view = minigameView(session.content, run);
+    const view0 = view;
     const outcome = run.minigame.outcome;
     this.add.text(GAME_WIDTH / 2, 22, `${def.name}  ·  ${def.difficultyTiers[run.minigame.tier]!.label}`, textStyle(30, COLORS.textLight)).setOrigin(0.5);
     drawPanel(this, 16, 48, GAME_WIDTH - 32, 96, { fill: COLORS.panelDark, border: COLORS.borderMuted, thin: true });
@@ -102,6 +107,33 @@ export class MinigameScene extends Phaser.Scene {
       if (def.accessibilityOptions.noTimerOption) this.scene.restart({ focus: this.menu.index, slow: this.slow, paused: !this.paused });
     });
     onInputAction(this, (a) => this.menu.handle(a));
+    // New UI: the mock-up minigame screen (score windows, the field, the choices) unless a minigame look is picked.
+    if (reduxOn() && !skin) {
+      const theme = run.stage ? getTheme(session.content, run.stage.themeId) : undefined;
+      const art = artOf(this, theme ? arenaFor(session.content, theme) : undefined)?.file ?? null;
+      const party = partyChips(this).flatMap((p) => (p.file ? [p.file] : []));
+      const rxHints: (readonly [string, string])[] = [['Enter', 'choose'], ['Esc', outcome ? 'leave' : 'forfeit']];
+      if (tickMs > 0) rxHints.unshift(['S', this.slow ? 'normal' : 'slow']);
+      if (tickMs > 0 && def.accessibilityOptions.noTimerOption) rxHints.unshift(['T', this.paused ? 'resume' : 'pause']);
+      const view = mountRedux(this, {
+        render: (c) =>
+          gameView(c, {
+            title: `${def.name} · ${def.difficultyTiers[run.minigame!.tier]!.label}`,
+            hud: view0.hud,
+            prompt: outcome ? outcome.lines.join(' ') : view0.prompt,
+            medal: outcome ? outcome.medal : null,
+            art,
+            party,
+            cols,
+            cells: options.map((o) => ({ label: o.label, detail: o.detail ?? '', off: Boolean(o.disabled) })),
+            index: this.menu.index,
+            hints: rxHints,
+          }),
+        acts: { pick: (i) => { if (options[Number(i)]?.disabled) return; this.menu.focus(Number(i), false); this.menu.confirm(); } },
+        overs: { over: (i) => { if (!options[Number(i)]?.disabled) this.menu.focus(Number(i), false); } },
+      });
+      this.menu.onFocus = () => view.refresh();
+    }
   }
 
   /** A glossy medal that bounces in when the game ends (still when motion is off). */
