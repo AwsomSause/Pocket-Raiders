@@ -210,8 +210,12 @@ export class StadiumDirector {
     if (this.h.card) {
       // New UI: the camera cut is the cutscene card; a close-up shows who it is of.
       const cast = this.h.art?.cast();
-      const castId = cut.id === 'opponent-closeup' ? cast?.opponent : cut.id === 'champion-silhouette' ? cast?.host : cut.id === 'rival-silhouette' ? cast?.rival : '';
-      await this.h.card(plan, { name: cut.label, role: 'Galar Stadium', line: cut.caption, castId: castId ?? '' });
+      // A crowd shot has nobody of its own: the Champion hosting the stadium fronts it, as in the mock-up's stadium cut-in.
+      const names = this.h.hype?.facts() ?? {};
+      const who = cut.id === 'opponent-closeup' ? { name: names.foe || cut.label, role: 'Galar Stadium', castId: cast?.opponent ?? '' }
+        : cut.id === 'rival-silhouette' ? { name: names.rival || cut.label, role: 'Rival', castId: cast?.rival ?? '' }
+        : { name: this.h.host, role: 'Galar Champion', castId: cast?.host ?? '' };
+      await this.h.card(plan, { ...who, line: cut.caption });
       await this.commentate(cut.id, beat);
       return;
     }

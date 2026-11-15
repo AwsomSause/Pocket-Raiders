@@ -46,9 +46,12 @@ export function cutView(c: ReduxCtx, d: CutModel): string {
   const tag = `<div class="abs" style="left:60px;bottom:22px;z-index:6"><div class="beat">${CUT_BEATS.map((_, k) => `<i class="${k <= on ? 'on' : ''}"></i>`).join('')}<span>${CUT_BEATS[on]}</span></div></div>${hint ? `<div class="abs sm" style="right:60px;bottom:22px;z-index:6;color:#fff"><kbd>${esc(hint[0])}</kbd>${esc(hint[1])}</div>` : ''}`;
   const next = `<div class="fill" style="z-index:7;cursor:pointer"${act('next')}></div>`;
   // A moment with nothing said (a title only) draws no empty quote marks.
-  const line = d.line ? `“${esc(d.line)}”` : '', len = d.line.length;
+  // A line that already carries its own quote marks (a whole quote, or telling with a quote inside) gets no second pair.
+  const said = d.line.trim().replace(/^["“]([^"“”]*)["”]$/, '$1');
+  const line = !said ? '' : /["“”]/.test(said) ? esc(said) : `“${esc(said)}”`, len = said.length;
   const plate = (st: string): string => (d.role ? `<span class="plate" style="${st}">${esc(d.role)}</span>` : '');
-  const name = d.name.length > 12 ? 0.75 : 1;
+  // A long name (a stadium camera cut's caption) steps down so it stays on one or two lines.
+  const name = d.name.length > 18 ? 0.5 : d.name.length > 12 ? 0.75 : 1;
   if (v === 1) {
     return letter(`<div class="fill" style="background:radial-gradient(circle,var(--p2),#000 75%)"></div><div class="burst"></div>${foot(480, 430, d.mon ? figure(d.mon, 260) : figure(d.cast, 284))}`)
       + `<div class="abs col cen" style="left:0;right:0;top:76px;z-index:6;color:#fff;gap:2px">${plate('background:var(--acc);color:#14161e')}<b style="font-size:${Math.round(52 * name)}px;text-shadow:4px 4px 0 #000">${esc(d.name)}</b></div><div class="abs" style="left:140px;right:140px;bottom:74px;text-align:center;z-index:6;color:#fff;font-size:${size(len, 20)}px;text-shadow:2px 2px 0 #000">${line}</div>` + tag + next;

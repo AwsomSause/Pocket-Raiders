@@ -51,4 +51,21 @@ describe('cutscene card as a moment', () => {
       expect(html).toContain('Cynthia');
     }
   });
+  it('a line with its own quote marks is not quoted twice; a plain line gets one pair', () => {
+    for (const layout of [0, 1, 2]) {
+      expect(cutView(ctx(layout), card({ line: 'It is time.' }))).toContain('“It is time.”');
+      const whole = cutView(ctx(layout), card({ line: '"I did NOT see that coming!"' }));
+      expect(whole).toContain('“I did NOT see that coming!”');
+      expect(whole).not.toContain('“&quot;');
+      const told = cutView(ctx(layout), card({ line: 'Sonia adjusts her glasses. "I\'ve been taking notes."' }));
+      expect(told).not.toContain('“Sonia');
+      expect(told).toContain('Sonia adjusts her glasses.');
+    }
+  });
+  it('a long name steps down in size', () => {
+    const px = (name: string): number => Number(/<b style="font-size:(\d+)px/.exec(cutView(ctx(0), card({ name })))?.[1]);
+    expect(px('Cynthia')).toBe(60);
+    expect(px('Gigantamax Pikachu')).toBe(45);
+    expect(px('The commentators react')).toBe(30);
+  });
 });
