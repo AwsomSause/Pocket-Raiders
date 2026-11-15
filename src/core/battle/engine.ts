@@ -796,6 +796,13 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
       if (pick >= 0) action = { kind: 'move', index: pick };
     }
   }
+  // Sabrina's Labyrinth opening: no Pokémon of your own, so whatever you try, the hooded shape wins.
+  if (battle.eventRule?.noPokemon && action.kind !== 'deal') {
+    events.push({ type: 'raid', tone: 'phase', text: 'You reach for a Poké Ball and find nothing. You have no Pokémon of your own here, and the hooded shape does not even have to move.' });
+    battle.outcome = 'lose';
+    battle.turn += 1;
+    return events;
+  }
   // Sabrina's Labyrinth: the false slot shows its own move and does another (the companion marks it every second turn).
   if (battle.eventRule?.falseSlot && action.kind === 'move' && action.index >= 0) {
     const me = ctx.party[battle.activeIndex]!;
