@@ -2911,7 +2911,7 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('legacyEgg') }),
   /** Grand-Enemy hunt: clues found so far (at least / at most). */
   /** World-state callback: a story flag (set by a `flag` effect) is at least this. */
-  z.object({ kind: z.literal('flag'), key: z.string(), atLeast: z.number().int().min(0).default(1), atMost: z.number().int().min(0).default(99) }),
+  z.object({ kind: z.literal('flag'), key: z.string(), atLeast: z.number().int().min(0).default(1), atMost: z.number().int().min(0).default(99), /** Catalog Overhaul (people): also needs the flag to have been stamped (`stamp: 'region'`) at least this many regions ago (a three-meeting arc's "one region later"). */ regionsAgo: z.number().int().min(1).max(9).optional(), /** At most this many regions since the stamp (0 = still in the region it was set in: "for the region"). */ regionsAgoMost: z.number().int().min(0).max(9).optional() }),
   /** Recognized wild foe: a wild species beat one of your Pokémon earlier this run. */
   z.object({ kind: z.literal('oldFoe') }),
   /** Rival feud: two rivals who are enemies of each other have an unsettled feud. */
@@ -3127,7 +3127,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
    */
   z.object({ kind: z.literal('canon'), action: z.enum(['solo', 'unsolo', 'ghostStart', 'ghostLevel', 'ghostFree', 'ghostEnd', 'ghostReturn', 'labRoom', 'labRetry', 'champion', 'flawless']), species: z.array(z.string()).default([]), level: z.number().int().min(1).max(500).optional() }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
-  z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1) }),
+  z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1), /** Catalog Overhaul (people): the first time it is set, `<key>-at` remembers the region (1 = the run's first) so a later scene can wait a region (`regionsAgo`). */ stamp: z.literal('region').optional() }),
   /** Clone Core (New Island): your lead's moves are copied onto the other party Pokémon you pick (the lowest-level one when none is picked). */
   z.object({ kind: z.literal('copyMoves') }),
   /** Dossier (E1): meets a cast character (adds them to the Dossier) or changes their status. `id` is an `sc.*` id from the expansion cast. */
@@ -3137,7 +3137,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** A run-defining relic: its modifiers (an upside and a downside) join the run for good. Taken once per id. */
   z.object({ kind: z.literal('relic'), id: z.string(), name: z.string(), effects: z.array(ArchetypeModifierSchema).min(1).max(3) }),
   /** Run events J: a temporary modifier for the next `battles` battles (of the `until` kind): a type boost, a handicap, weather or Trick Room at the start (`battleStart`). Uses `run.tempEffects`, so it runs out on its own. `label` is what the outcome tells the player. */
-  z.object({ kind: z.literal('tempEffect'), label: z.string().min(1), effects: z.array(ArchetypeModifierSchema).min(1).max(3), battles: z.number().int().min(1).max(5).default(1), until: z.enum(['battle', 'boss', 'wild']).default('battle') }),
+  z.object({ kind: z.literal('tempEffect'), label: z.string().min(1), effects: z.array(ArchetypeModifierSchema).min(1).max(3), battles: z.number().int().min(1).max(5).default(1), /** `region`: lasts until the run moves on to the next region (`battles` is ignored). */ until: z.enum(['battle', 'boss', 'wild', 'region']).default('battle') }),
   /** Rival feud: settle the open feud (back the first or second rival, stay out, or exploit it). */
   z.object({ kind: z.literal('feud'), choice: z.enum(['first', 'second', 'stay-out', 'exploit']) }),
   /** Grand-Enemy hunt: one more clue (`finish` ends the hunt and gives its title). */
@@ -3166,6 +3166,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('laterEvent'), eventId: z.string().min(1), nodes: z.number().int().min(1).max(12) }),
   /** Catalog Overhaul questlines: friendship for the party member of this evolution line only (a Companion's Bond). Does nothing when none is in the party. */
   z.object({ kind: z.literal('friendshipLine'), species: z.string().min(1), amount: z.number().int() }),
+  /** Catalog Overhaul: this event may be drawn again later in the run ("Maybe later": the scene comes back). */
+  z.object({ kind: z.literal('seeAgain'), eventId: z.string().min(1) }),
   /** Exploration: like addEvent, but the next room is one of these, picked by the event's roll (a Mystery Dungeon floor). */
   /** Pseudo-stage: step into a pseudo-stage (src/data/pseudoStages.json) from this node; it plays like a stage and returns here. */
   z.object({ kind: z.literal('enterPseudo'), id: z.string().min(1) }),
@@ -3336,7 +3338,11 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     rule: EventRuleSchema.optional(),
     /** Beta 0.7 U1: Ultra Aura: every foe starts with +1 to all its stats. */
     aura: z.boolean().optional(),
+    /** Catalog Overhaul: a friendly fight. A loss never ends the run: the party gets back on its feet, you return to the map and `lose` applies. */
+    friendly: z.boolean().optional(),
     win: z.array(EventEffectSchema).default([]),
+    /** Effects applied when a `friendly` or `pseudo` fight is lost. */
+    lose: z.array(EventEffectSchema).optional(),
   }),
   z.object({
     kind: z.literal('trainer'),
@@ -3348,6 +3354,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     format: EventBattleFormatSchema.optional(),
     /** A fixed foe team (species ids) instead of one drawn by `types`. */
     team: z.array(z.string()).optional(),
+    /** Catalog Overhaul (people): the foe's first Pokémon knows these moves, replacing its last ones (Joey's Rattata and Hyper Fang). */
+    foeMoves: z.array(z.string()).max(2).optional(),
     /** With `team`: this team instead when your lead is weak to `weakTo` (the Samurai counters your Bug-type). */
     counter: z.object({ weakTo: TypeNameSchema, team: z.array(z.string()).min(1) }).optional(),
     /** A trainer class from trainers.json, or a boss id (its signature team). */
@@ -3397,6 +3405,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     terrain: TerrainSchema.optional(),
     /** W7: a fight inside a pseudo stage: a loss ejects to the map with a partial heal and the run goes on. */
     pseudo: z.boolean().optional(),
+    /** Catalog Overhaul: a friendly fight (a road trainer, a mentor, a story spar). A loss never ends the run: the party gets back on its feet, you stay where you are on the map and `lose` applies. */
+    friendly: z.boolean().optional(),
     /** Run events B: share of max HP your party recovers between the fights of a `chain` (Relay Battle). */
     chainHeal: z.number().min(0).max(1).optional(),
     /** Run events B: special rules for this fight (see EventRuleSchema). */
@@ -3404,7 +3414,7 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** Run events B: `win` effects used instead of `win` when the fight took longer than `rule.turnLimit` turns. */
     slowWin: z.array(EventEffectSchema).optional(),
     win: z.array(EventEffectSchema).default([]),
-    /** Effects applied when this fight is lost (a consolation prize). Only fights whose loss does not end the run (pseudo stages) use it. */
+    /** Effects applied when this fight is lost (a consolation prize). Only fights whose loss does not end the run (`pseudo`, `friendly`) use it. */
     lose: z.array(EventEffectSchema).optional(),
   }),
 ]);
