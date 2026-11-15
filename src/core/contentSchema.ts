@@ -3355,6 +3355,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     lineup: z.array(z.string()).optional(),
     /** Beta 0.6: draw this foe with a named character's own sprite (a boss id, e.g. "sabrina"). */
     sprite: z.string().optional(),
+    /** Poli-Pond: draw this foe's "trainer" as this Pokémon's own front sprite (a species id) instead of a human. */
+    spritePokemon: z.string().optional(),
     levelBonus: z.number().int().default(0),
     chain: z.number().int().min(1).max(3).default(1),
     /** Run events B: the field is forced to this weather / terrain for the whole fight (Umbrella Squad). */

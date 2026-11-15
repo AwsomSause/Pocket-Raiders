@@ -1167,6 +1167,9 @@ export class BattleScene extends Phaser.Scene {
     // Beta 0.6: a format's named foe (Oracle Sabrina, Giovanni) is drawn as that character, not as the class stand-in.
     const named = trainer.spriteBoss ? content.bosses.get(trainer.spriteBoss) : undefined;
     if (named) return { assetId: named.sprites.default, label: trainer.name };
+    // Poli-Pond: the bully "trainer" is a Pokémon, drawn with its own front sprite.
+    const mon = trainer.spritePokemon ? content.species.get(trainer.spritePokemon) : undefined;
+    if (mon) return { assetId: pokemonAssetIds(mon.assets).front, label: trainer.name };
     const cls = content.trainers.get(trainer.classId);
     // Beta 4.4: a rival is drawn as its own character (Silver, Hop, Nemona...), not always as Blue.
     const character = trainer.classId === 'rival' ? content.bosses.get(trainer.name.toLowerCase()) : undefined;
