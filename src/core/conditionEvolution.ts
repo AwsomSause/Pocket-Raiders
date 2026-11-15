@@ -88,6 +88,11 @@ export const CONDITION_EVOLUTIONS: ConditionEvolution[] = [
   { from: 'benovolant-beak', to: 'tyrant-king', minLevel: 17, condition: { kind: 'holds', item: 'kings-rock' } },
   { from: 'bastiodon', to: 'bastiodoom', minLevel: 1, condition: { kind: 'holds', item: 'black-sludge' } },
   { from: 'aggron', to: 'cataggron', minLevel: 55, condition: { kind: 'holds', item: 'metal-coat' } },
+  // Beta 0.7 batch (docs/status/beta07-galarian-pokemon.md). The level-up and stone routes are in the species data.
+  { from: 'galarian-azurill', to: 'galarian-marill', minLevel: 1, condition: { kind: 'friendship' } },
+  { from: 'galarian-tangela', to: 'galarian-tangrowth', minLevel: 1, condition: { kind: 'knowsMove', move: 'discharge' } },
+  { from: 'galarian-onix', to: 'galarian-steelix', minLevel: 1, condition: { kind: 'holds', item: 'metal-coat' } },
+  { from: 'hypno', to: 'hoopno', minLevel: 1, condition: { kind: 'holds', item: 'muscle-band' } },
   // Story Overhaul S15. The engine's only storm weather is rain, so "storm" and "thunderstorm" mean a win that ends in rain.
   { from: 'tuftin', to: 'eevee', minLevel: 1, condition: { kind: 'heartbond', level: 3 } },
   { from: 'noctowl', to: 'oracowl', minLevel: 42, stones: ['moon-stone', 'dusk-stone'], condition: { kind: 'all', of: [{ kind: 'night' }, { kind: 'heartbond', level: 6 }] } },

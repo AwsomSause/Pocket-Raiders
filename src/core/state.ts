@@ -194,9 +194,11 @@ export const HeldStateSchema = z.object({
   playerAttacks: z.number().int().min(0).default(0),
   /** Berries the player's side ate this battle (Powder Jar, Gooey Mulch). */
   berries: z.number().int().min(0).default(0),
+  /** Kitchen Heat: Pokémon (by uid) that are burned in front of it and can't eat Berries right now. */
+  berryLock: z.record(z.string(), z.boolean()).default({}),
 });
 export type HeldState = z.infer<typeof HeldStateSchema>;
-export const freshHeldState = (): HeldState => ({ used: {}, choice: {}, streak: {}, popped: [], sure: [], first: [], crit: {}, lost: {}, gained: {}, embargo: {}, magicRoom: 0, playerAttacks: 0, berries: 0 });
+export const freshHeldState = (): HeldState => ({ used: {}, choice: {}, streak: {}, popped: [], sure: [], first: [], crit: {}, lost: {}, gained: {}, embargo: {}, magicRoom: 0, playerAttacks: 0, berries: 0, berryLock: {} });
 
 /** Battle-only conditions on the Pokémon in battle; cleared when it switches out. */
 export const VolatileSchema = z.object({
@@ -311,6 +313,10 @@ export const VolatileSchema = z.object({
   dynamoBoost: z.boolean().default(false),
   /** Rune Sigil: the first punch since switching in has landed. */
   sigilUsed: z.boolean().default(false),
+  /** Parcel Guard / Neon Camouflage / Thunderhead: the once-per-switch-in effect has gone off. */
+  parcelUsed: z.boolean().default(false),
+  camoUsed: z.boolean().default(false),
+  thunderheadUsed: z.boolean().default(false),
   /** Silent Cloak: the first move since switching in has been used. */
   cloakUsed: z.boolean().default(false),
   /** Champion's Fury: its first attack since switching in has gone off. */
@@ -444,6 +450,9 @@ export const freshVolatile = (): Volatile => ({
   ampCount: 0,
   dynamoBoost: false,
   sigilUsed: false,
+  parcelUsed: false,
+  camoUsed: false,
+  thunderheadUsed: false,
   cloakUsed: false,
   furyUsed: false,
   haunted: 0,

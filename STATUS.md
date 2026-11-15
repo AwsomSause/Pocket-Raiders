@@ -11,6 +11,7 @@ The long "Done" list (about 140 bullets) and the older known-limits notes moved 
 ## In progress / next
 - Pseudo-stages rebuilt as real drawn stages inside a node (`docs/status/pseudo-stages-real-stages.md`).
 - **Beta 0.6 INSTRUMENTALITY** is merged to `main` (#1260, 2026-11-14): update log `docs/updates/beta-0.6.md`, plan and decisions in `docs/plans/instrumentality/`. What shipped, how it works, known gaps and the bug-hunt results: `docs/HANDOFF.md`.
+- **Beta 0.7 Jet batch 3** (39 Galarian-line Pokémon, Magmuk, Neocleon, Hoopno): `docs/status/beta07-galarian-pokemon.md`.
 - **Beta 0.7** is not started and its scope is Kice's call: Node Event Menus and/or the rest of INSTRUMENTALITY (milestones 3.0 and 3.0+1.0). Everything planned or deferred: `docs/HANDOFF.md` section 8.
 - Plan: `docs/plans/left-out-plan.md` (everything asked for but not built, in priority order; each item updates its row there). Waiting on Kice: regional forms mechanic, time of day, online co-op; branch protection on `main` (Settings > Branches, require `check`).
 - Trainers.md perks: all 220 trainers built (limits in `docs/plans/trainers-coverage.md`).

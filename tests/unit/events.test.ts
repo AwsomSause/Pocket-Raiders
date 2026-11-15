@@ -34,12 +34,13 @@ const eventStops = (run: RunState) => run.stage!.map.nodes.flatMap((n) => n.side
 
 function win(run: RunState): TurnResult {
   const lead = createPokemon(content, 'houndoom', 100, run.party[0]!.uid);
-  lead.moves = [{ id: 'flamethrower', pp: 64 }];
+  // Two attack types: an enemy that is immune to one of them (Forge Body, Levitate) can't stall the fight forever.
+  lead.moves = [{ id: 'flamethrower', pp: 64 }, { id: 'earthquake', pp: 64 }];
   run.party[0] = lead;
   let turn: TurnResult | null = null;
   for (let i = 0; i < 80 && run.phase === 'battle'; i++) {
     run.party[0]!.hp = 1_000_000;
-    turn = takeTurn(content, run, { kind: 'move', index: 0 });
+    turn = takeTurn(content, run, { kind: 'move', index: i % 2 });
     run = turn.run;
   }
   return turn!;

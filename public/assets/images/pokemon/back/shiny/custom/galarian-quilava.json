@@ -1,0 +1,1 @@
+{"textures": [{"image": "galarian-quilava.png", "format": "RGBA8888", "size": {"w": 166, "h": 134}, "scale": 1, "frames": [{"filename": "0001.png", "rotated": false, "trimmed": false, "sourceSize": {"w": 166, "h": 134}, "spriteSourceSize": {"x": 0, "y": 0, "w": 166, "h": 134}, "frame": {"x": 0, "y": 0, "w": 166, "h": 134}}]}], "meta": {"app": "tools/jet/make-jet-sprites.py"}}

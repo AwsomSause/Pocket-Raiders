@@ -36,6 +36,8 @@ export function moveEffectClauses(move: Move): string[] {
   }
   if (e.drain) out.push(`User regains ${Math.round(e.drain * 100)}% of the damage`);
   if (e.recoil) out.push(`User takes ${Math.round(e.recoil * 100)}% recoil`);
+  if (e.healSelf) out.push(`User restores ${Math.round(e.healSelf * 100)}% of its max HP after the hit`);
+  if (e.drowsy) out.push(`${e.drowsy.chance}% chance: the foe falls asleep at the end of the next turn`);
   if (e.recoilMaxHp) out.push(`User loses ${Math.round(e.recoilMaxHp * 100)}% of its max HP`);
   if (e.heal) out.push(`User restores ${Math.round(e.heal * 100)}% of its HP`);
   if (e.protect) out.push('Blocks attacks this turn');

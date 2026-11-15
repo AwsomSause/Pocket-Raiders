@@ -427,6 +427,10 @@ export const MoveSchema = z.object({
       clearHazards: z.enum(['self', 'both']).optional(),
       /** Confuses the target (chance in percent). */
       confuse: z.object({ chance: z.number().min(1).max(100) }).optional(),
+      /** After its damage lands the user restores this fraction of its max HP (Pitaya Burst). */
+      healSelf: z.number().positive().max(1).optional(),
+      /** The target may turn drowsy and fall asleep at the end of the next turn, like Yawn (Ring Toss; chance in percent). */
+      drowsy: z.object({ chance: z.number().min(1).max(100) }).optional(),
       /** Hits this many times: [2, 5] rolls 2–5 hits (35/35/15/15%), [2, 2] always twice. */
       hits: z.tuple([z.number().int().min(2), z.number().int().min(2)]).optional(),
       /** The user must rest on its next turn after this move hits (Hyper Beam). */

@@ -1,0 +1,1 @@
+{"textures": [{"image": "galarian-meganium.png", "format": "RGBA8888", "size": {"w": 124, "h": 168}, "scale": 1, "frames": [{"filename": "0001.png", "rotated": false, "trimmed": false, "sourceSize": {"w": 124, "h": 168}, "spriteSourceSize": {"x": 0, "y": 0, "w": 124, "h": 168}, "frame": {"x": 0, "y": 0, "w": 124, "h": 168}}]}], "meta": {"app": "tools/jet/make-jet-sprites.py"}}

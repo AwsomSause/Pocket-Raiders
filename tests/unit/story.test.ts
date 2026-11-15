@@ -26,7 +26,9 @@ import { MemoryStorageProvider } from '../../src/save/storage';
 import { autoplay, gameplayFingerprint, step } from './autoplay';
 import { content, toBattle } from './helpers';
 
-const STORY_SPECIES = new Set(['tuftin', 'oracowl', 'oracowl-day', 'tempestwing', 'megawattrel', 'equinar', 'hollow-shepherd', 'brinecrown', 'veinheart', 'lumeria', 'verdelis']);
+// The 39 Beta 0.7 Jet-batch Pokémon (Galarian lines, Magmuk, Neocleon, Hoopno) join the wild pools too, so old seeds leave them out.
+const JET_BATCH_3 = ['galarian-grimer', 'galarian-muk', 'magmuk', 'galarian-spearow', 'galarian-fearow', 'galarian-azurill', 'galarian-marill', 'galarian-azumarill', 'galarian-trubbish', 'galarian-garbodor', 'galarian-lotad', 'galarian-lombre', 'galarian-ludicolo', 'neocleon', 'galarian-magnemite', 'galarian-magneton', 'galarian-magnezone', 'galarian-tangela', 'galarian-tangrowth', 'galarian-chikorita', 'galarian-bayleef', 'galarian-meganium', 'galarian-cyndaquil', 'galarian-quilava', 'galarian-typhlosion', 'galarian-totodile', 'galarian-croconaw', 'galarian-feraligatr', 'galarian-larvitar', 'galarian-pupitar', 'galarian-tyranitar', 'galarian-onix', 'galarian-steelix', 'galarian-slugma', 'galarian-magcargo', 'galarian-snivy', 'galarian-servine', 'galarian-serperior', 'hoopno'];
+const STORY_SPECIES = new Set(['tuftin', 'oracowl', 'oracowl-day', 'tempestwing', 'megawattrel', 'equinar', 'hollow-shepherd', 'brinecrown', 'veinheart', 'lumeria', 'verdelis', ...JET_BATCH_3]);
 // The Google Drive pack's items (tools/drive/build-items.py) came later too.
 import DRIVE_ITEMS from '../../tools/drive/items.json';
 import LIBRARY_ITEMS from '../../tools/drive/library-items.json';

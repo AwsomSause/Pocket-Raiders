@@ -4,6 +4,7 @@
 // Attack and Defence Formes are battle forms). Base stats, types, moves, TMs and abilities are the pack's. The pack's evolution
 // rules (held item, nature, time, friendship) live in src/core/conditionEvolution.ts. Sprites: tools/jet/make-jet-sprites.py.
 // The Beta 4.4 batch: Maliceye, Gemgoyle, Decidueye (Assassian), Dreadodile, Promised Prince and its line, the Alolan Trapinch, Dratini lines, the Paldean Golett line and Mega Alolan Flygon.
+// Beta 0.7 batch: 39 more (the Galarian lines, Magmuk, Neocleon, Hoopno) with 16 new signature moves and 15 new abilities.
 // Not in the game from the pack: the Pokédex entry texts, EV yields, height, and the "spread" targeting of the sound moves.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -25,6 +26,9 @@ const BASED: Record<string, string> = {
   'paldean-golett': 'golett', 'paldean-golurk': 'golurk', 'alolan-dratini': 'dratini', 'alolan-dragonair': 'dragonair', 'alolan-dragonite': 'dragonite',
 };
 // Game ids: the Mega is called like the other Megas.
+// Beta 0.7 batch: 'galarian-<x>' is built on <x>; the rest are named here.
+const BASED_2: Record<string, string> = { magmuk: 'muk', neocleon: 'kecleon', hoopno: 'hypno' };
+const baseOf = (id: string): string | undefined => BASED[id] ?? BASED_2[id] ?? (id.startsWith('galarian-') ? id.slice('galarian-'.length) : undefined);
 const GAME_ID: Record<string, string> = { 'mega-alolan-flygon': 'alolan-flygon-mega' };
 const gid = (packId: string) => GAME_ID[packId] ?? packId;
 
@@ -65,6 +69,23 @@ const newMoves = [
   mv('coral-splash', 'Coral Splash', 'water', 'special', 45, 100, 25, [], { statChanges: [{ stat: 'spe', stages: -1, target: 'enemy', chance: 30 }] }),
   mv('pearl-pulse', 'Pearl Pulse', 'water', 'special', 75, 100, 15, ['pulse'], { statChanges: [{ stat: 'spd', stages: 1, target: 'self', chance: 20 }] }),
   mv('reef-tempest', 'Reef Tempest', 'water', 'special', 100, 100, 5, [], { weather: 'rain' }),
+  // Beta 0.7 batch (Galarian lines). The spread moves hit one target (the engine's spread targeting is still to come).
+  mv('molten-sludge', 'Molten Sludge', 'poison', 'physical', 95, 100, 10, ['contact'], { status: { id: 'brn', chance: 30 } }),
+  mv('carrion-dive', 'Carrion Dive', 'dark', 'physical', 85, 100, 10, ['contact'], {}, { critStage: 1 }),
+  mv('parcel-slam', 'Parcel Slam', 'normal', 'physical', 90, 100, 10, ['contact'], { statChanges: [{ stat: 'spe', stages: -1, target: 'enemy', chance: 30 }] }),
+  mv('dumpster-slam', 'Dumpster Slam', 'steel', 'physical', 90, 100, 10, ['contact'], { status: { id: 'psn', chance: 30 } }),
+  mv('paella-pan-toss', 'Paella Pan Toss', 'fire', 'special', 90, 100, 10, [], { status: { id: 'brn', chance: 20 } }),
+  mv('static-lash', 'Static Lash', 'electric', 'physical', 50, 100, 15, ['contact'], { status: { id: 'par', chance: 30 } }, { priority: 1 }),
+  mv('verdant-pulse', 'Verdant Pulse', 'grass', 'special', 90, 100, 10, ['pulse'], { statChanges: [{ stat: 'spe', stages: -1, target: 'enemy', chance: 30 }] }),
+  mv('cable-snare', 'Cable Snare', 'electric', 'physical', 80, 100, 10, ['contact'], { bind: true, status: { id: 'par', chance: 10 } }),
+  mv('pitaya-burst', 'Pitaya Burst', 'grass', 'special', 90, 100, 10, [], { healSelf: 0.125 }),
+  mv('thunderhead-burst', 'Thunderhead Burst', 'electric', 'special', 90, 90, 10, [], { status: { id: 'par', chance: 30 }, powerRule: 'electricTerrainBoost' }),
+  mv('venom-gnash', 'Venom Gnash', 'poison', 'physical', 85, 100, 10, ['bite', 'contact'], { status: { id: 'psn', chance: 30 } }),
+  mv('inferno-crush', 'Inferno Crush', 'fire', 'physical', 110, 90, 5, ['contact'], { status: { id: 'brn', chance: 30 } }),
+  mv('molten-coil', 'Molten Coil', 'fire', 'physical', 90, 100, 10, ['contact'], { bind: true }),
+  mv('froth-burst', 'Froth Burst', 'water', 'special', 85, 100, 10, [], { statChanges: [{ stat: 'def', stages: 1, target: 'self', chance: 30 }] }),
+  mv('regal-ribbon', 'Regal Ribbon', 'fairy', 'special', 130, 90, 5, [], { statChanges: [{ stat: 'spa', stages: -2, target: 'self', chance: 100 }] }),
+  mv('ring-toss', 'Ring Toss', 'psychic', 'physical', 80, 100, 10, [], { drowsy: { chance: 30 } }),
 ];
 const known = new Set([...moves, ...newMoves.map((m) => m.id)]);
 
@@ -98,13 +119,13 @@ for (const p of pack) {
   const learnset = learn.filter(([l, m]) => !seen.has(`${l}${m}`) && seen.add(`${l}${m}`)).sort((a, b) => a[0] - b[0]).map(([level, move]) => ({ level, move }));
   const slot = (s: string) => p.abilities.find((a: any) => a.slot === s);
   for (const a of p.abilities) if (a.isNew && !abilities.some((x) => x.id === kebab(a.id))) abilities.push({ id: kebab(a.id), name: a.name, description: a.description });
-  const normal = [slot('standard'), slot('unique')].filter(Boolean).map((a: any) => kebab(a.id));
-  const base = byId.get(BASED[id] ?? FIRST[id] ?? kebab(p.evolution.from));
+  const normal = p.abilities.filter((a: any) => a.slot !== 'hidden').map((a: any) => kebab(a.id));
+  const base = byId.get(baseOf(id) ?? FIRST[id] ?? kebab(p.evolution.from));
   if (!base) throw new Error(`${id}: no base species`);
   const from = p.evolution.from ? (mega ? 'alolan-vibrava' : kebab(p.evolution.from)) : null;
   const mk = (sid: string, name: string, stats: any, extra: object) => ({
     id: sid, dex: dex++, name, generation: base.generation, types: p.types.map((t: string) => t.toLowerCase()), baseStats: stat(stats), catchRate: p.profile.catchRate, baseExp: p.profile.baseExp,
-    growthRate: p.profile.growthRate.toLowerCase().replace(/ /g, '-'), evolutionStage: stage, evolvesFrom: from, tags: stage === 1 && !p.evolution.from && BASED[id] ? ['scout'] : [], learnset, evolutions: [],
+    growthRate: p.profile.growthRate.toLowerCase().replace(/ /g, '-'), evolutionStage: stage, evolvesFrom: from, tags: stage === 1 && !p.evolution.from && baseOf(id) ? ['scout'] : [], learnset, evolutions: [],
     abilities: { normal, hidden: slot('hidden') ? kebab(slot('hidden').id) : null }, assets: { sprite: `custom/${sid}`, icon: ICON[id] ?? `${base.generation}/${base.dex}`, cry: CRY[id] ?? `${base.dex}` },
     weight: p.profile.weightKg, femaleRatio: p.profile.genderRatio ? p.profile.genderRatio.femalePercent / 100 : null, eggGroups: p.profile.eggGroups.map((g: string) => EGG[g] ?? g.toLowerCase()), color: COLOR[id] ?? base.color, ...extra,
   });
@@ -117,6 +138,7 @@ for (const p of pack) {
   if (!mega && e.from && e.trigger === 'level_up' && e.minLevel && !e.heldItem && !e.natures?.length && !e.time && !e.partyRequirement) {
     if (packById.has(kebab(e.from))) evolutions.push({ from: kebab(e.from), to: sid0, level: e.minLevel });
   } else if (e.trigger === 'use_item' && e.item) evolutions.push({ from: kebab(e.from), to: sid0, item: kebab(e.item) });
+  // (Condition routes of this batch - friendship, a known move, a held item - are in core/conditionEvolution.ts.)
   const tm = [...new Set(tmCsv.filter((r) => r[0] === p.id).map((r) => kebab(r[2]!)).filter((m) => moves.has(m)))];
   for (const f of out.filter((o) => o.id === sid0 || o.id.startsWith(`${sid0}-`))) learnables[f.id] = { egg: [], other: tm };
 }
@@ -124,6 +146,11 @@ for (const p of pack) {
 for (const ev of evolutions.filter((x) => x.level !== undefined)) {
   const target = out.find((o) => o.id === ev.from);
   if (target) { target.evolutions.push({ to: ev.to, level: ev.level }); }
+}
+// Stone routes inside the pack (Galarian Muk to Magmuk with a Fire Stone ...) are listed on the species too.
+for (const ev of evolutions.filter((x) => x.item)) {
+  const target = out.find((o) => o.id === ev.from);
+  if (target) target.evolutions.push({ to: ev.to, item: ev.item });
 }
 const external = evolutions.filter((x) => !out.some((o) => o.id === x.from)).map((x) => (x.item ? { from: x.from, to: x.to, item: x.item } : { from: x.from, to: x.to, level: x.level }));
 // Alolan Flygonite, the Mega Stone of Alolan Flygon.
