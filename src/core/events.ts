@@ -71,6 +71,7 @@ import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
 import { noteCanonEvent, restoreStash, stashParty } from './expansion/canonRun';
 import { flightNorthEffect } from './instrumentality/flightNorth';
+import { applyKc, kcConditionWords, kcHolds, kcWords } from './expansion/canonKantoRules';
 import { applyCanonEffect, ghostReturns, labRetryEvent, nearestBst } from './expansion/canonSaffron';
 import { addStageAttribute } from './expansion/stageMods';
 import { raidOffered, resolveStoryRaid } from './raid/storyRaids';
@@ -240,6 +241,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       if (!rec) return false;
       return (!c.feeling || rec.feelings[c.feeling.key] >= c.feeling.atLeast) && (c.leadAtLeast === undefined || rec.lead >= c.leadAtLeast) && (c.leadAtMost === undefined || rec.lead <= c.leadAtMost) && (!c.mark || rec.marks.includes(c.mark));
     }
+    case 'kc':
+      return kcHolds(content, run, c);
     case 'flag': {
       const value = Number(run.story.flags[`ev:${c.key}`] ?? 0);
       if (value < c.atLeast || value > c.atMost) return false;
@@ -466,6 +469,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs the tournament bracket to be at this round';
     case 'rivalState':
       return 'Needs a rival who feels a certain way about you';
+    case 'kc':
+      return kcConditionWords(c);
     case 'flag':
       return 'Needs something you did earlier';
     case 'record':
@@ -561,7 +566,7 @@ function coSeen(content: Content, run: RunState, id: string): boolean {
 }
 
 /** A placed event only appears on a stage its placement allows (earliest absolute stage, in-region stage, stage tags). */
-function coFits(content: Content, run: RunState, id: string): boolean {
+export function coFits(content: Content, run: RunState, id: string): boolean {
   const p = content.coPlacement?.get(id);
   if (!p || !run.stage) return true;
   return fitsStage(p, stageNumber(content, run), run.stage.index + 1, stageTags(getTheme(content, run.stage.themeId).types, periodOf(run), tideOf(content, run)));
@@ -1103,6 +1108,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `${whoWords(e.who)} +${e.amount} level${e.amount === 1 ? '' : 's'}`;
     case 'join':
       return e.shadow ? 'a Shadow Pokémon is rescued' : e.blissful ? 'a Blissful Pokémon joins' : 'a Pokémon joins';
+    case 'kc':
+      return kcWords(e);
     case 'canon':
       return e.action === 'champion' ? 'a champion belt' : e.action === 'ghostReturn' ? 'a ghost asks to join' : e.action === 'ghostFree' ? 'a trapped Pokémon is freed' : '';
     case 'seedling':
@@ -1451,6 +1458,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       run.pending.push({ kind: 'caught', mon });
       return `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} ${e.shadow ? 'was rescued from the haze and' : ''} wants to join you!`.replace('  ', ' ');
     }
+    case 'kc':
+      return applyKc(content, run, e, { cap: runLevelCap(content, run), picked: whoOf(content, run, 'picked', pickedUid), egg: (species, types = []) => applyEffect(content, run, { kind: 'egg', species, types, levelBonus: 0, shinyMultiplier: 1, left: 3, unit: 'battle' } as EventEffect, rng, tradeUid) });
     case 'canon': {
       if (e.action === 'ghostReturn') {
         const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
