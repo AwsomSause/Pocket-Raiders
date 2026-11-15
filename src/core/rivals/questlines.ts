@@ -431,7 +431,9 @@ export function questText(content: Content, run: RunState, eventId: string, text
     const lines = rec && CONTEXTS.has(ctx) ? (BANK.personalities[rec.personality] as unknown as Record<BankContext, string[]>)[ctx as BankContext] : undefined;
     if (lines?.length) return lines[fnv1a(`${run.seed}::rq-say::${eventId}::${n}`) % lines.length]!;
     return own[0]?.[1] ?? '';
-  }).replace(/\{(rival|rival2|player|called|lead|young|lost|rung|team|fellow|mentor|evil|lieutenant)\}/g, (_m, k: string) => simple[k]!);
+  }).replace(/\{(rival|rival2|player|called|lead|young|lost|rung|team|fellow|mentor|evil|lieutenant)\}/g, (_m, k: string) => simple[k]!)
+    // A filled-in name that starts a line or a sentence starts with a capital ("your rival" before a rival is met).
+    .replace(/(^|\n|[.!?] )(your|the) /g, (_m, lead: string, w: string) => `${lead}${w.charAt(0).toUpperCase()}${w.slice(1)} `);
 }
 
 // ---------- the pack's Marks (RIVAL_SYSTEM_OVERHAUL.md 3.3) ----------

@@ -22,7 +22,6 @@ async function openEvent(page: Page, eventId: string, sideId: string) {
   await page.evaluate(
     ([eventId, sideId]) => {
       const pkr = (window as any).__pkr;
-      pkr.session.settings.uiStyle = 'new';
       const run = pkr.session.run;
       const node = run.stage.map.nodes.find((n: any) => n.column === 1);
       node.sides.push({ id: sideId, kind: 'event', used: false, eventId });
@@ -36,7 +35,19 @@ async function openEvent(page: Page, eventId: string, sideId: string) {
   await page.waitForTimeout(1200);
 }
 
-const eventText = (page: Page) => page.locator('[data-scene="Event"]').last().innerText();
+/** Reads every page of the scene's text (Enter turns a page; the choices show after the last), then the choices. */
+const eventText = async (page: Page) => {
+  const view = page.locator('#rx .stage[data-scene="Event"]');
+  await expect(view).toBeVisible();
+  let all = '';
+  for (let i = 0; i < 8; i++) {
+    all += `\n${await view.innerText()}`;
+    if ((await view.locator('.rx-more').count()) === 0) break;
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(350);
+  }
+  return all;
+};
 
 test('rival questline scenes play in the New UI with their tokens filled', async ({ page }) => {
   const errors: string[] = [];
@@ -44,7 +55,7 @@ test('rival questline scenes play in the New UI with their tokens filled', async
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
   await page.goto('/');
   await page.evaluate(() => localStorage.clear());
-  await page.goto('/?seed=co-rivals-e2e');
+  await page.goto('/?seed=co-rivals-e2e&ui=new');
   await waitForScene(page, 'MainMenu');
   await toMap(page);
 
