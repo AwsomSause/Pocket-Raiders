@@ -1,0 +1,5946 @@
+{
+ "catalogOverhaul": "people",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "npc-meet-aroma-lady-rosalind",
+   "name": "Aroma Lady Rosalind: Smell the Flowers",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-rosalind-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A narrow path winds through a night garden, the gravel pale under a thin moon. A woman in a long skirt kneels by a bed of white moonflowers, her sleeves rolled to the elbow and soil on her knees. She does not look up. Rosalind: \"Come. Smell this one. Go on.\" She tilts a bloom toward you. The scent is sweet and heavy, like warm honey, and your lead gives a slow, enormous yawn. Rosalind smiles at the flower, not at you. Rosalind: \"That's the trick. Smell the flowers, then fall to them.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Rosalind sits back on her heels and whistles softly. A Bellossom and a Vileplume step out from between the stems, shaking pollen from their petals. Before you can call a move the air goes thick and sweet: Sweet Scent first, then Sleep Powder drifting down like snow.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rosalind-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Rosalind's moonflowers put your team to sleep",
+         "importance": 60
+        }
+       ],
+       "foeMoves": [
+        "sweet-scent",
+        "sleep-powder"
+       ],
+       "team": [
+        "bellossom",
+        "vileplume"
+       ],
+       "name": "Aroma Lady Rosalind",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You stayed awake through Rosalind's moonflower garden",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"What is that scent?\"",
+     "success": {
+      "text": "Rosalind: \"Moonflower. Grows only where someone's grieved.\" She says it lightly, the way people say true things they have had a long time to get used to. Then she brushes the soil from her hands, and her Bellossom and Vileplume rise from the bed, already shedding Sweet Scent and Sleep Powder into the dark.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rosalind-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rosalind-asked",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Rosalind's moonflowers put your team to sleep",
+         "importance": 60
+        }
+       ],
+       "foeMoves": [
+        "sweet-scent",
+        "sleep-powder"
+       ],
+       "team": [
+        "bellossom",
+        "vileplume"
+       ],
+       "name": "Aroma Lady Rosalind",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You stayed awake through Rosalind's moonflower garden",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Hold my breath and leave.\"",
+     "success": {
+      "text": "You fill your lungs and walk briskly past the flowerbed, cheeks puffed out. Rosalind laughs, a low warm sound, and waves you on with her trowel. The smell follows you halfway down the path anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-aroma-lady-rosalind-m2",
+   "name": "Aroma Lady Rosalind: The Bare Garden",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-rosalind-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-rosalind-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "The same garden, or what is left of it. The beds have been dug up and the moonflowers lie in heaps by the path, roots in the air, already wilting. Stakes with orange tape mark out neat rectangles in the dirt. Rosalind sits on an upturned crate with a trowel in her lap, looking at nothing. Rosalind: \"The town wants a car park.\" She turns the trowel over and over in her hands. Rosalind: \"My husband planted the first moonflower here. Forty years ago.\"",
+   "choices": [
+    {
+     "label": "\"Fight the town.\"",
+     "success": {
+      "text": "Rosalind looks up for the first time. Something in her face sets, like soil after rain. Rosalind: \"Then we'll need names. A lot of names.\" She pulls a clipboard out from under the crate. She has clearly had it ready for a while.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rosalind-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-aroma-lady-rosalind-petition"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Move the garden.\"",
+     "success": {
+      "text": "You spend the rest of the evening on your knees beside her, lifting moonflowers one by one with their roots wrapped in wet newspaper. It costs you a whole rest, and your back aches, but by midnight the last bloom is settled in the little yard behind her house. Rosalind pats the soil flat and is quiet a long time. Rosalind: \"Thank you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rosalind-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rosalind-moved",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Plant one somewhere else.\"",
+     "success": {
+      "text": "Rosalind chooses one moonflower from the heap, the healthiest, and wraps its roots in her own scarf. Rosalind: \"Somewhere it's needed. You'll know.\" You carry it carefully on top of your bag. The next time you stop to rest it opens, white and sweet, and your whole team sleeps better than they have in days.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rosalind-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rosalind-carried",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "You carried one of Rosalind's moonflowers to a new place",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-rosalind-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Rosalind looks at you for a long moment. Rosalind: \"You remembered what grows here.\" Half the town already knows her story; with you beside her, the petition is as good as signed.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"Fight the town.\"",
+       "success": {
+        "text": "Rosalind stands up off the crate. Rosalind: \"Then we go straight to the council.\" The names come easily: the baker, the postman, the children who used to steal the flowers. By evening the petition is full, and the council meets tonight.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-rosalind-m2",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "npc-meet-aroma-lady-rosalind-council"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-aroma-lady-rosalind-petition",
+   "name": "Aroma Lady Rosalind: The Petition",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "Market morning. You and Rosalind stand by the fountain with the clipboard and a jam jar of moonflower cuttings. People slow down, read the heading, and look at her. Some of them remember her husband. Some only remember the smell on summer nights.",
+   "choices": [
+    {
+     "label": "\"Knock on every door.\"",
+     "success": {
+      "text": "By noon your feet hurt and the clipboard holds four pages of names, some in wobbly children's writing. An old man signs twice by mistake and refuses to cross one out. Rosalind tucks the pages into her coat like a love letter. The council meets tonight.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-aroma-lady-rosalind-council"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Hand out cuttings.\"",
+     "success": {
+      "text": "Every cutting buys a signature, and some buy a story: a first kiss by the moonflowers, a dog buried under them, a grandmother who walked there every night. Rosalind listens to every one. By evening the jar is empty and the pages are full.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-aroma-lady-rosalind-council"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-aroma-lady-rosalind-council",
+   "name": "Aroma Lady Rosalind: The Council",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "The council chamber smells of floor polish and old coffee. The mayor is \"unavailable.\" His aide, a sharp young man with a sharper Pokémon, stands between Rosalind and the table where the plans are spread. Aide: \"Plans are plans. If you want them changed, you'll have to make me.\" Rosalind lays the petition down beside the plans and looks at you.",
+   "choices": [
+    {
+     "label": "\"Battle the aide.\"",
+     "success": {
+      "text": "The aide sighs as if this happens every week and sends out his team. Behind you, someone from the market starts to clap. Win or lose, the room has seen the names, and by the end of the night the car park moves to the far side of town.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rosalind-saved",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The petition saved Rosalind's garden, if not your pride",
+         "importance": 60
+        }
+       ],
+       "name": "The Mayor's Aide",
+       "size": 2,
+       "types": [
+        "normal"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the mayor's aide and saved Rosalind's garden",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Let Rosalind speak first.\"",
+     "success": {
+      "text": "Rosalind reads out the names, every one, in a clear voice that does not shake once. When she is done the councillors are looking at their shoes. The aide sends out his team anyway, for form's sake, but the vote is already over: the car park moves to the far side of town.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rosalind-saved",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The petition saved Rosalind's garden, if not your pride",
+         "importance": 60
+        }
+       ],
+       "name": "The Mayor's Aide",
+       "size": 2,
+       "types": [
+        "normal"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the mayor's aide and saved Rosalind's garden",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-aroma-lady-rosalind-m3",
+   "name": "Aroma Lady Rosalind: First Bloom",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-rosalind-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-rosalind-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "Night again, and warm. In a new bed edged with river stones, the moonflowers are opening one by one, slowly, like hands unclenching. Rosalind is dressed up: a good coat, a silver brooch, her hair pinned with care. She has brought two folding chairs. Rosalind: \"It bloomed. I wanted someone to see it with me.\"",
+   "choices": [
+    {
+     "label": "\"Sit with her.\"",
+     "success": {
+      "text": "You sit. For a long while neither of you says anything, and the flowers open around you with tiny papery sounds. The scent settles over your team like a blanket, and every ache and fever and sting eases out of them. When you finally stand, Rosalind presses a Miracle Seed into your palm and folds your fingers over it.",
+      "effects": [
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rosalind-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-aroma-lady-rosalind"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle, one last time.\"",
+     "success": {
+      "text": "Rosalind laughs and claps her gloved hands. A Comfey drifts out from behind her brooch, trailing its ring of flowers, and her Bellossom and Vileplume follow it onto the path. She laughs the whole way through, at good moves and bad ones, hers and yours.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rosalind-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-aroma-lady-rosalind"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Rosalind laughed all through your last battle",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "comfey",
+        "bellossom",
+        "vileplume"
+       ],
+       "name": "Aroma Lady Rosalind",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "miracle-seed",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You and Rosalind battled under her first moonflowers",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Bring my team.\"",
+     "success": {
+      "text": "You call everyone out. One by one your Pokémon push their noses into the moonflowers, sneeze, sniff again, and go soft-eyed and quiet. Rosalind watches each one as if she is memorising them. She gives you a Miracle Seed for the road.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rosalind-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-aroma-lady-rosalind"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "named-bed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-rosalind-carried",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Rosalind points to the oldest bloom at the centre of the bed. Rosalind: \"That one's from the flower you carried. The whole bed grew from it.\" A little painted stick in the soil beside it bears your name."
+    },
+    {
+     "id": "saved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-rosalind-saved",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Over the hedge you can see the old garden, saved, its gate open, and a bench by the gate with a brass plate for her husband."
+    },
+    {
+     "id": "moved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-rosalind-moved",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "This is her own yard. The moonflowers you dug up together crowd right up to her back step, and her kettle is whistling in the kitchen."
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-beauty-bianca",
+   "name": "Beauty Bianca: Sparkle",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-bianca-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_beauty"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A boardwalk over bright water, gulls wheeling overhead. A woman in a wide sun hat holds up a hand mirror, fixes a curl that was not out of place, then turns the mirror so it flashes right in your eyes. Bianca: \"My Pokémon sparkle, and so do I. Do you?\" Behind her a Milotic lifts its head over the railing, its scales throwing little rainbows across the planks. Bianca: \"Battle me. Try not to get scuffed.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Bianca snaps her mirror shut. Her Milotic pours over the railing like a ribbon of light and takes the lead, every scale catching the sun.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-bianca-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Bianca's Milotic outshone your team",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "milotic"
+       ],
+       "name": "Beauty Bianca",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Bianca without a scuff",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"You look lovely.\"",
+     "success": {
+      "text": "Bianca glows. She actually glows, pink to the ears, and has to fan herself with the mirror. Bianca: \"Well. Aren't you sweet.\" She is so pleased that if you beat her today, she will pay you a little extra prize money.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Bianca glows",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.1
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-bianca-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Bianca's Milotic outshone your team",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "milotic"
+       ],
+       "name": "Beauty Bianca",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Bianca without a scuff",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"I don't sparkle.\"",
+     "success": {
+      "text": "Bianca: \"Everyone does. You just don't polish.\" She tucks a stray hair behind your ear, very briskly, like an aunt. Then her Milotic slides forward over the planks and the battle begins.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-bianca-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-bianca-polish",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Bianca's Milotic outshone your team",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "milotic"
+       ],
+       "name": "Beauty Bianca",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Bianca without a scuff",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-beauty-bianca-m2",
+   "name": "Beauty Bianca: Scuffed",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-bianca-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-bianca-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_beauty"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "You almost walk right past her. No hat, no makeup, a plaster cast on one arm, hair tied back with a rubber band. Her Milotic lies beside her on a beach towel, one long fin torn and bandaged. Bianca: \"A wild Gyarados on the coast road. My Milotic got between us.\" She strokes the bandaged fin with her good hand, very gently. Bianca: \"I'm supposed to be in a contest Friday. Look at us.\"",
+   "choices": [
+    {
+     "label": "\"Enter anyway.\"",
+     "success": {
+      "text": "Friday comes, and Bianca walks on stage as she is: cast, bandage, not a speck of powder. The judges mark her down in the beauty round. The crowd does not care. When Milotic lifts its torn fin into the lights, the whole hall stands, and they are still clapping when she walks off.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-bianca-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-bianca-brave",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "Bianca entered her contest scuffed and won the crowd",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Heal first.\"",
+     "success": {
+      "text": "Bianca hesitates, then nods. Bianca: \"There's a specialist up the coast. Two days' walk.\" You carry the towel; she carries her pride.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-bianca-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-beauty-bianca-coast-road"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll enter for you.\"",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You walk on stage in her place with your own Pokémon, and the round goes beautifully: every beat hit, every turn clean. In the front row Bianca is on her feet, cast and all, cheering louder than anyone in the hall.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-bianca-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-bianca-stand-in",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You walk on stage in her place, and the round goes wrong: a missed cue, a stumble, a judge wincing. You hear Bianca anyway, right through it, cheering from the front row as if you had won. Bianca: \"That's sparkle!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-bianca-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-bianca-stand-in",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "no-polish",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-bianca-polish",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Bianca looks up at you and almost laughs. Bianca: \"You were right. I'll go without polish.\" If she enters anyway, it will cost her nothing she minds losing."
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-beauty-bianca-coast-road",
+   "name": "Beauty Bianca: The Coast Road",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_beauty"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "The coast road, the same one. Bianca walks slower here, watching the water. Her Milotic rides in a borrowed handcart, and every wave that breaks too loud makes it flinch.",
+   "choices": [
+    {
+     "label": "\"Keep to the cliff path.\"",
+     "success": {
+      "text": "You take the long way, high above the water. It costs most of the day, but Milotic stops flinching, and by evening Bianca is humming.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-beauty-bianca-specialist"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Sing to Milotic.\"",
+     "success": {
+      "text": "You hum something, badly. Bianca joins in, worse. Milotic lays its head on the side of the cart and closes its eyes for the first time since the Gyarados.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-beauty-bianca-specialist"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-beauty-bianca-specialist",
+   "name": "Beauty Bianca: The Specialist",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_beauty"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "A white clinic at the end of the coast, with a Chansey at the door. The specialist unwraps the fin, hums, and says it will mend clean if they stay three days. The contest is tomorrow. Bianca looks at the date on the wall for a long moment.",
+   "choices": [
+    {
+     "label": "\"Stay.\"",
+     "success": {
+      "text": "Bianca: \"There'll be other Fridays.\" She says it lightly and does not quite manage it. But three days later the fin is whole, and her Milotic swims a full lap of the clinic pool, shining. She misses the contest and does not mention it once.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-bianca-healed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Hold her hand.\"",
+     "success": {
+      "text": "You sit with her through the first night. She misses the contest. She does not miss Milotic waking up and nosing her cast, very gently, as if checking that she healed too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-bianca-healed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-beauty-bianca-m3",
+   "name": "Beauty Bianca: New Shine",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-bianca-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-bianca-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_beauty"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "A contest hall, bright as noon, ribbons everywhere. At the judges' table, in a silver dress with her sleeve pinned back to show a thin pale scar down her arm, sits Bianca. Her Milotic lies coiled beside her chair. Bianca: \"They asked me to judge. Because of the scar. Isn't that funny?\" She does not sound as if she thinks it is funny. She sounds proud.",
+   "choices": [
+    {
+     "label": "\"Enter her contest.\"",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Your round is clean and bright, and Bianca scores it honestly, which means high. She leans across the table as you leave the stage. Bianca: \"That had real shine.\" She slips you a Prism Scale wrapped in tissue paper.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-bianca-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "prism-scale",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-beauty-bianca"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your round wobbles, and Bianca scores it honestly, which means low. She catches you at the stage door anyway. Bianca: \"Scuffed is fine. Scuffed is how you start.\" She gives you a Prism Scale wrapped in tissue paper.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-bianca-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "prism-scale",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-beauty-bianca"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle her.\"",
+     "success": {
+      "text": "Bianca stands, smooths her dress, and steps down from the judges' table onto the floor. Her new partner leads: a Sylveon, ribbons trailing, with Milotic gliding behind it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-bianca-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-beauty-bianca"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Bianca's new Sylveon outshone your team",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "sylveon",
+        "milotic"
+       ],
+       "name": "Beauty Bianca",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "prism-scale",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You battled Bianca, the judge with the scar",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Ask about the Gyarados.\"",
+     "success": {
+      "text": "Bianca's smile goes still. Bianca: \"It wasn't an ordinary one. It was an Alpha.\" She folds her hands on the table. Bianca: \"It's still out there on the coast road. Would you calm it? For both of us.\" She presses a Prism Scale into your hand, as if paying in advance.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-bianca-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-bianca-gyarados",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "prism-scale",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-beauty-bianca"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "brave",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-bianca-brave",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the wall behind her hangs a photograph from that Friday: Bianca in her cast, Milotic's torn fin raised, the whole crowd on its feet."
+    },
+    {
+     "id": "healed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-bianca-healed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Bianca catches your eye and lifts her healed arm a little, then nods at Milotic's fin, mended into a shining seam. Bianca: \"Clean seams. Both of us.\""
+    },
+    {
+     "id": "stand-in",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-bianca-stand-in",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Bianca waves at you from the table with both hands. Bianca: \"My stand-in! Everyone, this one entered for me.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-biker-ryder",
+   "name": "Biker Ryder: Out of My Way",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-ryder-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_biker"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "The engine comes first, then the bike: it roars up the road and skids sideways in a spray of gravel, blocking the way completely. The rider pulls off a dented helmet with a sticker half peeled off the side. Ryder: \"Out of my way, rookie!\" He waits. You do not move. He shifts on the seat. Ryder: \"Or, you know. Battle me. Either.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Ryder grins, all teeth, and kicks the stand down. A Weezing rolls out of a saddlebag in a cloud of exhaust-coloured smog, and a Scrafty hops off the back seat, hitching up its skin like trousers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-ryder-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Ryder roared off after beating you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "weezing",
+        "scrafty"
+       ],
+       "name": "Biker Ryder",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Ryder on the open road",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Move aside.\"",
+     "success": {
+      "text": "You step onto the verge. Ryder looks almost disappointed, then guns the engine and roars off in a cloud of dust. One less battle today. Far down the road, you hear him whoop.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Nice bike.\"",
+     "success": {
+      "text": "Ryder stops. He looks at the bike, at the dent in the tank, at the old chrome he clearly polishes every night. Ryder: \"...It was my dad's.\" He is quieter after that, and when he sends out his Weezing and Scrafty, he does it without the shouting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-ryder-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-ryder-bike",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Ryder roared off after beating you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "weezing",
+        "scrafty"
+       ],
+       "name": "Biker Ryder",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Ryder on the open road",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-biker-ryder-m2",
+   "name": "Biker Ryder: The Gang",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-ryder-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-ryder-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_biker"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "A diner car park at night, neon buzzing pink over the puddles. A dozen bikes lean in a row, and their riders laugh too loud by the door. Ryder sits apart on the kerb with his helmet between his boots. Ryder: \"They want me to do a job. Rob a delivery van.\" He scrapes at the dent in the helmet with his thumbnail. Ryder: \"If I don't, I'm out. If I do, I'm what my dad was.\"",
+   "choices": [
+    {
+     "label": "\"Don't.\"",
+     "success": {
+      "text": "Ryder stands up and tells them. The car park goes quiet. Then four of them step forward, and four Pokémon come out of four saddlebags. Ryder's Scrafty moves to stand beside your lead without being asked. Two against four.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-ryder-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-ryder-left-gang",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Ryder walked away from his gang, bruised but free",
+         "importance": 60
+        }
+       ],
+       "format": "doubles",
+       "name": "The Gang",
+       "ally": "scrafty",
+       "size": 4,
+       "types": [
+        "poison",
+        "dark"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You and Ryder faced down his old gang together",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Do it and tip the police.\"",
+     "success": {
+      "text": "Ryder does the job. Halfway through, he stops at a phone box and calls Officer Jenny himself. The sirens catch the whole gang at the van, and him with them. As they put him in the car he looks at you through the window and nods, once, like a man who has finally paid for something.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-ryder-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-ryder-arrested",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ride with me instead.\"",
+     "success": {
+      "text": "Ryder looks at you, then at the gang, then at his dad's bike. He pulls on the dented helmet. For the next stretch of road his engine rumbles a polite distance behind you, and when the gang roars past looking for him, they never think to look behind a rookie.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-ryder-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-ryder-rode",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "wandererFriend",
+        "stages": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bike",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-ryder-bike",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Ryder pats the tank of the bike beside him. Ryder: \"Only thing my dad left me that isn't trouble.\" He says it to the bike, not to you."
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-biker-ryder-m3",
+   "name": "Biker Ryder: Delivery",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-ryder-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-ryder-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_biker"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "A delivery bike, very clean, with a Pokémon Center cross painted on the box. Ryder sits on it in a courier's jacket two sizes too neat for him, his helmet polished, the dent still there. Ryder: \"Got a job. Real one. I deliver for the Pokémon Center.\" He cannot stop grinning.",
+   "choices": [
+    {
+     "label": "\"Race me.\"",
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You win by a wheel's length and Ryder whoops louder than you do. Ryder: \"Fine! Winner gets a courier.\" He will carry one thing of yours ahead to any stop down the road, no charge, and deliveries are free for you all region.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-ryder-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-ryder-carry",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-ryder-free-deliveries",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-biker-ryder"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Ryder wins by a wheel's length and does a lap of honour he has clearly practised. Then he slaps your back. Ryder: \"Deliveries are free for you anyway. Rookie rate.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-ryder-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-ryder-free-deliveries",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-biker-ryder"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Ryder sends out his Weezing, then his Scrafty. The smog is thinner now, more like morning mist, and he calls his moves instead of shouting them. His team is calmer, and somehow that makes it harder to beat. Win or lose, he says your deliveries are free for the region.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-ryder-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-ryder-free-deliveries",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-biker-ryder"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Ryder the courier beat you, calmly",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "weezing",
+        "scrafty"
+       ],
+       "name": "Biker Ryder",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You battled Ryder the courier",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Deliver something for me.\"",
+     "success": {
+      "text": "You think of someone you met on this road and write them a few lines on the back of a map. Ryder tucks it into the box like it is the most important parcel in the region. Ryder: \"Signed for. Every time.\" He roars off, and for once nobody minds the noise. Your deliveries ride free for the rest of the region.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-ryder-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-ryder-free-deliveries",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "Ryder carried your letter to someone you met on the road",
+        "importance": 60
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-biker-ryder"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "halfway-house",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-ryder-arrested",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Not a road this time: a halfway house with a vegetable patch and a sign that says VISITORS WELCOME. Ryder is in the kitchen in an apron, up to his elbows in potatoes, a clean delivery bike leaning outside the window. He laughs out loud when he sees you, at himself, at all of it. Ryder: \"Got a job. Real one. I deliver for the Pokémon Center.\" He waves a peeler. Ryder: \"Afternoons. Mornings, I peel.\""
+    },
+    {
+     "id": "left-gang",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-ryder-left-gang",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Ryder's Scrafty wears a little courier cap now. Ryder: \"Nobody's come looking. Not once since that car park.\""
+    },
+    {
+     "id": "rode",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-ryder-rode",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Ryder taps his horn twice, the way he did riding behind you. Ryder: \"Never did find me, did they.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-bird-keeper-perry",
+   "name": "Bird Keeper Perry: Ride the Wind",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-perry-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_birdkeeper"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A windy hilltop, the grass flattened into silver waves. A man in a heavy coat stands with binoculars, three birds circling over him in wide, lazy loops. He does not lower the binoculars when you arrive. Perry: \"Watch them ride the wind! Look at the left one. She's showing off.\" The left one, a Swellow, folds her wings and drops like a stone, then flicks up at the last second, screaming with joy.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Perry whistles once and all three birds peel out of the sky at once: Pidgeotto, Swellow, Staraptor. They are on you before your team has blinked, every one of them faster than anything on your side for that first turn.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-perry-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Perry's birds were too fast for you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "pidgeotto",
+        "swellow",
+        "staraptor"
+       ],
+       "name": "Bird Keeper Perry",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Perry's three birds",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Watch with him.\"",
+     "success": {
+      "text": "You stand beside Perry and watch until your eyes water. He names every thermal and every trick, and the time it takes to cross a whole stop slips away. But your own flying Pokémon have been watching too, and for the rest of the region they ride the wind like the Swellow does.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-perry-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-perry-watched",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Riding the wind",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "type": "flying",
+          "value": 1.05
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You leave Perry to his birds. He does not notice you go; the Swellow is showing off again, and he is laughing at her.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-bird-keeper-perry-m2",
+   "name": "Bird Keeper Perry: One Missing",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-perry-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-perry-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_birdkeeper"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "The same hilltop, the same coat. But only two birds circle overhead now, and they keep turning north, as if listening for something. Perry's binoculars hang forgotten on his chest. Perry: \"Swellow didn't come back. Three days.\" He rubs his left knee, slowly. Perry: \"Storm took her north. I can't climb up there anymore.\"",
+   "choices": [
+    {
+     "label": "\"I'll find her.\"",
+     "success": {
+      "text": "Perry grips your arm hard, then presses his binoculars into your hands. Perry: \"She'll come to a whistle. Two short, one long.\" You head north toward the storm-torn ridges.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-perry-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-bird-keeper-perry-north"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"She'll come back.\"",
+     "success": {
+      "text": "You sit with him. The wind blows. Perry does not believe you and then, later, a little, does. The next stage she comes back on her own: limping through the air, one wing held wrong, landing in his arms as if she never meant to leave.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-perry-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-perry-waited",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Get another.\"",
+     "success": {
+      "text": "Perry: \"That's not how it works.\" He turns his back on you and lifts the binoculars north again. He does not lower them until you are gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-perry-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-perry-cold",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "watched",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-perry-watched",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Perry nods when he sees you. He remembers you standing with him in the wind, watching her show off."
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-bird-keeper-perry-north",
+   "name": "Bird Keeper Perry: North of the Storm",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_birdkeeper"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "North of Perry's hill the land breaks into ridges and torn trees, the storm's path still written in snapped branches. Wind howls through the gaps. Somewhere up here is a Swellow who did not come home.",
+   "choices": [
+    {
+     "label": "\"Whistle: two short, one long.\"",
+     "success": {
+      "text": "You whistle until your lips go numb. On the third try, very faint, something whistles back from higher up the ridge.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-bird-keeper-perry-nest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Follow the feathers.\"",
+     "success": {
+      "text": "Blue-black feathers, caught in thorns, one every few hundred steps. You follow them up the ridge as the light goes gold.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-bird-keeper-perry-nest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-bird-keeper-perry-nest",
+   "name": "Bird Keeper Perry: The Nest",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_birdkeeper"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "Under an overhang on the highest ridge, Swellow is grounded, one wing dragging at a terrible angle. Behind her, in a scrape of dry grass, a nest of Taillow chicks gape and cheep. She hisses at you, broken wing and all, and does not budge an inch from the nest.",
+   "choices": [
+    {
+     "label": "\"Splint the wing.\"",
+     "success": {
+      "text": "You move slowly, talking the whole time. In the end she lets you, and you strap the wing to a straight stick with your own scarf. You carry the whole nest down the ridge in your hat. When Perry sees you coming, he has to sit down in the grass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-perry-found",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stay till she trusts you.\"",
+     "success": {
+      "text": "You sit by the overhang all night, sharing your food with a nest of very loud chicks. By morning Swellow lets you lift them. Perry meets you halfway up the hill, knee or no knee, crying openly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-perry-found",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-bird-keeper-perry-m3",
+   "name": "Bird Keeper Perry: The Flock",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-perry-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-perry-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_birdkeeper"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "The hilltop is crowded with birds: on the fence, in the grass, on Perry's hat. Swellow sits on his shoulder, and young Taillow trip over each other around his boots. Perry: \"She brought her chicks. They think I'm their grandad.\" One of them tries to climb his coat. He lets it.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Perry whistles and the sky fills: Staraptor, Swellow, Pidgeotto and the three boldest chicks, six birds, all fast, all screaming with joy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-perry-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-bird-keeper-perry"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Perry's flock ran rings round you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "staraptor",
+        "swellow",
+        "pidgeotto",
+        "taillow",
+        "taillow",
+        "taillow"
+       ],
+       "name": "Bird Keeper Perry",
+       "size": 6,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "sharp-beak",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Perry's whole flock",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Take a chick.\"",
+     "success": {
+      "text": "Perry kneels and lets the chicks choose. The boldest Taillow hops onto your boot and will not get off. Perry: \"That one. She's got her mother's nerve.\" He wipes his eyes on his sleeve.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-perry-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "taillow"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-bird-keeper-perry"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Fly with them.\"",
+     "success": {
+      "text": "Perry's Staraptor lowers its back for you. You climb on and the whole flock lifts with you, round the hill and over the next stretch of road, wind roaring, Perry a tiny waving figure below. You land well ahead. A Taillow catches up with a Sharp Beak tied to its foot, from him.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-perry-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "item",
+        "id": "sharp-beak",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-bird-keeper-perry"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "cold",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-perry-cold",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The hilltop again, and birds on every post. Perry stands among them, polite and distant, and nods to you the way you nod to a stranger. Swellow is on his shoulder; there are no chicks. He does not say how she came home, and you do not ask.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "\"Battle.\"",
+       "success": {
+        "text": "Perry whistles. Staraptor, Swellow and Pidgeotto drop out of the sky, fast and clean. He battles like a professional, and afterwards shakes your hand like one.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-perry-done",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "recruit",
+          "trainer": "npc-bird-keeper-perry"
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "Perry's birds beat you, politely",
+           "importance": 60
+          }
+         ],
+         "team": [
+          "staraptor",
+          "swellow",
+          "pidgeotto"
+         ],
+         "name": "Bird Keeper Perry",
+         "size": 3,
+         "types": [],
+         "levelBonus": 0,
+         "win": [
+          {
+           "kind": "item",
+           "id": "sharp-beak",
+           "count": 1
+          },
+          {
+           "kind": "moment",
+           "text": "You beat Perry's birds, and he shook your hand",
+           "importance": 60
+          }
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "found",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-perry-found",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Swellow lands on your shoulder instead of Perry's, the old splint mark still in her feathers. Perry: \"She remembers who carried her down.\""
+    },
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-perry-waited",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Swellow's wing never quite set straight; she flies with a little hitch now. Perry: \"Came home on her own. Stubborn, like me.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-black-belt-kenji",
+   "name": "Black Belt Kenji: Hup",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kenji-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_blackbelt"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A dojo yard at dawn, the sand raked into neat lines and dew on the practice posts. A man in a white gi does push-ups on his knuckles, counting under his breath, sweat dripping off his nose. He springs up when he sees you. Kenji: \"Hup! Train the body, train the Pokémon!\" He points at the sand. Kenji: \"You. Twenty push-ups, then we battle.\"",
+   "choices": [
+    {
+     "label": "\"Do the push-ups.\"",
+     "success": {
+      "text": "You get down in the cold sand and do twenty. The last five are ugly, but you do them. Kenji counts every one aloud and bows at the end, very properly. Out of respect, he sends out only his Machoke.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kenji-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-kenji-pushups",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Kenji's Machoke beat you after your push-ups",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "machoke"
+       ],
+       "name": "Black Belt Kenji",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You did twenty push-ups and beat Kenji's Machoke",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Just battle.\"",
+     "success": {
+      "text": "Kenji grunts, not unhappy, and steps back. A Machoke and a Hitmonchan stride into the yard and bow to you before they raise their fists.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kenji-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Kenji's fighters beat you at dawn",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "machoke",
+        "hitmonchan"
+       ],
+       "name": "Black Belt Kenji",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Kenji in his dojo yard",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Skip.\"",
+     "success": {
+      "text": "Kenji: \"Soft.\" He drops straight back into his push-ups and does not look up again. Somehow it stings more than a lost battle would.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-black-belt-kenji-m2",
+   "name": "Black Belt Kenji: The Old Knee",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kenji-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kenji-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_blackbelt"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "The dojo, but quiet. Kenji sits on a chair at the edge of the mat, his knee strapped in a heavy brace, a walking stick hooked over the chair back. The rack of practice gis is half empty. Kenji: \"Can't kneel. Can't spar. My students are leaving.\" He stares at the mat. Kenji: \"I can still teach. Nobody wants a teacher who can't show.\"",
+   "choices": [
+    {
+     "label": "\"Teach from the chair.\"",
+     "success": {
+      "text": "Kenji frowns, then nods. Kenji: \"Then you show. I'll talk.\" He points his stick at the empty mat, and you realise you are about to lead a class.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kenji-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-black-belt-kenji-class"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let your Pokémon teach.\"",
+     "success": {
+      "text": "Kenji whistles, and his Machoke steps onto the mat and runs through every form, slow and then fast, while Kenji calls the counts from his chair. The children by the door creep back in one by one. By the end they are all copying Machoke and shrieking with laughter.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kenji-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-kenji-pokemon",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Train me.\"",
+     "success": {
+      "text": "Kenji looks at your lead for a long time. Then he leans forward on his stick, and the old voice comes back into him. Kenji: \"Two choices. Low and fast, or straight and faster. Pick.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kenji-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-black-belt-kenji-lesson"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pushups",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-kenji-pushups",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Kenji brightens a little when he sees you. Kenji: \"Twenty push-ups. Ugly ones. I remember.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-black-belt-kenji-class",
+   "name": "Black Belt Kenji: The Class",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_blackbelt"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "Three children stand on the mat in gis too big for them, and you stand in front of them. Kenji sits behind you with his stick across his knees. Kenji: \"Stance first. Show them.\"",
+   "choices": [
+    {
+     "label": "\"Show them the stance.\"",
+     "success": {
+      "text": "You plant your feet the way Kenji tells you, and the children copy you, wobbling. Kenji corrects all four of you from his chair, sharp and funny. At the end of the class three students write their names back on the dojo board.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kenji-chair",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let them spar with my team.\"",
+     "success": {
+      "text": "Your team spars with three tiny students, very gently, while Kenji calls every move from his chair like a commentator. When the parents come, three names go back up on the dojo board.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kenji-chair",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-black-belt-kenji-lesson",
+   "name": "Black Belt Kenji: The Lesson",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_blackbelt"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "Kenji has your lead on the mat in front of his chair, talking it through the move one piece at a time, tapping the floor with his stick on every beat. Kenji: \"Low Kick takes their feet. Mach Punch beats them to it.\"",
+   "choices": [
+    {
+     "label": "\"Low Kick.\"",
+     "success": {
+      "text": "By sundown your lead sweeps the practice post clean off its base. Kenji nods once. That is apparently the highest praise there is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kenji-trained",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "teachMove",
+        "move": "low-kick"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Mach Punch.\"",
+     "success": {
+      "text": "By sundown your lead hits the post before Kenji has finished saying \"now.\" He laughs out loud, for the first time since the knee.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kenji-trained",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "teachMove",
+        "move": "mach-punch"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-black-belt-kenji-m3",
+   "name": "Black Belt Kenji: Grading Day",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kenji-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kenji-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_blackbelt"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "The dojo is full: parents on benches, students in rows, belts laid out on a low table like a rainbow that ends in black. Kenji stands on his stick, brace under his gi, as proud as a man can be. Kenji: \"I need one more judge for the black belts. You.\"",
+   "choices": [
+    {
+     "label": "\"Judge.\"",
+     "success": {
+      "text": "Kenji hands you a scoring card and a stub of pencil, and three candidates in white step onto the mat and bow to you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-black-belt-kenji-grading"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Spar the students.\"",
+     "success": {
+      "text": "Kenji calls three of his best. One at a time, one Pokémon each, quick and hard, while the whole room counts every round aloud.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kenji-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-black-belt-kenji"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Kenji's students beat you on grading day",
+         "importance": 60
+        }
+       ],
+       "chain": 3,
+       "name": "Kenji's Students",
+       "size": 1,
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "black-belt",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat three of Kenji's students on grading day",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Spar Kenji.\"",
+     "success": {
+      "text": "Kenji does not stand. He sits on his chair at the edge of the mat and fights through his Pokémon, calling every move a beat before you think of yours: Machoke, Hitmonlee, Hitmonchan. He is brilliant, and the whole room knows it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kenji-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-black-belt-kenji"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Kenji beat you without getting up",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "machoke",
+        "hitmonlee",
+        "hitmonchan"
+       ],
+       "name": "Black Belt Kenji",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "black-belt",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Kenji, who fought sitting down",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "chair",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-kenji-chair",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Three of the students in the front row are the ones you taught from the chair. They wave at you, then remember they are supposed to be serious."
+    },
+    {
+     "id": "pokemon",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-kenji-pokemon",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Machoke stands beside Kenji as his assistant instructor, wearing a black belt of its own."
+    },
+    {
+     "id": "trained",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-kenji-trained",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Kenji glances at your lead and checks its stance from across the room. Kenji: \"Good. You kept practising.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-black-belt-kenji-grading",
+   "name": "Black Belt Kenji: The Black Belts",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_blackbelt"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "Three candidates bow to the judges. Mika is fast and sure. Taro falls twice in the forms and gets straight back up both times. Little Sora barely makes a sound, and her Pokémon does not miss a single count. Kenji leans over. Kenji: \"One black belt left. Your call.\"",
+   "choices": [
+    {
+     "label": "\"Mika.\"",
+     "success": {
+      "text": "Mika bows so low her forehead touches the mat. Kenji ties the black belt on her himself, his hands steady. Afterwards he presses a Black Belt of his own into your hands, old and soft from years of wear.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kenji-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "black-belt",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You judged the black belts at Kenji's dojo",
+        "importance": 60
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-black-belt-kenji"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Taro.\"",
+     "success": {
+      "text": "Taro stares at you as if you have made a mistake, then realises you have not. Kenji: \"Good pick. He gets up.\" He gives you a Black Belt of his own, old and soft from years of wear.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kenji-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "black-belt",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You judged the black belts at Kenji's dojo",
+        "importance": 60
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-black-belt-kenji"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Sora.\"",
+     "success": {
+      "text": "Sora does not say anything. She holds the black belt in both hands for the rest of the afternoon. Kenji nods slowly and gives you a Black Belt of his own, old and soft from years of wear.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kenji-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "black-belt",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You judged the black belts at Kenji's dojo",
+        "importance": 60
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-black-belt-kenji"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-bug-catcher-wade",
+   "name": "Bug Catcher Wade: Tougher Than They Look",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-wade-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_bugcatcher"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A forest edge, sun coming through the leaves in bright coins. A boy with a net taller than he is holds up a jar with something buzzing furiously inside. Wade: \"Bugs are way tougher than they look!\" He hugs the jar to his chest. Wade: \"Everyone at school says they're gross. Watch.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Wade unscrews the jar. A Beedrill zips out, stingers up, and a Butterfree floats down from a branch where it was waiting all along.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-wade-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Wade's bugs were tougher than they looked",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "beedrill",
+        "butterfree"
+       ],
+       "name": "Bug Catcher Wade",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Wade's bugs at the forest edge",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Show me your favourite.\"",
+     "success": {
+      "text": "Wade's face lights up. He digs in his shirt pocket and brings out a tiny Weedle on his palm. Wade: \"This is Spike. He's going to be huge.\" Spike wiggles importantly. Then Wade tucks him away safe and sends out his Beedrill and Butterfree.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-wade-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-wade-spike",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Wade's bugs were tougher than they looked",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "beedrill",
+        "butterfree"
+       ],
+       "name": "Bug Catcher Wade",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Wade's bugs at the forest edge",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"They are gross.\"",
+     "success": {
+      "text": "Wade's face falls. He looks down at the jar for a long second. Then he sets his jaw and sends out his Beedrill and Butterfree anyway, and they fight harder than bugs have any right to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-wade-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-wade-hurt",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Wade's bugs were tougher than they looked",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "beedrill",
+        "butterfree"
+       ],
+       "name": "Bug Catcher Wade",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Wade's bugs at the forest edge",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-bug-catcher-wade-m2",
+   "name": "Bug Catcher Wade: The Bug Show",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-wade-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-wade-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_bugcatcher"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "A school fair: bunting, a cake stall, a bouncy castle full of shrieking. In the far corner stands a table with a hand-painted sign, BUG SHOW, and jars, and drawings, and a Butterfree asleep on a cushion. Nobody is at it. Wade sits behind it with his chin on his hands. Wade: \"Nobody's coming. It's because of the last kid who brought a Beedrill. It stung a teacher.\"",
+   "choices": [
+    {
+     "label": "\"I'll stand at your table.\"",
+     "success": {
+      "text": "You stand next to Wade, pick up a jar and look interested, which turns out to be all it takes. One kid wanders over, then three, then a crowd. By the end Wade is explaining moulting to a ring of children, his voice cracking with happiness.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-wade-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-wade-show",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Bring my Bug-types.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "bug"
+      }
+     ],
+     "success": {
+      "text": "You let your Bug-types out onto the table, and every one of them draws a new visitor: a kid who wants to touch, a dad who used to catch them, a girl who asks very serious questions. Wade keeps a tally on the back of his sign and runs out of room.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-wade-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-wade-show",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Find the teacher.\"",
+     "success": {
+      "text": "Wade goes pale. Wade: \"She'll still be cross.\" You go to find her anyway, through the fair crowd, toward the staff tent.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-wade-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-bug-catcher-wade-teacher"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "hurt",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-wade-hurt",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Wade sees you and looks away, fast. He will not look at you, not properly, until you help."
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-bug-catcher-wade-teacher",
+   "name": "Bug Catcher Wade: The Teacher",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_bugcatcher"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "The teacher is in the staff tent with a cup of tea and a small plaster on her hand. She knows exactly why you are here before you open your mouth.",
+   "choices": [
+    {
+     "label": "\"Ask her to visit the table.\"",
+     "success": {
+      "text": "She laughs. She was never cross with Wade at all. She walks back with you to the BUG SHOW and makes a great fuss of Spike, and suddenly everyone else wants to see too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-wade-teacher",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tell her about Wade.\"",
+     "success": {
+      "text": "You tell her about the jar and the net and how hard he worked on the sign. She puts down her tea. Five minutes later she is at his table, asking him to show her everything, and he does.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-wade-teacher",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-bug-catcher-wade-m3",
+   "name": "Bug Catcher Wade: Scyther",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-wade-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-wade-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_bugcatcher"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "The same forest edge, but Wade is taller now, his net traded for a proper bag. A Beedrill hums at his shoulder and, beside him, a Scyther stands like a green blade. Wade: \"Spike evolved all the way. And look who I caught.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Wade grins and sends them both: Spike the Beedrill, buzzing with pride, and the Scyther, which bows before it strikes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-wade-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-bug-catcher-wade"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Wade's Scyther cut you down to size",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "beedrill",
+        "scyther"
+       ],
+       "name": "Bug Catcher Wade",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "silver-powder",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Spike the Beedrill and Wade's Scyther",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Trade?\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "bug"
+      }
+     ],
+     "success": {
+      "text": "Wade thinks very hard. Then he nods. Wade: \"Okay. But you have to look after it like a bug person.\" Your Bug-type goes to him and his Scyther comes to you, still bowing.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "a Bug-type",
+         "type": "bug"
+        }
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "scyther"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-wade-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-bug-catcher-wade"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"How's school?\"",
+     "success": {
+      "text": "Wade: \"Bug Club has twelve people.\" He says it like he is announcing a championship. There is a badge on his bag with a Weedle on it. He gives you a pouch of Silver Powder, swept up after club meetings.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-wade-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "silver-powder",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-bug-catcher-wade"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "spike",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-wade-spike",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You remember Spike: a tiny Weedle on a boy's palm. The Beedrill at Wade's shoulder seems to remember you too."
+    },
+    {
+     "id": "teacher",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-wade-teacher",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Wade's old teacher sits on a stump nearby with a field guide. She runs Bug Club now, with him."
+    },
+    {
+     "id": "show",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-wade-show",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Wade has the old BUG SHOW sign tucked under his arm. Wade: \"Kept it. It's on the club door now.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-burglar-quinn",
+   "name": "Burglar Quinn: Finders Keepers",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-quinn-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_burglar"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A back alley behind a row of fine houses, all bins and drainpipes. A thin figure in a striped shirt sees you, drops a heavy sack with a clink, and holds both hands up, grinning. Quinn: \"Finders keepers, right?\" A Murkrow lands on a bin lid, eyeing the sack. Quinn: \"Battle me for the sack. You win, you keep what's in it.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Quinn snaps their fingers. The Murkrow hops down and a Sneasel drops off the gutter, claws out, both very much at home in an alley. If you win, the sack is yours, and there are two good things in it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Quinn kept the sack",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "murkrow",
+        "sneasel"
+       ],
+       "name": "Burglar Quinn",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nugget",
+          "pearl",
+          "big-pearl",
+          "star-piece"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nugget",
+          "pearl",
+          "big-pearl",
+          "star-piece"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "honest-kept-stolen",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You won Quinn's sack, and kept it",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Whose sack is that?\"",
+     "success": {
+      "text": "Quinn: \"Rich fella's. He won't miss it.\" They say it without a flicker. Then the Murkrow and the Sneasel are between you and the sack, and what to do with it will have to wait until after.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-quinn-asked",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Quinn kept the rich fella's sack",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "murkrow",
+        "sneasel"
+       ],
+       "name": "Burglar Quinn",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "npc-meet-burglar-quinn-sack"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Report you.\"",
+     "success": {
+      "text": "You turn toward the street to shout for help. Quinn is faster: over the wall, sack and all, the Murkrow cawing like laughter. A curtain twitches somewhere. You have the feeling Quinn will remember your face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-quinn-reported",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-burglar-quinn-sack",
+   "name": "Burglar Quinn: The Sack",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_burglar"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "The sack is yours by the rules of the alley. Inside: silver, a jewel box, and a few things worth a lot more than they look. Quinn shrugs. The rich fella's back gate is right there, unlatched.",
+   "choices": [
+    {
+     "label": "\"Keep it.\"",
+     "success": {
+      "text": "You heft the sack. Quinn grins as if you have passed some sort of test. You walk off two good things heavier, and not quite as light inside.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "pearl",
+         "big-pearl",
+         "star-piece"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "pearl",
+         "big-pearl",
+         "star-piece"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "honest-kept-stolen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Return it.\"",
+     "success": {
+      "text": "You knock at the back door and hand the sack to a startled maid. Quinn watches from the wall, head tilted, as if you are a puzzle. Quinn: \"Huh.\" That is all, but they keep looking back at you as they go.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-burglar-quinn-m2",
+   "name": "Burglar Quinn: The Job",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-quinn-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-quinn-m2",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "roster-quinn-reported",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_burglar"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "A rooftop at dusk, the slates still warm from the day. Quinn lies flat at the edge, Murkrow tucked under one arm, looking across at a mansion with every window lit. Quinn: \"That's where my sister works. Cleaner. They didn't pay her for three months.\" Their voice is very flat. Quinn: \"I'm getting her money. Just her money.\"",
+   "choices": [
+    {
+     "label": "\"Help.\"",
+     "success": {
+      "text": "Quinn looks at you sideways, then nods. Quinn: \"Quiet as you can. And we take what's owed, not a coin more.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-burglar-quinn-stealth"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Talk to the owner.\"",
+     "success": {
+      "text": "You walk up to the front door instead. The owner will not come down; he sends his butler, who peels off his gloves very slowly. Butler: \"The master is not receiving complaints.\" Whatever happens on the gravel, the neighbours are watching, and by morning the owner pays every coin he owes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-quinn-legal",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The butler beat you, but Quinn's sister got paid",
+         "importance": 60
+        }
+       ],
+       "name": "The Butler",
+       "size": 2,
+       "types": [
+        "normal"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the butler, and Quinn's sister got paid",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Stop them.\"",
+     "success": {
+      "text": "You put a hand on Quinn's shoulder. They are still for a long time. Then they let go of the roof edge. Quinn: \"Fine. Then I'm done here.\" By morning Quinn has left town, and the Murkrow with them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-quinn-stopped",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-quinn-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Quinn glances at you. Quinn: \"You asked whose sack it was. Nobody asks.\" It seems to have stayed with them."
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-burglar-quinn-m2-reported",
+   "name": "Burglar Quinn: The Job",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-quinn-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-quinn-m2",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "roster-quinn-reported",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_burglar"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "A rooftop at dusk, the slates still warm from the day. Quinn lies flat at the edge, looking across at a mansion with every window lit, and hears you climb up. Their face closes like a door. They do not say a word, and the Murkrow turns its back on you. Quinn will not talk until you say sorry.",
+   "choices": [
+    {
+     "label": "\"Sorry.\"",
+     "success": {
+      "text": "Quinn studies you for a long moment. Then they shift over to make room on the warm slates. Quinn: \"That's where my sister works. They didn't pay her for three months. I'm getting her money. Just her money.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-burglar-quinn-apology"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'd do it again.\"",
+     "success": {
+      "text": "Quinn nods slowly, as if that is the answer they expected. Quinn: \"Then we're done.\" They slide down the drainpipe and are gone into the dark. You never see them again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-quinn-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-burglar-quinn"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-burglar-quinn-apology",
+   "name": "Burglar Quinn: The Job",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_burglar"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "Quinn lies flat beside you at the roof edge, watching the lit windows of the mansion. Somewhere inside, their sister is mopping a floor she has not been paid for in three months.",
+   "choices": [
+    {
+     "label": "\"Help.\"",
+     "success": {
+      "text": "Quinn looks at you sideways, then nods. Quinn: \"Quiet as you can. And we take what's owed, not a coin more.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-burglar-quinn-stealth"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Talk to the owner.\"",
+     "success": {
+      "text": "You walk up to the front door instead. The owner will not come down; he sends his butler, who peels off his gloves very slowly. Butler: \"The master is not receiving complaints.\" Whatever happens on the gravel, the neighbours are watching, and by morning the owner pays every coin he owes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-quinn-legal",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The butler beat you, but Quinn's sister got paid",
+         "importance": 60
+        }
+       ],
+       "name": "The Butler",
+       "size": 2,
+       "types": [
+        "normal"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the butler, and Quinn's sister got paid",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Stop them.\"",
+     "success": {
+      "text": "You put a hand on Quinn's shoulder. They are still for a long time. Then they let go of the roof edge. Quinn: \"Fine. Then I'm done here.\" By morning Quinn has left town, and the Murkrow with them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-quinn-stopped",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-burglar-quinn-stealth",
+   "name": "Burglar Quinn: Through the Window",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_burglar"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "A servants' window, a loose latch, a dark corridor smelling of polish. Quinn knows exactly where the study is: the ledger in the desk, the cash box beside it. Footsteps creak somewhere above.",
+   "choices": [
+    {
+     "label": "\"Slip past the guard.\"",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You and Quinn move like shadows past the night guard's lamp. In the study Quinn counts out three months' wages to the coin, writes OWED across the ledger page, and leaves everything else exactly where it was.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-helped",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A floorboard shrieks and the guard's Growlithe starts barking, but Quinn already has the envelope. You go out of the window with exactly the owed amount and not a coin more, and end up laughing in the bushes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-helped",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Keep watch at the door.\"",
+     "success": {
+      "text": "You stand in the dark with your heart thudding while Quinn works. They are back in two minutes with one envelope: three months' wages, counted twice. Quinn: \"Not a coin more.\" They mean it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-helped",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-burglar-quinn-m3",
+   "name": "Burglar Quinn: Honest Work",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-quinn-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-quinn-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_burglar"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "A narrow locksmith's shop with a brand-new sign over the door, the paint barely dry. Keys hang from every wall like wind chimes. Quinn stands behind the counter in a clean apron, the Murkrow on a perch by the till. Quinn: \"Turns out knowing how to break in is how you know how to keep people out.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Quinn comes round the counter, wiping their hands. The Murkrow flaps down, and the Sneasel is gone: in its place stands a Weavile, sleek and sure of itself. Quinn: \"Weavile now. Grew up, like me.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-burglar-quinn"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Quinn's Weavile beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "murkrow",
+        "weavile"
+       ],
+       "name": "Burglar Quinn",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Quinn the locksmith",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Open a lock for me.\"",
+     "success": {
+      "text": "Quinn takes a ring of slim picks from under the counter and drops it into your hand. Quinn: \"Any locked chest in this region. Tell them I sent you.\" The picks are still warm from the till drawer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-quinn-free-locks",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-burglar-quinn"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"How's your sister?\"",
+     "success": {
+      "text": "Quinn does not answer; they just nod toward the back room. Their sister is there, laughing at something on the radio, flour on her sleeves and a key of her own on a ribbon round her neck. Quinn watches her as if they are still keeping lookout.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-quinn-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-burglar-quinn"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "helped",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-quinn-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Framed behind the counter hangs a page torn from a ledger, with OWED written across it in Quinn's hand."
+    },
+    {
+     "id": "legal",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-quinn-legal",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A receipt is pinned by the till: three months' wages, signed by a very grumpy owner. Quinn: \"My sister wanted it framed. I said pinned is fine.\""
+    },
+    {
+     "id": "stopped",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-quinn-stopped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Quinn shrugs at the strange town outside the window. Quinn: \"You were right to stop me. Annoying, but right.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-camper-liam",
+   "name": "Camper Liam: Under the Stars",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-liam-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_camper"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A campsite in a clearing, the tent pitched a little crooked. A boy in a scout scarf crouches over a ring of stones, poking at a fire that will not light: smoke, and no flame. A Sandshrew watches him with deep sympathy. Liam: \"Nothing beats a night under the stars.\" He blows on the kindling. It goes out. Liam: \"Once I get the fire going. Any second now.\"",
+   "choices": [
+    {
+     "label": "\"Light it for him.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "Your Fire-type sniffs the kindling, sneezes once, and the whole stack catches with a soft whump. Liam stares, then laughs and shakes your hand with both of his. Liam: \"Stay! There's beans!\" You rest by his fire, free, and your team sleeps warm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-liam-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Liam gives up on the fire with obvious relief. Liam: \"Battle's easier than kindling.\" A Growlithe bounds out of the tent barking, and the Sandshrew rolls after it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-liam-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Liam beat you, even without a fire",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "growlithe",
+        "sandshrew"
+       ],
+       "name": "Camper Liam",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Liam by his unlit fire",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Show him how.\"",
+     "success": {
+      "text": "You kneel beside him and rebuild it: tinder small, twigs crossed, room for air. Liam copies every move with his tongue between his teeth, and on the second try the flame takes. He writes it all down in a notebook. You have a feeling your next rest will go better for it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-liam-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-liam-taught",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-camper-liam-m2",
+   "name": "Camper Liam: Lost Scout",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-liam-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-liam-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_camper"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "Night, and cold. Liam stands alone at a fork in the path, holding a map upside down under a torch with a dying battery. His scarf is crooked and his Growlithe is pressed against his legs. Liam: \"My troop went on without me. I said I knew the way.\" He tries to sound as if it does not matter. It matters.",
+   "choices": [
+    {
+     "label": "\"Walk him back.\"",
+     "success": {
+      "text": "You turn his map the right way up. Liam: \"...Oh.\" You set off together down the dark path, Growlithe trotting in front with its tail up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-liam-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-camper-liam-trail"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Camp here together.\"",
+     "success": {
+      "text": "You build a fire and share what food you have, and your team rests. Late in the night, eyes shine at the edge of the firelight: a wild Pokémon, curious and close. Liam stands up in front of you, shaking, arms out, and it stares at him and backs away. He sleeps very well after that, and so do you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-liam-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-liam-camped",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let him find it.\"",
+     "success": {
+      "text": "You show him the stars, and how to find north by them, and then you step back. He goes off alone with his chin up. Much later, from far down the valley, you hear a whistle and a whole troop cheering. He got there late, and proud.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-liam-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-liam-alone",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "taught",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-liam-taught",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He has a fire going this time, small and neat, built exactly the way you showed him. Even now, he is very proud of it."
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-camper-liam-trail",
+   "name": "Camper Liam: The Dark Trail",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_camper"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "The trail winds down into pine forest. Every snapped twig makes Liam jump. His Growlithe has its nose to the ground, following the troop's scent, and keeps looking back to check you are both still there.",
+   "choices": [
+    {
+     "label": "\"Let Growlithe lead.\"",
+     "success": {
+      "text": "Growlithe takes the lead and never once loses the scent. Liam follows it with his hand on its back, and by the second mile he is walking taller.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-camper-liam-troop"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Sing a camp song.\"",
+     "success": {
+      "text": "You sing, badly. Liam knows all the words and corrects you. By the third verse he has forgotten to be scared.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-camper-liam-troop"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-camper-liam-troop",
+   "name": "Camper Liam: The Troop",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_camper"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "Lanterns in the trees, a ring of tents, and a troop leader with a whistle pacing at the edge of camp. She stops when she sees Liam. Then she runs.",
+   "choices": [
+    {
+     "label": "\"Hand him over.\"",
+     "success": {
+      "text": "The troop leader hugs Liam so hard his cap falls off, then shakes your hand and will not let go. Troop Leader: \"Thank you. Truly.\" The whole troop cheers you into camp for cocoa.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-liam-escorted",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Say he led the way.\"",
+     "success": {
+      "text": "You tell the leader Liam found the trail himself. Liam goes red to the ears and says nothing, which is exactly right. The troop leader thanks you anyway, quietly, with a look that says she knows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-liam-escorted",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-camper-liam-m3",
+   "name": "Camper Liam: Troop Leader",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-liam-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-liam-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_camper"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "A campsite with a ring of little kids in scout scarves, all watching one boy. It is Liam, taller now, with a leader's badge on his scarf and an Arcanine lying beside him like a rug. He spots you, comes over fast, and whispers. Liam: \"I'm the leader now. Don't tell them I got lost.\"",
+   "choices": [
+    {
+     "label": "\"I won't.\"",
+     "success": {
+      "text": "Liam grins, the same grin as the night by the fire that would not light. He presses a Fire Stone into your hand, warm from his pocket, and goes back to his troop a little taller.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-liam-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "fire-stone",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-camper-liam"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Liam turns to his troop. Liam: \"Watch carefully. This is how it's done.\" His Arcanine rises, huge and golden, and a Sandslash rolls out beside it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-liam-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-camper-liam"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Liam beat you in front of his whole troop",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "arcanine",
+        "sandslash"
+       ],
+       "name": "Camper Liam",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "fire-stone",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Liam in front of his whole troop",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Teach them something.\"",
+     "success": {
+      "text": "You teach the troop to build a fire that lights the first time. Liam takes notes with them, very seriously, then tells them the trick is his. For the rest of the region, every rest you take is a little warmer. He gives you a Fire Stone for the lesson.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-liam-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "fire-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-liam-rest-healing",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-camper-liam"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "escorted",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-liam-escorted",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The troop leader from that night waves from her tent. She has made Liam her second-in-command."
+    },
+    {
+     "id": "camped",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-liam-camped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Liam is telling his troop a story about a wild Pokémon in the dark, and a scout who stood up to it. He winks at you."
+    },
+    {
+     "id": "alone",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-liam-alone",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The troop's flag has a new motto stitched on it: GET THERE PROUD. Liam says it was his idea."
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-channeler-hester",
+   "name": "Channeler Hester: Behind You",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-hester-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_channeler"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A graveyard gate at night, the iron cold and beaded with mist. An old woman in layered robes sways in front of it, eyes half shut, a string of little bells at her wrist. She stops swaying the moment you come near. Hester: \"I feel something behind you…\" You turn. Nothing. Only the path and the dark trees. Hester: \"No. Not that kind. Something you lost.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Hester's bells shiver though she has not moved. A Haunter rises out of the gate itself, grinning, and a Misdreavus drifts down from a headstone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hester-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Hester's ghosts beat you at the graveyard gate",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "haunter",
+        "misdreavus"
+       ],
+       "name": "Channeler Hester",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Hester's ghosts at the graveyard gate",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"What did I lose?\"",
+     "success": {
+      "text": "Hester takes your hand in both of hers. Her fingers are icy. She is quiet a long time, and then, if you have ever let a Pokémon go or lost one on the road, she says the name of its kind, softly, and your throat tightens. Then she lets you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hester-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-hester-named",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Walk away.\"",
+     "success": {
+      "text": "You walk. Behind you, not loudly, Hester calls after you. Hester: \"It's following you anyway.\" You do not look back. You almost do.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-channeler-hester-m2",
+   "name": "Channeler Hester: The Real Ghost",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-hester-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-hester-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_channeler"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "Hester's cottage, a lamp lit in every window. She opens the door before you knock, and she is not swaying now; she is frightened. Behind her, plates lift off the dresser one by one and drift slowly around the room. Hester: \"I've been pretending. Thirty years. Now there's a real one and I can't make it go.\"",
+   "choices": [
+    {
+     "label": "\"Find out what it wants.\"",
+     "success": {
+      "text": "You sit at her table among the floating plates and wait. After a long while a Shuppet peeks out of the teapot. It drifts upward, again and again, toward the attic hatch. It wants something up there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hester-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-channeler-hester-attic"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle it.\"",
+     "success": {
+      "text": "You call your team. Something small and dark shrieks out of the teapot and the plates come down like rain. Hester covers her ears. It will flee rather than be beaten, and the house will stay as haunted as before.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hester-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-hester-fought",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "shuppet"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "The Shuppet fled, but Hester's house stayed haunted",
+         "importance": 60
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The Shuppet in Hester's house drove you off",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "Hester watches you go from the doorway, a plate hovering over her shoulder. A week later there is a SOLD sign on the gate. She has moved out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hester-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-hester-moved",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-channeler-hester-attic",
+   "name": "Channeler Hester: The Attic",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_channeler"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "The attic hatch sticks, then gives. Dust, trunks, hat boxes: thirty years of a channeler's props, crystal balls and fake candles and a plaster skull with a chipped nose. Shuppet hovers at your shoulder, trembling with hope.",
+   "choices": [
+    {
+     "label": "\"Search the trunks.\"",
+     "success": {
+      "text": "Robes, letters, a bundle of old bells. Not here. Shuppet droops, then points deeper, under the eaves where the roof comes down low.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-channeler-hester-doll"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Follow Shuppet.\"",
+     "success": {
+      "text": "Shuppet drifts past every trunk without a glance, deeper into the attic, to where the roof slopes down and the dust is oldest.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-channeler-hester-doll"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-channeler-hester-doll",
+   "name": "Channeler Hester: The Lost Doll",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_channeler"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "Under the eaves, behind a broken rocking horse, sits a cardboard box marked in a child's hand. Inside is a rag doll with button eyes and a stitched smile, wrapped in a baby blanket. Hester comes up the ladder behind you and goes very still. Hester: \"That was mine. When I was small.\"",
+   "choices": [
+    {
+     "label": "\"Give the doll to Shuppet.\"",
+     "success": {
+      "text": "Shuppet wraps itself around the doll and goes perfectly quiet. Downstairs, every plate settles back on the dresser with a tiny clink. Hester sits down in the dust and cries, and Shuppet floats over and pats her head with the doll's hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hester-doll",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give the doll to Hester.\"",
+     "success": {
+      "text": "Hester holds the doll against her chest. Shuppet curls up on her shoulder, against the doll, and stays there. The plates downstairs settle one by one. Hester: \"Oh. It wasn't haunting me. It was keeping me company.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hester-doll",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-channeler-hester-m3",
+   "name": "Channeler Hester: Real Channeler",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-hester-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-hester-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_channeler"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "A small room with one candle and no props at all: no crystal ball, no plaster skull. Hester sits at a plain table, and at her shoulder floats a Banette, the Shuppet grown up. Hester: \"It stayed. Now I really do feel things.\" She does not sway. She does not need to.",
+   "choices": [
+    {
+     "label": "\"Read me.\"",
+     "success": {
+      "text": "Hester takes your hands and closes her eyes, and this time there is no swaying and no show. She tells you one true thing about the region ahead: where something hidden waits, off the road, for someone who knows to look.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hester-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-hester-reading",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-channeler-hester"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Hester stands. Banette rises from her shoulder with a grin full of zips, and a Mismagius fades out of the candle smoke beside it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hester-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-channeler-hester"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Hester's Banette and Mismagius beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "banette",
+        "mismagius"
+       ],
+       "name": "Channeler Hester",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Hester, a real channeler now",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Thank it.\"",
+     "success": {
+      "text": "You bow to Banette. It stares at you, then reaches inside itself, which is unsettling, and hands you a Spell Tag, still warm. Hester: \"It likes you. It doesn't like anyone.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hester-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "spell-tag",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-channeler-hester"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "named",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-hester-named",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Hester looks past you, at the space behind your shoulder, and her face softens. Hester: \"Your lost one's still with you. The reading will be about it.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"Read me.\"",
+       "success": {
+        "text": "Hester reads you, and it is all about the Pokémon you lost: its kind, and the place in the region ahead where others of its kind can still be found. You write it down with shaking hands.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-hester-done",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "flag",
+          "key": "roster-hester-reading-lost",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "recruit",
+          "trainer": "npc-channeler-hester"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "fought",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-hester-fought",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A teacup drifts past the window; the cottage is still a little haunted. Hester: \"It came back after you fought it. It forgave you, I think.\""
+    },
+    {
+     "id": "moved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-hester-moved",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "This is a new house, smaller, at the other end of the region. Hester: \"It followed me here. Of course it did.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cool-couple-leon-and-sky",
+   "name": "Cool Couple Leon and Sky: Stylish and Strong",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-couple-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_coolcouple"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A seaside promenade, gulls and ice-cream carts. Two trainers in matching red jackets lean against the railing in a pose they have obviously practised, sunglasses on, collars up. Sky: \"Stylish and strong, that's us.\" Leon pushes his sunglasses up into his hair. Leon: \"Doubles. You and whoever you've got.\" At their feet, a Plusle and a Minun high-five.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Leon and Sky step apart in perfect time. Plusle and Minun spark at each other and leap onto the field together, sharing every charge.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Leon and Sky beat you, stylishly",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "plusle",
+        "minun"
+       ],
+       "format": "doubles",
+       "name": "Cool Couple Leon and Sky",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Leon and Sky in a double battle",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Who's stronger?\"",
+     "success": {
+      "text": "They both say \"Me\" at exactly the same moment, and glare at each other over their sunglasses. The battle starts badly for them: Plusle and Minun keep going after different targets, each trainer calling their own plan and ignoring the other.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-couple-tension",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Leon and Sky beat you, stylishly",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "plusle",
+        "minun"
+       ],
+       "format": "doubles",
+       "name": "Cool Couple Leon and Sky",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Leon and Sky in a double battle",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Not today.\"",
+     "success": {
+      "text": "Sky shrugs, unbothered. Leon is already fixing his collar for the next challenger. They hold the pose until you are out of sight.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cool-couple-leon-and-sky-m2",
+   "name": "Cool Couple Leon and Sky: Separate Jackets",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-couple-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-couple-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_coolcouple"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "A bench by the road. Leon sits alone, no sunglasses, in a plain blue jacket that matches nothing. His Plusle sits at the far end of the bench, staring down the road. Leon: \"We split. She says I never let her lead.\" He picks at a thread on his cuff. Somewhere two bends further on, you suspect, Sky is sitting alone too.",
+   "choices": [
+    {
+     "label": "\"Talk to the other one.\"",
+     "success": {
+      "text": "Leon looks up, startled, then hopeful, then cross with himself for hoping. Leon: \"Tell her... no. Wait. Let me think what to say.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-cool-couple-leon-and-sky-leon-message"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle them alone.\"",
+     "success": {
+      "text": "Leon shrugs and stands. His Plusle hops down, sparks fizzing, looking round for the Minun that is not there. Alone, they are clumsier than you remember. Two bends of the road later, you will find Sky.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-couple-apart",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-cool-couple-leon-and-sky-sky"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Leon beat you, even on his own",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "plusle"
+       ],
+       "name": "Leon",
+       "size": 1,
+       "types": [],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Leon on his own",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Stay out of it.\"",
+     "success": {
+      "text": "You wish him luck and walk on. Leon nods as if he expected that. Two bends of the road later you can already see a green jacket on a wall ahead.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-couple-apart",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-cool-couple-leon-and-sky-sky"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cool-couple-leon-and-sky-leon-message",
+   "name": "Cool Couple Leon and Sky: Leon's Message",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_coolcouple"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "Leon thinks for a long time. He starts three sentences and finishes none of them. Then it all comes out at once: that he is sorry, that she always does this, and something daft about the jackets that makes you both laugh. Which part do you carry?",
+   "choices": [
+    {
+     "label": "\"That he's sorry.\"",
+     "success": {
+      "text": "You fold the apology up carefully, like a letter, and carry it two bends down the road.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-msg",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-cool-couple-leon-and-sky-sky"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"That she always does this.\"",
+     "success": {
+      "text": "Leon: \"Good. Tell her that.\" He does not look as if he thinks it is good. You carry the complaint two bends down the road.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-msg",
+        "amount": 2,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-cool-couple-leon-and-sky-sky"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The joke about the jackets.\"",
+     "success": {
+      "text": "Leon snorts. Leon: \"She'll hate that. She'll laugh, and she'll hate that.\" You carry the joke two bends down the road.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-msg",
+        "amount": 3,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-cool-couple-leon-and-sky-sky"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cool-couple-leon-and-sky-sky",
+   "name": "Cool Couple Leon and Sky: Separate Jackets",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_coolcouple"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "Two bends of the road later, Sky sits on a low wall in a green jacket, alone, her Minun asleep in her lap. She does not take her sunglasses off. Sky: \"He thinks matching is the same as together.\"",
+   "choices": [
+    {
+     "label": "\"Talk to the other one.\"",
+     "success": {
+      "text": "Sky is quiet a while. Then she pushes her sunglasses up into her hair. Sky: \"Fine. Take him something back.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-cool-couple-leon-and-sky-sky-message"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle them alone.\"",
+     "success": {
+      "text": "Sky sends out her Minun alone. It keeps glancing to its left, at the space where Plusle should be. Alone, it is slower than you remember.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-apart",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Sky beat you, even on her own",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "minun"
+       ],
+       "name": "Sky",
+       "size": 1,
+       "types": [],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Sky on her own",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Stay out of it.\"",
+     "success": {
+      "text": "You leave her to her wall and her thoughts. Leon and Sky stay apart; for this run, at least, they are two people in two jackets.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-apart",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tension",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-couple-tension",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Sky glances at you over her sunglasses. Sky: \"You noticed, didn't you.\" She almost smiles."
+    },
+    {
+     "id": "heard-sorry",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-couple-msg",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "You give her Leon's apology. Sky takes off her sunglasses for the first time. She says nothing, but she is listening."
+    },
+    {
+     "id": "heard-other",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-couple-msg",
+       "atLeast": 2,
+       "atMost": 3
+      }
+     ],
+     "notice": "You pass on Leon's words. Sky snorts, half annoyed and half not, and Minun wakes up to see what the fuss is about."
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cool-couple-leon-and-sky-sky-message",
+   "name": "Cool Couple Leon and Sky: Sky's Answer",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_coolcouple"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "Sky starts, stops, and starts again. She is sorry; he never listens; and there is the thing about the jackets that she cannot help laughing at. Which part do you carry back to Leon?",
+   "choices": [
+    {
+     "label": "\"That she's sorry.\"",
+     "success": {
+      "text": "You carry her apology back up the road. Leon hears it, and something in his shoulders lets go. But one apology is half a bridge, and he never sent his own; they stay apart, each a little less sure of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-apart",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"That he never listens.\"",
+     "success": {
+      "text": "You carry the complaint back. Leon hears it, opens his mouth to argue, and shuts it again. They stay apart.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-apart",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The joke about the jackets.\"",
+     "success": {
+      "text": "Leon laughs despite himself. Then he stops laughing. It was a good joke, but a joke is not an apology, and they stay apart.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-apart",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "both-sorry",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-couple-msg",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "You are already carrying Leon's apology. If she sends one back, that will make two.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"That she's sorry.\"",
+       "success": {
+        "text": "You carry her apology back two bends of the road. Leon listens, then runs, jacket flapping, all the way to the wall where Sky is already walking to meet him. Two apologies. They meet in the middle of the road, and neither of them is matching anything.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-couple-reconciled",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cool-couple-leon-and-sky-m3",
+   "name": "Cool Couple Leon and Sky: New Jackets",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-couple-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-couple-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_coolcouple"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "A promenade again, bright and busy. Leon and Sky are both here, but not together: each stands with a new partner, a stranger in a stranger's jacket, two pairs a little way apart along the railing. They both see you at once.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Leon and Sky step out with Ampharos and Altaria, and this time every move is coordinated: one calls, the other answers, and the two Pokémon move like a single thought.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-cool-couple-leon-and-sky"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Leon and Sky beat you, in step at last",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "ampharos",
+        "altaria"
+       ],
+       "format": "doubles",
+       "name": "Cool Couple Leon and Sky",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Leon and Sky, coordinated at last",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Tag with me.\"",
+     "success": {
+      "text": "Sky elbows Leon. Leon elbows her back. In the end one of them falls in beside you for your next double battle, jacket and all, already arguing tactics.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "wandererFriend",
+        "stages": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-cool-couple-leon-and-sky"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Congratulations.\"",
+     "success": {
+      "text": "They both go a little pink. Sky presses a Pecha Berry into your hand, and Leon presses another one on top, so it is fair. Sky: \"Each. We do things each now.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-couple-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 2
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-cool-couple-leon-and-sky"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "reconciled",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-couple-reconciled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A promenade again. Leon and Sky stand side by side at the railing in two jackets that do not match at all, one blue and one green, and somehow they look more like a pair than they ever did. An Ampharos and an Altaria lounge at their feet. Sky: \"We stopped matching. Better.\""
+    },
+    {
+     "id": "apart",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-couple-apart",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Leon nods to you from one end of the railing; Sky raises a hand from the other. They are polite to each other now, at least."
+    }
+   ]
+  }
+ ]
+}

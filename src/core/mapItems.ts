@@ -15,6 +15,7 @@ import type { CatalogEffect, CatalogEntry, Content, EncounterMod, Perk, Theme, T
 import { hooksOf } from './battle/held';
 import { runArchetype } from './archetypes';
 import { fishingRareTriesPerk, foodCount, hiddenItemChancePerk } from './trainerPerks';
+import { hiddenItemSightPerk } from './mentorWorld';
 import { findNode } from './map';
 import { hashSeed, Rng } from './rng';
 import type { PokemonInstance, RunState } from './state';
@@ -368,6 +369,20 @@ export function afterTrainerWin(content: Content, run: RunState, stock: readonly
   return found;
 }
 
+/** Linden's Notebook: the item when it works now (the region after the one it was given in), else null. */
+export function wildMovesItem(content: Content, run: MapItemRun & Pick<RunState, 'itemCounters'>): string | null {
+  const item = perkItem(content, run, 'wildMoves');
+  return item && run.itemCounters?.[WILD_MOVES_REGION] === (run.regionIndex ?? 0) ? item : null;
+}
+
+const WILD_MOVES_REGION = 'wild-moves-region';
+
+/** On reaching a new region: a Linden's Notebook not yet put to use starts working here, for this region only (mutates `run`). */
+export function startWildMovesRegion(content: Content, run: RunState): void {
+  if (!hasPerk(content, run, 'wildMoves') || run.itemCounters?.[WILD_MOVES_REGION] !== undefined) return;
+  run.itemCounters = { ...run.itemCounters, [WILD_MOVES_REGION]: run.regionIndex };
+}
+
 /** Money when the run reaches a new region (Pass Orb). */
 export function regionMoneyFromItems(content: Content, run: RunState): number {
   return perksOf(activePerks(content, run), 'regionMoney').reduce((sum, p) => sum + p.perk.amount * p.copies, 0);
@@ -409,17 +424,53 @@ export function markUsedThisStage(run: RunState, itemId: string): void {
   run.itemCounters = { ...run.itemCounters, [stageUseKey(run, itemId)]: 1 };
 }
 
+/** Why this stage hides an item: the Itemfinder, Looker's chance, or only Juno's lesson (seen when near); null for none. */
+function hiddenItemSource(content: Content, run: RunState): 'itemfinder' | 'looker' | 'sight' | null {
+  if (hasPerk(content, run, 'hiddenItem')) return 'itemfinder';
+  // Looker's perk: some stages hide an item with no Itemfinder.
+  const chance = hiddenItemChancePerk(runArchetype(content, run).modifiers);
+  if (chance > 0 && new Rng(hashSeed(`${run.seed}::looker-chance::${stageKey(run)}`)).float() < chance) return 'looker';
+  // Juno's lesson: every stage hides one, shown only once you are close (visibleHiddenItemNode).
+  return hiddenItemSightPerk(runArchetype(content, run).modifiers) > 0 ? 'sight' : null;
+}
+
 /** Itemfinder: the wild stop on this stage that hides a Bag item (picked by a generator of its own), or null. */
 export function hiddenItemNode(content: Content, run: RunState): string | null {
-  if (!run.stage) return null;
-  if (!hasPerk(content, run, 'hiddenItem')) {
-    // Looker's perk: some stages hide an item with no Itemfinder.
-    const chance = hiddenItemChancePerk(runArchetype(content, run).modifiers);
-    if (chance <= 0 || new Rng(hashSeed(`${run.seed}::looker-chance::${stageKey(run)}`)).float() >= chance) return null;
-  }
+  if (!run.stage || !hiddenItemSource(content, run)) return null;
   const wild = run.stage.map.nodes.filter((n) => n.kind === 'wild');
   if (wild.length === 0) return null;
   return new Rng(hashSeed(`${run.seed}::itemfinder::${stageKey(run)}`)).pick(wild).id;
+}
+
+/** Forward steps from where the player stands to each node of the stage (the next stops are 1 step away). */
+export function stepsAhead(stage: NonNullable<RunState['stage']>): Map<string, number> {
+  const steps = new Map<string, number>();
+  let frontier = stage.current === null ? stage.map.nodes.filter((n) => n.column === 1).map((n) => n.id) : [stage.current];
+  let d = stage.current === null ? 1 : 0;
+  while (frontier.length > 0) {
+    const next: string[] = [];
+    for (const id of frontier) {
+      if (steps.has(id)) continue;
+      steps.set(id, d);
+      next.push(...findNode(stage.map, id).next);
+    }
+    frontier = next;
+    d += 1;
+  }
+  return steps;
+}
+
+/**
+ * The hidden item the map marks with ✦, or null. The Itemfinder and Looker's perk show it from the start;
+ * with only Juno's lesson it shows once it is within the lesson's number of steps ahead.
+ */
+export function visibleHiddenItemNode(content: Content, run: RunState): string | null {
+  const node = hiddenItemNode(content, run);
+  if (!node || !run.stage) return null;
+  if (hiddenItemSource(content, run) !== 'sight') return node;
+  const range = hiddenItemSightPerk(runArchetype(content, run).modifiers);
+  const d = stepsAhead(run.stage).get(node);
+  return d !== undefined && d <= range ? node : null;
 }
 
 /** Itemfinder: when the player beats or catches the wild Pokémon at the hidden stop, a Bag item from the shop's middle third (mutates `run`). */
