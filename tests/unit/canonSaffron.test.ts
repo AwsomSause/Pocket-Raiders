@@ -38,18 +38,10 @@ describe('Saffron canon: the event graph', () => {
 
 describe('Route 25: The Angry Mankey', () => {
   const win = (id: string) => (room(id).choices[0]!.success.battle as { win: object[] }).win;
-  it('is five Mankey in a row with no healing: three, one, then a fifth that stands guard', () => {
-    expect(room('r25').choices[0]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: `${P}r25-1` });
-    expect(room('r25-1').choices[0]!.success.battle).toMatchObject({ kind: 'wild', species: ['mankey'], chain: 3 });
-    expect(room('r25-4').choices[0]!.success.battle).toMatchObject({ kind: 'wild', species: ['mankey'] });
-    expect(room('r25-5').choices[0]!.success.battle).toMatchObject({ kind: 'wild', species: ['mankey'], rule: { foeStands: 1 } });
-    for (const id of ['r25-1', 'r25-4', 'r25-5']) expect(JSON.stringify(room(id))).not.toContain('"heal"');
-  });
-  it("the thieves' camp is one node off the path, before or after the fight, and returns the food", () => {
-    expect(room('r25').choices[1]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: `${P}r25-camp` });
-    expect(win('r25-camp')).toContainEqual({ kind: 'flag', key: 'r25-food', amount: 1 });
-    expect(win('r25-camp-after')).toContainEqual({ kind: 'flag', key: 'r25-food', amount: 1 });
-    expect(room('r25-after').choices.some((c) => c.success.effects.some((e) => e.kind === 'addEvent' && e.eventId === `${P}r25-camp-after`))).toBe(true);
+  it('moved to Greenneedle gn.15: the Kanto gate opens its rooms (the gauntlet, or the camp first); the old rooms are retired', () => {
+    expect(room('r25').choices[0]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: 'gn-15-m1' });
+    expect(room('r25').choices[1]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: 'gn-15-camp' });
+    for (const id of ['r25-1', 'r25-4', 'r25-5', 'r25-camp', 'r25-camp-after', 'r25-thanks', 'r25-claim']) expect(room(id).disabled, id).toBe(true);
   });
   it('the reward is Mankey with Swords Dance and Mach Punch; with the food returned it starts fonder (Bond +2) and the troop is in the crowd', () => {
     for (const id of ['r25-thanks', 'r25-claim']) {

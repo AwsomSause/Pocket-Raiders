@@ -2,7 +2,7 @@
 // In Kanto the canon spaces at Vermilion and Saffron open the same stories (CANON_SPACES_KANTO_MOVED_TO_GREENNEEDLE.md: "The Greenneedle
 // version is the only version"); the old canon rooms are retired below (kept for saved runs).
 // Build: npm run co:build -- greenneedle-3   then   npm run co:gn
-import { $, at, ch, egg, eggMove, fight, flag, has, heal, hurt, item, join, leave, out, ptype, room, trainer, wild, type Json } from '../dsl.ts';
+import { $, at, ch, egg, eggMove, fight, flag, has, heal, hurt, item, join, leave, money, out, ptype, room, trainer, wild, type Json } from '../dsl.ts';
 import { bond, chIf, eitherWay, gev, gn, is, kindness, laterStage, leavePseudo, moment, not, notThisRegion, notThisStage, partyHas, pick, rm, roll, route, say, scene, setTo, stampRegion, stampStage, when, weighted, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
@@ -635,11 +635,137 @@ const gn14: Json[] = [
 ];
 const KANTO_LAB: Json = { ...gev('cs-kanto-saffron-labyrinth', "Sabrina's Labyrinth", lab({ stop: 'event', rarity: 'common', types: ['psychic', 'ghost'], pokemon: 'mr-mime', requires: [not('lab-entered')] }), LAB_INTRO, LAB_DOOR), canon: 'cs.kanto.saffron.labyrinth' };
 
-export const EVENTS: Json[] = [...gn11, KANTO_KAIJU, ...gn12, KANTO_MAIDEN, ...gn13, KANTO_FLIGHT, ...gn14, KANTO_LAB];
+// =====================================================================================================================
+// gn.15  ROUTE 25: THE ANGRY MANKEY  (step 6, must-see, instead of the battle, a red "!"; five Mankey in a row at A+1; the thieves' camp is a
+// side branch at the next step, or found first; one Mankey joins with Swords Dance and Mach Punch)
+// =====================================================================================================================
+const R25_TINT = '#6b4a3a';
+const r25 = (o: Json = {}): Json => ({ tint: R25_TINT, tags: ['Combat', 'Pokémon', 'Story'], pokemon: 'mankey', effect: 'none', ...o });
+const MANKEY_LINE = ['mankey', 'primeape', 'annihilape'];
+/** A gauntlet fight: a hungry Mankey at A+1. It fights for its troop and can't be caught; losing just sends you back down the road. */
+const troopFight = (win: Json[], o: Json = {}): Json => {
+  const { rule, ...rest } = o;
+  return { ...wild({ species: ['mankey'], lv: 1, win }), friendly: true, lose: [room('gn-15-driven')], ...rest, rule: { noCatch: true, ...((rule as Json | undefined) ?? {}) } };
+};
+const FOOD_BACK: Json[] = [flag('mankey-food-returned')];
+/** Food returned: before the gauntlet the fifth comes out alone and bows; after it, the four eat (and the Mankey with you is fonder). */
+const FOOD_HOME: Json[] = [
+  when('mankey-gauntlet', { min: 0, max: 0 }, [room('gn-15-bow')], 'You carry the sack back to the road. The screaming in the trees stops.'),
+  when('mankey-gauntlet', { min: 1 }, [{ kind: 'friendship', bond: 2, who: { species: MANKEY_LINE } }], 'The four sit up and eat. The fifth doesn\'t eat until they have.'),
+];
+const CAMP_INTRO = say(
+  '*Three trainers round a fire, with a sack of Berries the size of a barrel.*',
+  'Mankey fur is caught on the sack\'s drawstring. There\'s a week of rinds round the fire.',
+  '**A trainer:** "They\'re wild Pokémon. It\'s not stealing. It\'s foraging, second-hand."',
+);
+const R25_OPEN = say(
+  '*A screech. Then four more. The trees shake.*',
+  '*Five Mankey drop onto the road. Four are jumping, shrieking, beating the ground.*',
+  '*The fifth is standing still, in front of the other four, with its arms out.*',
+);
+const R25_DOOR: Json[] = [
+  ch('Face them.', out('You put your bag down and stand your ground. The four stop jumping. They come.', flag('mankey-met'), flag('mankey-gauntlet'), gn('ahead', { key: 'gn-15-camp' }), room('gn-15-m1'))),
+  ch('Find out why they\'re so angry.', out('You back away slowly, off the road. Behind the trees, there\'s smoke, and a trail of Berry rinds.', flag('mankey-met'), room('gn-15-camp'))),
+];
+/** Fed the starving Poochyena, or gave the Taken Egg back: the fifth has seen that look before. */
+const SEEN_THE_LOOK: Json[] = [is('fed-poochyena')];
+const SEEN_THE_EGG: Json[] = [is('egg-returned')];
+const WAITED: Json[] = [flag('mankey-waited'), flag('mankey-fifth-earned'), room('gn-15-reward')];
+const LOWERS = say(
+  '*It lowers its arms.*',
+  'It doesn\'t trust you. It watches every step you take. But it lets you pass, and it lets the four crawl back behind it.',
+);
+
+const gn15: Json[] = [
+  gev('gn-15-troop', 'Route 25: The Angry Mankey', r25({ stop: 'event', rarity: 'rare', forced: true, types: ['fighting'], requires: [not('mankey-met')] }), R25_OPEN, R25_DOOR),
+  rm('gn-15-camp', "Route 25: The Thieves' Camp", r25({ pokemon: 'meowth', tint: '#4a3a2a', requires: [not('mankey-food-returned')] }), CAMP_INTRO, [
+    ch('Take it back (a battle).', fight('You stand up into the firelight. Three trainers stand up too.', trainer('Three Trainers', { size: 3, team: ['meowth', 'raticate', 'sandshrew'], win: [...FOOD_BACK, ...FOOD_HOME] }))),
+    ch('Buy it back.', out('You count out ₽500. They shrug, and push the sack over with a foot.', $(-500), ...FOOD_BACK, ...FOOD_HOME), { requires: [money(500)] }),
+    ch('Ask them to carry it back themselves.', out(say(
+      'They know who you are. They look at each other. Then, sheepish, they lift the sack between them.',
+      'Five Mankey watch them the whole way back to the road. Nobody says anything.',
+    ), ...FOOD_BACK, flag('mankey-thieves-sorry'), ...FOOD_HOME), { requires: [is('rep', 3)] }),
+    ch('Leave it.', out('You leave them to their fire.',
+      when('mankey-gauntlet', { min: 0, max: 0 }, [flag('mankey-gauntlet'), gn('ahead', { key: 'gn-15-camp' }), room('gn-15-m1')], 'Back on the road, the Mankey are waiting. They come.'),
+    )),
+  ]),
+  rm('gn-15-m1', 'Route 25: The First', r25(), say(
+    'The first Mankey comes in low and screaming. It opens its mouth wider than its face.',
+    'There will be no healing between them. They won\'t give you time.',
+  ), [ch('Hold the line.', fight('It opens with a Screech. Your lead flinches; its guard drops.', troopFight([room('gn-15-m2')], { rule: { myStages: { def: -2 } } })))]),
+  rm('gn-15-m2', 'Route 25: The Second', r25(), say(
+    'The second doesn\'t wait for the first to get up. It\'s all claws and noise.',
+  ), [ch('Hold the line.', fight('It goes for you with Fury Swipes, over and over, like it\'s digging.', troopFight([room('gn-15-m3')], { foeMoves: ['fury-swipes'] })))]),
+  rm('gn-15-m3', 'Route 25: The Third', r25(), say(
+    'The third has something clutched to its chest. A Berry. One of theirs.',
+    'It hasn\'t eaten it. It\'s been saving it.',
+  ), [ch('Hold the line.', fight('Halfway through, it eats the Berry. It looks almost ashamed.', troopFight([room('gn-15-breath')], { held: 'sitrus-berry' })))]),
+  rm('gn-15-breath', 'Route 25: One Breath', r25(), say(
+    'Three are down. The fourth hangs back, just for a moment, to look at them.',
+    'It\'s the only breath you\'ll get.',
+  ), [ch('Take it.', out('You crouch with your team and breathe. It isn\'t much.', heal(0.25), room('gn-15-m4')))]),
+  rm('gn-15-m4', 'Route 25: The Fourth', r25(), say(
+    'The fourth watched the others fall. It isn\'t screaming any more. It comes in quiet, low and fast, aiming for the legs.',
+  ), [ch('Hold the line.', fight('A Low Kick, then another. It learned that from somewhere.', troopFight([room('gn-15-fifth')], { foeMoves: ['low-kick'] })))]),
+  rm('gn-15-fifth', 'Route 25: The Fifth', r25(), say(
+    'The four crawl back behind it. The fifth hasn\'t moved since the start.',
+    '*It stands in front of them, with its arms out.*',
+    'It doesn\'t attack. It\'s waiting to see what you do.',
+  ), [
+    ch('Attack it.', fight('It doesn\'t move out of the way. When it does fight back, it fights like a Primeape, and it\'s furious.', troopFight([flag('mankey-fifth-beaten'), room('gn-15-reward')], { levelBonus: 3, foeMoves: ['rage'], rule: { foeStands: 1, foeStages: { atk: 1, def: 1, spe: 1 } } }), flag('mankey-hit-fifth'))),
+    ch('Wait.', out(say(
+      '*It looks at you. It looks at the bag. It makes a small, tired sound.*',
+      '*The other four are thin. You can see that now.*',
+    ), room('gn-15-fifth-2')), {
+      branches: [
+        { when: SEEN_THE_LOOK, text: say('*It looks at you. It looks at the bag.*', 'Then it looks at your face, for a long time. It\'s seen that look before. You gave a starving Poochyena your lunch once, and it shows.', LOWERS), effects: WAITED },
+        { when: SEEN_THE_EGG, text: say('*It looks at you. It looks at the bag.*', 'Then it looks at your face, for a long time. It\'s seen that look before. You rolled a stolen Egg back to its parents once, and it shows.', LOWERS), effects: WAITED },
+      ],
+    }),
+  ]),
+  rm('gn-15-fifth-2', 'Route 25: The Fifth', r25(), say(
+    'It still has its arms out. They\'re shaking now. It\'s been holding them up for a long time.',
+  ), [
+    ch('Wait.', out(LOWERS, ...WAITED)),
+    ch('Attack it.', fight('It doesn\'t move out of the way. When it does fight back, it fights like a Primeape, and it\'s furious.', troopFight([flag('mankey-fifth-beaten'), room('gn-15-reward')], { levelBonus: 3, foeMoves: ['rage'], rule: { foeStands: 1, foeStages: { atk: 1, def: 1, spe: 1 } } }), flag('mankey-hit-fifth'))),
+  ]),
+  rm('gn-15-bow', 'Route 25: The Fifth', r25(), say(
+    'The gauntlet doesn\'t happen.',
+    '*The fifth walks out onto the road, alone. It looks at the sack. It looks at you.*',
+    '*It bows.*',
+  ), [ch('Bow back.', out('Behind it, in the trees, four thin Mankey are already eating.', flag('mankey-fifth-earned'), room('gn-15-reward')))]),
+  rm('gn-15-driven', 'Route 25: Driven Back', r25(), say(
+    'Your team goes down. The Mankey don\'t chase you. They just stand on the road until you\'re gone.',
+  ), [ch('Walk on.', out('Nobody joins you. Behind you, the screaming starts again, and then stops.', flag('mankey-driven')))]),
+  rm('gn-15-reward', 'Route 25: One of the Troop', r25(), say(
+    'The road\'s quiet. The troop is looking at you.',
+    'One Mankey steps out. It doesn\'t ask. It just stands next to your bag, the way the fifth stood in front of the four.',
+  ), [
+    ch('Let it come.', out('It falls in beside you. It already knows Swords Dance and Mach Punch, from somewhere.',
+      when('mankey-fifth-beaten', { min: 1 }, [], 'The four lie where they fell. The fifth, beaten, still drags itself in front of them. It\'s one of the four that comes. The fifth never joins anyone who hit it first.'),
+      when('mankey-fifth-earned', { min: 1 }, [flag('mankey-fifth-joined')], 'It\'s the fifth. It doesn\'t look back at the others. It knows they\'ll eat tonight.'),
+      when('mankey-food-returned', { min: 0, max: 0 }, [{ ...join({ species: ['mankey'] }), moves: ['swords-dance', 'mach-punch'] }]),
+      when('mankey-food-returned', { min: 1 }, [{ ...join({ species: ['mankey'] }), moves: ['swords-dance', 'mach-punch'], friendship: 10 }], 'Bond +2: it has seen you bring the food home.'),
+      when('mankey-gauntlet', { min: 1 }, [{ kind: 'canon', action: 'flawless', species: [] }]),
+      flag('kanto-mankey'), stampStage('mankey-at'))),
+    ch('Leave the troop together.', out('You shake your head. It goes back to the others. They make room for it.', flag('kanto-mankey'), stampStage('mankey-at'))),
+  ]),
+  gev('gn-15-grove', 'The Berry Grove', r25({ stop: 'event', rarity: 'uncommon', pokemon: 'mankey', tint: '#4f6a2a', tags: ['Story', 'Pokémon'], requires: [is('mankey-thieves-sorry'), laterStage('mankey-at'), not('mankey-grove')] }), say(
+    'A Berry grove, fenced with string and tin cans. Three trainers are sitting on the fence. You know them.',
+    '**A trainer:** "We guard it now. From people like us." They look embarrassed. "The Mankey come by for the windfalls."',
+  ), [
+    ch('Help them watch the fence.', fight('Someone\'s coming through the trees with an empty sack.', trainer('Berry Thieves', { size: 2, team: ['rattata', 'meowth'], friendly: true, win: [item('sitrus-berry', 2)] }), flag('mankey-grove'))),
+    ch('Wave and walk on.', out('They wave back. One of them is wearing a Mankey-fur hat, and looks very sorry about it.', flag('mankey-grove'))),
+  ]),
+];
+const KANTO_R25: Json = { ...gev('cs-kanto-saffron-r25', 'Route 25: The Angry Mankey', r25({ stop: 'event', rarity: 'common', types: ['fighting'], requires: [not('mankey-met')] }), R25_OPEN, R25_DOOR), canon: 'cs.kanto.saffron.route25' };
+
+export const EVENTS: Json[] = [...gn11, KANTO_KAIJU, ...gn12, KANTO_MAIDEN, ...gn13, KANTO_FLIGHT, ...gn14, KANTO_LAB, ...gn15, KANTO_R25];
 
 /** The old Kanto canon builds of these stories (moved to Greenneedle): kept for saved runs, never shown again. */
 export const REMOVE: string[] = [
   ...['n1', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7', 'goodbye'].map((n) => `cs-kanto-vermilion-flight-${n}`),
+  ...['r25-camp', 'r25-1', 'r25-4', 'r25-5', 'r25-after', 'r25-camp-after', 'r25-thanks', 'r25-claim'].map((n) => `cs-kanto-saffron-${n}`),
   ...['lab-lost', 'lab-ghost', 'lab-n1', 'lab-n2', 'lab-n3', 'lab-n4', 'lab-n5', 'lab-n6', 'lab-final', 'return-shuppet', 'return-duskull', 'return-drifloon', 'return-gastly'].map((n) => `cs-kanto-saffron-${n}`),
   'ev-sabrina-labyrinth',
   ...['square-a', 'square-b', 'lantern', 'tm1', 'tm2', 'tm3', 'tm4', 'tm5', 'tm6', 'tm7', 'tm8', 'swap', 'eggs', 'tea', 'n1', 'n2', 'n3', 'n4', 'n5', 'top'].map((n) => `cs-kanto-vermilion-maiden-${n}`),
@@ -657,6 +783,12 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'Always levels 5 to 20 inside', often: 'run', dressing: { kanto: 'Flight North', kantoStage: 'The road north of Vermilion (the canon space)', elsewhere: 'Flight North' },
     badge: 'None', note: 'No badge: a surprise. Kanto shows it through cs-kanto-vermilion-flight.',
   },
+  'gn-15-troop': {
+    gn: 'gn.15', shape: 'Single', earliest: 'A4', home: 6, window: [4, 9], sits: 'must-see', attaches: 'instead', tags: ['Interrupting Episode'],
+    level: 'A+1', often: 'run', badge: '!', dressing: { kanto: 'Route 25: The Angry Mankey', kantoStage: 'Route 25, on the way to Saffron (the canon space)', elsewhere: 'The Angry Mankey' },
+    note: 'Badge: a red "!". The thieves\' camp is a side stop on the next step (op `ahead`) or found first. Kanto shows it through cs-kanto-saffron-r25.',
+  },
+  'gn-15-grove': { gn: 'gn.15', shape: 'Single', earliest: 'A5', home: 8, window: [1, 20], sits: 'optional', tags: ['Afterstory'], level: 'A+0', often: 'run', note: 'Only when the thieves carried the food back (sorry).' },
   'gn-14-door': {
     gn: 'gn.14', shape: 'Door', earliest: 'A6', home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage', 'Mystery Episode', 'Companion Story'],
     level: "The ghost L10 to L40; Alakazam is the ghost's level +2", often: 'run', badge: '?', dressing: { kanto: "Sabrina's Labyrinth", kantoStage: 'Saffron (the canon space)', elsewhere: "Sabrina's Labyrinth" },

@@ -413,3 +413,101 @@ describe("gn.14 Sabrina's Labyrinth", () => {
     expect(content.events.get('gn-14-return')!.choices[0]!.success.effects).toContainEqual(expect.objectContaining({ kind: 'canon', action: 'ghostReturn' }));
   });
 });
+
+describe('gn.15 Route 25: The Angry Mankey', () => {
+  const troop = (seed: string, setup: (run: RunState) => void = () => {}) => {
+    const run = gnRun(seed);
+    setup(run);
+    open(run, 'gn-15-troop');
+    return run;
+  };
+  const recruit = (run: RunState) => (run.pending.find((p) => p.kind === 'caught') as { mon: RunState['party'][number] } | undefined)?.mon;
+  /** Fights 1 to 4 (each checked), up to the fifth. */
+  const toFifth = (seed: string, setup?: (run: RunState) => void): RunState => {
+    let run = choose(troop(seed, setup), 'gn-15-troop', 'Face them.').run;
+    const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+    for (const id of here.next) expect(run.stage!.map.nodes.find((n) => n.id === id)!.sides.some((s) => s.eventId === 'gn-15-camp')).toBe(true);
+    const m1 = choose(run, 'gn-15-m1', 'Hold the line.').run;
+    expect(m1.battle!.eventRule).toMatchObject({ noCatch: true, myStages: { def: -2 } });
+    expect(m1.battle!.enemyTeam[0]!.speciesId).toBe('mankey');
+    const m2 = choose(win(m1), 'gn-15-m2', 'Hold the line.').run;
+    expect(m2.battle!.enemyTeam[0]!.moves.map((m) => m.id)).toContain('fury-swipes');
+    const m3 = choose(win(m2), 'gn-15-m3', 'Hold the line.').run;
+    expect(m3.battle!.enemyTeam[0]!.held).toEqual({ 'sitrus-berry': 1 });
+    run = win(m3);
+    run.party[0]!.hp = 1;
+    run = choose(run, 'gn-15-breath', 'Take it.').run;
+    const quarter = maxHp(content, run.party[0]!) * 0.25;
+    expect(run.party[0]!.hp).toBeGreaterThanOrEqual(1 + Math.floor(quarter));
+    expect(run.party[0]!.hp).toBeLessThanOrEqual(1 + Math.ceil(quarter));
+    const m4 = choose(run, 'gn-15-m4', 'Hold the line.').run;
+    expect(m4.battle!.enemyTeam[0]!.moves.map((m) => m.id)).toContain('low-kick');
+    return win(m4);
+  };
+
+  it('a must-see gauntlet on step 6 (window 4 to 9), instead of the battle, with a red "!"', () => {
+    expect(content.coPlacement!.get('gn-15-troop')).toMatchObject({ home: 6, window: [4, 9], sits: 'must-see', attaches: 'instead', badge: 'own' });
+  });
+
+  it('four fights with no healing but one breath; waiting twice at the fifth lets you pass, and the fifth joins with Swords Dance and Mach Punch', () => {
+    let run = toFifth('r25-wait');
+    expect(scene(run, 'gn-15-fifth').labels).toEqual(['Attack it.', 'Wait.']);
+    run = choose(run, 'gn-15-fifth', 'Wait.').run;
+    run = choose(run, 'gn-15-fifth-2', 'Wait.').run;
+    expect(flagOf(run, 'mankey-waited')).toBe(1);
+    run = choose(run, 'gn-15-reward', 'Let it come.').run;
+    expect(flagOf(run, 'mankey-fifth-joined')).toBe(1);
+    const mon = recruit(run)!;
+    expect(mon.speciesId).toBe('mankey');
+    expect(mon.moves.map((m) => m.id)).toEqual(expect.arrayContaining(['swords-dance', 'mach-punch']));
+  });
+
+  it('attacking the fifth: it stands the first turn and uses Rage; one of the four joins, never the fifth; nobody fainted pays a Black Belt', () => {
+    const fight = choose(toFifth('r25-hit'), 'gn-15-fifth', 'Attack it.').run;
+    expect(fight.battle!.eventRule).toMatchObject({ foeStands: 1, foeStages: { atk: 1, def: 1, spe: 1 } });
+    expect(fight.battle!.enemyTeam[0]!.moves.map((m) => m.id)).toContain('rage');
+    const run = choose(win(fight), 'gn-15-reward', 'Let it come.');
+    expect(flagOf(run.run, 'mankey-fifth-joined')).toBe(0);
+    expect([run.text, ...run.changes].join(' ')).toMatch(/one of the four/);
+    expect(recruit(run.run)!.held).toEqual({ 'black-belt': 1 });
+  });
+
+  it('fed the Poochyena once: the fifth lowers its arms one turn sooner', () => {
+    const run = choose(toFifth('r25-pooch', (r) => setFlag(r, 'fed-poochyena')), 'gn-15-fifth', 'Wait.');
+    expect(run.text).toMatch(/Poochyena/);
+    expect(run.run.stage!.map.nodes.find((n) => n.id === run.run.stage!.current)!.sides.some((x) => !x.used && x.eventId === 'gn-15-reward')).toBe(true);
+  });
+
+  it("the thieves' camp first: buying the food back for ₽500 skips the gauntlet, the fifth bows and joins Bond +2; carrying it needs Reputation 3", () => {
+    let run = choose(troop('r25-camp'), 'gn-15-troop', 'Find out why they\'re so angry.').run;
+    run.money = 600;
+    expect(scene(run, 'gn-15-camp').labels).toEqual(['Take it back (a battle).', 'Buy it back.', 'Ask them to carry it back themselves.', 'Leave it.']);
+    run = choose(run, 'gn-15-camp', 'Buy it back.').run;
+    expect(run.money).toBe(100);
+    expect(flagOf(run, 'mankey-gauntlet')).toBe(0);
+    run = choose(run, 'gn-15-bow', 'Bow back.').run;
+    const base = createPokemon(content, 'mankey', 5, 'x').friendship;
+    run = choose(run, 'gn-15-reward', 'Let it come.').run;
+    expect(flagOf(run, 'mankey-fifth-joined')).toBe(1);
+    expect(recruit(run)!.friendship).toBeGreaterThanOrEqual(base + 10);
+    expect(recruit(run)!.held ?? {}).not.toHaveProperty('black-belt');
+    const sorry = choose(troop('r25-sorry', (r) => setFlag(r, 'rep', 3)), 'gn-15-troop', 'Find out why they\'re so angry.').run;
+    expect(flagOf(choose(sorry, 'gn-15-camp', 'Ask them to carry it back themselves.').run, 'mankey-thieves-sorry')).toBe(1);
+  });
+
+  it('the camp after the fight: the four eat, the fifth waits, and the Mankey with you grows fonder; sorry thieves guard a grove later', () => {
+    let run = choose(toFifth('r25-after'), 'gn-15-fifth', 'Attack it.').run;
+    run = choose(win(run), 'gn-15-reward', 'Let it come.').run;
+    const mon = recruit(run)!;
+    run.pending = [];
+    run.phase = 'map';
+    run.party.push(mon);
+    const before = mon.friendship;
+    open(run, 'gn-15-camp');
+    run.money = 600;
+    const after = choose(run, 'gn-15-camp', 'Buy it back.');
+    expect([after.text, ...after.changes].join(' ')).toMatch(/fifth doesn't eat until they have/);
+    expect(after.run.party.find((m) => m.uid === mon.uid)!.friendship).toBeGreaterThan(before);
+    expect(content.events.get('gn-15-grove')!.requires).toContainEqual(expect.objectContaining({ key: 'mankey-thieves-sorry' }));
+  });
+});

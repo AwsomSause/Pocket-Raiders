@@ -468,6 +468,49 @@
   ],
   "tags": []
  },
+ "gn-15-troop": {
+  "gn": "gn.15",
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 6,
+  "window": [
+   4,
+   9
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "level": "A+1",
+  "often": "run",
+  "badge": "!",
+  "dressing": {
+   "kanto": "Route 25: The Angry Mankey",
+   "kantoStage": "Route 25, on the way to Saffron (the canon space)",
+   "elsewhere": "The Angry Mankey"
+  },
+  "note": "Badge: a red \"!\". The thieves' camp is a side stop on the next step (op `ahead`) or found first. Kanto shows it through cs-kanto-saffron-r25.",
+  "kinds": [
+   "Interrupting Episode"
+  ],
+  "tags": []
+ },
+ "gn-15-grove": {
+  "gn": "gn.15",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 8,
+  "window": [
+   1,
+   20
+  ],
+  "sits": "optional",
+  "level": "A+0",
+  "often": "run",
+  "note": "Only when the thieves carried the food back (sorry).",
+  "kinds": [
+   "Afterstory"
+  ],
+  "tags": []
+ },
  "gn-14-door": {
   "gn": "gn.14",
   "shape": "Door",

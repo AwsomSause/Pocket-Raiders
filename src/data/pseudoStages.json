@@ -664,7 +664,7 @@
     {
       "id": "ps_route_25",
       "name": "Route 25: The Angry Mankey",
-      "entry": "cs-kanto-saffron-r25",
+      "entry": "cs-kanto-saffron-r25-camp",
       "themeId": "normal-fighting",
       "tint": "#4a3220",
       "mood": "rocky trail"

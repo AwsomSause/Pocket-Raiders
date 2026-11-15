@@ -188,6 +188,17 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'itemEach':
       addItem(run.inventory, e.key!, Math.max(1, run.party.length));
       return '';
+    // gn.15: a side branch at the next step (the thieves' camp): a stop for the event on every node the path can go to next.
+    case 'ahead': {
+      const here = run.stage?.map.nodes.find((n) => n.id === run.stage!.current);
+      if (!here || !content.events.has(e.key!)) return '';
+      for (const next of run.stage!.map.nodes.filter((n) => here.next.includes(n.id))) {
+        if (next.sides.some((x) => x.eventId === e.key && !x.used)) continue;
+        next.sides.push({ id: `event-ahead-${next.sides.length + 1}-${next.id}`, kind: 'event', used: false, eventId: e.key! });
+      }
+      if (run.itemCounters) delete run.itemCounters[`event-seen:${e.key!}`];
+      return '';
+    }
     case 'payBerry': {
       // gn.12: one held Berry is handed over (the first party Pokémon holding one, the first Berry by name).
       for (const m of run.party) {

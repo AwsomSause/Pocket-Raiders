@@ -1890,6 +1890,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     if (enemy.shiny) countShiny(run, enemy.speciesId);
     for (const [i, id] of (b.foeMoves ?? []).entries()) if (content.moves.has(id) && !enemy.moves.some((m) => m.id === id)) enemy.moves[Math.max(0, enemy.moves.length - 1 - i)] = { id, pp: content.moves.get(id)!.pp };
     if (b.look) enemy.look = b.look;
+    if (b.held && content.catalog.has(b.held)) enemy.held = { [b.held]: 1 };
     if (b.shadow) makeShadow(enemy, rollShadowHeart(content, new Rng(hashSeed(`${run.seed}::shadow-foe::${enemy.uid}`))));
     if (b.blissful) makeBlissful(content, enemy);
     // T4: a doubles / triples wild fight brings one or two more wild Pokémon, rolled by their own generator (old rolls stay the same).

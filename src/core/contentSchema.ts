@@ -3406,6 +3406,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     chain: z.number().int().min(1).max(3).default(1),
     /** The wild Pokémon knows these moves (replacing its last ones): Route 25's Primeape uses Rage. */
     foeMoves: z.array(z.string()).max(2).optional(),
+    /** Catalog Overhaul (Greenneedle): the wild Pokémon holds this item (gn.15's third Mankey carries a stolen Berry, and eats it). */
+    held: z.string().optional(),
     /** Anime Forms art for the foe (core/animeLooks.ts; the Squirtle Squad). Presentation only. */
     look: z.enum(ANIME_LOOKS).optional(),
     /** Beta 0.6: a named special Pokémon (dossier id, e.g. sv.rocket.roadblock) is the foe, so it fights with its signature trait. */

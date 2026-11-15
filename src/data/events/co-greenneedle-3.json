@@ -11,6 +11,14 @@
   "cs-kanto-saffron-lab-n4",
   "cs-kanto-saffron-lab-n5",
   "cs-kanto-saffron-lab-n6",
+  "cs-kanto-saffron-r25-1",
+  "cs-kanto-saffron-r25-4",
+  "cs-kanto-saffron-r25-5",
+  "cs-kanto-saffron-r25-after",
+  "cs-kanto-saffron-r25-camp",
+  "cs-kanto-saffron-r25-camp-after",
+  "cs-kanto-saffron-r25-claim",
+  "cs-kanto-saffron-r25-thanks",
   "cs-kanto-saffron-return-drifloon",
   "cs-kanto-saffron-return-duskull",
   "cs-kanto-saffron-return-gastly",
@@ -8233,6 +8241,1177 @@
     }
    ],
    "canon": "cs.kanto.saffron.labyrinth"
+  },
+  {
+   "id": "gn-15-troop",
+   "name": "Route 25: The Angry Mankey",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "types": [
+    "fighting"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mankey-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#6b4a3a",
+    "effect": "none"
+   },
+   "intro": "*A screech. Then four more. The trees shake.*\n\n*Five Mankey drop onto the road. Four are jumping, shrieking, beating the ground.*\n\n*The fifth is standing still, in front of the other four, with its arms out.*",
+   "choices": [
+    {
+     "label": "Face them.",
+     "success": {
+      "text": "You put your bag down and stand your ground. The four stop jumping. They come.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mankey-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mankey-gauntlet",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "ahead",
+        "key": "gn-15-camp"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-15-m1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find out why they're so angry.",
+     "success": {
+      "text": "You back away slowly, off the road. Behind the trees, there's smoke, and a trail of Berry rinds.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mankey-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-15-camp"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-15-camp",
+   "name": "Route 25: The Thieves' Camp",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mankey-food-returned",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "*Three trainers round a fire, with a sack of Berries the size of a barrel.*\n\nMankey fur is caught on the sack's drawstring. There's a week of rinds round the fire.\n\n**A trainer:** \"They're wild Pokémon. It's not stealing. It's foraging, second-hand.\"",
+   "choices": [
+    {
+     "label": "Take it back (a battle).",
+     "success": {
+      "text": "You stand up into the firelight. Three trainers stand up too.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "meowth",
+        "raticate",
+        "sandshrew"
+       ],
+       "name": "Three Trainers",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "mankey-food-returned",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "mankey-gauntlet",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-15-bow"
+          }
+         ],
+         "text": "You carry the sack back to the road. The screaming in the trees stops."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "mankey-gauntlet",
+         "min": 1,
+         "then": [
+          {
+           "kind": "friendship",
+           "bond": 2,
+           "who": {
+            "species": [
+             "mankey",
+             "primeape",
+             "annihilape"
+            ]
+           }
+          }
+         ],
+         "text": "The four sit up and eat. The fifth doesn't eat until they have."
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Buy it back.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "You count out ₽500. They shrug, and push the sack over with a foot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "mankey-food-returned",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mankey-gauntlet",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-15-bow"
+         }
+        ],
+        "text": "You carry the sack back to the road. The screaming in the trees stops."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mankey-gauntlet",
+        "min": 1,
+        "then": [
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": {
+           "species": [
+            "mankey",
+            "primeape",
+            "annihilape"
+           ]
+          }
+         }
+        ],
+        "text": "The four sit up and eat. The fifth doesn't eat until they have."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask them to carry it back themselves.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rep",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "They know who you are. They look at each other. Then, sheepish, they lift the sack between them.\n\nFive Mankey watch them the whole way back to the road. Nobody says anything.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mankey-food-returned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mankey-thieves-sorry",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mankey-gauntlet",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-15-bow"
+         }
+        ],
+        "text": "You carry the sack back to the road. The screaming in the trees stops."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mankey-gauntlet",
+        "min": 1,
+        "then": [
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": {
+           "species": [
+            "mankey",
+            "primeape",
+            "annihilape"
+           ]
+          }
+         }
+        ],
+        "text": "The four sit up and eat. The fifth doesn't eat until they have."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave them to their fire.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mankey-gauntlet",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "mankey-gauntlet",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "ahead",
+          "key": "gn-15-camp"
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-15-m1"
+         }
+        ],
+        "text": "Back on the road, the Mankey are waiting. They come."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-15-m1",
+   "name": "Route 25: The First",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#6b4a3a",
+    "effect": "none"
+   },
+   "intro": "The first Mankey comes in low and screaming. It opens its mouth wider than its face.\n\nThere will be no healing between them. They won't give you time.",
+   "choices": [
+    {
+     "label": "Hold the line.",
+     "success": {
+      "text": "It opens with a Screech. Your lead flinches; its guard drops.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mankey"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-m2"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-driven"
+        }
+       ],
+       "rule": {
+        "noCatch": true,
+        "myStages": {
+         "def": -2
+        }
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-15-m2",
+   "name": "Route 25: The Second",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#6b4a3a",
+    "effect": "none"
+   },
+   "intro": "The second doesn't wait for the first to get up. It's all claws and noise.",
+   "choices": [
+    {
+     "label": "Hold the line.",
+     "success": {
+      "text": "It goes for you with Fury Swipes, over and over, like it's digging.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mankey"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-m3"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-driven"
+        }
+       ],
+       "foeMoves": [
+        "fury-swipes"
+       ],
+       "rule": {
+        "noCatch": true
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-15-m3",
+   "name": "Route 25: The Third",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#6b4a3a",
+    "effect": "none"
+   },
+   "intro": "The third has something clutched to its chest. A Berry. One of theirs.\n\nIt hasn't eaten it. It's been saving it.",
+   "choices": [
+    {
+     "label": "Hold the line.",
+     "success": {
+      "text": "Halfway through, it eats the Berry. It looks almost ashamed.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mankey"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-breath"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-driven"
+        }
+       ],
+       "held": "sitrus-berry",
+       "rule": {
+        "noCatch": true
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-15-breath",
+   "name": "Route 25: One Breath",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#6b4a3a",
+    "effect": "none"
+   },
+   "intro": "Three are down. The fourth hangs back, just for a moment, to look at them.\n\nIt's the only breath you'll get.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You crouch with your team and breathe. It isn't much.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-15-m4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-15-m4",
+   "name": "Route 25: The Fourth",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#6b4a3a",
+    "effect": "none"
+   },
+   "intro": "The fourth watched the others fall. It isn't screaming any more. It comes in quiet, low and fast, aiming for the legs.",
+   "choices": [
+    {
+     "label": "Hold the line.",
+     "success": {
+      "text": "A Low Kick, then another. It learned that from somewhere.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mankey"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-fifth"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-driven"
+        }
+       ],
+       "foeMoves": [
+        "low-kick"
+       ],
+       "rule": {
+        "noCatch": true
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-15-fifth",
+   "name": "Route 25: The Fifth",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#6b4a3a",
+    "effect": "none"
+   },
+   "intro": "The four crawl back behind it. The fifth hasn't moved since the start.\n\n*It stands in front of them, with its arms out.*\n\nIt doesn't attack. It's waiting to see what you do.",
+   "choices": [
+    {
+     "label": "Attack it.",
+     "success": {
+      "text": "It doesn't move out of the way. When it does fight back, it fights like a Primeape, and it's furious.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mankey-hit-fifth",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mankey"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "mankey-fifth-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-reward"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-driven"
+        }
+       ],
+       "foeMoves": [
+        "rage"
+       ],
+       "rule": {
+        "noCatch": true,
+        "foeStands": 1,
+        "foeStages": {
+         "atk": 1,
+         "def": 1,
+         "spe": 1
+        }
+       }
+      }
+     }
+    },
+    {
+     "label": "Wait.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "fed-poochyena",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "*It looks at you. It looks at the bag.*\n\nThen it looks at your face, for a long time. It's seen that look before. You gave a starving Poochyena your lunch once, and it shows.\n\n*It lowers its arms.*\n\nIt doesn't trust you. It watches every step you take. But it lets you pass, and it lets the four crawl back behind it.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "mankey-waited",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mankey-fifth-earned",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-reward"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "egg-returned",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "*It looks at you. It looks at the bag.*\n\nThen it looks at your face, for a long time. It's seen that look before. You rolled a stolen Egg back to its parents once, and it shows.\n\n*It lowers its arms.*\n\nIt doesn't trust you. It watches every step you take. But it lets you pass, and it lets the four crawl back behind it.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "mankey-waited",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mankey-fifth-earned",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-reward"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "*It looks at you. It looks at the bag. It makes a small, tired sound.*\n\n*The other four are thin. You can see that now.*",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-15-fifth-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-15-fifth-2",
+   "name": "Route 25: The Fifth",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#6b4a3a",
+    "effect": "none"
+   },
+   "intro": "It still has its arms out. They're shaking now. It's been holding them up for a long time.",
+   "choices": [
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "*It lowers its arms.*\n\nIt doesn't trust you. It watches every step you take. But it lets you pass, and it lets the four crawl back behind it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mankey-waited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mankey-fifth-earned",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-15-reward"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Attack it.",
+     "success": {
+      "text": "It doesn't move out of the way. When it does fight back, it fights like a Primeape, and it's furious.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mankey-hit-fifth",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mankey"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "mankey-fifth-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-reward"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-15-driven"
+        }
+       ],
+       "foeMoves": [
+        "rage"
+       ],
+       "rule": {
+        "noCatch": true,
+        "foeStands": 1,
+        "foeStages": {
+         "atk": 1,
+         "def": 1,
+         "spe": 1
+        }
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-15-bow",
+   "name": "Route 25: The Fifth",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#6b4a3a",
+    "effect": "none"
+   },
+   "intro": "The gauntlet doesn't happen.\n\n*The fifth walks out onto the road, alone. It looks at the sack. It looks at you.*\n\n*It bows.*",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "Behind it, in the trees, four thin Mankey are already eating.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mankey-fifth-earned",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-15-reward"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-15-driven",
+   "name": "Route 25: Driven Back",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#6b4a3a",
+    "effect": "none"
+   },
+   "intro": "Your team goes down. The Mankey don't chase you. They just stand on the road until you're gone.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Nobody joins you. Behind you, the screaming starts again, and then stops.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mankey-driven",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-15-reward",
+   "name": "Route 25: One of the Troop",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#6b4a3a",
+    "effect": "none"
+   },
+   "intro": "The road's quiet. The troop is looking at you.\n\nOne Mankey steps out. It doesn't ask. It just stands next to your bag, the way the fifth stood in front of the four.",
+   "choices": [
+    {
+     "label": "Let it come.",
+     "success": {
+      "text": "It falls in beside you. It already knows Swords Dance and Mach Punch, from somewhere.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mankey-fifth-beaten",
+        "min": 1,
+        "then": [],
+        "text": "The four lie where they fell. The fifth, beaten, still drags itself in front of them. It's one of the four that comes. The fifth never joins anyone who hit it first."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mankey-fifth-earned",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "mankey-fifth-joined",
+          "amount": 1
+         }
+        ],
+        "text": "It's the fifth. It doesn't look back at the others. It knows they'll eat tonight."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mankey-food-returned",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "mankey"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "moves": [
+           "swords-dance",
+           "mach-punch"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mankey-food-returned",
+        "min": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "mankey"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "moves": [
+           "swords-dance",
+           "mach-punch"
+          ],
+          "friendship": 10
+         }
+        ],
+        "text": "Bond +2: it has seen you bring the food home."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mankey-gauntlet",
+        "min": 1,
+        "then": [
+         {
+          "kind": "canon",
+          "action": "flawless",
+          "species": []
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mankey",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mankey-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the troop together.",
+     "success": {
+      "text": "You shake your head. It goes back to the others. They make room for it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-mankey",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mankey-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-15-grove",
+   "name": "The Berry Grove",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mankey-thieves-sorry",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "mankey-at"
+    },
+    {
+     "kind": "flag",
+     "key": "mankey-grove",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#4f6a2a",
+    "effect": "none"
+   },
+   "intro": "A Berry grove, fenced with string and tin cans. Three trainers are sitting on the fence. You know them.\n\n**A trainer:** \"We guard it now. From people like us.\" They look embarrassed. \"The Mankey come by for the windfalls.\"",
+   "choices": [
+    {
+     "label": "Help them watch the fence.",
+     "success": {
+      "text": "Someone's coming through the trees with an empty sack.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mankey-grove",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "team": [
+        "rattata",
+        "meowth"
+       ],
+       "name": "Berry Thieves",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "sitrus-berry",
+         "count": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wave and walk on.",
+     "success": {
+      "text": "They wave back. One of them is wearing a Mankey-fur hat, and looks very sorry about it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mankey-grove",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-saffron-r25",
+   "name": "Route 25: The Angry Mankey",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "types": [
+    "fighting"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mankey-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#6b4a3a",
+    "effect": "none"
+   },
+   "intro": "*A screech. Then four more. The trees shake.*\n\n*Five Mankey drop onto the road. Four are jumping, shrieking, beating the ground.*\n\n*The fifth is standing still, in front of the other four, with its arms out.*",
+   "choices": [
+    {
+     "label": "Face them.",
+     "success": {
+      "text": "You put your bag down and stand your ground. The four stop jumping. They come.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mankey-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mankey-gauntlet",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "ahead",
+        "key": "gn-15-camp"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-15-m1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find out why they're so angry.",
+     "success": {
+      "text": "You back away slowly, off the road. Behind the trees, there's smoke, and a trail of Berry rinds.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mankey-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-15-camp"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.saffron.route25"
   }
  ]
 }
