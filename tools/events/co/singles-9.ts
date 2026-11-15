@@ -192,7 +192,7 @@ const SF150: Json[] = [
     scene: { cast: [], effect: 'sparkle' },
     intro: 'The professor from last region comes hurrying up the road with a clipboard. "There you are! How is my prototype? Is it eating? Is it happy?"',
     choices: [
-      ch('Show it to her.', out('She checks its eyes, its paws, its readings, and then just sits and watches it for a while. "It\'s happy," she says quietly. "That\'s the result I hoped for." She leaves you a gift and a long list of notes.', any(...RARE), bondUp(1, { species: ['eevee', 'vaporeon', 'jolteon', 'flareon', 'espeon', 'umbreon', 'leafeon', 'glaceon', 'sylveon'] }), flag('professor-checkin-seen')), { branches: [{ when: [line('eevee', true)], text: 'The Eevee is not with you any more, and you tell her so. She nods slowly, and writes it down. "Thank you for telling me. Every result matters."', effects: [flag('professor-checkin-seen')] }] }),
+      ch('Show it to her.', out('She checks its eyes, its paws, its readings, and then just sits and watches it for a while. "It\'s happy," she says quietly. "That\'s the result I hoped for." She leaves you a gift and a long list of notes.', any('quick-claw', 'wide-lens', 'pp-up'), bondUp(1, { species: ['eevee', 'vaporeon', 'jolteon', 'flareon', 'espeon', 'umbreon', 'leafeon', 'glaceon', 'sylveon'] }), flag('professor-checkin-seen')), { branches: [{ when: [line('eevee', true)], text: 'The Eevee is not with you any more, and you tell her so. She nods slowly, and writes it down. "Thank you for telling me. Every result matters."', effects: [flag('professor-checkin-seen')] }] }),
     ],
   },
   {

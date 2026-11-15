@@ -15,6 +15,8 @@ const temp = (label: string, effects: Json[], battles = 3): Json => ({ kind: 'te
 const stagePrices = (value: number): Json => ({ kind: 'tempEffect', label: `Shop prices ×${value} this stage`, effects: [{ kind: 'priceMultiplier', group: 'all', value }], until: 'boss' });
 const relic = (id: string, name: string, effects: Json[]): Json => ({ kind: 'relic', id, name, effects });
 const rm = (id: string, name: string, group: string, intro: string, choices: Json[], o: Json = {}): Json => ({ id, name, group, room: true, scene: { cast: [], effect: 'none' }, ...o, intro, choices });
+/** The treasure chest's prize (the doc names no tier): an uncommon held item. */
+const TRAP_PRIZE = ['quick-claw', 'wide-lens', 'pp-up'];
 const RARE = ['leftovers', 'focus-sash', 'life-orb', 'choice-band', 'choice-specs', 'choice-scarf'];
 const EPIC = ['comet-shard', 'sacred-ash', 'poke-radar', 'super-rod', 'x-attack-6', 'x-speed-6'];
 const DOORS = ['rk-door-wood', 'rk-door-iron', 'rk-door-silver', 'rk-door-gold'];
@@ -131,8 +133,8 @@ const SF154: Json[] = [
     id: 'rk-treasure-trap',
     intro: 'Two chests in a dim cellar. A hooded figure leans against the wall between them. "One is treasure, one is a trap. I always lie, or I never do. Ask me one thing."',
     choices: [
-      ch('Which is the treasure?', out('"The left." You think about it: whether they lie or not, there is only one honest way to read that, and you work it out. You open the right chest, and it is the treasure.', any(...RARE))),
-      ch('Which would you open?', out('"If you asked me which I\'d open, I\'d say the left." Asked that way, the answer is honest whoever they are. You open the left chest, and it is the treasure.', any(...RARE))),
+      ch('Which is the treasure?', out('"The left." You think about it: whether they lie or not, there is only one honest way to read that, and you work it out. You open the right chest, and it is the treasure.', any(...TRAP_PRIZE))),
+      ch('Which would you open?', out('"If you asked me which I\'d open, I\'d say the left." Asked that way, the answer is honest whoever they are. You open the left chest, and it is the treasure.', any(...TRAP_PRIZE))),
     ],
   },
   {

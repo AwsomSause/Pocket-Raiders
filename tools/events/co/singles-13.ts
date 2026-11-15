@@ -34,7 +34,7 @@ const SF159: Json[] = [
   wk('berry-bonanza', 'Berry Bonanza', '**"Berries by the barrel!"** Carts piled so high with Berries that they roll off into the road, and your team chases every one.', [
     ch('Stock up.', out('You fill your bag, and your team fills their cheeks. Berries are half price in every shop this region.', week('Berry Bonanza: Berries half price', [{ kind: 'priceMultiplier', items: BERRIES, value: 0.5 }]))),
   ]),
-  wk('held-item-hurricane', 'Held-Item Hurricane', '**"Hold onto your hats!"** A freak wind is blowing through the markets, and it is raining held items. Printed on the warning sign: 3 in 5 common, 2 in 5 rare.', [
+  wk('held-item-hurricane', 'Held-Item Hurricane', '**"Hold onto your hats!"** A freak wind is blowing through the markets, and it is raining held items. Printed on the warning sign: 3 in 4 uncommon, 1 in 4 rare.', [
     ch('Catch one.', out('You run into the wind with your arms out and catch something as it tumbles past. The wind is not done: it will blow through again further down the road.', any('quick-claw', 'wide-lens', 'scope-lens', 'leftovers', 'life-orb'), { kind: 'laterEvent', eventId: 'wk-hurricane-again', nodes: 5 })),
   ]),
   wk('coupon-week', 'Coupon Week', '**"Every purchase comes with a coupon for the next!"** The shopkeepers are handing out slips of paper with everything, and your pockets fill up fast.', [
@@ -191,7 +191,7 @@ const SF160: Json[] = [
 const ROOMS: Json[] = [
   {
     id: 'wk-hurricane-again', name: 'The Wind Returns', group: 'Calendar weeks', room: true, scene: { cast: [], effect: 'none' },
-    intro: 'The wind is back, and it is raining held items again. Same odds: 3 in 5 common, 2 in 5 rare.',
+    intro: 'The wind is back, and it is raining held items again. Same odds: 3 in 4 uncommon, 1 in 4 rare.',
     choices: [ch('Catch one.', out('You catch another one as it whirls past. That is the last of the storm.', any('quick-claw', 'wide-lens', 'scope-lens', 'leftovers', 'life-orb')))],
   },
   {
