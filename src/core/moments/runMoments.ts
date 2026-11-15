@@ -4,6 +4,7 @@
 
 import { displayName } from '../care';
 import { TYPE_NAMES, type Content } from '../contentSchema';
+import { bondFriendship } from '../co/who';
 import { changeFriendship } from '../friendship';
 import { addItem } from '../items';
 import { typeEffectiveness } from '../battle/damage';
@@ -46,6 +47,8 @@ export function restMoments(content: Content, run: RunState): string[] {
       if (!plays(run, m, mon)) continue;
       const fx = m.effect;
       if (fx.friendship) changeFriendship(content, mon, fx.friendship);
+      if (fx.bond) changeFriendship(content, mon, bondFriendship(content, fx.bond, 'picked'));
+      if (fx.cure) mon.status = null;
       if (fx.teamFriendship) for (const p of run.party) changeFriendship(content, p, fx.teamFriendship);
       if (fx.freeBerry) addItem(run.inventory, BERRIES[Math.floor(new Rng(hashSeed(`${run.seed}:pmoment:${m.id}:${mon.uid}:berry`)).float() * BERRIES.length)]!, 1);
       let extra = '';

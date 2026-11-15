@@ -14,7 +14,7 @@ import { Rng, hashSeed } from '../rng';
 import type { Content, Species } from '../contentSchema';
 import type { PokemonInstance } from '../state';
 
-export const MOMENT_TRIGGERS = ['runEnd', 'lethal', 'faint', 'ally', 'start', 'low', 'ko', 'enter', 'super', 'crit', 'weather', 'status', 'rest', 'catch'] as const;
+export const MOMENT_TRIGGERS = ['runEnd', 'lethal', 'faint', 'ally', 'start', 'low', 'ko', 'enter', 'super', 'crit', 'weather', 'status', 'rest', 'catch', 'turn'] as const;
 export type MomentTrigger = (typeof MOMENT_TRIGGERS)[number];
 
 /** Triggers in priority order: when several moments could be the cinematic of one battle, the earlier one wins. */
@@ -78,8 +78,8 @@ export const MomentEffectSchema = z.object({
   healTeam: z.boolean().optional(),
   /** Catch moments: the Pokémon rolls a talent (once) if it has none. */
   talentRoll: z.boolean().optional(),
-  /** Entry moments: HP restored now, as a percent of max HP. */
-  healNowPct: z.number().int().min(1).max(100).optional(),
+  /** Entry moments: HP restored now, as a percent of max HP (12.5 = an eighth). */
+  healNowPct: z.number().min(1).max(100).optional(),
   /** Own stat boosts from `boost` / `boostBest` fade after this many turns (absent = last the battle). */
   boostTurns: z.number().int().min(1).max(5).optional(),
   /** The next move of this type does this much more damage (percent); spent when it lands. */
@@ -93,6 +93,31 @@ export const MomentEffectSchema = z.object({
   /** Run-end revive: HP multiplier on max HP, and the Overcharged state. */
   reviveHpMult: z.number().min(1).max(3).optional(),
   overcharged: z.boolean().optional(),
+  // Catalog Overhaul (POKEMON_MOMENTS.md, the pack's statuses and effects).
+  /** Rest moments: Bond points gained (pack Bond, converted like the event effect). */
+  bond: z.number().int().min(1).max(5).optional(),
+  /** It survives the next hit that would knock it out, at 1 HP (once). */
+  endure: z.boolean().optional(),
+  /** Kindled: its moves of this type do `pct`% more for the rest of the battle. */
+  kindle: z.object({ type: z.string(), pct: z.number().int().min(1).max(200) }).optional(),
+  /** The next Pokémon of this type you send in is Kindled. */
+  kindleNext: z.object({ type: z.string(), pct: z.number().int().min(1).max(200) }).optional(),
+  /** Remembered: the next Pokémon you send in gets +10% to every stat but HP until the battle ends. */
+  rememberedNext: z.boolean().optional(),
+  /** It can't be switched out for this many turns. */
+  rooted: z.number().int().min(1).max(5).optional(),
+  /** Resolute: can't be flinched or confused, and its next move has +1 priority. */
+  resolute: z.boolean().optional(),
+  /** Its next move (from the next turn on) has this much extra priority. */
+  nextPriority: z.number().int().min(1).max(2).optional(),
+  /** The foe is badly poisoned. */
+  foeBadPoison: z.boolean().optional(),
+  /** Its first Ground move this battle hits Flying-types. */
+  groundHitsFlying: z.boolean().optional(),
+  /** Names the opponent's ace (its strongest Pokémon) before it comes out. */
+  revealAce: z.boolean().optional(),
+  /** Haunting: after it faints it stays as a spirit for `turns` turns, striking with its best move at `pct`% power each turn; it can't be hit. */
+  haunting: z.object({ turns: z.number().int().min(1).max(5), pct: z.number().int().min(1).max(100), foeAccDown: z.number().int().min(1).max(50).optional() }).optional(),
 });
 export type MomentEffect = z.infer<typeof MomentEffectSchema>;
 
@@ -125,6 +150,20 @@ export const PokemonMomentSchema = z.object({
       night: z.boolean().optional(),
       /** The foe has all of these types. */
       foeTypes: z.array(z.string()).optional(),
+      /** Last Stand: it is the only one of your Pokémon still standing. */
+      lastStanding: z.boolean().optional(),
+      /** The hit came while it was at full HP. */
+      fullHp: z.boolean().optional(),
+      /** The foe in front is below this percent of its max HP. */
+      foeHpBelow: z.number().int().min(1).max(99).optional(),
+      /** Your side has a Tailwind, or strong winds blow. */
+      tailwind: z.boolean().optional(),
+      /** It was knocked out by a contact move. */
+      contact: z.boolean().optional(),
+      /** A named opponent: a trainer battle, not a wild one. */
+      named: z.boolean().optional(),
+      /** The opponent's ace (its strongest Pokémon) has one of these types. */
+      foeAceTypes: z.array(z.string()).optional(),
     })
     .optional(),
   /** Ally moments: `same` = the fallen Pokémon must match this moment's scope too; `any` = any ally falling counts. */

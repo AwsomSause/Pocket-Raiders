@@ -120,7 +120,8 @@ export function eventText(content: Content, names: Names, e: RunEvent, details =
       const def = pokemonMoment(e.id);
       // A full-screen scene already told its story; the box only says what happened.
       if (e.scene) return `${who(e.side)} rises again, Overcharged!`;
-      const line = (def?.presentation.split(' | ').pop() ?? '').replace(/^"|"$/g, '');
+      // Pack lines name the Pokémon as [Name].
+      const line = (def?.presentation.split(' | ').pop() ?? '').replace(/^"|"$/g, '').replace(/\[Name\]/g, content.species.get(e.speciesId)?.name ?? 'It');
       // Battle-start and switch-in moments: their flavour line, then what it did.
       if (e.trigger !== 'lethal' && e.trigger !== 'runEnd') return `${e.name}! ${line ? `${line} ` : ''}${def?.effectText ?? ''}`.trim();
       return `${e.name}! ${who(e.side)} hangs on!${line ? ` ${line}` : ''}`;

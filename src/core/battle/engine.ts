@@ -119,7 +119,7 @@ import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, 
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
 import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
-import { momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
+import { hauntAccuracyCut, momentGroundTypes, momentNoConfuse, momentRooted, momentStatMult, noteContactHit, tryHauntStrikes, momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
 import type { MomentHooks } from '../moments/pokemonMoments';
 import { quirkAccuracy, quirkDamageMult, quirkEntryStages, quirkGuard, quirkNoCrits, quirkOf, quirkPriority, quirkSurvives } from '../co/quirks';
 import { reapplyBoost } from '../instrumentality/secondChance';
@@ -148,7 +148,7 @@ export type BattleEvent =
   /** Became confused; `confusion` is the "is confused!" check at the start of its move; `confusionEnd` snapped out. */
   | { type: 'confused'; side: Side }
   /** A Pokémon moment (core/moments): `cinematic` false means it is told as a plain line; `scene` is the full-screen run-end revive. */
-  | { type: 'pmoment'; side: Side; uid: string; speciesId: string; id: string; name: string; tier: 'minor' | 'major' | 'landmark'; hpAfter: number; cinematic: boolean; scene: boolean; trigger: 'runEnd' | 'lethal' | 'faint' | 'start' | 'enter' | 'ally' | 'low' | 'ko' | 'super' | 'crit' | 'weather' | 'status' | 'rest' | 'catch' }
+  | { type: 'pmoment'; side: Side; uid: string; speciesId: string; id: string; name: string; tier: 'minor' | 'major' | 'landmark'; hpAfter: number; cinematic: boolean; scene: boolean; trigger: 'runEnd' | 'lethal' | 'faint' | 'start' | 'enter' | 'ally' | 'low' | 'ko' | 'super' | 'crit' | 'weather' | 'status' | 'rest' | 'catch' | 'turn' }
   | { type: 'confusion'; side: Side }
   | { type: 'confusionEnd'; side: Side }
   | { type: 'confusionHit'; side: Side; amount: number; hpAfter: number }
@@ -697,6 +697,7 @@ export function switchProblem(ctx: Pick<BattleContext, 'battle' | 'party'> & Par
   if (!ctx.battle.needsSwitch && forcedMoveId(ctx.battle.playerVolatile)) return 'Your Pokémon is in the middle of a move!';
   if (!ctx.battle.needsSwitch && ctx.battle.extra?.fairyLock === ctx.battle.turn) return "Fairy Lock keeps your Pokémon from switching out!";
   if (!ctx.battle.needsSwitch && !shedShell && ctx.battle.playerVolatile?.trapped) return "Your Pokémon can't be switched out!";
+  if (!ctx.battle.needsSwitch && active && ctx.battle.storyEffects && momentRooted(ctx, active.uid)) return "It won't give ground. It can't be switched out!";
   if (!ctx.battle.needsSwitch && !shedShell && active && 'content' in ctx && ctx.content) {
     const foeMon = currentEnemy(ctx.battle);
     const trapper = foeMon.hp > 0 ? (ctx.battle.enemyVolatile.abilityOverride ?? abilityOf(ctx.content, foeMon)) : null;
@@ -1057,6 +1058,8 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
 
   // 4. Decide the outcome or replace fainted Pokémon.
   const enemyBefore = battle.enemyIndex;
+  // Haunting (Pokémon moments): a fallen Pokémon's spirit strikes before the faints are settled.
+  if (ctx.moments && !battle.outcome) tryHauntStrikes(ctx, events);
   settleFaints(ctx, events);
   // A trainer's next Pokémon saw its ally fall.
   if (!battle.outcome && battle.enemyIndex !== enemyBefore) warnRage(ctx, currentEnemy(battle), events);
@@ -2516,7 +2519,10 @@ function resolveMove(content: Content, mon: PokemonInstance, index: number): Mov
 function statsOf(ctx: BattleContext, c: Combatant): ReturnType<typeof calcStats> {
   const base = calcStats(ctx.content, c.mon);
   const o = c.vol.statOverride;
-  const stats = Object.keys(o).length ? { ...base, ...o } : base;
+  const raw = Object.keys(o).length ? { ...base, ...o } : base;
+  // Remembered (Pokémon moments): +10% to every stat but HP.
+  const remembered = momentStatMult(ctx, c);
+  const stats = remembered === 1 ? raw : { ...raw, atk: Math.floor(raw.atk * remembered), def: Math.floor(raw.def * remembered), spa: Math.floor(raw.spa * remembered), spd: Math.floor(raw.spd * remembered), spe: Math.floor(raw.spe * remembered) };
   const ability = abilityIn(ctx, c);
   const boosted = (ability === 'protosynthesis' && weatherNow(ctx) === 'sun') || (ability === 'quark-drive' && ctx.battle.terrain?.id === 'electric');
   if (!boosted) return stats;
@@ -3431,7 +3437,7 @@ function executeMove(
       user.vol.locked.turns -= 1;
       if (user.vol.locked.turns <= 0) {
         user.vol.locked = null;
-        if (user.mon.hp > 0 && user.vol.confusion === 0) {
+        if (user.mon.hp > 0 && user.vol.confusion === 0 && !momentNoConfuse(ctx, user)) {
           user.vol.confusion = ctx.rng.int(2, 5);
           events.push({ type: 'fatigue', side: user.side });
         }
@@ -3927,6 +3933,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     const keenEye = (userAbility === 'keen-eye' || userAbility === 'minds-eye' || userAbility === 'wise-eye') && target.stages.eva > 0;
     const evaStage = fx.ignoreStages || userAbility === 'unaware' || keenEye ? 0 : target.stages.eva;
     accuracy = hitChance(baseAccuracy, accStage, evaStage) * itemAccuracy * perkAccuracy;
+    // Haunting (Pokémon moments): while a spirit haunts the field, the foe's moves are less accurate.
+    if (baseAccuracy !== null && user.side === 'enemy' && ctx.moments) accuracy *= 1 - hauntAccuracyCut(ctx) / 100;
     if (baseAccuracy !== null && user.side === 'player') accuracy *= aimAccuracy(content, ctx.battle.skill, move.id);
     if (baseAccuracy !== null) {
       if (user.side === 'player' && user.mon.moves.find((m) => m.id === move.id)?.star) accuracy *= 1.05;
@@ -3993,7 +4001,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   // Foresight / Odor Sleuth / Miracle Eye open the immunities they name.
   const seen = target.vol.identified === 'ghost' && (moveType === 'normal' || moveType === 'fighting') ? hitTypes.filter((t) => t !== 'ghost') : target.vol.identified === 'dark' && moveType === 'psychic' ? hitTypes.filter((t) => t !== 'dark') : hitTypes;
   // S169: a rare move ignores the one immunity it is named for.
-  const breaker = breakImmunity(content, content.typeChart, move.id, moveType, seen);
+  const breaker = breakImmunity(content, content.typeChart, move.id, moveType, ctx.moments && targetsEnemy && move.category !== 'status' ? momentGroundTypes(ctx, user, moveType, seen) : seen);
   const idHit = breaker.types;
   if (breaker.broke && targetsEnemy) events.push(say(user.side, 'arena', `${content.moves.get(move.id)?.name ?? 'The move'} breaks through the ${breaker.broke[0]!.toUpperCase()}${breaker.broke.slice(1)} type's immunity!`, user.mon.uid));
   let rawEff = fx.superAgainst ? idHit.reduce((n, t) => n * (t === fx.superAgainst ? 2 : typeEffectiveness(content.typeChart, moveType, [t])), 1) : typeEffectiveness(content.typeChart, moveType, idHit);
@@ -4633,6 +4641,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   }
   if (landed > 0 && ctx.moments) {
     spendMomentBoost(ctx, user, moveType);
+    if (contact) noteContactHit(ctx, target);
     // Toxic Blood: a contact hit on the Pokémon poisons the attacker.
     if (contact && user.mon.hp > 0 && momentContactPoison(ctx, target) && !user.mon.status && canGetStatus(ctx, target, user, 'psn')) tryInflictStatus(ctx, target, user, 'psn', undefined, events, false);
   }
@@ -5610,7 +5619,7 @@ function applyStateEffects(ctx: BattleContext, user: Combatant, target: Combatan
   }
   if (fx.confuseBoth) {
     for (const c of [user, target]) {
-      if (c.vol.confusion === 0 && c.mon.hp > 0 && abilityIn(ctx, c) !== 'own-tempo' && abilityIn(ctx, c) !== 'hoop-focus') {
+      if (c.vol.confusion === 0 && c.mon.hp > 0 && abilityIn(ctx, c) !== 'own-tempo' && abilityIn(ctx, c) !== 'hoop-focus' && !momentNoConfuse(ctx, c)) {
         c.vol.confusion = rng.int(2, 5);
         events.push({ type: 'confused', side: c.side });
       }
@@ -6358,7 +6367,7 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
 /** Confuses for 2–5 turns of moves (1–4 of them are checks); Own Tempo prevents it. Returns true if it worked. */
 function tryConfuse(ctx: BattleContext, source: Combatant, target: Combatant, events: BattleEvent[], announceFailure: boolean): boolean {
   const ownTempo = ['own-tempo', 'hoop-focus'].includes(targetAbility(ctx, source, target) ?? '');
-  if (target.vol.confusion > 0 || ownTempo || Held.statusBlocked(ctx, target, 'confusion')) {
+  if (target.vol.confusion > 0 || ownTempo || Held.statusBlocked(ctx, target, 'confusion') || momentNoConfuse(ctx, target)) {
     if (announceFailure && ownTempo) announce(target, targetAbility(ctx, source, target)!, events);
     if (announceFailure) events.push({ type: 'fail', side: target.side });
     return false;

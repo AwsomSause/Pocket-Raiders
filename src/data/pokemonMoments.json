@@ -747,15 +747,21 @@
      "ground"
     ]
    },
-   "trigger": "lethal",
-   "chance": 0.12,
+   "trigger": "start",
+   "chance": 1,
    "limit": "battle",
    "tier": "minor",
    "status": "supported",
-   "effectText": "Survive at 1 HP, takes half damage for the next 2 turns.",
-   "presentation": "Rumble | \"Dug in deep.\"",
+   "effectText": "Against a Flying-type ace: its first Ground move this battle hits Flying-types.",
+   "presentation": "Rumble | [Name] braces. The ground is its.",
    "effect": {
-    "guard": 2
+    "groundHitsFlying": true
+   },
+   "requires": {
+    "named": true,
+    "foeAceTypes": [
+     "flying"
+    ]
    }
   },
   {
@@ -2439,28 +2445,23 @@
   },
   {
    "id": "rock-hold",
-   "name": "Held The Line",
+   "name": "Still Standing",
    "scope": {
-    "lines": [
-     "graveler",
-     "golem",
-     "rhydon",
-     "rhyperior",
-     "tyranitar"
+    "types": [
+     "rock"
     ]
    },
    "trigger": "super",
-   "chance": 0.15,
+   "chance": 1,
    "limit": "battle",
    "tier": "minor",
    "status": "supported",
-   "effectText": "After a super-effective hit: Def +1 and heal 5%.",
-   "presentation": "Dust | \"Held the line.\"",
+   "effectText": "A super-effective hit that doesn't knock it out: Defence +1.",
+   "presentation": "A crack, then silence | [Name] has a new chip in it. That's all.",
    "effect": {
     "boost": {
      "def": 1
-    },
-    "healNowPct": 5
+    }
    }
   },
   {
@@ -2979,9 +2980,6 @@
    }
   },
   {
-   "status": "supported",
-   "limit": "battle",
-   "tier": "minor",
    "id": "p2-static-discharge",
    "name": "Static Discharge",
    "scope": {
@@ -2991,17 +2989,17 @@
    },
    "trigger": "faint",
    "chance": 0.35,
-   "effectText": "When it faints: the foe is paralysed.",
-   "presentation": "Spark sfx | \"A last discharge.\"",
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "When it faints, the attacker is paralysed.",
+   "presentation": "A loud snap, the screen flashes white | [Name] goes out with a spark.",
    "effect": {
     "foeStatus": "par",
     "foeStatusChance": 100
    }
   },
   {
-   "status": "supported",
-   "limit": "battle",
-   "tier": "minor",
    "id": "p2-spite-blood",
    "name": "Spite in the Blood",
    "scope": {
@@ -3011,11 +3009,16 @@
    },
    "trigger": "faint",
    "chance": 0.4,
-   "effectText": "When it faints: the foe is poisoned (any hit, not only contact).",
-   "presentation": "Bubble | \"Poison in the blood.\"",
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Knocked out by a contact move, it bites down: the attacker is badly poisoned.",
+   "presentation": "A hiss | [Name] bit down on the way out.",
    "effect": {
-    "foeStatus": "psn",
-    "foeStatusChance": 100
+    "foeBadPoison": true
+   },
+   "requires": {
+    "contact": true
    }
   },
   {
@@ -3135,6 +3138,323 @@
      "pct": 50
     }
    }
+  },
+  {
+   "id": "pt1-plain-and-stubborn",
+   "name": "Plain and Stubborn",
+   "scope": {
+    "types": [
+     "normal"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Survives the next hit that would knock it out, at 1 HP.",
+   "presentation": "No music, just breathing | [Name] plants its feet. It's not special. It's still here.",
+   "effect": {
+    "endure": true
+   },
+   "requires": {
+    "lastStanding": true
+   },
+   "hpBelow": 25
+  },
+  {
+   "id": "pt2-embers-left",
+   "name": "Embers Left",
+   "scope": {
+    "types": [
+     "fire"
+    ]
+   },
+   "trigger": "faint",
+   "chance": 0.3,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "The next Fire-type you send in is Kindled: its Fire moves do 50% more for the battle.",
+   "presentation": "The sprite dims to an ember glow, a small crackle | Something in [Name] is still warm.",
+   "effect": {
+    "kindleNext": {
+     "type": "fire",
+     "pct": 50
+    }
+   }
+  },
+  {
+   "id": "pt3-the-tide-comes-back",
+   "name": "The Tide Comes Back",
+   "scope": {
+    "types": [
+     "water"
+    ]
+   },
+   "trigger": "turn",
+   "chance": 1,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "It drinks the rain: it gets back an eighth of its HP.",
+   "presentation": "The rain sound swells | [Name] lifts its head into the rain.",
+   "effect": {
+    "healNowPct": 12.5
+   },
+   "requires": {
+    "weather": "rain"
+   }
+  },
+  {
+   "id": "pt4-sunlight-through-leaves",
+   "name": "Sunlight Through Leaves",
+   "scope": {
+    "types": [
+     "grass"
+    ]
+   },
+   "trigger": "rest",
+   "chance": 1,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "It wakes with Bond +1, and any status is gone.",
+   "presentation": "A green glow on the camp screen | [Name] sleeps in the last of the sun.",
+   "effect": {
+    "bond": 1,
+    "cure": true
+   }
+  },
+  {
+   "id": "pt6-frozen-in-place",
+   "name": "Frozen in Place",
+   "scope": {
+    "types": [
+     "ice"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Defence and Sp. Def x1.5 for 2 turns, and it can't be switched out.",
+   "presentation": "Wind, frost creeps over the screen edge | [Name] stops moving. It isn't giving ground.",
+   "effect": {
+    "boost": {
+     "def": 1,
+     "spd": 1
+    },
+    "boostTurns": 2,
+    "rooted": 2
+   },
+   "requires": {
+    "lastStanding": true
+   },
+   "hpBelow": 25
+  },
+  {
+   "id": "pt7-one-more-round",
+   "name": "One More Round",
+   "scope": {
+    "types": [
+     "fighting"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.3,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Resolute: it can't be flinched or confused, and its next move has +1 priority.",
+   "presentation": "A bell rings once | [Name] wipes its face. Raises its fists.",
+   "effect": {
+    "resolute": true
+   },
+   "requires": {
+    "lastStanding": true
+   },
+   "hpBelow": 25
+  },
+  {
+   "id": "pt10-catch-the-wind",
+   "name": "Catch the Wind",
+   "scope": {
+    "types": [
+     "flying"
+    ]
+   },
+   "trigger": "turn",
+   "chance": 1,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "With a Tailwind or strong winds: Speed +1.",
+   "presentation": "Wind rises | [Name] spreads its wings and waits for nothing.",
+   "effect": {
+    "boost": {
+     "spe": 1
+    }
+   },
+   "requires": {
+    "tailwind": true
+   }
+  },
+  {
+   "id": "pt11-it-saw-this-coming",
+   "name": "It Saw This Coming",
+   "scope": {
+    "types": [
+     "psychic"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "The opponent's ace is revealed.",
+   "presentation": "A soft chime | [Name] looks at the opponent's last Pokémon before it's sent out.",
+   "effect": {
+    "revealAce": true
+   },
+   "requires": {
+    "named": true
+   }
+  },
+  {
+   "id": "pt12-the-swarm-answers",
+   "name": "The Swarm Answers",
+   "scope": {
+    "types": [
+     "bug"
+    ]
+   },
+   "trigger": "ally",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "When an ally faints: Attack and Speed +1.",
+   "presentation": "Buzzing from offscreen | Something in the grass heard.",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "spe": 1
+    }
+   },
+   "allyScope": "any"
+  },
+  {
+   "id": "pt14-not-quite-gone",
+   "name": "Not Quite Gone",
+   "scope": {
+    "types": [
+     "ghost"
+    ]
+   },
+   "trigger": "faint",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Haunting: for 3 turns its spirit stays and strikes with its best move at half power. It can't be hit.",
+   "presentation": "The sprite fades to an outline | [Name] isn't finished.",
+   "effect": {
+    "haunting": {
+     "turns": 3,
+     "pct": 50
+    }
+   }
+  },
+  {
+   "id": "pt15-old-blood",
+   "name": "Old Blood",
+   "scope": {
+    "types": [
+     "dragon"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Dragon moves x1.5 for the rest of the battle.",
+   "presentation": "A low roar under the music | Something very old in [Name] wakes up.",
+   "effect": {
+    "kindle": {
+     "type": "dragon",
+     "pct": 50
+    }
+   },
+   "requires": {
+    "lastStanding": true
+   },
+   "hpBelow": 25
+  },
+  {
+   "id": "pt16-takes-advantage",
+   "name": "Takes Advantage",
+   "scope": {
+    "types": [
+     "dark"
+    ]
+   },
+   "trigger": "turn",
+   "chance": 0.3,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "With the foe below a quarter of its HP: +1 priority on its next move.",
+   "presentation": "The music drops to a bass note | [Name] smiles.",
+   "effect": {
+    "nextPriority": 1
+   },
+   "requires": {
+    "foeHpBelow": 25
+   }
+  },
+  {
+   "id": "pt17-built-to-last",
+   "name": "Built to Last",
+   "scope": {
+    "types": [
+     "steel"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 1,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "A hit that would knock it out from full HP leaves it at 1 HP, as Sturdy does.",
+   "presentation": "A metal clang | [Name] rings like a bell and stays up.",
+   "effect": {},
+   "requires": {
+    "fullHp": true
+   }
+  },
+  {
+   "id": "pt18-a-small-kindness",
+   "name": "A Small Kindness",
+   "scope": {
+    "types": [
+     "fairy"
+    ]
+   },
+   "trigger": "ally",
+   "chance": 0.3,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "When an ally faints: the next Pokémon you send in is Remembered (+10% to every stat but HP).",
+   "presentation": "Soft bells | [Name] goes to its fallen friend before the next turn.",
+   "effect": {
+    "rememberedNext": true
+   },
+   "allyScope": "any"
   }
  ]
 }
