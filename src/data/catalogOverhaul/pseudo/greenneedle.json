@@ -91,6 +91,24 @@
    "tint": "#4a4a2a",
    "mood": "smog",
    "start": "opened"
+  },
+  {
+   "id": "ps_gn_savanna",
+   "name": "The Deep Savanna",
+   "entry": "gn-19-door",
+   "themeId": "ground-fire",
+   "tint": "#b08a3a",
+   "mood": "dry heat",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_jungle",
+   "name": "The Lush Jungle",
+   "entry": "gn-20-door",
+   "themeId": "grass-poison",
+   "tint": "#1e5a2a",
+   "mood": "humid green",
+   "start": "opened"
   }
  ]
 }

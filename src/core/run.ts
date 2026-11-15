@@ -4011,6 +4011,11 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (leadAsk) run.pending.push({ kind: 'askLead', ...leadAsk });
   // gn.16: the tournament final paused for the last exchange (the win effects read this flag).
   if (battle.event && battle.eventRule?.gn === 'final') run.story.flags['ev:tc-last-exchange'] = battle.storyEffects.includes('gn-last-exchange') ? 1 : 0;
+  // The Lush Jungle (gn.20): a knockout on either side, the player's or the wild one's, and the canopy village pulls its ladder up.
+  if (battle.event && battle.eventRule?.gn === 'jungle') {
+    const down = (battle.storyEffects.find((x) => x.startsWith('gn-jungle-down:')) ?? 'gn-jungle-down:').slice('gn-jungle-down:'.length).split(',');
+    if (battle.enemyTeam.some((m) => m.hp <= 0) || run.party.some((m) => m.hp <= 0 && !down.includes(m.uid))) run.story.flags['ev:jungle-harmed'] = 1;
+  }
   // An event battle you won pays its own rewards.
   const chained = outcome === 'win' && !!battle.event && eventChainNext(content, run, battle.event);
   const eventRewards = outcome === 'win' && battle.event && !chained ? (battle.event.eventId === 'plaza:club' ? plazaClubWon(content, run) : eventBattleWon(content, run, battle.event, battle.turn - 1)) : outcome === 'caught' && battle.event ? eventBattleCaught(content, run, battle.event) : [];

@@ -959,6 +959,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
       let a = a0;
       if (anyFainted(playerC, enemy) || a.user.mon.hp <= 0) return;
       if (a.user.side === 'enemy' && (enemyActed || loseFreeTurn(battle, events) || blissfulCalm(ctx, enemy, events) || foeStands(ctx, enemy, events) || gnFoeWaits(ctx, enemy, events))) return;
+      if (a.user.side === 'player' && gnYouWait(ctx, a.user, events)) return;
       // Shadow II: a Veiled Pokémon may hesitate; a Gripped or Fallen one may use a move of its own choosing. Decided (and shown) before the turn.
       if (a.user.side === 'player' && a.user.mon.shadow) {
         const plan = shadowTurnPlan(a.user.mon, battle.turn, turnStartState);
@@ -975,7 +976,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
       }
       actWithRage(ctx, a.user, enemy, events, () => executeMove(ctx, a.user, a.target, a.move, a.slot, index === 0, events));
     });
-  } else if (!enemyActed && !loseFreeTurn(battle, events) && !blissfulCalm(ctx, enemy, events) && !foeStands(ctx, enemy, events) || gnFoeWaits(ctx, enemy, events)) {
+  } else if (!enemyActed && !loseFreeTurn(battle, events) && !blissfulCalm(ctx, enemy, events) && !foeStands(ctx, enemy, events) && !gnFoeWaits(ctx, enemy, events)) {
     actWithRage(ctx, enemy, enemy, events, () => executeMove(ctx, enemy, playerC, enemyMove, enemyMoveIndex, false, events));
   }
   recordFaints(ctx, playerC, enemy, events);
@@ -1649,6 +1650,16 @@ function gnFoeWaits(ctx: BattleContext, enemy: Combatant, events: BattleEvent[])
   const [token] = ctx.battle.storyEffects.splice(i, 1);
   if (enemy.mon.hp <= 0) return false;
   events.push({ type: 'raid', tone: 'info', text: token!.slice('gn-foe-waits:'.length) });
+  return true;
+}
+
+/** Greenneedle events: a `gn-you-wait:<line>` token costs your Pokémon its next move and shows the line (the Lush Jungle's vines). */
+function gnYouWait(ctx: BattleContext, player: Combatant, events: BattleEvent[]): boolean {
+  const i = ctx.battle.storyEffects.findIndex((e) => e.startsWith('gn-you-wait:'));
+  if (i < 0) return false;
+  const [token] = ctx.battle.storyEffects.splice(i, 1);
+  if (player.mon.hp <= 0) return false;
+  events.push({ type: 'raid', tone: 'info', text: token!.slice('gn-you-wait:'.length) });
   return true;
 }
 
@@ -4134,6 +4145,10 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (ctx.battle.eventRule?.typeBoost?.type === moveType) powerMult *= 1 + ctx.battle.eventRule.typeBoost.pct / 100;
       // The Polluted Factory's furnace (gn.17): Water moves go up as steam, at half power (and clear the Molten Sludge: greenneedle/factory.ts).
       if (ctx.battle.eventRule?.gn === 'furnace' && moveType === 'water') powerMult *= 0.5;
+      // The Lush Jungle (gn.20): the air is humid. Grass moves +10%, Fire moves -10%, for everyone.
+      const humid = ctx.battle.eventRule?.gn === 'jungle' || ctx.battle.eventRule?.gn === 'tsareena';
+      if (humid && moveType === 'grass') powerMult *= 1.1;
+      if (humid && moveType === 'fire') powerMult *= 0.9;
       if (ctx.battle.field.waterSport > 0 && moveType === 'fire') powerMult *= 1 / 3;
       if (ctx.battle.field.mudSport > 0 && moveType === 'electric') powerMult *= 1 / 3;
       if (userAbility && TYPE_BOOST[userAbility] === moveType) powerMult *= 1.5;

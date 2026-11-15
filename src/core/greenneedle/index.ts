@@ -37,6 +37,10 @@ export const BOND_THREE = 85;
 
 /** Token on `battle.storyEffects`: the foe gives up its next attack, with this line (the battle engine reads and removes it). */
 export const FOE_WAITS = 'gn-foe-waits:';
+/** A `gn-you-wait:<line>` token costs your Pokémon its next move and shows the line (the jungle's vines). */
+export const YOU_WAIT = 'gn-you-wait:';
+/** The Lush Jungle: the uids already fainted when a fight began. */
+export const JUNGLE_DOWN = 'gn-jungle-down:';
 
 export const FOREST = { inside: 'gn-forest-in', battles: 'gn-forest-battles', fought: 'gn-forest-fought', rank: 'gn-forest-rank', evolved: 'gn-forest-evolved', fog: 'gn-forest-fog', duelist: 'gn-forest-duelist', big: 'gn-forest-big' } as const;
 
@@ -74,6 +78,8 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'lookAtLevel') return run.party.some((m) => !!m.look && c.types!.includes(m.look) && m.level >= gnFlag(run, c.key!));
   if (c.test === 'notRegion') return !c.types!.includes(run.regionOrder[run.regionIndex] ?? '');
   if (c.test === 'holdsBerry') return run.party.some((m) => Object.entries(m.held ?? {}).some(([id, n]) => n > 0 && id.endsWith('-berry')));
+  // gn.19: a large Pokémon (100 kg or more) in the party, standing, to give the Hippowdon shade.
+  if (c.test === 'heavy') return run.party.some((m) => m.hp > 0 && (content.species.get(m.speciesId)?.weight ?? 50) >= 100);
   if (c.test === 'cutter') return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return !!mv && mv.category !== 'status' && (mv.flags.includes('slicing') || s.id.includes('claw')); }));
   if (c.test === 'moveType') return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return !!mv && mv.category !== 'status' && c.types!.includes(mv.type); }));
   if (c.test === 'noMoveType') return !run.party.some((m) => m.moves.some((s) => c.types!.includes(content.moves.get(s.id)?.type ?? '')));
@@ -224,6 +230,14 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       delete run.minigames.attempts[id];
       return '';
     }
+    case 'releaseLast': {
+      const all = [...run.party.map((m, i) => ({ m, where: 'party' as const, i })), ...run.box.map((m, i) => ({ m, where: 'box' as const, i }))].filter((x) => e.species!.includes(x.m.speciesId));
+      const last = all.sort((a, b) => b.m.uid.localeCompare(a.m.uid, undefined, { numeric: true }))[0];
+      if (!last || (last.where === 'party' && run.party.length <= 1)) return '';
+      if (last.where === 'party') run.party.splice(last.i, 1);
+      else run.box.splice(last.i, 1);
+      return `Let go: ${getSpecies(content, last.m.speciesId).name}`;
+    }
     case 'addParty':
       setGnFlag(run, e.key!, gnFlag(run, e.key!) + run.party.filter((m) => m.hp > 0).length);
       return '';
@@ -297,6 +311,22 @@ export function gnBattleStart(content: Content, run: RunState): void {
   // The Polluted Factory (gn.17).
   const rule = battle.eventRule?.gn;
   if (rule === 'pipes' || rule === 'sludge' || rule === 'furnace' || rule === 'core') factoryStart(content, run, battle, rule);
+  // The Deep Savanna (gn.19): a sandstorm on the first turn; with no water left the party starts at 90% HP; a Donphan takes a blow.
+  if (rule === 'savanna' || rule === 'herd') {
+    battle.weather = { id: 'sand', turns: 1 };
+    if (gnFlag(run, 'savanna-water') <= 0) for (const m of run.party) if (m.hp > 0) m.hp = Math.min(m.hp, Math.max(1, Math.floor(maxHp(content, m) * 0.9)));
+    if (rule === 'herd') battle.storyEffects.push(`${FOE_WAITS}A Donphan from the herd steps in front of your Pokémon and takes the blow meant for it.`);
+  }
+  // The Lush Jungle's Tsareena (gn.20): Trop Kick, High Jump Kick, U-turn.
+  if (rule === 'tsareena' && battle.enemyTeam[0]) setMoves(content, battle.enemyTeam[0], ['trop-kick', 'high-jump-kick', 'u-turn']);
+  // The Lush Jungle (gn.20): who was already down when the fight began (only a knockout in this fight pulls the ladder up, run.ts).
+  if (rule === 'jungle') battle.storyEffects.push(`${JUNGLE_DOWN}${run.party.filter((m) => m.hp <= 0).map((m) => m.uid).join(',')}`);
+  // The vine tangle costs the lead its first move, unless it knows a slicing move.
+  if (rule === 'jungle' && lead && gnFlag(run, 'jungle-vines') > 0) {
+    setGnFlag(run, 'jungle-vines', 0);
+    const cuts = lead.moves.some((m) => content.moves.get(m.id)?.flags.includes('slicing'));
+    if (!cuts) battle.storyEffects.push(`${YOU_WAIT}Vines tangle round your Pokémon's legs. It can't move this turn.`);
+  }
   // The last exchange: both fighters are under a quarter of their HP. "You choose." with Bond 3 or more: its first move goes first.
   if (battle.eventRule?.gn === 'lastExchange') {
     const foe = battle.enemyTeam[0];

@@ -702,5 +702,77 @@
    "Afterstory"
   ],
   "tags": []
+ },
+ "gn-19-door": {
+  "gn": "gn.19",
+  "shape": "Door",
+  "earliest": "A6",
+  "home": 13,
+  "window": [
+   11,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A+1",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Deep Savanna",
+   "kantoStage": "Beyond Safari Land's far gate",
+   "elsewhere": "The Deep Savanna"
+  },
+  "note": "Badge: a sun. Six nodes. Also opened from Safari Land's far gate (gn-19-far).",
+  "kinds": [
+   "Pseudo Stage"
+  ],
+  "tags": [
+   "hot|cave"
+  ]
+ },
+ "gn-19-lone": {
+  "gn": "gn.19",
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 8,
+  "window": [
+   1,
+   20
+  ],
+  "sits": "optional",
+  "level": "A+0",
+  "often": "run",
+  "note": "A later region, after the herd was led on without its leader.",
+  "kinds": [
+   "Afterstory"
+  ],
+  "tags": []
+ },
+ "gn-20-door": {
+  "gn": "gn.20",
+  "shape": "Door",
+  "earliest": "A6",
+  "home": 14,
+  "window": [
+   12,
+   17
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A+1; the Tsareena at A+2",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Lush Jungle",
+   "kantoStage": "Beyond Safari Land's far gate",
+   "elsewhere": "The Lush Jungle"
+  },
+  "note": "Badge: a leaf. Six nodes. Also opened from Safari Land's far gate (gn-20-far).",
+  "kinds": [
+   "Pseudo Stage"
+  ],
+  "tags": [
+   "forest"
+  ]
  }
 }
