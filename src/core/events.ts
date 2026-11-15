@@ -519,8 +519,12 @@ function eventPacks(content: Content, run: RunState): Set<string> {
   return new Set([...runGameEventIds(run), ...own]);
 }
 
-/** An event whose only recruit is a trainer the player already owns (or is playing). */
+/**
+ * An event whose only recruit is a trainer the player already owns (or is playing). A story meeting (a callback or a room, such as the
+ * last meeting of a Road Roster arc) is never hidden this way: the recruit there is a bonus, and owning the trainer must not cut the story.
+ */
 function recruitsOwned(run: RunState, e: EventDef): boolean {
+  if (e.callback || e.room) return false;
   const ids = e.choices.flatMap((c) => [c.success, c.failure ?? c.success].flatMap((o) => [...o.effects, ...(o.battle?.win ?? [])])).flatMap((x) => (x.kind === 'recruit' ? [x.trainer] : []));
   return ids.length > 0 && ids.every((id) => id === run.archetypeId || (run.itemCounters?.[`owned:${id}`] ?? 0) > 0);
 }
