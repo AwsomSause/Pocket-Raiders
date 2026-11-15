@@ -4,6 +4,7 @@
 
 import { act, esc, hpb, TYPE_COLORS, W } from '../kit';
 import type { ReduxCtx } from '../stage';
+import { type Art, pic, scrollStart } from '../templates';
 
 export interface BattleBox {
   name: string;
@@ -118,4 +119,58 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
   const note = d.note ? `<div class="abs" style="left:50%;top:${v === 2 && !duo ? 100 : 60}px;transform:translateX(-50%);max-width:560px;z-index:5;pointer-events:none"><span class="tg" style="white-space:normal">${esc(d.note)}</span></div>` : '';
   const pin = d.auto ? `<div class="abs btn on" style="left:50%;top:${v === 2 && !duo ? 76 : 20}px;transform:translateX(-50%);height:32px;font-size:14px"${act('auto')}>AUTO ▶▶</div>` : '';
   return head + tray + tabs + header + momentum + status + note + pin;
+}
+
+export interface BattleListRow {
+  label: string;
+  art: Art | null;
+  /** HP left, 0 to 1, for a Pokémon; null for an item. */
+  hp: number | null;
+  /** A short mark for a Pokémon ("IN BATTLE", "FNT", "✔ +20 HP"), or the count of an item ("×3"). */
+  tag: string;
+  off: boolean;
+}
+
+export interface BattleListModel {
+  /** The window's first line ("Switch to…"); left out when it has pocket tabs. */
+  title: string;
+  /** A small line under the rows (a key hint), or ''. */
+  note: string;
+  tabs: { labels: readonly string[]; index: number } | null;
+  n: number;
+  row: (i: number) => BattleListRow;
+  index: number;
+  /** Where the window's top edge sits (under the foe's box; lower when several foes are out). */
+  top?: number;
+  /** The player can step back out of it (a small Back line shows). */
+  back?: boolean;
+}
+
+/** "Bag  (P pins to the hotbar)": the title, and the words in brackets as a small note. */
+export function windowTitle(title: string): { title: string; note: string } {
+  const m = /^(.*?)\s*\((.*)\)\s*$/.exec(title);
+  return m ? { title: m[1]!.trim(), note: m[2]!.trim() } : { title: title.trim(), note: '' };
+}
+
+/** Rows the battle's Party and Item windows show at once. */
+export const BATTLE_LIST_ROWS = 6;
+
+/** "×3" reads as "× 3", the way the mock-ups write a count. */
+const countText = (t: string): string => t.replace(/^[×x]\s*(\d+)$/, '× $1');
+
+/** The battle's Party and Item windows (the mock-ups' overlays): a small window over the field, left of the arena. */
+export function battleListView(_c: ReduxCtx, d: BattleListModel): string {
+  const n = Math.max(0, d.n), index = Math.max(0, Math.min(n - 1, d.index));
+  const s = scrollStart(n, index, BATTLE_LIST_ROWS), end = Math.min(n, s + BATTLE_LIST_ROWS);
+  const items = d.tabs !== null;
+  const tabs = d.tabs ? `<div class="tabs" style="margin-bottom:6px;flex-wrap:wrap">${d.tabs.labels.map((t, k) => `<span class="${k === d.tabs!.index ? 'on' : ''}" style="cursor:pointer"${act('tab', k)}>${esc(t)}</span>`).join('')}</div>` : '';
+  const rows = Array.from({ length: end - s }, (_, q) => {
+    const i = s + q, r = d.row(i);
+    const right = r.hp === null ? (r.tag ? `<span class="sm">${esc(countText(r.tag))}</span>` : '') : `${r.tag ? `<span class="tg" style="font-size:11px;padding:1px 6px;white-space:nowrap">${esc(r.tag)}</span>` : ''}${hpb(pct(r.hp), r.tag.length > 10 ? 54 : 90)}`;
+    return `<div class="row" style="gap:8px;margin:0 -6px;padding:0 6px;border-radius:5px;cursor:pointer;${i === index ? 'background:var(--p2);box-shadow:0 0 0 2px var(--acc);' : ''}${r.off ? 'opacity:.5;' : ''}"${act('pick', i)} data-over="over">${pic(r.art, items ? 30 : 34)}<b class="grow" style="font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r.label)}</b>${right}</div>`;
+  }).join('');
+  const none = n ? '' : '<div class="sm" style="opacity:.7">Nothing here.</div>';
+  const where = n > BATTLE_LIST_ROWS ? `${s + 1}–${end} of ${n}` : '';
+  const foot = where || d.note || d.back ? `<div class="row sm" style="gap:8px;opacity:.8"><span class="grow">${esc([where, d.note].filter(Boolean).join(' · '))}</span>${d.back ? `<span style="cursor:pointer"${act('back')}><kbd>Esc</kbd>back</span>` : ''}</div>` : '';
+  return W(`${tabs}${d.title && !items ? `<b class="acc">${esc(d.title)}</b>` : ''}${rows}${none}${foot}`, `position:absolute;left:20px;top:${d.top ?? 92}px;width:330px;display:flex;flex-direction:column;gap:${items ? 7 : 5}px;padding:10px 12px;z-index:4`);
 }

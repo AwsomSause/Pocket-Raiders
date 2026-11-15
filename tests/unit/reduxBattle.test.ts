@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { battleView, trayHeight, type BattleBox, type BattleModel, type BattleOption } from '../../src/ui/redux/screens/battle';
+import { BATTLE_LIST_ROWS, battleListView, battleView, trayHeight, type BattleBox, type BattleListModel, type BattleListRow, type BattleModel, type BattleOption, windowTitle } from '../../src/ui/redux/screens/battle';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 
 // The New UI battle HUD is a pure function from what the battle shows to HTML, in four layouts.
@@ -103,5 +103,81 @@ describe('New UI battle HUD', () => {
       expect(trayHeight(v, 4)).toBeGreaterThanOrEqual(trayHeight(v, 0));
     }
     expect(trayHeight(2, 4)).toBe(trayHeight(2, 9));
+  });
+});
+
+const mon = (i: number, o: Partial<BattleListRow> = {}): BattleListRow => ({ label: `Mon ${i + 1}`, art: null, hp: 1 - i * 0.15, tag: '', off: false, ...o });
+const thing = (i: number, o: Partial<BattleListRow> = {}): BattleListRow => ({ label: `Item ${i + 1}`, art: null, hp: null, tag: `×${i + 1}`, off: false, ...o });
+const list = (o: Partial<BattleListModel> = {}): BattleListModel => ({ title: 'Switch to…', note: '', tabs: null, n: 6, row: (i) => mon(i), index: 0, ...o });
+
+describe('New UI battle windows (Party and Item)', () => {
+  it('lists the party under its title with an HP bar each, at the mock-up spot', () => {
+    const html = battleListView(ctx(0), list());
+    expect(html).toContain('Switch to…');
+    expect(html).toContain('left:20px;top:92px;width:330px');
+    expect(count(html, 'data-act="pick"')).toBe(6);
+    expect(count(html, 'class="hp')).toBe(6);
+    for (let i = 0; i < 6; i++) expect(html).toContain(`data-act="pick" data-arg="${i}"`);
+    expect(html).not.toContain('class="tabs"');
+    expect(html).not.toMatch(/\d+–\d+ of \d+/);
+  });
+
+  it('marks the focused row only, dims a row that cannot be picked, and shows a short mark', () => {
+    const html = battleListView(ctx(0), list({ index: 2, row: (i) => mon(i, { off: i === 5, tag: i === 0 ? 'IN BATTLE' : i === 5 ? 'FNT' : '' }) }));
+    expect(count(html, 'box-shadow:0 0 0 2px var(--acc)')).toBe(1);
+    expect(html).toMatch(/box-shadow:0 0 0 2px var\(--acc\);"[^>]*data-arg="2"/);
+    expect(count(html, 'opacity:.5;')).toBe(1);
+    expect(html).toContain('IN BATTLE');
+    expect(html).toContain('FNT');
+  });
+
+  it('a long mark gives the name room by shortening the HP bar', () => {
+    expect(battleListView(ctx(0), list({ n: 1, row: (i) => mon(i, { tag: '✔ Revive 11 HP' }) }))).toContain('width:54px');
+    expect(battleListView(ctx(0), list({ n: 1, row: (i) => mon(i, { tag: 'FNT' }) }))).toContain('width:90px');
+  });
+
+  it('the Item window shows pockets as tabs instead of a title, and counts the way the mock-up writes them', () => {
+    const html = battleListView(ctx(0), list({ title: 'Bag', note: 'P pins to the hotbar', tabs: { labels: ['Medicine', 'Balls'], index: 1 }, n: 3, row: (i) => thing(i), back: true }));
+    expect(count(html, 'data-act="tab"')).toBe(2);
+    expect(html).toMatch(/class="on"[^>]*data-arg="1"/);
+    expect(html).not.toContain('>Bag<');
+    expect(html).toContain('× 2');
+    expect(count(html, 'class="hp')).toBe(0);
+    expect(html).toContain('P pins to the hotbar');
+    expect(html).toContain('data-act="back"');
+  });
+
+  it('scrolls a long list with the cursor, says where it is, and asks only for the rows on screen', () => {
+    const asked: number[] = [];
+    const html = battleListView(ctx(0), list({ n: 40, index: 39, tabs: { labels: ['All'], index: 0 }, row: (i) => { asked.push(i); return thing(i); } }));
+    expect(count(html, 'data-act="pick"')).toBe(BATTLE_LIST_ROWS);
+    expect(html).toContain('data-arg="39"');
+    expect(html).toContain('–40 of 40');
+    expect(asked.length).toBe(BATTLE_LIST_ROWS);
+    expect(battleListView(ctx(0), list({ n: 40, index: 0, row: (i) => thing(i) }))).toContain(`1–${BATTLE_LIST_ROWS} of 40`);
+  });
+
+  it('survives an empty pocket and a cursor out of range, and never lets a name in as HTML', () => {
+    const none = battleListView(ctx(0), list({ n: 0, index: 4, tabs: { labels: ['Medicine'], index: 0 }, row: () => { throw new Error('no row to ask for'); } }));
+    expect(count(none, 'data-act="pick"')).toBe(0);
+    expect(none).toContain('Nothing here.');
+    expect(count(none, 'data-act="tab"')).toBe(1);
+    expect(count(battleListView(ctx(0), list({ index: 99 })), 'data-act="pick"')).toBe(6);
+    expect(count(battleListView(ctx(0), list({ index: -3 })), 'data-act="pick"')).toBe(6);
+    const html = battleListView(ctx(0), list({ title: '<b>t</b>', n: 1, row: (i) => mon(i, { label: '<i>x</i>', tag: '<u>m</u>' }) }));
+    expect(html).not.toContain('<b>t</b>');
+    expect(html).not.toContain('<i>x</i>');
+    expect(html).not.toContain('<u>m</u>');
+  });
+
+  it('sits lower when several foes are out, and leaves the Back line out when the choice is forced', () => {
+    expect(battleListView(ctx(0), list({ top: 144 }))).toContain('top:144px');
+    expect(battleListView(ctx(0), list())).not.toContain('data-act="back"');
+  });
+
+  it('splits a title from the words in brackets', () => {
+    expect(windowTitle('Bag  (P pins to the hotbar)')).toEqual({ title: 'Bag', note: 'P pins to the hotbar' });
+    expect(windowTitle('Switch to…')).toEqual({ title: 'Switch to…', note: '' });
+    expect(windowTitle('  ')).toEqual({ title: '', note: '' });
   });
 });

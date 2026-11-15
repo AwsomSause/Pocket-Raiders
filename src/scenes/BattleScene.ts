@@ -82,6 +82,7 @@ import { ambienceFor, musicState } from '../core/presentation/musicLayers';
 import { eventText, fixedDamageLabel, type Names } from '../ui/battleText';
 import { onInputAction, type InputAction } from '../ui/input';
 import { bagRow, partyRows, Picker } from '../ui/partyPanel';
+import { BAG_POCKETS, itemPocket, POCKET_NAMES } from '../core/bag';
 import { itemCard, itemFooter } from '../core/itemPreview';
 import { runHealMultiplier } from '../core/run';
 import { rewindTurnsAvailable } from '../core/rewind';
@@ -311,6 +312,8 @@ export class BattleScene extends Phaser.Scene {
   private rxHidden = new WeakSet<object>();
   /** The focused move in words, for the New UI's text box. */
   private rxInfo = '';
+  /** New UI: the Item window's open pocket. */
+  private rxPocket = 0;
   private playerBox!: InfoBox;
   private enemyBox!: InfoBox;
   private playerSprite: Visual | null = null;
@@ -1650,6 +1653,12 @@ export class BattleScene extends Phaser.Scene {
     this.events.once('shutdown', () => this.events.off('update', tick));
   }
 
+  /** New UI: the battle's lists (Party, Item, a target for an item) show as the mock-ups' small window, under the foes' boxes. */
+  private rxWindow(): { top?: number } | undefined {
+    if (!this.rx) return undefined;
+    return { top: this.duo ? 28 + Math.max(1, this.duo.slots.enemy.length) * 58 : undefined };
+  }
+
   /** New UI: reads what the battle shows right now and redraws the HUD when any of it changed. */
   private rxTick(): void {
     if (!this.rx) return;
@@ -1666,14 +1675,16 @@ export class BattleScene extends Phaser.Scene {
     const boxes = (list: InfoBox[]): BattleBox[] => list.filter((b) => b.container.visible && b.rx).map((b) => ({ ...b.rx!, hp: Math.round(b.rx!.hp * 200) / 200 }));
     const menu = this.menu && this.menu.container.visible ? { options: this.menu.options.map((o) => ({ label: o.label, sub: o.rx?.sub ?? o.detail, type: o.rx?.type, off: !!o.disabled })), index: this.menu.index } : null;
     const tabs = this.tabs.view;
+    const list = this.picker;
     const data: BattleModel = {
       foes: boxes(foes),
       mine: boxes(mine),
-      text: this.message.visible ? this.message.text : this.moveInfo.visible ? this.rxInfo || this.moveInfo.text : '',
+      // An open list (Party, Item) says what the focused row does in the text box.
+      text: list ? list.note || (this.message.visible ? this.message.text : '') : this.message.visible ? this.message.text : this.moveInfo.visible ? this.rxInfo || this.moveInfo.text : '',
       menu,
       tabs: tabs.shown ? { labels: tabs.labels, index: tabs.index, auto: tabs.auto, autoOff: tabs.autoOff } : null,
       header: this.header.visible ? this.header.text : '',
-      status: this.status.visible ? this.status.text : '',
+      status: this.status.visible && !list ? this.status.text : '',
       momentum: this.momentumText.visible ? this.momentumText.text : '',
       note: this.note.alpha > 0.05 ? this.note.text : '',
       auto: this.autoRunning,
@@ -3735,10 +3746,16 @@ export class BattleScene extends Phaser.Scene {
     return { content: battleContent(services().session.content, run.rules, run.regionOrder[run.regionIndex]), battle, party: run.party, inventory: run.inventory, disabledMechanics: run.disabledMechanics, perks: runPerks(services().session.content, run), gimmicks: gimmickContext(services().session.content, run), noBattleItems: noBattleItems(run.rules), setStyle: isHardcore(run.rules), catchBlocked: nuzlockeCatchProblem(battle), bondScore: (uid: string) => bondScoreOf(run.story.histories[uid]?.bond) };
   }
 
-  private openBag(): void {
+  private openBag(pocket = this.rxPocket): void {
     const content = services().session.content;
     const run = this.run;
-    const ids = Object.keys(run.inventory).filter((id) => content.items.get(id)?.usableInBattle && run.inventory[id]! > 0);
+    const all = Object.keys(run.inventory).filter((id) => content.items.get(id)?.usableInBattle && run.inventory[id]! > 0);
+    // New UI: the Item window sorts the Bag into pockets (tabs), as in the mock-up. The other looks list everything.
+    const pocketOf = (id: string): string => itemPocket(content.items.get(id)!.category);
+    const pockets = this.rx ? BAG_POCKETS.filter((p) => all.some((id) => pocketOf(id) === p)) : [];
+    const at = Math.max(0, Math.min(pockets.length - 1, pocket));
+    this.rxPocket = at;
+    const ids = pockets.length ? all.filter((id) => pocketOf(id) === pockets[at]) : all;
     this.bagIds = ids;
     // A Pokémon-targeted item is usable if it works on at least one party member.
     const problem = (id: string): string | null => {
@@ -3754,6 +3771,8 @@ export class BattleScene extends Phaser.Scene {
       glass: true,
       dock: true,
       title: 'Bag  (P pins to the hotbar)',
+      window: this.rxWindow(),
+      tabs: pockets.length ? { labels: pockets.map((p) => (p === 'balls' ? 'Balls' : POCKET_NAMES[p])), index: at, onChange: (i) => this.openBag(i) } : undefined,
       columns: 2,
       rowHeight: 34,
       rows: ids.map((id) => bagRow(content, run.inventory, id, problem(id))),
@@ -3781,6 +3800,7 @@ export class BattleScene extends Phaser.Scene {
       glass: true,
       dock: true,
       title: `Use ${item.name} on which Pokémon?`,
+      window: this.rxWindow(),
       columns: 3,
       rowHeight: 70,
       rows: partyRows(content, run.party, (i) => itemProblem(this.battleCtx(), itemId, i), (i) => (i === run.battle!.activeIndex ? 'IN BATTLE' : undefined), (i) => `${itemFooter(card, previews[i]!)}`, (i) => previews[i]),
@@ -3809,6 +3829,7 @@ export class BattleScene extends Phaser.Scene {
       this.picker = new Picker(this, {
         dock: true,
         title: forced ? 'Send out which Pokémon?' : `Switch ${this.speciesName(this.activeMon())} for which Pokémon?`,
+        window: this.rxWindow(),
         columns: 3,
         rowHeight: 70,
         rows: partyRows(content, run.party, (i) => doublesSwitchProblem(view, i, taken), (i) => (onField.includes(i) ? 'IN BATTLE' : undefined)),
@@ -3820,7 +3841,8 @@ export class BattleScene extends Phaser.Scene {
     this.picker = new Picker(this, {
       glass: true,
       dock: true,
-      title: forced ? 'Send out which Pokémon?' : 'Party',
+      title: forced ? 'Send out which Pokémon?' : this.rx ? 'Switch to…' : 'Party',
+      window: this.rxWindow(),
       columns: 3,
       rowHeight: 70,
       rows: partyRows(content, run.party, (i) => (forced ? switchProblem(this.battleCtx(), i) : null), (i) => (i === run.battle!.activeIndex && !forced ? 'IN BATTLE' : undefined)),

@@ -501,6 +501,80 @@ test('New UI: the battle shows the mock-up boxes, text box and menus over the li
   expect(errors).toEqual([]);
 });
 
+test('New UI: the battle\'s Party and Item tabs open the mock-up windows over the field; the keyboard and clicks steer them', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Battle');
+  await confirmToMenu(page);
+  // Two kinds of medicine and the starting balls, and a hurt Pokémon so the Potion can be used.
+  await page.evaluate(() => {
+    const run = (window as any).__pkr.session.run;
+    run.inventory = { ...run.inventory, potion: 2, revive: 1 };
+    run.party[0].hp = Math.max(1, run.party[0].hp - 5);
+  });
+  const stages = view(page, 'Battle');
+  const tab = (name: string) => stages.locator('[data-act="tab"]', { hasText: name }).first();
+  const win = stages.locator('.win', { has: page.locator('[data-act="pick"][data-over]') }).filter({ hasNot: page.locator('.btn') });
+  const text = stages.locator('.txt');
+  const picker = () => page.evaluate(() => {
+    const s = (window as any).__pkr.game.scene.getScene('Battle');
+    return s.picker ? { hidden: s.picker.root.cameraFilter !== 0, row: s.picker.current as number } : null;
+  });
+
+  // Party: one window under the foe's box, a row per Pokémon with its HP bar; the canvas list is left out of the picture.
+  await tab('Party').click();
+  await expect(win).toHaveCount(1);
+  await expect(win).toContainText('Switch to…');
+  const party = await page.evaluate(() => (window as any).__pkr.session.run.party.length as number);
+  await expect(win.locator('[data-act="pick"]')).toHaveCount(party);
+  await expect(win.locator('.hp')).toHaveCount(party);
+  expect((await picker())?.hidden).toBe(true);
+  await expect(stages.locator('[data-act="tab"].on').first()).toContainText('Party');
+  // The text box says what the focused Pokémon brings.
+  await expect(text).not.toHaveText('');
+  // Esc goes back to the commands and the window leaves.
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await expect(win).toHaveCount(0);
+  await expect(stages.locator('[data-act="pick"]', { hasText: 'Fight' })).toBeVisible();
+  expect(await picker()).toBeNull();
+
+  // Item: pockets as tabs, rows with counts, and the focused item's words in the text box.
+  await tab('Item').click();
+  await expect(win).toHaveCount(1);
+  const pockets = win.locator('.tabs [data-act="tab"]');
+  await expect(pockets).toHaveCount(2);
+  await expect(pockets.first()).toHaveClass(/on/);
+  await expect(pockets.first()).toHaveText('Medicine');
+  await expect(win.locator('[data-act="pick"]')).toHaveCount(2);
+  await expect(win).toContainText('Potion');
+  await expect(win).toContainText('× 2');
+  await expect(text).toContainText('HP');
+  // Down moves the same cursor the window shows.
+  await page.waitForTimeout(250);
+  await page.keyboard.press('ArrowDown');
+  await expect.poll(async () => (await picker())?.row).toBe(1);
+  await expect(win).toContainText('Revive');
+  // Right opens the next pocket; a click on a pocket does the same.
+  await page.keyboard.press('ArrowRight');
+  await expect(pockets.nth(1)).toHaveClass(/on/);
+  await expect(win).toContainText('Ball');
+  await pockets.first().click();
+  await expect(pockets.first()).toHaveClass(/on/);
+  // Choosing the Potion asks which Pokémon: the same window with the party, each row saying what the item would do.
+  await win.locator('[data-act="pick"]', { hasText: 'Potion' }).click();
+  await expect(win).toContainText('Use Potion on which Pokémon?');
+  await expect(win.locator('.hp')).toHaveCount(party);
+  // Picking the hurt Pokémon spends the Potion and the turn.
+  const before = await page.evaluate(() => ({ n: (window as any).__pkr.session.run.inventory.potion as number, turn: (window as any).__pkr.session.run.battle.turn as number }));
+  await win.locator('[data-act="pick"]').first().click();
+  await expect(win).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.inventory.potion ?? 0)).toBe(before.n - 1);
+  expect(errors).toEqual([]);
+});
+
 test('UI style: Old shows no New layer; the address can ask for either', async ({ page }) => {
   const errors = watch(page);
   // An automated browser gets Old by default (the older specs rely on it).
