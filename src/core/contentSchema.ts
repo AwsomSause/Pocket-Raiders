@@ -2772,7 +2772,7 @@ export type MaxMoveData = z.infer<typeof MaxMoveDataSchema>;
 // ---------- map events ("?" stops; plans/events-and-map-stops-plan) ----------
 
 /** The one signature animation each event scene plays. */
-export const EVENT_EFFECTS = ['none', 'rattle', 'spin', 'flicker', 'glint', 'shake', 'float', 'net', 'rain', 'sparkle', 'fog', 'fire', 'snow', 'hearts'] as const;
+export const EVENT_EFFECTS = ['none', 'rattle', 'spin', 'flicker', 'glint', 'shake', 'float', 'net', 'rain', 'sparkle', 'fog', 'fire', 'snow', 'hearts', 'confetti'] as const;
 
 /** Something an event or one of its choices needs; a locked choice stays visible with its requirement. */
 export const EventConditionSchema = z.discriminatedUnion('kind', [
@@ -3407,6 +3407,8 @@ export const EventSceneSchema = z.object({
   /** Backdrop tint as "#rrggbb". */
   tint: z.string().regex(/^#[0-9a-f]{6}$/i).optional(),
   effect: z.enum(EVENT_EFFECTS).default('none'),
+  /** Beta 0.7 Fighting Tournament: the bracket strip is drawn on this event. 0 = sign-up, 1 to 5 = that round is next, 6 = the champion's cutscene. */
+  tourney: z.number().int().min(0).max(6).optional(),
 });
 
 // ---------- game events (Untitled doc §17, plan Part 4b): weekly and holiday events ----------
