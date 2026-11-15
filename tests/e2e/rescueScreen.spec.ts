@@ -82,6 +82,11 @@ test('the rival rescue plan opens over the map and plays through', async ({ page
         }
         await page.waitForTimeout(250);
       }
+      // Beta 0.7 (all text waits for input): the "did not learn" line stays until Enter, then the map reopens the Rescue screen.
+      for (let i = 0; i < 4 && (await scene(page)) === 'Decision'; i++) {
+        await page.keyboard.press('Enter');
+        await page.waitForTimeout(600);
+      }
       await expect.poll(rescueUp, { timeout: 30_000 }).toBe(true);
       const after = await plan();
       expect(after.fights).toHaveLength(fights);

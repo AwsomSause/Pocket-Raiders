@@ -48,7 +48,11 @@ test('an Evil Team beat plays, moves the story on, and the Story screen shows th
   await page.keyboard.press('Enter');
   await page.waitForTimeout(1200);
   expect(await page.evaluate(() => (window as any).__pkr.session.run.story.evil.beat)).toBe(1);
-  await page.keyboard.press('Enter');
+  // Beta 0.7 (all events): the outcome text waits for input, then any reward waits for input again: Enter until the map is back.
+  for (let i = 0; i < 4 && (await scene(page)) === 'Event'; i++) {
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(900);
+  }
   await waitForScene(page, 'Map');
   await page.evaluate(() => {
     const s = (window as any).__pkr.game.scene.getScene('Map');
