@@ -18,6 +18,7 @@ import { stageFronts } from '../world';
 import type { Rival } from '../story/schema';
 import { BANK, BANK_CONTEXTS, type BankContext } from './bank';
 import { featuredRival } from './living';
+import { getMentor } from '../mentors';
 import { scout } from './tier5';
 import { addMark, overhaulOf, type FeelingKey, type RivalOverhaulState } from './overhaul';
 
@@ -206,6 +207,21 @@ export function slotHolder(content: Content, run: RunState, holds: (eventId: str
 type QuestCondition = Extract<EventCondition, { kind: 'rivalQuest' }>;
 type QuestEffect = Extract<EventEffect, { kind: 'rivalQuest' }>;
 
+/** The schedule-only part of the condition, for scenes that need no rival (R12's apprentice, R10's photographer before a rival is met). */
+function questScheduleOnly(content: Content, run: RunState, c: QuestCondition, met: (c: EventCondition) => boolean): boolean {
+  if (c.line && !lineOn(run, c.line)) return false;
+  if (c.stale && flagOf(run, c.stale) === stageNow(content, run)) return false;
+  if (c.lastStage !== undefined && ((run.stage?.index ?? 0) + 1 >= stagesPerRegion(content, run)) !== c.lastStage) return false;
+  if (c.beat) {
+    if (!beatScheduled(content, run, c.beat)) return false;
+    if (beatOf(c.beat).beat.slot) {
+      const holds = (eventId: string): boolean => (content.events.get(eventId)?.requires ?? []).every((r) => r.kind === 'rivalQuest' || met(r));
+      if (slotHolder(content, run, holds) !== c.beat) return false;
+    }
+  }
+  return true;
+}
+
 /** The `rivalQuest` condition. `met` checks another condition of an event (used to see which due beats could really show). */
 export function questConditionMet(content: Content, run: RunState, c: QuestCondition, met: (c: EventCondition) => boolean): boolean {
   if (c.slotFree) {
@@ -215,9 +231,19 @@ export function questConditionMet(content: Content, run: RunState, c: QuestCondi
     if (slotHolder(content, run, holds) !== null) return false;
     if (Object.keys(c).filter((k) => k !== 'kind' && k !== 'slotFree').length === 0) return true;
   }
+  if (c.stageOfRegion !== undefined && (run.stage?.index ?? 0) + 1 !== c.stageOfRegion) return false;
+  if (c.freshRegion) {
+    const at = flagOf(run, c.freshRegion);
+    if (at > 0 && Math.floor((at - 1) / stagesPerRegion(content, run)) === run.regionIndex) return false;
+  }
+  if (c.leagueEve !== undefined && (run.regionIndex >= run.regionOrder.length - 1 && (run.stage?.index ?? 0) + 1 >= stagesPerRegion(content, run)) !== c.leagueEve) return false;
+  if (c.mentorLessons !== undefined && (run.mentor?.lessons.length ?? -1) < c.mentorLessons) return false;
   const main = mainRival(run);
   const rec = recOf(run, main);
-  if (!main || !rec) return false;
+  // Fields about the rival need one; the schedule, the map and the mentor do not.
+  const aboutRival = c.personality || c.arc || c.second !== undefined || c.feeling || c.mark || c.noMark;
+  if ((!main || !rec) && aboutRival) return false;
+  if (!rec) return questScheduleOnly(content, run, c, met);
   if (c.personality && !c.personality.includes(rec.personality)) return false;
   if (c.arc && !c.arc.includes(packArc(run) ?? '')) return false;
   if (c.second !== undefined && (secondRival(run) !== null) !== c.second) return false;
@@ -384,6 +410,8 @@ export function questText(content: Content, run: RunState, eventId: string, text
     young: QUESTS.youngNames[flagOf(run, 'rq-r4-name') - 1] ?? 'the little one',
     rung: RUNG_WORDS[flagOf(run, 'circuit-rung')] ?? 'one',
     lost: content.species.get(lostFamily(content, run) ?? '')?.name ?? 'a name you cannot quite read',
+    fellow: run.mentor?.fellow.name ?? 'the other apprentice',
+    mentor: getMentor(run.mentor?.id)?.name ?? 'your mentor',
     team: (main?.memory?.lastBattle?.team ?? []).map((id) => content.species.get(id)?.name ?? id).join(', ') || 'a list of names, in order',
   };
   let n = 0;
@@ -395,7 +423,7 @@ export function questText(content: Content, run: RunState, eventId: string, text
     const lines = rec && CONTEXTS.has(ctx) ? (BANK.personalities[rec.personality] as unknown as Record<BankContext, string[]>)[ctx as BankContext] : undefined;
     if (lines?.length) return lines[fnv1a(`${run.seed}::rq-say::${eventId}::${n}`) % lines.length]!;
     return own[0]?.[1] ?? '';
-  }).replace(/\{(rival|rival2|player|called|lead|young|lost|rung|team)\}/g, (_m, k: string) => simple[k]!);
+  }).replace(/\{(rival|rival2|player|called|lead|young|lost|rung|team|fellow|mentor)\}/g, (_m, k: string) => simple[k]!);
 }
 
 // ---------- the pack's Marks (RIVAL_SYSTEM_OVERHAUL.md 3.3) ----------
@@ -665,3 +693,44 @@ export function placeAhead(run: RunState, eventId: string, step: number): void {
   for (const node of nodes.length > 0 ? nodes : here ? [here] : []) node.sides.push({ id: `event-ahead-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId });
   if (run.itemCounters) delete run.itemCounters[`event-seen:${eventId}`];
 }
+
+/** Two rosters taken in turn (R11's double battle: both rivals' teams, three each). */
+export function interleave(a: readonly string[], b: readonly string[]): string[] {
+  const out: string[] = [];
+  for (let i = 0; i < Math.max(a.length, b.length) && out.length < 6; i++) {
+    if (a[i]) out.push(a[i]!);
+    if (b[i] && out.length < 6) out.push(b[i]!);
+  }
+  return out;
+}
+
+// ---------- R11: the feud watched ----------
+
+/**
+ * R11 "Settle it with a battle between you": a CPU-versus-CPU battle. Your team waits in the box (uids in the string flag
+ * `rq:r11-stash`); the main rival's Pokémon fight for "your" side, played by the battle screen's autopilot. The side you
+ * cheered for (flag `rq-r11-cheer`: 1 the main rival, 2 the second) starts with Attack and Special Attack +1.
+ */
+export function beginFeudWatch(content: Content, run: RunState, theirs: PokemonInstance[]): void {
+  if (theirs.length === 0 || typeof run.story.flags['rq:r11-stash'] === 'string') return;
+  run.story.flags['rq:r11-stash'] = run.party.map((m) => m.uid).join(',');
+  run.box = [...(run.box ?? []), ...run.party];
+  for (const m of theirs) m.hp = maxHp(content, m);
+  run.party = theirs;
+}
+
+/** The watched fight is over: the rival's Pokémon go home, yours come back in their old order. Returns who won (1 main, 2 second). */
+export function endFeudWatch(run: RunState, outcome: 'win' | 'lose'): number {
+  const stash = run.story.flags['rq:r11-stash'];
+  if (typeof stash !== 'string') return 0;
+  const uids = stash.split(',').filter(Boolean);
+  run.party = uids.map((uid) => run.box.find((m) => m.uid === uid)).filter((m): m is PokemonInstance => Boolean(m));
+  run.box = run.box.filter((m) => !uids.includes(m.uid));
+  delete run.story.flags['rq:r11-stash'];
+  const winner = outcome === 'win' ? 1 : 2;
+  setFlag(run, 'feud-watch-winner', winner);
+  return winner;
+}
+
+/** True while a feud is being watched (the battle's spectate belongs to R11, not to Pidgey's Resolve). */
+export const feudWatching = (run: RunState): boolean => typeof run.story.flags['rq:r11-stash'] === 'string';

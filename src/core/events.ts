@@ -37,7 +37,7 @@ import { oldFoe } from './story/promises';
 import { featuredRival, rivalBeaten, rivalFightTeam, rivalLastResult, rivalPath } from './rivals/living';
 import { monRivalState } from './rivals/monRivals';
 import { openFeud, settleFeud } from './story/feud';
-import { apprenticeLevelBonus, applyMentorEffect, mentorConditionMet, mentorConditionText, mentorStopEvent } from './mentors';
+import { apprenticeLevelBonus, applyMentorEffect, getMentor, mentorConditionMet, mentorConditionText, mentorStopEvent } from './mentors';
 import { noteEventMorality } from './story/nemesis';
 import { addHuntClue, finishHunt, huntClues, huntDone } from './story/grandEnemy';
 import { gauntletLeft, startGauntlet } from './story/gauntlet';
@@ -101,7 +101,7 @@ import { celebrateToday, milestoneToday, periodOf, PERIOD_LABEL, restUntilMornin
 import { BERRIES } from './berries';
 import { choiceAt, effectiveEvent, visibleChoices } from './eventMemory';
 import { beginRivalBrain } from './rivals/brainSetup';
-import { applyQuestEffect, beginBorrow, planRivalTeam, shapeRivalMons, questConditionMet, questText, rivalAllySpecies, rivalStanding, RIVAL_QUEST_GROUP } from './rivals/questlines';
+import { applyQuestEffect, beginBorrow, beginFeudWatch, interleave, mainRival, secondRival, planRivalTeam, shapeRivalMons, questConditionMet, questText, rivalAllySpecies, rivalStanding, RIVAL_QUEST_GROUP } from './rivals/questlines';
 import { getTheme, typesPool } from './themes';
 import { anyRoaming, endRoamer, healConvoy, startConvoy, partyHasAbility, placeCamp, scoutAhead, CAMP_EVENT_ID } from './world';
 import { MAX_FOES, MAX_FOES_LISTED } from './bossLimits';
@@ -1666,8 +1666,13 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     const boss = b.bossId ? content.bosses.get(b.bossId) : undefined;
     const ghost = b.retired ? retiredTeam(run.story) : b.ghost ? championTeam(run.story) : [];
     const authored = ghost.length > 0 || (b.rival && featuredRival(run)) ? 'rival-ghost-team' : boss ? 'event-boss-signature' : null;
-    const rival = b.rival ? featuredRival(run) : null;
-    const rivalRoster = rival && ghost.length === 0 ? rivalFightTeam(content, rival) : [];
+    const plan = b.kind === 'trainer' ? b.quest : undefined;
+    // Rival questlines fight the main rival (R11: the second rival, or both together, or the second rival watched against the main).
+    const rival = b.rival ? (plan ? ((plan.second || plan.watch ? secondRival(run) : mainRival(run)) ?? featuredRival(run)) : featuredRival(run)) : null;
+    const partner = plan?.pair ? secondRival(run) : null;
+    const rivalRoster = rival && ghost.length === 0 ? (partner ? interleave(rivalFightTeam(content, rival), rivalFightTeam(content, partner)) : rivalFightTeam(content, rival)) : [];
+    // R12 The Final Lesson: the run's mentor, with their own types.
+    const mentorFoe = plan?.mentor ? getMentor(run.mentor?.id) : undefined;
     // Rival questlines: the scene may shape the rival's team (a slot aimed at your lead, the ace first, R4's young Pokémon).
     const rivalTeam = rival && b.kind === 'trainer' && b.quest && rivalRoster.length > 0 ? planRivalTeam(content, run, rival, rivalRoster, b.quest, run.party[activeIndex]!).map((id) => (id.startsWith('type:') ? pickSpecies(content, run, [], [id.slice(5) as TypeName], rng) : id)) : rivalRoster;
     const evil = evilBattle(content, run, b);
@@ -1701,7 +1706,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     }) : ghost.length > 0 ? ghost.map((m) => newMon(content, run, m.speciesId, Math.min(cap, Math.max(1, Math.min(m.level, base + 6))), 'e')) : Array.from({ length: b.size }, (_, i) => {
       const level = Math.min(cap, Math.max(1, base + (i === b.size - 1 ? 1 : 0)));
       const lane = b.lineup?.[i];
-      const speciesId = boss ? boss.signature[i % boss.signature.length]! : lane && content.species.has(lane) ? lane : b.rule?.bstMatch && b.species?.length ? nearestBst(content, b.species, run.party[activeIndex]!) : pickSpecies(content, run, b.species ?? [], b.types, rng);
+      const speciesId = boss ? boss.signature[i % boss.signature.length]! : lane && content.species.has(lane) ? lane : b.rule?.bstMatch && b.species?.length ? nearestBst(content, b.species, run.party[activeIndex]!) : pickSpecies(content, run, b.species ?? [], mentorFoe ? mentorFoe.leans : b.types, rng);
       return newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
     });
     // Beta 0.7: only a listed story boss (`seventh`) fields a 7th foe; every other team is cut to 6.
@@ -1716,9 +1721,26 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     const strategyKey = evil ? { kind: 'evil' as const, key: evilTeam(content, run)?.id ?? '' } : rival && rivalTeam.length > 0 ? { kind: 'rival' as const, key: rival.style } : null;
     const shaped = strategyKey && team.length > 0 ? shapeInstances(content, strategyIdForGroup(content, strategyKey.kind, strategyKey.key), strategyKey.kind, team, 0) : null;
     if (shaped) team.splice(0, team.length, ...shaped.team);
-    run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? (b.kind === 'trainer' && b.quest?.as) || rival.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name, leaderId: null });
+    // R11 the feud watched: your team waits; the main rival's team takes the field against the second rival's.
+    const watching = Boolean(plan?.watch && rival && rivalTeam.length > 0 && mainRival(run));
+    if (watching) {
+      const main = mainRival(run)!;
+      const level = (i: number, n: number): number => Math.min(cap, Math.max(1, base + (i === n - 1 ? 1 : 0)));
+      const theirs = rivalFightTeam(content, main).slice(0, team.length);
+      beginFeudWatch(content, run, theirs.map((id, i) => newMon(content, run, id, level(i, theirs.length), 'p')));
+    }
+    const startAt = watching ? 0 : activeIndex;
+    const trainerName = evil ? evil.name : partner && rival ? `${rival.name} & ${partner.name}` : rival ? (b.kind === 'trainer' && b.quest?.as) || rival.name : mentorFoe ? mentorFoe.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name;
+    run.battle = createBattle('trainer', team, startAt, run.party[startAt]!.uid, { classId: b.classId ?? 'event', name: trainerName, leaderId: null });
+    if (watching) {
+      run.battle.spectate = { kind: 'duel' };
+      // The side you cheered for starts a little braver (Attack and Special Attack +1).
+      const cheer = Number(run.story.flags['ev:rq-r11-cheer'] ?? 0);
+      const side = cheer === 1 ? run.battle.playerStages : cheer === 2 ? run.battle.enemyStages : null;
+      if (side) for (const st of ['atk', 'spa'] as const) side[st] = Math.min(6, (side[st] ?? 0) + 1);
+    }
     // A questline fight against the rival themself is a real rival battle: tier 5 play, and Lead, Marks and feelings move with the result.
-    if (rival && rivalTeam.length > 0 && b.kind === 'trainer' && b.quest && !b.quest.as) {
+    if (rival && rivalTeam.length > 0 && b.kind === 'trainer' && b.quest && !b.quest.as && !partner && !watching) {
       run.battle.rivalId = rival.id;
       beginRivalBrain(content, run, rival.id);
     }
@@ -1749,7 +1771,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
         run.battle.enemyStages[stat as 'atk'] = n;
       }
     }
-    const allyId = b.ally === 'rival' ? rivalAllySpecies(content, run) : b.ally;
+    const allyId = b.ally === 'rival' ? rivalAllySpecies(content, run) : b.ally === 'fellow' ? (run.mentor ? pickSpecies(content, run, [], run.mentor.fellow.types, rng) : undefined) : b.ally;
     if (allyId && content.species.has(allyId) && team.length >= 2) {
       // A temporary ally joins the party for this fight only (finishBattle sends it home).
       const ally = newMon(content, run, allyId, Math.max(1, base), 'p');
@@ -1801,7 +1823,7 @@ export function isApprenticeBattle(content: Content, event: EventBattleRef): boo
 export function isStoryEventBattle(content: Content, event: EventBattleRef): boolean {
   const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
-  return event.eventId.startsWith('format:') || (battle?.kind === 'trainer' && Boolean(battle.rival || battle.evil || battle.ghost || battle.retired));
+  return event.eventId.startsWith('format:') || (battle?.kind === 'trainer' && Boolean(battle.rival || battle.evil || battle.ghost || battle.retired || battle.quest?.mentor));
 }
 
 /** A Stand-with climax battle (a loss is Second Shot). */

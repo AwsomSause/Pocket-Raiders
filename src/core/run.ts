@@ -23,7 +23,7 @@ import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instru
 import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
-import { endBorrow, mainRival, notePlayerLoss, scoutedLead } from './rivals/questlines';
+import { endBorrow, endFeudWatch, feudWatching, mainRival, notePlayerLoss, scoutedLead, secondRival } from './rivals/questlines';
 import { recordStoryLoss, storyLossApplies } from './story2/loss';
 import { biomeWildWeight } from './biomes';
 import { pickEggFamily } from './eggPools';
@@ -3269,6 +3269,15 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // A temporary ally (a tag battle) goes home after a lost fight too (finishBattle sends it home after a win).
   if (battle.outcome === 'lose' && battle.loaner) run.party = run.party.filter((m) => m.uid !== battle.loaner);
   // Pidgey's Resolve: a watched CPU fight counts for nothing; the real team comes back and the story reads out how it ended.
+  if (battle.spectate && (battle.outcome === 'win' || battle.outcome === 'lose') && feudWatching(run)) {
+    // R11: the feud watched. Your team comes back; the outcome's effects apply as for any event fight.
+    const winner = endFeudWatch(run, battle.outcome);
+    const lines = battle.event ? (battle.outcome === 'win' ? eventBattleWon(content, run, battle.event, battle.turn - 1) : eventBattleLost(content, run, battle.event)) : [];
+    run.battle = null;
+    run.phase = 'map';
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, spectated: { kind: battle.spectate.kind, lines: [`${winner === 1 ? mainRival(run)?.name : secondRival(run)?.name} wins.`, ...lines] } };
+  }
   if (battle.spectate && (battle.outcome === 'win' || battle.outcome === 'lose')) {
     const lines = finishSpectate(content, run, battle.outcome);
     recordChanges(content, current, run, 'battle');

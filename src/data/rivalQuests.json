@@ -397,6 +397,81 @@
           "final": true
         }
       }
+    },
+    "R10": {
+      "name": "Three Photographs",
+      "managed": false,
+      "span": 40,
+      "beats": {
+        "album": {
+          "event": "rq-r10-album",
+          "minStage": 4,
+          "late": true
+        }
+      }
+    },
+    "R11": {
+      "name": "Two Rivals, One Argument",
+      "beats": {
+        "open": {
+          "event": "rival-feud",
+          "minStage": 7,
+          "slot": true
+        },
+        "bench": {
+          "event": "rq-r11-bench",
+          "after": "open",
+          "offset": 1,
+          "slot": true
+        },
+        "outside": {
+          "event": "rq-r11-outside",
+          "after": "bench",
+          "offset": 1,
+          "slot": true
+        },
+        "finale": {
+          "event": "rq-r11-finale",
+          "after": "outside",
+          "offset": 1,
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R12": {
+      "name": "The Fellow Apprentice",
+      "managed": false,
+      "span": 20,
+      "beats": {
+        "open": {
+          "event": "rq-r12-camp",
+          "minStage": 2
+        },
+        "confession": {
+          "event": "rq-r12-confession",
+          "after": "open",
+          "offset": 1
+        },
+        "finale": {
+          "event": "rq-r12-final",
+          "after": "confession",
+          "offset": 1,
+          "final": true
+        },
+        "nurse": {
+          "event": "rq-r12-nurse",
+          "after": "finale",
+          "when": "nextRegion",
+          "late": true
+        },
+        "third": {
+          "event": "rq-r12-third",
+          "after": "finale",
+          "when": "nextRegion",
+          "late": true
+        }
+      }
     }
   }
 }

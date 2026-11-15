@@ -2946,6 +2946,13 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** Catalog pack rival questlines (core/rivals/questlines.ts): a beat that is due now (`beat`, "R2.open"), a questline the run uses or has running, the main rival's personality or pack arc, whether a second rival exists, or a feeling of the main or second rival in a range. Never true without a registered rival. */
   z.object({
     kind: z.literal('rivalQuest'),
+    /** R10: a stage of the region (1-based) and "not yet this region" (the flag's stage is in an earlier region or unset). */
+    stageOfRegion: z.number().int().min(1).max(12).optional(),
+    freshRegion: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
+    /** R10: the last stage before the League (the last stage of the run's last region). */
+    leagueEve: z.boolean().optional(),
+    /** R12: the run's mentor has taught at least this many lessons. */
+    mentorLessons: z.number().int().min(0).optional(),
     /** The stage's rival slot is free and no questline beat wants it (for rival-slot events in other files; pair with the effect's `takeSlot`). */
     slotFree: z.boolean().optional(),
     beat: z.string().regex(/^R\d+\.[a-z0-9-]+$/).optional(),
@@ -3454,8 +3461,11 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** Run events B: special rules for this fight (see EventRuleSchema). */
     rule: EventRuleSchema.optional(),
     /** Catalog pack rival questlines (core/rivals/questlines.ts planRivalTeam), with `rival`: how the rival builds this fight's team. `counter: 'lead'` aims one slot at your lead's weakness, `'seen'` at a Pokémon of yours they have fought, `'owed'` by what R2 remembers (helped: none; abandoned: lead; else seen); `aceFirst` sends their ace out first; `young` adds R4's young Pokémon (the species they lost) as their opener; `full` brings all six; `guard` keeps their weakest Pokémon back (R4's cautious stage); `as` is another trainer fighting with the rival's team in the rival's style (their mentor): the fight is not recorded as a rival battle. */
-    quest: z.object({ counter: z.enum(['none', 'lead', 'seen', 'owed']).optional(), aceFirst: z.boolean().optional(), young: z.boolean().optional(), full: z.boolean().optional(), guard: z.boolean().optional(), as: z.string().optional(), /** R7: Borrowed Team rules, each side commands the other's ace (use with aceFirst). */ borrow: z.boolean().optional() }).optional(),
-    /** With `ally`: "rival" lends the rival's ace as your partner for the fight (a tag battle beside them). */
+    quest: z.object({ counter: z.enum(['none', 'lead', 'seen', 'owed']).optional(), aceFirst: z.boolean().optional(), young: z.boolean().optional(), full: z.boolean().optional(), guard: z.boolean().optional(), as: z.string().optional(), /** R7: Borrowed Team rules, each side commands the other's ace (use with aceFirst). */ borrow: z.boolean().optional(),
+      /** R11: `second` fights the second rival; `pair` fields both rivals' teams together (a double battle against you). */ second: z.boolean().optional(), pair: z.boolean().optional(),
+      /** R12 The Final Lesson: the run's mentor fights with their types and name (pair with ally "fellow"). */ mentor: z.boolean().optional(),
+      /** R11: the feud watched: your team waits, the main rival's team fights the second rival's while you cheer (core/rivals/questlines.ts). */ watch: z.boolean().optional() }).optional(),
+    /** With `ally`: "rival" lends the rival's ace as your partner for the fight (a tag battle beside them); "fellow" a Pokémon of your fellow apprentice's types. */
     /** Run events B: `win` effects used instead of `win` when the fight took longer than `rule.turnLimit` turns. */
     slowWin: z.array(EventEffectSchema).optional(),
     win: z.array(EventEffectSchema).default([]),
