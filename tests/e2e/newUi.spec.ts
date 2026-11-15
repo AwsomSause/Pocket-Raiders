@@ -84,6 +84,56 @@ test('New UI: an event is played with clicks (choice, outcome text, results) and
   expect(errors).toEqual([]);
 });
 
+test('New UI: a long event script is read page by page; choices wait for the last page, rewards for the last outcome page', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await page.evaluate(() => {
+    const e = (window as any).__pkr.session.content.events.get('pokemon-center');
+    e.intro = 'The doors slide open.\nRain drums on the roof.\n\nNurse Joy: "A trainer, at this hour?"\n\nShe points at the machine.';
+    e.choices[0].success.text = 'Nurse Joy: "There. All healed."\n\nThe machine goes quiet.';
+  });
+  await addSide(page, { id: 'nu-pages', kind: 'event', used: false, eventId: 'pokemon-center' });
+  await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('Map').scene.start('Event', { sideId: 'nu-pages' }));
+  await waitForScene(page, 'Event');
+  const ev = view(page, 'Event');
+  // Page 1: both of its lines, no choices yet, nothing from later pages.
+  await expect(ev).toContainText('The doors slide open.');
+  await expect(ev).toContainText('Rain drums on the roof.');
+  await expect(ev).toContainText('1/3');
+  await expect(ev).not.toContainText('at this hour');
+  await expect(ev.locator('[data-act="pick"]')).toHaveCount(0);
+  // Enter on a page that is not the last one never picks a choice.
+  await page.keyboard.press('Enter');
+  await expect(ev).toContainText('A trainer, at this hour?');
+  await expect(ev).toContainText('Nurse Joy');
+  await expect(ev).not.toContainText('The doors slide open.');
+  expect(await scene(page)).toBe('Event');
+  await expect(ev.locator('[data-act="pick"]')).toHaveCount(0);
+  // A click anywhere turns the page too; Esc goes back one.
+  await ev.locator('[data-act="page"]').click({ position: { x: 400, y: 200 } });
+  await expect(ev).toContainText('She points at the machine.');
+  await expect(ev.locator('[data-act="pick"]')).not.toHaveCount(0);
+  await page.keyboard.press('Escape');
+  await expect(ev).toContainText('A trainer, at this hour?');
+  await page.keyboard.press('Enter');
+  await expect(ev).toContainText('3/3');
+  await ev.locator('[data-act="pick"]').first().click();
+  // Outcome page 1 of 2: no rewards yet.
+  await expect(ev).toContainText('There. All healed.', { timeout: 10_000 });
+  await expect(ev).not.toContainText('The machine goes quiet.');
+  await page.waitForTimeout(700);
+  await page.keyboard.press('Enter');
+  await expect(ev).toContainText('The machine goes quiet.');
+  await expect(ev).not.toContainText('Outcome');
+  await page.keyboard.press('Enter');
+  await expect(ev).toContainText('Outcome', { timeout: 10_000 });
+  await page.waitForTimeout(1500);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Map');
+  expect(errors).toEqual([]);
+});
+
 test('New UI: learning a move asks with the mock-up decision screen and its Yes/No box', async ({ page }) => {
   const errors = watch(page);
   await start(page, 'ui=new&seed=newui-e2e');
