@@ -1,0 +1,12 @@
+{
+  "_note": "Numbers and tables for the families-c pieces of the Catalog Overhaul Pack (src/core/events/coToolkit.ts). STORY_FAMILIES_9 SF72 (rule battles), STORY_FAMILIES_10 SF74 (the Cursed Idol), QUESTLINES_DEEPENED_1 FE4 (the Time Machine).",
+  "rules": {
+    "multiplier": { "veryBad": 2, "bad": 1.5, "even": 1, "favours": 0.75 },
+    "words": { "2": "This rule is very bad for you: double prize", "1.5": "This rule is bad for you: prize ×1.5", "1": "This rule is even for both sides: prize ×1", "0.75": "This rule favours you: prize ×0.75" }
+  },
+  "idol": { "money": 300, "hpCurse": 3, "restCurse": 5, "faceCurse": 7, "hpShare": 0.1, "restShare": 0.75 },
+  "paradox": {
+    "past": { "phanpy": "great-tusk", "donphan": "great-tusk", "igglybuff": "scream-tail", "jigglypuff": "scream-tail", "wigglytuff": "scream-tail", "foongus": "brute-bonnet", "amoonguss": "brute-bonnet", "misdreavus": "flutter-mane", "mismagius": "flutter-mane", "larvesta": "slither-wing", "volcarona": "slither-wing", "magnemite": "sandy-shocks", "magneton": "sandy-shocks", "magnezone": "sandy-shocks", "bagon": "roaring-moon", "shelgon": "roaring-moon", "salamence": "roaring-moon", "suicune": "walking-wake", "raikou": "raging-bolt", "entei": "gouging-fire" },
+    "future": { "phanpy": "iron-treads", "donphan": "iron-treads", "delibird": "iron-bundle", "makuhita": "iron-hands", "hariyama": "iron-hands", "deino": "iron-jugulis", "zweilous": "iron-jugulis", "hydreigon": "iron-jugulis", "larvesta": "iron-moth", "volcarona": "iron-moth", "larvitar": "iron-thorns", "pupitar": "iron-thorns", "tyranitar": "iron-thorns", "ralts": "iron-valiant", "kirlia": "iron-valiant", "gardevoir": "iron-valiant", "gallade": "iron-valiant", "virizion": "iron-leaves", "cobalion": "iron-crown", "terrakion": "iron-boulder" }
+  }
+}
