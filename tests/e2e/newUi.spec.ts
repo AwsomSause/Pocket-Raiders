@@ -643,7 +643,8 @@ test('New UI: a Gym Leader enters on the mock-up cutscene card (a click skips it
   await expect(cut.locator('kbd')).toHaveText('Esc');
   await expect(stages.locator('.vsx')).toHaveCount(0);
   await expect(stages.locator('.win.glass')).toHaveCount(0);
-  await cut.locator('[data-act="next"]').click();
+  // The card is redrawn on every beat, so the click goes to the layer (which stays) rather than to one drawing of it.
+  await cut.click();
   await expect(cut).toHaveCount(0);
   // Skipping is remembered for this boss, and the versus card follows.
   expect(await page.evaluate(() => (window as any).__pkr.session.settings.skippedIntros.length)).toBe(1);
@@ -1104,5 +1105,185 @@ test('UI style: Old shows no New layer; the address can ask for either', async (
   await expect(view(page, 'MainMenu')).toBeVisible();
   // The saved setting still says New: that is what players get.
   expect(await page.evaluate(() => (window as any).__pkr.session.settings.uiStyle)).toBe('new');
+  expect(errors).toEqual([]);
+});
+
+/** Starts a scene by name from whatever is on screen. */
+async function open(page: Page, key: string, data?: Record<string, unknown>) {
+  await page.evaluate(([k, d]) => {
+    const g = (window as any).__pkr.game;
+    for (const s of g.scene.getScenes(true)) if (s.scene.key !== k) g.scene.stop(s.scene.key);
+    g.scene.start(k, d ?? undefined);
+  }, [key, data] as const);
+  await waitForScene(page, key);
+}
+
+test('New UI: the loading screen and the update splash are the mock-up page; so are the welcome log, the tutorial and the credits', async ({ browser, baseURL }) => {
+  test.setTimeout(150_000);
+  // A fresh browser profile with the offline worker off: the worker would answer for the files this test holds back.
+  const context = await browser.newContext({ serviceWorkers: 'block', viewport: { width: 1280, height: 720 }, ...(baseURL ? { baseURL } : {}) });
+  const page = await context.newPage();
+  const errors = watch(page);
+  // The game's pictures and sounds are held back so the loading screen stays up; the fonts and the splash's own files pass.
+  let release: () => void = () => undefined;
+  const gate = new Promise<void>((r) => { release = r; });
+  await page.route('**/assets/**', async (route) => {
+    const url = route.request().url();
+    if (/\/assets\/(images|audio)\//.test(url) && !/splash|amb-birds/.test(url)) await gate;
+    await route.continue().catch(() => undefined);
+  });
+  await page.goto('/?ui=new&splash=1', { waitUntil: 'domcontentloaded' });
+  const boot = view(page, 'Boot');
+  // The update splash: the picture behind, the update's name over the loading bar, and a click anywhere moves on.
+  await expect(boot).toContainText('is here', { timeout: 30_000 });
+  await expect(boot.locator('.bg')).toHaveCount(1);
+  await expect(boot.locator('.hp.gold i')).toHaveCount(1);
+  await boot.locator('[data-act="next"]').click();
+  // The loading screen under it: the title, a tip and the bar (nothing has loaded yet, so the bar is not full).
+  await expect(boot).toContainText('Loading the region…', { timeout: 10_000 });
+  await expect(boot).toContainText('Tip:');
+  await expect(boot.locator('[data-act="next"]')).toHaveCount(0);
+  const width = await boot.locator('.hp.gold i').evaluate((el) => parseFloat((el as HTMLElement).style.width));
+  expect(width).toBeLessThan(100);
+  release();
+  // After the splash the title screen is skipped: straight into the hub.
+  await waitForScene(page, 'Hub', 90_000);
+  await page.unroute('**/assets/**');
+
+  // The welcome log: a talk page with the player's picture, a tag, and the choices only once the text has been read.
+  await open(page, 'Welcome', { returnTo: 'MainMenu' });
+  const welcome = view(page, 'Welcome');
+  const read = async (v: typeof welcome) => { for (let i = 0; i < 8 && (await v.locator('.rx-more').count()) > 0; i++) { await page.keyboard.press('Enter'); await page.waitForTimeout(250); } };
+  await expect(welcome).toContainText('First launch');
+  await read(welcome);
+  await expect(welcome.locator('[data-act="pick"]')).toHaveText(['Next', 'Skip the update log']);
+  expect(await welcome.innerHTML()).toContain('packs/mc/look_a/command.png');
+  expect(await welcome.innerHTML()).not.toContain('₽');
+  await welcome.locator('[data-act="pick"]').first().click();
+  await expect(welcome).toContainText('Update log 1/');
+  await read(welcome);
+  await welcome.locator('[data-act="pick"]').nth(1).click();
+  await expect(welcome).toContainText('Optional tutorial');
+  await read(welcome);
+  await welcome.locator('[data-act="pick"]').first().click();
+
+  // The tutorial: all ten choices fit on the page; pointing at a lesson shows its professor; a lesson reads page by page.
+  await waitForScene(page, 'Tutorial');
+  const tutorial = view(page, 'Tutorial');
+  const picks = tutorial.locator('[data-act="pick"]');
+  await expect(picks).toHaveCount(10);
+  await expect(tutorial).toContainText('Tutorial 0/9');
+  const frame = (await tutorial.boundingBox())!;
+  for (const k of [0, 9]) {
+    const b = (await picks.nth(k).boundingBox())!;
+    expect(b.y).toBeGreaterThanOrEqual(frame.y);
+    expect(b.y + b.height).toBeLessThanOrEqual(frame.y + frame.height);
+  }
+  await picks.nth(2).hover();
+  await expect(tutorial).toContainText('Prof. Birch');
+  await picks.first().click();
+  await expect(tutorial).toContainText('Tutorial 1/');
+  await expect(tutorial).toContainText('Prof. Oak');
+  for (let i = 0; i < 12 && !(await tutorial.innerText()).includes('Finish this lesson'); i++) {
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(250);
+  }
+  await tutorial.locator('[data-act="pick"]', { hasText: 'Finish this lesson' }).click();
+  await expect(tutorial).toContainText('Tutorial 1/9');
+  await expect(picks.first()).toContainText('✓');
+  expect(await page.evaluate(() => (window as any).__pkr.session.settings.tutorialDone.length)).toBe(1);
+  await picks.last().click();
+  await waitForScene(page, 'MainMenu');
+
+  // The asset credits stand still and scroll; Esc leaves, back to Settings where they are opened from.
+  await open(page, 'Credits', { assets: true, from: 'MainMenu' });
+  const credits = view(page, 'Credits');
+  await expect(credits.locator('.rx-credits')).toContainText('Asset credits');
+  await expect(credits).toContainText('skip');
+  await page.waitForTimeout(500);
+  await page.keyboard.press('ArrowDown');
+  await expect.poll(() => credits.locator('.rx-credits').evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+  await page.keyboard.press('Escape');
+  await waitForScene(page, 'Settings');
+  // The ending credits roll by themselves with full animations.
+  await page.evaluate(() => { const s = (window as any).__pkr.session; s.saveSettings({ ...s.settings, battleAnimations: 'full' }); });
+  await open(page, 'Credits', { assets: false });
+  const at = () => credits.locator('.rx-roll').evaluate((el) => (el as HTMLElement).style.transform);
+  const first = await at();
+  await expect.poll(at, { timeout: 5_000 }).not.toBe(first);
+  await page.waitForTimeout(500);
+  await page.keyboard.press('Enter');
+  await expect.poll(() => scene(page), { timeout: 20_000 }).not.toBe('Credits');
+  expect(errors).toEqual([]);
+  await context.close();
+});
+
+test('New UI: the prologue plays on the mock-up pages: talk pages with Prof. Vance, the name entry\'s on-screen keys, the Departure cards', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await open(page, 'Prologue');
+  const pro = view(page, 'Prologue');
+  const session = () => page.evaluate(() => (window as any).__pkr.session.profile.story.protagonist);
+  // The Look: two choices beside the Look's portrait; pointing at one shows it.
+  await expect(pro.locator('[data-act="pick"]')).toHaveText(['Look A', 'Look B']);
+  expect(await pro.innerHTML()).toContain('packs/mc/look_a/portrait.png');
+  await pro.locator('[data-act="pick"]').nth(1).hover();
+  await expect.poll(() => pro.innerHTML()).toContain('packs/mc/look_b/portrait.png');
+  await pro.locator('[data-act="pick"]').first().click();
+  await page.waitForTimeout(250);
+  expect((await session()).look).toBe('look_a');
+  await pro.locator('[data-act="pick"]', { hasText: 'Quick Start' }).click();
+  await page.waitForTimeout(250);
+
+  /** One step: a confirm button when one is lit, else the first choice not ticked yet, else Enter (a page turn). */
+  const step = async () => {
+    const clicked = await page.evaluate(() => {
+      const b = [...document.querySelectorAll<HTMLElement>('#rx [data-act="pick"]')].filter((x) => !/opacity:\s*\.5/.test(x.getAttribute('style') ?? ''));
+      const go = b.find((x) => /^(Confirm|Continue|Go |Looks right)/.test(x.innerText.trim())) ?? b.find((x) => !x.innerText.trim().startsWith('✓'));
+      go?.click();
+      return !!go;
+    });
+    if (!clicked) await page.keyboard.press('Enter');
+    await page.waitForTimeout(280);
+  };
+  const seen = new Set<string>();
+  const note = async () => {
+    const html = await pro.innerHTML().catch(() => '');
+    if (html.includes('packs/vance/') && html.includes('Prof. Vance')) seen.add('vance');
+    if (html.includes('class="beat"') && html.includes('Departure')) seen.add('departure');
+    if (/Prologue \d+\/\d+/.test(html)) seen.add('tag');
+    return html;
+  };
+
+  // Up to the name entry.
+  for (let i = 0; i < 80 && (await pro.locator('[data-act="key"]').count()) === 0; i++) { await note(); await step(); }
+  await expect(pro.locator('[data-act="key"]')).toHaveCount(30);
+  expect(seen.has('vance')).toBe(true);
+  expect(seen.has('tag')).toBe(true);
+  const key = (k: string) => pro.locator(`[data-act="key"][data-arg="${k}"]`).click();
+  // Nothing typed yet: "That is me" is refused and the page stays.
+  await pro.locator('[data-act="ok"]').click();
+  await page.waitForTimeout(250);
+  await expect(pro.locator('[data-act="key"]')).toHaveCount(30);
+  // On-screen keys (a capital first, then small letters), the delete key, and the keyboard all type into the box.
+  for (const k of ['K', 'A', 'Y', 'Y']) await key(k);
+  await expect(pro).toContainText('Kayy');
+  await key('⌫');
+  await page.keyboard.press('e');
+  await expect(pro).toContainText('Kaye');
+  await page.keyboard.press('Backspace');
+  await pro.locator('[data-act="clear"]').click();
+  await expect(pro).not.toContainText('Kay');
+  for (const k of ['K', 'A', 'Y']) await key(k);
+  await pro.locator('[data-act="ok"]').click();
+  await page.waitForTimeout(300);
+  await expect(pro.locator('[data-act="key"]')).toHaveCount(0);
+
+  // On to the end: pronouns, the quiz, the partner, then the Departure cards.
+  for (let i = 0; i < 160 && (await scene(page)) === 'Prologue'; i++) { await note(); await step(); }
+  expect(await scene(page)).not.toBe('Prologue');
+  expect(seen.has('departure')).toBe(true);
+  expect((await session()).name).toBe('Kay');
   expect(errors).toEqual([]);
 });

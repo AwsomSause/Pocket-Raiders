@@ -11,6 +11,12 @@ import { onInputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu, type MenuOption } from '../ui/widgets';
 import { drawBackdrop } from '../ui/widgets';
+import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { eventView } from '../ui/redux/screens/event';
+import { cutBeat, cutView } from '../ui/redux/screens/cut';
+import { beatTag, formView, typeKey, vanceLine } from '../ui/redux/screens/prologue';
+import { pageLines, pageSpeaker } from '../ui/redux/script';
+import type { Art } from '../ui/redux/templates';
 import type { ProfileStory, StoryData } from '../core/story2/schema';
 import { chooseNextBackstory, chooseNextLine, intakeChoices, quizQuestions, revealPicks, saveQuizResult } from '../core/story2/intake';
 import { enabledBackstories } from '../core/story2/module';
@@ -27,6 +33,31 @@ export const STORY_RUN_MODE = 'story-run';
 
 type Step = 'intake' | 'look' | 'mode' | BeatId;
 
+/** A box the player types in: the page's own input in Old, a plain value the New UI's name entry edits. */
+interface TextBox { value: string; focus: (o?: FocusOptions) => void }
+
+/** New UI: what the current step put on screen, written down by the layout helpers so the mock-up page can show it. */
+interface RxPage {
+  title: string;
+  lines: string[];
+  options: MenuOption[];
+  next: (() => void) | null;
+  notice: string;
+  vance: VanceAnim | null;
+  /** The name entry: its boxes and which one is typed in. */
+  fields: { label: string; max: number; box: TextBox }[];
+  field: number;
+  /** A cutscene card instead of a page (the opening shots, the departure): pages of name and line; `skip` leaves early. */
+  cut: { pages: { name: string; line: string }[]; beat: number | null; who: 'me' | 'vance'; skip: (() => void) | null } | null;
+  /** Looks to show as the picture, one per option. */
+  looks: PlayerLookId[] | null;
+}
+type PlayerLookId = 'a' | 'b';
+const emptyPage = (): RxPage => ({ title: '', lines: [], options: [], next: null, notice: '', vance: null, fields: [], field: 0, cut: null, looks: null });
+/** New UI: the backdrop of the station's rooms and how big Professor Vance's 160-pixel frames are drawn. */
+const RX_ROOM = 'packs/memories/eventbg/indoor.png';
+const VANCE_FRAME = 160;
+
 export class PrologueScene extends Phaser.Scene {
   private menu: Menu | null = null;
   private inputs: HTMLInputElement[] = [];
@@ -40,6 +71,13 @@ export class PrologueScene extends Phaser.Scene {
   private sideW = 0;
   /** Opened from the title's Story Run entry: finishing goes on to trainer choice for a Story Run. */
   private thenRun = false;
+  /** New UI: the mock-up layer, the page being shown, which page of its text is up, and what was last drawn. */
+  private rx: ReduxView | null = null;
+  private rxM: RxPage = emptyPage();
+  private rxAt = 0;
+  private rxSig = '';
+  /** New UI: the frame a step was drawn in (the key press that opened it must not also act on it). */
+  private rxOpened = -1;
 
   constructor() {
     super('Prologue');
@@ -55,6 +93,7 @@ export class PrologueScene extends Phaser.Scene {
    */
   private vance(anim: VanceAnim): void {
     const key = `story.vance.${anim}`;
+    this.rxM.vance = anim;
     if (!this.textures.exists(key)) return;
     this.sideW = VANCE_SIDE;
     const sprite = this.add.sprite(GAME_WIDTH - VANCE_SIDE / 2 - 20, GAME_HEIGHT - 20, key, 0).setOrigin(0.5, 1).setScale(VANCE_SCALE);
@@ -80,11 +119,17 @@ export class PrologueScene extends Phaser.Scene {
     this.shot = 0;
     this.pronounPick = null;
     drawBackdrop(this);
+    this.rx = null;
+    this.rxM = emptyPage();
+    this.rxAt = 0;
+    this.rxSig = '';
     onInputAction(this, (a) => {
+      if (this.rx) return this.rxInput(a);
       if (this.menu) this.menu.handle(a);
       else if (a === 'confirm') this.onConfirm?.();
     });
     this.events.once('shutdown', () => this.clearInputs());
+    if (reduxOn()) this.mountRx();
     this.go(this.story.prologue.done ? 'intake' : 'look');
   }
 
@@ -98,6 +143,9 @@ export class PrologueScene extends Phaser.Scene {
     this.sideW = 0;
     this.children.removeAll(true);
     drawBackdrop(this);
+    this.rxM = emptyPage();
+    this.rxAt = 0;
+    this.rxOpened = this.time.now;
   }
 
   private clearInputs(): void {
@@ -106,26 +154,36 @@ export class PrologueScene extends Phaser.Scene {
   }
 
   private title(text: string): void {
+    this.rxM.title = text;
     this.add.text(GAME_WIDTH / 2, 28, text, textStyle(30, COLORS.textLight)).setOrigin(0.5);
   }
 
   private body(lines: string[], y = 90): number {
+    this.rxM.lines.push(...lines);
     const t = this.add.text(60, y, lines.join('\n\n'), textStyle(20, COLORS.text, { wordWrap: { width: GAME_WIDTH - 120 - this.sideW } }));
     return y + t.height + 16;
   }
 
   private choose(options: MenuOption[], onSelect: (i: number) => void, y: number, onBack?: () => void, initialIndex?: number): void {
     this.menu?.destroy();
+    this.rxM.options = options;
     this.menu = new Menu(this, { x: 60, y, options, itemWidth: GAME_WIDTH - 120 - this.sideW, itemHeight: 40, fontSize: 20, onSelect, onBack, initialIndex });
   }
 
   private next(text: string, fn: () => void): void {
     this.add.text(GAME_WIDTH - 40, GAME_HEIGHT - 30, text, textStyle(16, '#8a7f96')).setOrigin(1, 0.5);
     this.onConfirm = fn;
+    this.rxM.next = fn;
     this.input.once('pointerup', fn);
   }
 
-  private inputBox(label: string, y: number, value = '', max = 14): HTMLInputElement {
+  private inputBox(label: string, y: number, value = '', max = 14): TextBox {
+    if (this.rx) {
+      // New UI: the mock-ups' name entry types into a plain value (keys, the on-screen grid, paste); no page input.
+      const box: TextBox = { value, focus: () => { this.rxM.field = Math.max(0, this.rxM.fields.findIndex((f) => f.box === box)); } };
+      this.rxM.fields.push({ label, max, box });
+      return box;
+    }
     this.add.text(60, y - 22, label, textStyle(15, '#c9bfd6'));
     const el = document.createElement('input');
     el.type = 'text';
@@ -155,7 +213,165 @@ export class PrologueScene extends Phaser.Scene {
   }
 
   private say(text: string): void {
+    this.rxM.notice = text;
     this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 70, text, textStyle(17, '#f0e0a0', { align: 'center', wordWrap: { width: GAME_WIDTH - 80 } })).setOrigin(0.5).setName('notice');
+  }
+
+  // ---------- New UI: the mock-up pages ----------
+
+  /**
+   * New UI: the prologue drawn as the mock-ups: a talk page (the event look) for the station, Professor Vance and the
+   * choices, a cutscene card for the opening shots and the departure, and the name entry for the name and custom
+   * pronouns. The steps above stay as they are: the layout helpers write down what a step shows, and this draws it.
+   */
+  private mountRx(): void {
+    this.rx = mountRedux(this, {
+      render: (c) => this.rxRender(c),
+      acts: {
+        pick: (i) => {
+          if (!this.menu) return void this.onConfirm?.();
+          this.menu.focus(Number(i), false);
+          this.menu.confirm();
+        },
+        page: () => this.rxTurn(1),
+        next: () => this.rxInput('confirm'),
+        key: (k) => this.rxType(String(k), true),
+        ok: () => this.onConfirm?.(),
+        clear: () => this.rxEdit(() => ''),
+        paste: () => void navigator.clipboard?.readText().then((t) => this.rxPaste(t)).catch(() => undefined),
+        field: (k) => { this.rxM.field = Number(k); },
+      },
+      overs: { over: (i) => { if (this.menu && !this.rxM.options[Number(i)]?.disabled) this.menu.focus(Number(i), false); } },
+    });
+    const onKey = (e: KeyboardEvent): void => this.rxKey(e);
+    const onPaste = (e: ClipboardEvent): void => this.rxPaste(e.clipboardData?.getData('text') ?? '');
+    this.input.keyboard?.on('keydown', onKey);
+    window.addEventListener('paste', onPaste);
+    this.events.once('shutdown', () => {
+      this.input.keyboard?.off('keydown', onKey);
+      window.removeEventListener('paste', onPaste);
+    });
+  }
+
+  override update(): void {
+    if (!this.rx) return;
+    const m = this.rxM;
+    const sig = [this.menu?.index ?? -1, this.rxAt, m.title, m.lines.join('\n'), m.notice, m.vance, m.field, m.fields.map((f) => f.box.value).join('\u0001'), m.options.map((o) => `${o.label}${o.disabled ? '!' : ''}`).join('\u0001'), m.cut?.pages[0]?.line ?? ''].join('\u0002');
+    if (sig === this.rxSig) return;
+    this.rxSig = sig;
+    this.rx.refresh();
+  }
+
+  /** The step's text as pages of at most 240 letters. */
+  private rxPages() {
+    const m = this.rxM;
+    // What was just examined (or what went wrong) is read in place of the step's opening words, which were read already.
+    const pages = pageLines(m.notice ? m.notice.split('\n').map((text) => ({ who: null, text })) : m.lines.map(vanceLine), 240);
+    return pages.length ? pages : [[{ who: null, text: '' }]];
+  }
+
+  private rxTurn(by: number): void {
+    const to = this.rxAt + by;
+    if (to < 0 || to >= (this.rxM.cut ? this.rxM.cut.pages.length : this.rxPages().length)) return;
+    this.rxAt = to;
+  }
+
+  /** New UI input: pages turn first; on the last page the menu (or Continue) takes over. The name entry reads raw keys instead. */
+  private rxInput(a: Parameters<Menu['handle']>[0]): void {
+    const m = this.rxM;
+    if (m.fields.length) return;
+    const pages = m.cut ? m.cut.pages.length : this.rxPages().length;
+    if (this.rxAt < pages - 1) {
+      if (a === 'confirm') this.rxTurn(1);
+      else if (a === 'back') m.cut?.skip ? m.cut.skip() : this.rxTurn(-1);
+      return;
+    }
+    if (m.cut && a === 'back' && m.cut.skip) return m.cut.skip();
+    if (m.cut && a !== 'confirm') return;
+    if (this.menu && !m.next) this.menu.handle(a);
+    else if (a === 'confirm') this.onConfirm?.();
+  }
+
+  private rxEdit(change: (value: string, max: number) => string): void {
+    const f = this.rxM.fields[this.rxM.field];
+    if (f) f.box.value = change(f.box.value, f.max);
+  }
+
+  private rxType(key: string, fromGrid = false): void {
+    this.rxEdit((v, max) => typeKey(v, key, max, fromGrid));
+  }
+
+  private rxPaste(text: string): void {
+    for (const ch of text.replace(/[\r\n]/g, '')) this.rxType(ch);
+  }
+
+  /** The name entry's keys: letters type, Backspace deletes, Tab or the arrows change box, Enter confirms, Esc goes back. */
+  private rxKey(e: KeyboardEvent): void {
+    const m = this.rxM;
+    if (!m.fields.length || this.time.now === this.rxOpened) return;
+    if (e.key === 'Enter') return void this.onConfirm?.();
+    if (e.key === 'Escape') return void this.menu?.handle('back');
+    if (e.key === 'Tab' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      m.field = (m.field + (e.key === 'ArrowUp' || e.shiftKey ? m.fields.length - 1 : 1)) % m.fields.length;
+      return;
+    }
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    this.rxType(e.key);
+  }
+
+  private rxRender(c: ReduxCtx): string {
+    const m = this.rxM;
+    const look: PlayerLookId = this.story.protagonist.look === 'look_b' ? 'b' : 'a';
+    // The mock-ups draw the story's two big portraits from one frame of their sheets, larger than a Trainer picture:
+    // Vance at 0.9 and the player at 0.8 of the page's figure scale (3.4 on a talk page; 5, 4.6 or 5.6 on a cutscene
+    // card, by layout). A card stands them a little under its bottom edge: those rows of the frame are left off.
+    const big = (file: string, frame: number, unit: number, scale: number, sunk: number, base: number): Art => {
+      const rows = frame - sunk / (scale * unit);
+      return { file, atlas: false, crop: [0, 0, frame, rows], k: (rows * scale * unit) / base };
+    };
+    const [cutScale, cutSunk, cutBase] = ([[5, 38, 344], [4.6, 0, 284], [5.6, 58, 356]] as const)[c.v(3)]!;
+    const meFile = `packs/mc/look_${look}/${look === 'a' ? 'command' : 'throw'}.png`;
+    const me = (cut = false): Art => (cut ? big(meFile, 128, 0.8, cutScale, cutSunk, cutBase) : big(meFile, 128, 0.8, 3.4, 0, 240));
+    const vance = (anim: VanceAnim, cut = false): Art => (cut ? big(`packs/vance/${anim}.png`, VANCE_FRAME, 0.9, cutScale, cutSunk, cutBase) : big(`packs/vance/${anim}.png`, VANCE_FRAME, 0.9, 3.4, 0, 240));
+    if (m.cut) {
+      const at = Math.min(this.rxAt, m.cut.pages.length - 1), page = m.cut.pages[at]!;
+      return cutView(c, { name: page.name, role: 'Prologue', line: page.line, cast: m.cut.who === 'vance' ? vance(m.vance ?? 'confident', true) : me(true), backdrop: m.cut.who === 'vance' ? 'arenas/grass_bg.png' : 'arenas/power_plant_bg.png', beat: m.cut.beat ?? Math.max(0, 4 - (m.cut.pages.length - 1 - at)), skip: m.cut.skip ? ['Esc', 'skip'] : ['Enter', 'next'] });
+    }
+    if (m.fields.length) {
+      const f = m.fields[Math.min(m.field, m.fields.length - 1)]!;
+      const first = m.lines[0] ? vanceLine(m.lines[0]) : null;
+      const one = m.fields.length === 1;
+      return formView(c, {
+        title: 'Name and pronouns',
+        prompt: one && first?.who ? first.text : f.label,
+        value: f.box.value,
+        fields: m.fields.map((x) => ({ label: x.label, value: x.box.value })),
+        field: m.field,
+        ok: one ? 'That is me' : 'Confirm',
+        note: [...(one && first?.who ? m.lines.slice(1) : m.lines).map((l) => vanceLine(l).text), m.notice].filter(Boolean).join(' '),
+      });
+    }
+    const pages = this.rxPages(), at = Math.min(this.rxAt, pages.length - 1), page = pages[at]!;
+    const { tag, name } = beatTag(m.title, BEATS.length);
+    const index = this.menu?.index ?? 0;
+    return eventView(c, {
+      name,
+      tag: m.looks && !this.story.prologue.done ? 'First launch' : tag,
+      lines: page,
+      speaker: pageSpeaker(page),
+      page: { at, of: pages.length },
+      art: RX_ROOM, tint: null, fx: null,
+      cast: m.looks ? big(`packs/mc/look_${m.looks[index] ?? 'a'}/portrait.png`, 128, 0.8, 3.4, 0, 240) : m.vance ? vance(m.vance) : pageSpeaker(page)?.startsWith('Prof. Vance') ? vance('confident') : me(),
+      mon: null,
+      choices: m.next ? [{ label: 'Continue', sub: '', chance: '', locked: false }] : m.options.map((o) => ({ label: o.label, sub: '', chance: '', locked: !!o.disabled })),
+      index: m.next ? 0 : index,
+      money: null,
+      outcome: null,
+      pick: null,
+      countdown: '',
+      timer: null,
+    });
   }
 
   // ---------- flow ----------
@@ -221,6 +437,7 @@ export class PrologueScene extends Phaser.Scene {
       });
     });
     const options: MenuOption[] = looks.map((l) => ({ label: l.label }));
+    this.rxM.looks = looks.map((l) => (l.id === 'look_b' ? 'b' : 'a'));
     this.choose(options, (i) => {
       const look = looks[i]!;
       this.edit((st) => setLook(st, look.id).story);
@@ -256,6 +473,8 @@ export class PrologueScene extends Phaser.Scene {
       this.shot += 1;
       this.go('cold_open');
     });
+    // New UI: each opening shot is a cutscene card (the shot, then the recording's words); the strip follows the shots.
+    this.rxM.cut = { pages: [{ name: 'The Opening', line: `${m.shot} “${m.line}”` }], beat: cutBeat(this.shot, MONTAGE.length), who: 'me', skip: prologueRequired(this.story) ? null : () => this.advance('cold_open') };
     if (prologueRequired(this.story)) return;
     const skip = this.add.text(40, GAME_HEIGHT - 30, 'Skip opening', textStyle(16, '#c9bfd6')).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
     skip.on('pointerup', (_p: unknown, _x: unknown, _y: unknown, e: Phaser.Types.Input.EventData) => { e.stopPropagation(); this.advance('cold_open'); });
@@ -291,7 +510,8 @@ export class PrologueScene extends Phaser.Scene {
     }
     const question = VANCE_QUESTIONS[q]!;
     this.vance(q === 0 && !reply ? 'nudge' : reply ? 'explain' : 'tilt');
-    const intro = q === 0 ? VANCE_OPENING : reply ? [`VANCE: ${reply}`] : [];
+    // The opening already ends on the first question's words, so they are not said twice.
+    const intro = q === 0 ? VANCE_OPENING.filter((l) => l !== `VANCE: ${question.prompt}`) : reply ? [`VANCE: ${reply}`] : [];
     const y = this.body([...intro, `VANCE: ${question.prompt}`], 80);
     this.choose(question.options.map((o) => ({ label: o.text })), (i) => {
       const pick = question.options[i]!;
@@ -368,6 +588,7 @@ export class PrologueScene extends Phaser.Scene {
     this.title('Beat 7: Backstory');
     let y = this.body([BACKSTORY_PROMPT], 70);
     const list = this.add.text(60, y - 6, ids.map((id) => `${nameOf(id)}: ${BACKSTORY_PITCH[id] ?? ''}`).join('\n'), textStyle(15, '#c9bfd6', { wordWrap: { width: GAME_WIDTH - 120 }, lineSpacing: 4 }));
+    this.rxM.lines.push(...ids.map((id) => `${nameOf(id)}: ${BACKSTORY_PITCH[id] ?? ''}`));
     y += list.height + 4;
     this.choose(ids.map((id) => ({ label: nameOf(id) })), (i) => {
       this.edit((s) => chooseNextBackstory(s, ids[i]!));
@@ -493,6 +714,8 @@ export class PrologueScene extends Phaser.Scene {
       this.edit(finishPrologue);
       this.leave(true);
     }, y);
+    // New UI: the departure is a cutscene card, one page for each thing Vance says; the last page finishes.
+    this.rxM.cut = { pages: BRIEFING.map((l) => ({ name: 'Departure', line: vanceLine(renderTokens(l, { name: p.name, pronouns: p.pronouns })).text })), beat: null, who: 'vance', skip: null };
   }
 
   /** Back to the title, or (when opened for a Story Run and `go` is true) on to trainer choice in Story Run mode. */

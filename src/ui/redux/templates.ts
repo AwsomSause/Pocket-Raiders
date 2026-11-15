@@ -72,12 +72,17 @@ export function settingsView(c: ReduxCtx, d: SettingsModel): string {
 }
 
 /** A picture for a cell or a window: an animated atlas (no extension) or a plain image file, under assets/images. */
-export interface Art { file: string; atlas: boolean }
+export interface Art { file: string; atlas: boolean; /** A plain picture that is a sheet of frames: the one frame to show, [x, y, w, h]. */ crop?: readonly [number, number, number, number]; /** Drawn this many times the usual height (a big story portrait beside the usual Trainer pictures). */ k?: number }
 /** A person or a picture standing `px` tall: a trainer atlas plays its pose, a plain picture is scaled. */
-export function figure(a: Art | null | undefined, px: number): string {
+export function figure(a: Art | null | undefined, size: number): string {
   if (!a) return '';
+  const px = Math.round(size * (a.k ?? 1));
   if (a.atlas) return tall(a.file, px);
   const dim = rxImage(a.file);
+  if (dim && a.crop) {
+    const [x, y, w, h] = a.crop, k = px / h;
+    return `<i class="im" style="display:block;width:${Math.round(w * k)}px;height:${px}px;background:url(${rxUrl(a.file)}) ${-Math.round(x * k)}px ${-Math.round(y * k)}px/${Math.round(dim[0] * k)}px ${Math.round(dim[1] * k)}px;image-rendering:pixelated"></i>`;
+  }
   return dim ? `<i class="im" style="display:block;width:${Math.round((dim[0] * px) / dim[1])}px;height:${px}px;background:url(${rxUrl(a.file)}) 0 0/100% 100%;image-rendering:pixelated"></i>` : '';
 }
 export const pic = (a: Art | null | undefined, size: number, cls = ''): string => (a ? (a.atlas ? mini(a.file, size, cls) : icon(a.file, size)) : '');

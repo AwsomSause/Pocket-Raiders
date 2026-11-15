@@ -63,6 +63,9 @@ export function playCutMoment(scene: Phaser.Scene, plan: MomentPlan, model: Omit
       render: (c) => cutView(c, { ...model, beat, skip: plan.skippable ? ['Esc', 'skip'] : null }),
       acts: { next: () => { if (plan.skippable) finish(true); } },
     });
+    // The card is redrawn on every beat. A press that starts on one drawing and ends on the next has no button under
+    // it any more, so the click lands on the layer itself: it counts as the same "skip" click.
+    view.el.addEventListener('click', () => { if (plan.skippable) finish(true); });
     scene.input.keyboard?.on('keydown', onKey);
     scene.input.keyboard?.on('keyup', onUp);
     scene.events.once('shutdown', () => finish(false));
