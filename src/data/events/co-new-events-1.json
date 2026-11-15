@@ -1,0 +1,5511 @@
+{
+ "catalogOverhaul": "new-events",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "ne01-alpha-who-lost-its-voice",
+   "name": "The Alpha Who Lost Its Voice",
+   "group": "Alphas",
+   "rarity": "rare",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "types": [
+    "grass",
+    "bug",
+    "flying",
+    "rock",
+    "dragon"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "grass",
+      "bug",
+      "flying",
+      "rock",
+      "dragon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne01-alpha-who-lost-its-voice-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "exploud",
+    "tint": "#16241a",
+    "effect": "none"
+   },
+   "intro": "The forest has no sound in it. No birds. No wind in the leaves. In a clearing sits a huge Exploud with its mouth wide open, and nothing comes out.\n\nSmall Whismur sit round it in a ring, waiting to be led. It tries to roar. A dry hiss.\nThe smallest Whismur flinches anyway, out of habit, and then looks ashamed of itself.\n\nRanger Odalric: \"Three days like this. It shouted down a rockslide to save them. Tore something.\"\nRanger Odalric: \"An Alpha that can't call its herd isn't an Alpha for long. Something else will come.\"\n\nThe Exploud sees you. It stands. It is still twice the height of a house, and it is trying very hard to still look like it.",
+   "choices": [
+    {
+     "label": "Give it a Cheri Berry and honey for its throat.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "cheri-berry"
+      },
+      {
+       "kind": "item",
+       "id": "honey"
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "You hold the Berry up in both hands, dripping with honey. The great head comes down, slowly, and it drinks like something that has been thirsty for three days.\n\nIt tries again. A croak. Then a note: thin, cracked, and the most beautiful thing the clearing has ever heard. The Whismur cheer until they fall over.\n\nOdalric presses a Throat Spray into your hand, and the Exploud leans down and shows one of your team how a voice is meant to be used.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "cheri-berry"
+       },
+       {
+        "kind": "loseItem",
+        "id": "honey"
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "exploud-healed",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "throat-spray",
+        "count": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "hyper-voice",
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "ne01-alpha-who-lost-its-voice-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let one of my Pokémon call for it.",
+     "pick": {
+      "moveFlag": "sound"
+     },
+     "success": {
+      "text": "Your Pokémon steps into the ring, fills its chest and roars for the one who can't.\nThe sound rolls out through the trees, and from every side the herd comes running.\n\nThe Exploud listens to its own herd gather on somebody else's voice. Then it bows its huge head to your Pokémon, low, the way an Alpha bows to nobody.\n\nOdalric finds a Throat Spray in his pack for you. Your Pokémon has learned something about being heard.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "picked"
+       },
+       {
+        "kind": "item",
+        "id": "throat-spray",
+        "count": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "hyper-voice",
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "ne01-alpha-who-lost-its-voice-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It can't use a single sound move. It plants its feet in front of the Whismur and fights anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne01-alpha-who-lost-its-voice-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "exploud"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "exploud-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ne01-the-alpha-whismur"
+        }
+       ],
+       "alpha": true,
+       "rule": {
+        "foeNoFlag": "sound"
+       }
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "odalric-honey",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kind-helped-stranger",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Odalric already has the honey out, and a Cheri Berry beside it.\nRanger Odalric: \"Thought you might.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Give it the Berry and honey Odalric holds out.",
+       "pick": {},
+       "success": {
+        "text": "You take the jar from his hands and hold it up. The great head comes down, slowly, and it drinks like something that has been thirsty for three days.\n\nIt tries again. A croak. Then a note: thin, cracked, and the most beautiful thing the clearing has ever heard. The Whismur cheer until they fall over.\n\nOdalric presses a Throat Spray into your hand, and the Exploud leans down and shows one of your team how a voice is meant to be used.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "calmed-alpha",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "exploud-healed",
+          "amount": 1
+         },
+         {
+          "kind": "item",
+          "id": "throat-spray",
+          "count": 1
+         },
+         {
+          "kind": "teachMove",
+          "move": "hyper-voice",
+          "who": "picked"
+         },
+         {
+          "kind": "flag",
+          "key": "ne01-alpha-who-lost-its-voice-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ne01-the-alpha-whismur",
+   "name": "The Alpha Whismur",
+   "group": "Alphas",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "whismur",
+    "tint": "#16241a",
+    "effect": "none"
+   },
+   "intro": "The Exploud sits down hard, beaten, breathing like a bellows. The ring of Whismur doesn't scatter.\n\nOne of them steps out in front of it. It is bigger than the rest, and its eyes are red, and it is shaking, and it does not move aside.",
+   "choices": [
+    {
+     "label": "Catch the Alpha Whismur.",
+     "success": {
+      "text": "It opens its mouth. It has the voice the big one lost.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "whismur"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [],
+       "alpha": true
+      }
+     }
+    },
+    {
+     "label": "Leave it with its herd.",
+     "success": {
+      "text": "You lower the Ball. The small Alpha stands guard over the big one until you are out of sight, and for a good while after.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne01-the-roar",
+   "name": "A Roar Across the Valley",
+   "group": "Alphas",
+   "rarity": "common",
+   "minStage": 3,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "exploud-healed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "runPlace",
+     "regionEnd": true
+    },
+    {
+     "kind": "flag",
+     "key": "ne01-the-roar-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "exploud",
+    "tint": "#1a2a20",
+    "effect": "none"
+   },
+   "intro": "You are almost out of the valley when it comes: a roar, rolling down from the forest behind you, whole and enormous.\nEvery bird in a mile goes up at once.\n\nIt isn't a warning. Along the road ahead, wild Pokémon lift their heads, look at you, and stay exactly where they are.",
+   "choices": [
+    {
+     "label": "Raise a hand to the forest.",
+     "success": {
+      "text": "The roar comes once more, shorter. The wild Pokémon on the road ahead are friendly today.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The wild Pokémon ahead are friendly",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 2.5
+         }
+        ],
+        "battles": 1,
+        "until": "wild"
+       },
+       {
+        "kind": "flag",
+        "key": "ne01-the-roar-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne02-two-alphas-one-river",
+   "name": "Two Alphas, One River",
+   "group": "Alphas",
+   "rarity": "rare",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "types": [
+    "water"
+   ],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "water"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne02-two-alphas-one-river-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "feraligatr",
+    "tint": "#10283a",
+    "effect": "none"
+   },
+   "intro": "The river is the only water for miles. On the east bank stands an Alpha Feraligatr. On the west bank, an Alpha Ludicolo. Neither is drinking.\n\nSmall Pokémon line both banks, thirsty, afraid to come down. A Marill takes one step toward the water and two steps back.\n\nFisher Jacinta: \"They've stood like that since the dry spell. Whoever blinks loses the river.\"\nFisher Jacinta: \"If you calm one, the other takes it all. If you calm neither, nothing drinks.\"\n\nBoth Alphas turn their heads, very slowly, and look at you.",
+   "choices": [
+    {
+     "label": "Calm the Feraligatr.",
+     "success": {
+      "text": "You walk down the east bank with your hands open. It takes a long time. At last the great jaw lowers, and the Feraligatr drinks.\n\nOn the far side the Ludicolo watches, turns, and leads its herd away upstream, into harder country. One small Lotad looks back at the water the whole way.\n\nThe Feraligatr noses a Mystic Water out of the shallows and leaves it at your feet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "river-feraligatr",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne02-two-alphas-one-river-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Calm the Ludicolo.",
+     "success": {
+      "text": "You wade the ford with your hands open. It takes a long time. At last the Ludicolo's shoulders drop, and it bends and drinks.\n\nOn the far side the Feraligatr watches, turns, and leads its herd away upstream, into harder country. A Totodile at the back keeps looking over its shoulder.\n\nThe Ludicolo pulls a Big Root from the bank and holds it out to you, formally, like a gift between neighbours.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "river-ludicolo",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "big-root",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne02-two-alphas-one-river-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig a second channel (a node, and a Ground- or Water-type).",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "water"
+       ]
+      }
+     ],
+     "success": {
+      "text": "A long afternoon. Your Pokémon digs and you carry, and both Alphas stand over the work like two foremen who hate each other.\n\nFisher Jacinta: \"They've stopped glaring at each other. They're glaring at you. It's an improvement.\"\n\nThe river forks. Both herds drink, a hundred metres apart, pretending not to see each other.\nA Mystic Water and a Big Root are left on the new bank, one from each side.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "river-shared",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "big-root",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne02-two-alphas-one-river-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle both.",
+     "success": {
+      "text": "The Feraligatr comes off the east bank first.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne02-two-alphas-one-river-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "feraligatr"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "ne02-the-second-alpha"
+        }
+       ],
+       "alpha": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "dug-before",
+     "when": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "spring-flood-dug",
+        "flood-sandbagged"
+       ]
+      }
+     ],
+     "notice": "Jacinta looks at your hands, and at the callus a spade leaves.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Dig a second channel (a Ground- or Water-type).",
+       "requires": [
+        {
+         "kind": "partyTypes",
+         "types": [
+          "ground",
+          "water"
+         ]
+        }
+       ],
+       "success": {
+        "text": "Fisher Jacinta: \"You've done this before.\"\n\nYou have. The cut goes where the ground wants it, and it is done before the heat of the day.\nBoth Alphas watch the whole time, and neither of them blinks.\n\nThe river forks. Both herds drink, a hundred metres apart, pretending not to see each other.\nA Mystic Water and a Big Root are left on the new bank, one from each side.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "calmed-alpha",
+          "amount": 2
+         },
+         {
+          "kind": "flag",
+          "key": "river-shared",
+          "amount": 1
+         },
+         {
+          "kind": "item",
+          "id": "mystic-water",
+          "count": 1
+         },
+         {
+          "kind": "item",
+          "id": "big-root",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "ne02-two-alphas-one-river-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ne02-the-second-alpha",
+   "name": "The Second Alpha",
+   "group": "Alphas",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "ludicolo",
+    "tint": "#10283a",
+    "effect": "none"
+   },
+   "intro": "The Feraligatr is down. For one breath the river is quiet, and the small Pokémon on the banks edge toward the water.\n\nThen the Ludicolo steps down off the west bank. It has watched the whole fight. It has decided the river is still worth it.",
+   "choices": [
+    {
+     "label": "Face the Ludicolo.",
+     "success": {
+      "text": "It doesn't dance. Not today.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ludicolo"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "river-emptied",
+         "amount": 1
+        },
+        {
+         "kind": "quietWild",
+         "span": "region",
+         "types": [
+          "water"
+         ]
+        }
+       ],
+       "alpha": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne03-alpha-that-follows",
+   "name": "The Alpha That Follows at a Distance",
+   "group": "Alphas",
+   "rarity": "rare",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne03-alpha-that-follows-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "arcanine",
+    "tint": "#2a2216",
+    "effect": "none"
+   },
+   "intro": "Something large has been on the ridge behind you for two stages. It never comes closer. It never leaves. Your lead keeps looking back.\n\nAn Alpha Arcanine, scarred, grey at the muzzle. When you look straight at it, it lies down and studies the grass, as if it hadn't been following at all.",
+   "choices": [
+    {
+     "label": "Leave food at the edge of camp.",
+     "success": {
+      "text": "You set a bowl down where the firelight ends and walk away from it.\nIn the morning the bowl is empty, and it has been licked clean, and it has been carried ten paces closer to your bedroll.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sienna-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sienna-fed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne03-alpha-that-follows-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shout at it to go.",
+     "success": {
+      "text": "You shout. It gets up, walks to the far side of the ridge, and lies down again where you can only see its ears. It doesn't go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sienna-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sienna-shouted",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne03-alpha-that-follows-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ignore it.",
+     "success": {
+      "text": "You walk on. So does it, a ridge behind, at exactly your pace.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sienna-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne03-alpha-that-follows-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne03-she-stands-between",
+   "name": "The Arcanine in the Dark",
+   "group": "Alphas",
+   "rarity": "common",
+   "minStage": 4,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sienna-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne03-she-stands-between-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "arcanine",
+    "tint": "#141018",
+    "effect": "none"
+   },
+   "intro": "Night. A pack of wild Houndoom has your camp cornered: a ring of low eyes, closing. Your team bunches up round the fire.\n\nThe old Arcanine walks out of the dark and stands between. It doesn't fight. It doesn't growl. It just stands there, grey and scarred and very large.\n\nOne by one, the Houndoom leave.",
+   "choices": [
+    {
+     "label": "Thank it.",
+     "success": {
+      "text": "You say it out loud. One ear turns your way. It stays until the fire burns down, facing outward, and it is gone before you wake.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sienna-stood",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne03-she-stands-between-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer a Poké Ball.",
+     "success": {
+      "text": "You hold a Ball out on your open hand.\nIt looks at the Ball, and then at you, the way you'd look at someone who has mistaken you for somebody else. It stays until dawn all the same.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sienna-stood",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne03-she-stands-between-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask it why.",
+     "success": {
+      "text": "It can't tell you. It looks down the road ahead, toward the region's gate, for a long time. Then it lies down with its back to your fire, keeping watch.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sienna-stood",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne03-she-stands-between-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne03-sienna-at-the-gate",
+   "name": "Sienna at the Gate",
+   "group": "Alphas",
+   "rarity": "common",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sienna-stood",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "runPlace",
+     "regionEnd": true
+    },
+    {
+     "kind": "flag",
+     "key": "ne03-sienna-at-the-gate-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "arcanine",
+    "tint": "#2a2216",
+    "effect": "none"
+   },
+   "intro": "She is lying at the region's gate when you reach it, chin on her paws, watching the road beyond.\n\nBartholomew: \"That's Sienna. She walked a trainer to this gate, forty years back. He never came out the other side.\"\nBartholomew: \"She walks everyone who reminds her of him. Then she goes back and waits.\"\n\nThe old man at the gate says it kindly. He has plainly said it before.",
+   "choices": [
+    {
+     "label": "Come with me, Sienna.",
+     "success": {
+      "text": "She looks at the gate for a long time. Forty years of looking. Then she gets up, stiffly, and comes to stand at your side.\n\nShe won't go in a Ball. She has never been in one. She walks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sienna-joined",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "arcanine"
+        ],
+        "types": [],
+        "levelBonus": 5,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne03-sienna-at-the-gate-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait here. I'll come back through.",
+     "success": {
+      "text": "She lies back down at the gate, and this time she is facing the way you are going. Bartholomew takes his hat off.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sienna-waits",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne03-sienna-at-the-gate-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "He isn't coming, Sienna. Go home.",
+     "success": {
+      "text": "She howls, once. It goes on a long time. Then she goes, slowly, the way she came, and she doesn't look back at the gate. Not once.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne03-sienna-at-the-gate-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "shouted-at-her",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sienna-shouted",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "She came anyway, that night with the Houndoom. But she keeps her distance from you now, and her eyes on the gate.",
+     "hide": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ne04-crowned-calf",
+   "name": "The Crowned Calf",
+   "group": "Alphas",
+   "rarity": "rare",
+   "types": [
+    "normal",
+    "ground",
+    "grass"
+   ],
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "normal",
+      "ground",
+      "grass"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne04-crowned-calf-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "pokemon": "miltank",
+    "tint": "#2a2a14",
+    "effect": "none"
+   },
+   "intro": "A herd of Tauros has formed a ring. In the middle isn't a bull.\nIt's a very small Alpha Miltank calf with red eyes, and the bulls are bowing to it.\n\nHerder Ximena: \"Born Alpha. Never seen it. The herd follows her, and she's two weeks old. She leads them in circles.\"\nHerder Ximena: \"She walked them into a ravine yesterday. They went, because she's the Alpha.\"\n\nThe calf stamps one small hoof. Thirty Tauros stamp.",
+   "choices": [
+    {
+     "label": "Teach her (a node; choose a Pokémon to walk beside her).",
+     "pick": {},
+     "success": {
+      "text": "Your Pokémon walks the herd to water and back, and the calf trots beside it.\nIt copies everything: the pace, the turn of the head, the stop at the top of the rise.\n\nShe learns one thing. Look first. At the ravine's edge she stops, and thirty Tauros stop behind her, and Ximena lets out a breath she has been holding since yesterday.\n\nXimena fills your arms with Moomoo Milk. A young Tauros, with nobody left to follow in circles, decides to follow you.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calf-taught",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 15,
+        "who": "picked"
+       },
+       {
+        "kind": "item",
+        "id": "moomoo-milk",
+        "count": 3
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "tauros"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne04-crowned-calf-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Calm her with Moomoo Milk.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "moomoo-milk"
+      }
+     ],
+     "success": {
+      "text": "She drinks the whole bottle, hiccups, and falls asleep standing up. The oldest bull looks at her, and then at the herd, and quietly takes the lead while she grows.\n\nXimena fills your arms with more Moomoo Milk than you gave. A young Tauros, bored of circles, decides to follow you.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "moomoo-milk"
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "moomoo-milk",
+        "count": 3
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "tauros"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne04-crowned-calf-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle the herd's champion for the lead.",
+     "success": {
+      "text": "The biggest bull steps out of the ring and lowers his horns. The calf watches with enormous interest.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne04-crowned-calf-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "tauros"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "herd-led",
+         "amount": 1
+        },
+        {
+         "kind": "quietWild",
+         "span": "stage",
+         "types": [
+          "normal",
+          "ground",
+          "grass"
+         ]
+        },
+        {
+         "kind": "item",
+         "id": "moomoo-milk",
+         "count": 3
+        },
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "tauros"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "little-league",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "little-league-look-after",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have taught small ones to look after each other before. It shows in how you stand.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Teach her (choose a Pokémon to walk beside her).",
+       "pick": {},
+       "success": {
+        "text": "It takes no time at all. Your Pokémon walks, the calf copies, and at the ravine's edge she stops and looks first, and thirty Tauros stop behind her.\n\nXimena fills your arms with Moomoo Milk. A young Tauros, with nobody left to follow in circles, decides to follow you.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "calf-taught",
+          "amount": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 15,
+          "who": "picked"
+         },
+         {
+          "kind": "item",
+          "id": "moomoo-milk",
+          "count": 3
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "tauros"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "ne04-crowned-calf-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ne04-the-herd-makes-way",
+   "name": "The Herd Makes Way",
+   "group": "Alphas",
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "calf-taught",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "runPlace",
+     "lastRegion": true
+    },
+    {
+     "kind": "flag",
+     "key": "ne04-the-herd-makes-way-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "miltank",
+    "tint": "#2a2a14",
+    "effect": "none"
+   },
+   "intro": "The road is blocked from hedge to hedge: Tauros, a hundred of them, and at the front a full-grown Alpha Miltank with red eyes.\n\nShe looks at you. She looks at the road behind you, and the road ahead. She looks first. Then she steps aside, and the whole herd makes way.",
+   "choices": [
+    {
+     "label": "Walk through.",
+     "success": {
+      "text": "You walk the length of the herd. Not one bull moves until she does.\nAt the far end you look back, and she is already leading them to water, in a straight line.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "ne04-the-herd-makes-way-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne05-alpha-of-the-empty-nest",
+   "name": "The Alpha of the Empty Nest",
+   "group": "Alphas",
+   "rarity": "rare",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "types": [
+    "flying",
+    "rock",
+    "dragon"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "flying",
+      "rock",
+      "dragon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne05-alpha-of-the-empty-nest-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "braviary",
+    "tint": "#1c2634",
+    "effect": "none"
+   },
+   "intro": "A huge Alpha Braviary circles a nest on the cliff. The nest is empty. It has been empty a long time; the sticks are grey.\n\nIt dives at anything that comes near: you, a Wingull, a leaf.\n\nClimber Lazarus: \"Egg thieves, two summers back. It's guarded nothing ever since.\"\n\nIn your bag, something shifts. If there is an egg in there, the Braviary has noticed.",
+   "choices": [
+    {
+     "label": "Sit below the nest until it lands (a node).",
+     "success": {
+      "text": "You sit. It dives at you four times and you don't move. The afternoon goes. The light goes gold.\n\nAt dusk it lands beside you, close enough to touch, and folds its wings. It doesn't look at the nest. Neither do you.\n\nWhen you get up to go, there is a Sharp Beak on the rock where it sat, and one long feather for your hat.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "sharp-beak",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "braviary-feather",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne05-alpha-of-the-empty-nest-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show it an egg from my bag.",
+     "requires": [
+      {
+       "kind": "hasEgg"
+      }
+     ],
+     "success": {
+      "text": "You hold the egg up in both hands. The Braviary goes absolutely still in the air, and then it comes down like something falling.\n\nIt tucks the egg under its wing for one night. It doesn't sleep.\nIn the morning it gives the egg back, warm, and watches your hands the whole time you pack it.\n\nThere is a Sharp Beak on the rock, and one long feather for your hat.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "egg-under-wing",
+        "amount": 1
+       },
+       {
+        "kind": "eggWarm",
+        "steps": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "item",
+        "id": "sharp-beak",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "braviary-feather",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne05-alpha-of-the-empty-nest-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "The wind off the cliff is on its side.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne05-alpha-of-the-empty-nest-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "braviary"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "sharp-beak",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "braviary-feather",
+         "amount": 1
+        }
+       ],
+       "alpha": true,
+       "rule": {
+        "foeTailwind": 4
+       }
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "took-an-egg",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "took-egg",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "egg-returned",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "It knows. It looks at your bag, and at your hands, and it screams at you until the cliff rings.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Sit below the nest until it lands (two nodes).",
+       "success": {
+        "text": "You sit. It doesn't trust you, and it is right not to. It dives at you all afternoon, and all the next morning.\n\nOn the second dusk it lands. Not beside you. Near. It folds its wings and looks out to sea.\n\nWhen you get up to go, there is a Sharp Beak on the rock where it sat, and one long feather.",
+        "effects": [
+         {
+          "kind": "takeNode",
+          "nodes": 2
+         },
+         {
+          "kind": "flag",
+          "key": "calmed-alpha",
+          "amount": 1
+         },
+         {
+          "kind": "item",
+          "id": "sharp-beak",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "braviary-feather",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "ne05-alpha-of-the-empty-nest-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "returned-the-egg",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "egg-returned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It circles once over your head, lower than it comes for anyone. It has heard about an egg that went home.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Sit below the nest.",
+       "success": {
+        "text": "You have barely sat down when it lands beside you, at once, and folds its wings.\n\nIt doesn't look at the nest. It looks at you, sidelong, for a long time.\nThere is a Sharp Beak on the rock when you go, and one long feather for your hat.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "calmed-alpha",
+          "amount": 1
+         },
+         {
+          "kind": "item",
+          "id": "sharp-beak",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "braviary-feather",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "ne05-alpha-of-the-empty-nest-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ne05-first-look",
+   "name": "The Hatchling's First Look",
+   "group": "Alphas",
+   "rarity": "common",
+   "minStage": 4,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "egg-under-wing",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "hasEgg",
+     "absent": true
+    },
+    {
+     "kind": "flag",
+     "key": "ne05-first-look-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2634",
+    "effect": "none"
+   },
+   "intro": "The egg the Braviary kept warm has hatched. You remember now: the shell cracked, and the first thing the hatchling did was look up.\n\nNot at you. Up, at the sky, as if somebody had told it where to look.",
+   "choices": [
+    {
+     "label": "Look up with it.",
+     "success": {
+      "text": "There is nothing up there but weather. The hatchling watches it for a while anyway, and then tucks itself against your boot.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "newest"
+       },
+       {
+        "kind": "flag",
+        "key": "ne05-first-look-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne06-mega-stone-that-refused",
+   "name": "The Mega Stone That Refused",
+   "group": "Mega, Delta and Z anomalies",
+   "rarity": "uncommon",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne06-mega-stone-that-refused-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.lacey"
+    ],
+    "pokemon": "ampharos",
+    "tint": "#2a2430",
+    "effect": "none"
+   },
+   "intro": "A trainer in the square is shouting at her Ampharos. The Mega Stone on its collar is glowing, and the Ampharos won't change.\n\nTrainer Rosamund: \"It worked last week! It worked for my brother!\"\nThe Ampharos looks at the ground.\n\nEzekiel: \"Stones don't refuse. Pokémon do. Ask it what you did last week.\"\n\nThe old stone-cutter doesn't look up from his chisel.\nRosamund: \"...I traded its friend away.\"",
+   "choices": [
+    {
+     "label": "Help her find the friend (a node back).",
+     "success": {
+      "text": "The Flaaffy is two towns back, with a kid who loves it and who listens to the whole story with a very serious face.\nHe'll trade it back, fairly: the card is laid on the table, both sides, nothing hidden.\n\nYou walk them home. The Ampharos sees the Flaaffy at the end of the street and lights up, tail to ears, before the Stone does anything at all.\n\nRosamund can't speak. She pushes the Ampharosite's twin into your hands, the one her brother wore.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "back": true
+       },
+       {
+        "kind": "flag",
+        "key": "mega-reunited",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "ampharosite",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne06-mega-stone-that-refused-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell her to apologise.",
+     "success": {
+      "text": "She kneels in the square, in front of everybody. It takes a while. She isn't good at it, and she keeps going anyway.\n\nThe Ampharos puts its head on her shoulder. No Mega today. She wipes her face and says that's fine. She says it twice, and the second time she means it.\n\nEzekiel hands you a Soothe Bell from his apron without a word.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mega-apology",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "soothe-bell",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne06-mega-stone-that-refused-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer to buy the Stone (₽3,000).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3000
+      }
+     ],
+     "success": {
+      "text": "She names a fair price and you pay it. She unclips the Stone from the collar herself.\n\nThe Ampharos watches it go from her hand into yours. It doesn't make a sound.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3000
+       },
+       {
+        "kind": "flag",
+        "key": "mega-bought",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "ampharosite",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne06-mega-stone-that-refused-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "yours-too",
+     "when": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 2,
+       "who": "any",
+       "absent": true
+      }
+     ],
+     "notice": "Ezekiel looks over your team, one at a time, and stops on one of them.\nEzekiel: \"Yours too. Not yet.\""
+    }
+   ]
+  },
+  {
+   "id": "ne06-rosamund-in-the-circuit",
+   "name": "Rosamund, Reunited",
+   "group": "Mega, Delta and Z anomalies",
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mega-reunited",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne06-rosamund-in-the-circuit-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.lacey"
+    ],
+    "pokemon": "ampharos",
+    "tint": "#2a2430",
+    "effect": "none"
+   },
+   "intro": "A trainer waves at you across the road so hard she nearly drops her bag. Rosamund. She is on the Circuit now.\n\nBeside her walk an Ampharos and a Flaaffy, shoulder to shoulder, and the Stone on the collar is already humming.",
+   "choices": [
+    {
+     "label": "Battle her.",
+     "success": {
+      "text": "\"Watch this,\" she says. \"It does it every time now.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne06-rosamund-in-the-circuit-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "flaaffy",
+        "ampharos"
+       ],
+       "name": "Rosamund",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wave back and walk on.",
+     "success": {
+      "text": "The Ampharos lights its tail for you, twice, like a lighthouse saying hello.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne06-rosamund-in-the-circuit-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne07-delta-in-the-greenhouse",
+   "name": "The Delta in the Greenhouse",
+   "group": "Mega, Delta and Z anomalies",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "grass",
+    "bug",
+    "normal",
+    "steel",
+    "electric",
+    "poison"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "grass",
+      "bug",
+      "normal",
+      "steel",
+      "electric",
+      "poison"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne07-delta-in-the-greenhouse-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "pokemon": "roselia-delta",
+    "tint": "#16302a",
+    "effect": "none"
+   },
+   "intro": "A greenhouse with fogged glass. Inside, the plants have grown round a Pokémon. It's a Roselia, but it's the wrong colour, and frost follows its hands.\n\nGardener Philippa: \"It grew here. I don't know how. It can't go outside: the sun hurts it.\"\nGardener Philippa: \"A researcher offered me money. A lot. She said she'd 'learn so much.'\"\n\nThe Delta Roselia waters a seedling with ice. The seedling likes it.",
+   "choices": [
+    {
+     "label": "Leave it here, and help shade the glass (a node, and a Grass- or Ice-type).",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "grass",
+        "ice"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You and your Pokémon spend the day on ladders, painting the panes white and hanging reed mats. Philippa hands things up. The Roselia supervises from a flowerpot.\n\nBy evening the greenhouse is a winter garden, cool and blue, with frost ferns on every pane. It stays. It was never going anywhere.\n\nIt gives you a piece of ice that hasn't melted all day, and doesn't intend to.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-greenhouse",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "nevermeltice",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne07-delta-in-the-greenhouse-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it to Linden's study, where it'll be safe and known.",
+     "success": {
+      "text": "Linden meets you at the door with the blinds already drawn.\nHe is careful with it: he asks before he measures, and he writes down what it likes before what it is.\n\nPhilippa visits on Thursdays. Your own Delta research is a step further on, and there is a piece of Never-Melt Ice on your desk when you leave.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-studied",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "nevermeltice",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne07-delta-in-the-greenhouse-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it choose.",
+     "success": {
+      "text": "It looks at the door. It looks at you. It looks at Philippa, who is holding a watering can with both hands and trying not to hope out loud.\n\nIt walks to her and sits on her boot. She has shown it more kindness than anyone here.\nShe gives you its first frost flower, a piece of ice that won't melt.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "nevermeltice",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne07-delta-in-the-greenhouse-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "black-market-researcher",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "bought-stolen",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The researcher is at the gate again. You know that coat: it's the black market's. Philippa takes your sleeve and asks, very quietly, if you would see her off.",
+     "addChoices": [
+      {
+       "label": "See the researcher off.",
+       "success": {
+        "text": "\"I only want to learn so much,\" she says, and reaches for a Ball.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "ne07-delta-in-the-greenhouse-done",
+          "amount": 1
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "name": "Researcher",
+         "classId": "scientist",
+         "size": 2,
+         "types": [],
+         "levelBonus": 0,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "delta-greenhouse",
+           "amount": 1,
+           "stamp": "region"
+          },
+          {
+           "kind": "item",
+           "id": "nevermeltice",
+           "count": 1
+          },
+          {
+           "kind": "flag",
+           "key": "rep",
+           "amount": 1
+          }
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "kind-to-it",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kind-total",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Let it choose.",
+       "success": {
+        "text": "It looks at the door. It looks at Philippa.\nIt looks at you for a long time, the way wild things look at people who have been kind without being asked.\n\nIt walks to you and holds up both frosted hands to be carried. Philippa laughs, and cries a little, and packs it a jar of greenhouse soil for the road.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delta-roselia-joined",
+          "amount": 1
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "roselia-delta"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "moves": [
+           "icy-wind"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "ne07-delta-in-the-greenhouse-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ne07-snow-flowers",
+   "name": "A Postcard of Snow Flowers",
+   "group": "Mega, Delta and Z anomalies",
+   "rarity": "common",
+   "minStage": 4,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delta-greenhouse",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "delta-greenhouse",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne07-snow-flowers-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "roselia-delta",
+    "tint": "#16302a",
+    "effect": "none"
+   },
+   "intro": "A postcard has found you, a whole region on. A photograph: a greenhouse with white panes, and inside it, flowers made of snow, hundreds of them.\n\nOn the back, in a gardener's square handwriting: \"It asks after you. I can tell.\"",
+   "choices": [
+    {
+     "label": "Keep the postcard.",
+     "success": {
+      "text": "You put it where it won't bend. Your team crowds in to look at the picture, and for a moment the whole camp smells of cold glass and green things.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "ne07-snow-flowers-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne08-z-crystal-for-someone-else",
+   "name": "A Z-Crystal for Someone Else",
+   "group": "Mega, Delta and Z anomalies",
+   "rarity": "rare",
+   "tags": [
+    "Pokémon",
+    "Mystery"
+   ],
+   "stop": "event",
+   "types": [
+    "water",
+    "ghost",
+    "psychic",
+    "dark"
+   ],
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "z-chosen",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "water",
+      "ghost",
+      "psychic",
+      "dark"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#102a34",
+    "effect": "glint"
+   },
+   "intro": "A Z-Crystal sits on a stone pedestal in the open. Nobody has taken it. Dozens of trainers have clearly tried: the ground is worn smooth around it.\n\nKalani: \"It burns you if you pick it up. Everybody tries. It's not for you.\"\nKalani: \"Granddad says it's waiting for a Pokémon, not a trainer.\"\n\nThe kahuna's grandson yawns. One of your Pokémon is staring at the crystal.",
+   "choices": [
+    {
+     "label": "Let my Pokémon go to it.",
+     "requires": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 4,
+       "who": "any"
+      }
+     ],
+     "success": {
+      "text": "The one who trusts you most walks up to the pedestal on its own. It looks back at you once. Then it touches the crystal.\n\nThe crystal goes cool. The light in it settles, like something that has stopped waiting. Kalani sits up straight for the first time today.\n\nKalani: \"...Huh. Granddad's going to want to hear about this.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "z-chosen",
+        "amount": 1
+       },
+       {
+        "kind": "typeItem",
+        "who": "top",
+        "table": {
+         "normal": "normalium-z",
+         "fighting": "fightinium-z",
+         "flying": "flyinium-z",
+         "poison": "poisonium-z",
+         "ground": "groundium-z",
+         "rock": "rockium-z",
+         "bug": "buginium-z",
+         "ghost": "ghostium-z",
+         "steel": "steelium-z",
+         "fire": "firium-z",
+         "water": "waterium-z",
+         "grass": "grassium-z",
+         "electric": "electrium-z",
+         "psychic": "psychium-z",
+         "ice": "icium-z",
+         "dragon": "dragonium-z",
+         "dark": "darkinium-z",
+         "fairy": "fairium-z"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick it up myself.",
+     "success": {
+      "text": "It burns.\nNo harm done: just a red hand, a dropped crystal that rolls back to exactly where it was, and Kalani laughing so hard he has to hold the pedestal.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Ask who it's for.",
+     "success": {
+      "text": "Kalani: \"A Pokémon that would do the dance even if no one was watching.\"\n\nHe says it like something he has been made to learn by heart. Then, grudgingly: one that trusts its trainer nearly all the way.\nBond 4, the old people call it.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "not-yet",
+     "when": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 4,
+       "who": "any",
+       "absent": true
+      }
+     ],
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let my Pokémon go to it.",
+       "success": {
+        "text": "Your Pokémon walks up to the pedestal, sniffs the crystal, sneezes, and backs away. The light inside doesn't change.\n\nKalani: \"Told you. It'll keep. Come back when one of them means it.\"\n\nThe crystal stays where it is. It will be here for a while yet.",
+        "effects": []
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ne08-the-kahuna-nods",
+   "name": "An Old Man in the Crowd",
+   "group": "Mega, Delta and Z anomalies",
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "z-chosen",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne08-the-kahuna-nods-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#102a34",
+    "effect": "none"
+   },
+   "intro": "The first time your Pokémon's Z-Power lights the field, you see him: an old man at the back of the crowd, in a flowered shirt, with Kalani's chin.\n\nHe isn't watching the move. He is watching your Pokémon's face while it does the dance. He nods, once, slowly.",
+   "choices": [
+    {
+     "label": "Nod back.",
+     "success": {
+      "text": "By the time the dust settles he is gone. Kalani is standing where he stood, pretending he wasn't impressed.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "top"
+       },
+       {
+        "kind": "flag",
+        "key": "ne08-the-kahuna-nods-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne09-mega-that-wont-come-down",
+   "name": "The Mega That Won't Come Down",
+   "group": "Mega, Delta and Z anomalies",
+   "rarity": "rare",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Survival"
+   ],
+   "stop": "event",
+   "types": [
+    "electric",
+    "flying"
+   ],
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "electric",
+      "flying"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne09-mega-that-wont-come-down-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.lacey",
+     "trainer.youngster_m"
+    ],
+    "pokemon": "manectric-mega",
+    "tint": "#141a30",
+    "effect": "rain"
+   },
+   "intro": "Lightning has been striking the same hill for an hour. On top of it, a wild Mega Manectric, with no trainer and no Stone, can't stop.\n\nStorm chaser Ada: \"It's stuck in the form. The storm's feeding it. It's burning itself out.\"\nKip: \"When the storm goes, it goes. Maybe for good.\"\n\nIt howls. The howl is tired.",
+   "choices": [
+    {
+     "label": "Ground it (a Ground-type takes the lightning).",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "Your Ground-type climbs the hill and plants itself beside the Manectric. The next bolt comes down, and goes through it into the earth, and the next, and the next.\n\nThe lightning has somewhere to go at last. The Manectric shrinks, shudders, and sleeps with its head across your Pokémon's feet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mega-grounded",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": {
+         "types": [
+          "ground"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ne09-mega-that-wont-come-down-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait out the storm with it (two nodes).",
+     "success": {
+      "text": "You sit on the hill in the rain where it can see you, and you stay. It is a long storm. Twice you think it has gone out.\n\nIt survives, barely. When the clouds break it comes down off the hill after you, limping, half the size it was.\nIn the scorched grass where it stood lies a Manectite.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "storm-waited",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "manectite",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "manectric"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "levelShare": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "ne09-mega-that-wont-come-down-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it down.",
+     "success": {
+      "text": "It doesn't want to fight. It can't do anything else.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne09-mega-that-wont-come-down-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "manectric-mega"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "mega-battled-down",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "manectite",
+         "count": 1
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "good-with-current",
+     "when": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "rocket-radio-shorted",
+        "macro-plug-pulled"
+       ]
+      }
+     ],
+     "notice": "Storm chaser Ada: \"You're good with current. I heard.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Ground it (a Ground-type takes the lightning).",
+       "requires": [
+        {
+         "kind": "partyType",
+         "type": "ground"
+        }
+       ],
+       "success": {
+        "text": "Your Ground-type climbs the hill and plants itself beside the Manectric. You show it where to stand: you have done this to bigger machines than a storm.\n\nThe lightning goes to earth. The Manectric shrinks, shudders, and sleeps. And in the scorched grass, exactly where you guessed, lies a Manectite.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "mega-grounded",
+          "amount": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 10,
+          "who": {
+           "types": [
+            "ground"
+           ]
+          }
+         },
+         {
+          "kind": "item",
+          "id": "manectite",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "ne09-mega-that-wont-come-down-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ne10-delta-dittos-question",
+   "name": "The Delta Ditto's Question",
+   "group": "Mega, Delta and Z anomalies",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Mystery"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delta-ditto-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne10-delta-dittos-question-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "pokemon": "ditto-delta",
+    "tint": "#2a1c34",
+    "effect": "sparkle"
+   },
+   "intro": "A Delta Ditto sits on the path in the shape of you. It has got the hat wrong.\n\nIt copies your wave. It copies your lead. It copies your lead's type, then picks a different one, pleased with itself.\n\nThaddeus: \"It's asking you something. They do that. It wants to know what it should be.\"\n\nThe professor's aide says it without stopping, like a man who has been asked the same question by a Ditto and didn't know either.",
+   "choices": [
+    {
+     "label": "Be whatever you like.",
+     "success": {
+      "text": "It thinks. You can see it think: the whole of it ripples.\nThen it turns into something no one has ever seen: a small, round, happy shape, in a colour and a type of its own choosing.\n\nIt stays that way. It looks at you to see if that was allowed. It was.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ditto-free",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "ditto-delta-fighting",
+         "ditto-delta-flying",
+         "ditto-delta-poison",
+         "ditto-delta-ground",
+         "ditto-delta-rock",
+         "ditto-delta-bug",
+         "ditto-delta-ghost",
+         "ditto-delta-steel",
+         "ditto-delta-fire",
+         "ditto-delta-water",
+         "ditto-delta-grass",
+         "ditto-delta-electric",
+         "ditto-delta-psychic",
+         "ditto-delta-ice",
+         "ditto-delta-dragon",
+         "ditto-delta-dark",
+         "ditto-delta-fairy"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne10-delta-dittos-question-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Be like me.",
+     "success": {
+      "text": "It fixes the hat. For a whole stage there are two of you on the road, and one of you can't battle, and people say hello to both.\n\nAt the stage's end it waves, your wave exactly, and goes off the way you didn't.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ditto-twin",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne10-delta-dittos-question-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Be like {lead}.",
+     "success": {
+      "text": "It copies your lead perfectly, type and all, down to the way it holds its head. Your lead does not like it. Your lead circles it twice, stiff with outrage.\n\nIt stands beside your lead for the next fight all the same, a matched pair, and one of the pair is delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ditto-mirror",
+        "amount": 1
+       },
+       {
+        "kind": "tagPartner",
+        "copy": "lead",
+        "battles": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne10-delta-dittos-question-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "elder-ditto",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "elder-ditto-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Before anything else, it turns for a moment into an old, slow, sea-coloured shape you have met before: the elder's. A greeting.\nThen it is you again, with the hat wrong."
+    }
+   ]
+  },
+  {
+   "id": "ne10-two-of-you",
+   "name": "Weren't There Two of You?",
+   "group": "Mega, Delta and Z anomalies",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ditto-twin",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne10-two-of-you-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#2a1c34",
+    "effect": "none"
+   },
+   "intro": "A man mending a net looks up as you pass, looks past you, and frowns.\n\nFisherman: \"Weren't there two of you?\"",
+   "choices": [
+    {
+     "label": "\"Only for a while.\"",
+     "success": {
+      "text": "He nods as if that is a perfectly ordinary thing to hear, and goes back to his net. Your lead looks behind you, just to be sure.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "ne10-two-of-you-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne11-bell-ringers-last-morning",
+   "name": "The Bell Ringer's Last Morning",
+   "group": "Legendary Signs",
+   "rarity": "rare",
+   "tags": [
+    "Legendary",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "flying",
+    "rock",
+    "dragon",
+    "ghost",
+    "psychic",
+    "dark"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "blessing-ho-oh",
+      "blessing-lugia"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "morning"
+     ]
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "flying",
+      "rock",
+      "dragon",
+      "ghost",
+      "psychic",
+      "dark"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne11-bell-ringers-last-morning-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#3a2a1c",
+    "effect": "none"
+   },
+   "intro": "An old woman is climbing a tower with a hammer. There are nine hundred steps. She is on step forty, sitting down.\n\nBell ringer Oighrig: \"Every dawn for sixty years. It hears. I know it hears. It never comes.\"\nBell ringer Oighrig: \"My knees say this is the last one. Carry the hammer? I'll tell you when to strike.\"",
+   "choices": [
+    {
+     "label": "Carry the hammer, and her (a node, and a Fighting- or Flying-type).",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fighting",
+        "flying"
+       ]
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "blessing-lugia",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "It is nine hundred steps.\nYour Pokémon takes the hammer and you take her arm, and she tells you about every dawn of sixty years on the way up, and none of them twice.\n\nAt the top she strikes the bell herself. One clean note goes out over the whole town. A feather drifts past the window, slowly, the colour of the sunrise.\n\nShe doesn't see it. You do. She gives you the Tidal Bell off its hook: \"It should go with someone whose knees work.\"",
+       "effects": [
+        {
+         "kind": "takeNode",
+         "nodes": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-own",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "bell-oighrig",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "tidal-bell",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It is nine hundred steps.\nYour Pokémon takes the hammer and you take her arm, and she tells you about every dawn of sixty years on the way up, and none of them twice.\n\nAt the top she strikes the bell herself. One clean note goes out over the whole town. A feather drifts past the window, slowly, the colour of the sunrise.\n\nShe doesn't see it. You do. She gives you the Clear Bell off its hook: \"It should go with someone whose knees work.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bell-oighrig",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "clear-bell",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne11-bell-ringers-last-morning-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ring it for her.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "blessing-lugia",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You climb the nine hundred steps alone and strike it. It rings wrong: flat, and late, and twice.\n\nFar below, on step forty, an old woman laughs until she has to hold the rail.\n\nOighrig: \"It'll forgive you.\" She sends the Tidal Bell down the road after you with a boy who runs.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "sign-own",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "tidal-bell",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You climb the nine hundred steps alone and strike it. It rings wrong: flat, and late, and twice.\n\nFar below, on step forty, an old woman laughs until she has to hold the rail.\n\nOighrig: \"It'll forgive you.\" She sends the Clear Bell down the road after you with a boy who runs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "clear-bell",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne11-bell-ringers-last-morning-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell her it isn't coming.",
+     "success": {
+      "text": "She looks at you for a moment. Then she smiles, picks up the hammer, and gets to her feet one knee at a time.\n\nBell ringer Oighrig: \"No. But I am.\"\n\nShe climbs anyway. You hear the bell from the road, a long while later. It is on time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne11-bell-ringers-last-morning-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "keeps-lights",
+     "when": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "lighthouse-lit",
+        "crossing-lamp-lit"
+       ]
+      }
+     ],
+     "notice": "Bell ringer Oighrig: \"You keep lights. I can tell.\""
+    }
+   ]
+  },
+  {
+   "id": "ne12-footprint-pond",
+   "name": "The Footprint Pond",
+   "group": "Legendary Signs",
+   "rarity": "rare",
+   "tags": [
+    "Legendary",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "fire",
+    "ground"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "blessing-groudon",
+      "blessing-fire",
+      "blessing-landorus",
+      "blessing-zygarde"
+     ]
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "fire",
+      "ground"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne12-footprint-pond-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#3a2c14",
+    "effect": "none"
+   },
+   "intro": "A pond shaped like a foot. Each toe is the size of a cart. Farmers have built a fence round it and planted beans.\n\nFarmer Wenceslas: \"My grandmother's grandmother saw it step here. We don't drain it. We don't deepen it.\"\n\nA developer in a clean coat has a folder under his arm and a pen already out.\nMr. Ferreira: \"It's a pond. I'm offering each of you a year's wages.\"",
+   "choices": [
+    {
+     "label": "Speak for the pond.",
+     "success": {
+      "text": "You have barely started when Ferreira's guard steps between you and the farmers. Your name doesn't carry far enough here to be heard over him.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne12-footprint-pond-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Ferreira's Guard",
+       "classId": "worker",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "sign-own",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "pond-kept",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "oran-berry",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "sitrus-berry",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "pecha-berry",
+         "count": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stay out of it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The farmers vote, with beans in a hat. It's close. A year's wages is a year's wages.\n\nBut they have heard of you: the one who stops for people.\nSomebody says so out loud, and looks at the pond, and the vote goes the pond's way by two beans.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "pond-kept",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "The farmers vote, with beans in a hat. It's close. A year's wages is a year's wages.\n\nIt goes Ferreira's way by two beans. Wenceslas stands at the fence a long time with his hat in his hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pond-sold",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne12-footprint-pond-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what the pond is worth to them.",
+     "success": {
+      "text": "Farmer Wenceslas: \"It's proof.\"\n\nHe doesn't say of what. He doesn't need to. Ferreira hears it, and looks at the toes the size of carts, and lowers his voice.\nThen he closes his folder and leaves.\n\nThe farmers fill your hands with beans from the fence.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pond-kept",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne12-footprint-pond-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "reputation-carries",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rep",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Speak for the pond.",
+       "success": {
+        "text": "You speak, and they listen, because they know who is speaking. Even Ferreira's guard takes his hands out of his pockets.\n\nWhen you finish, nobody reaches for the pen. Ferreira looks at the faces round the fence, closes his folder, and goes.\n\nThe farmers fill your hands with beans from the fence.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-own",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "pond-kept",
+          "amount": 1
+         },
+         {
+          "kind": "item",
+          "id": "oran-berry",
+          "count": 1
+         },
+         {
+          "kind": "item",
+          "id": "sitrus-berry",
+          "count": 1
+         },
+         {
+          "kind": "item",
+          "id": "pecha-berry",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "ne12-footprint-pond-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "magma-money",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "team-op-stopped-magma-drill",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know that folder's crest. Ferreira's money is Magma's, and he knows you know. He is already edging toward his cart."
+    }
+   ]
+  },
+  {
+   "id": "ne12-the-second-footprint",
+   "name": "The Second Footprint",
+   "group": "Legendary Signs",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pond-kept",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "weather",
+     "in": [
+      "rain"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne12-the-second-footprint-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2c34",
+    "effect": "rain"
+   },
+   "intro": "Heavy rain, the first in months. Word comes down the road behind you, farm to farm, faster than the water.\n\nThe foot-shaped pond has overflowed. And the overflow has filled a second hollow nobody knew was there: another footprint, a stride further on, pointing the same way.",
+   "choices": [
+    {
+     "label": "Look the way it was walking.",
+     "success": {
+      "text": "It was walking the way you are going. The whole team is quiet for a while.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne12-the-second-footprint-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne13-child-who-draws-it",
+   "name": "The Child Who Draws It",
+   "group": "Legendary Signs",
+   "rarity": "uncommon",
+   "tags": [
+    "Legendary",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "blessing-influence",
+     "atLeast": 0,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne13-child-who-draws-it-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m",
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2c2a34",
+    "effect": "none"
+   },
+   "intro": "A chalk drawing covers the whole square: the Legendary that watches over this run, drawn by someone who has seen it.\n\nAnselmo: \"It comes to my window. Nobody believes me.\"\nHis mother: \"He says it every night. Please don't encourage him.\"\n\nShe sounds tired, not unkind. The small boy has chalk up to his elbows. The drawing has a detail no book shows.",
+   "choices": [
+    {
+     "label": "I believe you.",
+     "success": {
+      "text": "He stares at you. Then he digs in his pocket and gives you his best chalk, the long one, the one he was saving.\n\nAnselmo: \"For if you see it. So you can draw it too.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "anselmo-believed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne13-child-who-draws-it-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask him what it does at the window.",
+     "success": {
+      "text": "Anselmo: \"It checks I'm asleep. Then it goes.\"\n\nHe says it as if it were the most ordinary thing a legend could do. Perhaps it is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne13-child-who-draws-it-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell his mother about the detail.",
+     "success": {
+      "text": "You point it out: the one thing in the drawing that isn't in any book, and couldn't be guessed.\n\nShe looks at the drawing properly for the first time. She looks at her son. Then she sits down on the step, slowly, with her hand over her mouth.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne13-child-who-draws-it-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "facing-away",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sign-broken",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In the drawing, it is facing away. Anselmo doesn't know why he drew it like that. He says that is how it stood at the window last night."
+    }
+   ]
+  },
+  {
+   "id": "ne13-you-saw-it",
+   "name": "The Face of Someone Who Saw It",
+   "group": "Legendary Signs",
+   "rarity": "common",
+   "minStage": 2,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "anselmo-believed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "blessing-influence",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne13-you-saw-it-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2c2a34",
+    "effect": "none"
+   },
+   "intro": "There is a chalk drawing on the ground here, a long way from any square. The same hand. The same detail no book shows. He was here.\n\nUnder it, in careful letters: \"You saw it. You've got the face of someone who saw it.\"",
+   "choices": [
+    {
+     "label": "Add to the drawing with his chalk.",
+     "success": {
+      "text": "You draw what you can. It isn't as good as his. You leave the chalk beside it for whoever sees it next.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne13-you-saw-it-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne14-two-priests-one-shrine",
+   "name": "Two Priests, One Shrine",
+   "group": "Legendary Signs",
+   "rarity": "rare",
+   "tags": [
+    "Legendary",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "ghost",
+    "psychic",
+    "dark",
+    "grass",
+    "bug",
+    "flying",
+    "rock",
+    "dragon"
+   ],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "blessing-influence",
+     "atLeast": 0,
+     "atMost": 99
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "ghost",
+      "psychic",
+      "dark",
+      "grass",
+      "bug",
+      "flying",
+      "rock",
+      "dragon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne14-two-priests-one-shrine-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m",
+     "trainer.hex_maniac"
+    ],
+    "tint": "#241c2c",
+    "effect": "none"
+   },
+   "intro": "A shrine with two doors. A priest stands at each, and they aren't speaking.\n\nPriest Evaristo: \"It's a guardian. We honour it with silence.\"\nPriestess Domitila: \"It's lonely. We honour it with songs.\"\n\nThey turn to you at the same moment. It is the first thing they have done together in a year.\nBoth: \"Settle it.\"",
+   "choices": [
+    {
+     "label": "Silence.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "blessing-company",
+         "atLeast": 0,
+         "atMost": 0
+        }
+       ],
+       "text": "Domitila bows, stiffly, and closes her songbook. The shrine will be quiet for a year.\n\nAnd in the quiet, something settles over the roof like a held breath let go. The one it was built for has always walked alone.\nIt is glad to be left to.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "shrine-silence",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-own",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Domitila bows, stiffly, and closes her songbook. The shrine will be quiet for a year.\n\nNothing answers. Perhaps the one it was built for likes company more than they knew. No harm is done; the quiet is only quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shrine-silence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne14-two-priests-one-shrine-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Song.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "blessing-company",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Evaristo bows, stiffly, and unbars his door. The shrine will sing for a year.\n\nDomitila starts before he has finished bowing. And somewhere above the roof, something that has never once travelled alone turns its head to listen.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "shrine-song",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-own",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Evaristo bows, stiffly, and unbars his door. The shrine will sing for a year.\n\nNothing answers. Perhaps the one it was built for prefers its own company. No harm is done; a song is only a song.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shrine-song",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne14-two-priests-one-shrine-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the shrine (a node).",
+     "success": {
+      "text": "You sit down between the two doors. The priests look at each other, and then, since neither will leave first, they sit too: one at each end of the step.\n\nAt dusk the wind makes a sound in the eaves. It isn't a silence. It isn't a song.\nIt is neither, and it is plainly an answer, and both of them hear it.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "shrine-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "listened-first",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne14-two-priests-one-shrine-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "always-waits",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "listened-first",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "Priestess Domitila: \"You always wait. Good.\""
+    }
+   ]
+  },
+  {
+   "id": "ne14-one-bench",
+   "name": "Two Priests, One Bench",
+   "group": "Legendary Signs",
+   "rarity": "common",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "shrine-asked",
+      "shrine-silence",
+      "shrine-song"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne14-one-bench-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m",
+     "trainer.hex_maniac"
+    ],
+    "tint": "#241c2c",
+    "effect": "none"
+   },
+   "intro": "You know those two robes. Evaristo and Domitila are sitting on a roadside bench, sharing it. Not speaking, and not not speaking.\n\nThere is a bag of roasted chestnuts between them, exactly in the middle.",
+   "choices": [
+    {
+     "label": "Walk past quietly.",
+     "success": {
+      "text": "Domitila hums half a bar. Evaristo lets her.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne14-one-bench-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne15-legends-old-trainer",
+   "name": "The Legend's Old Trainer",
+   "group": "Legendary Signs",
+   "rarity": "rare",
+   "tags": [
+    "Legendary",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "blessing-influence",
+     "atLeast": 0,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne15-legends-old-trainer-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2c2a24",
+    "effect": "none"
+   },
+   "intro": "A very old man feeds birds. One slat of his bench is marked: scorched, or frozen, or cracked. Whatever sat there once was no ordinary thing.\n\nZebedee: \"It sat here with me. Once. Seventy years ago. I never caught it. I never tried.\"\nZebedee: \"People ask why not. You don't catch a sunrise.\"\n\nZebedee: \"If you see it, tell it the bench is still here.\"",
+   "choices": [
+    {
+     "label": "I'll tell it.",
+     "success": {
+      "text": "He nods. That is all. He goes back to the birds, and his hand is steadier than it was.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zebedee-message",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne15-legends-old-trainer-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come and tell it yourself.",
+     "success": {
+      "text": "He laughs. Then he doesn't. He looks at the marked slat, and at his own two hands.\n\nZebedee: \"...When?\"\n\nHe is already working out which coat.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zebedee-travels",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne15-legends-old-trainer-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why did it sit with you?",
+     "success": {
+      "text": "Zebedee: \"I was crying. It didn't ask why.\"\n\nHe has had seventy years to find a better answer. He never needed one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne15-legends-old-trainer-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne16-wish-already-granted",
+   "name": "The Wish That Was Already Granted",
+   "group": "Mythical Tellings",
+   "rarity": "rare",
+   "tags": [
+    "Legendary",
+    "Story"
+   ],
+   "stop": "rest",
+   "types": [],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "promise-broken-jirachi",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne16-wish-already-granted-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "jirachi",
+    "tint": "#141834",
+    "effect": "sparkle"
+   },
+   "intro": "A woman is asleep on a hill with a telescope. A note is pinned to her coat: \"If it comes, wake me.\"\n\nA small light is sitting on the telescope, reading the note.\n\nThe light, in your head: \"She wished for her brother to come home. He came home nine years ago. She keeps coming.\"\nThe light: \"Should I wake her?\"",
+   "choices": [
+    {
+     "label": "Wake her.",
+     "success": {
+      "text": "You touch her shoulder. She sees it for one second: one whole second of the thing she has waited nine years to thank.\nShe cries, and says thank you to the sky, over and over, long after it has gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-jirachi",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "jirachi-seen",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ne16-wish-already-granted-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let her sleep.",
+     "success": {
+      "text": "The light tucks the note back under its pin, carefully, the way you'd tuck in a blanket. It sits with her a while longer.\nThen there is only the hill, and the telescope, and the stars.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-jirachi",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "jirachi-seen",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ne16-wish-already-granted-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what she really wants.",
+     "success": {
+      "text": "The light: \"To have somewhere to go at night.\"\n\nThe light thinks about that for a long time. It hadn't known that could be a wish.\nIt looks at the sleeping woman as if it were seeing her for the first time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-jirachi",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "jirachi-seen",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "promise-step-jirachi",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne16-wish-already-granted-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne16-only-the-note",
+   "name": "The Wish That Was Already Granted",
+   "group": "Mythical Tellings",
+   "rarity": "common",
+   "minStage": 3,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "promise-broken-jirachi",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne16-wish-already-granted-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne16-only-the-note-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "jirachi",
+    "tint": "#141834",
+    "effect": "none"
+   },
+   "intro": "A woman is asleep on a hill with a telescope. A note is pinned to her coat: \"If it comes, wake me.\"\n\nNothing is sitting on the telescope. There is only the note, and the wind turning its corner over and back.",
+   "choices": [
+    {
+     "label": "Pin the note down so it can't blow away.",
+     "success": {
+      "text": "You fix it with a second pin from your own collar. She doesn't wake. Nothing comes. You go quietly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne16-wish-already-granted-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne16-only-the-note-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne16-the-next-hill",
+   "name": "The Woman on the Next Hill",
+   "group": "Mythical Tellings",
+   "rarity": "common",
+   "minStage": 5,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "jirachi-seen",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne16-the-next-hill-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#141834",
+    "effect": "none"
+   },
+   "intro": "A region later, on another hill, there is a telescope you know. She is awake this time, with a flask and a second cup.\n\nShe doesn't know your face. She waves anyway, the way people wave who have somewhere to go at night.",
+   "choices": [
+    {
+     "label": "Wave back.",
+     "success": {
+      "text": "She points the telescope at something for you, and pours the second cup.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "flag",
+        "key": "ne16-the-next-hill-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne17-time-travellers-garden",
+   "name": "The Time Traveller's Garden",
+   "group": "Mythical Tellings",
+   "rarity": "rare",
+   "tags": [
+    "Legendary",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "grass",
+      "bug"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne17-time-travellers-garden-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "pokemon": "celebi",
+    "tint": "#14301c",
+    "effect": "sparkle"
+   },
+   "intro": "A garden in the forest with rows in three states: seedlings, full bloom, and bare winter stalks, side by side.\n\nFidelma, who is young: \"I planted these.\"\nFidelma, who is old: \"She did. I'm weeding.\"\n\nThey have the same hands. Something green flickers between the rows.",
+   "choices": [
+    {
+     "label": "Help the young one plant.",
+     "success": {
+      "text": "She hands you a trowel and a tray of seed packets, each one labelled in a handwriting that gets shakier as you go down the row.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ne17-choose-a-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "ne17-time-travellers-garden-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help the old one weed.",
+     "success": {
+      "text": "You weed beside her all morning, across the hedge from her own young back. She doesn't hurry. She has done this row before.\n\nShe tells you one thing about the country ahead, plainly, the way you'd tell someone what the weather did last year.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-celebi",
+        "amount": 1
+       },
+       {
+        "kind": "scout",
+        "columns": 6
+       },
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "flag",
+        "key": "ne17-time-travellers-garden-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what grows in the last row.",
+     "success": {
+      "text": "Both of them answer, the young one a little before the old one.\n\nFidelma: \"Whatever you plant now.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-celebi",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne17-time-travellers-garden-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne17-choose-a-seed",
+   "name": "A Seed You Choose",
+   "group": "Mythical Tellings",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#14301c",
+    "effect": "none"
+   },
+   "intro": "Fidelma: \"One seed. Your choice. It'll matter.\"\n\nAcross the hedge, the old one stops weeding to see which packet you pick. She already knows. She watches anyway.",
+   "choices": [
+    {
+     "label": "Plant an Oran Berry.",
+     "success": {
+      "text": "You press it into the last row and water it in. Something green flickers past your shoulder, and the soil is warm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "garden-planted",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "garden-planted-oran",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "telling-celebi",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Plant a Sitrus Berry.",
+     "success": {
+      "text": "You press it into the last row and water it in. Something green flickers past your shoulder, and the soil is warm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "garden-planted",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "garden-planted-sitrus",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "telling-celebi",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Plant a Lum Berry.",
+     "success": {
+      "text": "You press it into the last row and water it in. Something green flickers past your shoulder, and the soil is warm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "garden-planted",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "garden-planted-lum",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "telling-celebi",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne17-the-tree-by-the-road",
+   "name": "A Tree With a Carved F",
+   "group": "Mythical Tellings",
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "garden-planted",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "runPlace",
+     "lastRegion": true
+    },
+    {
+     "kind": "flag",
+     "key": "ne17-the-tree-by-the-road-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#14301c",
+    "effect": "none"
+   },
+   "intro": "A full-grown Berry tree stands by the road in the last region, heavy with fruit. It is older than the road.\n\nYou know the Berry. You planted one, a long way back and not very long ago.\nThere is a letter carved in the bark at the height of a gardener's hand: F.",
+   "choices": [
+    {
+     "label": "Pick from your tree.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "garden-planted-sitrus",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The Sitrus fruit comes away easily, as if it had been waiting.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "sitrus-berry",
+         "count": 4
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "garden-planted-lum",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The Lum fruit comes away easily, as if it had been waiting.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "lum-berry",
+         "count": 4
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "The fruit comes away easily, as if it had been waiting.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 4
+       },
+       {
+        "kind": "flag",
+        "key": "ne17-the-tree-by-the-road-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne18-smallest-guest",
+   "name": "The Smallest Guest",
+   "group": "Mythical Tellings",
+   "rarity": "uncommon",
+   "tags": [
+    "Legendary",
+    "Recovery"
+   ],
+   "stop": "rest",
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne18-smallest-guest-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mew",
+    "tint": "#2c1c2c",
+    "effect": "sparkle"
+   },
+   "intro": "The team's food is being eaten by something nobody can see. The bowls empty a bite at a time.\n\nYour lead growls at the air. The air giggles.\n\nA pink tail, for a blink.",
+   "choices": [
+    {
+     "label": "Put out an extra bowl.",
+     "success": {
+      "text": "You fill one more bowl and set it a little apart. It empties, neatly. In the morning there is a Berry in it that nobody on your team recognises.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-mew",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mew-fed",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "enigma-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne18-smallest-guest-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Try to catch it.",
+     "success": {
+      "text": "You throw. The Ball closes on nothing at all, rocks once out of politeness, and opens. Laughter, from somewhere above the tent.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne18-smallest-guest-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pretend not to notice.",
+     "success": {
+      "text": "It gets bolder. It tries every bowl. It sits on your lead's head.\n\nYour lead, who can see it perfectly well, is furious, and holds still for the whole meal because you asked it to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-mew",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "ne18-smallest-guest-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne18-the-extra-bowl",
+   "name": "The Extra Bowl",
+   "group": "Mythical Tellings",
+   "rarity": "common",
+   "minStage": 2,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mew-fed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne18-the-extra-bowl-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mew",
+    "tint": "#2c1c2c",
+    "effect": "sparkle"
+   },
+   "intro": "You have got into the habit of putting out one bowl more than you have mouths.\n\nThis morning the extra bowl is empty again, and licked, and turned upside down like a hat.",
+   "choices": [
+    {
+     "label": "Fill it again.",
+     "success": {
+      "text": "Somewhere just out of sight, something small is pleased with you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "ne18-the-extra-bowl-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne19-nightmare-cure",
+   "name": "The Nightmare Cure",
+   "group": "Mythical Tellings",
+   "rarity": "rare",
+   "tags": [
+    "Legendary",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "ghost",
+    "psychic",
+    "dark"
+   ],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "ghost",
+      "psychic",
+      "dark"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne19-nightmare-cure-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "darkrai",
+    "tint": "#101020",
+    "effect": "rain"
+   },
+   "intro": "A whole inn is asleep at noon. The innkeeper is asleep at the desk with the pen still moving.\n\nDr. Adeyemi: \"Nobody's hurt. They won't wake. It's standing on the roof.\"\n\nOn the roof, in the rain, a dark shape. It looks ashamed.",
+   "choices": [
+    {
+     "label": "Talk to it.",
+     "success": {
+      "text": "You climb out of a top window onto the tiles. It doesn't run. It can't help it: wherever it goes, they sleep, and dream badly.\n\nIt came to the inn because it was raining.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-darkrai",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "darkrai-heard",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ne19-on-the-roof"
+       },
+       {
+        "kind": "flag",
+        "key": "ne19-nightmare-cure-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fetch a Lunar Feather (a node).",
+     "success": {
+      "text": "It is on a windowsill down the road, weighted with a stone, as if somebody had left it for exactly this. You carry it back through the rain.\n\nThey wake, all at once, in the middle of their sentences. The shape on the roof leaves, quickly, without looking back. The doctor shakes your hand for a long time.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "lunar-wing",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne19-nightmare-cure-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It doesn't fight back much.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne19-nightmare-cure-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "darkrai"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "darkrai-driven",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne19-on-the-roof",
+   "name": "On the Roof",
+   "group": "Mythical Tellings",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "darkrai",
+    "tint": "#101020",
+    "effect": "rain"
+   },
+   "intro": "The rain comes down on both of you. Under the tiles, forty people breathe slowly.\n\nIt looks at the road, and at the sky, and at you. It will go if you say so. It always goes.",
+   "choices": [
+    {
+     "label": "Stand on the roof with it until the rain stops.",
+     "success": {
+      "text": "You stand. It stands. Neither of you says anything, which suits it.\n\nAt dusk the rain stops, and the inn wakes on its own, yawning, with no memory of any dream at all.\nWhen you look round, you are alone on the roof.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "promise-step-darkrai",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "darkrai-roof",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell it you understand, and climb down.",
+     "success": {
+      "text": "It watches you go. When the rain eases it slips away over the rooftops, and the inn wakes slowly behind it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne19-the-bad-dream",
+   "name": "A Bad Dream",
+   "group": "Mythical Tellings",
+   "rarity": "common",
+   "minStage": 5,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "darkrai-driven",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne19-the-bad-dream-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#101020",
+    "effect": "none"
+   },
+   "intro": "You sleep badly. So does your lead: it twitches and whimpers at the foot of your bedroll, chasing or chased.\n\nYou know whose dream this is. You drove it off a roof in the rain.",
+   "choices": [
+    {
+     "label": "Sit up with your lead until it passes.",
+     "success": {
+      "text": "Morning comes eventually. The rest of the team is rested. Your lead is not: it got nothing from this night but your hand on its back.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "damage",
+        "share": 0.3,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "ne19-the-bad-dream-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne20-bouquet-road",
+   "name": "The Bouquet Road",
+   "group": "Mythical Tellings",
+   "rarity": "rare",
+   "tags": [
+    "Legendary",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "grass",
+    "bug",
+    "fire",
+    "ground"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "grass",
+      "bug",
+      "fire",
+      "ground"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne20-bouquet-road-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "shaymin",
+    "tint": "#1c3018",
+    "effect": "none"
+   },
+   "intro": "A road paved with flowers, growing out of a burnt hillside. They end at a small green hedgehog-shaped lump that is fast asleep.\n\nCaptain Berengaria: \"Burnt black last month. Then this. It's walked the whole fire line.\"\nCaptain Berengaria: \"It's worn out. Someone should carry it the last stretch.\"\n\nThe firefighter leans on her spade. She would do it herself, but her hands are black to the wrist, and it is very clean.",
+   "choices": [
+    {
+     "label": "Carry it (a node).",
+     "success": {
+      "text": "It weighs nothing. It doesn't wake. You carry it up the last of the fire line, and where you step, flowers come up through the ash behind you.\n\nAt the top it yawns, climbs down, and leaves a Gracidea in your hand as if it were paying a fare.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "telling-shaymin",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "shaymin-carried",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "gracidea",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne20-bouquet-road-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Pokémon carry it.",
+     "pick": {},
+     "success": {
+      "text": "Your Pokémon carries it the last stretch on its back, stepping as if it were carrying water.\n\nWhen it wakes, it tucks a flower behind your Pokémon's ear. The flower doesn't wilt. It isn't going to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-shaymin",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "flower-behind-ear",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne20-bouquet-road-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it rest.",
+     "success": {
+      "text": "You leave it sleeping. An hour on, it wakes, thanks nobody, and walks the last stretch itself, with the flowers following.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-shaymin",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne20-bouquet-road-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne21-beast-that-came-through-small",
+   "name": "The Beast That Came Through Small",
+   "group": "Ultra Beasts",
+   "rarity": "rare",
+   "tags": [
+    "Legendary",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne21-beast-that-came-through-small-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "pokemon": "poipole",
+    "tint": "#201434",
+    "effect": "flicker"
+   },
+   "intro": "A wormhole the size of a coin hangs over a puddle. Something has come through it: a Poipole, and it has lost its colour from the cold.\n\nHyacinth: \"It's a juvenile. The hole's too small to go back.\"\nHyacinth: \"The Foundation wants it boxed. I don't.\"\n\nResearcher Wicke's assistant is holding the box. She hasn't opened it.",
+   "choices": [
+    {
+     "label": "Keep it warm until the hole grows (a node, with a Fire-type).",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "It rides in your hood, shivering, with your Fire-type walking close beside. By evening its colour has come back, purple first.\n\nAt midnight the hole is the size of a door. It looks at you, and at the warm one, and goes home.\n\nHyacinth gives you the Beast Ball it never needed.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "beast-sent-home",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "fire"
+         ]
+        }
+       },
+       {
+        "kind": "item",
+        "id": "beast-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne21-beast-that-came-through-small-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it with me.",
+     "success": {
+      "text": "It comes. It watches the sky every night, the wrong part of the sky, where its home isn't.\n\nIt is homesick, and it will fight like it until it trusts you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "poipole-taken",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "poipole"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "quirk": "homesick"
+       },
+       {
+        "kind": "flag",
+        "key": "ne21-beast-that-came-through-small-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hand it to the Foundation.",
+     "success": {
+      "text": "Hyacinth closes the box herself, gently. It is safe, and it will be studied. She gives you a Beast Ball and can't quite look at you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "beast-boxed",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "beast-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne21-beast-that-came-through-small-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne22-town-that-likes-its-beast",
+   "name": "The Town That Likes Its Beast",
+   "group": "Ultra Beasts",
+   "rarity": "rare",
+   "tags": [
+    "Legendary",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne22-town-that-likes-its-beast-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "pokemon": "celesteela",
+    "tint": "#1c2c24",
+    "effect": "confetti"
+   },
+   "intro": "A town has built a festival round a Celesteela standing in its field. Children climb it. It has been there since spring.\n\nMayor Drusilla: \"It scares off storms. Tourists love it. We named it Agnes.\"\n\nA man in a grey Foundation coat waits until she has gone to say his piece.\nMr. Lindqvist: \"It's rooting. In a year, that field is dead for a century.\"",
+   "choices": [
+    {
+     "label": "Tell the town the truth.",
+     "success": {
+      "text": "You say it from the bandstand. The town is angry at you, and then at Lindqvist, and then, as the afternoon goes on, quiet.\n\nNobody thanks you today. They will work out what to do. It will take them a while to forgive the one who made them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "beast-agnes-truth",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ne22-town-that-likes-its-beast-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find a place it can root safely (a node).",
+     "success": {
+      "text": "An old quarry, two fields over: bare rock, nothing to kill. The town walks Agnes there in a parade, with the band, and the children riding.\n\nThe baker: \"We'll visit. It likes the Tuesday bread.\"\n\nThey press a Beast Ball on you that someone won at the coconut shy, and a bag of festival sweets.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "beast-agnes-moved",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "beast-ball",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "sweet-heart",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "ne22-town-that-likes-its-beast-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them be.",
+     "success": {
+      "text": "The festival goes on. The children climb. The grass round Agnes's feet is a little yellower than the grass further out.\nSomeone hands you a Beast Ball from the prize stall, and sweets.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "beast-agnes-stays",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "beast-ball",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "sweet-heart",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "ne22-town-that-likes-its-beast-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne22-the-town-thinks-again",
+   "name": "The Town Thinks Again",
+   "group": "Ultra Beasts",
+   "rarity": "common",
+   "minStage": 7,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "beast-agnes-truth",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "beast-agnes-truth",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne22-the-town-thinks-again-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c2c24",
+    "effect": "none"
+   },
+   "intro": "A letter with a mayor's seal has followed you into the next region.\n\n\"We moved her to the quarry. It took the whole town and a week. You were right, and we were rude about it.\nAgnes sends nothing, being a Beast, but the bakery sends this.\"",
+   "choices": [
+    {
+     "label": "Open the parcel.",
+     "success": {
+      "text": "Tuesday bread, a little stale, and worth it. Word of what you did has got here ahead of you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "flag",
+        "key": "ne22-the-town-thinks-again-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne23-paper-samurais-duel",
+   "name": "The Paper Samurai's Duel",
+   "group": "Ultra Beasts",
+   "rarity": "rare",
+   "tags": [
+    "Legendary",
+    "Combat"
+   ],
+   "stop": "event",
+   "types": [
+    "grass",
+    "bug",
+    "flying",
+    "rock",
+    "dragon"
+   ],
+   "minStage": 7,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "grass",
+      "bug",
+      "flying",
+      "rock",
+      "dragon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne23-paper-samurais-duel-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "pokemon": "kartana",
+    "tint": "#1c2a1c",
+    "effect": "none"
+   },
+   "intro": "A Kartana stands on a bridge rail. Every blade of grass on the bank has been cut to the same height.\n\nIt bows. It points at your lead, then at the bridge.\n\nKenshiro Vale: \"One on one. No switching. It's asking nicely.\"\n\nThe passing swordsman keeps his own hands well away from his own sword.",
+   "choices": [
+    {
+     "label": "Accept.",
+     "success": {
+      "text": "Your lead steps onto the bridge alone. The Kartana bows again, lower.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne23-paper-samurais-duel-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "kartana"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kartana-honoured",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "razor-claw",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "beast-ball",
+         "count": 1
+        }
+       ],
+       "rule": {
+        "noSwitch": true
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kartana-honoured",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "razor-claw",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "beast-ball",
+         "count": 1
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Bow, and decline.",
+     "success": {
+      "text": "You bow. It considers you, bows back, and steps off the rail to let you cross. The grass on the far bank is the same height too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne23-paper-samurais-duel-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send out everyone.",
+     "success": {
+      "text": "It looks at your whole team lining up. If paper can be disgusted, it is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne23-paper-samurais-duel-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "kartana"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kartana-dishonoured",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "glove-duel",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "glove-duel-accepted",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Before anything else, it draws a line across the bridge with one arm: the same line somebody once drew for you with a glove."
+    }
+   ]
+  },
+  {
+   "id": "ne23-the-falling-tree",
+   "name": "The Falling Tree",
+   "group": "Ultra Beasts",
+   "rarity": "common",
+   "minStage": 8,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kartana-honoured",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne23-the-falling-tree-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "kartana",
+    "tint": "#1c2a1c",
+    "effect": "none"
+   },
+   "intro": "In the night a dead tree comes down over your camp, the whole length of it, with a crack like the sky breaking.\n\nIt lands in two halves, one on either side of the fire. The cut is perfectly clean. On the far stump, a small folded shape bows, and is gone.",
+   "choices": [
+    {
+     "label": "Bow to the dark.",
+     "success": {
+      "text": "Your team sleeps the rest of the night between the two halves of the tree, as safe as it has ever been.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "ne23-the-falling-tree-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne24-what-the-guzzlord-left",
+   "name": "What the Guzzlord Left",
+   "group": "Ultra Beasts",
+   "rarity": "rare",
+   "tags": [
+    "Legendary",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 8,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne24-what-the-guzzlord-left-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m",
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "guzzlord",
+    "tint": "#2c2420",
+    "effect": "none"
+   },
+   "intro": "A bite has been taken out of a hill, a barn, and half a road.\nOn the edge of the bite, a family sits on a sofa that is all they have.\n\nEmeric: \"It ate the house. It didn't eat us. It looked at us and went round.\"\nOdette: \"It was crying. Nobody believes me.\"\n\nThe daughter says it to you, not to her father. She has stopped saying it to him.",
+   "choices": [
+    {
+     "label": "Help them rebuild (a node).",
+     "success": {
+      "text": "A wall, then a roof. Your team carries beams. Emeric works without a word and doesn't stop until the door hangs straight.\n\nOdette gives you her drawing of it: huge, and round, and crying. She has drawn the tears very carefully.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "guzzlord-rebuilt",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "odette-drawing",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne24-what-the-guzzlord-left-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Track it.",
+     "success": {
+      "text": "The trail is easy: it is a trench. It ends in a quarry, where something enormous is eating rock, as far from people as it could get.\n\nYou only catch the tail end of it, and the tail end notices you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guzzlord-found",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "odette-drawing",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne24-what-the-guzzlord-left-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "guzzlord"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Give them money (₽500).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "They take it, embarrassed. Emeric counts it twice so he will know exactly what he owes you. Odette gives you her drawing of it, crying, because you didn't laugh.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "odette-drawing",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne24-what-the-guzzlord-left-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne24-the-dog-door",
+   "name": "A Very Large Dog Door",
+   "group": "Ultra Beasts",
+   "rarity": "common",
+   "minStage": 9,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "guzzlord-rebuilt",
+      "guzzlord-found"
+     ]
+    },
+    {
+     "kind": "runPlace",
+     "regionEnd": true
+    },
+    {
+     "kind": "flag",
+     "key": "ne24-the-dog-door-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2c2420",
+    "effect": "none"
+   },
+   "intro": "The house on the edge of the bite is finished: new walls, new roof, the old sofa on the porch.\n\nIn the back wall there is a dog door. It is twice the height of the front door. Odette painted \"IN CASE\" over it herself.",
+   "choices": [
+    {
+     "label": "Tell her it's a good door.",
+     "success": {
+      "text": "She already knows. She waves until you are out of sight.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne24-the-dog-door-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne25-beast-in-the-mirror",
+   "name": "The Beast in the Mirror",
+   "group": "Ultra Beasts",
+   "rarity": "rare",
+   "tags": [
+    "Legendary",
+    "Mystery"
+   ],
+   "stop": "event",
+   "types": [
+    "water"
+   ],
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "water"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne25-beast-in-the-mirror-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "nihilego",
+    "tint": "#101c34",
+    "effect": "float"
+   },
+   "intro": "The lake reflects a different sky. Under the surface, a Nihilego drifts, and it is holding something: a child's lost hat.\n\nLeopold: \"It took my hat. Then it gave my sister's ball back. It doesn't know which things are ours.\"\n\nThe Nihilego offers the hat to your reflection.",
+   "choices": [
+    {
+     "label": "Reach into the water.",
+     "success": {
+      "text": "Your hand goes through your own reflection. It puts the hat into your fingers.\nIts touch is cold, and for one second you see where it is from: a sky with nothing in it you could name.\n\nLeopold gets his hat back, wet. He gives you a strange Ball he found on the shore, and puts the hat on wet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nihilego-touched",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "beast-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne25-beast-in-the-mirror-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Water-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon swims out and takes the hat, gently, from something that lets go as gently.\nIt comes back unharmed, and thoughtful, and looks at the lake for a long time after.\n\nLeopold gives you a strange Ball he found on the shore.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       },
+       {
+        "kind": "item",
+        "id": "beast-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne25-beast-in-the-mirror-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the hat.",
+     "success": {
+      "text": "Leopold: \"It can keep it. It looks lonely.\"\n\nHe shrugs, like someone much older. Under the water, the Nihilego puts the hat on.\nLeopold gives you a strange Ball he found on the shore: he has no use for it.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "beast-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne25-beast-in-the-mirror-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne25-the-hat",
+   "name": "The Hat Again",
+   "group": "Ultra Beasts",
+   "rarity": "common",
+   "minStage": 8,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "nihilego-touched",
+      "ne25-beast-in-the-mirror-done"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne25-the-hat-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#101c34",
+    "effect": "none"
+   },
+   "intro": "A different town, a different child, the same hat. You would know it anywhere: it still has the water mark.\n\nNobody can tell you how she came by it. She says she found it on her windowsill, dry, on a night it rained.",
+   "choices": [
+    {
+     "label": "Say nothing about the lake.",
+     "success": {
+      "text": "She wears it at exactly the angle Leopold did.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne25-the-hat-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
