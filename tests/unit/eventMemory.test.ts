@@ -1,6 +1,7 @@
 // Choice memory (Beta 0.6): remembered flags change what an event shows; indices stay stable; the flag registry is clean.
 
 import { describe, expect, it } from 'vitest';
+import { ENGINE_FLAGS } from '../../src/core/rivals/questlines';
 import memoryFlags from '../../src/data/overhaul/memoryFlags.json';
 import { EventDefSchema, MAX_EVENT_VARIANTS } from '../../src/core/contentSchema';
 import { allChoices, choiceAt, effectiveEvent, memoryKey, memoryValue, remembered, visibleChoices } from '../../src/core/eventMemory';
@@ -94,9 +95,15 @@ describe('memory flag registry', () => {
     const setKeys = new Set<string>();
     const reads: string[] = [];
     for (const ev of content.events.values()) {
-      for (const ch of allChoices(ev)) for (const o of [ch.success, ch.failure]) for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]) if (e.kind === 'flag') setKeys.add(e.key);
+      for (const ch of allChoices(ev)) for (const o of [ch.success, ch.failure]) for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle?.lose ?? [])]) {
+        if (e.kind === 'flag') setKeys.add(e.key);
+        // Rival questlines set flags through their own effect (set, pick, roll).
+        if (e.kind === 'rivalQuest') for (const k of [e.set?.key, e.pick?.key, e.roll?.key]) if (k) setKeys.add(k);
+      }
       for (const v of ev.remembers) for (const c of v.when) if (c.kind === 'flag') reads.push(`${ev.id}:${c.key}`);
     }
+    // Flags the rival questline engine sets after a fight (core/rivals/questlines.ts ENGINE_FLAGS).
+    for (const k of ENGINE_FLAGS) setKeys.add(k);
     const missing = reads.filter((r) => !setKeys.has(r.split(':')[1]!));
     expect(missing).toEqual([]);
   });

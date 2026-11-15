@@ -1918,8 +1918,10 @@
       "text": "The flag is on the other path. You know it is. You go the way that is not that way.\n\nBehind you, somebody waits a whole stage.",
       "effects": [
        {
-        "kind": "addEvent",
-        "eventId": "rival-map-note"
+        "kind": "rivalQuest",
+        "openFirst": [
+         "rival-map-note"
+        ]
        }
       ]
      }

@@ -42,12 +42,12 @@ describe('a rival who became a friend (left-out 2.2)', () => {
     const run = late('dir-ev-ally');
     run.party.push(createPokemon(content, 'rattata', 5, 'extra'));
     run.story.rivals.push({ encounters: 3, state: 'recurring' } as never);
+    run.story.rivals[0]!.state = 'ally';
+    // Catalog Overhaul row 12: the ally's gift merged into R15's gift (rival-trap-gift) and is retired, never drawn;
+    // the swap is now R7's finale (Borrowed Team), drawn only by the rival questline schedule.
+    expect(content.events.get('rival-gift')!.disabled).toBe(true);
     expect(ids(run)).not.toContain('rival-gift');
     expect(ids(run)).not.toContain('rival-swap');
-    run.story.rivals[0]!.state = 'ally';
-    expect(ids(run)).toContain('rival-gift');
-    expect(ids(run)).toContain('rival-swap');
-    const gift = content.events.get('rival-gift')!;
-    expect(JSON.stringify(gift)).toContain('"join"');
+    expect(content.events.get('rival-swap')!.requires).toContainEqual({ kind: 'rivalQuest', beat: 'R7.finale' });
   });
 });
