@@ -98,6 +98,8 @@ test('throw a ball from the Bag, catch the Pokémon and add it to the party', as
           const root = await atRootMenu();
           if (root === 'caught') return 'left';
           if (root === null) await page.keyboard.press('Enter');
+          // A late Enter can land on the fresh menu and open Fight or the Bag: back out to the root menu.
+          if (root === false) await page.keyboard.press('Escape');
           return root ? 'root' : 'busy';
         },
         { timeout: 40_000, intervals: [300] },
