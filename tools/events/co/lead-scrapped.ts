@@ -1,0 +1,55 @@
+// Catalog Overhaul Pack: the 45 events the ledger scraps (CATALOG_LEDGER.md, verdict SCRAP).
+// wx-fallen-bridge duplicates Broken Bridge; youngsters-shorts gives its line to Joey in the Road Roster (category 'people');
+// the 43 ovc-*-s1 one-line vignettes each duplicate a fuller event (Hazards, Rests, Lost and Found, Fairground, Berry Tree, Honest Market).
+// They stay loadable for saved runs but are never drawn again.
+import type { Json } from '../dsl.ts';
+
+export const CATEGORY = 'lead';
+export const EVENTS: Json[] = [];
+export const REMOVE: string[] = [
+  'wx-fallen-bridge',
+  'youngsters-shorts',
+  'ovc-wild-sneeze-s1',
+  'ovc-muddy-path-s1',
+  'ovc-picnic-invite-s1',
+  'ovc-scarecrow-s1',
+  'ovc-shiny-stone-glint-s1',
+  'ovc-berry-bush-guard-s1',
+  'ovc-coin-fountain-s1',
+  'ovc-kite-flyer-s1',
+  'ovc-umbrella-seller-s1',
+  'ovc-sleeping-wild-s1',
+  'ovc-broken-bridge-s1',
+  'ovc-singing-bird-s1',
+  'ovc-vending-machine-s1',
+  'ovc-trail-marker-s1',
+  'ovc-lantern-festival-s1',
+  'ovc-stray-ball-s1',
+  'ovc-puddle-reflections-s1',
+  'ovc-lazy-merchant-s1',
+  'ovc-campfire-songs-s1',
+  'ovc-old-sign-s1',
+  'ovc-hopscotch-s1',
+  'ovc-puzzle-box-s1',
+  'ovc-oasis-rest-s1',
+  'ovc-sudden-gust-s1',
+  'ovc-hide-and-seek-s1',
+  'ovc-tall-grass-nest-s1',
+  'ovc-raincoat-seller-s1',
+  'ovc-noisy-neighbor-s1',
+  'ovc-dry-well-s1',
+  'ovc-flower-crown-s1',
+  'ovc-mushroom-ring-s1',
+  'ovc-dusty-crate-s1',
+  'ovc-stubborn-signpost-s1',
+  'ovc-glowing-pond-s1',
+  'ovc-cave-echo-s1',
+  'ovc-singing-stones-s1',
+  'ovc-caravan-camp-s1',
+  'ovc-frozen-flower-s1',
+  'ovc-orchard-keeper-s1',
+  'ovc-blind-bard-s1',
+  'ovc-rooftop-race-s1',
+  'ovc-tide-pool-walk-s1',
+  'ovc-thunder-hill-s1',
+];

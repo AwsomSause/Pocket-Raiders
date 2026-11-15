@@ -129,6 +129,9 @@ export const PokemonInstanceSchema = z.object({
   held: z.record(z.string(), z.number().int().min(1)).optional(),
   /** Small permanent stat boosts per stat (Wings): copies taken, each worth its catalog percent. */
   statBoosts: z.partialRecord(StatNameSchema, z.number().int().min(0)).optional(),
+  /** Catalog Overhaul: stat boosts in percent given by event scenes ("+1 to a stat" is 5%), capped per stat; `eventBoostsRegion` is the share that ends with the region. */
+  eventBoosts: z.partialRecord(StatNameSchema, z.number().int().min(0)).optional(),
+  eventBoostsRegion: z.partialRecord(StatNameSchema, z.number().int().min(0)).optional(),
   /** Max HP bonus in percent from the trainer's HP perks (core/trainerPerks.ts syncHpPerks keeps it current). */
   perkHp: z.number().int().optional(),
   /** Hatched from an Egg this run (core/eggs.ts; Elm's perk gives these more experience). */
@@ -1472,7 +1475,7 @@ export const RunStateSchema = z.object({
   /** Encore! Hype carried between battles (reset after a boss battle). */
   hype: z.number().int().min(0).default(0),
   /** Signature effects that run out: they leave `perkEffects` after `battles` more battles (of the `until` kind). */
-  tempEffects: z.array(z.object({ effects: z.array(ArchetypeModifierSchema), battles: z.number().int().min(1), until: z.enum(['battle', 'boss', 'wild']) })).default([]),
+  tempEffects: z.array(z.object({ effects: z.array(ArchetypeModifierSchema), battles: z.number().int().min(1), until: z.enum(['battle', 'boss', 'wild', 'region']) })).default([]),
   signatureApplied: z.record(z.string(), z.array(ArchetypeModifierSchema)).default({}),
   /** Mode, difficulty, modifiers and their reward multiplier (core/rules.ts). */
   rules: RunRulesSchema,
