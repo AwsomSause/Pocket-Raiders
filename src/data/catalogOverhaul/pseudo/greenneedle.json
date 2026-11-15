@@ -66,6 +66,15 @@
    "start": "opened"
   },
   {
+   "id": "ps_gn_labyrinth",
+   "name": "Sabrina's Labyrinth",
+   "entry": "gn-14-door",
+   "themeId": "psychic-ghost",
+   "tint": "#2a1a40",
+   "mood": "shadow lanterns",
+   "start": "opened"
+  },
+  {
    "id": "ps_gn_maiden",
    "name": "Maiden's Peak",
    "entry": "gn-12-door",

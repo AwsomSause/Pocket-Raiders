@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { chainRooms, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
+import { takeTurn } from '../../src/core/run';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { reinforcementDue } from '../../src/core/raid/raid';
 import { choose, flagOf, gnRun, lose, open, openSide, scene, setFlag, win } from './helpers/gnPlay';
@@ -300,5 +301,115 @@ describe('gn.13 Flight North', () => {
     expect(flagOf(bye, 'kanto-flight-gratitude')).toBe(1);
     expect(bye.expansion?.flightNorth?.state).toBe('ready');
     expect(content.events.get('cs-kanto-vermilion-flight-c7')!.disabled).toBe(true);
+  });
+});
+
+describe("gn.14 Sabrina's Labyrinth", () => {
+  const enter = (seed: string, setup: (run: RunState) => void = () => {}) => {
+    const run = gnRun(seed);
+    addMon(run, 'pikachu');
+    addMon(run, 'eevee');
+    setup(run);
+    open(run, 'gn-14-door');
+    return choose(run, 'gn-14-door', 'Read it.').run;
+  };
+  /** Through the unwinnable first fight and the ghost's offer, to node 1. */
+  const toNode1 = (seed: string, setup?: (run: RunState) => void): RunState => {
+    const fight = choose(enter(seed, setup), 'gn-14-lost', 'Stand there anyway.').run;
+    expect(fight.battle!.eventRule).toMatchObject({ noPokemon: true });
+    const after = takeTurn(content, structuredClone(fight), { kind: 'move', index: 0 }).run;
+    expect(after.phase).toBe('map');
+    return choose(after, 'gn-14-ghost', 'Take it.').run;
+  };
+  const lab = (run: RunState) => run.expansion!.canon!.lab!;
+
+  it('a door on step 11 (window 9 to 14), optional, instead of the battle, with a "?" badge', () => {
+    expect(content.coPlacement!.get('gn-14-door')).toMatchObject({ home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', badge: '?' });
+    expect(scene(gnRun('x'), 'gn-14-door').labels).toEqual(['Read it.', 'No, thank you.']);
+  });
+
+  it('"No, thank you." changes nothing; "Read it." leaves one of the four ghosts alone in the party with the team stashed', () => {
+    const run = gnRun('lab-no');
+    open(run, 'gn-14-door');
+    const no = choose(run, 'gn-14-door', 'No, thank you.').run;
+    expect(no.party.map((m) => m.uid)).toEqual(run.party.map((m) => m.uid));
+    expect(no.expansion?.canon?.lab).toBeUndefined();
+    const seen = new Set<string>();
+    for (let i = 0; i < 30; i++) {
+      const r = enter(`lab-${i}`);
+      expect(r.party).toHaveLength(1);
+      expect(r.party[0]!.level).toBe(10);
+      expect(r.expansion!.canon!.stash).toHaveLength(3);
+      expect(openSide(r)?.eventId).toBe('gn-14-lost');
+      seen.add(r.party[0]!.speciesId);
+    }
+    expect([...seen].sort()).toEqual(['drifloon', 'duskull', 'gastly', 'shuppet']);
+  });
+
+  it('six lanterns (a sleepwalker, a mirror, four doors, two doors, the floor, the riddle), then Sabrina; the team comes back and the ghost is owed', () => {
+    let run = toNode1('lab-walk');
+    const n1 = choose(run, 'gn-14-n1', 'Wake them with a battle.').run;
+    expect(n1.battle!.eventRule).toMatchObject({ foeAsleep: true, matchLead: true });
+    run = win(n1);
+    expect(lab(run).freed).toHaveLength(1);
+    expect(run.party[0]!.level).toBe(15);
+    const wrong = choose(run, 'gn-14-n2', 'Walk to your right.').run;
+    expect(openSide(wrong)?.eventId).toBe('gn-14-n2');
+    expect(wrong.party[0]!.hp).toBeLessThan(maxHp(content, wrong.party[0]!));
+    run = choose(wrong, 'gn-14-n2', 'Walk to your left.').run;
+    run = choose(run, 'gn-14-n3', 'Watch the doors.').run;
+    const order = ['Town, route, rest, harbour.', 'Route, harbour, town, rest.', 'Rest, town, harbour, route.'][flagOf(run, 'lab-doors') - 1]!;
+    run = choose(run, 'gn-14-n3-doors', order).run;
+    expect(lab(run).freed).toHaveLength(3);
+    run = choose(run, 'gn-14-n4', 'Open the other one.').run;
+    run = choose(run, 'gn-14-n5', 'Step where it steps.').run;
+    expect(run.party[0]!.level).toBe(37);
+    const grave = choose(run, 'gn-14-n6', 'A shadow.');
+    expect([grave.text, ...grave.changes].join(' ')).toMatch(/blank/);
+    run = grave.run;
+    expect(run.party[0]!.level).toBe(40);
+    const boss = choose(run, 'gn-14-sabrina', 'Face Sabrina.').run;
+    expect(boss.battle!.eventRule).toMatchObject({ falseSlot: true, ghostRescue: true, evolveMid: true });
+    expect(boss.battle!.enemyTeam[0]!).toMatchObject({ speciesId: 'alakazam', level: 42 });
+    run = win(boss);
+    expect(run.party.map((m) => m.speciesId)).toEqual(gnRun('lab-walk').party.map((m) => m.speciesId).concat(['pikachu', 'eevee']));
+    expect(flagOf(run, 'kanto-sabrina-labyrinth-done')).toBe(1);
+    expect(run.expansion!.canon!.lab).toMatchObject({ owed: true, done: true, active: false });
+    expect(scene(run, 'gn-14-goodbye').labels).toEqual(['Wave back.']);
+  });
+
+  it('a loss resets the stage: node 1 again, nobody freed', () => {
+    let run = toNode1('lab-lose');
+    run = win(choose(run, 'gn-14-n1', 'Wake them with a battle.').run);
+    run = choose(run, 'gn-14-n2', 'Walk to your left.').run;
+    expect(lab(run).freed).toHaveLength(2);
+    run = choose(run, 'gn-14-n3', 'Watch the doors.').run;
+    run = choose(run, 'gn-14-n3-doors', 'Harbour, rest, route, town.').run; // never right: the doors start over
+    expect(openSide(run)?.eventId).toBe('gn-14-n3');
+    const n1 = toNode1('lab-lose-2');
+    const lost = lose(choose(n1, 'gn-14-n1', 'Wake them with a battle.').run);
+    expect(openSide(lost)?.eventId).toBe('gn-14-n1');
+    expect(lab(lost).freed).toEqual([]);
+  });
+
+  it('remembers: a cruel run sees the body turn round; a lost Pokémon names the grave; the Shedinja stands by it', () => {
+    const cruel = choose(toNode1('lab-cruel', (r) => setFlag(r, 'robbed-trainer')), 'gn-14-n1', 'Wake them with a battle.');
+    expect(cruel.text).toMatch(/disappointed/);
+    const run = toNode1('lab-grave');
+    setFlag(run, 'lost-mon');
+    setFlag(run, 'shedinja-answered');
+    let r = win(choose(run, 'gn-14-n1', 'Wake them with a battle.').run);
+    r = choose(r, 'gn-14-n2', 'Walk to your left.').run;
+    r = choose(r, 'gn-14-n3', 'Watch the doors.').run;
+    r = choose(r, 'gn-14-n3-doors', ['Town, route, rest, harbour.', 'Route, harbour, town, rest.', 'Rest, town, harbour, route.'][flagOf(r, 'lab-doors') - 1]!).run;
+    r = choose(choose(r, 'gn-14-n4', 'Open the other one.').run, 'gn-14-n5', 'Step where it steps.').run;
+    const words = (({ text, changes }) => [text, ...changes].join(' '))(choose(r, 'gn-14-n6', 'A shadow.'));
+    expect(words).toMatch(/has a name on it/);
+    expect(words).toMatch(/Shedinja/);
+  });
+
+  it('the return one region later is the one gn-14-return room', () => {
+    expect(scene(gnRun('x'), 'gn-14-return').labels).toEqual(['Take it.', 'Not this time.']);
+    expect(content.events.get('gn-14-return')!.choices[0]!.success.effects).toContainEqual(expect.objectContaining({ kind: 'canon', action: 'ghostReturn' }));
   });
 });

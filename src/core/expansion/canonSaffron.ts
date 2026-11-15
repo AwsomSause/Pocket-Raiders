@@ -38,9 +38,9 @@ const setCanon = (run: RunState, canon: CanonState): void => {
 };
 const nameOf = (content: Content, mon: Pick<PokemonInstance, 'speciesId'>): string => content.species.get(mon.speciesId)?.name ?? mon.speciesId;
 
-/** The Labyrinth's rooms in order (event ids without the `cs-kanto-saffron-` prefix). */
-export const LAB_ROOMS = ['lab-n1', 'lab-n2', 'lab-n3', 'lab-n4', 'lab-n5', 'lab-n6', 'lab-final'] as const;
-const LAB_PREFIX = 'cs-kanto-saffron-';
+/** The Labyrinth's rooms in order: Greenneedle gn.14 (the Kanto canon rooms it replaced are retired). */
+export const LAB_ROOMS = ['n1', 'n2', 'n3', 'n4', 'n5', 'n6', 'sabrina'] as const;
+const LAB_PREFIX = 'gn-14-';
 
 /**
  * After a loss in the Labyrinth: the event to open next. The stage's progress resets (nobody is freed, the ghost is healed)
@@ -249,8 +249,8 @@ export function markRivalReturned(run: RunState): void {
   if (canon.rival) setCanon(run, { ...canon, rival: { ...canon.rival, returned: true } });
 }
 
-/** The event that carries the ghost's return, by ghost. */
-export const ghostReturnEventId = (base: string): string => `cs-kanto-saffron-return-${base}`;
+/** The event that carries the ghost's return (one room for every ghost: gn.14's return). */
+export const ghostReturnEventId = (_base: string): string => 'gn-14-return';
 
 /**
  * At a stage start: does the ghost return here? It does at the parallel stage (the same stage number) of the next region, or at the closest stage
@@ -267,7 +267,7 @@ export function ghostReturnEvent(content: Content, run: RunState): string | null
   return stage.index === target ? ghostReturnEventFor(content, lab.ghost) : null;
 }
 
-const ghostReturnEventFor = (content: Content, base: string): string | null => (content.events.has(ghostReturnEventId(base)) ? ghostReturnEventId(base) : null);
+const ghostReturnEventFor = (content: Content, base: string): string | null => (content.events.has(ghostReturnEventId(base)) && !content.events.get(ghostReturnEventId(base))!.disabled ? ghostReturnEventId(base) : null);
 
 // ---------- mid-fight evolution ----------
 

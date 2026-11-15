@@ -19,7 +19,8 @@ Branch `claude/project-thread-uehq47`, draft PR #1314 into `ui-mockups`.
 | gn.11 Kaiju Tentacruel | done, 6 tests pass (rescues on a four-turn tide, Ned's hook, pylons, the raid with its four moves and Tentacool calls, free / defeat / float, the lost ending, the sea-battle return; Kanto: cs-kanto-vermilion-kaiju now an event, the canon den is no longer placed) | yes |
 | gn.12 Maiden's Peak | done, 5 tests pass (market hub: Lantern Row, TM Hall of 24 by type on two rotating boards, Swap Alley, Egg Row, stalls and boxes, Dusk Vendors, Madame Roux, Tea House; five sightings, two right turns of three = Blessing; Fairium Z or three Fairy HMs; Tea House hub every later stage; the portrait; Kanto: cs-kanto-vermilion-maiden) | yes |
 | gn.13 Flight North | done, 4 tests pass (must-see check at step 17, theft 50% ±5 for the Squad, Heat 6+ and the S.S. Anne trio; bully, meadow, cocoon, Harden-only stream, wings, camp, Jessie & James with the shiny rescue, goodbye returns the team; Kanto: cs-kanto-vermilion-flight, old flight rooms retired) | yes |
-| gn.14–gn.62 | not started | |
+| gn.14 Sabrina's Labyrinth | done, 6 tests pass (door step 11, "?" badge; unwinnable first fight; one of four ghosts L10 to L40; six lanterns: sleepwalker fight, mirror, four-door memory, two doors, floating floor, riddle; Sabrina with the false slot and the ghost rescue; goodbye; return one region later; Kanto: cs-kanto-saffron-labyrinth, old lab rooms and the ev-sabrina-labyrinth opener retired) | yes |
+| gn.15–gn.62 | not started | |
 | gn.new.01–38 | not started | |
 
 ## Limits (documented)
@@ -32,6 +33,7 @@ Branch `claude/project-thread-uehq47`, draft PR #1314 into `ui-mockups`.
 - gn.07 remembers an abandoned Pokémon by run flag `abandoned-mon`: gn.new.03 (The Ball That Wouldn't Open) and the Trubbish Nobody Wanted must set it.
 
 - gn.11 "Each turn, each party Pokémon can fight or rescue": the tide gives four turns; a Water- or Flying-type in the party rescues in one, otherwise two. Assists, boats and pylon stuns land before the fight, as boss HP already lost (6% per rescue, 9% boats, 6% per pylon stun, 6% more per stun the Machop braces); each pylon is +1 Attack for the boss. "Free it": the party's HP pays for the two turns of panicked swings (more if angered). The stage header "Something in the Harbour" from Step 1 is not shown (no stage-header hook). Out of Kanto there is no harbour market to shut. The Kaiju is no longer catchable (the gift is the Tentacool).
+- gn.14: "Once per save" is once per run (no memory across runs). The grave shows "a name you know" for `lost-mon` (no name is stored with the flag). The puzzles are choices; a wrong answer costs the ghost 20% HP and restarts that trial. The Shedinja line reads `shedinja-answered` (gn.new.07 must set it); the cruel body reads `hoenn-cruel` or `robbed-trainer`. The core Labyrinth rules (canonSaffron.ts) now point at the gn-14 rooms.
 - gn.13: Flight North fights can't be caught and allow no bag items (the team is gone). The S.S. Anne trio raises the theft odds (+5%), the Squad and Heat 6+ lower them.
 - gn.12 Swap Alley uses tradeFor (similar strength, wider, anything); the Honest Trade Card and nature pick wait for the markets row's `honestTrade`. Costume Stalls: ribbons are Bond (outfits for the player wait for an outfit system). The hatchery is a trade for a sand-warmed Egg that hatches after the next battle. The Fairy HMs are taught on the spot (no machine case to keep them). "Dusk" is the evening period.
 

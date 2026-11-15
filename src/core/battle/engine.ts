@@ -6916,7 +6916,8 @@ function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
     active.hp = 1;
     active.status = null;
     for (const foe of battle.enemyTeam) foe.hp = 0;
-    events.push({ type: 'raid', tone: 'phase', text: `${nameOf(ctx, active)} calls out! Every ghost in the Labyrinth answers and swarms the foe!` });
+    events.push({ type: 'raid', tone: 'phase', text: `${nameOf(ctx, active)} goes very still. Then it calls. Not a cry. A name, maybe. Every Ghost-type in the building comes through the walls at once!` });
+    events.push({ type: 'raid', tone: 'phase', text: 'Sabrina: "...It asked them. And they came. Nobody\'s ever come when I asked."' });
     battle.outcome = 'win';
   }
   if (active.hp <= 0) {

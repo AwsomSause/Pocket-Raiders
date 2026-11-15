@@ -656,7 +656,7 @@
     {
       "id": "ps_sabrinas_labyrinth",
       "name": "Sabrina's Labyrinth",
-      "entry": "cs-kanto-saffron-labyrinth",
+      "entry": "ev-sabrina-labyrinth",
       "themeId": "psychic-ghost",
       "tint": "#2a1a40",
       "mood": "shadow lanterns"

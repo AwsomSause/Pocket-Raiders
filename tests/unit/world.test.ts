@@ -316,6 +316,8 @@ describe('landmarks and dungeons', () => {
     for (const id of content.events.keys()) if (id.startsWith('ultra-tear-')) opened.add(id);
     // Beta 0.7: Pidgey's Resolve places its join rooms from code (core/sky/story.ts pushRoom).
     for (const id of content.events.keys()) if (id.startsWith('sky.join.')) opened.add(id);
+    // gn.14: the Labyrinth ghost's return is placed by code (core/expansion/canonRun.ts addGhostReturnStop).
+    opened.add('gn-14-return');
     // Catalog Overhaul: a placed event (core/co/placement.ts) is put on the map at its home step, room or not.
     for (const id of content.coPlacement?.keys() ?? []) opened.add(id);
     // Damian's "Go again." (gn.05) opens his next meeting, an ordinary drawn event, at once; anything else opened must be a room.

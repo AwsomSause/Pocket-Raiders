@@ -2,6 +2,19 @@
  "catalogOverhaul": "greenneedle",
  "override": true,
  "remove": [
+  "cs-kanto-saffron-lab-final",
+  "cs-kanto-saffron-lab-ghost",
+  "cs-kanto-saffron-lab-lost",
+  "cs-kanto-saffron-lab-n1",
+  "cs-kanto-saffron-lab-n2",
+  "cs-kanto-saffron-lab-n3",
+  "cs-kanto-saffron-lab-n4",
+  "cs-kanto-saffron-lab-n5",
+  "cs-kanto-saffron-lab-n6",
+  "cs-kanto-saffron-return-drifloon",
+  "cs-kanto-saffron-return-duskull",
+  "cs-kanto-saffron-return-gastly",
+  "cs-kanto-saffron-return-shuppet",
   "cs-kanto-vermilion-flight-c1",
   "cs-kanto-vermilion-flight-c2",
   "cs-kanto-vermilion-flight-c3",
@@ -37,7 +50,8 @@
   "cs-kanto-vermilion-maiden-tm6",
   "cs-kanto-vermilion-maiden-tm7",
   "cs-kanto-vermilion-maiden-tm8",
-  "cs-kanto-vermilion-maiden-top"
+  "cs-kanto-vermilion-maiden-top",
+  "ev-sabrina-labyrinth"
  ],
  "events": [
   {
@@ -6967,6 +6981,1258 @@
     }
    ],
    "canon": "cs.kanto.vermilion.flightnorth"
+  },
+  {
+   "id": "gn-14-door",
+   "name": "Sabrina's Labyrinth",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "psychic",
+    "ghost"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lab-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mr-mime",
+    "tint": "#2a1a40",
+    "effect": "fog"
+   },
+   "intro": "**A fortune-teller at a folding table:** \"Your aura's very loud. Shall I read it? No charge. It's a special entrance.\"\n\nBehind her, a curtain the colour of a bruise. Something on the other side is breathing slowly.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "She turns your palm to the light. Her thumb stops in the middle of it.\n\n**Fortune-teller:** \"Oh. Oh, you poor thing. Through the curtain, please. Mind the step.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lab-entered",
+        "amount": 1
+       },
+       {
+        "kind": "canon",
+        "action": "ghostStart",
+        "species": []
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-14-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No, thank you.",
+     "success": {
+      "text": "You keep walking. She goes on smiling at the place where you were standing.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-14-lost",
+   "name": "Sabrina's Labyrinth: The First Fight",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gengar",
+    "tint": "#2a1a40",
+    "effect": "fog"
+   },
+   "intro": "*The party's Poké Balls roll off the belt, one by one, and through the walls.*\n\n*A battle starts. You reach for a Poké Ball. Your hand closes on nothing.*\n\nSomeone in a hood is waiting for you to send something out. You have nobody to send.",
+   "choices": [
+    {
+     "label": "Stand there anyway.",
+     "success": {
+      "text": "You stand with empty hands. It doesn't take long.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-14-ghost"
+        }
+       ],
+       "rule": {
+        "noItems": true,
+        "noPokemon": true
+       },
+       "name": "Hooded Shape",
+       "size": 1,
+       "types": [
+        "ghost",
+        "psychic"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-14-ghost"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-14-ghost",
+   "name": "Sabrina's Labyrinth: The Companion",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "duskull",
+    "tint": "#2a1a40",
+    "effect": "fog"
+   },
+   "intro": "*It ends. A tombstone pushes up through the floor. The name on it is yours.*\n\n*A swarm of Ghost-types crosses the room, laughing, right to left, and is gone.*\n\n*One stays behind. It floats down. It looks at the tombstone, and then at you, standing next to it, a little see-through.*\n\n*It holds out a hand, or a string, or a sleeve.*",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It's colder than a hand and warmer than you expected. When you step, it steps, a moment behind you, copying.\n\nSomewhere ahead, six small lights are waiting in the dark. You know every one of them by the way it flickers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lab-ghost-offered",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-14-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask why it's helping.",
+     "success": {
+      "text": "It thinks about it for a long time.\n\n*It points at the tombstone. Then at you. Then it shakes its head, very firmly, as if correcting a spelling.*\n\nIt takes your sleeve and waits for you to walk first, so it can copy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lab-ghost-offered",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-14-n1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-14-n1",
+   "name": "Sabrina's Labyrinth: The Body",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "hypno",
+    "tint": "#2a1a40",
+    "effect": "fog"
+   },
+   "intro": "Node 1. Through a door you haven't opened, **your own body** stands in a room you've never entered. It's breathing. It doesn't turn round.\n\nBetween you and the first lantern, a trainer sways on their feet with their eyes half shut, a Poké Ball loose in one hand.\n\n*The ghost copies the way you stand, a step behind.*",
+   "choices": [
+    {
+     "label": "Wake them with a battle.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "hoenn-cruel",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "In the next room, your body turns round. It looks at you. It looks disappointed. Then the trainer throws, without looking.",
+       "effects": []
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "robbed-trainer",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "In the next room, your body turns round. It looks at you. It looks disappointed. Then the trainer throws, without looking.",
+       "effects": []
+      }
+     ],
+     "success": {
+      "text": "The trainer blinks at you, slowly, and throws without looking.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "labRetry",
+         "species": []
+        }
+       ],
+       "rule": {
+        "matchLead": true,
+        "foeAsleep": true,
+        "noItems": true
+       },
+       "name": "Sleepwalking Trainer",
+       "size": 1,
+       "types": [
+        "psychic",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "canon",
+         "action": "ghostFree",
+         "species": []
+        },
+        {
+         "kind": "canon",
+         "action": "ghostLevel",
+         "species": [],
+         "level": 15
+        },
+        {
+         "kind": "canon",
+         "action": "labRoom",
+         "species": [],
+         "level": 1
+        },
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-14-n2"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-14-n2",
+   "name": "Sabrina's Labyrinth: The Mirror",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mr-mime",
+    "tint": "#2a1a40",
+    "effect": "fog"
+   },
+   "intro": "Node 2. A tall mirror fills the far wall. In it, the lantern hangs on your right. On your side of the glass, there is no lantern at all.\n\nAt the ends of the corridors, **your Pokémon, glimpsed as ghosts**, wave at you. A little late, every time.\n\n*Walk so the reflection reaches the lantern.*",
+   "choices": [
+    {
+     "label": "Walk to your right.",
+     "success": {
+      "text": "Your reflection walks to its right, away from the lantern. The glass ripples like a laugh. Something cold shoves the ghost back to the start.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-14-n2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk to your left.",
+     "success": {
+      "text": "Your reflection walks the other way, right up to the lantern, and puts its hand on it.\n\nThe glass lets go of the light. One of the waving shapes at the end of the corridor stops waving and comes to you.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 20
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 2
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-14-n3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk into the mirror.",
+     "success": {
+      "text": "You walk into the glass. It is very much glass. The ghost winces for you, a moment late.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-14-n2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-14-n3",
+   "name": "Sabrina's Labyrinth: Four Doors",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "haunter",
+    "tint": "#2a1a40",
+    "effect": "fog"
+   },
+   "intro": "Node 3. **Doors that open onto places from earlier regions.** A town you left. A route. The first rest of the run. A harbour.\n\nThey light up one at a time, in an order, and then go dark. The lantern is behind whichever door you open last, if you get it right.\n\n*The ghost has stopped copying you. It's watching the doors too.*",
+   "choices": [
+    {
+     "label": "Watch the doors.",
+     "success": {
+      "text": "You watch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "lab-doors",
+        "weights": [
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-doors",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "The town. The route. The rest. The harbour."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-doors",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "The route. The harbour. The town. The rest."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-doors",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "The rest. The town. The harbour. The route."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-14-n3-doors"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-14-n3-doors",
+   "name": "Sabrina's Labyrinth: Four Doors",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "haunter",
+    "tint": "#2a1a40",
+    "effect": "fog"
+   },
+   "intro": "The doors are dark now. Through one of them, faintly, you can hear the town you started from.\n\nOpen them in the order they lit.",
+   "choices": [
+    {
+     "label": "Town, route, rest, harbour.",
+     "success": {
+      "text": "You open the doors, one after another.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-doors",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "canon",
+          "action": "ghostFree",
+          "species": []
+         },
+         {
+          "kind": "canon",
+          "action": "ghostLevel",
+          "species": [],
+          "level": 25
+         },
+         {
+          "kind": "canon",
+          "action": "labRoom",
+          "species": [],
+          "level": 3
+         },
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-14-n4"
+         }
+        ],
+        "text": "The last door opens on the first rest of your run: the same bench, the same light. The lantern is sitting on the bench, waiting."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-doors",
+        "max": 0,
+        "then": [
+         {
+          "kind": "damage",
+          "share": 0.2
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-14-n3"
+         }
+        ],
+        "text": "The wrong door. It opens onto a route you never walked, and the wind off it knocks the ghost flat. The doors light up again, from the start."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-doors",
+        "min": 2,
+        "then": [
+         {
+          "kind": "damage",
+          "share": 0.2
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-14-n3"
+         }
+        ],
+        "text": "The wrong door. It opens onto a route you never walked, and the wind off it knocks the ghost flat. The doors light up again, from the start."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Route, harbour, town, rest.",
+     "success": {
+      "text": "You open the doors, one after another.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-doors",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "canon",
+          "action": "ghostFree",
+          "species": []
+         },
+         {
+          "kind": "canon",
+          "action": "ghostLevel",
+          "species": [],
+          "level": 25
+         },
+         {
+          "kind": "canon",
+          "action": "labRoom",
+          "species": [],
+          "level": 3
+         },
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-14-n4"
+         }
+        ],
+        "text": "The last door opens on the first rest of your run: the same bench, the same light. The lantern is sitting on the bench, waiting."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-doors",
+        "max": 1,
+        "then": [
+         {
+          "kind": "damage",
+          "share": 0.2
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-14-n3"
+         }
+        ],
+        "text": "The wrong door. It opens onto a route you never walked, and the wind off it knocks the ghost flat. The doors light up again, from the start."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-doors",
+        "min": 3,
+        "then": [
+         {
+          "kind": "damage",
+          "share": 0.2
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-14-n3"
+         }
+        ],
+        "text": "The wrong door. It opens onto a route you never walked, and the wind off it knocks the ghost flat. The doors light up again, from the start."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rest, town, harbour, route.",
+     "success": {
+      "text": "You open the doors, one after another.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-doors",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "canon",
+          "action": "ghostFree",
+          "species": []
+         },
+         {
+          "kind": "canon",
+          "action": "ghostLevel",
+          "species": [],
+          "level": 25
+         },
+         {
+          "kind": "canon",
+          "action": "labRoom",
+          "species": [],
+          "level": 3
+         },
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-14-n4"
+         }
+        ],
+        "text": "The last door opens on the first rest of your run: the same bench, the same light. The lantern is sitting on the bench, waiting."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-doors",
+        "max": 2,
+        "then": [
+         {
+          "kind": "damage",
+          "share": 0.2
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-14-n3"
+         }
+        ],
+        "text": "The wrong door. It opens onto a route you never walked, and the wind off it knocks the ghost flat. The doors light up again, from the start."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-doors",
+        "min": 4,
+        "then": [
+         {
+          "kind": "damage",
+          "share": 0.2
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-14-n3"
+         }
+        ],
+        "text": "The wrong door. It opens onto a route you never walked, and the wind off it knocks the ghost flat. The doors light up again, from the start."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Harbour, rest, route, town.",
+     "success": {
+      "text": "You open the doors, one after another.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-doors",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "canon",
+          "action": "ghostFree",
+          "species": []
+         },
+         {
+          "kind": "canon",
+          "action": "ghostLevel",
+          "species": [],
+          "level": 25
+         },
+         {
+          "kind": "canon",
+          "action": "labRoom",
+          "species": [],
+          "level": 3
+         },
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-14-n4"
+         }
+        ],
+        "text": "The last door opens on the first rest of your run: the same bench, the same light. The lantern is sitting on the bench, waiting."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-doors",
+        "max": 3,
+        "then": [
+         {
+          "kind": "damage",
+          "share": 0.2
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-14-n3"
+         }
+        ],
+        "text": "The wrong door. It opens onto a route you never walked, and the wind off it knocks the ghost flat. The doors light up again, from the start."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-doors",
+        "min": 5,
+        "then": [
+         {
+          "kind": "damage",
+          "share": 0.2
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-14-n3"
+         }
+        ],
+        "text": "The wrong door. It opens onto a route you never walked, and the wind off it knocks the ghost flat. The doors light up again, from the start."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-14-n4",
+   "name": "Sabrina's Labyrinth: Two Doors",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "banette",
+    "tint": "#2a1a40",
+    "effect": "fog"
+   },
+   "intro": "Node 4. Two doors. One's labelled **\"Right.\"**\n\nBeside them, **a villager repeats one sentence**, over and over, to nobody: \"She was only a little girl when it started.\"\n\n*The ghost floats level with you now. Not behind. Beside.*",
+   "choices": [
+    {
+     "label": "Open the door marked \"Right.\"",
+     "success": {
+      "text": "It opens onto the same room, and the same villager, saying the same sentence. The ghost bumps into you from behind. You're back where you began.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-14-n4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Open the other one.",
+     "success": {
+      "text": "The villager stops in the middle of the sentence. For a moment, very quietly: \"...She was so lonely.\"\n\nThen the lantern is in your hands.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 30
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 4
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-14-n5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-14-n5",
+   "name": "Sabrina's Labyrinth: The Floating Floor",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "drifblim",
+    "tint": "#2a1a40",
+    "effect": "fog"
+   },
+   "intro": "Node 5. A floor of tiles floating over nothing. Each one tips when you put weight on it.\n\nOn the far wall, **children's drawings of your team**, in crayon, pinned up. Each has a gold star. One of them is of the ghost.\n\n*It goes first now. It doesn't look back to check you're following. It knows.*",
+   "choices": [
+    {
+     "label": "Step where it steps.",
+     "success": {
+      "text": "You put your feet exactly where it floats. Not one tile tips.\n\nAt the far side, it stops under the drawing of itself. It looks at the gold star for a long time.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 37
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 5
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-14-n6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run for the far side.",
+     "success": {
+      "text": "Three tiles in, the floor tips. You fall a long way, slowly, and land at the start. The ghost comes down after you, holding your sleeve.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-14-n5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick the steadiest tiles.",
+     "success": {
+      "text": "The steadiest tile is the one that flips. Of course it is. You land back at the start with a crayon in your hair.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-14-n5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-14-n6",
+   "name": "Sabrina's Labyrinth: The Small Grave",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dusclops",
+    "tint": "#2a1a40",
+    "effect": "fog"
+   },
+   "intro": "Node 6. **A small grave, for a Pokémon you never lost.** Beside it, the last lantern, and a riddle chalked on the floor:\n\n*\"I'm with you all your life and you've never touched me.\"*",
+   "choices": [
+    {
+     "label": "A shadow.",
+     "success": {
+      "text": "The chalk smudges, as if someone breathed on it. The last lantern opens.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lost-mon",
+        "min": 1,
+        "then": [],
+        "text": "The grave has a name on it. You know the name. The ghost floats over and stays by it, very still, for as long as you need."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lost-mon",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "The stone is blank. The ghost won't go near it. It waits by the lantern instead, with its back to the grave."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "shedinja-answered",
+        "min": 1,
+        "then": [],
+        "text": "The Shedinja is standing by the grave, a little apart. It doesn't move. You think it came to see you through."
+       },
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 40
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 6
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-14-sabrina"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A name.",
+     "success": {
+      "text": "The chalk rubs itself out and writes the riddle again, more slowly, as if for a child. The cold comes up out of the floor and knocks the ghost back.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-14-n6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your own heartbeat.",
+     "success": {
+      "text": "You can't hear your heartbeat in here. You realise you haven't been able to for a while. The riddle writes itself out again.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-14-n6"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-14-sabrina",
+   "name": "Sabrina's Labyrinth: Sabrina",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "alakazam",
+    "tint": "#2a1a40",
+    "effect": "fog"
+   },
+   "intro": "**Sabrina, not turning round:** \"You came all this way without a body. Most people stop at the grave.\"\n\n*A doll on her knee turns its head.*\n\nHer Alakazam is already looking at your ghost. Its spoons are bent toward it.\n\nEvery turn, one of your ghost's moves will lie. Every second turn, it can see true.",
+   "choices": [
+    {
+     "label": "Face Sabrina.",
+     "success": {
+      "text": "It floats out in front of you. It doesn't look back. It leads.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "labRetry",
+         "species": []
+        }
+       ],
+       "rule": {
+        "matchLead": true,
+        "noItems": true,
+        "evolveMid": true,
+        "ghostRescue": true,
+        "falseSlot": true
+       },
+       "team": [
+        "alakazam"
+       ],
+       "name": "Sabrina",
+       "size": 1,
+       "types": [
+        "psychic"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "canon",
+         "action": "ghostEnd",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-sabrina-ghost",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-sabrina-labyrinth-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-sabrina-haunting-owed",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-14-goodbye"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-14-goodbye",
+   "name": "Sabrina's Labyrinth: Goodbye",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gengar",
+    "tint": "#2a1a40",
+    "effect": "fog"
+   },
+   "intro": "You have your body back. The lights go back into the Poké Balls, one by one, and the belt is heavy again.\n\n*It floats in front of you. It copies your wave, a step behind, the way it did at the start.*",
+   "choices": [
+    {
+     "label": "Wave back.",
+     "success": {
+      "text": "*It's gone.*\n\nThe curtain is only a curtain. The fortune-teller's table is folded up and leaning on the wall.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "A ghost walked you back to your own body, then let go of your sleeve.",
+        "importance": 80
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-14-return",
+   "name": "The Ghost Returns",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gengar",
+    "tint": "#2a1a40",
+    "effect": "fog"
+   },
+   "intro": "*Black screen.*\n\n*Nothing.*\n\n*Its face, very large, very suddenly.*\n\n*Then it backs off, embarrassed, and holds out a hand, or a string, or a sleeve.*",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It's still cold. It still waits for you to step first.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostReturn",
+        "species": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this time.",
+     "success": {
+      "text": "It nods, a moment late, the way it always did. Then it goes back into the dark.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-saffron-labyrinth",
+   "name": "Sabrina's Labyrinth",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "types": [
+    "psychic",
+    "ghost"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lab-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mr-mime",
+    "tint": "#2a1a40",
+    "effect": "fog"
+   },
+   "intro": "**A fortune-teller at a folding table:** \"Your aura's very loud. Shall I read it? No charge. It's a special entrance.\"\n\nBehind her, a curtain the colour of a bruise. Something on the other side is breathing slowly.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "She turns your palm to the light. Her thumb stops in the middle of it.\n\n**Fortune-teller:** \"Oh. Oh, you poor thing. Through the curtain, please. Mind the step.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lab-entered",
+        "amount": 1
+       },
+       {
+        "kind": "canon",
+        "action": "ghostStart",
+        "species": []
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-14-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No, thank you.",
+     "success": {
+      "text": "You keep walking. She goes on smiling at the place where you were standing.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.saffron.labyrinth"
   }
  ]
 }

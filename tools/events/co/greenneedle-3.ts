@@ -485,11 +485,163 @@ const gn13: Json[] = [
 ];
 const KANTO_FLIGHT: Json = { ...gev('cs-kanto-vermilion-flight', 'Flight North', north({ stop: 'event', rarity: 'common', types: ['normal', 'flying'], pokemon: 'meowth', requires: [not('flight-checked')] }), (gn13[0] as { intro: string }).intro, FLIGHT_CHECK), canon: 'cs.kanto.vermilion.flightnorth' };
 
-export const EVENTS: Json[] = [...gn11, KANTO_KAIJU, ...gn12, KANTO_MAIDEN, ...gn13, KANTO_FLIGHT];
+// =====================================================================================================================
+// gn.14  SABRINA'S LABYRINTH  (a door on step 11, optional, instead of the battle, a "?" badge; seven nodes, the ghost L10 to L40; its return
+// one region later). The rules are core/expansion/canonSaffron.ts (the ghost, the lanterns, the reset or resume) and labyrinth.ts (the false slot).
+// =====================================================================================================================
+const LAB_TINT = '#2a1a40';
+const lab = (o: Json = {}): Json => ({ tint: LAB_TINT, tags: ['Mystery', 'Pokémon', 'Story'], effect: 'fog', ...o });
+const canon = (action: string, level?: number): Json => ({ kind: 'canon', action, species: [], ...(level ? { level } : {}) });
+/** The ghost's level after each node (canonSaffron LABYRINTH_LEVELS). */
+const GHOST_LV = [10, 15, 20, 25, 30, 37, 40];
+const LAB_RETRY: Json[] = [canon('labRetry')];
+/** A lantern opens: one of your Pokémon is freed and follows as a light, the ghost grows, and this is a lantern node, so everyone heals. */
+const lantern = (n: number, next: string): Json[] => [canon('ghostFree'), canon('ghostLevel', GHOST_LV[n]), canon('labRoom', n), heal(1), room(next)];
+/** A wrong answer: the room shoves back, the ghost takes it, and the trial starts over. */
+const shoved = (id: string, text: string): Json => out(text, hurt(0.2), scene(id));
+const inLab = (battle: Json): Json => ({ ...battle, pseudo: true });
+
+const LAB_DOOR: Json[] = [
+  ch('Read it.', out(say(
+    'She turns your palm to the light. Her thumb stops in the middle of it.',
+    '**Fortune-teller:** "Oh. Oh, you poor thing. Through the curtain, please. Mind the step."',
+  ), flag('lab-entered'), canon('ghostStart'), room('gn-14-lost'))),
+  ch('No, thank you.', leave('You keep walking. She goes on smiling at the place where you were standing.')),
+];
+const LAB_INTRO = say(
+  '**A fortune-teller at a folding table:** "Your aura\'s very loud. Shall I read it? No charge. It\'s a special entrance."',
+  'Behind her, a curtain the colour of a bruise. Something on the other side is breathing slowly.',
+);
+
+const gn14: Json[] = [
+  gev('gn-14-door', "Sabrina's Labyrinth", lab({ stop: 'event', rarity: 'rare', types: ['psychic', 'ghost'], pokemon: 'mr-mime', requires: [not('lab-entered')] }), LAB_INTRO, LAB_DOOR),
+  rm('gn-14-lost', "Sabrina's Labyrinth: The First Fight", lab({ pokemon: 'gengar' }), say(
+    '*The party\'s Poké Balls roll off the belt, one by one, and through the walls.*',
+    '*A battle starts. You reach for a Poké Ball. Your hand closes on nothing.*',
+    'Someone in a hood is waiting for you to send something out. You have nobody to send.',
+  ), [ch('Stand there anyway.', fight('You stand with empty hands. It doesn\'t take long.', inLab(trainer('Hooded Shape', { size: 1, types: ['ghost', 'psychic'], rule: { noItems: true, noPokemon: true }, win: [room('gn-14-ghost')], lose: [room('gn-14-ghost')] }))))]),
+  rm('gn-14-ghost', "Sabrina's Labyrinth: The Companion", lab({ pokemon: 'duskull' }), say(
+    '*It ends. A tombstone pushes up through the floor. The name on it is yours.*',
+    '*A swarm of Ghost-types crosses the room, laughing, right to left, and is gone.*',
+    '*One stays behind. It floats down. It looks at the tombstone, and then at you, standing next to it, a little see-through.*',
+    '*It holds out a hand, or a string, or a sleeve.*',
+  ), [
+    ch('Take it.', out(say(
+      'It\'s colder than a hand and warmer than you expected. When you step, it steps, a moment behind you, copying.',
+      'Somewhere ahead, six small lights are waiting in the dark. You know every one of them by the way it flickers.',
+    ), flag('lab-ghost-offered'), room('gn-14-n1'))),
+    ch('Ask why it\'s helping.', out(say(
+      'It thinks about it for a long time.',
+      '*It points at the tombstone. Then at you. Then it shakes its head, very firmly, as if correcting a spelling.*',
+      'It takes your sleeve and waits for you to walk first, so it can copy.',
+    ), flag('lab-ghost-offered'), room('gn-14-n1'))),
+  ]),
+  rm('gn-14-n1', "Sabrina's Labyrinth: The Body", lab({ pokemon: 'hypno' }), say(
+    'Node 1. Through a door you haven\'t opened, **your own body** stands in a room you\'ve never entered. It\'s breathing. It doesn\'t turn round.',
+    'Between you and the first lantern, a trainer sways on their feet with their eyes half shut, a Poké Ball loose in one hand.',
+    '*The ghost copies the way you stand, a step behind.*',
+  ), [ch('Wake them with a battle.', fight('The trainer blinks at you, slowly, and throws without looking.', inLab(trainer('Sleepwalking Trainer', { size: 1, types: ['psychic', 'ghost'], rule: { matchLead: true, foeAsleep: true, noItems: true }, win: lantern(1, 'gn-14-n2'), lose: LAB_RETRY }))), {
+    branches: [
+      { when: [is('hoenn-cruel')], text: 'In the next room, your body turns round. It looks at you. It looks disappointed. Then the trainer throws, without looking.', effects: [] },
+      { when: [is('robbed-trainer')], text: 'In the next room, your body turns round. It looks at you. It looks disappointed. Then the trainer throws, without looking.', effects: [] },
+    ],
+  })]),
+  rm('gn-14-n2', "Sabrina's Labyrinth: The Mirror", lab({ pokemon: 'mr-mime' }), say(
+    'Node 2. A tall mirror fills the far wall. In it, the lantern hangs on your right. On your side of the glass, there is no lantern at all.',
+    'At the ends of the corridors, **your Pokémon, glimpsed as ghosts**, wave at you. A little late, every time.',
+    '*Walk so the reflection reaches the lantern.*',
+  ), [
+    ch('Walk to your right.', shoved('gn-14-n2', 'Your reflection walks to its right, away from the lantern. The glass ripples like a laugh. Something cold shoves the ghost back to the start.')),
+    ch('Walk to your left.', out(say(
+      'Your reflection walks the other way, right up to the lantern, and puts its hand on it.',
+      'The glass lets go of the light. One of the waving shapes at the end of the corridor stops waving and comes to you.',
+    ), ...lantern(2, 'gn-14-n3'))),
+    ch('Walk into the mirror.', shoved('gn-14-n2', 'You walk into the glass. It is very much glass. The ghost winces for you, a moment late.')),
+  ]),
+  rm('gn-14-n3', "Sabrina's Labyrinth: Four Doors", lab({ pokemon: 'haunter' }), say(
+    'Node 3. **Doors that open onto places from earlier regions.** A town you left. A route. The first rest of the run. A harbour.',
+    'They light up one at a time, in an order, and then go dark. The lantern is behind whichever door you open last, if you get it right.',
+    '*The ghost has stopped copying you. It\'s watching the doors too.*',
+  ), [ch('Watch the doors.', out('You watch.',
+    pick('lab-doors', 1, 1, 1),
+    when('lab-doors', { min: 1, max: 1 }, [], 'The town. The route. The rest. The harbour.'),
+    when('lab-doors', { min: 2, max: 2 }, [], 'The route. The harbour. The town. The rest.'),
+    when('lab-doors', { min: 3, max: 3 }, [], 'The rest. The town. The harbour. The route.'),
+    room('gn-14-n3-doors')))]),
+  rm('gn-14-n3-doors', "Sabrina's Labyrinth: Four Doors", lab({ pokemon: 'haunter' }), say(
+    'The doors are dark now. Through one of them, faintly, you can hear the town you started from.',
+    'Open them in the order they lit.',
+  ), [
+    ...[['Town, route, rest, harbour.', 1], ['Route, harbour, town, rest.', 2], ['Rest, town, harbour, route.', 3], ['Harbour, rest, route, town.', 4]].map(([label, k]) => ch(label as string, out('You open the doors, one after another.',
+      when('lab-doors', { min: k as number, max: k as number }, lantern(3, 'gn-14-n4'), 'The last door opens on the first rest of your run: the same bench, the same light. The lantern is sitting on the bench, waiting.'),
+      when('lab-doors', { max: (k as number) - 1 }, [hurt(0.2), scene('gn-14-n3')], 'The wrong door. It opens onto a route you never walked, and the wind off it knocks the ghost flat. The doors light up again, from the start.'),
+      when('lab-doors', { min: (k as number) + 1 }, [hurt(0.2), scene('gn-14-n3')], 'The wrong door. It opens onto a route you never walked, and the wind off it knocks the ghost flat. The doors light up again, from the start.'),
+    ))),
+  ]),
+  rm('gn-14-n4', "Sabrina's Labyrinth: Two Doors", lab({ pokemon: 'banette' }), say(
+    'Node 4. Two doors. One\'s labelled **"Right."**',
+    'Beside them, **a villager repeats one sentence**, over and over, to nobody: "She was only a little girl when it started."',
+    '*The ghost floats level with you now. Not behind. Beside.*',
+  ), [
+    ch('Open the door marked "Right."', shoved('gn-14-n4', 'It opens onto the same room, and the same villager, saying the same sentence. The ghost bumps into you from behind. You\'re back where you began.')),
+    ch('Open the other one.', out(say(
+      'The villager stops in the middle of the sentence. For a moment, very quietly: "...She was so lonely."',
+      'Then the lantern is in your hands.',
+    ), ...lantern(4, 'gn-14-n5'))),
+  ]),
+  rm('gn-14-n5', "Sabrina's Labyrinth: The Floating Floor", lab({ pokemon: 'drifblim' }), say(
+    'Node 5. A floor of tiles floating over nothing. Each one tips when you put weight on it.',
+    'On the far wall, **children\'s drawings of your team**, in crayon, pinned up. Each has a gold star. One of them is of the ghost.',
+    '*It goes first now. It doesn\'t look back to check you\'re following. It knows.*',
+  ), [
+    ch('Step where it steps.', out(say(
+      'You put your feet exactly where it floats. Not one tile tips.',
+      'At the far side, it stops under the drawing of itself. It looks at the gold star for a long time.',
+    ), ...lantern(5, 'gn-14-n6'))),
+    ch('Run for the far side.', shoved('gn-14-n5', 'Three tiles in, the floor tips. You fall a long way, slowly, and land at the start. The ghost comes down after you, holding your sleeve.')),
+    ch('Pick the steadiest tiles.', shoved('gn-14-n5', 'The steadiest tile is the one that flips. Of course it is. You land back at the start with a crayon in your hair.')),
+  ]),
+  rm('gn-14-n6', "Sabrina's Labyrinth: The Small Grave", lab({ pokemon: 'dusclops' }), say(
+    'Node 6. **A small grave, for a Pokémon you never lost.** Beside it, the last lantern, and a riddle chalked on the floor:',
+    '*"I\'m with you all your life and you\'ve never touched me."*',
+  ), [
+    ch('A shadow.', out('The chalk smudges, as if someone breathed on it. The last lantern opens.',
+      when('lost-mon', { min: 1 }, [], 'The grave has a name on it. You know the name. The ghost floats over and stays by it, very still, for as long as you need.'),
+      when('lost-mon', { min: 0, max: 0 }, [], 'The stone is blank. The ghost won\'t go near it. It waits by the lantern instead, with its back to the grave.'),
+      when('shedinja-answered', { min: 1 }, [], 'The Shedinja is standing by the grave, a little apart. It doesn\'t move. You think it came to see you through.'),
+      ...lantern(6, 'gn-14-sabrina'))),
+    ch('A name.', shoved('gn-14-n6', 'The chalk rubs itself out and writes the riddle again, more slowly, as if for a child. The cold comes up out of the floor and knocks the ghost back.')),
+    ch('Your own heartbeat.', shoved('gn-14-n6', 'You can\'t hear your heartbeat in here. You realise you haven\'t been able to for a while. The riddle writes itself out again.')),
+  ]),
+  rm('gn-14-sabrina', "Sabrina's Labyrinth: Sabrina", lab({ pokemon: 'alakazam' }), say(
+    '**Sabrina, not turning round:** "You came all this way without a body. Most people stop at the grave."',
+    '*A doll on her knee turns its head.*',
+    'Her Alakazam is already looking at your ghost. Its spoons are bent toward it.',
+    'Every turn, one of your ghost\'s moves will lie. Every second turn, it can see true.',
+  ), [ch('Face Sabrina.', fight('It floats out in front of you. It doesn\'t look back. It leads.', inLab(trainer('Sabrina', { size: 1, team: ['alakazam'], types: ['psychic'], lv: 2, rule: { matchLead: true, noItems: true, evolveMid: true, ghostRescue: true, falseSlot: true }, win: [canon('ghostEnd'), flag('kanto-sabrina-ghost'), flag('kanto-sabrina-labyrinth-done'), flag('kanto-sabrina-haunting-owed'), room('gn-14-goodbye')], lose: LAB_RETRY }))))]),
+  rm('gn-14-goodbye', "Sabrina's Labyrinth: Goodbye", lab({ pokemon: 'gengar' }), say(
+    'You have your body back. The lights go back into the Poké Balls, one by one, and the belt is heavy again.',
+    '*It floats in front of you. It copies your wave, a step behind, the way it did at the start.*',
+  ), [ch('Wave back.', out(say('*It\'s gone.*', 'The curtain is only a curtain. The fortune-teller\'s table is folded up and leaning on the wall.'), moment('A ghost walked you back to your own body, then let go of your sleeve.', 80), leavePseudo()))]),
+  rm('gn-14-return', 'The Ghost Returns', lab({ pokemon: 'gengar', tags: ['Story', 'Pokémon'] }), say(
+    '*Black screen.*',
+    '*Nothing.*',
+    '*Its face, very large, very suddenly.*',
+    '*Then it backs off, embarrassed, and holds out a hand, or a string, or a sleeve.*',
+  ), [
+    ch('Take it.', out('It\'s still cold. It still waits for you to step first.', canon('ghostReturn'))),
+    ch('Not this time.', out('It nods, a moment late, the way it always did. Then it goes back into the dark.')),
+  ]),
+];
+const KANTO_LAB: Json = { ...gev('cs-kanto-saffron-labyrinth', "Sabrina's Labyrinth", lab({ stop: 'event', rarity: 'common', types: ['psychic', 'ghost'], pokemon: 'mr-mime', requires: [not('lab-entered')] }), LAB_INTRO, LAB_DOOR), canon: 'cs.kanto.saffron.labyrinth' };
+
+export const EVENTS: Json[] = [...gn11, KANTO_KAIJU, ...gn12, KANTO_MAIDEN, ...gn13, KANTO_FLIGHT, ...gn14, KANTO_LAB];
 
 /** The old Kanto canon builds of these stories (moved to Greenneedle): kept for saved runs, never shown again. */
 export const REMOVE: string[] = [
   ...['n1', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7', 'goodbye'].map((n) => `cs-kanto-vermilion-flight-${n}`),
+  ...['lab-lost', 'lab-ghost', 'lab-n1', 'lab-n2', 'lab-n3', 'lab-n4', 'lab-n5', 'lab-n6', 'lab-final', 'return-shuppet', 'return-duskull', 'return-drifloon', 'return-gastly'].map((n) => `cs-kanto-saffron-${n}`),
+  'ev-sabrina-labyrinth',
   ...['square-a', 'square-b', 'lantern', 'tm1', 'tm2', 'tm3', 'tm4', 'tm5', 'tm6', 'tm7', 'tm8', 'swap', 'eggs', 'tea', 'n1', 'n2', 'n3', 'n4', 'n5', 'top'].map((n) => `cs-kanto-vermilion-maiden-${n}`),
 ];
 
@@ -505,6 +657,11 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'Always levels 5 to 20 inside', often: 'run', dressing: { kanto: 'Flight North', kantoStage: 'The road north of Vermilion (the canon space)', elsewhere: 'Flight North' },
     badge: 'None', note: 'No badge: a surprise. Kanto shows it through cs-kanto-vermilion-flight.',
   },
+  'gn-14-door': {
+    gn: 'gn.14', shape: 'Door', earliest: 'A6', home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage', 'Mystery Episode', 'Companion Story'],
+    level: "The ghost L10 to L40; Alakazam is the ghost's level +2", often: 'run', badge: '?', dressing: { kanto: "Sabrina's Labyrinth", kantoStage: 'Saffron (the canon space)', elsewhere: "Sabrina's Labyrinth" },
+    note: 'The doc says once per save; once per run here (no memory across runs). Kanto shows it through cs-kanto-saffron-labyrinth.',
+  },
   'gn-12-door': {
     gn: 'gn.12', shape: 'Door', earliest: 'A5', home: 9, window: [7, 12], sits: 'optional', attaches: 'town', tags: ['Pseudo Stage', 'Hub Destination', 'Mystery Episode'],
     level: 'A+0', often: 'run', dressing: { kanto: "Maiden's Peak", kantoStage: 'The cliff town east of Vermilion (the canon space)', elsewhere: "Maiden's Peak" },
@@ -514,5 +671,6 @@ export const PLACEMENT: Record<string, Placement> = {
 
 export const CHAINS: Json[] = [
   { id: 'ps_gn_flight', name: 'Flight North', entry: 'gn-13-check', themeId: 'normal-flying', tint: FLIGHT_TINT, mood: 'open sky', start: 'opened' },
+  { id: 'ps_gn_labyrinth', name: "Sabrina's Labyrinth", entry: 'gn-14-door', themeId: 'psychic-ghost', tint: LAB_TINT, mood: 'shadow lanterns', start: 'opened' },
   { id: 'ps_gn_maiden', name: "Maiden's Peak", entry: 'gn-12-door', themeId: 'fairy-ghost', tint: MAIDEN_TINT, mood: 'festival lanterns', start: 'opened' },
 ];

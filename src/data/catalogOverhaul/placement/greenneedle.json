@@ -468,6 +468,33 @@
   ],
   "tags": []
  },
+ "gn-14-door": {
+  "gn": "gn.14",
+  "shape": "Door",
+  "earliest": "A6",
+  "home": 11,
+  "window": [
+   9,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "The ghost L10 to L40; Alakazam is the ghost's level +2",
+  "often": "run",
+  "badge": "?",
+  "dressing": {
+   "kanto": "Sabrina's Labyrinth",
+   "kantoStage": "Saffron (the canon space)",
+   "elsewhere": "Sabrina's Labyrinth"
+  },
+  "note": "The doc says once per save; once per run here (no memory across runs). Kanto shows it through cs-kanto-saffron-labyrinth.",
+  "kinds": [
+   "Pseudo Stage",
+   "Mystery Episode",
+   "Companion Story"
+  ],
+  "tags": []
+ },
  "gn-12-door": {
   "gn": "gn.12",
   "shape": "Door",
