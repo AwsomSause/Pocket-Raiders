@@ -1,0 +1,1399 @@
+{
+ "catalogOverhaul": "families-b",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "ovc-swap-meet-s1",
+   "name": "The Swap Meet",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "tint": "#4a4030",
+    "effect": "confetti"
+   },
+   "intro": "Tables in a field, everyone selling everything. One trader has a tray of held items and a sign: SWAP, LIKE FOR LIKE. \"No tricks,\" he says. \"I tell you what mine does, you tell me what yours does. Then we decide.\"",
+   "choices": [
+    {
+     "label": "Swap a held item for a Quick Claw.",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "leftovers",
+        "focus-sash",
+        "life-orb",
+        "choice-band",
+        "lucky-punch",
+        "macho-brace",
+        "smoke-ball"
+       ]
+      }
+     ],
+     "success": {
+      "text": "He holds up his: \"Quick Claw. Sometimes your Pokémon moves first. Sometimes. I won't promise more.\" You hand over yours and he names it back to you, correctly, before he takes it. Fair is fair.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "from": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "lucky-punch",
+         "macho-brace",
+         "smoke-ball"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "quick-claw",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Swap a held item for a Scope Lens.",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "leftovers",
+        "focus-sash",
+        "life-orb",
+        "choice-band",
+        "lucky-punch",
+        "macho-brace",
+        "smoke-ball"
+       ]
+      }
+     ],
+     "success": {
+      "text": "\"Scope Lens. Sharper eyes, more critical hits. Worth the same as yours, near enough.\" He weighs your item in one hand, his in the other. \"Near enough. Deal?\" Deal.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "from": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "lucky-punch",
+         "macho-brace",
+         "smoke-ball"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "scope-lens",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just browse.",
+     "success": {
+      "text": "You look at everything and buy nothing. He doesn't mind. \"Looking is free. Knowing what things are is the best part.\"",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-crowded-market-s1",
+   "name": "The Crowded Market",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3428",
+    "effect": "none"
+   },
+   "intro": "A market so full you can hardly move, and in the middle of it, one stall with no one at all. An old woman behind a table of cracked, faded things. She isn't calling out. She has stopped expecting anyone.",
+   "choices": [
+    {
+     "label": "Visit her stall.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Old balls, old charms, an old photo of this market full of people round her stall. \"Everything here is worth exactly what it says,\" she says. \"That's why nobody comes. No bargains.\" You buy a Friend Ball, honestly priced.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "item",
+        "id": "friend-ball",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade her a berry for a story.",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "oran-berry",
+        "sitrus-berry",
+        "lum-berry",
+        "pecha-berry",
+        "cheri-berry",
+        "chesto-berry",
+        "rawst-berry",
+        "aspear-berry",
+        "leppa-berry"
+       ]
+      }
+     ],
+     "success": {
+      "text": "She takes the berry, and in return tells you about the market when she was young. The stall was her mother's. It's the only story she has left to sell. You leave richer.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "from": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "chesto-berry",
+         "rawst-berry",
+         "aspear-berry",
+         "leppa-berry"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go where the crowd goes.",
+     "success": {
+      "text": "You buy a snack at the busiest stall. It's fine. Behind you the old woman straightens a row of things nobody will look at.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-trading-card-kid-s1",
+   "name": "The Trading Card Kid",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "tint": "#3a3a4a",
+    "effect": "none"
+   },
+   "intro": "A kid on a wall with a binder of trading cards, every one in a plastic sleeve. \"Trade?\" he asks, hopeful. \"I'll tell you which ones are rare. Most kids lie about that. I don't.\"",
+   "choices": [
+    {
+     "label": "Trade him something from your bag.",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "nugget",
+        "big-pearl",
+        "pearl",
+        "star-piece",
+        "stardust",
+        "comet-shard",
+        "relic-gold",
+        "rare-bone",
+        "big-mushroom"
+       ]
+      }
+     ],
+     "success": {
+      "text": "He looks at your item, then at you, then says: \"That's worth more than my best card. I'll give you my best card AND this.\" He hands over a card and a Poké Ball. He insists.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "from": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look through his binder.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "poke-ball"
+      }
+     ],
+     "success": {
+      "text": "He talks you through every card: which Pokémon, where they live, what they're weak to. He's better than a Pokédex. You give him a Poké Ball for the lesson.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him to keep them.",
+     "success": {
+      "text": "\"Good,\" he says, relieved. \"I didn't really want to trade the shiny one.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-cracked-egg-stand-s1",
+   "name": "The Cracked Egg Stand",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "tint": "#4a4430",
+    "effect": "none"
+   },
+   "intro": "A woman selling eggs from a cart, every one with fine cracks in the shell. \"People think cracks mean bad,\" she says. \"Cracks mean soon. These are hatching. A battle or two. I tell everyone. Most still walk off.\"",
+   "choices": [
+    {
+     "label": "Buy one (800).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 800
+      }
+     ],
+     "success": {
+      "text": "She picks one for you and holds it to her ear first. \"This one's ready. A day, maybe less. Keep it warm, keep it with your team.\" It knocks back against your hand.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -800
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 1,
+        "unit": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask why they cracked.",
+     "success": {
+      "text": "\"Their parents left them at the wild nesting grounds and didn't come back. Storm. I bring them here so someone takes them before they hatch alone.\" She doesn't charge you for the answer.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. She sets the eggs straight on their straw and keeps them warm.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-old-ferry-s1",
+   "name": "The Old Ferry",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#24384a",
+    "effect": "fog"
+   },
+   "intro": "A river too wide to wade, and a ferryman on a flat old boat. \"I don't take money,\" he says. \"I take stories. A true one. And I always know if it isn't.\"",
+   "choices": [
+    {
+     "label": "Tell him something true from your run.",
+     "success": {
+      "text": "You tell him about something that happened on this road, the real way it happened. He listens without a word, poling slowly. On the far side he nods. \"That's a true one. Thank you.\" He takes you further downriver than you asked.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "flag",
+        "key": "ferry-truth",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "An old ferryman took a true story of your journey as his fare.",
+        "importance": 45
+       }
+      ]
+     }
+    },
+    {
+     "label": "Make up a good story.",
+     "success": {
+      "text": "You tell him a grand tale. He listens, then turns the boat around and puts you back where you started, gently. \"A good story,\" he says. \"Not a true one. Come back with a true one.\" He isn't angry.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ferry-lie",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find another way across.",
+     "success": {
+      "text": "You walk an hour upstream to a bridge. The ferryman watches you go and lights a pipe, in no hurry.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-midnight-market-s1",
+   "name": "The Midnight Market",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1a1830",
+    "effect": "glint"
+   },
+   "intro": "Lanterns under the trees, stalls that weren't there by day. Ghost-types run half of them. A Mismagius behind a table of things that glow faintly. Every price is written on a tag, in ink that moves.",
+   "choices": [
+    {
+     "label": "Buy a Dusk Ball (300).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "The tag says: \"Better at night, in caves. Nothing else.\" The Mismagius waits until you've read it all before it takes your money.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "dusk-ball",
+        "count": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade a treasure for something rare.",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "nugget",
+        "big-pearl",
+        "pearl",
+        "star-piece",
+        "stardust",
+        "comet-shard",
+        "relic-gold",
+        "rare-bone",
+        "big-mushroom"
+       ]
+      }
+     ],
+     "success": {
+      "text": "The Mismagius shows you three things and tells you, in a voice like a cold draft, what each is worth to you and to it. You choose. It does not cheat. Ghosts are honest about things.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "from": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "spell-tag",
+         "never-melt-ice",
+         "black-belt",
+         "sharp-beak"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just walk the stalls.",
+     "success": {
+      "text": "Music from nowhere, little lights, a Litwick that follows you for a while. When dawn comes the trees are just trees.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-kitchen-contest-s1",
+   "name": "The Kitchen Contest",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3020",
+    "effect": "fire"
+   },
+   "intro": "A chef with a Chef's hat taller than her Slurpuff waves you to a camp stove. \"Cook-off! You and me, ten minutes, whatever's in your bag. Winner swaps one ingredient with the loser. Fair, yes?\"",
+   "choices": [
+    {
+     "label": "Cook with your berries.",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "oran-berry",
+        "sitrus-berry",
+        "lum-berry",
+        "pecha-berry",
+        "cheri-berry",
+        "chesto-berry",
+        "rawst-berry",
+        "aspear-berry",
+        "leppa-berry"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You do your best. She tastes it and laughs, kindly. \"Terrible! But honest.\" She won, so she swaps: your berry for her secret spice, which your team loves.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "from": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "chesto-berry",
+         "rawst-berry",
+         "aspear-berry",
+         "leppa-berry"
+        ]
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Fire-type cook.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "Your Fire-type does the heat and you do the stirring. The chef tastes it, goes quiet, and takes off her hat. \"You win. Take your swap.\" She gives you her best: a Charcoal from her own stove.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "charcoal",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "fire"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just eat.",
+     "success": {
+      "text": "She feeds your whole team for free, \"as a judge's fee.\" You judge everything delicious.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-bug-contest-s1",
+   "name": "The Bug Contest",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "pokemon": "scyther",
+    "tint": "#3a4a24",
+    "effect": "none"
+   },
+   "types": [
+    "bug"
+   ],
+   "intro": "A park, a crowd, and a sign: BUG CONTEST TODAY. Best Bug-type wins. The judge has a list and reads it out to everyone before they start: what the prize is, and what the rules are. No surprises.",
+   "choices": [
+    {
+     "label": "Enter with a Bug-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "bug"
+      }
+     ],
+     "success": {
+      "text": "Your Bug-type is measured, admired, and placed. Not first, but a proud second. The prize is read out as promised: a Silver Powder and a big rosette.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "silver-powder",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 8,
+        "who": {
+         "types": [
+          "bug"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catch a Bug-type in the contest grounds.",
+     "success": {
+      "text": "You get one ball and one try, like everyone else. Something big rustles in the long grass.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "bug"
+       ],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 10
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch and cheer.",
+     "success": {
+      "text": "You cheer for the smallest entrant, a Caterpie whose owner is about five. It wins nothing. They both look delighted.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-rain-shelter-s1",
+   "name": "The Shelter in the Rain",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "tint": "#2a3440",
+    "effect": "rain"
+   },
+   "intro": "A sudden downpour, cold and hard. One little roadside shelter, a roof and three walls, and there is room in it for exactly one. You, or your lead, who is already soaked and shivering.",
+   "choices": [
+    {
+     "label": "Put your lead inside.",
+     "success": {
+      "text": "It looks at you, then at the shelter, then goes in and curls up. You stand in the rain with your hand on the roof. It keeps its eyes on you the whole time. It doesn't forget this.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "lead"
+       },
+       {
+        "kind": "damage",
+        "share": 0.05,
+        "who": "party",
+        "except": [
+         "water"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the shelter yourself.",
+     "success": {
+      "text": "You squeeze in. Your lead sits outside, pressed against the wall, rain pouring off it. When it stops, you are dry and it is miserable, and it doesn't quite look at you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Neither. Walk through it together.",
+     "success": {
+      "text": "You give up on staying dry and walk on in the rain, side by side. By the time it stops you are both soaked and both laughing.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-backyard-battle-s1",
+   "name": "The Backyard Battle",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a2a",
+    "effect": "none"
+   },
+   "intro": "Two kids in a backyard, a Pidgey and a Rattata facing off, both kids shouting \"No fair!\" at once. They see you. \"You're a real trainer! Be referee!\"",
+   "choices": [
+    {
+     "label": "Referee fairly.",
+     "success": {
+      "text": "You set rules, count turns, and call it honestly: a draw. Both kids are furious for exactly ten seconds, then demand a rematch. You leave them battling properly.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show them a real battle instead.",
+     "success": {
+      "text": "\"Two on one!\" they shout. \"Real trainer versus us!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Backyard Kids",
+       "size": 2,
+       "types": [],
+       "levelBonus": -4,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 150
+        },
+        {
+         "kind": "friendship",
+         "amount": 3,
+         "who": "party"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let their Pokémon decide.",
+     "success": {
+      "text": "You ask the Pidgey and the Rattata. They look at each other and go off together to eat seeds. The kids stare, then follow. Battle over.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-strange-footprints-s1",
+   "name": "The Strange Footprints",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "tint": "#3a3428",
+    "effect": "shake"
+   },
+   "intro": "Footprints across the path, each one as big as a cart wheel, pressed deep in the mud. Fresh. Broken branches lead off into the trees, high up. Your team has gone very quiet.",
+   "choices": [
+    {
+     "label": "Follow them.",
+     "success": {
+      "text": "At the end of the trail, in a clearing, it is waiting. Huge, ancient, eyes like lamps. An Alpha, a Pokémon grown past what it should be. It has been watching you follow.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 25
+        },
+        {
+         "kind": "flag",
+         "key": "alpha-faced",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You followed giant footprints to an Alpha and stood your ground.",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Measure them and note them down.",
+     "success": {
+      "text": "You measure, sketch, and note the direction. A Ranger will want this. Somewhere off in the trees, something large stops moving, and listens to you write.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go round.",
+     "success": {
+      "text": "You take the long way. All afternoon, you have the feeling of being watched from very high up.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-ancient-puzzle-s1",
+   "name": "The Ancient Puzzle",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#3a3448",
+    "effect": "none"
+   },
+   "types": [
+    "psychic",
+    "rock"
+   ],
+   "intro": "A stone door across a ravine path, carved with glyphs. Unown symbols, in rows. One row has a gap. Under it, smaller marks, almost worn away. The door won't move.",
+   "choices": [
+    {
+     "label": "Work out the missing glyph.",
+     "success": {
+      "text": "You trace the rows for an hour. The pattern clicks: it's a word, and the missing letter is obvious once you see it. You press the stone. The door groans open onto a short cut, and a little treasure left long ago.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "scout",
+        "columns": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Psychic-type feel for it.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "psychic"
+      }
+     ],
+     "success": {
+      "text": "Your Psychic-type puts its head to the stone, and every glyph glows for a moment. The door swings open by itself. Inside, something small and old waits.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "psychic"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Climb around it.",
+     "success": {
+      "text": "It's a hard climb and your team grumbles the whole way. Behind you, the glyphs keep their word to themselves.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-berry-thief-s1",
+   "name": "The Berry Thief",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a2a",
+    "effect": "none"
+   },
+   "intro": "You put your bag down for one moment. When you turn back, a small wild Pokémon is sitting on it, a berry in its mouth, looking you right in the eye. It does not run.",
+   "choices": [
+    {
+     "label": "Let it keep the berry.",
+     "success": {
+      "text": "It eats it slowly, never looking away. Then it takes one step closer, and another. It wants to see what else you have. Mostly, it wants to come along.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": -1,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Chase it off.",
+     "success": {
+      "text": "It drops the berry and squares up. It is very small and very sure of itself.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Trade it a different berry.",
+     "success": {
+      "text": "You hold out a different berry. It weighs them both, considers, and takes the one you offered. It leaves the first one on your bag, very politely. Then it's gone.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-wandering-bard-s1",
+   "name": "The Wandering Bard",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "tint": "#3a3048",
+    "effect": "sparkle"
+   },
+   "intro": "A bard with a lute and a Kricketune is singing at a crossroads. As you come near, the song changes. It's about a trainer on this road, and the last fight they won. It's about you.",
+   "choices": [
+    {
+     "label": "Listen to the end.",
+     "success": {
+      "text": "The verses get it nearly right, and the parts they get wrong they get wrong kindly. Your team listens, ears up, when the song names them. When it ends, people who were passing clap.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay the bard.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You drop coins in the hat. The bard bows, and the Kricketune plays a last little flourish just for your lead.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask how they know.",
+     "success": {
+      "text": "\"Songs travel faster than trainers,\" the bard says. \"The road tells me. I just sing it back.\" The Kricketune chirps once, as if that settles it.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bard-child",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "ovc-lost-child-s1"
+      }
+     ],
+     "intro": "A bard with a lute and a Kricketune is singing at a crossroads. As you come near, the song changes: it's about a trainer who met a lost child on this very road. It's about you.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "bard-ferry",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ferry-truth",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A bard with a lute and a Kricketune is singing at a crossroads. The song changes as you come near: a ferryman, a river, and a traveller who paid in a true story.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "bard-wreck",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "ovc-shipwreck-find-s1"
+      }
+     ],
+     "intro": "A bard with a lute and a Kricketune is singing at a crossroads. As you come near, the song turns to a wreck on a beach, and a bell, and a traveller who found it.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-old-photographer-s1",
+   "name": "The Old Photographer",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "tint": "#40382a",
+    "effect": "none"
+   },
+   "intro": "An old man with a wooden box camera on a tripod. \"Portraits,\" he says. \"One plate left. I'd like it to be a team that looks like they belong together. You look like that.\"",
+   "choices": [
+    {
+     "label": "Pose for him.",
+     "success": {
+      "text": "It takes forever to set up. Your team won't stay still. Then, for one second, everyone looks at the camera, and the shutter clicks. He hands you the plate. You'll keep it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "An old photographer used his last plate on your team.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask him to take one of himself.",
+     "success": {
+      "text": "He laughs. \"Nobody ever asks.\" You set the timer, he stands in front of his own camera for the first time in forty years. He gives you a pass to his studio, and his old lens.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "wide-lens",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say no thanks.",
+     "success": {
+      "text": "He nods and folds the tripod up slowly. \"Someone, someday,\" he says.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-guarded-item-s1",
+   "name": "The Guarded Item",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#30304a",
+    "effect": "glint"
+   },
+   "intro": "On a rock in a clearing, something glows. Curled around the rock, a wild Pokémon, wide awake, watching you. It has been guarding that glow a long time.",
+   "choices": [
+    {
+     "label": "Battle it for the item.",
+     "success": {
+      "text": "It uncurls, and it is bigger than you thought.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "silk-scarf",
+          "black-belt",
+          "sharp-beak",
+          "soft-sand",
+          "hard-stone",
+          "spell-tag",
+          "metal-coat",
+          "charcoal",
+          "mystic-water",
+          "miracle-seed",
+          "magnet",
+          "dragon-fang",
+          "protein",
+          "calcium",
+          "carbos",
+          "hp-up",
+          "iron",
+          "zinc"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it something in exchange.",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "oran-berry",
+        "sitrus-berry",
+        "lum-berry",
+        "pecha-berry",
+        "cheri-berry",
+        "chesto-berry",
+        "rawst-berry",
+        "aspear-berry",
+        "leppa-berry"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You put a berry down slowly, then back away. The Pokémon sniffs it, considers, and nudges the glowing thing off the rock, toward you. A trade, of a kind.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "from": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "chesto-berry",
+         "rawst-berry",
+         "aspear-berry",
+         "leppa-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "silk-scarf",
+         "black-belt",
+         "sharp-beak",
+         "soft-sand",
+         "hard-stone",
+         "spell-tag",
+         "metal-coat",
+         "charcoal",
+         "mystic-water",
+         "miracle-seed",
+         "magnet",
+         "dragon-fang",
+         "protein",
+         "calcium",
+         "carbos",
+         "hp-up",
+         "iron",
+         "zinc"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it to its treasure.",
+     "success": {
+      "text": "It watches you go all the way to the trees. It looked tired. You hope it has someone.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-broken-machine-s1",
+   "name": "The Broken Machine",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#30383a",
+    "effect": "none"
+   },
+   "types": [
+    "electric",
+    "steel"
+   ],
+   "intro": "An old vending machine by the road, humming, lights flickering, giving nothing. A dent in the side where someone kicked it. From inside, very faintly, a crackle that sounds almost like a voice.",
+   "choices": [
+    {
+     "label": "Let an Electric-type look.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "electric"
+      }
+     ],
+     "success": {
+      "text": "Your Electric-type touches the panel and the machine jolts awake. Something flies out of it with a happy buzz: a Rotom, which had been stuck inside. It circles your head and then, after a moment's thought, stays.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rotom"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fix it the old way.",
+     "success": {
+      "text": "You thump it in the right spot. Three cans and a Poké Ball drop out, and a little spark escapes into the air and is gone, laughing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it humming.",
+     "success": {
+      "text": "It hums to itself as you walk away. You could swear it sounds disappointed.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
