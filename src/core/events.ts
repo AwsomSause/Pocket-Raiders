@@ -138,7 +138,7 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     case 'partyMoveType':
       return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return mv?.type === c.type && mv.category !== 'status'; }));
     case 'partyType':
-      return run.party.some((m) => content.species.get(m.speciesId)?.types.includes(c.type)) !== (c.absent === true);
+      return run.party.some((m) => [c.type, ...(c.or ?? [])].some((t) => content.species.get(m.speciesId)?.types.includes(t))) !== (c.absent === true);
     case 'period':
       return c.in.includes(periodOf(run));
     case 'season':
@@ -348,7 +348,10 @@ export function conditionText(content: Content, c: EventCondition): string {
     case 'milestone':
       return 'Needs a milestone day';
     case 'partyType':
-      return c.absent ? `Only without a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party` : `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party`;
+    {
+      const names = [c.type, ...(c.or ?? [])].map((t) => `${t.charAt(0).toUpperCase()}${t.slice(1)}-`).join(' or ');
+      return c.absent ? `Only without a ${names}type in your party` : `Needs a ${names}type in your party`;
+    }
     case 'memorial':
       return c.atLeast <= 1 ? 'Needs a Pokémon lost for good' : `Needs ${c.atLeast} Pokémon lost for good`;
     case 'partyLevelOver':

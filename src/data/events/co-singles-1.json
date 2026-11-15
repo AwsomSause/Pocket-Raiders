@@ -1,0 +1,2471 @@
+{
+ "catalogOverhaul": "singles",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "berry-tree",
+   "name": "Berry Tree",
+   "group": "Map stops",
+   "stop": "berry",
+   "types": [
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "A lone Berry tree stands where the route bends, so heavy with fruit that its lowest branches rest in the grass. Nobody has come this way in days. Everything on it is ripe.",
+   "choices": [
+    {
+     "label": "Strip it.",
+     "success": {
+      "text": "You shake every branch until nothing is left but leaves. Four Berries, and a tree that looks smaller than it did a minute ago.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "leppa-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "leppa-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "leppa-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "leppa-berry",
+         "lum-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a few, leave the rest.",
+     "success": {
+      "text": "You pick two and stop, with fruit still swinging on the branches. Whoever walks this road after you will find it waiting, and will never know who to thank.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "leppa-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "leppa-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "berrytree-left",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-tree-pell",
+   "name": "Pell Junior",
+   "group": "Map stops",
+   "room": false,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "**Hiker, Pell Junior**, jogs up the road behind you with a rucksack of rattling jars. \"You're the one who left the tree some! I got there starving, and it was still full. Dad always said: a traveller who leaves a few is worth catching up to.\"",
+   "choices": [
+    {
+     "label": "Take the Rare Berry.",
+     "success": {
+      "text": "He presses it into your hand like a secret. \"Top branch. I climbed for it. It was always going to whoever left the rest.\" He waves until the road hides him.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "liechi-berry",
+         "ganlon-berry",
+         "salac-berry",
+         "petaya-berry",
+         "apicot-berry"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "berrytree-pell-met",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "Pell Junior caught up to say thank you for the Berries left on the tree.",
+        "importance": 35
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "berrytree-left",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "berrytree-pell-met",
+     "atMost": 0
+    }
+   ]
+  },
+  {
+   "id": "pokemon-center",
+   "name": "Pokémon Center",
+   "group": "Map stops",
+   "stop": "heal",
+   "scene": {
+    "cast": [],
+    "effect": "hearts"
+   },
+   "intro": "A small Pokémon Center: one room, a shop counter, a single lamp over the desk. The nurse is yawning into a cup of tea that went cold hours ago.",
+   "choices": [
+    {
+     "label": "Heal.",
+     "success": {
+      "text": "The machine hums, the lights run green, and every Pokémon comes back bright-eyed. The nurse waves you off with half a smile and the other half of a yawn.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Heal, and ask how she is.",
+     "success": {
+      "text": "She blinks. Nobody has asked her that all week. She has been on since last night, alone. While the machine hums, your lead climbs up beside her and keeps her company, and she talks to it softly the whole time.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "flag",
+        "key": "center-nurse-asked",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shop.",
+     "success": {
+      "text": "She slides the shutter up on the counter. \"Take your time. It's nice to have someone in.\"",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "nurse-revive",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "center-nurse-asked",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "center-nurse-revive",
+       "atMost": 0
+      }
+     ],
+     "notice": "The nurse here looks up and smiles before you reach the desk. \"You're the one who asked after the night nurse down the road. She rang every Center on the line about you.\"",
+     "addChoices": [
+      {
+       "label": "Take the free Revive.",
+       "success": {
+        "text": "\"From all of us on the night shift. Nobody ever asks.\" She heals the team as well, and will not hear a word about paying.",
+        "effects": [
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "cure"
+         },
+         {
+          "kind": "item",
+          "id": "revive",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "center-nurse-revive",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "training-ground",
+   "name": "Training Ground",
+   "group": "Map stops",
+   "stop": "dojo",
+   "scene": {
+    "cast": [],
+    "effect": "shake"
+   },
+   "intro": "Worn tracks, a rack of weights, a row of scarred targets. A faded board by the gate lists every Pokémon that ever trained here, in a hundred different handwritings.",
+   "choices": [
+    {
+     "label": "Train the lead.",
+     "success": {
+      "text": "Your lead throws itself at the course until its chest heaves and its eyes shine. It gains a level, and it looks back at you to make sure you saw.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Train the weakest.",
+     "success": {
+      "text": "You take the one at the back of the line and give it the whole afternoon. It stumbles, tries again, and gets it. It gains two levels: the board says those who are behind catch up twice as fast here.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 2,
+        "who": "weakest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "treasure-cache",
+   "name": "Treasure Cache",
+   "group": "Map stops",
+   "stop": "treasure",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A box sticks out of the dirt, its corners green with age. A name is scratched into the lid in a child's careful letters: \"R. Tanner.\"",
+   "choices": [
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "The lid creaks. Inside is one thing a box like this could hold: a Nugget, a Star Piece, a Big Pearl, a Rare Candy, Leftovers or a Focus Sash. Under it, a note in the same careful letters: \"For emergencies.\"",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "star-piece",
+         "big-pearl",
+         "rare-candy",
+         "leftovers",
+         "focus-sash"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find R. Tanner.",
+     "success": {
+      "text": "It takes most of the day to find him. Tanner is a kid, and the box is every coin he ever saved, buried in case his family needed it. When you hand it back unopened he stares, then holds it out. \"Pick one thing. Please.\" The whole village hears about it by supper.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "star-piece",
+         "big-pearl",
+         "rare-candy",
+         "leftovers",
+         "focus-sash"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "cache-tanner-found",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Carried a buried savings box back to a kid named Tanner.",
+        "importance": 45
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "villain-hideout",
+   "name": "Villain Hideout",
+   "group": "Map stops",
+   "stop": "hideout",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#200810",
+    "effect": "flicker"
+   },
+   "intro": "A poster on a wall hums when you lean on it. Behind the paper there is a seam, and behind the seam a stairwell going down. Somebody went to a lot of trouble to hide this.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You peel the poster back and step through. The air below is warm and smells of machines. There are rooms down here, and someone has left the lights on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ev-hidden-hideout"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Note it and leave.",
+     "success": {
+      "text": "You write down the wall, the poster and the hum, and walk away at an ordinary pace. Whatever you learn about these people later, this door is in the Files now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-noted",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lookout-tower",
+   "name": "Old Lookout Tower",
+   "group": "Exploration",
+   "scene": {
+    "cast": [],
+    "tint": "#1c2430",
+    "effect": "none"
+   },
+   "intro": "A leaning tower, a rope ladder, a rusted telescope. Fog lies over everything below, but the top of the tower is above it, in clear light.",
+   "choices": [
+    {
+     "label": "Climb.",
+     "success": {
+      "text": "Rung over rung, and then the fog falls away beneath you. The whole stage lies open like a map, and through the telescope something shows that the road never would have: a hidden stop.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 20
+       },
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Flying-type up.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "It circles the tower twice, small against the sky, then drops back to your arm and shows you everything it saw. The whole stage, and one hidden stop besides.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 20
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-hidden-dungeon",
+   "name": "Hidden Dungeon",
+   "group": "Landmarks",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Mystery"
+   ],
+   "minStage": 3,
+   "secret": [],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Behind a curtain of vines, a stone door stands ajar, not quite wide enough. Three torn pages would fit the slot cut into it. The slot is empty in all three places.",
+   "choices": [
+    {
+     "label": "Use the pages.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "torn-pages",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The three pages slide home as if they had been waiting. The stone breathes out, and the door swings wide onto stairs nobody has walked in a hundred years. The Mystery Dungeon is open.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "md-entrance"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You push once more. The door will not move, and the slot shows exactly how many pages are missing. You let the vines fall back over it.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pages-three",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "torn-pages",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "Behind a curtain of vines, a stone door stands ajar. Three torn pages would fit the slot cut into it, and you are carrying three. They are warm in your bag."
+    },
+    {
+     "id": "pages-two",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "torn-pages",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "intro": "Behind a curtain of vines, a stone door stands ajar. Three torn pages would fit the slot cut into it. You have two. One place in the slot stays dark."
+    },
+    {
+     "id": "pages-one",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "torn-pages",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Behind a curtain of vines, a stone door stands ajar. Three torn pages would fit the slot cut into it. You have one. Two places in the slot stay dark."
+    }
+   ]
+  },
+  {
+   "id": "ev-regional-festival",
+   "name": "Regional Festival",
+   "group": "Places and weather",
+   "rarity": "uncommon",
+   "tags": [
+    "Region",
+    "Shop",
+    "Relationship"
+   ],
+   "requires": [
+    {
+     "kind": "milestone"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Lanterns swing between the stalls, games ring out from every corner, and by the fountain strangers are swapping gifts and laughing at what they got. Somebody presses a warm paper cup into your hands.",
+   "choices": [
+    {
+     "label": "Join the swap.",
+     "success": {
+      "text": "You set your gift on the fountain wall. Across from you a stranger sets down theirs, and for a moment you each just look at what the other chose to give.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "festival-gift-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Play the games.",
+     "success": {
+      "text": "The stalls are loud and bright and every one of them wants you. Your team is already pulling you toward the nearest.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "rf-balancing-act",
+         "rf-balloon-pop",
+         "rf-barrel-roll",
+         "rf-berry-bobbing",
+         "rf-berry-taste",
+         "rf-bumper-cars"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You stay at the edge of the light and let the evening happen. Your team leans against you, one by one, until the lanterns burn low.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "festival-gift-swap",
+   "name": "The Gift Swap",
+   "group": "Map stops",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "hearts"
+   },
+   "intro": "The swap is honest: both gifts sit on the fountain wall in plain sight. Theirs is a Sitrus Berry tied with ribbon. Yours would be a Potion from your bag. They can see it, and they are smiling.",
+   "choices": [
+    {
+     "label": "Swap.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "potion"
+      }
+     ],
+     "success": {
+      "text": "You trade. They hold the Potion like it is worth ten times what it is. \"My Pokémon's been poorly. You have no idea.\" The ribbon is still on the Berry.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "potion"
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep your gift.",
+     "success": {
+      "text": "You shake your head, kindly. They nod, and somebody else steps up to the wall.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rare-sighting",
+   "name": "A Rare Sighting",
+   "group": "Map stops",
+   "stop": "special",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c2a38",
+    "effect": "float"
+   },
+   "intro": "Fresh tracks leave the path and end at a Pokémon nobody has ever recorded on this route. It has already noticed you. It has not run.",
+   "choices": [
+    {
+     "label": "Approach.",
+     "success": {
+      "text": "You step forward, slowly, hands open. It watches every step, and then it squares up. This is one of the rare ones.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Faced a rare sighting.",
+         "importance": 30
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stay still.",
+     "success": {
+      "text": "You do not move. You barely breathe. It tilts its head and comes closer on its own, curious, close enough to touch, before it remembers to be wild. It will be a little easier to catch.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "It came closer: easier to catch",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.25
+         }
+        ],
+        "battles": 1,
+        "until": "wild"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "A rare Pokémon walked up on its own.",
+         "importance": 30
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "shimmering-grass",
+   "name": "Shimmering Grass",
+   "group": "Map stops",
+   "stop": "rare",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1c3a2a",
+    "effect": "sparkle"
+   },
+   "intro": "One patch of grass glitters when nothing else does. Something in it is the wrong colour, the way a dream is the wrong colour.",
+   "choices": [
+    {
+     "label": "Look closer.",
+     "success": {
+      "text": "You part the grass with one finger. It is there, and it is looking back at you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "shimmering-grass-close"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Not every shining thing is yours to find. You walk on, and the glitter stays behind your eyes all the way to the next stop.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "shimmering-grass-close",
+   "name": "In the Shimmering Grass",
+   "group": "Map stops",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "Up close, you can see it clearly: a wild Pokémon of this route, and its colours may not be the usual ones. It has not bolted. You can still back away.",
+   "choices": [
+    {
+     "label": "Step in.",
+     "success": {
+      "text": "The grass bursts apart in a spray of light.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 6,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Back away.",
+     "success": {
+      "text": "You let the grass close again. It goes on glittering, untroubled.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "route-detour",
+   "name": "A Hand-Painted Detour Sign",
+   "group": "Routes",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a20",
+    "effect": "none"
+   },
+   "intro": "A sign: \"Shortcut. Probably safe.\" Under it, in different handwriting: \"Clinic ahead. Rest awhile.\" Somebody has drawn a small heart on the second one.",
+   "choices": [
+    {
+     "label": "Shortcut.",
+     "success": {
+      "text": "You take the shortcut. The grass closes over the path behind you, and ahead, a side trail forks off toward voices.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "side-trail"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Clinic.",
+     "success": {
+      "text": "A small clinic, a kettle already on, and not a trainer in sight. The nurse who drew the heart heals everyone and sends you off with dry socks.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "side-trail",
+   "name": "The Side Trail",
+   "group": "Map stops",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "shake"
+   },
+   "intro": "A trail that leaves the route and rejoins it further on. Three trainers wait along it, and there is no Center. A board at the fork says the prizes run at ×1.5 here.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "The first trainer steps out of the grass, grinning. Three in a row, no healing between, and every prize half as big again.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Side-trail prizes ×1.5",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.5
+         }
+        ],
+        "battles": 3,
+        "until": "battle"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Trail Trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stay on the route.",
+     "success": {
+      "text": "You stay on the route. The trail was only ever an offer, and it will be here for somebody braver or more broke.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "galar-gigantamax-sighting",
+   "name": "Gigantamax Sighting",
+   "group": "Galar",
+   "rarity": "rare",
+   "tags": [
+    "Region",
+    "Combat",
+    "Pokémon"
+   ],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "copperajah",
+    "tint": "#b87333",
+    "effect": "shake"
+   },
+   "intro": "The ground shakes. Over the ridge, a Pokémon towers into the clouds, wreathed in swirling red. Your whole team has gone very still, staring up.",
+   "choices": [
+    {
+     "label": "Follow it.",
+     "success": {
+      "text": "You run for the ridge while it is still in sight. From the top you can finally see what it is, and where it has stopped.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "gmax-den-copperajah",
+         "gmax-den-centiskorch",
+         "gmax-den-rillaboom",
+         "gmax-den-corviknight",
+         "gmax-den-drednaw"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You let it go. It sinks behind the ridge like a slow red sunset, and the ground settles, and your team finally breathes.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gmax-den-copperajah",
+   "name": "The Giant on the Ridge",
+   "group": "Map stops",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "copperajah-gmax",
+    "effect": "shake"
+   },
+   "intro": "From the ridge you can see it clearly now: a Gigantamax Copperajah, red clouds turning above its head. It has not seen you yet.",
+   "choices": [
+    {
+     "label": "Face it.",
+     "success": {
+      "text": "It turns. The whole sky turns with it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "copperajah-gmax"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 6
+        },
+        {
+         "kind": "moment",
+         "text": "Faced a Gigantamax Pokémon in the wild.",
+         "importance": 70
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back down the ridge.",
+     "success": {
+      "text": "You back away one step at a time. Some stories are better told from a distance.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gmax-den-centiskorch",
+   "name": "The Giant on the Ridge",
+   "group": "Map stops",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "centiskorch-gmax",
+    "effect": "shake"
+   },
+   "intro": "From the ridge you can see it clearly now: a Gigantamax Centiskorch, red clouds turning above its head. It has not seen you yet.",
+   "choices": [
+    {
+     "label": "Face it.",
+     "success": {
+      "text": "It turns. The whole sky turns with it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "centiskorch-gmax"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 6
+        },
+        {
+         "kind": "moment",
+         "text": "Faced a Gigantamax Pokémon in the wild.",
+         "importance": 70
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back down the ridge.",
+     "success": {
+      "text": "You back away one step at a time. Some stories are better told from a distance.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gmax-den-rillaboom",
+   "name": "The Giant on the Ridge",
+   "group": "Map stops",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rillaboom-gmax",
+    "effect": "shake"
+   },
+   "intro": "From the ridge you can see it clearly now: a Gigantamax Rillaboom, red clouds turning above its head. It has not seen you yet.",
+   "choices": [
+    {
+     "label": "Face it.",
+     "success": {
+      "text": "It turns. The whole sky turns with it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "rillaboom-gmax"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 6
+        },
+        {
+         "kind": "moment",
+         "text": "Faced a Gigantamax Pokémon in the wild.",
+         "importance": 70
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back down the ridge.",
+     "success": {
+      "text": "You back away one step at a time. Some stories are better told from a distance.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gmax-den-corviknight",
+   "name": "The Giant on the Ridge",
+   "group": "Map stops",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "corviknight-gmax",
+    "effect": "shake"
+   },
+   "intro": "From the ridge you can see it clearly now: a Gigantamax Corviknight, red clouds turning above its head. It has not seen you yet.",
+   "choices": [
+    {
+     "label": "Face it.",
+     "success": {
+      "text": "It turns. The whole sky turns with it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "corviknight-gmax"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 6
+        },
+        {
+         "kind": "moment",
+         "text": "Faced a Gigantamax Pokémon in the wild.",
+         "importance": 70
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back down the ridge.",
+     "success": {
+      "text": "You back away one step at a time. Some stories are better told from a distance.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gmax-den-drednaw",
+   "name": "The Giant on the Ridge",
+   "group": "Map stops",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "drednaw-gmax",
+    "effect": "shake"
+   },
+   "intro": "From the ridge you can see it clearly now: a Gigantamax Drednaw, red clouds turning above its head. It has not seen you yet.",
+   "choices": [
+    {
+     "label": "Face it.",
+     "success": {
+      "text": "It turns. The whole sky turns with it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "drednaw-gmax"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 6
+        },
+        {
+         "kind": "moment",
+         "text": "Faced a Gigantamax Pokémon in the wild.",
+         "importance": 70
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back down the ridge.",
+     "success": {
+      "text": "You back away one step at a time. Some stories are better told from a distance.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "galar-runaway-wooloo",
+   "name": "Runaway Wooloo",
+   "group": "Galar",
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wooloo",
+    "tint": "#d8d0c0",
+    "effect": "float"
+   },
+   "intro": "A Wooloo comes rolling down the route at full speed, taking a fence with it. **Shepherd, out of breath:** \"Please! It does this every Tuesday!\"",
+   "choices": [
+    {
+     "label": "Stop it (a Rock- or Steel-type).",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "rock",
+       "or": [
+        "steel"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon plants its feet. The Wooloo bumps into it, bounces once and sits down, delighted with itself. The shepherd laughs until she has to lean on the fence. \"Take some wool. Sells for ₽200, and you earned every bit.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "wooloo-wool",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Roll with it.",
+     "success": {
+      "text": "You cannot stop it, so you join it. Your whole party goes tumbling down the hill after the Wooloo, shrieking, and when you all fetch up in a heap you are a good way down the route.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You step aside. The Wooloo rolls by, perfectly happy. The shepherd jogs past after it, calling thanks and apologies in equal parts.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-hidden-grotto",
+   "name": "Hidden Grotto",
+   "group": "World Events",
+   "rarity": "rare",
+   "types": [
+    "rock",
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#102838",
+    "effect": "glint"
+   },
+   "intro": "A crack behind a waterfall opens into a grotto that glows on its own. From the far end comes a breeze that smells of somewhere you have not been yet.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You duck under the falling water. Something lives in here, and in the glow you can make out its shape before it notices you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hidden-grotto-den"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the breeze.",
+     "success": {
+      "text": "The breeze leads you through a passage barely wider than your shoulders, and out into daylight far ahead of where you went in. Every hidden stop on the road shows itself from here.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hidden-grotto-den",
+   "name": "The Grotto's Keeper",
+   "group": "Map stops",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "In the grotto's glow a wild Pokémon is drinking from the pool: a hidden one, stronger than the route's usual, and it has every colour the light gives it. It has not looked up.",
+   "choices": [
+    {
+     "label": "Step into the light.",
+     "success": {
+      "text": "It looks up. The glow shivers.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 3,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 4
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it to its pool.",
+     "success": {
+      "text": "You leave it drinking. The waterfall closes behind you like a curtain.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-sinkhole",
+   "name": "Sinkhole",
+   "group": "Weather & Hazards",
+   "rarity": "uncommon",
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a2a",
+    "effect": "shake"
+   },
+   "intro": "The ground opens under your feet. For one long second there is nothing, and then there is a cave, a patch of sky far above, and your team landing around you in a heap.",
+   "choices": [
+    {
+     "label": "Look for a way up.",
+     "success": {
+      "text": "You count heads first. Everyone is here. Then you find the slope, and climb it together, hauling each other the last stretch into the light.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Explore down.",
+     "success": {
+      "text": "The dark goes on below, and it is not empty. You go down into one floor of a Mystery Dungeon.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "md-entrance"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-balloon",
+   "name": "The Hot-Air Balloon",
+   "group": "World & Traversal",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "types": [
+    "flying",
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a14",
+    "effect": "float"
+   },
+   "intro": "**Balloonist, Hetty:** \"Wind's from the west. Hop in.\" The little flags on her basket all point the same way down the route, to the stops the wind can reach.",
+   "choices": [
+    {
+     "label": "Hop in, and pick where to land.",
+     "success": {
+      "text": "The ground lets go of you. Your team crowds the edge of the basket, and the whole route slides by underneath, small and quiet. Hetty hums. Your next move lands two columns ahead, wherever the flags point.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No, thanks.",
+     "success": {
+      "text": "\"Suit yourself. The wind won't wait, but it does come back.\" She rises without you, waving.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-cave-echo",
+   "name": "The Echoing Cave",
+   "group": "World & Traversal",
+   "rarity": "uncommon",
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1814",
+    "effect": "shake"
+   },
+   "intro": "Every sound in this cave comes back twice. Somewhere, though, the echo is wrong: one stretch of wall gives back less than it is given.",
+   "choices": [
+    {
+     "label": "Use a sound move.",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon lets its voice go. The echo runs the walls, and at one spot the rock answers hollow, cracks, and falls in. Behind it is a hidden room, and something left there long ago.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "star-piece",
+         "rare-candy",
+         "metronome",
+         "throat-spray"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Clap.",
+     "success": {
+      "text": "You clap once. Twice it comes back, from everywhere but one place: low on the left wall, the sound just stops. Now you know where. It will still take a real voice to open it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cave-echo-heard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "echo-heard",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "cave-echo-heard",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You already know where the echo is wrong: low on the left wall. It still needs a sound move to break it open."
+    }
+   ]
+  },
+  {
+   "id": "w4-graffiti-wall",
+   "name": "The Graffiti Wall",
+   "group": "World & Traversal",
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c2a",
+    "effect": "none"
+   },
+   "intro": "A wall of painted arrows and tags, years deep. One tag near the bottom is your rival's. There is a date next to it, and the paint is not old.",
+   "choices": [
+    {
+     "label": "Follow the arrows.",
+     "success": {
+      "text": "The arrows are not decoration. You follow them round the back of the wall, and they point out two stops that are on no map.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "scout",
+        "columns": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the rival's tag.",
+     "success": {
+      "text": "\"I was here first. Ha.\" There is a little drawing of their ace next to it, done with real care. And just below, a patch of clean wall.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "w4-graffiti-tag"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-graffiti-tag",
+   "name": "The Clean Patch of Wall",
+   "group": "Travel and shortcuts",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Under your rival's tag there is a clean patch of wall, just big enough. Somebody has left half a can of paint on the ground.",
+   "choices": [
+    {
+     "label": "Add your own tag below it.",
+     "success": {
+      "text": "You write your name under theirs, and after a moment, a small drawing of your own lead beside their ace. They will come back this way. They will pretend to be annoyed.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        }
+       },
+       {
+        "kind": "moment",
+        "text": "Left a tag under the rival's on the graffiti wall.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it as it is.",
+     "success": {
+      "text": "You leave their wall alone. It was their moment.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-raft",
+   "name": "The Raft Crossing",
+   "group": "World & Traversal",
+   "rarity": "uncommon",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#102838",
+    "effect": "rain"
+   },
+   "intro": "A raft tied at the bank; a long, slow current going exactly your way; and the fish are biting so hard the water twitches.",
+   "choices": [
+    {
+     "label": "Ride it.",
+     "success": {
+      "text": "You push off and lie back. The banks slide past, your team trails their paws in the water, and for a while nobody has to walk anywhere. The current carries you well down the route.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "heal",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ride and fish.",
+     "success": {
+      "text": "You drift with a line over the side. You do not get as far, but where the raft noses into the bank the water is alive with fish.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "addStop",
+        "stop": "fish"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-rock-climb",
+   "name": "The Climbing Wall",
+   "group": "World & Traversal",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "types": [
+    "rock",
+    "fighting"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2014",
+    "effect": "shake"
+   },
+   "intro": "Good grey rock, the kind that holds. At the top, in a nest of shining stones, something old is waiting to be found.",
+   "choices": [
+    {
+     "label": "Climb with a Rock-type anchoring.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "rock"
+      }
+     ],
+     "success": {
+      "text": "Your Rock-type takes the rope and does not move an inch. You climb as if the cliff were a ladder. In the nest: one fossil, a Plume, a Root or a Claw, whole after all this time.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "plume-fossil",
+         "root-fossil",
+         "claw-fossil"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Free-climb.",
+     "success": {
+      "text": "No rope. Your lead goes first to test the holds, and one of them gives. It catches itself, scraped and shaking (10% of its HP), and goes on up anyway. The fossil is there: a Plume, a Root or a Claw.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "plume-fossil",
+         "root-fossil",
+         "claw-fossil"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-tracks",
+   "name": "Fresh Tracks",
+   "group": "World & Traversal",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c14",
+    "effect": "none"
+   },
+   "intro": "Big tracks, each one wider than your hand, lead off the road into long grass. They are fresh. The grass is still springing back.",
+   "choices": [
+    {
+     "label": "Follow.",
+     "success": {
+      "text": "You follow them, as quietly as you know how. They go on a long way, and then they stop.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "w4-tracks-deep"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "Whatever made those is going about its day. You let it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-tracks-deep",
+   "name": "The End of the Tracks",
+   "group": "World & Traversal",
+   "rarity": "uncommon",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c14",
+    "effect": "glint"
+   },
+   "intro": "The tracks end at a hollow under a fallen tree. Something very big is asleep inside. Its breathing moves the leaves.",
+   "choices": [
+    {
+     "label": "Wake it gently.",
+     "success": {
+      "text": "You say something soft. One eye opens, as big as your fist. It is an Alpha, and it is deciding about you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 3,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 30
+        },
+        {
+         "kind": "flag",
+         "key": "calmed-alpha",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Woke an Alpha at the end of the tracks.",
+         "importance": 50
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look at it.",
+     "success": {
+      "text": "You stay where you are and just look, long enough to know exactly what it is: an Alpha of this route, half again the size of any other. You mark the hollow on your map and back away. It never wakes.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       },
+       {
+        "kind": "flag",
+        "key": "tracks-hollow-saved",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You back out the way you came, placing your feet in its tracks so the grass will not tell on you.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "hollow-saved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tracks-hollow-saved",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "This is the hollow you marked on your map. It is still asleep in there."
+    }
+   ]
+  },
+  {
+   "id": "w4-zip-line",
+   "name": "The Zip-Line",
+   "group": "World & Traversal",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "types": [
+    "flying",
+    "electric"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#14243a",
+    "effect": "float"
+   },
+   "intro": "A cable runs down the whole valley, humming in the wind. A harness hangs from it, swaying, made for one.",
+   "choices": [
+    {
+     "label": "Ride it.",
+     "success": {
+      "text": "You clip in, lift your feet, and the valley opens under you like a held breath let go. You land a stop ahead, laughing.",
+      "effects": [
+       {
+        "kind": "express"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Flying-type carry one more.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "You ride the cable, and your Flying-type flies alongside with a teammate held in its claws, both of them shrieking with joy the whole way down. The passenger will not stop talking about it.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "stranded-cyclist",
+   "name": "Stranded Cyclist",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_biker"
+    ],
+    "effect": "none"
+   },
+   "intro": "**Cyclist, Rafi:** \"Bent wheel. Help? I'll lend you the bike.\" He is sitting on the verge with the wheel in his lap, trying to look like he is not upset.",
+   "choices": [
+    {
+     "label": "Fix it (a Steel- or Fighting-type).",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "steel",
+       "or": [
+        "fighting"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon takes the wheel in both hands and, very gently, makes it round again. Rafi spins it and it sings. \"Take her down the hill. Leave her at the bottom. She knows the way back.\" You ride a stop ahead.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "\"No worries,\" says Rafi, and goes back to looking at his wheel.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "taxi-fare",
+   "name": "Taxi Driver's Fare",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_cueball"
+    ],
+    "effect": "none"
+   },
+   "intro": "**Driver:** \"Flat tyre's fixed, back's gone, and there's a fare waiting. Drive her across the map for me?\" He holds out the keys like a man handing over a baby.",
+   "choices": [
+    {
+     "label": "Drive (a Pokémon rides on the roof).",
+     "success": {
+      "text": "You drive. Your lead rides on the roof with its face in the wind and its eyes shut, and people along the road stop to wave at it. By the time you hand the keys back you are far down the route, and it does not want to get down. It loved every second.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Fair enough. She's got a clutch like a bad temper.\" He lowers himself back onto the bumper.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mailman-shortcut",
+   "name": "Mailman Shortcut",
+   "group": "Helpers, gifts and kindness",
+   "stop": "merchant",
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "effect": "none"
+   },
+   "intro": "**Mailman, Mr. Abara:** \"Take these down the road? I tip.\" His bag is twice the size of him, and he has been carrying it since before the sun was up.",
+   "choices": [
+    {
+     "label": "Take them.",
+     "success": {
+      "text": "You deliver every one, and every door opens on someone glad. Mr. Abara tips ₽200. The last letter in the bundle has your name on it: a postcard from up the road, and on the back, in a stranger's hand, everything they saw of the Gym ahead.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A postcard arrived from the next region.",
+        "importance": 30
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"No harm in asking.\" He shoulders the bag again, one strap at a time.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "marooned-sailor",
+   "name": "Marooned Sailor",
+   "group": "Helpers, gifts and kindness",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "boss.npc_sailor"
+    ],
+    "effect": "rain"
+   },
+   "intro": "A sailor stands on a rock a long way out, waving his whole shirt. \"A boat! A boat!\" The tide is not waiting for either of you.",
+   "choices": [
+    {
+     "label": "Rescue (a Water- or Flying-type).",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water",
+       "or": [
+        "flying"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon brings him in, soaked and babbling thanks. When he can speak properly he unrolls a sea chart, salt-stained and precious. \"Three years I kept this dry.\" One stop out on the water shows itself on your map.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw a line.",
+     "chance": 0.5,
+     "success": {
+      "text": "The line flies true. He ties it round his waist and you haul him in hand over hand, both of you shouting. He gives you his sea chart with shaking hands, and one stop out on the water shows itself.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The line falls short, and short again. On the third throw a passing fishing boat sees him and takes him off. He waves at you anyway, for trying.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ask-directions",
+   "name": "Which Way?",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2438",
+    "effect": "none"
+   },
+   "intro": "**Local, pointing two ways at once:** \"Depends who's asking.\"",
+   "choices": [
+    {
+     "label": "Left.",
+     "success": {
+      "text": "Left it is. A trainer is leaning on the next fence post as if she has been expecting someone.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Fence-Post Trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Right.",
+     "success": {
+      "text": "Right it is. The path bends, and there is something on it worth stopping for.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "berry-tree",
+         "treasure-cache",
+         "lookout-tower"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Who's asking?",
+     "success": {
+      "text": "She grins. Nobody ever asks back. \"Left is a trainer who hasn't lost all week. Right is something nice. Now you know as much as I do.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "directions-asked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "told",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "directions-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "**Local, pointing two ways at once:** \"You again! Left is the trainer, right is the nice thing. I told you. Nobody listens.\""
+    }
+   ]
+  },
+  {
+   "id": "r130-drifting-wingull-island",
+   "name": "Drifting Island of Wingull",
+   "group": "Wild Scenes",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "types": [
+    "flying",
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wingull",
+    "tint": "#143040",
+    "effect": "float"
+   },
+   "intro": "A flock of Wingull hangs over the gap in the cliff path, wings spread wing-tip to wing-tip on the updraft. It is almost a bridge. It only needs persuading.",
+   "choices": [
+    {
+     "label": "Feed them.",
+     "success": {
+      "text": "You hold out the crusts of your lunch. One takes a piece, and then they all close up, shoulder to shoulder, and hold. You cross on a bridge of wings, and it carries you a stop ahead.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go round.",
+     "success": {
+      "text": "You go round, the long way, with the Wingull laughing at you the whole time.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r157-cave-spider-silk",
+   "name": "Cave Spider Silk Net",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "bug"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ariados",
+    "tint": "#242424",
+    "effect": "net"
+   },
+   "intro": "A web is strung across a chasm, as wide as a road and humming faintly. On the far side, things glint that somebody dropped and never came back for.",
+   "choices": [
+    {
+     "label": "Cross.",
+     "chance": 0.75,
+     "success": {
+      "text": "You go across on your stomach, a hand at a time, not looking down. The far side has what you hoped.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "star-piece",
+         "focus-sash"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Halfway over, the silk takes hold of you and will not let go. It takes most of the day, and all of your team pulling, to get you free. You never reach the far side.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Send a Bug-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "bug"
+      }
+     ],
+     "success": {
+      "text": "Your Bug-type walks out onto the web as if it were a pavement, and comes back with something in its mouth and a great deal of pride.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "star-piece",
+         "focus-sash"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r166-sudowoodo-gate",
+   "name": "Sudowoodo Gate",
+   "group": "Wild Scenes",
+   "types": [
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sudowoodo",
+    "tint": "#2a2418",
+    "effect": "shake"
+   },
+   "intro": "A tree stands in the narrow pass, where no tree should be. It is not a tree. It is holding very, very still and hoping.",
+   "choices": [
+    {
+     "label": "Water it.",
+     "chance": 0.5,
+     "success": {
+      "text": "One splash. The tree shrieks, leaps a foot in the air and runs off down the pass with its arms waving. The way is open.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     },
+     "failure": {
+      "text": "One splash. The tree shrieks, and then it is furious.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sudowoodo"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 15
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You sit down and wait. It holds its pose for a long time. Then longer. In the end it sighs, drops its arms and wanders off, bored. It cost you a good while, and nothing else.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r145-bonsly-standoff",
+   "name": "Bonsly Stand-Off",
+   "group": "Wild Scenes",
+   "types": [
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "bonsly",
+    "tint": "#2a2418",
+    "effect": "shake"
+   },
+   "intro": "A Bonsly stands in the exact middle of the bridge. It will not move. It keeps glancing over its shoulder at the railings and then glaring at you again.",
+   "choices": [
+    {
+     "label": "Look past it.",
+     "success": {
+      "text": "Behind it, a Sudowoodo is wedged in the railings, stuck fast and very embarrassed. The little one has been standing guard.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "r145-bonsly-railings"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push it.",
+     "success": {
+      "text": "You try to move it. It was already frightened, and now it is fighting.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "bonsly"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "r145-bonsly-railings",
+   "name": "Stuck in the Railings",
+   "group": "Travel and shortcuts",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bonsly",
+    "effect": "hearts"
+   },
+   "intro": "The Sudowoodo is stuck in the bridge railings by both arms. The Bonsly has put itself between you and it, trembling, refusing to cry.",
+   "choices": [
+    {
+     "label": "Free it.",
+     "success": {
+      "text": "You work the Sudowoodo loose, one arm and then the other. It hugs the Bonsly so hard they both fall over. They clear the bridge together, and the Bonsly keeps looking back at you.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "freed-sudowoodo",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Free it, and let the Bonsly follow.",
+     "chance": 0.5,
+     "success": {
+      "text": "You work the Sudowoodo loose. It bows, stiffly. The Bonsly looks at it, looks at you, and takes three small steps your way. The Sudowoodo nods: go on, then.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "bonsly"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "shadow": false
+       },
+       {
+        "kind": "flag",
+        "key": "freed-sudowoodo",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You work the Sudowoodo loose. The Bonsly takes one step after you, then runs back and holds on to the Sudowoodo's leg. Not today. They wave until you are off the bridge.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "freed-sudowoodo",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

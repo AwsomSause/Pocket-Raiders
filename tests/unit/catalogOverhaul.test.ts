@@ -78,7 +78,11 @@ describe('catalog overhaul: status files', () => {
 });
 
 describe('catalog overhaul: loading rules (src/data/index.ts)', () => {
-  const base = RAW_CONTENT.eventsExtra ?? [];
+  // The sample id may already be rebuilt by a real co file (two co files may not build one id), so that copy steps aside here.
+  const base = (RAW_CONTENT.eventsExtra ?? []).map((f) => {
+    const g = f as { catalogOverhaul?: string; events?: { id: string }[] };
+    return g.catalogOverhaul ? { ...g, events: (g.events ?? []).filter((e) => e.id !== 'berry-tree') } : f;
+  }) as NonNullable<typeof RAW_CONTENT.eventsExtra>;
   const sample = structuredClone(getContent().events.get('berry-tree')) as unknown as Record<string, unknown>;
 
   it('a co file wins over an older override file with the same id', () => {
