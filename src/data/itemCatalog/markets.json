@@ -1,4 +1,4 @@
 [
- {"id":"fauna-coupon","name":"Mrs. Fauna's Coupon","family":"Shop and money items","description":"Next shop purchase -30%","rarity":"uncommon","stacksOn":"player","max":null,"how":"use","icon":"coupon-2","status":"supported","effect":{"kind":"perk","lasts":{"for":"purchases","count":1},"perks":[{"perk":"discount","percent":30}]}},
- {"id":"doss-twenty","name":"Doss's Twenty","family":"Shop and money items","description":"Next shop purchase -20%","rarity":"common","stacksOn":"player","max":null,"how":"use","icon":"coupon-1","status":"supported","effect":{"kind":"perk","lasts":{"for":"purchases","count":1},"perks":[{"perk":"discount","percent":20}]}}
+ {"id":"fauna-coupon","name":"Mrs. Fauna's Coupon","family":"Shop and money items","description":"Next shop purchase -30%","rarity":"uncommon","stacksOn":"player","max":null,"how":"use","icon":"coupon-2","status":"supported","giftOnly":true,"effect":{"kind":"perk","lasts":{"for":"purchases","count":1},"perks":[{"perk":"discount","percent":30}]}},
+ {"id":"doss-twenty","name":"Doss's Twenty","family":"Shop and money items","description":"Next shop purchase -20%","rarity":"common","stacksOn":"player","max":null,"how":"use","icon":"coupon-1","status":"supported","giftOnly":true,"effect":{"kind":"perk","lasts":{"for":"purchases","count":1},"perks":[{"perk":"discount","percent":20}]}}
 ]

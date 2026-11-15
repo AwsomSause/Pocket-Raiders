@@ -102,5 +102,87 @@
    "setBy": "Biscuit's story (SF46, families): the dog got home",
    "readBy": "trade-t110"
   }
+ ],
+ "flags": [
+  {
+   "key": "apprentice-met",
+   "hook": "The Apprentice (SF2, families)"
+  },
+  {
+   "key": "berry-festival-fixed",
+   "hook": "The Berry Festival (SF76)"
+  },
+  {
+   "key": "team-op-stopped-stone-harvest",
+   "hook": "The Stone Harvest (M2, Flare)"
+  },
+  {
+   "key": "promise-genesect-no-machines",
+   "hook": "Genesect's Promise (legends)"
+  },
+  {
+   "key": "promise-meloetta-kept",
+   "hook": "Meloetta's Promise (legends)"
+  },
+  {
+   "key": "grunt-school-active",
+   "hook": "Grunt School (SF17)"
+  },
+  {
+   "key": "roster-lucky-done",
+   "hook": "Gambler Lucky (RR19, people): his arc is done (Persian returned)"
+  },
+  {
+   "key": "roster-rosalind-done",
+   "hook": "Rosalind (RR2, people): her arc is done"
+  },
+  {
+   "key": "roster-perry-done",
+   "hook": "Perry (RR5, people): his arc is done"
+  },
+  {
+   "key": "bank-robbed",
+   "hook": "The evil team's crisis strand (CATALOG_LEDGER bank-teller: the bank can be robbed by the evil team)"
+  },
+  {
+   "key": "glass-forest-ticket",
+   "hook": "markets sets it (ticket-tout); The Glass Forest (SF41.4, ovc-glass-forest-s1, families) should open for it"
+  },
+  {
+   "key": "teller-wennick",
+   "hook": "Hermit Wennick's story (SF44, families)"
+  },
+  {
+   "key": "delta-journal",
+   "hook": "The Delta journal (Dr. Linden Vale, D1/B6)"
+  },
+  {
+   "key": "marsh-vent",
+   "hook": "The Hot Marsh (D6): the vent fixed"
+  },
+  {
+   "key": "delta-ditto-colony",
+   "hook": "The Ditto Colony (D4) done"
+  },
+  {
+   "key": "delta-factory-dump",
+   "hook": "The factory dump (D5) done"
+  },
+  {
+   "key": "badge-challenged",
+   "hook": "Sorrel's Gym (GL7, questlines)"
+  },
+  {
+   "key": "apprentice-friend",
+   "hook": "The Apprentice (SF2, families): Tib is a friend"
+  },
+  {
+   "key": "nobody-escaped",
+   "hook": "Nell's story (SF20, families): she escaped"
+  },
+  {
+   "key": "dog-home",
+   "hook": "Biscuit's story (SF46, families): the dog got home"
+  }
  ]
 }

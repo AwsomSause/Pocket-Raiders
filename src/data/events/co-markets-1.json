@@ -3529,9 +3529,9 @@
         "factor": 1
        },
        {
-        "kind": "flag",
-        "key": "machine-parts",
-        "amount": 1
+        "kind": "item",
+        "id": "machine-part",
+        "count": 1
        },
        {
         "kind": "flag",

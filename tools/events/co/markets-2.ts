@@ -7,6 +7,7 @@ export { CATEGORY } from './_markets.ts';
 
 const G = 'Training and growth';
 const NO_MACHINES = flagIs('promise-genesect-no-machines');
+const PARTS: Json = { kind: 'item', id: 'machine-part', count: 3 };
 const picked = { pick: {} };
 const svc = (what: string, o: Json = {}): Json => mk('service', { what, who: 'picked', ...o });
 const effort = (stat: string, amount = 1, o: Json = {}): Json => mk('effort', { stat, amount, ...o });
@@ -209,23 +210,23 @@ export const EVENTS: Json[] = [
   },
   ...natureRooms('', RARE),
   ...natureRooms('-free', 0),
-  // ---- 13. TM Workshop ----
+  // ---- 13. TM Workshop ---- (Machine Parts are the real item, so parts from any event count)
   {
     id: 'tm-workshop', name: 'TM Workshop',
     intro: 'A shed that sparks. Fidget, the tinker, pushes up a pair of goggles and leaves two clean circles in the soot. "Three Machine Parts and I\'ll forge you a disc." Three Machine Parts, no money: one TM of your choice from his list.',
     choices: [
-      ch('Forge.', out('Fidget sweeps your three parts into a crucible with the side of his hand. "Right. What\'ll it be?"', stay('tm-workshop-list')), { requires: [flagIs('machine-parts', 3)] }),
+      ch('Forge.', out('Fidget sweeps your three parts into a crucible with the side of his hand. "Right. What\'ll it be?"', stay('tm-workshop-list')), { requires: [PARTS] }),
       ask('Where are parts?', '"Wex. The scrap buyer. Sell him junk, he hands back the good cogs." Fidget grins. "He thinks he\'s doing me a favour. He is. Don\'t tell him how big."', 'tm-workshop'),
       ch('No.', leave('Something in the shed goes bang. "That\'s fine!" Fidget calls. "That\'s meant to happen!"')),
     ],
     remembers: [refuses('tm-workshop', 'A shed that has, for once, stopped sparking. Fidget sits on an upturned bucket with his goggles in his lap. "No machines." He looks around at a shed made entirely of machines. "So. I\'m learning to whittle. Look." It is a very bad spoon. He is very proud of it.', [0, 1])],
   },
   room('tm-workshop-list', "Fidget's List", ['trainer.worker_m'], 'A list nailed to the shed door, in six colours of paint. "Pick. The crucible\'s hot." Three Machine Parts for any one.', [
-    ...(['fire', 'water', 'grass'] as const).map((t) => ch(`A ${t[0]!.toUpperCase()}${t.slice(1)} disc.`, out('Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. "Made from three things nobody wanted. Best kind."', flag('machine-parts', -3), item(`tm-${t}`)), { requires: [flagIs('machine-parts', 3)] })),
+    ...(['fire', 'water', 'grass'] as const).map((t) => ch(`A ${t[0]!.toUpperCase()}${t.slice(1)} disc.`, out('Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. "Made from three things nobody wanted. Best kind."', { kind: 'loseItem', id: 'machine-part', count: 3 }, item(`tm-${t}`)), { requires: [PARTS] })),
     ch('More discs.', out('Fidget flips the list over. There is more on the back.', stay('tm-workshop-list-2'))),
   ], 'merchant'),
   room('tm-workshop-list-2', "Fidget's List, the Back", ['trainer.worker_m'], 'The back of the list. Three Machine Parts for any one.', [
-    ...(['electric', 'psychic', 'ground'] as const).map((t) => ch(`${t === 'electric' ? 'An' : 'A'} ${t[0]!.toUpperCase()}${t.slice(1)} disc.`, out('Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. "Made from three things nobody wanted. Best kind."', flag('machine-parts', -3), item(`tm-${t}`)), { requires: [flagIs('machine-parts', 3)] })),
+    ...(['electric', 'psychic', 'ground'] as const).map((t) => ch(`${t === 'electric' ? 'An' : 'A'} ${t[0]!.toUpperCase()}${t.slice(1)} disc.`, out('Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. "Made from three things nobody wanted. Best kind."', { kind: 'loseItem', id: 'machine-part', count: 3 }, item(`tm-${t}`)), { requires: [PARTS] })),
     ch('Not yet.', leave('"Parts keep. Come back when you\'ve decided."')),
   ], 'merchant'),
 

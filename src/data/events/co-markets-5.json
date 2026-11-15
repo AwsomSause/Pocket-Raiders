@@ -2095,6 +2095,12 @@
    "choices": [
     {
      "label": "The starter, sleeping.",
+     "requires": [
+      {
+       "kind": "photos",
+       "atLeast": 1
+      }
+     ],
      "success": {
       "text": "Flick looks at it for a long time. \"It's always the sleeping ones,\" he says softly, and pins a rosette on it. First prize.",
       "effects": [
@@ -2112,6 +2118,12 @@
     },
     {
      "label": "The whole team.",
+     "requires": [
+      {
+       "kind": "photos",
+       "atLeast": 1
+      }
+     ],
      "success": {
       "text": "Everybody squeezed in, somebody blinking. Flick nods. Second prize. \"Good. Honest. Somebody's looking at you instead of the camera.\"",
       "effects": [

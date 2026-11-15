@@ -256,7 +256,7 @@
   {
    "id": "guide-for-hire",
    "name": "The Guide for Hire",
-   "group": "Merchants & Deals",
+   "group": "NPC Stories",
    "stop": "scout",
    "rarity": "uncommon",
    "scene": {
@@ -322,6 +322,11 @@
          "pp-up",
          "heart-scale"
         ]
+       },
+       {
+        "kind": "flag",
+        "key": "lore-salt-road",
+        "amount": 1
        }
       ],
       "battle": {
@@ -2191,6 +2196,9 @@
          "key": "duel"
         }
        ],
+       "rule": {
+        "suddenDeath": true
+       },
        "name": "Duellist Raine",
        "size": 1,
        "types": [],

@@ -20,6 +20,8 @@ const fairOpens = (poppet: boolean): Json[] => [
 /** A fair game: a room beside the gate. */
 const game = (id: string, name: string, intro: string, choices: Json[], extra: Json = {}): Json => ({ id, name, group: G, stop: 'contest', room: true, intro, choices, ...extra });
 const skill = (id: string, needs: 'ok' | 'good' | 'perfect', fail: string, ...failEffects: Json[]): Json => ({ prompt: { id, needs }, fail: out(fail, ...failEffects) });
+// The two prize photos are real camp photos (the camp's photo album); the blurry action shot needs none.
+const PHOTO: Json = { requires: [{ kind: 'photos', atLeast: 1 }] };
 const BERRIES = ['oran-berry', 'pecha-berry', 'cheri-berry'];
 
 export const EVENTS: Json[] = [
@@ -160,8 +162,8 @@ export const EVENTS: Json[] = [
   ], { remembers: [{ id: 'garden-rosalind', when: [flagIs('roster-rosalind-done')], intro: 'A bright garden behind the stalls, and Rosalind kneeling in it, sleeves rolled up, with a whole bed of moonflowers. She sees you and smiles like it has been a long time.', hide: [2],
     addChoices: [ch('Pick one.', out('"Not that one." Rosalind stops your hand gently. She picks a moonflower instead and puts it in yours. "This one. You\'ll know why later."', flag('fair-flower'), moment('Rosalind gave you a moonflower from her bed at the fair.', 60)))] }] }),
   game('photo-contest', 'The Photo Contest', 'A board of pinned photographs and a judge with a magnifying glass. Flick waves you over. "Show me your best camp photo of your Pokémon!" First prize ₽500. Second ₽250.', [
-    ch('The starter, sleeping.', out('Flick looks at it for a long time. "It\'s always the sleeping ones," he says softly, and pins a rosette on it. First prize.', $(500), fr(5, 'starter'))),
-    ch('The whole team.', out('Everybody squeezed in, somebody blinking. Flick nods. Second prize. "Good. Honest. Somebody\'s looking at you instead of the camera."', $(250))),
+    ch('The starter, sleeping.', out('Flick looks at it for a long time. "It\'s always the sleeping ones," he says softly, and pins a rosette on it. First prize.', $(500), fr(5, 'starter')), PHOTO),
+    ch('The whole team.', out('Everybody squeezed in, somebody blinking. Flick nods. Second prize. "Good. Honest. Somebody\'s looking at you instead of the camera."', $(250)), PHOTO),
     ch('A blurry action shot.', out('Flick holds it up to the light, turns it sideways, and gasps. "This is the best bad photo I have ever seen." Special mention.', flag('fair-photo-mention'), moment('Flick gave your blurry action shot a special mention.', 45))),
   ]),
   game('pokefan-meetup', 'The Pokéfan Meetup', 'A ring of folding chairs and Pokéfans with their favourites in their laps. Gwendolyn waves you in. "Show us yours!"', [

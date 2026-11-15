@@ -1426,10 +1426,9 @@
      "label": "Forge.",
      "requires": [
       {
-       "kind": "flag",
-       "key": "machine-parts",
-       "atLeast": 3,
-       "atMost": 99
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
       }
      ],
      "success": {
@@ -1500,19 +1499,18 @@
      "label": "A Fire disc.",
      "requires": [
       {
-       "kind": "flag",
-       "key": "machine-parts",
-       "atLeast": 3,
-       "atMost": 99
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
       }
      ],
      "success": {
       "text": "Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. \"Made from three things nobody wanted. Best kind.\"",
       "effects": [
        {
-        "kind": "flag",
-        "key": "machine-parts",
-        "amount": -3
+        "kind": "loseItem",
+        "id": "machine-part",
+        "count": 3
        },
        {
         "kind": "item",
@@ -1526,19 +1524,18 @@
      "label": "A Water disc.",
      "requires": [
       {
-       "kind": "flag",
-       "key": "machine-parts",
-       "atLeast": 3,
-       "atMost": 99
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
       }
      ],
      "success": {
       "text": "Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. \"Made from three things nobody wanted. Best kind.\"",
       "effects": [
        {
-        "kind": "flag",
-        "key": "machine-parts",
-        "amount": -3
+        "kind": "loseItem",
+        "id": "machine-part",
+        "count": 3
        },
        {
         "kind": "item",
@@ -1552,19 +1549,18 @@
      "label": "A Grass disc.",
      "requires": [
       {
-       "kind": "flag",
-       "key": "machine-parts",
-       "atLeast": 3,
-       "atMost": 99
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
       }
      ],
      "success": {
       "text": "Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. \"Made from three things nobody wanted. Best kind.\"",
       "effects": [
        {
-        "kind": "flag",
-        "key": "machine-parts",
-        "amount": -3
+        "kind": "loseItem",
+        "id": "machine-part",
+        "count": 3
        },
        {
         "kind": "item",
@@ -1607,19 +1603,18 @@
      "label": "An Electric disc.",
      "requires": [
       {
-       "kind": "flag",
-       "key": "machine-parts",
-       "atLeast": 3,
-       "atMost": 99
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
       }
      ],
      "success": {
       "text": "Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. \"Made from three things nobody wanted. Best kind.\"",
       "effects": [
        {
-        "kind": "flag",
-        "key": "machine-parts",
-        "amount": -3
+        "kind": "loseItem",
+        "id": "machine-part",
+        "count": 3
        },
        {
         "kind": "item",
@@ -1633,19 +1628,18 @@
      "label": "A Psychic disc.",
      "requires": [
       {
-       "kind": "flag",
-       "key": "machine-parts",
-       "atLeast": 3,
-       "atMost": 99
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
       }
      ],
      "success": {
       "text": "Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. \"Made from three things nobody wanted. Best kind.\"",
       "effects": [
        {
-        "kind": "flag",
-        "key": "machine-parts",
-        "amount": -3
+        "kind": "loseItem",
+        "id": "machine-part",
+        "count": 3
        },
        {
         "kind": "item",
@@ -1659,19 +1653,18 @@
      "label": "A Ground disc.",
      "requires": [
       {
-       "kind": "flag",
-       "key": "machine-parts",
-       "atLeast": 3,
-       "atMost": 99
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
       }
      ],
      "success": {
       "text": "Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. \"Made from three things nobody wanted. Best kind.\"",
       "effects": [
        {
-        "kind": "flag",
-        "key": "machine-parts",
-        "amount": -3
+        "kind": "loseItem",
+        "id": "machine-part",
+        "count": 3
        },
        {
         "kind": "item",

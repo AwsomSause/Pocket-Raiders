@@ -60,11 +60,11 @@ export const EVENTS: Json[] = [
   // SF106. Guides, Insurance and Advice
   // =====================================================================
   {
-    id: 'guide-for-hire', name: 'The Guide for Hire', group: G,
+    id: 'guide-for-hire', name: 'The Guide for Hire', group: 'NPC Stories', // keeps its old NPC Stories group: it is the Salt Road lore's finder
     intro: 'Cyrilla, a guide with a walking stick: "Fifty and I show you the quiet way. Two hundred and I show you the secret way." Quiet: three nodes, one hazard, no trainers. Secret: two nodes, a hidden cache, a wild Rare. "Secret\'s only worth it if you want the cache."',
     choices: [
       ch('The quiet way (50).', out('She walks you round the back of everything. Nobody challenges you. One rockslide, which she sees coming. The way ahead is laid out plain.', pay(50), { kind: 'scout', columns: 3 }, { kind: 'takeNode', nodes: 3 }), need(50)),
-      ch('The secret way (200).', fight('Through a crack in a cliff, along a dry stream bed. A cache in a hollow tree, exactly where she said. And at the end, something rare watching you from the rocks.', { ...wild({ lv: 2 }), rare: true, friendly: true }, pay(200), { kind: 'skipAhead' }, { kind: 'itemFrom', ids: UNCOMMONS }), need(200)),
+      ch('The secret way (200).', fight('Through a crack in a cliff, along a dry stream bed. A cache in a hollow tree, exactly where she said. And at the end, something rare watching you from the rocks.', { ...wild({ lv: 2 }), rare: true, friendly: true }, pay(200), { kind: 'skipAhead' }, { kind: 'itemFrom', ids: UNCOMMONS }, flag('lore-salt-road')), need(200)),
       ch('Neither.', out('"Your road, then." Cyrilla tips her hat. "It\'s a good road too."')),
     ],
   },
@@ -301,7 +301,7 @@ export const EVENTS: Json[] = [
     id: 'sudden-death-duel', name: 'Sudden Death', group: G,
     intro: 'A duellist in a long coat holds up a Focus Sash. Raine: "First faint ends it. Winner takes a held item from the loser." Her stake: the Focus Sash. Yours: your most valuable item.',
     choices: [
-      ch('Accept.', fight('One Pokémon each. First faint ends it. Raine bows, very formally, and throws.', trainer('Duellist Raine', { size: 1, friendly: true, win: [item('focus-sash')], lose: [mk('stolen', { key: 'duel' })] }))),
+      ch('Accept.', fight('One Pokémon each. First faint ends it. Raine bows, very formally, and throws.', trainer('Duellist Raine', { size: 1, friendly: true, rule: { suddenDeath: true }, win: [item('focus-sash')], lose: [mk('stolen', { key: 'duel' })] }))),
       ch('Which item of yours?', out('Raine looks through your bag with you and names it, out loud, so there is no mistake.', mk('advise', { key: 'best' }), stay('sudden-death-duel'))),
       ch('No.', out('Raine bows anyway. "Another day."')),
     ],

@@ -43,3 +43,5 @@ All 199 catalog ids in the markets category are built (`npm run co:status`: mark
 - Collectors' "by region" offers (Bagon, Axew) are a seeded draw, not chosen by region. Delta Snorlax is the base Delta form, not the season's.
 - Roster "counts as a meeting" lines (Wade, Baxter, Hadrian, Delia, Hester) and the "If SF… is done" Remembers lines of the trades are not wired yet (their flags belong to other rows).
 - Altar of Swaps shows the card's warning instead of refusing a worse offer.
+- Photo Contest: the two prize photos need at least one camp photo (the camp album), so the old camp-photo hook still matters; the blurry action shot needs none.
+- Machine Parts are the real `machine-part` item (Wex hands one back; other events' parts count too). The coupons are gift-only, so they never join random draws.
