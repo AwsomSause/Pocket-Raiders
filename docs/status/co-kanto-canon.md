@@ -34,6 +34,9 @@ Source: `/mnt/project-files/catalog_overhaul_pack/kanto_canon_spaces/` (`KANTO_P
 | Indigo `.torch`, `.boulders`, `.village` | `KANTO_PLACED_4.md`, 871–959 | 2026-11-15 |
 | Roads `cs.kanto.route.song`, `.darkcity`, `.canyon`, `.egg`, `.daycare`, `.estate`, `.leek`, `.hero`, `.film`, `.badges`, `.buried` | `KANTO_PLACED_5.md`, 9–430 | 2026-11-15 |
 | Sevii `cs.kanto.sevii.*` (network + ferry, ember, stall, maniac, missing, bikers, berryforest, icefall, daycare, warehouse, lostcave, pillar, dottedhole, patternbush, altering, tower, tanoby, canyon, navel, birth) | `KANTO_PLACED_5.md`, 431–870 | 2026-11-15 |
+| Towns `cs.kanto.pewter.stranger`, `.visitors`, `cs.kanto.vermilion.triage`, `.site`, `cs.kanto.lavender.rival`, `cs.kanto.celadon.festival`, `cs.kanto.fuchsia.secrethouse`, `cs.kanto.cinnabar.shellder` | `KANTO_PLACED_6.md`, 10–322 | 2026-11-15 |
+| Roads `cs.kanto.route.goodbye`, `.k9`, `.oldstreet`, `.transfer`, `.snow`, `.bikerace`, `.gamblers`, `.seeker`, `.fame`, `.underground`, `.relay`, `.aides` | `KANTO_PLACED_6.md`, 323–670 | 2026-11-15 |
+| Sevii `cs.kanto.sevii.joyful`, `.treasure`, `.resort`, `.labyrinth`, `.ferry` | `KANTO_PLACED_6.md`, 671–787 | 2026-11-15 |
 
 ## Limits (Part 1)
 - Before / instead / after the node's battle and "at a + node" are recorded (placement file `attaches`) but every space is a stop beside its node until the lead's placer lands; then the placement file drives it.
@@ -83,3 +86,15 @@ Source: `/mnt/project-files/catalog_overhaul_pack/kanto_canon_spaces/` (`KANTO_P
 - Stand-ins: Full Restore is a full rest on the spot; the Move Maniac's Tiny Mushroom tier is folded into the Big Mushroom (a Network Machine); the Ruby and Sapphire are run flags (the catalog's are sellable valuables); Rocket Admins' "+1 every stat" is +1 level; the Tower's "no items" isn't enforced.
 - Tickets: the doc says "a rare reward elsewhere"; here the Mystic Ticket is in Selphy's bag (25%) and the Aurora Ticket is the prize for beating Trainer Tower's posted time.
 - Sizes: the Lost Cave has five rooms (doc: up to eight); Birth Island's six step puzzles are one aim prompt; the Altering Cave rolls one of 18 non-Kanto species.
+
+## Limits (Part 6, the second helping)
+- Same-run rule: the Building Site's bricks and the Professor's later-run visits are dropped; the site's "again" room is a Stage 8 follow-up in the same run.
+- The Kind Stranger is a Stage 1 road space (the forest is another thread's); the "certain if poisoned" rule isn't there. His advice is Speed ×2 against the next boss.
+- The rival at the Tower: "fought side by side" is read as the lead at Bond 3.
+- The Princess Festival is a rooftop choice at 50%; its price cut lasts until the next battle.
+- The Secret House Warden: the second roll isn't done (the gold-teeth replica flag plus ₽3000).
+- The Aides' lamp is a flag only; the Aides can be crowded out by the two-per-stage road cap.
+- The Vs. Seeker and Fame Checker are items; the six-remark dossier reveals aren't built.
+- Treasure Beach: a 50% roll stands in for low tide; "lost items wash back" isn't built.
+- Resort wishes are a fixed three species; the Labyrinth egg is a Kanto baby; Joyful berry-picking needs the Doduo line.
+- Bicycle Race: "a year of free food" is a rest now plus a run flag. Triage "potions" are rests (no in-battle healing items).

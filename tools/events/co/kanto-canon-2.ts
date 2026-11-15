@@ -36,7 +36,7 @@ const flash: Json = { kind: 'partyMove', move: 'flash' };
 
   s.room('f3', 'Pokémon Tower: The Channelers', 'Mediums in white, swaying between the stones. Their eyes are open and nobody is behind them. One turns toward you all at once, like a door blown by a wind, and speaks in a voice that is using her without asking.',
     [c('Battle, to end the possession.', battle('She throws a Poké Ball with a hand that isn\'t hers. Each battle ends a possession: there are two of them between you and the stairs.',
-      foe('Channeler', { size: 2, types: ['ghost'], levelBonus: 0, chain: 2, win: [moment('Freed the Channelers of Pokémon Tower.'), s.open('f3b')] })))], { scene: { effect: 'fog' } });
+      foe('Channeler', { size: 2, types: ['ghost'], levelBonus: 0, chain: 2, win: [moment('Freed the Channelers of Pokémon Tower.'), s.open('f3b')] })))], { scene: { effect: 'fog' }, remembers: [{ id: 'rival', when: [not('kanto-lavender-rival')], notice: 'Somebody else is up here, standing among the stones with their back to the stairs.', addChoices: [c('Go to the one among the stones.', o('You know the coat before you know the face.', { kind: 'addEvent', eventId: 'cs-kanto-lavender-rival' }))] }] });
   s.room('f3b', 'Pokémon Tower: The Channelers', 'The last of the cold goes out of her like a held breath. She sits down hard on the floor, and looks at her own hands, and then at you. Channeler, after: "Was I—? Oh. Oh, I\'m so sorry. Did I say anything dreadful?"',
     [c('"Nothing dreadful."', o('She laughs, shakily, and lets you help her up. "They only want somebody to talk through," she says. "They forget to ask." She points you to the stairs, and stays behind to sit with the other one until she wakes.', s.open('f4')))]);
 

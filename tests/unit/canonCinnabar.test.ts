@@ -25,7 +25,7 @@ const live = (id: string) => !content.events.get(id)!.disabled;
 describe('Cinnabar canon: the event graph', () => {
   it('every addEvent target exists, and every live room opens from a gate', () => {
     const ids = [...content.events.keys()].filter((id) => id.startsWith(P) && live(id));
-    const gates = ['lab', 'mansion', 'seafoam', 'newisland', 'volcano', 'inn', 'sleeper', 'wave', 'vial'];
+    const gates = ['lab', 'mansion', 'seafoam', 'newisland', 'volcano', 'inn', 'sleeper', 'wave', 'vial', 'shellder'];
     expect(ids.length).toBeGreaterThan(40);
     const reach = new Set<string>(gates.map((g) => `${P}${g}`));
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id.slice(P.length))) { expect(content.events.has(t), `${id} -> ${t}`).toBe(true); expect(live(t), `${id} -> ${t} (disabled)`).toBe(true); if (!reach.has(t)) { reach.add(t); again = true; } } }

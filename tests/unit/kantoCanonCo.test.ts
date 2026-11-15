@@ -47,7 +47,8 @@ describe('kanto-canon: data', () => {
 
   it('every room is opened by another event of the set (or is a follow-up or a Stage 8 return)', () => {
     const targets = new Set(mine.flatMap(opened));
-    const follow = new Set(canonKantoPlaced.followups.map((f) => f.event));
+    // Follow-ups, and road rows (KANTO_PLACED_6: the Aides' later gatehouses are rooms placed on the road), are placed, not opened.
+    const follow = new Set([...canonKantoPlaced.followups.map((f) => f.event), ...canonKantoPlaced.routes.map((r) => r.event)]);
     for (const t of targets) expect(content.events.get(t) && !content.events.get(t)!.disabled, `opened room ${t} exists`).toBe(true);
     for (const e of mine) if (e.room) expect(targets.has(e.id) || follow.has(e.id), `room ${e.id} is reachable`).toBe(true);
     for (const e of mine) if (!e.room && !e.canon) expect(follow.has(e.id), `${e.id} is neither a room, a space nor a follow-up`).toBe(true);
@@ -60,7 +61,7 @@ describe('kanto-canon: data', () => {
       const variantOpen = e.remembers.some((v) => v.addChoices.some((c) => c.requires.length === 0));
       // Events whose every choice has a requirement must cover both sides of it (has / has not).
       if (open.length === 0 && !variantOpen) // The last three score rooms gate on complementary ranges (one of the two always opens).
-      expect(['cs-kanto-lavender-tower-f7', 'cs-kanto-saffron-silph-gift', 'cs-kanto-viridian-convertible-end', 'cs-kanto-pewter-siblings-home', 'cs-kanto-vermilion-capsized-surface', 'cs-kanto-celadon-bridgerun-end', 'cs-kanto-celadon-greenhouse-out', 'cs-kanto-fuchsia-ranch-line', 'cs-kanto-saffron-exam-result', 'cs-kanto-cinnabar-inn-night', 'cs-kanto-cinnabar-sleeper-woke', 'cs-kanto-route-film-verdict', 'cs-kanto-sevii-dottedhole-bottom', 'cs-kanto-sevii-warehouse-admin1', 'cs-kanto-sevii-warehouse-admin2', ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => `cs-kanto-sevii-tower-f${n}`) /* KANTO_PLACED_5: cast or not, Sapphire here or won, Silph won or not, the climb's mode; KANTO_PLACED_4: two complementary gates (in time or late, passed or not, with or without a Squirtle): one always fits */], `${e.id} has only locked choices`).toContain(e.id);
+      expect(['cs-kanto-lavender-tower-f7', 'cs-kanto-saffron-silph-gift', 'cs-kanto-viridian-convertible-end', 'cs-kanto-pewter-siblings-home', 'cs-kanto-vermilion-capsized-surface', 'cs-kanto-celadon-bridgerun-end', 'cs-kanto-celadon-greenhouse-out', 'cs-kanto-fuchsia-ranch-line', 'cs-kanto-saffron-exam-result', 'cs-kanto-cinnabar-inn-night', 'cs-kanto-cinnabar-sleeper-woke', 'cs-kanto-route-film-verdict', 'cs-kanto-sevii-dottedhole-bottom', 'cs-kanto-sevii-warehouse-admin1', 'cs-kanto-sevii-warehouse-admin2', ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => `cs-kanto-sevii-tower-f${n}`), 'cs-kanto-lavender-rival-after', 'cs-kanto-route-bikerace-up', 'cs-kanto-route-bikerace-along', 'cs-kanto-route-bikerace-down', 'cs-kanto-route-bikerace-line', 'cs-kanto-route-gamblers-coin', 'cs-kanto-vermilion-triage-end', 'cs-kanto-fuchsia-secrethouse-end' /* KANTO_PLACED_5: cast or not, Sapphire here or won, Silph won or not, the climb's mode; KANTO_PLACED_6: a Scope or none, light or heavy, the count of wins or right calls; KANTO_PLACED_4: two complementary gates (in time or late, passed or not, with or without a Squirtle): one always fits */], `${e.id} has only locked choices`).toContain(e.id);
     }
   });
 

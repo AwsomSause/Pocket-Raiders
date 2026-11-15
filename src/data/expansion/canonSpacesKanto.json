@@ -5577,6 +5577,903 @@
     "level": null,
     "often": "Once per run (on the Sevii map)"
    }
+  },
+  {
+   "id": "cs.kanto.pewter.stranger",
+   "town": "route",
+   "parent": null,
+   "name": "The Kind Stranger",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.pewter.stranger"
+   ],
+   "section": "KANTO_PLACED_6: The Kind Stranger",
+   "placed": {
+    "stage": [
+     1
+    ],
+    "home": 6,
+    "window": [
+     4,
+     9
+    ],
+    "sits": "optional",
+    "attaches": "before",
+    "badge": "None: he's met",
+    "level": null,
+    "often": "Once per run",
+    "tags": [
+     "forest"
+    ]
+   }
+  },
+  {
+   "id": "cs.kanto.pewter.visitors",
+   "town": "route",
+   "parent": null,
+   "name": "Visitors",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.pewter.visitors"
+   ],
+   "section": "KANTO_PLACED_6: Visitors",
+   "placed": {
+    "stage": [
+     1
+    ],
+    "home": 10,
+    "window": [
+     8,
+     13
+    ],
+    "sits": "optional",
+    "attaches": "after",
+    "badge": "A kettle with stars round it",
+    "level": null,
+    "often": "Once per run"
+   }
+  },
+  {
+   "id": "cs.kanto.vermilion.triage",
+   "town": "vermilion",
+   "parent": null,
+   "name": "Triage",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.vermilion.triage"
+   ],
+   "section": "KANTO_PLACED_6: Triage",
+   "placed": {
+    "stage": [
+     3
+    ],
+    "home": 12,
+    "window": [
+     10,
+     14
+    ],
+    "sits": "plus",
+    "attaches": "plus",
+    "badge": "A stethoscope",
+    "level": null,
+    "often": "Once per run"
+   }
+  },
+  {
+   "id": "cs.kanto.vermilion.site",
+   "town": "vermilion",
+   "parent": null,
+   "name": "The Building Site",
+   "kind": "EV",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.vermilion.site"
+   ],
+   "section": "KANTO_PLACED_6: The Building Site",
+   "placed": {
+    "stage": [
+     3,
+     8
+    ],
+    "home": 3,
+    "sits": "town",
+    "attaches": "town",
+    "badge": "A flat square of earth",
+    "level": null,
+    "often": "Once per stage"
+   }
+  },
+  {
+   "id": "cs.kanto.lavender.rival",
+   "town": "lavender",
+   "parent": "cs.kanto.lavender.tower",
+   "name": "The Rival in the Tower",
+   "kind": "EV",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 1
+   },
+   "length": null,
+   "flags": [
+    "kanto.lavender.rival"
+   ],
+   "section": "KANTO_PLACED_6: The Rival in the Tower",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 4,
+    "sits": "must",
+    "attaches": "instead",
+    "badge": "None",
+    "level": 1,
+    "often": "Once per run (Pokémon Tower, floor 3)"
+   }
+  },
+  {
+   "id": "cs.kanto.celadon.festival",
+   "town": "celadon",
+   "parent": "cs.kanto.celadon.mart",
+   "name": "The Festival of Dolls",
+   "kind": "EV",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": null,
+   "flags": [
+    "kanto.celadon.festival"
+   ],
+   "section": "KANTO_PLACED_6: The Festival of Dolls",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 11,
+    "sits": "town",
+    "attaches": "town",
+    "badge": "A doll in a kimono",
+    "level": 0,
+    "often": "Once per run (half of runs)"
+   }
+  },
+  {
+   "id": "cs.kanto.fuchsia.secrethouse",
+   "town": "fuchsia",
+   "parent": null,
+   "name": "The Secret House",
+   "kind": "EV",
+   "appears": "trigger",
+   "requires": {
+    "flags": [],
+    "spaces": [
+     "cs.kanto.fuchsia.safari"
+    ]
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": null,
+   "flags": [
+    "kanto.fuchsia.secrethouse",
+    "kanto.gold.teeth.replica"
+   ],
+   "section": "KANTO_PLACED_6: The Secret House",
+   "placed": {
+    "stage": [
+     5
+    ],
+    "home": 14,
+    "sits": "town",
+    "attaches": "town",
+    "badge": "A small roof, far off",
+    "level": 0,
+    "often": "Once per run"
+   }
+  },
+  {
+   "id": "cs.kanto.cinnabar.shellder",
+   "town": "cinnabar",
+   "parent": null,
+   "name": "The Shell on the Tail",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.cinnabar.shellder"
+   ],
+   "section": "KANTO_PLACED_6: The Shell on the Tail",
+   "placed": {
+    "stage": [
+     7
+    ],
+    "home": 13,
+    "window": [
+     11,
+     15
+    ],
+    "sits": "optional",
+    "attaches": "after",
+    "badge": "A spiral shell",
+    "level": null,
+    "often": "Once per run",
+    "tags": [
+     "water"
+    ]
+   }
+  },
+  {
+   "id": "cs.kanto.route.goodbye",
+   "town": "route",
+   "parent": null,
+   "name": "Where It Was Happy",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.route.goodbye"
+   ],
+   "section": "KANTO_PLACED_6: Where It Was Happy",
+   "placed": {
+    "stage": [
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "home": 16,
+    "window": [
+     13,
+     18
+    ],
+    "sits": "door",
+    "attaches": "instead",
+    "badge": "A leaf with a heart-shaped hole",
+    "level": null,
+    "often": "Once per run",
+    "tags": [
+     "forest"
+    ]
+   }
+  },
+  {
+   "id": "cs.kanto.route.k9",
+   "town": "route",
+   "parent": null,
+   "name": "The Training Course",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.route.k9"
+   ],
+   "section": "KANTO_PLACED_6: The Training Course",
+   "placed": {
+    "stage": [
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "home": 8,
+    "window": [
+     5,
+     12
+    ],
+    "sits": "optional",
+    "attaches": "before",
+    "badge": "A whistle",
+    "level": null,
+    "often": "Once per run"
+   }
+  },
+  {
+   "id": "cs.kanto.route.oldstreet",
+   "town": "route",
+   "parent": null,
+   "name": "The Old Street",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [
+     "kanto.trio.rep"
+    ],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.route.oldstreet"
+   ],
+   "section": "KANTO_PLACED_6: The Old Street",
+   "placed": {
+    "stage": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "home": 11,
+    "window": [
+     8,
+     15
+    ],
+    "sits": "optional",
+    "attaches": "after",
+    "badge": "A crescent moon over a rooftop",
+    "level": null,
+    "often": "Once per run"
+   }
+  },
+  {
+   "id": "cs.kanto.route.transfer",
+   "town": "route",
+   "parent": null,
+   "name": "Inside the Machine",
+   "kind": "PS",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 1
+   },
+   "length": null,
+   "flags": [
+    "kanto.route.transfer"
+   ],
+   "section": "KANTO_PLACED_6: Inside the Machine",
+   "placed": {
+    "stage": [
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "home": 9,
+    "window": [
+     9,
+     12
+    ],
+    "sits": "plus",
+    "attaches": "plus",
+    "badge": "A grid",
+    "level": 1,
+    "often": "Once per run"
+   }
+  },
+  {
+   "id": "cs.kanto.route.snow",
+   "town": "route",
+   "parent": null,
+   "name": "Snowed In",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.route.snow"
+   ],
+   "section": "KANTO_PLACED_6: Snowed In",
+   "placed": {
+    "stage": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "home": 14,
+    "window": [
+     10,
+     17
+    ],
+    "sits": "must",
+    "attaches": "instead",
+    "badge": "A snowdrift with a light in it",
+    "level": null,
+    "often": "Once per run",
+    "tags": [
+     "high"
+    ]
+   }
+  },
+  {
+   "id": "cs.kanto.route.bikerace",
+   "town": "route",
+   "parent": null,
+   "name": "The Bicycle Race",
+   "kind": "PS",
+   "appears": "route",
+   "requires": {
+    "flags": [
+     "kanto.cerulean.bike"
+    ],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.route.bikerace",
+    "kanto.bike.diner"
+   ],
+   "section": "KANTO_PLACED_6: The Bicycle Race",
+   "placed": {
+    "stage": [
+     4,
+     5,
+     6,
+     7
+    ],
+    "home": 9,
+    "window": [
+     7,
+     12
+    ],
+    "sits": "door",
+    "attaches": "instead",
+    "badge": "A bicycle with a bent frame",
+    "level": null,
+    "often": "Once per run"
+   }
+  },
+  {
+   "id": "cs.kanto.route.gamblers",
+   "town": "route",
+   "parent": null,
+   "name": "The Gamblers",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": null,
+   "flags": [
+    "kanto.route.gamblers"
+   ],
+   "section": "KANTO_PLACED_6: The Gamblers",
+   "placed": {
+    "stage": [
+     3,
+     4,
+     5,
+     6
+    ],
+    "home": 7,
+    "window": [
+     5,
+     10
+    ],
+    "sits": "optional",
+    "attaches": "instead",
+    "badge": "A coin, mid-flip",
+    "level": 0,
+    "often": "Once per run"
+   }
+  },
+  {
+   "id": "cs.kanto.route.seeker",
+   "town": "vermilion",
+   "parent": null,
+   "name": "The Vs. Seeker",
+   "kind": "EV",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.route.seeker"
+   ],
+   "section": "KANTO_PLACED_6: The Vs. Seeker and the Fame Checker",
+   "placed": {
+    "stage": [
+     3
+    ],
+    "home": 2,
+    "sits": "plus",
+    "attaches": "plus",
+    "badge": "None",
+    "level": null,
+    "often": "Once per run"
+   }
+  },
+  {
+   "id": "cs.kanto.route.fame",
+   "town": "vermilion",
+   "parent": "cs.kanto.route.seeker",
+   "name": "The Fame Checker",
+   "kind": "EV",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.route.fame"
+   ],
+   "section": "KANTO_PLACED_6: The Vs. Seeker and the Fame Checker",
+   "placed": {
+    "stage": [
+     3
+    ],
+    "home": 2,
+    "sits": "plus",
+    "attaches": "plus",
+    "badge": "None",
+    "level": null,
+    "often": "Once per run"
+   }
+  },
+  {
+   "id": "cs.kanto.route.underground",
+   "town": "route",
+   "parent": null,
+   "name": "Lost and Found",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.route.underground"
+   ],
+   "section": "KANTO_PLACED_6: Lost and Found",
+   "placed": {
+    "stage": [
+     3,
+     4,
+     5,
+     6
+    ],
+    "home": 12,
+    "window": [
+     9,
+     15
+    ],
+    "sits": "door",
+    "attaches": "instead",
+    "badge": "A stairway down",
+    "level": null,
+    "often": "Once per run"
+   }
+  },
+  {
+   "id": "cs.kanto.route.relay",
+   "town": "route",
+   "parent": null,
+   "name": "The Swimmers' Relay",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": null,
+   "flags": [
+    "kanto.route.relay"
+   ],
+   "section": "KANTO_PLACED_6: The Swimmers' Relay",
+   "placed": {
+    "stage": [
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "home": 10,
+    "window": [
+     7,
+     14
+    ],
+    "sits": "optional",
+    "attaches": "instead",
+    "badge": "A buoy",
+    "level": 0,
+    "often": "Once per run",
+    "tags": [
+     "water"
+    ]
+   }
+  },
+  {
+   "id": "cs.kanto.route.aides",
+   "town": "route",
+   "parent": null,
+   "name": "The Aides",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.route.aides",
+    "kanto.aide.lamp"
+   ],
+   "section": "KANTO_PLACED_6: The Aides",
+   "placed": {
+    "stage": [
+     2
+    ],
+    "home": 18,
+    "sits": "must",
+    "attaches": "after",
+    "badge": "A clipboard",
+    "level": null,
+    "often": "Once each (Stages 2, 5 and 6; Stage 3's is the Itemfinder)"
+   }
+  },
+  {
+   "id": "cs.kanto.sevii.joyful",
+   "town": "sevii",
+   "parent": "cs.kanto.sevii.network",
+   "name": "The Joyful Game Corner",
+   "kind": "EV",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": null,
+   "flags": [
+    "kanto.sevii.joyful"
+   ],
+   "section": "KANTO_PLACED_6: The Joyful Game Corner",
+   "placed": {
+    "stage": [
+     7
+    ],
+    "home": 18,
+    "sits": "plus",
+    "attaches": "plus",
+    "badge": "Chalked squares",
+    "level": 0,
+    "often": "On the Sevii map"
+   }
+  },
+  {
+   "id": "cs.kanto.sevii.treasure",
+   "town": "sevii",
+   "parent": "cs.kanto.sevii.network",
+   "name": "Treasure Beach",
+   "kind": "EV",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": null,
+   "flags": [
+    "kanto.sevii.treasure"
+   ],
+   "section": "KANTO_PLACED_6: Treasure Beach",
+   "placed": {
+    "stage": [
+     7
+    ],
+    "home": 18,
+    "sits": "plus",
+    "attaches": "plus",
+    "badge": "A shell",
+    "level": 0,
+    "often": "On the Sevii map"
+   }
+  },
+  {
+   "id": "cs.kanto.sevii.resort",
+   "town": "sevii",
+   "parent": "cs.kanto.sevii.network",
+   "name": "The Lady of the Resort",
+   "kind": "EV",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": null,
+   "flags": [
+    "kanto.sevii.resort"
+   ],
+   "section": "KANTO_PLACED_6: The Lady of the Resort",
+   "placed": {
+    "stage": [
+     7
+    ],
+    "home": 18,
+    "sits": "plus",
+    "attaches": "plus",
+    "badge": "A parasol",
+    "level": 0,
+    "often": "On the Sevii map"
+   }
+  },
+  {
+   "id": "cs.kanto.sevii.labyrinth",
+   "town": "sevii",
+   "parent": "cs.kanto.sevii.network",
+   "name": "The Water Labyrinth",
+   "kind": "EV",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": null,
+   "flags": [
+    "kanto.sevii.labyrinth"
+   ],
+   "section": "KANTO_PLACED_6: The Water Labyrinth",
+   "placed": {
+    "stage": [
+     7
+    ],
+    "home": 18,
+    "sits": "plus",
+    "attaches": "plus",
+    "badge": "A reef with one hut",
+    "level": 0,
+    "often": "On the Sevii map"
+   }
+  },
+  {
+   "id": "cs.kanto.sevii.ferry",
+   "town": "sevii",
+   "parent": "cs.kanto.sevii.network",
+   "name": "The Last Ferry",
+   "kind": "EV",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": null,
+   "flags": [
+    "kanto.sevii.done"
+   ],
+   "section": "KANTO_PLACED_6: The Last Ferry",
+   "placed": {
+    "stage": [
+     7
+    ],
+    "home": 18,
+    "sits": "plus",
+    "attaches": "plus",
+    "badge": "The mainland",
+    "level": 0,
+    "often": "On the Sevii map"
+   }
   }
  ]
 }

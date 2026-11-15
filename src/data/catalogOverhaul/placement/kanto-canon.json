@@ -2786,5 +2786,530 @@
   ],
   "levelApplied": true,
   "own": true
+ },
+ "cs-kanto-pewter-stranger": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 6,
+  "window": [
+   4,
+   9
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "badge": "None: he's met",
+  "tags": [
+   "forest"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.pewter.stranger",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-pewter-visitors": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 10,
+  "window": [
+   8,
+   13
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A kettle with stars round it",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.pewter.visitors",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-vermilion-triage": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 12,
+  "window": [
+   10,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A stethoscope",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.vermilion.triage",
+  "kantoStages": [
+   3
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-vermilion-site": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 3,
+  "sits": "optional",
+  "attaches": "town",
+  "badge": "A flat square of earth",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.vermilion.site",
+  "kantoStages": [
+   3,
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-lavender-rival": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 4,
+  "sits": "must-see",
+  "attaches": "instead",
+  "badge": "None",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.lavender.rival",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-celadon-festival": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 11,
+  "sits": "optional",
+  "attaches": "town",
+  "badge": "A doll in a kimono",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.celadon.festival",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-fuchsia-secrethouse": {
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 14,
+  "sits": "optional",
+  "attaches": "town",
+  "badge": "A small roof, far off",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.fuchsia.secrethouse",
+  "kantoStages": [
+   5
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-cinnabar-shellder": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 13,
+  "window": [
+   11,
+   15
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A spiral shell",
+  "tags": [
+   "water"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.cinnabar.shellder",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-goodbye": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 16,
+  "window": [
+   13,
+   18
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "badge": "A leaf with a heart-shaped hole",
+  "tags": [
+   "forest"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.goodbye",
+  "kantoStages": [
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-k9": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 8,
+  "window": [
+   5,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "badge": "A whistle",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.k9",
+  "kantoStages": [
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-oldstreet": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 11,
+  "window": [
+   8,
+   15
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A crescent moon over a rooftop",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.oldstreet",
+  "kantoStages": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-transfer": {
+  "shape": "Door",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   9,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A grid",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.route.transfer",
+  "kantoStages": [
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-snow": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 14,
+  "window": [
+   10,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "badge": "A snowdrift with a light in it",
+  "tags": [
+   "high"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.snow",
+  "kantoStages": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-bikerace": {
+  "shape": "Door",
+  "earliest": "A4",
+  "home": 9,
+  "window": [
+   7,
+   12
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "badge": "A bicycle with a bent frame",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.bikerace",
+  "kantoStages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-gamblers": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 7,
+  "window": [
+   5,
+   10
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "badge": "A coin, mid-flip",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.route.gamblers",
+  "kantoStages": [
+   3,
+   4,
+   5,
+   6
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-seeker": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 2,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "None",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.seeker",
+  "kantoStages": [
+   3
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-fame": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 2,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "None",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.fame",
+  "kantoStages": [
+   3
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-underground": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "badge": "A stairway down",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.underground",
+  "kantoStages": [
+   3,
+   4,
+   5,
+   6
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-relay": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   7,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "badge": "A buoy",
+  "tags": [
+   "water"
+  ],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.route.relay",
+  "kantoStages": [
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-aides": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 18,
+  "sits": "must-see",
+  "attaches": "after",
+  "badge": "A clipboard",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.aides",
+  "kantoStages": [
+   2
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-joyful": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "Chalked squares",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.sevii.joyful",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-treasure": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A shell",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.sevii.treasure",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-resort": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A parasol",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.sevii.resort",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-labyrinth": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A reef with one hut",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.sevii.labyrinth",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-ferry": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "The mainland",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.sevii.ferry",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
  }
 }

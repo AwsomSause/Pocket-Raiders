@@ -19,7 +19,7 @@ describe('Vermilion canon: the event graph', () => {
     const ids = [...content.events.values()].filter((e) => e.id.startsWith(P) && !e.disabled).map((e) => e.id);
     for (const id of ids) for (const t of targets(id)) expect(content.events.has(t), `${id} -> ${t}`).toBe(true);
     // Every entry event (it carries a catalog id) is a gate; Volume II (KANTO_PLACED_3) adds more.
-    const gates = [...['flight', 'market', 'fishclub', 'maiden', 'ssanne'].map((g) => P + g), ...ids.filter((id) => room(id).canon)];
+    const gates = [...['flight', 'market', 'fishclub', 'maiden', 'ssanne', 'site-again'].map((g) => P + g), ...ids.filter((id) => room(id).canon)];
     const reach = new Set<string>(gates);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) if (!reach.has(t)) { reach.add(t); again = true; } }
     expect([...reach].sort()).toEqual(ids.sort());

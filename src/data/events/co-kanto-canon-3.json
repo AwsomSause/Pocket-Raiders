@@ -968,6 +968,23 @@
        }
       ]
      }
+    },
+    {
+     "label": "Banners on the far side of the roof: PRINCESS FESTIVAL.",
+     "chance": 0.5,
+     "success": {
+      "text": "A crowd that's all elbows, and a knockout on the roof.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-festival"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The banners are still in their box. \"Next year,\" says a man on a ladder. \"Probably.\"",
+      "effects": []
+     }
     }
    ],
    "canon": "cs.kanto.celadon.rooftop"
@@ -4964,6 +4981,24 @@
       }
      ],
      "intro": "The lobby's open; the fountain's working; the other half of the guards are gone. The President meets you at the door and doesn't let go of your hand for a long time."
+    },
+    {
+     "id": "stranger",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-silph-won",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-pewter-stranger",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You knew the suit at the top of the tower. Giovanni, at Silph: \"The forest. You'd gone round the oak twice. I remember thinking: that one listens. I've regretted the advice since. Not the walk.\""
     }
    ],
    "callback": false,

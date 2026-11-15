@@ -205,7 +205,34 @@
    "types": [],
    "minStage": 1,
    "requires": [],
-   "remembers": [],
+   "remembers": [
+    {
+     "id": "rival",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-lavender-rival",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Somebody else is up here, standing among the stones with their back to the stairs.",
+     "addChoices": [
+      {
+       "label": "Go to the one among the stones.",
+       "success": {
+        "text": "You know the coat before you know the face.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "cs-kanto-lavender-rival"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
    "callback": false,
    "forced": false,
    "scene": {

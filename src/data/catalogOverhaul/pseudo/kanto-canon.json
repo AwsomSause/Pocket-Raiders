@@ -145,6 +145,22 @@
    "themeId": "water-grass",
    "tint": "#8a3a2a",
    "mood": "seven islands in a warm sea, and a ferry that does three and the first"
+  },
+  {
+   "id": "ps_cs_kanto_route_transfer",
+   "name": "Inside the Machine",
+   "entry": "cs-kanto-route-transfer",
+   "themeId": "electric-psychic",
+   "tint": "#5a6b3a",
+   "mood": "corridors of steady light, and Poké Balls drifting along a rail like a slow river"
+  },
+  {
+   "id": "ps_cs_kanto_route_bikerace",
+   "name": "The Bicycle Race",
+   "entry": "cs-kanto-route-bikerace",
+   "themeId": "normal-flying",
+   "tint": "#5a6b3a",
+   "mood": "bunting, a start line, and a hill that goes on"
   }
  ]
 }

@@ -99,7 +99,7 @@ const OTHER_REGIONS = ['zigzagoon', 'shinx', 'lillipup', 'fletchling', 'rockruff
       join(['togepi']), fr(30, 'picked'), { kind: 'campBond', chemistry: 10, calm: 0, settle: false }, hatched, moment('A Togepi hatched in a party Pokémon\'s arms, and chose it.')), { pick: {} }),
       c('"I\'ll hold it."', o('It hatches. A Togepi. It looks up at you. Its Bond starts at 3. The others sulk for one node.', join(['togepi']), bond(3, 'newest'), hatched, moment('A Togepi hatched in your hands.'))),
       c('"Here. You take it." (to the rival)', o(`The rival: "...Why? I didn't... you found it." It's got hold of their finger. "Oh. Oh, no. All right." It's theirs. You'll see it again, on their shoulder.`,
-        { kind: 'rivalChange', feelings: { trust: 1 }, lead: 0 }, flag('kanto-rival-togepi'), hatched, moment('Gave the egg to the rival. It chose them.')), { requires: [{ kind: 'rivalState', feeling: { key: 'trust', atLeast: 0 } }] })],
+        { kind: 'rivalChange', feelings: { trust: 1 }, lead: 1 }, flag('kanto-rival-togepi'), hatched, moment('Gave the egg to the rival. It chose them.')), { requires: [{ kind: 'rivalState', feeling: { key: 'trust', atLeast: 0 } }] })],
     later());
 }
 
@@ -245,7 +245,7 @@ const OTHER_REGIONS = ['zigzagoon', 'shinx', 'lillipup', 'fletchling', 'rockruff
 
 const NET = 'cs.kanto.sevii.network';
 const dock = (n: string): Json => go(NET, n);
-const sdone = flag('kanto-sevii-done');
+const sdone = flag('kanto-sevii-places');
 const ISLAND: Record<string, string> = { two: 'Two Island', three: 'Three Island', four: 'Four Island', five: 'Five Island', six: 'Six Island', seven: 'Seven Island' };
 const back = (n: string) => c(`Back to ${n === 'knot' ? 'One Island' : ISLAND[n]}'s dock.`, o('Back along the jetty.', dock(n)));
 /** An island place: a node (or run of nodes) on the Sevii map. */
@@ -269,7 +269,11 @@ const isle = (id: string, name: string, kind: 'EV' | 'SHOP' | 'PS', flags: strin
   s.room('knot', 'One Island: The Dock', 'Knot Island. The Center, Mt. Ember steaming behind it, and the ferry, with Captain Tidewell asleep in it.',
     [c('Ember Spa and the Summit.', o('Up the hill, towards the steam.', go('cs.kanto.sevii.ember')), { requires: [not('kanto-sevii-ember')] }),
       c('The Network Center.', o('Celio\'s awake. Just.', s.open('celio'))), c('The ferry board.', o('Captain Tidewell wakes up and taps the board.', s.open('board'))),
-      c('Sail home to Cinnabar.', o('Nothing\'s lost by leaving. The islands keep.', { kind: 'leavePseudo' }))]);
+      c('The shore.', o('Sand, and the boat.', s.open('shore')))]);
+  // KANTO_PLACED_6: Treasure Beach (at low tide) and the Last Ferry home.
+  s.room('shore', 'One Island: The Shore', 'The beach, and Captain Tidewell\'s boat. Nothing\'s lost by leaving. The islands keep.',
+    [c('Treasure Beach.', o('The sea\'s gone out a long way.', go('cs.kanto.sevii.treasure')), { chance: 0.5, fail: o('The tide\'s in. The beach is under it. Another visit.', s.open('knot')) }),
+      c('Sail home to Cinnabar for good.', o('He starts the engine.', go('cs.kanto.sevii.ferry'))), back('knot')]);
   s.room('celio', 'One Island: Celio', 'The wall of machine, humming, half of it dark.',
     [c('Give him the Ruby.', o('He fits it. Half the lights come on. He gives you one Network Machine, still warm.', item('network-machine'), flag('kanto-sevii-machine'), sdone, s.open('knot')), { requires: [is('kanto-sevii-ruby'), not('kanto-sevii-machine')] }),
       c('Give him the Sapphire too.', o(`Every light goes green, top to bottom, like a tide. Celio: "It's... there's somebody there. On the other end. They're waving. I don't know who they are. I'm waving." A second Network Machine.`,
@@ -288,19 +292,23 @@ const isle = (id: string, name: string, kind: 'EV' | 'SHOP' | 'PS', flags: strin
   s.room('far', 'The Ferry Board: In Grey', 'Navel Rock and Birth Island, in grey. "Not without a ticket. I don\'t make the rules. Somebody does. Not me."',
     [c('Navel Rock (the Mystic Ticket).', o('He looks at the ticket a long time, and starts the engine.', go('cs.kanto.sevii.navel')), { requires: [is('kanto-mystic-ticket'), not('kanto-sevii-navel')] }),
       c('Birth Island (the Aurora Ticket).', o('He crosses himself, which he\'s never done before, and starts the engine.', go('cs.kanto.sevii.birth')), { requires: [is('kanto-aurora-ticket'), not('kanto-sevii-birth')] }),
-      back('knot')]);
+      c('The reef with one hut.', o('Captain Tidewell slows without being asked.', go('cs.kanto.sevii.labyrinth'))), back('knot')]);
   // The islands' docks: each island's places, in any order, then back to the ferry.
   const sail = c('Back to the ferry.', o('Captain Tidewell\'s waiting with the engine running.', s.open('knot')));
   const place = (id: string, label: string) => c(label, o('Along the shore.', go(id)), { requires: [not(eid(id))] });
   s.room('two', 'Two Island: The Dock', 'Boon Island. A stall, a cottage with a sign that says MOVES, and a game corner with three machines.',
     [c('The Growing Stall.', o('Along the shore.', go('cs.kanto.sevii.stall'))), c('The Move Maniac.', o('A cottage that smells of mushrooms.', go('cs.kanto.sevii.maniac'))),
-      place('cs.kanto.sevii.missing', 'The game corner.'), sail], later());
+      c('The game corner.', o('Three machines and a jukebox.', s.open('corner'))), sail], later());
+  s.room('corner', 'Two Island: The Game Corner', 'The island\'s game corner.',
+    [place('cs.kanto.sevii.missing', 'The man wiping a glass.'), c('The chalked squares.', o('The floor\'s chalked.', go('cs.kanto.sevii.joyful')), { requires: [is('kanto-sevii-berryforest')] }), back('two')]);
   s.room('three', 'Three Island: The Dock', 'Kin Island. One street, and a forest beyond it.',
     [place('cs.kanto.sevii.bikers', 'The street.'), place('cs.kanto.sevii.berryforest', 'Berry Forest.'), sail], later());
   s.room('four', 'Four Island: The Dock', 'Floe Island. Cold air off a cave mouth, and an old couple on a bench.',
     [place('cs.kanto.sevii.icefall', 'Icefall Cave.'), c('The Island Day-Care.', o('The old couple wave.', go('cs.kanto.sevii.daycare'))), sail], later());
   s.room('five', 'Five Island: The Dock', 'Chrono Island. A shed on a headland, a cave with a sign that says COUNT, and a rock offshore.',
-    [place('cs.kanto.sevii.warehouse', 'The shed on the headland.'), place('cs.kanto.sevii.lostcave', 'The Lost Cave.'), place('cs.kanto.sevii.pillar', 'The rock offshore.'), sail], later());
+    [place('cs.kanto.sevii.warehouse', 'The shed on the headland.'), c('West: the Lost Cave, and the resort.', o('Round the headland.', s.open('west'))), place('cs.kanto.sevii.pillar', 'The rock offshore.'), sail], later());
+  s.room('west', 'Five Island: West', 'The Lost Cave\'s mouth, and past it a resort with a veranda.',
+    [place('cs.kanto.sevii.lostcave', 'The Lost Cave.'), c('The veranda.', o('A parasol.', go('cs.kanto.sevii.resort')), { requires: [is('kanto-sevii-lostcave')] }), back('five')]);
   s.room('six', 'Six Island: The Dock', 'Fortune Island. A door with no handle, a field of tall grass cut into a pattern, and a plain cave.',
     [place('cs.kanto.sevii.dottedhole', 'The door with no handle.'), place('cs.kanto.sevii.patternbush', 'Pattern Bush.'), place('cs.kanto.sevii.altering', 'The Altering Cave.'), sail], later());
   s.room('seven', 'Seven Island: The Dock', 'Quest Island. A tower with a clock, a sea cave, and a canyon.',
@@ -329,19 +337,19 @@ const isle = (id: string, name: string, kind: 'EV' | 'SHOP' | 'PS', flags: strin
   const s = isle('cs.kanto.sevii.stall', 'The Growing Stall', 'SHOP', [], null, 'A shelf');
   s.entry('The Growing Stall', `A stall with one item on it. It's a Berry. She's dusted it. The shopkeeper, Miss Jessamy Quoyle: "Stock's hard. The boats don't come unless there's a reason to. You could be a reason. Go and be useful somewhere, and they'll hear." Each Sevii place you finish adds a row to her shelves, and her prices never rise.`,
     [buy('The Berry', 100, 'She wraps it like it\'s the last one. It is.', item('sitrus-berry')),
-      c('Balls, and medicine for the road. (3 places done)', o('A boat came in.', s.open('balls')), { requires: [is('kanto-sevii-done', 3)] }),
-      c('Stones, and more. (6 places done)', o('Two boats came in.', s.open('stones')), { requires: [is('kanto-sevii-done', 6)] }),
+      c('Balls, and medicine for the road. (3 places done)', o('A boat came in.', s.open('balls')), { requires: [is('kanto-sevii-places', 3)] }),
+      c('Stones, and more. (6 places done)', o('Two boats came in.', s.open('stones')), { requires: [is('kanto-sevii-places', 6)] }),
       back('two')], { room: true });
   s.room('balls', 'The Growing Stall: Balls and Medicine', 'Balls, and medicine for the road (used here, out of battle).',
     [buy('Nest Balls (5)', 1000, 'Five, in a paper bag.', item('nest-ball', 5)), buy('A rest-in-a-bottle', 800, 'For the road: everyone patched up, here and now.', heal(1)), c('Back to the front of the stall.', o('Back.', go('cs.kanto.sevii.stall')))]);
   s.room('stones', 'The Growing Stall: Stones', 'Evolution stones. The Ruby, if you missed it. And at nine places done, TMs.',
     [buy('An evolution stone', 2100, 'Her best one, from the box under the counter.', { kind: 'itemFrom', ids: ['fire-stone', 'water-stone', 'thunder-stone', 'leaf-stone', 'moon-stone'], count: 1 }),
       { ...buy('The Ruby', 6000, 'Expensively. She did warn you.', flag('kanto-sevii-ruby')), requires: [{ kind: 'money', atLeast: 6000 }, not('kanto-sevii-ruby')] },
-      c('TMs, and the best shop in Kanto. (9 places done)', o('Three boats this morning.', s.open('best')), { requires: [is('kanto-sevii-done', 9)] }),
+      c('TMs, and the best shop in Kanto. (9 places done)', o('Three boats this morning.', s.open('best')), { requires: [is('kanto-sevii-places', 9)] }),
       c('Back to the front of the stall.', o('Back.', go('cs.kanto.sevii.stall')))]);
   s.room('best', 'The Growing Stall: The Best Shop in Kanto', 'At nine: TMs. At twelve: the best shop in Kanto. "Three boats this morning. Three. One of them asked for you by name. I said you were mine."',
     [buy('A Network Machine', 3000, 'A TM that teaches whatever it can learn.', item('network-machine')),
-      { ...buy('A Rare Candy (12 places done)', 2400, 'From a boat that asked for you by name.', item('rare-candy')), requires: [{ kind: 'money', atLeast: 2400 }, is('kanto-sevii-done', 12)] },
+      { ...buy('A Rare Candy (12 places done)', 2400, 'From a boat that asked for you by name.', item('rare-candy')), requires: [{ kind: 'money', atLeast: 2400 }, is('kanto-sevii-places', 12)] },
       c('Back to the front of the stall.', o('Back.', go('cs.kanto.sevii.stall')))]);
 }
 
@@ -382,7 +390,7 @@ const isle = (id: string, name: string, kind: 'EV' | 'SHOP' | 'PS', flags: strin
     [c('Walk on.', o('They watch.', s.open('basket')))], { room: true });
   s.room('basket', 'Berry Forest: The Basket', 'A basket on the path, tipped over. Berries in a line, leading in.', [c('Follow the berries.', o('In.', s.open('girl')))]);
   const home = (lead: string, ...x: Json[]) => o(`${lead} She walks home. From her father: a bundle of Nest Balls, and the stall gains two rows. Six Berries, of your choice. The owner, when she comes in, puts the glass down. He hasn't put it down all day.`,
-    ...x, item('nest-ball', 5), item('sitrus-berry', 3), item('lum-berry', 3), flag('kanto-sevii-done', 3), flag('cs-kanto-sevii-berryforest'), flag('kanto-sevii-berryforest'), moment('Walked Lostelle home out of Berry Forest. Her father put the glass down.'), dock('three'));
+    ...x, item('nest-ball', 5), item('sitrus-berry', 3), item('lum-berry', 3), flag('kanto-sevii-places', 3), flag('cs-kanto-sevii-berryforest'), flag('kanto-sevii-berryforest'), moment('Walked Lostelle home out of Berry Forest. Her father put the glass down.'), dock('three'));
   s.room('girl', 'Berry Forest: The Girl', `Lostelle: "I'm not lost. I know the way. I just keep not going. Every time I think 'home,' I think 'in a minute.'" Behind her, among the trunks: a pendulum, swinging. Slow.`,
     [c('"Battle it."', battle('A Hypno.', wild(['hypno'], { levelBonus: s.lv, win: [s.open('home')] }))),
       c('(Stand between them, and look at it.)', o('Three swings. You don\'t follow the pendulum. It looks away first.', s.open('home')), { prompt: ['echo-rhythm', 'good'], fail: o('The pendulum wins, for a while. When you come to, the Hypno is gone and Lostelle is holding your hand.', s.open('home')) }),

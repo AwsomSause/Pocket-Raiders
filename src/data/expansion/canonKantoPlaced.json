@@ -61,6 +61,12 @@
     7,
     8
    ]
+  },
+  {
+   "event": "cs-kanto-vermilion-site-again",
+   "stages": [
+    8
+   ]
   }
  ],
  "routes": [
@@ -181,6 +187,141 @@
     8
    ],
    "chance": 0.2
+  },
+  {
+   "event": "cs-kanto-pewter-stranger",
+   "stages": [
+    1
+   ],
+   "chance": 0.4
+  },
+  {
+   "event": "cs-kanto-pewter-visitors",
+   "stages": [
+    1
+   ],
+   "chance": 0.35
+  },
+  {
+   "event": "cs-kanto-route-goodbye",
+   "stages": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "chance": 0.2
+  },
+  {
+   "event": "cs-kanto-route-k9",
+   "stages": [
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "chance": 0.25
+  },
+  {
+   "event": "cs-kanto-route-oldstreet",
+   "stages": [
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "chance": 0.3
+  },
+  {
+   "event": "cs-kanto-route-transfer",
+   "stages": [
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "chance": 0.2
+  },
+  {
+   "event": "cs-kanto-route-snow",
+   "stages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "chance": 0.15
+  },
+  {
+   "event": "cs-kanto-route-bikerace",
+   "stages": [
+    4,
+    5,
+    6,
+    7
+   ],
+   "chance": 0.2
+  },
+  {
+   "event": "cs-kanto-route-gamblers",
+   "stages": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "chance": 0.25
+  },
+  {
+   "event": "cs-kanto-route-underground",
+   "stages": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "chance": 0.25
+  },
+  {
+   "event": "cs-kanto-route-relay",
+   "stages": [
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "chance": 0.2
+  },
+  {
+   "event": "cs-kanto-route-aides",
+   "stages": [
+    2
+   ],
+   "chance": 1
+  },
+  {
+   "event": "cs-kanto-route-aides-s5",
+   "stages": [
+    5
+   ],
+   "chance": 1
+  },
+  {
+   "event": "cs-kanto-route-aides-s6",
+   "stages": [
+    6
+   ],
+   "chance": 1
   }
  ]
 }

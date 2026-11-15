@@ -37,7 +37,7 @@ describe('The Sevii Islands: the map', () => {
       expect(menu).toContain('cs.kanto.sevii.network');
       expect(menu.filter((m) => m.startsWith('cs.kanto.sevii.') && m !== 'cs.kanto.sevii.network')).toEqual([]);
     }
-    expect(canonKanto.spaces.filter((s) => s.id.startsWith('cs.kanto.sevii.')).length).toBe(20); // the ferry and Network Center (one space), 17 island places, 2 far islands
+    expect(canonKanto.spaces.filter((s) => s.id.startsWith('cs.kanto.sevii.')).length).toBe(25); // the ferry and Network Center (one space), 17 island places, 2 far islands, 5 more (KANTO_PLACED_6)
   });
 });
 
@@ -76,8 +76,8 @@ describe('The Ruby, the password and the Sapphire', () => {
   });
   it('the Growing Stall\'s shelves grow with the places done', () => {
     expect(locked('cs-kanto-sevii-stall', 1)).toThrow();
-    expect(() => play('cs-kanto-sevii-stall', 1, (r) => set(r, 'kanto-sevii-done', 3))).not.toThrow();
-    expect(locked('cs-kanto-sevii-stall', 2, (r) => set(r, 'kanto-sevii-done', 5))).toThrow();
+    expect(() => play('cs-kanto-sevii-stall', 1, (r) => set(r, 'kanto-sevii-places', 3))).not.toThrow();
+    expect(locked('cs-kanto-sevii-stall', 2, (r) => set(r, 'kanto-sevii-places', 5))).toThrow();
   });
 });
 

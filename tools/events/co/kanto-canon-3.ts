@@ -85,6 +85,8 @@ const lose = (id: string, count = 1): Json => ({ kind: 'loseItem', id, count });
       c('Buy drinks.', o('The machines take your coins with a sound like a sigh.', s.open('machines'))),
       c('Buy her one.', o('Tibby looks at you, and at the machines, and back at you, and doesn\'t dare say which.', s.open('herone'))),
       c('Go and find her mother first.', o('Tibby comes with you, holding the hem of your jacket, the whole way down to the fifth floor.', s.open('mother'))),
+      // KANTO_PLACED_6: the Festival of Dolls changes the Store for this visit (a roll: half of runs).
+      c('Banners on the far side of the roof: PRINCESS FESTIVAL.', o('A crowd that\'s all elbows, and a knockout on the roof.', { kind: 'addEvent', eventId: 'cs-kanto-celadon-festival' }), { chance: 0.5, fail: o('The banners are still in their box. "Next year," says a man on a ladder. "Probably."') }),
     ]);
   const ITEM: Record<string, string> = { water: 'rooftop-fresh-water', soda: 'rooftop-soda-pop', lemonade: 'rooftop-lemonade' };
   const keep = (d: string) => buy(DRINK[d]![0], DRINK[d]![1], 'A cold can for the road. It mends on the road, never in a battle. And a drink kept is worth something to someone, somewhere, later.', item(ITEM[d]!));
@@ -360,7 +362,7 @@ const lose = (id: string, count = 1): Json => ({ kind: 'loseItem', id, count });
       c('"Who tried to buy her?"', o('The President: "They left a card. It\'s blank. Who leaves a blank card?" He gives it to you. You hold it up to the light; nothing. It\'s a File.', intel(), flag('kanto-silph-card'), s.open('gift'))),
       c('"Why so many guards?"', o('The President: "I hired half. I don\'t know who hired the other half." He\'s realised it as he says it. He looks around the lobby at the men by the doors, and they look back.', s.open('gift'))),
       c('"Thank you."', o('He shakes your hand with both of his.', s.open('gift'))),
-    ], { remembers: [{ id: 'won', when: [is('kanto-silph-won')], intro: 'The lobby\'s open; the fountain\'s working; the other half of the guards are gone. The President meets you at the door and doesn\'t let go of your hand for a long time.' }] });
+    ], { remembers: [{ id: 'won', when: [is('kanto-silph-won')], intro: 'The lobby\'s open; the fountain\'s working; the other half of the guards are gone. The President meets you at the door and doesn\'t let go of your hand for a long time.' }, { id: 'stranger', when: [is('kanto-silph-won'), is('kanto-pewter-stranger')], notice: 'You knew the suit at the top of the tower. Giovanni, at Silph: "The forest. You\'d gone round the oak twice. I remember thinking: that one listens. I\'ve regretted the advice since. Not the walk."' }] });
   s.room('gift', 'Silph Co. Lobby: The Basement', 'The President, looking at the lift and not at the guards: "Come and see her."', [lapras, owed]);
 }
 

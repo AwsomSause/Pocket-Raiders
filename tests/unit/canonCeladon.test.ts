@@ -23,7 +23,7 @@ describe('Celadon canon: the event graph', () => {
     const gates = ['mart', 'gamecorner', 'mansion', 'eevee', 'tea', 'perfume', 'rooftop', 'salon', 'diner', 'poster', 'devroom', 'bridgerun', 'greenhouse', 'vee'];
     for (const g of gates) expect(room(g).canon).toBe(`cs.kanto.celadon.${g}`);
     const live = [...content.events.keys()].filter((id) => id.startsWith(P) && !content.events.get(id)!.disabled);
-    const targets = (id: string) => { const e = content.events.get(id)!; return [...e.choices, ...e.remembers.flatMap((v) => v.addChoices)].flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]).flatMap((e) => (e.kind === 'addEvent' ? [e.eventId] : e.kind === 'addEventFrom' ? e.ids : [])); };
+    const targets = (id: string) => { const e = content.events.get(id)!; return [...e.choices, ...e.remembers.flatMap((v) => v.addChoices)].flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).flatMap((e) => (e.kind === 'addEvent' ? [e.eventId] : e.kind === 'addEventFrom' ? e.ids : [])); };
     // Follow-ups (the Mansion Key's roof, the thirsty guard) are placed at later stages, not opened.
     const reach = new Set<string>([...gates.map((g) => `${P}${g}`), `${P}mansion-key`, `${P}rooftop-guard`]);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) { expect(content.events.has(t), `${id} -> ${t}`).toBe(true); if (!reach.has(t)) { reach.add(t); again = true; } } }

@@ -1050,7 +1050,7 @@
         "feelings": {
          "trust": 1
         },
-        "lead": 0
+        "lead": 1
        },
        {
         "kind": "flag",
@@ -3147,12 +3147,82 @@
      }
     },
     {
-     "label": "Sail home to Cinnabar.",
+     "label": "The shore.",
      "success": {
-      "text": "Nothing's lost by leaving. The islands keep.",
+      "text": "Sand, and the boat.",
       "effects": [
        {
-        "kind": "leavePseudo"
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-shore"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-network-shore",
+   "name": "One Island: The Shore",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The beach, and Captain Tidewell's boat. Nothing's lost by leaving. The islands keep.",
+   "choices": [
+    {
+     "label": "Treasure Beach.",
+     "chance": 0.5,
+     "success": {
+      "text": "The sea's gone out a long way.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-treasure"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The tide's in. The beach is under it. Another visit.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-knot"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sail home to Cinnabar for good.",
+     "success": {
+      "text": "He starts the engine.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-ferry"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to One Island's dock.",
+     "success": {
+      "text": "Back along the jetty.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-knot"
        }
       ]
      }
@@ -3211,7 +3281,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -3263,7 +3333,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -3681,6 +3751,18 @@
      }
     },
     {
+     "label": "The reef with one hut.",
+     "success": {
+      "text": "Captain Tidewell slows without being asked.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-labyrinth"
+       }
+      ]
+     }
+    },
+    {
      "label": "Back to One Island's dock.",
      "success": {
       "text": "Back along the jetty.",
@@ -3741,6 +3823,53 @@
     },
     {
      "label": "The game corner.",
+     "success": {
+      "text": "Three machines and a jukebox.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-corner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the ferry.",
+     "success": {
+      "text": "Captain Tidewell's waiting with the engine running.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-knot"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-network-corner",
+   "name": "Two Island: The Game Corner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The island's game corner.",
+   "choices": [
+    {
+     "label": "The man wiping a glass.",
      "requires": [
       {
        "kind": "flag",
@@ -3760,13 +3889,33 @@
      }
     },
     {
-     "label": "Back to the ferry.",
+     "label": "The chalked squares.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-berryforest",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
      "success": {
-      "text": "Captain Tidewell's waiting with the engine running.",
+      "text": "The floor's chalked.",
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-sevii-network-knot"
+        "eventId": "cs-kanto-sevii-joyful"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to Two Island's dock.",
+     "success": {
+      "text": "Back along the jetty.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-two"
        }
       ]
      }
@@ -3957,21 +4106,13 @@
      }
     },
     {
-     "label": "The Lost Cave.",
-     "requires": [
-      {
-       "kind": "flag",
-       "key": "cs-kanto-sevii-lostcave",
-       "atLeast": 0,
-       "atMost": 0
-      }
-     ],
+     "label": "West: the Lost Cave, and the resort.",
      "success": {
-      "text": "Along the shore.",
+      "text": "Round the headland.",
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-sevii-lostcave"
+        "eventId": "cs-kanto-sevii-network-west"
        }
       ]
      }
@@ -4004,6 +4145,81 @@
        {
         "kind": "addEvent",
         "eventId": "cs-kanto-sevii-network-knot"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-network-west",
+   "name": "Five Island: West",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The Lost Cave's mouth, and past it a resort with a veranda.",
+   "choices": [
+    {
+     "label": "The Lost Cave.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "cs-kanto-sevii-lostcave",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Along the shore.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-lostcave"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The veranda.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-lostcave",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "A parasol.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-resort"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to Five Island's dock.",
+     "success": {
+      "text": "Back along the jetty.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-five"
        }
       ]
      }
@@ -4480,7 +4696,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -4545,7 +4761,7 @@
      "requires": [
       {
        "kind": "flag",
-       "key": "kanto-sevii-done",
+       "key": "kanto-sevii-places",
        "atLeast": 3,
        "atMost": 99
       }
@@ -4565,7 +4781,7 @@
      "requires": [
       {
        "kind": "flag",
-       "key": "kanto-sevii-done",
+       "key": "kanto-sevii-places",
        "atLeast": 6,
        "atMost": 99
       }
@@ -4759,7 +4975,7 @@
      "requires": [
       {
        "kind": "flag",
-       "key": "kanto-sevii-done",
+       "key": "kanto-sevii-places",
        "atLeast": 9,
        "atMost": 99
       }
@@ -4841,7 +5057,7 @@
       },
       {
        "kind": "flag",
-       "key": "kanto-sevii-done",
+       "key": "kanto-sevii-places",
        "atLeast": 12,
        "atMost": 99
       }
@@ -5121,7 +5337,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -5283,7 +5499,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -5455,7 +5671,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 3
        },
        {
@@ -5524,7 +5740,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 3
        },
        {
@@ -5785,7 +6001,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -5821,7 +6037,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -5881,7 +6097,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -5967,7 +6183,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -6490,7 +6706,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -6568,7 +6784,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -6623,7 +6839,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -7345,7 +7561,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -7386,7 +7602,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -7427,7 +7643,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -7555,7 +7771,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -7605,7 +7821,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -7648,7 +7864,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -7714,7 +7930,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -7750,7 +7966,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -8236,7 +8452,7 @@
         },
         {
          "kind": "flag",
-         "key": "kanto-sevii-done",
+         "key": "kanto-sevii-places",
          "amount": 1
         },
         {
@@ -8262,7 +8478,7 @@
         },
         {
          "kind": "flag",
-         "key": "kanto-sevii-done",
+         "key": "kanto-sevii-places",
          "amount": 1
         },
         {
@@ -8303,7 +8519,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -8717,7 +8933,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -8787,7 +9003,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        }
       ],
@@ -10465,7 +10681,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -10498,7 +10714,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -10649,7 +10865,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -10946,7 +11162,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
@@ -10982,7 +11198,7 @@
        },
        {
         "kind": "flag",
-        "key": "kanto-sevii-done",
+        "key": "kanto-sevii-places",
         "amount": 1
        },
        {
