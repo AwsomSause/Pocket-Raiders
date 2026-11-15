@@ -1374,7 +1374,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'statBoost': {
       const able = run.party.filter((m) => m.hp > 0);
-      const who = e.who === 'picked' ? pickedMon(run, tradeUid) : e.who === 'lead' ? able.slice(0, 1) : e.who === 'weakest' ? [...able].sort((a, b) => a.level - b.level).slice(0, 1) : run.party;
+      const who = e.who === 'picked' ? whoOf(content, run, 'picked', tradeUid) : e.who === 'lead' ? able.slice(0, 1) : e.who === 'weakest' ? [...able].sort((a, b) => a.level - b.level).slice(0, 1) : run.party;
       let changed = false;
       for (const m of who) changed = boostStat(content, m, e.stat, e.percent, e.until === 'region') || changed;
       return changed ? effectWords(content, e) : '';
