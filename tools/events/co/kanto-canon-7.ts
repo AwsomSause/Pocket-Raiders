@@ -5,7 +5,7 @@
 // The Sevii Islands are one Pseudo Stage (the doc's "own map"): Captain Tidewell's ferry at Cinnabar steps into it, and every
 // island place is a run of nodes on that one map (Ember Spa's four nodes, Icefall Cave's four, and so on), so nothing nests.
 import type { Json } from '../dsl.ts';
-import { eid, road, later, intel, battle, buy, c, cash, flag, foe, fr, has, heal, heat, is, item, join, kc, moment, not, o, space, teach, temp, wild } from './_kc.ts';
+import { CHAINS, eid, road, later, intel, battle, buy, c, cash, flag, foe, fr, has, heal, heat, is, item, join, kc, moment, not, o, space, teach, temp, wild } from './_kc.ts';
 
 export const CATEGORY = 'kanto-canon';
 export const EVENTS: Json[] = [];
@@ -241,14 +241,16 @@ const OTHER_REGIONS = ['zigzagoon', 'shinx', 'lillipup', 'fletchling', 'rockruff
       c('Leave it at the Pewter Museum.', o('A small brass plaque, with your name on it, under a coin.', rep(5), flag('kanto-buried-sighting'), flag('kanto-route-buried'), moment('A plaque at the Pewter Museum, under a coin from Pokémopolis.')))]);
 }
 
-// ============================================================ THE SEVII ISLANDS (one Pseudo Stage)
+// ============================================================ THE SEVII ISLANDS (a Pseudo Stage for One Island and the ferry, and one for each island)
 
 const NET = 'cs.kanto.sevii.network';
 const dock = (n: string): Json => go(NET, n);
+/** The ferry crossing to an island: the entry of that island's own map, so each island draws as a small stage of its own. */
+const sailTo = (n: string): Json => go(NET, `sail-${n}`);
 const sdone = flag('kanto-sevii-places');
 const ISLAND: Record<string, string> = { two: 'Two Island', three: 'Three Island', four: 'Four Island', five: 'Five Island', six: 'Six Island', seven: 'Seven Island' };
 const back = (n: string) => c(`Back to ${n === 'knot' ? 'One Island' : ISLAND[n]}'s dock.`, o('Back along the jetty.', dock(n)));
-/** An island place: a node (or run of nodes) on the Sevii map. */
+/** An island place: a node (or run of nodes) on its island's map. */
 const isle = (id: string, name: string, kind: 'EV' | 'SHOP' | 'PS', flags: string[], level: number | null, badge: string) => space(E, { id, town: 'sevii', name, kind: kind === 'PS' ? 'EV' : kind, appears: 'always', parent: NET, flags, section: `${DOC}: ${name}`,
   placed: { stage: [7], home: 18, sits: 'plus', attaches: 'plus', badge, level, often: 'Once per run (on the Sevii map)' } });
 
@@ -256,12 +258,15 @@ const isle = (id: string, name: string, kind: 'EV' | 'SHOP' | 'PS', flags: strin
 {
   const s = space(E, { id: NET, town: 'cinnabar', name: 'The Sevii Islands', kind: 'PS', appears: 'always', flags: ['kanto.sevii.pass', 'kanto.sevii.ruby', 'kanto.sevii.sapphire', 'kanto.sevii.wall', 'kanto.sapphire.six', 'kanto.hooh.sighting', 'kanto.lugia.sighting', 'kanto.deoxys.sighting', 'kanto.unown.sighting'], section: `${DOC}: The Sevii Islands`,
     placed: { stage: [7], home: 18, sits: 'plus', attaches: 'town', badge: 'A ferry pass', level: 1, often: 'Once per run' },
-    ps: { name: 'The Sevii Islands', themeId: 'water-grass', mood: 'seven islands in a warm sea, and a ferry that does three and the first' } });
+    ps: { name: 'The Sevii Islands', themeId: 'water-grass', mood: 'seven islands in a warm sea, and a ferry that does three and the first', start: 'opened' } });
   s.entry('The Man on the Dock',
     `A man on the Cinnabar dock, with a boat, a pass, and all afternoon. The ferryman, Captain Jonah Tidewell: "Islands. Seven. I do three and the first. Don't ask why three. It's the fuel, or it's tradition; I've forgotten which I made up."`,
     [c('"Take me."', o('He\'s already untying the rope.', s.open('center'))),
       c('"What\'s out there?"', o('"No Gyms. No League. People who went to get away from all that, and things that live where it\'s quiet. You\'ll come back with sand in everything." He\'s untying the rope while he says it.', s.open('center'))),
-      c('"Not this time."', o(`"Suit yourself. The islands'll keep."`))]);
+      c('"Not this time."', o(`"Suit yourself. The islands'll keep."`)),
+      c('Back to One Island.', o('He\'s already untying the rope. "Knot, then."', s.open('knot')), { requires: [is('kanto-sevii-pass')] })],
+    { remembers: [{ id: 'first', when: [not('kanto-sevii-pass')], hide: [3] },
+      { id: 'pass', when: [is('kanto-sevii-pass')], intro: 'Captain Tidewell, at the jetty with the engine running and your Tri-Pass in his hat band. "One Island. I always go back by One. Everybody does."', hide: [0, 1, 2] }] });
   const hello = (label: string, line: string) => c(label, o(`${line} A full rest, in the Center's back room, on a camp bed among the cables.`, heal(1), flag('kanto-sevii-pass'), s.open('knot')));
   s.room('center', 'One Island: The Network Center', `A Pokémon Center with one wall that's all machine. Cables through the window. A man asleep with his forehead on a keyboard, typing one letter for ever. The engineer, Celio: "kkkkkkk... oh. Hello. I'm linking the storage system to regions further out. So a trainer here could see a friend's Pokémon there. It nearly works. It wants two stones to tune it. A red one. A blue one. I've a drawing. I drew it at four in the morning; the proportions may be hopeful." He gives you a Tri-Pass.`,
     [hello('"I\'ll look out for them."', '"Would you? Oh. Thank you."'), hello('"Why does it matter so much?"', 'Celio: "My friend made the one on the mainland. Everybody uses his. I\'d like to have made one thing people use."'),
@@ -281,8 +286,8 @@ const isle = (id: string, name: string, kind: 'EV' | 'SHOP' | 'PS', flags: strin
       c('"Which islands do the stones need?"', o('He draws it on your hand: One for the Ruby and the first half of a password, Four for the second half, Five for the warehouse. "That\'s three. Exactly three. I didn\'t plan that. I\'d like to say I did." The board marks them.', flag('kanto-sevii-asked'), s.open('knot'))),
       back('knot')]);
   // The ferry board: One Island first, then any three of the other six.
-  const trip = (n: string, level: string, thread: string) => c(`${ISLAND[n]} (${level})${thread}`, o(`The ferry noses out. ${ISLAND[n]} comes up out of the haze.`, flag('kanto-sevii-trips'), flag(`kanto-sevii-${n}`), dock(n)), { requires: [is('kanto-sevii-trips', 0, 2), not(`kanto-sevii-${n}`)] });
-  const revisit = (n: string) => c(`${ISLAND[n]} again.`, o('"Paid for that one already."', dock(n)), { requires: [is(`kanto-sevii-${n}`)] });
+  const trip = (n: string, level: string, thread: string) => c(`${ISLAND[n]} (${level})${thread}`, o(`The ferry noses out. ${ISLAND[n]} comes up out of the haze.`, flag('kanto-sevii-trips'), flag(`kanto-sevii-${n}`), sailTo(n)), { requires: [is('kanto-sevii-trips', 0, 2), not(`kanto-sevii-${n}`)] });
+  const revisit = (n: string) => c(`${ISLAND[n]} again.`, o('"Paid for that one already."', sailTo(n)), { requires: [is(`kanto-sevii-${n}`)] });
   void revisit;
   s.room('board', 'The Ferry Board', 'Seven islands, a level against each. "I do three. You pick." Islands the stones need are marked once Celio\'s been asked.',
     [trip('two', 'level A', ''), trip('three', 'level A+1', ''), trip('four', 'level A+1', ': the password, second half'), c('Further down the board.', o('He turns it over.', s.open('board2')))],
@@ -294,7 +299,22 @@ const isle = (id: string, name: string, kind: 'EV' | 'SHOP' | 'PS', flags: strin
       c('Birth Island (the Aurora Ticket).', o('He crosses himself, which he\'s never done before, and starts the engine.', go('cs.kanto.sevii.birth')), { requires: [is('kanto-aurora-ticket'), not('kanto-sevii-birth')] }),
       c('The reef with one hut.', o('Captain Tidewell slows without being asked.', go('cs.kanto.sevii.labyrinth'))), back('knot')]);
   // The islands' docks: each island's places, in any order, then back to the ferry.
-  const sail = c('Back to the ferry.', o('Captain Tidewell\'s waiting with the engine running.', s.open('knot')));
+  // Back to the ferry walks out of the island's map; the Captain takes you back to One Island (the Pseudo Stage's entry, with the pass).
+  const sail = c('Back to the ferry.', o('Captain Tidewell\'s waiting with the engine running.', go(NET)));
+  // Each island is a small stage of its own: the crossing is its entry, the dock its first room.
+  const MOODS: Record<string, [string, string]> = {
+    two: ['water-grass', 'a stall, a cottage that smells of mushrooms, and a game corner with three machines'],
+    three: ['water-grass', 'one street, and a forest of berries beyond it'],
+    four: ['water-grass', 'cold air off a cave mouth, and an old couple on a bench'],
+    five: ['water-grass', 'a shed on a headland, a cave that counts, and a rock offshore'],
+    six: ['water-grass', 'a door with no handle, and grass cut into a picture'],
+    seven: ['water-grass', 'a tower with a clock, a sea cave, and a canyon'],
+  };
+  for (const n of Object.keys(ISLAND)) {
+    s.room(`sail-${n}`, `The Ferry to ${ISLAND[n]}`, `Spray over the bow, and Captain Tidewell humming something with no tune. ${ISLAND[n]} comes up out of the haze: ${MOODS[n]![1]}.`,
+      [c('Step ashore.', o('The jetty boards are warm.', dock(n)))]);
+    CHAINS.push({ entry: s.id(`sail-${n}`), name: ISLAND[n]!, town: 'sevii', themeId: MOODS[n]![0], mood: MOODS[n]![1], start: 'opened' });
+  }
   const place = (id: string, label: string) => c(label, o('Along the shore.', go(id)), { requires: [not(eid(id))] });
   s.room('two', 'Two Island: The Dock', 'Boon Island. A stall, a cottage with a sign that says MOVES, and a game corner with three machines.',
     [c('The Growing Stall.', o('Along the shore.', go('cs.kanto.sevii.stall'))), c('The Move Maniac.', o('A cottage that smells of mushrooms.', go('cs.kanto.sevii.maniac'))),
@@ -366,7 +386,7 @@ const isle = (id: string, name: string, kind: 'EV' | 'SHOP' | 'PS', flags: strin
   const s = isle('cs.kanto.sevii.missing', 'The Missing Girl', 'EV', ['kanto.sevii.missing'], null, 'A glass');
   const free = [flag('kanto-sevii-three'), flag('kanto-sevii-missing'), flag('cs-kanto-sevii-missing')];
   s.entry('The Missing Girl', `The island's game corner: three machines and a jukebox. A man behind the counter, wiping the same glass. The owner: "My Lostelle went over to Three for berries. She does. She's back by tea. It's past tea." He wipes the glass. "It's past tea." He doesn't ask. He can't leave the shop; there's nobody else. (Three Island goes on your Tri-Pass free: it doesn't use one of the three.)`,
-    [c('"I\'m going to Three anyway."', o('He nods, and keeps wiping.', ...free, dock('two'))), c('"I\'ll go now."', o('He stops wiping. Just for a second.', ...free, dock('three'))), c('(Nod.)', o('He nods back.', ...free, dock('two')))], { room: true });
+    [c('"I\'m going to Three anyway."', o('He nods, and keeps wiping.', ...free, dock('two'))), c('"I\'ll go now."', o('He stops wiping. Just for a second.', ...free, sailTo('three'))), c('(Nod.)', o('He nods back.', ...free, dock('two')))], { room: true });
 }
 
 // ---------- Three Island: The Bikers

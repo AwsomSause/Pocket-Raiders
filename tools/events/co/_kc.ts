@@ -55,10 +55,12 @@ export interface SpaceRow {
   parent?: string | null; requires?: { flags?: string[]; spaces?: string[] }; uniqueRewardFlag?: string | null;
   length?: number | null; flags?: string[]; section: string; placed: Placed;
   /** A Pseudo Stage: its drawn map (name, background theme, mood). The entry event opens the first room. */
-  ps?: { name: string; themeId: string; mood: string };
+  ps?: { name: string; themeId: string; mood: string; start?: 'opened' };
 }
 export const SPACES: SpaceRow[] = [];
 export const EXTRA: Record<string, string> = {};
+/** Pseudo Stages whose entry is a room of a space, not the space's own entry (the Sevii islands, one map each). */
+export const CHAINS: { entry: string; name: string; town: string; themeId: string; mood: string; start?: 'opened' }[] = [];
 /** Follow-up scenes (placed at the start of a Kanto stage once their `requires` hold) and road spaces (rolled per stage). */
 export const FOLLOWUPS: { event: string; stages?: number[] }[] = [];
 export const ROUTES: { event: string; stages: number[]; chance: number }[] = [];

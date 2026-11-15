@@ -144,7 +144,8 @@
    "entry": "cs-kanto-sevii-network",
    "themeId": "water-grass",
    "tint": "#8a3a2a",
-   "mood": "seven islands in a warm sea, and a ferry that does three and the first"
+   "mood": "seven islands in a warm sea, and a ferry that does three and the first",
+   "start": "opened"
   },
   {
    "id": "ps_cs_kanto_route_transfer",
@@ -161,6 +162,60 @@
    "themeId": "normal-flying",
    "tint": "#5a6b3a",
    "mood": "bunting, a start line, and a hill that goes on"
+  },
+  {
+   "id": "ps_cs_kanto_sevii_network_sail_two",
+   "name": "Two Island",
+   "entry": "cs-kanto-sevii-network-sail-two",
+   "themeId": "water-grass",
+   "tint": "#2a6b6b",
+   "mood": "a stall, a cottage that smells of mushrooms, and a game corner with three machines",
+   "start": "opened"
+  },
+  {
+   "id": "ps_cs_kanto_sevii_network_sail_three",
+   "name": "Three Island",
+   "entry": "cs-kanto-sevii-network-sail-three",
+   "themeId": "water-grass",
+   "tint": "#2a6b6b",
+   "mood": "one street, and a forest of berries beyond it",
+   "start": "opened"
+  },
+  {
+   "id": "ps_cs_kanto_sevii_network_sail_four",
+   "name": "Four Island",
+   "entry": "cs-kanto-sevii-network-sail-four",
+   "themeId": "water-grass",
+   "tint": "#2a6b6b",
+   "mood": "cold air off a cave mouth, and an old couple on a bench",
+   "start": "opened"
+  },
+  {
+   "id": "ps_cs_kanto_sevii_network_sail_five",
+   "name": "Five Island",
+   "entry": "cs-kanto-sevii-network-sail-five",
+   "themeId": "water-grass",
+   "tint": "#2a6b6b",
+   "mood": "a shed on a headland, a cave that counts, and a rock offshore",
+   "start": "opened"
+  },
+  {
+   "id": "ps_cs_kanto_sevii_network_sail_six",
+   "name": "Six Island",
+   "entry": "cs-kanto-sevii-network-sail-six",
+   "themeId": "water-grass",
+   "tint": "#2a6b6b",
+   "mood": "a door with no handle, and grass cut into a picture",
+   "start": "opened"
+  },
+  {
+   "id": "ps_cs_kanto_sevii_network_sail_seven",
+   "name": "Seven Island",
+   "entry": "cs-kanto-sevii-network-sail-seven",
+   "themeId": "water-grass",
+   "tint": "#2a6b6b",
+   "mood": "a tower with a clock, a sea cave, and a canyon",
+   "start": "opened"
   }
  ]
 }

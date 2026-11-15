@@ -33,7 +33,10 @@ for (const s of kc.SPACES) {
 }
 write('src/data/catalogOverhaul/placement/kanto-canon.json', placement);
 
-const chains = kc.SPACES.filter((s) => s.ps).map((s) => ({ id: `ps_${kc.eid(s.id).replace(/-/g, '_')}`, name: s.ps!.name, entry: kc.eid(s.id), themeId: s.ps!.themeId, tint: kc.TINTS[s.town] ?? kc.TINTS.route, mood: s.ps!.mood }));
+const chains = [
+  ...kc.SPACES.filter((s) => s.ps).map((s) => ({ id: `ps_${kc.eid(s.id).replace(/-/g, '_')}`, name: s.ps!.name, entry: kc.eid(s.id), themeId: s.ps!.themeId, tint: kc.TINTS[s.town] ?? kc.TINTS.route, mood: s.ps!.mood, ...(s.ps!.start ? { start: s.ps!.start } : {}) })),
+  ...kc.CHAINS.map((c) => ({ id: `ps_${c.entry.replace(/-/g, '_')}`, name: c.name, entry: c.entry, themeId: c.themeId, tint: kc.TINTS[c.town] ?? kc.TINTS.route, mood: c.mood, ...(c.start ? { start: c.start } : {}) })),
+];
 write('src/data/catalogOverhaul/pseudo/kanto-canon.json', { category: 'kanto-canon', note: 'Kanto Canon Spaces with a Pseudo Stage shape (KANTO_PLACED_*.md).', chains });
 
 // Flags: read from the built event files (run after co:build), plus the ones the `kc` rules and canonRun.ts keep themselves.

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { chooseEvent } from '../../src/core/events';
 import { chooseStarter, createRun, debugForceEvent } from '../../src/core/run';
 import { buildTownMenu } from '../../src/core/expansion/canonSpaces';
+import { chainRooms, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
 import { canonKanto, canonKantoPlaced } from '../../src/data/expansion';
 import { content } from './helpers';
 
@@ -38,6 +39,51 @@ describe('The Sevii Islands: the map', () => {
       expect(menu.filter((m) => m.startsWith('cs.kanto.sevii.') && m !== 'cs.kanto.sevii.network')).toEqual([]);
     }
     expect(canonKanto.spaces.filter((s) => s.id.startsWith('cs.kanto.sevii.')).length).toBe(25); // the ferry and Network Center (one space), 17 island places, 2 far islands, 5 more (KANTO_PLACED_6)
+  });
+});
+
+describe('The Sevii maps', () => {
+  const sevii = PSEUDO_CHAINS.filter((c) => c.entry.startsWith('cs-kanto-sevii-'));
+  it('One Island and each of the six islands is its own small stage map, no column more than six rooms tall', () => {
+    expect(sevii.map((c) => c.name).sort()).toEqual(['Five Island', 'Four Island', 'Seven Island', 'Six Island', 'The Sevii Islands', 'Three Island', 'Two Island']);
+    const seen = new Set<string>();
+    for (const c of sevii) {
+      const rooms = chainRooms(content, c);
+      const tall = Math.max(...[...new Set(rooms.map((r) => r.depth))].map((d) => rooms.filter((r) => r.depth === d).length));
+      expect(tall, c.name).toBeLessThanOrEqual(6);
+      for (const r of rooms) { expect(seen.has(r.event), r.event).toBe(false); seen.add(r.event); }
+    }
+  });
+  it('played through: the dock, the Center, the board, the crossing, and Two Island\'s own map', () => {
+    const start = begin('SV-walk');
+    let { run, sideId } = debugForceEvent(content, structuredClone(start), NET);
+    const side = (id: string) => {
+      const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+      return here.sides.find((x) => x.eventId === id && !x.used)!.id;
+    };
+    run = chooseEvent(content, run, sideId, 0).run; // "Take me."
+    expect(run.stage!.pseudo?.name).toBe('The Sevii Islands');
+    run = chooseEvent(content, run, side(`${NET}-center`), 0).run;
+    run = chooseEvent(content, run, side(`${NET}-knot`), 2).run; // the ferry board
+    run = chooseEvent(content, run, side(`${NET}-board`), 0).run; // Two Island
+    expect(run.stage!.pseudo ?? null).toBe(null);
+    run = chooseEvent(content, run, side(`${NET}-sail-two`), 0).run; // step ashore
+    expect(run.stage!.pseudo?.name).toBe('Two Island');
+    expect(run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.roomEvent).toBe(`${NET}-two`);
+    run = chooseEvent(content, run, side(`${NET}-two`), 3).run; // back to the ferry
+    expect(run.stage!.pseudo ?? null).toBe(null);
+    run = chooseEvent(content, run, side(NET), 0).run; // the Captain: with the pass, only "Back to One Island" shows
+    expect(run.stage!.pseudo?.name).toBe('The Sevii Islands');
+    expect(run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.roomEvent).toBe(`${NET}-knot`);
+  });
+  it('a ferry trip goes to the island\'s crossing; the crossing steps onto the dock; the dock sails back by the Captain', () => {
+    expect(room(`${NET}-board`).choices[0]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: `${NET}-sail-two` });
+    expect(room(`${NET}-sail-two`).choices[0]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: `${NET}-two` });
+    expect(outs(`${NET}-two`)).toContain(NET);
+    // With the pass, the Captain's only choice is back to One Island.
+    const back = room(NET).remembers.find((v) => v.id === 'pass')!;
+    expect(back.hide).toEqual([0, 1, 2]);
+    expect(room(NET).choices[3]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: `${NET}-knot` });
   });
 });
 

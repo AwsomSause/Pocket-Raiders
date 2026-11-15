@@ -79,7 +79,7 @@ Source: `/mnt/project-files/catalog_overhaul_pack/kanto_canon_spaces/` (`KANTO_P
 
 ## Limits (Part 5, roads and Sevii)
 - Same-run rule: the Network Center's "see Pokémon from earlier runs", Trainer Tower's save-wide times and Tanoby's save-wide words stay in this run (the wall lights up; the board and the word are this run's). Ribbons and tiles are journal moments.
-- The Sevii Islands are one Pseudo Stage (Captain Tidewell at Cinnabar), with every island place as nodes on its map, so nothing nests. The map lets you walk ahead, but island choices check the ferry flags (three picks; Three free after the Missing Girl).
+- The Sevii Islands are seven small Pseudo Stages, not one (one map of 103 rooms drew 22 discs stacked in one column): One Island and the ferry (Captain Tidewell at Cinnabar), then one map per island, entered by its ferry crossing. Sailing back walks out to Cinnabar, where the Captain (with the pass) takes you back to One Island. Island choices check the ferry flags (three picks; Three free after the Missing Girl). Nothing nests.
 - The Song's marker isn't an item: the Jigglypuff joins without it; sleeping through costs Speed (halved) for one battle. Second chances: the Sleeper on the Beach and the Village board; the Buried City uses the Song if it was met at all.
 - Who Keeps the Egg: a "chemistry pair" is camp chemistry for the party plus friendship; the rival's Togepi is a flag for the rivals thread.
 - The Leek Thief: the stolen bag makes the next two battles a level gentler; items stay usable.

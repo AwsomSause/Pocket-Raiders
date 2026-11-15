@@ -2952,7 +2952,39 @@
    "types": [],
    "minStage": 1,
    "requires": [],
-   "remembers": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-pass",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "hide": [
+      3
+     ]
+    },
+    {
+     "id": "pass",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-pass",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Captain Tidewell, at the jetty with the engine running and your Tri-Pass in his hat band. \"One Island. I always go back by One. Everybody does.\"",
+     "hide": [
+      0,
+      1,
+      2
+     ]
+    }
+   ],
    "callback": false,
    "forced": false,
    "scene": {
@@ -2991,6 +3023,26 @@
      "success": {
       "text": "\"Suit yourself. The islands'll keep.\"",
       "effects": []
+     }
+    },
+    {
+     "label": "Back to One Island.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-pass",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He's already untying the rope. \"Knot, then.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-knot"
+       }
+      ]
      }
     }
    ],
@@ -3443,7 +3495,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-sevii-network-two"
+        "eventId": "cs-kanto-sevii-network-sail-two"
        }
       ]
      }
@@ -3479,7 +3531,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-sevii-network-three"
+        "eventId": "cs-kanto-sevii-network-sail-three"
        }
       ]
      }
@@ -3515,7 +3567,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-sevii-network-four"
+        "eventId": "cs-kanto-sevii-network-sail-four"
        }
       ]
      }
@@ -3586,7 +3638,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-sevii-network-five"
+        "eventId": "cs-kanto-sevii-network-sail-five"
        }
       ]
      }
@@ -3622,7 +3674,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-sevii-network-six"
+        "eventId": "cs-kanto-sevii-network-sail-six"
        }
       ]
      }
@@ -3658,7 +3710,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-sevii-network-seven"
+        "eventId": "cs-kanto-sevii-network-sail-seven"
        }
       ]
      }
@@ -3778,6 +3830,216 @@
    "room": true
   },
   {
+   "id": "cs-kanto-sevii-network-sail-two",
+   "name": "The Ferry to Two Island",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Spray over the bow, and Captain Tidewell humming something with no tune. Two Island comes up out of the haze: a stall, a cottage that smells of mushrooms, and a game corner with three machines.",
+   "choices": [
+    {
+     "label": "Step ashore.",
+     "success": {
+      "text": "The jetty boards are warm.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-two"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-network-sail-three",
+   "name": "The Ferry to Three Island",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Spray over the bow, and Captain Tidewell humming something with no tune. Three Island comes up out of the haze: one street, and a forest of berries beyond it.",
+   "choices": [
+    {
+     "label": "Step ashore.",
+     "success": {
+      "text": "The jetty boards are warm.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-three"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-network-sail-four",
+   "name": "The Ferry to Four Island",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Spray over the bow, and Captain Tidewell humming something with no tune. Four Island comes up out of the haze: cold air off a cave mouth, and an old couple on a bench.",
+   "choices": [
+    {
+     "label": "Step ashore.",
+     "success": {
+      "text": "The jetty boards are warm.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-four"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-network-sail-five",
+   "name": "The Ferry to Five Island",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Spray over the bow, and Captain Tidewell humming something with no tune. Five Island comes up out of the haze: a shed on a headland, a cave that counts, and a rock offshore.",
+   "choices": [
+    {
+     "label": "Step ashore.",
+     "success": {
+      "text": "The jetty boards are warm.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-five"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-network-sail-six",
+   "name": "The Ferry to Six Island",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Spray over the bow, and Captain Tidewell humming something with no tune. Six Island comes up out of the haze: a door with no handle, and grass cut into a picture.",
+   "choices": [
+    {
+     "label": "Step ashore.",
+     "success": {
+      "text": "The jetty boards are warm.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-six"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-network-sail-seven",
+   "name": "The Ferry to Seven Island",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Spray over the bow, and Captain Tidewell humming something with no tune. Seven Island comes up out of the haze: a tower with a clock, a sea cave, and a canyon.",
+   "choices": [
+    {
+     "label": "Step ashore.",
+     "success": {
+      "text": "The jetty boards are warm.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-seven"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
    "id": "cs-kanto-sevii-network-two",
    "name": "Two Island: The Dock",
    "group": "Canon Spaces: Kanto",
@@ -3840,7 +4102,7 @@
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-sevii-network-knot"
+        "eventId": "cs-kanto-sevii-network"
        }
       ]
      }
@@ -3990,7 +4252,7 @@
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-sevii-network-knot"
+        "eventId": "cs-kanto-sevii-network"
        }
       ]
      }
@@ -4057,7 +4319,7 @@
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-sevii-network-knot"
+        "eventId": "cs-kanto-sevii-network"
        }
       ]
      }
@@ -4144,7 +4406,7 @@
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-sevii-network-knot"
+        "eventId": "cs-kanto-sevii-network"
        }
       ]
      }
@@ -4314,7 +4576,7 @@
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-sevii-network-knot"
+        "eventId": "cs-kanto-sevii-network"
        }
       ]
      }
@@ -4409,7 +4671,7 @@
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-sevii-network-knot"
+        "eventId": "cs-kanto-sevii-network"
        }
       ]
      }
@@ -5228,7 +5490,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-sevii-network-three"
+        "eventId": "cs-kanto-sevii-network-sail-three"
        }
       ]
      }
