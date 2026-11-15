@@ -8,6 +8,8 @@ import type { ReduxCtx } from '../stage';
 import { figure, type Art } from '../templates';
 
 export interface DockButton { label: string; small?: string; off?: boolean }
+/** One figure of the line-up: `scale` 1 is the sprite's own size; `px` (the hub) gives the height outright instead. */
+export interface DockFigure { art: Art; scale: number; px?: number }
 export interface DockModel {
   town: string;
   chips: string[];
@@ -16,7 +18,7 @@ export interface DockModel {
   buttons: DockButton[];
   index: number;
   /** Who stands on the ground line, centre first then alternating right and left. `scale` 1 is the sprite's own size. */
-  lineup: { art: Art; scale: number }[];
+  lineup: DockFigure[];
   /** A speech bubble over the line-up ('' for none). */
   say: string;
   /** The small line about the focused button. */
@@ -27,12 +29,13 @@ export interface DockModel {
 export function dockView(c: ReduxCtx, d: DockModel): string {
   const v = c.v(3), n = d.buttons.length;
   const gy = v === 1 ? 420 : 318, cx = v === 1 ? 600 : 480;
-  const stand = (a: { art: Art; scale: number }): string => {
+  const stand = (a: DockFigure): string => {
+    if (a.px && a.art.atlas) return tall(a.art.file, a.px);
     if (!a.art.atlas) return figure(a.art, Math.round(84 * a.scale));
     const at = rxAtlas(a.art.file);
     return at ? tall(a.art.file, Math.round(at.sh * a.scale)) : mon(a.art.file, a.scale);
   };
-  const line = `<div class="abs" style="left:0;right:0;top:${gy}px;height:${540 - gy}px;background:var(--p);border-top:5px solid var(--f)"></div>` + d.lineup.slice(0, v === 1 ? 11 : 13).map((a, r) => foot(cx + (r % 2 ? 1 : -1) * Math.ceil(r / 2) * 58, gy + 4, stand(a), `z-index:${40 - r}`)).reverse().join('');
+  const line = `<div class="abs" style="left:0;right:0;top:${gy}px;height:${540 - gy}px;background:var(--p);border-top:5px solid var(--f)"></div>` + d.lineup.slice(0, 13).map((a, r) => foot(cx + (r % 2 ? 1 : -1) * Math.ceil(r / 2) * 58, gy + 4, stand(a), `z-index:${40 - r}`)).reverse().join('');
   const tabs = d.tabs.length ? `<div class="tabs">${d.tabs.map((t, k) => `<span class="${k === d.tab ? 'on' : ''}"${act('tab', k)}>${esc(t)}</span>`).join('')}</div>` : '';
   const top = `<div class="abs row" style="left:20px;right:20px;top:14px;gap:8px"><b style="font-size:24px;text-shadow:2px 2px 0 var(--l)">${esc(d.town)}</b><span class="grow"></span>${d.chips.map((t, k) => `<span class="tg${k ? ' no' : ''}">${esc(t)}</span>`).join('')}</div>`;
   const say = d.say ? `<div class="abs txt" style="left:${v === 1 ? 280 : 200}px;right:${v === 1 ? 40 : 200}px;top:64px;bottom:auto;font-size:15px;line-height:20px;padding:10px 16px;z-index:50">${esc(d.say)}</div>` : '';

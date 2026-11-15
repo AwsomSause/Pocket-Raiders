@@ -1,0 +1,3191 @@
+{
+ "catalogOverhaul": "people",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "mentor-marigold-hatch-lesson",
+   "name": "Marigold: Nobody Grows on an Empty Stomach",
+   "group": "Mentors",
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "marigold-hatch"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 1,
+   "intro": "A farmhouse kitchen, warm as a held breath, bread rising under a cloth and a kettle muttering on the hob. Marigold is flour to the elbows, and in a basket by the stove a clutch of eggs sits wrapped in an old wool blanket. She points you to a chair with a wooden spoon. Marigold: \"Sit, sit. Nobody grows on an empty stomach.\" A bowl of stew appears in front of you, and one for each of your Pokémon on the floor. Marigold: \"Feed them, rest them, talk to them. Bond's slower than levels, and it lasts longer.\"",
+   "choices": [
+    {
+     "label": "\"Eat.\"",
+     "success": {
+      "text": "You eat. Your Pokémon eat. Marigold watches the lot of you with her chin on her hand, and something in the kitchen settles, like a house exhaling at the end of a long day. For the run, your Pokémon grow fond of you faster.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Hold an egg.\"",
+     "success": {
+      "text": "Marigold lifts one from the basket and sets it in your hands as if it were the most natural thing in the world. It's warm. Something inside it shifts, once, against your palm. Marigold: \"That one likes you. Keep it close; it'll hatch before the next region.\" For the run, your Pokémon grow fond of you faster.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "togepi",
+         "happiny",
+         "riolu",
+         "azurill",
+         "munchlax"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "stage"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask about bonds.\"",
+     "success": {
+      "text": "Marigold talks while she kneads: about the Chansey that would only eat if she sang, about the Riolu that slept in her boot for a whole winter. None of it sounds like a lesson, and all of it is one. For the run, your Pokémon grow fond of you faster.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-marigold-hatch-recruit",
+   "name": "Marigold: Waiting for the Right Person",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "marigold-hatch"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-recruit",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2a44",
+    "effect": "sparkle"
+   },
+   "rarity": "uncommon",
+   "intro": "Marigold finds you in the orchard behind the farmhouse, your lead Pokémon pressed against your leg the way it does when it is tired and happy. She stands at the gate for a while with her apron full of windfalls, just watching. Marigold: \"See how it leans on you? That's trust. Here. This one's been waiting for the right person.\" In her arms, wrapped in a tea towel, something small blinks up at you.",
+   "choices": [
+    {
+     "label": "\"Take it.\"",
+     "success": {
+      "text": "The little one goes from her arms to yours without a sound and tucks its head under your chin straight away, as though it had decided long ago and was only waiting for you to arrive. Marigold dabs her eye with a floury knuckle and pretends it is the onions.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "happiny",
+         "togepi",
+         "riolu"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "friendship": 25
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-recruit",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 1,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "Marigold nods, not a bit offended, and tucks the tea towel tighter. Marigold: \"It'll keep. So will I.\" She will ask again when you pass this way.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "mentor-marigold-hatch-recruit"
+       },
+       {
+        "kind": "mentor",
+        "trust": 0,
+        "loyalty": 1,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-marigold-hatch-story",
+   "name": "Marigold: The First Shell",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "marigold-hatch"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-story",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#44301a",
+    "effect": "fire"
+   },
+   "rarity": "uncommon",
+   "intro": "Evening in the kitchen, the lamps low. Marigold sits by the stove turning an egg in her hands, except it is not an egg: it is a shell, empty and fine as paper, mended along one side with a thread of glue gone yellow with age. Marigold: \"My first hatchling never came out. I kept the shell. I've raised every one since like it was that one.\" She sets it down on the table between you, very gently. Marigold: \"I'm old. Someone should keep the shell after me. I'd like it to be someone who'll understand it.\"",
+   "choices": [
+    {
+     "label": "\"I'll keep it.\"",
+     "success": {
+      "text": "You pick the shell up as carefully as you have ever picked up anything. Marigold watches your hands, not your face, and whatever she sees there makes her nod. She wraps it in a square of blanket for you. Eggs you carry seem to hurry a little now, as if something is cheering them on.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "marigolds-shell",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "marigold-shell",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Keep it yourself.\"",
+     "success": {
+      "text": "Marigold's hands close round the shell again, and she holds it to her chest. Marigold: \"Selfish of me to ask. Thank you.\" She puts it back on the shelf above the stove, where it has always been, and you can see that is where it belongs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "marigold-kept",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Bury it.\"",
+     "success": {
+      "text": "You carry it out together, under the apple tree at the bottom of the orchard, and Marigold digs the hole herself with a trowel. She cries while she does it, quietly, the way people cry for things that happened a very long time ago. Walking back up to the house, she is lighter. You can see it in her step.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "marigold-buried",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bram",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mentor-bram-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Marigold gives you a narrow look. Marigold: \"Bram told you. Of course he did.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-marigold-hatch-final",
+   "name": "Marigold: The Final Lesson",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "Marigold walks you out into the yard behind the farmhouse, the hens scattering, the washing snapping on the line. Six Poké Balls sit in her apron pocket, and every Pokémon in them came out of an egg in her kitchen. They come out before she even calls them, a Blissey, a Togekiss, a Lucario and three more, and every one of them goes to her first, to be touched once on the head. Marigold: \"Go on, then. Show me how you've raised yours.\"",
+   "choices": [
+    {
+     "label": "\"Ready.\"",
+     "success": {
+      "text": "Her Blissey waddles forward first, and looks at your team with the same patient kindness its trainer does. Every one of hers is as close to her as a Pokémon can be.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Marigold's Final Lesson beat you, and you still graduated",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-marigold-hatch-farewell"
+        }
+       ],
+       "team": [
+        "blissey",
+        "togekiss",
+        "lucario",
+        "azumarill",
+        "snorlax",
+        "clefable"
+       ],
+       "name": "Marigold Hatch",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You passed Marigold's Final Lesson",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-marigold-hatch-farewell"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "shell",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "marigold-shell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The yard behind the farmhouse, the washing snapping on the line. Marigold looks at the bundle in your bag where her shell rides, and smiles. Six Poké Balls, every Pokémon hatched in her kitchen, every one of them devoted to her. Marigold: \"You kept it safe. Now show me how you've raised yours.\""
+    },
+    {
+     "id": "kept",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "marigold-kept",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The yard behind the farmhouse. Through the kitchen window you can see the old shell on its shelf above the stove, catching the light. Six Poké Balls in Marigold's apron, every Pokémon hatched under that same shelf. Marigold: \"It's watching. Show it how you've raised yours.\""
+    },
+    {
+     "id": "buried",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "marigold-buried",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Marigold has brought you down to the orchard, under the apple tree, where the earth has settled and a little green has come up. She looks lighter than you have ever seen her. Six Poké Balls, every Pokémon hatched in her kitchen. Marigold: \"Here feels right. Show me how you've raised yours.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-marigold-hatch-farewell",
+   "name": "Marigold: That's All of It",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "When it is over, Marigold's Pokémon and yours end up in one heap on the grass, too tired to care whose is whose. She lowers herself down beside them with a groan and looks for a long time. Marigold: \"Look at them. Look at yours. That's all of it.\" She presses two things into your hands: a smooth, pale Oval Stone, and a jar of her plum jam with a gingham lid.",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "You hold the stone in one hand and the jam in the other, and do not trust yourself to say anything else. Marigold pats your cheek with a floury hand, the way she would a hatchling, and sends you on your way with a full stomach.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-graduated",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "oval-stone",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Marigold gave you a jar of her plum jam",
+        "importance": 70
+       },
+       {
+        "kind": "mentor",
+        "trust": 40,
+        "loyalty": 5,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-ravi-ironhand-lesson",
+   "name": "Ravi: The First Bell",
+   "group": "Mentors",
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "ravi-ironhand"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 1,
+   "intro": "A coastguard station on a grey headland, the wind shoving at the windows and charts pinned flat with stones. Captain Ravi Ironhand stands by the door with a brass bell in his hand, polished so long the engraving has worn away. Ravi: \"Eyes up. We start at the first bell.\" He does not ring it yet. Ravi: \"Clean finishes. No wasted turns. The sea doesn't give you a second go.\"",
+   "choices": [
+    {
+     "label": "\"Ring it.\"",
+     "success": {
+      "text": "You take the bell and ring it, once, hard. The note goes out over the water and Ravi's mouth twitches, nearly a smile. The drills start at once and do not stop until dark. For the run, a knockout on the first turn of a battle sends your next Pokémon in faster.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's a clean finish?\"",
+     "success": {
+      "text": "Ravi draws it on a chart with a stub of pencil: the opening, the one hit that ends it, nothing wasted between. Ravi: \"That. Every time.\" By evening you can feel the shape of it. For the run, a knockout on the first turn of a battle sends your next Pokémon in faster.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I like a long fight.\"",
+     "success": {
+      "text": "Ravi looks at you the way he looks at a sky going green at the edges. Ravi: \"Then you'll be tired when it matters.\" He rings the bell himself, and works you twice as hard. For the run, a knockout on the first turn of a battle sends your next Pokémon in faster.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-ravi-ironhand-recruit",
+   "name": "Ravi: Too Brave for the Boat",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "ravi-ironhand"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-recruit",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2a44",
+    "effect": "sparkle"
+   },
+   "rarity": "uncommon",
+   "intro": "Ravi has been watching your last battle from the sea wall with his arms folded and his collar up. When it ends in one sharp exchange he walks down, and for the first time since you met him, he looks pleased. Ravi: \"That was clean. Do it again. A sailor I know needs a home for a Pokémon that's too brave for the boat.\"",
+   "choices": [
+    {
+     "label": "\"Take it.\"",
+     "success": {
+      "text": "The sailor is a broad woman with tar on her hands, and the Pokémon comes straight off her deck and over to you as if it has been looking for a bigger sea. She laughs, and Ravi does too, briefly, like it got out before he could stop it.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "pelipper",
+         "gyarados",
+         "dhelmise"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-recruit",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 1,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "Ravi nods once. Ravi: \"Fair. The tide comes back. So will the offer.\" He will ask again at the next harbour.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "mentor-ravi-ironhand-recruit"
+       },
+       {
+        "kind": "mentor",
+        "trust": 0,
+        "loyalty": 1,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-ravi-ironhand-story",
+   "name": "Ravi: A Storm I Should Have Seen",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "ravi-ironhand"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-story",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#44301a",
+    "effect": "fire"
+   },
+   "rarity": "uncommon",
+   "intro": "Ravi stands at the end of the breakwater looking at the horizon, and the horizon is the colour of a bruise. He does not turn round when you come up beside him. Ravi: \"Twenty years on the coast. I lost one recruit to a storm I should have seen. I teach so no one else is unprepared.\" The first fat drops of rain hit the stones. He turns at last, and his face is set like a knot. Ravi: \"There's a storm coming. Same as that one. There's a trawler out. I'm going. Will you come?\"",
+   "choices": [
+    {
+     "label": "\"Sail with you.\"",
+     "success": {
+      "text": "Ravi does not thank you. He just throws you an oilskin and runs for the lifeboat, and you run after him. The engine catches on the second try, and the harbour mouth opens ahead like a throat.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-ravi-ironhand-sea-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stay and keep the light on.\"",
+     "success": {
+      "text": "Ravi grips your shoulder once, hard, and goes alone. You climb the lighthouse stairs and keep the lamp turning all night, the beam sweeping out over water you cannot see, hour after hour. Just before dawn a light answers from the sea. He comes back, soaked to the bone, and the trawler comes in behind him.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ravi-light",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Don't go.\"",
+     "success": {
+      "text": "Ravi stares at you, and for a long moment you think he will go anyway. Ravi: \"...You're right.\" He doesn't go. The night is very long. At first light the trawler limps in on its own, battered, every soul aboard. Ravi sits down hard on the harbour steps and puts his face in his hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ravi-stayed",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bram",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mentor-bram-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Ravi gives you a narrow look. Ravi: \"Bram told you. Of course he did.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-ravi-ironhand-sea-1",
+   "name": "Ravi: The Harbour Mouth",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "Past the breakwater the sea stands up in walls. Rain comes sideways; the lifeboat climbs each wave and drops off the back of it with a crash that rattles your teeth. Ravi shouts over the wind with one hand on the wheel and the other pointing at the jib, which has torn loose and is thrashing. Ravi: \"Haul it in! Both hands!\"",
+   "choices": [
+    {
+     "label": "\"Haul the sail.\"",
+     "prompt": {
+      "id": "pull-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You get the line round your fist and pull, and pull, and the sail comes in hand over hand and you lash it down. Ravi gives you one nod through the rain. Ahead, the swell gets bigger.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-ravi-ironhand-sea-2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The line burns through your hands twice before Ravi lunges across and adds his weight to yours. Together you drag it in. Ravi: \"Again, next time. Faster.\" Ahead, the swell gets bigger.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-ravi-ironhand-sea-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Take the wheel.\"",
+     "success": {
+      "text": "Ravi hesitates for half a heartbeat, then gives it to you and goes for the sail himself. You hold her bow-on to the waves with every muscle you have until he is back. Ahead, the swell gets bigger.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-ravi-ironhand-sea-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-ravi-ironhand-sea-2",
+   "name": "Ravi: In the Swell",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "Halfway out, something big and frightened breaks the surface beside the boat: a Sharpedo, driven up from the deep by the storm and lashing at anything that moves. It slams the hull once and the whole boat shudders. Ravi braces against the gunwale. Ravi: \"Drive it off or hold on. Choose now.\"",
+   "choices": [
+    {
+     "label": "\"Drive it off.\"",
+     "success": {
+      "text": "You send your Pokémon to the bow and meet the Sharpedo wave for wave.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sharpedo"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-ravi-ironhand-sea-3"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-ravi-ironhand-sea-3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Hold on.\"",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You wrap your arms round the mast as the Sharpedo comes again, and the boat heels so far the sea pours over the side, and then rights itself. The Sharpedo loses interest and sinks back into the dark. Ravi lets out a breath you can see.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-ravi-ironhand-sea-3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The boat heels, your grip goes, and only Ravi's fist in your collar keeps you aboard. The Sharpedo sinks back into the dark. Neither of you says anything. Neither of you lets go for a while.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-ravi-ironhand-sea-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-ravi-ironhand-sea-3",
+   "name": "Ravi: The Trawler",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "There: a smudge of light in the murk, rising and falling. The trawler is wallowing broadside to the waves with her engine dead and four faces at the rail. Ravi brings the lifeboat as close as he dares, and holds out a coil of rope to you. Ravi: \"One throw. Make it clean.\"",
+   "choices": [
+    {
+     "label": "\"Throw the line.\"",
+     "prompt": {
+      "id": "throw-ring",
+      "needs": "good"
+     },
+     "success": {
+      "text": "The rope uncoils across the gap and lands right across the trawler's rail, and four pairs of hands grab it at once. Ravi tows them home through the worst of it. On the quay at dawn he counts heads twice, and then, quietly, a third time. Everyone is home.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ravi-sailed",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     },
+     "failure": {
+      "text": "The first throw falls short and the sea eats it. Ravi hauls it back, coils it, puts it back in your hands without a word, and the second throw lands. He tows them home through the worst of it. On the quay at dawn, everyone is home.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ravi-sailed",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Bring her alongside.\"",
+     "success": {
+      "text": "You take the wheel while Ravi leans out over the gap, and you hold the boats together long enough for four people to jump. Ravi tows the empty trawler home behind you. On the quay at dawn he counts heads twice, and then, quietly, a third time. Everyone is home.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ravi-sailed",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-ravi-ironhand-final",
+   "name": "Ravi: The Final Lesson",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "The coastguard station on the headland, where Ravi first put a bell in your hand. The sea is flat and silver today. Ravi stands on the slipway with six Poké Balls on his belt, Water and Fighting, every one of them fast. He rings the bell once. Ravi: \"First bell. No wasted turns. Show me.\"",
+   "choices": [
+    {
+     "label": "\"Ready.\"",
+     "success": {
+      "text": "Ravi's Kingdra hits the water before the bell has stopped ringing. This will be quick, one way or the other.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Ravi's Final Lesson beat you, and you still graduated",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-ravi-ironhand-farewell"
+        }
+       ],
+       "team": [
+        "kingdra",
+        "machamp",
+        "lucario",
+        "barraskewda",
+        "pelipper",
+        "gyarados"
+       ],
+       "name": "Captain Ravi Ironhand",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You passed Ravi's Final Lesson",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-ravi-ironhand-farewell"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sailed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ravi-sailed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The quay where you brought the trawler home, its crew lined up along the harbour wall to watch. Ravi stands on the slipway with six Poké Balls, Water and Fighting, every one of them fast, and the bell in his hand. He rings it once. Ravi: \"You crewed for me once. Now show me what you learned.\""
+    },
+    {
+     "id": "light",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ravi-light",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The foot of the lighthouse, where you kept the lamp turning all that night. Ravi glances up at it before he speaks. Six Poké Balls on his belt, Water and Fighting, every one of them fast. He rings the bell once. Ravi: \"You kept the light for me. Now show me your clean finish.\""
+    },
+    {
+     "id": "stayed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ravi-stayed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The harbour steps where Ravi sat down that morning. He stands on them now, steadier than he has been in years. Six Poké Balls on his belt, Water and Fighting, every one of them fast. He rings the bell once. Ravi: \"You stopped me once. Now show me you can finish.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-ravi-ironhand-farewell",
+   "name": "Ravi: I'd Sail with You",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "When it is over, Ravi recalls his last Pokémon and stands looking at the sea for a long time, the bell hanging from his fingers. Then he looks at you, and something in his face lets go. Ravi: \"Clean. Every turn. I'd sail with you.\" He holds out the bell, the engraving worn smooth by twenty years of his thumb.",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "The bell is heavier than it looks. Ravi closes your fingers round it with his own rough hand, then turns and walks back up to the station without looking round, the way sailors leave a quay. The first move you make in any battle will land true now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-graduated",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "ravis-bell",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Ravi gave you his bell",
+        "importance": 70
+       },
+       {
+        "kind": "mentor",
+        "trust": 40,
+        "loyalty": 5,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-sable-oakridge-lesson",
+   "name": "Sable: Do One Thing Slowly",
+   "group": "Mentors",
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "sable-oakridge"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 1,
+   "intro": "An empty stadium, forty thousand seats and not one person in them, the wind pushing a paper cup across the pitch. Sable Oakridge sits on the team bench in plain clothes, an ordinary jacket and worn-out boots. Once, this whole place chanted their name. Sable: \"I'm not here to be impressive. Let's begin.\" They stand, and look up at the empty stands like they can still hear them. Sable: \"When the crowd's loud, do one thing slowly. Anything. Breathe, tie a lace. Then battle.\"",
+   "choices": [
+    {
+     "label": "\"Show me.\"",
+     "success": {
+      "text": "Sable kneels and reties one boot, slowly, every loop deliberate, while you count your own breaths beside them. It feels like nothing. Then you battle, and it is not nothing at all. For the run, in boss and rival battles, your Pokémon can't be made to flinch on the first turn.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You were Champion?\"",
+     "success": {
+      "text": "Sable does not look at the empty stands. Sable: \"Was. Let's begin.\" And they do, as if the title were a coat they had hung up somewhere and forgotten. For the run, in boss and rival battles, your Pokémon can't be made to flinch on the first turn.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I don't get nervous.\"",
+     "success": {
+      "text": "Sable smiles, kindly, and says nothing. They just switch on the stadium speakers, and forty thousand recorded voices roar at once, and your hands shake. Sable: \"Breathe. Then battle.\" For the run, in boss and rival battles, your Pokémon can't be made to flinch on the first turn.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-sable-oakridge-recruit",
+   "name": "Sable: Calm as Stone",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "sable-oakridge"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-recruit",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#2a2a44",
+    "effect": "sparkle"
+   },
+   "rarity": "uncommon",
+   "intro": "Sable watched your last battle from the top row of an empty stand, and when you look up afterwards they are already walking down the steps towards you, unhurried. Sable: \"That's how a Champion thinks. My old Gym Leader friend has a Pokémon that's calm as stone. Take it.\"",
+   "choices": [
+    {
+     "label": "\"Take it.\"",
+     "success": {
+      "text": "Sable's friend runs a quiet gym in the hills, and the little Pokémon sits in the middle of the floor while everyone else rushes about, perfectly still, watching you. When you hold out your hand it walks over without a flicker of hurry. Sable nods, satisfied.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "gible",
+         "larvitar",
+         "dratini"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-recruit",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 1,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "Sable shrugs, unbothered. Sable: \"Stone keeps.\" They will ask again when the time is right.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "mentor-sable-oakridge-recruit"
+       },
+       {
+        "kind": "mentor",
+        "trust": 0,
+        "loyalty": 1,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-sable-oakridge-story",
+   "name": "Sable: One Season",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "sable-oakridge"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-story",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#44301a",
+    "effect": "fire"
+   },
+   "rarity": "uncommon",
+   "intro": "The stadium again, at night, the floodlights off and only the exit signs glowing green. Sable sits on the bench looking down at their hands, turning them over as if they belonged to someone else. Sable: \"I left the title because I stopped enjoying it. I was afraid that meant I'd stopped being good.\" A long silence. Then they hold up a letter with the League's seal on it, already opened, read many times. Sable: \"The League's asked me back. One season. Should I?\"",
+   "choices": [
+    {
+     "label": "\"Go back.\"",
+     "success": {
+      "text": "Sable folds the letter very carefully and puts it in their jacket, over their heart. When you reach the League this run, Sable will be waiting in the Elite Four: a harder League, and a warmer battle than any of the others.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sable-league",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Don't.\"",
+     "success": {
+      "text": "Sable lets out a breath they have been holding for a whole season, and laughs, surprised at how light it feels. The letter goes in the bin by the bench. Sable stays a teacher, and is relieved, and does not hide it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sable-teacher",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Only if you'd enjoy it.\"",
+     "success": {
+      "text": "Sable looks at you for a long time. Then at the dark stadium, as if seeing it for the first time. Sable: \"...I think I would. Now.\" They will be in the Elite Four this run, and their League team will have a Pokémon they have never used before.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sable-joy",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bram",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mentor-bram-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Sable gives you a narrow look. Sable: \"Bram told you. Of course he did.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-sable-oakridge-final",
+   "name": "Sable: The Final Lesson",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "The empty stadium, every floodlight on, every seat still empty. Sable stands at the far end of the pitch in their plain jacket with six Poké Balls at their belt: the team that won a Championship, and has not been seen together since. Sable kneels, ties one lace slowly, and stands. Sable: \"Your turn. Do one thing slowly. Then battle.\"",
+   "choices": [
+    {
+     "label": "\"Ready.\"",
+     "success": {
+      "text": "Sable's Garchomp lands on the pitch with a sound like a dropped stone, and the empty stadium seems to hold its breath.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Sable's Final Lesson beat you, and you still graduated",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-sable-oakridge-farewell"
+        }
+       ],
+       "team": [
+        "garchomp",
+        "dragonite",
+        "milotic",
+        "lucario",
+        "aegislash",
+        "gardevoir"
+       ],
+       "name": "Sable Oakridge",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You passed Sable's Final Lesson",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-sable-oakridge-farewell"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "joy",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sable-joy",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The stadium, every floodlight on. Sable is smiling before the battle even starts, properly, the way you have never seen. Six Poké Balls, the Championship team, and in their pocket a seventh they have only just begun to train. Sable kneels, ties one lace slowly, and stands. Sable: \"I'm enjoying this. Your turn. One thing slowly.\""
+    },
+    {
+     "id": "league",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sable-league",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The stadium, every floodlight on, League banners already hung for a season Sable has said yes to. They stand at the far end of the pitch with six Poké Balls, the Championship team, back together. Sable kneels, ties one lace slowly, and stands. Sable: \"One practice, before the real crowd. Your turn.\""
+    },
+    {
+     "id": "teacher",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sable-teacher",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The stadium, every floodlight on and every seat empty, exactly as Sable likes it now. They stand on the pitch in their teacher's jacket with six Poké Balls, the Championship team, out for one last afternoon. Sable kneels, ties one lace slowly, and stands. Sable: \"No crowd. Just us. Your turn.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-sable-oakridge-farewell",
+   "name": "Sable: You Did One Thing Slowly",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "When it is over, Sable recalls their last Pokémon and stands a moment in the floodlights, eyes closed, listening to a crowd that is not there. Then they look at you. Sable: \"You did one thing slowly. I saw. Good.\" They hand you a Champion's ribbon, faded gold, and then, after a moment's hesitation, the old title cape, folded small.",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "The cape is heavier than it looks and smells faintly of an old stadium. Sable does not wait to see you put it on. They sit back down on the bench, retie a lace that did not need retying, and wave you on without looking up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-graduated",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "Sable gave you a Champion's ribbon and their old title cape",
+        "importance": 70
+       },
+       {
+        "kind": "mentor",
+        "trust": 40,
+        "loyalty": 5,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-tobias-satchel-lesson",
+   "name": "Tobias: The Price of Not Having It",
+   "group": "Mentors",
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "tobias-satchel"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 1,
+   "intro": "A market stall under a striped awning, the morning crowd jostling past. Tobias leans on the counter with a satchel over one shoulder that clinks every time he moves, and a grin that has sold a great many things. Tobias: \"Everything has a price. The good stuff has two.\" He taps a Berry on the counter between you. Tobias: \"The price you pay, and the price of not having it when you need it.\"",
+   "choices": [
+    {
+     "label": "\"Teach me to trade.\"",
+     "success": {
+      "text": "Tobias spends the morning walking you up and down the market, weighing a Leftovers against a Life Orb against your team, until you can see the sums in your head. For the run, shops mark which held items are worth it for your team, and every shop has one item 20% off.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's the second price?\"",
+     "success": {
+      "text": "Tobias tells you about a Trainer who sold her last Revive to buy a hat, and what happened two routes later. He does not finish the story. He does not need to. For the run, shops mark which held items are worth it for your team, and every shop has one item 20% off.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Sell me something.\"",
+     "success": {
+      "text": "Tobias laughs, delighted, and sells you nothing at all; instead he makes you sell him your own bag, item by item, and tell him why each one is in it. For the run, shops mark which held items are worth it for your team, and every shop has one item 20% off.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-tobias-satchel-recruit",
+   "name": "Tobias: Something That Picks Things Up",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "tobias-satchel"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-recruit",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2a44",
+    "effect": "sparkle"
+   },
+   "rarity": "uncommon",
+   "intro": "Tobias saw the whole battle from his stall, and he is clapping before your opponent has recalled their last Pokémon. He leans over the counter, and for once there is no sales pitch in his voice. Tobias: \"You used that item perfectly. I'd have charged for that lesson. A friend's got a Pokémon that picks things up. You'll get along.\"",
+   "choices": [
+    {
+     "label": "\"Take it.\"",
+     "success": {
+      "text": "Tobias's friend keeps a junk shop two streets over, and the Pokémon is asleep on a heap of odds and ends. It wakes, looks at you, and drops something shiny into your palm by way of hello. Tobias: \"See? Already paying its way.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "meowth",
+         "munchlax",
+         "linoone"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-recruit",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 1,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "Tobias taps his nose. Tobias: \"A good trader waits for the right price.\" He will ask again on market day.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "mentor-tobias-satchel-recruit"
+       },
+       {
+        "kind": "mentor",
+        "trust": 0,
+        "loyalty": 1,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-tobias-satchel-story",
+   "name": "Tobias: The Worst Deal I Ever Made",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "tobias-satchel"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-story",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#44301a",
+    "effect": "fire"
+   },
+   "rarity": "uncommon",
+   "intro": "Closing time at the market, the awnings coming down all along the street. Tobias sits on an upturned crate patting the satchel at his hip, not counting the day's takings for once. Tobias: \"My first customer was a girl with no money and a Pokémon with no Berries. I gave her both. Worst deal I ever made.\" He smiles, but not with the usual grin. Tobias: \"She's a Gym Leader now. She's never come back. I'd like to know if she remembers.\"",
+   "choices": [
+    {
+     "label": "\"Ask her.\"",
+     "success": {
+      "text": "You take the question to this region's Gym Leader yourself. She goes quiet, then fetches a book from her office and opens it: pressed flat between the pages is a Berry, brown with age, his first. She does remember. When you tell Tobias, he does not say a word for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tobias-asked",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave it.\"",
+     "success": {
+      "text": "Tobias looks at you, then down at the satchel, and the real smile comes back slowly. Tobias: \"Best deal I ever made.\" He stands, slings the satchel over his shoulder, and goes back to closing up the stall, whistling.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tobias-left",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Bring her to you.\"",
+     "success": {
+      "text": "It takes some doing, but the next market day she comes to the stall in person. She buys everything on it, every last Berry and bauble. Tobias cries openly behind the counter and insists, to anyone who will listen, that it is allergies.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tobias-reunion",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bram",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mentor-bram-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Tobias gives you a narrow look. Tobias: \"Bram told you. Of course he did.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-tobias-satchel-final",
+   "name": "Tobias: The Final Lesson",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "The market after dark, the stalls shuttered and lanterns strung between them. Tobias stands in the middle of the empty street with six Poké Balls laid out on a cloth like goods for sale, and every Pokémon in them holds a perfect item: a Choice Scarf, a Life Orb, Leftovers, a Focus Sash, an Assault Vest, a Rocky Helmet. Tobias: \"Final sale. Show me what you've learned to carry.\"",
+   "choices": [
+    {
+     "label": "\"Ready.\"",
+     "success": {
+      "text": "Tobias's first Pokémon steps forward with a Choice Scarf knotted round its neck, and moves before you have finished blinking.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Tobias's Final Lesson beat you, and you still graduated",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-tobias-satchel-farewell"
+        }
+       ],
+       "team": [
+        "ambipom",
+        "kangaskhan",
+        "snorlax",
+        "breloom",
+        "conkeldurr",
+        "ferrothorn"
+       ],
+       "name": "Tobias Satchel",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You passed Tobias's Final Lesson",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-tobias-satchel-farewell"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tobias-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The market after dark, lanterns strung between the shuttered stalls. Tobias has a little book tucked in his breast pocket now, with a pressed Berry inside. Six Poké Balls on a cloth, every Pokémon holding a perfect item: Choice Scarf, Life Orb, Leftovers, Focus Sash, Assault Vest, Rocky Helmet. Tobias: \"She remembered. Now let's see what you remember.\""
+    },
+    {
+     "id": "left",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tobias-left",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The market after dark, lanterns strung between the shuttered stalls. Tobias is whistling. Six Poké Balls laid out on a cloth, every Pokémon holding a perfect item: Choice Scarf, Life Orb, Leftovers, Focus Sash, Assault Vest, Rocky Helmet. Tobias: \"Best deal I ever made, and this is the next one. Show me.\""
+    },
+    {
+     "id": "reunion",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tobias-reunion",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The market after dark, and the stall is bare: she bought everything on it, and Tobias has not restocked for sheer happiness. Six Poké Balls on the empty counter, every Pokémon holding a perfect item: Choice Scarf, Life Orb, Leftovers, Focus Sash, Assault Vest, Rocky Helmet. Tobias: \"Last stock I've got. Show me what you've learned.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-tobias-satchel-farewell",
+   "name": "Tobias: Good Trader",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "When it is over, Tobias gathers up his six Poké Balls and the empty cloth, and laughs, short and pleased, like a man who has just been beaten on a price and does not mind. Tobias: \"You paid both prices. Good trader.\" He lifts the satchel off his own shoulder, the one that has clinked beside him at every stall you have ever seen him at, and hangs it on yours.",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "The satchel settles against your hip as if it has always been there, and it holds more than it should. Tobias gives the strap one last tug to straighten it, then turns away quickly and becomes very busy with his awning.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-graduated",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "tobias-satchel",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Tobias gave you his satchel",
+        "importance": 70
+       },
+       {
+        "kind": "mentor",
+        "trust": 40,
+        "loyalty": 5,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-vesper-nox-lesson",
+   "name": "Vesper: Show Me Your Second Plan",
+   "group": "Mentors",
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "vesper-nox"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 1,
+   "intro": "A dark lounge at the top of a hotel, velvet and low lamps and the city glittering beyond the glass. Vesper Nox sits cloaked in a deep chair with a chessboard set up in front of her, the pieces already in play against an opponent who left long ago. Vesper: \"Don't tell me your plan. Show me your second plan.\" She moves a knight without looking at it. Vesper: \"Everyone has a first. Winners have the next.\"",
+   "choices": [
+    {
+     "label": "\"Teach me.\"",
+     "success": {
+      "text": "Vesper spends the evening watching you battle her shadows, and every time your first plan fails she says only \"and?\" until you have an answer. For the run, the first time each battle an opponent misses, your active Pokémon gets a little stronger.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What if the first plan works?\"",
+     "success": {
+      "text": "Vesper laughs softly. Vesper: \"Then you'll have a spare.\" She makes you build one anyway, and then another behind it. For the run, the first time each battle an opponent misses, your active Pokémon gets a little stronger.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Play chess.\"",
+     "success": {
+      "text": "You sit down opposite her. Vesper wins in nine moves, and smiles: not cruelly, but like someone who has enjoyed every single one of them. Then she shows you where your second plan should have been. For the run, the first time each battle an opponent misses, your active Pokémon gets a little stronger.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-vesper-nox-recruit",
+   "name": "Vesper: Outgrown Me",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "vesper-nox"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-recruit",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#2a2a44",
+    "effect": "sparkle"
+   },
+   "rarity": "uncommon",
+   "intro": "Vesper watched your last battle from the shadow of a doorway, and you only know she was there because of the soft, slow applause when it ends. She steps into the light, cloak whispering. Vesper: \"Elegant. I almost didn't see it. A Pokémon I raised has outgrown me.\" Something moves in the shadow behind her, patient and clever.",
+   "choices": [
+    {
+     "label": "\"Take it.\"",
+     "success": {
+      "text": "The Pokémon slides out of Vesper's shadow and into yours as though it has been planning this move for some time. Vesper watches it go with an expression you cannot read, then turns away. Vesper: \"Look after its second plan.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "gengar",
+         "hydreigon",
+         "zoroark"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-recruit",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 1,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "Vesper inclines her head. Vesper: \"Patience is a plan too.\" She will ask again.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "mentor-vesper-nox-recruit"
+       },
+       {
+        "kind": "mentor",
+        "trust": 0,
+        "loyalty": 1,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-vesper-nox-story",
+   "name": "Vesper: To Lose Well",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "vesper-nox"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-story",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#44301a",
+    "effect": "fire"
+   },
+   "rarity": "uncommon",
+   "intro": "The dark lounge, late, the city lights gone soft with rain. Vesper stands at the window adjusting the clasp of her cloak, again and again, a small nervous movement you have never seen from her. Vesper: \"Every challenger who reaches me is better than I was. I teach because I'd like, once, to lose well.\" She turns from the glass. Vesper: \"I'm Elite Four. You'll meet me at the League. When you do, I'd like a real battle. No holding back from me, and none from you.\"",
+   "choices": [
+    {
+     "label": "\"Promise.\"",
+     "success": {
+      "text": "Vesper looks at you for a long moment, and something in her face goes very still and very bright. She holds out a gloved hand, and you shake it. When you meet her at the League, she will not hold back, and neither will you. Win, and she will be happy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vesper-promise",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll hold back.\"",
+     "success": {
+      "text": "Vesper's smile does not move, but something behind it does. Vesper: \"Then so will I.\" She inclines her head, perfectly polite, and turns back to the board. She is quietly disappointed, and lets you see it, just for a second.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vesper-soft",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why does it matter?\"",
+     "success": {
+      "text": "Vesper is silent for so long the rain gets louder. Vesper: \"Because losing well is the last thing I haven't done.\" She sits, folds her hands, and waits for your answer.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-vesper-nox-story-again"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bram",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mentor-bram-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Vesper gives you a narrow look. Vesper: \"Bram told you. Of course he did.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-vesper-nox-story-again",
+   "name": "Vesper: The Last Thing",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "The rain runs down the glass. Vesper sits very still in the deep chair, cloak gathered round her, and the chessboard between you holds a game neither of you is playing. She is waiting, and she will not ask twice.",
+   "choices": [
+    {
+     "label": "\"Promise.\"",
+     "success": {
+      "text": "Vesper looks at you for a long moment, and something in her face goes very still and very bright. She holds out a gloved hand, and you shake it. When you meet her at the League, she will not hold back, and neither will you. Win, and she will be happy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vesper-promise",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll hold back.\"",
+     "success": {
+      "text": "Vesper's smile does not move, but something behind it does. Vesper: \"Then so will I.\" She inclines her head, perfectly polite, and turns back to the board. She is quietly disappointed, and lets you see it, just for a second.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vesper-soft",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-vesper-nox-final",
+   "name": "Vesper: The Final Lesson",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "The League. The Elite Four chamber of shadows: black glass floor, candles burning without flame, the long walk from the door to where Vesper sits on a carved chair with her cloak spread round her like a second night. Six Poké Balls rest in her lap, Ghost and Dark, every one of them built to set up and punish a mistake. Vesper: \"Show me your second plan.\"",
+   "choices": [
+    {
+     "label": "\"Ready.\"",
+     "success": {
+      "text": "Vesper's Sableye flickers out of the candle-shadow, and the chamber goes darker by a shade.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Vesper's Final Lesson beat you, and you still graduated",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-vesper-nox-farewell"
+        }
+       ],
+       "team": [
+        "sableye",
+        "mismagius",
+        "honchkrow",
+        "weavile",
+        "chandelure",
+        "spiritomb"
+       ],
+       "name": "Elite Four Vesper",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "vesper-final-won",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "You passed Vesper's Final Lesson",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-vesper-nox-farewell"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "promise",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "vesper-promise",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The League. The Elite Four chamber of shadows: black glass floor, candles burning without flame, the long walk from the door to where Vesper sits on a carved chair with her cloak spread round her like a second night. She rises as you enter, and she is smiling: you promised, and so did she. Six Poké Balls, Ghost and Dark, and nothing held back. Vesper: \"A real battle. As promised. Show me everything.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"Ready.\"",
+       "success": {
+        "text": "Vesper sends out her Sableye at full strength, and you can feel the difference before it has even moved.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "Vesper's Final Lesson beat you, and you still graduated",
+           "importance": 60
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "mentor-vesper-nox-farewell"
+          }
+         ],
+         "team": [
+          "sableye",
+          "mismagius",
+          "honchkrow",
+          "weavile",
+          "chandelure",
+          "spiritomb"
+         ],
+         "name": "Elite Four Vesper",
+         "size": 6,
+         "types": [],
+         "levelBonus": 3,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "vesper-final-won",
+           "amount": 1,
+           "stamp": "region"
+          },
+          {
+           "kind": "moment",
+           "text": "You passed Vesper's Final Lesson",
+           "importance": 60
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "mentor-vesper-nox-farewell"
+          }
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "soft",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "vesper-soft",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The League. The Elite Four chamber of shadows: black glass floor, candles burning without flame, the long walk from the door to where Vesper sits on a carved chair with her cloak spread round her like a second night. She does not rise. Six Poké Balls in her lap, Ghost and Dark, and you can tell from the way she holds them that she will keep her word and hold back. Vesper: \"As agreed. Let's begin.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"Ready.\"",
+       "success": {
+        "text": "Vesper's Sableye drifts out of the candle-shadow without hurry. She is holding back, as she said she would.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "Vesper's Final Lesson beat you, and you still graduated",
+           "importance": 60
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "mentor-vesper-nox-farewell"
+          }
+         ],
+         "team": [
+          "sableye",
+          "mismagius",
+          "honchkrow",
+          "weavile",
+          "chandelure",
+          "spiritomb"
+         ],
+         "name": "Elite Four Vesper",
+         "size": 6,
+         "types": [],
+         "levelBonus": 0,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "vesper-final-won",
+           "amount": 1,
+           "stamp": "region"
+          },
+          {
+           "kind": "moment",
+           "text": "You passed Vesper's Final Lesson",
+           "importance": 60
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "mentor-vesper-nox-farewell"
+          }
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mentor-vesper-nox-farewell",
+   "name": "Vesper: That Was the One",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "Vesper recalls her last Pokémon and sits back, cloak pooling round her, and for a while she says nothing at all. Vesper: \"Not today. But you never stopped planning. I saw.\" She unclasps the cloak and holds it out to you, with a Dusk Stone resting in its folds.",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "The cloak is lighter than it looks, and warm from her. Vesper sets the Dusk Stone on top of it with one gloved finger, like the last piece on a board. You leave her in the candlelight, already setting up a new game.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-graduated",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "dusk-stone",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Vesper gave you her cloak",
+        "importance": 70
+       },
+       {
+        "kind": "mentor",
+        "trust": 40,
+        "loyalty": 5,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "won",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "vesper-final-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Vesper's last Pokémon falls, and the candles in the chamber gutter all at once. She sits very still. Then she laughs, softly, wonderingly, and her eyes are bright. Vesper: \"Oh. That was it. That was the one. Thank you.\" She unclasps the cloak and holds it out to you, with a Dusk Stone resting in its folds."
+    }
+   ]
+  },
+  {
+   "id": "mentor-ysolde-marrow-lesson",
+   "name": "Ysolde: Like Walking into a Church",
+   "group": "Mentors",
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "ysolde-marrow"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 1,
+   "intro": "A library in a ruin, half its roof open to the sky and ivy growing through the shelves. Ysolde Marrow sits cross-legged among drifts of scrolls, grey-braided, a magnifying glass on a cord round her neck. She does not look up. Ysolde: \"Quiet. The old ones listen better than people do.\" Only when you have stood still long enough does she raise her eyes. Ysolde: \"Walk into a Legendary's place like you're walking into a church.\"",
+   "choices": [
+    {
+     "label": "\"Teach me.\"",
+     "success": {
+      "text": "Ysolde teaches you how to read a place: the stones left as offerings, the silence birds keep, the paths nobody walks. By dusk you are whispering without meaning to. For the run, every Legendary Sign you find counts for more.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Have you seen one?\"",
+     "success": {
+      "text": "Ysolde's hands go still on the scroll. Ysolde: \"Once. Briefly.\" She says no more, but she teaches you all afternoon like someone who has. For the run, every Legendary Sign you find counts for more.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Read me a scroll.\"",
+     "success": {
+      "text": "Ysolde unrolls one so old it crackles, and reads aloud in a low voice about a bell that rang beneath a mountain and a light that answered from the sea. The ruin seems to lean in to listen. For the run, every Legendary Sign you find counts for more.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-ysolde-marrow-recruit",
+   "name": "Ysolde: What the Third Scroll Said",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "ysolde-marrow"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-recruit",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2a44",
+    "effect": "sparkle"
+   },
+   "rarity": "uncommon",
+   "intro": "You come back to the ruined library with what you found, and Ysolde reads your face before you speak. She is already pulling a scroll from the shelf, and her hands are trembling a little. Ysolde: \"Yes. That's what the third scroll said. There's a Pokémon that guards a shrine near here. It'd follow you.\"",
+   "choices": [
+    {
+     "label": "\"Take it.\"",
+     "success": {
+      "text": "The shrine is a ring of stones on a hill, and the Pokémon has been standing guard in the middle of it longer than anyone knows. When you step inside the ring it turns, slowly, and follows you out. Ysolde writes it all down.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "bronzong",
+         "claydol",
+         "sigilyph"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-recruit",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 1,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "Ysolde nods. Ysolde: \"It has waited centuries. It can wait a little longer.\" She will ask again.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "mentor-ysolde-marrow-recruit"
+       },
+       {
+        "kind": "mentor",
+        "trust": 0,
+        "loyalty": 1,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-ysolde-marrow-story",
+   "name": "Ysolde: Four Hundred Pages",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "ysolde-marrow"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-story",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#44301a",
+    "effect": "fire"
+   },
+   "rarity": "uncommon",
+   "intro": "Ysolde clears a table among the scrolls and unrolls a map across it, weighting the corners with books. In the middle, circled over and over in ink, is a stretch of empty coast. Ysolde: \"I saw one once, for three seconds, in a storm. I've written four hundred pages since to be sure I didn't dream it.\" She puts her hand flat on the circle, and does not look at you. Ysolde: \"You've seen them. Properly. Will you tell me if I was right?\"",
+   "choices": [
+    {
+     "label": "\"You were right.\"",
+     "success": {
+      "text": "Ysolde: \"Oh.\" She sits down, very suddenly, on a pile of scrolls. She doesn't speak for a while. When she finally looks up, she looks thirty years younger, and as if she might cry, and she does not seem to mind either.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ysolde-right",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I don't know which you saw.\"",
+     "success": {
+      "text": "So she tells you: the shape in the storm, the sound it made, the colour of the light. As she speaks, you realise you know it. It is the very Legendary whose blessing this journey has followed. A Sign, and she has carried it for thirty years.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ysolde-sign",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Show me the pages.\"",
+     "success": {
+      "text": "You read all four hundred, by lamplight, while Ysolde pretends to sleep. Her description matches a Legendary you have met yourself, line for line. When you tell her, she adds your account as the last chapter, and the book goes to the printer at last.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ysolde-book",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bram",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mentor-bram-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Ysolde gives you a narrow look. Ysolde: \"Bram told you. Of course he did.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-ysolde-marrow-final",
+   "name": "Ysolde: The Final Lesson",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "Ysolde takes you to the ring of stones on the hill, where the old guardian once stood. Six Poké Balls hang from her belt on lengths of braided cord, every one a guardian: Bronzong, Claydol, Sigilyph, Cofagrigus, Golurk, and one older than all of them. Ysolde: \"Quietly, now. The old ones are watching. Show them.\"",
+   "choices": [
+    {
+     "label": "\"Ready.\"",
+     "success": {
+      "text": "Ysolde's Bronzong rises from the grass with a low bell note, and the stones of the ring seem to hum along with it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Ysolde's Final Lesson beat you, and you still graduated",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-ysolde-marrow-farewell"
+        }
+       ],
+       "team": [
+        "bronzong",
+        "claydol",
+        "sigilyph",
+        "cofagrigus",
+        "golurk",
+        "registeel"
+       ],
+       "name": "Ysolde Marrow",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You passed Ysolde's Final Lesson",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-ysolde-marrow-farewell"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "right",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ysolde-right",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The ring of stones on the hill. Ysolde stands straighter than she did, like someone who has finally put down something heavy. Six guardians on braided cords: Bronzong, Claydol, Sigilyph, Cofagrigus, Golurk, and one older than all of them. Ysolde: \"I was right. Now show the old ones you are too.\""
+    },
+    {
+     "id": "sign",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ysolde-sign",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The ring of stones on the hill, and the sky above it has the same strange light as her story. Six guardians on braided cords: Bronzong, Claydol, Sigilyph, Cofagrigus, Golurk, and one older than all of them. Ysolde: \"It's watching you, you know. Show it.\""
+    },
+    {
+     "id": "book",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ysolde-book",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The ring of stones on the hill. Ysolde has a printed copy of her book under her arm, your chapter marked with a ribbon. Six guardians on braided cords: Bronzong, Claydol, Sigilyph, Cofagrigus, Golurk, and one older than all of them. Ysolde: \"One last chapter. Show the old ones.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-ysolde-marrow-farewell",
+   "name": "Ysolde: The Old Ones Would Be Pleased",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "When it is over, Ysolde recalls her guardians one by one, murmuring something to each, and the hum goes out of the stones. She turns to you with her braid coming loose in the wind. Ysolde: \"The old ones would be pleased with you. I am.\" From her satchel she takes a thick bundle of pages tied with string: all four hundred, in her own cramped hand.",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "The pages are heavy, and every margin is full of notes on where the old ones sleep and what wakes them. Ysolde rests her hand on the bundle one last time, then on your head, briefly, like a blessing. Then she goes back to her ruin.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-graduated",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ysolde-pages",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Ysolde gave you her four hundred pages",
+        "importance": 70
+       },
+       {
+        "kind": "mentor",
+        "trust": 40,
+        "loyalty": 5,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

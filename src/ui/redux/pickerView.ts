@@ -7,7 +7,12 @@ import type { AssetManifest } from '../../assets/catalog';
 import { rxFileOf } from './assets';
 import { mountRedux, type ReduxCtx, type ReduxView } from './stage';
 import { act, type Area, esc, H, TX, W } from './kit';
-import { gridView, menuView, pic, scrollStart, tabsBar } from './templates';
+import { boardProgress, type BoardRow, boardView, gridStart, gridView, menuView, scrollStart, tabsBar } from './templates';
+import { bagCols, bagUseNote, bagView } from './screens/bag';
+import { battleListView, windowTitle } from './screens/battle';
+import { monFile, partyChips, partyStrip } from './game';
+import { services } from '../../game/services';
+import { itemUseProblem } from '../../core/items';
 
 export interface PickerBridge {
   title: string;
@@ -17,9 +22,17 @@ export interface PickerBridge {
   box: (i: number) => Phaser.GameObjects.Container | undefined;
   problem: (i: number) => string | null;
   hint: (i: number) => string;
+  /** A Pokémon row's look, HP left (0 to 1) and short mark, for the battle windows. */
+  mon?: (i: number) => { speciesId: string; shiny: boolean; hp: number; mark: string } | undefined;
+  /** A board row said outright (Bonds): its line, bar and tag are not read off the canvas row. */
+  board?: (i: number) => { title: string; sub: string; pct: number; tag: string } | undefined;
+  /** The item a row stands for, if any (Bag). */
+  item?: (i: number) => string | undefined;
   tabs?: { labels: readonly string[]; index: number; onChange: (index: number) => void };
   canBack: boolean;
   backLabel?: string;
+  /** The battle window's top edge, when it is not the usual one. */
+  top?: number;
   /** The quick-summary text while it is open (I), else null. */
   summary: () => string | null;
   pick: (i: number) => void;
@@ -27,10 +40,13 @@ export interface PickerBridge {
   back: () => void;
 }
 
-export type PickerKind = 'menu' | 'grid' | 'board';
+/** `window` is the battle's small Party or Item window over the field; the rest are full screens. */
+export type PickerKind = 'menu' | 'grid' | 'board' | 'bag' | 'window';
 
 /** Which template a list uses, by its title: the mock-ups' own rule for hub rooms (redux-07.js `kind`). */
 const KIND_BY_NAME: [RegExp, PickerKind][] = [
+  [/^bag$/i, 'bag'],
+  [/^bonds?$/i, 'board'],
   // The mock-up catalogue names these screens outright (redux-explorer.js SETS); the rule below covers the rest.
   [/^(lore|story|remembrance) archive|^tales|^run history|^trainer quests|^event hall|^content status|^seed board|run journal|memory lane|fallen trainers|battle replays|leaderboard|^bonds|story journal|^rival|^people|relationships|field notes|^notes/i, 'board'],
   [/^bank|^mentors|^mod packs|district|preparation desk|^camp|in this run|raid prep|^menu$/i, 'menu'],
@@ -46,6 +62,7 @@ export function pickerKind(title: string): PickerKind {
 
 /** Header colour by title: run menus teal, party green, shop orange, the rest hub blue. */
 function areaOf(title: string): Area {
+  if (/^bag$/i.test(title)) return 'shop';
   if (/party|pok[eé]mon|team|summary|bond/i.test(title)) return 'party';
   if (/shop|mart|merchant|exchange|bank/i.test(title)) return 'shop';
   if (/bag|item|camp|map|route|journal|notes/i.test(title)) return 'run';
@@ -55,6 +72,8 @@ function areaOf(title: string): Area {
 /** How many columns the cursor moves across in each template and layout (the Picker steers by this in the New UI). */
 export function pickerCols(kind: PickerKind, c: Pick<ReduxCtx, 'v'>): number {
   if (kind === 'grid') return c.v(2) === 1 ? 5 : 6;
+  if (kind === 'bag') return bagCols(c);
+  if (kind === 'window') return 1;
   if (kind === 'board') return c.v(2) === 1 ? 2 : 1;
   const v = c.v(3);
   return v === 1 ? 2 : 1;
@@ -90,10 +109,28 @@ export function scrapeRow(scene: Phaser.Scene, box: Phaser.GameObjects.Container
   };
 }
 
-const attr = (k: number): string => `${act('pick', k)} data-over="over"`;
-const more = (n: number, s: number, size: number, st: string): string => (n > size ? `<div class="abs sm" style="${st}">${s > 0 ? '▲' : ''} ${s + 1}–${Math.min(n, s + size)} of ${n} ${s + size < n ? '▼' : ''}</div>` : '');
+/** Who in the party the focused Bag item would help, one short note each ('' for no note). */
+function bagNotes(itemId: string | undefined): string[] | undefined {
+  const { content, run } = services().session;
+  const item = itemId ? content.items.get(itemId) : undefined;
+  if (!run || !item) return undefined;
+  const regionId = run.regionOrder[run.regionIndex];
+  return run.party.map((m) => bagUseNote(m.held?.[item.id] ?? 0, !!item.usableOutside, item.usableOutside ? itemUseProblem(content, item, m, regionId) : null, m.hp));
+}
 
 function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerKind): string {
+  if (kind === 'window') {
+    const sum = p.summary();
+    const over = sum === null ? '' : '<div class="shade" style="z-index:8"></div>' + W(`<div style="white-space:pre-wrap;line-height:22px;font-size:16px">${esc(sum)}</div><div class="sm acc">Press I, Enter or Esc to go back to the list</div>`, 'position:absolute;left:120px;right:120px;top:40px;bottom:50px;display:flex;flex-direction:column;gap:10px;padding:16px 20px;overflow:hidden;z-index:9', '', act('back'));
+    const t = windowTitle(p.title);
+    return battleListView(c, {
+      ...t, tabs: p.tabs ? { labels: p.tabs.labels, index: p.tabs.index } : null, n: p.rows, index: p.index(), top: p.top, back: p.canBack,
+      row: (i) => {
+        const r = scrapeRow(scene, p.box(i)), m = p.mon?.(i), file = m ? monFile(scene, m.speciesId, 'front', m.shiny) : null;
+        return { label: r.label, art: file ? { file, atlas: true } : m ? null : r.art, hp: m ? m.hp : null, tag: m ? m.mark : r.tag, off: p.problem(i) !== null };
+      },
+    }) + over;
+  }
   // "Bank · 0 credits · 0 candies": the name goes in the band, the rest becomes chips beside it.
   const [name = '', ...extra] = p.title.split(/\s+·\s+/);
   const n = p.rows, index = p.index(), area = areaOf(name);
@@ -101,26 +138,36 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
   const hints: [string, string][] = [['Enter', 'choose'], ...(p.tabs ? [['←→', 'tab'] as [string, string]] : []), ...(p.canBack ? [['Esc', p.backLabel ?? 'back'] as [string, string]] : [])];
   const row = (i: number): Scraped => scrapeRow(scene, p.box(i));
   const text = n ? p.problem(index) ?? p.hint(index) : p.canBack ? 'Nothing here yet. Press Esc to go back.' : 'Nothing here yet.';
-  const tabs = p.tabs ? tabsBar(p.tabs.labels, p.tabs.index) : '';
+  // The Bag draws its pockets as its own row of tabs under the header.
+  const tabs = p.tabs && kind !== 'bag' ? tabsBar(p.tabs.labels, p.tabs.index) : '';
   const back = p.canBack ? `<div class="abs hit" style="left:0;top:0;width:330px;height:48px;z-index:4"${act('back')}></div>` : '';
   const sum = p.summary();
   const over = sum === null ? '' : '<div class="shade" style="z-index:8"></div>' + W(`<div style="white-space:pre-wrap;line-height:22px;font-size:16px">${esc(sum)}</div><div class="sm acc">Press I, Enter or Esc to go back to the list</div>`, 'position:absolute;left:120px;right:120px;top:40px;bottom:50px;display:flex;flex-direction:column;gap:10px;padding:16px 20px;overflow:hidden;z-index:9', '', act('back'));
   let body: string;
-  if (n === 0) body = H(name, area, hints) + `<div class="abs cen" style="left:0;right:0;top:220px;display:flex;font-size:26px;opacity:.6">Nothing here yet</div>` + TX(esc(text));
+  if (n === 0 && kind !== 'bag') body = H(name, area, hints) + `<div class="abs cen" style="left:0;right:0;top:220px;display:flex;font-size:26px;opacity:.6">Nothing here yet</div>` + TX(esc(text));
   else if (kind === 'grid') {
     const cur = row(index), found = Array.from({ length: n }, (_, i) => p.problem(i) === null).filter(Boolean).length;
     body = gridView(c, { title: name, area, hints, n, cell: (i) => { const r = row(i); return { art: r.art, label: r.label, off: p.problem(i) !== null }; }, index, detail: { title: cur.label, body: cur.note, facts: cur.tag ? [['', cur.tag]] : [], art: cur.art }, found, total: n, text });
+  } else if (kind === 'bag') {
+    const strip = services().session.run ? partyStrip(partyChips(scene), 'left:24px;right:24px;bottom:100px', bagNotes(p.item?.(index))) : '';
+    body = bagView(c, { title: name, hints, pockets: p.tabs ? { labels: p.tabs.labels, index: p.tabs.index } : null, n, item: (i) => ({ ...row(i), off: p.problem(i) !== null }), index, strip, text });
   } else if (kind === 'board') {
-    if (c.v(2) === 1) {
-      const s = scrollStart(n, index, 6) & ~1;
-      body = H(name, area, hints) + `<div class="abs" style="left:24px;right:24px;top:70px;display:grid;grid-template-columns:1fr 1fr;gap:18px">${Array.from({ length: Math.min(6, n - s) }, (_, q) => { const i = s + q, r = row(i); return W(`<div class="row">${pic(r.art, 30)}<b class="grow" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.label)}</b>${r.tag ? `<span class="tg${i === index ? '' : ' no'}">${esc(r.tag)}</span>` : ''}</div><div class="sm" style="line-height:19px;max-height:38px;overflow:hidden">${esc(r.note)}</div>`, 'display:flex;flex-direction:column;gap:6px;padding:10px 14px;min-width:0', i === index ? 'sel' : p.problem(i) ? 'dim' : '', attr(i)); }).join('')}</div>` + more(n, s, 6, 'right:28px;top:438px') + TX(esc(text));
-    } else {
-      const s = scrollStart(n, index, 5);
-      body = H(name, area, hints) + `<div class="abs col" style="left:24px;right:24px;top:72px;gap:15px">${Array.from({ length: Math.min(5, n - s) }, (_, q) => { const i = s + q, r = row(i); return W(`${pic(r.art, 36)}<div class="col grow" style="gap:4px"><b style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.label)}</b><span class="sm" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.note)}</span></div>${r.tag ? `<span class="tg${i === index ? '' : ' no'}">${esc(r.tag)}</span>` : ''}`, 'display:flex;align-items:center;gap:14px;padding:9px 16px', i === index ? 'sel' : p.problem(i) ? 'dim' : '', attr(i)); }).join('')}</div>` + more(n, s, 5, 'right:28px;top:446px') + TX(esc(text));
-    }
+    // Only the rows near the cursor are on screen, so only those are read.
+    const near = (i: number): boolean => Math.abs(i - index) < 8;
+    const rows = Array.from({ length: n }, (_, i): BoardRow => {
+      if (!near(i)) return { title: '', sub: '' };
+      const said = p.board?.(i);
+      if (said) return { ...said, off: p.problem(i) !== null };
+      const r = row(i), prog = boardProgress(r.tag);
+      // A count ("2/5") becomes the mock-ups' progress bar, a state tag and the count in words under the title.
+      return prog
+        ? { title: r.label, sub: [prog.count, r.note].filter(Boolean).join(' · '), tag: prog.state, pct: prog.pct, art: r.art, off: p.problem(i) !== null }
+        : { title: r.label, sub: r.note, tag: r.tag, art: r.art, off: p.problem(i) !== null };
+    });
+    body = boardView(c, { title: name, area, rows, index, text, hints });
   } else {
     // menu: only the rows on screen are read.
-    const v = c.v(3), size = v === 1 ? 8 : 7, s = v === 2 ? 0 : v === 1 ? scrollStart(n, index, 8) & ~1 : scrollStart(n, index, 7);
+    const v = c.v(3), size = v === 1 ? 8 : 7, s = v === 2 ? 0 : v === 1 ? gridStart(n, index, 8, 2) : scrollStart(n, index, 7);
     const near = (i: number): boolean => (v === 2 ? Math.min(Math.abs(i - index), n - Math.abs(i - index)) <= 1 : i >= s && i < s + size);
     const items = Array.from({ length: n }, (_, i) => { if (!near(i)) return { label: '' }; const r = row(i); return { label: r.label, note: v === 0 ? r.tag : [r.note, r.tag].filter(Boolean).join(' · '), disabled: p.problem(i) !== null }; });
     const cur = row(index);
@@ -141,6 +188,7 @@ export function mountPickerView(scene: Phaser.Scene, p: PickerBridge, kind: Pick
     },
     acts: { pick: (i) => p.pick(Number(i)), tab: (k) => p.tabs && Number(k) !== p.tabs.index && p.tabs.onChange(Number(k)), back: () => p.back() },
     overs: { over: (i) => p.hover(Number(i)) },
+    clear: kind === 'window',
   });
   return Object.assign(view, { get cols() { return cols; } }) as PickerView;
 }

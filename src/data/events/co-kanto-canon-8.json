@@ -1,0 +1,6102 @@
+{
+ "catalogOverhaul": "kanto-canon",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "cs-kanto-pewter-stranger",
+   "name": "The Kind Stranger",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "The path's forked three times, and the third fork looks like the first. A man in a very good suit is coming the other way, with a walking stick, as if it's a park. The stranger: \"You've gone round twice. So did I, the first time; it's the oak. Everybody turns at the oak. Is that one poisoned? Here.\" An Antidote, from an inside pocket. He crouches to give it himself, without minding the suit. \"What's its name? ...And did it choose you, or you it? ...Ah. That's the better way round.\"",
+   "choices": [
+    {
+     "label": "\"Who are you?\"",
+     "success": {
+      "text": "\"A man out for a walk.\" He smiles. It's a real one. He asks about each of your Pokémon, with real interest, and listens to the answers: where it was met, what it's good at, what it's afraid of. Of whichever's weakest: \"That one'll surprise you. The ones that start behind have further to go. I've always thought further was the point.\" He shows you the way out past the oak. He doesn't give his name.",
+      "effects": [
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Make it move: Speed doubled against the next boss",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 2
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-pewter-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Met a well-dressed man in Viridian Forest. He gave advice about Ground types, and no name."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Which way's out?\"",
+     "success": {
+      "text": "\"Left at the oak. Everybody goes right.\" He asks about each of your Pokémon, with real interest, and listens to the answers: where it was met, what it's good at, what it's afraid of. Of whichever's weakest: \"That one'll surprise you. The ones that start behind have further to go. I've always thought further was the point.\" He shows you the way out past the oak. He doesn't give his name.",
+      "effects": [
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Make it move: Speed doubled against the next boss",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 2
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-pewter-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Met a well-dressed man in Viridian Forest. He gave advice about Ground types, and no name."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Do you train?\"",
+     "success": {
+      "text": "\"I did. I keep a few. Ground types. People think they're slow. They're patient. If one's ever facing you, don't wait for it to make a mistake. It won't. Make it move.\" He asks about each of your Pokémon, with real interest, and listens to the answers: where it was met, what it's good at, what it's afraid of. Of whichever's weakest: \"That one'll surprise you. The ones that start behind have further to go. I've always thought further was the point.\" He shows you the way out past the oak. He doesn't give his name.",
+      "effects": [
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Make it move: Speed doubled against the next boss",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 2
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-pewter-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Met a well-dressed man in Viridian Forest. He gave advice about Ground types, and no name."
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.stranger"
+  },
+  {
+   "id": "cs-kanto-pewter-visitors",
+   "name": "Visitors",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A town with no clocks. No kettles. A bicycle with no bell. Your bag is one item lighter. Something's been taken. You'll get it back. A man in a hat made of foil, Mr. Oswald Peake: \"It's them. I've said for years. They take metal. They take things that tick. Do you know what ticks? Ships. I'm not frightened. I'm thrilled.\"",
+   "choices": [
+    {
+     "label": "Follow the trail.",
+     "success": {
+      "text": "Small round footprints. A dropped teaspoon. A cave, the next node on.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "cs-kanto-pewter-visitors-cave",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.visitors"
+  },
+  {
+   "id": "cs-kanto-pewter-visitors-cave",
+   "name": "Visitors: The Cave",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Inside: Clefairy, dozens, in a chain, passing things hand to hand. In the middle, as high as a house: kettles, clocks, a weathervane, a bathtub, a bicycle bell at the very top, all fitted together into something with fins. One of them's holding your item up against a gap, to see if it fits. It doesn't. It hands it back, politely, and takes a doorknob instead. It launches whether or not you interfere.",
+   "choices": [
+    {
+     "label": "\"Stop them.\"",
+     "chance": 0.4,
+     "success": {
+      "text": "A sound like every kettle in town coming to the boil at once. It goes up. It really does. It comes down again, in the pond, gently. They climb out, wet, and look at the sky, and start collecting kettles. Your item comes back, and a Comet Shard, and a Clefairy that's decided to stay on the ground asks to come.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "comet-shard",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "clefairy"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-pewter-visitors",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Watched the Clefairy's kettle ship go up, and come down in the pond."
+       }
+      ]
+     },
+     "failure": {
+      "text": "A sound like every kettle in town coming to the boil at once. It goes up. It really does. It keeps going. It's a new star for about a minute, low in the west. Your item comes back, handed down politely, and a Comet Shard.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "comet-shard",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-pewter-visitors",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Watched a new star made of kettles, low in the west, for about a minute."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help. (Hand up the next piece.)",
+     "chance": 0.4,
+     "success": {
+      "text": "A sound like every kettle in town coming to the boil at once. It goes up. It really does. It comes down again, in the pond, gently. They climb out, wet, and look at the sky, and start collecting kettles. Your item comes back, and a Comet Shard, and a Clefairy that's decided to stay on the ground asks to come.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "item",
+        "id": "comet-shard",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "clefairy"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-pewter-visitors",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Watched the Clefairy's kettle ship go up, and come down in the pond."
+       }
+      ]
+     },
+     "failure": {
+      "text": "A sound like every kettle in town coming to the boil at once. It goes up. It really does. It keeps going. It's a new star for about a minute, low in the west. Your item comes back, handed down politely, and a Comet Shard.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "item",
+        "id": "comet-shard",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-pewter-visitors",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Watched a new star made of kettles, low in the west, for about a minute."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Fetch Mr. Peake. He should see this.\"",
+     "chance": 0.4,
+     "success": {
+      "text": "A sound like every kettle in town coming to the boil at once. It goes up. It really does. It comes down again, in the pond, gently. They climb out, wet, and look at the sky, and start collecting kettles. Your item comes back, and a Comet Shard, and a Clefairy that's decided to stay on the ground asks to come.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Mr. Peake: \"They were here. The whole time. They weren't coming. They were leaving. ...I'd have helped. I've a very good kettle.\""
+       },
+       {
+        "kind": "item",
+        "id": "comet-shard",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "clefairy"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-pewter-visitors",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Watched the Clefairy's kettle ship go up, and come down in the pond."
+       }
+      ]
+     },
+     "failure": {
+      "text": "A sound like every kettle in town coming to the boil at once. It goes up. It really does. It keeps going. It's a new star for about a minute, low in the west. Your item comes back, handed down politely, and a Comet Shard.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Mr. Peake: \"They were here. The whole time. They weren't coming. They were leaving. ...I'd have helped. I've a very good kettle.\""
+       },
+       {
+        "kind": "item",
+        "id": "comet-shard",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-pewter-visitors",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Watched a new star made of kettles, low in the west, for about a minute."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-vermilion-triage",
+   "name": "Triage",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "A lorry on its side on the coast road. Nobody's badly hurt; it's said at once. A queue of shaken Pokémon and their people outside a door marked DR. PROCTOR. HUMANS. Dr. Proctor: \"The Center's full. They've sent them to me. I do people. I've a Chansey; she does the Pokémon in the waiting room for fun. I don't know which end of a Weepinbell is the front. You're a trainer. Stand there. Tell me who's first.\"",
+   "choices": [
+    {
+     "label": "Stand there.",
+     "success": {
+      "text": "The first patient.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm not a doctor.\"",
+     "success": {
+      "text": "\"Nor am I, for these. Stand there.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p1"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.vermilion.triage"
+  },
+  {
+   "id": "cs-kanto-vermilion-triage-p1",
+   "name": "Triage: Patient 1",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "A Dodrio, one head drooping. The other two heads are holding it up.",
+   "choices": [
+    {
+     "label": "First.",
+     "success": {
+      "text": "Right. That saves time for the next.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-triage-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Can wait.",
+     "success": {
+      "text": "It costs nobody anything but minutes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Only frightened.",
+     "success": {
+      "text": "It costs nobody anything but minutes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-vermilion-triage-p2",
+   "name": "Triage: Patient 2",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "A Cubone, howling. The Chansey pats it and moves on.",
+   "choices": [
+    {
+     "label": "First.",
+     "success": {
+      "text": "It costs nobody anything but minutes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Can wait.",
+     "success": {
+      "text": "It costs nobody anything but minutes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Only frightened.",
+     "success": {
+      "text": "Right. That saves time for the next.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-triage-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-vermilion-triage-p3",
+   "name": "Triage: Patient 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "A Weepinbell, very quiet. Its trainer: \"It's fine, it's being good.\"",
+   "choices": [
+    {
+     "label": "First.",
+     "success": {
+      "text": "Dr. Proctor, at the Weepinbell: \"The quiet one. Of course. It's the same with people. It's always the one in the corner saying 'I don't want to be a bother.'\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-triage-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Can wait.",
+     "success": {
+      "text": "It costs nobody anything but minutes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Only frightened.",
+     "success": {
+      "text": "It costs nobody anything but minutes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p4"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-vermilion-triage-p4",
+   "name": "Triage: Patient 4",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "A Raticate with a split tooth. It's eating a chair.",
+   "choices": [
+    {
+     "label": "First.",
+     "success": {
+      "text": "It costs nobody anything but minutes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Can wait.",
+     "success": {
+      "text": "Right. That saves time for the next.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-triage-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Only frightened.",
+     "success": {
+      "text": "It costs nobody anything but minutes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-vermilion-triage-p5",
+   "name": "Triage: Patient 5",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "A Sandslash that won't uncurl. It uncurls for its trainer's voice.",
+   "choices": [
+    {
+     "label": "First.",
+     "success": {
+      "text": "It costs nobody anything but minutes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Can wait.",
+     "success": {
+      "text": "It costs nobody anything but minutes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Only frightened.",
+     "success": {
+      "text": "Right. That saves time for the next.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-triage-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-p6"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-vermilion-triage-p6",
+   "name": "Triage: Patient 6",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "A Voltorb, sparking. Everyone's backed away.",
+   "choices": [
+    {
+     "label": "First, and gently.",
+     "success": {
+      "text": "Right. That saves time for the next.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-triage-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Can wait.",
+     "success": {
+      "text": "It costs nobody anything but minutes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Only frightened.",
+     "success": {
+      "text": "It costs nobody anything but minutes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-triage-end"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-vermilion-triage-end",
+   "name": "Triage: Everyone Treated",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "Everyone's treated in the end.",
+   "choices": [
+    {
+     "label": "Six right.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-triage-right",
+       "atLeast": 6,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Medicine for the road, a bundle of Lum Berries, and the Chansey teaches one of yours Soft-Boiled, or the nearest thing it can learn.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "item",
+        "id": "lum-berry",
+        "count": 3
+       },
+       {
+        "kind": "teachMove",
+        "move": "soft-boiled"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-vermilion-triage",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Called all six right at Dr. Proctor's."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Four or five right.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-triage-right",
+       "atLeast": 4,
+       "atMost": 5
+      }
+     ],
+     "success": {
+      "text": "Medicine for the road, and a bundle of Lum Berries.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "item",
+        "id": "lum-berry",
+        "count": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-vermilion-triage",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "One to three right.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-triage-right",
+       "atLeast": 1,
+       "atMost": 3
+      }
+     ],
+     "success": {
+      "text": "Medicine for the road.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-vermilion-triage",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "None right.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-triage-right",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You're thanked, and handed a mop.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-vermilion-triage",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-vermilion-site",
+   "name": "The Building Site",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "An empty lot. An old man. A Machop, stamping. The old man: \"I'm getting my land ready for a building.\" Stamp. Stamp. The Machop moves one pace left. Stamp. Flat earth.",
+   "choices": [
+    {
+     "label": "\"What sort of building?\"",
+     "success": {
+      "text": "\"A good one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-vermilion-site",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"How long's it been?\"",
+     "success": {
+      "text": "\"Not long. Since the war.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-vermilion-site",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Can one of mine help?\"",
+     "pick": {
+      "types": [
+       "fighting"
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fighting"
+      }
+     ],
+     "success": {
+      "text": "Your Fighting type goes over. It stamps beside the Machop. They don't speak. They fall into step. A little experience, and Bond +1.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "friendship",
+        "amount": 0,
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-vermilion-site",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.vermilion.site"
+  },
+  {
+   "id": "cs-kanto-vermilion-site-again",
+   "name": "The Building Site: Nearly Ready",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-vermilion-site",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "The same lot, in the same run, a long way on. Flat earth. The old man: \"Nearly ready.\" Stamp. Stamp.",
+   "choices": [
+    {
+     "label": "\"What sort of building?\"",
+     "success": {
+      "text": "\"A good one. Nearly.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Can one of mine help?\"",
+     "pick": {
+      "types": [
+       "fighting"
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fighting"
+      }
+     ],
+     "success": {
+      "text": "Your Fighting type remembers the step. It stamps beside the Machop. They don't speak. They fall into step. A little experience, and Bond +1.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "friendship",
+        "amount": 0,
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-vermilion-site",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-rival",
+   "name": "The Rival in the Tower",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a66"
+   },
+   "intro": "The third floor. Somebody's standing among the stones with their back to the stairs. It's the rival. They don't turn round. Their eyes are open. Their Pokémon are out, all of them, fighting hard, at empty air. The rival's lips are moving. They're calling moves. Their voice isn't quite theirs. The rival's lead sees you. It's exhausted. It looks at you the way something looks when it's been waiting for anyone at all.",
+   "choices": [
+    {
+     "label": "(Say their name.) (Warm or better)",
+     "requires": [
+      {
+       "kind": "rivalState",
+       "leadAtLeast": 1
+      }
+     ],
+     "success": {
+      "text": "They blink. The air in front of their Pokémon's just air.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-rival-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Say their name.)",
+     "requires": [
+      {
+       "kind": "rivalState",
+       "leadAtMost": 0
+      }
+     ],
+     "success": {
+      "text": "They turn, slowly, and it isn't them looking.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-rival-fight"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle. Snap them out of it.\"",
+     "success": {
+      "text": "The rival's team, commanded by something that doesn't know them: it uses moves they'd never pick. Beating it lets go.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rival",
+       "size": 6,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rival-after"
+        }
+       ],
+       "rival": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rival-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "(Go to their lead first.)",
+     "requires": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 3,
+       "who": "lead"
+      }
+     ],
+     "success": {
+      "text": "Your lead stands beside it. It's your lead's cry that reaches them.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-rival-after"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.lavender.rival",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-rival-fight",
+   "name": "The Rival in the Tower: Not Them",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a66"
+   },
+   "intro": "Something that doesn't know them is calling the moves.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The rival's team, commanded by something that doesn't know them: it uses moves they'd never pick. Beating it lets go.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rival",
+       "size": 6,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rival-after"
+        }
+       ],
+       "rival": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rival-after"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-rival-after",
+   "name": "The Rival in the Tower: After",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a66"
+   },
+   "intro": "The cold goes out of the floor.",
+   "choices": [
+    {
+     "label": "Help them up.",
+     "requires": [
+      {
+       "kind": "kc",
+       "act": "holdsNone",
+       "ids": [
+        "silph-scope"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Rival: \"What... why are we... how long have I been up here?\" They look at their Pokémon. They can see what state they're in. \"...I did that. Didn't I. I was telling them to.\" They don't remember it clearly, and they're embarrassed anyway. They hold out the Silph Scope they came in with: \"Take it. I don't want to see what was standing next to me. You look.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "silph-scope",
+        "count": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-lavender-rival",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Brought the rival back from among the stones on the third floor."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help them up. (You have a Scope.)",
+     "requires": [
+      {
+       "kind": "kc",
+       "act": "holdsAny",
+       "ids": [
+        "silph-scope"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Rival: \"What... why are we... how long have I been up here?\" They look at their Pokémon. They can see what state they're in. \"...I did that. Didn't I. I was telling them to.\" They don't remember it clearly, and they're embarrassed anyway. They look at your Scope, and put theirs away. \"Good. You look.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-lavender-rival",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Brought the rival back from among the stones on the third floor."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-festival",
+   "name": "The Festival of Dolls",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "The Store, and a crowd that's all elbows. Banners: PRINCESS FESTIVAL. EVERYTHING NEARLY FREE. Miss Stott's lift is carrying nineteen people and a rug. Miss Stott: \"Third! Discs! Mind the... madam, that's a person, not a step!\" Shop prices are halved for this visit. On the roof: a four-battle knockout. The prize: a set of antique dolls on seven tiers. Jessie's entered. No disguise. Her own name. She's standing in front of the dolls, and she isn't scheming. James, to you, low: \"She never had any. Not one. There was a year they ate snow. Don't... she'd hate that I said.\"",
+   "choices": [
+    {
+     "label": "Enter the knockout.",
+     "success": {
+      "text": "Your name goes on the board, opposite hers.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Princess Festival: shop prices halved",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "value": 0.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-trio-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-festival-r1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just shop.",
+     "success": {
+      "text": "Everything nearly free.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Princess Festival: shop prices halved",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "value": 0.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-celadon-festival",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.celadon.festival",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-festival-r1",
+   "name": "The Festival of Dolls: Round 1",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "A girl with a Clefairy and a lot of ribbon.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Round 1. No items.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Festival Entrant 1",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-celadon-festival-r2"
+        }
+       ],
+       "team": [
+        "clefairy",
+        "jigglypuff"
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-celadon-festival-jessie"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-festival-r2",
+   "name": "The Festival of Dolls: Round 2",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "A boy who has dressed his Machop as a samurai.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Round 2. No items.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Festival Entrant 2",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-celadon-festival-r3"
+        }
+       ],
+       "team": [
+        "machop",
+        "mankey"
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-celadon-festival-jessie"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-festival-r3",
+   "name": "The Festival of Dolls: Semi-final",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "A grandmother, very fast.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Round 3. No items.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Festival Entrant 3",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-celadon-festival-final"
+        }
+       ],
+       "team": [
+        "persian",
+        "wigglytuff"
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-celadon-festival-jessie"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-festival-final",
+   "name": "The Festival of Dolls: The Final",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Both of you won through. It's the final. Jessie: \"I'm not stealing them. I want to have won them. There's a difference. I've only just noticed there's a difference.\" She fights fair. Arbok doesn't use Poison Sting on the dolls' side of the roof.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The final.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Jessie",
+       "size": 3,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-celadon-festival-won"
+        }
+       ],
+       "team": [
+        "arbok",
+        "lickitung",
+        "seviper"
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-celadon-festival-jessie"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-festival-won",
+   "name": "The Festival of Dolls: The Dolls",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "You won. The dolls, on their seven tiers.",
+   "choices": [
+    {
+     "label": "\"They're yours.\" (Give them to Jessie.)",
+     "success": {
+      "text": "She doesn't take them. Then she does. She holds the smallest one in both hands. Jessie: \"I don't... what do you want? ...Nothing. You want nothing. I don't know what face to do.\" Meowth: \"That one, Jess. That one's fine.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-trio-rep",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-celadon-festival",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Won the dolls at the Princess Festival, and gave them to Jessie."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Good match.\" (Keep them.)",
+     "success": {
+      "text": "Seven tiers of dolls, in your journal.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-celadon-festival",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Won a set of antique dolls on seven tiers at the Princess Festival."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-festival-jessie",
+   "name": "The Festival of Dolls: Jessie Wins",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Jessie wins the final herself.",
+   "choices": [
+    {
+     "label": "Watch her go.",
+     "success": {
+      "text": "She's won them. She carries all seven tiers out on her back, and doesn't put them down for a week.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-trio-rep",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-celadon-festival",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-secrethouse",
+   "name": "The Secret House",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "From the gate, on a clear day: a roof, at the very back of the reserve. Mr. Lowe, at the gate: \"There's a prize, if you get there on one ticket. Nobody does. They see a Chansey and that's that.\" Five hundred steps. Four hundred of them are just walking; the rest are what you spend them on.",
+   "choices": [
+    {
+     "label": "Start walking.",
+     "success": {
+      "text": "Steps: the count's on your ticket.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-secrethouse-grass"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not today.\"",
+     "success": {
+      "text": "\"Nobody does,\" says Mr. Lowe, kindly.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.secrethouse"
+  },
+  {
+   "id": "cs-kanto-fuchsia-secrethouse-grass",
+   "name": "The Secret House: Long Grass",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "Five patches of long grass across the path. Each costs five steps. Round them costs more.",
+   "choices": [
+    {
+     "label": "Straight through (25 steps).",
+     "success": {
+      "text": "Through. Something rustles in all five.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-secret-steps",
+        "amount": 25
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-secrethouse-rare1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Round (60 steps).",
+     "success": {
+      "text": "The long way round.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-secret-steps",
+        "amount": 60
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-secrethouse-rare1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-secrethouse-rare1",
+   "name": "The Secret House: Something pink and round",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "Something pink and round, right by the path. Stopping to catch it costs twenty steps, and it's always something good.",
+   "choices": [
+    {
+     "label": "Stop and catch it (20 steps).",
+     "success": {
+      "text": "The rarest things in the reserve are on the way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-secret-steps",
+        "amount": 20
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "chansey",
+        "kangaskhan",
+        "tauros"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-secrethouse-rare2"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-secrethouse-rare2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You don't look back. Much.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-secrethouse-rare2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-secrethouse-rare2",
+   "name": "The Secret House: Something long, in the reeds",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "Something long, in the reeds, right by the path. Stopping to catch it costs twenty steps, and it's always something good.",
+   "choices": [
+    {
+     "label": "Stop and catch it (20 steps).",
+     "success": {
+      "text": "The rarest things in the reserve are on the way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-secret-steps",
+        "amount": 20
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "dratini",
+        "scyther",
+        "pinsir"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-secrethouse-pond"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-secrethouse-pond"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You don't look back. Much.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-secrethouse-pond"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-secrethouse-pond",
+   "name": "The Secret House: The Pond",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "The pond. Without a Water type, it's forty steps to go round.",
+   "choices": [
+    {
+     "label": "Swim it (a Water type).",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Straight across.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-secrethouse-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go round (40 steps).",
+     "success": {
+      "text": "Round, and round.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-secret-steps",
+        "amount": 40
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-secrethouse-end"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-secrethouse-end",
+   "name": "The Secret House: The Count",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "The count on your ticket.",
+   "choices": [
+    {
+     "label": "Reached.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-secret-steps",
+       "atLeast": 0,
+       "atMost": 100
+      }
+     ],
+     "success": {
+      "text": "The man inside: \"You made it. I've sat here eleven years. I've a speech. ...I've forgotten it. Here.\" HM Surf.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "surf",
+        "type": "water"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fuchsia-secrethouse",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Reached the Secret House at the back of Safari Land on one ticket."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Reached (and you know Surf).",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-secret-steps",
+       "atLeast": 0,
+       "atMost": 100
+      },
+      {
+       "kind": "partyMove",
+       "move": "surf"
+      }
+     ],
+     "success": {
+      "text": "\"You made it.\" A replica of the Gold Teeth, in a velvet box. Shown to the Warden, he laughs so hard the real ones come out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-gold-teeth-replica",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 3000
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fuchsia-secrethouse",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Got a replica of the Gold Teeth from the Secret House."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Time.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-secret-steps",
+       "atLeast": 101,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The loudspeaker calls time. You're walked back by a ranger. \"How far? ...The pond. It's always the pond.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-fuchsia-secrethouse",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-shellder",
+   "name": "The Shell on the Tail",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "A rock pool. A Slowpoke with its tail in it. A professor on a camp stool, watching the tail, with a notebook open at a blank page. Professor Westwood the Fifth: \"My great-great-grandfather asked: why does it evolve when the Shellder bites? He didn't find out. Nor did his son. Nor his. Nor my father. They're all on the wall at home. Looking at me.\" He's brought the portraits. They're propped along the rocks. Four men with the same nose, increasingly disappointed. \"I've had this one's tail in that pool since April. The Shellder won't bite.\"",
+   "choices": [
+    {
+     "label": "\"Maybe it's got to want to.\"",
+     "success": {
+      "text": "He writes that down, then crosses it out. The trio arrive, after the Slowpoke. A battle starts that isn't yours: Jessie's Shellder, thrown; the Slowpoke, slow; the professor on his feet. The Shellder misses. It lands on the tail. It bites, out of habit. Light. A Slowbro's standing in the pool. It's upright. It looks at its own hands. Professor Westwood: \"It's the balance. The weight on the tail. It has to stand up to carry it. And standing... it thinks better standing. They help each other stand. It was never the bite. It's the...\" He's stopped. He's looked at the notebook. He's looked at the portraits. \"...Oh. That's it, then. That's all of it. What do I do on Monday?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-trio-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-shellder-ask"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Have you asked the Slowpoke?\"",
+     "success": {
+      "text": "\"...No.\" The trio arrive, after the Slowpoke. A battle starts that isn't yours: Jessie's Shellder, thrown; the Slowpoke, slow; the professor on his feet. The Shellder misses. It lands on the tail. It bites, out of habit. Light. A Slowbro's standing in the pool. It's upright. It looks at its own hands. Professor Westwood: \"It's the balance. The weight on the tail. It has to stand up to carry it. And standing... it thinks better standing. They help each other stand. It was never the bite. It's the...\" He's stopped. He's looked at the notebook. He's looked at the portraits. \"...Oh. That's it, then. That's all of it. What do I do on Monday?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-trio-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-shellder-ask"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if you find out?\"",
+     "success": {
+      "text": "\"...I don't know. Nobody in my family's ever got that far.\" The trio arrive, after the Slowpoke. A battle starts that isn't yours: Jessie's Shellder, thrown; the Slowpoke, slow; the professor on his feet. The Shellder misses. It lands on the tail. It bites, out of habit. Light. A Slowbro's standing in the pool. It's upright. It looks at its own hands. Professor Westwood: \"It's the balance. The weight on the tail. It has to stand up to carry it. And standing... it thinks better standing. They help each other stand. It was never the bite. It's the...\" He's stopped. He's looked at the notebook. He's looked at the portraits. \"...Oh. That's it, then. That's all of it. What do I do on Monday?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-trio-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-shellder-ask"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.cinnabar.shellder"
+  },
+  {
+   "id": "cs-kanto-cinnabar-shellder-ask",
+   "name": "The Shell on the Tail: Monday",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "He asks you for a new question.",
+   "choices": [
+    {
+     "label": "\"Why does a Magikarp jump?\"",
+     "requires": [
+      {
+       "kind": "partyLine",
+       "species": "magikarp"
+      }
+     ],
+     "success": {
+      "text": "He writes it at the top of the blank page. For the rest of this run, whenever you pass, he's on the camp stool with that question, very happy. A King's Rock.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "kings-rock",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-cinnabar-shellder",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Gave Professor Westwood a new question: \"Why does a Magikarp jump?\""
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why did the Clefairy want to leave?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-pewter-visitors",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He writes it at the top of the blank page. For the rest of this run, whenever you pass, he's on the camp stool with that question, very happy. A King's Rock.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "kings-rock",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-cinnabar-shellder",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Gave Professor Westwood a new question: \"Why did the Clefairy want to leave?\""
+       }
+      ]
+     }
+    },
+    {
+     "label": "Other questions.",
+     "success": {
+      "text": "He turns the page.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-shellder-ask2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-shellder-ask2",
+   "name": "The Shell on the Tail: Other Questions",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "He waits, pencil up.",
+   "choices": [
+    {
+     "label": "\"Why won't a Farfetch'd put the leek down?\"",
+     "success": {
+      "text": "He writes it at the top of the blank page. For the rest of this run, whenever you pass, he's on the camp stool with that question, very happy. A King's Rock.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "kings-rock",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-cinnabar-shellder",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Gave Professor Westwood a new question: \"Why won't a Farfetch'd put the leek down?\""
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's a Ditto when nobody's looking?\"",
+     "success": {
+      "text": "He writes it at the top of the blank page. For the rest of this run, whenever you pass, he's on the camp stool with that question, very happy. A King's Rock.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "kings-rock",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-cinnabar-shellder",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Gave Professor Westwood a new question: \"What's a Ditto when nobody's looking?\""
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Whatever you like.\"",
+     "success": {
+      "text": "He writes it at the top of the blank page. For the rest of this run, whenever you pass, he's on the camp stool with that question, very happy. A King's Rock.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "kings-rock",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-cinnabar-shellder",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Gave Professor Westwood a new question: \"Whatever you like.\""
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-goodbye",
+   "name": "Where It Was Happy",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A wood. Movement in every tree. They come out, one at a time: thirty, forty, all of them the same kind as your lead. Your lead goes still. It's never seen another one. It's never seen this many of anything like itself. One comes forward. They touch noses. And then it's in among them, and it's gone, and it's all one sound. All day, you watch from a log. It's playing. It's teaching a small one something. It's never, in this whole run, looked like that. Evening. The fire. Your lead's asleep in a heap of its own kind. One of them's got an arm over it.",
+   "choices": [
+    {
+     "label": "(Get up, quietly, and go.)",
+     "success": {
+      "text": "The path. The trees thinning. You don't look back. You're doing very well at not looking back. Behind you: something running. Fast, and not stopping. It hits you in the chest and holds on. At the tree line, all of them have come out to see it off. They're cheering. They knew before you did.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 0,
+        "bond": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-goodbye",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Tried to leave your lead where it was happy. It came after you. It always will."
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Stay where you are.)",
+     "success": {
+      "text": "Nothing changes. Morning. It's on your bag, ready. It was never going to stay.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-goodbye",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"...You were happy here, weren't you.\"",
+     "success": {
+      "text": "Nothing changes. Morning. It's on your bag, ready. It was never going to stay.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-goodbye",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.goodbye"
+  },
+  {
+   "id": "cs-kanto-route-k9",
+   "name": "The Training Course",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "You're on the ground. Six Growlithe are sitting on you. It's very warm. Officer Jenny: \"Hold! ...Oh. You're not him. He's got a moustache. I'm sorry. They go for the bag; you've a burglar's bag. Off. Off. All six. Let me make it up to you: want to run one of yours through the course?\"",
+   "choices": [
+    {
+     "label": "Run your lead through it.",
+     "success": {
+      "text": "The wall first.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-k9-wall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'd rather just get up.\"",
+     "success": {
+      "text": "\"Fair.\" She helps you up. The Growlithe help, too, mostly by licking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-k9",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.k9"
+  },
+  {
+   "id": "cs-kanto-route-k9-wall",
+   "name": "The Training Course: The Wall",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A timing jump.",
+   "choices": [
+    {
+     "label": "Jump.",
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Over.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-k9-tunnel"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Over, at the second go.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-k9-tunnel"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-k9-tunnel",
+   "name": "The Training Course: The Tunnel",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A dark crawl: you call left and right.",
+   "choices": [
+    {
+     "label": "Call it through.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Out the far end, dusty.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-k9-voice"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Out the far end, eventually.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-k9-voice"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-k9-voice",
+   "name": "The Training Course: The Voice",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "You breathe helium and shout a command in a squeak. A Growlithe that only knows the voice wouldn't obey.",
+   "choices": [
+    {
+     "label": "Squeak.",
+     "requires": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 2,
+       "who": "lead"
+      }
+     ],
+     "success": {
+      "text": "It tilts its head. It sniffs. It looks at you as if to say: I know it's you; why are you doing that? And it does it. Passed. An officer's whistle: the next police encounter in the region is friendly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-police-tip",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-k9",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Passed Officer Jenny's course with a squeak."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Squeak, and hope.",
+     "success": {
+      "text": "It does the first two and sits down at the third, puzzled. Jenny: \"It's Bond, not brains. Come back when it's had longer with you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-k9",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-oldstreet",
+   "name": "The Old Street",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-trio-rep",
+     "atLeast": 10,
+     "atMost": 99
+    }
+   ],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A film town: billboards, palm trees, a street of theatres. The trio's on it. Meowth's stopped walking. Jessie: \"What?\" Meowth: \"Nothin'. Go on. I'll catch yous up.\" They go. He doesn't follow. He's looking down an alley. He's seen you. He doesn't run. Meowth: \"...I used to eat outta that bin. That one. Best bin on the street.\"",
+   "choices": [
+    {
+     "label": "Follow him into the alley.",
+     "success": {
+      "text": "He doesn't stop you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-oldstreet-alley"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.oldstreet"
+  },
+  {
+   "id": "cs-kanto-route-oldstreet-alley",
+   "name": "The Old Street: The Alley",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "The alley: a gang of street Meowth. A Persian on a crate. They know him. They circle him. They don't speak. One of them mimes walking on two legs, and falls about. A window above: a cat on a cushion, with a ribbon. Meowth, not looking up: \"Meowzie. She said I wasn't good enough. Said she liked people. Rich ones, that talk nice. So I learned. Standin' up. Took a month; I fell down a lot. Then talkin'. Out of a picture book. First word I got was 'rocket.' That's the only reason I'm in this line o' work. I come back. On two feet. I said, 'Meowzie, I can speak, I can walk, I'm just like a person.' And she said that made me a freak.\"",
+   "choices": [
+    {
+     "label": "(Stand beside him.)",
+     "success": {
+      "text": "You walk into the alley and stand at his shoulder. That's all. The Persian looks at you. It looks at Meowth. Nobody's ever stood there before. It gets down off the crate, and goes. In the window, the cat's watching. Meowth looks up at last. Meowth: \"Nah. Y'know what? I talk. I'm the only one there is. She can keep the cushion.\" And then: \"Don't tell them two I was here.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-trio-rep",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-oldstreet",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Stood beside Meowth in the alley where he learned to talk."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You're not a freak.\"",
+     "success": {
+      "text": "You say it, and then you stand at his shoulder. The Persian looks at you. It looks at Meowth. Nobody's ever stood there before. It gets down off the crate, and goes. In the window, the cat's watching. Meowth looks up at last. Meowth: \"Nah. Y'know what? I talk. I'm the only one there is. She can keep the cushion.\" And then: \"Don't tell them two I was here.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-trio-rep",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-oldstreet",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Stood beside Meowth in the alley where he learned to talk."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Do you want to leave?\"",
+     "success": {
+      "text": "\"...In a minute.\" You stand at his shoulder while he has the minute. The Persian looks at you. It looks at Meowth. Nobody's ever stood there before. It gets down off the crate, and goes. In the window, the cat's watching. Meowth looks up at last. Meowth: \"Nah. Y'know what? I talk. I'm the only one there is. She can keep the cushion.\" And then: \"Don't tell them two I was here.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-trio-rep",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-oldstreet",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Stood beside Meowth in the alley where he learned to talk."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-transfer",
+   "name": "Inside the Machine",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A Center where the transfer machine eats Poké Balls. A queue of worried trainers. An engineer with a helmet that's all wires. Dr. Akihabara: \"They go in. They don't come out the other end. Something's in the line. I can send a person in to look. It's quite safe. I think it's quite safe. I've a guide.\" A Porygon. It bobs. (Staged without flashing: steady colours, slow fades.)",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "Corridors of steady light.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-transfer-booth"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I think I'll wait out here.\"",
+     "success": {
+      "text": "The queue sighs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-transfer",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.transfer"
+  },
+  {
+   "id": "cs-kanto-route-transfer-booth",
+   "name": "Inside the Machine: The Toll Booth",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "The trio, with a Porygon of their own and a roadblock made of stolen Balls. James: \"It's a toll booth! In a telephone! It's the perfect crime!\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The trio.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-trio-met",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Jessie and James",
+       "size": 3,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-transfer-virus"
+        }
+       ],
+       "team": [
+        "porygon",
+        "arbok",
+        "weezing"
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-transfer-out"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-transfer-virus",
+   "name": "Inside the Machine: The Anti-Virus",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A shape that can't tell thieves from visitors. It can't be beaten for long; it regrows.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It comes apart, and starts to come back together.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "porygon2"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-transfer-t1"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-transfer-out"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-transfer-t1",
+   "name": "Inside the Machine: Run (1)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Four turns for the exit, with it behind.",
+   "choices": [
+    {
+     "label": "Run.",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "A turn.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-transfer-t2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Everyone's ejected, dizzy. The Balls arrive a day late.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-transfer",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-transfer-t2",
+   "name": "Inside the Machine: Run (2)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "It's regrown.",
+   "choices": [
+    {
+     "label": "Run.",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Another.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-transfer-t3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Everyone's ejected, dizzy. The Balls arrive a day late.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-transfer",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-transfer-t3",
+   "name": "Inside the Machine: Run (3)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "The trio's Porygon's gone. They're on foot. The thing's nearly on them.",
+   "choices": [
+    {
+     "label": "\"Keep running.\"",
+     "success": {
+      "text": "Out. The trio's ejected a minute later through a printer.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-transfer-exit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go back for those three.\"",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Your guide Porygon carries all four. It's slower. It makes it by a turn.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-trio-rep",
+        "amount": 10
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-transfer-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Everyone's ejected, dizzy. The Balls arrive a day late.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-transfer",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-transfer-exit",
+   "name": "Inside the Machine: Out",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "The lost Balls go where they were sent.",
+   "choices": [
+    {
+     "label": "Thank the guide.",
+     "success": {
+      "text": "The guide Porygon asks to stay.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "porygon"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-transfer",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Went inside the transfer machine, and came out with a Porygon."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-transfer-out",
+   "name": "Inside the Machine: Ejected",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Dizzy, on the Center floor.",
+   "choices": [
+    {
+     "label": "Sit up.",
+     "success": {
+      "text": "Everyone's ejected, dizzy. The Balls arrive a day late.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-transfer",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-snow",
+   "name": "Snowed In",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "fire",
+     "when": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "notice": "Your Fire type lies across the door. The night's easy."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A mountain road. Snow from the side. The path's gone, then the hill's gone, then your hand. A drift, hollowed out. A cave the size of a cupboard. The fire's lit, and it's small. The party's out, all of them, crowded in. They're shivering. It's warmer in the Balls. You know it.",
+   "choices": [
+    {
+     "label": "\"In. All of you. That's not a request.\"",
+     "success": {
+      "text": "They go. One by one. The light of each Ball closing. The cave's very quiet. The fire's lower. A Ball opens by itself. Then another. Then all of them. They're back, packed in round you, the big ones on the outside, your lead under your coat. Nobody's looking at you. It's been decided. Morning. Blue sky. The drift's a white dome with a hole at the top, and steam coming out of it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 0,
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "shadowHeart",
+        "amount": -5
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-snow",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Snowed in, and nobody would go in their Balls."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"...Stay, then.\"",
+     "success": {
+      "text": "Nobody moves to go. They're back, packed in round you, the big ones on the outside, your lead under your coat. Nobody's looking at you. It's been decided. Morning. Blue sky. The drift's a white dome with a hole at the top, and steam coming out of it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 0,
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "shadowHeart",
+        "amount": -5
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-snow",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Snowed in, and nobody would go in their Balls."
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Hold the Balls out, and say nothing.)",
+     "success": {
+      "text": "They look at the Balls. They look at you. They stay. They're back, packed in round you, the big ones on the outside, your lead under your coat. Nobody's looking at you. It's been decided. Morning. Blue sky. The drift's a white dome with a hole at the top, and steam coming out of it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 0,
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "shadowHeart",
+        "amount": -5
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-snow",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Snowed in, and nobody would go in their Balls."
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.snow"
+  },
+  {
+   "id": "cs-kanto-route-bikerace",
+   "name": "The Bicycle Race",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-cerulean-bike",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A town with bunting. A start line. A rule, on a board: THE RIDER'S LEAD POKÉMON MUST BE ON THE BICYCLE. Your lightest Pokémon hops up at once. Your heaviest looks at it. It looks at the bicycle. It looks at you, with hope.",
+   "choices": [
+    {
+     "label": "The light one.",
+     "success": {
+      "text": "Light: fast uphill, twitchy downhill.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-bikerace-up"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The heavy one.",
+     "success": {
+      "text": "Heavy: very slow uphill. Downhill, unstoppable. Literally: the brakes don't count.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bike-heavy",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-bikerace-up"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Snorlax.",
+     "requires": [
+      {
+       "kind": "partyLine",
+       "species": "snorlax"
+      }
+     ],
+     "success": {
+      "text": "The front wheel's flat by the first corner. It's holding your shoulders. It's having the best day.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bike-heavy",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-bike-snorlax",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-bikerace-up"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.bikerace"
+  },
+  {
+   "id": "cs-kanto-route-bikerace-up",
+   "name": "The Bicycle Race: Uphill",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Uphill.",
+   "choices": [
+    {
+     "label": "Pedal. (A light passenger)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-bike-heavy",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Up, fast.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bike-place",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-bikerace-along"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A wobble. You lose a place.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-bikerace-along"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pedal. (A heavy passenger)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-bike-heavy",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Very slow. The crowd walks beside you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-bikerace-along"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It wobbles. It holds.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-bikerace-along"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-bikerace-along",
+   "name": "The Bicycle Race: Along",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Along.",
+   "choices": [
+    {
+     "label": "Pedal. (A light passenger)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-bike-heavy",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Along, twitchy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bike-place",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-bikerace-down"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A wobble. You lose a place.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-bikerace-down"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pedal. (A heavy passenger)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-bike-heavy",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Along, ponderously.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-bikerace-down"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It wobbles. It holds.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-bikerace-down"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-bikerace-down",
+   "name": "The Bicycle Race: Downhill",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Downhill.",
+   "choices": [
+    {
+     "label": "Pedal. (A light passenger)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-bike-heavy",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Down, twitchy, and fast.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bike-place",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-bikerace-line"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A wobble. You lose a place.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-bikerace-line"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pedal. (A heavy passenger)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-bike-heavy",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Down. Unstoppable.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bike-place",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-bike-place",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-bikerace-line"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It wobbles. It holds.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-bikerace-line"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-bikerace-line",
+   "name": "The Bicycle Race: The Line",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "The finish line.",
+   "choices": [
+    {
+     "label": "The podium.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-bike-place",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Leftovers, or a Soothe Bell.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "soothe-bell"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-bikerace",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Made the podium in the Bicycle Race."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Last place.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-bike-place",
+       "atLeast": 0,
+       "atMost": 1
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-bike-snorlax",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Last. They clap anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-bikerace",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Last place, with a Snorlax on the handlebars.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-bike-place",
+       "atLeast": 0,
+       "atMost": 1
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-bike-snorlax",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The crowd's favourite. They've waited at the line. A year of free food at the finish-line diner: a full rest, now, and again whenever you pass this way this run.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-bike-diner",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-bikerace",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Came last in the Bicycle Race with a Snorlax on the handlebars. The crowd's favourite."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-gamblers",
+   "name": "The Gamblers",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Three men at a folding table by the road, each with a coin, none of them doing anything until it's landed. The coin decides his lead and his opening move. You may call it. Rich: \"Heads, I fight. Tails, I fight worse.\"",
+   "choices": [
+    {
+     "label": "Call it. (A right call picks his lead.)",
+     "chance": 0.5,
+     "success": {
+      "text": "The coin's fair, and it's said so. Rich's battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Gambler Rich",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-gamblers-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-g2"
+        }
+       ],
+       "team": [
+        "growlithe"
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-g2"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "The coin's fair, and it's said so. Rich's battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Gambler Rich",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-gamblers-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-g2"
+        }
+       ],
+       "team": [
+        "growlithe",
+        "poliwhirl"
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-g2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Don't call it.",
+     "success": {
+      "text": "The coin's fair, and it's said so. Rich's battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Gambler Rich",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-gamblers-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-g2"
+        }
+       ],
+       "team": [
+        "growlithe",
+        "poliwhirl"
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-g2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "He flips for whether to be offended. It comes up \"no.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-gamblers",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.gamblers"
+  },
+  {
+   "id": "cs-kanto-route-gamblers-g2",
+   "name": "The Gamblers: Stan",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Stan: \"I flipped for breakfast. I'd have liked eggs.\"",
+   "choices": [
+    {
+     "label": "Call it. (A right call picks his lead.)",
+     "chance": 0.5,
+     "success": {
+      "text": "The coin's fair, and it's said so. Stan's battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Gambler Stan",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-gamblers-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-g3"
+        }
+       ],
+       "team": [
+        "vulpix"
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-g3"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "The coin's fair, and it's said so. Stan's battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Gambler Stan",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-gamblers-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-g3"
+        }
+       ],
+       "team": [
+        "vulpix",
+        "pikachu"
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-g3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Don't call it.",
+     "success": {
+      "text": "The coin's fair, and it's said so. Stan's battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Gambler Stan",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-gamblers-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-g3"
+        }
+       ],
+       "team": [
+        "vulpix",
+        "pikachu"
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-g3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "He flips for whether to be offended. It comes up \"no.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-gamblers",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-gamblers-g3",
+   "name": "The Gamblers: Dirk",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Dirk: \"I flipped on whether to pay up if I lose. ...It came up 'pay.' I flipped again. It's stubborn.\"",
+   "choices": [
+    {
+     "label": "Call it. (A right call picks his lead.)",
+     "chance": 0.5,
+     "success": {
+      "text": "The coin's fair, and it's said so. Dirk's battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Gambler Dirk",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-gamblers-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-coin"
+        }
+       ],
+       "team": [
+        "magnemite"
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-done"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "The coin's fair, and it's said so. Dirk's battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Gambler Dirk",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-gamblers-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-coin"
+        }
+       ],
+       "team": [
+        "magnemite",
+        "voltorb"
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-done"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Don't call it.",
+     "success": {
+      "text": "The coin's fair, and it's said so. Dirk's battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Gambler Dirk",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-gamblers-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-coin"
+        }
+       ],
+       "team": [
+        "magnemite",
+        "voltorb"
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-gamblers-done"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "He flips for whether to be offended. It comes up \"no.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-gamblers",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-gamblers-coin",
+   "name": "The Gamblers: All Three",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "All three beaten.",
+   "choices": [
+    {
+     "label": "Collect.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-gamblers-won",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Dirk: \"It's the one I've been flipping. It's lucky. Not for me.\" An Amulet Coin.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "amulet-coin",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-gamblers",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Beat all three gamblers on the road. Dirk paid up with his coin."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Collect what you won.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-gamblers-won",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ],
+     "success": {
+      "text": "Coins, doubled.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-gamblers",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-gamblers-done",
+   "name": "The Gamblers: Done",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Dirk pockets his coin.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "\"Flip you for it next time.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-gamblers",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-fame",
+   "name": "The Fame Checker",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "It listens to what people say about people. \"Brock? Cooks for ten. Never sits down himself.\" A Pewter grandmother. \"Erika fell asleep judging the flower show. Gave first prize to a hedge.\" A Celadon gardener. \"The man at Viridian's Gym is never in. Lovely suits, the once I saw him.\" The Old Man.",
+   "choices": [
+    {
+     "label": "Put it away.",
+     "success": {
+      "text": "Each remark fills a line in the Notebook.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "fame-checker",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-fame",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Got the Fame Checker from Miss Pennyfeather."
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.fame",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-seeker",
+   "name": "The Vs. Seeker",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "A woman at the Center's counter, Miss Leonora Pennyfeather: \"I don't use these now. I've a shop. This one finds people who'd like another go at you. This one listens to what people say about people. Mind what you do with the second.\"",
+   "choices": [
+    {
+     "label": "Take both.",
+     "success": {
+      "text": "The Vs. Seeker, and the Fame Checker. A rematched trainer, later: \"You! I've been practising. I've been practising specifically you.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "vs-seeker",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-seeker",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-fame"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.seeker"
+  },
+  {
+   "id": "cs-kanto-route-underground",
+   "name": "Lost and Found",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A gatehouse with a guard who won't let anyone through. Beside it, steps going down. A man coming up: \"Long way. Dark. People drop things. I dropped a sandwich in '94. If you find it, don't.\"",
+   "choices": [
+    {
+     "label": "Go down.",
+     "success": {
+      "text": "A long walk by the light of your lead. It stops twice: two things somebody dropped.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "star-piece",
+         "pearl"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "big-pearl",
+         "stardust"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-underground-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go down, with the Itemfinder.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-vermilion-itemfinder",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "It stops three times.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "star-piece",
+         "pearl"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "big-pearl",
+         "stardust"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "comet-shard",
+         "big-nugget"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-underground-end"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.underground"
+  },
+  {
+   "id": "cs-kanto-route-underground-end",
+   "name": "Lost and Found: The Far End",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A girl on the bottom step, Saige: \"Are you a trade? I'm waiting for a trade. Mum said wait here. That was a while ago. I've a Nidoran. He's called Mr. Nido. I'd like a girl one.\" The Honest Trade Card is shown.",
+   "choices": [
+    {
+     "label": "Trade her a Nidoran (female) for Mr. Nido.",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "nidoran-f"
+      }
+     ],
+     "success": {
+      "text": "Saige, after: \"Be nice to Mr. Nido. He doesn't like the dark. That's why we waited where the light comes down.\" Bond grows half again as fast, as with every trade.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a female Nidoran",
+         "species": [
+          "nidoran-f"
+         ]
+        },
+        "table": {
+         "nidoran-f": "nidoran-m"
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-underground",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Traded for Mr. Nido at the bottom of the Underground Path."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I haven't one. I'll sit with you a bit.\"",
+     "success": {
+      "text": "You sit where the light comes down. Her mum comes, eventually, with chips.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-underground",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-relay",
+   "name": "The Swimmers' Relay",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Open water. Four buoys in a line to the horizon. Heads bobbing between them, shouting. A swimmer, treading water: \"Buoy to buoy! Battle at each! Last one to four buys the chips! You've got something that floats?\"",
+   "choices": [
+    {
+     "label": "Ride one that can carry you.",
+     "pick": {
+      "types": [
+       "water"
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Strokes, in rhythm, to the first buoy.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-relay-b1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not today.\"",
+     "success": {
+      "text": "\"Chips are on you, then!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-relay",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.relay"
+  },
+  {
+   "id": "cs-kanto-route-relay-b1",
+   "name": "The Swimmers' Relay: Buoy 1",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Buoy 1, and a swimmer hanging off it.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "A battle at the buoy.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Swimmer",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-relay-b2"
+        }
+       ],
+       "team": [
+        "tentacool",
+        "goldeen"
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kanto-route-relay",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stop here.",
+     "success": {
+      "text": "Coins for each buoy. Chips, on the beach, after. Everybody's buying everybody's.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-relay",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-relay-b2",
+   "name": "The Swimmers' Relay: Buoy 2",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Buoy 2, and a swimmer hanging off it.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "A battle at the buoy.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Swimmer",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-relay-b3"
+        }
+       ],
+       "team": [
+        "seel",
+        "staryu"
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kanto-route-relay",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stop here.",
+     "success": {
+      "text": "Coins for each buoy. Chips, on the beach, after. Everybody's buying everybody's.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-relay",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-relay-b3",
+   "name": "The Swimmers' Relay: Buoy 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Buoy three. \"I'm not out of breath. I'm pacing. ...Give me a second. Then battle.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "A battle at the buoy.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Swimmer",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-relay-b4"
+        }
+       ],
+       "team": [
+        "poliwhirl",
+        "seaking"
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kanto-route-relay",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stop here.",
+     "success": {
+      "text": "Coins for each buoy. Chips, on the beach, after. Everybody's buying everybody's.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-relay",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-relay-b4",
+   "name": "The Swimmers' Relay: Buoy 4",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Buoy 4, and a swimmer hanging off it.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "A battle at the buoy.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Swimmer",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-relay-last"
+        }
+       ],
+       "team": [
+        "tentacruel",
+        "starmie"
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kanto-route-relay",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stop here.",
+     "success": {
+      "text": "Coins for each buoy. Chips, on the beach, after. Everybody's buying everybody's.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route-relay",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-relay-last",
+   "name": "The Swimmers' Relay: The Last Buoy",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "First to the last buoy.",
+   "choices": [
+    {
+     "label": "Haul out.",
+     "success": {
+      "text": "A Mystic Water or a Wave Incense, and a tired, pleased Pokémon. Chips, on the beach, after. Everybody's buying everybody's.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "mystic-water",
+         "wave-incense"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 0,
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-relay",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "First to the last buoy in the Swimmers' Relay."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-aides",
+   "name": "The Aides: Miss Ione Tack",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A gatehouse before the Gym's approach. A woman with a clipboard. She doesn't say who she works for, and doesn't send you anywhere.",
+   "choices": [
+    {
+     "label": "Show the count (10 caught).",
+     "requires": [
+      {
+       "kind": "dex",
+       "set": "caught",
+       "atLeast": 10
+      }
+     ],
+     "success": {
+      "text": "Miss Ione Tack: \"Ten. That's the first hurdle. Most people have ten by accident.\" A lamp, for the dark routes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-aide-lamp",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-aides",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "An Aide counted your 10."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "\"Come back with more. I'll be here. It's a gatehouse. Where would I go.\"",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.aides"
+  },
+  {
+   "id": "cs-kanto-route-aides-s5",
+   "name": "The Aides: Mr. Humphrey Tack",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Another gatehouse, another clipboard.",
+   "choices": [
+    {
+     "label": "Show the count (20 caught).",
+     "requires": [
+      {
+       "kind": "dex",
+       "set": "caught",
+       "atLeast": 20
+      }
+     ],
+     "success": {
+      "text": "Mr. Humphrey Tack: \"Twenty! My brother wanted thirty. He's always been unreasonable.\" An Exp. Share.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "exp-share",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-aides",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "An Aide counted your 20."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "\"Come back with more. I'll be here. It's a gatehouse. Where would I go.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-aides-s6",
+   "name": "The Aides: Old Mrs. Tack",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A gatehouse with a cushion on the chair.",
+   "choices": [
+    {
+     "label": "Show the count (40 caught).",
+     "requires": [
+      {
+       "kind": "dex",
+       "set": "caught",
+       "atLeast": 40
+      }
+     ],
+     "success": {
+      "text": "Old Mrs. Tack: \"Forty. I've three children in gatehouses. None of them write. Count yours for me, dear.\" An Amulet Coin.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "amulet-coin",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-route-aides",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "An Aide counted your 40."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "\"Come back with more. I'll be here. It's a gatehouse. Where would I go.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-joyful",
+   "name": "The Joyful Game Corner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2a6b6b"
+   },
+   "intro": "The three machines are pushed back against the wall. The floor's chalked with squares. The owner: \"She said they were boring. The machines. She's six. She's right. So: these.\"",
+   "choices": [
+    {
+     "label": "Jumping (a small Pokémon).",
+     "pick": {},
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-joyful",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "A rope, turned by a Machop. A rhythm; it speeds up. Lostelle counts, wrongly. Lostelle: \"Yours is good. Mine's better. Mine's imaginary. It never trips.\" Berries, by score. Bond +1, once.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 3
+       },
+       {
+        "kind": "friendship",
+        "amount": 0,
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-sevii-joyful",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-two"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Berry-picking (a Doduo or Dodrio: more than one head).",
+     "pick": {},
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-joyful",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "partyLine",
+       "species": "doduo"
+      }
+     ],
+     "success": {
+      "text": "A tree, three heads, three baskets. Each head's steered separately. They argue. Lostelle: \"Yours is good. Mine's better. Mine's imaginary. It never trips.\" Berries, by score. Bond +1, once.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 3
+       },
+       {
+        "kind": "friendship",
+        "amount": 0,
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-sevii-joyful",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-two"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Play again, for Berries.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-joyful",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "No coins. No prizes but Berries, by score.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-two"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to Two Island's dock.",
+     "success": {
+      "text": "Back along the jetty.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-two"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.sevii.joyful",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-treasure",
+   "name": "Treasure Beach",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2a6b6b"
+   },
+   "intro": "A beach nobody's on. The sea's gone out a long way, and left things. Your lead digs. It's found something. It brings it over very carefully, as if it knows.",
+   "choices": [
+    {
+     "label": "Dig. (Three finds)",
+     "success": {
+      "text": "Pearls, a Star Piece, shells.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pearl",
+         "big-pearl",
+         "star-piece",
+         "stardust"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pearl",
+         "big-pearl",
+         "star-piece",
+         "stardust"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pearl",
+         "big-pearl",
+         "star-piece",
+         "stardust"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-sevii-treasure",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-knot"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig, with the Itemfinder. (Five finds)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-vermilion-itemfinder",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Pearls, a Star Piece, shells, and two more.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pearl",
+         "big-pearl",
+         "star-piece",
+         "stardust"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pearl",
+         "big-pearl",
+         "star-piece",
+         "stardust"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pearl",
+         "big-pearl",
+         "star-piece",
+         "stardust"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pearl",
+         "big-pearl",
+         "star-piece",
+         "stardust"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pearl",
+         "big-pearl",
+         "star-piece",
+         "stardust"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-sevii-treasure",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-knot"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to One Island's dock.",
+     "success": {
+      "text": "Back along the jetty.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-knot"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.sevii.treasure",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-resort",
+   "name": "The Lady of the Resort",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2a6b6b"
+   },
+   "intro": "A veranda. A parasol. A young lady who's seen everything on the island twice. Selphy: \"I'm bored. It's a medical condition; I've had it since birth. I should like to see a...\" (a different one each time) \"...Have you one? Don't fetch one. Either you have, or the wish passes.\"",
+   "choices": [
+    {
+     "label": "Hear her wish.",
+     "success": {
+      "text": "She names one, then another, then a third, in case.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-resort-wish"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let her look at your lead.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-resort",
+       "atLeast": 3,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-resort-master",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "She doesn't clap. She looks at it for a while. \"That one I shan't get bored of. Odd.\" From the bottom of the bag: a Master Ball, \"a sort of paperweight.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "master-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-resort-master",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-five"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to Five Island's dock.",
+     "success": {
+      "text": "She waves you off with the parasol.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-five"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.sevii.resort",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-resort-wish",
+   "name": "The Lady of the Resort: The Wish",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2a6b6b"
+   },
+   "intro": "Selphy, waiting, the parasol tilted.",
+   "choices": [
+    {
+     "label": "Show her a Psyduck.",
+     "requires": [
+      {
+       "kind": "partyLine",
+       "species": "psyduck"
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-resort-psyduck",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "She claps, once, properly. Selphy: \"Yes. Look at it. It's exactly as ridiculous as I'd hoped. Sebastian! My bag.\" She's no idea what any of it's worth.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "rare-candy",
+         "big-nugget"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-sevii-resort",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-resort-psyduck",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-five"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show her a Slowpoke.",
+     "requires": [
+      {
+       "kind": "partyLine",
+       "species": "slowpoke"
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-resort-slowpoke",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "She claps, once, properly. Selphy: \"Yes. Look at it. It's exactly as ridiculous as I'd hoped. Sebastian! My bag.\" She's no idea what any of it's worth.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "rare-candy",
+         "big-nugget"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-sevii-resort",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-resort-slowpoke",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-five"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show her a Farfetch'd.",
+     "requires": [
+      {
+       "kind": "partyLine",
+       "species": "farfetchd"
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-resort-farfetchd",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "She claps, once, properly. Selphy: \"Yes. Look at it. It's exactly as ridiculous as I'd hoped. Sebastian! My bag.\" She's no idea what any of it's worth.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "rare-candy",
+         "big-nugget"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-sevii-resort",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-resort-farfetchd",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-five"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I haven't one.\"",
+     "success": {
+      "text": "\"Then the wish passes.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-five"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-labyrinth",
+   "name": "The Water Labyrinth",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2a6b6b"
+   },
+   "intro": "A reef with one hut. Captain Tidewell slows without being asked. \"He'll want to look at yours. Let him. Don't talk. He hates talk.\" A man on the rock. He looks at your lead. Not at you. A long time. The sea goes in and out. Your lead looks back at him, and then, checking, up at you.",
+   "choices": [
+    {
+     "label": "(Say nothing.)",
+     "requires": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 2,
+       "who": "lead"
+      }
+     ],
+     "success": {
+      "text": "He nods. He goes into the hut. He comes out with something wrapped in his own coat: an Egg he's been keeping warm. \"It looked up at you. To see if you were all right with me. That's all I check.\"",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "pichu",
+         "cleffa",
+         "igglybuff",
+         "togepi",
+         "tyrogue",
+         "smoochum",
+         "elekid",
+         "magby"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-sevii-labyrinth",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The man on the reef gave you an Egg, because your lead looked up at you."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-knot"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Say nothing, and wait.)",
+     "success": {
+      "text": "\"Come back when it looks at you differently.\" He means it: on any later crossing, he looks again.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-knot"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.sevii.labyrinth",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-ferry",
+   "name": "The Last Ferry",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "wall",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-wall",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the dock: Celio, with a cable still round his neck, waving with both arms."
+    },
+    {
+     "id": "girl",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-berryforest",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Lostelle, on her father's shoulders. He's got both hands on her ankles. He isn't wiping anything."
+    },
+    {
+     "id": "quiet",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-places",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "The dock's empty. Captain Tidewell: \"Quiet trip. Nothing wrong with quiet.\""
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2a6b6b"
+   },
+   "intro": "The ferry back. Who's on the dock depends on what was done.",
+   "choices": [
+    {
+     "label": "Look along the dock.",
+     "success": {
+      "text": "Faces, and the haze behind them.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-ferry-dock"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "He turns the boat round without a word.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-network-knot"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.sevii.ferry",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-ferry-dock",
+   "name": "The Last Ferry: The Dock",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "winter",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-icefall",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Old Winter. She doesn't wave. She's there. The Dewgong waves for her."
+    },
+    {
+     "id": "boy",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-pillar",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The boy from the Pillar, with a bottle."
+    },
+    {
+     "id": "selphy",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-lostcave",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A parasol, at the back, pretending to be passing."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2a6b6b"
+   },
+   "intro": "Further along.",
+   "choices": [
+    {
+     "label": "The end of the dock.",
+     "success": {
+      "text": "The rope comes in.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-sevii-ferry-away"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-sevii-ferry-away",
+   "name": "The Last Ferry: Away",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "stall",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-sevii-places",
+       "atLeast": 12,
+       "atMost": 99
+      }
+     ],
+     "notice": "Miss Quoyle's shut the shop to come. There's a sign on it: BACK IN TEN. SEEING OFF A REASON."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2a6b6b"
+   },
+   "intro": "The islands go down into the haze, one at a time, last first. The mainland comes up out of it. Captain Tidewell: \"Sand in everything?\"",
+   "choices": [
+    {
+     "label": "\"Everything.\"",
+     "success": {
+      "text": "Captain Tidewell: \"Aye. That's how it gets you.\" A full rest. The Notebook gains a page: every island visited, and one line for each person helped.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-sevii-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Took the last ferry back from the Sevii Islands, with sand in everything."
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll be back.\"",
+     "success": {
+      "text": "Captain Tidewell: \"Aye. That's how it gets you.\" A full rest. The Notebook gains a page: every island visited, and one line for each person helped.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-sevii-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Took the last ferry back from the Sevii Islands, with sand in everything."
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  }
+ ]
+}

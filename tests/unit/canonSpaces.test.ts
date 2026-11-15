@@ -8,7 +8,7 @@ const menu = (seed: string, slot: string, flags: string[] = [], completed: strin
 describe('Kanto canon spaces catalog', () => {
   it('is clean and has the documented counts', () => {
     expect(canonSpaceGaps(canonKanto)).toEqual([]);
-    expect(canonKanto.spaces.length).toBe(71);
+    expect(canonKanto.spaces.length).toBe(194); // 71 + Haunter's Prank (KANTO_PLACED_1) + the Badge Check and seven game route moments (KANTO_PLACED_2) + 29 Volume II spaces (KANTO_PLACED_3) + 29 more (KANTO_PLACED_4) + 11 roads and 20 Sevii spaces (KANTO_PLACED_5) + 25 (KANTO_PLACED_6)
   });
   it('keeps the director\'s mandatory spaces always placed', () => {
     for (const id of ['cs.kanto.vermilion.flightnorth', 'cs.kanto.saffron.route25', 'cs.kanto.pewter.forest', 'cs.kanto.pewter.moon', 'cs.kanto.lavender.tower']) expect(byId.get(id)?.appears).toBe('always');
@@ -33,7 +33,8 @@ describe('Town Roll', () => {
     expect(early.length).toBe(2 + 2);
     const late = menu('A', 'stage-4');
     expect(late[0]).toBe('cs.kanto.celadon.mart');
-    expect(late.length).toBe(1 + 3);
+    expect(late[1]).toBe('cs.kanto.celadon.diner'); // KANTO_PLACED_4: the Diner is Always too
+    expect(late.length).toBe(2 + 3);
   });
   it('never offers more than two Pseudo Stages, and never a sub-space or trigger without its condition', () => {
     for (let i = 0; i < 200; i++) for (const slot of ['stage-5', 'stage-7', 'interlude-3']) {
@@ -62,15 +63,17 @@ describe('Town Roll', () => {
   it('retires a space once its one-time reward is owned', () => {
     for (let i = 0; i < 150; i++) expect(menu(`M${i}`, 'stage-3', ['kanto.maiden.zcrystal'])).not.toContain('cs.kanto.vermilion.maiden');
   });
-  it('the Viridian return only replays Route 22 and leaves completed spaces out', () => {
+  it('the Viridian return replays Route 22 and the Old Man (KANTO_PLACED_1, Remembers) and leaves other completed spaces out', () => {
     const first = menu('R', 'interlude-0');
     const back = menu('R', 'stage-8', [], first);
     expect(back[0]).toBe('cs.kanto.viridian.route22');
-    expect(back.filter((id) => first.includes(id))).toEqual(['cs.kanto.viridian.route22']);
+    expect(back.filter((id) => first.includes(id))).toEqual(['cs.kanto.viridian.route22', 'cs.kanto.viridian.oldman']);
   });
   it('opens the Indigo finale with Victory Road, and Cerulean Cave only after it', () => {
-    expect(menu('I', 'finale')).toEqual(['cs.kanto.indigo.road']);
-    expect(menu('I', 'finale', [], ['cs.kanto.indigo.road'])).toContain('cs.kanto.cerulean.cave');
+    expect(menu('I', 'finale')).toEqual(['cs.kanto.indigo.road', 'cs.kanto.indigo.village']); // KANTO_PLACED_4: the Village at the Gate
+    // KANTO_PLACED_2: Cerulean Cave is locked; only the Victory Road summit opens it (an addEvent, not a menu pick).
+    expect(menu('I', 'finale', [], ['cs.kanto.indigo.road'])).not.toContain('cs.kanto.cerulean.cave');
+    expect(byId.get('cs.kanto.cerulean.cave')?.appears).toBe('locked');
   });
   it('does not touch the run RNG streams (pure: no shared state)', () => {
     const a = menu('Z', 'stage-4');

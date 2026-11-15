@@ -124,13 +124,29 @@ import eventsTrainingJson from './eventsTraining.json';
 import eventsVillainJson from './eventsVillain.json';
 import eventsMerchantsJson from './eventsMerchants.json';
 const eventsExtraFiles = Object.values(import.meta.glob<unknown>('./events/*.json', { eager: true, import: 'default' }));
+// Catalog Overhaul placement blocks, one file per category (src/data/catalogOverhaul/placement/*.json), keyed by event id.
+const coPlacementFiles = Object.values(import.meta.glob<Record<string, Record<string, unknown>>>('./catalogOverhaul/placement/*.json', { eager: true, import: 'default' }));
 import npcStoryJson from './npcStory.json';
 import { isGiftable } from '../core/events';
+import { readPlacement, type CoPlacement } from '../core/co/placement';
 import { chainEvents } from '../core/overhaul/chains';
 import { mythicalChainEvents } from '../core/overhaul/mythicalChains';
 import { dungeonEvents } from '../core/dungeon/compile';
 import { validateAllDungeons } from '../core/dungeon/schema';
 import { pseudoEvents, validateAllPseudo } from '../core/dungeon/pseudo';
+
+/** Catalog Overhaul: merges the placement files. An id in two files is a data problem. An id that is no event is skipped: cut-down copies of
+ *  the content (old-seed fingerprints, small test catalogs) drop events but keep the placement files. Each category's gate test checks that
+ *  its placed ids are real events in the full content (tests/unit/coPeople.test.ts for people). */
+function readCoPlacement(files: Record<string, Record<string, unknown>>[], eventIds: Set<string>, problems: string[]): Map<string, CoPlacement> {
+  const out = new Map<string, CoPlacement>();
+  for (const file of files) for (const [id, raw] of Object.entries(file)) {
+    if (id.startsWith('$')) continue; // "$note" and the like
+    if (out.has(id)) problems.push(`catalogOverhaul/placement: ${id} is placed in two files`);
+    else if (eventIds.has(id)) out.set(id, readPlacement(raw));
+  }
+  return out;
+}
 
 export class ContentError extends Error {
   constructor(public readonly problems: string[]) {
@@ -213,6 +229,8 @@ export interface RawContent {
   eventsMerchants?: unknown;
   /** Every src/data/events/*.json file, auto-discovered, added to `events`. */
   eventsExtra?: unknown[];
+  /** Catalog Overhaul placement files (event id to placement block). */
+  coPlacement?: Record<string, Record<string, unknown>>[];
 }
 
 /**
@@ -345,6 +363,7 @@ export const RAW_CONTENT: RawContent = {
   eventsVillain: eventsVillainJson,
   eventsMerchants: eventsMerchantsJson,
   eventsExtra: eventsExtraFiles,
+  coPlacement: coPlacementFiles,
 };
 
 function parse<T>(schema: z.ZodType<T>, value: unknown, label: string, problems: string[]): T | null {
@@ -480,6 +499,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
     assetCredits: parse(AssetCreditsSchema, raw.assetCredits ?? assetCredits, 'assetCredits.json', problems) ?? { sections: [] },
     raids,
     events: toMap(eventsFile.events, 'events.json', problems),
+    coPlacement: readCoPlacement(raw.coPlacement ?? [], new Set(eventsFile.events.map((e) => e.id)), problems),
     totems,
     shadowWorld,
     evilTeams,
@@ -781,7 +801,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const knownItem = (id: string) => content.items.has(id) || content.catalog.has(id);
   for (const e of content.events.values()) {
     const where = `event "${e.id}"`;
-    const effects = e.choices.flatMap((c) => [c.success, ...(c.failure ? [c.failure] : [])]).flatMap((o) => [...o.effects, ...(o.battle?.win ?? [])]);
+    const effects = e.choices.flatMap((c) => [c.success, ...(c.failure ? [c.failure] : [])]).flatMap((o) => [...o.effects, ...(o.battle?.win ?? [])]).concat(e.choices.flatMap((c) => c.branches.flatMap((b) => b.effects)));
     for (const f of effects) {
       if (f.kind === 'item' && !knownItem(f.id)) problems.push(`${where} gives unknown item "${f.id}"`);
       if (f.kind === 'loseItem' && f.id && !knownItem(f.id)) problems.push(`${where} uses unknown item "${f.id}"`);

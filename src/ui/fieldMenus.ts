@@ -338,6 +338,7 @@ function bagEntryRow(content: Content, run: RunState, r: BagRowData, problem: st
     return {
       problem,
       hint: bagEntryText(e),
+      item: e.itemId,
       draw: (scene, box, w, h) => {
         if (e.iconAssetId) box.add(itemVisual(scene, e.iconAssetId, w / 2, h / 2 - 12, 3));
         box.add(scene.add.text(w / 2, h - 22, `${e.name}  ×${e.quantity}`, textStyle(18)).setOrigin(0.5));
@@ -360,6 +361,7 @@ function bagEntryRow(content: Content, run: RunState, r: BagRowData, problem: st
   const tag = e.source === 'held' ? `Held by ${e.holders.map((h) => h.name).join(', ')}` : e.source === 'loose' ? 'Not held: give it to a Pokémon' : e.source === 'bag' ? (content.items.get(e.itemId)?.usableOutside ? 'Usable' : 'Battle use') : e.source === 'map' ? 'Working now' : 'Always on';
   return {
     problem,
+    item: e.itemId,
     hint: r.map ? `${bagEntryText(e, { action: true })} Choose it: ${r.map.text}` : bagEntryText(e) + (canCashIn(content, run, e.itemId) ? ' Nobody can use it: choose it to cash it in.' : ''),
     draw: (scene, box, w, h) => {
       if (e.iconAssetId) box.add(itemVisual(scene, e.iconAssetId, 26, h / 2, 2));
