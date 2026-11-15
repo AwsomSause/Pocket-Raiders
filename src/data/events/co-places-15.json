@@ -521,6 +521,39 @@
       ]
      }
     }
+   ],
+   "remembers": [
+    {
+     "id": "fog-named",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fog-named",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The fog says your name, softly, the way someone who missed you would, and lifts.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Walk on.",
+       "success": {
+        "text": "The fog parts all the way across the moor, a road of clear air just your width. It costs you nothing. Your team walks close beside you the whole way, and nobody says anything, because nobody needs to.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         }
+        ]
+       }
+      }
+     ]
+    }
    ]
   },
   {
@@ -1161,7 +1194,7 @@
       "effects": [
        {
         "kind": "item",
-        "id": "never-melt-ice",
+        "id": "nevermeltice",
         "count": 1
        }
       ]
@@ -1235,7 +1268,7 @@
       "effects": [
        {
         "kind": "item",
-        "id": "never-melt-ice",
+        "id": "nevermeltice",
         "count": 1
        }
       ]

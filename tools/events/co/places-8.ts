@@ -67,6 +67,7 @@ const FORGE: Json = {
   choices: [
     {
       ...ch('Fuse three.', out('Hallam turns your three pieces over in his tongs and shakes his head. "Your line\'s asleep. There\'s nothing for these to join." He gives you the scrap price for them.', frag(-3), $(150))),
+      requires: [flagIs('relic-frag', 3)],
       branches: LINES.map((line) => ({
         when: [growing(line)],
         text: `Hallam lays the three pieces in the coals and works the bellows until the shed roars. Then he holds your ${NAME[line]} relic beside them, and the pieces run into it like water finding its level. It comes out of the quench a little heavier. "There. It's grown a step. Feel it?" You do.`,

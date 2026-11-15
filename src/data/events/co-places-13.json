@@ -456,6 +456,21 @@
         "who": "party"
        },
        {
+        "kind": "flag",
+        "key": "mansion-lamp-kitchen",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-library",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-cellar",
+        "amount": -99
+       },
+       {
         "kind": "addEvent",
         "eventId": "dz-mansion-kitchen"
        }
@@ -475,6 +490,21 @@
        {
         "kind": "research",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-kitchen",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-library",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-cellar",
+        "amount": -99
        },
        {
         "kind": "addEvent",
@@ -513,6 +543,21 @@
         "who": "party"
        },
        {
+        "kind": "flag",
+        "key": "mansion-lamp-kitchen",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-library",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-cellar",
+        "amount": -99
+       },
+       {
         "kind": "addEvent",
         "eventId": "dz-mansion-kitchen"
        }
@@ -532,6 +577,21 @@
        {
         "kind": "research",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-kitchen",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-library",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-cellar",
+        "amount": -99
        },
        {
         "kind": "addEvent",
@@ -1378,6 +1438,11 @@
         "kind": "flag",
         "key": "detective-case-1-done",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mem-detective-helped",
+        "amount": 1
        }
       ]
      }
@@ -1390,6 +1455,16 @@
        {
         "kind": "flag",
         "key": "detective-case-1-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mem-detective-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lore-mirror-trainer",
         "amount": 1
        },
        {
@@ -1413,6 +1488,16 @@
        {
         "kind": "flag",
         "key": "detective-case-1-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mem-detective-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lore-mirror-trainer",
         "amount": 1
        },
        {

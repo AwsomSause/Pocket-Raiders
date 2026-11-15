@@ -59,7 +59,7 @@ const ICE: Json[] = [
     n.back,
   ]),
   ice.room('f', 'Claw marks and nests line the walls. This is somebody\'s home. An Alpha Mamoswine fills the cave, frost thick on its tusks, eyes red. Tucked against its side, half under the fur: a calf, small, shivering, too cold even for here.', (n) => [
-    ch('Calm it with a Never-Melt Ice.', n.to('You set the Never-Melt Ice on the floor between you. The Mamoswine snuffs it, crunches it, and lets out a long breath that fogs the whole cave. The red fades. It turns its great head back to the calf, and lets you by.', lose('never-melt-ice'), flag(n.f('den-calmed')), flag('calmed-alpha'), rp(3)), { requires: [has('never-melt-ice')] }),
+    ch('Calm it with a Never-Melt Ice.', n.to('You set the Never-Melt Ice on the floor between you. The Mamoswine snuffs it, crunches it, and lets out a long breath that fogs the whole cave. The red fades. It turns its great head back to the calf, and lets you by.', lose('nevermeltice'), flag(n.f('den-calmed')), flag('calmed-alpha'), rp(3)), { requires: [has('nevermeltice')] }),
     ch('Battle.', n.wild('It puts itself between you and the calf, and charges.', { species: ['mamoswine'], lv: 3, win: [rp(2)] })),
     ch('Leave the calf something warm.', n.to('Your Fire-type walks forward slowly, sits down by the calf, and simply glows. The shivering stops. The calf sighs and burrows against the warmth. The Mamoswine watches for a long time. Then it lies down, all at once, like a hill settling.', flag(n.f('den-calmed')), flag('calmed-alpha'), rp(3), fr(5, { types: ['fire'] })), { requires: [ptype('fire')] }),
     n.back,

@@ -77,9 +77,11 @@ const DOOR = (id: string): Json => ({
     ch('Call out.', go(id, '"Hello?" The giggling stops. The whole house holds its breath. Then the giggling starts again, closer, just on the other side of the door.')),
   ],
 });
+// A fresh visit starts with every lamp cold (a second mansion in the same run is lit again from the start).
+const DARK: Json[] = LAMPS.map((k) => flag(k, -99));
 const HALL_CHOICES = (): Json[] => [
-  ch('Scream back.', go('dz-mansion-kitchen', 'You scream right back at it. The portrait\'s mouth snaps shut. Then a Gastly falls out of the frame, laughing so hard it cannot float, and rolls around on the floor. It follows you after that, still giggling.', fr(2))),
-  ch('Look closer.', go('dz-mansion-kitchen', 'It is a family: a mother, a father, a little girl, and around them their Pokémon, a Gastly, a Shuppet, a Litwick, a Mimikyu in the girl\'s arms. Under the frame, a date, a long time ago. The portrait stops screaming, as if it is glad to be looked at properly.', flag('mansion-family'), rp(1))),
+  ch('Scream back.', go('dz-mansion-kitchen', 'You scream right back at it. The portrait\'s mouth snaps shut. Then a Gastly falls out of the frame, laughing so hard it cannot float, and rolls around on the floor. It follows you after that, still giggling.', fr(2), ...DARK)),
+  ch('Look closer.', go('dz-mansion-kitchen', 'It is a family: a mother, a father, a little girl, and around them their Pokémon, a Gastly, a Shuppet, a Litwick, a Mimikyu in the girl\'s arms. Under the frame, a date, a long time ago. The portrait stops screaming, as if it is glad to be looked at properly.', flag('mansion-family'), rp(1), ...DARK)),
 ];
 const MANSION: Json[] = [
   DOOR('w4-haunted-manor'),
@@ -198,9 +200,9 @@ const CASE1: Json[] = [
     id: 'detective-clue-3',
     intro: 'The Rooftop. Up the fire stairs, and there it is: the lantern, and curled round it, fast asleep, a little Litwick with a red collar. It was cold. It found the warmest thing in the square.',
     choices: [
-      ch('Return the lantern.', out('You lift the lantern out of its arms as gently as you can. It wakes, and shivers. Quennell takes the lantern back to the square, and says nothing about it, and you can tell he wishes you had chosen differently.', $(200), flag('detective-case-1-done'))),
-      ch('Let it keep it.', out('You leave it sleeping. The square will have one less light. Quennell nods slowly. "There are worse places for a lantern to be."', flag('detective-case-1-done'), ...kind())),
-      ch('Find it a lantern of its own.', out('You go down to the church and ask, and they have an old lantern in the vestry, dented and perfect. The town puts it up on the roof for the Litwick. It moves in that night. Everyone is happy, Dawdle most of all, though you couldn\'t say how you can tell.', flag('detective-case-1-done'), ...kind(2), moment('You solved the case of the missing lantern, and a cold Litwick got a lantern of its own.', 60))),
+      ch('Return the lantern.', out('You lift the lantern out of its arms as gently as you can. It wakes, and shivers. Quennell takes the lantern back to the square, and says nothing about it, and you can tell he wishes you had chosen differently.', $(200), flag('detective-case-1-done'), flag('mem-detective-helped'))),
+      ch('Let it keep it.', out('You leave it sleeping. The square will have one less light. Quennell nods slowly. "There are worse places for a lantern to be."', flag('detective-case-1-done'), flag('mem-detective-helped'), flag('lore-mirror-trainer'), ...kind())),
+      ch('Find it a lantern of its own.', out('You go down to the church and ask, and they have an old lantern in the vestry, dented and perfect. The town puts it up on the roof for the Litwick. It moves in that night. Everyone is happy, Dawdle most of all, though you couldn\'t say how you can tell.', flag('detective-case-1-done'), flag('mem-detective-helped'), flag('lore-mirror-trainer'), ...kind(2), moment('You solved the case of the missing lantern, and a cold Litwick got a lantern of its own.', 60))),
     ],
   }),
 ];

@@ -35,8 +35,9 @@ describe('run events K', () => {
 
   it('resolves every choice of every event (checks, chances and trades included)', () => {
     let resolved = 0;
+    // The live event (Catalog Overhaul places rebuilt some of these with new choices).
     for (const e of RK) {
-      for (let i = 0; i < e.choices.length; i++) {
+      for (let i = 0; i < content.events.get(e.id)!.choices.length; i++) {
         const run = runAt(e.id, `rk-${e.id}-${i}`);
         const gated = (content.events.get(e.id)!.choices[i]!.requires ?? []).length > 0;
         try {
@@ -51,8 +52,9 @@ describe('run events K', () => {
     expect(resolved).toBeGreaterThan(100);
   });
 
+  // Catalog Overhaul places (SF102 Pacts): the booth's one pact is "The Pact" (money up, trainers stronger).
   it('gives lasting relics once, with an upside', () => {
     const a = chooseEvent(content, runAt('rk-pact-booth', 'pact'), 'rk-side', 0).run;
-    expect(a.story.flags['relic:rk-pact-lesser']).toBe(true);
+    expect(a.story.flags['relic:rk-pact-booth']).toBe(true);
   });
 });

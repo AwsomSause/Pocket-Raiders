@@ -3,7 +3,7 @@
 // "Wait."). Where two catalog ids share a biome, both are the same hazard.
 // SF128: one family with a stated trade, no random rewards: a node of time and one Pokémon's effort for +2 Bond with that Pokémon
 // and the town's Reputation +1; or a stated donation; or not today.
-import { $, anyType, ch, flag, fr, heal, hurt, hurtExcept, hurtLead, item, join, money, out, statusLead, status, takeNode, type Json } from '../dsl.ts';
+import { $, anyType, ch, flag, flagIs, fr, heal, hurt, hurtExcept, hurtLead, item, join, money, out, statusLead, status, takeNode, type Json } from '../dsl.ts';
 import { kind, moment, rep } from './_delve.ts';
 
 export const CATEGORY = 'places';
@@ -17,6 +17,8 @@ interface Hazard {
   push: { text: string; fx: Json[]; chance?: number; fail?: { text: string; fx: Json[] } };
   wait?: { text: string; fx: Json[] };
   use: { types: string[]; label: string; text: string; fx: Json[] };
+  /** Remembers variants the old hazard had (kept: a beat elsewhere in the run changes this place). */
+  remembers?: Json[];
 }
 const hazard = (h: Hazard): Json[] => h.ids.map((id) => ({
   id,
@@ -26,6 +28,7 @@ const hazard = (h: Hazard): Json[] => h.ids.map((id) => ({
     ...(h.wait ? [ch('Wait.', out(h.wait.text, ...h.wait.fx))] : []),
     ch(h.use.label, out(h.use.text, ...h.use.fx), { requires: [anyType(...h.use.types)] }),
   ],
+  ...(h.remembers ? { remembers: h.remembers } : {}),
 }));
 
 const HAZARDS: Hazard[] = [
@@ -74,6 +77,8 @@ const HAZARDS: Hazard[] = [
     push: { text: 'You push on and walk straight into a dead end, and then another. By the time you find the road, half the day is gone.', fx: [takeNode()] },
     wait: { text: 'You wait for the fog to lift. It lifts, slowly, by noon.', fx: [takeNode()] },
     use: { types: ['flying'], label: 'Use a Flying-type.', text: 'Your Flying-type beats its wings, once, twice, and the fog tears open in front of you like a curtain. The road is right there.', fx: [fr(2, types('flying'))] },
+    // NE77 The Fog That Asks: once the fog has your name, it lets you through.
+    remembers: [{ id: 'fog-named', when: [flagIs('fog-named')], notice: 'The fog says your name, softly, the way someone who missed you would, and lifts.', hide: [0, 1], addChoices: [ch('Walk on.', out('The fog parts all the way across the moor, a road of clear air just your width. It costs you nothing. Your team walks close beside you the whole way, and nobody says anything, because nobody needs to.', fr(3)))] }],
   },
   {
     ids: ['heatwave'],
@@ -120,7 +125,7 @@ const HAZARDS: Hazard[] = [
     intro: 'A Frozen Lake. A shortcut straight across the ice. Out in the middle, something shines under the surface.',
     push: { text: 'You cross slowly, testing every step. The ice groans but holds the whole way. The shining thing stays sealed in it, out of reach.', fx: [], chance: 0.67, fail: { text: 'Halfway across, the ice cracks under someone with a sound like a gunshot, and everyone gets wet and cold scrambling to the far side.', fx: [hurt(0.1)] } },
     wait: { text: 'You go round the shore. It takes a long time, and the shining thing stays where it is.', fx: [takeNode()] },
-    use: { types: ['ice'], label: 'Use an Ice-type.', text: 'Your Ice-type walks straight across, the ice thickening under its feet, and stops in the middle, and digs. The shine is a Never-Melt Ice.', fx: [item('never-melt-ice')] },
+    use: { types: ['ice'], label: 'Use an Ice-type.', text: 'Your Ice-type walks straight across, the ice thickening under its feet, and stops in the middle, and digs. The shine is a Never-Melt Ice.', fx: [item('nevermeltice')] },
   },
   {
     ids: ['wx-floating-ice-floes'],

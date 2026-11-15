@@ -4,12 +4,10 @@
 // - Away: a Pokémon stays behind somewhere (the Cursola reef) and comes back later through an event, stronger.
 // - Risk Dial: a `stopWeight` modifier makes one kind of map stop (ambushes) more common.
 // - Shadow Boon: a `bossLeadStages` modifier moves the lead's stats at the start of the next boss battle.
-// Pure rules, no RNG, no Phaser.
+// Pure rules, no RNG, no Phaser. Only type imports, so the battle engine can read the modifiers without an import cycle
+// (bringing a Pokémon back levels it up, so `bringBack` lives in ./placesAway.ts).
 import type { ArchetypeModifier, Content, TypeName } from '../contentSchema';
-import { addLevels } from '../pokemon';
-import { runLevelCap } from '../regions';
 import type { PokemonInstance, RunState } from '../state';
-import { changeFriendship } from '../friendship';
 
 /** The relic a lost vowed Pokémon leaves behind: the party carries its promise. */
 export const VOW_MARK = { id: 'vow-mark', name: 'Mark of the Vow', effects: [{ kind: 'friendshipMultiplier', value: 1.25 }] as ArchetypeModifier[] };
@@ -36,21 +34,6 @@ export function sendAway(content: Content, run: RunState, key: string, chosen: P
   run.coAway = [...(run.coAway ?? []).filter((a) => a.key !== key), { key, mon, region: run.regionIndex }];
   run.story.flags[`ev:${key}`] = 1;
   if (run.story.flags[`ev:${key}-at`] === undefined) run.story.flags[`ev:${key}-at`] = run.regionIndex + 1;
-  return mon;
-}
-
-/** Brings the Pokémon left under `key` back (to the party, or the box when it is full), `levels` and `friendship` stronger. */
-export function bringBack(content: Content, run: RunState, key: string, levels: number, friendship: number, capacity: number, purify = false): PokemonInstance | null {
-  const at = (run.coAway ?? []).findIndex((a) => a.key === key);
-  if (at < 0) return null;
-  const { mon } = run.coAway![at]!;
-  run.coAway = run.coAway!.filter((_, i) => i !== at);
-  if (levels > 0) addLevels(content, mon, levels, runLevelCap(content, run));
-  if (friendship > 0) changeFriendship(content, mon, friendship);
-  if (purify) delete mon.shadow;
-  mon.hp = Math.max(1, mon.hp);
-  if (run.party.length < capacity) run.party.push(mon);
-  else run.box.push(mon);
   return mon;
 }
 

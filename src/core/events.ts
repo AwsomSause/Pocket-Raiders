@@ -12,7 +12,8 @@
 import { applyCoEffect, coConditionMet, coConditionText, coEffectWords, fillCoText, restoreMachine } from './events/coToolkit';
 import { flagAge, lineHolds, lineMember, queueLaterEvent, stampFlagStage } from './events/questline';
 import { modifierEventWeight } from './runModifiers';
-import { bringBack, sendAway, stopWeightOf, upgradeItem } from './co/placesRules';
+import { sendAway, stopWeightOf, upgradeItem } from './co/placesRules';
+import { bringBack } from './co/placesAway';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { rememberPick, rememberedPick } from './co/pickMemory';
 import { PSEUDO, enterPseudoStage, leavePseudoStage, routeChainEvent } from './dungeon/pseudo';

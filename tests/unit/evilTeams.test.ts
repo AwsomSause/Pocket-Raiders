@@ -210,9 +210,10 @@ describe('permanent choices', () => {
   });
 
   it('a path choice changes the rest of the run (its modifiers stay) and is run-defining', () => {
-    const r = pickChoice(newRun('fork'), 'road-fork', 'The mountain pass').run;
-    expect(r.perkEffects).toEqual(expect.arrayContaining([{ kind: 'enemyLevelOffset', value: 1 }]));
-    expect(choiceHistory(r)[0]).toMatchObject({ id: 'road-fork', pick: 'mountain', weight: 3 });
+    // Catalog Overhaul places (SF102): the fork is now three towns; the Gym road's relic stays for the run.
+    const r = pickChoice(newRun('fork'), 'road-fork', 'The Gym town.').run;
+    expect(r.story.flags['relic:road-gym']).toBe(true);
+    expect(choiceHistory(r)[0]).toMatchObject({ id: 'road-fork', pick: 'gym', weight: 3 });
   });
 
   it('a rescued Pokémon can come back to join later', () => {

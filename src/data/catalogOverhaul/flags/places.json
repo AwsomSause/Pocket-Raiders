@@ -2,9 +2,9 @@
  "category": "places",
  "note": "Run flags the places events use. `from` = set by another category's system and only read here; `for` = set here for another category to read. Every other flag is set and read inside the places files.",
  "flags": [
-  { "key": "noble-ine", "from": "families-c (A1, Ine the Warden met)", "readBy": "dg-abandoned-mine-shaft-d" },
-  { "key": "delta-d2-done", "from": "legends (Delta chain D2, the Ghost Dragon of the Burnt Valley, finished)", "readBy": "dg-volcanic-core-g" },
-  { "key": "alpha-gyarados-met", "from": "legends (Alpha A2, the lake Gyarados, done)", "readBy": "dg-deep-ocean-h" },
+  { "key": "noble-ine", "hook": "families-c", "from": "families-c (A1, Ine the Warden met)", "readBy": "dg-abandoned-mine-shaft-d" },
+  { "key": "delta-d2-done", "hook": "legends", "from": "legends (Delta chain D2, the Ghost Dragon of the Burnt Valley, finished)", "readBy": "dg-volcanic-core-g" },
+  { "key": "alpha-gyarados-met", "hook": "legends", "from": "legends (Alpha A2, the lake Gyarados, done)", "readBy": "dg-deep-ocean-h" },
   { "key": "faller-rank", "from": "legends (Ultra Beast Incursions; places adds +1 at dg-deep-ocean-b)", "readBy": "dg-celestial-observatory-h" },
   { "key": "calmed-alpha", "for": "legends (Alpha of Alphas at 6)", "setBy": "every Delve den and guardian that is calmed" },
   { "key": "sign-bird", "for": "legends (Signs)", "setBy": "dg-mountain-pass-e, dg-sky-bridge-c" },

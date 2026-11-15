@@ -171,16 +171,18 @@ describe('Rival feud', () => {
 });
 
 describe('Relics and the Camp Council', () => {
-  it('a relic adds its upside and downside once, and the camp is a rest spot', async () => {
+  // Catalog Overhaul places (SF94): the shrine now trades one Relic Tree line for another (its upside: the other line's
+  // tree at full growth; its downside: your own tree is cut back). The full relic rules are in coPlaces.test.ts.
+  it('the relic shrine trades your tree line for another once, and the camp is a rest spot', async () => {
     const { chooseEvent } = await import('../../src/core/events');
     const run = fresh('relic');
     const node = run.stage!.map.nodes[0]!;
     node.sides.push({ id: 'event-r', kind: 'event', used: false, eventId: 'relic-shrine' });
     run.stage!.current = node.id;
-    const before = run.perkEffects?.length ?? 0;
+    run.story.flags['ev:tree-ember'] = 1;
     const r = chooseEvent(content, run, 'event-r', 0);
-    expect(r.run.perkEffects!.length).toBe(before + 2);
-    expect(r.run.perkEffects!.map((e) => e.kind)).toEqual(expect.arrayContaining(['hyperChanceMultiplier', 'rivalLevelOffset']));
+    expect(r.run.story.flags['ev:tree-ember'] ?? 0).toBe(0);
+    expect(r.run.story.flags['ev:tree-tide']).toBe(3);
     expect(content.events.get('camp-council')!.stop).toBe('rest');
     expect(content.events.get('camp-council')!.choices).toHaveLength(4);
   });

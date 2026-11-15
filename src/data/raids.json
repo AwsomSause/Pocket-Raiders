@@ -2748,7 +2748,7 @@
         }
       ],
       "rewards": {
-        "moneyPerLevel": 120,
+        "moneyPerLevel": 130,
         "items": [
           {
             "item": "dynamax-candy",

@@ -289,6 +289,14 @@
        }
       ]
      },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "relic-frag",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
      "branches": [
       {
        "when": [
