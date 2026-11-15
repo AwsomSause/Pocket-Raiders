@@ -69,6 +69,12 @@ All 183 ledger ids of the category are built (`npm run co:status`: people 183 / 
 
 Placement: the PC, GL and PA4 rows of `QUESTLINES_PLACED.md` are in `placement/people.json`. PC1 is shape "Endgame" (after the League in the last region): the placer has no Endgame shape yet, so its `requires` (last region) is what holds it back. Everything else keeps its old catalog placement. Final Lesson "in the last region" is read as `regionsLeft <= 1`.
 
+### Shared code and tests this category changed
+- `src/data/index.ts`: a placement id that is no event is skipped instead of failing (cut-down test contents drop events); `coPeople.test.ts` checks every people placement id is a real, placed event.
+- Older tests moved with the pack: NPC recruits come from the meet arc (`npcTrainers`, `clock`), mentor tests follow MS1-MS12 (`mentors`), Victory Hall is a room (`challengeModes`), room and memory checks count lose effects, branches and Remembers choices (`world`, `eventMemory`), story-walk bots pass by attached events (`storyWalk.ts`).
+- `ps-league-exhibition-gate` (category places) is retired by `people-champions-2` REMOVE, since C3 no longer opens it; a places co file with that id wins.
+- `npm run check` passed on 2026-11-15 (8,828 unit tests, build, content gate, assets, perf); `tests/e2e/coPeople.spec.ts` passes (2 tests).
+
 ## Needs Kice
 Beats that are not built or are built as the nearest honest version, by file. "Needs engine": a flag records the beat until a system reads it. "Cross-run": not built (memory stays inside one run). "Cross-doc": reads another document's story; no flag invented.
 
