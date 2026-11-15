@@ -32,6 +32,8 @@ Source: `/mnt/project-files/catalog_overhaul_pack/kanto_canon_spaces/` (`KANTO_P
 | Saffron `.mrpsychic`, `.imite`, `.exam`, `.teleport`, `.seam`, `.post` | `KANTO_PLACED_4.md`, 502–688 | 2026-11-15 |
 | Cinnabar `.inn`, `.sleeper`, `.backlog`, `.trades`, `.wave`, `.vial` | `KANTO_PLACED_4.md`, 689–870 | 2026-11-15 |
 | Indigo `.torch`, `.boulders`, `.village` | `KANTO_PLACED_4.md`, 871–959 | 2026-11-15 |
+| Roads `cs.kanto.route.song`, `.darkcity`, `.canyon`, `.egg`, `.daycare`, `.estate`, `.leek`, `.hero`, `.film`, `.badges`, `.buried` | `KANTO_PLACED_5.md`, 9–430 | 2026-11-15 |
+| Sevii `cs.kanto.sevii.*` (network + ferry, ember, stall, maniac, missing, bikers, berryforest, icefall, daycare, warehouse, lostcave, pillar, dottedhole, patternbush, altering, tower, tanoby, canyon, navel, birth) | `KANTO_PLACED_5.md`, 431–870 | 2026-11-15 |
 
 ## Limits (Part 1)
 - Before / instead / after the node's battle and "at a + node" are recorded (placement file `attaches`) but every space is a stop beside its node until the lead's placer lands; then the placement file drives it.
@@ -71,3 +73,13 @@ Source: `/mnt/project-files/catalog_overhaul_pack/kanto_canon_spaces/` (`KANTO_P
 - The Boulder Hall's three rooms are nodes of Victory Road's map beside the plates they open from (rooms of the same Pseudo Stage).
 - The Admissions Exam's practical uses your own party, not three rentals (no rental teams in events yet); the quirk cards are text only.
 - Room ends with two complementary gates (in time or late, pass or fail, with or without a Squirtle) are listed in the "only locked choices" exceptions of `kantoCanonCo.test.ts`; one always fits.
+
+## Limits (Part 5, roads and Sevii)
+- Same-run rule: the Network Center's "see Pokémon from earlier runs", Trainer Tower's save-wide times and Tanoby's save-wide words stay in this run (the wall lights up; the board and the word are this run's). Ribbons and tiles are journal moments.
+- The Sevii Islands are one Pseudo Stage (Captain Tidewell at Cinnabar), with every island place as nodes on its map, so nothing nests. The map lets you walk ahead, but island choices check the ferry flags (three picks; Three free after the Missing Girl).
+- The Song's marker isn't an item: the Jigglypuff joins without it; sleeping through costs Speed (halved) for one battle. Second chances: the Sleeper on the Beach and the Village board; the Buried City uses the Song if it was met at all.
+- Who Keeps the Egg: a "chemistry pair" is camp chemistry for the party plus friendship; the rival's Togepi is a flag for the rivals thread.
+- The Leek Thief: the stolen bag makes the next two battles a level gentler; items stay usable.
+- Stand-ins: Full Restore is a full rest on the spot; the Move Maniac's Tiny Mushroom tier is folded into the Big Mushroom (a Network Machine); the Ruby and Sapphire are run flags (the catalog's are sellable valuables); Rocket Admins' "+1 every stat" is +1 level; the Tower's "no items" isn't enforced.
+- Tickets: the doc says "a rare reward elsewhere"; here the Mystic Ticket is in Selphy's bag (25%) and the Aurora Ticket is the prize for beating Trainer Tower's posted time.
+- Sizes: the Lost Cave has five rooms (doc: up to eight); Birth Island's six step puzzles are one aim prompt; the Altering Cave rolls one of 18 non-Kanto species.

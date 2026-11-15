@@ -70,6 +70,117 @@
     8
    ],
    "chance": 0.6
+  },
+  {
+   "event": "cs-kanto-route-song",
+   "stages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "chance": 0.25
+  },
+  {
+   "event": "cs-kanto-route-darkcity",
+   "stages": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "chance": 0.25
+  },
+  {
+   "event": "cs-kanto-route-canyon",
+   "stages": [
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "chance": 0.25
+  },
+  {
+   "event": "cs-kanto-route-daycare",
+   "stages": [
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "chance": 0.25
+  },
+  {
+   "event": "cs-kanto-route-estate",
+   "stages": [
+    4,
+    5,
+    6,
+    7
+   ],
+   "chance": 0.25
+  },
+  {
+   "event": "cs-kanto-route-leek",
+   "stages": [
+    2,
+    3,
+    4,
+    5
+   ],
+   "chance": 0.25
+  },
+  {
+   "event": "cs-kanto-route-hero",
+   "stages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "chance": 0.2
+  },
+  {
+   "event": "cs-kanto-route-film",
+   "stages": [
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "chance": 0.25
+  },
+  {
+   "event": "cs-kanto-route-badges",
+   "stages": [
+    6,
+    7,
+    8
+   ],
+   "chance": 0.3
+  },
+  {
+   "event": "cs-kanto-route-buried",
+   "stages": [
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "chance": 0.2
   }
  ]
 }

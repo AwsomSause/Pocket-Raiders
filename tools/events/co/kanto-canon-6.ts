@@ -384,7 +384,7 @@ const status = (s: string): Json => ({ kind: 'status', status: s, who: 'lead' })
     'A sandbar. Forty Squirtle and Wartortle, asleep in heaps. In the middle, a Blastoise on its back, snoring out of one cannon. The other cannon\'s blocked by something round and pink. A Wartortle, the only one awake, pulls at your sleeve. It points. It mimes: singing. Then: falling over. From inside the cannon, muffled, a song. Getting close puts things to sleep.',
     [c('Send one that can\'t sleep.', pop('It walks up and pulls. Done.'), { requires: [{ kind: 'partyAbility', abilities: ['insomnia', 'vital-spirit', 'soundproof'], label: 'Insomnia, Vital Spirit or Soundproof' }] }),
       c('Send anything else (three attempts).', pop('One step nearer each time, and a turn asleep on the sand each time. On the third, it\'s close enough.')),
-      c('Go yourself, fingers in your ears.', pop('It works. Your lead is very impressed.', fr(3, 'lead')))]);
+      c('Go yourself, fingers in your ears.', pop('It works. Your lead is very impressed.', fr(3, 'lead')))], { remembers: [{ id: 'song', when: [is('kanto-song-missed'), not('kanto-song-awake')], notice: 'In the background, on a rock with its marker pen: the Jigglypuff from the road. It has seen you.', addChoices: [c('Sit down in front of the Jigglypuff. Stay awake this time.', o('It clears its throat, very slowly, watching you.', { kind: 'addEvent', eventId: 'cs-kanto-route-song-v1' }))] }] });
   s.room('woke', 'The Sleeper on the Beach: Awake', 'The Blastoise sits up, and forty Squirtle and Wartortle wake round it.',
     [c('Say goodbye.', o('A Wartortle from the island asks to come.', join(['wartortle']), flag('kanto-cinnabar-sleeper'), moment('Pulled a Jigglypuff out of a Blastoise\'s cannon.')), { requires: [{ kind: 'partyLine', species: 'squirtle', absent: true }] }),
       c('Say goodbye.', o('The Wartortle that was awake has sunglasses in its shell. It puts them on.', flag('kanto-cinnabar-sleeper')), { requires: [{ kind: 'partyLine', species: 'squirtle' }] })]);
@@ -497,7 +497,7 @@ const status = (s: string): Json => ({ kind: 'status', status: s, who: 'lead' })
   s.room('hub', 'The Village at the Gate', 'The fair, and the gate behind it.', hub);
   s.room('board', 'The Village at the Gate: The Board', 'You may pin one thing from the journey.',
     [c('Pin a moment from this run.', o('You pin it at eye level. It\'ll be there as long as this journey is.', fr(3), flag('kanto-indigo-village'), moment('Pinned something from the journey to the board by the Indigo gate.'), s.open('hub'))),
-      c('"Not yet."', o('The board waits.', s.open('hub'))), c('Read the board.', o('A hundred trainers\' journeys, one line each. Some got further than you. Some didn\'t get this far.', s.open('hub')))]);
+      c('"Not yet."', o('The board waits.', s.open('hub'))), c('Read the board.', o('A hundred trainers\' journeys, one line each. Some got further than you. Some didn\'t get this far.', s.open('hub')))], { remembers: [{ id: 'song', when: [is('kanto-song-missed'), not('kanto-song-awake')], notice: 'In the background, on a rock with its marker pen: the Jigglypuff from the road. It has seen you.', addChoices: [c('Sit down in front of the Jigglypuff. Stay awake this time.', o('It clears its throat, very slowly, watching you.', { kind: 'addEvent', eventId: 'cs-kanto-route-song-v1' }))] }] });
 }
 
 export const REMOVE: string[] = retired(EVENTS);

@@ -121,6 +121,30 @@
    "themeId": "water-ice",
    "tint": "#8a3a2a",
    "mood": "the sea going back a long way, and then standing up"
+  },
+  {
+   "id": "ps_cs_kanto_route_canyon",
+   "name": "The Fossil Rush",
+   "entry": "cs-kanto-route-canyon",
+   "themeId": "rock-ghost",
+   "tint": "#5a6b3a",
+   "mood": "eyes opening in rows in the dark, and a shaft of daylight far above"
+  },
+  {
+   "id": "ps_cs_kanto_route_buried",
+   "name": "The Buried City",
+   "entry": "cs-kanto-route-buried",
+   "themeId": "psychic-ghost",
+   "tint": "#5a6b3a",
+   "mood": "a valley with two giants in it, arguing in the rain"
+  },
+  {
+   "id": "ps_cs_kanto_sevii_network",
+   "name": "The Sevii Islands",
+   "entry": "cs-kanto-sevii-network",
+   "themeId": "water-grass",
+   "tint": "#8a3a2a",
+   "mood": "seven islands in a warm sea, and a ferry that does three and the first"
   }
  ]
 }

@@ -2171,5 +2171,620 @@
   ],
   "levelApplied": true,
   "own": true
+ },
+ "cs-kanto-route-song": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 6,
+  "window": [
+   3,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "badge": "A music note and a marker pen",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.route.song",
+  "kantoStages": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-darkcity": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   7,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "badge": "A shuttered window",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.route.darkcity",
+  "kantoStages": [
+   3,
+   4,
+   5,
+   6
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-canyon": {
+  "shape": "Door",
+  "earliest": "A2",
+  "home": 12,
+  "window": [
+   10,
+   15
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "badge": "A pickaxe",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.route.canyon",
+  "kantoStages": [
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-egg": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 12,
+  "sits": "must-see",
+  "attaches": "before",
+  "badge": "A cracked shell",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.egg",
+  "kantoStages": [
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-daycare": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 7,
+  "window": [
+   5,
+   10
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A heart with a price tag",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.route.daycare",
+  "kantoStages": [
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-estate": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A crest",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.estate",
+  "kantoStages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-leek": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 5,
+  "window": [
+   3,
+   9
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A leek",
+  "tags": [],
+  "level": "A-1",
+  "often": "region",
+  "canon": "cs.kanto.route.leek",
+  "kantoStages": [
+   2,
+   3,
+   4,
+   5
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-hero": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 10,
+  "window": [
+   6,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A paper crown",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.hero",
+  "kantoStages": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-film": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 13,
+  "window": [
+   10,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A clapperboard",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.film",
+  "kantoStages": [
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-badges": {
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 8,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "An empty badge case",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.route.badges",
+  "kantoStages": [
+   6,
+   7,
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-buried": {
+  "shape": "Door",
+  "earliest": "A4",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "badge": "A spoon and a bell",
+  "tags": [
+   "eerie"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.buried",
+  "kantoStages": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-network": {
+  "shape": "Door",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "town",
+  "badge": "A ferry pass",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.sevii.network",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-ember": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A hot spring",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.sevii.ember",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-stall": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A shelf",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.sevii.stall",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-maniac": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A mushroom",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.sevii.maniac",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-missing": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A glass",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.sevii.missing",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-bikers": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A spanner",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.sevii.bikers",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-berryforest": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A basket",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.sevii.berryforest",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-icefall": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "An icicle",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.sevii.icefall",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-daycare": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A teapot",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.sevii.daycare",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-warehouse": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A crate",
+  "tags": [],
+  "level": "A+2",
+  "often": "region",
+  "canon": "cs.kanto.sevii.warehouse",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-lostcave": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A sign that says COUNT",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.sevii.lostcave",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-pillar": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A small stone",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.sevii.pillar",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-dottedhole": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A dotted sign",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.sevii.dottedhole",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-patternbush": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A picture in the grass",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.sevii.patternbush",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-altering": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A pencilled sign",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.sevii.altering",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-tower": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A clock",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.sevii.tower",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-tanoby": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A carved tile",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.sevii.tanoby",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-canyon": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A dance step",
+  "tags": [],
+  "level": "A+2",
+  "often": "region",
+  "canon": "cs.kanto.sevii.canyon",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-navel": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A stair",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.sevii.navel",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-sevii-birth": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A black triangle",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.sevii.birth",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
  }
 }

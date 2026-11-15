@@ -5190,7 +5190,40 @@
    "types": [],
    "minStage": 1,
    "requires": [],
-   "remembers": [],
+   "remembers": [
+    {
+     "id": "song",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-song-missed",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-song-awake",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "In the background, on a rock with its marker pen: the Jigglypuff from the road. It has seen you.",
+     "addChoices": [
+      {
+       "label": "Sit down in front of the Jigglypuff. Stay awake this time.",
+       "success": {
+        "text": "It clears its throat, very slowly, watching you.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "cs-kanto-route-song-v1"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
    "callback": false,
    "forced": false,
    "scene": {
@@ -6646,7 +6679,40 @@
    "types": [],
    "minStage": 1,
    "requires": [],
-   "remembers": [],
+   "remembers": [
+    {
+     "id": "song",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-song-missed",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-song-awake",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "In the background, on a rock with its marker pen: the Jigglypuff from the road. It has seen you.",
+     "addChoices": [
+      {
+       "label": "Sit down in front of the Jigglypuff. Stay awake this time.",
+       "success": {
+        "text": "It clears its throat, very slowly, watching you.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "cs-kanto-route-song-v1"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
    "callback": false,
    "forced": false,
    "scene": {
