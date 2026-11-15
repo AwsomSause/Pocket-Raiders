@@ -3324,6 +3324,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** Beta 0.7 U1: Ultra Aura: every foe starts with +1 to all its stats. */
     aura: z.boolean().optional(),
     win: z.array(EventEffectSchema).default([]),
+    /** Catalog Overhaul (Greenneedle): effects when the wild Pokémon is caught. A catch does not pay `win`, so a story room that must go on either way lists its next step here too. */
+    caught: z.array(EventEffectSchema).optional(),
   }),
   z.object({
     kind: z.literal('trainer'),

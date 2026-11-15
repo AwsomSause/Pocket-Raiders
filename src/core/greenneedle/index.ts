@@ -33,7 +33,22 @@ export const BOND_THREE = 85;
 /** Token on `battle.storyEffects`: the foe gives up its next attack, with this line (the battle engine reads and removes it). */
 export const FOE_WAITS = 'gn-foe-waits:';
 
-export const FOREST = { inside: 'gn-forest-in', battles: 'gn-forest-battles', fought: 'gn-forest-fought', rank: 'gn-forest-rank', evolved: 'gn-forest-evolved', fog: 'gn-forest-fog' } as const;
+export const FOREST = { inside: 'gn-forest-in', battles: 'gn-forest-battles', fought: 'gn-forest-fought', rank: 'gn-forest-rank', evolved: 'gn-forest-evolved', fog: 'gn-forest-fog', duelist: 'gn-forest-duelist', big: 'gn-forest-big' } as const;
+
+/** The newest conscious party Pokémon of the type becomes the forest's duelist (once; later calls do nothing). */
+export function markDuelist(content: Content, run: RunState, type: string): string {
+  if (markedMon(run, 'duelist')) return '';
+  const fits = run.party.filter((m) => m.hp > 0 && (content.species.get(m.speciesId)?.types as string[] | undefined)?.includes(type));
+  const mon = fits[fits.length - 1];
+  if (!mon) return '';
+  mon.gn = [...(mon.gn ?? []), `duelist:${mon.speciesId}`];
+  for (const k of [FOREST.battles, FOREST.fought, FOREST.rank, FOREST.evolved]) setGnFlag(run, k, 0);
+  setGnFlag(run, FOREST.duelist, 1);
+  setGnFlag(run, FOREST.big, ['pinsir', 'scyther', 'heracross'].includes(mon.speciesId) ? 1 : 0);
+  // The pack's own flag name for "a Bug-type walks with the player" (kanto.forest.bug).
+  setGnFlag(run, 'kanto-forest-bug', 1);
+  return `${nameOf(content, mon)} walks beside you now. It is your duelist.`;
+}
 
 /** What a step needs from events.ts: the stop's seeded stream and the ordinary effect applier (passed in, so this folder imports no engine code). */
 export interface GnHost {
@@ -44,15 +59,8 @@ export interface GnHost {
 /** One Greenneedle story step. Returns the line the outcome shows (may be empty). */
 export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host: GnHost): string {
   switch (e.op) {
-    case 'duelist': {
-      if (markedMon(run, 'duelist')) return '';
-      const fits = run.party.filter((m) => m.hp > 0 && (content.species.get(m.speciesId)?.types as string[] | undefined)?.includes(e.type ?? 'bug'));
-      const mon = fits[fits.length - 1];
-      if (!mon) return '';
-      mon.gn = [...(mon.gn ?? []), `duelist:${mon.speciesId}`];
-      for (const k of [FOREST.battles, FOREST.fought, FOREST.rank, FOREST.evolved]) setGnFlag(run, k, 0);
-      return `${nameOf(content, mon)} walks beside you now. It is your duelist.`;
-    }
+    case 'duelist':
+      return markDuelist(content, run, e.type ?? 'bug');
     case 'capFlag':
       if (gnFlag(run, e.key!) > e.n!) setGnFlag(run, e.key!, e.n!);
       return '';
@@ -60,6 +68,7 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       setGnFlag(run, e.key!, e.n!);
       return '';
     case 'unmark':
+      if (e.key === 'duelist') setGnFlag(run, FOREST.duelist, 0);
       for (const mon of run.party) if (mon.gn) mon.gn = mon.gn.filter((t) => t !== e.key && !t.startsWith(`${e.key}:`));
       return '';
     case 'roll':
@@ -103,6 +112,10 @@ export function gnBattleStart(_content: Content, run: RunState): void {
   const battle = run.battle;
   if (!battle) return;
   if (gnFlag(run, FOREST.inside) > 0 && gnFlag(run, FOREST.fog) > 0) battle.accuracyMult = 0.9;
+  // A Weedle duelist: the swarm's Beedrill will not strike first at one of their own.
+  if (battle.event?.eventId === 'gn-03-oak' && battle.kind === 'wild' && ['weedle', 'kakuna', 'beedrill'].includes(markedMon(run, 'duelist')?.was ?? '')) {
+    battle.storyEffects.push(`${FOE_WAITS}The swarm hangs back. They will not strike first at one of their own.`);
+  }
   const lead = run.party[battle.activeIndex];
   if (battle.eventRule?.gn === 'samurai' && lead && lead.friendship >= BOND_THREE) battle.storyEffects.push(`kind:${lead.uid}`);
 }
@@ -121,8 +134,10 @@ export function gnShape(content: Content, run: RunState, action: PlayerAction): 
 }
 
 /** The forest counts (gn.03): battles won inside, and how many of them the duelist fought in; 2 = most, 1 = some, 0 = none. */
-function countForest(run: RunState, battle: BattleState): void {
+function countForest(content: Content, run: RunState, battle: BattleState): void {
   if (gnFlag(run, FOREST.inside) < 1) return;
+  // A Bug-type caught in the last room has joined by now: it is marked before this fight is counted.
+  markDuelist(content, run, 'bug');
   const duelist = markedMon(run, 'duelist');
   if (!duelist) return;
   const battles = gnFlag(run, FOREST.battles) + 1;
@@ -134,11 +149,11 @@ function countForest(run: RunState, battle: BattleState): void {
 }
 
 /** After a turn: once a fight is won, the stories that count fights take their count (once per fight). */
-export function gnAfterTurn(_content: Content, run: RunState): Cue[] {
+export function gnAfterTurn(content: Content, run: RunState): Cue[] {
   const battle = run.battle;
-  if (!battle || battle.outcome !== 'win' || battle.storyEffects.includes('gn-counted')) return [];
+  if (!battle || (battle.outcome !== 'win' && battle.outcome !== 'caught') || battle.storyEffects.includes('gn-counted')) return [];
   battle.storyEffects.push('gn-counted');
-  countForest(run, battle);
+  countForest(content, run, battle);
   return [];
 }
 

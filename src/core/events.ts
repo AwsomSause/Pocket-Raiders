@@ -1614,7 +1614,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
   prepareSpectate(content, run, event.eventId);
   const lastAlive = b.kind === 'trainer' && b.rule?.reversed ? run.party.map((p) => p.hp > 0).lastIndexOf(true) : -1;
   const pondLead = b.kind === 'trainer' && b.rule?.pondDuel ? run.party.findIndex((p) => p.pond && p.hp > 0) : -1;
-  const marked = b.kind === 'trainer' && b.rule?.leadMark ? run.party.findIndex((p) => p.hp > 0 && p.gn?.some((t) => t === b.rule!.leadMark || t.startsWith(`${b.rule!.leadMark}:`))) : -1;
+  const marked = b.kind !== 'raid' && b.rule?.leadMark ? run.party.findIndex((p) => p.hp > 0 && p.gn?.some((t) => t === b.rule!.leadMark || t.startsWith(`${b.rule!.leadMark}:`))) : -1;
   const dueler = pondLead >= 0 ? pondLead : marked >= 0 ? marked : b.kind === 'trainer' && b.rule?.leadType ? run.party.findIndex((p) => p.hp > 0 && getSpecies(content, p.speciesId).types.includes(b.rule!.leadType!)) : -1;
   const activeIndex = dueler >= 0 ? dueler : lastAlive >= 0 ? lastAlive : run.party.findIndex((p) => p.hp > 0);
   const base = (b.kind !== 'raid' ? b.level : undefined) ?? (b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level + b.levelBonus : eventLevel(content, run, node, rng) + b.levelBonus);
@@ -1863,6 +1863,15 @@ export function eventBattleWon(content: Content, run: RunState, event: EventBatt
   if (battle.kind === 'trainer') evilBattleWon(run, battle);
   const slow = battle.kind === 'trainer' && battle.rule?.turnLimit !== undefined && turns > battle.rule.turnLimit && battle.slowWin;
   return (slow || battle.win).map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
+}
+
+/** A wild event fight that ended in a catch pays its `caught` effects (a catch is not a `win`). */
+export function eventBattleCaught(content: Content, run: RunState, event: EventBattleRef): string[] {
+  const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
+  const battle = (event.success ? choice?.success : choice?.failure)?.battle;
+  if (!battle || battle.kind !== 'wild' || !battle.caught?.length) return [];
+  const rng = new Rng(hashSeed(`${run.seed}::event-caught::${stageKey(run)}::${event.sideId}`));
+  return battle.caught.map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
 }
 
 /** The consolation prize of a lost pseudo-stage fight (`lose` effects of the battle that was lost). */

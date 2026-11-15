@@ -1,0 +1,29 @@
+{
+ "gn-03-door": {
+  "gn": "gn.03",
+  "shape": "Door",
+  "earliest": "A1",
+  "home": 6,
+  "window": [
+   4,
+   9
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "tags": [
+   "Pseudo Stage",
+   "Rival Episode"
+  ],
+  "level": "A-1",
+  "often": "run",
+  "needs": [
+   "forest"
+  ],
+  "dressing": {
+   "kanto": "Viridian Forest",
+   "kantoStage": "Pewter",
+   "elsewhere": "The Old Wood"
+  },
+  "note": "Six nodes. The duel is at equal levels."
+ }
+}

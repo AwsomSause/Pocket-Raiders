@@ -76,6 +76,9 @@ export const leavePseudo = (): Json => ({ kind: 'leavePseudo' });
 export const teach = (move: string, o: Json = {}): Json => ({ kind: 'teachMove', move, ...o });
 export const moment = (text: string, importance = 60): Json => ({ kind: 'moment', text, importance });
 
+/** A wild fight whose story goes on whether the Pokémon is beaten or caught (a catch does not pay `win`). */
+export const eitherWay = (battle: Json): Json => ({ ...battle, caught: battle.win });
+
 /** A fight inside a pseudo stage: a loss ejects to the map and the run goes on. */
 export const inside = (battle: Json): Json => ({ ...battle, pseudo: true });
 

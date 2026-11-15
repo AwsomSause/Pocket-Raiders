@@ -1,0 +1,1355 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-03-door",
+   "name": "Viridian Forest: The Samurai's Challenge",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "stop": "dungeon",
+   "rarity": "rare",
+   "forced": true,
+   "minStage": 1,
+   "types": [
+    "bug",
+    "grass"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "gn-03-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "kanto",
+     "when": [
+      {
+       "kind": "region",
+       "ids": [
+        "kanto"
+       ]
+      }
+     ],
+     "intro": "Viridian Forest. Everyone in Pewter has a story about it, and every story ends the same way: with a man in old armour, sitting very still in a clearing, waiting for somebody worth his time.\n\nThe road goes in under the first branches and the day goes green and quiet behind you. Somewhere ahead a twig snaps, and then, very politely, does not snap again.\n\nIt is six stops deep. You can still turn round here."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f3a22",
+    "effect": "float"
+   },
+   "intro": "The Old Wood. The people at the last crossroads lowered their voices when they named it, the way you do for a neighbour who might be listening.\n\nThe road goes in under the first branches and the day goes green and quiet behind you. Somewhere ahead a twig snaps, and then, very politely, does not snap again.\n\nThey say a man in old armour waits in a clearing in there. It is six stops deep. You can still turn round here.",
+   "choices": [
+    {
+     "label": "Step under the trees.",
+     "success": {
+      "text": "You step in. The light changes on your hands first. Behind you the road is already a bright coin at the end of a tunnel, and getting smaller.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-03-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-forest-in",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "gn-forest-fog",
+        "n": 10
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "gn-forest-trap",
+        "n": 10
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-03-eaves"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "You stand at the tree line a moment longer. The forest does not mind. It has waited for people before, and it will be here.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-03-eaves",
+   "name": "The Eaves",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "remembers": [
+    {
+     "id": "fog",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-forest-fog",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "And there is fog today, lying between the trunks like breath on glass. Nobody will aim well in it: every move, yours and theirs, is a tenth less sure until you leave the forest. Something pale may be drifting in it."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.bug_catcher"
+    ],
+    "tint": "#1f3a22",
+    "effect": "float"
+   },
+   "intro": "The light goes green. It comes down through so many leaves that it has forgotten it was ever sunlight, and it lies on the path in coins that move when the wind does.\n\nA boy with a net taller than he is steps out of the ferns, so pleased to see another person that he forgets to look fierce.\n\n**Bug Catcher Arlo:** \"Mind the man with the sword. He's all right. He's just very serious.\"\n\nThen he remembers he is a trainer, and plants his feet, and tries to look like one.",
+   "choices": [
+    {
+     "label": "Battle Bug Catcher Arlo.",
+     "success": {
+      "text": "**Bug Catcher Arlo:** \"Right! Yes! Battle! I knew that's what this was!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Bug Catcher Arlo",
+       "classId": "bug-catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "duelist",
+         "type": "bug"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-forest-trap",
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "gn-forest-trap",
+           "n": 0
+          },
+          {
+           "kind": "flag",
+           "key": "flight-sighting",
+           "amount": 1
+          },
+          {
+           "kind": "moment",
+           "text": "A net dropped on the party in the forest. Far above the leaves: a balloon with a cat's face.",
+           "importance": 55
+          }
+         ],
+         "text": "A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat's face, drifting away as if it had somewhere better to be."
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-gift"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-03-gift",
+   "name": "The Forest Gift",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "caterpie",
+    "tint": "#1f3a22",
+    "effect": "rattle"
+   },
+   "intro": "The ferns ahead are shaking, and it is not the wind, because the wind has not found its way in here in years.\n\nSomething small is in there, and it is not hiding. It is waiting to be found. The whole forest seems to lean in a little, the way a room does when someone is about to open a present.\n\nThe first Bug-type you catch in this forest will walk beside you to the end of it. The others will notice.",
+   "choices": [
+    {
+     "label": "Part the ferns.",
+     "success": {
+      "text": "You part the ferns. It looks up at you. It does not run. It was always going to be here, and so, it seems, were you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "caterpie",
+        "weedle"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "duelist",
+         "type": "bug"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-oak"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "duelist",
+         "type": "bug"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-oak"
+        }
+       ],
+       "rare": [
+        {
+         "species": [
+          "shedinja"
+         ],
+         "chance": 0.01,
+         "flag": "gn-forest-fog"
+        },
+        {
+         "species": [
+          "pinsir",
+          "scyther",
+          "heracross"
+         ],
+         "chance": 0.1
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-03-oak",
+   "name": "The Split Oak",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "remembers": [
+    {
+     "id": "most",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-03-oak-won",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-rank",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "The Bug Catcher has gone, and the fork is empty. A voice comes down out of the trees, from nowhere you can point to. **A voice:** \"It watches your hands. That's trust.\""
+    },
+    {
+     "id": "some",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-03-oak-won",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-rank",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "The Bug Catcher has gone, and the fork is empty. A voice comes down out of the trees, from nowhere you can point to. **A voice:** \"It's eager. You're careful with it. Too careful?\""
+    },
+    {
+     "id": "none",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-03-oak-won",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-rank",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "The Bug Catcher has gone, and the fork is empty. A voice comes down out of the trees, from nowhere you can point to. **A voice:** \"It walks beside you like luggage.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f3a22",
+    "effect": "flicker"
+   },
+   "intro": "An oak that lightning opened long ago, and that went on growing anyway, in two directions, like an argument nobody won. The path runs straight through the split.\n\nA Bug Catcher's net leans in the fork. Off to one side, away from the path, a thicket is buzzing: a low, crowded sound, like a kettle with opinions.",
+   "choices": [
+    {
+     "label": "Battle the Bug Catcher in the fork.",
+     "success": {
+      "text": "He drops out of the fork and lands badly and pretends he meant to.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Bug Catcher",
+       "classId": "bug-catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "duelist",
+         "type": "bug"
+        },
+        {
+         "kind": "flag",
+         "key": "gn-03-oak-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-oak"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-03-oak-won",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Follow the buzzing off the path.",
+     "chance": 0.4,
+     "success": {
+      "text": "The thicket opens like a door kicked from the inside. Weedle on the low twigs, Kakuna hung in rows like lanterns, and above them the Beedrill, coming down in three waves. Stand through all three and whatever they were guarding is yours.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-03-swarm-tried",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "chain": 3,
+       "species": [
+        "weedle",
+        "kakuna",
+        "beedrill"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "poison-barb",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-oak"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "failure": {
+      "text": "You push through to the buzzing and find only an old nest, grey and papery, humming with nothing but the wind in its empty cells. Whatever lived here moved on. You go back to the path.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-03-swarm-tried",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-03-oak"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-03-swarm-tried",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-big",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Walk on, deeper in.",
+     "success": {
+      "text": "You step through the split in the oak. For one stride there is a tree on either side of you, and both of them are the same tree.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-03-hollow"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-03-oak-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-03-hollow",
+   "name": "The Hollow",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "remembers": [
+    {
+     "id": "weedle",
+     "when": [
+      {
+       "kind": "partyType",
+       "type": "bug",
+       "absent": true
+      }
+     ],
+     "notice": "And in the middle of the path, exactly where you would have to step, sits a Weedle. It is not blocking the way. It is sitting the way someone sits who was told to wait here, and has, for longer than was reasonable.",
+     "addChoices": [
+      {
+       "label": "Crouch, and let the Weedle climb on.",
+       "success": {
+        "text": "You put your hand flat on the moss. It considers the hand. Then it walks up your arm, one careful foot at a time, as if it had been waiting for exactly this arm, and settles against your collar. It was never lost. It was early.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "weedle"
+          ],
+          "types": [],
+          "levelBonus": -1,
+          "shinyMultiplier": 1,
+          "direct": true
+         },
+         {
+          "kind": "gn",
+          "op": "duelist",
+          "type": "bug"
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-03-hollow"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f3a22",
+    "effect": "glint"
+   },
+   "intro": "The path dips into a hollow where the oldest tree in the forest stands, so wide that its own roots have had to climb over each other. The bark smells sweet. Something has been at it.\n\nA Bug Catcher waits on the far side of the dip, tapping his net against his shoe.",
+   "choices": [
+    {
+     "label": "Battle the Bug Catcher across the dip.",
+     "success": {
+      "text": "He has clearly been practising what to say, and forgets all of it, and throws the Ball instead.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Bug Catcher",
+       "classId": "bug-catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "duelist",
+         "type": "bug"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-clearing"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Look inside the sweet-smelling tree.",
+     "chance": 0.3,
+     "success": {
+      "text": "Inside the trunk the dark is golden. Comb, hung in sheets, and a slow shifting of bodies far up where the hollow narrows. A den. They will not come down for a stranger. They might come down for honey, left at the roots, with no hand near it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-03-honey-tried",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn-03-den-found",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-03-hollow"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Inside the trunk there is old comb, long dry, and the ghost of sweetness. Whatever kept house here has gone. You brush the bark dust off your hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-03-honey-tried",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-03-hollow"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-03-honey-tried",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave honey at the roots, and step back.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "honey"
+      }
+     ],
+     "success": {
+      "text": "You set the honey down and walk away from it, which is the hard part. For a long minute nothing. Then a scrape of bark, and something comes down the trunk head first, slowly, watching you the whole way.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "honey"
+       },
+       {
+        "kind": "flag",
+        "key": "gn-03-den-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "combee",
+        "heracross"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "duelist",
+         "type": "bug"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-hollow"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "duelist",
+         "type": "bug"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-hollow"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-03-den-found",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-03-den-done",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-03-clearing",
+   "name": "The Clearing",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "remembers": [
+    {
+     "id": "accept",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-rank",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "He looks at the Bug-type beside you for a long time, and it looks back, and neither of them seems to find the other wanting. **The Samurai:** \"I accept.\"",
+     "addChoices": [
+      {
+       "label": "Step onto the duelling ground.",
+       "success": {
+        "text": "He stands. The stump he leaves behind is worn into the shape of a man who has waited a long time. He does not hurry. Neither, you notice, does your duelist.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-03-duel"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "barely",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-rank",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "He looks at the Bug-type beside you, and then at you, and breathes out through his nose. **The Samurai:** \"It'll do. Barely.\"",
+     "addChoices": [
+      {
+       "label": "Step onto the duelling ground.",
+       "success": {
+        "text": "He stands. The stump he leaves behind is worn into the shape of a man who has waited a long time. Your duelist edges half a step closer to your boot, and then, deliberately, half a step away again.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-03-duel"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "stranger",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-rank",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "He looks at the Bug-type beside you. It looks at the ground. He closes his eyes. **The Samurai:** \"You brought me a stranger.\" He will not duel it. Not until it has fought one battle at your side.",
+     "addChoices": [
+      {
+       "label": "Fight one battle beside it, here, now.",
+       "success": {
+        "text": "The ferns at the edge of the clearing are moving. You look at your duelist. For the first time since the eaves, you ask it for something.",
+        "effects": [],
+        "battle": {
+         "kind": "wild",
+         "species": [],
+         "types": [
+          "bug"
+         ],
+         "levelBonus": -1,
+         "shinyMultiplier": 1,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "samurai-refused",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-03-clearing"
+          }
+         ],
+         "caught": [
+          {
+           "kind": "flag",
+           "key": "samurai-refused",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-03-clearing"
+          }
+         ],
+         "rule": {
+          "leadMark": "duelist"
+         },
+         "pseudo": true
+        }
+       }
+      },
+      {
+       "label": "Bow, and leave the forest.",
+       "success": {
+        "text": "You bow. He does not open his eyes, but he inclines his head, the exact depth you bowed and no deeper. The far side of the forest is brighter than you remembered daylight being.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "samurai-refused",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-forest-in",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "unmark",
+          "key": "duelist"
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.samurai"
+    ],
+    "tint": "#1f3a22",
+    "effect": "glint"
+   },
+   "intro": "A clearing. The first sky you have seen since the eaves. In the middle of it, on a stump, a figure in old armour sits so still that a Metapod has settled on the stump beside him, and hardens, with a small flourish, as if drawing a sword.\n\n**The Samurai:** \"You carry a Bug-type. Good. I've been watching it since the eaves.\"",
+   "choices": [
+    {
+     "label": "Tell him no Bug-type walks with you.",
+     "success": {
+      "text": "He looks at the empty air beside your boot. **The Samurai:** \"Then I was watching the wrong traveller.\" He says it without unkindness. The far side of the forest is brighter than you remembered daylight being.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "samurai-refused",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-forest-in",
+        "n": 0
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Bow, and leave the forest.",
+     "success": {
+      "text": "You bow. He inclines his head, the exact depth you bowed and no deeper. The far side of the forest is brighter than you remembered daylight being.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "samurai-refused",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-forest-in",
+        "n": 0
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-03-duel",
+   "name": "The Duel",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "remembers": [
+    {
+     "id": "won-evolved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-forest-samurai-won",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-evolved",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "It is over. The grass is flat where they circled. Your duelist is breathing hard and standing very straight, in a shape it did not have when you walked in under the eaves.\n\n*He sheathes the sword he never drew.*\n\n**The Samurai:** \"Take this. It's not a gift. You've already got it; I'm only naming it.\"\n\n**The Samurai:** \"It became itself in front of me. I've an egg that deserves that.\"",
+     "addChoices": [
+      {
+       "label": "Take what he names, and the egg.",
+       "success": {
+        "text": "He shows your duelist the cut once, slowly, the way you show something to an equal. Then he puts the egg in your hands with both of his, and holds on a moment longer than he needs to. You leave the forest carrying more than you brought in.",
+        "effects": [
+         {
+          "kind": "teachMove",
+          "move": "samurai-slash",
+          "type": "bug"
+         },
+         {
+          "kind": "egg",
+          "species": [
+           "scyther",
+           "pinsir",
+           "heracross"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "left": 3,
+          "unit": "battle"
+         },
+         {
+          "kind": "flag",
+          "key": "gn-03-done",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-forest-in",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "unmark",
+          "key": "duelist"
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "won",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-forest-samurai-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "It is over. The grass is flat where they circled. Your duelist is breathing hard and standing very straight, and it keeps glancing up at you to check that you saw.\n\n*He sheathes the sword he never drew.*\n\n**The Samurai:** \"Take this. It's not a gift. You've already got it; I'm only naming it.\"",
+     "addChoices": [
+      {
+       "label": "Take what he names.",
+       "success": {
+        "text": "He shows your duelist the cut once, slowly, the way you show something to an equal. It copies him. It gets it wrong. He nods as if it had got it right, and by the edge of the forest, it has.",
+        "effects": [
+         {
+          "kind": "teachMove",
+          "move": "samurai-slash",
+          "type": "bug"
+         },
+         {
+          "kind": "flag",
+          "key": "gn-03-done",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-forest-in",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "unmark",
+          "key": "duelist"
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "farfetchd",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-new-06-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He watches how you stand before he says anything else. **The Samurai:** \"You've duelled before. It shows in the wrists.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.samurai"
+    ],
+    "tint": "#1f3a22",
+    "effect": "glint"
+   },
+   "intro": "One on one. Equal levels. No items. No switching. He has drawn a line in the grass with his heel, and stands behind it, and waits for you to notice there is one on your side too.\n\n**The Samurai:** \"First cut decides most duels. Not this one. Begin.\"",
+   "choices": [
+    {
+     "label": "Begin.",
+     "success": {
+      "text": "Your duelist walks out to the line. It does not look small. Nothing does, standing where it has chosen to stand.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "pinsir"
+       ],
+       "name": "The Samurai",
+       "classId": "veteran",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-forest-samurai-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-duel"
+        }
+       ],
+       "pseudo": true,
+       "counter": {
+        "weakTo": "flying",
+        "team": [
+         "scyther"
+        ]
+       },
+       "rule": {
+        "gn": "samurai",
+        "leadMark": "duelist",
+        "leadType": "bug",
+        "matchLead": true,
+        "suddenDeath": true,
+        "noSwitch": true,
+        "noItems": true
+       },
+       "lose": [
+        {
+         "kind": "item",
+         "id": "silver-powder",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "samurai-rematch-owed",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "gn-forest-in",
+         "n": 0
+        },
+        {
+         "kind": "moment",
+         "text": "The Samurai bowed. \"Next forest. I'll be at the far side.\"",
+         "importance": 60
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kanto-forest-samurai-won",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-03-rematch",
+   "name": "The Far Side of the Forest",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 2,
+   "types": [
+    "bug",
+    "grass"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "samurai-rematch-owed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "kanto-forest-samurai-won",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "partyType",
+     "type": "bug"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.samurai"
+    ],
+    "tint": "#1f3a22",
+    "effect": "glint"
+   },
+   "intro": "The trees thin. And there, at the far side, exactly where he said, a figure in old armour is sitting on a fence rail as if rails had been invented for the purpose.\n\nYou remember how it ended last time. *He bowed.* **The Samurai:** \"Next forest. I'll be at the far side.\"\n\nHe gets down. He draws the line in the dirt with his heel. He has been waiting, and he is glad, and he would rather fall on the sword than say so.",
+   "choices": [
+    {
+     "label": "Begin.",
+     "success": {
+      "text": "Same line. Same rules. One on one, equal levels, no items, no switching. Only the two of you are different.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "pinsir"
+       ],
+       "name": "The Samurai",
+       "classId": "veteran",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-forest-samurai-won",
+         "amount": 1
+        },
+        {
+         "kind": "teachMove",
+         "move": "samurai-slash",
+         "type": "bug"
+        },
+        {
+         "kind": "flag",
+         "key": "gn-03-done",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "unmark",
+         "key": "duelist"
+        },
+        {
+         "kind": "moment",
+         "text": "\"Take this. It's not a gift. You've already got it; I'm only naming it.\" The Samurai named the cut: Samurai Slash.",
+         "importance": 65
+        }
+       ],
+       "pseudo": true,
+       "counter": {
+        "weakTo": "flying",
+        "team": [
+         "scyther"
+        ]
+       },
+       "rule": {
+        "gn": "samurai",
+        "leadMark": "duelist",
+        "leadType": "bug",
+        "matchLead": true,
+        "suddenDeath": true,
+        "noSwitch": true,
+        "noItems": true
+       },
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The Samurai bowed again. \"Next forest. I'll be at the far side.\"",
+         "importance": 50
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "**The Samurai:** \"Then next forest.\" He climbs back onto the rail. He would wait a year. You suspect he has.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-03-after",
+   "name": "A Familiar Stance",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-forest-samurai-won",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "gn-03-after-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "partyType",
+     "type": "bug"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.samurai"
+    ],
+    "tint": "#1f3a22",
+    "effect": "glint"
+   },
+   "intro": "A figure in old armour by the road, drilling a Bug-type through a cut, over and over. You know the armour. You know the cut.\n\nThen you see the Bug-type. It is the same kind as yours. It opens with the same first move as yours. It even waits on the same foot.\n\n**The Samurai:** \"Don't say anything. I lost. A man who loses and learns nothing has lost twice.\"",
+   "choices": [
+    {
+     "label": "Spar with him.",
+     "success": {
+      "text": "He turns his copy to face your original. For once, he is the one who looks nervous.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Samurai",
+       "classId": "veteran",
+       "mirror": true,
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "gn-03-after-done",
+         "amount": 1
+        },
+        {
+         "kind": "friendship",
+         "amount": 5,
+         "who": "lead"
+        }
+       ],
+       "rule": {
+        "leadType": "bug",
+        "noItems": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Bow, and walk on.",
+     "success": {
+      "text": "You bow. He bows. His Bug-type bows, a half-second late, and yours, without being asked, bows back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-03-after-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

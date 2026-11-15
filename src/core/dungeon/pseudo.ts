@@ -148,6 +148,8 @@ export function opensNext(event: Pick<EventDef, 'choices'>): string[] {
     for (const v of Object.values(x)) walk(v);
   };
   walk(event.choices);
+  // A remembered variant's added choices can open rooms too (Greenneedle).
+  walk((event as { remembers?: unknown }).remembers);
   return [...new Set(out)];
 }
 
