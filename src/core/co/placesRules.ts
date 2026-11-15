@@ -68,3 +68,22 @@ export function bossLeadStagesOf(perks: readonly ArchetypeModifier[] | undefined
   for (const m of perks ?? []) if (m.kind === 'bossLeadStages') n += m.value;
   return Math.max(-6, Math.min(6, n));
 }
+
+/** SF94: the relic grows. Every copy of `from` (in the bag, or held by a party or box Pokémon) becomes `to`. Returns how many changed. */
+export function upgradeItem(run: RunState, from: string, to: string): number {
+  let n = 0;
+  const bag = run.inventory[from] ?? 0;
+  if (bag > 0) {
+    delete run.inventory[from];
+    run.inventory[to] = (run.inventory[to] ?? 0) + bag;
+    n += bag;
+  }
+  for (const mon of [...run.party, ...run.box]) {
+    const held = mon.held?.[from] ?? 0;
+    if (held <= 0) continue;
+    delete mon.held![from];
+    mon.held![to] = (mon.held![to] ?? 0) + held;
+    n += held;
+  }
+  return n;
+}

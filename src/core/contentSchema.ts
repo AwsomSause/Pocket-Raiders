@@ -3099,6 +3099,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('vow'), who: CoWhoSchema.default('picked') }),
   /** Catalog Overhaul (places, SF102): a Pokémon (of `type`, the picked one first) stays behind under `key`; `bringBack` returns it `levels` stronger. */
   z.object({ kind: z.literal('sendAway'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), type: TypeNameSchema.optional(), /** The first Shadow Pokémon in the party goes. */ shadow: z.boolean().optional(), who: CoWhoSchema.default('picked') }),
+  /** Catalog Overhaul (places, SF94 Relics): a grown relic replaces the old one wherever it is (the bag, or held by any Pokémon). */
+  z.object({ kind: z.literal('upgradeItem'), from: z.string().min(1), to: z.string().min(1) }),
   z.object({ kind: z.literal('bringBack'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), levels: z.number().int().min(0).max(10).default(0), friendship: z.number().int().min(0).max(100).default(0), /** It comes back purified (no longer a Shadow Pokémon). */ purify: z.boolean().optional() }),
   z.object({ kind: z.literal('takeNode'), nodes: z.number().int().min(1).max(3).default(1), back: z.boolean().default(false) }),
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, amount: z.number().int() }),

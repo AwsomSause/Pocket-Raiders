@@ -943,6 +943,11 @@
         "count": 1
        },
        {
+        "kind": "flag",
+        "key": "relic-growth-leaf",
+        "amount": 1
+       },
+       {
         "kind": "attribute",
         "key": "goodEvil",
         "amount": 1
@@ -1130,6 +1135,11 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "relic-growth-tide",
+        "amount": 1
+       },
+       {
         "kind": "skipAhead"
        },
        {
@@ -1274,6 +1284,11 @@
        {
         "kind": "flag",
         "key": "evil-ambush",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "relic-growth-ember",
         "amount": 1
        }
       ]
@@ -2434,6 +2449,11 @@
           "water"
          ]
         }
+       },
+       {
+        "kind": "flag",
+        "key": "relic-growth-tide",
+        "amount": 1
        },
        {
         "kind": "attribute",

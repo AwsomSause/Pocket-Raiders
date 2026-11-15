@@ -236,4 +236,32 @@ describe('catalog overhaul: standalone choices and the Pacts (SF102)', () => {
     expect(bossLeadStagesOf(run.perkEffects)).toBe(-1);
     expect(run.tempEffects.some((t) => t.until === 'boss')).toBe(true);
   });
+
+  it('Relics (SF94): a seed grows by fused fragments into a bough, the shrine trades it away for another line\'s crown, and an asleep line can\'t be forged', () => {
+    let run = newRun('relic');
+    open(run, 'relic-tree-roots');
+    run = pick(run, 'The Leaf Seed.');
+    expect(run.party[0]!.held?.['relic-leaf-seed']).toBe(1);
+    run.story.flags['ev:relic-frag'] = 3;
+    open(run, 'relic-forge');
+    run = pick(run, 'Fuse three.');
+    expect(flagOf(run, 'relic-frag')).toBe(0);
+    expect(flagOf(run, 'relic-growth-leaf')).toBe(2);
+    open(run, 'relic-tree-leaf-bough');
+    run = pick(run, 'Keep going.');
+    expect(run.party[0]!.held?.['relic-leaf-bough']).toBe(1);
+    expect(run.party[0]!.held?.['relic-leaf-seed']).toBeUndefined();
+    expect(flagOf(run, 'tree-leaf')).toBe(2);
+    open(run, 'relic-shrine');
+    run = pick(run, 'Take another line\'s relic.');
+    expect(run.party.some((m) => m.held?.['relic-ember-crown'] === 1)).toBe(true);
+    expect(run.party[0]!.held?.['withered-relic']).toBe(1);
+    expect(flagOf(run, 'tree-leaf')).toBe(0);
+    expect(flagOf(run, 'relic-growth-leaf')).toBe(0);
+    run.story.flags['ev:relic-frag'] = 3;
+    open(run, 'relic-forge');
+    run = pick(run, 'Fuse three.');
+    expect(flagOf(run, 'relic-growth-leaf')).toBe(0);
+    expect(flagOf(run, 'relic-growth-ember')).toBe(0);
+  });
 });

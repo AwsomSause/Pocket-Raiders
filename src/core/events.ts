@@ -12,7 +12,7 @@
 import { applyCoEffect, coConditionMet, coConditionText, coEffectWords, fillCoText, restoreMachine } from './events/coToolkit';
 import { flagAge, lineHolds, lineMember, queueLaterEvent, stampFlagStage } from './events/questline';
 import { modifierEventWeight } from './runModifiers';
-import { bringBack, sendAway, stopWeightOf } from './co/placesRules';
+import { bringBack, sendAway, stopWeightOf, upgradeItem } from './co/placesRules';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { rememberPick, rememberedPick } from './co/pickMemory';
 import { PSEUDO, enterPseudoStage, leavePseudoStage, routeChainEvent } from './dungeon/pseudo';
@@ -1106,6 +1106,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'a Pokémon stays behind';
     case 'bringBack':
       return 'a Pokémon comes back';
+    case 'upgradeItem':
+      return `${itemName(content, e.from)} grows into ${itemName(content, e.to)}`;
     case 'takeNode':
       return e.back ? 'a step back along the road (nothing is refought)' : `takes your next ${e.nodes === 1 ? 'node' : `${e.nodes} nodes`} (no battle there)`;
     case 'attribute': {
@@ -1432,6 +1434,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const mon = sendAway(content, run, e.key, whoOf(content, run, e.who, pickedUid)[0], e.type, e.shadow === true);
       return mon ? `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} stays behind.` : '';
     }
+    case 'upgradeItem':
+      return upgradeItem(run, e.from, e.to) > 0 ? effectWords(content, e) : '';
     case 'bringBack': {
       const mon = bringBack(content, run, e.key, e.levels, e.friendship, partyCapacity(content, run), e.purify === true);
       return mon ? `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} is back with you.` : '';

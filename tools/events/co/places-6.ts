@@ -93,7 +93,7 @@ const STANDALONE_A: Json[] = [
     intro: 'A huge Greedent sits on a hoard of Berries taller than you. It glares. A villager leaning on a fence says, "It\'s stocking up. Winter\'s early this year. Everything round here is hungry."',
     choices: [
       ch('Rob it.', fightIt('You reach for the hoard. The Greedent comes off the pile like a landslide.', friendlyWild({ species: ['greedent'], lv: 4, win: [item('oran-berry', 6), flagAt('greedent-famine')] }))),
-      ch('Help it fill the store. (a node)', out('You spend the day shaking trees and carrying Berries to the hoard. At dusk the Greedent pushes one back toward you with its nose, then waddles after you when you leave. It holds its Berry the way it holds a grudge: forever.', takeNode(), { kind: 'join', species: ['greedent'], types: [], levelBonus: 0, shinyMultiplier: 1, ability: 'harvest' }, item('sitrus-berry'), ...kind())),
+      ch('Help it fill the store. (a node)', out('You spend the day shaking trees and carrying Berries to the hoard. At dusk the Greedent pushes one back toward you with its nose, then waddles after you when you leave. It holds its Berry the way it holds a grudge: forever.', takeNode(), { kind: 'join', species: ['greedent'], types: [], levelBonus: 0, shinyMultiplier: 1, ability: 'harvest' }, item('sitrus-berry'), flag('relic-growth-leaf'), ...kind())),
       ch('Leave it.', out('You leave the hoard where it is. The Greedent watches you all the way to the bend in the road.')),
     ],
   },
@@ -108,7 +108,7 @@ const STANDALONE_A: Json[] = [
     id: 'r146-wailmer-whale-song',
     intro: 'Far out on the water a Wailmer pod is singing, low and rolling. You feel it in the boat\'s planks. One chord is missing, and they keep leaving a gap for it, waiting.',
     choices: [
-      ch('Supply the chord (a sound move).', out('Your Pokémon finds the note and holds it. The pod answers all at once, and the sea under you goes warm with the sound. They turn and swim alongside, and they know a way across the water that no chart has.', fr(5, { moveFlag: 'sound' }), flag('wailmer-song'), ferry(), moment('You finished the Wailmer pod\'s song.', 55)), { requires: [moveFlag('sound')] }),
+      ch('Supply the chord (a sound move).', out('Your Pokémon finds the note and holds it. The pod answers all at once, and the sea under you goes warm with the sound. They turn and swim alongside, and they know a way across the water that no chart has.', fr(5, { moveFlag: 'sound' }), flag('wailmer-song'), flag('relic-growth-tide'), ferry(), moment('You finished the Wailmer pod\'s song.', 55)), { requires: [moveFlag('sound')] }),
       ch('Listen.', out('You ship the oars and drift. Nobody finishes the chord, and it is beautiful anyway, like a question you are allowed not to answer.', heal(0.2), rp(2))),
       ch('Row on.', out('You row on. The song follows the boat a long way, still waiting.')),
     ],
@@ -126,7 +126,7 @@ const STANDALONE_A: Json[] = [
     id: 'w4-beacon-fire',
     intro: 'An old beacon of stacked wood on a rise, dry and ready. Lit, it would show the whole road ahead. Anyone watching the hills would see it too.',
     choices: [
-      ch('Light it.', out('The beacon roars up into the night. You can see the next stage laid out under you like a map. Somewhere out there, someone who wants to find you sees it too.', scout(8), reveal(), { kind: 'evil', heat: 1 }, flag('evil-ambush'))),
+      ch('Light it.', out('The beacon roars up into the night. You can see the next stage laid out under you like a map. Somewhere out there, someone who wants to find you sees it too.', scout(8), reveal(), { kind: 'evil', heat: 1 }, flag('evil-ambush'), flag('relic-growth-ember'))),
       ch('Leave it.', out('You leave it dark. The road ahead stays a road you will have to walk to know.')),
     ],
   },
@@ -246,7 +246,7 @@ const STANDALONE_A: Json[] = [
     id: 'r161-cursola-reef-grudge',
     intro: 'A Cursola clings to a dying reef, white as old bone. It hates the sea for what it took. In a cold voice inside your head it asks for a guard: one Water-type, to stay with the reef a while.',
     choices: [
-      ch('Leave a Water-type here for a region.', out('You choose. Your Water-type looks at you for a long moment, then swims down to the reef and settles there. The Cursola goes quiet. You row away without looking back, because you would not go if you looked back.', { kind: 'sendAway', key: 'cursola-reef-guard', type: 'water', who: { types: ['water'] } }, ...kind(2), moment('You left a Water-type to guard a dying reef.', 65)), { requires: [ptype('water'), { kind: 'partySize', atLeast: 2 }] }),
+      ch('Leave a Water-type here for a region.', out('You choose. Your Water-type looks at you for a long moment, then swims down to the reef and settles there. The Cursola goes quiet. You row away without looking back, because you would not go if you looked back.', { kind: 'sendAway', key: 'cursola-reef-guard', type: 'water', who: { types: ['water'] } }, flag('relic-growth-tide'), ...kind(2), moment('You left a Water-type to guard a dying reef.', 65)), { requires: [ptype('water'), { kind: 'partySize', atLeast: 2 }] }),
       ch('Battle it.', fightIt('The reef glows, and the grudge rises out of the coral at you.', friendlyWild({ species: ['cursola', 'corsola-galar'], lv: 1, win: [any('spell-tag', 'reaper-cloth')] }))),
       ch('Leave.', out('You leave the reef to its grudge. The cold voice follows you all the way to the shore.')),
     ],
