@@ -1,0 +1,2111 @@
+{
+ "catalogOverhaul": "legends",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "co-u1-noodles",
+   "name": "The Task Force",
+   "group": "Story: Ultra Beasts",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ultra-static",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "task-force",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ub-refused-help",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.Spr_Pt_Looker",
+     "boss.anabel-gen7"
+    ],
+    "pokemon": "nihilego",
+    "tint": "#606880",
+    "effect": "none"
+   },
+   "intro": "At the rest stop, a man in a raincoat is eating noodles at your table without asking.\n\nLooker: \"Don't look up. You've been followed by something for a stage. Not a person. The sky went the wrong colour behind you twice. You didn't notice. It did.\"\n\nAnabel, sitting down on his other side: \"He means it's coming. We run a task force. It's two people and one office with a leak.\" She slides a Beast Ball across the table. \"We have one of these. You can have it.\"",
+   "choices": [
+    {
+     "label": "\"Why me?\"",
+     "success": {
+      "text": "Anabel: \"Because of how you fight. They're drawn to it.\" She tells you which of your habits it is following: the way you win.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "task-force",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ub-appetite-told",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "beast-ball",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's coming?\"",
+     "success": {
+      "text": "Looker lays out three photographs: three Beasts it could be. He taps one, then another, then shrugs. \"One of them is right.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "task-force",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "beast-ball",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I don't need your help.\"",
+     "success": {
+      "text": "Looker: \"No one does. Until.\" He leaves the Ball on the table anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ub-refused-help",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "beast-ball",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u1-mission-1",
+   "name": "The Task Force: Observation",
+   "group": "Story: Ultra Beasts",
+   "callback": true,
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "task-force",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "u1-missions",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.Spr_Pt_Looker"
+    ],
+    "pokemon": "nihilego",
+    "tint": "#606880",
+    "effect": "none"
+   },
+   "intro": "Anabel, at the rest stop, with a folder: \"One job this stage, if you want it.\"\n\nWatch the next strange patch of sky for one stop, without going near it. Pay: ₽600.",
+   "choices": [
+    {
+     "label": "Take the job.",
+     "success": {
+      "text": "You do it, and report back. Looker writes it down in a notebook held together with tape.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "u1-missions",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 600
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this stage.\"",
+     "success": {
+      "text": "Anabel: \"Next one, then.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "u1-missions",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u1-mission-2",
+   "name": "The Task Force: Gentle Hands",
+   "group": "Story: Ultra Beasts",
+   "callback": true,
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "task-force",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "u1-missions",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.Spr_Pt_Looker"
+    ],
+    "pokemon": "nihilego",
+    "tint": "#606880",
+    "effect": "none"
+   },
+   "intro": "Anabel, at the rest stop, with a folder: \"One job this stage, if you want it.\"\n\nIf something from somewhere else comes through, drive it off without knocking it out. Pay: a Beast Ball.",
+   "choices": [
+    {
+     "label": "Take the job.",
+     "success": {
+      "text": "You do it, and report back. Looker writes it down in a notebook held together with tape.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "u1-missions",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "beast-ball",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this stage.\"",
+     "success": {
+      "text": "Anabel: \"Next one, then.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "u1-missions",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u1-mission-3",
+   "name": "The Task Force: Samples",
+   "group": "Story: Ultra Beasts",
+   "callback": true,
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "task-force",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "u1-missions",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.Spr_Pt_Looker"
+    ],
+    "pokemon": "nihilego",
+    "tint": "#606880",
+    "effect": "none"
+   },
+   "intro": "Anabel, at the rest stop, with a folder: \"One job this stage, if you want it.\"\n\nBring back anything from the other side. Pay: what they know about what is coming next.",
+   "choices": [
+    {
+     "label": "Take the job.",
+     "success": {
+      "text": "You do it, and report back. Looker writes it down in a notebook held together with tape.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "u1-missions",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ub-appetite-told",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this stage.\"",
+     "success": {
+      "text": "Anabel: \"Next one, then.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "u1-missions",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u1-anabel",
+   "name": "The Task Force: Anabel",
+   "group": "Story: Ultra Beasts",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "task-force",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "u1-missions",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.anabel-gen7"
+    ],
+    "pokemon": "poipole",
+    "tint": "#606880",
+    "effect": "none"
+   },
+   "intro": "Anabel, alone this time, at the edge of the camp.\n\nAnabel: \"I came through one of those. I was eight. I don't remember where from. If you go into one, would you look? For anything that looks like a place someone could grow up?\"",
+   "choices": [
+    {
+     "label": "\"I'll look.\"",
+     "success": {
+      "text": "Anabel nods, and does not say anything else for a while.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "anabel-look",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I can't promise.\"",
+     "success": {
+      "text": "Anabel: \"No. Nobody can.\" She smiles anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "anabel-asked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Come with me.\"",
+     "success": {
+      "text": "Anabel looks at Looker. Looker looks at his noodles. \"Go,\" he says.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "anabel-came",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Anabel came with you to look for the place she came from.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u2-lab",
+   "name": "The Mother Who Wanted Paradise",
+   "group": "Story: Ultra Beasts",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters"
+    ],
+    "pokemon": "nihilego",
+    "tint": "#e0e0f0",
+    "effect": "none"
+   },
+   "intro": "The Aether Foundation's wormhole lab. Beautiful; white; a jellyfish-shaped glass case, empty. A woman in white turns from it.\n\nLusamine: \"You've met them, haven't you? The Beasts. Aren't they perfect? They never age. They never leave you. They don't talk back. I am going to go and live with them. And I'm taking everything I love with me.\"",
+   "choices": [
+    {
+     "label": "\"That's not love.\"",
+     "success": {
+      "text": "Lusamine: \"What would you know about it?\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "lusamine-won",
+         "amount": 1
+        }
+       ],
+       "name": "Lusamine",
+       "bossId": "lusamine",
+       "size": 3,
+       "types": [
+        "fairy",
+        "poison",
+        "psychic"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "u2-lab",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Show me.\"",
+     "success": {
+      "text": "She shows you the lab: Pokémon frozen in glass cases, \"to keep them perfect\". Then she battles you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "lusamine-won",
+         "amount": 1
+        }
+       ],
+       "name": "Lusamine",
+       "bossId": "lusamine",
+       "size": 3,
+       "types": [
+        "fairy",
+        "poison",
+        "psychic"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "u2-lab",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "u2-saw-cases",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Where are your children?\"",
+     "success": {
+      "text": "She does not answer. Behind the next door is an empty room with a girl's hat on the bed. Then she battles you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "lusamine-won",
+         "amount": 1
+        }
+       ],
+       "name": "Lusamine",
+       "bossId": "lusamine",
+       "size": 3,
+       "types": [
+        "fairy",
+        "poison",
+        "psychic"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "u2-lab",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "u2-asked-children",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u2-cases",
+   "name": "The Mother Who Wanted Paradise: The Cases",
+   "group": "Story: Ultra Beasts",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "u2-lab",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "freed-caged",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "pokemon": "nihilego",
+    "tint": "#e0e0f0",
+    "effect": "none"
+   },
+   "intro": "An Aether van, unloading. More glass cases, and in each one a Pokémon, still. Every one she freezes is one less that fights.",
+   "choices": [
+    {
+     "label": "Stop the van.",
+     "success": {
+      "text": "Aether staff block the doors.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [],
+       "name": "Aether Staff",
+       "size": 2,
+       "types": [
+        "psychic",
+        "steel"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "freed-caged",
+         "amount": 1
+        },
+        {
+         "kind": "friendship",
+         "amount": 1,
+         "who": "party"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Follow it.",
+     "success": {
+      "text": "It goes back to the lab. You know where she will be.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "u2-followed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u2-tear",
+   "name": "The Mother Who Wanted Paradise: The Tear",
+   "group": "Story: Ultra Beasts",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "u2-lab",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "nihilego",
+    "tint": "#a0c0f0",
+    "effect": "flicker"
+   },
+   "intro": "Lusamine opens a Tear to the Ultra Deep Sea. She looks back at you once, and goes through.",
+   "choices": [
+    {
+     "label": "Follow her.",
+     "success": {
+      "text": "Cold water that is not water. Light from nowhere.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faller-rank",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-u2-deep"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let her go.",
+     "success": {
+      "text": "The Tear closes. Somewhere, a glass case cracks open on its own.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u2-deep",
+   "name": "The Ultra Deep Sea",
+   "group": "Story: Ultra Beasts",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "nihilego",
+    "tint": "#a0c0f0",
+    "effect": "float"
+   },
+   "intro": "Lusamine, joined with a Nihilego, beautiful and wrong.\n\nLusamine: \"Stay. It doesn't hurt.\"",
+   "choices": [
+    {
+     "label": "Fight it off her.",
+     "success": {
+      "text": "The Nihilego lets go of her and turns on you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "nihilego"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "freed-caged",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "lusamine-saved",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You pulled Lusamine back out of the Ultra Deep Sea.",
+         "importance": 80
+        }
+       ],
+       "pseudo": true,
+       "lose": [],
+       "rule": {
+        "ultra": "host"
+       }
+      }
+     }
+    },
+    {
+     "label": "Talk to her.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "nebby-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Lillie's name is enough. The Nihilego lets go. Lusamine sits down in the not-water and cries.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "freed-caged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lusamine-saved",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "beast-ball",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Lusamine came home because someone said her daughter's name.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave her.",
+     "success": {
+      "text": "You go back through the Tear alone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lusamine-left",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u2-older",
+   "name": "The Mother Who Wanted Paradise: Later",
+   "group": "Story: Ultra Beasts",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "lusamine-left",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters"
+    ],
+    "pokemon": "nihilego",
+    "tint": "#c0c0d0",
+    "effect": "none"
+   },
+   "intro": "A woman in white, alone, older than she should be. Lusamine: \"I need you to forgive me for something.\" She will not say what.",
+   "choices": [
+    {
+     "label": "\"I forgive you.\"",
+     "success": {
+      "text": "She closes her eyes, and walks away lighter.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lusamine-forgiven",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"For what?\"",
+     "success": {
+      "text": "She does not answer. She walks away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lusamine-asked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u3-beach",
+   "name": "The Flex",
+   "group": "Story: Ultra Beasts",
+   "rarity": "rare",
+   "types": [
+    "water",
+    "fighting"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "pokemon": "buzzwole",
+    "tint": "#c04040",
+    "effect": "none"
+   },
+   "intro": "On a beach, a giant red Beast is posing. Bodybuilders around it are posing back. Nobody is winning.\n\nA bodybuilder, straining: \"It's been going for three hours. It won't stop until someone out-poses it. Carl passed out. Carl was the best of us.\"\n\nBuzzwole flexes at you.",
+   "choices": [
+    {
+     "label": "Pose back.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fighting",
+        "bug"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Three rounds. Your strongest Fighting- or Bug-type poses beside you, and on the third round Buzzwole lowers its arms, deeply moved.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "buzzwole-outposed",
+        "amount": 1
+       },
+       {
+        "kind": "statBoost",
+        "stat": "atk",
+        "percent": 5,
+        "who": {
+         "types": [
+          "fighting",
+          "bug"
+         ]
+        },
+        "until": "run"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-u3-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "Its Ultra Rule is on: Flex.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "buzzwole"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "buzzwole-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-u3-after"
+        }
+       ],
+       "pseudo": true,
+       "lose": [],
+       "rule": {
+        "ultra": "flex"
+       }
+      }
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "It follows you, flexing, a long way down the beach before it loses interest.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "buzzwole-follows",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u3-after",
+   "name": "The Flex: The Gym",
+   "group": "Story: Ultra Beasts",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "pokemon": "buzzwole",
+    "tint": "#c04040",
+    "effect": "none"
+   },
+   "intro": "The bodybuilders carry you to their gym on their shoulders. Buzzwole comes too, still glowing.",
+   "choices": [
+    {
+     "label": "Train with them.",
+     "success": {
+      "text": "A morning of free training. Your top Pokémon is stronger for it.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "atk",
+        "percent": 5,
+        "who": "top",
+        "until": "run"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask Buzzwole to come along.",
+     "success": {
+      "text": "It will, if you can hold it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "buzzwole"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "buzzwole-asked",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": [],
+       "rule": {
+        "ultra": "flex"
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u4-midway",
+   "name": "The Midway",
+   "group": "Story: Ultra Beasts",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "blacephalon",
+    "tint": "#e060a0",
+    "effect": "confetti"
+   },
+   "intro": "A fairground you do not remember, at night, with every ride lit and nobody on them. A clown face floats above the Ferris wheel and explodes into confetti. Then puts itself back.\n\nA loudspeaker: \"NEXT ACT.\" A spotlight finds you.",
+   "choices": [
+    {
+     "label": "Perform.",
+     "success": {
+      "text": "You step into the light.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faller-rank",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-u4-act-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You walk out of the gate, and in through the gate, and you are back by the Ferris wheel.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-u4-exit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find the operator.",
+     "success": {
+      "text": "A booth at the back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faller-rank",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-u4-booth"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u4-exit",
+   "name": "The Midway: The Exit",
+   "group": "Story: Ultra Beasts",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "blacephalon",
+    "tint": "#e060a0",
+    "effect": "none"
+   },
+   "intro": "The gate again. It looks the same as last time.",
+   "choices": [
+    {
+     "label": "Try again.",
+     "success": {
+      "text": "This time the road is the road. Behind you, the lights go out one by one.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Go back in.",
+     "success": {
+      "text": "The spotlight was waiting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faller-rank",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-u4-act-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u4-act-1",
+   "name": "The Midway: Act 1",
+   "group": "Story: Ultra Beasts",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "blacephalon",
+    "tint": "#e060a0",
+    "effect": "confetti"
+   },
+   "intro": "Act one: a battle with flair. The loudspeaker: \"SHOW THEM SOMETHING.\"",
+   "choices": [
+    {
+     "label": "Let your lead show off its best move.",
+     "success": {
+      "text": "The crowd that is not there roars.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "midway-cheer",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-u4-act-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do what you always do.",
+     "success": {
+      "text": "The crowd that is not there yawns. You did that one already.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-u4-act-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u4-act-2",
+   "name": "The Midway: Act 2",
+   "group": "Story: Ultra Beasts",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "blacephalon",
+    "tint": "#e060a0",
+    "effect": "confetti"
+   },
+   "intro": "Act two: a move the crowd has never seen.",
+   "choices": [
+    {
+     "label": "Call a move you have never used.",
+     "success": {
+      "text": "The crowd that is not there roars.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "midway-cheer",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-u4-act-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call your favourite again.",
+     "success": {
+      "text": "The crowd that is not there yawns. You did that one already.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-u4-act-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u4-act-3",
+   "name": "The Midway: Act 3",
+   "group": "Story: Ultra Beasts",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "blacephalon",
+    "tint": "#e060a0",
+    "effect": "confetti"
+   },
+   "intro": "Act three: the pose.",
+   "choices": [
+    {
+     "label": "Strike a pose nobody has struck before.",
+     "success": {
+      "text": "The crowd that is not there roars.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "midway-cheer",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-u4-curtain"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bow.",
+     "success": {
+      "text": "The crowd that is not there yawns. You did that one already.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-u4-curtain"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u4-curtain",
+   "name": "The Midway: Curtain",
+   "group": "Story: Ultra Beasts",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "blacephalon",
+    "tint": "#e060a0",
+    "effect": "confetti"
+   },
+   "intro": "The spotlight goes out. The loudspeaker clicks.",
+   "choices": [
+    {
+     "label": "Wait.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "midway-cheer",
+         "atLeast": 3,
+         "atMost": 99
+        }
+       ],
+       "text": "The fairground erupts. A Blacephalon drops from the Ferris wheel, bows to you, and asks for an encore.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "midway-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "midway-triumph",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-u4-booth"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "midway-cheer",
+         "atLeast": 2,
+         "atMost": 2
+        }
+       ],
+       "text": "Polite applause, from nowhere. A Blacephalon peeks out of the booth at the back.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "midway-done",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-u4-booth"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Silence. Then the clown face, quietly: \"No one ever stays to the end.\" It goes back to the booth.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "midway-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u4-booth",
+   "name": "The Midway: The Operator",
+   "group": "Story: Ultra Beasts",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "blacephalon",
+    "tint": "#a04080",
+    "effect": "none"
+   },
+   "intro": "Inside the booth is a Blacephalon, alone, running every ride by itself. Under it, a subtitle: \"No one ever comes.\"\n\nIt asks to be applauded. Once.",
+   "choices": [
+    {
+     "label": "Applaud.",
+     "success": {
+      "text": "It is so happy its head goes off. Then it wants to come with you, if you can hold on to it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "beast-ball",
+        "count": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "blacephalon"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "blacephalon-applauded",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": [],
+       "rule": {
+        "ultra": "finale"
+       }
+      }
+     }
+    },
+    {
+     "label": "Leave it the lights.",
+     "success": {
+      "text": "It runs the Ferris wheel for you all the way out.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u5-city",
+   "name": "The Ruined City",
+   "group": "Story: Ultra Beasts",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "home",
+     "when": [
+      {
+       "kind": "partySpecies",
+       "species": "guzzlord"
+      }
+     ],
+     "notice": "Your Guzzlord lies down in the empty street. This is its home.",
+     "addChoices": []
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "guzzlord",
+    "tint": "#606060",
+    "effect": "none"
+   },
+   "intro": "Through a Tear: a city very like one you know. The same streets. Nothing in them. The Pokémon Center's sign is there, faded. The door is open. The shelves are bare.\n\nA person in a protective suit, from a doorway: \"You're from before. I can tell. You've got colour. It ate everything. Then it was still hungry. It's still here. It's always hungry.\"",
+   "choices": [
+    {
+     "label": "\"What happened?\"",
+     "success": {
+      "text": "Four lines. The Beast came. The leaders fed it to keep it calm. It was never enough. Then there was nobody left to feed it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faller-rank",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "u5-heard",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-u5-stadium"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Come back with me.\"",
+     "success": {
+      "text": "They cannot: they would starve on the other side. They ask for one thing from your bag, to remember colour by. You give it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faller-rank",
+        "amount": 1
+       },
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "flag",
+        "key": "u5-gift",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-u5-stadium"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Where is it?\"",
+     "success": {
+      "text": "They point. Every street from here costs you something: it has eaten the way, and you pay to pass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faller-rank",
+        "amount": 1
+       },
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-u5-stadium"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u5-stadium",
+   "name": "The Ruined City: The Stadium",
+   "group": "Story: Ultra Beasts",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "guzzlord",
+    "tint": "#404040",
+    "effect": "none"
+   },
+   "intro": "Guzzlord, in the city's stadium, eating the seats.",
+   "choices": [
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It turns from the seats to you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "guzzlord"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "guzzlord-found",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You stood in the stadium of a city that was eaten, and fought what ate it.",
+         "importance": 80
+        }
+       ],
+       "pseudo": true,
+       "lose": [],
+       "rule": {
+        "ultra": "devour"
+       }
+      }
+     }
+    },
+    {
+     "label": "Feed it everything.",
+     "success": {
+      "text": "You empty your bag into the stands. For the first time in a long time, it stops, and sleeps.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "flag",
+        "key": "guzzlord-fed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "guzzlord-found",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave and go.",
+     "success": {
+      "text": "The survivor waves from a doorway, very small, as the Tear closes.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u6-crane",
+   "name": "The Paper Crane",
+   "group": "Story: Ultra Beasts",
+   "rarity": "rare",
+   "types": [
+    "grass",
+    "steel"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "kartana",
+    "tint": "#f0f0e0",
+    "effect": "none"
+   },
+   "intro": "A folded paper crane lands on your lead. It is sharp enough to cut. More cranes, in a line, lead off the path to a forest of folded paper trees. A child sits in the middle, folding, with paper cuts on every finger.\n\nThe child: \"I'm making it a home. So it doesn't go back.\"",
+   "choices": [
+    {
+     "label": "\"Who?\"",
+     "success": {
+      "text": "A Kartana steps out from behind a paper tree, very still.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-u6-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let me help.\"",
+     "success": {
+      "text": "You fold three things: a boat, a box, a star. The Kartana watches each one, and on the last it bends, very slightly, like a nod.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kartana-helped",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-u6-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You're bleeding.\"",
+     "success": {
+      "text": "The child shrugs. The Kartana moves between the two of you, protecting them.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-u6-end"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u6-end",
+   "name": "The Paper Crane: Home",
+   "group": "Story: Ultra Beasts",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "kartana",
+    "tint": "#f0f0e0",
+    "effect": "none"
+   },
+   "intro": "The paper forest rustles. The Kartana waits, and the child waits.",
+   "choices": [
+    {
+     "label": "\"Take it home.\"",
+     "success": {
+      "text": "A Tear opens. The Kartana goes. The child cries, and then folds you a crane that is not sharp.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kartana-honoured",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A child folded you a crane that was not sharp.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let it stay with the child.\"",
+     "success": {
+      "text": "The child laughs for the first time. The Kartana cuts the next sheet of paper for them, perfectly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kartana-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "The child shouts. The Kartana is already moving.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "kartana"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kartana-caught",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": [],
+       "rule": {
+        "ultra": "paper-cut"
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u7-wall",
+   "name": "The Wall That Watches",
+   "group": "Story: Ultra Beasts",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "stakataka",
+    "tint": "#808070",
+    "effect": "none"
+   },
+   "intro": "A stone wall in a field where no wall was. Every brick has an eye.\n\nA farmer: \"It moved in the night. It moved a metre closer to my house. My grandson says it's lonely. My grandson is six.\"",
+   "choices": [
+    {
+     "label": "Talk to it.",
+     "success": {
+      "text": "Every eye opens. It shifts, brick by brick, into the shape of the farmer's house, and settles. You rest against it; it is warm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stakataka-house",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Knock it down.",
+     "success": {
+      "text": "Its Ultra Rule: Many as One.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "stakataka"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "stakataka-beaten",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": [],
+       "rule": {
+        "ultra": "many-as-one"
+       }
+      }
+     }
+    },
+    {
+     "label": "Build next to it.",
+     "success": {
+      "text": "Your party helps the farmer build a wall alongside it. It takes two stops. In the morning it has moved to join the new wall, and the farmer's grandson is sitting on top.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "stakataka-wall",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u8-cling",
+   "name": "Poipole's Friend",
+   "group": "Story: Ultra Beasts",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "anabel",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "task-force",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Anabel: \"That's a Poipole. They choose. You don't. In its world, they give them to children. Because there's no light, and children need something.\"",
+     "addChoices": []
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "poipole",
+    "tint": "#a060c0",
+    "effect": "none"
+   },
+   "intro": "A small purple Pokémon clings to your least-used Pokémon and will not let go. It chirps.",
+   "choices": [
+    {
+     "label": "\"It can stay.\"",
+     "success": {
+      "text": "It chirps again, louder, and holds on tighter.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "poipole"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "poipole-clings",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Find its home.\"",
+     "success": {
+      "text": "A Tear opens, once, just for it. Poipole looks back at you all the way in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "poipole-home",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the one it's holding.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "bondLevel",
+         "atLeast": 3,
+         "who": "any"
+        }
+       ],
+       "text": "Your Pokémon looks at you, then nods. Poipole stays.",
+       "effects": [
+        {
+         "kind": "join",
+         "species": [
+          "poipole"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "flag",
+         "key": "poipole-clings",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon looks at you, unsure. Poipole lets go, and waits nearby, and then it is gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "poipole-asked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-u9-sky",
+   "name": "The Hole in the Sky",
+   "group": "Story: Ultra Beasts",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ultra-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "task-force",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "faller-rank",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "light",
+     "when": [
+      {
+       "kind": "partySpecies",
+       "species": "solgaleo"
+      }
+     ],
+     "notice": "Your Solgaleo lifts its head. The Beasts turn toward its light.",
+     "addChoices": []
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.Spr_Pt_Looker",
+     "boss.anabel-gen7"
+    ],
+    "pokemon": "necrozma",
+    "tint": "#303060",
+    "effect": "flicker"
+   },
+   "intro": "The sky opens. Looker, on the phone: \"Don't come. Do not come.\" Anabel, taking the phone: \"Come.\"\n\nBeasts are coming through. Several. Not attacking anyone. Lost.",
+   "choices": [
+    {
+     "label": "\"Close it.\"",
+     "success": {
+      "text": "A battle at the Tear itself.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "sky-held",
+         "amount": 1
+        }
+       ],
+       "team": [
+        "nihilego",
+        "pheromosa",
+        "celesteela"
+       ],
+       "name": "The Hole in the Sky",
+       "size": 3,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "faller-rank",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sky-closed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You closed the hole in the sky. The Beasts on this side stayed, scared.",
+         "importance": 90
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Guide them home.\"",
+     "success": {
+      "text": "One Beast at a time. You calm the first and the others follow its lead.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "xurkitree"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [],
+       "pseudo": true,
+       "lose": [],
+       "rule": {
+        "calm": {
+         "need": 4,
+         "start": 0,
+         "perTurn": 1,
+         "likes": [
+          "sound"
+         ]
+        }
+       },
+       "calm": [
+        {
+         "kind": "flag",
+         "key": "sky-guided",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You walked the lost Beasts home through the hole in the sky, one at a time.",
+         "importance": 90
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Let them through.\"",
+     "success": {
+      "text": "They come through, look around, and spread out across the region, lost and harmless and strange.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-open",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You let the Beasts through. The region is stranger now.",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

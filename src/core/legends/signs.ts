@@ -8,6 +8,7 @@
 
 import { getBlessing } from '../blessings';
 import { MYTHICALS } from '../instrumentality/promisesData';
+import { BEAST_BY_ID } from '../ultra/beasts';
 import type { RunState } from '../state';
 
 /** Groups a Sign may name instead of one Legendary (species ids). `own` is whichever Legendary blesses this run. */
@@ -96,6 +97,17 @@ export function syncLegendFlags(run: Pick<RunState, 'story' | 'expansion' | 'reg
       setFlag(run, `believed-${m.id}`, (p.tellings[m.id] ?? 0) >= 3 ? 1 : 0);
     }
     setFlag(run, 'mythical-visited', p.visited ? 1 : 0);
+  }
+  // Ultra Beast Incursions: `ultra-on` (the system is on this run), `ultra-static` (a Static or later contact has happened),
+  // `ultra-beast-<species>` (that Beast was met this run). Read by the Ultra questlines (co legends-9).
+  const u = run.expansion?.ultra;
+  if (u) {
+    setFlag(run, 'ultra-on', 1);
+    if (u.contact !== 'none' || u.met.length > 0) setFlag(run, 'ultra-static', 1);
+    for (const id of [...u.met, ...(u.beastId ? [u.beastId] : [])]) {
+      const species = BEAST_BY_ID.get(id)?.speciesId;
+      if (species) setFlag(run, `ultra-beast-${species}`, 1);
+    }
   }
 }
 

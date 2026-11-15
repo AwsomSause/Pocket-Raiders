@@ -1,6 +1,6 @@
 {
  "category": "legends",
- "note": "Door shapes of the legends questlines (Alphas A2-A4, Mega Anomaly M4, Legendary L4 and L5). Rooms are co-* events in co-legends-*.json.",
+ "note": "Door shapes of the legends questlines (Alphas A2-A4, Mega Anomaly M4, Legendary L4 and L5, Ultra U4 and U5). Rooms are co-* events in co-legends-*.json.",
  "chains": [
   {
    "id": "ps_black_tide",
@@ -54,6 +54,24 @@
    "themeId": "psychic-dark",
    "tint": "#504060",
    "mood": "humming cave",
+   "start": "opened"
+  },
+  {
+   "id": "ps_ultra_midway",
+   "name": "The Midway",
+   "entry": "co-u4-midway",
+   "themeId": "psychic-dark",
+   "tint": "#e060a0",
+   "mood": "an empty fairground at night",
+   "start": "opened"
+  },
+  {
+   "id": "ps_ultra_ruin",
+   "name": "The Ruined City",
+   "entry": "co-u5-city",
+   "themeId": "rock-ghost",
+   "tint": "#606060",
+   "mood": "a city with nothing in it",
    "start": "opened"
   }
  ]

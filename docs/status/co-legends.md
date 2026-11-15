@@ -125,7 +125,24 @@ Each Visit opens for a believed Mythical (`believed-<id>`, three Tellings) while
 
 Wonders and most Promise rules are still Beta 0.7 limits (promisesData.ts: only Zarude's rule and Wonder run in the game). Tests: `tests/unit/coLegendsMythical.test.ts`.
 
+## Ultra Beast questlines U1-U9 (built 2026-11-15, `legends-9.ts`, 26 events)
+Every entry needs the Ultra setting on this run (`ultra-on`, a mirror flag `syncLegendFlags` now keeps with `ultra-static` and `ultra-beast-<species>`). Beast fights are pseudo fights with their Ultra Rule on; a Beast Ball catches as usual. Entering a home world (U2 Deep Sea, U4 Midway, U5 Ruined City) raises `faller-rank` by 1 (this run only). U4 and U5 are Doors (pseudo chains `ps_ultra_midway`, `ps_ultra_ruin`).
+
+| Code | Built | Limits |
+|---|---|---|
+| U1 Task Force | Looker and Anabel after the first Static (a Beast Ball either way), three missions at rests (₽600, a Beast Ball, a hint), Anabel's ask | missions are told, not checked; mission pay is not Shards (cut) |
+| U2 Lusamine | lab battle (3 ways in), the frozen cases, the Tear: follow = Nihilego fight or "Talk to her" (needs Lillie met, `nebby-met`), leave = she returns a region later | Lillie coming through the Tear is the families' |
+| U3 Buzzwole | pose back (Fighting/Bug: +Atk), battle (Flex), walk away; the gym's free training | it does not join the next battle on the other side |
+| U4 Midway | at Night: three acts (repeating bores the crowd), the curtain, the operator (applaud = a fight plus a Beast Ball), the looping exit | "double catch odds" is an extra Beast Ball |
+| U5 Ruined City | the survivor (story / give an item / pay items to pass), the stadium: battle (Devour) / feed it everything / leave | the Final Reunion box and Operation memory not built |
+| U6 Kartana | who / help fold / bleeding, then take it home / let it stay / catch it (Paper Cut) | |
+| U7 Stakataka | talk (it becomes a house; rest) / knock it down (Many as One) / build beside it (2 nodes, full heal) | the wall is not a lasting Rest node |
+| U8 Poipole | it can stay (joins) / find its home / ask the one it holds (High Bond nods) | Cling (double Bond) not built; Poipole simply joins |
+| U9 Hole in the Sky | needs the Task Force and Faller rank 2: close it (3 Beasts, +1 Faller) / guide them home (a calm) / let them through | "every Ultra Rule active" after letting them through is told, not built; Faller 3 lowered to 2 (only three home worlds can raise it) |
+
+Tests: `tests/unit/coLegendsUltra.test.ts`.
+
 ## Where I stopped (paused 2026-11-15, Kice: five threads at a time)
-- Resumed 2026-11-15 (merged ui-mockups; shared pieces are in the base now). Alphas, Megas, Deltas, Z, Legendary L2-L15 and Mythical MY1-MY22 done; next U1-U9, RULE ids.
-- Still to build: M7 (rivals slot), U1-U9, the 382 RULE ids (ladder Trial/Recognition/Presence), placement/flags/status files, update fragment, PR.
+- Resumed 2026-11-15 (merged ui-mockups; shared pieces are in the base now). Alphas, Megas, Deltas, Z, Legendary L2-L15 and Mythical MY1-MY22 and Ultra U1-U9 done; next the RULE ids.
+- Still to build: M7 (rivals slot), the 382 RULE ids (ladder Trial/Recognition/Presence), placement/flags/status files, update fragment, PR.
 - Run the full `npm run check` before opening the PR.
