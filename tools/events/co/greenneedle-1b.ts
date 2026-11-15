@@ -238,7 +238,7 @@ export const REMOVE: string[] = ['pp-rematch-exceptional'];
 
 export const PLACEMENT: Record<string, Placement> = {
   'pp-cold-open': {
-    gn: 'gn.01', shape: 'Chain', earliest: 'A2', sits: 'optional', tags: ['Miniature Episode', 'Companion Story', 'Region-Wide Story'], level: 'bullies A-1, Burl A+0 (rematch: the Poliwag +2)', often: 'run', needs: ['water'],
+    gn: 'gn.01', shape: 'Chain', earliest: 'A2', sits: 'optional', tags: ['Miniature Episode', 'Companion Story', 'Region-Wide Story'], level: 'bullies A-1, Burl A+0 (rematch: the Poliwag +2)', often: 'run', needs: ['water'], stages: [1, 2, 3, 4, 5, 6],
     beats: [
       { beat: 'Cold open', event: 'pp-cold-open', stage: 'S(n)', home: 3, window: [2, 5] },
       { beat: 'Lesson 1: Aim', event: 'pp-lesson-aim', stage: 'S(n)', home: 7, window: [6, 9] },

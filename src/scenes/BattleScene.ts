@@ -2243,11 +2243,11 @@ export class BattleScene extends Phaser.Scene {
     this.message.setText(chunkLines([FINALE_ASK])[0] ?? '');
     void this.readAloud([FINALE_ASK]).then(() => {
       this.commandWindow.setVisible(true);
-      this.message.setText('Who do you cheer for?');
+      this.message.setText('Who are you cheering for?');
       this.menu = new Menu(this, {
         x: COMMAND_X + 24,
         y: MESSAGE_Y + 26,
-        options: [{ label: 'Cheer for Pidgeot' }, { label: 'Cheer for Fearow' }],
+        options: [{ label: 'Pidgeot!' }, { label: 'Fearow!' }],
         columns: 1,
         itemWidth: 300,
         itemHeight: 50,

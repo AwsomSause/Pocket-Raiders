@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { chainRooms, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
+import { fitsStage, positioned } from '../../src/core/co/placement';
 import { RunStateSchema } from '../../src/core/state';
 import { conditionMet } from '../../src/core/events';
 import { content } from './helpers';
@@ -346,5 +347,25 @@ describe('gn.01 Poli-Pond (to the doc)', () => {
     const r = choose(run, 'pp-ending', 'This is your pond now.');
     expect(r.text).toMatch(/He holds the reeds back for it/);
     expect(flagOf(r.run, 'pp-reconcile')).toBe(1);
+  });
+});
+
+describe('Greenneedle placement (the placer reads the data as the docs give it)', () => {
+  it('stage needs are the placer tags, and Mt. Moon takes a cave OR a high stage', () => {
+    const moon = content.coPlacement!.get('gn-04-door')!;
+    const fits = (tags: string[]) => fitsStage(moon, 3, 3, new Set(tags));
+    expect(fits(['cave'])).toBe(true);
+    expect(fits(['high'])).toBe(true);
+    expect(fits(['forest'])).toBe(false);
+    expect(content.coPlacement!.get('gn-03-door')!.tags).toEqual(['forest']);
+    // Category labels ("Rival Episode") are never read as stage needs.
+    expect(content.coPlacement!.get('gn-05-barn')!.tags).toEqual([]);
+  });
+
+  it("the key event's beat gives its step and stage: Pidgey's branch is S1, step 2", () => {
+    const sky = content.coPlacement!.get('sky.opening')!;
+    expect(sky).toMatchObject({ home: 2, window: [1, 4], stages: [1], sits: 'must-see' });
+    expect(positioned(sky)).toBe(true);
+    expect(content.coPlacement!.get('pp-cold-open')!.stages).toEqual([1, 2, 3, 4, 5, 6]);
   });
 });

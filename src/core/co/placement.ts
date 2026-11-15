@@ -98,6 +98,8 @@ export function stageTags(types: readonly string[], period: string, tide?: 'high
 
 /** A tide need as the docs write it ("high tide", "tide: low", "low-tide") reads as `high tide` or `low tide`; a bare "tide" fits either. */
 const tagHolds = (tag: string, tags: ReadonlySet<string>): boolean => {
+  // "cave|high": any one of them (Greenneedle's Mt. Moon needs a cave or a high stage).
+  if (tag.includes('|')) return tag.split('|').some((t) => tagHolds(t.trim(), tags));
   if (!tag.includes('tide')) return tags.has(tag);
   const want = tag.includes('high') ? 'high tide' : tag.includes('low') ? 'low tide' : null;
   return want ? tags.has(want) : tags.has('high tide') || tags.has('low tide');

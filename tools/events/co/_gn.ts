@@ -117,10 +117,13 @@ export interface Placement {
   window?: [number, number];
   sits?: 'must-see' | 'optional' | 'side-branch';
   attaches?: 'after' | 'before' | 'instead' | 'rest' | 'town';
+  /** The doc's category labels (written to the data as `kinds`; the placer's `tags` are the stage needs below). */
   tags?: string[];
+  /** In-region stages it may appear in (S1 = 1); empty = any, or the key event's beat stage. */
+  stages?: number[];
   level?: string;
   often?: 'run' | 'region';
-  /** Map tags the stage needs (water, forest, cave, high). */
+  /** Map tags the stage needs (water, forest, cave, high); several = any one of them. */
   needs?: string[];
   /** Its name and place when the region is Kanto, and its name elsewhere. */
   dressing?: { kanto: string; kantoStage?: string; elsewhere?: string };

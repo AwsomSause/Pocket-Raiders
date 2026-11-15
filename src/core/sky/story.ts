@@ -21,6 +21,8 @@ import { SkyStateSchema, freshSky, type SkyEnding, type SkySide, type SkyState }
 import {
   ALONE_LINES, ANSWERS, CHEER_PIDGEOT_LINE, DUEL_HEADER, FEAROW_TRACK, FINALE_ASK, FINALE_SETUP, GIFT_LINES, OVERHEAD,
   SPAR_LOST, SPAR_WON, answerLine, backedLine, duelResult, endingLine, fearowGrowthLine, finaleEnd,
+  FEAROW_BY_STAGE,
+  FEAROW_START,
 } from './text';
 
 export const SKY_FLY_ITEM = 'hm-fly';
@@ -389,7 +391,7 @@ export function applySky(content: Content, run: RunState, e: SkyEffect): string 
       if (!sky) return '';
       sky.afterDone = true;
       setEnding(sky, 'rematch-done');
-      return say(e.act === 'rematchWon' ? 'You beat it, and it does not run. It stays on the road. It looks at you for a long time, and it nods once: the nod you give to someone you had a quarrel with and have decided is over.' : 'It beats you, and it does not gloat. It lands beside you on the road and just stands there, the way you stand next to someone after a fight you both wish had gone differently.', endingLine('rematch-done'));
+      return say('It beats you, and it does not gloat. It lands beside you on the road and just stands there, the way you stand next to someone after a fight you both wish had gone differently.', endingLine('rematch-done'));
     }
   }
 }

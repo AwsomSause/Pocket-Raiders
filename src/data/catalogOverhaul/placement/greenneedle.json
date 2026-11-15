@@ -10,22 +10,21 @@
   ],
   "sits": "must-see",
   "attaches": "instead",
-  "tags": [
-   "Pseudo Stage",
-   "Exploration"
-  ],
   "level": "A+0",
   "often": "run",
-  "needs": [
-   "cave",
-   "high"
-  ],
   "dressing": {
    "kanto": "Mt. Moon",
    "kantoStage": "Pewter (after the forest)",
    "elsewhere": "The Moonlit Cave"
   },
-  "note": "Seven nodes, three episodes. Needs a cave OR high stage (either tag). Raid marks read team-raid-moon-won / team-raid-moon-lost."
+  "note": "Seven nodes, three episodes. Needs a cave OR high stage (either tag). Raid marks read team-raid-moon-won / team-raid-moon-lost.",
+  "kinds": [
+   "Pseudo Stage",
+   "Exploration"
+  ],
+  "tags": [
+   "cave|high"
+  ]
  },
  "gn-05-barn": {
   "gn": "gn.05",
@@ -37,9 +36,6 @@
    13
   ],
   "sits": "optional",
-  "tags": [
-   "Rival Episode"
-  ],
   "level": "friends A-2, Damian A+0, ace A+1",
   "often": "region",
   "dressing": {
@@ -79,7 +75,11 @@
     ]
    }
   ],
-  "note": "At most once per region; walking past costs nothing; never the stage's Gym."
+  "note": "At most once per region; walking past costs nothing; never the stage's Gym.",
+  "kinds": [
+   "Rival Episode"
+  ],
+  "tags": []
  },
  "gn-03-door": {
   "gn": "gn.03",
@@ -92,36 +92,36 @@
   ],
   "sits": "must-see",
   "attaches": "instead",
-  "tags": [
-   "Pseudo Stage",
-   "Rival Episode"
-  ],
   "level": "A-1",
   "often": "run",
-  "needs": [
-   "forest"
-  ],
   "dressing": {
    "kanto": "Viridian Forest",
    "kantoStage": "Pewter",
    "elsewhere": "The Old Wood"
   },
-  "note": "Six nodes. The duel is at equal levels."
+  "note": "Six nodes. The duel is at equal levels.",
+  "kinds": [
+   "Pseudo Stage",
+   "Rival Episode"
+  ],
+  "tags": [
+   "forest"
+  ]
  },
  "pp-cold-open": {
   "gn": "gn.01",
   "shape": "Chain",
   "earliest": "A2",
   "sits": "optional",
-  "tags": [
-   "Miniature Episode",
-   "Companion Story",
-   "Region-Wide Story"
-  ],
   "level": "bullies A-1, Burl A+0 (rematch: the Poliwag +2)",
   "often": "run",
-  "needs": [
-   "water"
+  "stages": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
   ],
   "beats": [
    {
@@ -189,17 +189,26 @@
     "stage": "any later evil-team climax or Champion battle"
    }
   ],
-  "note": "Stages S1-S6. The cold open places the lessons and the pond visit on later nodes of its stage (core/events.ts pond begin)."
+  "note": "Stages S1-S6. The cold open places the lessons and the pond visit on later nodes of its stage (core/events.ts pond begin).",
+  "kinds": [
+   "Miniature Episode",
+   "Companion Story",
+   "Region-Wide Story"
+  ],
+  "tags": [
+   "water"
+  ],
+  "home": 3,
+  "window": [
+   2,
+   5
+  ]
  },
  "sky.opening": {
   "gn": "gn.02",
   "shape": "Region-wide",
   "earliest": "A1",
   "sits": "must-see",
-  "tags": [
-   "Region-Wide Story",
-   "Rival Episode"
-  ],
   "level": "Pidgey and Spearow match each other at A-1, rising each stage",
   "often": "run",
   "beats": [
@@ -244,6 +253,19 @@
     ]
    }
   ],
-  "note": "Best in a run's first region. Once per run."
+  "note": "Best in a run's first region. Once per run.",
+  "kinds": [
+   "Region-Wide Story",
+   "Rival Episode"
+  ],
+  "tags": [],
+  "home": 2,
+  "window": [
+   1,
+   4
+  ],
+  "stages": [
+   1
+  ]
  }
 }
