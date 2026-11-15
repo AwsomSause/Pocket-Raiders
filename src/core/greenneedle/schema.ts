@@ -6,8 +6,10 @@ const Key = z.string().regex(/^[a-z][a-z0-9-]*$/);
 
 /** The full event-effect schema, bound by contentSchema.ts once it exists (a `when` step carries ordinary effects). */
 let effectSchema: z.ZodType = z.never();
-export const bindGnEffects = (schema: z.ZodType): void => {
+let conditionSchema: z.ZodType = z.never();
+export const bindGnEffects = (schema: z.ZodType, conditions?: z.ZodType): void => {
   effectSchema = schema;
+  if (conditions) conditionSchema = conditions;
 };
 
 /**
@@ -41,6 +43,8 @@ export const GnEffectSchema = z.object({
   max: z.number().int().min(0).optional(),
   text: z.string().min(1).optional(),
   then: z.array(z.lazy(() => effectSchema)).max(8).optional(),
+  /** gn.13: a roll's chance moves by `n` percent for each line whose conditions all hold (a Squad member in the party -5, high Heat -5...). */
+  mods: z.array(z.object({ when: z.array(z.lazy(() => conditionSchema)).min(1).max(3), n: z.number().int().min(-50).max(50) })).max(4).optional(),
   /** Written as an `addEventFrom` so the pseudo-stage map (core/dungeon/pseudo.ts opensNext) sees every room a route can open. */
   to: z.object({ kind: z.literal('addEventFrom'), ids: z.array(z.string().min(1)).min(1).max(16) }).optional(),
 }).refine((e) => (e.op === 'route' ? !!e.to && !!e.key : true), { message: 'a route needs `key` and `to`' })

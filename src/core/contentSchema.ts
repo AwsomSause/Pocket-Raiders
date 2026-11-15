@@ -3265,7 +3265,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('choice'), id: z.string().regex(/^[a-z][a-z0-9-]*$/), pick: z.string().min(1), text: z.string().min(1), weight: z.number().int().min(1).max(3).default(1) }),
 ]);
 export type EventEffect = z.infer<typeof EventEffectSchema>;
-bindGnEffects(EventEffectSchema);
+bindGnEffects(EventEffectSchema, EventConditionSchema);
 
 /** A battle an outcome starts; `win` effects apply only if you win it. Wild Pokémon can be caught. */
 /**

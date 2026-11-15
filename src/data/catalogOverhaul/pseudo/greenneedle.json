@@ -57,6 +57,15 @@
    "start": "opened"
   },
   {
+   "id": "ps_gn_flight",
+   "name": "Flight North",
+   "entry": "gn-13-check",
+   "themeId": "normal-flying",
+   "tint": "#2f5d73",
+   "mood": "open sky",
+   "start": "opened"
+  },
+  {
    "id": "ps_gn_maiden",
    "name": "Maiden's Peak",
    "entry": "gn-12-door",

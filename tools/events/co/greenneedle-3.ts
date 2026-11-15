@@ -3,7 +3,7 @@
 // version is the only version"); the old canon rooms are retired below (kept for saved runs).
 // Build: npm run co:build -- greenneedle-3   then   npm run co:gn
 import { $, at, ch, egg, eggMove, fight, flag, has, heal, hurt, item, join, leave, out, ptype, room, trainer, wild, type Json } from '../dsl.ts';
-import { bond, chIf, eitherWay, gev, gn, is, kindness, laterStage, leavePseudo, moment, not, notThisRegion, notThisStage, pick, rm, roll, route, say, scene, stampRegion, stampStage, when, weighted, type Placement } from './_gn.ts';
+import { bond, chIf, eitherWay, gev, gn, is, kindness, laterStage, leavePseudo, moment, not, notThisRegion, notThisStage, partyHas, pick, rm, roll, route, say, scene, setTo, stampRegion, stampStage, when, weighted, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -372,10 +372,124 @@ const gn12: Json[] = [
 ];
 const KANTO_MAIDEN: Json = { ...gev('cs-kanto-vermilion-maiden', "Maiden's Peak", peak({ stop: 'event', rarity: 'common', types: ['fairy'], requires: [not('maiden-done'), not('maiden-entered')] }), (gn12[0] as { intro: string }).intro, (gn12[0] as { choices: Json[] }).choices), canon: 'cs.kanto.vermilion.maiden' };
 
-export const EVENTS: Json[] = [...gn11, KANTO_KAIJU, ...gn12, KANTO_MAIDEN];
+// =====================================================================================================================
+// gn.13  FLIGHT NORTH  (a must-see check on step 17, before the battle, no badge; half the time a seven-node pseudo stage at levels 5 to 20)
+// The return ("Second Wind") after a lost run is core/instrumentality/flightNorth.ts (Beta 0.7): it reads `kanto-flight-bug` and the Bug-type's name.
+// =====================================================================================================================
+const FLIGHT_TINT = '#2f5d73';
+const north = (o: Json = {}): Json => ({ tint: FLIGHT_TINT, tags: ['Story', 'Pokémon', 'Evil Team'], effect: 'none', ...o });
+const fn = (action: 'name' | 'trust', name?: string): Json => ({ kind: 'flightNorth', action, ...(name ? { name } : {}) });
+const NAMES = ['Pip', 'Nettle', 'Thimble', 'Button'];
+/** Its line: Weedle when flag `flight-weedle` is 1, else Caterpie. */
+const asBug = (caterpie: Json[], weedle: Json[]): Json[] => [when('flight-weedle', { min: 0, max: 0 }, caterpie), when('flight-weedle', { min: 1 }, weedle)];
+const EVOLVE_COCOON: Json[] = [{ kind: 'formChange', from: 'caterpie', to: 'metapod' }, { kind: 'formChange', from: 'weedle', to: 'kakuna' }];
+const EVOLVE_FINAL: Json[] = [{ kind: 'formChange', from: 'metapod', to: 'butterfree' }, { kind: 'formChange', from: 'kakuna', to: 'beedrill' }, { kind: 'formChange', from: 'caterpie', to: 'butterfree' }, { kind: 'formChange', from: 'weedle', to: 'beedrill' }];
+/** Inside: the bag is empty and there are no Poké Balls, so nothing is caught and no item is used. */
+const inFlight = (battle: Json): Json => ({ ...battle, pseudo: true, rule: { noCatch: true, noItems: true, ...((battle.rule as Json | undefined) ?? {}) } });
+const FLOCK = (text: string): Json => when('flight-flock', { min: 1 }, [], text);
+const THEFT_ODDS: Json = gn('roll', {
+  key: 'flight-stolen', n: 50, mods: [
+    { when: [{ kind: 'gn', test: 'lookAtLevel', types: ['squad-lesser', 'squad-leader'], key: 'gn-none' }], n: -5 },
+    { when: [{ kind: 'evil', heat: 6 }], n: -5 },
+    { when: [is('ssanne-trio-seen')], n: 5 },
+  ],
+});
+const THEFT = say(
+  '*A shadow. You look up.*',
+  '**Jessie:** "Prepare for trouble!"',
+  '**James:** "And you know the rest; we\'re on a schedule!"',
+  '*A net. A hook. A vacuum hose with a funnel on it.*',
+  '**Meowth:** "All of \'em! Even da little one! Meowth, dat\'s right!"',
+  '*Your lead reaches for you through the net. Then the balloon\'s a dot. Then it\'s nothing.*',
+);
+const FLIGHT_CHECK: Json[] = [
+  ch('Keep walking.', out('You keep walking.',
+    flag('flight-checked'), THEFT_ODDS,
+    partyHas('flight-had-caterpie', 'caterpie', 'metapod', 'butterfree'), partyHas('flight-had-weedle', 'weedle', 'kakuna', 'beedrill'),
+    when('flight-stolen', { min: 0, max: 0 }, [], 'Nothing. A balloon crosses the sky, far off. It has a cat\'s face. Your Pokémon watch it all the way to the horizon, and walk a little closer to you after.'),
+    when('flight-stolen', { min: 1 }, [gn('stash'), flag('kanto-flight-stolen'), room('gn-13-bully')], THEFT),
+  )),
+];
+
+const gn13: Json[] = [
+  gev('gn-13-check', 'Flight North', north({ stop: 'event', rarity: 'rare', forced: true, types: ['normal', 'flying'], pokemon: 'meowth', requires: [not('flight-checked')] }), say(
+    'The road north runs between high grass and a wide, empty sky.',
+    'Somewhere above you, very faintly, three voices are clearing their throats.',
+  ), FLIGHT_CHECK),
+  rm('gn-13-bully', 'Flight North: The Bully', north({ pokemon: 'spearow' }), say(
+    '*Grass. Sky. You sit up. The belt\'s empty. The bag\'s empty. Even the Poké Balls are gone.*',
+    'A Spearow lands on your chest and pecks. You have nothing to fight it with. There is nobody to call.',
+  ), [
+    ch('Cover your head.', out(say(
+      '*Then something small hits the Spearow from the side like a thrown shoe.*',
+      '*The Spearow goes over. The small thing stands there, wobbling.*',
+      '*It looks at what it\'s done. It looks at you. It\'s as surprised as you are.*',
+    ),
+    roll('flight-weedle', 50), when('flight-had-caterpie', { min: 1 }, [setTo('flight-weedle', 0)]), when('flight-had-weedle', { min: 1 }, [setTo('flight-weedle', 1)]),
+    ...asBug([{ ...join({ species: ['caterpie'] }), level: 5, direct: true }, flag('kanto-flight-bug', 1)], [{ ...join({ species: ['weedle'] }), level: 5, direct: true }, flag('kanto-flight-bug', 2)]),
+    pick('flight-name', 1, 1, 1, 1), ...NAMES.map((n, i) => when('flight-name', { min: i + 1, max: i + 1 }, [fn('name', n)], `It needs a name. You call it ${n}. (You can call it something else from your party.)`)),
+    room('gn-13-meadow')), {
+      branches: [{ when: [{ kind: 'gn', test: 'thisRegion', key: 'spearow-seen-region' }], text: say(
+        'You know this Spearow. It\'s from the flock by the branch, the one that fought the Pidgey. Its flock wheels overhead, watching.',
+        '*Then something small hits it from the side like a thrown shoe. The Spearow goes over. The small thing stands there, wobbling, as surprised as you are.*',
+      ), effects: [
+        setTo('flight-flock', 1), roll('flight-weedle', 50), when('flight-had-caterpie', { min: 1 }, [setTo('flight-weedle', 0)]), when('flight-had-weedle', { min: 1 }, [setTo('flight-weedle', 1)]),
+        ...asBug([{ ...join({ species: ['caterpie'] }), level: 5, direct: true }, flag('kanto-flight-bug', 1)], [{ ...join({ species: ['weedle'] }), level: 5, direct: true }, flag('kanto-flight-bug', 2)]),
+        pick('flight-name', 1, 1, 1, 1), ...NAMES.map((n, i) => when('flight-name', { min: i + 1, max: i + 1 }, [fn('name', n)], `It needs a name. You call it ${n}. (You can call it something else from your party.)`)),
+        room('gn-13-meadow'),
+      ] }],
+    }),
+  ]),
+  rm('gn-13-meadow', 'Flight North: The Meadow', north({ pokemon: 'pidgey' }), say(
+    'It follows you into the long grass. Every few steps it rears up and looks round, checking you\'re still there.',
+    'Two wild Pokémon are in the way. It is the only one of you that can fight. It knows it.',
+  ), [ch('Let it try.', fight('It squares up, trembling, and gives two rising notes: its cry. You will know it anywhere, later.', inFlight({ kind: 'wild', species: ['rattata', 'pidgey', 'nidoran-f', 'nidoran-m', 'oddish', 'bellsprout', 'sentret', 'zigzagoon'], types: [], level: 6, chain: 2, levelBonus: 0, shinyMultiplier: 1,
+    win: [{ kind: 'levels', amount: 2, who: 'lead' }, fn('trust'), FLOCK('High up, the Spearow flock passes over, once. It doesn\'t come down.'), room('gn-13-cocoon')] })))]),
+  rm('gn-13-cocoon', 'Flight North: Cocoon Night', north(), say(
+    '*It wins. It hops. It nearly falls over. It looks back to see if you saw.*',
+    'Night, and no fire. It spins a thread and begins to wrap itself in. It isn\'t afraid of the change. It\'s afraid you won\'t be there after.',
+    '*It can\'t walk now. You carry it.*',
+  ), [
+    ch('Carry it inside my coat.', out('You carry it against your chest, out of the wind. Through the shell, very faintly, you can feel it settle.', ...EVOLVE_COCOON, heal(1), bond(1), fn('trust'), room('gn-13-stream'))),
+    ch('Carry it where it can see.', out('You carry it in your hands, held up, so it can watch the stars go over. It doesn\'t move. You think it\'s looking.', ...EVOLVE_COCOON, heal(1), bond(1), fn('trust'), room('gn-13-stream'))),
+  ]),
+  rm('gn-13-stream', 'Flight North: The Stream', north({ pokemon: 'poliwag' }), say(
+    'At the stream, something bigger comes out of the water. Your cocoon can\'t run. It can only Harden, and wait.',
+  ), [ch('Stay with it.', fight('You put yourself beside it on the stones, close enough to feel the shell tick as it hardens.', inFlight({ kind: 'wild', species: ['poliwag', 'psyduck', 'tentacool', 'goldeen'], types: [], level: 9, levelBonus: 0, shinyMultiplier: 1, rule: { noAttacks: true, surviveTurns: 4 },
+    win: [{ kind: 'levels', amount: 1, who: 'lead' }, fn('trust'), room('gn-13-hatch')] })))]),
+  rm('gn-13-hatch', 'Flight North: Hatching', north({ pokemon: 'pidgey' }), say(
+    '*It takes every hit. It doesn\'t make a sound.*',
+    'In the morning the shell splits. It comes out changed.',
+    '*It\'s never had wings before. It flies into a tree. It tries again.*',
+    'A flock of Pidgey lifts out of a dead oak, all at once, and turns on it.',
+  ), [ch('Stand together.', fight('It doesn\'t look away from them. Neither do you.', { ...inFlight({ kind: 'wild', species: ['pidgey'], types: [], level: 10, chain: 2, levelBonus: 0, shinyMultiplier: 1,
+    win: [{ kind: 'levels', amount: 4, who: 'lead' }, heal(1), fn('trust'), FLOCK('The Spearow flock passes over again, higher. This time it keeps going.'), room('gn-13-camp')] }) }, ...EVOLVE_FINAL))]),
+  rm('gn-13-camp', "Flight North: The Trio's Camp", north({ pokemon: 'meowth' }), say(
+    'A campfire, a balloon tethered to a tree, and by the fire, a cage. Your team is in it.',
+    '*Your lead sees you through the bars. It doesn\'t make a sound either. It\'s learned that from somebody.*',
+  ), [ch('Slip in from the shadows.', fight('You send it in low, out of the firelight, at the trio\'s guards.', inFlight({ kind: 'trainer', name: 'The Trio\'s Guards', team: ['ekans', 'koffing'], level: 15, size: 2, types: [], levelBonus: 0, win: [{ kind: 'levels', amount: 4, who: 'lead' }, heal(1), fn('trust'), room('gn-13-boss')] })))]),
+  rm('gn-13-boss', 'Flight North: The Boss', north({ pokemon: 'venomoth' }), say(
+    '**James:** "It\'s a *bug.* You\'ve come to rescue six Pokémon with a *bug.*"',
+    '**Jessie:** "Venomoth, dear. Do tidy up."',
+  ), [ch('Fight!', fight('It looks back at you once. Then it goes.', inFlight({ kind: 'trainer', name: 'Jessie & James', team: ['venomoth'], level: 20, size: 1, types: [], levelBonus: 0, rule: { shinyRescue: true, evolveMid: true }, win: [room('gn-13-goodbye')] }), ...EVOLVE_FINAL))]),
+  rm('gn-13-goodbye', 'Flight North: Goodbye', north(), say(
+    '**Meowth:** "Dere\'s TWO of \'em?!"',
+    '**All three:** "We\'re blasting off agaaaain!"',
+    'You open the cage. Your team pours out, every one of them talking at once, and every one of them at full strength.',
+    '*The shiny one\'s waiting, on a branch, looking north.*',
+  ), [ch('Say goodbye.', out(say(
+    '*It looks at the shiny one. It looks at you.*',
+    '*It does its victory hop, one more time. It doesn\'t fall over.*',
+    '*They go.*',
+  ), { kind: 'restoreParty' }, heal(1), flag('kanto-flight-gratitude'), flag('flight-done'), moment('A small Bug-type saved your whole team, then flew north.', 85), leavePseudo()))]),
+];
+const KANTO_FLIGHT: Json = { ...gev('cs-kanto-vermilion-flight', 'Flight North', north({ stop: 'event', rarity: 'common', types: ['normal', 'flying'], pokemon: 'meowth', requires: [not('flight-checked')] }), (gn13[0] as { intro: string }).intro, FLIGHT_CHECK), canon: 'cs.kanto.vermilion.flightnorth' };
+
+export const EVENTS: Json[] = [...gn11, KANTO_KAIJU, ...gn12, KANTO_MAIDEN, ...gn13, KANTO_FLIGHT];
 
 /** The old Kanto canon builds of these stories (moved to Greenneedle): kept for saved runs, never shown again. */
 export const REMOVE: string[] = [
+  ...['n1', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7', 'goodbye'].map((n) => `cs-kanto-vermilion-flight-${n}`),
   ...['square-a', 'square-b', 'lantern', 'tm1', 'tm2', 'tm3', 'tm4', 'tm5', 'tm6', 'tm7', 'tm8', 'swap', 'eggs', 'tea', 'n1', 'n2', 'n3', 'n4', 'n5', 'top'].map((n) => `cs-kanto-vermilion-maiden-${n}`),
 ];
 
@@ -386,6 +500,11 @@ export const PLACEMENT: Record<string, Placement> = {
     note: 'Badge: a wave. Kanto shows it through cs-kanto-vermilion-kaiju (the canon raid den is no longer placed).',
   },
   'gn-11-return': { gn: 'gn.11', shape: 'Single', earliest: 'A6', home: 8, window: [1, 20], sits: 'optional', tags: ['Afterstory'], needs: ['water'], level: 'A+1', often: 'run', note: 'Only when the Kaiju was freed.' },
+  'gn-13-check': {
+    gn: 'gn.13', shape: 'Single', earliest: 'A4', home: 17, window: [15, 19], sits: 'must-see', attaches: 'before', tags: ['Interrupting Episode', 'Pseudo Stage', 'Companion Story', 'Finale'],
+    level: 'Always levels 5 to 20 inside', often: 'run', dressing: { kanto: 'Flight North', kantoStage: 'The road north of Vermilion (the canon space)', elsewhere: 'Flight North' },
+    badge: 'None', note: 'No badge: a surprise. Kanto shows it through cs-kanto-vermilion-flight.',
+  },
   'gn-12-door': {
     gn: 'gn.12', shape: 'Door', earliest: 'A5', home: 9, window: [7, 12], sits: 'optional', attaches: 'town', tags: ['Pseudo Stage', 'Hub Destination', 'Mystery Episode'],
     level: 'A+0', often: 'run', dressing: { kanto: "Maiden's Peak", kantoStage: 'The cliff town east of Vermilion (the canon space)', elsewhere: "Maiden's Peak" },
@@ -394,5 +513,6 @@ export const PLACEMENT: Record<string, Placement> = {
 };
 
 export const CHAINS: Json[] = [
+  { id: 'ps_gn_flight', name: 'Flight North', entry: 'gn-13-check', themeId: 'normal-flying', tint: FLIGHT_TINT, mood: 'open sky', start: 'opened' },
   { id: 'ps_gn_maiden', name: "Maiden's Peak", entry: 'gn-12-door', themeId: 'fairy-ghost', tint: MAIDEN_TINT, mood: 'festival lanterns', start: 'opened' },
 ];

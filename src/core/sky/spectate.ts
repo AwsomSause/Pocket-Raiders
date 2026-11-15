@@ -114,6 +114,8 @@ export function finishSpectate(content: Content, run: RunState, outcome: 'win' |
       run.story.flags['ev:pidgey-backed-spearow'] = 1;
     }
     run.story.flags['ev:pidgey-story'] = sky.phase === 'rivalry' ? 1 : 0;
+    // gn.13 Flight North: the bully is from this Spearow's flock when it was seen in the same region.
+    run.story.flags['ev:spearow-seen-region'] = run.regionIndex + 1;
     return lines;
   }
   const winner = outcome === 'win' ? 'pidgeot' : 'fearow';

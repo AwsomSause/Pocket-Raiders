@@ -129,5 +129,7 @@ export interface Placement {
   dressing?: { kanto: string; kantoStage?: string; elsewhere?: string };
   /** A story in several beats, each with its own stage, home and window. */
   beats?: { beat: string; event?: string; stage: string; home?: number; window?: [number, number] }[];
+  /** The map badge: its own (default), "?" or "None" (a surprise). */
+  badge?: string;
   note?: string;
 }

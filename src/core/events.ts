@@ -1384,7 +1384,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'pond':
       return applyPondEffect(content, run, e);
     case 'gn':
-      return applyGnEffect(content, run, e, { float: () => rng.float(), apply: (x) => applyEffect(content, run, x as EventEffect, rng, tradeUid), stage: stageNumber(content, run), region: currentRegion(content, run).id });
+      return applyGnEffect(content, run, e, { float: () => rng.float(), apply: (x) => applyEffect(content, run, x as EventEffect, rng, tradeUid), stage: stageNumber(content, run), region: currentRegion(content, run).id, met: (c) => conditionMet(content, run, c as EventCondition) });
     case 'stashParty':
       return stashParty(run) ? 'Your Pokémon are taken away' : '';
     case 'restoreParty':

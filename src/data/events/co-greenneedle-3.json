@@ -2,6 +2,22 @@
  "catalogOverhaul": "greenneedle",
  "override": true,
  "remove": [
+  "cs-kanto-vermilion-flight-c1",
+  "cs-kanto-vermilion-flight-c2",
+  "cs-kanto-vermilion-flight-c3",
+  "cs-kanto-vermilion-flight-c4",
+  "cs-kanto-vermilion-flight-c5",
+  "cs-kanto-vermilion-flight-c6",
+  "cs-kanto-vermilion-flight-c7",
+  "cs-kanto-vermilion-flight-goodbye",
+  "cs-kanto-vermilion-flight-n1",
+  "cs-kanto-vermilion-flight-w1",
+  "cs-kanto-vermilion-flight-w2",
+  "cs-kanto-vermilion-flight-w3",
+  "cs-kanto-vermilion-flight-w4",
+  "cs-kanto-vermilion-flight-w5",
+  "cs-kanto-vermilion-flight-w6",
+  "cs-kanto-vermilion-flight-w7",
   "cs-kanto-vermilion-maiden-eggs",
   "cs-kanto-vermilion-maiden-lantern",
   "cs-kanto-vermilion-maiden-n1",
@@ -5801,6 +5817,1156 @@
     }
    ],
    "canon": "cs.kanto.vermilion.maiden"
+  },
+  {
+   "id": "gn-13-check",
+   "name": "Flight North",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Evil Team"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "types": [
+    "normal",
+    "flying"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "flight-checked",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "The road north runs between high grass and a wide, empty sky.\n\nSomewhere above you, very faintly, three voices are clearing their throats.",
+   "choices": [
+    {
+     "label": "Keep walking.",
+     "success": {
+      "text": "You keep walking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flight-checked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "flight-stolen",
+        "n": 50,
+        "mods": [
+         {
+          "when": [
+           {
+            "kind": "gn",
+            "test": "lookAtLevel",
+            "types": [
+             "squad-lesser",
+             "squad-leader"
+            ],
+            "key": "gn-none"
+           }
+          ],
+          "n": -5
+         },
+         {
+          "when": [
+           {
+            "kind": "evil",
+            "heat": 6
+           }
+          ],
+          "n": -5
+         },
+         {
+          "when": [
+           {
+            "kind": "flag",
+            "key": "ssanne-trio-seen",
+            "atLeast": 1,
+            "atMost": 99
+           }
+          ],
+          "n": 5
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "partyHas",
+        "key": "flight-had-caterpie",
+        "species": [
+         "caterpie",
+         "metapod",
+         "butterfree"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "partyHas",
+        "key": "flight-had-weedle",
+        "species": [
+         "weedle",
+         "kakuna",
+         "beedrill"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "flight-stolen",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Nothing. A balloon crosses the sky, far off. It has a cat's face. Your Pokémon watch it all the way to the horizon, and walk a little closer to you after."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "flight-stolen",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "stash"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-flight-stolen",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-13-bully"
+         }
+        ],
+        "text": "*A shadow. You look up.*\n\n**Jessie:** \"Prepare for trouble!\"\n\n**James:** \"And you know the rest; we're on a schedule!\"\n\n*A net. A hook. A vacuum hose with a funnel on it.*\n\n**Meowth:** \"All of 'em! Even da little one! Meowth, dat's right!\"\n\n*Your lead reaches for you through the net. Then the balloon's a dot. Then it's nothing.*"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-13-bully",
+   "name": "Flight North: The Bully",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Evil Team"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "spearow",
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "*Grass. Sky. You sit up. The belt's empty. The bag's empty. Even the Poké Balls are gone.*\n\nA Spearow lands on your chest and pecks. You have nothing to fight it with. There is nobody to call.",
+   "choices": [
+    {
+     "label": "Cover your head.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "gn",
+         "test": "thisRegion",
+         "key": "spearow-seen-region"
+        }
+       ],
+       "text": "You know this Spearow. It's from the flock by the branch, the one that fought the Pidgey. Its flock wheels overhead, watching.\n\n*Then something small hits it from the side like a thrown shoe. The Spearow goes over. The small thing stands there, wobbling, as surprised as you are.*",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "flight-flock",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "roll",
+         "key": "flight-weedle",
+         "n": 50
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "flight-had-caterpie",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "flight-weedle",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "flight-had-weedle",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "flight-weedle",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "flight-weedle",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "caterpie"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "level": 5,
+           "direct": true
+          },
+          {
+           "kind": "flag",
+           "key": "kanto-flight-bug",
+           "amount": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "flight-weedle",
+         "min": 1,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "weedle"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "level": 5,
+           "direct": true
+          },
+          {
+           "kind": "flag",
+           "key": "kanto-flight-bug",
+           "amount": 2
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "pick",
+         "key": "flight-name",
+         "weights": [
+          1,
+          1,
+          1,
+          1
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "flight-name",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "flightNorth",
+           "action": "name",
+           "name": "Pip"
+          }
+         ],
+         "text": "It needs a name. You call it Pip. (You can call it something else from your party.)"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "flight-name",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "flightNorth",
+           "action": "name",
+           "name": "Nettle"
+          }
+         ],
+         "text": "It needs a name. You call it Nettle. (You can call it something else from your party.)"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "flight-name",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "flightNorth",
+           "action": "name",
+           "name": "Thimble"
+          }
+         ],
+         "text": "It needs a name. You call it Thimble. (You can call it something else from your party.)"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "flight-name",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "flightNorth",
+           "action": "name",
+           "name": "Button"
+          }
+         ],
+         "text": "It needs a name. You call it Button. (You can call it something else from your party.)"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-13-meadow"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "*Then something small hits the Spearow from the side like a thrown shoe.*\n\n*The Spearow goes over. The small thing stands there, wobbling.*\n\n*It looks at what it's done. It looks at you. It's as surprised as you are.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "flight-weedle",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "flight-had-caterpie",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "flight-weedle",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "flight-had-weedle",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "flight-weedle",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "flight-weedle",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "caterpie"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "level": 5,
+          "direct": true
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-flight-bug",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "flight-weedle",
+        "min": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "weedle"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "level": 5,
+          "direct": true
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-flight-bug",
+          "amount": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "flight-name",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "flight-name",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "flightNorth",
+          "action": "name",
+          "name": "Pip"
+         }
+        ],
+        "text": "It needs a name. You call it Pip. (You can call it something else from your party.)"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "flight-name",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "flightNorth",
+          "action": "name",
+          "name": "Nettle"
+         }
+        ],
+        "text": "It needs a name. You call it Nettle. (You can call it something else from your party.)"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "flight-name",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "flightNorth",
+          "action": "name",
+          "name": "Thimble"
+         }
+        ],
+        "text": "It needs a name. You call it Thimble. (You can call it something else from your party.)"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "flight-name",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "flightNorth",
+          "action": "name",
+          "name": "Button"
+         }
+        ],
+        "text": "It needs a name. You call it Button. (You can call it something else from your party.)"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-13-meadow"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-13-meadow",
+   "name": "Flight North: The Meadow",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Evil Team"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgey",
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "It follows you into the long grass. Every few steps it rears up and looks round, checking you're still there.\n\nTwo wild Pokémon are in the way. It is the only one of you that can fight. It knows it.",
+   "choices": [
+    {
+     "label": "Let it try.",
+     "success": {
+      "text": "It squares up, trembling, and gives two rising notes: its cry. You will know it anywhere, later.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "rattata",
+        "pidgey",
+        "nidoran-f",
+        "nidoran-m",
+        "oddish",
+        "bellsprout",
+        "sentret",
+        "zigzagoon"
+       ],
+       "types": [],
+       "level": 6,
+       "chain": 2,
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 2,
+         "who": "lead"
+        },
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "flight-flock",
+         "min": 1,
+         "then": [],
+         "text": "High up, the Spearow flock passes over, once. It doesn't come down."
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-13-cocoon"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "noCatch": true,
+        "noItems": true
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-13-cocoon",
+   "name": "Flight North: Cocoon Night",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Evil Team"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "*It wins. It hops. It nearly falls over. It looks back to see if you saw.*\n\nNight, and no fire. It spins a thread and begins to wrap itself in. It isn't afraid of the change. It's afraid you won't be there after.\n\n*It can't walk now. You carry it.*",
+   "choices": [
+    {
+     "label": "Carry it inside my coat.",
+     "success": {
+      "text": "You carry it against your chest, out of the wind. Through the shell, very faintly, you can feel it settle.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "caterpie",
+        "to": "metapod"
+       },
+       {
+        "kind": "formChange",
+        "from": "weedle",
+        "to": "kakuna"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-13-stream"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry it where it can see.",
+     "success": {
+      "text": "You carry it in your hands, held up, so it can watch the stars go over. It doesn't move. You think it's looking.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "caterpie",
+        "to": "metapod"
+       },
+       {
+        "kind": "formChange",
+        "from": "weedle",
+        "to": "kakuna"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-13-stream"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-13-stream",
+   "name": "Flight North: The Stream",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Evil Team"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "poliwag",
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "At the stream, something bigger comes out of the water. Your cocoon can't run. It can only Harden, and wait.",
+   "choices": [
+    {
+     "label": "Stay with it.",
+     "success": {
+      "text": "You put yourself beside it on the stones, close enough to feel the shell tick as it hardens.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "poliwag",
+        "psyduck",
+        "tentacool",
+        "goldeen"
+       ],
+       "types": [],
+       "level": 9,
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "rule": {
+        "noCatch": true,
+        "noItems": true,
+        "noAttacks": true,
+        "surviveTurns": 4
+       },
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 1,
+         "who": "lead"
+        },
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-13-hatch"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-13-hatch",
+   "name": "Flight North: Hatching",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Evil Team"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgey",
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "*It takes every hit. It doesn't make a sound.*\n\nIn the morning the shell splits. It comes out changed.\n\n*It's never had wings before. It flies into a tree. It tries again.*\n\nA flock of Pidgey lifts out of a dead oak, all at once, and turns on it.",
+   "choices": [
+    {
+     "label": "Stand together.",
+     "success": {
+      "text": "It doesn't look away from them. Neither do you.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "metapod",
+        "to": "butterfree"
+       },
+       {
+        "kind": "formChange",
+        "from": "kakuna",
+        "to": "beedrill"
+       },
+       {
+        "kind": "formChange",
+        "from": "caterpie",
+        "to": "butterfree"
+       },
+       {
+        "kind": "formChange",
+        "from": "weedle",
+        "to": "beedrill"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "pidgey"
+       ],
+       "types": [],
+       "level": 10,
+       "chain": 2,
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 4,
+         "who": "lead"
+        },
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "flight-flock",
+         "min": 1,
+         "then": [],
+         "text": "The Spearow flock passes over again, higher. This time it keeps going."
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-13-camp"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "noCatch": true,
+        "noItems": true
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-13-camp",
+   "name": "Flight North: The Trio's Camp",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Evil Team"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "A campfire, a balloon tethered to a tree, and by the fire, a cage. Your team is in it.\n\n*Your lead sees you through the bars. It doesn't make a sound either. It's learned that from somebody.*",
+   "choices": [
+    {
+     "label": "Slip in from the shadows.",
+     "success": {
+      "text": "You send it in low, out of the firelight, at the trio's guards.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Trio's Guards",
+       "team": [
+        "ekans",
+        "koffing"
+       ],
+       "level": 15,
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 4,
+         "who": "lead"
+        },
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-13-boss"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "noCatch": true,
+        "noItems": true
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-13-boss",
+   "name": "Flight North: The Boss",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Evil Team"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "venomoth",
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "**James:** \"It's a *bug.* You've come to rescue six Pokémon with a *bug.*\"\n\n**Jessie:** \"Venomoth, dear. Do tidy up.\"",
+   "choices": [
+    {
+     "label": "Fight!",
+     "success": {
+      "text": "It looks back at you once. Then it goes.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "metapod",
+        "to": "butterfree"
+       },
+       {
+        "kind": "formChange",
+        "from": "kakuna",
+        "to": "beedrill"
+       },
+       {
+        "kind": "formChange",
+        "from": "caterpie",
+        "to": "butterfree"
+       },
+       {
+        "kind": "formChange",
+        "from": "weedle",
+        "to": "beedrill"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Jessie & James",
+       "team": [
+        "venomoth"
+       ],
+       "level": 20,
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "rule": {
+        "noCatch": true,
+        "noItems": true,
+        "shinyRescue": true,
+        "evolveMid": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-13-goodbye"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-13-goodbye",
+   "name": "Flight North: Goodbye",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Evil Team"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "**Meowth:** \"Dere's TWO of 'em?!\"\n\n**All three:** \"We're blasting off agaaaain!\"\n\nYou open the cage. Your team pours out, every one of them talking at once, and every one of them at full strength.\n\n*The shiny one's waiting, on a branch, looking north.*",
+   "choices": [
+    {
+     "label": "Say goodbye.",
+     "success": {
+      "text": "*It looks at the shiny one. It looks at you.*\n\n*It does its victory hop, one more time. It doesn't fall over.*\n\n*They go.*",
+      "effects": [
+       {
+        "kind": "restoreParty"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-flight-gratitude",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flight-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A small Bug-type saved your whole team, then flew north.",
+        "importance": 85
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight",
+   "name": "Flight North",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Evil Team"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "types": [
+    "normal",
+    "flying"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "flight-checked",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "The road north runs between high grass and a wide, empty sky.\n\nSomewhere above you, very faintly, three voices are clearing their throats.",
+   "choices": [
+    {
+     "label": "Keep walking.",
+     "success": {
+      "text": "You keep walking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flight-checked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "flight-stolen",
+        "n": 50,
+        "mods": [
+         {
+          "when": [
+           {
+            "kind": "gn",
+            "test": "lookAtLevel",
+            "types": [
+             "squad-lesser",
+             "squad-leader"
+            ],
+            "key": "gn-none"
+           }
+          ],
+          "n": -5
+         },
+         {
+          "when": [
+           {
+            "kind": "evil",
+            "heat": 6
+           }
+          ],
+          "n": -5
+         },
+         {
+          "when": [
+           {
+            "kind": "flag",
+            "key": "ssanne-trio-seen",
+            "atLeast": 1,
+            "atMost": 99
+           }
+          ],
+          "n": 5
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "partyHas",
+        "key": "flight-had-caterpie",
+        "species": [
+         "caterpie",
+         "metapod",
+         "butterfree"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "partyHas",
+        "key": "flight-had-weedle",
+        "species": [
+         "weedle",
+         "kakuna",
+         "beedrill"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "flight-stolen",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Nothing. A balloon crosses the sky, far off. It has a cat's face. Your Pokémon watch it all the way to the horizon, and walk a little closer to you after."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "flight-stolen",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "stash"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-flight-stolen",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-13-bully"
+         }
+        ],
+        "text": "*A shadow. You look up.*\n\n**Jessie:** \"Prepare for trouble!\"\n\n**James:** \"And you know the rest; we're on a schedule!\"\n\n*A net. A hook. A vacuum hose with a funnel on it.*\n\n**Meowth:** \"All of 'em! Even da little one! Meowth, dat's right!\"\n\n*Your lead reaches for you through the net. Then the balloon's a dot. Then it's nothing.*"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.vermilion.flightnorth"
   }
  ]
 }

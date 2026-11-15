@@ -440,6 +440,34 @@
    "water"
   ]
  },
+ "gn-13-check": {
+  "gn": "gn.13",
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "level": "Always levels 5 to 20 inside",
+  "often": "run",
+  "dressing": {
+   "kanto": "Flight North",
+   "kantoStage": "The road north of Vermilion (the canon space)",
+   "elsewhere": "Flight North"
+  },
+  "badge": "None",
+  "note": "No badge: a surprise. Kanto shows it through cs-kanto-vermilion-flight.",
+  "kinds": [
+   "Interrupting Episode",
+   "Pseudo Stage",
+   "Companion Story",
+   "Finale"
+  ],
+  "tags": []
+ },
  "gn-12-door": {
   "gn": "gn.12",
   "shape": "Door",

@@ -18,7 +18,8 @@ Branch `claude/project-thread-uehq47`, draft PR #1314 into `ui-mockups`.
 | gn.10 The S.S. Anne | done, 10 tests pass (12 trainer cabins, trades A/B/Delta/secret, 11 optional rooms capped at 4, Dobbs-Leary, captain, rival, gift; Kanto: cs-kanto-vermilion-ssanne) | yes |
 | gn.11 Kaiju Tentacruel | done, 6 tests pass (rescues on a four-turn tide, Ned's hook, pylons, the raid with its four moves and Tentacool calls, free / defeat / float, the lost ending, the sea-battle return; Kanto: cs-kanto-vermilion-kaiju now an event, the canon den is no longer placed) | yes |
 | gn.12 Maiden's Peak | done, 5 tests pass (market hub: Lantern Row, TM Hall of 24 by type on two rotating boards, Swap Alley, Egg Row, stalls and boxes, Dusk Vendors, Madame Roux, Tea House; five sightings, two right turns of three = Blessing; Fairium Z or three Fairy HMs; Tea House hub every later stage; the portrait; Kanto: cs-kanto-vermilion-maiden) | yes |
-| gn.13–gn.62 | not started | |
+| gn.13 Flight North | done, 4 tests pass (must-see check at step 17, theft 50% ±5 for the Squad, Heat 6+ and the S.S. Anne trio; bully, meadow, cocoon, Harden-only stream, wings, camp, Jessie & James with the shiny rescue, goodbye returns the team; Kanto: cs-kanto-vermilion-flight, old flight rooms retired) | yes |
+| gn.14–gn.62 | not started | |
 | gn.new.01–38 | not started | |
 
 ## Limits (documented)
@@ -31,9 +32,11 @@ Branch `claude/project-thread-uehq47`, draft PR #1314 into `ui-mockups`.
 - gn.07 remembers an abandoned Pokémon by run flag `abandoned-mon`: gn.new.03 (The Ball That Wouldn't Open) and the Trubbish Nobody Wanted must set it.
 
 - gn.11 "Each turn, each party Pokémon can fight or rescue": the tide gives four turns; a Water- or Flying-type in the party rescues in one, otherwise two. Assists, boats and pylon stuns land before the fight, as boss HP already lost (6% per rescue, 9% boats, 6% per pylon stun, 6% more per stun the Machop braces); each pylon is +1 Attack for the boss. "Free it": the party's HP pays for the two turns of panicked swings (more if angered). The stage header "Something in the Harbour" from Step 1 is not shown (no stage-header hook). Out of Kanto there is no harbour market to shut. The Kaiju is no longer catchable (the gift is the Tentacool).
+- gn.13: Flight North fights can't be caught and allow no bag items (the team is gone). The S.S. Anne trio raises the theft odds (+5%), the Squad and Heat 6+ lower them.
 - gn.12 Swap Alley uses tradeFor (similar strength, wider, anything); the Honest Trade Card and nature pick wait for the markets row's `honestTrade`. Costume Stalls: ribbons are Bond (outfits for the player wait for an outfit system). The hatchery is a trade for a sand-warmed Egg that hatches after the next battle. The Fairy HMs are taught on the spot (no machine case to keep them). "Dusk" is the evening period.
 
 ## Fixes found on the way
+- Flight North's nickname made a half-built care record (no mood or fatigue), so every stat of the named Bug-type came out NaN and the first hit knocked it out: the name now goes on a full care record.
 - Door events (gn.03/04/06/07) used stop `dungeon`, so the Landmark Dungeon placer could pick them: now stop `event`.
 - Greenneedle items (Moon Stone Shard, Bottle-Cap Badge, Damian's badge) are gift-only, so they never enter reward drafts (old-seed fingerprint back to green).
 - Event fight rules' stat stages (`stages`/`myStages`/`foeStages`) now also apply to wild event fights.

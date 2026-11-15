@@ -648,7 +648,7 @@
     {
       "id": "ps_flight_north",
       "name": "Flight North",
-      "entry": "cs-kanto-vermilion-flight",
+      "entry": "cs-kanto-vermilion-flight-n1",
       "themeId": "normal-flying",
       "tint": "#2f5d73",
       "mood": "open sky"

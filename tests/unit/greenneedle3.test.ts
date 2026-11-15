@@ -215,3 +215,90 @@ describe("gn.12 Maiden's Peak", () => {
     expect(content.catalog.get('hm-moonblast')!.effect).toMatchObject({ kind: 'teachMove', move: 'moonblast' });
   });
 });
+
+describe('gn.13 Flight North', () => {
+  const check = (seed: string, setup: (run: RunState) => void = () => {}) => {
+    const run = gnRun(seed);
+    setup(run);
+    open(run, 'gn-13-check');
+    return choose(run, 'gn-13-check', 'Keep walking.');
+  };
+  const stolenSeed = (): string => {
+    for (let i = 0; i < 60; i++) if (flagOf(check(`gn13-${i}`).run, 'flight-stolen') === 1) return `gn13-${i}`;
+    throw new Error('no seed');
+  };
+
+  it('a must-see check at step 17 (window 15 to 19), before the battle, with no badge; the odds move with the Squad, Heat and the S.S. Anne', () => {
+    expect(content.coPlacement!.get('gn-13-check')).toMatchObject({ home: 17, window: [15, 19], sits: 'must-see', attaches: 'before', badge: 'none' });
+    const odds = (setup: (run: RunState) => void) => {
+      let n = 0;
+      for (let i = 0; i < 200; i++) n += flagOf(check(`gn13-odds-${i}`, setup).run, 'flight-stolen');
+      return n;
+    };
+    const base = odds(() => {});
+    expect(base).toBeGreaterThan(70);
+    expect(base).toBeLessThan(130);
+    // The same seeds, so the counts can only move one way.
+    expect(odds((run) => setFlag(run, 'ssanne-trio-seen'))).toBeGreaterThan(base);
+    expect(odds((run) => { run.party[0]!.look = 'squad-lesser'; })).toBeLessThan(base);
+    const roll = content.events.get('gn-13-check')!.choices[0]!.success.effects.find((e) => e.kind === 'gn' && (e as { op: string }).op === 'roll') as { mods: { n: number }[] };
+    expect(roll.mods.map((m) => m.n)).toEqual([-5, -5, 5]);
+  });
+
+  it('the theft takes every Pokémon (stored, never lost); a Caterpie or a Weedle at level 5 saves you, and gets a name', () => {
+    const r = check(stolenSeed());
+    expect([r.text, ...r.changes].join(' ')).toContain('Prepare for trouble');
+    let run = r.run;
+    expect(run.stage!.pseudo?.id).toMatch(/flight/);
+    expect(run.party.length).toBe(0);
+    const bully = choose(run, 'gn-13-bully', 'Cover your head.');
+    run = bully.run;
+    expect(run.party.length).toBe(1);
+    expect(['caterpie', 'weedle']).toContain(run.party[0]!.speciesId);
+    expect(run.party[0]!.level).toBe(5);
+    expect(['Pip', 'Nettle', 'Thimble', 'Button']).toContain(run.party[0]!.care?.nickname);
+    expect(flagOf(run, 'kanto-flight-bug')).toBeGreaterThan(0);
+  });
+
+  it('carried a Weedle from the forest: it is a Weedle; seen the Spearow flock this region: the bully is from it', () => {
+    const seed = stolenSeed();
+    let run = gnRun(seed);
+    run.party[0]!.speciesId = 'kakuna';
+    run.story.flags['ev:spearow-seen-region'] = run.regionIndex + 1;
+    open(run, 'gn-13-check');
+    run = choose(run, 'gn-13-check', 'Keep walking.').run;
+    const bully = choose(run, 'gn-13-bully', 'Cover your head.');
+    expect(bully.run.party[0]!.speciesId).toBe('weedle');
+    expect(bully.text).toContain('flock');
+    expect(flagOf(bully.run, 'flight-flock')).toBe(1);
+  });
+
+  it('seven nodes at levels 5 to 20: cocoon, a Harden-only stream, wings, the camp, the Venomoth with the shiny rescue; then the team comes back', () => {
+    const seed = stolenSeed();
+    const team = gnRun(seed).party.map((m) => m.speciesId);
+    let run = choose(check(seed).run, 'gn-13-bully', 'Cover your head.').run;
+    teach(run, 0, 'tackle'); // the test player always attacks (the plain autoplay likes String Shot)
+    const meadow = choose(run, 'gn-13-meadow', 'Let it try.').run;
+    expect(meadow.battle!.enemyTeam[0]!.level).toBe(6);
+    run = win(meadow);
+    run = choose(run, 'gn-13-cocoon', 'Carry it where it can see.').run;
+    expect(['metapod', 'kakuna']).toContain(run.party[0]!.speciesId);
+    const stream = choose(run, 'gn-13-stream', 'Stay with it.').run;
+    expect(stream.battle!.eventRule).toMatchObject({ noAttacks: true, surviveTurns: 4 });
+    run = win(stream);
+    const hatch = choose(run, 'gn-13-hatch', 'Stand together.').run;
+    expect(['butterfree', 'beedrill']).toContain(hatch.party[0]!.speciesId);
+    run = win(hatch);
+    run = win(choose(run, 'gn-13-camp', 'Slip in from the shadows.').run);
+    const boss = choose(run, 'gn-13-boss', 'Fight!').run;
+    expect(boss.battle!.enemyTeam[0]!).toMatchObject({ speciesId: 'venomoth', level: 20 });
+    expect(boss.battle!.eventRule).toMatchObject({ shinyRescue: true });
+    run = win(boss);
+    const bye = choose(run, 'gn-13-goodbye', 'Say goodbye.').run;
+    expect(bye.party.map((m) => m.speciesId)).toEqual(team); // the team comes back; the bug flies north
+    expect(bye.party.every((m) => m.hp === maxHp(content, m))).toBe(true);
+    expect(flagOf(bye, 'kanto-flight-gratitude')).toBe(1);
+    expect(bye.expansion?.flightNorth?.state).toBe('ready');
+    expect(content.events.get('cs-kanto-vermilion-flight-c7')!.disabled).toBe(true);
+  });
+});

@@ -6860,7 +6860,7 @@ function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
     const hero = ctx.party[battle.activeIndex];
     if (hero && hero.hp > 0 && hero.hp * 4 < calcStats(ctx.content, hero).hp) {
       battle.storyEffects.push('shiny-rescue');
-      events.push({ type: 'raid', tone: 'phase', text: `A shiny ${nameOf(ctx, hero)} swoops in and knocks out ${getSpecies(ctx.content, enemy.speciesId).name} with one move!`, cameo: { speciesId: hero.speciesId, shiny: true, kind: 'rescue' } });
+      events.push({ type: 'raid', tone: 'phase', text: `A second cry: two rising notes, from above. A shiny ${nameOf(ctx, hero)} comes down out of the sun and goes through ${getSpecies(ctx.content, enemy.speciesId).name} like a thrown stone!`, cameo: { speciesId: hero.speciesId, shiny: true, kind: 'rescue' } });
       enemy.hp = 0;
     }
   }

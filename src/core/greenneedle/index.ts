@@ -62,11 +62,13 @@ export interface GnHost {
   stage: number;
   /** The run's current region id. */
   region: string;
+  /** Whether an ordinary event condition holds now (roll modifiers). */
+  met?: (condition: unknown) => boolean;
 }
 
 /** A Greenneedle condition. */
 export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage: number): boolean {
-  if (c.test === 'lookAtLevel') return run.party.some((m) => m.look === c.types![0] && m.level >= gnFlag(run, c.key!));
+  if (c.test === 'lookAtLevel') return run.party.some((m) => !!m.look && c.types!.includes(m.look) && m.level >= gnFlag(run, c.key!));
   if (c.test === 'notRegion') return !c.types!.includes(run.regionOrder[run.regionIndex] ?? '');
   if (c.test === 'holdsBerry') return run.party.some((m) => Object.entries(m.held ?? {}).some(([id, n]) => n > 0 && id.endsWith('-berry')));
   if (c.test === 'cutter') return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return !!mv && mv.category !== 'status' && (mv.flags.includes('slicing') || s.id.includes('claw')); }));
@@ -111,9 +113,11 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       if (e.key === 'duelist') setGnFlag(run, FOREST.duelist, 0);
       for (const mon of run.party) if (mon.gn) mon.gn = mon.gn.filter((t) => t !== e.key && !t.startsWith(`${e.key}:`));
       return '';
-    case 'roll':
-      setGnFlag(run, e.key!, host.float() * 100 < e.n! ? 1 : 0);
+    case 'roll': {
+      const odds = e.n! + (e.mods ?? []).filter((m) => m.when.every((c) => host.met?.(c) ?? false)).reduce((sum, m) => sum + m.n, 0);
+      setGnFlag(run, e.key!, host.float() * 100 < odds ? 1 : 0);
       return '';
+    }
     case 'pick': {
       const total = e.weights!.reduce((a, b) => a + b, 0);
       let at = host.float() * total;
