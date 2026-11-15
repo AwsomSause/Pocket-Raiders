@@ -329,6 +329,48 @@ test('New UI: Party opens as the mock-up page; Enter opens the Summary with its 
   expect(errors).toEqual([]);
 });
 
+test('New UI: the Bag shows its pockets, the item window and who the item helps; Use heals the chosen Pokémon', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  // A hurt lead and a healthy twin, with Potions to use: the strip must tell the two apart.
+  await page.evaluate(() => {
+    const run = (window as any).__pkr.session.run;
+    const twin = JSON.parse(JSON.stringify(run.party[0]));
+    twin.uid = 'e2e-twin';
+    run.party.push(twin);
+    run.party[0].hp = 1;
+    run.inventory = { potion: 2 };
+  });
+  await view(page, 'Map').first().locator('[data-act="pick"]', { hasText: 'Bag' }).first().click();
+  const top = () => view(page, 'Map').last();
+  await expect(top().locator('.hd')).toContainText('Bag');
+  // Pockets: "All" and the Potion's own pocket.
+  expect(await top().locator('[data-act="tab"]').count()).toBeGreaterThanOrEqual(2);
+  await expect(top().locator('.btn.on[data-over]')).toContainText('Potion');
+  await expect(top().locator('.btn.on[data-over]')).toContainText('×2');
+  await expect(top()).toContainText('Restores 20 HP');
+  await expect(top()).toContainText('Can use');
+  await expect(top()).toContainText('No effect');
+  // The second pocket still lists the Potion; the first tab goes back.
+  await page.waitForTimeout(250);
+  await top().locator('[data-act="tab"]').nth(1).click();
+  await expect(top().locator('[data-act="tab"]').nth(1)).toHaveClass(/on/);
+  await expect(top().locator('.btn.on[data-over]')).toContainText('Potion');
+  await page.waitForTimeout(250);
+  await top().locator('[data-act="tab"]').first().click();
+  await expect(top().locator('[data-act="tab"]').first()).toHaveClass(/on/);
+  // The window's button uses the item: pick the hurt lead, and it is healed for one Potion (how much depends on the run's heal bonus).
+  await page.waitForTimeout(250);
+  await top().locator('.win [data-act="pick"]', { hasText: 'Use' }).click();
+  await expect(top().locator('.hd')).toContainText('Use the Potion');
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Enter');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.party[0].hp)).toBeGreaterThanOrEqual(21);
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.inventory.potion)).toBe(1);
+  expect(errors).toEqual([]);
+});
+
 test('UI style: Old shows no New layer; the address can ask for either', async ({ page }) => {
   const errors = watch(page);
   // An automated browser gets Old by default (the older specs rely on it).
