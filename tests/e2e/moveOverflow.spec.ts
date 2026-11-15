@@ -14,6 +14,8 @@ for (const style of ['original', 'classic', 'cyber']) {
       await page.waitForTimeout(250);
     }
     await page.waitForFunction(() => (window as any).__pkr.game.scene.getScene('Map').busy === false);
+    // A plain first fight: no placed event opens before it.
+    await page.evaluate(() => { for (const n of (window as any).__pkr.session.run.stage.map.nodes) if (n.column === 1) n.sides = []; });
     await page.keyboard.press('Enter');
     await page.waitForFunction(() => (window as any).__pkr.activeScene() === 'Battle', null, { timeout: 20_000 });
     await confirmToMenu(page, 30_000);

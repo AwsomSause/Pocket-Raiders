@@ -104,6 +104,8 @@ test('repeated battles do not pile up textures, objects or tweens', async ({ pag
     await confirmToMenu(page);
     await page.waitForTimeout(400);
   };
+  // A plain first fight: no placed event opens before it.
+  await page.evaluate(() => { for (const n of (window as any).__pkr.session.run.stage.map.nodes) if (n.column === 1) n.sides = []; });
   await page.keyboard.press('Enter'); // the first node: a battle
   await waitForScene(page, 'Battle');
   // Warm up: lazy art for the first battle (animation sheets, fallbacks) can still be arriving after the first restart on a
