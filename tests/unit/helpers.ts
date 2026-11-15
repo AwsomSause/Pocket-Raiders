@@ -22,6 +22,14 @@ export function toBattle(run: RunState, c: Content = content): RunState {
     return chooseEvent(c, run, waiting, Math.max(0, pick)).run;
   }
   const choices = mapChoices(c, run);
+  // A chain pseudo-stage (the Kanto lines, R23's race) walks room to room: a room still waiting here is played, not walked past.
+  if (choices.length === 0 && run.stage?.pseudo?.chain && run.stage.current !== null) {
+    const room = run.stage.map.nodes.find((n) => n.id === run.stage!.current)?.sides.find((x) => x.kind === 'event' && !x.used);
+    if (room) {
+      const pick = eventView(c, run, room.id).choices.findIndex((ch) => !ch.locked);
+      return chooseEvent(c, run, room.id, Math.max(0, pick)).run;
+    }
+  }
   const node = choices.find((n) => !n.harder) ?? choices[0]!;
   const next = chooseNode(c, run, node.id);
   // Scripted fights in tests expect one foe: an SOS call is marked as already used (tests/unit/sos.test.ts covers calls).
