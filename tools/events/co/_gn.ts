@@ -81,6 +81,17 @@ export const fossil = (table: 'local' | 'far'): Json => gn('fossil', { key: tabl
 /** Remembers the region the player is in now; `regionChanged(key)` holds once they are in a later one. */
 export const stampRegion = (key: string): Json => gn('stampRegion', { key });
 export const regionChanged = (key: string): Json => ({ kind: 'gn', test: 'regionChanged', key });
+/** The run flag becomes 1 when a party Pokémon is one of these species, else 0. */
+export const partyHas = (key: string, ...species: string[]): Json => gn('partyHas', { key, species });
+/** Holds when no party Pokémon knows a move of any of these types. */
+export const noMoveOf = (...types: string[]): Json => ({ kind: 'gn', test: 'noMoveType', types });
+/** One item by weight: `pick` then one `when` per entry (the flag `key` keeps which one). */
+export const weighted = (key: string, table: [string, number][]): Json[] => [
+  pick(key, ...table.map(([, w]) => w)),
+  ...table.map(([id], i) => when(key, { min: i + 1, max: i + 1 }, [{ kind: 'item', id, count: 1 }])),
+];
+/** Holds unless the flag was stamped (`stampRegion`) in this region. */
+export const notThisRegion = (key: string): Json => ({ kind: 'gn', test: 'notThisRegion', key });
 export const leavePseudo = (): Json => ({ kind: 'leavePseudo' });
 export const teach = (move: string, o: Json = {}): Json => ({ kind: 'teachMove', move, ...o });
 export const moment = (text: string, importance = 60): Json => ({ kind: 'moment', text, importance });

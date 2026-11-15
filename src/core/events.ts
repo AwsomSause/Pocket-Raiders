@@ -115,7 +115,7 @@ export function stageNumber(content: Content, run: RunState): number {
 export function conditionMet(content: Content, run: RunState, c: EventCondition): boolean {
   switch (c.kind) {
     case 'gn':
-      return gnConditionMet(run, c);
+      return gnConditionMet(content, run, c);
     case 'money':
       return run.money >= c.atLeast;
     case 'partySize':
@@ -1880,7 +1880,7 @@ export function eventBattleCaught(content: Content, run: RunState, event: EventB
 
 /** The consolation prize of a lost pseudo-stage fight (`lose` effects of the battle that was lost). */
 export function eventBattleLost(content: Content, run: RunState, event: EventBattleRef): string[] {
-  const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
+  const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   if (!battle || (battle.kind !== 'trainer' && battle.kind !== 'raid') || !battle.lose?.length) return [];
   const rng = new Rng(hashSeed(`${run.seed}::event-lose::${stageKey(run)}::${event.sideId}`));

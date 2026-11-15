@@ -6,6 +6,9 @@ import type { Content } from '../contentSchema';
 import type { PlayerAction } from '../battle/engine';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import type { GnCond, GnEffect } from './schema';
+import { addLevels, isUsableMove, maxHp } from '../pokemon';
+import { typeEffectiveness } from '../battle/damage';
+import type { TypeName } from '../contentSchema';
 
 type Cue = { type: 'spectacle'; kind: 'arena'; side: 'player' | 'enemy'; text: string; uid?: string };
 const cue = (side: 'player' | 'enemy', text: string, uid?: string): Cue => ({ type: 'spectacle', kind: 'arena', side, text, ...(uid ? { uid } : {}) });
@@ -61,8 +64,10 @@ export interface GnHost {
 }
 
 /** A Greenneedle condition. */
-export function gnConditionMet(run: RunState, c: GnCond): boolean {
-  const stamped = gnFlag(run, c.key);
+export function gnConditionMet(content: Content, run: RunState, c: GnCond): boolean {
+  if (c.test === 'noMoveType') return !run.party.some((m) => m.moves.some((s) => c.types!.includes(content.moves.get(s.id)?.type ?? '')));
+  const stamped = gnFlag(run, c.key!);
+  if (c.test === 'notThisRegion') return stamped !== run.regionIndex + 1;
   return stamped > 0 && stamped < run.regionIndex + 1;
 }
 
@@ -129,6 +134,9 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'stampRegion':
       setGnFlag(run, e.key!, run.regionIndex + 1);
       return '';
+    case 'partyHas':
+      setGnFlag(run, e.key!, run.party.some((m) => e.species!.includes(m.speciesId)) ? 1 : 0);
+      return '';
     case 'stageMod':
       setGnFlag(run, e.key!, host.stage % e.n!);
       return '';
@@ -152,7 +160,7 @@ const guards = (content: Content, mon: PokemonInstance, index: number): boolean 
 };
 
 /** When an event fight begins: the forest's fog dulls everyone's aim, and a trusting duelist moves first on its first move (the token Kindness uses). */
-export function gnBattleStart(_content: Content, run: RunState): void {
+export function gnBattleStart(content: Content, run: RunState): void {
   const battle = run.battle;
   if (!battle) return;
   if (gnFlag(run, FOREST.inside) > 0 && gnFlag(run, FOREST.fog) > 0) battle.accuracyMult = 0.9;
@@ -163,8 +171,54 @@ export function gnBattleStart(_content: Content, run: RunState): void {
   // Damian's friends (gn.05): Tully uses Splash twice, on purpose; Bex spends a turn finding the attack button.
   if (battle.eventRule?.gn === 'tully') battle.storyEffects.push(`${FOE_WAITS}Tully's Pokémon uses Splash! On purpose.`, `${FOE_WAITS}Tully's Pokémon uses Splash again! Tully looks very pleased.`);
   if (battle.eventRule?.gn === 'bex') battle.storyEffects.push(`${FOE_WAITS}Bex is looking for the attack one. "TOP LEFT!" shouts Damian, from the back.`);
+  if (battle.eventRule?.gn === 'damian') trainAce(content, battle.enemyTeam[battle.enemyTeam.length - 1], battle.eventRule.ace ?? 1);
   const lead = run.party[battle.activeIndex];
   if (battle.eventRule?.gn === 'samurai' && lead && lead.friendship >= BOND_THREE) battle.storyEffects.push(`kind:${lead.uid}`);
+}
+
+/** A type's own boosting item: what a trainer who thought about it would give the ace to hold. */
+const TYPE_HELD: Record<string, string> = {
+  normal: 'silk-scarf', fighting: 'black-belt', flying: 'sharp-beak', poison: 'poison-barb', ground: 'soft-sand', rock: 'hard-stone', bug: 'silver-powder',
+  ghost: 'spell-tag', steel: 'metal-coat', fire: 'charcoal', water: 'mystic-water', grass: 'miracle-seed', electric: 'magnet', psychic: 'twistedspoon',
+  ice: 'nevermeltice', dragon: 'dragon-fang', dark: 'blackglasses', fairy: 'fairy-feather',
+};
+
+/**
+ * Damian's ace (gn.05): "This one I actually trained." It stands `plus` levels above the team, holds its type's booster, and keeps its first two
+ * moves while the last two answer its two worst weaknesses (the strongest damaging move it can learn of a type that hits each one hard).
+ */
+/** Every move the species can learn (level-up, TM/tutor, egg), as rivals/coverage.ts counts it (not imported: it would load rivals before events). */
+function learnPool(content: Content, speciesId: string): string[] {
+  const sp = content.species.get(speciesId);
+  if (!sp) return [];
+  const base = sp.form?.base;
+  return [...new Set([...sp.learnset.map((e) => e.move), ...(content.learnables.get(speciesId) ?? (base ? content.learnables.get(base) : undefined) ?? []), ...(content.eggMoves.get(speciesId) ?? [])])];
+}
+
+export function trainAce(content: Content, ace: PokemonInstance | undefined, plus: number): void {
+  if (!ace) return;
+  if (plus > 0) {
+    addLevels(content, ace, plus);
+    ace.hp = maxHp(content, ace);
+  }
+  const species = content.species.get(ace.speciesId);
+  const held = species?.types[0] ? TYPE_HELD[species.types[0]] : undefined;
+  if (held && content.catalog.get(held)?.status === 'supported') ace.held = { [held]: 1 };
+  const pool = learnPool(content, ace.speciesId).filter((id) => isUsableMove(content, id) && (content.moves.get(id)?.power ?? 0) > 0);
+  const types = Object.keys(content.typeChart) as TypeName[];
+  const hits = (moveId: string, target: TypeName): boolean => typeEffectiveness(content.typeChart, content.moves.get(moveId)!.type as TypeName, [target]) >= 2;
+  const weak = species ? types.filter((t) => typeEffectiveness(content.typeChart, t, species.types as TypeName[]) >= 2) : [];
+  const picked: string[] = [];
+  for (const w of weak) {
+    if (picked.length >= 2) break;
+    const best = pool
+      .filter((id) => !picked.includes(id) && !ace.moves.slice(0, 2).some((m) => m.id === id) && hits(id, w))
+      .sort((a, b) => (content.moves.get(b)!.power ?? 0) - (content.moves.get(a)!.power ?? 0) || a.localeCompare(b))[0];
+    if (best) picked.push(best);
+  }
+  if (picked.length === 0) return;
+  const kept = ace.moves.slice(0, 4 - picked.length);
+  ace.moves = [...kept, ...picked.map((id) => ({ id, pp: content.moves.get(id)!.pp }))];
 }
 
 /** Before the player's command is played: a Greenneedle rule may answer it. Returns the action to play and lines to show first. */

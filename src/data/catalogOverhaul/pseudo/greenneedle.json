@@ -3,6 +3,15 @@
  "note": "Greenneedle pseudo stages (chains): the map is drawn from each door event's rooms. Built by tools/catalog-overhaul/gn-data.ts.",
  "chains": [
   {
+   "id": "ps_gn_moon",
+   "name": "Mt. Moon",
+   "entry": "gn-04-door",
+   "themeId": "rock-fairy",
+   "tint": "#2a2440",
+   "mood": "moonlight",
+   "start": "opened"
+  },
+  {
    "id": "ps_gn_forest",
    "name": "Viridian Forest: The Samurai's Challenge",
    "entry": "gn-03-door",

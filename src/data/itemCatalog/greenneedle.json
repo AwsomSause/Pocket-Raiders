@@ -1,0 +1,41 @@
+[
+  {
+    "id": "moon-shard",
+    "name": "Moon Stone Shard",
+    "family": "Valuables",
+    "description": "A sliver of Moon Stone the Clefairy left behind on the cave floor. Too small to evolve anything. Sell for ₽400",
+    "rarity": "uncommon",
+    "stacksOn": "player",
+    "max": null,
+    "how": "use",
+    "icon": "library/starshard1",
+    "status": "supported",
+    "effect": { "kind": "money", "amount": 400, "changes": {} }
+  },
+  {
+    "id": "bottle-cap-badge",
+    "name": "Bottle-Cap Badge",
+    "family": "Charms",
+    "description": "Damian made it himself. It counts for nothing and you keep it anyway: +5% prize money from trainers",
+    "rarity": "rare",
+    "stacksOn": "player",
+    "max": 1,
+    "how": "passive",
+    "icon": "library/bottlecap",
+    "status": "supported",
+    "effect": { "kind": "passive", "passive": "trainerMoney", "percent": 5 }
+  },
+  {
+    "id": "damian-badge",
+    "name": "Damian's Badge",
+    "family": "Charms",
+    "description": "A real badge from an inspected Gym, with a certificate behind it: another +5% prize money from trainers",
+    "rarity": "epic",
+    "stacksOn": "player",
+    "max": 1,
+    "how": "passive",
+    "icon": "library/surgebadge",
+    "status": "supported",
+    "effect": { "kind": "passive", "passive": "trainerMoney", "percent": 5 }
+  }
+]

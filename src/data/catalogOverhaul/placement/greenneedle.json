@@ -1,4 +1,86 @@
 {
+ "gn-04-door": {
+  "gn": "gn.04",
+  "shape": "Door",
+  "earliest": "A1",
+  "home": 12,
+  "window": [
+   10,
+   15
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "tags": [
+   "Pseudo Stage",
+   "Exploration"
+  ],
+  "level": "A+0",
+  "often": "run",
+  "needs": [
+   "cave",
+   "high"
+  ],
+  "dressing": {
+   "kanto": "Mt. Moon",
+   "kantoStage": "Pewter (after the forest)",
+   "elsewhere": "The Moonlit Cave"
+  },
+  "note": "Seven nodes, three episodes. Needs a cave OR high stage (either tag). Raid marks read team-raid-moon-won / team-raid-moon-lost."
+ },
+ "gn-05-barn": {
+  "gn": "gn.05",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   7,
+   13
+  ],
+  "sits": "optional",
+  "tags": [
+   "Rival Episode"
+  ],
+  "level": "friends A-2, Damian A+0, ace A+1",
+  "often": "region",
+  "dressing": {
+   "kanto": "Outside Cerulean",
+   "kantoStage": "Cerulean",
+   "elsewhere": "Damian's Unofficial Gym"
+  },
+  "beats": [
+   {
+    "beat": "Meeting 1: the barn",
+    "event": "gn-05-barn",
+    "stage": "A3",
+    "home": 9,
+    "window": [
+     7,
+     13
+    ]
+   },
+   {
+    "beat": "Meeting 2: a rented hall (next region)",
+    "event": "gn-05-hall",
+    "stage": "next region",
+    "home": 9,
+    "window": [
+     7,
+     13
+    ]
+   },
+   {
+    "beat": "Meeting 3: an inspected Gym (the region after)",
+    "event": "gn-05-gym",
+    "stage": "region after",
+    "home": 9,
+    "window": [
+     7,
+     13
+    ]
+   }
+  ],
+  "note": "At most once per region; walking past costs nothing; never the stage's Gym."
+ },
  "gn-03-door": {
   "gn": "gn.03",
   "shape": "Door",
