@@ -88,6 +88,8 @@ import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
 import { climaxCutOf } from './arc/climaxExtended';
 import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
 import { checkFlagKeys } from './shadow2/keys';
+import { bondLevel, bondLevelMet, fitsMatch, whoOf, whoWords } from './co/who';
+import { oweNodes } from './co/takeNode';
 import { noteSpecial } from './expansion/fieldNotes';
 import { grantNamedShadow } from './shadow2/grant';
 import type { MapNode, RunState, SideStop } from './state';
@@ -180,6 +182,10 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     }
     case 'friendship':
       return run.party.some((m) => m.friendship >= c.atLeast);
+    case 'bondLevel':
+      return bondLevelMet(content, run, c.atLeast, c.who) !== (c.absent === true);
+    case 'partyTypes':
+      return run.party.some((m) => m.hp > 0 && (content.species.get(m.speciesId)?.types ?? []).some((t) => c.types.includes(t)));
     case 'rivalMet':
       return run.story.rivals.some((r) => r.encounters >= c.atLeast);
     case 'rivalAlly':
@@ -302,8 +308,8 @@ function tradePicksOf(content: Content, run: RunState, choice: EventChoice): { u
   const e = choice.success.effects.find((f) => f.kind === 'tradeAway' || f.kind === 'tradeFor');
   // Catalog Overhaul: a "pick a Pokémon" choice lists the whole party (or only the given types).
   if (!e && choice.pick) {
-    const types = choice.pick.types;
-    return run.party.filter((m) => types.length === 0 || (content.species.get(m.speciesId)?.types ?? []).some((t) => types.includes(t))).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
+    const { types, moveFlag, bond } = choice.pick;
+    return run.party.filter((m) => fitsMatch(content, m, { ...(types.length > 0 ? { types } : {}), ...(moveFlag ? { moveFlag } : {}) }) && (bond === undefined || bondLevel(content, m) >= bond)).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
   }
   if (!e || (e.kind !== 'tradeAway' && e.kind !== 'tradeFor')) return null;
   return tradeCandidates(content, run, e.want).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
@@ -311,6 +317,7 @@ function tradePicksOf(content: Content, run: RunState, choice: EventChoice): { u
 
 /** Why a choice's trade cannot happen yet, in words (null when it can or the choice has no trade). */
 function tradeMissing(content: Content, run: RunState, choice: EventChoice): string | null {
+  if (choice.pick && tradePicksOf(content, run, choice)?.length === 0) return 'Needs a Pokémon that fits';
   if (choice.success.effects.some((e) => e.kind === 'copyMoves') && run.party.length < 2) return 'Needs 2 Pokémon in your party';
   for (const e of choice.success.effects) {
     if (e.kind !== 'tradeAway' && e.kind !== 'tradeFor') continue;
@@ -373,6 +380,10 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs a team member who fainted recently';
     case 'friendship':
       return `Needs a Pokémon with friendship ${c.atLeast}`;
+    case 'bondLevel':
+      return c.absent ? `Only while no Pokémon has Bond ${c.atLeast}` : `Needs ${c.who === 'any' ? 'a Pokémon' : whoWords(c.who)} with Bond ${c.atLeast}`;
+    case 'partyTypes':
+      return `Needs ${/^[aeiou]/.test(c.types[0]!) ? 'an' : 'a'} ${c.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join('- or ')}-type Pokémon`;
     case 'rivalAlly':
       return 'Needs a rival who has become a friend';
     case 'friendHere':
@@ -946,7 +957,9 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'status':
       return `${e.who === 'lead' ? 'lead' : 'party'} ${e.status === 'paralysis' ? 'paralysed' : e.status === 'sleep' ? 'asleep' : e.status === 'burn' ? 'burned' : 'poisoned'}`;
     case 'friendship':
-      return `friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
+      return `${e.who === 'party' ? '' : `${whoWords(e.who)}: `}friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
+    case 'takeNode':
+      return e.back ? 'a step back along the road (nothing is refought)' : `takes your next ${e.nodes === 1 ? 'node' : `${e.nodes} nodes`} (no battle there)`;
     case 'attribute': {
       const label = e.key === 'ragePeace' ? (e.amount >= 0 ? 'Rage' : 'Peace') : e.key === 'goodEvil' ? (e.amount >= 0 ? 'Good' : 'Evil') : ATTRIBUTE_LABELS[e.key];
       return `${label} +${Math.abs(e.amount)}`;
@@ -954,7 +967,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'research':
       return `+${e.amount} Research Points`;
     case 'levels':
-      return `${e.who === 'party' ? 'party' : e.who === 'weakest' ? 'lowest-level Pokémon' : 'lead'} +${e.amount} level${e.amount === 1 ? '' : 's'}`;
+      return `${whoWords(e.who)} +${e.amount} level${e.amount === 1 ? '' : 's'}`;
     case 'join':
       return e.shadow ? 'a Shadow Pokémon is rescued' : e.blissful ? 'a Blissful Pokémon joins' : 'a Pokémon joins';
     case 'canon':
@@ -1130,12 +1143,6 @@ export function isGiftable(content: Content, id: string): boolean {
 }
 
 /** Applies one effect (mutates `run`) and says what changed, or '' when nothing did. */
-/** The Pokémon a "pick a Pokémon" choice named, or the lead (the first able to fight) when none was. */
-function pickedMon(run: RunState, uid?: string): RunState['party'] {
-  const mon = run.party.find((m) => m.uid === uid) ?? run.party.find((m) => m.hp > 0) ?? run.party[0];
-  return mon ? [mon] : [];
-}
-
 export function applyEffect(content: Content, run: RunState, e: EventEffect, rng: Rng, tradeUid?: string): string {
   switch (e.kind) {
     case 'money': {
@@ -1231,10 +1238,13 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'friendship': {
       const gain = runAttributeEffects(content, run).friendship;
-      const who = e.who === 'picked' ? pickedMon(run, tradeUid) : e.who === 'lead' ? run.party.filter((m) => m.hp > 0).slice(0, 1) : run.party;
+      const who = whoOf(content, run, e.who, tradeUid);
       for (const m of who) changeFriendship(content, m, e.amount, e.amount > 0 ? gain : 1);
-      return effectWords(content, e);
+      return who.length > 0 ? effectWords(content, e) : '';
     }
+    case 'takeNode':
+      if (!e.back) oweNodes(run, e.nodes);
+      return effectWords(content, e);
     case 'attribute':
       addRunAttribute(content, run, e.key, e.amount);
       return effectWords(content, e);
@@ -1243,9 +1253,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return effectWords(content, e);
     case 'levels': {
       const cap = runLevelCap(content, run);
-      const able = run.party.filter((m) => m.hp > 0);
       // The weakest is the lowest level (the first one on a tie): catch-up for a Pokémon that fell behind.
-      const who = e.who === 'picked' ? pickedMon(run, tradeUid) : e.who === 'lead' ? able.slice(0, 1) : e.who === 'weakest' ? [...able].sort((a, b) => a.level - b.level).slice(0, 1) : run.party;
+      const who = whoOf(content, run, e.who, tradeUid);
       let gained = 0;
       for (const m of who) gained += addLevels(content, m, e.amount, cap).levelsGained;
       return gained > 0 ? effectWords(content, e) : '';
