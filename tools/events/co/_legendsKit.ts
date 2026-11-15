@@ -14,7 +14,8 @@ export const telling = (mythical: string, amount = 1): Json => ({ kind: 'flag', 
  */
 export const alpha = (o: {
   species: string;
-  need: number;
+  /** Balms needed to calm it (1 to 12). Leave it out for an Alpha that can only be fought (and caught with a ball once beaten down). */
+  need?: number;
   start?: number;
   perTurn?: number;
   likes?: ('sound' | 'scent')[];
@@ -34,9 +35,9 @@ export const alpha = (o: {
   shinyMultiplier: 1,
   ...(o.pseudo === false ? {} : { pseudo: true }),
   ...(o.weather ? { weather: o.weather } : {}),
-  rule: { ...(o.rule ?? {}), calm: { need: o.need, start: o.start ?? 0, perTurn: o.perTurn ?? 0, likes: o.likes ?? [] } },
+  ...(o.need || o.rule ? { rule: { ...(o.rule ?? {}), ...(o.need ? { calm: { need: o.need, start: o.start ?? 0, perTurn: o.perTurn ?? 0, likes: o.likes ?? [] } } : {}) } } : {}),
   win: o.win ?? [],
-  calm: o.calm ?? [],
+  ...(o.need ? { calm: o.calm ?? [] } : {}),
   lose: o.lose ?? [],
 });
 

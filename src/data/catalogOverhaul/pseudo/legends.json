@@ -1,1 +1,33 @@
-{ "category": "legends", "chains": [] }
+{
+ "category": "legends",
+ "note": "Door shapes of the legends questlines (Alphas A2-A4). Rooms are co-* events in co-legends-1.json.",
+ "chains": [
+  {
+   "id": "ps_black_tide",
+   "name": "The Black Tide",
+   "entry": "story-alpha-black-tide",
+   "themeId": "water-dark",
+   "tint": "#203858",
+   "mood": "storm sea",
+   "start": "opened"
+  },
+  {
+   "id": "ps_frostbound",
+   "name": "The Frostbound Pass",
+   "entry": "story-alpha-frostbound",
+   "themeId": "ice-dragon",
+   "tint": "#9ab8d0",
+   "mood": "frozen pass",
+   "start": "opened"
+  },
+  {
+   "id": "ps_hushed_moor",
+   "name": "The Hushed Moor",
+   "entry": "story-alpha-hushed-one",
+   "themeId": "normal-flying",
+   "tint": "#3a3048",
+   "mood": "silent dusk",
+   "start": "opened"
+  }
+ ]
+}

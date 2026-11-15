@@ -2277,6 +2277,13 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
   const ability = abilityIn(ctx, c);
   if (!ability) return;
   syncForms(ctx, c, events, false);
+  if (ability === 'hush') {
+    // Hush (catalog overhaul, the Hushed One): the air goes silent. Sound moves fail for three turns on both sides (the Throat Chop block).
+    announce(c, ability, events);
+    c.vol.throat = Math.max(c.vol.throat, 3);
+    other.vol.throat = Math.max(other.vol.throat, 3);
+    return;
+  }
   if (ability === 'delta-stream') {
     announce(c, ability, events);
     const old = ctx.battle.weather;
@@ -2575,6 +2582,8 @@ function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
   if (ability === 'prankster' && move.category === 'status') return move.priority + 1;
   if (move.category === 'status' && !c.vol.movesUsed.includes(move.id) && Held.hasHook(ctx, c.mon, c.side, 'coolShades')) return move.priority + 1;
   if (ability === 'silent-cloak' && !c.vol.cloakUsed) return move.priority + 1;
+  // Three Faces (catalog overhaul, the Unwelcome Guest): its first move after it comes out is hidden from the foe, so it goes first.
+  if (ability === 'three-faces' && c.vol.movesUsed.length === 0) return move.priority + 1;
   if ((ability === 'champions-fury' || ability === 'champions-entrance') && !c.vol.furyUsed && move.category !== 'status') return move.priority + 1;
   if (c.side === 'player' && c.vol.movesUsed.length === 0 && ctx.battle.storyEffects.includes(`kind:${c.mon.uid}`)) return move.priority + 1;
   if (ability === 'gale-wings' && move.type === 'flying' && c.mon.hp >= calcStats(ctx.content, c.mon).hp) return move.priority + 1;

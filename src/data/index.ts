@@ -60,9 +60,10 @@ import itemsJson from './items.json';
 import itemCatalogJson from './itemCatalog.json';
 // Item catalog entries added in their own files (src/data/itemCatalog/*.json, one per batch, auto-discovered like events/*.json).
 const itemCatalogExtra = Object.values(import.meta.glob<unknown[]>('./itemCatalog/*.json', { eager: true, import: 'default' })).flat();
-// Catalog Overhaul Pack: bag items and moves added by a category in its own file (src/data/catalogOverhaul/items|moves/<category>.json).
+// Catalog Overhaul Pack: bag items, moves and abilities added by a category in its own file (src/data/catalogOverhaul/items|moves/<category>.json).
 const coItems = Object.values(import.meta.glob<unknown[]>('./catalogOverhaul/items/*.json', { eager: true, import: 'default' })).flat();
 const coMoves = Object.values(import.meta.glob<unknown[]>('./catalogOverhaul/moves/*.json', { eager: true, import: 'default' })).flat();
+const coAbilities = Object.values(import.meta.glob<unknown[]>('./catalogOverhaul/abilities/*.json', { eager: true, import: 'default' })).flat();
 import learnablesJson from './learnables.json';
 import megaStonesJson from './megaStones.json';
 import zMovesJson from './zMoves.json';
@@ -308,7 +309,7 @@ export const RAW_CONTENT: RawContent = {
   // Generated: npm run data:mega-moves (Mega signature moves, flagged megasig).
   // Story Run signature moves: npm run data:story-sigs (flagged storysig).
   moves: [...movesJson, ...megaMovesJson.moves, ...storySignatureMovesJson.moves, ...canonMovesJson.moves, ...jetSpeciesJson.moves, ...coMoves],
-  abilities: [...abilitiesJson, ...storySpeciesJson.abilities, ...jetSpeciesJson.abilities],
+  abilities: [...abilitiesJson, ...storySpeciesJson.abilities, ...jetSpeciesJson.abilities, ...coAbilities],
   typeChart: typeChartJson,
   archetypes: archetypesJson,
   trainerUnlocks: trainerUnlocksJson,

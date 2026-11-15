@@ -1,0 +1,3302 @@
+{
+ "catalogOverhaul": "legends",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "story-alpha-black-tide",
+   "name": "Alpha: The Black Tide",
+   "group": "Story: Alphas",
+   "rarity": "rare",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "gyarados",
+    "tint": "#203858",
+    "effect": "rain"
+   },
+   "intro": "Storm water by the drowned lighthouse. A shadow longer than the ferry coils under the waves.\n\nFerryman: \"I'm not sailing. Not with that out there.\"\nFerryman: \"It's been circling the lighthouse twenty years. Since the keeper drowned.\"\nFerryman: \"He had a Magikarp. Let it go the night before.\"",
+   "choices": [
+    {
+     "label": "Sail anyway.",
+     "success": {
+      "text": "The ferryman will not come, but he lends you his small boat. \"Keep low,\" he says. \"It comes up where you are not looking.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tide-sailed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-tide-sail-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Relight the lamp.",
+     "success": {
+      "text": "The Sunken Lighthouse leans out of the water at the end of a broken causeway. Nobody has climbed it since the keeper.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tide-lamp",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-tide-lamp-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight it from the shore.",
+     "success": {
+      "text": "You stand on the rocks and call it up. It rises out of the water, and keeps rising. In the water it is enormous.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "gyarados"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "weather": "rain",
+       "rule": {
+        "calm": {
+         "need": 8,
+         "start": 0,
+         "perTurn": 0,
+         "likes": []
+        }
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "tide-beaten",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "The Black Tide sank away, beaten. It will not circle the lighthouse again.",
+         "importance": 60
+        }
+       ],
+       "calm": [
+        {
+         "kind": "join",
+         "species": [
+          "gyarados"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "alpha": true,
+         "moves": [
+          "keepers-lamp"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "tide-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "The Black Tide followed you home. The ferry runs again; the lamp is lit every night.",
+         "importance": 80
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-tide-sail-1",
+   "name": "The Black Tide: Open Water",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "gyarados",
+    "tint": "#203858",
+    "effect": "rain"
+   },
+   "intro": "The lighthouse shrinks behind you. The sea is quiet in a way that is not calm. Then the water ahead of the boat lifts, a long way, like a hill getting up.",
+   "choices": [
+    {
+     "label": "A Water-type shields the boat.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Water-type slides into the swell beside the boat and takes the wave on its back. The boat rocks, and rights itself.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-tide-sail-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Flying-type shields the boat.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type rides the wind above the boat and drives the spray aside with its wings.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-tide-sail-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Row hard.",
+     "success": {
+      "text": "You row until your hands burn. The wave catches the stern anyway and soaks everyone.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-tide-sail-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-tide-sail-2",
+   "name": "The Black Tide: The Circling",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "gyarados",
+    "tint": "#1b2f4a",
+    "effect": "rain"
+   },
+   "intro": "It surfaces behind you this time, close enough to see the old scars along its jaw. It circles the boat once, twice, the way it has circled the lighthouse for twenty years.",
+   "choices": [
+    {
+     "label": "A Water-type shields the boat.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Water-type slides into the swell beside the boat and takes the wave on its back. The boat rocks, and rights itself.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-tide-sail-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Flying-type shields the boat.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type rides the wind above the boat and drives the spray aside with its wings.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-tide-sail-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Row hard.",
+     "success": {
+      "text": "You row until your hands burn. The wave catches the stern anyway and soaks everyone.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-tide-sail-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-tide-sail-3",
+   "name": "The Black Tide: Under the Boat",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "gyarados",
+    "tint": "#14243a",
+    "effect": "rain"
+   },
+   "intro": "The boat stops. The water under it is black and moving. It comes up beneath you and the boat slides off its back into the swell. It looks at you with eyes as red as the lamp used to be.",
+   "choices": [
+    {
+     "label": "Calm it. Hold on and keep talking to it.",
+     "success": {
+      "text": "You keep your voice low and steady, the way the keeper must have.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "gyarados"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "weather": "rain",
+       "rule": {
+        "calm": {
+         "need": 6,
+         "start": 0,
+         "perTurn": 0,
+         "likes": []
+        }
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "tide-beaten",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "The Black Tide sank away, beaten. It will not circle the lighthouse again.",
+         "importance": 60
+        }
+       ],
+       "calm": [
+        {
+         "kind": "join",
+         "species": [
+          "gyarados"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "alpha": true,
+         "moves": [
+          "keepers-lamp"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "tide-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "The Black Tide followed you home. The ferry runs again; the lamp is lit every night.",
+         "importance": 80
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-tide-lamp-1",
+   "name": "The Black Tide: The Lighthouse Stair",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#2a3a52",
+    "effect": "rain"
+   },
+   "intro": "The stair goes round and round inside the tower. Halfway up, in the keeper's room, a sea chest has been tied shut with rope gone white with salt.",
+   "choices": [
+    {
+     "label": "Open the keeper's chest.",
+     "success": {
+      "text": "Inside, wrapped in oilcloth: a bundle of letters in a careful hand. Every one begins the same way. \"Dear Magikarp.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tide-letters",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-tide-lamp-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it. Climb on.",
+     "success": {
+      "text": "It is not your chest. You climb.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-tide-lamp-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-tide-lamp-2",
+   "name": "The Black Tide: The Lamp Room",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "gyarados",
+    "tint": "#3a3020",
+    "effect": "rain"
+   },
+   "intro": "The lamp room is glass on every side. Out in the storm the shadow has stopped circling. It is looking up at the dark lamp.",
+   "choices": [
+    {
+     "label": "Light the lamp.",
+     "success": {
+      "text": "The wick takes. The great lens turns, slowly, and throws its beam across the water. The shadow rises into it. It will come in over three turns of the light, if you can stand it that long.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "gyarados"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "weather": "rain",
+       "rule": {
+        "calm": {
+         "need": 6,
+         "start": 0,
+         "perTurn": 2,
+         "likes": []
+        }
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "tide-beaten",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "The Black Tide sank away, beaten. It will not circle the lighthouse again.",
+         "importance": 60
+        }
+       ],
+       "calm": [
+        {
+         "kind": "join",
+         "species": [
+          "gyarados"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "alpha": true,
+         "moves": [
+          "keepers-lamp"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "tide-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "The Black Tide followed you home. The ferry runs again; the lamp is lit every night.",
+         "importance": 80
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Read a letter aloud.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "tide-letters",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "\"Dear Magikarp. They say you will grow up to be something terrible. I do not believe them. I will keep the lamp lit so you can find your way back.\" The great head comes up to the glass and stays there. The red goes out of its eyes all at once.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "gyarados"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "alpha": true,
+        "moves": [
+         "keepers-lamp"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "tide-calmed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Black Tide followed you home. The ferry runs again; the lamp is lit every night.",
+        "importance": 80
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-tide-beach",
+   "name": "The Black Tide: The Beach",
+   "group": "Story: Alphas",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tide-beaten",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gyarados",
+    "tint": "#5a6a7a",
+    "effect": "none"
+   },
+   "intro": "A grey beach, far from the lighthouse. Something long and dark lies at the edge of the tide. It is the Black Tide, and it is dying.",
+   "choices": [
+    {
+     "label": "Sit with it.",
+     "success": {
+      "text": "You sit on the wet sand beside its head until the tide comes in. It does not look at you, and then, near the end, it does.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tide-sat",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You cannot. You walk on, and do not look back until the beach is gone.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "story-alpha-frostbound",
+   "name": "Alpha: The Frostbound",
+   "group": "Story: Alphas",
+   "rarity": "rare",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.snow_worker_m"
+    ],
+    "pokemon": "baxcalibur",
+    "tint": "#a0c8e0",
+    "effect": "snow"
+   },
+   "intro": "The snow pass is shut. Ice spikes jut from the road. A dragon of frost sleeps across it.\n\nMountain guide: \"It came up here to die. Froze before it could.\"\nGuide: \"While it sleeps, the pass stays winter. Every village below goes hungry.\"",
+   "choices": [
+    {
+     "label": "Wake it.",
+     "success": {
+      "text": "You shout. The ice along its back cracks like a lake in spring, and it lifts its head.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "baxcalibur"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "weather": "hail",
+       "rule": {
+        "calm": {
+         "need": 8,
+         "start": 0,
+         "perTurn": 0,
+         "likes": []
+        }
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "frost-woke",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Beaten, the Frostbound fled up the mountain. The pass stays frozen.",
+         "importance": 60
+        }
+       ],
+       "calm": [
+        {
+         "kind": "join",
+         "species": [
+          "baxcalibur"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "alpha": true,
+         "moves": [
+          "last-winter"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "frost-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "The Frostbound woke, and the pass thawed behind it.",
+         "importance": 80
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Dig around it.",
+     "success": {
+      "text": "The guide knows the long way round. Two days of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-frost-dig-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it warm.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "Your Fire-types lie down against its frozen side and stay there. One turn. Two. On the third, the ice runs off it in streams. It wakes, looks at you for a long time, and walks away into the high snow. The pass thaws behind it, and where it lay there is an egg.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "frost-warmed",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "frigibax"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "last-winter"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-frost-dig-1",
+   "name": "The Frostbound: The Long Way",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#9ab8d0",
+    "effect": "snow"
+   },
+   "intro": "The long way round is a goat path along the cliff. The wind comes straight off the ice. Below, the sleeping dragon looks small.",
+   "choices": [
+    {
+     "label": "Keep going.",
+     "success": {
+      "text": "You keep going, one foot and then the other.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-frost-dig-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-frost-dig-2",
+   "name": "The Frostbound: The Far Side",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#b8d0e0",
+    "effect": "snow"
+   },
+   "intro": "You come down on the far side of the pass. Behind you the dragon still sleeps across the road, and the villages below are still hungry.",
+   "choices": [
+    {
+     "label": "Go on down.",
+     "success": {
+      "text": "The guide shakes your hand at the bottom. \"Somebody will wake it one day,\" he says. \"I hope they're kind.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "nevermeltice",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "story-alpha-hushed-one",
+   "name": "Alpha: The Hushed One",
+   "group": "Story: Alphas",
+   "rarity": "rare",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "pokemon": "oracowl",
+    "tint": "#504870",
+    "effect": "fog"
+   },
+   "intro": "Dusk on the moor. No wind. A great owl watches from a dead tree. Your own voice sounds thin.\n\nThe subtitles stop working. Your Pokémon look at each other.\nA shepherd, in sign language, subtitled only when you are near: \"It eats sound. Don't fight it. Cross it.\"",
+   "choices": [
+    {
+     "label": "Cross the moor quietly.",
+     "success": {
+      "text": "You nod to the shepherd and step off the path into the heather.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-hush-cross-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight it.",
+     "success": {
+      "text": "You call your Pokémon, and no sound comes out. They look back at you, and then they do what they think is best.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "noctowl"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "noCommands": true,
+        "calm": {
+         "need": 6,
+         "start": 0,
+         "perTurn": 0,
+         "likes": []
+        }
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hush-fought",
+         "amount": 1
+        }
+       ],
+       "calm": [
+        {
+         "kind": "join",
+         "species": [
+          "noctowl"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "alpha": true,
+         "ability": "hush"
+        },
+        {
+         "kind": "flag",
+         "key": "hush-sat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "calmed-alpha",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "The Hushed One landed on your arm.",
+         "importance": 80
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Sit under the tree.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hush-crossed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You sit. The owl does not come down.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "noctowl"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "alpha": true,
+        "ability": "hush"
+       },
+       {
+        "kind": "flag",
+        "key": "hush-sat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Hushed One landed on your arm.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "prince-signs",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "prince-signs",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know enough signs to talk with the shepherd properly.",
+     "addChoices": [
+      {
+       "label": "Ask the shepherd for the route.",
+       "success": {
+        "text": "The shepherd's hands move fast and you follow most of it. There is a way across where the owl does not look. At the end of it there is a dead tree.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "hush-crossed",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "co-hush-tree"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "co-hush-cross-1",
+   "name": "The Hushed One: The Moor",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "noctowl",
+    "tint": "#3a3048",
+    "effect": "none"
+   },
+   "intro": "The heather is waist deep. Wild Pokémon move in it, silent, the way everything here is silent. You crouch behind a standing stone.",
+   "choices": [
+    {
+     "label": "Keep low and keep still.",
+     "success": {
+      "text": "Nothing sees you. The moor lets you pass.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-hush-cross-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run for the next stone.",
+     "success": {
+      "text": "You run. Something in the heather turns its head, and you lose your footing on the wet ground.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-hush-cross-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-hush-cross-2",
+   "name": "The Hushed One: The Moor",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "noctowl",
+    "tint": "#3a3048",
+    "effect": "none"
+   },
+   "intro": "A Mightyena pack crosses the path ahead of you without a sound. Their paws do not even rustle.",
+   "choices": [
+    {
+     "label": "Keep low and keep still.",
+     "success": {
+      "text": "Nothing sees you. The moor lets you pass.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-hush-cross-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run for the next stone.",
+     "success": {
+      "text": "You run. Something in the heather turns its head, and you lose your footing on the wet ground.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-hush-cross-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-hush-cross-3",
+   "name": "The Hushed One: The Moor",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "noctowl",
+    "tint": "#3a3048",
+    "effect": "none"
+   },
+   "intro": "The last stretch is open bog. The owl's head turns, slowly, all the way round, and stops.",
+   "choices": [
+    {
+     "label": "Keep low and keep still.",
+     "success": {
+      "text": "Nothing sees you. The moor lets you pass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hush-crossed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-hush-tree"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run for the next stone.",
+     "success": {
+      "text": "You run. Something in the heather turns its head, and you lose your footing on the wet ground.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "flag",
+        "key": "hush-crossed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-hush-tree"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-hush-tree",
+   "name": "The Hushed One: The Dead Tree",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "noctowl",
+    "tint": "#2a2438",
+    "effect": "none"
+   },
+   "intro": "You are across. The dead tree stands at the edge of the moor, and the owl is in it, watching you.",
+   "choices": [
+    {
+     "label": "Sit under the tree.",
+     "success": {
+      "text": "You sit with your back to the trunk. A long time passes with no sound at all. Then a weight lands on your arm, light for its size, and stays.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "noctowl"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "alpha": true,
+        "ability": "hush"
+       },
+       {
+        "kind": "flag",
+        "key": "hush-sat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Hushed One landed on your arm.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You leave the moor without a word. Behind you the silence closes up again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "story-alpha-orchard-warden",
+   "name": "Alpha: The Orchard Warden",
+   "group": "Story: Alphas",
+   "rarity": "rare",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "pokemon": "venusaur",
+    "tint": "#407838",
+    "effect": "sparkle"
+   },
+   "intro": "An empty orchard town. Vines over every door. A giant rests among the trees, its shell the orchard.\n\nA villager, found in the next town: \"It moved. We ran.\"\nVillager: \"It only moved because we stopped harvesting. We got old.\"",
+   "choices": [
+    {
+     "label": "Bring them back.",
+     "success": {
+      "text": "It takes two days of knocking on doors in the next town, and a lot of tea. In the end they come: slowly, with their baskets, looking up at the giant the whole way.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-orchard-harvest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Harvest alone.",
+     "success": {
+      "text": "You climb the first tree on its back. It is too much for one, and the giant stirs.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "torterra"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 6,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "orchard-fought",
+         "amount": 1
+        }
+       ],
+       "calm": [
+        {
+         "kind": "flag",
+         "key": "orchard-settled",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "sitrus-berry",
+         "count": 3
+        },
+        {
+         "kind": "flag",
+         "key": "calmed-alpha",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You leave the orchard to the vines. It stays still forever.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-orchard-harvest",
+   "name": "The Orchard Warden: The Harvest",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "pokemon": "torterra",
+    "tint": "#4a7a3a",
+    "effect": "none"
+   },
+   "intro": "The harvest goes on all day with the giant watching. Then one man fills a third basket, and a fourth, and starts stripping a tree the giant has not offered. The ground under the orchard shifts. It is standing up.",
+   "choices": [
+    {
+     "label": "Stop him.",
+     "success": {
+      "text": "You catch his arm. He puts the basket down. The giant settles, very slowly, and the orchard is still again. When the baskets are full, something small climbs out from under its shell and walks over to you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "orchard-full",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "turtwig"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "lum-berry",
+        "count": 2
+       },
+       {
+        "kind": "moment",
+        "text": "The orchard town is full again. A Turtwig came out from under the Warden's shell.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let him.",
+     "success": {
+      "text": "You look away. The orchard stands, all of it, trees and vines and birds, and walks off into the hills. Nobody follows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "orchard-greed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "story-alpha-quarry-king",
+   "name": "Alpha: The Quarry King",
+   "group": "Story: Alphas",
+   "rarity": "rare",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "rhydon",
+    "tint": "#8a7050",
+    "effect": "shake"
+   },
+   "intro": "Rockfall on the quarry road. A local Gym Leader has roped the cut off.\n\nLeader: \"Poachers want its horn. I've been guarding it alone for four nights.\"\nLeader: \"It's not dangerous. It's scared. Every fight near it makes it worse.\"",
+   "choices": [
+    {
+     "label": "Guard with you.",
+     "success": {
+      "text": "You split the cut between you. The Leader takes the haul road; you take the rest.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "quarry-guarded",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-quarry-night-1",
+        "nodes": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-quarry-night-2",
+        "nodes": 2
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-quarry-night-3",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a shift so you can sleep.",
+     "success": {
+      "text": "The Leader is asleep before you finish saying it. You guard the cut alone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "quarry-shift",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "quarry-leader-friend",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-quarry-night-1",
+        "nodes": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-quarry-night-2",
+        "nodes": 2
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-quarry-night-3",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catch it before they do.",
+     "success": {
+      "text": "You step over the rope. It panics, and the whole quarry shakes. In the dust, you hear the poachers' truck start up.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "rhyperior"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 8,
+         "start": 0,
+         "perTurn": 0,
+         "likes": []
+        }
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "quarry-poachers-escaped",
+         "amount": 1,
+         "stamp": "region"
+        }
+       ],
+       "calm": [
+        {
+         "kind": "join",
+         "species": [
+          "rhyperior"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "alpha": true
+        },
+        {
+         "kind": "flag",
+         "key": "quarry-poachers-escaped",
+         "amount": 1,
+         "stamp": "region"
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-quarry-night-1",
+   "name": "The Quarry King: Poachers",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "rhyperior",
+    "tint": "#5a4a3a",
+    "effect": "none"
+   },
+   "intro": "The first night, they come up the haul road with lamps.",
+   "choices": [
+    {
+     "label": "Hold the cut.",
+     "success": {
+      "text": "\"Out of the way. That horn's worth more than you are.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "quarry-poachers-escaped",
+         "amount": 1,
+         "stamp": "region"
+        }
+       ],
+       "name": "Poacher",
+       "classId": "hiker",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "quarry-held",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-quarry-night-2",
+   "name": "The Quarry King: Poachers",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "rhyperior",
+    "tint": "#5a4a3a",
+    "effect": "none"
+   },
+   "intro": "The second night, they try the cliff path.",
+   "choices": [
+    {
+     "label": "Hold the cut.",
+     "success": {
+      "text": "\"Out of the way. That horn's worth more than you are.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "quarry-poachers-escaped",
+         "amount": 1,
+         "stamp": "region"
+        }
+       ],
+       "name": "Poacher",
+       "classId": "hiker",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "quarry-held",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-quarry-night-3",
+   "name": "The Quarry King: Poachers",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "rhyperior",
+    "tint": "#5a4a3a",
+    "effect": "none"
+   },
+   "intro": "The third night, they come all together.",
+   "choices": [
+    {
+     "label": "Hold the cut.",
+     "success": {
+      "text": "\"Out of the way. That horn's worth more than you are.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-quarry-calm"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "quarry-poachers-escaped",
+         "amount": 1,
+         "stamp": "region"
+        }
+       ],
+       "name": "Poacher",
+       "classId": "hiker",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "quarry-held",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-quarry-calm",
+   "name": "The Quarry King: The Fourth Night",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "rhyperior",
+    "tint": "#6a5a40",
+    "effect": "none"
+   },
+   "intro": "The fourth night is quiet. The great Rhyperior comes down to the rope and looks at you over it.\n\nLeader: \"It chews them. Hard Stones. Like gum.\"",
+   "choices": [
+    {
+     "label": "Hold out a Hard Stone.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hard-stone"
+      }
+     ],
+     "success": {
+      "text": "It takes the stone from your hand as gently as a horse takes an apple. Crunch. It lies down. In the morning there is a horn on the ground where it slept: the old one, shed. The quarry becomes a reserve.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hard-stone"
+       },
+       {
+        "kind": "item",
+        "id": "shed-horn",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "quarry-reserve",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Quarry King shed its horn, and the quarry became a reserve.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with it until morning.",
+     "success": {
+      "text": "You have no stone to give it. You sit by the rope and it watches you, and neither of you sleeps. In the morning the Leader brings a sack of them.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "shed-horn",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "quarry-reserve",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-quarry-poachers-return",
+   "name": "The Quarry King: The Poachers Return",
+   "group": "Story: Alphas",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "quarry-poachers-escaped",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "rhyperior",
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A truck you know, on a road in another region. In the back, under a tarpaulin, something huge and red-eyed is chained. They took one after all.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"You again.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "rhyperior",
+        "excadrill",
+        "golem"
+       ],
+       "name": "Poacher Boss",
+       "classId": "hiker",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "quarry-poachers-stopped",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let them go.",
+     "success": {
+      "text": "The truck grinds past. You hear chains.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "story-alpha-rooftop-watcher",
+   "name": "Alpha: The Rooftop Watcher",
+   "group": "Story: Alphas",
+   "rarity": "rare",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.ruin_maniac"
+    ],
+    "pokemon": "corviknight",
+    "tint": "#3a4058",
+    "effect": "float"
+   },
+   "intro": "Black feathers drift from the ruined observatory. On the dome, something armoured.\n\nThe dome's split like an egg. Through the gap, a brass telescope, still turning, very slowly, with a noise like a spoon in a drain.\nAstronomer, Dr. Thaddea Lockhart, from behind a filing cabinet: \"It nests there because the telescope still turns. It likes the light at night. The eyepiece glows; I think it thinks it's a moon.\"\nDr. Lockhart: \"The motor's grinding. Every night it's louder. Every night it's angrier at the noise. Last night it took the weathervane off. It was a good weathervane.\"\nOn the dome, a head turns. Red eyes. Each feather's the size of a shield.",
+   "choices": [
+    {
+     "label": "Fix the telescope.",
+     "success": {
+      "text": "Three lenses, in three rooms of the ruin. Dr. Lockhart draws you a map on the back of an envelope. Through the roof, the Alpha watches you go.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-watcher-objective"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight it on the dome.",
+     "success": {
+      "text": "You climb out onto the dome. It is breaking: each turn a panel falls, and anything standing on it loses its footing. Flying types and light ones are not troubled.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "corviknight"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "breakingFloor": true
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "watcher-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "When it was beaten it did not fall. It landed, very upright, and looked at the hole it had made in its own roof.",
+         "importance": 60
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Turn the telescope off.",
+     "success": {
+      "text": "The switch. The turning stops. The eyepiece goes dark.\nIt screams. It's gone in three wingbeats. Nothing's nested on the dome by morning.\nDr. Lockhart: \"It's quiet. I wanted quiet. I don't— it's very quiet.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "watcher-driven",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-watcher-objective",
+   "name": "The Rooftop Watcher: The Objective",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a3a4a",
+    "effect": "none"
+   },
+   "intro": "The library. The objective lens is under a fallen shelf, and the shelf is under three hundred books.",
+   "choices": [
+    {
+     "label": "A strong Pokémon lifts the shelf.",
+     "check": "strength",
+     "success": {
+      "text": "Your strongest Pokémon gets its shoulder under the shelf and lifts. The lens is not even scratched.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-watcher-mirror"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It strains and the shelf will not move. You take the books off a row at a time instead.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-watcher-mirror"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move the books a row at a time.",
+     "success": {
+      "text": "It takes all night. You read the first page of a lot of books.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-watcher-mirror"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-watcher-mirror",
+   "name": "The Rooftop Watcher: The Mirror",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "murkrow",
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "The cellar. The mirror is in a nest of Murkrow, who like shiny things and will trade.",
+   "choices": [
+    {
+     "label": "Trade them a coin.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You hold out a coin. Six Murkrow look at it. One of them takes it and pushes the mirror toward you with its beak.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-watcher-eyepiece"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade them something that shines.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "nugget"
+      }
+     ],
+     "success": {
+      "text": "A Nugget. The Murkrow lose their minds. You walk out with the mirror and a cellar full of very happy birds.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "nugget"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-watcher-eyepiece"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-watcher-eyepiece",
+   "name": "The Rooftop Watcher: The Eyepiece",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "corviknight",
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "The eyepiece is in the Corviknight's own nest, on the dome. It has to let you take it.",
+   "choices": [
+    {
+     "label": "Hold out the other two lenses.",
+     "success": {
+      "text": "It looks at the lenses a long time. Then it steps aside.\nThe motor's oiled. The noise stops. The telescope swings, and settles on something in the sky.\nThe Corviknight walks along the dome's edge, puts one eye to the gap, and looks through it at the same thing.\nDr. Lockhart: \"...It was never the light. It wanted to see what I was looking at.\"\nIt lowers a wing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "watcher-mended",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "watcher-taxi",
+        "amount": 3
+       },
+       {
+        "kind": "moment",
+        "text": "You mended the telescope, and the Rooftop Watcher offered you rides.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-watcher-taxi",
+   "name": "The Watcher's Taxi",
+   "group": "Story: Alphas",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "watcher-taxi",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "corviknight",
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "A shadow crosses the path. The Rooftop Watcher lands beside you and lowers a wing.",
+   "choices": [
+    {
+     "label": "Ride.",
+     "success": {
+      "text": "It carries you over the next stretch of road in three wingbeats.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "flag",
+        "key": "watcher-taxi",
+        "amount": -1
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "co-watcher-taxi"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "It waits a moment, then lifts off. It will be back.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "co-watcher-taxi"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "story-alpha-sleeper",
+   "name": "Alpha: The Sleeper",
+   "group": "Story: Alphas",
+   "rarity": "rare",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "snorlax",
+    "tint": "#406070",
+    "effect": "none"
+   },
+   "intro": "A mountain on a bridge that snores.\n\nThe bridge is bowed in the middle. A queue of carts on both sides. Somebody's set up a tea stall; it's been that long.\nThe mayor, Mr. Ignatius Follett, hoarse: \"Flutes. Shouting. Berries. A brass band, Thursday. It rolls over. It rolled onto the tuba.\"\nThe belly rises. The belly falls. In the fur, near the top: two small eyes, looking out. Then four. Then they're gone.",
+   "choices": [
+    {
+     "label": "Wake it.",
+     "success": {
+      "text": "You climb up and shout into its ear. On its first turn the family scatters: small shapes, running, into a valley with no shade in it.\nIt fights like something that's been hit while holding a child.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "snorlax"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "sleeper-forced",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Look closer.",
+     "success": {
+      "text": "You climb. It's warm. In the fur of its chest, like a nest in a hedge: a Munchlax, asleep; three Rattata; a Pidgey with a bad wing; something that might be a Teddiursa.\nBelow the bridge, the river's dry. Above it, no tree for a mile. The bridge's shadow, and the Snorlax's, are the only shade in the valley.\nA carter, looking up: \"That's why the Rattata've gone from my barn. I thought I'd got lucky.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sleeper-seen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-sleeper-bridge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Build shade.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "grass"
+      }
+     ],
+     "pick": {
+      "types": [
+       "grass"
+      ]
+     },
+     "success": {
+      "text": "Your Grass-type plants a seed at the bridge's end and grows it, a little at a time, over the next three nodes.\nNode one: a sapling by the bridge's end. Children water it. Nobody asked them to.\nNode two: head height. The carters have unhitched; they're sitting under what there is of it.\nNode three: it's wide enough. The Snorlax opens one eye. It looks at the tree for a long time.\nIt gets up. Carefully, the way something gets up when it knows what's on it. It walks off the bridge, and lies down under the tree, and the family in its fur doesn't even wake.\nThe bridge springs back up with a noise like a held breath. A Munchlax from the family climbs down and asks to come with you; the others stay.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 3
+       },
+       {
+        "kind": "flag",
+        "key": "sleeper-shade",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "picked"
+       },
+       {
+        "kind": "join",
+        "species": [
+         "munchlax"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the ford.",
+     "success": {
+      "text": "There's always a ford one step longer. You take it, and the bridge snores on behind you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-sleeper-bridge",
+   "name": "The Sleeper: Knowing",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#6a7a5a",
+    "effect": "none"
+   },
+   "intro": "You climb back down. You know what is on it now.",
+   "choices": [
+    {
+     "label": "Wake it, knowing.",
+     "success": {
+      "text": "You climb up and shout into its ear. On its first turn the family scatters: small shapes, running, into a valley with no shade in it.\nIt fights like something that's been hit while holding a child.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "snorlax"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "sleeper-forced",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Build shade.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "grass"
+      }
+     ],
+     "pick": {
+      "types": [
+       "grass"
+      ]
+     },
+     "success": {
+      "text": "Your Grass-type plants a seed at the bridge's end and grows it, a little at a time, over the next three nodes.\nNode one: a sapling by the bridge's end. Children water it. Nobody asked them to.\nNode two: head height. The carters have unhitched; they're sitting under what there is of it.\nNode three: it's wide enough. The Snorlax opens one eye. It looks at the tree for a long time.\nIt gets up. Carefully, the way something gets up when it knows what's on it. It walks off the bridge, and lies down under the tree, and the family in its fur doesn't even wake.\nThe bridge springs back up with a noise like a held breath. A Munchlax from the family climbs down and asks to come with you; the others stay.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 3
+       },
+       {
+        "kind": "flag",
+        "key": "sleeper-shade",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "picked"
+       },
+       {
+        "kind": "join",
+        "species": [
+         "munchlax"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the ford.",
+     "success": {
+      "text": "You take the ford, and let them sleep.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "story-alpha-static-choir",
+   "name": "Alpha: The Static Choir",
+   "group": "Story: Alphas",
+   "rarity": "rare",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "electivire",
+    "tint": "#d0c040",
+    "effect": "flicker"
+   },
+   "intro": "The substation hums too loud. A crackling giant stalks the fence.\n\nThe town behind you is dark at noon: no signs, no trams, a traffic light swinging dead on its wire.\nThe engineer, Miss Tova Tindall, in a rubber apron: \"It was a normal Electivire. It's been the plant's for years. It likes the hum. It sings to it. Then the company came, and ran three new lines into its yard, and now it gets the whole town's current, all day.\"\nMiss Tindall: \"It's the size of a house. It can't stop taking it in. It's not angry. Listen.\"\nUnder the crackle: a note. Held. It's trying to sing, and it's too loud to hear itself.",
+   "choices": [
+    {
+     "label": "Cut the feed lines.",
+     "success": {
+      "text": "Three lines, three junction boxes, each on the road ahead of you, each with a guard.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "co-choir-line-1",
+        "nodes": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-choir-line-2",
+        "nodes": 2
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-choir-line-3",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight it.",
+     "success": {
+      "text": "Miss Tindall grabs your sleeve. \"Every turn you fight it, it takes more from the lines. It will get stronger every turn. I'm telling you now.\" You go in anyway.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "electivire"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "foeGrows": "spa"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "choir-tripped",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "The plant tripped. The town's power is out for the region.",
+         "importance": 60
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Find the company.",
+     "success": {
+      "text": "An office over a laundrette. A brass plate with no name on it. Inside: the team's lieutenant, and a wall chart with one line going up.\nNo battle here. You leave with the chart. The Electivire is still growing; the other ways are still open.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "choir-company",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "story-alpha-static-choir"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-choir-line-1",
+   "name": "The Static Choir: Line 1",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "electivire",
+    "tint": "#3a3a1a",
+    "effect": "none"
+   },
+   "intro": "The first feed line runs to a junction box, and a guard stands at it. When it is cut: It's the size of a barn. One street's lights come on.",
+   "choices": [
+    {
+     "label": "Cut the line.",
+     "success": {
+      "text": "\"It's a power company! We're helping it! It's a growth programme!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Team Grunt",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "choir-line-1",
+         "amount": 1
+        }
+       ],
+       "evil": "grunt"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-choir-line-2",
+   "name": "The Static Choir: Line 2",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "electivire",
+    "tint": "#3a3a1a",
+    "effect": "none"
+   },
+   "intro": "The second feed line runs to a junction box, and a guard stands at it. When it is cut: A cottage. The trams start.",
+   "choices": [
+    {
+     "label": "Ask him what's on the other end.",
+     "success": {
+      "text": "\"I just watch the box. Nobody said what was on the other end.\" He looks. He sees it. \"...Nobody said.\" He hands over the key.\nA cottage. The trams start.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "choir-line-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight him for the key.",
+     "success": {
+      "text": "He sighs and sends out his Pokémon.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Team Grunt",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "choir-line-2",
+         "amount": 1
+        }
+       ],
+       "evil": "grunt"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-choir-line-3",
+   "name": "The Static Choir: Line 3",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "electivire",
+    "tint": "#3a3a1a",
+    "effect": "none"
+   },
+   "intro": "The third feed line runs to a junction box, and a guard stands at it.",
+   "choices": [
+    {
+     "label": "Cut the line.",
+     "success": {
+      "text": "A lieutenant's deputy stands at the last box. She doesn't talk.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Lieutenant's Deputy",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "electivire"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "alpha": true
+        },
+        {
+         "kind": "flag",
+         "key": "calmed-alpha",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "choir-cut",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "intel",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "The Static Choir can hear itself again. The plant keeps one thin line into its yard, labelled by hand: HERS.",
+         "importance": 80
+        }
+       ],
+       "evil": "specialist"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "story-alpha-unwelcome-guest",
+   "name": "Alpha: The Unwelcome Guest",
+   "group": "Story: Alphas",
+   "rarity": "rare",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "pokemon": "gengar",
+    "tint": "#503060",
+    "effect": "float"
+   },
+   "intro": "A haunted theatre. Three grins float in the dark. One is real.\n\nRed seats, row on row, all empty. On the stage, a ghost light on a stand. Above it, in the black: three smiles, with nothing round them.\nThe owner, Mrs. Clementina Sedgwick, in the foyer, not going further: \"It moved in over the winter. It frightened out the troupe. They used to rehearse to an empty house every night; they couldn't afford to open.\"\nMrs. Sedgwick: \"I think it misses them. It moves the chairs. Into rows. Facing the stage. It sits in a different one each night.\"",
+   "choices": [
+    {
+     "label": "Find the real grin.",
+     "success": {
+      "text": "You walk down the aisle and stand under the three smiles.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-grins-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Perform for it.",
+     "success": {
+      "text": "You and your party take the stage and do the best thing you have done this run, again, on a real stage, to one seat. If you have won nothing, the lead does what it can: a bow and a fall.\nIt doesn't move through the whole thing.\nThen, from row G: clapping. Two enormous hands. It goes on for some time. It's not a critic. It's an audience.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "guest-applauded",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "join",
+        "species": [
+         "gastly"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "three-faces"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring the troupe back.",
+     "success": {
+      "text": "Two nodes: the troupe's lodging in the next street, and the walk back.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-troupe"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-guest-grins-1",
+   "name": "The Unwelcome Guest: Three Grins",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "gengar",
+    "tint": "#2a1a3a",
+    "effect": "none"
+   },
+   "intro": "Turn 1 of 3. The three grins drift. Only the real one blinks; the other two are painted on the dark.",
+   "choices": [
+    {
+     "label": "The left grin.",
+     "chance": 0.3333333333333333,
+     "success": {
+      "text": "The grin gets eyes. Then a great round body. It's delighted to have been spotted; it's been waiting all winter for somebody good.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guest-found",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-found"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The grin you chose peels off and floats away. Laughter, from behind you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-grins-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The middle grin.",
+     "chance": 0.3333333333333333,
+     "success": {
+      "text": "The grin gets eyes. Then a great round body. It's delighted to have been spotted; it's been waiting all winter for somebody good.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guest-found",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-found"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The grin you chose peels off and floats away. Laughter, from behind you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-grins-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The right grin.",
+     "chance": 0.3333333333333333,
+     "success": {
+      "text": "The grin gets eyes. Then a great round body. It's delighted to have been spotted; it's been waiting all winter for somebody good.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guest-found",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-found"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The grin you chose peels off and floats away. Laughter, from behind you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-grins-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-guest-grins-2",
+   "name": "The Unwelcome Guest: Three Grins",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "gengar",
+    "tint": "#2a1a3a",
+    "effect": "none"
+   },
+   "intro": "Turn 2 of 3. The three grins drift. Only the real one blinks; the other two are painted on the dark.",
+   "choices": [
+    {
+     "label": "The left grin.",
+     "chance": 0.3333333333333333,
+     "success": {
+      "text": "The grin gets eyes. Then a great round body. It's delighted to have been spotted; it's been waiting all winter for somebody good.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guest-found",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-found"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The grin you chose peels off and floats away. Laughter, from behind you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-grins-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The middle grin.",
+     "chance": 0.3333333333333333,
+     "success": {
+      "text": "The grin gets eyes. Then a great round body. It's delighted to have been spotted; it's been waiting all winter for somebody good.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guest-found",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-found"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The grin you chose peels off and floats away. Laughter, from behind you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-grins-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The right grin.",
+     "chance": 0.3333333333333333,
+     "success": {
+      "text": "The grin gets eyes. Then a great round body. It's delighted to have been spotted; it's been waiting all winter for somebody good.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guest-found",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-found"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The grin you chose peels off and floats away. Laughter, from behind you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-grins-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-guest-grins-3",
+   "name": "The Unwelcome Guest: Three Grins",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "gengar",
+    "tint": "#2a1a3a",
+    "effect": "none"
+   },
+   "intro": "Turn 3 of 3. The three grins drift. Only the real one blinks; the other two are painted on the dark.",
+   "choices": [
+    {
+     "label": "The left grin.",
+     "chance": 0.3333333333333333,
+     "success": {
+      "text": "The grin gets eyes. Then a great round body. It's delighted to have been spotted; it's been waiting all winter for somebody good.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guest-found",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-found"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The grin you chose peels off and floats away. Laughter, from behind you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guest-lost",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The middle grin.",
+     "chance": 0.3333333333333333,
+     "success": {
+      "text": "The grin gets eyes. Then a great round body. It's delighted to have been spotted; it's been waiting all winter for somebody good.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guest-found",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-found"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The grin you chose peels off and floats away. Laughter, from behind you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guest-lost",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The right grin.",
+     "chance": 0.3333333333333333,
+     "success": {
+      "text": "The grin gets eyes. Then a great round body. It's delighted to have been spotted; it's been waiting all winter for somebody good.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guest-found",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-guest-found"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The grin you chose peels off and floats away. Laughter, from behind you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guest-lost",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-guest-found",
+   "name": "The Unwelcome Guest: Spotted",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "gengar",
+    "tint": "#3a1a4a",
+    "effect": "none"
+   },
+   "intro": "It hangs in the air in front of you, grinning, waiting to see what you will do.",
+   "choices": [
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It cackles and comes at you, delighted.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "gengar"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "guest-fought",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Applaud it.",
+     "success": {
+      "text": "You clap. It bows, very low, and the bow goes on a little too long, and then it comes down and sits in row G, and a small Gastly peels off it and floats over to you.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "gastly"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "three-faces"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-guest-troupe",
+   "name": "The Unwelcome Guest: The Troupe",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#4a2a2a",
+    "effect": "none"
+   },
+   "intro": "The leading man: \"It breathed on me. In the love scene.\"\nThe director, Madame Lavinia Brecht: \"It laughed at the death. A death, darling.\"",
+   "choices": [
+    {
+     "label": "It was laughing because it was good.",
+     "success": {
+      "text": "They come. Terrified. They rehearse. From the dark:\nA voice like a cellar door: boo.\nThe leading man, without thinking: \"It was not that bad!\"\nA pause. A cackle. Row G's shaking.\nMadame Brecht, slowly: \"...Again. From the top. And this time, make it boo for a reason.\"\nThe theatre opens. The posters say: WITH LIVE AUDIENCE. Row G's never sold.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "guest-heckles",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "gastly"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "three-faces"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's the only audience you've got.",
+     "success": {
+      "text": "They come. Terrified. They rehearse. From the dark:\nA voice like a cellar door: boo.\nThe leading man, without thinking: \"It was not that bad!\"\nA pause. A cackle. Row G's shaking.\nMadame Brecht, slowly: \"...Again. From the top. And this time, make it boo for a reason.\"\nThe theatre opens. The posters say: WITH LIVE AUDIENCE. Row G's never sold.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "guest-heckles",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "gastly"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "three-faces"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It set out the chairs.",
+     "success": {
+      "text": "Silence.\nMadame Brecht: \"...It did what?\"\nThey come. Terrified. They rehearse. From the dark:\nA voice like a cellar door: boo.\nThe leading man, without thinking: \"It was not that bad!\"\nA pause. A cackle. Row G's shaking.\nMadame Brecht, slowly: \"...Again. From the top. And this time, make it boo for a reason.\"\nThe theatre opens. The posters say: WITH LIVE AUDIENCE. Row G's never sold.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "guest-heckles",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "gastly"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "three-faces"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "story-alpha-weeping-lantern",
+   "name": "Alpha: The Weeping Lantern",
+   "group": "Story: Alphas",
+   "rarity": "rare",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "pokemon": "dusknoir",
+    "tint": "#40405a",
+    "effect": "fog"
+   },
+   "intro": "A silent graveyard path. Every lantern lit. One floating.\n\nRows of small stones. On each, a lantern, burning violet. The stones are blank. Smooth, as if they've been wiped.\nThe groundskeeper, Mr. Crispin Tolhurst, with a rake: \"It burns the names off. Night after night. It goes along the rows and it holds itself against each one, close, like you'd warm your hands.\"\nMr. Tolhurst: \"To keep them warm, I think. It doesn't know stone's not cold the way it means. The families come, and they can't find theirs. They stand in the wrong row and cry at a stranger.\"\nThe floating one's stopped at a stone. Its flames are low. It's leaning on it.",
+   "choices": [
+    {
+     "label": "Read the names to it.",
+     "success": {
+      "text": "Mr. Tolhurst has the register. You read.\n\"Pippin. Raticate. Eleven years.\" It turns. It drifts to a stone, the right one, and its flame goes steady there.\n\"Duchess. Persian. 'She let us live with her.'\" Another.\n\"Bramble. Sandshrew. Nineteen years.\"\nTwelve names. By the eighth it is going ahead of you, to each stone, before you finish reading.\nIt isn't burning them off to warm them. It's been trying to read them. It can't read. It's been pressing its face to each one, hoping.\nWhen you close the register, a Litwick drops from a lantern's wick into your hand. It knows one name: the last one you read.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "litwick"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "hex"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight it.",
+     "success": {
+      "text": "It turns from the stone toward you, and every lantern on the path flares.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "chandelure"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "lantern-fought",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "The Weeping Lantern fled. The lanterns went out along every row, one by one, and did not light again.",
+         "importance": 60
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Find the stonemason.",
+     "success": {
+      "text": "Two nodes: his yard, and back.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-lantern-mason"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-lantern-mason",
+   "name": "The Weeping Lantern: The Stonemason",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "chandelure",
+    "tint": "#3a2a4a",
+    "effect": "none"
+   },
+   "intro": "The mason, Old Quentin Kettlewell, deaf in one ear: \"I cut every one of those. Forty years. I'll cut them again. I'll not do it with that breathing on my chisel.\"",
+   "choices": [
+    {
+     "label": "It'll let you.",
+     "success": {
+      "text": "At the graveyard: he sets the chisel. The Chandelure comes close. He stops. It stops. He starts again, slower. It holds its light where he needs it.\nWhen the last name is cut, a Litwick drops from a lantern's wick into your hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-mason",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "litwick"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "hex"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "It only wants to know who they are.",
+     "success": {
+      "text": "At the graveyard: he sets the chisel. The Chandelure comes close. He stops. It stops. He starts again, slower. It holds its light where he needs it.\nWhen the last name is cut, a Litwick drops from a lantern's wick into your hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-mason",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "litwick"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "hex"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cut them deeper this time.",
+     "success": {
+      "text": "At the graveyard: he sets the chisel. The Chandelure comes close. He stops. It stops. He starts again, slower. It holds its light where he needs it.\nWhen the last name is cut, a Litwick drops from a lantern's wick into your hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-mason",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "litwick"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "hex"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

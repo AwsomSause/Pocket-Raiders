@@ -89,7 +89,7 @@ import { changeFriendship } from './friendship';
 import { joinMoments, restMoments } from './moments/runMoments';
 import { followStep } from './followMode';
 import { addItem, applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, STACK_MAX } from './items';
-import { addLevels, createPokemon, gainXp, getSpecies, MAX_PP_UPS, maxHp, maxPp, xpForDefeat, xpForLevel } from './pokemon';
+import { ALPHA_MARK_HP, addLevels, createPokemon, gainXp, getSpecies, MAX_PP_UPS, maxHp, maxPp, xpForDefeat, xpForLevel } from './pokemon';
 import { addEvs, evYield } from './ivs';
 import { bankShopEntries, runLicenses } from './bank';
 import { withTokenAttribute } from './runPrep';
@@ -3711,6 +3711,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (battle.ball) caught.caughtBall = battle.ball;
     // A raid boss's extra HP pool belongs to the fight, not to the Pokémon you take home.
     if (battle.raid) delete caught.statBoosts;
+    // An Alpha's doubled HP belongs to the wild fight too (events.ts startEventBattle); it keeps only the Alpha Mark (pokemon.ts ALPHA_MARK_HP).
+    if (caught.alpha && caught.statBoosts?.hp) caught.statBoosts = { ...caught.statBoosts, hp: Math.max(0, caught.statBoosts.hp - (100 - ALPHA_MARK_HP)) };
     shiftLevel(content, run, caught, catchLevelOffset(runPerks(content, run)) + palPadLevels(content, run));
     // Friend, Luxury and Heal Ball.
     const ball = battle.ball ? content.items.get(battle.ball)?.effect : undefined;

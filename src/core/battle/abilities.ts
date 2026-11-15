@@ -194,6 +194,8 @@ const SUPPORTED = new Set<string>([
   'cute-charm', 'rivalry', 'wise-eye', 'eye-of-the-gale', 'grid-surfer',
   'dread-jaws', 'storm-talons', 'clinging-dust', 'sovereign-plumage', 'coral-veil', 'eyespot-glare', 'dynamo-down', 'gem-orbit', 'tailwind-rider', 'rune-sigil', 'twin-maw', 'silent-cloak', 'champions-fury', 'champions-entrance',
   'thorn-ballad', 'encore-amp', 'adaptive-plating', 'plague-bulwark', 'soul-kindling', 'neon-circuit',
+  // Catalog Overhaul legends (Alphas): the Hushed One's Hush, the Unwelcome Guest's Three Faces (engine.ts).
+  'hush', 'three-faces',
   // Beta 0.7 batch (Galarian lines).
   'basalt-shell', 'scavenger', 'parcel-guard', 'landfill', 'kitchen-heat', 'neon-camouflage', 'ripe-bloom', 'thunderhead', 'venom-jaws', 'foam-shell', 'royal-disdain', 'hoop-focus',
   ...Object.keys(PINCH),
