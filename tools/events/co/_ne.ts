@@ -109,6 +109,8 @@ const fitted = (e: Json): Json => {
 export interface NeOpts extends EventOpts {
   /** Keep an older build's id (NE36 to NE40, NE76 to NE85). */
   id?: string;
+  /** Written in full but off until the hook it needs exists (NE100: the run end). */
+  disabled?: boolean;
   place: Place;
   tags?: string[];
   priority?: number;
