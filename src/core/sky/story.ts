@@ -16,6 +16,7 @@ import { stageKey } from '../mapItems';
 import { count, discover } from '../progress';
 import type { PokemonInstance, RunState } from '../state';
 import { cpuDuel, type DuelResult, type Duelist } from './sim';
+import { shapeSpectateFoe } from './spectate';
 import { SkyStateSchema, freshSky, type SkyEnding, type SkySide, type SkyState } from './state';
 import {
   ALONE_LINES, ANSWERS, CHEER_PIDGEOT_LINE, DUEL_HEADER, FEAROW_TRACK, FINALE_ASK, FINALE_SETUP, GIFT_LINES, OVERHEAD,
@@ -165,6 +166,7 @@ export function shapeSkyFoe(content: Content, run: RunState, eventId: string): v
   const sky = skyOf(run);
   const battle = run.battle;
   if (!sky || !battle || battle.enemyTeam.length === 0) return;
+  if (eventId === 'sky.opening' || eventId === 'sky.finale') return shapeSpectateFoe(content, run, sky, eventId);
   const rematch = eventId === 'sky.rematch';
   const level = rematch
     ? clampLevel(content, run, avgLevel(run) + SKY_BALANCE.rematchAbove)
@@ -185,7 +187,7 @@ function setEnding(sky: SkyState, ending: SkyEnding): void {
   sky.phase = 'done';
 }
 
-function pushRoom(run: RunState, eventId: string): void {
+export function pushRoom(run: RunState, eventId: string): void {
   const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
   here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId });
   if (run.itemCounters) delete run.itemCounters[`event-seen:${eventId}`];
@@ -254,20 +256,14 @@ export function applySky(content: Content, run: RunState, e: SkyEffect): string 
   const say = (...lines: string[]): string => lines.filter(Boolean).join('\n');
   switch (e.act) {
     case 'duel': {
+      // The fight itself is watched on the battle scene (spectate.ts); this only records which bird was backed.
       if (sky) return '';
       const side = e.side ?? 'pidgey';
-      const result = cpuDuel(content, run.seed, 'opening', { speciesId: 'pidgey', level: SKY_BALANCE.duelLevel }, { speciesId: 'spearow', level: SKY_BALANCE.duelLevel }, { names: ['Pidgey', 'Spearow'] });
-      const winner: SkySide = result.winner === 0 ? 'pidgey' : 'spearow';
-      sky = freshSky(run.regionIndex, side, winner);
+      sky = freshSky(run.regionIndex, side);
       run.expansion = { ...run.expansion, sky };
       discover(run, 'pidgey', false);
       discover(run, 'spearow', false);
-      let gift = '';
-      if (sky.ending === 'hm') {
-        addItem(run.inventory, SKY_FLY_ITEM, 1);
-        gift = 'You are given a Flying HM.';
-      }
-      return say(...DUEL_HEADER, ...result.lines, ...duelResult(side, winner), gift);
+      return say(...DUEL_HEADER);
     }
     case 'passBy': {
       reopen(run);
@@ -319,37 +315,6 @@ export function applySky(content: Content, run: RunState, e: SkyEffect): string 
       sky.alone += 1;
       const gift = giveGift(content, run, sky, 'berry');
       return say('You set it down where the grass is flat and walk away without a word. Later you see the Pidgey find it, and look around for who left it, and not find you. It does not eat it. It tucks it into its feathers.', gift && `(The berry is given: ${sky.gifts.length} so far.)`);
-    }
-    case 'finaleWatch': {
-      if (!sky || sky.phase !== 'rivalry') return '';
-      const result = playFinale(content, run, sky, 'ask');
-      const lead = [...FINALE_SETUP];
-      if (result.asked) {
-        sky.finale.asked = true;
-        pushRoom(run, 'sky.cheer');
-        return say(...lead, ...result.lines, FINALE_ASK);
-      }
-      const winner = result.winner === 0 ? 'pidgeot' : 'fearow';
-      sky.finale.winner = winner;
-      setEnding(sky, winner === 'pidgeot' ? 'pidgeot-alone' : 'fearow-alone');
-      return say(...lead, ...result.lines, ...finaleEnd(winner, undefined), endingLine(sky.ending!));
-    }
-    case 'cheer': {
-      if (!sky || !sky.finale.asked || sky.finale.winner !== undefined) return '';
-      const side = e.bird ?? 'pidgeot';
-      sky.finale.cheer = side;
-      const result = playFinale(content, run, sky, side);
-      const winner = result.winner === 0 ? 'pidgeot' : 'fearow';
-      sky.finale.winner = winner;
-      const lines = [side === 'pidgeot' ? CHEER_PIDGEOT_LINE : 'You call out for Fearow.', ...result.lines, ...finaleEnd(winner, side)];
-      if (winner === 'pidgeot' && side === 'pidgeot') {
-        // Not over yet: Pidgeot asks to join (the room below). `settleSky` closes it if it is never answered.
-        pushRoom(run, 'sky.join.pidgeot');
-      } else if (winner === 'pidgeot') setEnding(sky, 'pidgeot-left');
-      else if (side === 'fearow') {
-        pushRoom(run, 'sky.join.fearow');
-      } else setEnding(sky, 'fearow-alone');
-      return say(...lines);
     }
     case 'joinBird': {
       if (!sky || sky.joinedUid) return '';

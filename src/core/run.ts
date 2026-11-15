@@ -14,6 +14,7 @@
 
 import { noteBattle } from './expansion/fieldNotes';
 import { settleSky } from './sky/story';
+import { finishSpectate } from './sky/spectate';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
@@ -2879,6 +2880,8 @@ export interface TurnResult {
   narrativeDefeat?: { id: string; defeatLine: string; victoryLine: string };
   /** Story Run: a lost rival or story fight that the run survives (party healed, map next). Never a game over. */
   storyLoss?: boolean;
+  /** Pidgey's Resolve: a watched CPU-versus-CPU fight ended; the lines say what it meant and the map is next (core/sky/spectate.ts). */
+  spectated?: { kind: 'duel' | 'finale'; lines: string[] };
   /** A rival's warm-up duel ended: what was said, and whether the real battle follows (`next: 'battle'`) or the rival took it (`next: 'map'`). */
   stepIn?: StepInEnd;
   /** What the trainer says during the turn (presentation only). */
@@ -3232,6 +3235,12 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     run.phase = 'map';
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, raidFailed: true };
+  }
+  // Pidgey's Resolve: a watched CPU fight counts for nothing; the real team comes back and the story reads out how it ended.
+  if (battle.spectate && (battle.outcome === 'win' || battle.outcome === 'lose')) {
+    const lines = finishSpectate(content, run, battle.outcome);
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, spectated: { kind: battle.spectate.kind, lines } };
   }
   if (battle.stepIn?.kind === 'duel' && (battle.outcome === 'win' || battle.outcome === 'lose')) {
     const stepIn = finishStepInDuel(content, run, battle.outcome);

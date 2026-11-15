@@ -2,11 +2,14 @@
 
 import { describe, expect, it } from 'vitest';
 import { chooseEvent, conditionMet, eligibleEvents } from '../../src/core/events';
+import { chooseAutoAction } from '../../src/core/battle/autoBattle';
+import { cheerDue, cheerSky } from '../../src/core/sky/spectate';
+import { chunkLines } from '../../src/core/sky/text';
 import { permanentForm } from '../../src/core/battle/transform';
 import { abilityOf, createPokemon } from '../../src/core/pokemon';
 import { createBattle, resolveTurn, type BattleEvent } from '../../src/core/battle/engine';
 import { Rng, hashSeed } from '../../src/core/rng';
-import { chooseStarter, createRun } from '../../src/core/run';
+import { chooseStarter, createRun, takeTurn } from '../../src/core/run';
 import { applySky, fearowLevel, fearowMoves, giftCandidate, isFinaleStage, meetingIsAlone, pidgeotLevel, playFinale, recruitMon, settleSky, skyOf } from '../../src/core/sky/story';
 import { freshSky, SkyStateSchema } from '../../src/core/sky/state';
 import { cpuDuel } from '../../src/core/sky/sim';
@@ -15,7 +18,35 @@ import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
 
 const newRun = (seed = 'sky-1'): RunState => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', expansion: { eventsDensity: 'normal' } }), 0);
-const sideOf = (run: RunState, eventId: string) => run.stage!.map.nodes.flatMap((n) => n.sides).find((s) => s.eventId === eventId);
+const sideOf = (run: RunState, eventId: string) => {
+  const found = run.stage!.map.nodes.flatMap((n) => n.sides).find((s) => s.eventId === eventId);
+  if (found) return found;
+  // A scene the stage did not place (the test moved the story along by hand): put it beside the first node.
+  const node = run.stage!.map.nodes[0]!;
+  node.sides.push({ id: `event-test-${eventId}`, kind: 'event', used: false, eventId });
+  return node.sides[node.sides.length - 1]!;
+};
+/** Starts a watched fight from its event (choice `pick`), then plays it to the end the way the scene does: auto turns, and a cheer when asked. */
+const watch = (run: RunState, eventId: string, pick: number, cheer?: 'pidgeot' | 'fearow') => {
+  const side = sideOf(run, eventId)!;
+  run.stage!.current = run.stage!.map.nodes.find((n) => n.sides.some((x) => x.id === side.id))!.id;
+  let cur = chooseEvent(content, run, side.id, pick).run;
+  const party = structuredClone(cur.party);
+  let asked = false;
+  for (let i = 0; i < 300; i++) {
+    if (cur.phase !== 'battle') throw new Error('the fight ended without a result');
+    if (cheerDue(content, cur)) {
+      asked = true;
+      if (cheer) cheerSky(content, cur, cheer);
+      else cur.battle!.spectate!.cheered = 'none';
+    }
+    const pickAction = chooseAutoAction(content, cur, [])!;
+    const res = takeTurn(content, cur, pickAction.action);
+    cur = res.run;
+    if (res.spectated) return { run: cur, lines: res.spectated.lines, asked, watchedParty: party };
+  }
+  throw new Error('the fight did not end');
+};
 /** Finds a seed (from a fixed list) whose opening duel has this winner. */
 const seedWhere = (winner: 'pidgey' | 'spearow'): string => {
   for (let i = 0; i < 200; i++) {
@@ -26,8 +57,8 @@ const seedWhere = (winner: 'pidgey' | 'spearow'): string => {
 };
 
 describe('Pidgey\'s Resolve: data', () => {
-  it('has all nine scenes, and the old evolution card is not the one that carries the story', () => {
-    for (const id of ['sky.opening', 'sky.meet', 'sky.alone', 'sky.finale', 'sky.cheer', 'sky.join.pidgeot', 'sky.join.fearow', 'sky.overhead', 'sky.rematch']) expect(content.events.get(id), id).toBeDefined();
+  it('has all eight scenes, and the old evolution card is not the one that carries the story', () => {
+    for (const id of ['sky.opening', 'sky.meet', 'sky.alone', 'sky.finale', 'sky.join.pidgeot', 'sky.join.fearow', 'sky.overhead', 'sky.rematch']) expect(content.events.get(id), id).toBeDefined();
     expect(content.events.get('sky.meet')!.choices.length).toBeGreaterThanOrEqual(3);
   });
 
@@ -44,48 +75,52 @@ describe('Pidgey\'s Resolve: the opening', () => {
     expect(eligibleEvents(content, plain).some((e) => e.id === 'sky.opening')).toBe(false);
   });
 
-  it('the winner is the same whichever bird you back, and for the same seed always', () => {
-    const seed = seedWhere('pidgey');
-    const a = newRun(seed);
-    const b = newRun(seed);
-    applySky(content, a, { kind: 'sky', act: 'duel', side: 'pidgey' });
-    applySky(content, b, { kind: 'sky', act: 'duel', side: 'spearow' });
-    expect(skyOf(a)!.duelWinner).toBe('pidgey');
-    expect(skyOf(b)!.duelWinner).toBe('pidgey');
+  it('is a watched fight on the real engine: your team and Bag are set aside, both sides are birds, and nothing counts', () => {
+    const run = newRun();
+    const bag = structuredClone(run.inventory);
+    const team = structuredClone(run.party);
+    const side = sideOf(run, 'sky.opening')!;
+    run.stage!.current = run.stage!.map.nodes.find((n) => n.sides.some((x) => x.id === side.id))!.id;
+    const started = chooseEvent(content, run, side.id, 0).run;
+    expect(started.phase).toBe('battle');
+    expect(started.battle!.spectate).toEqual({ kind: 'duel' });
+    expect(started.party.map((m) => m.speciesId)).toEqual(['pidgey']);
+    expect(started.inventory).toEqual({});
+    expect(started.battle!.enemyTeam[0]!.speciesId).toBe('spearow');
+    const done = watch(newRun(), 'sky.opening', 0);
+    expect(done.run.party).toEqual(team);
+    expect(done.run.inventory['hm-fly'] ?? 0).toBeLessThanOrEqual(1);
+    expect({ ...done.run.inventory, 'hm-fly': undefined }).toEqual({ ...bag, 'hm-fly': undefined });
+    expect(done.run.phase).toBe('map');
+    expect(done.run.battle).toBeNull();
+    expect(skyOf(done.run)!.stash).toBeUndefined();
   });
 
-  it('backing Pidgey and winning gives a Flying HM and ends the story', () => {
-    const run = newRun(seedWhere('pidgey'));
-    const text = applySky(content, run, { kind: 'sky', act: 'duel', side: 'pidgey' });
-    expect(skyOf(run)).toMatchObject({ phase: 'done', ending: 'hm' });
-    expect(run.inventory['hm-fly']).toBe(1);
-    expect(text).toContain('Flying HM');
-    expect(eligibleEvents(content, run).some((e) => e.id === 'sky.meet')).toBe(false);
-  });
-
-  it('backing Spearow and losing, backing Pidgey and losing, and backing Spearow and winning start the story', () => {
-    for (const [side, winnerSeed] of [['spearow', 'pidgey'], ['pidgey', 'spearow'], ['spearow', 'spearow']] as const) {
-      const run = newRun(seedWhere(winnerSeed));
-      applySky(content, run, { kind: 'sky', act: 'duel', side });
-      const sky = skyOf(run)!;
-      expect(sky.backed).toBe(side);
-      if (side === 'spearow' && winnerSeed === 'pidgey') {
-        // Spearow loses: nothing happens, and the story does not begin.
-        expect(sky.phase).toBe('rivalry');
+  it('every backing and result is played out, and the lines are read', () => {
+    const seen = new Set<string>();
+    for (let i = 0; i < 24; i++) {
+      for (const pick of [0, 1]) {
+        const done = watch(newRun(`sky-${i}`), 'sky.opening', pick);
+        const sky = skyOf(done.run)!;
+        seen.add(`${sky.backed}/${sky.duelWinner}`);
+        expect(done.lines.join(' ').length).toBeGreaterThan(80);
+        if (sky.backed === 'pidgey' && sky.duelWinner === 'pidgey') {
+          expect(sky).toMatchObject({ phase: 'done', ending: 'hm' });
+          expect(done.run.inventory['hm-fly']).toBe(1);
+          expect(done.lines.join(' ')).toContain('Flying HM');
+        } else {
+          expect(sky.phase).toBe('rivalry');
+          expect(done.run.inventory['hm-fly']).toBeUndefined();
+        }
       }
-      expect(sky.phase).toBe('rivalry');
-      expect(run.inventory['hm-fly']).toBeUndefined();
     }
+    expect(seen.size).toBe(4);
   });
 
-  it('plays through the event system: the stop is on the map, and choosing it stores the story', () => {
-    const run = newRun(seedWhere('spearow'));
-    const side = sideOf(run, 'sky.opening');
-    expect(side).toBeDefined();
-    run.stage!.current = run.stage!.map.nodes.find((n) => n.sides.some((x) => x.id === side!.id))!.id;
-    const res = chooseEvent(content, run, side!.id, 0);
-    expect(skyOf(res.run)?.backed).toBe('pidgey');
-    expect(res.changes.join('\n')).toContain('branch');
+  it('the watched fight is deterministic for a seed', () => {
+    const a = watch(newRun('sky-7'), 'sky.opening', 0);
+    const b = watch(newRun('sky-7'), 'sky.opening', 0);
+    expect(skyOf(a.run)!.duelWinner).toBe(skyOf(b.run)!.duelWinner);
   });
 });
 
@@ -170,73 +205,100 @@ describe('Pidgey\'s Resolve: the cliff', () => {
     expect(conditionMet(content, run, { kind: 'sky', when: 'finale' })).toBe(false);
   });
 
-  it('the fight is a replay: the same inputs are the same fight, and the ask never changes the start', () => {
-    const run = atCliff('cliff-2');
-    const sky = skyOf(run)!;
-    const a = playFinale(content, run, sky, 'ask');
-    const b = playFinale(content, run, sky, 'ask');
-    expect(a).toEqual(b);
-    const c1 = playFinale(content, run, sky, 'pidgeot');
-    const c2 = playFinale(content, run, sky, 'pidgeot');
-    expect(c1).toEqual(c2);
-  });
-
   it('Fearow is always the stronger bird, and training eases it', () => {
     const untrained = atCliff('cliff-3');
     const trained = atCliff('cliff-3', 3);
     trained.expansion!.sky!.gifts = ['oran-berry', 'oran-berry', 'oran-berry'];
-    expect(fearowLevel(content, untrained, skyOf(untrained)!)).toBeGreaterThan(pidgeotLevel(content, untrained, skyOf(untrained)!));
     const gapU = fearowLevel(content, untrained, skyOf(untrained)!) - pidgeotLevel(content, untrained, skyOf(untrained)!);
     const gapT = fearowLevel(content, trained, skyOf(trained)!) - pidgeotLevel(content, trained, skyOf(trained)!);
+    expect(gapU).toBeGreaterThan(0);
     expect(gapT).toBeLessThan(gapU);
   });
 
-  it('across 40 seeds the player is usually asked, and the cheer decides between two real outcomes', () => {
-    let asked = 0;
-    let cheerPidgeotWins = 0;
-    let cheerFearowPidgeotWins = 0;
-    for (let i = 0; i < 40; i++) {
-      const run = atCliff(`cliff-${i}`);
-      const sky = skyOf(run)!;
-      if (!playFinale(content, run, sky, 'ask').asked) continue;
-      asked++;
-      if (playFinale(content, run, sky, 'pidgeot').winner === 0) cheerPidgeotWins++;
-      if (playFinale(content, run, sky, 'fearow').winner === 0) cheerFearowPidgeotWins++;
-    }
-    expect(asked).toBeGreaterThanOrEqual(24);
-    // Cheering Pidgeot wins it more often than cheering Fearow does (the Mega is worth more than Attack +2), and it is never certain.
-    expect(cheerPidgeotWins).toBeGreaterThan(cheerFearowPidgeotWins);
-    expect(cheerPidgeotWins).toBeLessThan(asked);
-    expect(cheerPidgeotWins).toBeGreaterThan(0);
+  it('is watched: Pidgeot (with its gifts) against Fearow (with the moves it learned), your team set aside', () => {
+    const run = atCliff('cliff-4');
+    skyOf(run)!.gifts = ['oran-berry'];
+    skyOf(run)!.meets = 5;
+    const side = sideOf(run, 'sky.finale')!;
+    run.stage!.current = run.stage!.map.nodes.find((n) => n.sides.some((x) => x.id === side.id))!.id;
+    const started = chooseEvent(content, run, side.id, 0).run;
+    expect(started.battle!.spectate).toEqual({ kind: 'finale', cheerAt: 0.35 });
+    expect(started.party.map((m) => m.speciesId)).toEqual(['pidgeot']);
+    expect(started.party[0]!.held).toEqual({ 'oran-berry': 1 });
+    expect(started.party[0]!.fixedAbility).toBe('scrappy');
+    expect(started.battle!.enemyTeam[0]!.speciesId).toBe('fearow');
+    expect(started.battle!.enemyTeam[0]!.moves.map((m) => m.id)).toEqual(fearowMoves(skyOf(started)!));
   });
 
-  it('watching starts the ask and puts the cheer scene beside you; cheering decides it and an unanswered join closes', () => {
+  it('across 30 seeds the player is usually asked, and the answer decides between real outcomes', () => {
+    let asked = 0;
+    let pidgeotCheerWins = 0;
+    let fearowCheerPidgeotWins = 0;
     for (let i = 0; i < 30; i++) {
-      const run = atCliff(`cliff-w${i}`);
-      run.stage!.current = run.stage!.map.nodes[0]!.id;
-      const text = applySky(content, run, { kind: 'sky', act: 'finaleWatch' });
-      const sky = skyOf(run)!;
-      if (!sky.finale.asked) {
-        expect(sky.phase).toBe('done');
-        expect(text).toBeTruthy();
-        continue;
-      }
-      expect(sky.phase).toBe('rivalry');
-      expect(run.stage!.map.nodes[0]!.sides.some((s) => s.eventId === 'sky.cheer')).toBe(true);
-      applySky(content, run, { kind: 'sky', act: 'cheer', bird: 'pidgeot' });
-      expect(sky.finale.cheer).toBe('pidgeot');
-      expect(['pidgeot', 'fearow']).toContain(sky.finale.winner);
-      if (sky.finale.winner === 'pidgeot') {
-        expect(run.stage!.map.nodes[0]!.sides.some((s) => s.eventId === 'sky.join.pidgeot')).toBe(true);
-        // The join is never answered: the next region begins and it flies free.
-        run.regionIndex += 1;
-        settleSky(content, run);
-        expect(sky.ending).toBe('pidgeot-free');
-        return;
-      }
-      // Fearow won after Pidgeot was cheered: both birds go their own way.
-      expect(sky.ending).toBe('fearow-alone');
+      const seed = `cliff-${i}`;
+      const probe = watch(atCliff(seed), 'sky.finale', 0, 'pidgeot');
+      if (!probe.asked) continue;
+      asked++;
+      if (skyOf(probe.run)!.finale.winner === 'pidgeot') pidgeotCheerWins++;
+      const other = watch(atCliff(seed), 'sky.finale', 0, 'fearow');
+      if (skyOf(other.run)!.finale.winner === 'pidgeot') fearowCheerPidgeotWins++;
     }
+    expect(asked).toBeGreaterThanOrEqual(15);
+    expect(pidgeotCheerWins).toBeGreaterThan(0);
+    expect(pidgeotCheerWins).toBeLessThan(asked);
+    expect(pidgeotCheerWins).toBeGreaterThan(fearowCheerPidgeotWins);
+  });
+
+  it('every ending follows the winner and the cheer, and your team always comes back', () => {
+    const seen = new Set<string>();
+    for (let i = 0; i < 40 && seen.size < 5; i++) {
+      for (const cheer of ['pidgeot', 'fearow', undefined] as const) {
+        const run = atCliff(`cliff-e${i}`);
+        const team = structuredClone(run.party);
+        const done = watch(run, 'sky.finale', 0, cheer);
+        const sky = skyOf(done.run)!;
+        expect(done.run.party).toEqual(team);
+        expect(sky.stash).toBeUndefined();
+        expect(done.lines.length).toBeGreaterThan(0);
+        const here = done.run.stage!.map.nodes.flatMap((n) => n.sides).map((x) => x.eventId);
+        if (!done.asked) {
+          expect(sky.finale.cheer).toBeUndefined();
+          expect(sky.ending).toBe(sky.finale.winner === 'pidgeot' ? 'pidgeot-alone' : 'fearow-alone');
+        } else if (sky.finale.winner === 'pidgeot' && cheer === 'pidgeot') expect(here).toContain('sky.join.pidgeot');
+        else if (sky.finale.winner === 'pidgeot') expect(sky.ending).toBe('pidgeot-left');
+        else if (cheer === 'fearow') expect(here).toContain('sky.join.fearow');
+        else expect(sky.ending).toBe('fearow-alone');
+        seen.add(`${sky.finale.winner}/${cheer ?? 'none'}/${sky.ending ?? 'open'}`);
+      }
+    }
+    expect(seen.size).toBeGreaterThanOrEqual(4);
+  });
+
+  it('cheering Pidgeot makes it Mega (a stoneless Mega); cheering Fearow gives Attack +2', () => {
+    let megaSeen = false;
+    let furySeen = false;
+    for (let i = 0; i < 30 && !(megaSeen && furySeen); i++) {
+      const r = atCliff(`cliff-m${i}`);
+      const side = sideOf(r, 'sky.finale')!;
+      r.stage!.current = r.stage!.map.nodes.find((n) => n.sides.some((x) => x.id === side.id))!.id;
+      let run = chooseEvent(content, r, side.id, 0).run;
+      for (let t = 0; t < 300 && run.phase === 'battle'; t++) {
+        if (cheerDue(content, run)) {
+          const bird = i % 2 === 0 ? 'pidgeot' : 'fearow';
+          cheerSky(content, run, bird);
+          if (bird === 'fearow') {
+            expect(run.battle!.playerStages.atk).toBeGreaterThanOrEqual(2);
+            furySeen = true;
+          } else expect(run.party[0]!.skyMega).toBe(true);
+        }
+        const res = takeTurn(content, run, chooseAutoAction(content, run, [])!.action);
+        run = res.run;
+        if (res.events.some((e) => (e as { type: string; kind?: string }).type === 'transform' && (e as { kind?: string }).kind === 'mega')) megaSeen = true;
+        if (res.spectated) break;
+      }
+    }
+    expect(furySeen).toBe(true);
+    expect(megaSeen).toBe(true);
   });
 
   it('Pidgeot joins once, with Scrappy, a stoneless Mega that has Sky\'s Resolve, and its held item', () => {
@@ -366,5 +428,22 @@ describe('Sky\'s Resolve in battle', () => {
     const resolve = fight('skys-resolve', ['hurricane'], ['hurricane'], 'pidgeot');
     expect(misses(resolve, 'player')).toBe(0);
     expect(misses(resolve, 'enemy')).toBe(0);
+  });
+});
+
+describe('Pidgey\'s Resolve: reading the text', () => {
+  it('long story lines are cut to pieces that fit the message box, and nothing is lost', () => {
+    const long = ['You step off the path and the two of them do not even notice you. A Pidgey, small and brown and stubborn. A Spearow, loud and quick and a size too big for the branch.', 'Short.'];
+    const pieces = chunkLines(long);
+    expect(pieces.every((p) => p.length <= 84)).toBe(true);
+    expect(pieces.join(' ').replace(/\s+/g, ' ')).toBe(long.join(' ').replace(/\s+/g, ' '));
+    const huge = 'x'.repeat(200);
+    expect(chunkLines([huge]).join('')).toBe(huge);
+  });
+
+  it('every line the story can say fits after cutting', async () => {
+    const text = await import('../../src/core/sky/text');
+    const all = [...text.DUEL_HEADER, ...text.duelResult('pidgey', 'pidgey'), ...text.duelResult('pidgey', 'spearow'), ...text.duelResult('spearow', 'pidgey'), ...text.duelResult('spearow', 'spearow'), ...text.FINALE_SETUP, text.FINALE_ASK, ...text.finaleEnd('pidgeot', 'pidgeot'), ...text.finaleEnd('pidgeot', 'fearow'), ...text.finaleEnd('pidgeot', undefined), ...text.finaleEnd('fearow', 'fearow'), ...text.finaleEnd('fearow', 'pidgeot'), ...text.finaleEnd('fearow', undefined)];
+    for (const piece of chunkLines(all)) expect(piece.length).toBeLessThanOrEqual(84);
   });
 });
