@@ -34,6 +34,7 @@ import { eliteRematchDue } from './story/eliteRematch';
 import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
+import { laterEventStep } from './events/questline';
 import { climaxBattleEnded, setClimaxCut } from './arc/climaxExtended';
 import { freeHandedOverRival, standWithClimaxLost, standWithOf } from './arc/standWithExtended';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
@@ -1086,6 +1087,8 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
     onCross(taken.text);
     if (taken.spent) return run;
   }
+  // Catalog Overhaul questlines: an event queued for "N nodes on" opens beside this node.
+  laterEventStep(content, run);
   // The Mach Bike rides past a wild Pokémon: no battle, but the reward draft still comes.
   if (mode === 'machBike' && node.kind === 'wild') {
     run.afterDecisions = 'reward';

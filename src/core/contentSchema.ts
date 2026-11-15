@@ -2826,6 +2826,10 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('storyRaid'), n: z.number().int().min(1).max(6) }),
   /** An event that has already been played this run. */
   z.object({ kind: z.literal('eventSeen'), id: z.string() }),
+  /** Catalog Overhaul questlines (core/events/questline.ts): a story flag was first set at least / at most this many stages ago (0 = this stage). False when it never was. */
+  z.object({ kind: z.literal('flagAge'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), atLeast: z.number().int().min(0).default(1), atMost: z.number().int().min(0).default(99) }),
+  /** Catalog Overhaul questlines: a Pokémon of this evolution line (base species id) is in the party, optionally at Bond level `bond` or more (0 to 5; Bond level N = friendship N x 50, the pack-wide rule). `absent`: none of the line is in the party. */
+  z.object({ kind: z.literal('partyLine'), species: z.string().min(1), bond: z.number().int().min(0).max(5).default(0), absent: z.boolean().optional() }),
   /** The trainer must not carry this tag (N is "pacifist": no aggressive choices). */
   z.object({ kind: z.literal('noTrainerTag'), tag: z.string() }),
   /** Event Director: a party member this fond of you (friendship, 0 to 255). */
@@ -3175,6 +3179,10 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('addEvent'), eventId: z.string().min(1) }),
   /** Catalog Overhaul: this event may be drawn again later in the run ("Maybe later": the scene comes back). */
   z.object({ kind: z.literal('seeAgain'), eventId: z.string().min(1) }),
+  /** Catalog Overhaul questlines (core/events/questline.ts): this event's stop opens beside the node reached after `nodes` more nodes ("three nodes on"). */
+  z.object({ kind: z.literal('laterEvent'), eventId: z.string().min(1), nodes: z.number().int().min(1).max(12) }),
+  /** Catalog Overhaul questlines: friendship for the party member of this evolution line only (a Companion's Bond). Does nothing when none is in the party. */
+  z.object({ kind: z.literal('friendshipLine'), species: z.string().min(1), amount: z.number().int() }),
   /** Exploration: like addEvent, but the next room is one of these, picked by the event's roll (a Mystery Dungeon floor). */
   /** Pseudo-stage: step into a pseudo-stage (src/data/pseudoStages.json) from this node; it plays like a stage and returns here. */
   z.object({ kind: z.literal('enterPseudo'), id: z.string().min(1) }),
