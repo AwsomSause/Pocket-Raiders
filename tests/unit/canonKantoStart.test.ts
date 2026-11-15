@@ -68,7 +68,8 @@ describe('Viridian before Stage 1, the Plateau finale and the road events in a r
   it('a Kanto run with canon on starts with the Old Man and Route 22 on the stage 1 map', () => {
     for (const seed of kantoSeeds.slice(0, 10)) {
       const run = begin(seed);
-      const open = stops(run, 'cx-open');
+      // Must-see spaces (the Old Man, Route 22) sit on every node of their step, so every route meets them.
+      const open = [...new Set(stops(run, 'cx-open'))];
       expect(open).toContain('cs-kanto-viridian-oldman');
       expect(open).toContain('cs-kanto-viridian-route22');
       expect(open.length).toBeLessThanOrEqual(4);
@@ -129,7 +130,7 @@ describe('Viridian, Indigo, road and cast events: playing them', () => {
       const before = structuredClone(begin(kantoSeeds[0]!));
       before.seed = `OM${i}`;
       const { run, sideId } = debugForceEvent(content, before, 'cs-kanto-viridian-oldman');
-      const out = chooseEvent(content, run, sideId, 0).run;
+      const out = chooseEvent(content, run, sideId, 1).run; // "Let me try." (80%; else the Coffee Joke)
       if (out.battle) { coffee++; expect(out.battle.kind).toBe('wild'); } else {
         lesson++;
         expect((out.inventory['poke-ball'] ?? 0) - (before.inventory['poke-ball'] ?? 0)).toBe(5);
@@ -144,7 +145,7 @@ describe('Viridian, Indigo, road and cast events: playing them', () => {
     const { run, sideId } = debugForceEvent(content, structuredClone(begin(kantoSeeds[0]!)), 'cs-kanto-viridian-route22');
     const out = chooseEvent(content, run, sideId, 0).run;
     expect(out.battle?.kind).toBe('trainer');
-    expect(out.expansion!.canon!.flags).toContain('kanto.route22.fought');
+    expect(out.expansion!.canon!.flags).toContain('kanto.route22.first');
   });
   it('Route 22 with a registered rival gives the Rival Token mark and starts the fight (it used to throw "Unknown rival mark")', () => {
     // Play on until the run has met a rival and is back on the map.

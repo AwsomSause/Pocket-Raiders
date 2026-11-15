@@ -107,7 +107,8 @@
    "town": "viridian",
    "stage": 8,
    "always": [
-    "cs.kanto.viridian.route22"
+    "cs.kanto.viridian.route22",
+    "cs.kanto.viridian.oldman"
    ]
   },
   {
@@ -130,18 +131,32 @@
     "spaces": []
    },
    "uniqueRewardFlag": null,
-   "level": null,
+   "level": {
+    "mode": "relative",
+    "offset": -2
+   },
    "length": null,
    "flags": [
     "kanto.weedle.seed"
    ],
-   "section": "2.2"
+   "section": "KANTO_PLACED_1: The Old Man's Lesson",
+   "placed": {
+    "stage": [
+     1
+    ],
+    "home": 1,
+    "sits": "must",
+    "attaches": "before",
+    "badge": "A coffee cup",
+    "level": -2,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.viridian.route22",
    "town": "viridian",
    "parent": null,
-   "name": "Route 22 — The Rival",
+   "name": "Route 22: The Rival",
    "kind": "MC",
    "appears": "always",
    "requires": {
@@ -155,16 +170,32 @@
    },
    "length": null,
    "flags": [
-    "kanto.route22.fought",
-    "kanto.route22.rematch"
+    "kanto.route22.first",
+    "kanto.route22.final"
    ],
-   "section": "2.3"
+   "section": "KANTO_PLACED_1: Route 22: The Rival",
+   "placed": {
+    "stage": [
+     1,
+     8
+    ],
+    "home": 3,
+    "window": [
+     2,
+     4
+    ],
+    "sits": "must",
+    "attaches": "instead",
+    "badge": "The rival's face",
+    "level": 2,
+    "often": "Twice per Kanto (Stage 8: Step 18, must-see)"
+   }
   },
   {
    "id": "cs.kanto.viridian.parcel",
    "town": "viridian",
    "parent": null,
-   "name": "Viridian Mart — The Parcel",
+   "name": "Viridian Mart: The Parcel",
    "kind": "EV",
    "appears": "roll",
    "requires": {
@@ -172,12 +203,27 @@
     "spaces": []
    },
    "uniqueRewardFlag": null,
-   "level": null,
+   "level": {
+    "mode": "relative",
+    "offset": -1
+   },
    "length": null,
    "flags": [
-    "kanto.parcel.upgrade"
+    "kanto.parcel.upgrade",
+    "kanto.parcel.lost"
    ],
-   "section": "2.4"
+   "section": "KANTO_PLACED_1: Viridian Mart: The Parcel",
+   "placed": {
+    "stage": [
+     1
+    ],
+    "home": 2,
+    "sits": "town",
+    "attaches": "town",
+    "badge": "A parcel",
+    "level": -1,
+    "often": "Once per run (delivery: the stage's first + node)"
+   }
   },
   {
    "id": "cs.kanto.viridian.school",
@@ -193,8 +239,22 @@
    "uniqueRewardFlag": null,
    "level": null,
    "length": null,
-   "flags": [],
-   "section": "2.5"
+   "flags": [
+    "kanto.school.done"
+   ],
+   "section": "KANTO_PLACED_1: Viridian Trainer School",
+   "placed": {
+    "stage": [
+     1,
+     8
+    ],
+    "home": 2,
+    "sits": "town",
+    "attaches": "town",
+    "badge": "A chalkboard",
+    "level": null,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.viridian.diglett",
@@ -213,8 +273,25 @@
     "offset": -1
    },
    "length": 3,
-   "flags": [],
-   "section": "2.6"
+   "flags": [
+    "kanto.diglett.waited"
+   ],
+   "section": "KANTO_PLACED_1: Diglett's Cave",
+   "placed": {
+    "stage": [
+     1
+    ],
+    "home": 3,
+    "window": [
+     2,
+     5
+    ],
+    "sits": "door",
+    "attaches": "instead",
+    "badge": "A molehill",
+    "level": -1,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.pewter.forest",
@@ -273,8 +350,25 @@
    "uniqueRewardFlag": null,
    "level": null,
    "length": null,
-   "flags": [],
-   "section": "3.4"
+   "flags": [
+    "kanto.stew.perfect"
+   ],
+   "section": "KANTO_PLACED_1: Brock's Rest Stop",
+   "placed": {
+    "stage": [
+     1
+    ],
+    "home": 10,
+    "window": [
+     8,
+     13
+    ],
+    "sits": "plus",
+    "attaches": "plus",
+    "badge": "A cooking pot",
+    "level": null,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.pewter.museum",
@@ -290,8 +384,26 @@
    "uniqueRewardFlag": null,
    "level": null,
    "length": null,
-   "flags": [],
-   "section": "3.5"
+   "flags": [
+    "kanto.museum.registry",
+    "kanto.museum.amber"
+   ],
+   "section": "KANTO_PLACED_1: Pewter Museum of Science",
+   "placed": {
+    "stage": [
+     1
+    ],
+    "home": 15,
+    "window": [
+     13,
+     17
+    ],
+    "sits": "town",
+    "attaches": "town",
+    "badge": "A bone",
+    "level": null,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.pewter.magikarp",
@@ -324,12 +436,30 @@
     "spaces": []
    },
    "uniqueRewardFlag": null,
-   "level": null,
+   "level": {
+    "mode": "relative",
+    "offset": -1
+   },
    "length": null,
    "flags": [
     "kanto.flock.seen"
    ],
-   "section": "3.7"
+   "section": "KANTO_PLACED_1: Pewter Skies: The Flock",
+   "placed": {
+    "stage": [
+     1
+    ],
+    "home": 7,
+    "window": [
+     5,
+     9
+    ],
+    "sits": "optional",
+    "attaches": "before",
+    "badge": "A feather",
+    "level": -1,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.pewter.moon.clefairy",
@@ -532,10 +662,30 @@
     "spaces": []
    },
    "uniqueRewardFlag": null,
-   "level": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
    "length": null,
-   "flags": [],
-   "section": "4.6"
+   "flags": [
+    "kanto.burglary.solved"
+   ],
+   "section": "KANTO_PLACED_1: Cerulean Burglary",
+   "placed": {
+    "stage": [
+     2
+    ],
+    "home": 11,
+    "window": [
+     9,
+     13
+    ],
+    "sits": "optional",
+    "attaches": "before",
+    "badge": "A broken wall",
+    "level": 0,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.cerulean.daycare",
@@ -551,8 +701,21 @@
    "uniqueRewardFlag": null,
    "level": null,
    "length": null,
-   "flags": [],
-   "section": "4.7"
+   "flags": [
+    "kanto.daycare.left"
+   ],
+   "section": "KANTO_PLACED_1: Route 5 Day-Care",
+   "placed": {
+    "stage": [
+     2
+    ],
+    "home": 15,
+    "sits": "town",
+    "attaches": "town",
+    "badge": "An egg",
+    "level": null,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.cerulean.cave",
@@ -685,10 +848,30 @@
     "spaces": []
    },
    "uniqueRewardFlag": null,
-   "level": null,
+   "level": {
+    "mode": "relative",
+    "offset": -1
+   },
    "length": null,
-   "flags": [],
-   "section": "5.6"
+   "flags": [
+    "kanto.sprat.taught"
+   ],
+   "section": "KANTO_PLACED_1: Diglett Port: The Fan Club Fish",
+   "placed": {
+    "stage": [
+     3
+    ],
+    "home": 7,
+    "window": [
+     5,
+     9
+    ],
+    "sits": "optional",
+    "attaches": "after",
+    "badge": "A hook",
+    "level": -1,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.vermilion.market",
@@ -704,8 +887,21 @@
    "uniqueRewardFlag": null,
    "level": null,
    "length": null,
-   "flags": [],
-   "section": "5.6"
+   "flags": [
+    "kanto.market.ticket"
+   ],
+   "section": "KANTO_PLACED_1: Vermilion Harbor Market",
+   "placed": {
+    "stage": [
+     3
+    ],
+    "home": 4,
+    "sits": "town",
+    "attaches": "town",
+    "badge": "A crate of fish",
+    "level": null,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.lavender.tower",
@@ -723,12 +919,27 @@
     "mode": "relative",
     "offset": 0
    },
-   "length": null,
+   "length": 7,
    "flags": [
     "kanto.tower.cleared",
     "kanto.tower.memorial"
    ],
-   "section": "6.1"
+   "section": "KANTO_PLACED_1: Pokémon Tower",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 3,
+    "window": [
+     2,
+     5
+    ],
+    "sits": "must",
+    "attaches": "instead",
+    "badge": "A tower",
+    "level": 0,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.lavender.fuji",
@@ -744,8 +955,21 @@
    "uniqueRewardFlag": null,
    "level": null,
    "length": null,
-   "flags": [],
-   "section": "6.2"
+   "flags": [
+    "kanto.fuji.adopted"
+   ],
+   "section": "KANTO_PLACED_1: Mr. Fuji's House",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 1,
+    "sits": "town",
+    "attaches": "town",
+    "badge": "A small house",
+    "level": null,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.lavender.fanclub",
@@ -761,8 +985,21 @@
    "uniqueRewardFlag": null,
    "level": null,
    "length": null,
-   "flags": [],
-   "section": "6.3"
+   "flags": [
+    "kanto.fanclub.listened"
+   ],
+   "section": "KANTO_PLACED_1: Pokémon Fan Club",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 1,
+    "sits": "town",
+    "attaches": "town",
+    "badge": "A rosette",
+    "level": null,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.lavender.rocktunnel",
@@ -781,8 +1018,25 @@
     "offset": 0
    },
    "length": 5,
-   "flags": [],
-   "section": "6.4"
+   "flags": [
+    "kanto.rocktunnel.cleared"
+   ],
+   "section": "KANTO_PLACED_1: Rock Tunnel Blackout",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 4,
+    "window": [
+     3,
+     6
+    ],
+    "sits": "door",
+    "attaches": "instead",
+    "badge": "A black square",
+    "level": 0,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.lavender.powerplant",
@@ -801,8 +1055,26 @@
     "offset": 2
    },
    "length": 6,
-   "flags": [],
-   "section": "6.5"
+   "flags": [
+    "kanto.powerplant.cleared",
+    "kanto.powerplant.zapdos"
+   ],
+   "section": "KANTO_PLACED_1: Abandoned Power Plant",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 4,
+    "window": [
+     3,
+     6
+    ],
+    "sits": "door",
+    "attaches": "instead",
+    "badge": "A bolt in a circle",
+    "level": 2,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.lavender.volunteers",
@@ -818,8 +1090,21 @@
    "uniqueRewardFlag": null,
    "level": null,
    "length": null,
-   "flags": [],
-   "section": "6.6"
+   "flags": [
+    "kanto.volunteers.revive"
+   ],
+   "section": "KANTO_PLACED_1: Lavender Volunteers",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 1,
+    "sits": "town",
+    "attaches": "town",
+    "badge": "A candle",
+    "level": null,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.celadon.mart",
@@ -1103,7 +1388,7 @@
    "parent": null,
    "name": "Sabrina's Labyrinth",
    "kind": "PS",
-   "appears": "always",
+   "appears": "roll",
    "requires": {
     "flags": [],
     "spaces": []
@@ -1478,6 +1763,43 @@
    "length": null,
    "flags": [],
    "section": "13.1"
+  },
+  {
+   "id": "cs.kanto.lavender.prank",
+   "town": "lavender",
+   "parent": null,
+   "name": "Haunter's Prank",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": null,
+   "flags": [
+    "kanto.prank.friend"
+   ],
+   "section": "KANTO_PLACED_1: Haunter's Prank",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 2,
+    "window": [
+     1,
+     4
+    ],
+    "sits": "optional",
+    "attaches": "after",
+    "badge": "A grin",
+    "level": 0,
+    "often": "Once per run"
+   }
   }
  ]
 }

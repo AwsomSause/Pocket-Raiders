@@ -1,0 +1,371 @@
+{
+ "cs-kanto-viridian-oldman": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 1,
+  "sits": "must-see",
+  "attaches": "before",
+  "tags": [
+   "A coffee cup"
+  ],
+  "level": "A-2",
+  "often": "region",
+  "canon": "cs.kanto.viridian.oldman",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-viridian-route22": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 3,
+  "window": [
+   2,
+   4
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "tags": [
+   "The rival's face"
+  ],
+  "level": "A+2",
+  "often": "region",
+  "canon": "cs.kanto.viridian.route22",
+  "kantoStages": [
+   1,
+   8
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-viridian-parcel": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 2,
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "A parcel"
+  ],
+  "level": "A-1",
+  "often": "region",
+  "canon": "cs.kanto.viridian.parcel",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-viridian-school": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 2,
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "A chalkboard"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.viridian.school",
+  "kantoStages": [
+   1,
+   8
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-viridian-diglett": {
+  "shape": "Door",
+  "earliest": "A1",
+  "home": 3,
+  "window": [
+   2,
+   5
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "A molehill"
+  ],
+  "level": "A-1",
+  "often": "region",
+  "canon": "cs.kanto.viridian.diglett",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-pewter-rest": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 10,
+  "window": [
+   8,
+   13
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "A cooking pot"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.pewter.rest",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-pewter-museum": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "A bone"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.pewter.museum",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-pewter-flock": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 7,
+  "window": [
+   5,
+   9
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "tags": [
+   "A feather"
+  ],
+  "level": "A-1",
+  "often": "region",
+  "canon": "cs.kanto.pewter.flock",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-cerulean-burglary": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 11,
+  "window": [
+   9,
+   13
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "tags": [
+   "A broken wall"
+  ],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.cerulean.burglary",
+  "kantoStages": [
+   2
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-cerulean-daycare": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 15,
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "An egg"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.cerulean.daycare",
+  "kantoStages": [
+   2
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-vermilion-fishclub": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 7,
+  "window": [
+   5,
+   9
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "tags": [
+   "A hook"
+  ],
+  "level": "A-1",
+  "often": "region",
+  "canon": "cs.kanto.vermilion.fishclub",
+  "kantoStages": [
+   3
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-vermilion-market": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 4,
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "A crate of fish"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.vermilion.market",
+  "kantoStages": [
+   3
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-lavender-tower": {
+  "shape": "Door",
+  "earliest": "A4",
+  "home": 3,
+  "window": [
+   2,
+   5
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "tags": [
+   "A tower"
+  ],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.lavender.tower",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-lavender-fuji": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 1,
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "A small house"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.lavender.fuji",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-lavender-fanclub": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 1,
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "A rosette"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.lavender.fanclub",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-lavender-rocktunnel": {
+  "shape": "Door",
+  "earliest": "A4",
+  "home": 4,
+  "window": [
+   3,
+   6
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "A black square"
+  ],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.lavender.rocktunnel",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-lavender-powerplant": {
+  "shape": "Door",
+  "earliest": "A4",
+  "home": 4,
+  "window": [
+   3,
+   6
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "A bolt in a circle"
+  ],
+  "level": "A+2",
+  "often": "region",
+  "canon": "cs.kanto.lavender.powerplant",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-lavender-volunteers": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 1,
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "A candle"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.lavender.volunteers",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true
+ },
+ "cs-kanto-lavender-prank": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 2,
+  "window": [
+   1,
+   4
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "tags": [
+   "A grin"
+  ],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.lavender.prank",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true
+ }
+}

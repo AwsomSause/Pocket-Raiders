@@ -32,8 +32,14 @@ export const CanonSpaceSchema = z.object({
   length: z.number().int().positive().nullable(),
   /** Run flags the space writes, as listed in its spec. */
   flags: z.array(flag),
-  /** The section number in CANON_SPACES_KANTO.md, for tracing. */
+  /** The section number in CANON_SPACES_KANTO.md, or the KANTO_PLACED heading, for tracing. */
   section: z.string(),
+  /** Catalog overhaul (KANTO_PLACED_*.md): where the space sits on the 20-step map. Missing on spaces the placed docs do not cover. */
+  placed: z.object({
+    stage: z.array(z.number().int().min(1).max(8)), home: z.number().int().min(1).max(20), window: z.tuple([z.number().int(), z.number().int()]).optional(),
+    sits: z.enum(['must', 'optional', 'town', 'plus', 'door', 'hub']), attaches: z.enum(['before', 'instead', 'after', 'town', 'plus']),
+    badge: z.string(), level: z.number().int().min(-2).max(2).nullable(), often: z.string(),
+  }).optional(),
 });
 export type CanonSpace = z.infer<typeof CanonSpaceSchema>;
 
@@ -58,13 +64,15 @@ export const CanonSpacesFileSchema = z.object({
 export type CanonSpacesFile = z.infer<typeof CanonSpacesFileSchema>;
 
 /** Row counts the content gate holds the catalog to. */
-export const CANON_KANTO_COUNTS = { towns: 10, slots: 11, spaces: 71 } as const;
+export const CANON_KANTO_COUNTS = { towns: 10, slots: 11, spaces: 72 } as const;
 
 /** The run's canon state (stored at run.expansion.canon). A menu is rolled once per slot and then kept, so reloading never re-rolls it. */
 export const CanonStateSchema = z.object({
   flags: z.array(flag).default([]),
   completed: z.array(spaceId).default([]),
   menus: z.record(z.string(), z.array(spaceId)).default({}),
+  /** Route 5 Day-Care (catalog overhaul): Pokémon left for a stage (PokemonInstance rows); they come back +3 levels at the next stage. */
+  daycare: z.object({ mons: z.array(z.unknown()), pair: z.boolean() }).optional(),
   /** Saffron: party members waiting while one Pokémon fights alone (PokemonInstance rows; checked where they are used). */
   stash: z.array(z.unknown()).optional(),
   /** Accessibility: a loss in Sabrina's Labyrinth resumes from the last room reached instead of starting over (setting `labyrinthResume`). */

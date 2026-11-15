@@ -6,6 +6,7 @@ import { NATURE_IDS } from './natures';
 import { z } from 'zod';
 import { CO_MOVE_FLAGS, CO_WHO_NAMES } from './co/who';
 import { ANIME_LOOKS } from './animeLooks';
+import { KcConditionSchema, KcEffectSchema } from './expansion/canonKantoSchema';
 import { GRADES as PROMPT_GRADES } from './interaction/prompt';
 import { UltraRuleIdSchema } from './ultra/beasts';
 import { SpectacleConfigSchema } from './battle/spectacleConfig';
@@ -2789,6 +2790,8 @@ export const EVENT_EFFECTS = ['none', 'rattle', 'spin', 'flicker', 'glint', 'sha
 
 /** Something an event or one of its choices needs; a locked choice stays visible with its requirement. */
 export const EventConditionSchema = z.discriminatedUnion('kind', [
+  /** Kanto Canon Spaces rebuild (core/expansion/canonKantoRules.ts). */
+  KcConditionSchema,
   z.object({ kind: z.literal('money'), atLeast: z.number().int().positive() }),
   z.object({ kind: z.literal('partySize'), atLeast: z.number().int().min(1).max(6) }),
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, atLeast: z.number().int() }),
@@ -2993,6 +2996,8 @@ export type TradeWant = z.infer<typeof TradeWantSchema>;
 
 /** One thing an outcome does. `share` is a fraction of max HP. */
 export const EventEffectSchema = z.discriminatedUnion('kind', [
+  /** Kanto Canon Spaces rebuild (core/expansion/canonKantoRules.ts). */
+  KcEffectSchema,
   z.object({ kind: z.literal('money'), amount: z.number().int() }),
   z.object({ kind: z.literal('item'), id: z.string(), count: z.number().int().positive().default(1) }),
   /** One of these items, picked by the event's roll. */

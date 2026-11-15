@@ -8,7 +8,7 @@ const menu = (seed: string, slot: string, flags: string[] = [], completed: strin
 describe('Kanto canon spaces catalog', () => {
   it('is clean and has the documented counts', () => {
     expect(canonSpaceGaps(canonKanto)).toEqual([]);
-    expect(canonKanto.spaces.length).toBe(71);
+    expect(canonKanto.spaces.length).toBe(72); // 71 + Haunter's Prank, scripted in KANTO_PLACED_1 (catalog overhaul)
   });
   it('keeps the director\'s mandatory spaces always placed', () => {
     for (const id of ['cs.kanto.vermilion.flightnorth', 'cs.kanto.saffron.route25', 'cs.kanto.pewter.forest', 'cs.kanto.pewter.moon', 'cs.kanto.lavender.tower']) expect(byId.get(id)?.appears).toBe('always');
@@ -62,11 +62,11 @@ describe('Town Roll', () => {
   it('retires a space once its one-time reward is owned', () => {
     for (let i = 0; i < 150; i++) expect(menu(`M${i}`, 'stage-3', ['kanto.maiden.zcrystal'])).not.toContain('cs.kanto.vermilion.maiden');
   });
-  it('the Viridian return only replays Route 22 and leaves completed spaces out', () => {
+  it('the Viridian return replays Route 22 and the Old Man (KANTO_PLACED_1, Remembers) and leaves other completed spaces out', () => {
     const first = menu('R', 'interlude-0');
     const back = menu('R', 'stage-8', [], first);
     expect(back[0]).toBe('cs.kanto.viridian.route22');
-    expect(back.filter((id) => first.includes(id))).toEqual(['cs.kanto.viridian.route22']);
+    expect(back.filter((id) => first.includes(id))).toEqual(['cs.kanto.viridian.route22', 'cs.kanto.viridian.oldman']);
   });
   it('opens the Indigo finale with Victory Road, and Cerulean Cave only after it', () => {
     expect(menu('I', 'finale')).toEqual(['cs.kanto.indigo.road']);

@@ -1,0 +1,28 @@
+{
+ "category": "kanto-canon",
+ "built": {},
+ "merged": {},
+ "rule": {},
+ "scrapped": [],
+ "extra": {
+  "cs.kanto.viridian.oldman": "cs-kanto-viridian-oldman",
+  "cs.kanto.viridian.route22": "cs-kanto-viridian-route22",
+  "cs.kanto.viridian.parcel": "cs-kanto-viridian-parcel",
+  "cs.kanto.viridian.school": "cs-kanto-viridian-school",
+  "cs.kanto.viridian.diglett": "cs-kanto-viridian-diglett",
+  "cs.kanto.pewter.rest": "cs-kanto-pewter-rest",
+  "cs.kanto.pewter.museum": "cs-kanto-pewter-museum",
+  "cs.kanto.pewter.flock": "cs-kanto-pewter-flock",
+  "cs.kanto.cerulean.burglary": "cs-kanto-cerulean-burglary",
+  "cs.kanto.cerulean.daycare": "cs-kanto-cerulean-daycare",
+  "cs.kanto.vermilion.fishclub": "cs-kanto-vermilion-fishclub",
+  "cs.kanto.vermilion.market": "cs-kanto-vermilion-market",
+  "cs.kanto.lavender.tower": "cs-kanto-lavender-tower",
+  "cs.kanto.lavender.fuji": "cs-kanto-lavender-fuji",
+  "cs.kanto.lavender.fanclub": "cs-kanto-lavender-fanclub",
+  "cs.kanto.lavender.rocktunnel": "cs-kanto-lavender-rocktunnel",
+  "cs.kanto.lavender.powerplant": "cs-kanto-lavender-powerplant",
+  "cs.kanto.lavender.volunteers": "cs-kanto-lavender-volunteers",
+  "cs.kanto.lavender.prank": "cs-kanto-lavender-prank"
+ }
+}

@@ -1,0 +1,24 @@
+[
+ {
+  "id": "soul-dew-shard",
+  "name": "Soul Dew Shard",
+  "family": "Type boosters (held)",
+  "description": "A sliver of Soul Dew left by the ghosts of Pokémon Tower: Ghost and Psychic moves +10%",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "soul-dew",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": ["ghost", "psychic"],
+     "percent": 10
+    }
+   ]
+  }
+ }
+]

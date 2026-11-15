@@ -3,7 +3,7 @@
 // the roaming cast's cameos). Own seeded streams, nothing new to save: a run without run.expansion.canon is untouched.
 
 import { z } from 'zod';
-import { canonKanto, canonRoutesKanto } from '../../data/expansion';
+import { canonKanto, canonKantoPlaced, canonRoutesKanto } from '../../data/expansion';
 import type { Content } from '../contentSchema';
 import { conditionMet } from '../events';
 import { Rng, hashSeed } from '../rng';
@@ -11,6 +11,7 @@ import { currentRegion } from '../regions';
 import type { RunState } from '../state';
 import { canonEventFor } from './canonRun';
 import { enterCanonSlot } from './canonSpaces';
+import { nodesForSpace } from './canonKantoPlaced';
 
 export const CanonRouteSchema = z.object({
   /** The event id (src/data/events/canon-kanto-start.json). */
@@ -45,7 +46,9 @@ export function addOpeningCanonStops(content: Content, run: RunState): void {
   const rng = new Rng(hashSeed(`${run.seed}::canon-stops::interlude-0`));
   for (const id of enterCanonSlot(canonKanto, run, 'interlude-0')) {
     const event = canonEventFor(content, id, 'interlude-0');
-    if (event) addStop(run.stage!, event.id, rng, 'cx-open', run.stage!.map.columns - 1);
+    if (!event || run.stage!.map.nodes.some((n) => n.sides.some((s) => s.eventId === event.id))) continue;
+    // Catalog overhaul: Viridian's spaces sit on their doc steps (Old Man: Step 1, Route 22: Step 3, both must-see).
+    for (const node of nodesForSpace(run.stage!, canonKanto.spaces.find((x) => x.id === id), rng)) node.sides.push({ id: `cx-open-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: event.id });
   }
 }
 
@@ -65,7 +68,7 @@ export function addRouteCanonStops(content: Content, run: RunState): void {
   const n = run.stage!.index + 1;
   const rng = new Rng(hashSeed(`${run.seed}::canon-routes::stage-${n}`));
   let placed = 0;
-  for (const r of canonRoutesKanto.routes) {
+  for (const r of [...canonRoutesKanto.routes, ...canonKantoPlaced.routes]) {
     if (placed >= canonRoutesKanto.maxPerStage) break;
     if (!r.stages.includes(n)) continue;
     const roll = rng.float();

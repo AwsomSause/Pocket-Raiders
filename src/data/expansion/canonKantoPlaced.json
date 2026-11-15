@@ -1,0 +1,24 @@
+{
+ "followups": [
+  {
+   "event": "cs-kanto-viridian-parcel-nest",
+   "stages": [
+    3
+   ]
+  },
+  {
+   "event": "cs-kanto-pewter-flock-fence"
+  },
+  {
+   "event": "cs-kanto-pewter-flock-again",
+   "stages": [
+    2,
+    3
+   ]
+  },
+  {
+   "event": "cs-kanto-cerulean-daycare-back"
+  }
+ ],
+ "routes": []
+}
