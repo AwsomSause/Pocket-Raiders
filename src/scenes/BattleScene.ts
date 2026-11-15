@@ -154,7 +154,7 @@ import { addStickerRow } from '../ui/battleFx/stickers';
 import { victoryPoseFor } from '../core/presentation/victoryPose';
 import { introRecap } from '../core/presentation/skipRecap';
 import { aceBurst, legendFlash, rivalCatch, rivalEntrance, rivalExit } from '../ui/battleFx/rivalStepIn';
-import { victoryPose, showRecapBanner, bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner } from '../ui/battleFx/spectacle';
+import { victoryPose, showRecapBanner, bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner, cameoBeat } from '../ui/battleFx/spectacle';
 import { LETTER_MS, storyBar, storyLine, typeSpeech, type StoryBar } from '../ui/dialogue/storyDialogue';
 import { planSpeech, stripSpeechTags, type SpeechVoice } from '../ui/dialogue/speechPacing';
 import { AERO, moveFlagNames, bounceIn, breathe, categoryIcon, drawGlass, effectivenessIcon, effectivenessWord, slideIn, statusIcon, typeLabel, type MotionLevel } from '../ui/aero';
@@ -2134,6 +2134,7 @@ export class BattleScene extends Phaser.Scene {
 
   /** Plays the opening; if any part of the show fails, the Pokémon and boxes still appear and the battle goes on. */
   private async intro(): Promise<void> {
+    await this.flightNorthEntrance();
     if (await this.rivalStepInScene()) return;
     try {
       await this.introShow();
@@ -2142,6 +2143,22 @@ export class BattleScene extends Phaser.Scene {
       await this.recoverIntro().catch((e2) => console.warn('Battle intro recovery failed', e2));
       this.busy = false;
       this.nextPrompt();
+    }
+  }
+
+  /** Beta 0.7 Flight North: the Bug-type's return swoops in (Mega Beedrill or Gigantamax-sized Butterfree) before its fight begins. Presentation only. */
+  private async flightNorthEntrance(): Promise<void> {
+    const assist = this.run.battle?.finaleAssist;
+    if (!this.run.battle?.flightNorth || !assist || assist.id !== 'flight-north' || assist.strikesLeft < 6) return;
+    try {
+      const sp = services().session.content.species.get(assist.speciesId);
+      if (!sp) return;
+      await loadAssets(this, pokemonArtIds([sp], { front: true, back: false, shiny: false, cry: false })).catch(() => undefined);
+      const at = this.spotXY('player');
+      const vis = pokemonVisual(this, sp, 'front', at.x + 90, at.y, PIXEL_SCALE * 1.3, false, {});
+      await this.playBeat(cameoBeat(this, vis, { x: at.x + 90, y: at.y - 40 }, 'return', this.motion));
+    } catch (e) {
+      console.warn('Flight North entrance failed', e);
     }
   }
 
@@ -4648,6 +4665,20 @@ export class BattleScene extends Phaser.Scene {
       if (e.type === 'raid' && e.tone === 'phase') this.focusPush('phase');
       if (e.type === 'raid' && e.tone === 'phase') this.arenaLight?.set(++this.arenaPhase, 0xff4fd8);
       if (e.type === 'raid' && e.tone === 'phase') await this.playBeat(phaseBanner(this, e.text, 0xff4fd8, this.motion));
+      // Beta 0.7 Flight North: the shiny rescuer, or the Bug-type's return, swoops onto the field. A failed load only skips the picture.
+      if (e.type === 'raid' && e.cameo) {
+        try {
+          const sp = content.species.get(e.cameo.speciesId);
+          if (sp) {
+            await loadAssets(this, pokemonArtIds([sp], { front: true, back: false, shiny: e.cameo.shiny, cry: false })).catch(() => undefined);
+            const at = this.spotXY('player');
+            const vis = pokemonVisual(this, sp, 'front', at.x + 90, at.y, PIXEL_SCALE * 1.3, e.cameo.shiny, {});
+            await this.playBeat(cameoBeat(this, vis, { x: at.x + 90, y: at.y - 40 }, e.cameo.kind, this.motion));
+          }
+        } catch (err) {
+          console.warn('Cameo failed', err);
+        }
+      }
       // A story moment replaces the event's own line with its own (and a banner when it is a major one).
       const cue = storyCues.find((c) => c.at === index);
       if (cue) {
