@@ -178,6 +178,18 @@ describe('catalog overhaul: singles', () => {
     expect(run.party).toHaveLength(1);
   });
 
+  it('the census pays per different party type, counting each type once', () => {
+    const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'co-census', archetypeId: 'red' }), 0);
+    run.money = 0;
+    const types = new Set(content.species.get(run.party[0]!.speciesId)!.types);
+    expect(applyEffect(content, run, { kind: 'coCensus', per: 100 }, new Rng(hashSeed('c')))).toBe(`+₽${100 * types.size}`);
+    // Boundary: a second Pokémon of the same species adds no new type.
+    run.party.push(structuredClone(run.party[0]!));
+    run.money = 0;
+    applyEffect(content, run, { kind: 'coCensus', per: 100 }, new Rng(hashSeed('c')));
+    expect(run.money).toBe(100 * types.size);
+  });
+
   it('a written line becomes the run epitaph, naming the picked Pokémon', () => {
     const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'co-epitaph', archetypeId: 'red' }), 0);
     const mon = run.party[0]!;

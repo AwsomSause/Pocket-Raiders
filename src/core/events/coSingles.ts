@@ -8,7 +8,7 @@ import type { Rng } from '../rng';
 import type { PokemonInstance, RunState } from '../state';
 import { leastUsed, mostUsed } from './coToolkit';
 
-export type SinglesEffect = Extract<EventEffect, { kind: 'coAdvice' | 'coFog' | 'coEpitaph' }>;
+export type SinglesEffect = Extract<EventEffect, { kind: 'coAdvice' | 'coFog' | 'coEpitaph' | 'coCensus' }>;
 
 const FOG = 'co:fog-items';
 export const EPITAPH = 'co:epitaph';
@@ -23,6 +23,11 @@ export function teamWeaknesses(content: Content, run: Pick<RunState, 'party'>): 
     .map((type) => ({ type, mons: run.party.filter((m) => typeEffectiveness(content.typeChart, type, content.species.get(m.speciesId)?.types ?? []) > 1) }))
     .filter((w) => w.mons.length >= 2)
     .sort((a, b) => b.mons.length - a.mons.length || a.type.localeCompare(b.type));
+}
+
+/** SF154 The Census: the different types across the party (each counted once). */
+export function partyTypes(content: Content, run: Pick<RunState, 'party'>): TypeName[] {
+  return [...new Set(run.party.flatMap((m) => content.species.get(m.speciesId)?.types ?? []))];
 }
 
 /** The move a Pokémon has used most this run (ties: the earlier slot), or null if it has not fought. */
@@ -82,6 +87,7 @@ export function singlesEffectWords(e: SinglesEffect): string {
     case 'coAdvice': return e.topic === 'weakness' ? 'advice about your team' : 'advice about how you fight';
     case 'coFog': return e.action === 'take' ? `up to ${e.count} item${e.count === 1 ? '' : 's'} lost in the fog` : 'what the fog took comes back';
     case 'coEpitaph': return 'your line becomes the run\'s epitaph';
+    case 'coCensus': return `₽${e.per} for each different type in your party`;
   }
 }
 
@@ -94,6 +100,11 @@ export function applySinglesEffect(content: Content, run: RunState, e: SinglesEf
       const mon = run.party.find((m) => m.uid === pickedUid) ?? run.party[0];
       run.story.flags[EPITAPH] = e.text.replaceAll('{picked}', mon ? nameOf(content, mon) : 'my partner');
       return `Epitaph: ${String(run.story.flags[EPITAPH])}`;
+    }
+    case 'coCensus': {
+      const pay = e.per * partyTypes(content, run).length;
+      run.money += pay;
+      return `+₽${pay}`;
     }
   }
 }

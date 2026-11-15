@@ -455,6 +455,21 @@
    "key": "safari-pass",
    "setBy": "return-gold-teeth (Give them back.)",
    "readBy": "the Safari row (SF113): free entry"
+  },
+  {
+   "key": "closet-candy",
+   "setBy": "rk-pocket-closet (Leave a Rare Candy.)",
+   "readBy": "rk-pocket-closet-return (gives it back; spent there)"
+  },
+  {
+   "key": "closet-nugget",
+   "setBy": "rk-pocket-closet (Leave a Nugget.)",
+   "readBy": "rk-pocket-closet-return-2 (gives it back; spent there)"
+  },
+  {
+   "key": "closet-star",
+   "setBy": "rk-pocket-closet (Leave a Star Piece.)",
+   "readBy": "rk-pocket-closet-return-3 (gives it back; spent there)"
   }
  ]
 }

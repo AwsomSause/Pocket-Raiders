@@ -39,4 +39,9 @@
 - A scout lends you a Pokémon and comes back for it; a professor gives you a Protean Eevee and checks on it a region later; a reporter's three questions end up in the paper.
 - Milestones ask how you want to travel: fast, careful, or rich. Quiet moments let your team rest, hold your hand, or dream.
 
+**Batch 10: choice rooms (30 events).**
+- Four doors, wood to gold, each richer and riskier; a dial that picks one for you; a glass elevator with four floors.
+- Honest odds, printed: a 1-in-6 slot, a 1-in-3 lucky number worth 10% more prize money all run, a three-game streak stall.
+- A census that pays ₽100 for every different type on your team, and a wardrobe that keeps one valuable safe until a later stage.
+
 Known limits: "confused" and "Charged" for one battle are a damage change, the balloon lands two stops ahead (you cannot pick the spot), the Wooloo rolls on any day, and a few "shown before you choose" previews describe the Pokémon without naming it. Full list: `docs/status/co-singles.md`.

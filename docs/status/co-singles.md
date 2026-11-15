@@ -15,11 +15,13 @@ Content: `tools/events/co/singles-<n>.ts` -> `src/data/events/co-singles-<n>.jso
 | 7 | SF146 Study Stops, SF147 Evil-Team Pressure, SF148 Puzzles | 29 | built, re-read 2026-11-15 |
 | 8 | SF149 Puzzle Gates | 24 | built, re-read 2026-11-15 |
 | 9 | SF150 Famous Faces, SF151 Item Returns, SF152 Milestones, SF153 Quiet Moments | 38 | built, re-read 2026-11-15 |
-| later | SF154 to SF161 | 165 | not started (old events still play) |
+| 10 | SF154 Choice Rooms (+ the pocket closet's three returns) | 33 | built, re-read 2026-11-15 |
+| later | SF155 to SF161 | 135 | not started (old events still play) |
 
 SF158 to SF160 (82 calendar weeks) live in `gameEvents.json` and SF161 (15 battle moments) in `dramaEvents.json`, not in the event files; they need their own build path.
 
 ## Engine pieces added
+- `coCensus {per}` (SF154 The Census): pays `per` for each different type in the party.
 - Every fight a singles event starts is `friendly` (PLAN.md: no event ends a run); `friendlyAll` in `tools/events/co/_singlesKit.ts`, checked in `coSingles.test.ts`.
 - "A Rock- or Steel-type" uses the shared `partyTypes` condition (the `or` field was dropped). Test in `coSingles.test.ts`.
 - Items in `src/data/itemCatalog/singles.json`: `wooloo-wool` (+₽200), `tiny-mushroom` (+₽50, +1 toward Peace), `mareep-wool` (+₽300), `toy-pikachu` (next wild battle, the wild Pokémon loses its first turn, like the Poké Doll).
@@ -54,8 +56,9 @@ All checked 2026-11-15 against `STORY_FAMILIES_19.md` and `_20.md`.
 | SF151 | file-data-card, fix-machine-part, penny-hack, return-gold-teeth, return-lost-item, trade-scanner |
 | SF152 | milestone-crossroads, milestone-dawn, milestone-embers (+ `milestone-embers-trainer`, next node), milestone-summit |
 | SF153 | quiet-bond, rk-birthday, rk-counting-sheep, rk-mood-swing, rk-perfect-day, rk-rest-day, rk-terrible-day, hold-the-hand, dream-memory |
+| SF154 | rk-crossroads-four, rk-door-wood/iron/silver/gold, rk-chaos-dial, rk-elevator, rk-floor-1/2/3/4, rk-twin-nodes, rk-twin-left/right, rk-treasure-trap, rk-lucky-number, rk-probability-mage, rk-strangers-dice, rk-streak-1/2/3, rk-echo-item, rk-mastery-echo, rk-mirror-reversal, rk-pocket-closet (+ `rk-pocket-closet-return`, `-2`, `-3`), rk-census, rk-crowd-poll, rk-daily-puzzle, rk-holiday-surprise, rk-team-banner |
 
-SF137 to SF153: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
+SF137 to SF154: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
 Buttons match the doc word for word, except `w4-balloon` (the doc says "pick a reachable node", not a button text): "Hop in, and pick where to land."
 Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callback), `festival-gift-swap`, `shimmering-grass-close`, `hidden-grotto-den`, `gmax-den-*` (5), `w4-graffiti-tag`, `r145-bonsly-railings`.
 
@@ -119,3 +122,10 @@ Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callba
 | Quiet bond "paired +1 Speed when both battle together" | Your top-Bond Pokémon gets a lasting Speed boost | A pair rule |
 | Birthday "real birthday (if the save has one)" | Any day | A birthday in the profile |
 | Dream memory "an earlier scene replays, with the other choice" | Your most-used Pokémon's moment, told in words | A scene replay |
+| Gold crown "the next three battles are against Aces" | The next three foes are 3 levels up and pay boss money ×1.5 | Ace trainer slots |
+| Strangers' dice "80% to 120%" | Even odds: 80% or 120% shop prices until the stage's boss | A five-step roll |
+| Mirror reversal "the last item loss is undone" | Gives back what the Memory Fog took (nothing if it took nothing) | A record of every item loss |
+| Pocket closet | Stores a Rare Candy, Nugget or Star Piece; a later stage's wardrobe gives the same item back (the old ones multiplied healing items, which the battle rules no longer allow) | Nothing |
+| Crowd poll "the options shown" | Two options, even odds | More options |
+| Daily puzzle "the day's prize" | One of four prizes | A real daily rotation |
+| Echo stone "a Common item" | Poké Ball, Great Ball or Repel (an event has at most four buttons) | Nothing |

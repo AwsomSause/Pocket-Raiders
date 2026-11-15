@@ -3197,6 +3197,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('coFog'), action: z.enum(['take', 'give']), count: z.number().int().min(1).max(2).default(2) }),
   /** SF142 The Unwritten Library: this line (`{picked}` = the picked Pokémon's name) is the run's epitaph, shown when the run ends. */
   z.object({ kind: z.literal('coEpitaph'), text: z.string().min(1).max(160) }),
+  /** SF154 The Census: `per` money for each different type in the party. */
+  z.object({ kind: z.literal('coCensus'), per: z.number().int().min(1).max(1000) }),
   /** Clone Core (New Island): your lead's moves are copied onto the other party Pokémon you pick (the lowest-level one when none is picked). */
   z.object({ kind: z.literal('copyMoves') }),
   /** Catalog Overhaul (families-b): the Pokémon a pick choice named goes to the front of the party ("Send out the one it beat"). */
