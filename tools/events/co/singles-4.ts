@@ -417,8 +417,8 @@ const SF141: Json[] = [
     id: 'traveler-map',
     intro: '**A traveller, Peregrine**, unrolling a map on a rock: "No name on this route. Just a ring of ink, here. I\'ve never had the nerve."',
     choices: [
-      ch('Ask to copy it.', out('She lets you copy it, carefully. The ring of ink is just ahead: a grotto.', room('traveler-grotto'))),
-      ch('Ask where it goes.', out('"Where it goes? Nobody knows. That\'s why it\'s a ring." She shows you anyway. It is just ahead: a grotto.', room('traveler-grotto'))),
+      ch('Ask to copy it.', out('She lets you copy it, carefully. The ring of ink is just ahead: a grotto.', { kind: 'laterEvent', eventId: 'traveler-grotto', nodes: 2 })),
+      ch('Ask where it goes.', out('"Where it goes? Nobody knows. That\'s why it\'s a ring." She shows you anyway. It is just ahead: a grotto.', { kind: 'laterEvent', eventId: 'traveler-grotto', nodes: 2 })),
     ],
   },
   rm('traveler-grotto', 'The Grotto on the Map', 'The ring of ink was a grotto. The air inside is salt, and something is glowing at the back: a Pokémon that has not seen anyone in years, and a string of pearls lying in the shallows.', [

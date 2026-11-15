@@ -208,7 +208,12 @@ describe('choosing at an event', () => {
   });
 
   it('locks a choice whose requirement is missing', () => {
-    const run = atEvent(newRun('locked'), 'rest-meadow');
+    // rest-meadow was the sample until the Catalog Overhaul rebuilt it without an item cost; this copy keeps the old shape.
+    const [needsBerry] = EventChoiceSchema.array().parse([
+      { label: 'Share an Oran Berry', requires: [{ kind: 'item', id: 'oran-berry' }], success: { text: 'Shared.', effects: [{ kind: 'loseItem', id: 'oran-berry' }] } },
+    ]);
+    content.events.set('test-locked', { ...content.events.get('rest-meadow')!, id: 'test-locked', choices: [needsBerry!], remembers: [] });
+    const run = atEvent(newRun('locked'), 'test-locked');
     delete run.inventory['oran-berry'];
     const view = eventView(content, run, 'test-event');
     expect(view.choices[0]!.locked).toMatch(/Oran Berry/);
@@ -311,8 +316,11 @@ describe('choice cards: cost and kind of risk (Visual Bible event screens)', () 
   it('an uncertain choice says what it depends on and what failing means', () => {
     expect(choiceRisk(content, choice({ check: 'luck', failure: { text: 'f' } })).risk).toBe('Depends on your Luck · nothing lost if it fails');
     expect(choiceRisk(content, choice({ chance: 0.5, failure: { text: 'f', effects: [{ kind: 'damage', share: 0.2 }] } })).risk).toBe('Luck of the draw · a setback if it fails');
-    const fight = content.events.get('fight-or-flight-2')!.choices.find((c) => c.check && c.failure?.battle)!;
-    expect(choiceRisk(content, fight).risk).toMatch(/^Depends on your \w+ · a fight if it fails$/);
+    // fight-or-flight-2 was the sample until the Catalog Overhaul rebuilt it; this copy keeps the old card shape.
+    const [fight] = EventChoiceSchema.array().parse([
+      { label: 'Stand your ground', check: 'strength', success: { text: 'It backs off.', effects: [] }, failure: { text: 'It charges.', effects: [], battle: { kind: 'wild', species: ['tauros'] } } },
+    ]);
+    expect(choiceRisk(content, fight!).risk).toMatch(/^Depends on your \w+ · a fight if it fails$/);
   });
 
   it('a cost paid either way counts; a cost only on success does not (it would spoil the outcome)', () => {

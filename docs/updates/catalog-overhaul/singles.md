@@ -5,4 +5,11 @@
 - New choices: carry R. Tanner's savings home, add your tag under your rival's, free the Sudowoodo the Bonsly is guarding.
 - New item: Wooloo Wool (sells for ₽200).
 
-Known limits: rides skip one stop (not two), the Wooloo rolls on any day, and a few "shown before you choose" previews describe the Pokémon without naming it. Full list: `docs/status/co-singles.md`.
+**Batches 2 to 4: rests, road people, comic encounters and wild scenes (98 events).**
+- Rests are real rests now: a hot spring, a starry camp, an aurora night, a sea that glows. Pick who soaks first or who watches with you, and that Pokémon's Bond grows.
+- Road people remember you: the birthday kid comes back stronger, the wedding couple names their baby Pokémon after you, the soap box kid grows up and opens a bike shop.
+- A critic outside a cafe tells you your team's real weaknesses, and a mentor tells you how you really fight. A clerk can point you to a Move Tutor.
+- Wild scenes show who is there before you choose: watch Berries being eaten, play hide-and-seek with a Wynaut, sit down to tea with Fairy-types (say please).
+- New items: Tiny Mushroom, Mareep Wool (₽300), and a child's Toy Pikachu (the next wild Pokémon is too busy staring at it to move first).
+
+Known limits: "confused" and "Charged" for one battle are a damage change, rides skip one stop (not two), the Wooloo rolls on any day, and a few "shown before you choose" previews describe the Pokémon without naming it. Full list: `docs/status/co-singles.md`.

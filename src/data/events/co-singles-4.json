@@ -1,0 +1,2909 @@
+{
+ "catalogOverhaul": "singles",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "berries-abound",
+   "name": "Berries Abound",
+   "group": "Wild Pokémon scenes",
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "A Berry tree is shaking all over, and it is not the wind. Every branch has a wild Pokémon in it, eating as fast as it can. You can see each one from here: the route's Grass- and Bug-types, stuffed and happy.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You sit under the tree and watch them eat. Now and then a Berry drops, and nobody minds you having it. Your team leans on you, sleepy in the shade.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "potion",
+         "poke-ball"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Climb in.",
+     "success": {
+      "text": "You climb up among them and grab a Berry. One of them takes this very personally.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "pecha-berry"
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "grass",
+        "bug"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "fiery-fallout",
+   "name": "Fiery Fallout",
+   "group": "Wild Pokémon scenes",
+   "types": [
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#401808",
+    "effect": "fire"
+   },
+   "intro": "Ash drifts down like grey snow. In the haze, Fire-types sleep curled in warm hollows, their flames turned low. You can see which ones from here.",
+   "choices": [
+    {
+     "label": "Tiptoe through.",
+     "success": {
+      "text": "You go through on the very tips of your toes, and not one of them stirs. Ash settles on your shoulders and your team's backs like a blessing. On the far side, a warm stone with something tucked under it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "potion",
+         "poke-ball"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wake one.",
+     "success": {
+      "text": "You touch one on the shoulder. It opens one eye, and then both, and then it is very awake.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "fire"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "glowing-mushrooms",
+   "name": "Glowing Mushrooms",
+   "group": "Wild Pokémon scenes",
+   "rarity": "uncommon",
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#182818",
+    "effect": "sparkle"
+   },
+   "intro": "Blue mushrooms glow in the dark under the trees, lighting a path deeper in. The air smells of rain and something sweet.",
+   "choices": [
+    {
+     "label": "Pick one.",
+     "success": {
+      "text": "You pick the smallest. It goes on glowing in your hand for a long time. A Tiny Mushroom.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "tiny-mushroom",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the glow.",
+     "success": {
+      "text": "The glow leads you deeper, to a ring of mushrooms, and one of the mushrooms is looking at you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "foongus",
+        "morelull"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "habitat-migration",
+   "name": "A Migrating Flock",
+   "group": "Habitats",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1d2430",
+    "effect": "fog"
+   },
+   "intro": "Wings darken the whole sky. The flock passing over is the route's Flying-types, thousands of them, and the noise of them is like rain.",
+   "choices": [
+    {
+     "label": "Watch them pass.",
+     "success": {
+      "text": "You lie on your back and watch until the last one is gone. Your team watches with you, completely silent, and a single feather comes spinning down into your hands.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "potion",
+         "poke-ball"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Signal one down.",
+     "success": {
+      "text": "You wave both arms. One of them peels off from the flock and drops toward you like a stone.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "flying"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "lightning-storm",
+   "name": "Lightning Storm",
+   "group": "Wild Pokémon scenes",
+   "rarity": "uncommon",
+   "types": [
+    "electric"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#181830",
+    "effect": "rain"
+   },
+   "intro": "A storm crackles over the plain, and in the middle of it Electric-types are dancing, lit up from inside, throwing sparks at the sky.",
+   "choices": [
+    {
+     "label": "Shelter.",
+     "success": {
+      "text": "You all pile into a hollow under a rock and watch the dance from there, flinching at every crack. It is the best thing any of you have ever seen.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "potion",
+         "poke-ball"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join them.",
+     "success": {
+      "text": "You run out into the storm. Everything that is not an Electric-type gets a nasty jolt (5% of its HP), and one of the dancers turns to see who has joined in.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05,
+        "who": "party",
+        "except": [
+         "electric"
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "electric"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "migrating-flock",
+   "name": "Migrating Flock",
+   "group": "Wild Pokémon scenes",
+   "types": [
+    "flying"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#203048",
+    "effect": "float"
+   },
+   "intro": "A flock goes over, low enough that you can hear their wings. The route's Flying-types, heading somewhere they have to be.",
+   "choices": [
+    {
+     "label": "Watch them pass.",
+     "success": {
+      "text": "You stand and watch them go. When they are almost gone, the last one dips its wings, as if to you. A feather comes down.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "potion",
+         "poke-ball"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Signal one down.",
+     "success": {
+      "text": "You whistle. One turns out of the line and comes down to see who called.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "flying"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "pokemon-playground",
+   "name": "Pokémon Playground",
+   "group": "Wild Pokémon scenes",
+   "scene": {
+    "cast": [],
+    "effect": "hearts"
+   },
+   "intro": "Young wild Pokémon are playing tag in a clearing, shrieking and tumbling. One of them keeps looking at your lead. There is a 30% chance one tags your lead and follows you.",
+   "choices": [
+    {
+     "label": "Join the game.",
+     "chance": 0.3,
+     "success": {
+      "text": "You join in, and you are terrible at it, and it is wonderful. At the end one of them tags your lead, and then just keeps following it.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You join in, and you are terrible at it, and it is wonderful. At the end they all scatter home, waving.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You sit on a stump and watch them play until it gets dark. Your team watches with you, a little wistful.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "potion",
+         "poke-ball"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r111-sandslash-colony",
+   "name": "Sunbathing Sandslash Colony",
+   "group": "Wild Scenes",
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sandslash",
+    "tint": "#3a3018",
+    "effect": "glint"
+   },
+   "intro": "Sandslash lie sunbathing on the warm dunes, belly-up, eyes closed. All around them, things glint in the dust.",
+   "choices": [
+    {
+     "label": "Sit with them.",
+     "pick": {},
+     "success": {
+      "text": "You sit down in the sand with the one you chose, and after a while the nearest Sandslash rolls over and leans against it. When you leave, there is a Soft Sand where it was lying.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "item",
+        "id": "soft-sand",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick up the glints.",
+     "success": {
+      "text": "You reach for the nearest glint, and every Sandslash wakes at once, and one of them is angry about it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sandslash",
+        "sandshrew"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "r112-pond-choir",
+   "name": "Pond Choir",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "politoed",
+    "tint": "#102838",
+    "effect": "sparkle"
+   },
+   "intro": "Frogs, ducks and Poliwag are singing in the reeds, all slightly different songs that somehow fit. One Poliwag sings louder than the rest. There is a 30% chance it joins if you sing.",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You sit at the water's edge and listen until the light goes. Your team sways along, very slightly.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "potion",
+         "poke-ball"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sing along.",
+     "chance": 0.3,
+     "success": {
+      "text": "You sing, badly. The loudest Poliwag stops, looks at you, and hops over to sing right next to you. When you stand up to go, so does it.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "poliwag"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You sing, badly. The choir does not mind. The loudest Poliwag gives you a nod, as one singer to another.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r118-honey-tree-hunt",
+   "name": "Honey Tree Hunt",
+   "group": "Wild Scenes",
+   "types": [
+    "bug"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "combee",
+    "tint": "#3a3010",
+    "effect": "float"
+   },
+   "intro": "Combee buzz in and out of a hive in a hollow tree, and honey runs down the bark in golden threads. Take a little and they will not mind. Take a lot and the queen will.",
+   "choices": [
+    {
+     "label": "Take a little.",
+     "success": {
+      "text": "You scrape a little honey from the bark and leave the hive alone. The Combee do not even look at you.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "honey",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a lot.",
+     "success": {
+      "text": "You reach into the hive. The buzzing stops. Then the Vespiquen comes out.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "vespiquen"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "honey",
+         "count": 3
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "r119-aipom-troop",
+   "name": "Aipom Pickpocket Troop",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "aipom",
+    "tint": "#2a2218",
+    "effect": "shake"
+   },
+   "intro": "Your bag is lighter. You look up, and a troop of Aipom is sitting in the branches above you, passing something of yours from tail to tail.",
+   "choices": [
+    {
+     "label": "Chase them (three trees).",
+     "success": {
+      "text": "You chase them through one tree, then another, then a third, until the leader drops to the ground in front of you, out of breath and grinning. It hands back your item, and then one it stole from somebody else, as a prize for keeping up.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "star-piece",
+         "rare-candy"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You let them have it. They chatter at you happily from the branches as you walk on, wearing it.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r123-fireflies-dusk",
+   "name": "Fireflies at Dusk",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "bug"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "volbeat",
+    "tint": "#1c2a14",
+    "effect": "glint"
+   },
+   "intro": "At dusk, Volbeat and Illumise rise out of the grass and draw shapes in the air with their lights. Every shape points the same way, over and over.",
+   "choices": [
+    {
+     "label": "Follow the lights.",
+     "success": {
+      "text": "You follow where they point, off the road and through the dark, and there it is: a stop no map shows.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You watch them draw in the air until the last light goes out. Your team watches too, faces lit gold and green.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "potion",
+         "poke-ball"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r126-hatching-hot-spring",
+   "name": "Hatching Hot Spring",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "fire",
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "slugma",
+    "tint": "#2a1c14",
+    "effect": "fog"
+   },
+   "intro": "Eggs lie warming in a steaming shallow, and one of them is rocking. A Slugma lies beside them looking deeply bored with its job. There is a 30% chance a hatchling follows you.",
+   "choices": [
+    {
+     "label": "Watch the eggs.",
+     "success": {
+      "text": "You sit with the Slugma and watch. It does not acknowledge you, but it moves over to make room. One egg cracks, and a tiny face looks out at the world.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "potion",
+         "poke-ball"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help one hatch.",
+     "chance": 0.3,
+     "success": {
+      "text": "You hold the rocking egg in the warm water until it cracks open, and the first thing the hatchling sees is you. It will not be left behind.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magby",
+         "slugma",
+         "numel",
+         "torchic",
+         "charmander"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You hold the rocking egg in the warm water until it cracks, and the hatchling tumbles out and goes straight to the Slugma. Fair enough.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r128-shed-skin-garden",
+   "name": "Shed Skin Garden",
+   "group": "Wild Scenes",
+   "types": [
+    "poison"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "arbok",
+    "tint": "#241a2a",
+    "effect": "glint"
+   },
+   "intro": "Old Ekans skins hang in the bushes like paper lanterns, and things have caught in them over the years: buttons, rings, keys.",
+   "choices": [
+    {
+     "label": "Search.",
+     "success": {
+      "text": "In the third skin you check there is a Gym badge, scratched, with a name on the back. Somebody has been missing this for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shed-skin-badge",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "shed-skin-badge-return",
+   "name": "The Lost Badge",
+   "group": "Wild scenes",
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "shed-skin-badge",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "shed-skin-badge-return-seen",
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "A trainer at the roadside is turning out her pockets for the hundredth time. The name on the back of the badge you found is hers.",
+   "choices": [
+    {
+     "label": "Give it back.",
+     "success": {
+      "text": "She stares at it. \"I won this when I was ten. I thought it was gone.\" She closes your hand round something in return, and will not take it back.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-scarf"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "shed-skin-badge-return-seen",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Gave a lost Gym badge back to its owner.",
+        "importance": 45
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r129-slumbering-hollow-chorus",
+   "name": "Slumbering Hollow Chorus",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "normal",
+    "psychic"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "jigglypuff",
+    "tint": "#2a1c3a",
+    "effect": "float"
+   },
+   "intro": "Jigglypuff and Chingling are singing in a hollow, very softly. Your eyelids are getting heavy. Your team is already asleep on its feet.",
+   "choices": [
+    {
+     "label": "Sleep.",
+     "success": {
+      "text": "You give in. You sleep in the grass, the whole team in a pile around you, and wake up with the song still going and everything in you mended. A full rest.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay awake.",
+     "chance": 0.3,
+     "success": {
+      "text": "You stay awake, pinching yourself, and listen to the whole song. At the end one of the singers notices you are still up, and is so impressed it comes with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "jigglypuff",
+         "chingling"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You stay awake, pinching yourself, and listen to the whole song. At the end the singers drift off to sleep themselves, and you tiptoe away.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r131-rust-choir",
+   "name": "Rust Choir",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "steel",
+    "flying"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "skarmory",
+    "tint": "#2a2a30",
+    "effect": "rattle"
+   },
+   "intro": "Skarmory perch on a heap of old scrap metal, and every time one shifts its weight the metal rings like a bell. In the scrap: a Metal Coat, an Iron Ball, a Shed Shell or a Steel Gem, maybe.",
+   "choices": [
+    {
+     "label": "Search the scrap.",
+     "success": {
+      "text": "You dig into the scrap and come up with something useful, and the bells stop ringing. A Skarmory drops off its perch in front of you.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "metal-coat",
+         "iron-ball",
+         "shed-shell",
+         "steel-gem"
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "skarmory"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You leave them their bells. The ringing follows you a long way down the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r132-zigzagoon-hunters",
+   "name": "Zigzagoon Treasure Hunters",
+   "group": "Wild Scenes",
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zigzagoon",
+    "tint": "#2a2218",
+    "effect": "shake"
+   },
+   "intro": "A Zigzagoon zips past with something shiny in its mouth, then zags back, then zigs away again, clearly wanting you to follow.",
+   "choices": [
+    {
+     "label": "Follow.",
+     "success": {
+      "text": "You follow it, zig and zag, to a patch of dug-up earth where several Zigzagoon are proudly showing off a buried item. One of them, darker than the others, with a wild look and spiky fur, drops the item at your feet and sits down. It wants to come with you.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "star-piece",
+         "big-pearl",
+         "rare-candy"
+        ]
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "zigzagoon-galar"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r135-plant-whisperer-grove",
+   "name": "Plant Whisperer Grove",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "weepinbell",
+    "tint": "#142a14",
+    "effect": "sparkle"
+   },
+   "intro": "Bellsprout sway together in a grove, all leaning the same way at the same moment, in a chord you can almost hear. There is a 30% chance one joins if you sway with them.",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You stand at the edge and listen to something without sound. Your team sways, very slightly, without meaning to.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "potion",
+         "poke-ball"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sway along.",
+     "chance": 0.3,
+     "success": {
+      "text": "You sway with them. The one you chose sways with you. After a while one of the Bellsprout sways out of the grove and leans against your leg, and stays.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "bellsprout"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You sway with them. The one you chose sways with you, and for a while you are all part of the chord.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r136-rampaging-rhyhorn",
+   "name": "Rampaging Rhyhorn",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "ground",
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "tint": "#3a2a1c",
+    "effect": "rattle"
+   },
+   "intro": "A Rhyhorn comes charging down the road with its eyes blazing, straight at you, not slowing down.",
+   "choices": [
+    {
+     "label": "Dodge left.",
+     "success": {
+      "text": "You throw yourself left. It thunders past and away, still blazing, and you will never know what was wrong.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Dodge right.",
+     "success": {
+      "text": "You throw yourself right. It thunders past and away, still blazing, and you will never know what was wrong.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Stop it head-on.",
+     "success": {
+      "text": "You plant your feet, and your team plants theirs.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "rhyhorn"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "r136-rhyhorn-sting"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "r136-rhyhorn-sting",
+   "name": "The Beedrill Sting",
+   "group": "Wild scenes",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "effect": "none"
+   },
+   "intro": "The Rhyhorn sinks down, beaten, breathing hard. Now that it is still you can see why it was running: a Beedrill sting is lodged in the soft skin behind its ear.",
+   "choices": [
+    {
+     "label": "Pull it out.",
+     "chance": 0.3,
+     "success": {
+      "text": "You pull the sting out in one go. The Rhyhorn shudders, and then it looks at you with its eyes clear for the first time, and when you walk on, it walks on beside you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rhyhorn"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You pull the sting out in one go. The Rhyhorn shudders, sighs, and lies down in the road to sleep for the first time in days.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it lying in the road. It does not try to get up.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r138-feral-furfrou-salon",
+   "name": "Feral Furfrou Salon",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "furfrou",
+    "tint": "#2a2030",
+    "effect": "sparkle"
+   },
+   "intro": "A shaggy wild Furfrou sits by the road holding a comb in its mouth, and holds it out to you, and waits.",
+   "choices": [
+    {
+     "label": "Groom it.",
+     "success": {
+      "text": "You comb it out, slowly, all of it, until it shines. It looks at itself in a puddle for a long time, chooses its trim, and comes with you, looking extremely pleased.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "furfrou"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Groomed a wild Furfrou, who chose to come along.",
+        "importance": 40
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r142-boulder-boxing-ring",
+   "name": "Boulder Boxing Ring",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "rock",
+    "fighting"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "machoke",
+    "tint": "#2a2218",
+    "effect": "rattle"
+   },
+   "intro": "A ring of boulders, a mat of packed earth, and in the middle **the reigning champ**, a Machop with tape on its fists, pointing at the mat. Win three bouts, and there is a Hard Stone on the corner post.",
+   "choices": [
+    {
+     "label": "Spar (three bouts).",
+     "success": {
+      "text": "Three bouts, one after another, and the crowd of wild Pokémon round the boulders roars at every one.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 3,
+       "species": [
+        "machop",
+        "makuhita",
+        "timburr"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "hard-stone",
+         "count": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "r144-dewdrop-meadow",
+   "name": "Dewdrop Meadow",
+   "group": "Wild Scenes",
+   "types": [
+    "grass",
+    "poison"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "oddish",
+    "tint": "#1c2a20",
+    "effect": "sparkle"
+   },
+   "intro": "Oddish are bathing in the dew of a morning meadow, rolling in it, leaves sparkling. There is a 30% chance one follows you if you join in.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You sit on a wet log and watch them roll. Your team gets very wet trying to copy them.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "potion",
+         "poke-ball"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join them.",
+     "chance": 0.3,
+     "success": {
+      "text": "You roll in the dew with them, and come up soaked and laughing, and one Oddish decides you are its new favourite thing.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "oddish"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You roll in the dew with them, and come up soaked and laughing. They wave their leaves at you as you go.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r148-paras-mushroom-patch",
+   "name": "Paras Mushroom Patch",
+   "group": "Wild Scenes",
+   "types": [
+    "bug",
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "parasect",
+    "tint": "#2a2018",
+    "effect": "sparkle"
+   },
+   "intro": "Mushrooms in a patch: a red one and a brown one. Some of these are fine. Some of these are not. A Paras is grazing nearby, completely unbothered.",
+   "choices": [
+    {
+     "label": "The red one.",
+     "chance": 0.5,
+     "success": {
+      "text": "It is the good one: a Big Mushroom.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "big-mushroom",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It is not the good one. Your lead takes one sniff and staggers in circles, dizzy for its next battle.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Dizzy from the wrong mushroom: your lead hits softer next battle",
+        "effects": [
+         {
+          "kind": "partyPositionDamage",
+          "position": "first",
+          "value": 0.75
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The brown one.",
+     "chance": 0.5,
+     "success": {
+      "text": "It is the good one: a Big Mushroom.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "big-mushroom",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It is not the good one. Your lead takes one sniff and staggers in circles, dizzy for its next battle.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Dizzy from the wrong mushroom: your lead hits softer next battle",
+        "effects": [
+         {
+          "kind": "partyPositionDamage",
+          "position": "first",
+          "value": 0.75
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask a Paras.",
+     "success": {
+      "text": "You crouch down and ask. The Paras looks at you, looks at the patch, and taps one mushroom with a claw. It is the good one. A Big Mushroom.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "big-mushroom",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r149-pikachu-static-storm",
+   "name": "Pikachu Static Storm",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "electric"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pikachu",
+    "tint": "#3a3a10",
+    "effect": "flicker"
+   },
+   "intro": "A field of Pikachu, every one of them crackling. The air is so full of static that your hair stands straight up, and so does everyone else's.",
+   "choices": [
+    {
+     "label": "Walk through.",
+     "success": {
+      "text": "You walk through with your hair on end. The Pikachu think this is the funniest thing they have ever seen.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Let Electric-types in.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "electric"
+      }
+     ],
+     "success": {
+      "text": "Your Electric-types walk into the field and come out humming, charged to the tips of their ears. They will start the next battle Charged.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Charged: Electric moves ×1.5 next battle",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "electric",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r152-dream-meadow-snooze",
+   "name": "Dream Meadow Snooze",
+   "group": "Wild Scenes",
+   "types": [
+    "psychic",
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "munna",
+    "tint": "#20203a",
+    "effect": "float"
+   },
+   "intro": "Everything in this meadow is asleep: the wild Pokémon, the bees, the wind. The air smells of warm cake.",
+   "choices": [
+    {
+     "label": "Nap.",
+     "success": {
+      "text": "You lie down for one minute, and wake up hours later with the whole team asleep on top of you and everything in you mended. A full heal.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tiptoe on.",
+     "success": {
+      "text": "You tiptoe through without waking a single thing. It is harder than it sounds.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r158-mareep-shearing",
+   "name": "Mareep Wool Shearing",
+   "group": "Wild Scenes",
+   "types": [
+    "electric"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mareep",
+    "tint": "#2a2a3a",
+    "effect": "sparkle"
+   },
+   "intro": "Mareep crowd a pen, fluffy to the point of bursting, crackling with static. A pair of shears hangs on the fence. A sign: \"Help yourself. Please.\" The next town buys Mareep Wool at ₽300.",
+   "choices": [
+    {
+     "label": "Shear them.",
+     "success": {
+      "text": "You shear them one by one, and get a shock every single time, and they bound away light and grateful. A bag of Mareep Wool: the next town pays ₽300 for it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "mareep-wool",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You leave them to their fluff. They do not seem to mind.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r160-starfall-beach",
+   "name": "Starfall Beach",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "water",
+    "psychic"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "starmie",
+    "tint": "#14243a",
+    "effect": "glint"
+   },
+   "intro": "Staryu lie twinkling in the sand of a long beach, as if the stars came down overnight and stayed.",
+   "choices": [
+    {
+     "label": "Walk among them.",
+     "success": {
+      "text": "You walk among them barefoot, careful where you step. Your team walks behind you in a line, careful too.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "potion",
+         "poke-ball"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw one back in the sea.",
+     "success": {
+      "text": "One has washed too high to get back. You carry it down and set it in the waves, and it spins away into the deep, twinkling.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "staryu-thrown-back",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r160-staryu-returns",
+   "name": "A Star Comes Back",
+   "group": "Wild scenes",
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "staryu-thrown-back",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "r160-staryu-returns-seen",
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "Something is twinkling in the shallows of a river, a long way from the sea. It is a Staryu, and it knows you. There is a 30% chance it comes along.",
+   "choices": [
+    {
+     "label": "Hold out your hand.",
+     "chance": 0.3,
+     "success": {
+      "text": "It spins up out of the water and into your hand and leaves a Stardust there. Then it stays.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "stardust",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "staryu"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "r160-staryu-returns-seen",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It spins up out of the water and leaves a Stardust in your hand. Then it spins away home, twinkling.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "stardust",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "r160-staryu-returns-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r164-gulpin-gulp-contest",
+   "name": "Gulpin Gulp Contest",
+   "group": "Wild Scenes",
+   "types": [
+    "poison"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gulpin",
+    "tint": "#243020",
+    "effect": "shake"
+   },
+   "intro": "A Gulpin has gulped something it should not have, and is extremely pleased with itself. A crowd of wild Pokémon is cheering.",
+   "choices": [
+    {
+     "label": "Cheer it on.",
+     "success": {
+      "text": "You cheer, and the Gulpin bows, and burps, and the crowd goes wild. Whatever it ate is staying eaten.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Ask for it back.",
+     "success": {
+      "text": "You ask nicely, and the Gulpin, after a long and difficult moment, gives it back. It is your rival's: you would know that keyring anywhere. They will be glad to have it.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        }
+       },
+       {
+        "kind": "moment",
+        "text": "Got your rival's lost keys back from a Gulpin.",
+        "importance": 40
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r165-nidoran-picnic",
+   "name": "Nidoran Family Picnic",
+   "group": "Wild Scenes",
+   "types": [
+    "poison"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "nidoran-m",
+    "tint": "#2a2030",
+    "effect": "hearts"
+   },
+   "intro": "A family of Nidoran are having a picnic on a blanket of leaves. The smallest one waves you over.",
+   "choices": [
+    {
+     "label": "Share.",
+     "success": {
+      "text": "You sit down and share your lunch. The little one eats from your hand, and when you get up to go it climbs into your bag and refuses to come out.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "nidoran-f",
+         "nidoran-m"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave back.",
+     "success": {
+      "text": "You wave back. The whole family waves. You walk on smiling, and so does your team.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "potion",
+         "poke-ball"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r167-ledyba-treehouse",
+   "name": "Treehouse of Ledyba",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "bug",
+    "flying"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ledian",
+    "tint": "#2a3a18",
+    "effect": "float"
+   },
+   "intro": "A rope ladder hangs out of a tree, and at the top Ledyba have built something that is very nearly a treehouse.",
+   "choices": [
+    {
+     "label": "Climb.",
+     "success": {
+      "text": "You climb up. The Ledyba make room. At the top, in a nest of leaves, they have been keeping something shiny, and they give it to you.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "silver-powder",
+         "star-piece",
+         "sitrus-berry",
+         "big-pearl"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r168-taillow-dive-display",
+   "name": "Taillow Dive Display",
+   "group": "Wild Scenes",
+   "types": [
+    "flying",
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "taillow",
+    "tint": "#243448",
+    "effect": "float"
+   },
+   "intro": "Taillow are dive-bombing a field one after another, pulling up at the last second, each one more reckless than the last. They want a judge.",
+   "choices": [
+    {
+     "label": "Judge the best dive.",
+     "success": {
+      "text": "You pick the one that went lowest and pulled up latest. It lands at your feet, chest out, and when you walk away it flies after you. The best diver has joined you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "taillow"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r170-geodude-rock-candy",
+   "name": "Geodude Rock Candy",
+   "group": "Wild Scenes",
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "geodude",
+    "tint": "#2a2418",
+    "effect": "glint"
+   },
+   "intro": "A Geodude is miming cracking open a geode, very dramatically, then holding the geode out to you.",
+   "choices": [
+    {
+     "label": "Crack it.",
+     "success": {
+      "text": "You crack it on a rock. Inside, where crystals should be, there is a fossil: a Plume, a Root or a Claw.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "plume-fossil",
+         "root-fossil",
+         "claw-fossil"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it back.",
+     "success": {
+      "text": "You hand it back. The Geodude stares at you, then cracks it on its own head and gives you what was inside: a fossil, a Plume, a Root or a Claw.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "plume-fossil",
+         "root-fossil",
+         "claw-fossil"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r173-tangela-maze",
+   "name": "Tangela Maze",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tangela",
+    "tint": "#142a1c",
+    "effect": "net"
+   },
+   "intro": "Vines close over the path in every direction, and at every corner a Tangela sits watching you choose.",
+   "choices": [
+    {
+     "label": "Left, left, right.",
+     "chance": 0.5,
+     "success": {
+      "text": "Left, left, right, and you are out the other side, and the Tangela at the exit nods as if you passed something.",
+      "effects": []
+     },
+     "failure": {
+      "text": "Left, left, right, and you are back at the start. You go round again and come out a whole stop later, scratched and tangled.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask a Tangela.",
+     "success": {
+      "text": "You ask the nearest Tangela. It points, and points, and points again, and the whole route through the maze is laid out. You walk straight out.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r174-wynaut-hide-and-seek",
+   "name": "Wynaut Hide and Seek",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "types": [
+    "psychic"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wynaut",
+    "tint": "#1c2438",
+    "effect": "hearts"
+   },
+   "intro": "Giggling, from somewhere. A Wynaut is hiding on this stretch of road, and it wants to be found.",
+   "choices": [
+    {
+     "label": "Look in the grass.",
+     "success": {
+      "text": "Nothing in the grass. The giggling moves further down the road.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "wynaut-hide-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look up the tree.",
+     "success": {
+      "text": "Nothing up the tree. The giggling moves further down the road.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "wynaut-hide-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look in the barrel.",
+     "success": {
+      "text": "There it is, in the barrel, delighted to be found. It climbs out and onto your shoulder, and joins you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "wynaut"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wynaut-hide-2",
+   "name": "Still Hiding",
+   "group": "Wild scenes",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "wynaut",
+    "effect": "none"
+   },
+   "intro": "Further down the road, the giggling comes from either a hedge or a cart. It is not hiding very well.",
+   "choices": [
+    {
+     "label": "Look in the hedge.",
+     "success": {
+      "text": "Nothing in the hedge. The giggling is coming from the cart, very obviously.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "wynaut-hide-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look under the cart.",
+     "success": {
+      "text": "There it is, under the cart, delighted to be found. It climbs out and onto your shoulder, and joins you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "wynaut"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wynaut-hide-3",
+   "name": "Found It",
+   "group": "Wild scenes",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "wynaut",
+    "effect": "hearts"
+   },
+   "intro": "The cart is shaking with giggles.",
+   "choices": [
+    {
+     "label": "Look under the cart.",
+     "success": {
+      "text": "There it is, delighted to be found at last. It climbs onto your shoulder, and joins you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "wynaut"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r175-alolan-sunset-cove",
+   "name": "Alolan Sunset Cove",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wishiwashi",
+    "tint": "#3a2a20",
+    "effect": "glint"
+   },
+   "intro": "In a cove at sunset, a cloud of Wishiwashi shines under the water like a dropped necklace. One is swimming alone, a little apart from the rest.",
+   "choices": [
+    {
+     "label": "Catch the lone one first.",
+     "success": {
+      "text": "You go for the lone one, and the whole cloud turns, and comes together, and rises out of the water as one enormous fish, Totem-sized, glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "wishiwashi-school"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You watch the cloud turn and turn in the sunset until the light goes and it breaks up into a thousand small fish again.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "potion",
+         "poke-ball"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r176-snorunt-snowdrift",
+   "name": "Snorunt Snowdrift",
+   "group": "Wild Scenes",
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "snorunt",
+    "tint": "#1c2c3a",
+    "effect": "snow"
+   },
+   "intro": "Snorunt are playing in a snowdrift, and one of them is trying very hard to build a snowman, and the snowman keeps falling over.",
+   "choices": [
+    {
+     "label": "Help build it.",
+     "success": {
+      "text": "You help. It takes ages. When it is done, the little Snorunt looks at the snowman, looks at you, and decides you are better company. It joins you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "snorunt"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r178-torchic-brood",
+   "name": "Torchic Chick Brood",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "fire",
+    "fighting"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "combusken",
+    "tint": "#3a1c10",
+    "effect": "fire"
+   },
+   "intro": "A Combusken stands guard over a scatter of Torchic chicks, every feather on end, ready to fight anything that comes closer.",
+   "choices": [
+    {
+     "label": "Back away slowly.",
+     "success": {
+      "text": "You back away one step at a time, hands where it can see them. It does not lower its guard until you are gone.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Offer food.",
+     "success": {
+      "text": "You set some food down and step back. The Combusken looks at it, at you, and relaxes, and lets the chicks eat. When you go, one chick runs after you, peeping, and its parent lets it.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "torchic"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r179-gastly-gas-leak",
+   "name": "Gastly Gas Leak",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "ghost",
+    "poison"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gastly",
+    "tint": "#241830",
+    "effect": "fog"
+   },
+   "intro": "A cabin by the road is full to the rafters with purple gas, and grinning Gastly drift in and out of the windows.",
+   "choices": [
+    {
+     "label": "Clear it (Defog or a Flying-type).",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type beats its wings and the gas pours out of the windows and away, and the Gastly scatter with it, all but one, which stays behind to play. It comes with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "gastly"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle the Gastly.",
+     "success": {
+      "text": "You step in. The Gastly close round you, grinning, and it is a party.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "gastly",
+        "haunter"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "r180-lucky-charm-chansey",
+   "name": "Lucky Charm Chansey",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "chansey",
+    "tint": "#3a2030",
+    "effect": "hearts"
+   },
+   "intro": "A Chansey sits by the road with an egg-shaped bundle in its arms, looking at your team the way a nurse looks at a waiting room.",
+   "choices": [
+    {
+     "label": "Let it look after one.",
+     "pick": {},
+     "success": {
+      "text": "It takes the one you chose into its arms and hums, and when it lets go, that one is completely mended.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank it.",
+     "success": {
+      "text": "You thank it. It nods, very professional, and goes back to watching the road for anyone who needs it.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "first-chansey",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "chansey-lucky-egg",
+       "atMost": 0
+      }
+     ],
+     "notice": "The bundle in its arms is not an egg. It holds it out to you.",
+     "addChoices": [
+      {
+       "label": "Take the bundle.",
+       "success": {
+        "text": "Inside the bundle is a Lucky Egg, warm. The Chansey pats your hand once and goes.",
+        "effects": [
+         {
+          "kind": "item",
+          "id": "lucky-egg",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "chansey-lucky-egg",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "shiny-glint",
+   "name": "A Shiny Glint",
+   "group": "Wild Pokémon scenes",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#302810",
+    "effect": "glint"
+   },
+   "intro": "Something sparkles in the tall grass, there and gone, there and gone.",
+   "choices": [
+    {
+     "label": "Look closer.",
+     "success": {
+      "text": "You part the grass and look. It is right there, and now you can see exactly what it is, and whether its colours are the rare ones.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "shiny-glint-close"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. The sparkle goes on behind you for a while.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "shiny-glint-close",
+   "name": "In the Tall Grass",
+   "group": "Wild scenes",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "Up close it is a wild Pokémon of this route, and it has seen you. You can see exactly what it is, and whether its colours are the rare ones.",
+   "choices": [
+    {
+     "label": "Step in.",
+     "success": {
+      "text": "It bursts out of the grass.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 6,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Back away.",
+     "success": {
+      "text": "You let the grass close again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sleeping-hollow",
+   "name": "Sleeping Hollow",
+   "group": "Wild Pokémon scenes",
+   "scene": {
+    "cast": [],
+    "tint": "#182028",
+    "effect": "fog"
+   },
+   "intro": "In a hollow under the roots, wild Pokémon are napping in a heap, every one of the route's kinds. You can see each species from here.",
+   "choices": [
+    {
+     "label": "Tiptoe in.",
+     "success": {
+      "text": "You creep closer. One of them wakes, and does not run, only looks at you, curious and sleepy. It will be a little easier to catch.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "It woke curious: easier to catch",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.25
+         }
+        ],
+        "battles": 1,
+        "until": "wild"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You leave them sleeping. One of them sighs in its sleep as you go.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "swarm",
+   "name": "Swarm",
+   "group": "Wild Pokémon scenes",
+   "stop": "swarm",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "Dozens of the same Pokémon fill the field, the route's own kind, so many the grass moves like water. One in twenty might be its rare colouring.",
+   "choices": [
+    {
+     "label": "Wade in.",
+     "success": {
+      "text": "You wade in. Three come at you one after another, no rest between.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 3,
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 4,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Go round.",
+     "success": {
+      "text": "You go round, the long way, and the field goes on rustling behind you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "teleporting-hijinks",
+   "name": "Teleporting Hijinks",
+   "group": "PokeRogue-style encounters",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#201838",
+    "effect": "spin"
+   },
+   "intro": "A humming pad on the ground, and a sign beside it: \"DO NOT STAND HERE.\" The pad sends whoever stands on it to a random open stop on this stage, forward or back.",
+   "choices": [
+    {
+     "label": "Stand there.",
+     "chance": 0.5,
+     "success": {
+      "text": "You stand there. The world folds, and unfolds, and you are further along the road than you were.",
+      "effects": [
+       {
+        "kind": "express"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You stand there. The world folds, and unfolds, and you are back where you were a stop ago. The sign was right.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "back": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Don't.",
+     "success": {
+      "text": "You do as the sign says. It is a strange feeling.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "the-strong-stuff",
+   "name": "The Strong Stuff",
+   "group": "PokeRogue-style encounters",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "pokemon": "shuckle",
+    "effect": "shake"
+   },
+   "intro": "A Shuckle sits on a pile of old Berries that have gone to juice, and very much past it. It offers you a sip from a leaf cup.",
+   "choices": [
+    {
+     "label": "One sip.",
+     "pick": {},
+     "success": {
+      "text": "One sip for the one you chose. It shudders, and then glows, and half its wounds close.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Two sips.",
+     "pick": {},
+     "success": {
+      "text": "Two sips for the one you chose. It shudders, glows, mends completely, and then walks into a tree. It will be confused for its next battle.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Two sips of Berry Juice: confused, hits softer next battle",
+        "effects": [
+         {
+          "kind": "partyPositionDamage",
+          "position": "first",
+          "value": 0.75
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No, thank you.",
+     "success": {
+      "text": "The Shuckle drinks it itself. It does not seem to mind.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "tide-pools",
+   "name": "Tide Pools",
+   "group": "Wild Pokémon scenes",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#103040",
+    "effect": "rain"
+   },
+   "intro": "Rock pools full of tiny Water-types, each pool its own little world. You can see every species in every pool from where you stand.",
+   "choices": [
+    {
+     "label": "Look in each pool.",
+     "success": {
+      "text": "You go from pool to pool on your knees and look in every one. Your team crowds round each pool with you, noses nearly in the water.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "potion",
+         "poke-ball"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wade in.",
+     "success": {
+      "text": "You wade in, and one of the pool's inhabitants takes exception.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "water"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "traveler-map",
+   "name": "The Traveler's Map",
+   "group": "Emergent Stories",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c2430",
+    "effect": "glint"
+   },
+   "intro": "**A traveller, Peregrine**, unrolling a map on a rock: \"No name on this route. Just a ring of ink, here. I've never had the nerve.\"",
+   "choices": [
+    {
+     "label": "Ask to copy it.",
+     "success": {
+      "text": "She lets you copy it, carefully. The ring of ink is just ahead: a grotto.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "traveler-grotto",
+        "nodes": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask where it goes.",
+     "success": {
+      "text": "\"Where it goes? Nobody knows. That's why it's a ring.\" She shows you anyway. It is just ahead: a grotto.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "traveler-grotto",
+        "nodes": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "traveler-grotto",
+   "name": "The Grotto on the Map",
+   "group": "Wild scenes",
+   "rarity": "rare",
+   "minStage": 3,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "The ring of ink was a grotto. The air inside is salt, and something is glowing at the back: a Pokémon that has not seen anyone in years, and a string of pearls lying in the shallows.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "It turns to face you, and the glow turns with it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "item",
+         "id": "pearl-string",
+         "count": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it sleeping.",
+     "success": {
+      "text": "You copy the grotto onto your own map, and leave whatever is glowing in there to its long, quiet years.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "uncommon-breed",
+   "name": "Uncommon Breed",
+   "group": "Wild Pokémon scenes",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "A Pokémon of the route is eating at the roadside, and its colours are strange: a form you have not seen before.",
+   "choices": [
+    {
+     "label": "Approach quietly.",
+     "success": {
+      "text": "You creep close enough to see its form clearly. It sees you too, and it does not run. It will be a little easier to catch.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Approached quietly: easier to catch",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.25
+         }
+        ],
+        "battles": 1,
+        "until": "wild"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 3,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Leave it to eat.",
+     "success": {
+      "text": "You leave it to its meal. As you go, it lifts its head and watches you, and remembers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "uncommon-breed-left",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "uncommon-breed-returns",
+   "name": "The Strange One Comes Back",
+   "group": "Wild scenes",
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "uncommon-breed-left",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "uncommon-breed-returns-seen",
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "The strangely coloured Pokémon you left to eat is waiting at the side of the road, and this time it walks right up to you.",
+   "choices": [
+    {
+     "label": "Hold out your hand.",
+     "success": {
+      "text": "It sniffs your hand, friendly, and then squares up to see what you are made of. It will be easier to catch than any wild one has a right to be.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "It remembered you: easier to catch",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.25
+         }
+        ],
+        "battles": 1,
+        "until": "wild"
+       },
+       {
+        "kind": "flag",
+        "key": "uncommon-breed-returns-seen",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 3,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "wild-tea-party",
+   "name": "Wild Tea Party",
+   "group": "Wild Pokémon scenes",
+   "rarity": "uncommon",
+   "types": [
+    "fairy"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sinistea",
+    "tint": "#402838",
+    "effect": "hearts"
+   },
+   "intro": "Fairy-types sit round a tiny table, holding tiny teacups, in total silence. There is an empty chair.",
+   "choices": [
+    {
+     "label": "Sit and say please.",
+     "success": {
+      "text": "You sit, and say please, and are poured a cup. After tea, one of them climbs into your lap and does not get down. It has decided to come with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [
+         "fairy"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Grab a cup.",
+     "success": {
+      "text": "You grab a cup. Every one of them stares at you, and then they are gone, table and all, offended beyond words.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1601 @@
+{
+ "catalogOverhaul": "singles",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "barkeep-usual",
+   "name": "The Usual",
+   "group": "NPC Stories",
+   "stop": "rest",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2018",
+    "effect": "none"
+   },
+   "intro": "**Barkeep, Fitz**, polishing a glass that was clean an hour ago: \"The usual? Or the special. It changes. Nobody knows how. Not even me.\"",
+   "choices": [
+    {
+     "label": "The usual.",
+     "success": {
+      "text": "Something warm in a thick mug, and a seat by the stove for your team. Fitz does not ask where you have been. Everyone is healed.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The special.",
+     "chance": 0.5,
+     "success": {
+      "text": "Today the special is a Berry in a little glass dish, set down with great ceremony. \"Hold it. It will know when.\"",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sitrus-berry",
+         "lum-berry",
+         "liechi-berry",
+         "salac-berry"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Today the special is a rumour, poured slowly. Fitz leans in and tells you exactly who is waiting at the end of this road, and what they bring.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "birthday-party-crash",
+   "name": "Birthday Party Crash",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_twins"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "Streamers, a lopsided cake and a garden full of shrieking children. **Parents, desperate:** \"You're a trainer! We need a battle show! Please. Anything.\"",
+   "choices": [
+    {
+     "label": "Put on a show.",
+     "success": {
+      "text": "Your team does every trick it knows, and some it does not. The children scream themselves hoarse. You leave with cake in your hair.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Let the kid battle me.",
+     "success": {
+      "text": "The birthday kid marches up with one Pokémon and enormous seriousness. They lose, and laugh so hard they fall over, and then they ask how you did that, and you tell them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Birthday Kid",
+       "classId": "youngster",
+       "size": 1,
+       "types": [],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "birthday-kid-battled",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Battled a kid at their birthday party. They lost and laughed.",
+         "importance": 35
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "birthday-kid-returns",
+   "name": "The Birthday Kid",
+   "group": "Road people",
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "birthday-kid-battled",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "birthday-kid-returns-seen",
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "hearts"
+   },
+   "intro": "A young trainer plants themself in the road with their arms crossed. You know that face. It had cake on it. \"Remember me? I trained. I trained with the one YOU used.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "They send out a Pokémon just like the one you battled them with, and they have clearly watched it very, very closely.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "birthday-kid-returns-seen",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Birthday Kid",
+       "mirror": true,
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "moment",
+         "text": "The birthday kid came back, trained like you.",
+         "importance": 45
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "blind-date-wingman",
+   "name": "Blind Date Wingman",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_youngcouple"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "Two nervous trainers at opposite tables of a cafe, each pretending not to look at the other. One of them catches your sleeve: \"Please. Help us talk. I can't do it.\"",
+   "choices": [
+    {
+     "label": "Introduce them.",
+     "success": {
+      "text": "You march one over to the other and say both their names. They look at each other in silence for so long that you leave them to it.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Talk about their Pokémon.",
+     "success": {
+      "text": "You ask about their Pokémon, and both of them light up at once, and then they are talking to each other instead of to you. It works. You slip away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wingman-pokemon-talk",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "blind-date-callback",
+   "name": "A Name for a Hatchling",
+   "group": "Road people",
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wingman-pokemon-talk",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "blind-date-callback-seen",
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "hearts"
+   },
+   "intro": "The couple from the cafe find you on the road, holding hands and a very small Pokémon. \"We named it after your lead. We hope that's all right. It's the reason we're together.\"",
+   "choices": [
+    {
+     "label": "Say it's perfect.",
+     "success": {
+      "text": "Your lead sniffs the little one, very seriously, and allows it. The couple cry a bit. So do you, a bit.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "A couple named their Pokémon after your lead.",
+        "importance": 50
+       },
+       {
+        "kind": "flag",
+        "key": "blind-date-callback-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "borrowed-ally",
+   "name": "Two on One",
+   "group": "Allies",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1f2418",
+    "effect": "glint"
+   },
+   "intro": "**A burly traveller, Gorm**, backed against a cliff by three trainers who have decided he looks like easy money: \"Take my partner! Two of us, they won't dare!\"",
+   "choices": [
+    {
+     "label": "Tag in.",
+     "success": {
+      "text": "His Machoke steps up beside your lead and cracks its knuckles. It is a tag battle, two of you against them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Road Toughs",
+       "ally": "machoke",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "flag",
+         "key": "gorm-tagged",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Fought beside Gorm's Machoke.",
+         "importance": 40
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Call the police.",
+     "success": {
+      "text": "You run for the nearest call box. Officer Jenny arrives at a gallop, and the three toughs remember they have somewhere else to be. Gorm shakes your hand until your arm aches.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "borrowed-ally-cheer",
+   "name": "Gorm's Machoke",
+   "group": "Road people",
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "gorm-tagged",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "borrowed-ally-cheer-seen",
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "hearts"
+   },
+   "intro": "At the edge of the crowd near the Gym, something big is waving both pairs of arms over everyone's heads. Gorm's Machoke has spotted you. It is cheering. Gorm is trying to make it stop. He is not trying very hard.",
+   "choices": [
+    {
+     "label": "Wave back.",
+     "success": {
+      "text": "You wave. The Machoke flexes for you, very deliberately, all four arms. Your team flexes back. Gorm gives up and joins in.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Gorm's Machoke cheered you on near a Gym.",
+        "importance": 40
+       },
+       {
+        "kind": "flag",
+        "key": "borrowed-ally-cheer-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "broken-vending-pokeball",
+   "name": "Broken Vending Poké Ball",
+   "group": "Helpers, gifts and kindness",
+   "stop": "merchant",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A vending machine blinks ERROR, ERROR, ERROR, and with every blink it spits a Poké Ball onto the pavement. Nobody else is around.",
+   "choices": [
+    {
+     "label": "Grab a few.",
+     "success": {
+      "text": "You take five and leave the rest rolling. That seems like the right number for a machine that is having a bad day.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Grab as many as I can.",
+     "success": {
+      "text": "You fill your arms, and then your bag, and then the owner comes round the corner and stops. \"Those are mine.\" He holds out his hands. You give them back, every one, and he does not say another word.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Tell the owner.",
+     "success": {
+      "text": "You find him in the shop next door and tell him. He runs out, kicks the machine in exactly the right place, and it stops. Then he gives you three Great Balls, \"for being the only one who told me.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "childs-drawing",
+   "name": "Child's Drawing",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "effect": "none"
+   },
+   "intro": "**A child with a crayon map**, the X drawn so hard it went through the paper: \"My treasure! It's buried right here. I'll share!\"",
+   "choices": [
+    {
+     "label": "Dig it up.",
+     "success": {
+      "text": "You dig where the X is while she jumps up and down. Under the dirt there is a toy Pikachu, faded and loved.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "childs-drawing-toy"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help her dig it up.",
+     "success": {
+      "text": "You dig together, both of you filthy to the elbows. Under the dirt there is a toy Pikachu, faded and loved, and she holds it up like a trophy.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "childs-drawing-toy"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "childs-drawing-toy",
+   "name": "The Toy Pikachu",
+   "group": "Road people",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "pikachu",
+    "effect": "hearts"
+   },
+   "intro": "She looks at the toy Pikachu for a long time. Then she holds it out to you with both hands. \"You found it. So it's yours. That's the rule.\"",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You take it and thank her properly. She nods, satisfied: rules are rules. You carry the toy Pikachu carefully.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "toy-pikachu",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it back.",
+     "success": {
+      "text": "You close her fingers back around it. \"Keep it safe for me.\" She hugs it so hard its ear bends, and everybody in the street heard about it by dinner.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "coverage-judge",
+   "name": "The Team Appraiser",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#242430",
+    "effect": "none"
+   },
+   "intro": "**A critic outside a cafe**, lowering her sunglasses at your team: \"Your team. Oh, dear. Oh, dear, dear.\"",
+   "choices": [
+    {
+     "label": "Tell me.",
+     "success": {
+      "text": "She tells you. She is rude about it, and she is right.",
+      "effects": [
+       {
+        "kind": "coAdvice",
+        "topic": "weakness"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No, thanks.",
+     "success": {
+      "text": "\"Your funeral, darling.\" She sips her coffee.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dance-off",
+   "name": "Festival Dance-Off",
+   "group": "NPC Stories",
+   "stop": "contest",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#3a2a3a",
+    "effect": "sparkle"
+   },
+   "intro": "Drums start up out of nowhere. **A dancer** points straight at you across the square: \"You! Follow my arrows!\"",
+   "choices": [
+    {
+     "label": "Dance.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You hit every arrow. The crowd goes wild. The dancer bows to you, deeply, and says they will look for you at the next festival.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dancer-met",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Won a dance-off in a square full of strangers.",
+        "importance": 40
+       }
+      ]
+     },
+     "failure": {
+      "text": "You miss the third arrow and then all the rest of them, and the crowd loves you for it anyway. The dancer laughs and says they will look for you at the next festival.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dancer-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Pokémon dance.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "pick": {},
+     "success": {
+      "text": "The one you chose hits every arrow, and some that are not there. The dancer is delighted and says they will look for you both at the next festival.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dancer-met",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your Pokémon dances to a completely different song from the one playing, and the crowd adores it. The dancer says they will look for you at the next festival.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dancer-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "field-trip-chaperone",
+   "name": "Field Trip Chaperone",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_twins"
+    ],
+    "effect": "none"
+   },
+   "intro": "**Teacher, Ms. Agu**, with six children holding a rope between them: \"Could you guard us across the route? Wild Pokémon appear. I've counted. Three times, on this stretch.\"",
+   "choices": [
+    {
+     "label": "Lead.",
+     "success": {
+      "text": "You walk in front, and the rope of children follows. The first wild Pokémon comes out of the grass, then the second, then the third, and every child gets across without a scratch.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 3,
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Walked six children safely across the route.",
+         "importance": 45
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Bring up the rear.",
+     "success": {
+      "text": "You walk at the back, where the stragglers are. The wild Pokémon come from behind, all three times, and every time you are there first. Every child gets across.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 3,
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Walked six children safely across the route.",
+         "importance": 45
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "glove-duel",
+   "name": "The Glove on the Ground",
+   "group": "NPC Stories",
+   "stop": "ambush",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2024",
+    "effect": "none"
+   },
+   "intro": "**A trainer** throws a glove at your feet in front of the whole street. \"A duel. Properly. Three against three, no switching. In front of everyone.\"",
+   "choices": [
+    {
+     "label": "Accept.",
+     "success": {
+      "text": "The street clears to make a ring. Three against three, no switching: the rules are read out loud. If you lose, you lose nothing but your pride.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Duellist",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "You step over the glove and walk on. Behind you, somebody laughs, and the story goes round the street faster than you can.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "graveyard-ghost-helps",
+   "name": "The Ghost Remembers",
+   "group": "Helpers, gifts and kindness",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "h-graveyard",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "fog"
+   },
+   "intro": "A pale light drifts out of the trees ahead and hangs in the air, waiting. It is the ghost from the graveyard you tidied. It wants you to follow.",
+   "choices": [
+    {
+     "label": "Follow.",
+     "success": {
+      "text": "It leads you off the path and round, by a long, quiet way through the trees. From the far side you can see the ambush that was waiting on the road. The ghost bows to you, once, and fades.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "A ghost led you round an ambush.",
+        "importance": 45
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "library-gift",
+   "name": "Library Gift",
+   "group": "Helpers, gifts and kindness",
+   "stop": "library",
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "effect": "none"
+   },
+   "intro": "**Librarian, Mrs. Quarry**, over the top of her glasses: \"You look like a trainer who knows things. Is there a fact the shelves don't have yet?\"",
+   "choices": [
+    {
+     "label": "Answer the quiz.",
+     "check": "intelligence",
+     "success": {
+      "text": "She writes your answer down in the big book, and then, in a whisper, tells you where a move tutor keeps his scrolls. It is close.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "tutor"
+       }
+      ]
+     },
+     "failure": {
+      "text": "\"Oh, we have that one.\" She is very kind about it.",
+      "effects": []
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Another time, then.\" She goes back to her stamping.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "library-overdue-fine",
+   "name": "Library Overdue Fine",
+   "group": "Helpers, gifts and kindness",
+   "stop": "library",
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "effect": "none"
+   },
+   "intro": "**Clerk**, holding up a book with your name on the card: \"A year overdue. ₽200, or you can read it back to us tonight. Out loud.\"",
+   "choices": [
+    {
+     "label": "Pay ₽200.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You pay. He stamps the card with enormous satisfaction.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it back (a node).",
+     "success": {
+      "text": "You read the whole thing aloud, all evening, to a room of three old men and a sleeping cat. At the end, the clerk tells you the book was right about one thing: where a move tutor lives.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addStop",
+        "stop": "tutor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "playstyle-mentor",
+   "name": "The Mentor's Tips",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2838",
+    "effect": "none"
+   },
+   "intro": "**A mentor** you half recognise falls into step beside you: \"Don't mind me. I've been watching you fight. Here's what I noticed.\"",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You listen.",
+      "effects": [
+       {
+        "kind": "coAdvice",
+        "topic": "habits"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "\"Fair enough. You'll work it out.\" They peel off at the next fork.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "professors-lab",
+   "name": "Professor's Lab",
+   "group": "Helpers, gifts and kindness",
+   "stop": "lab",
+   "scene": {
+    "cast": [
+     "boss.oak"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "**Professor**, three monitors and a cold coffee: \"Ah, a trainer! Could you help with one thing? Just one. I have three, and I can only fund one.\"",
+   "choices": [
+    {
+     "label": "Delta request.",
+     "success": {
+      "text": "\"Delta forms. Strange colours, strange types. If you see one, I need to know.\" You take the request.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lab-request-delta",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Z request.",
+     "success": {
+      "text": "\"Z-Crystals. The trials, the dances. Bring me what you learn.\" You take the request.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lab-request-z",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Mega request.",
+     "success": {
+      "text": "\"Mega Evolution. Bond, stone, and something else nobody can name. Find out what.\" You take the request.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lab-request-mega",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "recommend-team",
+   "name": "Pick a Team for Me",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2830",
+    "effect": "none"
+   },
+   "intro": "**Young trainer, Lissie**, notebook open, pen ready: \"What type would you build around? Honestly? I'll do whatever you say.\"",
+   "choices": [
+    {
+     "label": "Fire.",
+     "success": {
+      "text": "She writes \"FIRE\" in capitals and underlines it three times. \"Right. Watch this space.\" She runs off before you can say anything else.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rec-fire",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Water.",
+     "success": {
+      "text": "She writes \"WATER\" in capitals and underlines it three times. \"Right. Watch this space.\" She runs off before you can say anything else.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rec-water",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Grass.",
+     "success": {
+      "text": "She writes \"GRASS\" in capitals and underlines it three times. \"Right. Watch this space.\" She runs off before you can say anything else.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rec-grass",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "recommend-returns-fire",
+   "name": "Your Fire-type Pick",
+   "group": "NPC Stories",
+   "stop": "ambush",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rec-fire",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2830",
+    "effect": "none"
+   },
+   "intro": "**Lissie**, waving a notebook full of Fire-type notes: \"I took your advice! Every word. Now let’s see if it was any good.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Her Fire-type team is everything you told her, and some things you did not. She is grinning the whole time.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "growlithe",
+        "ponyta",
+        "vulpix"
+       ],
+       "name": "Lissie",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "moment",
+         "text": "Lissie came back with the Fire-type team you suggested.",
+         "importance": 45
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "recommend-returns-water",
+   "name": "Your Water-type Pick",
+   "group": "NPC Stories",
+   "stop": "ambush",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rec-water",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2830",
+    "effect": "none"
+   },
+   "intro": "**Lissie**, waving a notebook full of Water-type notes: \"I took your advice! Every word. Now let’s see if it was any good.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Her Water-type team is everything you told her, and some things you did not. She is grinning the whole time.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "psyduck",
+        "poliwag",
+        "staryu"
+       ],
+       "name": "Lissie",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "moment",
+         "text": "Lissie came back with the Water-type team you suggested.",
+         "importance": 45
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "recommend-returns-grass",
+   "name": "Your Grass-type Pick",
+   "group": "NPC Stories",
+   "stop": "ambush",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rec-grass",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2830",
+    "effect": "none"
+   },
+   "intro": "**Lissie**, waving a notebook full of Grass-type notes: \"I took your advice! Every word. Now let’s see if it was any good.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Her Grass-type team is everything you told her, and some things you did not. She is grinning the whole time.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "oddish",
+        "bellsprout",
+        "exeggcute"
+       ],
+       "name": "Lissie",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "moment",
+         "text": "Lissie came back with the Grass-type team you suggested.",
+         "importance": 45
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "registration-desk",
+   "name": "Tournament Registration",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#232430",
+    "effect": "none"
+   },
+   "intro": "**Clerk**, flipping through a file with your name on it: \"Ah. I have your file. You've quit a tournament before, it says here.\" He looks up. \"Have you?\"",
+   "choices": [
+    {
+     "label": "That was then.",
+     "success": {
+      "text": "He looks at you over the file for a long moment, then stamps it. \"Then this is now.\" You are registered.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tournament-registered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "I won't quit.",
+     "success": {
+      "text": "\"They all say that.\" He stamps it anyway, harder than he needs to. You are registered.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tournament-registered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "riddle-guard",
+   "name": "The Riddling Guard",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2824",
+    "effect": "none"
+   },
+   "intro": "A guard in old armour blocks the bridge. **\"I speak without a mouth and hear without ears. What am I?\"**",
+   "choices": [
+    {
+     "label": "An echo.",
+     "success": {
+      "text": "He lowers his spear. \"An echo.\" He sounds almost sad that you got it. You cross.",
+      "effects": []
+     }
+    },
+    {
+     "label": "The wind.",
+     "success": {
+      "text": "\"WRONG.\" He draws himself up. After the battle he lets you cross anyway, muttering \"an echo\" under his breath.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Riddling Guard",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "A ghost.",
+     "success": {
+      "text": "\"WRONG.\" He draws himself up. After the battle he lets you cross anyway, muttering \"an echo\" under his breath.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Riddling Guard",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "soap-box-derby",
+   "name": "Soap Box Derby",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "effect": "none"
+   },
+   "intro": "**A kid** in a crash helmet three sizes too big, standing beside a cart made of crates: \"Build one and race me! Bet you can't!\"",
+   "choices": [
+    {
+     "label": "Build fast.",
+     "check": "speed",
+     "success": {
+      "text": "You build it light and low, and it flies down the hill, and you win by a wheel. The kid is so impressed they ask you how you did it, and you tell them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "derby-raced",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You build it light and low, and it loses a wheel halfway down. The kid wins, and helps you up, and asks how you would do it next time. You tell them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "derby-raced",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Build sturdy.",
+     "check": "strength",
+     "success": {
+      "text": "You build it heavy and solid, and it rumbles down the hill and wins simply by not falling apart. The kid takes notes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "derby-raced",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You build it heavy and solid, and it is far too slow. The kid wins and pats your cart kindly. They want to know how you put the axle on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "derby-raced",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "soap-box-derby-shop",
+   "name": "The Bike Shop",
+   "group": "Road people",
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "derby-raced",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "soap-box-derby-shop-seen",
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "hearts"
+   },
+   "intro": "A bike shop with a hand-painted sign. The owner looks up from a wheel, and you know that face: the soap box kid, older, with grease on their nose. \"It's you! Everything's half price for you. Forever. That's the rule.\"",
+   "choices": [
+    {
+     "label": "Look around.",
+     "success": {
+      "text": "They show you every bike in the shop, and then they open the shop counter for you at half price.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Old friend’s discount: half price",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "value": 0.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "moment",
+        "text": "The soap box kid owns a bike shop now.",
+        "importance": 40
+       },
+       {
+        "kind": "flag",
+        "key": "soap-box-derby-shop-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "street-magician",
+   "name": "Street Magician Volunteer",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_juggler"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "**A street magician**, sweeping off a tall hat: \"A volunteer! You, with the honest face!\"",
+   "choices": [
+    {
+     "label": "Volunteer.",
+     "success": {
+      "text": "You step up. He taps his hat, your lead vanishes in a puff of smoke, and the crowd gasps, and you gasp, and then it reappears behind you holding a Lucky Punch. The magician winks. \"I'll be at the fair. Come and see the real trick.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "lucky-punch",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "magician-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Pokémon volunteer.",
+     "pick": {},
+     "success": {
+      "text": "The one you chose climbs into the hat, and the hat is empty, and the crowd gasps. Then it climbs back out of your bag holding a Lucky Punch. The magician bows. \"I'll be at the fair.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "lucky-punch",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "magician-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tavern-gossip",
+   "name": "The Gossip Table",
+   "group": "NPC Stories",
+   "stop": "rest",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fisherman",
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "**Two regulars** at the end of the bar, both swearing to their stories: \"There's a path off the road nobody uses.\" \"No, there's a cave nobody's found.\" \"Which one's true?\"",
+   "choices": [
+    {
+     "label": "The path.",
+     "chance": 0.5,
+     "success": {
+      "text": "You follow the first story, and it is true. There is a path, and it leads to a stop no map shows.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       }
+      ]
+     },
+     "failure": {
+      "text": "You follow the first story, and there is no path, only a very surprised Pidgey. The cave was the true one, apparently.",
+      "effects": []
+     }
+    },
+    {
+     "label": "The cave.",
+     "chance": 0.5,
+     "success": {
+      "text": "You follow the second story, and it is true. Behind the hill there is a cave mouth, and a stop no map shows.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       }
+      ]
+     },
+     "failure": {
+      "text": "You follow the second story, and there is no cave, only a hill. The path was the true one, apparently.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "wedding-guestbook",
+   "name": "A Wedding on the Hill",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#3a2f3a",
+    "effect": "sparkle"
+   },
+   "intro": "Bells, ribbons, a crowd, and two Pokémon in tiny bowties trying very hard to sit still. A guestbook stands open at the gate. **\"Sign, and be lucky!\"**",
+   "choices": [
+    {
+     "label": "Sign.",
+     "success": {
+      "text": "You sign your name, and add a little message. The couple wave from the arch. Everyone cheers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wedding-signed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lore-egg-song",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sign, and let a Pokémon stamp it.",
+     "pick": {},
+     "success": {
+      "text": "You sign, and the one you chose presses a muddy paw beside your name. The bride laughs so hard she has to sit down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wedding-signed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lore-egg-song",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wedding-callback",
+   "name": "The Wedding’s Little One",
+   "group": "Road people",
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wedding-signed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wedding-callback-seen",
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "hearts"
+   },
+   "intro": "The couple from the wedding find you, a year on by their calendar, with a baby Pokémon riding on a shoulder. \"We named it after you. You signed the book. You were lucky for us.\"",
+   "choices": [
+    {
+     "label": "Hold it.",
+     "success": {
+      "text": "The baby Pokémon takes hold of your finger and will not let go. It has your name. You will think about that for a long time.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "A couple named their baby Pokémon after you.",
+        "importance": 55
+       },
+       {
+        "kind": "flag",
+        "key": "wedding-callback-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "part-timer",
+   "name": "Part-Timer",
+   "group": "PokeRogue-style encounters",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "effect": "rattle"
+   },
+   "intro": "**Shop owner**, eyeing your team: \"Your Pokémon could help out for pay. A stage's work. I'll send it back with wages, and something learned, or at least a story.\"",
+   "choices": [
+    {
+     "label": "Pick a Pokémon.",
+     "pick": {},
+     "success": {
+      "text": "The one you chose trots off with an apron round its neck. It is back by the next stage, very proud of itself, with ₽500 and a story about a customer who tried to pay in Berries.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

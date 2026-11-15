@@ -3056,7 +3056,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Beta 0.7 Flight North: names the Bug-type (`name`), or marks the moment it says goodbye. Only the name changes state; the return and its ending live in core/instrumentality/flightNorth.ts. */
   z.object({ kind: z.literal('flightNorth'), action: z.enum(['name', 'trust']), name: z.string().max(12).optional() }),
   /** A healing spot, shop or fishing spot opens beside this node. */
-  z.object({ kind: z.literal('addStop'), stop: z.enum(['heal', 'shop', 'fish', 'minigame']) }),
+  z.object({ kind: z.literal('addStop'), /** Catalog Overhaul singles: `tutor` opens a Move Tutor service stop here. */ stop: z.enum(['heal', 'shop', 'fish', 'minigame', 'tutor']) }),
   /** A ferry: jump to a node next to the gym (SS Ticket). */
   z.object({ kind: z.literal('skipAhead') }),
   /** Ideas W4: a trainer starts tailing you and steps out to challenge you after this many nodes (core/wanderer.ts). */
@@ -3190,6 +3190,9 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('pickTest'), test: z.enum(['leastUsed', 'impostor']), pass: z.string().regex(/^[a-z][a-z0-9-]*$/), fail: z.string().regex(/^[a-z][a-z0-9-]*$/), sulk: z.number().int().min(0).max(50).default(0) }),
   /** FE4: the lead fights its next battle as its Paradox counterpart, then snaps back. */
   z.object({ kind: z.literal('timeMachine'), era: z.enum(['past', 'future']) }),
+  // Catalog Overhaul, singles (core/events/coSingles.ts).
+  /** SF138: advice read from the real party: `weakness` (types that hit two or more hard) or `habits` (most and least used Pokémon, favourite move). Changes nothing. */
+  z.object({ kind: z.literal('coAdvice'), topic: z.enum(['weakness', 'habits']) }),
   /** Clone Core (New Island): your lead's moves are copied onto the other party Pokémon you pick (the lowest-level one when none is picked). */
   z.object({ kind: z.literal('copyMoves') }),
   /** Catalog Overhaul (families-b): the Pokémon a pick choice named goes to the front of the party ("Send out the one it beat"). */

@@ -9,6 +9,7 @@
 // one seeded by the stop. No existing stream is touched, so adding events
 // changes no other roll, and choosing again after a reload gives the same result.
 
+import { applySinglesEffect, singlesEffectWords } from './events/coSingles';
 import { applyCoEffect, coConditionMet, coConditionText, coEffectWords, fillCoText, restoreMachine } from './events/coToolkit';
 import { flagAge, lineHolds, lineMember, queueLaterEvent, stampFlagStage } from './events/questline';
 import { modifierEventWeight } from './runModifiers';
@@ -1141,7 +1142,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'revealStops':
       return 'reveal every "?" stop';
     case 'addStop':
-      return e.stop === 'heal' ? 'a healing spot opens here' : e.stop === 'shop' ? 'a shop opens here' : e.stop === 'minigame' ? 'a game opens here' : 'a fishing spot opens here';
+      return e.stop === 'heal' ? 'a healing spot opens here' : e.stop === 'shop' ? 'a shop opens here' : e.stop === 'minigame' ? 'a game opens here' : e.stop === 'tutor' ? 'a move tutor opens here' : 'a fishing spot opens here';
     case 'skipAhead':
       return 'skip ahead to the gym';
     case 'wanderer':
@@ -1193,6 +1194,8 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'pickTest':
     case 'timeMachine':
       return coEffectWords(e);
+    case 'coAdvice':
+      return singlesEffectWords(e);
     case 'friendshipLine':
       return `${content.species.get(e.species)?.name ?? e.species}: friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
     case 'cast':
@@ -1622,6 +1625,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'pickTest':
     case 'timeMachine':
       return applyCoEffect(content, run, e, tradeUid);
+    case 'coAdvice':
+      return applySinglesEffect(content, run, e);
     case 'cast':
       return recordCast(run, e.id, e.status) ? effectWords(content, e) : '';
     case 'mentor':
@@ -1674,7 +1679,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return effectWords(content, e);
     case 'addStop': {
       const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
-      here.sides.push({ id: `event-stop-${here.sides.length + 1}-${here.id}`, kind: e.stop, used: false });
+      const id = `event-stop-${here.sides.length + 1}-${here.id}`;
+      here.sides.push(e.stop === 'tutor' ? { id, kind: 'service', serviceId: 'tutor', used: false } : { id, kind: e.stop, used: false });
       return effectWords(content, e);
     }
     case 'scout':

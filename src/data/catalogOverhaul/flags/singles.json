@@ -63,8 +63,178 @@
   },
   {
    "key": "rep",
-   "setBy": "treasure-cache (Find R. Tanner.): the pack's Reputation +1 (STANDARDS.md)",
+   "setBy": "treasure-cache, field-trip, field-trip-chaperone, childs-drawing-toy: the pack's Reputation +1 (STANDARDS.md)",
    "readBy": "families-c Reputation (record condition)"
+  },
+  {
+   "key": "rep-lost",
+   "setBy": "glove-duel (refuse): the pack's Reputation -1 (STANDARDS.md)",
+   "readBy": "families-c Reputation (record condition)"
+  },
+  {
+   "key": "birthday-kid-battled",
+   "setBy": "birthday-party-crash",
+   "readBy": "birthday-kid-returns"
+  },
+  {
+   "key": "wingman-pokemon-talk",
+   "setBy": "blind-date-wingman",
+   "readBy": "blind-date-callback"
+  },
+  {
+   "key": "gorm-tagged",
+   "setBy": "borrowed-ally",
+   "readBy": "borrowed-ally-cheer"
+  },
+  {
+   "key": "derby-raced",
+   "setBy": "soap-box-derby",
+   "readBy": "soap-box-derby-shop"
+  },
+  {
+   "key": "wedding-signed",
+   "setBy": "wedding-guestbook",
+   "readBy": "wedding-callback"
+  },
+  {
+   "key": "rec-fire",
+   "setBy": "recommend-team",
+   "readBy": "recommend-returns-fire"
+  },
+  {
+   "key": "rec-water",
+   "setBy": "recommend-team",
+   "readBy": "recommend-returns-water"
+  },
+  {
+   "key": "rec-grass",
+   "setBy": "recommend-team",
+   "readBy": "recommend-returns-grass"
+  },
+  {
+   "key": "dancer-met",
+   "setBy": "dance-off",
+   "readBy": "markets thread (the dancer's later scenes)"
+  },
+  {
+   "key": "magician-met",
+   "setBy": "street-magician",
+   "readBy": "markets thread (the magician's later scenes)"
+  },
+  {
+   "key": "tournament-registered",
+   "setBy": "registration-desk",
+   "readBy": "families-a (the tournament)"
+  },
+  {
+   "key": "lab-request-delta",
+   "setBy": "professors-lab",
+   "readBy": "legends thread (Delta Episode request)"
+  },
+  {
+   "key": "lab-request-z",
+   "setBy": "professors-lab",
+   "readBy": "legends thread (Z-Crystal request)"
+  },
+  {
+   "key": "lab-request-mega",
+   "setBy": "professors-lab",
+   "readBy": "legends thread (Mega request)"
+  },
+  {
+   "key": "h-graveyard",
+   "setBy": "eventsHelpers.json (helper at the graveyard)",
+   "readBy": "graveyard-ghost-helps"
+  },
+  {
+   "key": "sign-articuno",
+   "setBy": "wx-aurora-night",
+   "readBy": "legends thread (Signs and Tellings, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "sign-ho-oh",
+   "setBy": "wx-rainbow-after-rain",
+   "readBy": "legends thread (Signs and Tellings, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "sign-lugia",
+   "setBy": "wx-bioluminescent-bay",
+   "readBy": "legends thread (Signs and Tellings, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "sign-shaymin",
+   "setBy": "wx-blossom-storm",
+   "readBy": "legends thread (Signs and Tellings, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "telling-manaphy",
+   "setBy": "wx-bioluminescent-bay",
+   "readBy": "legends thread (Signs and Tellings, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "chansey-lucky-egg",
+   "setBy": "r180-lucky-charm-chansey",
+   "readBy": "r180-lucky-charm-chansey (the Lucky Egg is given once per run)"
+  },
+  {
+   "key": "shed-skin-badge",
+   "setBy": "r128-shed-skin-garden",
+   "readBy": "shed-skin-badge-return"
+  },
+  {
+   "key": "staryu-thrown-back",
+   "setBy": "r160-starfall-beach",
+   "readBy": "r160-staryu-returns"
+  },
+  {
+   "key": "uncommon-breed-left",
+   "setBy": "uncommon-breed",
+   "readBy": "uncommon-breed-returns"
+  },
+  {
+   "key": "birthday-kid-returns-seen",
+   "setBy": "birthday-kid-returns",
+   "readBy": "birthday-kid-returns (once per run)"
+  },
+  {
+   "key": "blind-date-callback-seen",
+   "setBy": "blind-date-callback",
+   "readBy": "blind-date-callback (once per run)"
+  },
+  {
+   "key": "borrowed-ally-cheer-seen",
+   "setBy": "borrowed-ally-cheer",
+   "readBy": "borrowed-ally-cheer (once per run)"
+  },
+  {
+   "key": "r160-staryu-returns-seen",
+   "setBy": "r160-staryu-returns",
+   "readBy": "r160-staryu-returns (once per run)"
+  },
+  {
+   "key": "shed-skin-badge-return-seen",
+   "setBy": "shed-skin-badge-return",
+   "readBy": "shed-skin-badge-return (once per run)"
+  },
+  {
+   "key": "soap-box-derby-shop-seen",
+   "setBy": "soap-box-derby-shop",
+   "readBy": "soap-box-derby-shop (once per run)"
+  },
+  {
+   "key": "uncommon-breed-returns-seen",
+   "setBy": "uncommon-breed-returns",
+   "readBy": "uncommon-breed-returns (once per run)"
+  },
+  {
+   "key": "wedding-callback-seen",
+   "setBy": "wedding-callback",
+   "readBy": "wedding-callback (once per run)"
+  },
+  {
+   "key": "lore-egg-song",
+   "setBy": "wedding-guestbook (either Sign choice), as the old event did",
+   "readBy": "npcStory lore fragment egg-song"
   }
  ]
 }

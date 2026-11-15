@@ -221,8 +221,8 @@ export const EVENTS: Json[] = [
     id: 'wedding-guestbook',
     intro: 'Bells, ribbons, a crowd, and two Pokémon in tiny bowties trying very hard to sit still. A guestbook stands open at the gate. **"Sign, and be lucky!"**',
     choices: [
-      ch('Sign.', out('You sign your name, and add a little message. The couple wave from the arch. Everyone cheers.', flag('wedding-signed'))),
-      ch('Sign, and let a Pokémon stamp it.', out('You sign, and the one you chose presses a muddy paw beside your name. The bride laughs so hard she has to sit down.', flag('wedding-signed')), pick),
+      ch('Sign.', out('You sign your name, and add a little message. The couple wave from the arch. Everyone cheers.', flag('wedding-signed'), flag('lore-egg-song'))),
+      ch('Sign, and let a Pokémon stamp it.', out('You sign, and the one you chose presses a muddy paw beside your name. The bride laughs so hard she has to sit down.', flag('wedding-signed'), flag('lore-egg-song')), pick),
     ],
   },
   later('wedding-callback', 'The Wedding’s Little One', 'wedding-signed',
