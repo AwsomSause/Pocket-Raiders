@@ -8,7 +8,7 @@ const menu = (seed: string, slot: string, flags: string[] = [], completed: strin
 describe('Kanto canon spaces catalog', () => {
   it('is clean and has the documented counts', () => {
     expect(canonSpaceGaps(canonKanto)).toEqual([]);
-    expect(canonKanto.spaces.length).toBe(109); // 71 + Haunter's Prank (KANTO_PLACED_1) + the Badge Check and seven game route moments (KANTO_PLACED_2) + 29 Volume II spaces (KANTO_PLACED_3)
+    expect(canonKanto.spaces.length).toBe(138); // 71 + Haunter's Prank (KANTO_PLACED_1) + the Badge Check and seven game route moments (KANTO_PLACED_2) + 29 Volume II spaces (KANTO_PLACED_3) + 29 more (KANTO_PLACED_4)
   });
   it('keeps the director\'s mandatory spaces always placed', () => {
     for (const id of ['cs.kanto.vermilion.flightnorth', 'cs.kanto.saffron.route25', 'cs.kanto.pewter.forest', 'cs.kanto.pewter.moon', 'cs.kanto.lavender.tower']) expect(byId.get(id)?.appears).toBe('always');
@@ -33,7 +33,8 @@ describe('Town Roll', () => {
     expect(early.length).toBe(2 + 2);
     const late = menu('A', 'stage-4');
     expect(late[0]).toBe('cs.kanto.celadon.mart');
-    expect(late.length).toBe(1 + 3);
+    expect(late[1]).toBe('cs.kanto.celadon.diner'); // KANTO_PLACED_4: the Diner is Always too
+    expect(late.length).toBe(2 + 3);
   });
   it('never offers more than two Pseudo Stages, and never a sub-space or trigger without its condition', () => {
     for (let i = 0; i < 200; i++) for (const slot of ['stage-5', 'stage-7', 'interlude-3']) {
@@ -69,7 +70,7 @@ describe('Town Roll', () => {
     expect(back.filter((id) => first.includes(id))).toEqual(['cs.kanto.viridian.route22', 'cs.kanto.viridian.oldman']);
   });
   it('opens the Indigo finale with Victory Road, and Cerulean Cave only after it', () => {
-    expect(menu('I', 'finale')).toEqual(['cs.kanto.indigo.road']);
+    expect(menu('I', 'finale')).toEqual(['cs.kanto.indigo.road', 'cs.kanto.indigo.village']); // KANTO_PLACED_4: the Village at the Gate
     // KANTO_PLACED_2: Cerulean Cave is locked; only the Victory Road summit opens it (an addEvent, not a menu pick).
     expect(menu('I', 'finale', [], ['cs.kanto.indigo.road'])).not.toContain('cs.kanto.cerulean.cave');
     expect(byId.get('cs.kanto.cerulean.cave')?.appears).toBe('locked');

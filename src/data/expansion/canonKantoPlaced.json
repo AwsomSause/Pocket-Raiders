@@ -63,5 +63,13 @@
    ]
   }
  ],
- "routes": []
+ "routes": [
+  {
+   "event": "cs-kanto-indigo-torch",
+   "stages": [
+    8
+   ],
+   "chance": 0.6
+  }
+ ]
 }

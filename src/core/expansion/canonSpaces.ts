@@ -67,7 +67,7 @@ export const CanonSpacesFileSchema = z.object({
 export type CanonSpacesFile = z.infer<typeof CanonSpacesFileSchema>;
 
 /** Row counts the content gate holds the catalog to. */
-export const CANON_KANTO_COUNTS = { towns: 10, slots: 11, spaces: 109 } as const;
+export const CANON_KANTO_COUNTS = { towns: 10, slots: 11, spaces: 138 } as const;
 
 /** The run's canon state (stored at run.expansion.canon). A menu is rolled once per slot and then kept, so reloading never re-rolls it. */
 export const CanonStateSchema = z.object({

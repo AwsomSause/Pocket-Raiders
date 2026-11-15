@@ -25,7 +25,7 @@ const live = (id: string) => !content.events.get(id)!.disabled;
 describe('Cinnabar canon: the event graph', () => {
   it('every addEvent target exists, and every live room opens from a gate', () => {
     const ids = [...content.events.keys()].filter((id) => id.startsWith(P) && live(id));
-    const gates = ['lab', 'mansion', 'seafoam', 'newisland', 'volcano'];
+    const gates = ['lab', 'mansion', 'seafoam', 'newisland', 'volcano', 'inn', 'sleeper', 'wave', 'vial'];
     expect(ids.length).toBeGreaterThan(40);
     const reach = new Set<string>(gates.map((g) => `${P}${g}`));
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id.slice(P.length))) { expect(content.events.has(t), `${id} -> ${t}`).toBe(true); expect(live(t), `${id} -> ${t} (disabled)`).toBe(true); if (!reach.has(t)) { reach.add(t); again = true; } } }
@@ -44,8 +44,8 @@ describe('Cinnabar canon: the event graph', () => {
 });
 
 describe('Cinnabar Lab', () => {
-  it('is a hub: Fossil Revival, the Fusion Display, Lab Trades and a way out', () => {
-    expect(room(`${P}lab`).choices.map((c) => c.label)).toEqual(['Fossil Revival.', 'The Fusion Display.', 'Lab Trades.', expect.stringMatching(/^Leave/)]);
+  it('is a hub: Fossil Revival, the Fusion Display, the Trade Wing and a way out', () => {
+    expect(room(`${P}lab`).choices.map((c) => c.label)).toEqual(['Fossil Revival.', 'The Fusion Display.', 'The Trade Wing.', expect.stringMatching(/^Leave/)]);
   });
   it('revives Helix into Omanyte, and the newly woken fossil starts one Bond step higher', () => {
     const out = play('lab-revive', 0, 'LB1', (r) => { r.inventory['helix-fossil'] = 1; });
@@ -62,9 +62,11 @@ describe('Cinnabar Lab', () => {
     const { run, sideId } = debugForceEvent(content, structuredClone(begin('LB2')), `${P}lab-revive`);
     expect(() => chooseEvent(content, run, sideId, 0)).toThrow();
   });
-  it('trades a Pokémon for a Voltorb, an Electrode or a Porygon at a fair stage', () => {
-    const wants = room(`${P}lab-trade`).choices.slice(0, 3).map((c) => c.success.effects.map((e) => (e.kind === 'tradeAway' ? e.want.stage : e.kind === 'join' ? e.species[0] : null)).filter(Boolean));
-    expect(wants).toEqual([[1, 'voltorb'], [2, 'electrode'], [1, 'porygon']]);
+  it('opens the Trade Wing and the Backlog (KANTO_PLACED_4) as rooms of the Lab', () => {
+    const opens = (id: string) => room(id).choices.flatMap((c) => c.success.effects.flatMap((e) => (e.kind === 'addEvent' ? [e.eventId] : [])));
+    expect(opens(`${P}lab`)).toContain('cs-kanto-cinnabar-trades');
+    expect(opens(`${P}lab-revive2`)).toContain('cs-kanto-cinnabar-backlog');
+    expect(content.events.get(`${P}lab-trade`)?.disabled ?? true).toBe(true);
   });
 });
 

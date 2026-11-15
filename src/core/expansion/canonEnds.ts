@@ -29,9 +29,9 @@ export const CanonRoutesFileSchema = z.object({
 });
 export type CanonRoutesFile = z.infer<typeof CanonRoutesFileSchema>;
 
-function addStop(stage: NonNullable<RunState['stage']>, eventId: string, rng: Rng, prefix: string, maxColumn: number): boolean {
+function addStop(stage: NonNullable<RunState['stage']>, eventId: string, rng: Rng, prefix: string, maxColumn: number, minColumn = 1): boolean {
   if (stage.map.nodes.some((n) => n.sides.some((s) => s.eventId === eventId))) return false;
-  const nodes = stage.map.nodes.filter((n) => n.column <= maxColumn);
+  const nodes = stage.map.nodes.filter((n) => n.column <= maxColumn && n.column >= minColumn);
   if (nodes.length === 0) return false;
   const node = rng.pick(nodes);
   node.sides.push({ id: `${prefix}-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId });
@@ -58,7 +58,9 @@ export function addFinaleCanonStops(content: Content, run: RunState): void {
   const rng = new Rng(hashSeed(`${run.seed}::canon-stops::finale`));
   for (const id of enterCanonSlot(canonKanto, run, 'finale')) {
     const event = canonEventFor(content, id, 'finale');
-    if (event) addStop(run.stage!, event.id, rng, 'cx-end', 1);
+    // KANTO_PLACED_4: the Village at the Gate is the finale's Town node, after Victory Road (the first fight), so a hub sits on the second.
+    const hub = canonKanto.spaces.find((s) => s.id === id)?.kind === 'HUB';
+    if (event) addStop(run.stage!, event.id, rng, 'cx-end', hub ? 2 : 1, hub ? 2 : 1);
   }
 }
 

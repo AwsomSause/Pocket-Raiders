@@ -7,14 +7,20 @@
    "setBy": [
     "cs-kanto-celadon-gamecorner-back",
     "cs-kanto-celadon-mansion-study",
+    "cs-kanto-celadon-poster",
+    "cs-kanto-celadon-poster-nice",
     "cs-kanto-cerulean-burglary",
     "cs-kanto-cerulean-recruiter",
     "cs-kanto-cerulean-recruiter-ask",
+    "cs-kanto-cinnabar-inn-r1",
+    "cs-kanto-cinnabar-inn-r2",
+    "cs-kanto-cinnabar-inn-r3",
     "cs-kanto-cinnabar-mansion-n2",
     "cs-kanto-cinnabar-mansion-n3",
     "cs-kanto-cinnabar-mansion-n4",
     "cs-kanto-cinnabar-mansion-n5",
     "cs-kanto-cinnabar-mansion-n6",
+    "cs-kanto-cinnabar-vial",
     "cs-kanto-fuchsia-snag",
     "cs-kanto-fuchsia-zoo",
     "cs-kanto-lavender-radio",
@@ -22,7 +28,11 @@
     "cs-kanto-pewter-afterhours-amber",
     "cs-kanto-pewter-serum",
     "cs-kanto-pewter-seymour",
+    "cs-kanto-saffron-exam-fail",
+    "cs-kanto-saffron-exam-result",
     "cs-kanto-saffron-lament-flash",
+    "cs-kanto-saffron-mrpsychic",
+    "cs-kanto-saffron-seam",
     "cs-kanto-saffron-silph",
     "cs-kanto-vermilion-photographer"
    ]
@@ -52,6 +62,20 @@
    ]
   },
   {
+   "key": "kanto-bridgerun-escort",
+   "setBy": [
+    "cs-kanto-celadon-bridgerun-reason"
+   ]
+  },
+  {
+   "key": "kanto-bridgerun-late",
+   "setBy": [
+    "cs-kanto-celadon-bridgerun-drawbridge",
+    "cs-kanto-celadon-bridgerun-gang",
+    "cs-kanto-celadon-bridgerun-reason"
+   ]
+  },
+  {
    "key": "kanto-burglary-solved",
    "setBy": [
     "cs-kanto-cerulean-burglary"
@@ -75,6 +99,52 @@
    "key": "kanto-cave-first",
    "setBy": [
     "cs-kanto-cerulean-cave-n3"
+   ]
+  },
+  {
+   "key": "kanto-celadon-bridgerun",
+   "setBy": [
+    "cs-kanto-celadon-bridgerun-end"
+   ]
+  },
+  {
+   "key": "kanto-celadon-coincase",
+   "setBy": [
+    "cs-kanto-celadon-diner",
+    "cs-kanto-celadon-diner-talk"
+   ]
+  },
+  {
+   "key": "kanto-celadon-devroom",
+   "setBy": [
+    "cs-kanto-celadon-devroom"
+   ]
+  },
+  {
+   "key": "kanto-celadon-greenhouse",
+   "setBy": [
+    "cs-kanto-celadon-greenhouse-out"
+   ]
+  },
+  {
+   "key": "kanto-celadon-poster",
+   "setBy": [
+    "cs-kanto-celadon-poster",
+    "cs-kanto-celadon-poster-nice"
+   ]
+  },
+  {
+   "key": "kanto-celadon-salon",
+   "setBy": [
+    "cs-kanto-celadon-salon-styleoff",
+    "cs-kanto-celadon-salon-styleoff2",
+    "cs-kanto-celadon-salon-won"
+   ]
+  },
+  {
+   "key": "kanto-celadon-vee",
+   "setBy": [
+    "cs-kanto-celadon-vee-cage"
    ]
   },
   {
@@ -132,8 +202,49 @@
    ]
   },
   {
+   "key": "kanto-cinnabar-backlog",
+   "setBy": [
+    "cs-kanto-cinnabar-backlog"
+   ]
+  },
+  {
+   "key": "kanto-cinnabar-inn",
+   "setBy": [
+    "cs-kanto-cinnabar-inn-night"
+   ]
+  },
+  {
+   "key": "kanto-cinnabar-sleeper",
+   "setBy": [
+    "cs-kanto-cinnabar-sleeper-woke"
+   ]
+  },
+  {
+   "key": "kanto-cinnabar-trades",
+   "setBy": [
+    "cs-kanto-cinnabar-trades"
+   ]
+  },
+  {
+   "key": "kanto-cinnabar-vial",
+   "setBy": [
+    "cs-kanto-cinnabar-vial"
+   ]
+  },
+  {
+   "key": "kanto-cinnabar-wave",
+   "setBy": [
+    "cs-kanto-cinnabar-wave-flag",
+    "cs-kanto-cinnabar-wave-s1",
+    "cs-kanto-cinnabar-wave-s2",
+    "cs-kanto-cinnabar-wave-s3"
+   ]
+  },
+  {
    "key": "kanto-coins",
    "setBy": [
+    "cs-kanto-celadon-diner",
+    "cs-kanto-celadon-diner-talk",
     "cs-kanto-celadon-gamecorner",
     "cs-kanto-celadon-gamecorner-floor",
     "cs-kanto-celadon-gamecorner-prizes",
@@ -179,6 +290,13 @@
    ]
   },
   {
+   "key": "kanto-dragonair-sighting",
+   "setBy": [
+    "cs-kanto-fuchsia-dragonlake",
+    "cs-kanto-fuchsia-dragonlake-ask"
+   ]
+  },
+  {
    "key": "kanto-eevee",
    "setBy": [
     "cs-kanto-celadon-eevee",
@@ -193,6 +311,23 @@
     "cs-kanto-celadon-eevee",
     "cs-kanto-celadon-eevee-cousin",
     "cs-kanto-celadon-eevee-stones"
+   ]
+  },
+  {
+   "key": "kanto-erika-friend",
+   "setBy": [
+    "cs-kanto-celadon-greenhouse-out"
+   ]
+  },
+  {
+   "key": "kanto-exam-marks",
+   "setBy": [
+    "cs-kanto-saffron-exam-q1",
+    "cs-kanto-saffron-exam-q2",
+    "cs-kanto-saffron-exam-q3",
+    "cs-kanto-saffron-exam-q4",
+    "cs-kanto-saffron-exam-q5",
+    "cs-kanto-saffron-exam-q6"
    ]
   },
   {
@@ -247,9 +382,102 @@
    ]
   },
   {
+   "key": "kanto-fuchsia-birdmaze",
+   "setBy": [
+    "cs-kanto-fuchsia-birdmaze",
+    "cs-kanto-fuchsia-birdmaze-doduo",
+    "cs-kanto-fuchsia-birdmaze-k1",
+    "cs-kanto-fuchsia-birdmaze-k2",
+    "cs-kanto-fuchsia-birdmaze-k3",
+    "cs-kanto-fuchsia-birdmaze-k4",
+    "cs-kanto-fuchsia-birdmaze-k5"
+   ]
+  },
+  {
+   "key": "kanto-fuchsia-carnival",
+   "setBy": [
+    "cs-kanto-fuchsia-carnival"
+   ]
+  },
+  {
+   "key": "kanto-fuchsia-dragonlake",
+   "setBy": [
+    "cs-kanto-fuchsia-dragonlake",
+    "cs-kanto-fuchsia-dragonlake-ask"
+   ]
+  },
+  {
+   "key": "kanto-fuchsia-herd",
+   "setBy": [
+    "cs-kanto-fuchsia-herd-after"
+   ]
+  },
+  {
+   "key": "kanto-fuchsia-paras",
+   "setBy": [
+    "cs-kanto-fuchsia-paras-t3"
+   ]
+  },
+  {
+   "key": "kanto-fuchsia-ranch",
+   "setBy": [
+    "cs-kanto-fuchsia-ranch-line"
+   ]
+  },
+  {
    "key": "kanto-fuji-adopted",
    "setBy": [
     "cs-kanto-lavender-fuji"
+   ]
+  },
+  {
+   "key": "kanto-gang-patch",
+   "setBy": [
+    "cs-kanto-celadon-bridgerun-end"
+   ]
+  },
+  {
+   "key": "kanto-greenhouse-turns",
+   "setBy": [
+    "cs-kanto-celadon-greenhouse-last",
+    "cs-kanto-celadon-greenhouse-r1",
+    "cs-kanto-celadon-greenhouse-r2"
+   ]
+  },
+  {
+   "key": "kanto-indigo-boulders",
+   "setBy": [
+    "cs-kanto-indigo-boulders-r3"
+   ]
+  },
+  {
+   "key": "kanto-indigo-torch",
+   "setBy": [
+    "cs-kanto-indigo-torch",
+    "cs-kanto-indigo-torch-marker",
+    "cs-kanto-indigo-torch-out"
+   ]
+  },
+  {
+   "key": "kanto-indigo-village",
+   "setBy": [
+    "cs-kanto-indigo-village",
+    "cs-kanto-indigo-village-board",
+    "cs-kanto-indigo-village-hub"
+   ]
+  },
+  {
+   "key": "kanto-inn-board",
+   "setBy": [
+    "cs-kanto-cinnabar-inn"
+   ]
+  },
+  {
+   "key": "kanto-inn-riddles",
+   "setBy": [
+    "cs-kanto-cinnabar-inn-r1",
+    "cs-kanto-cinnabar-inn-r2",
+    "cs-kanto-cinnabar-inn-r3"
    ]
   },
   {
@@ -283,6 +511,12 @@
    "key": "kanto-lavender-vigil",
    "setBy": [
     "cs-kanto-lavender-vigil-done"
+   ]
+  },
+  {
+   "key": "kanto-m2-vial",
+   "setBy": [
+    "cs-kanto-cinnabar-vial"
    ]
   },
   {
@@ -331,6 +565,12 @@
    ]
   },
   {
+   "key": "kanto-moltres-sighting",
+   "setBy": [
+    "cs-kanto-indigo-boulders-r3"
+   ]
+  },
+  {
    "key": "kanto-museum-amber",
    "setBy": [
     "cs-kanto-pewter-museum-a3"
@@ -366,6 +606,13 @@
    "key": "kanto-orphan-cubone",
    "setBy": [
     "cs-kanto-lavender-orphan-w3"
+   ]
+  },
+  {
+   "key": "kanto-paras-confidence",
+   "setBy": [
+    "cs-kanto-fuchsia-paras-t1",
+    "cs-kanto-fuchsia-paras-t2"
    ]
   },
   {
@@ -495,6 +742,23 @@
    ]
   },
   {
+   "key": "kanto-ranch-ahead",
+   "setBy": [
+    "cs-kanto-fuchsia-ranch-hills",
+    "cs-kanto-fuchsia-ranch-river",
+    "cs-kanto-fuchsia-ranch-sprint"
+   ]
+  },
+  {
+   "key": "kanto-ranch-trust",
+   "setBy": [
+    "cs-kanto-fuchsia-ranch",
+    "cs-kanto-fuchsia-ranch-hills",
+    "cs-kanto-fuchsia-ranch-river",
+    "cs-kanto-fuchsia-ranch-sprint"
+   ]
+  },
+  {
    "key": "kanto-recruiter-card",
    "setBy": [
     "cs-kanto-cerulean-recruiter"
@@ -531,6 +795,42 @@
    ]
   },
   {
+   "key": "kanto-saffron-exam",
+   "setBy": [
+    "cs-kanto-saffron-exam-fail",
+    "cs-kanto-saffron-exam-result"
+   ]
+  },
+  {
+   "key": "kanto-saffron-imite",
+   "setBy": [
+    "cs-kanto-saffron-imite-done",
+    "cs-kanto-saffron-imite-p1",
+    "cs-kanto-saffron-imite-p2",
+    "cs-kanto-saffron-imite-p3"
+   ]
+  },
+  {
+   "key": "kanto-saffron-mrpsychic",
+   "setBy": [
+    "cs-kanto-saffron-mrpsychic"
+   ]
+  },
+  {
+   "key": "kanto-saffron-post",
+   "setBy": [
+    "cs-kanto-saffron-post-l1",
+    "cs-kanto-saffron-post-l2",
+    "cs-kanto-saffron-post-l3"
+   ]
+  },
+  {
+   "key": "kanto-saffron-seam",
+   "setBy": [
+    "cs-kanto-saffron-seam"
+   ]
+  },
+  {
    "key": "kanto-school-done",
    "setBy": [
     "cs-kanto-viridian-school-q10",
@@ -560,6 +860,24 @@
    "key": "kanto-seafoam-articuno",
    "setBy": [
     "cs-kanto-cinnabar-seafoam-pillar"
+   ]
+  },
+  {
+   "key": "kanto-seam-freed",
+   "setBy": [
+    "cs-kanto-saffron-seam"
+   ]
+  },
+  {
+   "key": "kanto-seam-knocked",
+   "setBy": [
+    "cs-kanto-saffron-seam"
+   ]
+  },
+  {
+   "key": "kanto-seam-watched",
+   "setBy": [
+    "cs-kanto-saffron-seam"
    ]
   },
   {
@@ -715,8 +1033,11 @@
    "setBy": [
     "cs-kanto-celadon-perfume",
     "cs-kanto-celadon-perfume-decide",
+    "cs-kanto-celadon-salon-styleoff",
+    "cs-kanto-celadon-salon-styleoff2",
     "cs-kanto-cerulean-ballet-finale",
-    "cs-kanto-fuchsia-tauros-rock"
+    "cs-kanto-fuchsia-tauros-rock",
+    "cs-kanto-indigo-torch"
    ]
   },
   {
@@ -853,6 +1174,7 @@
     "cs-kanto-cinnabar-mansion-n6",
     "cs-kanto-cinnabar-mansion-n6b",
     "cs-kanto-cinnabar-volcano-top",
+    "cs-kanto-saffron-seam",
     "cs-kanto-vermilion-dam-valley",
     "cs-kanto-vermilion-naptime-club",
     "cs-kanto-vermilion-photographer-album"
@@ -866,6 +1188,7 @@
     "cs-kanto-cerulean-ballet-bow",
     "cs-kanto-cerulean-bike",
     "cs-kanto-cerulean-gyarados-harness",
+    "cs-kanto-fuchsia-herd-after",
     "cs-kanto-pewter-serum-after",
     "cs-kanto-viridian-center-end"
    ]

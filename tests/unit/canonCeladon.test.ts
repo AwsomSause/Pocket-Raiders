@@ -19,8 +19,8 @@ const choicesOf = (id: string) => pages(id).flatMap((e) => e.choices);
 const count = (run: ReturnType<typeof begin>, id: string) => (run.inventory[id] ?? 0) + run.party.reduce((n, m) => n + (m.held?.[id] ?? 0), 0);
 
 describe('Celadon canon: the event graph', () => {
-  it('all seven catalog spaces have a gate, and every target exists and is reachable', () => {
-    const gates = ['mart', 'gamecorner', 'mansion', 'eevee', 'tea', 'perfume', 'rooftop'];
+  it('every catalog space has a gate, and every target exists and is reachable', () => {
+    const gates = ['mart', 'gamecorner', 'mansion', 'eevee', 'tea', 'perfume', 'rooftop', 'salon', 'diner', 'poster', 'devroom', 'bridgerun', 'greenhouse', 'vee'];
     for (const g of gates) expect(room(g).canon).toBe(`cs.kanto.celadon.${g}`);
     const live = [...content.events.keys()].filter((id) => id.startsWith(P) && !content.events.get(id)!.disabled);
     const targets = (id: string) => { const e = content.events.get(id)!; return [...e.choices, ...e.remembers.flatMap((v) => v.addChoices)].flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]).flatMap((e) => (e.kind === 'addEvent' ? [e.eventId] : e.kind === 'addEventFrom' ? e.ids : [])); };

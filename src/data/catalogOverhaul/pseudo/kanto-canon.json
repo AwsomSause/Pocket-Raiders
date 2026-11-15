@@ -97,6 +97,30 @@
    "themeId": "water-dark",
    "tint": "#2f5d73",
    "mood": "the chandelier standing up out of the floor, and water at every porthole"
+  },
+  {
+   "id": "ps_cs_kanto_celadon_bridgerun",
+   "name": "The Bridge Run",
+   "entry": "cs-kanto-celadon-bridgerun",
+   "themeId": "normal-water",
+   "tint": "#3d7a4a",
+   "mood": "twenty headlamps in the rain"
+  },
+  {
+   "id": "ps_cs_kanto_fuchsia_ranch",
+   "name": "The Big P Ranch",
+   "entry": "cs-kanto-fuchsia-ranch",
+   "themeId": "normal-fire",
+   "tint": "#7a3d6b",
+   "mood": "a herd of Tauros moving like weather"
+  },
+  {
+   "id": "ps_cs_kanto_cinnabar_wave",
+   "name": "The Big Wave",
+   "entry": "cs-kanto-cinnabar-wave",
+   "themeId": "water-ice",
+   "tint": "#8a3a2a",
+   "mood": "the sea going back a long way, and then standing up"
   }
  ]
 }

@@ -20,14 +20,15 @@ const withParty = (seed: string, species: string[]) => {
   run.party = species.map((s, i) => { const m = createPokemon(content, s, 30, `t${i}`); m.hp = 999; return m; });
   return run;
 };
-const targets = (id: string): string[] => [...room(id).choices, ...room(id).remembers.flatMap((v) => v.addChoices)].flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).flatMap((x) => (x.kind === 'addEvent' ? [x.eventId] : x.kind === 'addEventFrom' ? x.ids : []));
+const targets = (id: string): string[] => [...room(id).choices, ...room(id).remembers.flatMap((v) => v.addChoices)].flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).flatMap((x) => (x.kind === 'addEvent' || x.kind === 'laterEvent' ? [x.eventId] : x.kind === 'addEventFrom' ? x.ids : []));
 
 describe('Saffron canon: the event graph', () => {
   it('every addEvent target exists, and every room is reached from a gate', () => {
     const ids = [...content.events.keys()].filter((id) => id.startsWith(P) && !content.events.get(id)!.disabled).map((id) => id.slice(P.length));
     // train-arrive is the Magnet Train's follow-up, placed at the start of the next stage.
     // lament-flash is Sabrina's Lament (KANTO_PLACED_2), a follow-up after the Labyrinth.
-    const gates = ['r25', 'tournament', 'dojo', 'copycat', 'silph', 'train', 'train-arrive', 'lament-flash', 'labyrinth', 'return-shuppet', 'return-duskull', 'return-drifloon', 'return-gastly', 'rival-return'];
+    // KANTO_PLACED_4 adds Mr. Psychic, the House of Imitation, the Admissions Exam, the Teleport Girl, the Seam and Pidgey Post.
+    const gates = ['r25', 'tournament', 'dojo', 'copycat', 'silph', 'train', 'train-arrive', 'lament-flash', 'labyrinth', 'return-shuppet', 'return-duskull', 'return-drifloon', 'return-gastly', 'rival-return', 'mrpsychic', 'imite', 'exam', 'teleport', 'seam', 'post'];
     const reach = new Set<string>(gates);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) { expect(content.events.has(t), `${id} -> ${t}`).toBe(true); if (!reach.has(t.slice(P.length))) { reach.add(t.slice(P.length)); again = true; } } }
     expect([...reach].sort()).toEqual(ids.sort());

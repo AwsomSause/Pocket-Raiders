@@ -25,10 +25,10 @@ const evolve = (from: string, to: string): Json => ({ kind: 'formChange', from, 
   const rooms = [
     c('Fossil Revival.', o('The revival room is cold and very clean, with one plate in the middle of it like an altar.', s.open('revive'))),
     c('The Fusion Display.', o('Two tanks and a drawing of what would come out. An assistant: "We don\'t do it. We draw it. The drawing\'s the fun part. Nobody gets hurt by a drawing."', s.open('fusion'))),
-    c('Lab Trades.', o('A scientist: "Mine\'s a Porygon. It\'s very polite. I want something that isn\'t. I\'ve had enough manners."', s.open('trade'))),
+    c('The Trade Wing.', o('Three researchers look up from three desks at once. Each of them wants something common, and each has something that isn\'t.', { kind: 'addEvent', eventId: 'cs-kanto-cinnabar-trades' })),
     c('Leave him asleep on his keyboard.', o('You let the door close softly. Behind it the hum goes on, and so does the snoring.')),
   ];
-  s.entry('Cinnabar Lab', 'A white building on black rock. Inside, everything hums, and a man\'s asleep on a keyboard. Three rooms: Fossil Revival, the Fusion Display, and Lab Trades.', rooms,
+  s.entry('Cinnabar Lab', 'A white building on black rock. Inside, everything hums, and a man\'s asleep on a keyboard. Three rooms: Fossil Revival, the Fusion Display, and the Trade Wing.', rooms,
     { remembers: [{ id: 'museum', when: [is('kanto-museum-registry')], notice: 'Dr. Yarrow has the paperwork. "Blackwood wrote. Nine pages. He wants to know everything it does."' }] });
   s.room('revive', 'Cinnabar Lab: Fossil Revival', 'One revival per visit. Helix, Omanyte; Dome, Kabuto; Old Amber, Aerodactyl; and the other regions\' fossils likewise.',
     [revive('helix-fossil', 'omanyte', 'The Helix Fossil.'), revive('dome-fossil', 'kabuto', 'The Dome Fossil.'), revive('old-amber', 'aerodactyl', 'The Old Amber.'),
@@ -36,6 +36,7 @@ const evolve = (from: string, to: string): Json => ({ kind: 'formChange', from, 
   s.room('revive2', 'Cinnabar Lab: Other Fossils', 'The other regions\' fossils, and a drawer marked FRAGMENTS. A player holding one fragment gets the second here, for nothing.',
     [c('A fossil from another region.', o('He picks it out of your bag himself.', s.open('revive3'))),
       c('The second Fossil Fragment, for nothing.', o('Dr. Yarrow: "Half of a thing is no use to anybody. Here." The two halves fit.', kc('fossilFragment')), { requires: [is('kanto-fossil-fragment')] }),
+      c('The shelf marked UNCLAIMED.', o('Dr. Yarrow follows your eyes to the shelf, and goes quiet for a moment.', { kind: 'addEvent', eventId: 'cs-kanto-cinnabar-backlog' })),
       c('Back to the hall.', o('Back to the humming.', s.open('hall')))]);
   // Every other fossil in the game, on trays of three (the Lab revives them all; KANTO_PLACED_2: "the other regions' fossils likewise").
   const TRAYS: [string, string, [string, string, string][]][] = [
@@ -64,9 +65,6 @@ const evolve = (from: string, to: string): Json => ({ kind: 'formChange', from, 
       wake('(Say nothing; hold out a hand.)', 'It puts its head under your hand, and leaves it there.')]);
   s.room('fusion', 'Cinnabar Lab: The Fusion Display', 'Pick any two of your party, and the assistant sketches what would come out. Cosmetic: nobody gets hurt by a drawing.',
     [c('Pick two and watch her draw.', o('The sketch is very bad and very loving. Your lead looks at it, and then at you, with deep suspicion. You keep it anyway.', fr(1, 'picked'), s.open('hall')), { pick: {} }), c('Back.', o('Back.', s.open('hall')))]);
-  const tradeFor = (stage: number, mon: string, label: string) => c(label, o(`The scientist swaps Balls with you with enormous relief. Both sides of the trade were shown before it was made.`, { kind: 'tradeAway', want: { label: `a Pokémon of evolution stage ${stage}`, species: [], stage } }, join([mon])));
-  s.room('trade', 'Cinnabar Lab: Lab Trades', 'One trade, with both sides shown first: a Voltorb, an Electrode or a Porygon, for any Pokémon of the same evolution stage.',
-    [tradeFor(1, 'voltorb', 'A first-stage Pokémon for the Voltorb.'), tradeFor(2, 'electrode', 'A middle-stage Pokémon for the Electrode.'), tradeFor(1, 'porygon', 'A first-stage Pokémon for the Porygon.'), c('No trade.', o('"Manners it is, then," he sighs.'))]);
   s.room('hall', 'Cinnabar Lab', 'Everything hums. The man on the keyboard has turned his head the other way.', rooms);
 }
 
@@ -203,20 +201,21 @@ const evolve = (from: string, to: string): Json => ({ kind: 'formChange', from, 
     placed: { stage: [8], home: 20, sits: 'door', attaches: 'after', badge: 'Eight lights', level: 2, often: 'Once per run' },
     ps: { name: 'Victory Road', themeId: 'ground-rock', mood: 'eight lights coming on, one at a time' } });
   const FOES = ['machop', 'machoke', 'geodude', 'graveler', 'onix', 'rhyhorn', 'marowak', 'zubat', 'golbat'];
-  const plate = (to: string, text: string) => [c('Push the boulder onto the plate.', o(text, s.open(to)), { requires: [move('strength')] }),
-    c('Push it the hard way.', battle(`${text} It takes long enough that something comes to see what the noise is.`, wild(FOES, { levelBonus: 2, win: [s.open(to)] })))];
+  const plate = (to: string, text: string, hall: string) => [c('Push the boulder onto the plate.', o(text, s.open(to)), { requires: [move('strength')] }),
+    c('Push it the hard way.', battle(`${text} It takes long enough that something comes to see what the noise is.`, wild(FOES, { levelBonus: 2, win: [s.open(to)] }))),
+    c('Look round the whole hall first.', o('There are more boulders here than the way through needs, and more plates. Somebody built this as a puzzle on purpose.', { kind: 'addEvent', eventId: hall }))];
   s.entry('Victory Road', 'A cave with a carved arch. Eight sockets in the arch. As you walk under, eight lights come on, one at a time.',
     [c('Go in.', o('The lights stay on behind you.', s.open('n1')))],
     { remembers: [{ id: 'short', when: [is('kanto-badge-shortcut')], addChoices: [c('The guard\'s side door.', o('The short way round comes out past the first boulder.', s.open('n3')))], notice: 'The sixth guard\'s side door is unlocked.' }] });
   s.room('n1', 'Victory Road: The Arch', 'A trainer sitting just inside, boots off: "I\'ve been in here a month. I\'m not lost. I\'m resting."',
     [c('Go on.', battle('Past the resting trainer, the cave gets serious.', wild(FOES, { levelBonus: 2, win: [s.open('n2')] })))]);
-  s.room('n2', 'Victory Road: Boulder Puzzle 1', 'One boulder, one plate.', plate('n3', 'The boulder grinds onto the plate, and a gate lifts.'));
+  s.room('n2', 'Victory Road: Boulder Puzzle 1', 'One boulder, one plate.', plate('n3', 'The boulder grinds onto the plate, and a gate lifts.', 'cs-kanto-indigo-boulders'));
   s.room('n3', 'Victory Road: Back to Back', 'Two trainers, back to back.',
     [c('Battle.', battle('A double battle.', foe('Ace Trainers', { size: 2, format: 'doubles', levelBonus: 1, win: [s.open('n4')] })))]);
-  s.room('n4', 'Victory Road: Boulder Puzzle 2', 'Two boulders, two plates, one of them on the floor above.', plate('n5', 'Two boulders, two plates; the second one rolls the last foot by itself.'));
+  s.room('n4', 'Victory Road: Boulder Puzzle 2', 'Two boulders, two plates, one of them on the floor above.', plate('n5', 'Two boulders, two plates; the second one rolls the last foot by itself.', 'cs-kanto-indigo-boulders-r2'));
   s.room('n5', 'Victory Road: The Ledge', 'A rest: a ledge with a view of every stage of Kanto you\'ve crossed. The party sits.',
     [c('Sit with them.', o('Every road, every town, from up here, small and lit. Nobody says anything. Bond +1.', fr(3, 'party'), heal(0.3), s.open('n6')))]);
-  s.room('n6', 'Victory Road: Boulder Puzzle 3', 'The last boulder, and behind it, either a nest or a kennel.', plate('n6b', 'The last boulder drops, and the wall behind it opens.'));
+  s.room('n6', 'Victory Road: Boulder Puzzle 3', 'The last boulder, and behind it, either a nest or a kennel.', plate('n6b', 'The last boulder drops, and the wall behind it opens.', 'cs-kanto-indigo-boulders-r3'));
   s.room('n6b', 'Victory Road: Behind the Boulder', 'Behind the third boulder: the cave\'s one shaft of daylight.',
     [c('Look.', o('Moltres, asleep on a ledge with the cave\'s one shaft of daylight on it.', s.open('moltres')), { chance: 0.35, fail: o('An Arcanine, old, guarding nothing in particular.', s.open('arcanine')) })]);
   s.room('moltres', 'Victory Road: The Nest', 'Moltres, asleep in the light. It can be caught, at low odds.',

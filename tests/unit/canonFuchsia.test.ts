@@ -14,7 +14,7 @@ const flag = (run: RunState, key: string) => Number(run.story.flags[`ev:${key}`]
 
 describe('Fuchsia canon: the event graph', () => {
   const ids = [...content.events.keys()].filter((id) => id.startsWith(P) && !content.events.get(id)!.disabled);
-  const targets = (id: string) => [...content.events.get(id)!.choices, ...content.events.get(id)!.remembers.flatMap((v) => v.addChoices)].flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).filter((e) => e.kind === 'addEvent').map((e) => (e as { eventId: string }).eventId);
+  const targets = (id: string) => [...content.events.get(id)!.choices, ...content.events.get(id)!.remembers.flatMap((v) => v.addChoices)].flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).filter((e) => e.kind === 'addEvent' || e.kind === 'laterEvent').map((e) => (e as { eventId: string }).eventId); // laterEvent: the Weakest Paras, again at the next rest
   it('every target exists and every room is reachable from a gate', () => {
     for (const id of ids) for (const t of targets(id)) expect(content.events.has(t), `${id} -> ${t}`).toBe(true);
     // Gates, plus the follow-up placed at a later visit (the Tauros that looked back).
@@ -31,10 +31,11 @@ describe('Fuchsia canon: the event graph', () => {
       expect(ids.some((e) => content.events.get(e)!.canon === id), id).toBe(true);
     }
   });
-  it('the Fuchsia menu rolls three optional spaces, at most two of them Pseudo Stages', () => {
+  it('the Fuchsia menu has the Rod Brothers and rolls three optional spaces, at most two of them Pseudo Stages', () => {
     for (let i = 0; i < 40; i++) {
       const menu = buildTownMenu(canonKanto, { seed: `FM${i}`, slot: 'stage-5', flags: new Set(), completed: new Set() });
-      expect(menu.length).toBe(3);
+      expect(menu).toContain('cs.kanto.fuchsia.gurus'); // Always (KANTO_PLACED_4), plus three rolled
+      expect(menu.length).toBe(4);
       expect(menu.filter((m) => /factory|savanna|jungle/.test(m)).length).toBeLessThanOrEqual(2);
     }
   });

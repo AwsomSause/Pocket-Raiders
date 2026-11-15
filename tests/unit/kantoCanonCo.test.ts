@@ -60,7 +60,7 @@ describe('kanto-canon: data', () => {
       const variantOpen = e.remembers.some((v) => v.addChoices.some((c) => c.requires.length === 0));
       // Events whose every choice has a requirement must cover both sides of it (has / has not).
       if (open.length === 0 && !variantOpen) // The last three score rooms gate on complementary ranges (one of the two always opens).
-      expect(['cs-kanto-lavender-tower-f7', 'cs-kanto-saffron-silph-gift', 'cs-kanto-viridian-convertible-end', 'cs-kanto-pewter-siblings-home', 'cs-kanto-vermilion-capsized-surface'], `${e.id} has only locked choices`).toContain(e.id);
+      expect(['cs-kanto-lavender-tower-f7', 'cs-kanto-saffron-silph-gift', 'cs-kanto-viridian-convertible-end', 'cs-kanto-pewter-siblings-home', 'cs-kanto-vermilion-capsized-surface', 'cs-kanto-celadon-bridgerun-end', 'cs-kanto-celadon-greenhouse-out', 'cs-kanto-fuchsia-ranch-line', 'cs-kanto-saffron-exam-result', 'cs-kanto-cinnabar-inn-night', 'cs-kanto-cinnabar-sleeper-woke' /* KANTO_PLACED_4: two complementary gates (in time or late, passed or not, with or without a Squirtle): one always fits */], `${e.id} has only locked choices`).toContain(e.id);
     }
   });
 

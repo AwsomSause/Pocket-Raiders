@@ -13,6 +13,7 @@
   "cs-kanto-cinnabar-lab-fossil-7",
   "cs-kanto-cinnabar-lab-fossil-8",
   "cs-kanto-cinnabar-lab-fossil-9",
+  "cs-kanto-cinnabar-lab-trade",
   "cs-kanto-cinnabar-mansion-n7",
   "cs-kanto-cinnabar-mansion-n8",
   "cs-kanto-cinnabar-mansion-sw-s1-v1",
@@ -81,7 +82,7 @@
     "effect": "none",
     "tint": "#8a3a2a"
    },
-   "intro": "A white building on black rock. Inside, everything hums, and a man's asleep on a keyboard. Three rooms: Fossil Revival, the Fusion Display, and Lab Trades.",
+   "intro": "A white building on black rock. Inside, everything hums, and a man's asleep on a keyboard. Three rooms: Fossil Revival, the Fusion Display, and the Trade Wing.",
    "choices": [
     {
      "label": "Fossil Revival.",
@@ -108,13 +109,13 @@
      }
     },
     {
-     "label": "Lab Trades.",
+     "label": "The Trade Wing.",
      "success": {
-      "text": "A scientist: \"Mine's a Porygon. It's very polite. I want something that isn't. I've had enough manners.\"",
+      "text": "Three researchers look up from three desks at once. Each of them wants something common, and each has something that isn't.",
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-cinnabar-lab-trade"
+        "eventId": "cs-kanto-cinnabar-trades"
        }
       ]
      }
@@ -317,6 +318,18 @@
        {
         "kind": "kc",
         "act": "fossilFragment"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The shelf marked UNCLAIMED.",
+     "success": {
+      "text": "Dr. Yarrow follows your eyes to the shelf, and goes quiet for a moment.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-backlog"
        }
       ]
      }
@@ -1816,105 +1829,6 @@
    "room": true
   },
   {
-   "id": "cs-kanto-cinnabar-lab-trade",
-   "name": "Cinnabar Lab: Lab Trades",
-   "group": "Canon Spaces: Kanto",
-   "stop": "delve",
-   "rarity": "common",
-   "tags": [],
-   "types": [],
-   "minStage": 1,
-   "requires": [],
-   "remembers": [],
-   "callback": false,
-   "forced": false,
-   "scene": {
-    "cast": [],
-    "effect": "none",
-    "tint": "#8a3a2a"
-   },
-   "intro": "One trade, with both sides shown first: a Voltorb, an Electrode or a Porygon, for any Pokémon of the same evolution stage.",
-   "choices": [
-    {
-     "label": "A first-stage Pokémon for the Voltorb.",
-     "success": {
-      "text": "The scientist swaps Balls with you with enormous relief. Both sides of the trade were shown before it was made.",
-      "effects": [
-       {
-        "kind": "tradeAway",
-        "want": {
-         "label": "a Pokémon of evolution stage 1",
-         "species": [],
-         "stage": 1
-        }
-       },
-       {
-        "kind": "join",
-        "species": [
-         "voltorb"
-        ],
-        "levelBonus": 0
-       }
-      ]
-     }
-    },
-    {
-     "label": "A middle-stage Pokémon for the Electrode.",
-     "success": {
-      "text": "The scientist swaps Balls with you with enormous relief. Both sides of the trade were shown before it was made.",
-      "effects": [
-       {
-        "kind": "tradeAway",
-        "want": {
-         "label": "a Pokémon of evolution stage 2",
-         "species": [],
-         "stage": 2
-        }
-       },
-       {
-        "kind": "join",
-        "species": [
-         "electrode"
-        ],
-        "levelBonus": 0
-       }
-      ]
-     }
-    },
-    {
-     "label": "A first-stage Pokémon for the Porygon.",
-     "success": {
-      "text": "The scientist swaps Balls with you with enormous relief. Both sides of the trade were shown before it was made.",
-      "effects": [
-       {
-        "kind": "tradeAway",
-        "want": {
-         "label": "a Pokémon of evolution stage 1",
-         "species": [],
-         "stage": 1
-        }
-       },
-       {
-        "kind": "join",
-        "species": [
-         "porygon"
-        ],
-        "levelBonus": 0
-       }
-      ]
-     }
-    },
-    {
-     "label": "No trade.",
-     "success": {
-      "text": "\"Manners it is, then,\" he sighs.",
-      "effects": []
-     }
-    }
-   ],
-   "room": true
-  },
-  {
    "id": "cs-kanto-cinnabar-lab-hall",
    "name": "Cinnabar Lab",
    "group": "Canon Spaces: Kanto",
@@ -1959,13 +1873,13 @@
      }
     },
     {
-     "label": "Lab Trades.",
+     "label": "The Trade Wing.",
      "success": {
-      "text": "A scientist: \"Mine's a Porygon. It's very polite. I want something that isn't. I've had enough manners.\"",
+      "text": "Three researchers look up from three desks at once. Each of them wants something common, and each has something that isn't.",
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-cinnabar-lab-trade"
+        "eventId": "cs-kanto-cinnabar-trades"
        }
       ]
      }
@@ -4357,6 +4271,18 @@
        ]
       }
      }
+    },
+    {
+     "label": "Look round the whole hall first.",
+     "success": {
+      "text": "There are more boulders here than the way through needs, and more plates. Somebody built this as a puzzle on purpose.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-boulders"
+       }
+      ]
+     }
     }
    ],
    "room": true
@@ -4471,6 +4397,18 @@
        ]
       }
      }
+    },
+    {
+     "label": "Look round the whole hall first.",
+     "success": {
+      "text": "There are more boulders here than the way through needs, and more plates. Somebody built this as a puzzle on purpose.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-boulders-r2"
+       }
+      ]
+     }
     }
    ],
    "room": true
@@ -4584,6 +4522,18 @@
         }
        ]
       }
+     }
+    },
+    {
+     "label": "Look round the whole hall first.",
+     "success": {
+      "text": "There are more boulders here than the way through needs, and more plates. Somebody built this as a puzzle on purpose.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-boulders-r3"
+       }
+      ]
      }
     }
    ],

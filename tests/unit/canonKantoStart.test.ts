@@ -103,6 +103,8 @@ describe('Viridian before Stage 1, the Plateau finale and the road events in a r
     addFinaleCanonStops(content, run);
     const first = run.stage!.map.nodes.find((n) => n.column === 1)!;
     expect(first.sides.map((s) => s.eventId)).toEqual(['cs-kanto-indigo-road']);
+    // KANTO_PLACED_4: the Village at the Gate (the finale's Town node) sits on the second fight, after Victory Road.
+    expect(run.stage!.map.nodes.filter((n) => n.column === 2).flatMap((n) => n.sides.map((s) => s.eventId))).toContain('cs-kanto-indigo-village');
     addOpeningCanonStops(content, run); // not a stage: adds nothing
     addRouteCanonStops(content, run);
     expect(stops(run, 'cx-open')).toEqual([]);

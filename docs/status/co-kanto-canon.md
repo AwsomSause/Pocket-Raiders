@@ -27,6 +27,11 @@ Source: `/mnt/project-files/catalog_overhaul_pack/kanto_canon_spaces/` (`KANTO_P
 | Cerulean `.ballet`, `.tech`, `.aj`, `.bike`, `.recruiter`, `.stall`, `.gyarados` | `KANTO_PLACED_3.md`, 410–651 | 2026-11-15 |
 | Vermilion `.capsized`, `.portavista`, `.naptime`, `.dam`, `.photographer`, `.itemfinder` | `KANTO_PLACED_3.md`, 652–881 | 2026-11-15 |
 | Lavender `.namerater`, `.radio`, `.vigil`, `.orphan`, `.offering` | `KANTO_PLACED_3.md`, 882–1042 | 2026-11-15 |
+| Celadon `.salon`, `.diner`, `.poster`, `.devroom`, `.bridgerun`, `.greenhouse`, `.vee` | `KANTO_PLACED_4.md`, 10–257 | 2026-11-15 |
+| Fuchsia `.ranch`, `.herd`, `.dragonlake`, `.gurus`, `.birdmaze`, `.paras`, `.carnival` | `KANTO_PLACED_4.md`, 258–501 | 2026-11-15 |
+| Saffron `.mrpsychic`, `.imite`, `.exam`, `.teleport`, `.seam`, `.post` | `KANTO_PLACED_4.md`, 502–688 | 2026-11-15 |
+| Cinnabar `.inn`, `.sleeper`, `.backlog`, `.trades`, `.wave`, `.vial` | `KANTO_PLACED_4.md`, 689–870 | 2026-11-15 |
+| Indigo `.torch`, `.boulders`, `.village` | `KANTO_PLACED_4.md`, 871–959 | 2026-11-15 |
 
 ## Limits (Part 1)
 - Before / instead / after the node's battle and "at a + node" are recorded (placement file `attaches`) but every space is a stop beside its node until the lead's placer lands; then the placement file drives it.
@@ -57,3 +62,12 @@ Source: `/mnt/project-files/catalog_overhaul_pack/kanto_canon_spaces/` (`KANTO_P
 - Itemfinder counts caught species (30); the come-back is a Pidgey note three nodes later.
 - Name Rater: no renaming from an event; rating a name gives Bond. The Offering reads this run only (a party Pokémon fainted), never earlier runs (same-run rule); the Region of Doom wall is not linked.
 - Serum custody joins a plain Rhydon (no Veiled tier); Seymour's "any later run" line is dropped (same-run rule).
+
+## Limits (Part 4, Volume II)
+- Same-run rule: the Torch's flame in the Plateau's bowl, the Big Wave's "next run" and the Village board's pinned keepsake stay inside this run. Keepsakes (Diploma, tickets, certificate, board pin) are journal moments (Kice's cut).
+- Swaps for items the game lacks: the Boulder Hall's Max Revive is a Star Piece; the Torch's Ember Charm is a Charcoal. The Weakest Paras' Miracle Potion is a full heal on the spot, out of battle (the doc's own change).
+- Cinnabar Lab: the Trade Wing replaces Lab Trades as the doc says, but Fossil Revival stays beside the Backlog (the doc replaces it; dropping it would strand fossils carried from Mt. Moon). The Backlog opens from the Lab's second fossil tray.
+- The Village at the Gate sits on the League's second fight (Victory Road is on the first), the closest the League map has to "after Victory Road's last node".
+- The Boulder Hall's three rooms are nodes of Victory Road's map beside the plates they open from (rooms of the same Pseudo Stage).
+- The Admissions Exam's practical uses your own party, not three rentals (no rental teams in events yet); the quirk cards are text only.
+- Room ends with two complementary gates (in time or late, pass or fail, with or without a Squirtle) are listed in the "only locked choices" exceptions of `kantoCanonCo.test.ts`; one always fits.
