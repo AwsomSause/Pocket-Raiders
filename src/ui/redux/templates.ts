@@ -7,6 +7,8 @@ import { rxImage, rxUrl } from './assets';
 
 /** First row to show so `index` stays visible in a window of `size` rows out of `n`. */
 export const scrollStart = (n: number, index: number, size: number): number => Math.max(0, Math.min(n - size, index - Math.floor(size / 2)));
+/** The same for a grid `cols` wide: the window starts on a row boundary and still holds `index`, also at an uneven end. */
+export const gridStart = (n: number, index: number, size: number, cols: number): number => scrollStart(Math.ceil(n / cols), Math.floor(index / cols), Math.max(1, Math.floor(size / cols))) * cols;
 const dots = (n: number, start: number, size: number, st: string): string => (n > size ? `<div class="abs sm" style="${st}">${start > 0 ? '▲' : ''} ${start + 1}–${Math.min(n, start + size)} of ${n} ${start + size < n ? '▼' : ''}</div>` : '');
 
 export interface MenuItem { label: string; note?: string; disabled?: boolean }
@@ -35,7 +37,7 @@ export function menuView(c: ReduxCtx, d: MenuModel): string {
   const v = c.v(3), it = d.items, n = it.length, cur = it[d.index], text = TX(esc(d.text ?? '')) + (d.tabs ? tabsBar(d.tabs.labels, d.tabs.index) : '');
   const head = H(d.title, d.area ?? 'sys', d.hints);
   if (v === 1) {
-    const s = scrollStart(n, d.index, 8) & ~1;
+    const s = gridStart(n, d.index, 8, 2);
     return head + `<div class="abs" style="left:24px;right:24px;top:70px;display:grid;grid-template-columns:1fr 1fr;gap:18px">${it.slice(s, s + 8).map((x, q) => off(W(`<b>${esc(x.label)}</b><div class="sm">${esc(x.note || 'Open')}</div>`, 'padding:9px 14px', s + q === d.index ? 'sel' : '', pickAttr(s + q)), x.disabled)).join('')}</div>` + dots(n, s, 8, 'right:28px;top:438px') + text;
   }
   if (v === 2) {
@@ -146,7 +148,7 @@ export function boardView(c: ReduxCtx, d: BoardModel): string {
   const grid = c.v(2) === 1, size = boardSize(c), n = d.rows.length;
   const index = Math.max(0, Math.min(n - 1, d.index));
   // The two-column layout scrolls a whole line (two cards) at a time.
-  const from = grid ? scrollStart(n, index, size) & ~1 : scrollStart(n, index, size);
+  const from = grid ? gridStart(n, index, size, 2) : scrollStart(n, index, size);
   const shown = d.rows.slice(from, from + size);
   const pct = (r: BoardRow, w: number): string => (r.pct !== null && r.pct !== undefined ? hpb(Math.max(0, Math.min(100, r.pct)), w, ' gold') : '');
   const tag = (r: BoardRow, lit: boolean): string => (r.tag ? `<span class="tg${lit ? '' : ' no'}">${esc(r.tag)}</span>` : '');

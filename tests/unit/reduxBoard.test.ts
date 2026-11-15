@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
-import { boardProgress, boardSize, boardView, type BoardModel, type BoardRow } from '../../src/ui/redux/templates';
+import { boardProgress, boardSize, boardView, gridStart, menuView, type BoardModel, type BoardRow } from '../../src/ui/redux/templates';
 
 // The mock-ups' board (quests, chains, tasks): rows with a progress bar and a state tag, in two layouts.
 
@@ -33,6 +33,14 @@ describe('New UI board (quest list)', () => {
         expect(end).not.toContain('Quest 1<');
         // The click on a row reports its place in the whole list, not on the screen.
         expect(end).toContain('data-act="pick" data-arg="19"');
+      });
+
+      it('keeps the last row on screen when the list has an uneven number of rows', () => {
+        for (const n of [7, 9, 21]) {
+          const end = boardView(ctx(layout), model({ rows: rows(n), index: n - 1 }));
+          expect(end).toContain(`data-act="pick" data-arg="${n - 1}"`);
+          expect(end).toContain(`–${n} of ${n}`);
+        }
       });
 
       it('survives an empty list and a focus that is out of range', () => {
@@ -75,5 +83,29 @@ describe('New UI board progress from a count tag', () => {
 
   it('leaves every other tag alone', () => {
     for (const t of ['', 'Claim', 'Lv 5', '3/0', '2/5 done', 'x 3', '1/2/3', '-1/5']) expect(boardProgress(t)).toBeNull();
+  });
+});
+
+describe('New UI grid scrolling', () => {
+  it('starts on a row boundary and always holds the focused cell', () => {
+    for (const [cols, size] of [[2, 6], [2, 8], [7, 14]] as const) {
+      for (const n of [1, 2, 7, 13, 15, 21, 40, 41]) {
+        for (let index = 0; index < n; index++) {
+          const s = gridStart(n, index, size, cols);
+          expect(s % cols).toBe(0);
+          expect(s).toBeGreaterThanOrEqual(0);
+          expect(index).toBeGreaterThanOrEqual(s);
+          expect(index).toBeLessThan(s + size);
+        }
+      }
+    }
+  });
+
+  it('shows the last card of a two-column menu with an uneven number of rows', () => {
+    const items = Array.from({ length: 11 }, (_, i) => ({ label: `Room ${i + 1}` }));
+    const html = menuView(ctx(1), { title: 'Menu', items, index: 10 });
+    expect(html).toContain('Room 11');
+    expect(html).toContain('data-act="pick" data-arg="10"');
+    expect(html).toContain('–11 of 11');
   });
 });
