@@ -2069,6 +2069,2497 @@
      }
     }
    ]
+  },
+  {
+   "id": "aq04-keeper-of-the-hidden-village",
+   "name": "The Keeper of the Hidden Village",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "remembers": [
+    {
+     "id": "sibling",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-hidden-bulbasaur",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know that bulb, that frown. The Bulbasaur that chose you in the gorge village had exactly this face. The girl sees you staring. \"Ah. You've met the little one. This is its big sister.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_f"
+    ],
+    "pokemon": "bulbasaur",
+    "tint": "#1c2a1c",
+    "effect": "none"
+   },
+   "intro": "A hidden village, if you can call six houses and a garden a village. Every bed in the garden has a Pokémon in it: an Oddish with a torn leaf, a Rattata with a bandaged tail, an old Pidgeotto that cannot fly. In the gate stands a Bulbasaur, feet planted. A girl comes out wiping her hands. \"It's my guard. It looks after the sick ones.\" She does not call it off. \"It doesn't trust trainers.\" Two vines snap out of its bulb and crack against the ground beside your ankles: a warning, the first and last.",
+   "choices": [
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It does not wait for you to choose a Pokémon. It comes straight down the path, vines first.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Village Bulbasaur",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq04-battled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq04-after-battle"
+        }
+       ],
+       "lineup": [
+        "bulbasaur"
+       ],
+       "spritePokemon": "bulbasaur",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq04-battled",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq04-battle-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq04-after-battle"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Help the sick Pokémon.",
+     "success": {
+      "text": "You put your bag down outside the gate and show the Bulbasaur your empty hands. \"I'm not here for it. What do they need?\" The girl blinks, then hands you a bucket. The Bulbasaur lets you past. It follows two steps behind you, every step, and it watches.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq04-helping",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq04-fetch"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You step back from the gate. The vines draw in. The Bulbasaur does not follow you, not even with its eyes. It has already gone back to watching the garden.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq04-after-battle",
+   "name": "It Still Stays",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "lost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq04-battle-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It won. It stands over your fallen Pokémon, and then it does something you do not expect: it nudges a vine under your lead and helps it up."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_f"
+    ],
+    "pokemon": "bulbasaur",
+    "tint": "#1c2a1c",
+    "effect": "none"
+   },
+   "intro": "The fight is over. The Bulbasaur is breathing hard, scraped, still standing in the gate. It looks at you differently now: the way you look at someone who fought fair. But it does not move out of the way. The girl folds her arms. \"It respects you. That's new. It's still staying.\"",
+   "choices": [
+    {
+     "label": "Help the sick Pokémon.",
+     "success": {
+      "text": "You put your Poké Balls away and ask the girl what needs doing. The Bulbasaur hears that. Its vines go slack. It steps aside, just enough, and then falls in behind you, close, watching every single thing you do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq04-helping",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq04-fetch"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You nod to it, one fighter to another, and go. It watches you all the way to the trees. It does not follow.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq04-fetch",
+   "name": "Fetch",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_f"
+    ],
+    "pokemon": "bulbasaur",
+    "tint": "#1c2a1c",
+    "effect": "none"
+   },
+   "intro": "The first task: water. The spring is at the bottom of a steep path and the bucket leaks. The sick Pokémon need fresh water every hour, and the girl has been doing it alone. The Bulbasaur sits at the top of the path and watches you go down.",
+   "choices": [
+    {
+     "label": "Carry it up yourself.",
+     "success": {
+      "text": "Down, fill, up. Down, fill, up. The bucket leaks on your boots every time. On the sixth trip your arms are shaking, and a vine slides round the handle beside your hand and takes half the weight. You do not look at it. It does not look at you. You carry the seventh bucket together.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq04-task-1",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq04-mend"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Water-type up and down with you.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Water-type fills the troughs straight from the spring, and the Oddish in the nearest bed drinks and drinks and lifts its leaves for the first time all day. The Bulbasaur watches your Water-type work. Then it goes and sits beside it, very slightly, the way you sit near a new colleague.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq04-task-1",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq04-mend"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq04-mend",
+   "name": "Mend",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_f"
+    ],
+    "pokemon": "rattata",
+    "tint": "#1c2a1c",
+    "effect": "none"
+   },
+   "intro": "The second task: the Rattata's bandage has slipped, and the leg under it is swollen. It bites anyone who comes near. It bit the girl this morning. The Bulbasaur moves closer to you, not to stop you. To see.",
+   "choices": [
+    {
+     "label": "Hold it still and rebind the leg.",
+     "success": {
+      "text": "It bites you. Of course it bites you. You keep your hands where they are and talk to it, slow and boring, about nothing, until it lets go and lets you work. The new bandage is neat. The Bulbasaur puts its face very close to the bandage, sniffs, and then looks up at you for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq04-task-2",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq04-sit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Berry first.",
+     "success": {
+      "text": "You hold out a Berry and wait. It eats it, suspicious, and then a second one, less suspicious. By the third it lets you rebind the leg without a single bite. The girl says \"Huh\" in the voice of somebody who has been bitten twice today. The Bulbasaur makes a small, approving sound.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq04-task-2",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq04-sit"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq04-sit",
+   "name": "Sit With",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_f"
+    ],
+    "pokemon": "pidgeotto",
+    "tint": "#141c2a",
+    "effect": "none"
+   },
+   "intro": "The third task is the hardest, the girl says, and the simplest. The old Pidgeotto in the last bed has stopped eating. It is not hurt. It is old, and tired, and alone, and it has stopped expecting anything. \"Just sit with it,\" she says. \"That's all. Most people can't.\"",
+   "choices": [
+    {
+     "label": "Sit with it until it sleeps.",
+     "success": {
+      "text": "You sit. Evening comes. You do not do anything clever. At some point the old bird leans against your arm, and at some point after that it eats a little from your hand, and then it sleeps. When you look up, the Bulbasaur is lying on your other side, pressed against you, eyes closed. It has decided something.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq04-task-3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq04-helped",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq04-village-goodbye"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq04-village-goodbye",
+   "name": "It Needs to See the World",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "battled-then-helped",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq04-battled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The girl walks you to the gate. The Bulbasaur comes too. She stops. \"You fought it, and then you came in and carried water. It's never seen anyone do both.\" She swallows. \"It needs to see the world. Will you take it?\"",
+     "addChoices": [
+      {
+       "label": "Take it with you.",
+       "success": {
+        "text": "She kneels and ties a length of green vine round its neck, knotted the village way. \"Its own. It grew it.\" The Bulbasaur looks back at the garden for a long moment, at every bed. Then it walks out of the gate beside you, and it does not look back again. Behind you, the girl is laughing and crying and waving with both arms.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "bulbasaur"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 20
+         },
+         {
+          "kind": "item",
+          "id": "keepers-vine",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq04-taken",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "moment",
+          "text": "A Hidden Village's guard left its garden to see the world, beside you.",
+          "importance": 65
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_f"
+    ],
+    "pokemon": "bulbasaur",
+    "tint": "#2a3a24",
+    "effect": "sparkle"
+   },
+   "intro": "Morning. The garden is quiet, the troughs are full, and the old Pidgeotto is eating on its own. The girl walks you to the gate. The Bulbasaur sits in the gate, where it was when you came, and watches you go. \"Thank you,\" the girl says. \"It watched all of it. It won't forget.\"",
+   "choices": [
+    {
+     "label": "Say goodbye to the village.",
+     "success": {
+      "text": "You wave from the trees. The girl waves back. The Bulbasaur does not wave, being a Bulbasaur, but one vine lifts, a little, and stays up until you are out of sight.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "aq04-goodbye",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq04-on-watch",
+   "name": "On Watch",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq04-taken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "bulbasaur",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq04-taken",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "bulbasaur",
+    "tint": "#141c2a",
+    "effect": "none"
+   },
+   "intro": "Camp, late. Everyone is asleep but the Bulbasaur. It has put itself between the fire and the dark, vines half out, the way it stood in the village gate. It has made your camp a garden, and everyone in it a patient.",
+   "choices": [
+    {
+     "label": "Take the first watch with it.",
+     "success": {
+      "text": "You sit down beside it. It glances at you, as if to say this is its job. You stay anyway. Around midnight its vines draw in. Near one o'clock its head drops onto your knee. You keep the watch for both of you, and it lets you.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "bulbasaur",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq04-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell it everyone is safe.",
+     "success": {
+      "text": "\"Nobody's sick here. You can sleep.\" It looks round at the camp: at every Pokémon, one by one, checking. Then, slowly, it lies down in the middle of them instead of at the edge. It is asleep in a minute. It was more tired than it let anyone see.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "bulbasaur",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq04-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq04-patient",
+   "name": "A Patient on the Road",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq04-on-watch"
+    },
+    {
+     "kind": "partyLine",
+     "species": "bulbasaur",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "bulbasaur",
+    "tint": "#2a3a24",
+    "effect": "none"
+   },
+   "intro": "A Weedle lies at the side of the road with a bent horn, too weak to crawl. The Bulbasaur stops dead. Then it plants itself over the Weedle and will not move, and it looks at you: the exact look the girl gave you when she handed you the bucket.",
+   "choices": [
+    {
+     "label": "Carry the Weedle to a Center.",
+     "success": {
+      "text": "You carry it. The Bulbasaur walks beside you with one vine resting on the Weedle the whole way, keeping it steady. At the Center it waits outside the treatment room like family. When the Weedle comes out mended, the Bulbasaur sniffs the horn, and nods, and only then lets you leave.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "bulbasaur",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq04-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Treat it here, together.",
+     "success": {
+      "text": "You kneel at the roadside with your kit. You hold; the Bulbasaur holds; you splint the horn with a twig and a strip of bandage. It is not neat. It works. The Weedle crawls off into the grass, and the Bulbasaur watches it go with the face of somebody who has done this a hundred times and still minds.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "bulbasaur",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq04-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq04-trusted",
+   "name": "A Trainer It Trusts",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq04-patient"
+    },
+    {
+     "kind": "partyLine",
+     "species": "bulbasaur",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/youngster_f"
+    ],
+    "pokemon": "bulbasaur",
+    "tint": "#2a3a24",
+    "effect": "hearts"
+   },
+   "intro": "A young trainer at a Pokémon Center crouches down in front of the Bulbasaur. \"Can I pet it?\" The Bulbasaur does not trust trainers. Everybody knows that. You wait for the vines. They do not come. It looks at the girl, and then it looks up at you.",
+   "choices": [
+    {
+     "label": "Let it decide.",
+     "success": {
+      "text": "You say nothing. It decides. It steps forward and lets the girl scratch it between the eyes, and it closes its eyes while she does it. When she has gone it comes back and leans on your leg, heavily, the way you would after doing something brave.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "bulbasaur",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq04-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell her how it guards the sick.",
+     "success": {
+      "text": "You tell her about the garden. The girl listens with her mouth open. \"It's a doctor?\" The Bulbasaur sits up very straight. It lets her pat it, once, carefully, like a doctor would allow it. All the way down the next road it walks a little taller.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "bulbasaur",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq04-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq04-poachers",
+   "name": "The Village Is Found",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq04-taken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq04-taken",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "bulbasaur",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "pokemon": "bulbasaur",
+    "tint": "#2a1c1c",
+    "effect": "shake"
+   },
+   "intro": "The Bulbasaur stops in the road and turns round. Its vines are out. A Pidgey lands on your shoulder with a scrap of paper on its leg, and you know the handwriting: the girl. \"They found us. Men with cages. They want the sick ones; sick ones don't run. Please.\" The Bulbasaur is already walking back the way you came.",
+   "choices": [
+    {
+     "label": "Defend the village.",
+     "success": {
+      "text": "You run. The Bulbasaur runs faster. You come over the last rise and there are two men in the garden gate with cages, and one of them is reaching for the old Pidgeotto.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Village Poachers",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [
+        "poison",
+        "dark"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq04-defended",
+         "amount": 1
+        },
+        {
+         "kind": "friendshipLine",
+         "species": "bulbasaur",
+         "amount": 10
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq04-village-safe"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq04-defended",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq04-defence-lost",
+         "amount": 1
+        },
+        {
+         "kind": "friendshipLine",
+         "species": "bulbasaur",
+         "amount": 5
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq04-village-safe"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Move the village.",
+     "success": {
+      "text": "You get there first. Not to fight. To pack. All night you carry beds and buckets and patients up a hidden valley the girl knows, further from any path. The Bulbasaur goes last, wiping out the tracks with its vines. At dawn the poachers find six empty houses and a garden full of nothing. It takes everything you have. Two whole nodes of road.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "aq04-moved",
+        "amount": 1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "bulbasaur",
+        "amount": 10
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq04-village-safe"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq04-poachers-village",
+   "name": "The Village Is Found",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq04-task-3",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aq04-taken",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq04-helped",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "pokemon": "bulbasaur",
+    "tint": "#2a1c1c",
+    "effect": "shake"
+   },
+   "intro": "A Pidgey lands on your shoulder with a scrap of paper on its leg, and you know the handwriting: the girl from the hidden village. \"They found us. Men with cages. They want the sick ones. It's holding the gate alone. Please.\" You can picture it exactly: four small feet planted, vines out, not giving an inch.",
+   "choices": [
+    {
+     "label": "Defend the village.",
+     "success": {
+      "text": "You come over the last rise and the Bulbasaur is in the gate, scraped and bleeding, still holding it. It sees you. It does not look surprised.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Village Poachers",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [
+        "poison",
+        "dark"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq04-defended",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq04-village-safe"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq04-defended",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq04-defence-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq04-village-safe"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Move the village.",
+     "success": {
+      "text": "You get there first, and you do not fight. You pack. All night, beds and buckets and patients go up a hidden valley the girl knows. The Bulbasaur goes last, wiping out the tracks with its vines. At dawn the poachers find six empty houses. It takes everything you have. Two whole nodes of road.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "aq04-moved",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq04-village-safe"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq04-village-safe",
+   "name": "The Garden, Safe",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "moved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq04-moved",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The new garden is smaller, and steeper, and has a view of the sky the old one never had. The old Pidgeotto has been put by the window. It looks out all day."
+    },
+    {
+     "id": "lost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq04-defence-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "They beat you. And then the whole garden got out of bed: an Oddish with a torn leaf, a Rattata on three legs, an old Pidgeotto that cannot fly. The poachers ran from that."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_f"
+    ],
+    "pokemon": "bulbasaur",
+    "tint": "#2a3a24",
+    "effect": "sparkle"
+   },
+   "intro": "It is over. The cages are empty and broken. The girl sits on the garden step with her face in her hands, and then she looks up and she is laughing. \"You came back,\" she says. \"Nobody ever comes back.\" The Bulbasaur goes from bed to bed, checking every patient, one by one.",
+   "choices": [
+    {
+     "label": "Stay till everyone is settled.",
+     "success": {
+      "text": "You stay till the last patient is asleep. The girl gives you a jar of the garden's own seeds, and a meal, and a place by the fire. The Bulbasaur finishes its rounds and comes and lies down against your boot, as it did on the first night, when it decided.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq04-village-saved",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The hidden village was found, and you came back for it.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq05-charmander-in-the-rain",
+   "name": "The Charmander in the Rain",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_m"
+    ],
+    "pokemon": "charmander",
+    "tint": "#1e2430",
+    "effect": "rain"
+   },
+   "intro": "Rain, hard and cold, the kind that gets inside your collar. On a flat rock by the road sits a Charmander, curled round its own tail. The flame on the tip is so small it is almost blue. It is not sheltering. It is waiting. Its trainer told it to stay on this rock. He said he would come back. It will not leave the rock. A trainer hurries past under an umbrella and does not slow down. \"That one? He dumped it. Said it was too weak.\" He is gone before you can answer.",
+   "choices": [
+    {
+     "label": "Carry it to shelter.",
+     "success": {
+      "text": "You pick it up. It tries to fight you, and it is too weak to fight anything, and that is the worst part. You run. You hold it inside your coat with the flame against your chest, and you feel it flicker, and flicker, and you run faster. At the Pokémon Center the nurse takes one look and does not ask questions. In the morning its flame is bright and orange, and it is looking for you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "charmander"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "flag",
+        "key": "aq-char-carried",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq05-met",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "You carried a Charmander out of the rain with its flame against your chest.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait with it.",
+     "success": {
+      "text": "You sit on the wet rock beside it. You do not touch it. You wait, because it is waiting, and it seems wrong to leave it alone with that. The rain does not stop. Its flame gets smaller. When it is no bigger than a match you decide, and you pick it up, and it lets you. Its tail is nearly out when you reach the Center. Nearly.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "charmander"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq-char-waited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq05-met",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find the trainer.",
+     "success": {
+      "text": "He is in the Center, warm and dry, laughing with friends. You tell him where his Charmander is. He laughs harder. \"Still on the rock? It's even dumber than I thought.\" Behind you, the door is open. The Charmander followed you in, dripping. It heard. It turns round and walks out into the rain, and when you go after it, it lets you pick it up. It does not look back at him.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "charmander"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq-char-heard",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq05-met",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq05-tail-flame",
+   "name": "The Tail Flame",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq05-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "charmander",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq05-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "charmander",
+    "tint": "#1e2430",
+    "effect": "rain"
+   },
+   "intro": "A drizzle starts on the road. The Charmander stops dead and curls its tail under its body, the way it did on the rock. It is shaking. It is not cold. It is remembering.",
+   "choices": [
+    {
+     "label": "Hold your hand over its flame.",
+     "success": {
+      "text": "You cup your hand over the tip of its tail like a little roof. The rain runs off your knuckles. It looks up at your hand for a long time. Then it uncurls, slowly, and walks on, and lets you keep your hand there, the whole wet road.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "charmander",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq05-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Build it a fire.",
+     "success": {
+      "text": "You stop, there and then, and build a fire under a tree out of whatever is dry. It sits so close to the fire its feet steam. You sit beside it. By the time the rain stops it has fallen asleep with its tail in your lap.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "charmander",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq05-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq05-after-a-loss",
+   "name": "After a Loss",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq05-tail-flame"
+    },
+    {
+     "kind": "partyLine",
+     "species": "charmander",
+     "bond": 2
+    }
+   ],
+   "remembers": [
+    {
+     "id": "heard",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-char-heard",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know what it is hearing. A laugh, in a warm room. \"Too weak.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "charmander",
+    "tint": "#2a1c1c",
+    "effect": "none"
+   },
+   "intro": "It loses a battle. Not badly. It just loses. Afterwards it will not come to you. It sits with its back to you at the edge of the camp, flame low, waiting to be left on a rock.",
+   "choices": [
+    {
+     "label": "Tell it you're not leaving.",
+     "success": {
+      "text": "You go and sit behind it and say it plainly. \"You lost. I'm still here. I'm going to be here the next time, too.\" It does not turn round. But its flame comes up, a little, and a little more, until it lights the grass.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "charmander",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq05-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit in silence beside it.",
+     "success": {
+      "text": "You sit beside it and say nothing at all. After a long time, it leans. It is a very small lean. It is all it has. In the morning it is the first one up, and it is standing beside your bag, ready to go.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "charmander",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq05-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq05-too-weak",
+   "name": "Too Weak",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq05-after-a-loss"
+    },
+    {
+     "kind": "partyLine",
+     "species": "charmander",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_m"
+    ],
+    "pokemon": "charmander",
+    "tint": "#3a2418",
+    "effect": "fire"
+   },
+   "intro": "A trainer on the road glances at it and laughs, not unkindly. \"A Charmander? Bit weak, isn't it?\" The word lands. Your Charmander goes very still. Then its flame goes up, high and white, higher than you have ever seen it, and it does not look at you. It looks at him.",
+   "choices": [
+    {
+     "label": "Tell him he's wrong.",
+     "success": {
+      "text": "\"It isn't.\" That is all you say. The trainer shrugs and goes. Your Charmander looks at you, and the flame stays high, and it walks beside you closer than before. Somebody said the word, and you said the other one. It heard both.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "charmander",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq05-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it show him.",
+     "success": {
+      "text": "It walks up to him, and breathes one jet of fire into the sky, straight up, so hot the rain turns to steam above the whole road. The trainer's mouth falls open. The Charmander walks back to you, very calm, as if nothing has happened. Its tail is blazing.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "charmander",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq05-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq05-act-two",
+   "name": "The Charizard Who Will Not Obey",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq05-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aq05-met",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "partyLine",
+     "species": "charmander",
+     "bond": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "carried",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-char-carried",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Somewhere in there is the Charmander you ran through the rain with, inside your coat. It does not seem to remember. Or it remembers, and it is angry that it needed you."
+    },
+    {
+     "id": "heard",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-char-heard",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It heard a man call it too weak, once. Now it is the strongest thing on the road, and it is still trying to prove it to someone who is not here."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "charizard",
+    "tint": "#3a1c14",
+    "effect": "fire"
+   },
+   "intro": "A new region, and overnight it changed. Where your small fire-lizard slept there is a Charizard: huge, orange, wings folded like a tent. It has not obeyed you since. In battle it lies down and naps while your other Pokémon fight. When you call it, it opens one eye. It looks at you as if to ask what, exactly, you have ever done to deserve it.",
+   "choices": [
+    {
+     "label": "Earn it.",
+     "success": {
+      "text": "You set its Ball aside. \"Watch.\" Three trainers on the next stretch of road, one after another, and you take them without it. It watches from a rock, with both eyes open.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Three Hard Trainers",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "formChange",
+         "from": "charmander",
+         "to": "charizard"
+        },
+        {
+         "kind": "formChange",
+         "from": "charmeleon",
+         "to": "charizard"
+        },
+        {
+         "kind": "flag",
+         "key": "aq05-earned",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq05-earned"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "formChange",
+         "from": "charmander",
+         "to": "charizard"
+        },
+        {
+         "kind": "formChange",
+         "from": "charmeleon",
+         "to": "charizard"
+        },
+        {
+         "kind": "flag",
+         "key": "aq05-earned",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq05-earn-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq05-earned"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Force it.",
+     "success": {
+      "text": "You stand in front of it and order it up, in the voice you never use. It gets up. It fights. It wins. It does every single thing you say, from then on, exactly and coldly, and it never once looks at you while it does it. It is obeying. It is not with you.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "charmander",
+        "to": "charizard"
+       },
+       {
+        "kind": "formChange",
+        "from": "charmeleon",
+        "to": "charizard"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "charmander",
+        "amount": -20
+       },
+       {
+        "kind": "flag",
+        "key": "aq05-forced",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go to the valley.",
+     "success": {
+      "text": "There is a valley a day from here where wild Charizard live, and fight, and get strong. You have heard of it. So, you can tell, has it. \"Go on, then,\" you say. It looks at you, really looks, for the first time since it changed. Then it takes off, and you follow on foot.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "charmander",
+        "to": "charizard"
+       },
+       {
+        "kind": "formChange",
+        "from": "charmeleon",
+        "to": "charizard"
+       },
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "Your Charizard",
+         "species": [
+          "charizard"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "aq05-valley-gone",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq05-valley"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq05-earned",
+   "name": "Earned",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "lost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq05-earn-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You lost the third one. You did it anyway, without it, all three, and you did not once look back at the rock to ask for help. It saw that."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "charizard",
+    "tint": "#3a2418",
+    "effect": "fire"
+   },
+   "intro": "The last trainer leaves. You are scraped, and tired, and your team is in pieces. The Charizard gets down off its rock. It walks over to you. It lowers its great head until its eye is level with yours, and the flame on its tail burns very steady.",
+   "choices": [
+    {
+     "label": "Hold out your hand.",
+     "success": {
+      "text": "It touches its snout to your palm. It is very hot. In the next battle it does not nap. It stands in front of your whole team with its wings open, and it does not need to be told. When it fights now, its fire goes exactly where it means it to. You have earned that. So has it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "earned-flame",
+        "count": 1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "charmander",
+        "amount": 15
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-charizard",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Charizard who would not obey watched you fight without it, and chose you.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq05-valley",
+   "name": "The Valley of Charizard",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.dragon_tamer"
+    ],
+    "pokemon": "charizard",
+    "tint": "#3a1c14",
+    "effect": "fire"
+   },
+   "intro": "A valley full of fire. Charizard on every ledge, fighting, falling, getting up. Yours lands on a ledge with three others and is knocked off it in a second. It gets up. It is knocked off again. It gets up. A keeper in a scorched coat stands beside you, watching too. \"It came here for itself,\" she says. \"Not for you.\" Your Charizard is knocked off the ledge a third time. It gets up.",
+   "choices": [
+    {
+     "label": "Leave it here.",
+     "success": {
+      "text": "You watch until dark. It never once looks round for you. That is how you know it is the right place. You leave, and you do not look round either, until the top of the valley. When you do, there it is, on the highest ledge at last, blazing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq05-left-in-valley",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You left your Charizard in the valley, to become strong for itself.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for it.",
+     "success": {
+      "text": "You find a rock at the edge of the valley and you sit down on it. The keeper looks at the rock, and at you, and almost smiles. \"That's a long wait.\" \"I know.\" You do not say that someone once sat on a rock and waited for a person who never came. You do not have to. You are going to come.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq05-waiting",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq05-comes-back",
+   "name": "It Comes Back",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq05-waiting",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aq-char-carried",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq05-waiting",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "charizard",
+    "tint": "#3a2418",
+    "effect": "fire"
+   },
+   "intro": "A shadow on the road, coming down out of the sun. Your Charizard lands in front of you so hard the ground jumps. It is scarred now. It is bigger. It looks at you for a long time, and then it does something it has never done: it bows its head.",
+   "choices": [
+    {
+     "label": "Welcome it back.",
+     "success": {
+      "text": "You put your hand on its neck. It is very hot and very steady. It does not nap in the next battle, or the one after. It does not need to be told. It came back for you, in its own time, which is the only way it was ever going to come.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "charizard"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 40
+       },
+       {
+        "kind": "item",
+        "id": "earned-flame",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq05-returned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-charizard",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Charizard went to the valley for itself, and came back for you.",
+        "importance": 75
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq05-uninvited",
+   "name": "Uninvited",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq05-waiting",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aq-char-carried",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq05-waiting",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "charizard",
+    "tint": "#3a1c14",
+    "effect": "fire"
+   },
+   "intro": "The hardest fight of the region is ahead, and you know it, and so does your team. You are checking your bag for the third time when the sky goes orange. A Charizard drops out of the clouds and lands in front of you, scarred and huge, and plants itself between you and the road. Nobody called it. It is not asking.",
+   "choices": [
+    {
+     "label": "Let it stand with you.",
+     "success": {
+      "text": "You do not say anything. Neither does it. It came the way you once came for it: through the rain, without being asked, because it would not leave you alone with it. Its tail is blazing. Whatever is ahead, it will be there first.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "charizard"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 50
+       },
+       {
+        "kind": "item",
+        "id": "earned-flame",
+        "count": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Your Charizard came back",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "fire",
+          "value": 1.2
+         }
+        ],
+        "until": "boss"
+       },
+       {
+        "kind": "flag",
+        "key": "aq05-returned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq05-uninvited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-charizard",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Charizard came back uninvited, for the hardest fight of the region, the way you once came for it.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq06-firefighters",
+   "name": "The Firefighters",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 4,
+   "types": [
+    "grass",
+    "bug",
+    "fire",
+    "ground"
+   ],
+   "remembers": [
+    {
+     "id": "same-squad",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "cs-kanto-cerulean-squad-reward"
+      }
+     ],
+     "notice": "The one in the middle stops spraying and stares at you. Then it salutes, very seriously, with the hose still running. You know these shades. It is the same squad, the one that dropped a bucket on your head. Reformed."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "squirtle",
+    "tint": "#3a1c10",
+    "effect": "fire"
+   },
+   "intro": "Smoke over the trees, and in front of the smoke, five Squirtle in pointed sunglasses. They are putting out a forest fire. Very badly. One is spraying the wrong tree. One is spraying another Squirtle. The one in the middle salutes you with a hose. \"We used to cause trouble. Now we fix it. Mostly.\" A firefighter leans on her shovel, black to the elbows. \"They've been here three days. They won't stop. I can't make them stop.\"",
+   "choices": [
+    {
+     "label": "Help them.",
+     "success": {
+      "text": "You roll up your sleeves. The leader looks you up and down, decides you will do, and points at the worst of the smoke. \"Three fronts,\" the firefighter says. \"We hold all three, we save the forest.\" The next three stretches of road are fire.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq06-help",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq06-fire-1",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Get the firefighters to train them.",
+     "success": {
+      "text": "You walk the firefighter over to the Squad. \"They won't stop. So don't stop them. Teach them.\" She looks at the five Squirtle for a long time. Then she blows a whistle. It takes the rest of the day: drills, hose work, how to stand, where to aim. By sundown they are not five pranksters. They are a line. They put out the last of the fire in a row, like they always knew how.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq06-train",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq06-brigade",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq06-shades"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lead them.",
+     "success": {
+      "text": "You step in and start giving orders. \"You two, the left side. You, stop spraying him.\" The Squad stops. All five turn and look at their leader. Their leader takes off its sunglasses, slowly, and looks at you over the top of them. It is very offended.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq06-lead",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq06-offended"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq06-fire-1",
+   "name": "The First Front",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq06-help",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "squirtle",
+    "tint": "#3a1c10",
+    "effect": "fire"
+   },
+   "intro": "The first front: a line of burning hedges, crackling toward a farm. Two Squirtle are already there, spraying in two different directions. The leader shouts something that is probably an order. The heat hits your face like an oven door.",
+   "choices": [
+    {
+     "label": "Use a Water move.",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Water-type steps up beside the Squad and lets go, a long steady jet, straight along the hedge. The two Squirtle see where it is aiming and copy it. Three streams in one line. The hedge hisses and goes black. The leader nods, once. It is taking notes.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "aq06-fire-1",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq06-fire-2",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Form a bucket line with the Squad.",
+     "prompt": {
+      "id": "whack-tap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You grab a bucket. The Squad, after a moment, gets in line behind you, and the buckets go up the line, and the water goes on the fire. Slowly, then quickly. Your arms ache. The hedge goes out. The smallest Squirtle is soaked from head to tail and very proud of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq06-fire-1",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq06-fire-2",
+        "nodes": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The line breaks twice. A bucket goes over. The hedge burns down to the farm fence before the water catches up, and you are scorched and sooty and coughing. But it stops at the fence. That is enough.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "flag",
+        "key": "aq06-fire-1",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq06-fire-2",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq06-fire-2",
+   "name": "The Second Front",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq06-fire-1",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "slugma",
+    "tint": "#3a1c10",
+    "effect": "fire"
+   },
+   "intro": "The second front is not burning on its own. Something in the middle of it is keeping it burning: a family of Slugma, terrified, glowing white-hot, crawling the wrong way through the dry grass and setting it alight wherever they go. The Squad hangs back. The smallest one is shaking.",
+   "choices": [
+    {
+     "label": "Drive the Slugma out of the grass.",
+     "success": {
+      "text": "You step in between the Slugma and the trees. They turn on you, molten and frightened.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "slugma"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq06-fire-2",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq06-fire-3",
+         "nodes": 1
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq06-fire-2",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq06-fire-2-lost",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq06-fire-3",
+         "nodes": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Use a Water move to cool the path.",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Water-type soaks a path through the grass, a cool dark lane from the Slugma to the rocks. They feel it. They follow it, sizzling, out of the dry grass and onto bare stone, where they can glow all they like. Behind them the Squad drowns the last of the sparks.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "aq06-fire-2",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq06-fire-3",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq06-fire-3",
+   "name": "The Third Front",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq06-fire-2",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "squirtle",
+    "tint": "#3a1408",
+    "effect": "fire"
+   },
+   "intro": "The last front is the big one: the fire has reached the old trees, and the old trees are tall. The firefighter is out of water. The Squad is out of breath. The leader looks up at a wall of flame twice as tall as a house, and then at you, and for the first time it takes off its sunglasses and puts them in its shell for safekeeping.",
+   "choices": [
+    {
+     "label": "Everyone, together, now.",
+     "success": {
+      "text": "The Squad lines up beside your Water-types, all of them, in a row. The leader counts. On three, every one of them fires at once: one great rope of water, all the way up. The wall comes down hissing, and the old trees stand in the steam, black and alive. In the quiet afterwards, the leader shows your Water-type how the Squad aims, low and steady. It learns.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "water-pulse",
+        "type": "water"
+       },
+       {
+        "kind": "flag",
+        "key": "aq06-fire-3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq06-forest-saved",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq06-shades"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq06-offended",
+   "name": "The Leader Is Offended",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "squirtle",
+    "tint": "#3a1c10",
+    "effect": "fire"
+   },
+   "intro": "The leader puts its sunglasses back on, very deliberately. It turns its back on you. It gives its own order, and the Squad sprays the wrong tree with great confidence. The fire is still spreading. The firefighter looks at you. \"It'll never forgive you. Or it'll never forget you. Hard to tell with that one.\"",
+   "choices": [
+    {
+     "label": "Give the orders anyway.",
+     "success": {
+      "text": "You keep going. Calm, clear, one order at a time. One by one the Squad starts to listen. The fire turns. The fire stops. In the steam afterwards the leader walks up to you, and you brace yourself. It holds out a flipper. It is shaking yours. It is grateful, and it is furious about it, and both are true.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq06-led",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq06-shades"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the leader your plan and let it lead.",
+     "success": {
+      "text": "You crouch down and tell it, quietly, where you would aim and why. It listens with its arms folded. Then it turns round and gives every one of your orders as its own, loudly, and the Squad obeys at once. The fire goes out. The leader does not thank you. But it gives you a long, slow nod from behind its shades, and you know.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq06-led",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq06-leader-led",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq06-shades"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq06-shades",
+   "name": "The Leader's Sunglasses",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "brigade",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq06-brigade",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The firefighter has painted a sign and nailed it to the station door: SQUIRTLE SQUAD, TOWN FIRE BRIGADE. The Squad stands under it in a row and refuses to move until somebody takes a picture."
+    },
+    {
+     "id": "led",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq06-led",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The leader has not quite forgiven you for giving orders to its Squad. It has decided to be grateful anyway. It is clearly very hard work."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "squirtle",
+    "tint": "#2b4a63",
+    "effect": "sparkle"
+   },
+   "intro": "Evening. The forest is safe, black at the edges and green in the middle. The Squad lines up in front of you. The leader steps forward, takes off its pointed sunglasses, and holds them out to you with both flippers. Then one of the smaller Squirtle steps out of the line, and stands beside the shades, and waits.",
+   "choices": [
+    {
+     "label": "Take the shades and the Squirtle.",
+     "success": {
+      "text": "You put on the sunglasses. They are far too small. The whole Squad cheers. The little Squirtle slides on a spare pair of its own and walks over to your side, and salutes the Squad, and the Squad salutes back. \"Look after it,\" says the firefighter. \"It's the best of them. Don't tell the leader I said that.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cool-shades",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "squirtle"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 15,
+        "look": "squad-lesser"
+       },
+       {
+        "kind": "flag",
+        "key": "aq06-squirtle-joined",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You fought a forest fire beside the Squirtle Squad, and wore the leader's sunglasses.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the shades. The Squirtle stays with its squad.",
+     "success": {
+      "text": "You crouch down to the little one. \"They need you here.\" It thinks about that, very seriously, and then salutes and steps back into the line. The shades are yours. The Squad stands in a row and watches you go, and somewhere behind you a hose goes off by accident, and the firefighter shouts.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cool-shades",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "aq06-squirtle-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You fought a forest fire beside the Squirtle Squad, and wore the leader's sunglasses.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq07-krabby-at-the-lab",
+   "name": "The Krabby at the Lab",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_f"
+    ],
+    "pokemon": "kingler",
+    "tint": "#1c2a3a",
+    "effect": "none"
+   },
+   "intro": "A professor's ranch: fields, fences, a pond full of Pokémon that belong to people who are somewhere else. By the pond sits a Kingler, huge, its great claw resting on the grass. It is facing the gate. It is very still. \"Its trainer sent it here when his team was full,\" the professor says. \"Years ago. He visits once a year, on his birthday.\" She looks at the Kingler. \"It evolved without him. He doesn't know yet.\" The gate creaks. The Kingler clacks its claw, once, and turns. It is the wind.",
+   "choices": [
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "You step out in front of it. The Kingler looks at you, then at the gate, then back at you, and raises its claw. It wants someone to see what it can do.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Ranch Kingler",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq-kingler-battled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq07-respect"
+        }
+       ],
+       "lineup": [
+        "kingler"
+       ],
+       "spritePokemon": "kingler",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq-kingler-battled",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq07-kingler-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq07-footage"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wait for its trainer.",
+     "success": {
+      "text": "You ask the professor if you can stay. She looks at you oddly, then gives you a chair by the gate. You sit with the Kingler. You both face the road. A whole stage of road goes by on the other side of that gate, and you wait, and so does it. It does not mind the company.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-kingler-reunion",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "aq07-he-is-coming",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it for a walk.",
+     "success": {
+      "text": "You open the pen and the Kingler follows you out, sideways, slow. You go round the pond, along the fence, up the long field. At the far edge of the ranch, where the path goes on to the road, it stops. It will not take one more step. It looks back at the gate. If he comes, it has to be here. You walk it home.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-kingler-walked",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq07-respect",
+   "name": "Someone Saw",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_f"
+    ],
+    "pokemon": "kingler",
+    "tint": "#1c2a3a",
+    "effect": "glint"
+   },
+   "intro": "It is over. The Kingler sits back on the grass, scuffed and breathing hard, and it looks satisfied in a way you have not seen it look. It fought well and fast, and somebody watched. The professor is smiling. \"It's been waiting years to do that for someone.\"",
+   "choices": [
+    {
+     "label": "Bow to it.",
+     "success": {
+      "text": "You bow. The Kingler clacks its claw, slowly, three times. Then it goes to the edge of the pond, digs in the mud with its great claw, and comes back with something shining: a pearl as big as your thumb, the kind Kingler keep. It sets it down in front of you, and goes back to watching the gate.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "big-pearl",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq07-respected",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Kingler that waits for its trainer fought you, to show somebody what it could do.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq07-footage",
+   "name": "The Footage",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_f"
+    ],
+    "pokemon": "kingler",
+    "tint": "#1c2a3a",
+    "effect": "none"
+   },
+   "intro": "The Kingler won. It won easily. It stands over your Pokémon with its claw up, and then looks round at the gate, as if expecting applause. The professor lowers the camera she was holding. \"I filmed that,\" she says. \"I'm sending it to him. He needs to see what it's become.\"",
+   "choices": [
+    {
+     "label": "Let her send it.",
+     "success": {
+      "text": "She sends it that night. The answer comes before breakfast: one line, all capitals, mostly exclamation marks. \"He's coming,\" the professor says. \"Early. He's never come early.\" The Kingler does not know yet. It is still facing the gate. But it is facing it a little more hopefully.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq07-footage",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "aq07-he-is-coming",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq07-he-comes",
+   "name": "He Comes Through the Gate",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq07-he-is-coming",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq07-he-is-coming",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-kingler-reunion",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "When he finally stands up, he does not let go of the claw. \"I'm taking you with me,\" he says. \"I should have, years ago.\" Then he turns to you and holds out his hands. In them is a small Krabby. \"From its clutch. It would want you to have one.\"",
+     "addChoices": [
+      {
+       "label": "Take the Krabby.",
+       "success": {
+        "text": "The Krabby is cold and wet and blows bubbles at you. The Kingler watches it go into your arms, and clacks its claw once, gently: approval. Then it turns and follows its trainer out of the gate, sideways and slow, and it does not look back at the pond even once. It does not need to now.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "krabby"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 15
+         },
+         {
+          "kind": "flag",
+          "key": "aq07-krabby",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "reunion-guest-kingler",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "A Kingler that waited years by a gate went home with its trainer, and you saw it.",
+          "importance": 70
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "footage",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq07-footage",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He saw the footage. He watched it, the professor says, eleven times. He came a stage early, the first time he has ever come early."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_m"
+    ],
+    "pokemon": "kingler",
+    "tint": "#2a3a4a",
+    "effect": "sparkle"
+   },
+   "intro": "The gate creaks. The Kingler clacks once and turns, ready for it to be the wind. It is not the wind. A young man stands in the gateway with a backpack, out of breath, staring. The last time he saw it, it was a Krabby he could hold in one hand. He walks across the field. He sits down on the grass in front of it, and he does not say anything at all. Neither does the Kingler. It puts its great claw down beside him, very gently, like a hand.",
+   "choices": [
+    {
+     "label": "Leave them be.",
+     "success": {
+      "text": "You go and stand by the gate, where you can not hear them, and look at the road for a while. When you look back, they are both still sitting there, the man and the Kingler, facing the same way. The professor wipes her eyes with her sleeve. \"He won't be coming once a year any more,\" she says. \"It'll be travelling with him.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-kingler",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Kingler that waited years by a gate saw its trainer come through it.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }
