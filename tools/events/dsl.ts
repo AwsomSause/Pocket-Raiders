@@ -32,9 +32,15 @@ export function ev(id: string, name: string, group: string, o: EventOpts, intro:
 }
 
 /** A choice. `fail` is required with a check or chance. */
-export function ch(label: string, success: Json, o: { requires?: Json[]; check?: string; chance?: number; prompt?: { id: string; needs: 'ok' | 'good' | 'perfect' }; fail?: Json; pick?: { types?: string[]; moveFlag?: string; bond?: number } } = {}): Json {
-  return { label, ...(o.requires ? { requires: o.requires } : {}), ...(o.check ? { check: o.check } : {}), ...(o.chance !== undefined ? { chance: o.chance } : {}), ...(o.prompt ? { prompt: o.prompt } : {}), ...(o.pick ? { pick: o.pick } : {}), success, ...(o.fail ? { failure: o.fail } : {}) };
+export function ch(label: string, success: Json, o: { requires?: Json[]; check?: string; chance?: number; prompt?: { id: string; needs: 'ok' | 'good' | 'perfect' }; fail?: Json; branches?: Json[]; pick?: { types?: string[]; moveFlag?: string; bond?: number } } = {}): Json {
+  return { label, ...(o.requires ? { requires: o.requires } : {}), ...(o.check ? { check: o.check } : {}), ...(o.chance !== undefined ? { chance: o.chance } : {}), ...(o.prompt ? { prompt: o.prompt } : {}), ...(o.pick ? { pick: o.pick } : {}), ...(o.branches ? { branches: o.branches } : {}), success, ...(o.fail ? { failure: o.fail } : {}) };
 }
+/** A branch of a choice (`ch(..., { branches: [...] })`): when every condition holds, these words and effects replace the outcome (its battle stays). First match wins. */
+export const br = (when: Json[], text: string, ...effects: Json[]): Json => ({ when, text, effects });
+/** The lead (the first Pokémon able to fight) is of this type. */
+export const leadIs = (type: string): Json => ({ kind: 'leadType', type });
+/** The Pokémon the last pick choice named (remembered for the run) is one of these types / is the starter. */
+export const pickedIs = (types: string[] = [], starter?: boolean): Json => ({ kind: 'picked', types, ...(starter === undefined ? {} : { starter }) });
 
 export const out = (text: string, ...effects: Json[]): Json => ({ text, effects });
 export const fight = (text: string, battle: Json, ...effects: Json[]): Json => ({ text, effects, battle });

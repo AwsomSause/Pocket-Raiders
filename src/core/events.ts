@@ -11,6 +11,7 @@
 
 import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
+import { rememberPick, rememberedPick } from './co/pickMemory';
 import { PSEUDO, enterPseudoStage, leavePseudoStage, routeChainEvent } from './dungeon/pseudo';
 import { addMark, overhaulOf, type FeelingKey } from './rivals/overhaul';
 import { friendName, friendTeam, pseudoRivalBeat } from './rivals/live';
@@ -139,6 +140,13 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return (!!run.stage && run.party.some((m) => m.level >= curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage!.index, 1)) + c.over)) !== (c.absent === true);
     case 'partyMoveType':
       return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return mv?.type === c.type && mv.category !== 'status'; }));
+    case 'leadType':
+      return !!content.species.get(run.party.find((m) => m.hp > 0)?.speciesId ?? '')?.types.includes(c.type);
+    case 'picked': {
+      const mon = rememberedPick(run);
+      const types = mon ? content.species.get(mon.speciesId)?.types ?? [] : [];
+      return !!mon && (c.types.length === 0 || types.some((t) => c.types.includes(t))) && (c.starter === undefined || (mon.uid === run.log.starterUid) === c.starter);
+    }
     case 'partyType':
       return run.party.some((m) => content.species.get(m.speciesId)?.types.includes(c.type)) !== (c.absent === true);
     case 'period':
@@ -354,6 +362,10 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Only in ${c.ids.map((id) => content.regions.get(id)?.name ?? id).join(' or ')}`;
     case 'milestone':
       return 'Needs a milestone day';
+    case 'leadType':
+      return `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in the lead`;
+    case 'picked':
+      return 'Needs the Pokémon you picked';
     case 'partyType':
       return c.absent ? `Only without a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party` : `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party`;
     case 'memorial':
@@ -761,7 +773,8 @@ function outcomeWords(content: Content, o: EventOutcome): string {
 }
 
 /** Who a hazard's damage or status hits: the party (or only the lead), minus Pokémon of the spared types. */
-function hazardTargets(content: Content, run: RunState, e: { who: 'party' | 'lead'; except: string[] }) {
+function hazardTargets(content: Content, run: RunState, e: { who: 'party' | 'lead' | 'picked'; except: string[] }, tradeUid?: string) {
+  if (e.who === 'picked') return whoOf(content, run, 'picked', tradeUid).filter((m) => m.hp > 0);
   const able = run.party.filter((m) => m.hp > 0 && !(e.except.length && content.species.get(m.speciesId)?.types.some((t) => e.except.includes(t))));
   return e.who === 'lead' ? able.slice(0, 1) : able;
 }
@@ -861,7 +874,11 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   const rng = new Rng(hashSeed(`${run.seed}::event::${stageKey(run)}::${node.id}::${sideId}`));
   const chance = choice.prompt ? 1 : choiceChance(content, run, choice);
   const success = choice.prompt ? atLeast({ grade: promptGrade ?? 'miss' } as PromptResult, choice.prompt.needs) : chance === null || rng.float() < chance;
-  const outcome = success ? choice.success : choice.failure!;
+  // Catalog Overhaul: the picked Pokémon is remembered for the scenes that follow; a branch may then replace the outcome's words and effects.
+  if (choice.pick) rememberPick(run, tradeUid);
+  const base = success ? choice.success : choice.failure!;
+  const branch = success ? choice.branches.find((b) => b.when.every((c) => conditionMet(content, run, c))) : undefined;
+  const outcome = branch ? { ...base, text: branch.text, effects: branch.effects } : base;
   // The Event Director remembers important choices (and whether you took a risk).
   const risky = chance !== null || choice.prompt !== undefined;
   run.story.flags[risky ? 'choices:risky' : 'choices:safe'] = Number(run.story.flags[risky ? 'choices:risky' : 'choices:safe'] ?? 0) + 1;
@@ -1010,6 +1027,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `the map shows ${e.columns} more column${e.columns === 1 ? '' : 's'} ahead`;
     case 'foresight':
       return `the forecast reaches ${e.columns} more column${e.columns === 1 ? '' : 's'} ahead`;
+    case 'leadPicked':
+      return '';
     case 'addEvent':
     case 'addEventFrom':
       return 'a new place opens here';
@@ -1144,6 +1163,8 @@ export function isGiftable(content: Content, id: string): boolean {
 
 /** Applies one effect (mutates `run`) and says what changed, or '' when nothing did. */
 export function applyEffect(content: Content, run: RunState, e: EventEffect, rng: Rng, tradeUid?: string): string {
+  // The picked Pokémon: the one named now, else the one a pick choice named earlier this run (co/pickMemory.ts).
+  const pickedUid = tradeUid ?? rememberedPick(run)?.uid;
   switch (e.kind) {
     case 'money': {
       const bonus = e.amount > 0 ? scavengerBonus(content, run.licenses, rng) : 0;
@@ -1209,13 +1230,14 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'flightNorth':
       return flightNorthEffect(run, e);
     case 'heal': {
-      if (e.share >= 1) healParty(content, run);
+      if (e.who === 'picked') for (const m of whoOf(content, run, 'picked', pickedUid)) { if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * e.share)); }
+      else if (e.share >= 1) healParty(content, run);
       else for (const m of run.party) if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * e.share));
       return effectWords(content, e);
     }
     case 'damage': {
       // Never knocks a Pokémon out: it stops at 1 HP.
-      for (const m of hazardTargets(content, run, e)) m.hp = Math.max(1, m.hp - Math.floor(maxHp(content, m) * e.share));
+      for (const m of hazardTargets(content, run, e, pickedUid)) m.hp = Math.max(1, m.hp - Math.floor(maxHp(content, m) * e.share));
       return effectWords(content, e);
     }
     case 'storyRaid': {
@@ -1238,7 +1260,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'friendship': {
       const gain = runAttributeEffects(content, run).friendship;
-      const who = whoOf(content, run, e.who, tradeUid);
+      const who = whoOf(content, run, e.who, pickedUid);
       for (const m of who) changeFriendship(content, m, e.amount, e.amount > 0 ? gain : 1);
       return who.length > 0 ? effectWords(content, e) : '';
     }
@@ -1254,14 +1276,14 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'levels': {
       const cap = runLevelCap(content, run);
       // The weakest is the lowest level (the first one on a tie): catch-up for a Pokémon that fell behind.
-      const who = whoOf(content, run, e.who, tradeUid);
+      const who = whoOf(content, run, e.who, pickedUid);
       let gained = 0;
       for (const m of who) gained += addLevels(content, m, e.amount, cap).levelsGained;
       return gained > 0 ? effectWords(content, e) : '';
     }
     case 'join': {
       const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
-      const speciesId = pickSpecies(content, run, e.species, e.types, rng, 'reward');
+      const speciesId = (e.recall ? oldFoe(run) : null) ?? pickSpecies(content, run, e.species, e.types, rng, 'reward');
       // No event lifts the party's level cap (Balancing Phase 7).
       const level = e.level ?? Math.max(1, Math.min(runLevelCap(content, run), eventLevel(content, run, node, rng) + e.levelBonus));
       const mon = newMon(content, run, e.level ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'p');
@@ -1502,6 +1524,11 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (run.expansion?.lastFaint) delete run.expansion.lastFaint;
       const warmed = warmEggs(run, 1);
       return warmed > 0 ? `${effectWords(content, e)}; your Egg${warmed === 1 ? ' is' : 's are'} snug by the fire` : effectWords(content, e);
+    }
+    case 'leadPicked': {
+      const [mon] = whoOf(content, run, 'picked', pickedUid);
+      if (mon) run.party = [mon, ...run.party.filter((m) => m.uid !== mon.uid)];
+      return '';
     }
     case 'celebrate':
       celebrateToday(content, run);
