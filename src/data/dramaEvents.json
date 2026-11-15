@@ -9,6 +9,7 @@
    "cooldownBattles": 2,
    "chance": 100,
    "records": true,
+   "heated": true,
    "requires": "Enemy Pokémon has a Hyper moment (existing story rules apply the effect)",
    "lines": [
     "{name} holds on... and so do I!",
@@ -37,6 +38,7 @@
    "cooldownBattles": 1,
    "chance": 100,
    "records": true,
+   "heated": true,
    "requires": "A Pokémon at half HP reveals the strongest valid learnset move it doesn't know (yours: trust 70+ and sync 60+; a rival's: a confident Pokémon)",
    "lines": [
     "Where did that move come from? It was keeping it hidden!",
@@ -144,6 +146,7 @@
    "cooldownBattles": 5,
    "chance": 100,
    "records": true,
+   "heated": true,
    "requires": "One of your Pokémon has an Overdrive or Hyper moment this turn",
    "lines": [
     "That glow... that's Overdrive!",
@@ -384,6 +387,7 @@
    "cooldownBattles": 0,
    "chance": 100,
    "records": true,
+   "heated": true,
    "requires": "A rival's training Pokémon (brought in a stage below its final form, already at its evolution level) evolves at a turn boundary after turn 3 or at half HP",
    "lines": [
     "{name}... you've evolved! I knew you could!",

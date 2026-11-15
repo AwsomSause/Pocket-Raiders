@@ -253,6 +253,20 @@ export function libraryCandidates(c: PlanCtx): Candidate[] {
   return out;
 }
 
+/** The story flag a heated moment's after-battle scene waits on: `heated-last-second-resolve` for `lastSecondResolve`. */
+export const heatedFlag = (id: string): string => `heated-${id.replace(/[A-Z]/g, (ch) => `-${ch.toLowerCase()}`)}`;
+
+/** SF100: a heated moment happened in a big battle. Its after-battle scene is owed, at most once per region and three times per run. */
+export function noteHeatedMoment(run: RunState, id: string): boolean {
+  const flags = run.story.flags;
+  const total = Number(flags['ev:heated-total'] ?? 0);
+  if (total >= 3 || flags[`heated-region:${run.regionIndex}`]) return false;
+  flags[`heated-region:${run.regionIndex}`] = true;
+  flags['ev:heated-total'] = total + 1;
+  flags[`ev:${heatedFlag(id)}`] = 1;
+  return true;
+}
+
 /** Called when the director accepted a library event: cooldown, rival memory and Chronicle. */
 export function recordLibraryEvent(c: PlanCtx, cand: Candidate): void {
   const def = cand.def!;
@@ -267,6 +281,7 @@ export function recordLibraryEvent(c: PlanCtx, cand: Candidate): void {
       if (key in c.rival.traits) c.rival.traits[key] = Math.max(0, Math.min(100, c.rival.traits[key] + n));
     }
   }
+  if (def.heated) noteHeatedMoment(c.run, def.id);
   if (!def.records) return;
   if (c.rival && def.remember) flags[flagRival(c.rival.id, def.id)] = `${battleNo(c.run)}|${cand.vars?.foeMove ?? ''}`;
   emit(c.content, c.run, 'storyMoment', {

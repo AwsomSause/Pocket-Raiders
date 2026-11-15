@@ -99,6 +99,8 @@ export const DramaEventDefSchema = z.object({
   chance: z.number().min(0).max(100),
   /** Writes a Chronicle entry and a rival memory flag. */
   records: z.boolean(),
+  /** Catalog Overhaul SF100: a heated moment. After the battle a short scene asks the player about it (tools/events/co/places-11.ts); at most one per region and three per run. */
+  heated: z.boolean().optional(),
   requires: z.string(),
   lines: z.array(z.string()),
   voices: z.array(z.enum(VOICES)).optional(),

@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { chooseEvent, conditionMet, tradeCandidates } from '../../src/core/events';
 import { changeFriendship } from '../../src/core/friendship';
 import { bossLeadStagesOf, stopWeightOf } from '../../src/core/co/placesRules';
+import { heatedFlag, noteHeatedMoment } from '../../src/core/drama/events';
 import { visibleChoices } from '../../src/core/eventMemory';
 import { PSEUDO_CHAINS, chainRooms } from '../../src/core/dungeon/pseudo';
 import { chooseStarter, createRun, endRegionTempEffects } from '../../src/core/run';
@@ -322,5 +323,22 @@ describe('catalog overhaul: the original Legendaries\' stages (SF99)', () => {
     const old = content.expeditions.expeditions.find((e) => e.id === 'legend-veinheart')!;
     expect(old.legendary?.replacedBy).toBe('legend-veinheart');
     expect((content.events.get('legend-veinheart-final')!.choices[0]!.success.battle as { species?: string[] } | undefined)?.species).toEqual(['veinheart']);
+  });
+
+});
+
+describe('catalog overhaul: heated moments (SF100)', () => {
+  it('a heated moment owes one after-battle scene: at most one per region and three per run; answering it clears the flag', () => {
+    let run = newRun('heated');
+    expect(heatedFlag('lastSecondResolve')).toBe('heated-last-second-resolve');
+    expect(noteHeatedMoment(run, 'newMove')).toBe(true);
+    expect(noteHeatedMoment(run, 'lastSecondResolve')).toBe(false);
+    open(run, 'newMove');
+    run = pick(run, '"Not now."');
+    expect(flagOf(run, 'heated-new-move')).toBe(0);
+    for (let r = 1; r <= 3; r++) { run.regionIndex = r; noteHeatedMoment(run, 'overdriveBreakthrough'); }
+    expect(flagOf(run, 'heated-total')).toBe(3);
+    run.regionIndex = 4;
+    expect(noteHeatedMoment(run, 'midBattleEvolution')).toBe(false);
   });
 });
