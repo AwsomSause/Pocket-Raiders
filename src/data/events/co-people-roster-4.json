@@ -1,0 +1,4468 @@
+{
+ "catalogOverhaul": "people",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "npc-meet-juggler-pierre",
+   "name": "Juggler Pierre: Keep Your Eyes on the Ball",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-pierre-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_juggler"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A town square on market morning, all striped awnings and fussing pigeons. In the middle of it a man in a patched velvet waistcoat is juggling five Poké Balls in one smooth, endless loop, and a little crowd has stopped with its shopping to watch. One of the balls is not quite like the others. It hums, and every so often it blinks: a Voltorb, spinning along with the rest and plainly having the time of its life. The man finds your eyes without missing a catch. Pierre: \"Keep your eyes on the ball. And the Pokémon.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Pierre lets four balls drop into his coat pockets one after another, pop pop pop pop, and flicks the last one down onto the cobbles. The Voltorb lands, spins, and starts to glow far too brightly. The crowd takes one big step back. It opens with Self-Destruct.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-pierre-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Juggler Pierre's act beat you in the town square",
+         "importance": 60
+        }
+       ],
+       "foeMoves": [
+        "self-destruct"
+       ],
+       "team": [
+        "voltorb",
+        "mr-mime"
+       ],
+       "name": "Juggler Pierre",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Juggler Pierre in the town square",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Which is the Voltorb?\"",
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You keep your eyes on it, round and round, up and over, until you are sure, and you point. Pierre stops dead, catches all five, and bursts out laughing. The Voltorb, found out, sulks: there will be no exploding today. He lets it out anyway, with Mr. Mime behind it, and the battle is on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-pierre-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Juggler Pierre's act beat you in the town square",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "voltorb",
+        "mr-mime"
+       ],
+       "name": "Juggler Pierre",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Juggler Pierre in the town square",
+         "importance": 60
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "You point. Pierre shakes his head, smiling, and opens the ball: an empty one. The real Voltorb drops out of the air at your feet, already glowing far too brightly. It opens with Self-Destruct, and it is very pleased with itself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-pierre-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Juggler Pierre's act beat you in the town square",
+         "importance": 60
+        }
+       ],
+       "foeMoves": [
+        "self-destruct"
+       ],
+       "team": [
+        "voltorb",
+        "mr-mime"
+       ],
+       "name": "Juggler Pierre",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Juggler Pierre in the town square",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Applaud.\"",
+     "success": {
+      "text": "You clap, and the crowd claps with you. Pierre bows low without dropping a single ball, hooks a coin off the cobbles with the toe of his boot and kicks it up into his hat, then tosses 50 back to you with a wink. A juggler always pays his audience back a little.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 50
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-juggler-pierre-m2",
+   "name": "Juggler Pierre: Dropped",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-pierre-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-pierre-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_juggler"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "A park bench across from a theatre whose posters have started to peel. Pierre sits on it alone, his right wrist strapped up in a white sling, one Poké Ball turning slowly in his good hand. Mr. Mime stands beside him miming a wall around the bench, very gently, as if to keep the world out for a while. Pierre does not look up when you sit down. Pierre: \"Dropped one. On stage. In front of a thousand people.\"",
+   "choices": [
+    {
+     "label": "\"Juggle with one hand.\"",
+     "success": {
+      "text": "Pierre stares at his good hand as if it belonged to somebody else. Then he tosses the ball up and catches it. Tosses two. Drops one, picks it up, tosses two again. He waves you on without looking away from them: come back this way later.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-juggler-pierre-practice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let your Pokémon juggle.\"",
+     "success": {
+      "text": "Pierre looks at Mr. Mime. Mr. Mime looks at Pierre. Then five Poké Balls lift off the bench on a soft shimmer of Psychic and begin to circle, slow at first, then faster, then in shapes no hands could make. A passer-by stops. Then ten. When the balls come down the whole park is clapping, and Pierre is laughing with tears on his face. It is a hit.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-pierre-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-pierre-mime",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Retire.\"",
+     "success": {
+      "text": "He nods, and keeps nodding for a long time. Then he takes the five Poké Balls out of his coat one by one, still warm from his pocket, and puts them into your hands as carefully as eggs. He folds your fingers over the last one and pats them, and does not say anything at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 5
+       },
+       {
+        "kind": "flag",
+        "key": "roster-pierre-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-pierre-retired",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-juggler-pierre-practice",
+   "name": "Juggler Pierre: One Hand",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_juggler"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "Two bends of the road later you hear it before you see it: the soft slap of Poké Balls landing in a palm. Pierre has not left the bench. There are blisters on his good hand and three balls in the air, and he is grinning like a boy. Mr. Mime keeps count on its white fingers. Every time the count passes twenty it does a tiny bow.",
+   "choices": [
+    {
+     "label": "Toss him a fourth ball.",
+     "success": {
+      "text": "You throw it high and a little wide. Pierre's hand finds it anyway, and the pattern swallows it as if it had always been there: four balls, one hand, a lopsided rhythm nobody has ever seen. He catches them all and looks at his hand in wonder. It is a new act.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-pierre-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-pierre-onehand",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Count with Mr. Mime.",
+     "success": {
+      "text": "You count out loud, and Mr. Mime counts on its fingers, and when you both reach one hundred Pierre is still going. He finishes with the ball rolling down his arm and into his sling like it is coming home. Pierre has a new act, built around the hand he has left.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-pierre-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-pierre-onehand",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-juggler-pierre-m3",
+   "name": "Juggler Pierre: Encore",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-pierre-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-pierre-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_juggler"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "A real stage this time, red curtains and a painted sky behind it, and every seat out front already full. Backstage, Pierre stands in a new waistcoat, the sling gone, his right hand still a little stiff when he flexes it. Pierre: \"One hand, five balls, a Mr. Mime. They sold out.\" He swallows hard. Out front the lights go down and a thousand people go quiet. Pierre: \"I'm terrified. Stand at the front, would you?\"",
+   "choices": [
+    {
+     "label": "\"Watch.\"",
+     "success": {
+      "text": "You take a place right at the front, where he can see you. He looks for you once, finds you, and does not drop a single ball. When the curtain falls the noise is like rain on a roof. Afterwards he sends you home through the stage door with a basket of sandwiches and your whole team rested and warm.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-pierre-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-juggler-pierre"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Join the act.\"",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Pierre throws you a ball on the first beat, and you throw it back on the second, and somewhere in the middle you stop thinking and just keep time. The crowd goes wild. In the wings he presses a Light Clay into your hand, still dusty from his props box.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "light-clay",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-pierre-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-juggler-pierre"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You miss the third beat and a ball bounces off your head. Pierre catches it on the rebound and turns it into a bow, and the crowd roars, sure it was all part of the act. Only the two of you know better, and he winks at you all the way to the encore.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-pierre-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-juggler-pierre"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle after.\"",
+     "success": {
+      "text": "After the last bow, with the empty seats still warm, Pierre steps down off the stage and sends out Hypno and Mr. Mime. He is too happy to stand still. One more show, just for you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-pierre-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-juggler-pierre"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Juggler Pierre beat you after his comeback show",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "hypno",
+        "mr-mime"
+       ],
+       "name": "Juggler Pierre",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Juggler Pierre after his comeback show",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-lady-cordelia",
+   "name": "Lady Cordelia: The Finest",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-cordelia-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A white carriage waits at the side of the road, its two Ponyta dozing in their traces. Under a lace parasol beside it stands a girl in more lace than you have ever seen on one person, with a Persian at her feet brushed until it shines and a Delcatty wearing a little velvet bow. Cordelia: \"My Pokémon are only the finest.\" She glances back at the carriage, then lowers the parasol with great care. Cordelia: \"Mother says I mustn't battle common trainers. Mother isn't here.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Cordelia folds the parasol and hands it to the coachman without looking at him. Persian and Delcatty step forward together, perfectly in time, as if they have practised the walk more than the fighting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-cordelia-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Lady Cordelia's finest beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "persian",
+        "delcatty"
+       ],
+       "name": "Lady Cordelia",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Lady Cordelia's finest",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Common?\"",
+     "success": {
+      "text": "She goes pink right up to the ears and snaps the parasol shut. Her Persian's tail lashes. Whatever Mother taught her about manners, she has decided to forget it for the next few minutes, and she battles much harder than she meant to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-cordelia-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Lady Cordelia beat you, and was a little sorry about \"common\"",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "persian",
+        "delcatty"
+       ],
+       "name": "Lady Cordelia",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Lady Cordelia, who was trying very hard",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Go home.\"",
+     "success": {
+      "text": "Cordelia sulks. She climbs back into the carriage, pulls the little curtain shut with a snap, and the Persian gives you one long, offended look through the window as the Ponyta clop away.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-lady-cordelia-m2",
+   "name": "Lady Cordelia: Runaway",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-cordelia-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-cordelia-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "A campfire still smoking from the night, in a ditch by the road. Cordelia sits beside it in what used to be a lace dress and is now mostly mud, with twigs in her hair and a burnt pan in her lap. Her Persian is curled up nearby looking deeply appalled by everything. She lifts her chin when she sees you, the way she did beside the carriage. Cordelia: \"I ran away. I want to do a gym challenge. Mother says no.\"",
+   "choices": [
+    {
+     "label": "\"Go back.\"",
+     "success": {
+      "text": "She looks at the fire for a long time. Then she nods, and stands, and brushes at her skirt even though it will not help. She goes, crying, the Persian pressed against her legs, and she does not look back until the very last bend.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-cordelia-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-cordelia-home",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Come with me a while.\"",
+     "success": {
+      "text": "She tags along for a stretch of the road and is useless at camping: the tent goes up inside out, the porridge catches, and she tries to wash a pan in a stream with perfume. But in a fight she is fierce, and she laughs more each day. Her Persian, quietly, starts to like you.",
+      "effects": [
+       {
+        "kind": "wandererFriend",
+        "stages": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-cordelia-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-cordelia-travelled",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Write to your mother.\"",
+     "success": {
+      "text": "You write it together by the fire, Cordelia crossing out \"Dear Mother\" three times. A Pidgeotto takes it before noon. By evening it is back with the reply in a careful, shaky hand: one gym, if she comes home after. Cordelia reads it twice, then holds it against her chest.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-cordelia-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-cordelia-letter",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-lady-cordelia-m3",
+   "name": "Lady Cordelia: First Badge",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-cordelia-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-cordelia-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "The steps outside a gym, busy with trainers coming and going. Cordelia stands in the middle of them in a plain travelling coat, holding a badge up to the light as if it might fly away. Behind her a tall woman in a big hat is dabbing at her eyes with a lace handkerchief. Cordelia: \"One. Mother came. She cried.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Cordelia tucks the badge away very carefully and lets out a Primarina, a new one, who sings a note so clear that people on the steps stop to listen. She is not fighting for Mother today. She is fighting because she wants to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-cordelia-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-lady-cordelia"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Lady Cordelia's Primarina beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "primarina"
+       ],
+       "name": "Lady Cordelia",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Lady Cordelia and her Primarina",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Congratulate her mother.\"",
+     "success": {
+      "text": "Her mother turns, surprised, and then takes both your hands. She thanks you, her voice not quite steady, for being kind to her daughter when she needed someone to be. She presses a Silk Scarf into your hands, the softest thing you have ever held.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "silk-scarf",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-cordelia-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-lady-cordelia"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask what's next.\"",
+     "success": {
+      "text": "Cordelia: \"Seven more.\" She grins, a real grin with mud-ditch in it, nothing like the girl under the parasol. Her mother sighs the sigh of a woman who already knows she will be coming to all seven.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-cordelia-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-lady-cordelia"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "stable",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-cordelia-home",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A riding stable at the edge of a quiet town, all fresh hay and creaking gates. Cordelia is mucking out a stall in tall boots, with no badge anywhere on her. She is quieter than she was. But she runs this place now, every Ponyta and Rapidash in it, and when she leans on the paddock fence to watch them run, she looks free in a way the lace never let her. Her mother is there too, leaning on the same fence.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "\"Ask what's next.\"",
+       "success": {
+        "text": "Cordelia does not say \"seven more.\" She looks out at the paddock, where a young Ponyta is learning to jump, and she grins anyway. Whatever is next, it is hers to choose.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-cordelia-done",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "recruit",
+          "trainer": "npc-lady-cordelia"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-lass-janice",
+   "name": "Lass Janice: Gentle",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-janice-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_lass"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A meadow so full of clover that it smells sweet. A girl sits cross-legged in the middle of it, braiding daisies into a Clefairy's ears while a Jigglypuff waits its turn with a flower already tucked behind one ear. She sees your Poké Balls and holds the Clefairy a little closer. Janice: \"Be gentle, okay? They're my friends.\"",
+   "choices": [
+    {
+     "label": "\"I will.\"",
+     "success": {
+      "text": "Janice smiles, all teeth, and sets them down in the clover. You promise yourself to win without ever hitting harder than you need to. If you can manage it, she is going to be thrilled.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-janice-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Lass Janice's friends beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "clefairy",
+        "jigglypuff"
+       ],
+       "name": "Lass Janice",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "roster-janice-gentle",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Lass Janice gently, as you promised",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Battle normally.\"",
+     "success": {
+      "text": "Janice nods bravely and sets them down. You battle her the way you battle anyone. Afterwards she cries a little into Clefairy's fur, and you are not sure she knows she is doing it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-janice-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Lass Janice's friends beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "clefairy",
+        "jigglypuff"
+       ],
+       "name": "Lass Janice",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Lass Janice, and she cried a little after",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Can I just watch?\"",
+     "success": {
+      "text": "Janice beams. You sit in the clover and watch her finish the braids, and the Jigglypuff falls asleep in your lap. When you go, she gives you a Pecha Berry from her pocket, a little squashed, for free.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-lass-janice-m2",
+   "name": "Lass Janice: The Bully",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-janice-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-janice-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_lass"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "Behind a schoolhouse, by the bins. A boy a head taller than Janice is shoving her backwards, one hand on her shoulder, while her Clefairy hides behind her legs. Kent is the school bully, and he knows it. Kent: \"Fairy-types are for babies.\"",
+   "choices": [
+    {
+     "label": "\"Battle Kent.\"",
+     "success": {
+      "text": "You step between them. Kent sneers and throws out a Machop, which flexes. Janice holds her breath behind you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-janice-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-janice-protected",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Bully Kent's Machop beat you, but you stood up for Janice",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "machop"
+       ],
+       "name": "Bully Kent",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Bully Kent and stood up for Janice",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Let Janice battle him.\"",
+     "success": {
+      "text": "Janice shakes, but she steps forward. Her Clefairy wags a finger, Metronome, and out of nowhere comes a move nobody has ever seen a Clefairy use. Kent's Machop falls flat. Janice stares at her Clefairy, then at Kent, then at you, amazed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-janice-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-janice-won",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Talk to Kent.\"",
+     "success": {
+      "text": "It takes a while. Then it comes out, all in a rush: Kent's little sister has a Fairy-type, and everyone at home fusses over it, and nobody fusses over him. He is jealous. He kicks a bin, and then he says sorry to Janice, very quietly, to the ground.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-janice-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-janice-kent",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gentle",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-janice-gentle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Janice wipes her nose and stands up straighter when she sees you. Janice: \"You were gentle. So I'll be brave.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-lass-janice-m3",
+   "name": "Lass Janice: Clefable",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-janice-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-janice-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_lass"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "The clover meadow again, on a bright Saturday. Janice and Kent sit on the same blanket, her Clefairy beside his new Snubbull, with a scoreboard scratched on a slate between them. It is very long. Janice: \"Kent and me battle every Saturday now. He still loses.\" Kent goes red at once. Kent: \"I don't always lose!\"",
+   "choices": [
+    {
+     "label": "\"Battle them both.\"",
+     "success": {
+      "text": "They look at each other and grin. Janice and Kent stand side by side, and four Pokémon step forward, two by two. Afterwards Janice gives you a Pixie Plate, which she says is for being the best Saturday ever.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pixie-plate",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-janice-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-lass-janice"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Janice and Kent beat you together",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "clefairy",
+        "machop",
+        "togetic",
+        "snubbull"
+       ],
+       "format": "doubles",
+       "name": "Janice and Kent",
+       "size": 4,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Janice and Kent together",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Watch them battle.\"",
+     "success": {
+      "text": "You sit on the blanket and keep score. It goes back and forth all afternoon, and in the end both of their Pokémon fall over at the very same moment. They tie. Kent cheers like he has won. Janice gives you a Pixie Plate for being the judge.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pixie-plate",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-janice-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-lass-janice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give them a Moon Stone.\"",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "moon-stone"
+      }
+     ],
+     "success": {
+      "text": "You hold out the Moon Stone. Clefairy touches it, very gently, and the light takes her. The Clefable that sits up in the clover is tall and pale as the moon, and she still has a daisy in one ear. Janice cries happy tears and gives you a Pixie Plate.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "moon-stone"
+       },
+       {
+        "kind": "item",
+        "id": "pixie-plate",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-janice-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-lass-janice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-painter-vera",
+   "name": "Painter Vera: Canvas",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-vera-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_painter"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "An easel on the edge of a windy cliff, its legs weighed down with rocks. A painter in a paint-stiff smock stands at it, and beside her a Smeargle whose tail is dripping blue onto the grass in fat, happy drops. The sea below is the same blue. She turns, brush between her teeth, and takes it out to speak. Vera: \"Every battle is a canvas. Let's paint.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Vera wipes her brush on her smock and nods to Smeargle. It flicks its tail and watches you very closely. Whatever your first move is, it is going to Sketch it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-vera-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Painter Vera's Smeargle beat you with your own move",
+         "importance": 60
+        }
+       ],
+       "foeMoves": [
+        "sketch"
+       ],
+       "team": [
+        "smeargle"
+       ],
+       "name": "Painter Vera",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Painter Vera on the cliff",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Paint me.\"",
+     "success": {
+      "text": "Vera sits your whole team down on the rocks and paints fast, squinting, while Smeargle adds the sky with its tail. It takes an hour. When she turns the canvas round, it is all of you, a little windswept, looking braver than you feel. She says it will hang somewhere you can see it.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Painter Vera painted your team on a cliff top",
+        "importance": 60
+       },
+       {
+        "kind": "flag",
+        "key": "roster-vera-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-vera-portrait",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You leave her to the wind and the sea. When you look back from the path, she has already started something new, and it is mostly blue.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-painter-vera-m2",
+   "name": "Painter Vera: Blank",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-vera-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-vera-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_painter"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "Vera's studio, up three flights of stairs. A hundred canvases lean against the walls, and every single one is blank. The paints have dried in their pots. Smeargle lies on the floor with its tail tucked under its chin, not dripping anything. Vera: \"I can't paint anything. Not since my show was panned.\"",
+   "choices": [
+    {
+     "label": "\"Paint what you see.\"",
+     "success": {
+      "text": "She looks up, and what she sees is you, standing in her doorway. She picks up a brush. Then another. She paints you, quickly and then slowly, and doesn't stop until the window has gone gold. Smeargle's tail starts to drip again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-vera-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-vera-see",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Paint a battle.\"",
+     "success": {
+      "text": "Vera props a canvas against the wall and stands back. Smeargle gets up. Every hit it lands leaves a stroke of colour on the canvas behind it, red, gold, a long swoop of green.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-vera-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-vera-battle",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Painter Vera's Smeargle beat you and painted the whole thing",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "smeargle"
+       ],
+       "name": "Painter Vera",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You battled Painter Vera's Smeargle onto a canvas",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Burn the reviews.\"",
+     "success": {
+      "text": "You carry the bundle of newspapers down to the yard together and light them. The bonfire is small and smells of ink. Vera starts to laugh, really laugh, and she is still laughing when she runs back up the stairs and starts.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-vera-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-vera-burnt",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-painter-vera-m3",
+   "name": "Painter Vera: The Gallery",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-vera-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-vera-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_painter"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "A gallery opening, white walls, clinking glasses, Smeargle in a bow tie. Vera's paintings are everywhere, bright and alive. One of them, in the place of honour, is of you. Vera: \"The critic came back. He bought the one of you.\" She snorts into her drink. Vera: \"I told him it wasn't for sale. Then I sold it to him anyway. Rent.\"",
+   "choices": [
+    {
+     "label": "\"Buy it.\"",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The critic, overhearing, turns out to be a reasonable man. For 500 he lets the painting go home with the person in it. Vera promises it will hang where you can see it, and she slips you one of Smeargle's eggs as well, wrapped in a paint rag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "moment",
+        "text": "Vera's painting: your portrait from the gallery",
+        "importance": 60
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "smeargle"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-vera-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-painter-vera"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Vera grins and nods to Smeargle. It has been busy: its tail carries a whole palette of moves, every one Sketched from somebody. Afterwards she gives you a small painting of the fight and one of Smeargle's eggs.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Vera's painting: the battle at the gallery",
+        "importance": 60
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "smeargle"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-vera-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-painter-vera"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Painter Vera's fully Sketched Smeargle beat you",
+         "importance": 60
+        }
+       ],
+       "foeMoves": [
+        "spore",
+        "flamethrower"
+       ],
+       "team": [
+        "smeargle"
+       ],
+       "name": "Painter Vera",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Painter Vera's fully Sketched Smeargle",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Ask for one of my starter.\"",
+     "success": {
+      "text": "Vera sits your starter on a stool in the middle of the opening, and everyone watches her paint it. It sits so still and proud that it nearly bursts. When you take the portrait home, your starter keeps looking at it, and at you. Vera tucks a Smeargle egg in with it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       },
+       {
+        "kind": "moment",
+        "text": "Vera's painting: a portrait of your starter",
+        "importance": 60
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "smeargle"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-vera-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-painter-vera"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-picnicker-gina",
+   "name": "Picnicker Gina: Sandwiches",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-gina-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_picnicker"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A red-checked blanket spread out in a field of buttercups, a wicker basket with its lid propped open, and a girl in a sunhat waving both arms at you like you are late. Her Bellsprout is already holding a sandwich. Gina: \"We packed sandwiches for the whole team!\"",
+   "choices": [
+    {
+     "label": "\"Eat.\"",
+     "success": {
+      "text": "You sit down, and Gina hands out sandwiches to everyone, one each, cut into triangles with the crusts off. Your team eats in the sun until their bellies are round. It does them a little good.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-gina-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Gina claps and jumps up, brushing crumbs off her skirt. Bellsprout and Skiploom bounce out onto the grass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-gina-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Picnicker Gina beat you in a buttercup field",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "bellsprout",
+        "skiploom"
+       ],
+       "name": "Picnicker Gina",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Picnicker Gina in a buttercup field",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Both.\"",
+     "success": {
+      "text": "Gina: \"Battle first, then eat?\" You nod. She already has a sandwich ready for after, wrapped in a napkin, set aside for the winner and the loser both.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-gina-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "heal",
+         "share": 0.1
+        },
+        {
+         "kind": "moment",
+         "text": "Picnicker Gina beat you, then shared her sandwiches",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "bellsprout",
+        "skiploom"
+       ],
+       "name": "Picnicker Gina",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 0.1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Picnicker Gina, then shared her sandwiches",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-picnicker-gina-m2",
+   "name": "Picnicker Gina: Rain",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-gina-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-gina-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_picnicker"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "Rain coming down in sheets. Gina stands under a dripping tree with her checked blanket held over the basket like a tent, but it is far too late. Bellsprout droops. Gina: \"The sandwiches are soup now.\" Her voice wobbles. Gina: \"I planned this for a week. It's my mum's birthday picnic and she's on her way.\"",
+   "choices": [
+    {
+     "label": "\"Picnic in the rain.\"",
+     "success": {
+      "text": "You spread the soggy blanket right out in the open and sit down on it. Gina stares at you, then sits down too. Out of the puddles come Water-types, a Psyduck, a Wooper, a line of Lotad, all delighted, and they join the picnic. When her mum arrives, soaked, she says it is the best picnic she has ever had.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-gina-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-gina-rain",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Find shelter.\"",
+     "success": {
+      "text": "You find a shallow cave in the hillside and carry the basket in between you. Something is already in there: a wild Shroomish, sheltering from the rain too, blinking at you. It shuffles over to make room. When Gina's mum finds them, there is a little fire going and the Shroomish is asleep on Gina's foot.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-gina-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-gina-cave",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Share mine.\"",
+     "success": {
+      "text": "You give her a Berry from your bag, the best one you have, and Gina cuts it into a birthday shape with a butter knife. In return she writes out a recipe on a damp napkin: her mum's own sandwich, the one that never goes soggy. She makes you promise not to tell.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Gina gave you her mum's secret sandwich recipe",
+        "importance": 60
+       },
+       {
+        "kind": "flag",
+        "key": "roster-gina-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-gina-shared",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-picnicker-gina-m3",
+   "name": "Picnicker Gina: Café",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-gina-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-gina-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_picnicker"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "A little café with blue shutters, a hand-painted sign over the door that says GINA'S, and the smell of fresh bread drifting halfway down the road. Inside, Gina wears an apron instead of a sunhat. A Jumpluff floats about the ceiling and a Breloom is washing up. Gina: \"Mum said I should cook for people who aren't on a blanket.\" She waves her spoon at the tables. Gina: \"Sit anywhere. Your team eats free.\" A corner by the window is kept for travellers to rest.",
+   "choices": [
+    {
+     "label": "\"Eat.\"",
+     "success": {
+      "text": "She feeds your whole team until they cannot move. Soup, bread, a cake with a candle in it for no reason at all. Everyone comes out of GINA'S full, warm and fully healed, and she tells you the corner table is yours whenever you pass.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-gina-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-picnicker-gina"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Gina takes off her apron and folds it very neatly. Jumpluff drifts down from the ceiling; Breloom dries its hands. Gina: \"After, you eat.\"",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-gina-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-picnicker-gina"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Gina beat you at her own café",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "jumpluff",
+        "breloom"
+       ],
+       "name": "Picnicker Gina",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Gina at her own café",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Cook with her.\"",
+     "prompt": {
+      "id": "gauge-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You get the heat just right. Gina tastes it, closes her eyes, and calls it the dish of the day. Whoever eats it will fight a little stronger in the next battle.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Gina's dish of the day: your team hits a little harder in the next battle",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.05
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-gina-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-picnicker-gina"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The pan smokes and the dish comes out a bit black on one side. Gina laughs so hard she has to sit down, then eats the burnt half herself so you can have the good half. It is still delicious.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-gina-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-picnicker-gina"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-poke-maniac-rex",
+   "name": "Poké Maniac Rex: All of Them",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-rex-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_pokemaniac"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A man in a rubber Kangaskhan costume comes puffing down the road, the head pushed back like a hood so you can see his red, happy face. Under one arm he carries a binder so stuffed with cards that it is held shut with a belt. Rex: \"I collect them all, and I mean all!\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Rex sets the binder down very carefully on a dry rock before anything else. Then he lets out a real Kangaskhan, which looks at his costume with deep suspicion, and a Rhydon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rex-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Poké Maniac Rex beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "kangaskhan",
+        "rhydon"
+       ],
+       "name": "Poké Maniac Rex",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Poké Maniac Rex",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Show me the binder.\"",
+     "success": {
+      "text": "He unbuckles it with shaking fingers and shows you every page. Hundreds of cards, each in its own sleeve, each with a story he tells you whether you ask or not. One of them is rare, truly rare, and he lets you hold it for exactly three seconds.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rex-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Trade?\"",
+     "success": {
+      "text": "Rex's eyes go huge. He checks his binder against your party, muttering, and finds one he has never had. He trades you for it on the spot, any Pokémon he has for the one he lacks, and shakes your hand for a full minute.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "a Pokémon Rex does not have yet"
+        }
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rex-traded",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-poke-maniac-rex-m2",
+   "name": "Poké Maniac Rex: Missing Page",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-rex-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-rex-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_pokemaniac"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "Rex is on his knees at the side of the road with the binder open in front of him, turning pages back and forth, back and forth. The costume's head has come off and rolled into the ditch. He does not notice. Rex: \"Page forty-two. Gone. The one card I'd never trade.\"",
+   "choices": [
+    {
+     "label": "\"Search.\"",
+     "success": {
+      "text": "You get him on his feet and look at the ground together. There, in the dust beside the binder: small, five-toed pawprints, and the torn corner of a card sleeve, heading off the road.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-poke-maniac-rex-search"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who took it?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "roster-quinn-m1",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Rex goes very still. Then he remembers a face at the last town, a quick pair of hands. He finds Burglar Quinn by the fountain, and Quinn, looking at the empty sleeve, does not argue. Quinn gives it back, and even says sorry.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rex-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rex-quinn",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's just a card.\"",
+     "success": {
+      "text": "Rex stops turning pages. He does not look up. Rex: \"It was my dad's.\" He closes the binder very gently and holds it on his knees, and you wish you could take the words back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rex-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rex-cold",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-poke-maniac-rex-search",
+   "name": "Poké Maniac Rex: The Trail",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_pokemaniac"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "The pawprints lead off the road and into the trees. Rex follows close behind you in his costume, squeaking. A banana peel. Another. A second torn corner of plastic, caught on a thorn. Somewhere ahead, something is chattering to itself.",
+   "choices": [
+    {
+     "label": "Follow the pawprints.",
+     "success": {
+      "text": "You follow them over a stream and up a bank. The chattering gets louder.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-poke-maniac-rex-thief"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the banana peels.",
+     "success": {
+      "text": "The peels lead in a straight, greedy line. Rex picks each one up and puts it in his costume pouch, because he cannot stand litter.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-poke-maniac-rex-thief"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-poke-maniac-rex-thief",
+   "name": "Poké Maniac Rex: The Thief",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_pokemaniac"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "One more bend, and there it is: a Mankey sitting high in a tree, turning page forty-two over in its paws, sniffing it, holding it up to the light. It has no idea what it is. It just knows it was shiny and somebody loved it. Rex makes a small sound like a kettle.",
+   "choices": [
+    {
+     "label": "\"Battle it.\"",
+     "success": {
+      "text": "The Mankey shrieks and drops out of the tree, the card clamped in its teeth.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rex-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rex-found",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mankey"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You got page forty-two back from a Mankey",
+         "importance": 60
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "A Mankey beat you, but dropped page forty-two in the scuffle",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Offer it a snack.\"",
+     "success": {
+      "text": "You hold out a Berry. The Mankey thinks about it for a long time. Then it trades: card down, Berry up. Rex holds page forty-two against his chest and cries into his rubber costume, and the Mankey watches him, puzzled, eating.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rex-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rex-found",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-poke-maniac-rex-m3",
+   "name": "Poké Maniac Rex: Exhibition",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-rex-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-rex-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_pokemaniac"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "A small museum, cool and quiet, with one room full of Rex: cards in frames, costumes on stands, a Kangaskhan suit worn thin at the knees. Rex stands in the doorway in a borrowed tie. Rex: \"Forty years of cards and costumes. The museum gave me a whole room.\" He leads you to the middle, where one card sits alone under a light. Rex: \"Page forty-two has its own glass case.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Rex grins and opens a case marked DO NOT TOUCH. Out come six of the oddest Pokémon you have ever seen in one team, each of them a collector's piece.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rex-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-poke-maniac-rex"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Poké Maniac Rex's six odd Pokémon beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "kangaskhan",
+        "rhydon",
+        "lickitung",
+        "sudowoodo",
+        "spinda",
+        "unown"
+       ],
+       "name": "Poké Maniac Rex",
+       "size": 6,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Poké Maniac Rex's six odd Pokémon",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Donate something.\"",
+     "success": {
+      "text": "You give him something from your bag for the collection, and Rex looks at it as though it were treasure. He writes your name on a little card beside it. His thanks is a Rare Candy, taken from his own pocket.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rex-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-poke-maniac-rex"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"See page forty-two.\"",
+     "success": {
+      "text": "Rex lifts the glass. On the card, in faded ink in the corner, is a signature: Professor Oak's father. Rex's dad got it signed as a boy. Rex lets you hold it, and this time it is a lot longer than three seconds.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "You held page forty-two, signed by Professor Oak's father",
+        "importance": 60
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rex-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-poke-maniac-rex"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-pokemon-breeder-delia",
+   "name": "Pokémon Breeder Delia: Since the Egg",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-delia-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonbreeder"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A ranch fence, white paint flaking, with Miltank grazing in the field behind it. A woman in a flour-dusted apron leans on the gate, a Chansey at her side carrying an egg in its pouch as carefully as a held breath. Delia: \"Raised with love since the egg.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Delia unties her apron and hangs it on the gatepost. Chansey sets its egg down in the grass, very gently, and then turns around ready to fight. A Miltank ambles over to join it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-delia-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Pokémon Breeder Delia beat you at her ranch",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "chansey",
+        "miltank"
+       ],
+       "name": "Pokémon Breeder Delia",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Pokémon Breeder Delia at her ranch",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"How do you raise them?\"",
+     "success": {
+      "text": "Delia talks for an hour, leaning on the gate: warm straw, a radio playing low at night, a hand on the shell every morning so it knows you. You come away with one tip you will never forget. The next egg you carry should hatch a stage sooner.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-delia-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-delia-hatch-sooner",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Can I see the eggs?\"",
+     "success": {
+      "text": "She takes you to the warm barn. One egg in the straw is wobbling. As you watch, it cracks, and out pops an Audino, damp and blinking, who looks at you first. Delia laughs. That settles it: it is yours.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "audino"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-delia-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-pokemon-breeder-delia-m2",
+   "name": "Pokémon Breeder Delia: Sick Ranch",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-delia-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-delia-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonbreeder"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "The ranch, but quiet. Too quiet: no lowing, no bells. The Miltank lie in the barn straw with their eyes half shut. Delia sits on an upturned bucket among them, grey with tiredness, a cold cup of tea forgotten in her hands. Delia: \"Something's in the water. The Miltank are sick.\"",
+   "choices": [
+    {
+     "label": "\"Find the source.\"",
+     "success": {
+      "text": "You fill a jar from the trough and hold it to the light. There is a faint, oily rainbow on top. You head upstream.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-pokemon-breeder-delia-upstream"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Bring a doctor.\"",
+     "success": {
+      "text": "You run to the nearest Pokémon Center, and Nurse Joy comes back with you in a trap with a Chansey at the reins. It takes a stage of nights and mornings, and drips, and bitter medicine, but one by one the Miltank get up again. Delia sleeps for a whole day.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-delia-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-delia-doctor",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Help her nurse them.\"",
+     "success": {
+      "text": "You stay. You carry water from the well, hold the medicine bottles, sit up with the worst of them through the night. Your own team curls up in the warm straw and rests too. In the morning Delia presses three bottles of Moomoo Milk on you, from the first Miltank to get better.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "item",
+        "id": "moomoo-milk",
+        "count": 3
+       },
+       {
+        "kind": "flag",
+        "key": "roster-delia-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-delia-nursed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-pokemon-breeder-delia-upstream",
+   "name": "Pokémon Breeder Delia: Upstream",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonbreeder"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "The stream runs clear for a long way, and then it doesn't. Two bends of the road on, the water turns cloudy. A Magikarp lies on its side in the shallows, gasping. Further up, you can hear voices, and the clank of metal on metal.",
+   "choices": [
+    {
+     "label": "Keep following the stream.",
+     "success": {
+      "text": "You stay low and keep going, toward the voices.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-pokemon-breeder-delia-dumping"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry the Magikarp to clean water first.",
+     "success": {
+      "text": "You scoop it into your arms and run it back down to where the water is clear. It flips once and swims away. Then you go back up toward the voices.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-pokemon-breeder-delia-dumping"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-pokemon-breeder-delia-dumping",
+   "name": "Pokémon Breeder Delia: The Dumping",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonbreeder"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "A clearing by the bank. Grunts from an evil team in matching uniforms are rolling rusty barrels down to the water and tipping them in, one after another. The stream below them runs green.",
+   "choices": [
+    {
+     "label": "\"Stop them.\"",
+     "success": {
+      "text": "You walk out into the clearing. The grunts drop the barrel they are holding and reach for their Poké Balls.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-delia-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-delia-source",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The grunts beat you, but they ran before they could dump any more",
+         "importance": 60
+        }
+       ],
+       "name": "Evil team grunts",
+       "size": 2,
+       "types": [
+        "poison"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You stopped the dumping upstream of Delia's ranch",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Count the barrels for Delia.",
+     "success": {
+      "text": "You stay hidden and note every barrel, every uniform, every word. When you bring it all back, Delia goes straight to the town with it, white with anger. By the end of the week the barrels are gone and the stream is clearing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-delia-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-delia-source",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-pokemon-breeder-delia-m3",
+   "name": "Pokémon Breeder Delia: Calving",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-delia-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-delia-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonbreeder"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "The barn at night, one lamp hung from a beam. A Miltank lies in the straw, breathing hard; she is giving birth, and too early. Delia kneels beside her with her sleeves rolled up. Delia: \"She's early. Of course she's early. Hold the lamp, please.\" You hold it. Delia does not look up. Delia: \"If anything goes wrong, you're the only one here with a Pokémon that knows Heal Pulse. Or anything like it.\"",
+   "choices": [
+    {
+     "label": "\"Help.\"",
+     "success": {
+      "text": "You kneel in the straw, and your team presses in close and warm, and everything goes right. The calf comes into the world all legs and wet ears. By morning it has decided you are its mother, and Delia says it would be cruel to argue: the Miltank calf joins you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "miltank"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-delia-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-pokemon-breeder-delia"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Watch.\"",
+     "success": {
+      "text": "You hold the lamp steady through the whole long night and do not say a word. The calf is born just before dawn. Delia sits back in the straw and laughs, and laughs, and gives you the Lucky Egg from her apron pocket.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "lucky-egg",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-delia-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-pokemon-breeder-delia"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle after.\"",
+     "success": {
+      "text": "Mother and calf are asleep in the straw. Delia washes her hands, rolls her sleeves down, and leads you out into the yard, where a Blissey is waiting under the stars. Delia is too happy to sleep.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-delia-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-pokemon-breeder-delia"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Pokémon Breeder Delia's Blissey beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "blissey"
+       ],
+       "name": "Pokémon Breeder Delia",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Pokémon Breeder Delia's Blissey under the stars",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-pokemon-ranger-hal",
+   "name": "Pokémon Ranger Hal: Keep the Wild Safe",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-hal-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonranger_m"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A forest checkpoint: a striped barrier pole, a hut with a tin roof, a noticeboard of lost-Pokémon posters. A ranger in a green uniform stands at a map pinned to the hut wall, tracing paths with one finger. An Arcanine lies across the doorway like a draught excluder. Hal: \"Keep the wild safe, and the wild keeps us safe.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Hal clicks his tongue once. The Arcanine rises, stretches, and steps out onto the path, and the air around it goes warm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hal-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Pokémon Ranger Hal's Arcanine beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "arcanine"
+       ],
+       "name": "Pokémon Ranger Hal",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Pokémon Ranger Hal's Arcanine",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Any trouble?\"",
+     "success": {
+      "text": "Hal taps the map, hard. There is a poacher camp nearby, close enough to smell their fire. He has been waiting for a second pair of hands. He marks the way for you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hal-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-hal-poachers",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-pokemon-ranger-hal-poachers"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "Hal nods and goes back to his map. As you walk away, the Arcanine lifts its head and watches you all the way to the trees.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-pokemon-ranger-hal-poachers",
+   "name": "Pokémon Ranger Hal: The Poacher Camp",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonranger_m"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "A side path, then a clearing: a smoky fire, a tarpaulin, nets drying on a line, and a row of cages. In the cages, wild Pokémon pressed against the bars, too frightened to cry. Two poachers are arguing over a map.",
+   "choices": [
+    {
+     "label": "\"Battle the poachers.\"",
+     "success": {
+      "text": "You step out of the trees. The poachers jump up, knocking over their tea, and reach for their Poké Balls.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The poachers beat you, but Hal arrived in time to open their cages",
+         "importance": 60
+        }
+       ],
+       "name": "Poachers",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the poachers near Hal's checkpoint and opened their cages",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Open the cages quietly.",
+     "prompt": {
+      "id": "pull-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You creep along the row and pull the pins out one by one. The cage doors swing open. Not one of the wild Pokémon makes a sound as they slip away into the trees. By the time the poachers look round, the cages are empty.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "You quietly freed the poachers' cages near Hal's checkpoint",
+        "importance": 60
+       }
+      ]
+     },
+     "failure": {
+      "text": "The last pin sticks, and squeals. The poachers look round. The wild Pokémon are already running, but now you have to deal with the poachers.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "You freed the poachers' cages, but the poachers beat you",
+         "importance": 60
+        }
+       ],
+       "name": "Poachers",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You freed the poachers' cages, then beat the poachers",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-pokemon-ranger-hal-m2",
+   "name": "Pokémon Ranger Hal: The Fire",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-hal-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-hal-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonranger_m"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "Smoke over the trees, thick and yellow. The sky has gone the colour of tea. Hal stands at a fire line with a shovel, his face black with soot, Arcanine beside him growling at the flames as if they were an enemy. Hal: \"Need Water-types. Now.\"",
+   "choices": [
+    {
+     "label": "\"Fight the fire.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Water-types step up to the line. For three long turns they pour out every Water move they have, Hal shouting where to aim, until the steam is thicker than the smoke and the front line hisses and dies. Hal leans on his shovel and closes his eyes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hal-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-hal-fire",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Evacuate the wild.\"",
+     "success": {
+      "text": "You go in where the smoke is thinnest and come out carrying them: a singed Pidgey, a baby Ponyta too young to run fast, a Bidoof frozen with fear. Three wild Pokémon, carried out one at a time. Hal counts them as you set them down, and his hands shake.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hal-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-hal-evac",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Find who started it.\"",
+     "success": {
+      "text": "You follow the line of the fire back to where it began. Poachers, clearing ground: stumps soaked in fuel, cut wire, a dropped lighter. You bring Hal everything you found. His face goes very still.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hal-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-hal-arson",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-pokemon-ranger-hal-m3",
+   "name": "Pokémon Ranger Hal: After",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-hal-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-hal-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonranger_m"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "The burnt forest, black trunks standing in rows. But between them, everywhere, there are green shoots coming through the ash. A Bidoof is building a dam out of charcoal sticks. Hal crouches by a seedling, touching it like it might break. Hal: \"It's growing back. Faster than I thought.\" He stands, dusting off his knees. Hal: \"The poachers who set it are in court next week. I'm the witness.\"",
+   "choices": [
+    {
+     "label": "\"Plant.\"",
+     "success": {
+      "text": "You plant until your hands are black, a row of acorns and berry seeds, Hal working beside you without talking. When you stop, the row runs all the way to the stream. Hal gives you his old Ranger's Styler to remember it by, and a lump of Charcoal from the burn.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Ranger Hal gave you a Ranger's Styler",
+        "importance": 60
+       },
+       {
+        "kind": "item",
+        "id": "charcoal",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-hal-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-pokemon-ranger-hal"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Hal whistles. Arcanine and Staraptor come down out of the green, and they are much, much stronger than before. The fire changed them too.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Ranger Hal gave you a Ranger's Styler",
+        "importance": 60
+       },
+       {
+        "kind": "item",
+        "id": "charcoal",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-hal-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-pokemon-ranger-hal"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Pokémon Ranger Hal beat you in the regrowing forest",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "arcanine",
+        "staraptor"
+       ],
+       "name": "Pokémon Ranger Hal",
+       "size": 2,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Pokémon Ranger Hal in the regrowing forest",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Ride patrol.\"",
+     "success": {
+      "text": "You ride the patrol with Hal, Arcanine loping ahead. He shows you every hollow log, every bird's nest, every place the wild hides what it wants to keep. For the rest of the region, you will know where to look for hidden things. He gives you a spare Ranger's Styler and a lump of Charcoal.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Ranger patrol: you know where things are hidden",
+        "effects": [
+         {
+          "kind": "hiddenItemChance",
+          "chance": 1
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "Ranger Hal gave you a Ranger's Styler",
+        "importance": 60
+       },
+       {
+        "kind": "item",
+        "id": "charcoal",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-hal-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-pokemon-ranger-hal"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-pokemon-ranger-willa",
+   "name": "Pokémon Ranger Willa: Capture On",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-willa-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonranger_f"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A clearing, and a ranger in a red jacket spinning a capture disc in tight, glowing circles around a wild Pokémon. The loops close in, softer and softer, until the Pokémon stops running and just sits, calm, in the middle. She whoops. Willa: \"Capture on, ranger style!\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Willa catches the disc out of the air and grins. A Pachirisu scrambles up onto her shoulder, crackling, and a Lopunny drops down out of a tree beside her.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-willa-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Pokémon Ranger Willa beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "pachirisu",
+        "lopunny"
+       ],
+       "name": "Pokémon Ranger Willa",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Pokémon Ranger Willa",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Try the disc.\"",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Willa shows you the grip. You draw your circles around a wild Pokémon in the long grass, slow and steady, and the loops hold. It stops, looks up at you, and walks over of its own accord. Befriended. Willa whoops loud enough for both of you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-willa-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your loops wobble and break, and the wild Pokémon bolts into the trees. Willa claps you on the back anyway. Willa: \"First try, I hit myself in the face.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-willa-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You leave her to it. Behind you, the disc hums and the clearing fills with soft light.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-pokemon-ranger-willa-m2",
+   "name": "Pokémon Ranger Willa: The Failed Capture",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-willa-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-willa-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonranger_f"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "Rain on a muddy path. Willa sits on a stump in it with her hood down, getting soaked, turning her capture disc over in her hands. It is cracked right across. Her Pachirisu is huddled inside her jacket. Willa: \"A Pokémon panicked. Hurt itself running from me.\"",
+   "choices": [
+    {
+     "label": "\"Find it.\"",
+     "success": {
+      "text": "You search the brambles together until your sleeves are torn. Under a fallen log you find it: a Buneary with a hurt leg, shivering, ears flat. Willa takes off her jacket and wraps it up, and talks to it very softly all the way back to the Center.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-willa-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-willa-found",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Fix the disc.\"",
+     "success": {
+      "text": "You sit under a tree with the disc between you, and a wild Magnemite, drawn by the hum, drifts down to help. It welds the crack with a tiny blue spark. When Willa spins the disc, it is smoother than it was before. Better.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-willa-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-willa-fixed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Rest.\"",
+     "success": {
+      "text": "You make her come in out of the rain. She sleeps for a whole afternoon by a fire, with Pachirisu on her chest. When she wakes she looks younger. She will be better next time, and she knows it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-willa-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-willa-rested",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-pokemon-ranger-willa-m3",
+   "name": "Pokémon Ranger Willa: Partner",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-willa-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-willa-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonranger_f"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "Willa coming down the path on patrol, and hopping at her heel, a Buneary with one ear that never quite stands up. Behind it, trying very hard not to be noticed, hops a second, smaller Buneary. Willa: \"She wouldn't leave once her leg healed. Kept following me on patrol.\" She scoops the Buneary up. Willa: \"First partner I didn't capture. She captured me.\" The little one has been following too, she says. It seems to like the look of you.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Willa sets her Buneary down beside Lopunny. The little one watches from the grass, ears up, taking notes. Afterwards it hops straight over to you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "buneary"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-willa-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-pokemon-ranger-willa"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Pokémon Ranger Willa and her partner Buneary beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "lopunny",
+        "buneary"
+       ],
+       "name": "Pokémon Ranger Willa",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Pokémon Ranger Willa and her partner Buneary",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Ride along.\"",
+     "success": {
+      "text": "You ride the patrol with Willa, taking the ranger trails that cut straight through the forest. You skip a whole stretch of the road ahead. At the end of it, the little Buneary is riding on your shoulder and will not get off.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "buneary"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-willa-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-pokemon-ranger-willa"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Train her.\"",
+     "success": {
+      "text": "You train with Buneary all afternoon, the little one copying every move from the grass. By sunset they have both learned Jump Kick, and the little one does it right into your arms. It goes with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "buneary"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "jump-kick",
+        "species": "buneary"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-willa-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-pokemon-ranger-willa"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-psychic-edmund",
+   "name": "Psychic Edmund: Knew You Were Coming",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-edmund-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A crossroads at midnight, under a signpost with all its arms pointing the wrong way. A thin man in a cape stands in the middle of it, and he is already looking straight at you, as if he has been waiting for hours. Perhaps he has. Edmund: \"I knew you were coming.\" He smiles thinly. Edmund: \"I also know you'll pick the middle button.\"",
+   "choices": [
+    {
+     "label": "\"Wrong.\"",
+     "success": {
+      "text": "Edmund blinks. He looks shaken, really shaken, and his cape suddenly seems too big for him. He battles badly, his Kadabra glancing back at him for orders that come a beat too late.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-edmund-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-edmund-shaken",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Psychic Edmund beat you, even shaken",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "kadabra",
+        "xatu"
+       ],
+       "name": "Psychic Edmund",
+       "size": 2,
+       "types": [],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You broke Psychic Edmund's trick, and beat him",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Edmund: \"See?\" He sweeps his cape back. Kadabra and Xatu are out before you have finished reaching for your Poké Ball.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-edmund-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Psychic Edmund saw it coming and beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "kadabra",
+        "xatu"
+       ],
+       "name": "Psychic Edmund",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Psychic Edmund at the midnight crossroads",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"How?\"",
+     "success": {
+      "text": "Edmund: \"Most people pick the middle.\" He shrugs, a little embarrassed at being asked. Then Kadabra and Xatu step out of the dark, and the battle is on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-edmund-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Psychic Edmund beat you at the midnight crossroads",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "kadabra",
+        "xatu"
+       ],
+       "name": "Psychic Edmund",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Psychic Edmund at the midnight crossroads",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-psychic-edmund-m2",
+   "name": "Psychic Edmund: The Vision",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-edmund-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-edmund-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "A kerb outside a closed shop, at night. Edmund sits on it with his cape bunched around his knees, pale as paper. His Xatu stands beside him staring at nothing, unblinking. Edmund: \"I saw something real. Not a guess. A bridge falling.\" He laughs, but it is not a laugh. Edmund: \"Nobody believes a Psychic who's been guessing for twenty years.\"",
+   "choices": [
+    {
+     "label": "\"I believe you.\"",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "He looks at you as if nobody has said that to him in his life. He leads you there, running, cape flying. As you reach the middle, the bridge groans and starts to fall, and your whole team throws itself against the beams and holds it, holds it, until the last cart is across.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-edmund-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-edmund-believed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     },
+     "failure": {
+      "text": "He leads you there, running. The bridge groans and starts to fall. Your team holds it, barely, shaking, a long and terrible minute, until the last cart rolls off and the beams settle with a crack. Nobody falls. Edmund sits down in the road and cries.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-edmund-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-edmund-believed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Prove it.\"",
+     "success": {
+      "text": "Edmund closes his eyes. He names the next three wild Pokémon you will meet, one, two, three, and writes them on the back of your hand in pen. He is right. For your next three wild encounters, you will see them coming.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Edmund named them: you see the wild Pokémon ahead",
+        "effects": [
+         {
+          "kind": "preview",
+          "what": "wild"
+         }
+        ],
+        "battles": 3,
+        "until": "wild"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-edmund-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-edmund-proved",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Find the bridge.\"",
+     "success": {
+      "text": "You do not wait for a vision. You ask the way, and he follows you through the dark streets, holding his cape up out of the puddles.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-psychic-edmund-bridge"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "shaken",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-edmund-shaken",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Edmund looks up at you, and something in his face loosens. Edmund: \"You broke my trick. Then I started seeing for real.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-psychic-edmund-bridge",
+   "name": "Psychic Edmund: The Cracked Bridge",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "One node on, the bridge: old stone, a river running fast below. In the light of your lamp you see it at once. A crack runs right through the middle span, and every time a cart goes over, a little dust falls into the water. Edmund goes white.",
+   "choices": [
+    {
+     "label": "Wake the town.",
+     "success": {
+      "text": "You bang on doors until the lights come on. By dawn there is a rope across both ends and a sign that says CLOSED, and a builder is already shaking his head at the crack. The town closes it. Edmund watches the sign go up and does not say a word.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-edmund-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-edmund-found",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stand guard until morning.",
+     "success": {
+      "text": "You and Edmund stand at the end of the bridge all night, turning back every cart. In the morning the town closes it properly, with rope and a sign. A woman with a baby on her hip stops to thank Edmund. He does not know what to do with his hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-edmund-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-edmund-found",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-psychic-edmund-m3",
+   "name": "Psychic Edmund: Real Sight",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-edmund-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-edmund-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "A quiet shop with one lamp in the window and no crystal ball anywhere. A hand-lettered sign hangs on the door: NO FORTUNES. ADVICE ONLY. Edmund sits behind a plain table in a plain jumper, the cape on a hook. His Bronzong hums softly in the corner. Edmund: \"I stopped telling people what will happen. Now I tell them what might.\"",
+   "choices": [
+    {
+     "label": "\"Advise me.\"",
+     "success": {
+      "text": "Edmund looks at you for a long time. Then he tells you one thing about the next boss you will face, quietly, like a friend would. It is not a prophecy. It is just good advice. He gives you a Twisted Spoon on your way out.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "item",
+        "id": "twistedspoon",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-edmund-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-psychic-edmund"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Edmund takes the cape down off its hook, for old times' sake. Bronzong rises from the corner, and an Alakazam steps out from behind the curtain.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "twistedspoon",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-edmund-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-psychic-edmund"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Psychic Edmund beat you in his advice shop",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "bronzong",
+        "alakazam"
+       ],
+       "name": "Psychic Edmund",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Psychic Edmund in his advice shop",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"What do you see for me?\"",
+     "success": {
+      "text": "Edmund takes your hand and turns it over. Edmund: \"Something you lose and get back.\" He will not say more. He gives you a Twisted Spoon. Somewhere later in this run, something you lose is meant to come back to you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-edmund-lost-returns",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "twistedspoon",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-edmund-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-psychic-edmund"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

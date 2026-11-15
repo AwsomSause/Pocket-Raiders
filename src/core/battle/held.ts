@@ -268,6 +268,12 @@ export function accuracyMultiplier(ctx: HeldContext, user: Holder, target: Holde
   const state = stateOf(ctx.battle);
   const userHooks = hooksOf(ctx, user.mon, user.side);
   if (hooks(userHooks, 'moveLast').some((h) => h.hook.sureHit)) return null;
+  // Ravi's Bell: the holder's first move aimed at a foe each battle can't miss.
+  for (const { itemId } of hooks(userHooks, 'firstMoveSure')) {
+    if (timesUsed(ctx, user.mon.uid, itemId) > 0) continue;
+    markUsed(ctx, user.mon.uid, itemId);
+    return null;
+  }
   if (state.sure.includes(user.mon.uid)) {
     state.sure = state.sure.filter((u) => u !== user.mon.uid);
     return null;

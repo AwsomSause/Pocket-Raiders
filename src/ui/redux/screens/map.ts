@@ -5,6 +5,7 @@
 import { act, B, esc, foot, H, hpb, mini, nodeStyle, tall, W } from '../kit';
 import { rxUrl } from '../assets';
 import type { ReduxCtx } from '../stage';
+import { type BattlePanel, cardWindow } from './battle';
 
 export interface MapSideView { kind: string; glyph?: string; color?: string; used: boolean }
 export interface MapNodeView {
@@ -47,6 +48,8 @@ export interface MapModel {
   banner: { top: string; title: string; sub: string; plan: readonly string[] } | null;
   /** The legend window (L), when open. */
   legend: MapLegendRow[] | null;
+  /** The Ability card of the party Pokémon the pointer rests on (the mock-ups' Pokémon info card), or null. */
+  card?: BattlePanel | null;
 }
 
 const pick = (opt: number): string => (opt >= 0 ? `${act('pick', opt)} data-over="over"` : '');
@@ -57,7 +60,7 @@ export function mapView(c: ReduxCtx, d: MapModel): string {
   const cur = d.nodes.find((n) => n.cur) ?? null;
   const bar = `<div class="abs row" style="left:16px;right:16px;bottom:14px;gap:6px">${d.buttons.map((b) => B(esc(b.label), b.opt === d.index, `height:32px;font-size:13px;padding:0 4px;flex:1;justify-content:center;min-width:0;white-space:nowrap;overflow:hidden${b.hot && b.opt !== d.index ? ';box-shadow:inset 0 0 0 2px var(--acc)' : ''}`, '', pick(b.opt))).join('')}</div>`;
   const top = H(d.title, 'map', d.hints)
-    + `<div class="abs row" style="left:20px;right:20px;top:58px;gap:8px">${d.chips.map((t, k) => `<span class="tg${k ? ' no' : ''}">${esc(t)}</span>`).join('')}<span class="grow"></span>${d.eggs.map((t) => `<span class="tg no">Egg ${esc(t)}</span>`).join('')}${d.party.map((p) => `<div class="col" style="gap:2px;align-items:center" title="${esc(p.label)}">${p.file ? mini(p.file, 30) : ''}${hpb(p.hp, 30)}</div>`).join('')}</div>`;
+    + `<div class="abs row" style="left:20px;right:20px;top:58px;gap:8px">${d.chips.map((t, k) => `<span class="tg${k ? ' no' : ''}">${esc(t)}</span>`).join('')}<span class="grow"></span>${d.eggs.map((t) => `<span class="tg no">Egg ${esc(t)}</span>`).join('')}${d.party.map((p, k) => `<div class="col" style="gap:2px;align-items:center" title="${esc(p.label)}" data-tip="mon:${k}">${p.file ? mini(p.file, 30) : ''}${hpb(p.hp, 30)}</div>`).join('')}</div>`;
   const slider = `<div class="abs row" style="left:20px;right:20px;bottom:54px;gap:8px"><span class="sm">Stops</span><div class="hp gold" style="flex:1;height:8px"><i style="width:${Math.round((Math.max(0, d.column) / Math.max(1, d.columns)) * 100)}%"></i></div><span class="sm">${Math.max(0, d.column)} / ${d.columns}</span></div>`;
   const keys = d.keys.map(([k, t]) => `<span${act('key', k)} style="cursor:pointer"><kbd>${esc(k)}</kbd>${esc(t)}</span>`).join(' ');
   // The line about the stop or button under the cursor, and the notice corner (layouts A, B and D keep them over the slider).
@@ -65,7 +68,7 @@ export function mapView(c: ReduxCtx, d: MapModel): string {
   const info = (y: number): string => `<div class="abs row" style="left:20px;right:20px;top:${y}px;gap:16px;align-items:flex-start"><div class="sm grow" style="line-height:18px;max-height:54px;overflow:hidden">${esc(d.info)}</div><div class="sm" style="font-size:11px;line-height:13px;max-width:470px;max-height:52px;overflow:hidden;text-align:right">${side}</div></div><div class="abs sm" style="right:20px;bottom:72px;font-size:11px">${keys}</div>`;
   const banner = d.banner ? `<div class="abs" style="left:0;right:0;top:168px;height:${d.banner.plan.length ? 230 : 168}px;background:var(--p);box-shadow:inset 0 6px 0 var(--acc),inset 0 -6px 0 var(--acc),0 0 0 400px #0008;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px"><b class="acc" style="font-size:22px">${esc(d.banner.top)}</b><b style="font-size:48px;line-height:54px">${esc(d.banner.title)}</b><span style="font-size:17px">${esc(d.banner.sub)}</span>${d.banner.plan.length ? `<div class="sm" style="text-align:center;line-height:18px">Built from your last stage:<br>${d.banner.plan.map(esc).join('<br>')}</div>` : ''}</div>` : '';
 
-  const legend = d.legend ? `<div class="fill" style="z-index:7"${act('legend')}></div>` + W(`<b class="acc">Legend</b><div style="display:grid;grid-template-columns:repeat(${d.legend.length > 12 ? 4 : 1},1fr);gap:5px 12px">${d.legend.map((r) => `<div class="row" style="gap:8px;min-width:0"><i style="width:20px;height:20px;flex:none;border-radius:50%;background:${r.color};display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-style:normal;font-weight:700">${esc(r.glyph)}</i><span style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r.text)}</span></div>`).join('')}</div>`, `position:absolute;right:20px;top:60px;width:${d.legend.length > 12 ? 892 : 230}px;display:flex;flex-direction:column;gap:7px;padding:12px 14px;z-index:8`, '', act('legend')) : '';
+  const legend = (d.legend ? `<div class="fill" style="z-index:7"${act('legend')}></div>` + W(`<b class="acc">Legend</b><div style="display:grid;grid-template-columns:repeat(${d.legend.length > 12 ? 4 : 1},1fr);gap:5px 12px">${d.legend.map((r) => `<div class="row" style="gap:8px;min-width:0"><i style="width:20px;height:20px;flex:none;border-radius:50%;background:${r.color};display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-style:normal;font-weight:700">${esc(r.glyph)}</i><span style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r.text)}</span></div>`).join('')}</div>`, `position:absolute;right:20px;top:60px;width:${d.legend.length > 12 ? 892 : 230}px;display:flex;flex-direction:column;gap:7px;padding:12px 14px;z-index:8`, '', act('legend')) : '') + (d.card ? cardWindow(d.card) : '');
   // One stop: the mock-ups' disc, with the game's extra marks around it.
   const dot = (n: MapNodeView, x: number, y: number): string => {
     const [col, ch] = n.fog ? ['#56607a', '?'] as const : nodeStyle(n.kind);
