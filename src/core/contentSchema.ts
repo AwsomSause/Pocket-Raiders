@@ -2995,7 +2995,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Beta 0.7 Flight North: names the Bug-type (`name`), or marks the moment it says goodbye. Only the name changes state; the return and its ending live in core/instrumentality/flightNorth.ts. */
   z.object({ kind: z.literal('flightNorth'), action: z.enum(['name', 'trust']), name: z.string().max(12).optional() }),
   /** A healing spot, shop or fishing spot opens beside this node. */
-  z.object({ kind: z.literal('addStop'), stop: z.enum(['heal', 'shop', 'fish', 'minigame']) }),
+  z.object({ kind: z.literal('addStop'), stop: z.enum(['heal', 'shop', 'fish', 'minigame']), /** With `minigame`: the game it opens (data/minigames.json id). */ game: z.string().optional() }),
   /** A ferry: jump to a node next to the gym (SS Ticket). */
   z.object({ kind: z.literal('skipAhead') }),
   /** Ideas W4: a trainer starts tailing you and steps out to challenge you after this many nodes (core/wanderer.ts). */
@@ -3174,6 +3174,32 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('train'), what: z.enum(['natureReroll', 'natureNudge', 'abilitySwap', 'weakestStat', 'learnMove', 'evolutionHint', 'masteryShard', 'nap']), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']).optional(), type: TypeNameSchema.optional() }),
   /** Permanent choices (spec §17): records a decision in the run's choice history (the first answer to an id stands). */
   z.object({ kind: z.literal('choice'), id: z.string().regex(/^[a-z][a-z0-9-]*$/), pick: z.string().min(1), text: z.string().min(1), weight: z.number().int().min(1).max(3).default(1) }),
+  /**
+   * Catalog Overhaul markets (core/market.ts). `comeBack`: the seller `event` can be met again this run. `effort`: +`amount` vitamin stacks in `stat` for the lead
+   * or party (`type`: only that type trains, or with `typeAmount` that type gets `typeAmount` and the rest `amount`). `prize`: `times` draws from a printed-odds
+   * `table`, each costing `stake`. `sell`: the biggest stack of 5+ (`stack`), every curio (`curio`) or a little junk, at `factor` times the fair price.
+   * `pawn` / `redeem`: the most valuable item is held under `key` and bought back at `factor` times what was paid. `rebate`: `factor` of the last event purchase.
+   * `deposit` / `withdraw`: money held under `key`, paid back times `factor`. `feed`: a plate per Pokémon at `amount` each. `mend`: heals `factor` of max HP.
+   * `advise`: says which stone (`only`) would evolve a party Pokémon. `buyPoint` / `cashPoint`: one Frontier (Battle) Point for `amount` money, either way.
+   */
+  z.object({
+    kind: z.literal('market'),
+    action: z.enum(['comeBack', 'effort', 'prize', 'sell', 'pawn', 'redeem', 'rebate', 'deposit', 'withdraw', 'feed', 'mend', 'advise', 'buyPoint', 'cashPoint']),
+    event: z.string().optional(),
+    key: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
+    stat: z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'highest', 'lowest']).optional(),
+    amount: z.number().int().min(0).optional(),
+    who: z.enum(['lead', 'party']).default('lead'),
+    type: TypeNameSchema.optional(),
+    typeAmount: z.number().int().min(1).optional(),
+    factor: z.number().positive().optional(),
+    pick: z.enum(['stack', 'curio', 'junk']).optional(),
+    only: z.array(z.string()).min(1).optional(),
+    forfeit: z.boolean().optional(),
+    table: z.array(z.object({ weight: z.number().positive(), label: z.string().min(1), money: z.number().int().optional(), item: z.string().optional(), count: z.number().int().positive().optional(), flag: z.string().regex(/^[a-z][a-z0-9-]*$/).optional() })).min(1).optional(),
+    times: z.number().int().min(1).max(10).optional(),
+    stake: z.number().int().min(0).optional(),
+  }),
 ]);
 export type EventEffect = z.infer<typeof EventEffectSchema>;
 

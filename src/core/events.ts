@@ -29,6 +29,7 @@ import { changeFriendship } from './friendship';
 import { atLeast, promptById, type Grade, type PromptResult } from './interaction/prompt';
 import { applyCatalog, catalogTargetProblem, isFreeReroll } from './catalog';
 import { addItem } from './items';
+import { applyMarket, marketWords, noteSpend } from './market';
 import { evolve } from './evolution';
 import { canBeDoubles, makeDoubles } from './battle/doubles';
 import { canBeTriples, makeTriples } from './battle/triples';
@@ -975,6 +976,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return "your lead's moves are copied onto another Pokémon";
     case 'train':
       return trainEffectText(e);
+    case 'market':
+      return marketWords(e);
     case 'betterDraft':
       return `better next reward${e.extra ? ` (+${e.extra} choice)` : ''}`;
     case 'gymPreview':
@@ -1143,6 +1146,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const amount = Math.max(-run.money, e.amount + bonus);
       run.money += amount;
       if (amount > 0) count(run, 'moneyEarned', amount);
+      if (amount < 0) noteSpend(run, -amount);
       return amount === 0 ? '' : amount > 0 ? `+₽${amount}` : `−₽${-amount}`;
     }
     case 'item':
@@ -1322,6 +1326,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'train':
       return applyTrainEffect(content, run, e, rng);
+    case 'market':
+      return applyMarket(content, run, e, rng);
     case 'eggMove': {
       const lead = run.party.find((m) => m.hp > 0);
       if (!lead) return '';
@@ -1476,7 +1482,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return effectWords(content, e);
     case 'addStop': {
       const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
-      here.sides.push({ id: `event-stop-${here.sides.length + 1}-${here.id}`, kind: e.stop, used: false });
+      here.sides.push({ id: `event-stop-${here.sides.length + 1}-${here.id}`, kind: e.stop, used: false, ...(e.stop === 'minigame' && e.game ? { minigameId: e.game } : {}) });
       return effectWords(content, e);
     }
     case 'scout':
