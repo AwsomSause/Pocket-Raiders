@@ -1090,5 +1090,304 @@
   "earliest": "A5",
   "where": "A hidden node near the shrine",
   "sits": "side-branch"
+ },
+ "co-my1-clearing": {
+  "shape": "Visit",
+  "earliest": "A3",
+  "home": 11,
+  "sits": "side-branch",
+  "tags": [
+   "forest"
+  ],
+  "where": "A Visit: hidden; once believed; at most one Visit per region"
+ },
+ "co-my2-shrine": {
+  "shape": "Region",
+  "earliest": "A4",
+  "stages": [
+   2
+  ],
+  "home": 11,
+  "sits": "side-branch",
+  "tags": [
+   "forest"
+  ],
+  "where": "Region-shaped: Stages 2, 5, 8, each at a side branch, Step 11",
+  "badge": "?"
+ },
+ "co-my2-sapling-2": {
+  "shape": "Region",
+  "earliest": "A4",
+  "stages": [
+   5
+  ],
+  "home": 11,
+  "sits": "side-branch",
+  "tags": [
+   "forest"
+  ],
+  "badge": "?"
+ },
+ "co-my2-sapling-3": {
+  "shape": "Region",
+  "earliest": "A4",
+  "stages": [
+   8
+  ],
+  "home": 11,
+  "sits": "side-branch",
+  "tags": [
+   "forest"
+  ],
+  "badge": "?"
+ },
+ "co-my3-comet": {
+  "shape": "Visit",
+  "earliest": "A6",
+  "tags": [
+   "night"
+  ],
+  "where": "A + node at Night (the first of the Seven Nights)"
+ },
+ "co-my4-crater": {
+  "shape": "Visit",
+  "earliest": "A9",
+  "tags": [
+   "high",
+   "city"
+  ],
+  "where": "A + node; if it goes quiet, a side branch two stages on"
+ },
+ "co-my4-again": {
+  "shape": "Visit",
+  "earliest": "A9",
+  "sits": "side-branch",
+  "tags": [
+   "high",
+   "city"
+  ]
+ },
+ "co-my5-tide": {
+  "shape": "Visit",
+  "earliest": "A4",
+  "tags": [
+   "water"
+  ],
+  "where": "A + node on a water stage (Manaphy's later-run half is cut)"
+ },
+ "co-my6-arena": {
+  "shape": "Visit",
+  "earliest": "A5",
+  "home": 12,
+  "sits": "side-branch",
+  "where": "Side branch, 12: a ruined arena"
+ },
+ "co-my7-field": {
+  "shape": "Visit",
+  "earliest": "A2",
+  "home": 9,
+  "sits": "side-branch",
+  "tags": [
+   "forest"
+  ],
+  "where": "A Visit: hidden; once believed; at most one Visit per region"
+ },
+ "co-my7-again": {
+  "shape": "Visit",
+  "earliest": "A2",
+  "sits": "side-branch",
+  "tags": [
+   "forest"
+  ]
+ },
+ "co-my8-stall": {
+  "shape": "Visit",
+  "earliest": "A4",
+  "home": 9,
+  "where": "A roadside stall: 9, optional"
+ },
+ "co-my9-ring-1": {
+  "shape": "Trial",
+  "earliest": "A6",
+  "chain": "my9",
+  "beat": 1,
+  "where": "Three stages: S, S+1, S+2",
+  "badge": "?"
+ },
+ "co-my9-ring-2": {
+  "shape": "Trial",
+  "earliest": "A6",
+  "chain": "my9",
+  "beat": 2,
+  "where": "Three stages: S, S+1, S+2",
+  "badge": "?"
+ },
+ "co-my9-ring-3": {
+  "shape": "Trial",
+  "earliest": "A6",
+  "chain": "my9",
+  "beat": 3,
+  "where": "Three stages: S, S+1, S+2",
+  "badge": "?"
+ },
+ "co-my10-shadow": {
+  "shape": "Visit",
+  "earliest": "A7",
+  "home": 14,
+  "tags": [
+   "eerie"
+  ],
+  "where": "It steps out of your shadow at 14"
+ },
+ "co-my12-shrine": {
+  "shape": "Visit",
+  "earliest": "A6",
+  "home": 10,
+  "where": "A roadside shrine: 10, optional. Its Honest Trade Card says: This one lies."
+ },
+ "co-my12-again": {
+  "shape": "Visit",
+  "earliest": "A6",
+  "home": 10
+ },
+ "co-my13-camp": {
+  "shape": "Visit",
+  "earliest": "A5",
+  "tags": [
+   "night"
+  ],
+  "attaches": "rest",
+  "where": "A rest at Night; the header reads Moonless"
+ },
+ "co-my14-cave": {
+  "shape": "Visit",
+  "earliest": "A6",
+  "home": 12,
+  "sits": "side-branch",
+  "tags": [
+   "water"
+  ],
+  "where": "Side branch, 12: a cave behind a waterfall"
+ },
+ "co-my15-lab": {
+  "shape": "Visit",
+  "earliest": "A9",
+  "home": 13,
+  "sits": "side-branch",
+  "tags": [
+   "city",
+   "cave"
+  ],
+  "where": "A Visit: hidden; once believed; at most one Visit per region"
+ },
+ "co-my16-wall": {
+  "shape": "Visit",
+  "earliest": "A4",
+  "home": 11,
+  "sits": "side-branch",
+  "tags": [
+   "cave"
+  ],
+  "where": "A Visit: hidden; once believed; at most one Visit per region"
+ },
+ "co-my17-valley": {
+  "shape": "Visit",
+  "earliest": "A7",
+  "home": 14,
+  "sits": "side-branch",
+  "tags": [
+   "hot",
+   "water"
+  ],
+  "where": "A Visit: hidden; once believed; at most one Visit per region"
+ },
+ "co-my17-again": {
+  "shape": "Visit",
+  "earliest": "A7",
+  "sits": "side-branch",
+  "tags": [
+   "hot",
+   "water"
+  ]
+ },
+ "co-my18-hall": {
+  "shape": "Visit",
+  "earliest": "A5",
+  "home": 13,
+  "sits": "side-branch",
+  "tags": [
+   "city",
+   "eerie"
+  ],
+  "where": "Side branch, 13: a castle hall of stopped clocks"
+ },
+ "co-my19-bolt-1": {
+  "shape": "Trial",
+  "earliest": "A7",
+  "chain": "my19",
+  "beat": 1,
+  "tags": [
+   "storm"
+  ],
+  "where": "Three stages: S, S+1, S+2",
+  "badge": "?"
+ },
+ "co-my19-bolt-2": {
+  "shape": "Trial",
+  "earliest": "A7",
+  "chain": "my19",
+  "beat": 2,
+  "tags": [
+   "storm"
+  ],
+  "where": "Three stages: S, S+1, S+2",
+  "badge": "?"
+ },
+ "co-my19-cat": {
+  "shape": "Trial",
+  "earliest": "A7",
+  "chain": "my19",
+  "beat": 3,
+  "tags": [
+   "storm"
+  ],
+  "where": "Three stages: S, S+1, S+2",
+  "badge": "?"
+ },
+ "co-my20-camp": {
+  "shape": "Visit",
+  "earliest": "A2",
+  "attaches": "rest",
+  "where": "A + node: the campfire"
+ },
+ "co-my20-back": {
+  "shape": "Visit",
+  "earliest": "A2",
+  "attaches": "rest"
+ },
+ "co-my21-stack": {
+  "shape": "Visit",
+  "earliest": "A8",
+  "attaches": "rest",
+  "where": "Two stages after MY20, a + node"
+ },
+ "co-my22-vines": {
+  "shape": "Visit",
+  "earliest": "A6",
+  "home": 11,
+  "sits": "side-branch",
+  "tags": [
+   "forest"
+  ],
+  "where": "A Visit: hidden; once believed; at most one Visit per region"
+ },
+ "co-z5-dream": {
+  "shape": "Visit",
+  "earliest": "A6",
+  "tags": [
+   "night"
+  ],
+  "where": "A + node at Night while Darkrai is the Guest",
+  "level": "A+2"
  }
 }

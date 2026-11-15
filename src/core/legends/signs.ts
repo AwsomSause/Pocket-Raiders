@@ -1,5 +1,6 @@
 // Catalog Overhaul Pack (legends): Signs and Tellings.
-// Any event may set a run flag `sign-<legend>` (a Legendary Sign worth +N Influence) or `telling-<mythical>` (one Telling of a Mythical).
+// Any event may set a run flag `sign-<legend>` (a Legendary Sign worth +N Influence), `telling-<mythical>` (one Telling of a Mythical)
+// or `vow-<mythical>` (the end of a Visit scene: the Promise is made and the Mythical becomes the Guest).
 // The `flag` effect calls `legendFlag` here, which turns them into Influence on the run's blessing (LEGENDARY_BLESSINGS.md section 4:
 // Influence never falls, and a Sign only counts for the Legendary that blesses this run) and into Telling counts (MYTHICAL_PROMISES.md).
 // It also keeps a few read-only mirror flags current, so events of every category can read the run's blessing, Guest and Promise with a
@@ -92,7 +93,9 @@ export function syncLegendFlags(run: Pick<RunState, 'story' | 'expansion' | 'reg
       setFlag(run, `promise-${m.id}`, guest ? 1 : 0);
       if (p.kept.includes(m.id)) setFlag(run, `promise-kept-${m.id}`, 1);
       if (p.left.includes(m.id)) setFlag(run, `promise-broken-${m.id}`, 1);
+      setFlag(run, `believed-${m.id}`, (p.tellings[m.id] ?? 0) >= 3 ? 1 : 0);
     }
+    setFlag(run, 'mythical-visited', p.visited ? 1 : 0);
   }
 }
 
@@ -120,11 +123,27 @@ export function addTelling(run: RunState, mythical: string, amount: number): str
   return n < 3 && n + amount >= 3 ? `You have heard enough of ${def.title} to believe it.` : null;
 }
 
+/** A Visit scene ends in the Promise (`vow-<mythical>`): the Mythical becomes the Guest, exactly as accepting a rolled Visit does.
+ *  One Mythical per run: no-op when a Guest is already here, another Mythical has visited, it is disabled, or Promises are off. */
+export function makeVow(run: RunState, mythical: string): string | null {
+  const def = MYTHICALS.find((m) => m.id === mythical);
+  if (!def || def.status === 'disabled' || !run.expansion?.promises) return null;
+  const p = run.expansion.promise ?? { tellings: {}, visited: null, guest: null, kept: [], left: [] };
+  if (p.guest || (p.visited && p.visited !== mythical)) return null;
+  run.expansion = { ...run.expansion, promise: { ...p, visited: mythical, guest: { id: mythical, forgiven: false } } };
+  syncLegendFlags(run);
+  return `${def.title} walks beside you now. ${def.promise}`;
+}
+
 /** Called by the `flag` effect for every flag an event sets. Returns journal lines (may be empty). */
 export function legendFlag(run: RunState, key: string, amount: number): string[] {
   if (key.startsWith('sign-')) return addSign(run, key.slice('sign-'.length), amount);
   if (key.startsWith('telling-')) {
     const line = addTelling(run, key.slice('telling-'.length), amount);
+    return line ? [line] : [];
+  }
+  if (key.startsWith('vow-') && amount > 0) {
+    const line = makeVow(run, key.slice('vow-'.length));
     return line ? [line] : [];
   }
   return [];

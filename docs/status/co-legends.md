@@ -94,7 +94,38 @@ Pack questlines (status `extra` L2-L15). Every Legendary fight is a pseudo fight
 
 Tests: `tests/unit/coLegendsLegendary.test.ts`.
 
+## Mythical Visits MY1-MY22 and Z5 (built 2026-11-15, `legends-7.ts` MY1-MY12, 36 events; `legends-8.ts` MY13-MY22 + Z5, 29 events)
+Each Visit opens for a believed Mythical (`believed-<id>`, three Tellings) while no Mythical has visited this run (`mythical-visited` 0), never forces a battle, and ends in the Promise room `co-my-<id>-promise` ("I promise." / "Not this run." = ₽500 / "What happens if I break it?" comes back). "I promise." sets `vow-<id>`: `core/legends/signs.ts makeVow` makes it the Guest exactly as accepting a rolled Visit does (one per run; no-op for disabled Mythicals). Mythical fights are pseudo one-on-ones with no items, so nothing is caught. Placement shape `Visit` (hidden "?").
+
+| Code | Built | Limits |
+|---|---|---|
+| MY1 Mew | play / go away (steals an item) / sit | the stolen item is not returned; double forgiveness not built |
+| MY2 Celebi | bowls, or three saplings over Stages 2, 5, 8 | the reverting forest and the past-run forester cut |
+| MY3 Jirachi | at Night; wish for team (better draft) / someone / nothing | "starts with forgiveness" not built |
+| MY4 Deoxys | three tone rounds (a wrong answer retries a stage later), Forme choice flag | the Forme is a flag only (no Wonder) |
+| MY5 Phione | save it (Water-type or line) | Manaphy's later-run half and Keepsake cut |
+| MY6 Victini | glory = one-on-one (lose: "Again." once), them, honest | |
+| MY7 Shaymin | thank / carry to water (2 nodes) / pick a flower (retry next stage) | |
+| MY8 Meloetta | three notes (sound move for the third), 3 = dance, 1-2 = corrected, 0 = gone | |
+| MY9 Hoopa | three rings over three stages, the sandwich scene at the third | stolen-item return not tracked |
+| MY10 Marshadow | the shadow spar / ask / look away | no Promise: Marshadow is disabled (its Visit needs past runs) |
+| MY11 Arceus | not built | needs ten kept Promises on the save and a next-run Judgment: cut by the run-memory rule |
+| MY12 Pecharunt | favour / yes / no (it comes back next stage); "Ah. One of mine." with a Loyal blessing | "kept by breaking it" not built; the Honest Trade Card is the markets row's |
+| MY13 Darkrai | at Night: tell a nightmare (heal) / watch / ask about the pale shape; Cresselia variant | "+10% over max HP" is a full heal; double forgiveness not built |
+| MY14 Keldeo | one-on-one, win or lose ends in the Promise; Swords variant | Resolute form not built |
+| MY15 Genesect | stand down / wake (hard fight) / leave / type nothing, then HOME? | "already awake next run" cut |
+| MY16 Diancie | sing (only the nervous hum works) / strike (chipped) / a sound move (+1 Bond); Carbink variant | chipped does not change forgiveness |
+| MY17 Volcanion | nothing (retry next stage) / help / the poacher camp (free, report, tell it) | the Ranger is told, not built |
+| MY18 Magearna | three doors and the note | the bouquet hand-over at the last stage (a Parting) cut |
+| MY19 Zeraora | lightning over three stages, then the test | "took a wild one's side" is not checked |
+| MY20 Meltan | feed (an item) / shoo (comes back with friends) / ask the tinkerer | |
+| MY21 Melmetal | forge (an item for a better draft) / refuse / ask | Melmetal's Promise is disabled; Meltan stays the Guest; feeding eight is not counted |
+| MY22 Zarude | the fruit, then the child (never / find the family / not my business) | |
+| Z5 Darkest Dream | Darkrai as Guest + `promise-step-darkrai` 2 (new-events row), at Night: refuse / Z-Mega Darkrai fights beside you once (ally) and rests heal 25% less for the region; Cresselia hides "Do it." | wild Pokémon starting drowsy not built |
+
+Wonders and most Promise rules are still Beta 0.7 limits (promisesData.ts: only Zarude's rule and Wonder run in the game). Tests: `tests/unit/coLegendsMythical.test.ts`.
+
 ## Where I stopped (paused 2026-11-15, Kice: five threads at a time)
-- Resumed 2026-11-15 (merged ui-mockups; shared pieces are in the base now). Alphas, Megas, Deltas, Z (not Z5) and Legendary L2-L15 done; next MY1-MY22 (+Z5), U1-U9, RULE ids.
-- Still to build: M7 (rivals slot), D1-D8, Z1-Z7, L2-L15, MY1-MY22, U1-U9, the 382 RULE ids (ladder Trial/Recognition/Presence), placement/flags/status files, update fragment, PR.
+- Resumed 2026-11-15 (merged ui-mockups; shared pieces are in the base now). Alphas, Megas, Deltas, Z, Legendary L2-L15 and Mythical MY1-MY22 done; next U1-U9, RULE ids.
+- Still to build: M7 (rivals slot), U1-U9, the 382 RULE ids (ladder Trial/Recognition/Presence), placement/flags/status files, update fragment, PR.
 - Run the full `npm run check` before opening the PR.
