@@ -2,7 +2,7 @@
 
 Docs: `STORY_FAMILIES_1.md`, `_2`, `_3`, `_4`, `_7` in `/mnt/project-files/catalog_overhaul_pack/catalog_overhaul/` (227 catalog ids). Plan: `/mnt/project-files/plans/catalog-overhaul/PLAN.md`. Guide: `docs/catalog-overhaul.md`.
 
-- Content: `tools/events/co/families-a-<n>.ts` (helpers in `_fa.ts`) -> `npm run co:build -- families-a-<n>` -> `src/data/events/co-families-a-<n>.json`. Doc 1 = `-1` and `-2`, doc 2 = `-3`.
+- Content: `tools/events/co/families-a-<n>.ts` (helpers in `_fa.ts`) -> `npm run co:build -- families-a-<n>` -> `src/data/events/co-families-a-<n>.json`. Doc 1 = `-1` and `-2`, doc 2 = `-3`, doc 3 = `-4` and `-5`.
 - After a build: `node tools/events/co/_fa-status.ts <date>` (status file and the table below), `node tools/events/co/_fa-flags.ts` (flag map `src/data/catalogOverhaul/flags/families-a.json`; notes for flags other categories read in `_fa-flag-notes.json`), then `npx vitest run tests/unit/coFamiliesA.test.ts tests/unit/catalogOverhaul.test.ts`.
 - Run memory is same-run only (Kice 2026-11-14). Every "past run" or "this save" in the docs is built as "earlier this run", or skipped (listed below).
 - Story fights never end the run (`friendly`); battles inside a chain pseudo-stage set `pseudo`.
@@ -10,10 +10,9 @@ Docs: `STORY_FAMILIES_1.md`, `_2`, `_3`, `_4`, `_7` in `/mnt/project-files/catal
 - Shared pieces used (cherry-picked): people's region stamps and friendly battles, anime's `flagAge` / `laterEvent` / `partyLine`, new-events' `takeNode` and `who` selectors, families-c's text tokens.
 - Save: none.
 
-## Where this stopped (paused 2026-11-15, Kice: five threads at a time)
-- Done: docs 1 and 2 (built, re-read, tested). Shared pieces cherry-picked, plus the engine part of people's `statBoost`.
-- Doc 3 (`STORY_FAMILIES_3.md`) read in full, not built yet. Engine piece for SF16 already in: `src/core/co/familiesA.ts` (the last Pokémon released this run: flag `released-count`, text tokens `{released}` / `{releasedType}`, effect `rejoinReleased`). Plan for doc 3: the Exhibition Bracket as a chain pseudo-stage; the Rival Circuit keeps the `tournament` rounds; contests use the battle rule `contest`; the convoy keeps the `convoy` effects; the informant and the convoy secret are chosen by region.
-- Still to do: docs 3, 4, 7; placement file; update notes; browser test; `npm run check`; mark PR #1315 ready.
+## Where this stopped (resumed 2026-11-16, batch 3)
+- Done: docs 1, 2 and 3 (built, re-read, tested). Doc 3 is `families-a-4` (Circuit, Contests) and `-5` (Convoy, Hollow Lantern, Grunt School, Heist).
+- Still to do: docs 4, 7; placement file; update notes; browser test; `npm run check`; mark PR #1315 ready (the catalog lead combines the batch).
 
 ## Known limits (honest list)
 Doc 1 (SF1 to SF6)
@@ -33,6 +32,15 @@ Doc 2 (SF7 to SF12)
 - Hooded Traveller: always the mentor version (the Past Champion, Gym Leader and Ally pools are cross-run and other categories' questlines). "Come back" sets `hood-returned` only. The tag partner is the travelling-companion system for four stages.
 - Broken Habitat: the culprit is chosen by region (poachers by default; factory in Johto, Sinnoh, Kalos, Galar, Orrery Basin, Tidewrack Reaches; the rival in Paldea, Frontier Isles, Trial Archipelago, Cairnmoor). Zygarde Cells are a run count (flag `zygarde-cells`, read by legends L11), not a Bag item. A full rebuild sets `habitat-full`; legends counts it as a Trial. "Pay them: they come back next run" has no same-run return.
 - Hollow Vale: "comes back next run" (Leave, Hold) is same-run: after Hold, the town returns a stage later (`vale-again`). Mrs. Abney's "first battle" gift is Sweet Berry Juice, not a Potion (MEMORY_AND_FORMAT: no event gives an in-battle healing item). "Rather forget" does not hide a log entry. The `released.<species>` trade and the blueprint (cosmetic) are not built. The Kyogre/Suicune line shows; counting it as a Communion is legends' to wire.
+
+Doc 3 (SF13 to SF18)
+- Circuit: the rung events climb the rivals row's R1 board (`circuit-rung`, one match a stage, needs the R1 sign-up `circuit-entered`). A lost match comes back at a later plaza (`seeAgain`). The Tower Pass is a flag (`circuit-pass`); a lost match already returns, so it gives no extra retry. Seven floors are three rooms (battle chains stop at three); the Frontier's four rounds are three plus one. "A Road Roster trainer at Meeting 2" is a generic face from the road. The Rival Circuit final opens R1's own final (`rq-circuit-final`); the ₽1,200 purse is paid on walking out. The Gold match against the rival needs the rival on the same rung.
+- Exhibition Bracket: a chain pseudo-stage (`ps_fa_exhibition`). Sergei's "Pokémon from your last region" is text only. "Find him" marks a plan as seen (`evil` mark `plan-seen`, heat −1).
+- Contests: the Contest Partner is the Pokémon picked at the first contest (remembered as the run's pick; a later pick elsewhere replaces it). Ribbons are a run count (`contest-ribbons`). "The highest-power move scores 0" is a harder contest (five moves). The Ribbon Cup is a run relic (+10% damage on each battle's first attack), not a held item on the partner. "Free entry to every contest next run" (cross-run) became a shop stop and ₽500. Beauty Bianca is named in the text only.
+- Convoy: the first escort starts the convoy, the others join it (one more to guard; no cap of three). The secret is whoever is present first of Finch, Tess, Fen (not a draw). Endings are stops after the gym. Garrow's cut is a fixed ₽700. Finch's notes reveal the map's stops.
+- Hollow Lantern: Autumn only (the Ghost-theme region trigger is not built). The name is the Pokémon released earlier this run; with none, the glass is blank, the grave is a grave, and the Keeper's "Come back" is a battle for a Ghost-type. A released Pokémon is alive, so the grave is always its prints and the Keeper never battles. The lantern is not a Keepsake (Keepsakes are cut). The Litwick joins if you knew the lantern's name (not by flame colour). The Gourgeist Alpha is a strong wild battle.
+- Grunt School: "half its Grunts next stage" is team heat −1. The Grunt Jessa (RR45) line is not built. Dilly's basket is Berries and Sweet Berry Juice (no Potion: pack rule). The union route without signing is a 60% chance (else the stealth route).
+- Heist: the informant is fixed by region (Ruth: Kanto, Sinnoh, Kalos, Paldea, Frontier Isles, Cairnmoor; Kip: Johto, Unova, Alola, Torren, Grand, Orrery Basin; Vesna elsewhere). Keeping the ledger is a team mark (`ledger-kept`), not a preview of Admin teams. The cut is a fixed ₽1,000. The Zeraora's Promise line is not built.
 
 ## Re-read table
 Every row was re-read against its doc section after building (date = the re-read).
@@ -200,29 +208,29 @@ Every row was re-read against its doc section after building (date = the re-read
 | `wm-2` | STORY_FAMILIES_1 SF5.2 The Squeaky Cart | built, re-read 2026-11-15 |
 | `wm-3` | STORY_FAMILIES_1 SF5.4 The Rare Box | built, re-read 2026-11-15 |
 | `wm-4` | STORY_FAMILIES_1 SF5.5 Route's End | built, re-read 2026-11-15 |
-| `convoy-lost-children` | STORY_FAMILIES_3 SF15.1 Children on the Road | pending |
-| `convoy-lost-researcher` | STORY_FAMILIES_3 SF15.2 A Researcher Needs an Escort | pending |
-| `convoy-merchant-cart` | STORY_FAMILIES_3 SF15.3 The Merchant's Cart | pending |
-| `convoy-shelter` | STORY_FAMILIES_3 SF15.5 The Shelter | pending |
-| `convoy-wounded-ranger` | STORY_FAMILIES_3 SF15.4 A Wounded Ranger | pending |
+| `convoy-lost-children` | STORY_FAMILIES_3 SF15.1 Children on the Road | built, re-read 2026-11-16 |
+| `convoy-lost-researcher` | STORY_FAMILIES_3 SF15.2 A Researcher Needs an Escort | built, re-read 2026-11-16 |
+| `convoy-merchant-cart` | STORY_FAMILIES_3 SF15.3 The Merchant's Cart | built, re-read 2026-11-16 |
+| `convoy-shelter` | STORY_FAMILIES_3 SF15.5 The Shelter | built, re-read 2026-11-16 |
+| `convoy-wounded-ranger` | STORY_FAMILIES_3 SF15.4 A Wounded Ranger | built, re-read 2026-11-16 |
 | `hunt-clue-feather` | STORY_FAMILIES_4 SF30.1 A Feather That Hums | pending |
 | `hunt-clue-scorch` | STORY_FAMILIES_4 SF30.2 The Burned Ring | pending |
 | `hunt-clue-witness` | STORY_FAMILIES_4 SF30.3 The Witness | pending |
 | `hunt-lair` | STORY_FAMILIES_4 SF30.4 Where the Storm Rests | pending |
-| `spooky-costume-judge` | STORY_FAMILIES_3 SF16.10 The Festival Stops | pending |
-| `spooky-detour-battle` | STORY_FAMILIES_3 SF16.2 The Haunted Detour | pending |
-| `spooky-hexed-keeper` | STORY_FAMILIES_3 SF16.11 The Hexed Keeper | pending |
-| `spooky-hollow-lantern` | STORY_FAMILIES_3 SF16.4 The Hollow Lantern | pending |
-| `spooky-hollow-mirror` | STORY_FAMILIES_3 SF16.7 The Hollow Mirror | pending |
-| `spooky-lantern-festival` | STORY_FAMILIES_3 SF16.5 The Lantern Festival | pending |
-| `spooky-light-one` | STORY_FAMILIES_3 SF16.1 A Light Off the Road | pending |
-| `spooky-light-two` | STORY_FAMILIES_3 SF16.3 The Light Returns | pending |
-| `spooky-medium` | STORY_FAMILIES_3 SF16.6 The Medium's Table | pending |
-| `spooky-pale-visitor` | STORY_FAMILIES_3 SF16.9 The Pale Visitor | pending |
-| `spooky-whispering-grave` | STORY_FAMILIES_3 SF16.8 The Whispering Grave | pending |
-| `vt-grunt-favor` | STORY_FAMILIES_3 SF17.3 The Rookies Return | pending |
-| `vt-grunt-school` | STORY_FAMILIES_3 SF17.1 Villain Grunt School | pending |
-| `vt-grunt-union-strike` | STORY_FAMILIES_3 SF17.2 Grunt Union Strike | pending |
+| `spooky-costume-judge` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
+| `spooky-detour-battle` | STORY_FAMILIES_3 SF16.2 The Haunted Detour | built, re-read 2026-11-16 |
+| `spooky-hexed-keeper` | STORY_FAMILIES_3 SF16.11 The Hexed Keeper | built, re-read 2026-11-16 |
+| `spooky-hollow-lantern` | STORY_FAMILIES_3 SF16.4 The Hollow Lantern | built, re-read 2026-11-16 |
+| `spooky-hollow-mirror` | STORY_FAMILIES_3 SF16.7 The Hollow Mirror | built, re-read 2026-11-16 |
+| `spooky-lantern-festival` | STORY_FAMILIES_3 SF16.5 The Lantern Festival | built, re-read 2026-11-16 |
+| `spooky-light-one` | STORY_FAMILIES_3 SF16.1 A Light Off the Road | built, re-read 2026-11-16 |
+| `spooky-light-two` | STORY_FAMILIES_3 SF16.3 The Light Returns | built, re-read 2026-11-16 |
+| `spooky-medium` | STORY_FAMILIES_3 SF16.6 The Medium's Table | built, re-read 2026-11-16 |
+| `spooky-pale-visitor` | STORY_FAMILIES_3 SF16.9 The Pale Visitor | built, re-read 2026-11-16 |
+| `spooky-whispering-grave` | STORY_FAMILIES_3 SF16.8 The Whispering Grave | built, re-read 2026-11-16 |
+| `vt-grunt-favor` | STORY_FAMILIES_3 SF17.3 The Rookies Return | built, re-read 2026-11-16 |
+| `vt-grunt-school` | STORY_FAMILIES_3 SF17.1 Villain Grunt School | built, re-read 2026-11-16 |
+| `vt-grunt-union-strike` | STORY_FAMILIES_3 SF17.2 Grunt Union Strike | built, re-read 2026-11-16 |
 | `vt-pyromaniac-sweep` | STORY_FAMILIES_1 STORY FAMILIES, PART 1 | built, re-read 2026-11-15 |
 | `vt-stolen-egg-lab` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |
 | `th-map-1` | STORY_FAMILIES_4 SF23.1–23.5 The Five Pieces | pending |
@@ -244,22 +252,22 @@ Every row was re-read against its doc section after building (date = the re-read
 | `charity-favor` | STORY_FAMILIES_7 SF43.14 The Favour Returned ( | pending |
 | `cooking-draft` | STORY_FAMILIES_4 SF22.6 The Draft | pending |
 | `cooking-final` | STORY_FAMILIES_4 SF22.7 Three Silent Judges | pending |
-| `graveyard-vigil` | STORY_FAMILIES_3 SF16.10 The Festival Stops | pending |
-| `heist-go` | STORY_FAMILIES_3 SF18.2 The Heist: Execution | pending |
-| `heist-plan` | STORY_FAMILIES_3 SF18.1 The Heist Plan | pending |
+| `graveyard-vigil` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
+| `heist-go` | STORY_FAMILIES_3 SF18.2 The Heist: Execution | built, re-read 2026-11-16 |
+| `heist-plan` | STORY_FAMILIES_3 SF18.1 The Heist Plan | built, re-read 2026-11-16 |
 | `surf-rescue` | STORY_FAMILIES_1 STORY FAMILIES, PART 1 | built, re-read 2026-11-15 |
 | `time-loop-2` | STORY_FAMILIES_4 SF19.2 Ready This Time | pending |
 | `time-loop-3` | STORY_FAMILIES_4 SF19.3 The Baker Remembers | pending |
 | `time-loop-village` | STORY_FAMILIES_4 SF19.1 Noon | pending |
 | `umbrella-share` | STORY_FAMILIES_7 SF43.13 The Umbrella ( | pending |
-| `spooky-candle-vigil` | STORY_FAMILIES_3 SF16.10 The Festival Stops | pending |
-| `spooky-graveyard-dig` | STORY_FAMILIES_3 SF16.10 The Festival Stops | pending |
-| `spooky-haunted-mansion` | STORY_FAMILIES_3 SF16.10 The Festival Stops | pending |
-| `spooky-lost-spirit` | STORY_FAMILIES_3 SF16.10 The Festival Stops | pending |
-| `spooky-midnight-finale` | STORY_FAMILIES_3 SF16.12 The Pumpkin King and the Midnight Parade | pending |
-| `spooky-pumpkin-king` | STORY_FAMILIES_3 SF16.12 The Pumpkin King and the Midnight Parade | pending |
-| `spooky-pumpkin-patch` | STORY_FAMILIES_3 SF16.10 The Festival Stops | pending |
-| `spooky-trick-or-treat` | STORY_FAMILIES_3 SF16.10 The Festival Stops | pending |
+| `spooky-candle-vigil` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
+| `spooky-graveyard-dig` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
+| `spooky-haunted-mansion` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
+| `spooky-lost-spirit` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
+| `spooky-midnight-finale` | STORY_FAMILIES_3 SF16.12 The Pumpkin King and the Midnight Parade | built, re-read 2026-11-16 |
+| `spooky-pumpkin-king` | STORY_FAMILIES_3 SF16.12 The Pumpkin King and the Midnight Parade | built, re-read 2026-11-16 |
+| `spooky-pumpkin-patch` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
+| `spooky-trick-or-treat` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
 | `dg-treasure-dig-a` | STORY_FAMILIES_4 SF23.6 X Marks the Spot | pending |
 | `dg-treasure-dig-b` | STORY_FAMILIES_4 The Chest ( | pending |
 | `dg-treasure-dig-c` | STORY_FAMILIES_4 Daylight ( | pending |

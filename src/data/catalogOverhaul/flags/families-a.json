@@ -455,6 +455,273 @@
    "readBy": [],
    "note": "SF14 Contest record flags (category, which contest was played). contest-ribbons opens the Grand Festival."
   },
+  "convoy-alpha-hint": {
+   "setBy": [
+    "convoy-lost-children"
+   ],
+   "readBy": [],
+   "note": "SF15 Convoy record flags (who joined, how, which secret, which ending). Kept in the run log."
+  },
+  "convoy-cart": {
+   "setBy": [
+    "convoy-merchant-cart"
+   ],
+   "readBy": [
+    "convoy-bye-garrow"
+   ]
+  },
+  "convoy-case-seen": {
+   "setBy": [
+    "convoy-lost-researcher"
+   ],
+   "readBy": [
+    "convoy-secret-finch"
+   ]
+  },
+  "convoy-cut-asked": {
+   "setBy": [
+    "convoy-merchant-cart"
+   ],
+   "readBy": [],
+   "note": "SF15 Convoy record flags (who joined, how, which secret, which ending). Kept in the run log."
+  },
+  "convoy-delivered": {
+   "setBy": [],
+   "readBy": [
+    "convoy-bye-finch",
+    "convoy-bye-garrow",
+    "convoy-bye-kids",
+    "convoy-bye-tess"
+   ],
+   "note": "Set by the convoy engine (core/world.ts convoyStep) when a living escort reaches the gym; the goodbye stops read it."
+  },
+  "convoy-fen-home": {
+   "setBy": [
+    "convoy-secret-fen"
+   ],
+   "readBy": [
+    "convoy-bye-kids"
+   ]
+  },
+  "convoy-fen-inspector": {
+   "setBy": [
+    "convoy-secret-fen"
+   ],
+   "readBy": [
+    "convoy-bye-kids"
+   ]
+  },
+  "convoy-fen-together": {
+   "setBy": [
+    "convoy-secret-fen"
+   ],
+   "readBy": [
+    "convoy-bye-kids"
+   ]
+  },
+  "convoy-finch": {
+   "setBy": [
+    "convoy-lost-researcher"
+   ],
+   "readBy": [
+    "convoy-bye-finch",
+    "convoy-shelter"
+   ]
+  },
+  "convoy-finch-bye": {
+   "setBy": [
+    "convoy-bye-finch"
+   ],
+   "readBy": [
+    "convoy-bye-finch"
+   ]
+  },
+  "convoy-finch-helped": {
+   "setBy": [
+    "convoy-finch-robbed"
+   ],
+   "readBy": [],
+   "note": "SF15 Convoy record flags (who joined, how, which secret, which ending). Kept in the run log."
+  },
+  "convoy-finch-smashed": {
+   "setBy": [
+    "convoy-secret-finch"
+   ],
+   "readBy": [
+    "convoy-bye-finch"
+   ]
+  },
+  "convoy-finch-stopped": {
+   "setBy": [
+    "convoy-secret-finch"
+   ],
+   "readBy": [],
+   "note": "SF15 Convoy record flags (who joined, how, which secret, which ending). Kept in the run log."
+  },
+  "convoy-finch-turned-in": {
+   "setBy": [
+    "convoy-secret-finch"
+   ],
+   "readBy": [
+    "convoy-bye-finch"
+   ]
+  },
+  "convoy-finch-why": {
+   "setBy": [
+    "convoy-secret-finch"
+   ],
+   "readBy": [
+    "convoy-bye-finch",
+    "convoy-secret-finch"
+   ]
+  },
+  "convoy-garrow-bye": {
+   "setBy": [
+    "convoy-bye-garrow"
+   ],
+   "readBy": [
+    "convoy-bye-garrow"
+   ]
+  },
+  "convoy-garrow-kept": {
+   "setBy": [
+    "convoy-bye-garrow"
+   ],
+   "readBy": [],
+   "note": "SF15 Convoy record flags (who joined, how, which secret, which ending). Kept in the run log."
+  },
+  "convoy-kids": {
+   "setBy": [
+    "convoy-lost-children"
+   ],
+   "readBy": [
+    "convoy-bye-kids",
+    "convoy-shelter"
+   ]
+  },
+  "convoy-kids-bye": {
+   "setBy": [
+    "convoy-bye-kids"
+   ],
+   "readBy": [
+    "convoy-bye-kids"
+   ]
+  },
+  "convoy-kids-follow": {
+   "setBy": [
+    "convoy-lost-children"
+   ],
+   "readBy": [],
+   "note": "SF15 Convoy record flags (who joined, how, which secret, which ending). Kept in the run log."
+  },
+  "convoy-luxray": {
+   "setBy": [
+    "convoy-wounded-ranger"
+   ],
+   "readBy": [],
+   "note": "SF15 Convoy record flags (who joined, how, which secret, which ending). Kept in the run log."
+  },
+  "convoy-on": {
+   "setBy": [
+    "convoy-lost-children",
+    "convoy-lost-researcher",
+    "convoy-merchant-cart",
+    "convoy-wounded-ranger"
+   ],
+   "readBy": [],
+   "note": "SF15 Convoy record flags (who joined, how, which secret, which ending). Kept in the run log."
+  },
+  "convoy-public": {
+   "setBy": [
+    "convoy-shelter"
+   ],
+   "readBy": [],
+   "note": "SF15 Convoy record flags (who joined, how, which secret, which ending). Kept in the run log."
+  },
+  "convoy-secret": {
+   "setBy": [
+    "convoy-shelter"
+   ],
+   "readBy": [],
+   "note": "SF15 Convoy record flags (who joined, how, which secret, which ending). Kept in the run log."
+  },
+  "convoy-secret-none": {
+   "setBy": [
+    "convoy-shelter"
+   ],
+   "readBy": [],
+   "note": "SF15 Convoy record flags (who joined, how, which secret, which ending). Kept in the run log."
+  },
+  "convoy-stayed": {
+   "setBy": [
+    "convoy-shelter"
+   ],
+   "readBy": [],
+   "note": "SF15 Convoy record flags (who joined, how, which secret, which ending). Kept in the run log."
+  },
+  "convoy-tess": {
+   "setBy": [
+    "convoy-wounded-ranger"
+   ],
+   "readBy": [
+    "convoy-bye-tess",
+    "convoy-shelter"
+   ]
+  },
+  "convoy-tess-allowed": {
+   "setBy": [
+    "convoy-secret-tess"
+   ],
+   "readBy": [
+    "convoy-bye-tess"
+   ]
+  },
+  "convoy-tess-asked": {
+   "setBy": [
+    "convoy-wounded-ranger"
+   ],
+   "readBy": [
+    "convoy-secret-tess"
+   ]
+  },
+  "convoy-tess-back": {
+   "setBy": [
+    "convoy-secret-tess"
+   ],
+   "readBy": [
+    "convoy-bye-tess"
+   ]
+  },
+  "convoy-tess-bye": {
+   "setBy": [
+    "convoy-bye-tess"
+   ],
+   "readBy": [
+    "convoy-bye-tess"
+   ]
+  },
+  "convoy-tess-told": {
+   "setBy": [
+    "convoy-secret-tess"
+   ],
+   "readBy": [
+    "convoy-bye-tess"
+   ]
+  },
+  "coven-ball-found": {
+   "setBy": [
+    "spooky-graveyard-dig"
+   ],
+   "readBy": [],
+   "note": "SF16 festival record flags (Hex Coven). Kept in the run log."
+  },
+  "coven-sash": {
+   "setBy": [
+    "spooky-midnight-finale"
+   ],
+   "readBy": [],
+   "note": "SF16 festival record flags (Hex Coven). Kept in the run log."
+  },
   "crisis-ally-asked": {
    "setBy": [
     "crisis-old-friend"
@@ -1184,6 +1451,13 @@
     "world-disaster-quake"
    ]
   },
+  "dilly-cap": {
+   "setBy": [
+    "vt-grunt-favor"
+   ],
+   "readBy": [],
+   "note": "SF17 Dilly's uniform cap (cosmetic): kept in the run log."
+  },
   "elder-asked": {
    "setBy": [
     "elders-last-wish-1"
@@ -1581,6 +1855,96 @@
    ],
    "note": "Set by GL7 The Stolen Badge (past champions and leaders questlines) when the player helps Pell; until that row sets it, the Pell notice in ranked-ladder-1 stays hidden."
   },
+  "grunt-asked": {
+   "setBy": [
+    "vt-grunt-union-strike"
+   ],
+   "readBy": [],
+   "note": "SF17 Grunt School record flags. grunt-school-active is read by the markets row and cleared (quest set 0) when Dilly's story ends."
+  },
+  "grunt-crossed": {
+   "setBy": [
+    "vt-grunt-union-strike"
+   ],
+   "readBy": [
+    "vt-grunt-favor"
+   ]
+  },
+  "grunt-dilly-done": {
+   "setBy": [
+    "vt-grunt-favor"
+   ],
+   "readBy": [
+    "vt-grunt-favor"
+   ]
+  },
+  "grunt-dilly-inside": {
+   "setBy": [
+    "vt-grunt-favor"
+   ],
+   "readBy": [],
+   "note": "SF17 Grunt School record flags. grunt-school-active is read by the markets row and cleared (quest set 0) when Dilly's story ends."
+  },
+  "grunt-dilly-out": {
+   "setBy": [
+    "vt-grunt-favor"
+   ],
+   "readBy": [],
+   "note": "SF17 Grunt School record flags. grunt-school-active is read by the markets row and cleared (quest set 0) when Dilly's story ends."
+  },
+  "grunt-dilly-union": {
+   "setBy": [
+    "vt-grunt-favor"
+   ],
+   "readBy": [],
+   "note": "SF17 Grunt School record flags. grunt-school-active is read by the markets row and cleared (quest set 0) when Dilly's story ends."
+  },
+  "grunt-school-active": {
+   "setBy": [
+    "vt-grunt-school"
+   ],
+   "readBy": [],
+   "note": "Set while Dilly is still a Grunt (vt-grunt-school) and cleared to 0 when her story ends (vt-grunt-favor). The markets row reads it."
+  },
+  "grunt-signed": {
+   "setBy": [
+    "vt-grunt-union-strike"
+   ],
+   "readBy": [
+    "vt-grunt-favor"
+   ]
+  },
+  "grunt-taught": {
+   "setBy": [
+    "vt-grunt-school"
+   ],
+   "readBy": [
+    "vt-grunt-favor",
+    "vt-grunt-union-strike"
+   ]
+  },
+  "grunt-taught-battle": {
+   "setBy": [
+    "vt-grunt-school"
+   ],
+   "readBy": [],
+   "note": "SF17 Grunt School record flags. grunt-school-active is read by the markets row and cleared (quest set 0) when Dilly's story ends."
+  },
+  "grunt-taught-menace": {
+   "setBy": [
+    "vt-grunt-school"
+   ],
+   "readBy": [],
+   "note": "SF17 Grunt School record flags. grunt-school-active is read by the markets row and cleared (quest set 0) when Dilly's story ends."
+  },
+  "grunt-taught-quit": {
+   "setBy": [
+    "vt-grunt-school"
+   ],
+   "readBy": [
+    "vt-grunt-favor"
+   ]
+  },
   "habitat-built": {
    "setBy": [
     "habitat-rebuild"
@@ -1754,6 +2118,145 @@
    ],
    "readBy": [],
    "note": "The Broken Habitat (SF11): who did it and how it was stopped, kept for the rival (habitat-rival-*) and the run's chronicle."
+  },
+  "heist-asked": {
+   "setBy": [
+    "heist-plan"
+   ],
+   "readBy": [
+    "heist-ledger"
+   ]
+  },
+  "heist-fought": {
+   "setBy": [
+    "heist-go"
+   ],
+   "readBy": [],
+   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
+  },
+  "heist-freed": {
+   "setBy": [
+    "heist-go"
+   ],
+   "readBy": [],
+   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
+  },
+  "heist-informant-kip": {
+   "setBy": [
+    "heist-approach"
+   ],
+   "readBy": [
+    "heist-ledger",
+    "heist-plan"
+   ]
+  },
+  "heist-informant-ruth": {
+   "setBy": [
+    "heist-approach"
+   ],
+   "readBy": [
+    "heist-ledger",
+    "heist-plan"
+   ]
+  },
+  "heist-inside": {
+   "setBy": [
+    "heist-approach"
+   ],
+   "readBy": [],
+   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
+  },
+  "heist-ledger-kept": {
+   "setBy": [
+    "heist-ledger"
+   ],
+   "readBy": [],
+   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
+  },
+  "heist-ledger-lost": {
+   "setBy": [
+    "heist-ledger"
+   ],
+   "readBy": [],
+   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
+  },
+  "heist-ledger-police": {
+   "setBy": [
+    "heist-ledger"
+   ],
+   "readBy": [],
+   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
+  },
+  "heist-ledger-vesna": {
+   "setBy": [
+    "heist-ledger"
+   ],
+   "readBy": [],
+   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
+  },
+  "heist-loud": {
+   "setBy": [
+    "heist-approach"
+   ],
+   "readBy": [],
+   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
+  },
+  "heist-named-right": {
+   "setBy": [
+    "heist-name"
+   ],
+   "readBy": [
+    "heist-ledger"
+   ]
+  },
+  "heist-named-wrong": {
+   "setBy": [
+    "heist-name"
+   ],
+   "readBy": [],
+   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
+  },
+  "heist-quiet": {
+   "setBy": [
+    "heist-approach"
+   ],
+   "readBy": [],
+   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
+  },
+  "heist-role-drive": {
+   "setBy": [
+    "heist-plan"
+   ],
+   "readBy": [],
+   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
+  },
+  "heist-role-look": {
+   "setBy": [
+    "heist-plan"
+   ],
+   "readBy": [],
+   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
+  },
+  "heist-role-safe": {
+   "setBy": [
+    "heist-plan"
+   ],
+   "readBy": [],
+   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
+  },
+  "heist-vesna-flipped": {
+   "setBy": [
+    "heist-name"
+   ],
+   "readBy": [],
+   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
+  },
+  "heist-won": {
+   "setBy": [
+    "heist-go"
+   ],
+   "readBy": [],
+   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
   },
   "honest-returned-wallet": {
    "setBy": [],
@@ -1959,6 +2462,248 @@
    ],
    "readBy": [],
    "note": "Pack flag kind.walked_past (MEMORY_AND_FORMAT 2.1): read by You Walked Past Us."
+  },
+  "lantern-ask": {
+   "setBy": [
+    "spooky-pale-visitor"
+   ],
+   "readBy": [
+    "spooky-hexed-keeper"
+   ]
+  },
+  "lantern-asked": {
+   "setBy": [
+    "spooky-medium"
+   ],
+   "readBy": [
+    "spooky-hollow-mirror",
+    "spooky-medium"
+   ]
+  },
+  "lantern-bright": {
+   "setBy": [
+    "graveyard-vigil"
+   ],
+   "readBy": [],
+   "note": "SF16 Hollow Lantern record flags (how each beat went). Kept in the run log."
+  },
+  "lantern-came-back": {
+   "setBy": [
+    "spooky-hexed-keeper"
+   ],
+   "readBy": [],
+   "note": "SF16 Hollow Lantern record flags (how each beat went). Kept in the run log."
+  },
+  "lantern-carved": {
+   "setBy": [
+    "spooky-whispering-grave"
+   ],
+   "readBy": [],
+   "note": "SF16 Hollow Lantern record flags (how each beat went). Kept in the run log."
+  },
+  "lantern-coven1": {
+   "setBy": [
+    "spooky-detour-battle"
+   ],
+   "readBy": [
+    "spooky-detour-battle"
+   ]
+  },
+  "lantern-den": {
+   "setBy": [
+    "spooky-whispering-grave"
+   ],
+   "readBy": [],
+   "note": "SF16 Hollow Lantern record flags (how each beat went). Kept in the run log."
+  },
+  "lantern-done": {
+   "setBy": [
+    "spooky-hexed-keeper"
+   ],
+   "readBy": [
+    "graveyard-vigil",
+    "spooky-candle-vigil",
+    "spooky-costume-judge",
+    "spooky-graveyard-dig",
+    "spooky-haunted-mansion",
+    "spooky-hexed-keeper",
+    "spooky-lost-spirit",
+    "spooky-midnight-finale",
+    "spooky-pumpkin-king",
+    "spooky-pumpkin-patch",
+    "spooky-trick-or-treat"
+   ]
+  },
+  "lantern-festival": {
+   "setBy": [
+    "spooky-lantern-festival"
+   ],
+   "readBy": [
+    "spooky-lantern-festival",
+    "spooky-medium"
+   ]
+  },
+  "lantern-forgot": {
+   "setBy": [
+    "spooky-hollow-lantern"
+   ],
+   "readBy": [
+    "spooky-hexed-keeper"
+   ]
+  },
+  "lantern-grave": {
+   "setBy": [
+    "spooky-whispering-grave"
+   ],
+   "readBy": [
+    "spooky-pale-visitor",
+    "spooky-whispering-grave"
+   ]
+  },
+  "lantern-held": {
+   "setBy": [
+    "spooky-light-two"
+   ],
+   "readBy": [
+    "spooky-hollow-lantern",
+    "spooky-light-two"
+   ]
+  },
+  "lantern-known": {
+   "setBy": [
+    "spooky-hollow-lantern"
+   ],
+   "readBy": [
+    "spooky-candle-vigil",
+    "spooky-hexed-keeper"
+   ]
+  },
+  "lantern-listened": {
+   "setBy": [
+    "spooky-whispering-grave"
+   ],
+   "readBy": [],
+   "note": "SF16 Hollow Lantern record flags (how each beat went). Kept in the run log."
+  },
+  "lantern-lit": {
+   "setBy": [
+    "spooky-lantern-festival"
+   ],
+   "readBy": [],
+   "note": "SF16 Hollow Lantern record flags (how each beat went). Kept in the run log."
+  },
+  "lantern-mirror": {
+   "setBy": [
+    "spooky-hollow-mirror"
+   ],
+   "readBy": [
+    "spooky-hollow-mirror",
+    "spooky-whispering-grave"
+   ]
+  },
+  "lantern-named": {
+   "setBy": [
+    "spooky-hollow-lantern"
+   ],
+   "readBy": [
+    "spooky-hollow-lantern",
+    "spooky-lantern-festival"
+   ]
+  },
+  "lantern-on": {
+   "setBy": [
+    "spooky-light-one"
+   ],
+   "readBy": [
+    "graveyard-vigil",
+    "spooky-candle-vigil",
+    "spooky-costume-judge",
+    "spooky-detour-battle",
+    "spooky-graveyard-dig",
+    "spooky-haunted-mansion",
+    "spooky-light-one",
+    "spooky-light-two",
+    "spooky-lost-spirit",
+    "spooky-midnight-finale",
+    "spooky-pumpkin-king",
+    "spooky-pumpkin-patch",
+    "spooky-trick-or-treat"
+   ]
+  },
+  "lantern-release": {
+   "setBy": [
+    "spooky-pale-visitor"
+   ],
+   "readBy": [],
+   "note": "SF16 Hollow Lantern record flags (how each beat went). Kept in the run log."
+  },
+  "lantern-rested": {
+   "setBy": [
+    "spooky-hexed-keeper"
+   ],
+   "readBy": [],
+   "note": "SF16 Hollow Lantern record flags (how each beat went). Kept in the run log."
+  },
+  "lantern-right": {
+   "setBy": [
+    "spooky-medium"
+   ],
+   "readBy": [
+    "spooky-hexed-keeper"
+   ]
+  },
+  "lantern-sorry": {
+   "setBy": [
+    "spooky-medium"
+   ],
+   "readBy": [
+    "spooky-hexed-keeper"
+   ]
+  },
+  "lantern-unsure": {
+   "setBy": [
+    "spooky-medium"
+   ],
+   "readBy": [],
+   "note": "SF16 Hollow Lantern record flags (how each beat went). Kept in the run log."
+  },
+  "lantern-visited": {
+   "setBy": [
+    "spooky-pale-visitor"
+   ],
+   "readBy": [
+    "spooky-hexed-keeper",
+    "spooky-pale-visitor"
+   ]
+  },
+  "lantern-visits": {
+   "setBy": [
+    "spooky-hexed-keeper"
+   ],
+   "readBy": [],
+   "note": "SF16 Hollow Lantern record flags (how each beat went). Kept in the run log."
+  },
+  "lantern-want": {
+   "setBy": [
+    "spooky-pale-visitor"
+   ],
+   "readBy": [
+    "spooky-hexed-keeper"
+   ]
+  },
+  "lantern-who": {
+   "setBy": [
+    "spooky-lantern-festival"
+   ],
+   "readBy": [],
+   "note": "SF16 Hollow Lantern record flags (how each beat went). Kept in the run log."
+  },
+  "lantern-written": {
+   "setBy": [
+    "spooky-hollow-lantern"
+   ],
+   "readBy": [],
+   "note": "SF16 Hollow Lantern record flags (how each beat went). Kept in the run log."
   },
   "mara-asked": {
    "setBy": [
@@ -2244,6 +2989,13 @@
    ],
    "note": "Read-only state flag from legends (LEGENDS_PIECES section 3): the Shaymin Promise is active."
   },
+  "pumpkin-trophy": {
+   "setBy": [
+    "spooky-costume-judge"
+   ],
+   "readBy": [],
+   "note": "SF16 costume judge's pumpkin trophy (cosmetic): kept in the run log."
+  },
   "ranger-bear": {
    "setBy": [
     "ranger-trust-1"
@@ -2351,6 +3103,15 @@
    ],
    "readBy": [],
    "note": "SF13.12-13.15 Rival Circuit record flags; the bracket itself runs on the tournament round tracker."
+  },
+  "released-count": {
+   "setBy": [],
+   "readBy": [
+    "spooky-hexed-keeper",
+    "spooky-hollow-lantern",
+    "spooky-whispering-grave"
+   ],
+   "note": "Set by the engine (core/co/familiesA.ts noteReleased) each time the player releases a Pokémon this run."
   },
   "rep": {
    "setBy": [
@@ -2651,6 +3412,13 @@
    ],
    "readBy": [],
    "note": "Legends API (LEGENDS_PIECES section 2): a Sign; the legends hook turns it into Influence when that Legendary blesses the run."
+  },
+  "sinistea-home": {
+   "setBy": [
+    "spooky-lost-spirit-home"
+   ],
+   "readBy": [],
+   "note": "SF16 lost spirit went home: kept in the run log."
   },
   "tam-asked-box": {
    "setBy": [

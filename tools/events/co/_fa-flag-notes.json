@@ -45,5 +45,16 @@
  "rep": "Reputation (shared with the rivals row, which sets and reads it the same way).",
  "gl7-pell-helped": "Set by GL7 The Stolen Badge (past champions and leaders questlines) when the player helps Pell; until that row sets it, the Pell notice in ranked-ladder-1 stays hidden.",
  "aq22-ribbon": "Set by AQ22 The Aipom Who Wanted Contests (anime/Ash row) when the Aipom wins its ribbon; until then the festival notice stays hidden.",
- "roster-*-done": "Set by the people row's Road Roster kits (people-roster-*.ts, rosterKit) when a roster trainer's arc is done."
+ "roster-*-done": "Set by the people row's Road Roster kits (people-roster-*.ts, rosterKit) when a roster trainer's arc is done.",
+ "convoy-*": "SF15 Convoy record flags (who joined, how, which secret, which ending). Kept in the run log.",
+ "convoy-delivered": "Set by the convoy engine (core/world.ts convoyStep) when a living escort reaches the gym; the goodbye stops read it.",
+ "heist-*": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log.",
+ "lantern-*": "SF16 Hollow Lantern record flags (how each beat went). Kept in the run log.",
+ "grunt-*": "SF17 Grunt School record flags. grunt-school-active is read by the markets row and cleared (quest set 0) when Dilly's story ends.",
+ "grunt-school-active": "Set while Dilly is still a Grunt (vt-grunt-school) and cleared to 0 when her story ends (vt-grunt-favor). The markets row reads it.",
+ "released-count": "Set by the engine (core/co/familiesA.ts noteReleased) each time the player releases a Pokémon this run.",
+ "coven-*": "SF16 festival record flags (Hex Coven). Kept in the run log.",
+ "dilly-cap": "SF17 Dilly's uniform cap (cosmetic): kept in the run log.",
+ "pumpkin-trophy": "SF16 costume judge's pumpkin trophy (cosmetic): kept in the run log.",
+ "sinistea-home": "SF16 lost spirit went home: kept in the run log."
 }
