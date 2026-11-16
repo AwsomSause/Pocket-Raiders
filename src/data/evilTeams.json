@@ -1309,7 +1309,19 @@
     "op": "stone-mining",
     "half": false
    },
-   "routes": []
+   "routes": [
+    {
+     "region": "kalos",
+     "ranks": [
+      "Subscriber",
+      "Member",
+      "Stylist",
+      "Patron",
+      "Chosen",
+      "The Last Guest"
+     ]
+    }
+   ]
   },
   {
    "id": "skull",

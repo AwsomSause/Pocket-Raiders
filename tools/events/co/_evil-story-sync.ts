@@ -109,6 +109,7 @@ const ROUTES: Record<string, { region: string; ranks: string[] }[]> = {
     { region: 'kanto', ranks: ['Recruit', 'Grunt', 'Field Agent', 'Section Chief', 'Executive', `The Boss's Right Hand`] },
     { region: 'johto', ranks: ['Hopeful', 'Grunt', 'Operative', 'Cell Leader', 'Executive (the fifth)', 'The Voice'] },
   ],
+  flare: [{ region: 'kalos', ranks: ['Subscriber', 'Member', 'Stylist', 'Patron', 'Chosen', 'The Last Guest'] }],
 };
 
 const COUNTERS: Record<string, string> = {
@@ -190,5 +191,14 @@ inside('ps_static_mary', 'Broadcast 1: This Is Mary', 'static-broadcast-1', [['s
 inside('ps_static_air', 'Two Frequencies', 'static-two-frequencies', [['static-air-roof'], ['static-air-after']], 'a kettle whistling on every band', '#1e2a2e');
 inside('ps_ledger_freighter', 'The Vermilion Freighter', 'ledger-audit-2', [['ledger-freighter-deck'], ['ledger-freighter-hold'], ['ledger-freighter-crane']], 'a clipboard on a wet deck', '#1a2230');
 inside('ps_ledger_readout', 'Silph Co.: The Read-Out', 'ledger-readout', [['ledger-readout-floors'], ['ledger-readout-top']], 'six people and a tea towel');
+// Volume III, Kalos (evil-story-30/31): Act 3's door on Route 10, the four endings under Geosenge, Team Ember's laundry.
+const flare = (id: string, name: string, entry: string, layout: string[][], mood: string, tint = '#1e1418'): void =>
+  void chains.push({ id, name, entry, themeId: 'ghost-dark', tint, mood, team: 'flare', start: 'opened', layout } as never);
+flare('ps_fl_stones', 'Route 10: The Stones', 'fl-act3', [['fl-stones-rows'], ['fl-stones-wiring'], ['fl-stones-fourth'], ['fl-stones-last'], ['fl-stones-tag']], 'red cables humming between the stones', '#1e2418');
+flare('ps_fl_plan', 'Geosenge: So Clean', 'fl-final-choice', [['fl-plan-lobby'], ['fl-plan-rival'], ['fl-plan-sycamore'], ['fl-plan-petals'], ['fl-plan-aim'], ['fl-plan-light'], ['fl-plan-last']], 'a table laid for forty, and a countdown');
+flare('ps_fl_turn', 'Geosenge: No Refunds', 'fl-final-choice', [['fl-turn-key'], ['fl-turn-lysandre'], ['fl-turn-offer'], ['fl-turn-flower'], ['fl-turn-rubble']], 'a key, warm in your hand');
+flare('ps_fl_az', 'Geosenge: Back', 'fl-final-choice', [['fl-az-door'], ['fl-az-four'], ['fl-az-four-2'], ['fl-az-back'], ['fl-az-hour']], 'a very tall man, stooping');
+flare('ps_fl_own', 'Geosenge: A Bigger Well', 'fl-final-choice', [['fl-own-console'], ['fl-own-malva'], ['fl-own-clapping', 'fl-own-lost'], ['fl-own-list'], ['fl-own-fees'], ['fl-own-flower'], ['fl-own-staff'], ['fl-own-yarborough']], 'a coat, and a better question');
+flare('ps_ember_laundry', `Thursday's Laundry`, 'ember-stop-1', [['ember-laundry-1'], ['ember-laundry-2'], ['ember-laundry-gala']], 'steam, starch and four hundred red suits', '#2a2420');
 writeFileSync(pseudoFile, JSON.stringify({ category: 'evil-story', note: 'Evil Team Hideouts (STORY_FAMILIES_13 A8, STORY_FAMILIES_18 SF131 to SF133) and the Plasma Holding Camp (SF130). Written by tools/events/co/_evil-story-sync.ts.', chains }, null, 1) + '\n');
 console.log(`pseudo/evil-story.json: ${chains.length} Hideouts`);

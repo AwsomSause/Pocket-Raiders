@@ -6942,6 +6942,10 @@
         "kind": "flag",
         "key": "team-files-kept",
         "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-flare-offer-{region}"
        }
       ]
      }
@@ -6963,6 +6967,10 @@
         "kind": "flag",
         "key": "team-files-given",
         "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-flare-offer-{region}"
        }
       ]
      }
@@ -6994,6 +7002,10 @@
         "feelings": {
          "trust": -1
         }
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-flare-offer-{region}"
        }
       ]
      }
@@ -7037,6 +7049,10 @@
           "kind": "flag",
           "key": "shelf-kit-address",
           "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "evil-flare-offer-{region}"
          }
         ]
        }

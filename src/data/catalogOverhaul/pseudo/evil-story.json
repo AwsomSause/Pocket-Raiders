@@ -1032,6 +1032,178 @@
      "ledger-readout-top"
     ]
    ]
+  },
+  {
+   "id": "ps_fl_stones",
+   "name": "Route 10: The Stones",
+   "entry": "fl-act3",
+   "themeId": "ghost-dark",
+   "tint": "#1e2418",
+   "mood": "red cables humming between the stones",
+   "team": "flare",
+   "start": "opened",
+   "layout": [
+    [
+     "fl-stones-rows"
+    ],
+    [
+     "fl-stones-wiring"
+    ],
+    [
+     "fl-stones-fourth"
+    ],
+    [
+     "fl-stones-last"
+    ],
+    [
+     "fl-stones-tag"
+    ]
+   ]
+  },
+  {
+   "id": "ps_fl_plan",
+   "name": "Geosenge: So Clean",
+   "entry": "fl-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1418",
+   "mood": "a table laid for forty, and a countdown",
+   "team": "flare",
+   "start": "opened",
+   "layout": [
+    [
+     "fl-plan-lobby"
+    ],
+    [
+     "fl-plan-rival"
+    ],
+    [
+     "fl-plan-sycamore"
+    ],
+    [
+     "fl-plan-petals"
+    ],
+    [
+     "fl-plan-aim"
+    ],
+    [
+     "fl-plan-light"
+    ],
+    [
+     "fl-plan-last"
+    ]
+   ]
+  },
+  {
+   "id": "ps_fl_turn",
+   "name": "Geosenge: No Refunds",
+   "entry": "fl-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1418",
+   "mood": "a key, warm in your hand",
+   "team": "flare",
+   "start": "opened",
+   "layout": [
+    [
+     "fl-turn-key"
+    ],
+    [
+     "fl-turn-lysandre"
+    ],
+    [
+     "fl-turn-offer"
+    ],
+    [
+     "fl-turn-flower"
+    ],
+    [
+     "fl-turn-rubble"
+    ]
+   ]
+  },
+  {
+   "id": "ps_fl_az",
+   "name": "Geosenge: Back",
+   "entry": "fl-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1418",
+   "mood": "a very tall man, stooping",
+   "team": "flare",
+   "start": "opened",
+   "layout": [
+    [
+     "fl-az-door"
+    ],
+    [
+     "fl-az-four"
+    ],
+    [
+     "fl-az-four-2"
+    ],
+    [
+     "fl-az-back"
+    ],
+    [
+     "fl-az-hour"
+    ]
+   ]
+  },
+  {
+   "id": "ps_fl_own",
+   "name": "Geosenge: A Bigger Well",
+   "entry": "fl-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1418",
+   "mood": "a coat, and a better question",
+   "team": "flare",
+   "start": "opened",
+   "layout": [
+    [
+     "fl-own-console"
+    ],
+    [
+     "fl-own-malva"
+    ],
+    [
+     "fl-own-clapping",
+     "fl-own-lost"
+    ],
+    [
+     "fl-own-list"
+    ],
+    [
+     "fl-own-fees"
+    ],
+    [
+     "fl-own-flower"
+    ],
+    [
+     "fl-own-staff"
+    ],
+    [
+     "fl-own-yarborough"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ember_laundry",
+   "name": "Thursday's Laundry",
+   "entry": "ember-stop-1",
+   "themeId": "ghost-dark",
+   "tint": "#2a2420",
+   "mood": "steam, starch and four hundred red suits",
+   "team": "flare",
+   "start": "opened",
+   "layout": [
+    [
+     "ember-laundry-1"
+    ],
+    [
+     "ember-laundry-2"
+    ],
+    [
+     "ember-laundry-gala"
+    ]
+   ]
   }
  ]
 }
