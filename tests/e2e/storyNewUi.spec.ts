@@ -349,7 +349,7 @@ test('New UI: the prologue plays on the mock-up pages: talk pages with Prof. Van
   expect(errors).toEqual([]);
 });
 
-test('New UI: the Siege map is the mock-up ledger page; keys and clicks move over the districts and a free gate lets you in', async ({ page }) => {
+test('New UI: the Siege map is a war map of the city; keys and clicks move over the districts and a free gate lets you in', async ({ page }) => {
   const errors = watch(page);
   await start(page, 'ui=new&seed=e4-siege');
   await toMap(page);
@@ -377,13 +377,16 @@ test('New UI: the Siege map is the mock-up ledger page; keys and clicks move ove
   await expect(siege.locator('[data-act="enter"]')).toContainText('Enter by North Gate');
   await expect(siege).toContainText('Your rival');
   await page.screenshot({ path: 'test-results/newui-siege.png' });
-  // Keys move it: two to the right is a contested gate (one battle); the middle of the city has no gate.
+  // Keys move it round the wall: right of the north gate is the east one, and on from there the south one, a
+  // contested gate (one battle).
   await page.keyboard.press('ArrowRight');
+  await page.waitForTimeout(150);
   await page.keyboard.press('ArrowRight');
   await expect(siege.locator('[data-act="enter"]')).toContainText('Enter by South Gate');
   await expect(siege).toContainText('One battle');
-  // Down from above the short last row lands on its last district.
-  await page.keyboard.press('ArrowDown');
+  // The map is the city: up from the south gate is the middle, which has no gate.
+  await page.waitForTimeout(150);
+  await page.keyboard.press('ArrowUp');
   await expect(siege.locator('[data-act="enter"]')).toContainText('No gate here');
   await expect(siege).toContainText('Oracle Sabrina');
   await page.keyboard.press('Enter');
