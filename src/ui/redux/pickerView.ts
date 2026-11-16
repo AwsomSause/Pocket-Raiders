@@ -26,7 +26,9 @@ export interface PickerBridge {
   /** A Pokémon row's look, HP left (0 to 1) and short mark, for the battle windows. */
   mon?: (i: number) => { speciesId: string; shiny: boolean; hp: number; mark: string } | undefined;
   /** A board row said outright (Bonds): its line, bar and tag are not read off the canvas row. */
-  board?: (i: number) => { title: string; sub: string; pct: number; tag: string } | undefined;
+  board?: (i: number) => { title: string; sub: string; pct: number | null; tag: string } | undefined;
+  /** A menu row said outright (Camp): the words at its right, the detail card's text and picture. */
+  menu?: (i: number) => { label: string; note: string; detail: string; sprite?: string | null } | undefined;
   /** A grid cell said outright (the Pokédex): its picture, and the detail card's title and line. */
   cell?: (i: number) => { file: string | null; title: string; body: string; off?: boolean; sil?: boolean } | undefined;
   /** The item a row stands for, if any (Bag). */
@@ -161,9 +163,16 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
     // menu: only the rows on screen are read.
     const v = c.v(3), size = v === 1 ? 8 : 7, s = v === 2 ? 0 : v === 1 ? gridStart(n, index, 8, 2) : scrollStart(n, index, 7);
     const near = (i: number): boolean => (v === 2 ? Math.min(Math.abs(i - index), n - Math.abs(i - index)) <= 1 : i >= s && i < s + size);
-    const items = Array.from({ length: n }, (_, i) => { if (!near(i)) return { label: '' }; const r = row(i); return { label: r.label, note: v === 0 ? r.tag : [r.note, r.tag].filter(Boolean).join(' · '), disabled: p.problem(i) !== null }; });
-    const cur = row(index);
-    body = menuView(c, { title: name, area, hints, items, index, detail: { title: cur.label, body: [cur.note, cur.tag].filter(Boolean).join(' · ') || p.hint(index), sprite: cur.art?.atlas ? cur.art.file : undefined }, text });
+    const items = Array.from({ length: n }, (_, i) => {
+      if (!near(i)) return { label: '' };
+      const m = p.menu?.(i);
+      if (m) return { label: m.label, note: m.note, disabled: p.problem(i) !== null };
+      const r = row(i);
+      return { label: r.label, note: v === 0 ? r.tag : [r.note, r.tag].filter(Boolean).join(' · '), disabled: p.problem(i) !== null };
+    });
+    const saidRow = p.menu?.(index), cur = saidRow ? null : row(index);
+    const detail = saidRow ? { title: saidRow.label, body: saidRow.detail, sprite: saidRow.sprite ?? undefined } : { title: cur!.label, body: [cur!.note, cur!.tag].filter(Boolean).join(' · ') || p.hint(index), sprite: cur!.art?.atlas ? cur!.art.file : undefined };
+    body = menuView(c, { title: name, area, hints, items, index, detail, text });
   }
   return body + chips + tabs + back + over;
 }

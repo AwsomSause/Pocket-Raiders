@@ -44,6 +44,14 @@ describe('New UI list band colour', () => {
     expect(areaOf('Hall of Fame')).toBe('end');
     for (const t of ['Seed board', 'Seed leaderboard', 'Speedrun timer', 'Tournament bracket']) expect(areaOf(t)).toBe('run');
     expect(areaOf('Exchange Counter')).toBe('shop');
+    // The map's menus: the Album and the Story Journal are story pages, Camp is a run menu.
+    for (const t of ['Album', 'Story Journal']) expect(areaOf(t)).toBe('story');
+    expect(areaOf('Camp')).toBe('run');
+    expect(pickerKind('Album')).toBe('grid');
+    expect(pickerKind('Story Journal')).toBe('board');
+    expect(pickerKind('Camp')).toBe('menu');
+    // The camp's own Photo Album keeps the hub's band: only the map's Album is a story page.
+    expect(areaOf('Photo Album')).toBe('hub');
     expect(areaOf('Strange Merchant')).toBe('shop');
     expect(areaOf('Bag')).toBe('shop');
     expect(areaOf('Pokédex')).toBe('party');

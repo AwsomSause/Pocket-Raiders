@@ -30,6 +30,7 @@ import { itemCard, itemFooter } from '../core/itemPreview';
 import { runHealMultiplier } from '../core/run';
 import { partyPreviews, quickSummaryText } from './itemScreen';
 import { emotionDot, partyRows, Picker, speciesRow, type PickerLike, type PickerRow } from './partyPanel';
+import { reduxOn } from './redux/stage';
 import { itemVisual } from './sprites';
 import { COLORS, textStyle } from './theme';
 
@@ -96,6 +97,9 @@ export function openRivalNotebook(host: FieldMenuHost): void {
   host.setPicker(picker);
 }
 
+/** A Story Journal row for the New UI's board: its title, the line under it, its tag and a bar (0 to 100) if it has steps. */
+const bd = (title: string, sub: string, tag: string, pct: number | null = null): NonNullable<PickerRow['board']> => ({ title, sub, tag, pct });
+
 /** How many of the newest chronicle entries the Story screen lists. */
 const STORY_ROWS = 60;
 
@@ -118,6 +122,7 @@ export function openStoryMenu(host: FieldMenuHost): void {
     return {
       problem: null,
       hint: `World: ${r.world}.${r.signature ? `  Ace: ${r.signature}.` : ''}  ${r.summary}  ${r.memory}${r.bonds.length > 0 ? `  Team: ${r.bonds.join('; ')}.` : ''}${quest}`,
+      board: bd(r.title, `${r.ultimate ? 'Ultimate Rival' : 'Rival'} · ${r.state}${r.quest.length > 0 ? ` · quest ${r.quest.filter((q) => q.done).length} of ${r.quest.length}` : ''}`, 'Rival', r.quest.length > 0 ? Math.round((r.quest.filter((q) => q.done).length / r.quest.length) * 100) : null),
       draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
         box.add(scene.add.text(14, 8, `${r.ultimate ? `${ULTIMATE_EMBLEM} Ultimate Rival` : '★ Rival'} (${r.state}): ${r.title}`, textStyle(20, '#f0c028', { fixedWidth: w - 28 })));
       },
@@ -128,6 +133,7 @@ export function openStoryMenu(host: FieldMenuHost): void {
     rivalRows.push({
       problem: null,
       hint: m.hint,
+      board: bd(m.title, 'Pokémon rival', 'Grudge'),
       draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
         box.add(scene.add.text(14, 8, m.title, textStyle(20, '#ff9a7a', { fixedWidth: w - 28 })));
       },
@@ -140,6 +146,7 @@ export function openStoryMenu(host: FieldMenuHost): void {
     rivalRows.push({
       problem: null,
       hint: `${cls} ${past.name} fought you ${past.encounters} time${past.encounters === 1 ? '' : 's'} and ${ended}.${past.team?.length ? ` Team: ${past.team.map((id) => content.species.get(id)?.name ?? id).join(', ')}.` : ''}`,
+      board: bd(`${cls} ${past.name}`, `Previous Ultimate Rival · ${ended}`, 'Past'),
       draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
         box.add(scene.add.text(14, 8, `Previous Ultimate Rival: ${cls} ${past.name}`, textStyle(20, '#c8a8ff', { fixedWidth: w - 28 })));
       },
@@ -151,6 +158,7 @@ export function openStoryMenu(host: FieldMenuHost): void {
     rivalRows.unshift({
       problem: null,
       hint: b.text,
+      board: bd(b.text, 'Around the world', 'News'),
       draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
         box.add(scene.add.text(14, 8, b.text, textStyle(18, '#ffd28a', { fixedWidth: w - 28 })));
       },
@@ -159,6 +167,7 @@ export function openStoryMenu(host: FieldMenuHost): void {
   rivalRows.unshift({
     problem: null,
     hint: `Titles change how people talk to you, never your battles. Fame ${playerFame(run)}.`,
+    board: bd(title.name, `You are known as · Fame ${playerFame(run)}`, 'Title'),
     draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
       box.add(scene.add.text(14, 8, `You are known as: ${title.name}`, textStyle(20, '#ffe080', { fixedWidth: w - 28 })));
     },
@@ -168,6 +177,7 @@ export function openStoryMenu(host: FieldMenuHost): void {
     rivalRows.unshift({
       problem: null,
       hint: standing.hint,
+      board: bd(standing.title, 'Where you stand', 'Standing'),
       draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
         box.add(scene.add.text(14, 8, standing.title, textStyle(20, '#9be39b', { fixedWidth: w - 28 })));
       },
@@ -180,6 +190,7 @@ export function openStoryMenu(host: FieldMenuHost): void {
     return [{
       problem: null,
       hint: [card.signature && `Signature: ${card.signature}`, card.greatest.length > 1 && `Greatest moments: ${card.greatest.join('; ')}`].filter(Boolean).join('  ·  '),
+      board: bd(name, [...card.titles, ...card.tags].join(' · '), 'Legacy'),
       draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
         box.add(scene.add.text(14, 8, `${name}: ${[...card.titles, ...card.tags].join(' · ')}`, textStyle(20, '#7fe3ff', { fixedWidth: w - 28 })));
       },
@@ -191,6 +202,7 @@ export function openStoryMenu(host: FieldMenuHost): void {
     ...(evil ? [{
       problem: null,
       hint: evil.lines.join('  ·  '),
+      board: bd(evil.title, evil.lines[0] ?? '', 'Threat'),
       draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
         box.add(scene.add.text(14, 8, `⚑ ${evil.title}`, textStyle(20, evil.color, { fixedWidth: w - 28 })));
       },
@@ -198,6 +210,7 @@ export function openStoryMenu(host: FieldMenuHost): void {
     ...choiceHistory(run).map((c) => ({
       problem: null,
       hint: `${c.weight >= 3 ? 'Run-defining choice' : c.weight === 2 ? 'Lasting choice' : 'Small choice'}  ·  Region ${c.region + 1} · Stage ${c.stage + 1}`,
+      board: bd(c.text, `${c.weight >= 3 ? 'Run-defining choice' : c.weight === 2 ? 'Lasting choice' : 'Small choice'} · Region ${c.region + 1} · Stage ${c.stage + 1}`, 'Choice'),
       draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
         box.add(scene.add.text(14, 8, `${'◆'.repeat(c.weight)} ${c.text}`, textStyle(20, c.weight >= 3 ? '#ffb070' : c.weight === 2 ? '#ffe0a0' : '#d8d0e0', { fixedWidth: w - 28 })));
       },
@@ -206,6 +219,7 @@ export function openStoryMenu(host: FieldMenuHost): void {
   const storyRows = chronicleStories(content, run).map((st) => ({
     problem: null,
     hint: `${st.body}  ·  ${st.tags.join(' · ')}`,
+    board: bd(st.title, st.tags.join(' · '), 'Tale'),
     draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
       box.add(scene.add.text(14, 8, `📖 ${st.title}`, textStyle(20, '#ffd9a0', { fixedWidth: w - 28 })));
     },
@@ -216,7 +230,9 @@ export function openStoryMenu(host: FieldMenuHost): void {
     const feelings = entry.emotions.map((e) => EMOTION_NAMES[e]).join(', ');
     return {
       problem: null,
-      hint: [where, feelings && `Feelings: ${feelings}.`].filter(Boolean).join('  ·  '),
+      // New UI: the row already says where, so the text box keeps only the feelings.
+      hint: reduxOn() ? (feelings ? `Feelings: ${feelings}.` : '') : [where, feelings && `Feelings: ${feelings}.`].filter(Boolean).join('  ·  '),
+      board: bd(`${names ? `${names}: ` : ''}${entry.text}`, [where, feelings].filter(Boolean).join(' · '), 'Memory'),
       draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
         entry.emotions.forEach((e, i) => box.add(emotionDot(scene, 22 + i * 18, 20, colors[e])));
         box.add(scene.add.text(52, 8, `${names ? `${names}: ` : ''}${entry.text}`, textStyle(20, '#ffffff', { fixedWidth: w - 200 })));
@@ -224,12 +240,16 @@ export function openStoryMenu(host: FieldMenuHost): void {
       },
     };
   });
+  const all: PickerRow[] = [...storyRows, ...choiceRows, ...legacyRows, ...rivalRows, ...rows];
+  // New UI: the mock-up's Story Journal, a board of the run's threads (the title here picks the board and its band).
+  const rx = reduxOn();
+  if (rx) for (const r of all) r.hint ||= 'Open quests and story threads for this run.';
   const picker: Picker = new Picker(host.scene, {
     glass: true,
-    title: rows.length + rivalRows.length + legacyRows.length + storyRows.length + choiceRows.length > 0 ? 'Story so far' : 'Story so far: nothing memorable yet',
+    title: rx ? 'Story Journal' : all.length > 0 ? 'Story so far' : 'Story so far: nothing memorable yet',
     columns: 1,
     rowHeight: 40,
-    rows: [...storyRows, ...choiceRows, ...legacyRows, ...rivalRows, ...rows],
+    rows: all,
     onSelect: () => undefined,
     onBack: () => close(host, picker),
   });

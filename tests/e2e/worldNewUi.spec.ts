@@ -3,8 +3,8 @@ import { view, waitForScene, watch, start, toMap, toCommands, open } from './hel
 
 // The New UI's places from the last pass: the Pokédex (mock-up pieces "Pokédex: set browser" and "Pokédex: species
 // info": a wall of species pictures with filter tabs, and the species page with its stat bars and evolution line), the
-// Bank's Exchange Counter (the mock-up counter page with a clerk), a Plaza district's menu and Galar's stadium
-// interview (the mock-up talk page over the field).
+// Bank's Exchange Counter (the mock-up counter page with a clerk), a Plaza district's menu, Galar's stadium
+// interview (the mock-up talk page over the field) and the stage map's menus (Camp, Album, Story Journal, Legend).
 // One of the New UI spec files (see newUi.spec.ts); the shared steps are in helpers/newUi.ts.
 
 test('New UI: a Pokédex set is a wall of species pictures with filter tabs, and a species opens the mock-up species page (facts, six stat bars, evolution line, a second page of data)', async ({ page }) => {
@@ -326,5 +326,104 @@ test('New UI: a Galar gym battle opens on the versus card, and the stadium repor
   await page.waitForTimeout(250);
   await toCommands(page);
   await expect(air()).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test('New UI: the map menus follow the mock-ups: Camp opens on its five-row front page, the Album is a wall of pictures that Enter adds a team photo to, the Story Journal is a board, and L opens only the Legend', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-mapmenus');
+  await toMap(page);
+  const idle = () => expect.poll(() => page.evaluate(() => { const m = (window as any).__pkr.game.scene.getScene('Map'); return !m.busy && !m.picker; }), { timeout: 15_000 }).toBe(true);
+  const openMenu = async (label: string) => {
+    await idle();
+    await page.waitForTimeout(250);
+    await view(page, 'Map').first().locator('[data-act]', { hasText: label }).first().click();
+    await page.waitForTimeout(400);
+  };
+  const menu = (name: string | RegExp) => page.locator('#rx .stage[data-scene="Map"]', { has: page.locator('.hd', { hasText: name }) }).last();
+  const photos = () => page.evaluate(() => ((window as any).__pkr.session.run.partyLife?.scrapbook ?? []).length as number);
+
+  // Camp: the front page is the mock-up's five rows with a detail card, and no tab row.
+  await openMenu('Camp');
+  const camp = menu(/^\W*Camp/);
+  const rows = camp.locator('.btn[data-act="pick"]');
+  await expect(rows).toHaveCount(5);
+  await expect(rows.nth(0)).toContainText('Gadgets');
+  await expect(rows.nth(0)).toContainText('0 owned');
+  await expect(rows.nth(1)).toContainText('Cook a meal');
+  await expect(rows.nth(4)).toContainText('Campsite');
+  await expect(camp.locator('.win').first()).toContainText('Small tools that help on the road.');
+  await expect(camp.locator('.txt')).toHaveText('Camp opens between stops.');
+  await expect(camp.locator('.tabs')).toHaveCount(0);
+  await page.screenshot({ path: 'test-results/newui-map-camp.png' });
+  // A row opens that part of camp (its name is a chip); Esc comes back to the front page on the same row.
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(400);
+  await expect(camp.locator('.tg', { hasText: 'Kitchen' })).toHaveCount(1);
+  await expect(camp.locator('.btn[data-act="pick"]').first()).toContainText('Cooking Pot');
+  await expect(camp.locator('.tabs')).toHaveCount(0);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(400);
+  await expect(camp.locator('.btn.on')).toContainText('Kitchen');
+  await expect(camp.locator('.btn[data-act="pick"]')).toHaveCount(5);
+  await page.keyboard.press('Escape');
+  await expect(camp).toHaveCount(0);
+
+  // Album: a wall of 18 pages, all empty at first. Enter takes the team photo.
+  await openMenu('Album');
+  const album = menu('Album');
+  const cells = album.locator('.cell[data-act="pick"]');
+  await expect(cells).toHaveCount(18);
+  await expect(cells.locator('i.an')).toHaveCount(0);
+  await expect(album.locator('.win').nth(1)).toContainText(/0\s*\/\s*18/);
+  await expect(album.locator('.txt')).toContainText('Enter takes a team photo.');
+  expect(await photos()).toBe(0);
+  await page.keyboard.press('Enter');
+  await expect(album).toHaveCount(0);
+  expect(await photos()).toBe(1);
+  // The photo is the first picture; its card says the stage and the caption. A second photo this stage is refused.
+  await openMenu('Album');
+  await expect(cells.nth(0).locator('i.an')).toHaveCount(1);
+  await expect(cells.nth(0)).toHaveClass(/sel/);
+  await expect(cells.nth(1)).toHaveClass(/off/);
+  await expect(album.locator('.win').first()).toContainText('Stage 1');
+  await expect(album.locator('.win').first()).toContainText('Team photo');
+  await expect(album.locator('.win').nth(1)).toContainText(/1\s*\/\s*18/);
+  await expect(album.locator('.txt')).toContainText('You already took a photo this stage.');
+  await page.screenshot({ path: 'test-results/newui-map-album.png' });
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(400);
+  await expect(album).toHaveCount(1);
+  expect(await photos()).toBe(1);
+  await page.keyboard.press('Escape');
+  await expect(album).toHaveCount(0);
+
+  // Story Journal: board rows, each with a tag.
+  await openMenu('Story');
+  const journal = menu('Story Journal');
+  const lines = journal.locator('[data-act="pick"]');
+  await expect(lines.first()).toContainText('You are known as');
+  await expect(lines.first().locator('.tg')).toHaveText('Title');
+  await expect(journal.locator('.tg', { hasText: 'Memory' }).first()).toBeVisible();
+  await expect(journal.locator('.txt')).toContainText('Titles change how people talk to you');
+  await page.screenshot({ path: 'test-results/newui-map-journal.png' });
+  await page.keyboard.press('Escape');
+  await expect(journal).toHaveCount(0);
+
+  // L opens the Legend alone (the interaction log does not open over it); Shift+L opens the log.
+  await idle();
+  const log = page.locator('#rx [data-act="log"]');
+  await page.keyboard.press('l');
+  await expect(view(page, 'Map').first().locator('[data-act="legend"]').first()).toBeVisible();
+  await expect(log).toHaveCount(0);
+  await page.keyboard.press('l');
+  await expect(view(page, 'Map').first().locator('.fill[data-act="legend"]')).toHaveCount(0);
+  await expect(log).toHaveCount(0);
+  await page.keyboard.press('Shift+L');
+  await expect(log).toBeVisible();
+  await expect(log).toContainText('Interaction log');
+  await page.keyboard.press('Shift+L');
+  await expect(log).toHaveCount(0);
   expect(errors).toEqual([]);
 });
