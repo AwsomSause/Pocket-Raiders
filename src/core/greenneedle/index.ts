@@ -900,7 +900,7 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'ofSpecial':
       return ofSpecial(run, e.key!, e.n === 1, host.stage);
     case 'exDraw':
-      return exDraw(run);
+      return exDraw(content, run);
     case 'exBack':
       return exBack(run, e.n ?? 0);
     case 'exWatch':

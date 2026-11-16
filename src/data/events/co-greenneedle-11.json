@@ -2363,7 +2363,7 @@
        "atMost": 99
       }
      ],
-     "notice": "**Marit:** \"Wait. You again. You backed them last time too. You're loyal. Or stubborn. Which is it?\""
+     "notice": "**Marit:** \"Wait. You again. You picked a side last time, too, and said so on air. You're loyal. Or stubborn. Which is it?\""
     }
    ],
    "room": true,
@@ -2534,7 +2534,7 @@
     "tint": "#2f3f6b",
     "effect": "none"
    },
-   "intro": "Halfway. Both of them are down to three.\n\n{ex:phase-2}",
+   "intro": "Halfway.\n\n{ex:phase-2}",
    "choices": [
     {
      "label": "Cheer.",
@@ -3278,6 +3278,12 @@
       "effects": [
        {
         "kind": "gn",
+        "op": "setFlag",
+        "key": "draft-walked",
+        "n": 1
+       },
+       {
+        "kind": "gn",
         "op": "scene",
         "key": "gn-48-table-b"
        }
@@ -3859,6 +3865,52 @@
         "kind": "gn",
         "op": "stampRegion",
         "key": "draft-letter"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-48-home",
+   "name": "The Pokémon Draft: It Went Home",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "draft-returned",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "draft-home-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3d4a3a",
+    "effect": "none"
+   },
+   "intro": "Two figures coming the other way on the road. You know the walk of one of them before you know the face.\n\nIt's {draft:home-by}. And beside them, where it always walked: {draft:home}. It went back. Of course it did.",
+   "choices": [
+    {
+     "label": "Wave.",
+     "success": {
+      "text": "You wave. They both wave. {draft:home} looks at you a moment longer than its trainer does, and then they're past.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "draft-home-seen",
+        "n": 1
        }
       ]
      }

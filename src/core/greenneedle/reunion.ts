@@ -45,6 +45,7 @@ export const PEOPLE: Person[] = [
   { id: 'ferris', name: 'Ferris', group: 'after', kind: 'ace', flags: ['ferris-belt'], good: ['ferris-six'], line: [T('**Ferris** has six on the belt, asleep in a folding chair. The new one is in their lap.'), T('**Ferris** has five on the belt, and counts them twice.')] },
   { id: 'samurai', name: 'The Samurai', group: 'after', kind: 'ace', flags: ['kanto-forest-samurai-won'], good: ['kanto-forest-samurai-won'], line: [T('**The Samurai** stands very straight at the edge of the lantern light, and bows when you look.'), T('**The Samurai** stands very straight at the edge of the lantern light, and bows when you look.')] },
   { id: 'duelist', name: 'The Duelist', group: 'trainer', kind: 'ace', flags: ['allstar-samurai', 'allstar-damian'], good: ['allstar-respect'], line: [T('**The Duelist** has found someone to practise against, and is losing, cheerfully.'), T('**The Duelist** has found someone to practise against, and is losing, cheerfully.')] },
+  { id: 'lenders', name: 'The Draft\'s six lenders', group: 'trainer', kind: 'food', flags: ['draft-lent'], good: ['draft-lent'], line: [T('*The six trainers who lent you Pokémon at the Draft are here: {lenders}. Each of them asks about theirs, by name, before they ask about you.*'), T('*The six trainers who lent you Pokémon at the Draft are here.*')] },
   { id: 'linus', name: 'Linus and the stone', group: 'after', kind: 'guard', flags: ['wontevolve-linus-gone'], good: ['wontevolve-linus-gone'], line: [T('**Linus** has the stone in his pocket, and a Pokémon beside him who has decided, again, not to.'), T('**Linus** has the stone in his pocket, and a Pokémon beside him who has decided, again, not to.')] },
   { id: 'idris', name: 'Idris and a pair of boots', group: 'after', kind: 'guard', flags: ['desert-saw-idris'], good: ['desert-saw-idris'], line: [T('**Idris** has brought the boots. Both of them. He holds one up so you can see it is the right one.'), T('**Idris** has brought the boots. Both of them. He holds one up so you can see it is the right one.')] },
   { id: 'tamsel', name: 'Granny Tamsel', group: 'friend', kind: 'food', flags: ['tamsel-out'], good: ['tamsel-out'], line: [T('**Granny Tamsel**, who shouldn\'t be out of the gorge, and is: "Don\'t look at me like that. I walked."'), T('**Granny Tamsel**, who shouldn\'t be out of the gorge, and is: "Don\'t look at me like that. I walked."')] },
@@ -104,7 +105,7 @@ export function reunionArrive(content: Content, run: RunState): string {
     const good = wentWell(run, p);
     const far = !!p.far && any(run, p.far) > 0;
     const walls = f(run, 'mural-walls');
-    const line = (good ? p.line[0] : p.line[1]).replace('{walls}', walls === 1 ? 'one wall' : `${walls} walls`);
+    const line = (good ? p.line[0] : p.line[1]).replace('{walls}', walls === 1 ? 'one wall' : `${walls} walls`).replace('{lenders}', String(run.story.flags['draft:lenders'] ?? 'six of them'));
     att.push({ id: p.id, name: p.name, group: p.group, kind: p.kind, score: GROUP_BASE[p.group] + came + (good ? 2 : 0), good, far, line });
   }
   // Road Roster trainers with Trust 2 or more: met twice (`roster-<key>-m2`), and more when their arc ended (`roster-<key>-done`).

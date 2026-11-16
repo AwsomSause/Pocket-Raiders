@@ -457,14 +457,14 @@ describe('gn.47 The Pokémon League Exhibition', () => {
   it('back the winner because they\'re stronger: a nod and a Rare item; watch closely three times and you\'re invited down', () => {
     const run = queue('t47-strong');
     const m = matchupOf(run)!;
-    const side = winnerOf(run, m) === 1 ? 'a' : 'b';
+    const side = winnerOf(content, run, m) === 1 ? 'a' : 'b';
     const r = watch(run, side, '"They\'re stronger."', ['Watch closely.', 'Watch closely.', 'Watch closely.']);
     expect(said(r)).toContain('They look up at your seat, and nod.');
     expect(flagOf(r.run, 'ex-invite')).toBe(1);
     expect(scene(r.run, 'gn-47-after').labels).toEqual(['Go down.', 'Stay in your seat.']);
     expect(scene(r.run, 'gn-47-after').intro).toContain('Come down. Let\'s see what you saw.');
     const fight = choose(r.run, 'gn-47-after', 'Go down.');
-    const winner = content.bosses.get(winnerOf(run, m) === 1 ? m.a : m.b)!;
+    const winner = content.bosses.get(winnerOf(content, run, m) === 1 ? m.a : m.b)!;
     expect(fight.run.battle!.enemyTeam.map((x) => x.speciesId)).toEqual(winner.signature.slice(0, 3));
     expect(fight.run.battle!.trainer!.name).toBe(winner.name);
     const lost = lose(fight.run);
@@ -497,7 +497,7 @@ describe('gn.47 The Pokémon League Exhibition', () => {
   it('back the loser: they find you after; back the same one twice and the reporter remembers', () => {
     const run = queue('t47-loser');
     const m = matchupOf(run)!;
-    const side = winnerOf(run, m) === 1 ? 'b' : 'a';
+    const side = winnerOf(content, run, m) === 1 ? 'b' : 'a';
     const r = watch(run, side, '"They\'ve got more to prove."', ['Cheer.', 'Cheer.', 'Cheer.']);
     expect(said(r)).toContain('"You backed me. On air. That was either kind or foolish."');
     const who = side === 'a' ? m.a : m.b;
@@ -510,7 +510,7 @@ describe('gn.47 The Pokémon League Exhibition', () => {
     const run = queue('t47-treat');
     const m = matchupOf(run)!;
     const lead = run.party[0]!.friendship;
-    const r = watch(run, winnerOf(run, m) === 1 ? 'a' : 'b', '"I like how they treat their Pokémon."', ['Look at the crowd.', 'Cheer.', 'Cheer.']);
+    const r = watch(run, winnerOf(content, run, m) === 1 ? 'a' : 'b', '"I like how they treat their Pokémon."', ['Look at the crowd.', 'Cheer.', 'Cheer.']);
     expect(said(r)).toContain('Their ace comes over to the barrier');
     expect(r.run.party[0]!.friendship).toBe(lead + 5);
   });
@@ -523,9 +523,14 @@ describe('gn.47 The Pokémon League Exhibition', () => {
     expect(exRipple(content, r)).toBe('');
     r.stage!.index += 1;
     const line = exRipple(content, r);
-    expect(line).toContain('Youngster Joey: "Did you see');
+    expect(line).toContain('Youngster Joey: "');
     expect(r.battle!.enemyTeam[0]!.moves.some((x) => x.id === move)).toBe(true);
     expect(r.battle!.storyEffects).toContain(`ex-copied:foe:${move}`);
+    // The rest of that stage's trainers talk about the match too (no second copy); the stage after, nobody does.
+    const talk = exRipple(content, r);
+    expect(talk).toContain('Youngster Joey: "');
+    expect(talk).not.toContain('knows');
+    r.stage!.index += 1;
     expect(exRipple(content, r)).toBe('');
   });
 });
@@ -640,7 +645,7 @@ describe('gn.48 The Pokémon Draft', () => {
     mon.gn = [DRAFTED, 'draft-trait:first', 'draft-by:Hesper Quill'];
     r = choose(run, 'gn-48-recruit', 'Choose one.');
     expect(flagOf(r.run, 'draft-result')).toBe(2);
-    expect(said(r)).toContain('She\'s my first.');
+    expect(said(r)).toContain('First one I ever caught.');
     expect(r.run.party.some((m) => m.gn?.includes(DRAFTED))).toBe(false);
   });
 

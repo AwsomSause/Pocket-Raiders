@@ -254,7 +254,8 @@ const gn46: Json[] = [
 
 // =====================================================================================================================
 // gn.47  THE POKÉMON LEAGUE EXHIBITION  (a Town or Hub event; until towns exist, step 15, optional, window 13–17; once per region,
-// from A8; each matchup once per run). Watch a famous match from the stands (core/greenneedle/exhibition.ts): back one side on air,
+// from A8; each matchup once per run). Watch a famous match from the stands (core/greenneedle/exhibition.ts; the match is a real
+// CPU-versus-CPU battle on the engine, and its commentary is shown in three parts): back one side on air,
 // three moments while it runs, and the winner may reward you, or invite you down (25%, or always after watching closely three times).
 // =====================================================================================================================
 const EX_TINT = '#2f3f6b';
@@ -294,7 +295,7 @@ const gn47: Json[] = [
     ch('"I don\'t mind who wins. I want to see it."', out('Marit laughs. "Diplomatic!" It\'s broadcast. On the big screen inside, both of them hear it.', gn('exBack', { n: 0 }), setTo('ex-reason', 4), scene('gn-47-match-1'))),
   ]),
   rm('gn-47-why', 'The Pokémon League Exhibition: On Air', ex({ remembers: [
-    { id: 'again', when: [is('ex-again')], notice: '**Marit:** "Wait. You again. You backed them last time too. You\'re loyal. Or stubborn. Which is it?"' },
+    { id: 'again', when: [is('ex-again')], notice: '**Marit:** "Wait. You again. You picked a side last time, too, and said so on air. You\'re loyal. Or stubborn. Which is it?"' },
   ] }), say(
     'The microphone hovers. Somewhere behind Marit, a camera light goes red. You are, apparently, live.',
   ), [
@@ -309,7 +310,7 @@ const gn47: Json[] = [
     '{ex:phase-1}',
   ), exMoment(1, [scene('gn-47-match-2')])),
   rm('gn-47-match-2', 'The Pokémon League Exhibition: The Match', ex({ tags: ['Story', 'Combat'] }), say(
-    'Halfway. Both of them are down to three.',
+    'Halfway.',
     '{ex:phase-2}',
   ), exMoment(2, [scene('gn-47-match-3')])),
   rm('gn-47-match-3', 'The Pokémon League Exhibition: The Match', ex({ tags: ['Story', 'Combat'] }), say(
@@ -372,7 +373,7 @@ const gn48: Json[] = [
   rm('gn-48-table-a', 'The Pokémon Draft: The Table', hallD({ tags: ['Story'] }), say(
     'Pick {draft:round} of six. Five on the table. The other three drafters are watching your hand.',
     '1. {draft:card:1}', '2. {draft:card:2}', '3. {draft:card:3}',
-  ), [takeCard(1), takeCard(2), takeCard(3), ch('Further along the table.', out('You walk down to the other end of the table.', scene('gn-48-table-b')))]),
+  ), [takeCard(1), takeCard(2), takeCard(3), ch('Further along the table.', out('You walk down to the other end of the table.', setTo('draft-walked', 1), scene('gn-48-table-b')))]),
   rm('gn-48-table-b', 'The Pokémon Draft: The Table', hallD({ tags: ['Story'] }), say(
     'The far end of the table. Two more Balls, two more cards.',
     '4. {draft:card:4}', '5. {draft:card:5}',
@@ -407,6 +408,13 @@ const gn48: Json[] = [
   ), [
     ch('Write back.', out('You write two pages. {draft:friend} sits on the second page while you finish it.', stampRegion('draft-letter'), gn('draftLetter'))),
     ch('Don\'t.', out('You fold it into your bag. {draft:friend} watches you do it.', stampRegion('draft-letter'))),
+  ]),
+  // ---- Memory: released or traded away, it went back to its first trainer; it is met next at their side ----
+  gev('gn-48-home', 'The Pokémon Draft: It Went Home', hallD({ tags: ['Story'], stop: 'event', rarity: 'common', requires: [is('draft-returned'), not('draft-home-seen')] }), say(
+    'Two figures coming the other way on the road. You know the walk of one of them before you know the face.',
+    'It\'s {draft:home-by}. And beside them, where it always walked: {draft:home}. It went back. Of course it did.',
+  ), [
+    ch('Wave.', out('You wave. They both wave. {draft:home} looks at you a moment longer than its trainer does, and then they\'re past.', setTo('draft-home-seen', 1))),
   ]),
 ];
 
@@ -1280,7 +1288,7 @@ export const PLACEMENT: Record<string, Placement> = {
     gn: 'gn.47', shape: 'Single', earliest: 'A8', home: 15, window: [13, 17], sits: 'optional', attaches: 'town', tags: ['Onlooker'],
     level: 'If invited: A+2, with no loss cost', often: 'region', badge: 'own',
     dressing: { kanto: 'The Pokémon League Exhibition', elsewhere: 'The Pokémon League Exhibition' },
-    note: 'Badge: a ticket. Once per region; each matchup once per run. Until towns exist it sits on step 15. The match is told in three parts (core/greenneedle/exhibition.ts); a move watched closely is free once at any move tutor; a trainer in a later stage copies a move from it.',
+    note: 'Badge: a ticket. Once per region; each matchup once per run. Until towns exist it sits on step 15. The match is a real CPU-versus-CPU battle, six on six, with commentary in three parts (core/greenneedle/exhibition.ts); a move watched closely is free once at any move tutor; a trainer in a later stage copies a move from it.',
   },
   'gn-48-door': {
     gn: 'gn.48', shape: 'Hub', earliest: 'A7', home: 14, window: [12, 17], sits: 'optional', attaches: 'town', tags: ['Tournament Episode'],
@@ -1293,6 +1301,12 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'None', often: 'region', badge: 'own',
     dressing: { kanto: 'A Letter', elsewhere: 'A Letter' },
     note: 'Once a region, while a drafted Pokémon that stayed is with you: its first trainer writes. "Write back." gives it Bond +1.',
+  },
+  'gn-48-home': {
+    gn: 'gn.48', shape: 'Single', earliest: 'A7', home: 5, window: [1, 12], sits: 'optional', attaches: 'after', tags: ['Tournament Episode'],
+    level: 'None', often: 'run', badge: 'own',
+    dressing: { kanto: 'It Went Home', elsewhere: 'It Went Home' },
+    note: 'Memory: a drafted Pokémon that stayed and was then traded away (or released) went back to its first trainer. It is met next at their side, and they both wave. The Honest Trade Card warns of it in advance.',
   },
   'gn-49-hill': {
     gn: 'gn.49', shape: 'Single', earliest: 'A3', home: 9, window: [7, 12], sits: 'must-see', attaches: 'before', tags: ['Interrupting Episode'],

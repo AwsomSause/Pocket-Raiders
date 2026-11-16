@@ -64,7 +64,11 @@ export function defectorReturn(run: RunState, unasked: boolean): string {
   if (!mon) return '';
   run.party = run.party.filter((m) => m.uid !== mon.uid);
   run.box = run.box.filter((m) => m.uid !== mon.uid);
-  if (unasked) defectorTrust(run, 1);
+  if (unasked) {
+    defectorTrust(run, 1);
+    // A loan used well (gn.48 reads it: drafted Pokémon start at Bond 1).
+    set(run, 'loan-used-well', 1);
+  }
   return '';
 }
 

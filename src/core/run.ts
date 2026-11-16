@@ -40,8 +40,8 @@ import { duelAfterstory, duelistMark } from './greenneedle/duelist';
 import { tyrogueTurn } from './greenneedle/tyrogue';
 import { mirrorRecord } from './greenneedle/mirror';
 import { eeveeHealed, eeveeTurn } from './greenneedle/eevee';
-import { draftRecord } from './greenneedle/draft';
-import { exRipple } from './greenneedle/exhibition';
+import { draftGoesHome, draftRecord } from './greenneedle/draft';
+import { exPoster, exRipple } from './greenneedle/exhibition';
 import { snorlaxForgives, snorlaxGym, snorlaxRest } from './greenneedle/snorlax';
 import { farFromHome, smuggleRest } from './greenneedle/smuggling';
 import { standingWelcome } from './greenneedle/welcome';
@@ -2758,7 +2758,8 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     // gn.53: a city in repair heals half.
     const siegeShare = sgHealShare(run, stageNumber(content, run));
     if (siegeShare < 1) run.party.forEach((m, i) => { m.hp = Math.min(m.hp, Math.max(before[i] ?? 0, Math.ceil(maxHp(content, m) * siegeShare))); });
-    const siegeLine = sgCenterLine(run, stageNumber(content, run));
+    // gn.47: the poster of the Exhibition is in the next Center.
+    const siegeLine = [sgCenterLine(run, stageNumber(content, run)), exPoster(run)].filter(Boolean).join(' ');
     sgRest(content, run);
     careRest(run, content);
     const snorlaxLine = snorlaxRest(run, stageNumber(content, run));
@@ -4570,6 +4571,8 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       recordReleased(content, run, caught);
       noteReleased(run, caught);
       noteLeft(run, caught);
+      // Greenneedle gn.48: a drafted Pokémon that stayed is no wandering Old Friend: it goes back to its first trainer.
+      draftGoesHome(content, run, caught);
       // Greenneedle gn.58: who, where and why; the friend turns up again two or more stages on.
       recordRelease(content, run, caught, choice.reason, stageNumber(content, run));
     } else {

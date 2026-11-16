@@ -225,7 +225,7 @@
    "kanto": "The Pokémon League Exhibition",
    "elsewhere": "The Pokémon League Exhibition"
   },
-  "note": "Badge: a ticket. Once per region; each matchup once per run. Until towns exist it sits on step 15. The match is told in three parts (core/greenneedle/exhibition.ts); a move watched closely is free once at any move tutor; a trainer in a later stage copies a move from it.",
+  "note": "Badge: a ticket. Once per region; each matchup once per run. Until towns exist it sits on step 15. The match is a real CPU-versus-CPU battle, six on six, with commentary in three parts (core/greenneedle/exhibition.ts); a move watched closely is free once at any move tutor; a trainer in a later stage copies a move from it.",
   "kinds": [
    "Onlooker"
   ],
@@ -274,6 +274,30 @@
    "elsewhere": "A Letter"
   },
   "note": "Once a region, while a drafted Pokémon that stayed is with you: its first trainer writes. \"Write back.\" gives it Bond +1.",
+  "kinds": [
+   "Tournament Episode"
+  ],
+  "tags": []
+ },
+ "gn-48-home": {
+  "gn": "gn.48",
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 5,
+  "window": [
+   1,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "It Went Home",
+   "elsewhere": "It Went Home"
+  },
+  "note": "Memory: a drafted Pokémon that stayed and was then traded away (or released) went back to its first trainer. It is met next at their side, and they both wave. The Honest Trade Card warns of it in advance.",
   "kinds": [
    "Tournament Episode"
   ],
