@@ -33,6 +33,7 @@ import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHo
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
+import { finalRest, xatuDraw, xatuTokens, xatuTrue } from './cartographer';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
 import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
@@ -66,6 +67,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   text = text.replace(/\{money:([a-z0-9-]+)\}/g, (_, k: string) => `₽${gnFlag(run, k).toLocaleString('en-GB')}`);
   // gn.44: the reigning 1v1 champion, a different trainer each region.
   // gn.48: the Draft's table.
+  if (text.includes('{xatu:')) text = xatuTokens(content, run, text);
   if (text.includes('{draft:')) text = draftTokens(content, run, text);
   // gn.50: the defector.
   if (text.includes('{defector:')) text = defectorTokens(content, run, text);
@@ -163,6 +165,10 @@ export interface GnHost {
 export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage: number): boolean {
   // gn.16: the fighter won from behind (the first Pokémon able to fight is at half its HP or less).
   // gn.33: the tide is low (the Sunken City's causeway is out of the water).
+  // gn.new.12: the Xatu's image came true; the last rest of the run; the run's Blessing has answered (Communion).
+  if (c.test === 'prophecyTrue') return xatuTrue(run);
+  if (c.test === 'finalRest') return finalRest(content, run, getCampaign(content, run.campaignId).stagesPerRegion);
+  if (c.test === 'communion') return !!run.expansion?.blessing?.communion;
   if (c.test === 'lowTide') return tideOf(content, run) === 'low';
   if (c.test === 'highTide') return tideOf(content, run) === 'high';
   if (c.test === 'hurtLead') { const lead = run.party.find((m) => m.hp > 0); return !!lead && lead.hp * 2 <= maxHp(content, lead); }
@@ -580,6 +586,10 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return draftAldhelm(content, run, host);
     case 'draftLetter':
       return draftLetter(content, run);
+    // gn.new.12: the Xatu's image (drawn from the stop's seeded roll); `xatuRedraw`: the second draw after Communion.
+    case 'xatuDraw':
+    case 'xatuRedraw':
+      return xatuDraw(content, run, host.float, e.op === 'xatuRedraw');
     case 'snorlaxFeed':
       return snorlaxFeed(content, run, e.n ?? 3, e.key === 'first');
     case 'snorlaxFond':

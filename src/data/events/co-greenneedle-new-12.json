@@ -1,0 +1,271 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-12-xatu",
+   "name": "The Cartographer",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "xatu-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "xatu-changed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The stones around the rock have been moved. Whoever moved them left the one on top of the biggest map crooked, on purpose."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#6b5a3d",
+    "effect": "glint"
+   },
+   "intro": "*A Xatu on a rock, staring at the sun without blinking. Around it, under stones, a hundred hand-drawn maps. Some are very old.*\n\nOne lies open at its feet. It is of this stage. It is finished: every step, every lane, including the ones ahead.\n\nThe Xatu turns its head all the way round. It looks at you. It has been waiting a long time.\n\n**The Xatu, in your head:** \"Look. Then listen. That is the price.\"",
+   "choices": [
+    {
+     "label": "Look and listen.",
+     "success": {
+      "text": "You kneel by the map. Every step, every lane, laid out clear. Then the Xatu's eyes fill with sun, and yours do too.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "xatu-met",
+        "n": 1
+       },
+       {
+        "kind": "scout",
+        "columns": 20
+       },
+       {
+        "kind": "gn",
+        "op": "xatuDraw"
+       },
+       {
+        "kind": "moment",
+        "text": "The Cartographer showed you the whole map, and one thing that will happen.",
+        "importance": 70
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-12-image"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look, and refuse to listen.",
+     "success": {
+      "text": "You look at the map. Every lane, every step. You put your hands over your ears, and the Xatu watches you do it. After ten slow seconds the lines blur, and the paper is only paper. The Xatu goes back to the sun.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "xatu-met",
+        "n": 1
+       },
+       {
+        "kind": "scout",
+        "columns": 20
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You leave the maps under their stones. Behind you, the Xatu turns to watch you go, all the way round.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-12-image",
+   "name": "The Cartographer: The Image",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#6b5a3d",
+    "effect": "glint"
+   },
+   "intro": "*One image, bright as a coin, pressed behind your eyes. The Xatu holds it there until you have it by heart.*\n\n{xatu:image}\n\n**The Xatu, in your head:** \"That will happen. I do not say *might*. Do not ask me how. Do not ask me when.\"",
+   "choices": [
+    {
+     "label": "Bow.",
+     "success": {
+      "text": "You bow. The Xatu turns back to the sun, satisfied, or at least finished. The image stays with you, like a stone in a boot.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-12-furious",
+   "name": "The Cartographer: A Moved Stone",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "xatu-prophecy",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "communion"
+    },
+    {
+     "kind": "flag",
+     "key": "xatu-changed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#6b5a3d",
+    "effect": "glint"
+   },
+   "intro": "*The same Xatu, on the same kind of rock, and it is not staring at the sun. It is staring at you.*\n\nIts feathers are up. Something with a name older than the maps has answered you, and the image it drew is no longer true.\n\n**The Xatu, in your head:** \"Who did you ask? No. Do not tell me. I can *see* who you asked.\"",
+   "choices": [
+    {
+     "label": "Show it the Blessing.",
+     "success": {
+      "text": "The Xatu looks at the Blessing for a long moment. It is furious. Under the fury, something like a bow. It draws the map again, slowly, and shows you the new image. It will not say it is sorry.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "xatuRedraw"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-12-image"
+       },
+       {
+        "kind": "moment",
+        "text": "The Cartographer was furious. Then it drew the image again.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Apologise.",
+     "success": {
+      "text": "The Xatu stares. \"Do not apologise,\" it says. \"Make it *true*.\" It turns back to the sun. The stone is still crooked.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-12-natu",
+   "name": "The Cartographer: The Last Rest",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "prophecyTrue"
+    },
+    {
+     "kind": "gn",
+     "test": "finalRest"
+    },
+    {
+     "kind": "flag",
+     "key": "xatu-natu",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#6b5a3d",
+    "effect": "glint"
+   },
+   "intro": "*At the last rest, a small Natu sits on the step, very still, looking at where the sun is not.*\n\nIt has a rolled map in its beak, tied with a thread. It is not a hundred years old. It is yours.\n\nThe map has one line on it. It is the line you walked.",
+   "choices": [
+    {
+     "label": "Take the Natu.",
+     "success": {
+      "text": "It hops into your arms like it has done this before. The line on the map was the one the Xatu showed you, and you walked it.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "natu"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "xatu-natu",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The prophecy came true. A Natu waited at the last rest.",
+        "importance": 80
+       }
+      ]
+     },
+     "showIf": []
+    }
+   ]
+  }
+ ]
+}
