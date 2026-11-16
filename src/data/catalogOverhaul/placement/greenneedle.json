@@ -2759,5 +2759,53 @@
    "Mystery Episode"
   ],
   "tags": []
+ },
+ "gn-new-18-door": {
+  "gn": "gn.new.18",
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 5,
+  "window": [
+   5,
+   15
+  ],
+  "sits": "must-see",
+  "attaches": "rest",
+  "level": "None",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Day the Center Closed",
+   "elsewhere": "The Day the Center Closed"
+  },
+  "note": "Once per region, step 5 (fallback step 15). Six patients, one helper each; mistakes lengthen the queue, never worsen anything. Reward Standing Welcome: the first Center heal of the region also gives back one Revive (core/greenneedle/welcome.ts).",
+  "kinds": [
+   "Minigame Episode"
+  ],
+  "tags": []
+ },
+ "gn-new-18-parcel": {
+  "gn": "gn.new.18",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 1,
+  "window": [
+   1,
+   3
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "level": "None",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Chansey's Parcel",
+   "elsewhere": "The Chansey's Parcel"
+  },
+  "note": "Afterstory: a parcel at step 1 of the next region. Mostly bandages; one has a drawing on it.",
+  "kinds": [
+   "Minigame Episode"
+  ],
+  "tags": []
  }
 }
