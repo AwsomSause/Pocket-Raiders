@@ -4623,5 +4623,121 @@
   "note": "Afterstory: the three dojos merge; the sign is repainted every time a master wins an argument.",
   "kinds": [],
   "tags": []
+ },
+ "gn-new-25-open": {
+  "gn": "gn.new.25",
+  "shape": "Region-long",
+  "earliest": "A1",
+  "home": 5,
+  "window": [
+   3,
+   15
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "level": "No battles",
+  "often": "region",
+  "badge": "own",
+  "beats": [
+   {
+    "beat": "The Smeargle starts (S1)",
+    "event": "gn-new-25-open",
+    "stage": "S1",
+    "home": 5,
+    "window": [
+     3,
+     15
+    ]
+   },
+   {
+    "beat": "Panel 2",
+    "event": "gn-new-25-panel-2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     3,
+     15
+    ]
+   },
+   {
+    "beat": "Panel 3",
+    "event": "gn-new-25-panel-3",
+    "stage": "S3",
+    "home": 5,
+    "window": [
+     3,
+     15
+    ]
+   },
+   {
+    "beat": "Panel 4",
+    "event": "gn-new-25-panel-4",
+    "stage": "S4",
+    "home": 5,
+    "window": [
+     3,
+     15
+    ]
+   },
+   {
+    "beat": "Panel 5",
+    "event": "gn-new-25-panel-5",
+    "stage": "S5",
+    "home": 5,
+    "window": [
+     3,
+     15
+    ]
+   },
+   {
+    "beat": "Panel 6",
+    "event": "gn-new-25-panel-6",
+    "stage": "S6",
+    "home": 5,
+    "window": [
+     3,
+     15
+    ]
+   },
+   {
+    "beat": "Panel 7",
+    "event": "gn-new-25-panel-7",
+    "stage": "S7",
+    "home": 5,
+    "window": [
+     3,
+     15
+    ]
+   },
+   {
+    "beat": "Panel 8",
+    "event": "gn-new-25-panel-8",
+    "stage": "S8",
+    "home": 5,
+    "window": [
+     3,
+     15
+    ]
+   },
+   {
+    "beat": "The whole wall",
+    "event": "gn-new-25-end",
+    "stage": "S8",
+    "home": 19
+   }
+  ],
+  "dressing": {
+   "kanto": "The Mural",
+   "elsewhere": "The Mural"
+  },
+  "note": "Badge: a paint brush. One panel per stage; the subject (walked-past event, close call, catch, kindness, Gym) is picked in core/greenneedle/mural.ts. Fallback step 15. The ending needs six panels on the wall. Afterstory: the Final Reunion shows one wall per region (flag mural-walls).",
+  "kinds": [
+   "Mystery Episode",
+   "Region-Wide Story"
+  ],
+  "tags": [],
+  "stages": [
+   1
+  ]
  }
 }

@@ -1,0 +1,917 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-25-open",
+   "name": "The Mural",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "mural-at"
+    }
+   ],
+   "forced": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "*A long blank wall at the edge of the first town. A Smeargle is painting on it, tail dipping and lifting, quick as a heartbeat.*\n\nIt has drawn one figure. It doesn't look round when you come closer. By the time you're close, the figure is gone, and the paint is wet.\n\nYou know whose shape it was. It was yours, arriving.",
+   "choices": [
+    {
+     "label": "Look.",
+     "success": {
+      "text": "The wall is full-height and still glistening. At its left edge, a small figure with a pack walks into the town. It was a moment ago. It is already history.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "mural-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mural-panels",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you, a brush taps once against a palette, as if the painter were counting you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "mural-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mural-panels",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-panel-2",
+   "name": "The Mural: A New Panel",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "mural-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "mural-step"
+    },
+    {
+     "kind": "flag",
+     "key": "mural-end",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "forced": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "*A new panel on the long wall, next to the last. The paint is wet, and no one is here.*\n\nYou never see it done. The Smeargle is a rumour of a tail at the edge of the corner, and then it is nowhere.",
+   "choices": [
+    {
+     "label": "Look.",
+     "success": {
+      "text": "You step back until the panel fills your eyes, and the world goes quiet round the edges.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralPick"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "mural-subject",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-new-25-p0",
+          "gn-new-25-p1",
+          "gn-new-25-p2",
+          "gn-new-25-p3",
+          "gn-new-25-p4"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you the paint dries, a little more of your road kept for no one in particular.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralPick"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-panel-3",
+   "name": "The Mural: A New Panel",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "mural-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "mural-step"
+    },
+    {
+     "kind": "flag",
+     "key": "mural-end",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "forced": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "*A new panel on the long wall, next to the last. The paint is wet, and no one is here.*\n\nYou never see it done. The Smeargle is a rumour of a tail at the edge of the corner, and then it is nowhere.",
+   "choices": [
+    {
+     "label": "Look.",
+     "success": {
+      "text": "You step back until the panel fills your eyes, and the world goes quiet round the edges.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralPick"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "mural-subject",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-new-25-p0",
+          "gn-new-25-p1",
+          "gn-new-25-p2",
+          "gn-new-25-p3",
+          "gn-new-25-p4"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you the paint dries, a little more of your road kept for no one in particular.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralPick"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-panel-4",
+   "name": "The Mural: A New Panel",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "mural-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "mural-step"
+    },
+    {
+     "kind": "flag",
+     "key": "mural-end",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "forced": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "*A new panel on the long wall, next to the last. The paint is wet, and no one is here.*\n\nYou never see it done. The Smeargle is a rumour of a tail at the edge of the corner, and then it is nowhere.",
+   "choices": [
+    {
+     "label": "Look.",
+     "success": {
+      "text": "You step back until the panel fills your eyes, and the world goes quiet round the edges.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralPick"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "mural-subject",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-new-25-p0",
+          "gn-new-25-p1",
+          "gn-new-25-p2",
+          "gn-new-25-p3",
+          "gn-new-25-p4"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you the paint dries, a little more of your road kept for no one in particular.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralPick"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-panel-5",
+   "name": "The Mural: A New Panel",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "mural-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "mural-step"
+    },
+    {
+     "kind": "flag",
+     "key": "mural-end",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "forced": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "*A new panel on the long wall, next to the last. The paint is wet, and no one is here.*\n\nYou never see it done. The Smeargle is a rumour of a tail at the edge of the corner, and then it is nowhere.",
+   "choices": [
+    {
+     "label": "Look.",
+     "success": {
+      "text": "You step back until the panel fills your eyes, and the world goes quiet round the edges.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralPick"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "mural-subject",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-new-25-p0",
+          "gn-new-25-p1",
+          "gn-new-25-p2",
+          "gn-new-25-p3",
+          "gn-new-25-p4"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you the paint dries, a little more of your road kept for no one in particular.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralPick"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-panel-6",
+   "name": "The Mural: A New Panel",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "mural-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "mural-step"
+    },
+    {
+     "kind": "flag",
+     "key": "mural-end",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "forced": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "*A new panel on the long wall, next to the last. The paint is wet, and no one is here.*\n\nYou never see it done. The Smeargle is a rumour of a tail at the edge of the corner, and then it is nowhere.",
+   "choices": [
+    {
+     "label": "Look.",
+     "success": {
+      "text": "You step back until the panel fills your eyes, and the world goes quiet round the edges.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralPick"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "mural-subject",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-new-25-p0",
+          "gn-new-25-p1",
+          "gn-new-25-p2",
+          "gn-new-25-p3",
+          "gn-new-25-p4"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you the paint dries, a little more of your road kept for no one in particular.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralPick"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-panel-7",
+   "name": "The Mural: A New Panel",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "mural-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "mural-step"
+    },
+    {
+     "kind": "flag",
+     "key": "mural-end",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "forced": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "*A new panel on the long wall, next to the last. The paint is wet, and no one is here.*\n\nYou never see it done. The Smeargle is a rumour of a tail at the edge of the corner, and then it is nowhere.",
+   "choices": [
+    {
+     "label": "Look.",
+     "success": {
+      "text": "You step back until the panel fills your eyes, and the world goes quiet round the edges.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralPick"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "mural-subject",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-new-25-p0",
+          "gn-new-25-p1",
+          "gn-new-25-p2",
+          "gn-new-25-p3",
+          "gn-new-25-p4"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you the paint dries, a little more of your road kept for no one in particular.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralPick"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-panel-8",
+   "name": "The Mural: A New Panel",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "mural-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "mural-step"
+    },
+    {
+     "kind": "flag",
+     "key": "mural-end",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "forced": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "*A new panel on the long wall, next to the last. The paint is wet, and no one is here.*\n\nYou never see it done. The Smeargle is a rumour of a tail at the edge of the corner, and then it is nowhere.",
+   "choices": [
+    {
+     "label": "Look.",
+     "success": {
+      "text": "You step back until the panel fills your eyes, and the world goes quiet round the edges.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralPick"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "mural-subject",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-new-25-p0",
+          "gn-new-25-p1",
+          "gn-new-25-p2",
+          "gn-new-25-p3",
+          "gn-new-25-p4"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you the paint dries, a little more of your road kept for no one in particular.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralPick"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mural-step"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-end",
+   "name": "The Mural: The Whole Wall",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "mural-at"
+    },
+    {
+     "kind": "flag",
+     "key": "mural-panels",
+     "atLeast": 6,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mural-end",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "forced": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "*The whole wall, walkable, left to right. A figure arriving. A door left open. A Pokémon startled to stay. Steps up to a Gym. Your whole road, in paint.*\n\nThe last panel isn't painted yet. The Smeargle is sitting under it, brush out, looking at you.",
+   "choices": [
+    {
+     "label": "Come with me.",
+     "success": {
+      "text": "It stands, shakes out its tail, and doesn't look back at the wall once. The last panel stays blank. You'll fill it, somehow.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralJoin"
+       },
+       {
+        "kind": "flag",
+        "key": "mural-walls",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Took the Smeargle who painted the wall of this region.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Finish it first.",
+     "success": {
+      "text": "You sit with it while it paints, and don't watch. When it's done it hands you the brush, and then, quietly, itself.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralJoin"
+       },
+       {
+        "kind": "flag",
+        "key": "mural-walls",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Took the Smeargle who painted the wall of this region.",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "kindness",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Paint me something I'm not proud of.",
+     "success": {
+      "text": "It looks at you for a long moment. Then it lifts a paw and points at a panel already on the wall: the one you tried not to look at. It paints nothing new. It comes along.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralJoin"
+       },
+       {
+        "kind": "flag",
+        "key": "mural-walls",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Took the Smeargle who painted the wall of this region.",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-p0",
+   "name": "The Mural: Something You Passed",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "A panel of something you walked past. A door left ajar, a crowd turning round. Nobody in it is looking at you. There is no comment.\n\nThe painter simply kept it. Everything you leave behind, it seems, someone else is carrying.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You stand there until the figure in the doorway seems to turn. It doesn't. You go.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-p1",
+   "name": "The Mural: The Close Call",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "A panel of the fight you nearly lost. Your Pokémon, small and low, the foe huge and bright. The paint on its side is still tacky.\n\nThe painter chose the second before the turn. The moment your Pokémon stood up anyway.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Your Pokémon looks at its own painted self for a long time, and stands a little straighter.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-p2",
+   "name": "The Mural: Someone New",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "A panel of a Pokémon you caught this stage, painted mid-turn, startled, one paw still raised, as it was in the moment before it chose to stay.\n\nThe painter got its eyes right. You never told anyone what colour they were.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You look from the panel to your Ball, and back. It's warm in your hand.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-p3",
+   "name": "The Mural: A Kindness",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "A panel of a kindness you almost forgot. Your hand held out, someone smaller and braver taking it. The colours are the warmest on the whole wall.\n\nThe painter gave it more paint than the battles. You notice that, and don't know what to say.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You touch the corner of the panel. It doesn't come off on your finger, though the paint is wet.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-p4",
+   "name": "The Mural: The Gym",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "A panel of the Gym: the door, the banner, the long way up the steps. Nothing else happened that stage the painter cared to keep.\n\nIt is a good painting of a building. It is also, somehow, a painting of how you stood on the steps.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You straighten your collar, because the painted you has done the same. Then you go on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

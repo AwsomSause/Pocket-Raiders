@@ -42,6 +42,7 @@ import { impClaim, impJoin, impersonatorStart } from './impersonator';
 import { shedNinjask, shedRest } from './shedinja';
 import { lsAddress, lsDeal, lsTake, lsTicket } from './laststop';
 import { tyrEven, tyrEvolve, tyrLead, tyrResult, tyrTally, tyrogueJoin, tyrogueMon } from './tyrogue';
+import { muralJoin, muralPick } from './mural';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -735,6 +736,12 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return shedRest(content, run, host, e.key ?? '');
     case 'shedNinjask':
       return shedNinjask(run);
+    // gn.new.25: the Smeargle's wall (core/greenneedle/mural.ts).
+    case 'muralPick':
+      muralPick(run);
+      return '';
+    case 'muralJoin':
+      return muralJoin(content, run, host);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
