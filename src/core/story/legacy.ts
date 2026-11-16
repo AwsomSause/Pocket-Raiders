@@ -95,6 +95,9 @@ export function awardLegacyTitles(content: Content, run: RunState): void {
 
 /** The run epitaph: one line about the Pokémon whose story weighs most (null when nothing stands out). */
 export function runEpitaph(content: Content, run: RunState): string | null {
+  // Catalog Overhaul SF142 (The Unwritten Library): a line the player wrote this run stands as the epitaph.
+  const written = run.story.flags['co:epitaph'];
+  if (typeof written === 'string' && written) return written;
   let best: { uid: string; score: number } | null = null;
   for (const m of run.party) {
     const h = run.story.histories[m.uid];

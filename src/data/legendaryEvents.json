@@ -19367,6 +19367,7 @@
    "legendary": {
     "species": "equinar",
     "epithet": "Waking Dream",
+    "replacedBy": "legend-equinar",
     "rarity": "rare",
     "omen": "Equinar has been sighted nearby, and the land is changing around it: dreamlike halls.",
     "lore": [
@@ -19561,6 +19562,7 @@
    "legendary": {
     "species": "hollow-shepherd",
     "epithet": "Haunted Hour",
+    "replacedBy": "legend-hollow-shepherd",
     "rarity": "rare",
     "omen": "Hollow Shepherd has been sighted nearby, and the land is changing around it: lamplit ruins.",
     "lore": [
@@ -19753,6 +19755,7 @@
    "legendary": {
     "species": "brinecrown",
     "epithet": "Rising Tide",
+    "replacedBy": "legend-brinecrown",
     "rarity": "rare",
     "omen": "Brinecrown has been sighted nearby, and the land is changing around it: flooded paths.",
     "lore": [
@@ -19938,6 +19941,7 @@
    "legendary": {
     "species": "veinheart",
     "epithet": "Stone Hall",
+    "replacedBy": "legend-veinheart",
     "rarity": "rare",
     "omen": "Veinheart has been sighted nearby, and the land is changing around it: ancient halls.",
     "lore": [
@@ -20129,6 +20133,7 @@
    "legendary": {
     "species": "lumeria",
     "epithet": "Hive Mind",
+    "replacedBy": "legend-lumeria",
     "rarity": "veryRare",
     "omen": "Lumeria has been sighted nearby, and the land is changing around it: hives and thickets.",
     "lore": [
@@ -20328,6 +20333,7 @@
    "legendary": {
     "species": "verdelis",
     "epithet": "Overgrowth",
+    "replacedBy": "legend-verdelis",
     "rarity": "veryRare",
     "omen": "Verdelis has been sighted nearby, and the land is changing around it: tangled forest.",
     "lore": [

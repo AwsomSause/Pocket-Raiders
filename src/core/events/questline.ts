@@ -10,7 +10,7 @@ import type { Content } from '../contentSchema';
 import type { PokemonInstance, RunState } from '../state';
 
 const stampKey = (key: string): string => `evs:${key}`;
-const LATER = 'later-event:';
+export const LATER = 'later-event:';
 
 /** Records the stage a story flag was first set on (called by the `flag` effect; later sets keep the first stage). */
 export function stampFlagStage(run: Pick<RunState, 'story'>, key: string, stage: number): void {

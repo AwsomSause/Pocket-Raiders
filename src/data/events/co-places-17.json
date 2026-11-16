@@ -1,0 +1,2954 @@
+{
+ "catalogOverhaul": "places",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "ghost-ship",
+   "name": "The Ghost Ship",
+   "group": "Mysteries and story",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#101820",
+    "effect": "fog"
+   },
+   "intro": "Fog on the water, thick as wool. Out of it, slowly, a ship: old timbers, torn sails, a lantern swinging at the bow with nobody holding it. Nobody on deck. It makes no sound at all. The old sailors say it sails once every hundred years, looking for something it lost.",
+   "choices": [
+    {
+     "label": "Board.",
+     "success": {
+      "text": "You climb the rope ladder. The deck is warm, as if people stood here a moment ago. Then the lanterns all turn to face you, and the crew is not people at all.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "friendly": true,
+       "species": [],
+       "types": [
+        "ghost"
+       ],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ghost-ship-boarded",
+         "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "spell-tag",
+          "reaper-cloth",
+          "cleanse-tag"
+         ]
+        },
+        {
+         "kind": "moment",
+         "text": "Boarded the ship that sails every hundred years.",
+         "importance": 45
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Signal.",
+     "success": {
+      "text": "You raise a light and swing it, slow, the way sailors do. For a long moment nothing. Then, from the bow, the lantern swings back. Once. Like a thank-you. The ship turns into the fog and is gone, and the water is just water again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ghost-ship-signalled",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ghost-train",
+   "name": "The Ghost Train",
+   "group": "Mysteries and story",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#101018",
+    "effect": "fog"
+   },
+   "intro": "An empty platform at the edge of town, a timetable with no times on it. A dark train is waiting with its doors open. Every carriage is lit. Every seat is empty. A sign in the window says only: THE LAST STOP.",
+   "choices": [
+    {
+     "label": "Board.",
+     "success": {
+      "text": "You step on and the doors close behind you without a sound. The train pulls out. In the next carriage, someone is sitting very still, and when they turn round they have no face at all.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "friendly": true,
+       "species": [],
+       "types": [
+        "ghost"
+       ],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 2,
+         "who": "lead"
+        },
+        {
+         "kind": "flag",
+         "key": "last-stop-rode",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wait for the next one.",
+     "success": {
+      "text": "You sit on the bench. The doors close. The train leaves without you, and as it goes, every window has someone in it, waving. Your team presses close to you. The next train is an ordinary one, full of tired people going home, and you have never been so glad to see tired people.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-cartographer",
+   "name": "The Cartographer",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2618",
+    "effect": "glint"
+   },
+   "intro": "A studio above a bakery, every wall papered with maps, some of places that are not on any other map. **Cartographer, Inigo:** \"Ah, a walker! I can tell by the boots. I'll fill your map in for you. Three hundred, and I never draw a road I haven't walked.\"",
+   "choices": [
+    {
+     "label": "Pay. (300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "He takes your map and draws fast, muttering, tongue between his teeth. When he gives it back, every stop ahead is on it, and the roads between, and a tiny drawing of you in the corner.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about his maps.",
+     "success": {
+      "text": "He lights up. For an hour he walks you round the walls: the island that sank, the road that only exists in winter, the town that moved. Before you go he sketches the next bit of your road for free. \"For listening,\" he says. \"Nobody listens.\"",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 2
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dojo-challenge",
+   "name": "Dojo Challenge",
+   "group": "Trainers and challenges",
+   "stop": "dojo",
+   "types": [
+    "fighting"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "effect": "shake"
+   },
+   "intro": "A dojo with paper walls and a floor polished by a thousand bare feet. A Black Belt kneels at the door and bows low. \"Welcome. Spar, or meditate? Both are training. Only one of them hurts.\"",
+   "choices": [
+    {
+     "label": "Spar.",
+     "success": {
+      "text": "He bows again, and then he is very fast.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Black Belt Kenji",
+       "classId": "black-belt",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "attribute",
+         "key": "strength",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "dojo-tyrogue",
+         "nodes": 1
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Meditate.",
+     "success": {
+      "text": "You kneel beside him and your lead kneels beside you. You breathe. It breathes. For a while there is nothing in the world but breath, and when you stand, your lead stands steadier than it ever has.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "spd",
+        "percent": 5,
+        "who": "lead",
+        "until": "run"
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dojo-tyrogue",
+   "intro": "Footsteps behind you on the road, light and quick. A Tyrogue, one of the dojo's little ones, fists up, hopping from foot to foot. It watched you spar. It wants to go where fights like that happen.",
+   "choices": [
+    {
+     "label": "Take it along.",
+     "success": {
+      "text": "It punches the air, twice, and falls in beside your lead, copying the way it walks. Back at the dojo, someone will be smiling.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "tyrogue"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Tyrogue followed us from the dojo.",
+        "importance": 45
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it home.",
+     "success": {
+      "text": "You crouch down and tell it the dojo needs it more. It thinks about that very seriously. Then it bows, the way the Black Belt bowed, and runs back the way it came.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "name": "A Small Challenger",
+   "group": "Places",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tyrogue",
+    "effect": "none"
+   }
+  },
+  {
+   "id": "dream-team-draft",
+   "name": "Dream Team Draft",
+   "group": "Trainer Challenges",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.juggler"
+    ],
+    "tint": "#2a1f33",
+    "effect": "none"
+   },
+   "intro": "A scout with a clipboard and three Poké Balls lined up on a crate. \"Draft day! Pick one of three. They fight beside you for one battle against my best, and then they go home. No contracts. Just one fight, together.\"",
+   "choices": [
+    {
+     "label": "Draft Pikachu.",
+     "success": {
+      "text": "Pikachu hops out, cheeks crackling, and stands next to your lead like it has always been there.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Draft Scout",
+       "classId": "ace-trainer",
+       "ally": "pikachu",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Draft Machop.",
+     "success": {
+      "text": "Machop rolls its shoulders and nods to your lead, one fighter to another.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Draft Scout",
+       "classId": "ace-trainer",
+       "ally": "machop",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Draft Gastly.",
+     "success": {
+      "text": "Gastly drifts out and grins at the scout's team with far too many teeth.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Draft Scout",
+       "classId": "ace-trainer",
+       "ally": "gastly",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Pass.",
+     "success": {
+      "text": "\"Next year, then,\" says the scout, and tips his cap.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mirror-image-trainer",
+   "name": "The Mirror Trainer",
+   "group": "Trainer Challenges",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#202033",
+    "effect": "none"
+   },
+   "intro": "A trainer at the roadside holds up a tall mirror, and in it is your team, exactly, down to the scratches. \"Beat your own build,\" they say. \"Everyone thinks they could. Almost nobody can.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Your reflection steps out of the glass and bows, and every move you were about to make, it makes first.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Mirror Trainer",
+       "mirror": true,
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "mirror-lake-hint",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        },
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Turn the mirror away.",
+     "success": {
+      "text": "You turn the mirror gently to face the hills. \"Fair,\" says the trainer. \"Some days you don't want to meet yourself.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mirror-match",
+   "name": "The Mirror Trainer",
+   "group": "Trainers and challenges",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.mira"
+    ],
+    "tint": "#203040",
+    "effect": "glint"
+   },
+   "intro": "A trainer at the roadside holds up a tall mirror, and in it is your team, exactly, down to the scratches. \"Beat your own build,\" they say. \"Everyone thinks they could. Almost nobody can.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Your reflection steps out of the glass and bows, and every move you were about to make, it makes first.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Mirror Trainer",
+       "mirror": true,
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "mirror-lake-hint",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        },
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Turn the mirror away.",
+     "success": {
+      "text": "You turn the mirror gently to face the hills. \"Fair,\" says the trainer. \"Some days you don't want to meet yourself.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "hall-of-mirrors",
+   "name": "The Hall of Mirrors",
+   "group": "Set Pieces",
+   "stop": "mirage",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "boss.Spr_Pt_Looker"
+    ],
+    "tint": "#1c2030",
+    "effect": "glint"
+   },
+   "intro": "A long hall of old mirrors, and none of them show you as you are now. They show this run: the Pokémon you carried through rain, the one you stayed up with, the one you did not leave behind. Every kindness, lit up in silver.",
+   "choices": [
+    {
+     "label": "Look at each.",
+     "success": {
+      "text": "You walk the whole hall slowly and look at every one. Your team looks too. They see themselves being helped, over and over, by you, and when you reach the end they crowd round you so close you can hardly walk.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk through.",
+     "success": {
+      "text": "You walk through without stopping. Some things you do not need to see again; you were there. At the far end, a mirror shows only the road ahead, and it is bright.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look into the mirror of kindness.",
+     "requires": [
+      {
+       "kind": "meter",
+       "key": "goodEvil",
+       "side": "positive",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "The kind mirror shows every good thing you have done, and the faces of the people and Pokémon you did it for.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "party"
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "school-yard-skirmish",
+   "name": "School Yard",
+   "group": "Trainer Challenges",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2a1e",
+    "effect": "none"
+   },
+   "intro": "A school yard at lunch. Kids with Poké Balls everywhere, all shouting at once: \"Battle! Battle! Battle!\" A teacher on a bench gives you a look that says please.",
+   "choices": [
+    {
+     "label": "Coach them.",
+     "success": {
+      "text": "You sit them down in a circle and show them how to read a type chart with their fingers. By the bell they are cheering each other on instead of shouting. \"We're a team,\" says the smallest one, amazed. \"We're the Little League!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "little-league-coached",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle them all.",
+     "success": {
+      "text": "They come at you two at a time, giggling. It is chaos. It is wonderful.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "School Kids",
+       "classId": "youngster",
+       "size": 6,
+       "types": [],
+       "levelBonus": -5,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 200
+        },
+        {
+         "kind": "friendship",
+         "amount": 3,
+         "who": "party"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Hand out candy.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "You share what you have. Twenty sticky faces say thank you at once.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "court-case",
+   "name": "The Court of the Road",
+   "group": "Set Pieces",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "A court held on the roadside, on hay bales. A Meowth sits in the dock with its ears flat, accused of breaking a farmer's fence. It looks very small. **Judge:** \"Will anyone speak for the defendant?\"",
+   "choices": [
+    {
+     "label": "Defend it.",
+     "success": {
+      "text": "You walk the fence line in front of everyone. The posts are snapped at hip height to a Tauros, not a Meowth. There are hoof prints in the mud. The real culprit is grazing in the next field, chewing, unbothered. The court bursts out laughing; the farmer apologises; the Meowth is free. It looks at you for a long time, then follows you out of town.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "meowth"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "court-won",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Spoke for a Meowth in the Court of the Road. The Tauros did it.",
+        "importance": 45
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay silent.",
+     "success": {
+      "text": "Nobody speaks. The judge sighs and lets the Meowth go with a warning anyway, because nobody can prove anything. It slinks off. You think about it for a long time after.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "museum-return",
+   "name": "Return to the Museum",
+   "group": "Set Pieces",
+   "stop": "library",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.lenora"
+    ],
+    "tint": "#2a2a1c",
+    "effect": "none"
+   },
+   "intro": "The museum doors are open but the guard is crying. **Curator:** \"Someone stole our relics. In the night. The cases are just... empty. Those pieces were thousands of years old, and they were ours, everyone's.\"",
+   "choices": [
+    {
+     "label": "I'll look.",
+     "success": {
+      "text": "You ask around. A Gym Leader is already on the case, a tall woman with a library card in her coat. \"Lenora,\" she says. \"If you're helping, keep up.\" Behind the museum, a scrap of paper: a stall number at a market nobody admits exists.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-relic-lead",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "black-market-lead",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Return a Rare Bone.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "rare-bone"
+      }
+     ],
+     "success": {
+      "text": "You put the Rare Bone in an empty case. The curator holds it like a baby. \"It isn't ours,\" she says. \"But it's somebody's, and now it's safe.\" She presses a reward into your hands.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "rare-bone"
+       },
+       {
+        "kind": "money",
+        "amount": 700
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Return a Relic Gold.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "relic-gold"
+      }
+     ],
+     "success": {
+      "text": "You give the Relic Gold to the curator. Her hands shake. \"This was in the case nearest the door. The first one they took.\" She pays you, and writes your name in the donor book.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "relic-gold"
+       },
+       {
+        "kind": "money",
+        "amount": 900
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "You leave them to it. The guard is still crying when you go.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "carnival-booths",
+   "name": "Carnival Booths",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#3a2a22",
+    "effect": "sparkle"
+   },
+   "intro": "The fairground at dusk: strings of lights, the smell of sugar, a Ferris wheel turning slow. Ring toss, a shooting gallery, a tub of Berries bobbing in water. **Barker:** \"Fifty a go! Everybody wins something, some people win something good!\"",
+   "choices": [
+    {
+     "label": "Ring toss. (50)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "Your ring spins, wobbles, drops clean over the bottle. The barker groans theatrically and hands you a prize.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shooting gallery. (50)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "You knock down every tin Voltorb in the row. Your team cheers louder than the crowd.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "great-ball",
+         "ultra-ball"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bob for Berries. (50)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "You come up soaked and laughing with a Sitrus Berry in your teeth. A kid gives you a seedling from her pocket for being brave.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "seedling",
+        "berry": "sitrus-berry",
+        "mutated": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ride the wheel.",
+     "success": {
+      "text": "You ride the Ferris wheel with your team piled in the car. At the top it stops, and for a minute you can see the whole road you came along, lit up, and the road still to go.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "legend-autograph",
+   "name": "The Local Legend",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "trainer.blue"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "A crowd in the town square, and at the middle of it a famous trainer at a folding table, signing anything people hold out: Poké Balls, hats, a little boy's arm. The queue goes round the fountain twice.",
+   "choices": [
+    {
+     "label": "Queue.",
+     "success": {
+      "text": "You wait an hour. When you reach the front the legend looks up, then looks again, at your team. \"You've walked a long way with them,\" they say. \"I can tell.\" Someone in the crowd, a traveller with a worn pack, watches you go, and writes something down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "legend-autograph-signed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pc8-traveller-noticed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip the queue.",
+     "success": {
+      "text": "You wave from the back and keep walking. Some legends you meet in a queue. Others, you become.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ranger-rescue",
+   "name": "Ranger Rescue",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "A Pokémon Ranger kneeling by a fallen tree, Styler in one hand, the other on the head of a Pokémon pinned underneath. Its breathing is fast and scared. \"I can't lift this on my own,\" the Ranger says. \"Please. It's been here all night.\"",
+   "choices": [
+    {
+     "label": "Help.",
+     "success": {
+      "text": "You and your team lift together. The tree groans, rises an inch, two, enough. The Ranger pulls it free. It is shaking, bruised, alive. It will not leave your side after that; the Ranger smiles and writes something in a notebook. \"We could use people like you.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 2
+       },
+       {
+        "kind": "flag",
+        "key": "ranger-mission-lead",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep walking.",
+     "success": {
+      "text": "You walk on. Behind you the Ranger keeps pushing at the tree, alone.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "shopkeeper-regular",
+   "name": "The Shopkeeper Who Knows You",
+   "group": "NPC Stories",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A little shop with one stool by the counter. **Shopkeeper, Marta:** \"Back again? Regulars get the good stool. Sit. Tell me where you've been.\"",
+   "choices": [
+    {
+     "label": "Sit.",
+     "success": {
+      "text": "You sit. She makes tea. You tell her about the road and she listens as if it matters, and when you stand up to go she has slipped a Potion into your bag without asking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shop-loyalty",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trust-shopkeeper",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a little something. (100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "She wraps it in paper and string, the way her mother did.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "shop-loyalty",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just browse.",
+     "success": {
+      "text": "\"Take your time,\" she says. \"The shop isn't going anywhere. Neither am I.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "shopkeeper-discount",
+   "name": "Loyalty Has Its Perks",
+   "group": "NPC Stories",
+   "stop": "merchant",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "shop-loyalty",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "**Shopkeeper, Marta:** \"There you are! I kept something back.\" A box under the counter, tied with string. \"Mystery discount, for regulars. I won't say what's in it. That's the mystery.\"",
+   "choices": [
+    {
+     "label": "Take the box. (150)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "Inside, wrapped in tissue: something good, and a note in her handwriting that just says \"for the road\".",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "premier-ball",
+         "full-heal",
+         "revive"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank her and leave it.",
+     "success": {
+      "text": "\"Keep it for someone who needs it more,\" you say. She looks at you for a long moment, then gives you a Sitrus Berry anyway. \"That's not a discount. That's just me.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "shop-loyalty",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trust-shopkeeper",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "shopkeepers-delivery",
+   "name": "Shop Keeper's Delivery",
+   "group": "Helpers, gifts and kindness",
+   "stop": "merchant",
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "effect": "none"
+   },
+   "intro": "**Shopkeeper, Marta:** \"Could you carry a bag for me? My sister's at the next town and my knees aren't what they were. I'll pay by distance: a hundred for every stop you carry it.\"",
+   "choices": [
+    {
+     "label": "Carry the bag two stops. (+200)",
+     "success": {
+      "text": "It is heavier than it looks. Two stops on, her sister opens the door, sees the bag, and bursts into tears. \"She remembered my birthday.\" You get paid, and a slice of cake.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "h-delivery",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry it three stops. (+300)",
+     "success": {
+      "text": "You take the long road, the one with the view. Three stops, three hundred, and a letter back for Marta you promise to deliver next time.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 3
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "h-delivery",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Pokémon to carry it.",
+     "success": {
+      "text": "Your strongest Pokémon takes the bag in its teeth, proud as anything, and trots there and back. Marta pays it in treats as well as you in coins.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 100
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "\"Another time,\" she says, and pats the bag. \"It'll keep.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "lucky-egg-hunt",
+   "name": "The Egg Hunt",
+   "group": "Games of chance",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#283018",
+    "effect": "hearts"
+   },
+   "intro": "Painted eggs hidden all over a park: in the roots, in the flowerbeds, one balanced on a statue's head. Kids run everywhere. Somewhere in here, everyone says, is a real Lucky Egg.",
+   "choices": [
+    {
+     "label": "Hunt.",
+     "chance": 0.5,
+     "success": {
+      "text": "You search high. Up in the fork of an old tree, warm from the sun: the Lucky Egg, shining.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "lucky-egg",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You search high and low and find painted eggs, a lost glove, and a Berry or two. Someone else gets the Lucky Egg, and you cheer with the crowd.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help a kid hunt.",
+     "success": {
+      "text": "A little girl is crying because she has found nothing. You crouch beside her and play warmer, colder. When she finds the Lucky Egg herself her scream of joy turns the whole park round. Then she runs straight back and puts it in your hands. \"You helped,\" she says. \"So it's yours.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "item",
+        "id": "lucky-egg",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mudslide-thanks",
+   "name": "Thanks From the Hillside",
+   "group": "Emergent Stories",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mudslide-saved",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#242a1c",
+    "effect": "sparkle"
+   },
+   "intro": "At the bend in the road, the Pokémon you pulled from the mudslide are waiting for you. Clean now, standing in a line, the littlest one bouncing.",
+   "choices": [
+    {
+     "label": "Greet them.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "mudslide-mudbray-kept",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You kneel and they come to you one by one, pressing their heads into your hands. Your own Mudbray stands with them for a moment, the way family does, and then comes back to you.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "mudslide-thanked",
+         "amount": 1
+        },
+        {
+         "kind": "friendship",
+         "bond": 2,
+         "who": "party"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You kneel and they come to you one by one, pressing their heads into your hands. The Mudbray pushes something into your palm with its nose: a pouch of soft sand from the riverbank, the softest it could find.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soft-sand",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mudslide-thanked",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what they know.",
+     "success": {
+      "text": "They lead you a little way and show you the road ahead from a high rock.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 2
+       },
+       {
+        "kind": "flag",
+        "key": "mudslide-thanked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Invite the youngest along.",
+     "success": {
+      "text": "The littlest one cannot believe it. It runs one full circle round you before it settles in.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "diglett",
+         "geodude",
+         "sandshrew",
+         "onix",
+         "trapinch",
+         "drilbur"
+        ],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mudslide-thanked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "nesting-ground",
+   "name": "Nesting Ground",
+   "group": "Wild Pokémon scenes",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#283018",
+    "effect": "hearts"
+   },
+   "intro": "A nesting ground in the long grass. Parents stand guard over a ring of eggs, watching you with hard eyes. One egg wobbles, tips, and rolls out of the nest and down the slope, right to your feet.",
+   "choices": [
+    {
+     "label": "Roll it back.",
+     "success": {
+      "text": "You pick it up, warm and heavy, and walk it slowly back up the slope, never taking your eyes off the parents. You set it in the nest. They look at you, and then they bow, both of them, all the way down.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "requires": [
+      {
+       "kind": "noTrainerTag",
+       "tag": "pacifist"
+      }
+     ],
+     "success": {
+      "text": "You lift the egg and walk away. Behind you the parents call and call. The egg is warm against you all the way down the road.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": -3,
+        "shinyMultiplier": 3,
+        "left": 2,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "taken-egg",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "poacher-hideout",
+   "name": "The Poacher Camp",
+   "group": "Wild Pokémon scenes",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "disturbed-habitat"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#181010",
+    "effect": "flicker"
+   },
+   "intro": "Cages by a smouldering fire. Pokémon inside, pressed to the back bars, too tired to cry any more. Tents, a truck, and men's voices from behind them.",
+   "choices": [
+    {
+     "label": "Free them.",
+     "success": {
+      "text": "You open the first cage and a hunter shouts. They come out of the tents fast.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Pokémon Hunter",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "poacher-freed"
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Report it.",
+     "success": {
+      "text": "You slip away and find the Rangers. By dark the camp is surrounded and the cages are open. You watch from the hill as the last one runs free.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "poacher-camp",
+   "name": "The Poacher Camp",
+   "group": "Tricksters, villains and teams",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#201008",
+    "effect": "flicker"
+   },
+   "intro": "Cages by a smouldering fire. Pokémon inside, pressed to the back bars, too tired to cry any more. Tents, a truck, and men's voices from behind them.",
+   "choices": [
+    {
+     "label": "Free them.",
+     "success": {
+      "text": "You open the first cage and a hunter shouts. They come out of the tents fast.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Pokémon Hunter",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "poacher-freed"
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Report it.",
+     "success": {
+      "text": "You slip away and find the Rangers. By dark the camp is surrounded and the cages are open. You watch from the hill as the last one runs free.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "poacher-freed",
+   "intro": "The hunters are gone. One by one the cage doors swing open and the Pokémon run, limping, into the trees. All but one. It will not go near a Poké Ball, will not even look at one; it just stands next to you, shaking.",
+   "choices": [
+    {
+     "label": "Walk with it.",
+     "success": {
+      "text": "You do not reach for a ball. You just start walking, and it walks beside you, and after a while it stops shaking.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "smuggling-ball-shy",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Pokémon from the poacher cages walks beside us. It is afraid of Poké Balls.",
+        "importance": 45
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it find its way home.",
+     "success": {
+      "text": "You point it toward the trees. It looks back once, then goes.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "name": "The Open Cages",
+   "group": "Places",
+   "room": true
+  },
+  {
+   "id": "secret-route-path",
+   "name": "A Hidden Path",
+   "group": "Form Research",
+   "rarity": "rare",
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "form-met",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1b2a2a",
+    "effect": "fog"
+   },
+   "intro": "A gap in the rock you would never see unless you were looking. Through it, grass in odd colours, and the call of a Pokémon you know, but wrong somehow, as if it grew up somewhere else.",
+   "choices": [
+    {
+     "label": "Follow it.",
+     "success": {
+      "text": "The path opens into a hidden valley full of Pokémon in forms you have only read about. One of them does not like strangers.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "friendly": true,
+       "species": [
+        "tauros-paldea-combat-breed",
+        "mr-mime-galar",
+        "stunfisk-galar",
+        "yamask-galar",
+        "darumaka-galar",
+        "qwilfish-hisui"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "delta-habitat",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 10
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Mark it on your map.",
+     "success": {
+      "text": "You mark the gap carefully. A scientist will want to know.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 40
+       },
+       {
+        "kind": "flag",
+        "key": "delta-habitat",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "challengers",
+   "name": "Mysterious Challengers",
+   "group": "Approved events",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m",
+     "trainer.psychic_m",
+     "trainer.dragon_tamer"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "Three trainers on three stone pedestals, each in a cape. \"Pick your opponent! Each of us fights by a rule!\"",
+   "choices": [
+    {
+     "label": "The No-Switch Duelist.",
+     "success": {
+      "text": "\"Whoever you send out stays out. No running.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "rule": {
+        "noSwitch": true
+       },
+       "name": "No-Switch Duelist",
+       "classId": "youngster",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "statBoost",
+         "stat": "best",
+         "percent": 5,
+         "who": "lead",
+         "until": "run"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "The Empty-Pocket Ace.",
+     "success": {
+      "text": "\"No items. Just you and them.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "rule": {
+        "noItems": true
+       },
+       "name": "Empty-Pocket Ace",
+       "classId": "psychic",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "protein",
+          "calcium",
+          "carbos"
+         ]
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "The Masked Veteran.",
+     "requires": [
+      {
+       "kind": "noTrainerTag",
+       "tag": "pacifist"
+      }
+     ],
+     "success": {
+      "text": "\"You will not know what you face until it moves.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "rule": {
+        "hiddenFoe": true
+       },
+       "name": "Masked Veteran",
+       "classId": "dragon-tamer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb"
+         ]
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "department-store-sale",
+   "name": "Department Store Sale",
+   "group": "Approved events",
+   "stop": "shop",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "Banners across the front of the department store: EVERYTHING MUST GO! A truck at the loading door, the staff selling straight off the back of it.",
+   "choices": [
+    {
+     "label": "Ball bundle. (400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "A bag of Poké Balls with a Great Ball on top.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Healing bundle. (500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "Potions and a Full Heal, wrapped in a store bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "full-heal",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Vitamin bundle. (1,200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "Two bottles, sealed, the real thing.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "protein",
+         "calcium",
+         "carbos"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "protein",
+         "calcium",
+         "carbos"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Browse.",
+     "success": {
+      "text": "You wander the aisles. Nothing calls to you today.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fight-or-flight",
+   "name": "Fight or Flight",
+   "group": "Approved events",
+   "scene": {
+    "cast": [],
+    "tint": "#402010",
+    "effect": "glint"
+   },
+   "intro": "A huge Pokémon stands guard over something glowing in a hollow, eyes burning with an alpha's red light. It has not noticed you yet.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "chance": 0.5,
+     "success": {
+      "text": "You set your bag down and walk slowly, hands open, humming. It watches. It lowers its head, and lets you take the glowing thing from the hollow.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "muscle-band",
+         "metronome",
+         "silk-scarf"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It rears up, and you back away slowly. It does not follow. Some guardians are not ready to trust anyone.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Its eyes flare red. Alphas fight with everything.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "friendly": true,
+       "species": [],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "aura": true,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "muscle-band",
+          "metronome",
+          "expert-belt"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You leave it to its watch. Whatever it guards, it guards for a reason.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fortune-teller",
+   "name": "The Fortune Teller",
+   "group": "Approved events",
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#301848",
+    "effect": "float"
+   },
+   "intro": "A tent of purple cloth, a candle, three cards face down on a velvet cloth. \"The cards know who waits at the Gym,\" says the woman behind them, not looking up. \"Sit.\"",
+   "choices": [
+    {
+     "label": "Read me. (500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "She turns the cards one by one. A face, a type, a Pokémon. When you look up she is smiling. \"Now you know. Knowing is half of it.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "gymPreview"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read them yourself.",
+     "requires": [
+      {
+       "kind": "attribute",
+       "key": "intelligence",
+       "atLeast": 40
+      }
+     ],
+     "success": {
+      "text": "You turn the cards before she can stop you, and you read them right. She laughs out loud. \"Oh, I like you.\"",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "\"The cards will wait,\" she says. \"They always do.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "lost-pokemon",
+   "name": "Lost Pokémon",
+   "group": "Approved events",
+   "scene": {
+    "cast": [],
+    "effect": "hearts"
+   },
+   "intro": "A small Pokémon sitting alone in the road, crying. No trainer. No ball. Just a scrap of ribbon round its neck with a name on it, half washed off.",
+   "choices": [
+    {
+     "label": "Help it find its trainer.",
+     "success": {
+      "text": "You walk it from door to door. At the eleventh house a girl opens the door and screams its name and drops to her knees, and it leaps into her arms. Her parents press a reward on you and will not take no for an answer.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 600
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "super-potion",
+         "premier-ball"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Walked a lost Pokémon home, door to door, until we found her.",
+        "importance": 45
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "requires": [
+      {
+       "kind": "noTrainerTag",
+       "tag": "pacifist"
+      }
+     ],
+     "success": {
+      "text": "Nobody is looking for it. It stops crying when you pick it up.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": -2,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Its crying follows you a long way.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mysterious-chest",
+   "name": "The Rattling Chest",
+   "group": "Approved events",
+   "stop": "treasure",
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a10",
+    "effect": "rattle"
+   },
+   "intro": "A heavy iron chest at the roadside, half sunk in moss. As you get close it rattles, once, all on its own.",
+   "choices": [
+    {
+     "label": "Open it.",
+     "chance": 0.6,
+     "success": {
+      "text": "Gold, and something better underneath.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "muscle-band",
+         "metronome",
+         "silk-scarf"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The lid flies open and the chest is not a chest.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "friendly": true,
+       "species": [],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nugget",
+          "big-pearl",
+          "pearl"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "It rattles again as you walk away, almost disappointed.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "shady-dealer",
+   "name": "The Shady Dealer",
+   "group": "Approved events",
+   "stop": "merchant",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2a1838",
+    "effect": "fog"
+   },
+   "intro": "A man in a long coat with his hat pulled down. \"Trade me one of yours for something stronger. Look, I'll show you the card. What you give, what you get. All honest.\" He holds up a card with the trade written on it, plain as day.",
+   "choices": [
+    {
+     "label": "Trade an unevolved Pokémon.",
+     "success": {
+      "text": "He reads the card out loud so you both agree. The swap is fair. The one you get is strong, and a little nervous, and grows used to you.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "an unevolved Pokémon",
+         "stage": 1
+        }
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": 4,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "\"Suit yourself.\" He tips his hat and is gone before you blink.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "training-session",
+   "name": "Training Session",
+   "group": "Approved events",
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "effect": "shake"
+   },
+   "intro": "A Black Belt in a clearing, sweating, a punching bag on a branch. \"Your lead looks strong. Want me to make it stronger? Pick a drill.\"",
+   "choices": [
+    {
+     "label": "Train hard.",
+     "success": {
+      "text": "He works your lead until it drops, then works it again. It gets up stronger.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 2,
+        "who": "lead"
+       },
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Train gently.",
+     "success": {
+      "text": "He shows you stretches. Your lead copies you, and you copy it, and by the end you are both laughing.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 15,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vitamin-seller",
+   "name": "The Vitamin Seller",
+   "group": "Approved events",
+   "stop": "merchant",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "effect": "glint"
+   },
+   "intro": "A crate of unlabelled bottles and a seller who will not stop smiling. \"Vitamins! Cheap! Probably vitamins!\" Behind the crate, in a locked case, a few bottles with real labels.",
+   "choices": [
+    {
+     "label": "Cheap ones. (300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "chance": 0.5,
+     "success": {
+      "text": "It is a real vitamin, against all odds.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "protein",
+         "calcium",
+         "carbos"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "It is sugar water. Your team likes it, at least.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The real thing. (900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "He unlocks the case with a sigh. Two real bottles, sealed.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "protein",
+         "calcium",
+         "carbos"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "protein",
+         "calcium",
+         "carbos"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "\"Your loss!\" he calls. It isn't.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-redo-ticket",
+   "name": "The Redo Ticket Booth",
+   "group": "Run-Wide Modifiers",
+   "stop": "merchant",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a2a",
+    "effect": "glint"
+   },
+   "intro": "A ticket booth with a green leaf painted over the window. Inside, nobody, just a ticket on the counter that says REDO, and a price. The leaf shimmers when you look at it, as if time moves strangely here.",
+   "choices": [
+    {
+     "label": "Buy the Redo Ticket. (600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "You leave the coins and take the ticket. It is warm. Someday a Pokémon of yours will fall, and the ticket will remember the moment just before, and give it back. Once.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-redo-ticket",
+        "name": "Redo Ticket",
+        "effects": [
+         {
+          "kind": "survivalChance",
+          "chance": 0.3
+         }
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "flag",
+        "key": "celebi-telling",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You leave the ticket where it is. Some moments you want to keep, even the bad ones.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-reroll-shrine",
+   "name": "The Reroll Shrine",
+   "group": "Run-Wide Modifiers",
+   "stop": "shrine",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c2a",
+    "effect": "glint"
+   },
+   "intro": "A small shrine at a crossroads with a coin slot and a bell. Toss a coin, ring the bell, and the road ahead changes.",
+   "choices": [
+    {
+     "label": "Toss a coin. (200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "The bell rings and the road ahead shivers, and a new door is there.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "rk-door-wood",
+         "rk-door-iron",
+         "rk-floor-1"
+        ]
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "money",
+        "amount": -200
+       }
+      ]
+     }
+    },
+    {
+     "label": "Toss three coins. (500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "Three rings. The road ahead turns all the way round, and the door that opens is a good one.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "rk-door-silver",
+         "rk-door-gold",
+         "rk-floor-4"
+        ]
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "scout",
+        "columns": 2
+       },
+       {
+        "kind": "money",
+        "amount": -500
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You keep your coins and the road stays the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-shifting-map",
+   "name": "The Shifting Map",
+   "group": "Run-Wide Modifiers",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#241e2a",
+    "effect": "shake"
+   },
+   "intro": "A map pinned to a tree, and as you watch the roads on it move, slowly, like fingers.",
+   "choices": [
+    {
+     "label": "Take the map.",
+     "success": {
+      "text": "You fold it into your pack. Every few stops it shifts the road a little, and shows you more.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-shifting-map",
+        "name": "Shifting Map",
+        "effects": [
+         {
+          "kind": "stopShuffle",
+          "every": 3
+         }
+        ]
+       },
+       {
+        "kind": "scout",
+        "columns": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You leave the map to its slow shifting.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-skip-token",
+   "name": "The Skip Token Stand",
+   "group": "Run-Wide Modifiers",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a1c",
+    "effect": "none"
+   },
+   "intro": "A kid at a fold-out table with a jar of wooden tokens. \"Skip tokens! Skip the boring bit! Three hundred!\"",
+   "choices": [
+    {
+     "label": "Buy a token. (300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "The kid pockets your coins, very professional, and the road ahead folds shorter.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "money",
+        "amount": -300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Haggle.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "check": "charisma",
+     "success": {
+      "text": "You haggle. The kid haggles back. You meet in the middle and shake on it.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "money",
+        "amount": -150
+       }
+      ]
+     },
+     "failure": {
+      "text": "The kid will not budge. \"Fixed price. It's on the sign.\" You respect it.",
+      "effects": []
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Your loss,\" says the kid, and goes back to counting.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-double-agent",
+   "name": "Double Agent",
+   "group": "Villain Teams",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c28",
+    "effect": "none"
+   },
+   "intro": "A villain you beat, sitting on a fence with their hat pulled low and the team badge in their hand, turning it over and over. \"I'm done with them,\" they say, not looking at you. \"I mean it this time. I just don't know where to go.\"",
+   "choices": [
+    {
+     "label": "Come along.",
+     "success": {
+      "text": "They look up, surprised that you mean it. \"You'd really...?\" Their one Pokémon comes out of its ball on its own and sits at your feet. They throw the badge in the river.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "vt-double-agent",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "defector-joined",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A villain we beat threw their badge in the river and came with us.",
+        "importance": 45
+       }
+      ]
+     }
+    },
+    {
+     "label": "Prove it.",
+     "success": {
+      "text": "\"Fair.\" They tell you everything: where the team meets, who is in charge, where the next job is. They draw it on your map.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 30
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "flag",
+        "key": "defector-tip",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"I get it,\" they say. When you look back, the badge is still in their hand.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

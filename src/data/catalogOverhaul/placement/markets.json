@@ -1,0 +1,1327 @@
+{
+ "$note": "Catalog Overhaul placement for the markets category, from STORY_FAMILIES_PLACED.md (At the Town node; SF90 one per region, steps 5-12) and TRADES.md Part 2 (a trade node draws from the pool matching its terrain). Every entry is a pool (drawn by its rule, not pinned by the placer); rooms, callbacks and laterEvent scenes are not listed. Shape: docs/catalog-overhaul.md.",
+ "bait-bargain": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "ball-factory-outlet": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "ball-pitchman": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "bargain-bin": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "berry-merchant": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "bulk-buyer": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "charm-peddler": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "chefs-tasting": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "coupon-clipper": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "currency-exchanger": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "haggle-sale": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "healing-herbalist": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "honest-hawker": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "item-pawnshop": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "lucky-charm-shop": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "mart-truck": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "mega-bazaar": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "mismatched-mart": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "mismatched-socks": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "mystery-meat-cart": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "price-match-guy": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "rebate-booth": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "scrap-buyer": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "snack-stand": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "stone-seller": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "tm-vendor": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "travelling-collector": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "vending-machine": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "wholesale-warehouse": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "ability-capsule-booth": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "dragons-den": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "egg-moves-library": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "ev-trainer": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "evolution-tutor": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "expert-breeder": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "heavy-armor-fitting": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "hyper-training-gym": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "move-forgetter": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "move-tutor": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "moveset-rehearsal": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "nature-counselor": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "tm-workshop": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "drill-sergeant-kangaskhan": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "counterfeit-items": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "fake-nurse": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "pickpocket": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "vt-disguised-merchant": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "vt-pokeball-sting": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "vt-rocket-bake-sale": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "vt-shady-surveyor": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "evil-galactic-disguise": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "evil-plasma-disguise": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "evil-flare-disguise": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "evil-aether-disguise": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "evil-star-disguise": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "evil-marauders-disguise": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "evil-choir-disguise": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "evil-ironvein-disguise": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "evil-cartographers-disguise": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "evil-gilt-disguise": {
+  "shape": "Pool",
+  "attaches": "after",
+  "window": [
+   5,
+   12
+  ],
+  "often": "region"
+ },
+ "game-corner": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "slot-machine": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "ball-toss": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "card-shark": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "coin-flip": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "coin-fountain": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "dice-game": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "fortune-teller-2": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "ghost-gamble": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "lottery-booth": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "mysterious-chest-2": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "mystery-door": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "prize-wheel": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "reward-wheel": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "rf-claw-machine": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "rf-pachinko": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "rf-shell-game": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "rf-weather-bet": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "roulette-of-fate": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "scratch-card": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "voltorb-flip": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "often": "region"
+ },
+ "festival-day": {
+  "shape": "Pool",
+  "attaches": "town",
+  "stages": [
+   4
+  ],
+  "often": "region"
+ },
+ "w4-toll-bridge": {
+  "shape": "Pool",
+  "attaches": "before",
+  "sits": "optional"
+ },
+ "wx-mountain-pass-toll": {
+  "shape": "Pool",
+  "attaches": "before",
+  "sits": "optional"
+ },
+ "wx-heatwave-oasis": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "guide-for-hire": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "insurance-agent": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "rumour-seller": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "ticket-tout": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "risky-loan": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "bank-teller": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "pawn-appraiser": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "pawn-sharks": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "rental-counter": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "layaway-lady": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "subscription-box": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "ace-trainer-bet": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "gamblers-gauntlet": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "sudden-death-duel": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "flea-fossil": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "fossil-trader": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "itinerant-tutor": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "charm-tinkerer": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "magnet-salesman": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "traveling-doctor": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "apothecary-experiment": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "repel-reseller": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "shady-vitamins": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "mystery-box": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "raffle-seller": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "clearance-rack": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "mr-mirage-merchant": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "rival-merchants": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "sign-language-market": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "r155-kecleon-bazaar": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "strangers-map": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "token-exchange": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trading-post": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "wx-sandstorm-camp": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "hot"
+  ]
+ },
+ "heavyweight-swap": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "monster-breeder": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "pikachu-collector": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "red-collector": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "water-fan-swap": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "offer-you-cant-refuse": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "swap-quirky": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "rk-altar-swaps": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "rk-draft-pool": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "rk-free-pick-altar": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "christmas-eve-gift-swap": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "global-trade": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "barter-barge": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "ghost-trader": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t001": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "water"
+  ]
+ },
+ "trade-t002": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "water"
+  ]
+ },
+ "trade-t003": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "water"
+  ]
+ },
+ "trade-t004": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "water"
+  ]
+ },
+ "trade-t005": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "water"
+  ]
+ },
+ "trade-t006": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "water"
+  ]
+ },
+ "trade-t007": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "water"
+  ]
+ },
+ "trade-t008": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "water"
+  ]
+ },
+ "trade-t009": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "water"
+  ]
+ },
+ "trade-t010": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "cave"
+  ]
+ },
+ "trade-t011": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "cave"
+  ]
+ },
+ "trade-t012": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "cave"
+  ]
+ },
+ "trade-t013": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "cave"
+  ]
+ },
+ "trade-t014": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "cave"
+  ]
+ },
+ "trade-t015": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "cave"
+  ]
+ },
+ "trade-t016": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "cave"
+  ]
+ },
+ "trade-t017": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "cave"
+  ]
+ },
+ "trade-t018": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "cave"
+  ]
+ },
+ "trade-t019": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "forest"
+  ]
+ },
+ "trade-t020": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "forest"
+  ]
+ },
+ "trade-t021": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "forest"
+  ]
+ },
+ "trade-t022": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "forest"
+  ]
+ },
+ "trade-t023": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "forest"
+  ]
+ },
+ "trade-t024": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "forest"
+  ]
+ },
+ "trade-t026": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "forest"
+  ]
+ },
+ "trade-t027": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "forest"
+  ]
+ },
+ "trade-t028": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ]
+ },
+ "trade-t029": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ]
+ },
+ "trade-t030": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ]
+ },
+ "trade-t031": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ]
+ },
+ "trade-t032": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ]
+ },
+ "trade-t033": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ]
+ },
+ "trade-t034": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ]
+ },
+ "trade-t035": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ]
+ },
+ "trade-t036": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ]
+ },
+ "trade-t037": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "hot"
+  ]
+ },
+ "trade-t038": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "hot"
+  ]
+ },
+ "trade-t039": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "hot"
+  ]
+ },
+ "trade-t040": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "hot"
+  ]
+ },
+ "trade-t041": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "hot"
+  ]
+ },
+ "trade-t042": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "hot"
+  ]
+ },
+ "trade-t043": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "hot"
+  ]
+ },
+ "trade-t044": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "hot"
+  ]
+ },
+ "trade-t045": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "hot"
+  ]
+ },
+ "trade-t046": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "snow"
+  ]
+ },
+ "trade-t047": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "snow"
+  ]
+ },
+ "trade-t048": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "snow"
+  ]
+ },
+ "trade-t049": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "snow"
+  ]
+ },
+ "trade-t050": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "snow"
+  ]
+ },
+ "trade-t051": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "snow"
+  ]
+ },
+ "trade-t052": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "snow"
+  ]
+ },
+ "trade-t053": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "snow"
+  ]
+ },
+ "trade-t054": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "snow"
+  ]
+ },
+ "trade-t055": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t056": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t057": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t058": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t059": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t060": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t061": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t062": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t064": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "night"
+  ]
+ },
+ "trade-t065": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "night"
+  ]
+ },
+ "trade-t066": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "night"
+  ]
+ },
+ "trade-t067": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "night"
+  ]
+ },
+ "trade-t068": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "night"
+  ]
+ },
+ "trade-t069": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "night"
+  ]
+ },
+ "trade-t070": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "night"
+  ]
+ },
+ "trade-t071": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "night"
+  ]
+ },
+ "trade-t072": {
+  "shape": "Pool",
+  "attaches": "town",
+  "tags": [
+   "night"
+  ]
+ },
+ "trade-t073": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t074": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t075": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t076": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t077": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t078": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t079": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t081": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t082": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t083": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t084": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t085": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t086": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t087": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t088": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t089": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t090": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t091": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t092": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t093": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t094": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t095": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t096": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t102": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t103": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t105": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t106": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t107": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t108": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t109": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t110": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t063": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t080": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-t104": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-back-service": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-chain-long": {
+  "shape": "Pool",
+  "attaches": "town"
+ },
+ "trade-chain-short": {
+  "shape": "Pool",
+  "attaches": "town"
+ }
+}

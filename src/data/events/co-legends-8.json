@@ -1,0 +1,2786 @@
+{
+ "catalogOverhaul": "legends",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "co-my13-camp",
+   "name": "The Moonless Camp",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-darkrai",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "cresselia",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-cresselia",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The pale shape steps out of the trees. Cresselia, heard, not spoken: \"It is not your enemy. It never was.\"",
+     "addChoices": []
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "darkrai",
+    "tint": "#302040",
+    "effect": "flicker"
+   },
+   "intro": "Camp, at night. Everyone falls asleep at once, you last. The moon is gone from the sky.\n\nYou wake inside a dream of the camp. Your Pokémon are asleep, twitching. One whimpers.\n\nA figure at the edge of the firelight, made of smoke and a white plume: \"They dream of losing you. I did not put it there. I only let them see it. Tell me your nightmare, and I will take theirs.\"\n\nBehind it, something pale flickers in the trees and is gone.",
+   "choices": [
+    {
+     "label": "\"Tell it.\"",
+     "success": {
+      "text": "Which one?",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my13-nightmare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stay awake.\"",
+     "success": {
+      "text": "You hold the watch all night. Darkrai stays at the edge of the light until dawn, then speaks once: \"You are stubborn. Good.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "darkrai-watched",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-darkrai-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who was that in the trees?\"",
+     "success": {
+      "text": "Darkrai: \"Someone who would rather I did not exist.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "darkrai-asked-cresselia",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my13-camp-again"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my13-nightmare",
+   "name": "The Moonless Camp: Your Nightmare",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "darkrai",
+    "tint": "#302040",
+    "effect": "flicker"
+   },
+   "intro": "Darkrai waits. The fire does not crackle.",
+   "choices": [
+    {
+     "label": "Losing your starter.",
+     "success": {
+      "text": "You tell it about the first day, and the one you chose, and the dream where you lose them. Darkrai takes it, the way smoke takes a candle. Your team wakes rested.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "darkrai-told-1",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-darkrai-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Losing the run.",
+     "success": {
+      "text": "You tell it about the last battle going wrong, and walking home alone. Darkrai takes it, the way smoke takes a candle. Your team wakes rested.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "darkrai-told-2",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-darkrai-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Being forgotten.",
+     "success": {
+      "text": "You tell it about coming back one day and nobody knowing your name. Darkrai takes it, the way smoke takes a candle. Your team wakes rested.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "darkrai-told-3",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-darkrai-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-darkrai-promise",
+   "name": "Darkrai: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "darkrai",
+    "tint": "#302040",
+    "effect": "sparkle"
+   },
+   "intro": "Darkrai: \"Where I sleep, they dream badly. Stop less. Let them breathe.\"\n\nThe Promise: Keep away from them: use at most every second rest node.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Darkrai walks a little behind you, always at the edge of the light. Your team sleeps well that night.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-darkrai",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Darkrai came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Darkrai leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "darkrai-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Darkrai will forgive you once. The second time, it leaves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-darkrai-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my14-cave",
+   "name": "The Fourth Statue",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-keldeo",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "swords",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-swords",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "One of the three statues turns its stone head. Keldeo: \"They're watching.\"",
+     "addChoices": []
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "keldeo",
+    "tint": "#4080c0",
+    "effect": "none"
+   },
+   "intro": "Behind a waterfall, a cave with three tall swordsman statues: a Cobalion, a Terrakion and a Virizion, cut in stone. A fourth plinth is empty. Hoofprints lead to it and away.\n\nA small blue Pokémon with a stubby horn backs out of the shadows, holding its ground.\nKeldeo: \"They said I'm not ready. They left me here to think. I've thought. I'm ready. I just need someone to see it. Battle me. Don't go easy.\"",
+   "choices": [
+    {
+     "label": "\"You're ready.\"",
+     "success": {
+      "text": "Keldeo: \"You haven't even seen me.\" It is hurt, and asks again.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my14-cave-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Show me.\"",
+     "success": {
+      "text": "A one-on-one, under the statues.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "keldeo"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "keldeo-shown",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "keldeo-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-keldeo-promise"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "keldeo-shown",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-keldeo-promise"
+        }
+       ],
+       "rule": {
+        "noItems": true,
+        "noSwitch": true,
+        "matchLead": true,
+        "suddenDeath": true
+       }
+      }
+     }
+    },
+    {
+     "label": "\"Why did they leave you?\"",
+     "success": {
+      "text": "Keldeo: \"I ran to help someone. Alone. I almost lost.\" Then it lowers its horn.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "keldeo"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "keldeo-shown",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "keldeo-told",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-keldeo-promise"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "keldeo-shown",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "keldeo-told",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-keldeo-promise"
+        }
+       ],
+       "rule": {
+        "noItems": true,
+        "noSwitch": true,
+        "matchLead": true,
+        "suddenDeath": true
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-keldeo-promise",
+   "name": "Keldeo: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "keldeo",
+    "tint": "#4080c0",
+    "effect": "sparkle"
+   },
+   "intro": "Keldeo, win or lose: \"You didn't go easy. Thank you.\" It climbs onto the empty plinth and stands there a moment, then jumps down.\n\nKeldeo: \"If I have to stand alone, so do you.\"\n\nThe Promise: Fight your own battles: accept no assist from a rival or ally.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Keldeo trots beside you out of the cave, head high.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-keldeo",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Keldeo came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Keldeo leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "keldeo-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Keldeo will forgive you once. The second time, it leaves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-keldeo-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my15-lab",
+   "name": "Command?",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-genesect",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "genesect",
+    "tint": "#8040a0",
+    "effect": "none"
+   },
+   "intro": "An abandoned lab on a cliff. Rust. A cracked pod, still warm. A screen flickers: COMMAND?\n\nBehind the pod, a purple insect-machine with a cannon on its back, curled up. The screen scrolls: SUBJECT REVIVED 300,000,000 YEARS POST. MODIFIED. 4 DRIVES FITTED. AWAITING COMMAND.\n\nIt opens one red eye and looks at the screen, not at you.",
+   "choices": [
+    {
+     "label": "\"Stand down.\"",
+     "success": {
+      "text": "It powers off. It stays here, curled up, quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "genesect-down",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Wake up.\"",
+     "success": {
+      "text": "It wakes as a weapon.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "genesect"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "genesect-fought",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my15-home"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "genesect-fought",
+         "amount": 1
+        }
+       ],
+       "rule": {
+        "noItems": true
+       }
+      }
+     }
+    },
+    {
+     "label": "\"Leave it.\"",
+     "success": {
+      "text": "You walk out. It follows you out of the lab, at a distance, and at the gate the screen it carries flickers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "genesect-followed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my15-home"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Type nothing.",
+     "success": {
+      "text": "Three minutes pass. It types back, slowly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "genesect-home",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my15-home"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my15-home",
+   "name": "Command?: HOME?",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "genesect",
+    "tint": "#8040a0",
+    "effect": "none"
+   },
+   "intro": "The screen: HOME?",
+   "choices": [
+    {
+     "label": "\"Here.\"",
+     "success": {
+      "text": "It curls up by the pod again. It stays in the lab.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "genesect-stayed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I don't know.\"",
+     "success": {
+      "text": "It types: SAME. It follows.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-genesect-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let's find it.\"",
+     "success": {
+      "text": "It follows. Sometimes it stops on a cliff and looks at the sea.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "genesect-find",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-genesect-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-genesect-promise",
+   "name": "Genesect: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "genesect",
+    "tint": "#8040a0",
+    "effect": "sparkle"
+   },
+   "intro": "The screen: THEY CHANGED ME. NO ONE ASKED. DO NOT CHANGE THEM.\n\nThe Promise: No more machines: use no TM or technical item this run.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Genesect folds its cannon down and walks beside you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-genesect",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Genesect came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Genesect leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "genesect-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Genesect does not forgive. Break it once and it is gone.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-genesect-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my16-wall",
+   "name": "One Pure Note",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "types": [
+    "rock",
+    "fairy"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-diancie",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "carbink",
+     "when": [
+      {
+       "kind": "partySpecies",
+       "species": "carbink"
+      }
+     ],
+     "notice": "Your Carbink bow to the stone. The voice inside goes very quiet, and very embarrassed.",
+     "addChoices": []
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "diancie",
+    "tint": "#f0a0c0",
+    "effect": "none"
+   },
+   "intro": "A cave wall full of grey stone. One pink glint pulses with your heartbeat.\n\nA tiny voice, from inside the stone: \"Oh! Someone. Hello. I'm stuck. I made a diamond too big and it closed around me. One pure note would crack it. Not a loud one. A true one.\"",
+   "choices": [
+    {
+     "label": "\"Sing.\"",
+     "success": {
+      "text": "Which note?",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my16-note"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Strike the crystal.\"",
+     "success": {
+      "text": "It cracks wrong. Diancie tumbles out, free but chipped, and backs away from you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "diancie-chipped",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-diancie-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask a Pokémon to sing.",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon sings one note, and the crystal splits like a seed. Diancie steps out, blinking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "diancie-pokesang",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "moveFlag": "sound"
+        }
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-diancie-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my16-note",
+   "name": "One Pure Note: The Note",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "diancie",
+    "tint": "#f0a0c0",
+    "effect": "none"
+   },
+   "intro": "You take a breath.",
+   "choices": [
+    {
+     "label": "High.",
+     "success": {
+      "text": "Diancie giggles. \"Try again.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my16-note"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Low.",
+     "success": {
+      "text": "Diancie giggles. \"Try again.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my16-note"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The one you hum when you are nervous.",
+     "success": {
+      "text": "The crystal rings, and splits, and she is free.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "diancie-sang",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-diancie-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-diancie-promise",
+   "name": "Diancie: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "diancie",
+    "tint": "#f0a0c0",
+    "effect": "sparkle"
+   },
+   "intro": "Diancie: \"I'm supposed to be a princess. I'm not very good at it. Can I make you something? No. That's a trade. I want to give you something.\"\n\nDiancie: \"Things given are worth more than things sold.\"\n\nThe Promise: Sell nothing: sell no item this run.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Diancie walks with you, pink light in her hands, very pleased with herself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-diancie",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Diancie came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Diancie leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "diancie-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Diancie will forgive you once. The second time, it leaves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-diancie-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my17-valley",
+   "name": "The Steam Valley",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "types": [
+    "fire",
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-volcanion",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "volcanion",
+    "tint": "#c06040",
+    "effect": "fog"
+   },
+   "intro": "Steam drifts across the route toward you and stops, suspicious. Every rock is wet and hot.\n\nOut of the steam, a red-and-brown Pokémon with a great ring on its back. It stands between you and a small cave full of hurt Pokémon.\n\nVolcanion: \"Humans. What do you want? The last ones wanted my water. And then they wanted these.\"",
+   "choices": [
+    {
+     "label": "\"Nothing.\"",
+     "success": {
+      "text": "Volcanion: \"Then go.\" The steam closes over the path.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "volcanion-nothing",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"To help.\"",
+     "success": {
+      "text": "Volcanion: \"Prove it.\" Two of the hurt ones need Berries; one needs carrying to a Center and back. It takes all stage, and Volcanion watches every step.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "volcanion-helped",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-volcanion-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who hurt them?\"",
+     "success": {
+      "text": "A poacher camp, one node away. Volcanion: \"Go and look. Then come back and tell me what you'll do.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "volcanion-camp",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my17-camp"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my17-again",
+   "name": "The Steam Valley: Again",
+   "group": "Story: Mythical",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "volcanion-nothing",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "volcanion-helped",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "volcanion-camp",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "volcanion",
+    "tint": "#c06040",
+    "effect": "fog"
+   },
+   "intro": "The steam again, further on. It waits for you this time.\n\nOut of the steam, a red-and-brown Pokémon with a great ring on its back. It stands between you and a small cave full of hurt Pokémon.\n\nVolcanion: \"Humans. What do you want? The last ones wanted my water. And then they wanted these.\"",
+   "choices": [
+    {
+     "label": "\"To help.\"",
+     "success": {
+      "text": "Volcanion: \"Prove it.\" Two of the hurt ones need Berries; one needs carrying to a Center and back. It takes all stage, and Volcanion watches every step.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "volcanion-helped",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-volcanion-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who hurt them?\"",
+     "success": {
+      "text": "A poacher camp, one node away. Volcanion: \"Go and look. Then come back and tell me what you'll do.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "volcanion-camp",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my17-camp"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my17-camp",
+   "name": "The Steam Valley: The Camp",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "volcanion",
+    "tint": "#804030",
+    "effect": "none"
+   },
+   "intro": "The poachers' camp. Cages, stacked. Hurt Pokémon in most of them.",
+   "choices": [
+    {
+     "label": "\"Free them all.\"",
+     "success": {
+      "text": "The poachers do not let them go quietly. Volcanion arrives on the last of them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "volcanion-failed",
+         "amount": 1
+        }
+       ],
+       "name": "Poachers",
+       "size": 3,
+       "types": [
+        "dark",
+        "steel"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "volcanion-freed",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-volcanion-promise"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Report them.\"",
+     "success": {
+      "text": "The Ranger comes, a stage later. Volcanion watches from the steam. It respects it. It does not trust it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "volcanion-reported",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-volcanion-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back and tell Volcanion.",
+     "success": {
+      "text": "Volcanion destroys the camp with a single blast of steam and fire. Then it turns to you. \"Are you afraid of me?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "volcanion-blast",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-volcanion-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-volcanion-promise",
+   "name": "Volcanion: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "volcanion",
+    "tint": "#c06040",
+    "effect": "sparkle"
+   },
+   "intro": "Volcanion: \"Don't start helping something and walk away halfway. That's worse than not starting.\"\n\nThe Promise: Finish what you started: take in or find a home for every rescued Pokémon.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Volcanion walks with you, a long way off, steam rising from its ring.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-volcanion",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Volcanion came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Volcanion leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "volcanion-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Volcanion does not forgive. Break it once and it is gone.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-volcanion-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my18-hall",
+   "name": "The Heart in the Box",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-magearna",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "magearna-read",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The middle door glows faintly.",
+     "addChoices": []
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magearna",
+    "tint": "#c0a060",
+    "effect": "none"
+   },
+   "intro": "A castle hall full of clocks, all stopped. On a pedestal, a heart-shaped box, ticking. Three tiny doors, one gear.\n\nA note in the dust, in a careful hand: SHE WAS MADE 500 YEARS AGO. SHE WAKES FOR SOMEONE WHO KNOWS WHAT SHE IS FOR.",
+   "choices": [
+    {
+     "label": "The left door.",
+     "success": {
+      "text": "A tiny wind-up toy marches out and falls over. The box laughs: a ticking giggle.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my18-hall-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The middle door.",
+     "success": {
+      "text": "The gear turns. Every clock in the hall starts at once. Magearna unfolds from the box.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "magearna-woke",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-magearna-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The right door.",
+     "success": {
+      "text": "A tiny wind-up bird whistles at you. The box giggles, ticking.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my18-hall-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the rest of the note.",
+     "success": {
+      "text": "SHE IS FOR GIVING. SHE WAS A GIFT.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "magearna-read",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my18-hall-again"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-magearna-promise",
+   "name": "Magearna: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "magearna",
+    "tint": "#c0a060",
+    "effect": "sparkle"
+   },
+   "intro": "Magearna curtseys. It holds out a bouquet of metal flowers.\nMagearna, in chimes: \"Carry this. To someone. You will know who.\"\n\nThe Promise: Carry this for me: one Pokémon holds her bouquet until the last stage.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "One of your Pokémon takes the bouquet, carefully. Magearna chimes, and follows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-magearna",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Magearna came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Magearna leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "magearna-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Magearna will forgive you once. The second time, it leaves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-magearna-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my19-bolt-1",
+   "name": "Lightning on the Ground",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-zeraora",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zeraora",
+    "tint": "#e0c040",
+    "effect": "rain"
+   },
+   "intro": "Lightning crosses the ground, not the sky. It zigzags between the trees, stops a few steps from you, and is gone.",
+   "choices": [
+    {
+     "label": "Watch where it went.",
+     "success": {
+      "text": "Scorched grass, in a line, going on ahead of you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "zeraora-bolts",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my19-bolt-2",
+   "name": "Lightning on the Ground: Again",
+   "group": "Story: Mythical",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "zeraora-bolts",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zeraora",
+    "tint": "#e0c040",
+    "effect": "rain"
+   },
+   "intro": "The lightning again, closer. It circles your party once, crackling, and leaves.",
+   "choices": [
+    {
+     "label": "Stand still.",
+     "success": {
+      "text": "Your hair stands up. Something is checking you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "zeraora-bolts",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my19-cat",
+   "name": "Lightning on the Ground: Zeraora",
+   "group": "Story: Mythical",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "zeraora-bolts",
+     "atLeast": 2,
+     "atMost": 2
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zeraora",
+    "tint": "#e0c040",
+    "effect": "rain"
+   },
+   "intro": "Lightning stops at your feet. A lean yellow-and-black cat stands where it stopped, crackling.\n\nZeraora: \"Some time ago. A wild one, cornered. You took its side against a trainer. Why?\"\n\nIt does not blink. It is checking.",
+   "choices": [
+    {
+     "label": "\"It was right.\"",
+     "success": {
+      "text": "Zeraora: \"Most say that and don't mean it.\" It tests you: a battle, no items.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "zeraora"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "zeraora-tested",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-zeraora-promise"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "zeraora-failed",
+         "amount": 1
+        }
+       ],
+       "rule": {
+        "noItems": true,
+        "noSwitch": true,
+        "matchLead": true,
+        "suddenDeath": true
+       }
+      }
+     }
+    },
+    {
+     "label": "\"I don't know.\"",
+     "success": {
+      "text": "Zeraora: \"That's honest.\" It sits.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "zeraora-honest",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-zeraora-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I didn't. You've got the wrong person.\"",
+     "success": {
+      "text": "Zeraora looks at you a long time. Then it is lightning again, and gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "zeraora-left",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-zeraora-promise",
+   "name": "Zeraora: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "zeraora",
+    "tint": "#e0c040",
+    "effect": "sparkle"
+   },
+   "intro": "Zeraora: \"I was caged once. The team you have is the team. Make it enough.\"\n\nThe Promise: No more cages: catch nothing more this run.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Zeraora runs ahead of you, and back, and ahead, like weather.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-zeraora",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Zeraora came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Zeraora leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "zeraora-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Zeraora does not forgive. Break it once and it is gone.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-zeraora-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my20-camp",
+   "name": "The Hinge-Eater",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-meltan",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "meltan",
+    "tint": "#a0a0a0",
+    "effect": "none"
+   },
+   "intro": "The campfire. A clink. A tiny bolt-shaped Pokémon with a nut for a head is gnawing the hinge of your bag. It stops. It looks at you. It keeps gnawing. A second one pokes out of the firewood.\n\nA tinkerer, from the next tent: \"Oh no. Once there's two, there's always more.\"",
+   "choices": [
+    {
+     "label": "\"Feed it.\"",
+     "success": {
+      "text": "You hold out something metal. It eats it, glows, and sits on your boot.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "flag",
+        "key": "meltan-fed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-meltan-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Shoo it.\"",
+     "success": {
+      "text": "It goes. So does the bag hinge. Something falls out of the bag and is lost in the dark.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "flag",
+        "key": "meltan-shooed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the tinkerer.",
+     "success": {
+      "text": "Tinkerer: \"They eat metal. Give them one thing and they'll love you. Give them eight things and... well. You'll see.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "meltan-warned",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my20-camp-again"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my20-back",
+   "name": "The Hinge-Eater: Back",
+   "group": "Story: Mythical",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "meltan-shooed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "meltan",
+    "tint": "#a0a0a0",
+    "effect": "none"
+   },
+   "intro": "Meltan is back, with three friends, and something of yours it is very proud of having found.",
+   "choices": [
+    {
+     "label": "\"Fine. Feed it.\"",
+     "success": {
+      "text": "It gives back what it found, and eats something else instead, glowing.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "flag",
+        "key": "meltan-fed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-meltan-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shoo them all.",
+     "success": {
+      "text": "Four Meltan go off into the dark, offended.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-meltan-promise",
+   "name": "Meltan: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "meltan",
+    "tint": "#a0a0a0",
+    "effect": "sparkle"
+   },
+   "intro": "Meltan sits on your boot and looks at your bag, meaningfully.\n\nThe Promise: Feed me: give it one held item per stage.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Meltan rides on your bag, nibbling the buckle.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-meltan",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Meltan came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Meltan leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "meltan-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Meltan will forgive you once. The second time, it leaves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-meltan-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my21-stack",
+   "name": "More",
+   "group": "Story: Mythical",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "guest-meltan",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "meltan-fed",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "melmetal",
+    "tint": "#808090",
+    "effect": "none"
+   },
+   "intro": "Eight Meltan stack on top of each other in the camp, wobble, and become one huge metal Pokémon with arms like hammers.\n\nMelmetal, in a clanking voice: \"More.\" It holds out a hand. Your bag rattles.\n\nThe tinkerer: \"It wants to make things. Not eat them. Give it something good and see what happens.\"",
+   "choices": [
+    {
+     "label": "\"Here.\"",
+     "success": {
+      "text": "It hammers what you give it into something better, and hands it back, still warm. The next reward you find is finer for it.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "betterDraft",
+        "extra": 1
+       },
+       {
+        "kind": "flag",
+        "key": "melmetal-forged",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Eight Meltan became Melmetal at your campfire, and it forged you something.",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"That's enough.\"",
+     "success": {
+      "text": "Melmetal: \"...Hm.\" It sits. It waits for you to change your mind. By morning it is eight Meltan again, asleep in a pile.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "melmetal-refused",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What will you make?\"",
+     "success": {
+      "text": "Melmetal: \"Things to give away. Made things go out. Not in.\" Then it comes apart into eight Meltan, satisfied, and they follow you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "melmetal-asked",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my22-vines",
+   "name": "The Fruit Test",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-zarude",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zarude",
+    "tint": "#406030",
+    "effect": "none"
+   },
+   "intro": "Vines swing overhead. A pack of dark apes drops fruit on the path and watches from the branches. One fruit lands at your feet.\n\nA Zarude, scarred, with a pink scarf, sits on a branch, arms folded. A small human child is tied in a hammock of vines behind it, asleep and safe.\n\nZarude, in growls: \"The pack wants to see what you do with what's given.\"",
+   "choices": [
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "The pack hoots. They think you are greedy, but quick. Zarude says nothing.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my22-child"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw it back.",
+     "success": {
+      "text": "The pack throws fruit at you for a full minute. Zarude laughs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "zarude-threw",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my22-child"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share it.",
+     "success": {
+      "text": "You split it with your Pokémon. The pack goes quiet. Zarude climbs down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "zarude-shared",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my22-child"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my22-child",
+   "name": "The Fruit Test: The Child",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "zarude",
+    "tint": "#406030",
+    "effect": "none"
+   },
+   "intro": "A wanderer's child it found and raises. It is not stolen; nobody has come looking.\n\nZarude: \"The pack says I should leave it. I won't. Would you?\"",
+   "choices": [
+    {
+     "label": "\"Never.\"",
+     "success": {
+      "text": "Zarude nods.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-zarude-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Find their family.\"",
+     "success": {
+      "text": "A sign in a town, a year old: LOST, AGE 2. That night Zarude carries the child to the edge of town and watches from a tree until the door opens.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "zarude-family",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-zarude-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's not my business.\"",
+     "success": {
+      "text": "Zarude: \"Then go.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "zarude-refused",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-zarude-promise",
+   "name": "Zarude: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "zarude",
+    "tint": "#406030",
+    "effect": "sparkle"
+   },
+   "intro": "Zarude: \"The small one. Whatever happens, the small one doesn't fall.\"\n\nThe Promise: It is yours now: the youngest Pokémon in your party must never faint.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Zarude swings along the branches above you, and the pack follows a while.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-zarude",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Zarude came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Zarude leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "zarude-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Zarude will forgive you once. The second time, it leaves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-zarude-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z5-dream",
+   "name": "The Darkest Dream",
+   "group": "Story: Z Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "guest-darkrai",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "promise-step-darkrai",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "cresselia",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-cresselia",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Cresselia stands between you and the shadow. \"Do it\" is not something you can say tonight.",
+     "hide": [
+      1
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "darkrai",
+    "tint": "#200020",
+    "effect": "flicker"
+   },
+   "intro": "Night. Darkrai walks beside you, and its shadow does not match it.\n\nDarkrai, heard, not spoken: \"There is a shape I could take. In it, the dreams I bring would not end. Not for anyone. You have kept faith with me. I ask you, not myself.\"",
+   "choices": [
+    {
+     "label": "\"Don't.\"",
+     "success": {
+      "text": "Darkrai thanks you. Its shadow is its own again. In the last battle of this run, it means to stand beside you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "darkrai-refused-z",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "Darkrai asked you whether to become something worse, and you said no.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Do it.\"",
+     "success": {
+      "text": "The shadow rises. For one battle, Z-Mega Darkrai fights at your side. After it, the whole region sleeps badly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "darkrai-became-z",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The whole region sleeps badly",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 0.75
+         }
+        ],
+        "until": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [],
+       "format": "doubles",
+       "name": "The Endless Dream",
+       "ally": "darkrai-z-mega",
+       "size": 2,
+       "types": [
+        "dark",
+        "ghost"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "darkrai-z-won",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Why ask me?\"",
+     "success": {
+      "text": "Darkrai: \"Because I would say yes.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-z5-dream-again"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my13-camp-again",
+   "name": "The Moonless Camp",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "cresselia",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-cresselia",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The pale shape steps out of the trees. Cresselia, heard, not spoken: \"It is not your enemy. It never was.\"",
+     "addChoices": []
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "darkrai",
+    "tint": "#302040",
+    "effect": "flicker"
+   },
+   "intro": "Camp, at night. Everyone falls asleep at once, you last. The moon is gone from the sky.\n\nYou wake inside a dream of the camp. Your Pokémon are asleep, twitching. One whimpers.\n\nA figure at the edge of the firelight, made of smoke and a white plume: \"They dream of losing you. I did not put it there. I only let them see it. Tell me your nightmare, and I will take theirs.\"\n\nBehind it, something pale flickers in the trees and is gone.",
+   "choices": [
+    {
+     "label": "\"Tell it.\"",
+     "success": {
+      "text": "Which one?",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my13-nightmare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stay awake.\"",
+     "success": {
+      "text": "You hold the watch all night. Darkrai stays at the edge of the light until dawn, then speaks once: \"You are stubborn. Good.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "darkrai-watched",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-darkrai-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who was that in the trees?\"",
+     "success": {
+      "text": "Darkrai: \"Someone who would rather I did not exist.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "darkrai-asked-cresselia",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my13-camp-again"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "co-my14-cave-again",
+   "name": "The Fourth Statue",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "swords",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-swords",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "One of the three statues turns its stone head. Keldeo: \"They're watching.\"",
+     "addChoices": []
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "keldeo",
+    "tint": "#4080c0",
+    "effect": "none"
+   },
+   "intro": "Behind a waterfall, a cave with three tall swordsman statues: a Cobalion, a Terrakion and a Virizion, cut in stone. A fourth plinth is empty. Hoofprints lead to it and away.\n\nA small blue Pokémon with a stubby horn backs out of the shadows, holding its ground.\nKeldeo: \"They said I'm not ready. They left me here to think. I've thought. I'm ready. I just need someone to see it. Battle me. Don't go easy.\"",
+   "choices": [
+    {
+     "label": "\"You're ready.\"",
+     "success": {
+      "text": "Keldeo: \"You haven't even seen me.\" It is hurt, and asks again.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my14-cave-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Show me.\"",
+     "success": {
+      "text": "A one-on-one, under the statues.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "keldeo"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "keldeo-shown",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "keldeo-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-keldeo-promise"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "keldeo-shown",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-keldeo-promise"
+        }
+       ],
+       "rule": {
+        "noItems": true,
+        "noSwitch": true,
+        "matchLead": true,
+        "suddenDeath": true
+       }
+      }
+     }
+    },
+    {
+     "label": "\"Why did they leave you?\"",
+     "success": {
+      "text": "Keldeo: \"I ran to help someone. Alone. I almost lost.\" Then it lowers its horn.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "keldeo"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "keldeo-shown",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "keldeo-told",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-keldeo-promise"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "keldeo-shown",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "keldeo-told",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-keldeo-promise"
+        }
+       ],
+       "rule": {
+        "noItems": true,
+        "noSwitch": true,
+        "matchLead": true,
+        "suddenDeath": true
+       }
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "co-my18-hall-again",
+   "name": "The Heart in the Box",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "magearna-read",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The middle door glows faintly.",
+     "addChoices": []
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magearna",
+    "tint": "#c0a060",
+    "effect": "none"
+   },
+   "intro": "A castle hall full of clocks, all stopped. On a pedestal, a heart-shaped box, ticking. Three tiny doors, one gear.\n\nA note in the dust, in a careful hand: SHE WAS MADE 500 YEARS AGO. SHE WAKES FOR SOMEONE WHO KNOWS WHAT SHE IS FOR.",
+   "choices": [
+    {
+     "label": "The left door.",
+     "success": {
+      "text": "A tiny wind-up toy marches out and falls over. The box laughs: a ticking giggle.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my18-hall-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The middle door.",
+     "success": {
+      "text": "The gear turns. Every clock in the hall starts at once. Magearna unfolds from the box.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "magearna-woke",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-magearna-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The right door.",
+     "success": {
+      "text": "A tiny wind-up bird whistles at you. The box giggles, ticking.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my18-hall-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the rest of the note.",
+     "success": {
+      "text": "SHE IS FOR GIVING. SHE WAS A GIFT.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "magearna-read",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my18-hall-again"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "co-my20-camp-again",
+   "name": "The Hinge-Eater",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "meltan",
+    "tint": "#a0a0a0",
+    "effect": "none"
+   },
+   "intro": "The campfire. A clink. A tiny bolt-shaped Pokémon with a nut for a head is gnawing the hinge of your bag. It stops. It looks at you. It keeps gnawing. A second one pokes out of the firewood.\n\nA tinkerer, from the next tent: \"Oh no. Once there's two, there's always more.\"",
+   "choices": [
+    {
+     "label": "\"Feed it.\"",
+     "success": {
+      "text": "You hold out something metal. It eats it, glows, and sits on your boot.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "flag",
+        "key": "meltan-fed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-meltan-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Shoo it.\"",
+     "success": {
+      "text": "It goes. So does the bag hinge. Something falls out of the bag and is lost in the dark.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "flag",
+        "key": "meltan-shooed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the tinkerer.",
+     "success": {
+      "text": "Tinkerer: \"They eat metal. Give them one thing and they'll love you. Give them eight things and... well. You'll see.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "meltan-warned",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my20-camp-again"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "co-z5-dream-again",
+   "name": "The Darkest Dream",
+   "group": "Story: Z Anomalies",
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "cresselia",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-cresselia",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Cresselia stands between you and the shadow. \"Do it\" is not something you can say tonight.",
+     "hide": [
+      1
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "darkrai",
+    "tint": "#200020",
+    "effect": "flicker"
+   },
+   "intro": "Night. Darkrai walks beside you, and its shadow does not match it.\n\nDarkrai, heard, not spoken: \"There is a shape I could take. In it, the dreams I bring would not end. Not for anyone. You have kept faith with me. I ask you, not myself.\"",
+   "choices": [
+    {
+     "label": "\"Don't.\"",
+     "success": {
+      "text": "Darkrai thanks you. Its shadow is its own again. In the last battle of this run, it means to stand beside you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "darkrai-refused-z",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "Darkrai asked you whether to become something worse, and you said no.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Do it.\"",
+     "success": {
+      "text": "The shadow rises. For one battle, Z-Mega Darkrai fights at your side. After it, the whole region sleeps badly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "darkrai-became-z",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The whole region sleeps badly",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 0.75
+         }
+        ],
+        "until": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [],
+       "format": "doubles",
+       "name": "The Endless Dream",
+       "ally": "darkrai-z-mega",
+       "size": 2,
+       "types": [
+        "dark",
+        "ghost"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "darkrai-z-won",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Why ask me?\"",
+     "success": {
+      "text": "Darkrai: \"Because I would say yes.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-z5-dream-again"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  }
+ ]
+}

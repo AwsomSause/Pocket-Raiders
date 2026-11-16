@@ -14,6 +14,9 @@ import { chooseStarter, createRun, takeTurn } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { openHistory } from '../../src/core/story/record';
 import { content, toBattle } from './helpers';
+import { applyEffect } from '../../src/core/events';
+import { hashSeed, Rng } from '../../src/core/rng';
+import type { EventEffect } from '../../src/core/contentSchema';
 
 function battleRun(enemy = 'rattata', kind: 'wild' | 'trainer' = 'wild'): RunState {
   const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'bd', seed: 'bond', archetypeId: 'red', starterOverride: KANTO }), 0));
@@ -253,7 +256,7 @@ describe('Emotional Turning Point', () => {
     const foe = battleRun('rattata', 'trainer');
     foe.battle!.ai = 0.9;
     const tp: BattleEvent = { type: 'turningPoint', side: 'enemy', uid: 'e1', emotion: 'bravery' };
-    expect(planDrama(content, foe, structuredClone(foe.battle!), [tp], 'high').some((l) => l.cue?.event === 'emotionalTurningPoint')).toBe(true);
+    expect(planDrama(content, foe, structuredClone(foe.battle!), [tp], 'high').some((l) => l.cue?.event === 'foeTurningPoint')).toBe(true);
   });
 });
 
@@ -311,5 +314,49 @@ describe('Bond level on the party screen', () => {
     run.itemCounters = { ...run.itemCounters, [`bondwins:${[a!.uid, b.uid].sort().join('+')}`]: 8 };
     expect(bondLevelLines(content, run, a!)).toEqual([`Bond Lv 2 with ${content.species.get('pidgey')!.name}`]);
     expect(bondLevelLines(content, run, b)[0]).toMatch(/^Bond Lv 2 with /);
+  });
+});
+
+describe('SF161 Battle Moments: the after-battle choice', () => {
+  const ev = (e: EventEffect, run: RunState) => applyEffect(content, run, e, new Rng(hashSeed('m')));
+  it('a refusal names its Pokémon, opens its room one node on (even with dialogue off), and an apology raises its trust', () => {
+    const run = battleRun('rattata', 'trainer');
+    const uid = run.party[0]!.uid;
+    const lines = planDrama(content, run, structuredClone(run.battle!), [{ type: 'refused', side: 'player', uid, moveId: 'tackle' }], 'off');
+    expect(lines).toEqual([]);
+    expect(run.story.flags['moment-mon']).toBe(uid);
+    expect(run.itemCounters?.['later-event:moment-refusal']).toBe(1);
+    const before = bondOf(run, uid).trust;
+    const apology = content.events.get('moment-refusal')!.choices[0]!.success.effects[0]!;
+    expect(ev(apology, run)).toMatch(/trust \+10/);
+    expect(bondOf(run, uid).trust).toBe(Math.min(100, before + 10));
+  });
+  it('the line is narrated under your Pokémon\'s name and gives its reason', () => {
+    const run = battleRun('rattata', 'trainer');
+    const uid = run.party[0]!.uid;
+    const [line] = planDrama(content, run, structuredClone(run.battle!), [{ type: 'refused', side: 'player', uid, moveId: 'tackle' }], 'high');
+    const name = content.species.get(run.party[0]!.speciesId)!.name;
+    expect(line).toMatchObject({ speaker: name });
+    expect(line!.text).toMatch(/trusts you less than it trusts its own instinct/);
+  });
+  it('"Tell them they work well together" lands on both of the pair, and nobody else', () => {
+    const run = battleRun('rattata', 'trainer');
+    const a = run.party[0]!;
+    const b = createPokemon(content, 'pidgey', 10, 'p2');
+    const c = createPokemon(content, 'rattata', 10, 'p3');
+    run.party.push(b, c);
+    planDrama(content, run, structuredClone(run.battle!), [{ type: 'combo', side: 'player', from: a.uid, to: b.uid, stat: 'atk' }], 'normal');
+    expect(run.story.flags['moment-mon']).toBe(`${a.uid}|${b.uid}`);
+    const f = [a.friendship, b.friendship, c.friendship];
+    ev(content.events.get('moment-combo')!.choices[0]!.success.effects[0]!, run);
+    expect(a.friendship).toBeGreaterThan(f[0]!);
+    expect(b.friendship).toBeGreaterThan(f[1]!);
+    expect(c.friendship).toBe(f[2]);
+  });
+  it('a foe\'s practised pair is the trainer\'s commentary, with no choice for you', () => {
+    const run = battleRun('rattata', 'trainer');
+    const lines = planDrama(content, run, structuredClone(run.battle!), [{ type: 'combo', side: 'enemy', from: 'e0', to: 'e1', stat: 'atk' }], 'high');
+    expect(lines.some((l) => l.cue?.event === 'foeCombination' && l.speaker === 'Joey')).toBe(true);
+    expect(run.itemCounters?.['later-event:moment-combo']).toBeUndefined();
   });
 });

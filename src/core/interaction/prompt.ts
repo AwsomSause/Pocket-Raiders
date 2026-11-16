@@ -186,6 +186,9 @@ export const PROMPTS: readonly PromptDef[] = [
   { id: 'juggle-five', kind: 'rhythm', label: 'Keep the beat', hint: 'Press on each beat while five Aipom juggle.', beatsMs: [500, 1000, 1500, 2000, 2500], windowsMs: W(90, 170, 300) },
   { id: 'juggle-seven', kind: 'rhythm', label: 'Keep the beat', hint: 'Press on each beat while seven Aipom juggle.', beatsMs: [450, 900, 1350, 1800, 2250, 2700, 3150], windowsMs: W(80, 160, 280) },
   { id: 'pull-hold', kind: 'hold', label: 'Pull together', hint: 'Hold, and let go as the ring fills to pull them free.', targetMs: 1100, windowsMs: W(90, 180, 320) },
+  // Catalog Overhaul markets (SF91, SF92): the Game Corner's skill games.
+  { id: 'claw-drag', kind: 'drag', label: 'Steer the claw', hint: 'Drag the claw over the prize and let go.', from: [20, 25], to: [70, 70], windowsPx: W(6, 12, 22), maxMs: 4000 },
+  { id: 'shell-tap', kind: 'tap', label: 'Follow the Ball', hint: 'Press the moment her hands stop over the shell with the Ball.', windowsMs: W(180, 300, 480), expireMs: 1000 },
 ];
 
 export const promptById = (id: string): PromptDef => {

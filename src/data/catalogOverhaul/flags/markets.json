@@ -1,0 +1,188 @@
+{
+ "category": "markets",
+ "note": "Run flags the markets category sets or reads. `external` flags are set by another category's events; markets only reads them (the scene plays its plain version until they exist).",
+ "external": [
+  {
+   "key": "apprentice-met",
+   "setBy": "The Apprentice (SF2, families)",
+   "readBy": "bargain-bin"
+  },
+  {
+   "key": "berry-festival-fixed",
+   "setBy": "The Berry Festival (SF76)",
+   "readBy": "berry-merchant"
+  },
+  {
+   "key": "team-op-stopped-stone-harvest",
+   "setBy": "The Stone Harvest (M2, Flare)",
+   "readBy": "mega-bazaar"
+  },
+  {
+   "key": "promise-genesect-no-machines",
+   "setBy": "Genesect's Promise (legends)",
+   "readBy": "tm-vendor, services"
+  },
+  {
+   "key": "promise-meloetta-kept",
+   "setBy": "Meloetta's Promise (legends)",
+   "readBy": "nature-counselor"
+  },
+  {
+   "key": "grunt-school-active",
+   "setBy": "Grunt School (SF17)",
+   "readBy": "vt-rocket-bake-sale"
+  },
+  {
+   "key": "roster-lucky-done",
+   "setBy": "Gambler Lucky (RR19, people): his arc is done (Persian returned)",
+   "readBy": "game-corner"
+  },
+  {
+   "key": "roster-rosalind-done",
+   "setBy": "Rosalind (RR2, people): her arc is done",
+   "readBy": "flower-garden"
+  },
+  {
+   "key": "roster-perry-done",
+   "setBy": "Perry (RR5, people): his arc is done",
+   "readBy": "sky-race"
+  },
+  {
+   "key": "bank-robbed",
+   "setBy": "The evil team's crisis strand (CATALOG_LEDGER bank-teller: the bank can be robbed by the evil team)",
+   "readBy": "bank-teller-return, bank-teller-return-big"
+  },
+  {
+   "key": "glass-forest-ticket",
+   "setBy": "markets sets it (ticket-tout); The Glass Forest (SF41.4, ovc-glass-forest-s1, families) should open for it",
+   "readBy": "(families row)"
+  },
+  {
+   "key": "teller-wennick",
+   "setBy": "Hermit Wennick's story (SF44, families)",
+   "readBy": "trade-t024"
+  },
+  {
+   "key": "delta-journal",
+   "setBy": "The Delta journal (Dr. Linden Vale, D1/B6)",
+   "readBy": "trade-t091"
+  },
+  {
+   "key": "marsh-vent",
+   "setBy": "The Hot Marsh (D6): the vent fixed",
+   "readBy": "trade-t093"
+  },
+  {
+   "key": "delta-ditto-colony",
+   "setBy": "The Ditto Colony (D4) done",
+   "readBy": "trade-t094"
+  },
+  {
+   "key": "delta-factory-dump",
+   "setBy": "The factory dump (D5) done",
+   "readBy": "trade-t096"
+  },
+  {
+   "key": "badge-challenged",
+   "setBy": "Sorrel's Gym (GL7, questlines)",
+   "readBy": "trade-t106"
+  },
+  {
+   "key": "apprentice-friend",
+   "setBy": "The Apprentice (SF2, families): Tib is a friend",
+   "readBy": "trade-t107"
+  },
+  {
+   "key": "nobody-escaped",
+   "setBy": "Nell's story (SF20, families): she escaped",
+   "readBy": "trade-t108"
+  },
+  {
+   "key": "dog-home",
+   "setBy": "Biscuit's story (SF46, families): the dog got home",
+   "readBy": "trade-t110"
+  }
+ ],
+ "flags": [
+  {
+   "key": "apprentice-met",
+   "hook": "The Apprentice (SF2, families)"
+  },
+  {
+   "key": "berry-festival-fixed",
+   "hook": "The Berry Festival (SF76)"
+  },
+  {
+   "key": "team-op-stopped-stone-harvest",
+   "hook": "The Stone Harvest (M2, Flare)"
+  },
+  {
+   "key": "promise-genesect-no-machines",
+   "hook": "Genesect's Promise (legends)"
+  },
+  {
+   "key": "promise-meloetta-kept",
+   "hook": "Meloetta's Promise (legends)"
+  },
+  {
+   "key": "grunt-school-active",
+   "hook": "Grunt School (SF17)"
+  },
+  {
+   "key": "roster-lucky-done",
+   "hook": "Gambler Lucky (RR19, people): his arc is done (Persian returned)"
+  },
+  {
+   "key": "roster-rosalind-done",
+   "hook": "Rosalind (RR2, people): her arc is done"
+  },
+  {
+   "key": "roster-perry-done",
+   "hook": "Perry (RR5, people): his arc is done"
+  },
+  {
+   "key": "bank-robbed",
+   "hook": "The evil team's crisis strand (CATALOG_LEDGER bank-teller: the bank can be robbed by the evil team)"
+  },
+  {
+   "key": "glass-forest-ticket",
+   "hook": "markets sets it (ticket-tout); The Glass Forest (SF41.4, ovc-glass-forest-s1, families) should open for it"
+  },
+  {
+   "key": "teller-wennick",
+   "hook": "Hermit Wennick's story (SF44, families)"
+  },
+  {
+   "key": "delta-journal",
+   "hook": "The Delta journal (Dr. Linden Vale, D1/B6)"
+  },
+  {
+   "key": "marsh-vent",
+   "hook": "The Hot Marsh (D6): the vent fixed"
+  },
+  {
+   "key": "delta-ditto-colony",
+   "hook": "The Ditto Colony (D4) done"
+  },
+  {
+   "key": "delta-factory-dump",
+   "hook": "The factory dump (D5) done"
+  },
+  {
+   "key": "badge-challenged",
+   "hook": "Sorrel's Gym (GL7, questlines)"
+  },
+  {
+   "key": "apprentice-friend",
+   "hook": "The Apprentice (SF2, families): Tib is a friend"
+  },
+  {
+   "key": "nobody-escaped",
+   "hook": "Nell's story (SF20, families): she escaped"
+  },
+  {
+   "key": "dog-home",
+   "hook": "Biscuit's story (SF46, families): the dog got home"
+  }
+ ]
+}
