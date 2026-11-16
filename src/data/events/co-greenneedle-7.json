@@ -6380,6 +6380,12 @@
       "effects": [
        {
         "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-marks",
+        "n": 1
+       },
+       {
+        "kind": "gn",
         "op": "when",
         "key": "sunken-drain-h",
         "min": 1,
@@ -7509,6 +7515,1422 @@
         "kind": "flag",
         "key": "sunken-potter",
         "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-door",
+   "name": "The Ground Opens",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sunken-tablet",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "sunken-tablet-at"
+    },
+    {
+     "kind": "flag",
+     "key": "cavern-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "cavern-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "*The Small Tablet's warm. Then it's hot.*\n\n*The marks on it move. They line up. They point down.*\n\n*The ground in front of you folds open like a book.*",
+   "choices": [
+    {
+     "label": "Go down.",
+     "success": {
+      "text": "Steps, cut for feet a little bigger than yours. The walls are moving.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cavern-solved",
+        "n": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-34-corridor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-corridor",
+   "name": "Caverns-o-Mighty: The Corridor",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "thief",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunken-relicanth-fought",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Every word on the walls is the same one, the whole way down. THIEF.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The Unown are the cave. They're the only things alive down here, and they're on every wall.\n\nThey spell words. Not to you. To each other. HERE. WAIT. STILL. A long one: WE KEPT IT.\n\n*Halfway along, they stop. They arrange themselves into your name. And hold it. Then the letters look at you, all at once, one eye each.*",
+   "choices": [
+    {
+     "label": "Say it aloud.",
+     "success": {
+      "text": "Your own name comes back off the walls, softer each time, until it's only the Unown saying it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "unown-name",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-34-lintel"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Spell something back.",
+     "success": {
+      "text": "You hold up your hands and wait. The letters come.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-spell"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The name stays behind you. It's spelled right.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-34-lintel"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-spell",
+   "name": "Caverns-o-Mighty: Spell Something Back",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "Which word? One you've seen on the walls.",
+   "choices": [
+    {
+     "label": "HERE.",
+     "success": {
+      "text": "They copy it, pleased. HERE, all down the corridor.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "unown-spoke",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "unown-word",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-34-lintel"
+       }
+      ]
+     }
+    },
+    {
+     "label": "WAIT.",
+     "success": {
+      "text": "They copy it, pleased. WAIT, all down the corridor.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "unown-spoke",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "unown-word",
+        "n": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-34-lintel"
+       }
+      ]
+     }
+    },
+    {
+     "label": "STILL.",
+     "success": {
+      "text": "They copy it, pleased. STILL, all down the corridor.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "unown-spoke",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "unown-word",
+        "n": 3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-34-lintel"
+       }
+      ]
+     }
+    },
+    {
+     "label": "WE KEPT IT.",
+     "success": {
+      "text": "They copy it, pleased. WE KEPT IT, all down the corridor.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "unown-spoke",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "unown-word",
+        "n": 4
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-34-lintel"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-lintel",
+   "name": "Caverns-o-Mighty: The Doors",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "done",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "cavern-word-1",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "cavern-word-2",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "cavern-word-3",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The three Unown on the last lintel rearrange themselves. Now they spell END.",
+     "addChoices": [
+      {
+       "label": "Through the door marked END.",
+       "success": {
+        "text": "Seven dots, somewhere ahead, waiting to light.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-34-end"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "thief",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunken-relicanth-fought",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Every word on the walls is the same one, the whole way down. THIEF.*"
+    },
+    {
+     "id": "faded",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "cavern-unown-beaten",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "*So many letters are gone from the walls now. What's left is hard to read.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "Doors, and over each one, three Unown on the lintel. When they rearrange, the door goes somewhere else. You can read where before you step through.",
+   "choices": [
+    {
+     "label": "Through the door marked SCALE.",
+     "success": {
+      "text": "A chamber with a carving of a balance.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "cavern-word-1",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Through the door marked LINE.",
+     "success": {
+      "text": "A chamber with a carving of a doorway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "cavern-word-2",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Through the door marked HANDS.",
+     "success": {
+      "text": "A chamber with a carving of two hands.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-hands"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "cavern-word-3",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-34-scale",
+   "name": "Caverns-o-Mighty: The Scale",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "thief",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunken-relicanth-fought",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Every word on the walls is the same one, the whole way down. THIEF.*"
+    },
+    {
+     "id": "faded",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "cavern-unown-beaten",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "*So many letters are gone from the walls now. What's left is hard to read.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "A carving of a balance, with a fish on one side and nothing on the other. Below it, a row of empty niches.\n\nLoose Unown drift in the air. You can lead them, one at a time, to the niches.",
+   "choices": [
+    {
+     "label": "Spell TRADE.",
+     "success": {
+      "text": "The scale-weight, stamped with a fish. T, R, A, D, E. The niches glow, one by one.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cavern-word-1",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cavern-solved",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-lintel"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-weight",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "cavern-unown-beaten",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Spell FISH.",
+     "success": {
+      "text": "The letters line up in the niches, then one drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Try letters until a word fits.",
+     "success": {
+      "text": "It takes a long time. Letters in, letters out. Then: TRADE. The chamber opens.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-guessed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cavern-word-1",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cavern-solved",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-lintel"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight the Unown.",
+     "success": {
+      "text": "They come off the wall like leaves in a wind.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "unown"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cavern-unown-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-34-scale"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-34-scale"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-34-scale"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-line",
+   "name": "Caverns-o-Mighty: The Line",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "thief",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunken-relicanth-fought",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Every word on the walls is the same one, the whole way down. THIEF.*"
+    },
+    {
+     "id": "faded",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "cavern-unown-beaten",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "*So many letters are gone from the walls now. What's left is hard to read.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "A carving of a doorway, with lines beside it, each one higher than the last. A row of empty niches.",
+   "choices": [
+    {
+     "label": "Spell RISING.",
+     "success": {
+      "text": "The high-water marks, a hand's width in a lifetime. R, I, S, I, N, G.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cavern-word-2",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cavern-solved",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-lintel"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-marks",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "cavern-unown-beaten",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Spell DOOR.",
+     "success": {
+      "text": "The letters line up in the niches, then one drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Try letters until a word fits.",
+     "success": {
+      "text": "It takes a long time. Letters in, letters out. Then: RISING. The chamber opens.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-guessed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cavern-word-2",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cavern-solved",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-lintel"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight the Unown.",
+     "success": {
+      "text": "They come off the wall like leaves in a wind.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "unown"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cavern-unown-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-34-line"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-34-line"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-34-line"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-hands",
+   "name": "Caverns-o-Mighty: The Hands",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "thief",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunken-relicanth-fought",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Every word on the walls is the same one, the whole way down. THIEF.*"
+    },
+    {
+     "id": "faded",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "cavern-unown-beaten",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "*So many letters are gone from the walls now. What's left is hard to read.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "A carving of two hands, open, something small between them. A row of empty niches.\n\nThe last figure in the mural, looking back, putting something down.",
+   "choices": [
+    {
+     "label": "Spell KEPT.",
+     "success": {
+      "text": "K, E, P, T. It kept. It's still keeping.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cavern-last",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "cast",
+        "key": "cavern-regi",
+        "species": [
+         "regirock"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cavern-word-3",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cavern-solved",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-lintel"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-mural",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Spell LEFT.",
+     "success": {
+      "text": "L, E, F, T. What's left when everyone's gone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cavern-last",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "cast",
+        "key": "cavern-regi",
+        "species": [
+         "regice"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cavern-word-3",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cavern-solved",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-lintel"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-mural",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Spell GIVEN.",
+     "success": {
+      "text": "G, I, V, E, N. Made, and handed over.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cavern-last",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "cast",
+        "key": "cavern-regi",
+        "species": [
+         "registeel"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cavern-word-3",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cavern-solved",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-lintel"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-mural",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Try letters until a word fits.",
+     "success": {
+      "text": "Letters in, letters out, until the niches glow. You couldn't say which word it was.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-guessed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "cavern-last",
+        "weights": [
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cavern-last",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "cast",
+          "key": "cavern-regi",
+          "species": [
+           "regirock"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cavern-last",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "cast",
+          "key": "cavern-regi",
+          "species": [
+           "regice"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cavern-last",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "cast",
+          "key": "cavern-regi",
+          "species": [
+           "registeel"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cavern-word-3",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cavern-solved",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-lintel"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-mural",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-34-end",
+   "name": "Caverns-o-Mighty: The End",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "guessed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "cavern-guessed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*The dots light, but the door behind them opens on one you didn't choose.*"
+    },
+    {
+     "id": "thief",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunken-relicanth-fought",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Every word on the walls is the same one, the whole way down. THIEF.*"
+    },
+    {
+     "id": "spoke",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "unown-spoke",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*On the walls, all the way round, the Unown spell the word you gave them.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "regirock",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "*Seven dots light, one after another.*\n\n*It doesn't move toward you. It was put here to wait for the tablet, and the tablet's come.*",
+   "choices": [
+    {
+     "label": "Hold out the tablet.",
+     "success": {
+      "text": "It takes it. It sets it into its own chest, where there's a space the right size.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cavern-tablet-given",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-regi"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The dots flare.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@cavern-regi"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cavern-regi-defeated",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-34-defeated"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "cavern-regi-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "cavern-done",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "cavern-done",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Throw a Ball.",
+     "success": {
+      "text": "It bounces off. At full strength, there was almost no chance: about one in a hundred. You could see that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-ball",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-end"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-regi",
+   "name": "Caverns-o-Mighty: It Has What It Waited For",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "regirock",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "It has what it was waiting for. It stands a little lower now, the way you do after a long day.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It fights, but its heart isn't in it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@cavern-regi"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cavern-regi-defeated",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-34-defeated"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "cavern-regi-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "cavern-done",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "cavern-done",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ],
+       "rule": {
+        "foeStages": {
+         "atk": -1,
+         "def": -1,
+         "spa": -1,
+         "spd": -1,
+         "spe": -1
+        }
+       },
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "cavern-guessed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It fights at full strength. It doesn't know you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@cavern-regi"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cavern-regi-defeated",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-34-defeated"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "cavern-regi-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "cavern-done",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "cavern-done",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "cavern-guessed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-34-defeated",
+   "name": "Caverns-o-Mighty: Still",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "regirock",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "It goes still, the dots dark. Where it stood, something rare of its own kind, and the Small Tablet, cracked.\n\nThe tablet hums, faintly, when you turn toward other sealed doors.",
+   "choices": [
+    {
+     "label": "Take them.",
+     "success": {
+      "text": "Cold, both of them.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cavern-last",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "item",
+          "id": "stone-plate",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cavern-last",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "item",
+          "id": "icicle-plate",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cavern-last",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "item",
+          "id": "iron-plate",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "cavern-tablet-cracked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cavern-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
        }
       ]
      }

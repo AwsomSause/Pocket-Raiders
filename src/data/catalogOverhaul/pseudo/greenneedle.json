@@ -147,6 +147,15 @@
    "start": "opened"
   },
   {
+   "id": "ps_gn_unown",
+   "name": "Caverns-o-Mighty",
+   "entry": "gn-34-door",
+   "themeId": "psychic-ghost",
+   "tint": "#5a4f6e",
+   "mood": "unown caverns",
+   "start": "opened"
+  },
+  {
    "id": "ps_gn_sunken",
    "name": "The Sunken City",
    "entry": "gn-33-door",

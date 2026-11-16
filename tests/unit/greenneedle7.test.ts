@@ -514,3 +514,81 @@ describe('gn.33 The Sunken City', () => {
     expect(content.events.get('gn-33-potter')!.requires.length).toBeGreaterThan(1);
   });
 });
+
+describe('gn.34 Caverns-o-Mighty', () => {
+  const below = (seed: string, setup: (run: RunState) => void = () => {}): RunState => {
+    const run = gnRun(seed);
+    setFlag(run, 'sunken-tablet');
+    setFlag(run, 'sunken-tablet-at', 0);
+    setup(run);
+    open(run, 'gn-34-door');
+    return choose(run, 'gn-34-door', 'Go down.').run;
+  };
+  const SAW = (r: RunState): void => { setFlag(r, 'sunken-weight'); setFlag(r, 'sunken-marks'); setFlag(r, 'sunken-mural'); };
+  /** Through the corridor and all three chambers with the words read in the Sunken City; the last word picks the Regi. */
+  const solved = (seed: string, last: 'KEPT' | 'LEFT' | 'GIVEN', setup: (run: RunState) => void = SAW): RunState => {
+    let run = choose(below(seed, setup), 'gn-34-corridor', 'Walk on.').run;
+    run = choose(choose(run, 'gn-34-lintel', 'Through the door marked SCALE.').run, 'gn-34-scale', 'Spell TRADE.').run;
+    run = choose(choose(run, 'gn-34-lintel', 'Through the door marked LINE.').run, 'gn-34-line', 'Spell RISING.').run;
+    run = choose(choose(run, 'gn-34-lintel', 'Through the door marked HANDS.').run, 'gn-34-hands', `Spell ${last}.`).run;
+    return choose(run, 'gn-34-lintel', 'Through the door marked END.').run;
+  };
+
+  it('the stage after the Sunken City, must-see while the tablet is carried; the ground opens (no badge)', () => {
+    expect(content.coPlacement!.get('gn-34-door')).toMatchObject({ home: 9, window: [7, 12], sits: 'must-see', earliest: 10 });
+    expect(content.events.get('gn-34-door')!.requires.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('the corridor spells your name; spell something back and the Unown copy it', () => {
+    const run = below('t34-name');
+    expect(scene(run, 'gn-34-corridor').labels).toEqual(['Say it aloud.', 'Spell something back.', 'Walk on.']);
+    const spell = choose(run, 'gn-34-corridor', 'Spell something back.').run;
+    expect(scene(spell, 'gn-34-spell').labels).toEqual(['HERE.', 'WAIT.', 'STILL.', 'WE KEPT IT.']);
+    const spoke = choose(spell, 'gn-34-spell', 'WAIT.').run;
+    expect(flagOf(spoke, 'unown-spoke')).toBe(1);
+  });
+
+  it('read in the Sunken City: the words are there; the last word picks the Regi', () => {
+    for (const [word, regi] of [['KEPT', 'regirock'], ['LEFT', 'regice'], ['GIVEN', 'registeel']] as const) {
+      const run = solved(`t34-${word}`, word);
+      expect(flagOf(run, 'cavern-guessed')).toBe(0);
+      const fight = choose(run, 'gn-34-end', 'Battle.').run;
+      expect(fight.battle!.enemyTeam[0]!.speciesId).toBe(regi);
+    }
+  });
+
+  it('never saw the carvings: only guessing, and the game remembers it was a guess', () => {
+    let run = choose(below('t34-guess', () => {}), 'gn-34-corridor', 'Walk on.').run;
+    run = choose(run, 'gn-34-lintel', 'Through the door marked SCALE.').run;
+    expect(scene(run, 'gn-34-scale').labels).toEqual(['Spell FISH.', 'Try letters until a word fits.', 'Fight the Unown.']);
+    run = choose(run, 'gn-34-scale', 'Try letters until a word fits.').run;
+    expect(flagOf(run, 'cavern-guessed')).toBe(1);
+    run = choose(choose(run, 'gn-34-lintel', 'Through the door marked HANDS.').run, 'gn-34-hands', 'Try letters until a word fits.').run;
+    expect([1, 2, 3]).toContain(flagOf(run, 'cavern-last'));
+    run = choose(choose(run, 'gn-34-lintel', 'Through the door marked LINE.').run, 'gn-34-line', 'Try letters until a word fits.').run;
+    const end = choose(run, 'gn-34-lintel', 'Through the door marked END.').run;
+    expect(scene(end, 'gn-34-end').intro).toMatch(/one you didn't choose/);
+    expect(choose(end, 'gn-34-end', 'Battle.').run.battle!.enemyTeam[0]!.speciesId).toBe(['regirock', 'regice', 'registeel'][flagOf(run, 'cavern-last') - 1]);
+  });
+
+  it('hold out the tablet: it takes it, and fights at -1 to every stat (full strength after a guess)', () => {
+    const run = choose(solved('t34-tablet', 'KEPT'), 'gn-34-end', 'Hold out the tablet.').run;
+    const fight = choose(run, 'gn-34-regi', 'Battle.').run;
+    expect(fight.battle!.eventRule?.foeStages).toMatchObject({ atk: -1, def: -1, spa: -1, spd: -1, spe: -1 });
+    const guessed = choose(solved('t34-tablet-g', 'KEPT', (r) => { SAW(r); setFlag(r, 'cavern-guessed'); }), 'gn-34-end', 'Hold out the tablet.').run;
+    expect(choose(guessed, 'gn-34-regi', 'Battle.').run.battle!.eventRule?.foeStages).toBeUndefined();
+  });
+
+  it('a Ball at full HP: almost no chance, and it says so; beaten: a Plate of its type and the tablet, cracked', () => {
+    const run = solved('t34-ball', 'GIVEN');
+    expect(said(choose(run, 'gn-34-end', 'Throw a Ball.'))).toMatch(/one in a hundred/);
+    const after = choose(win(choose(run, 'gn-34-end', 'Battle.').run), 'gn-34-defeated', 'Take them.').run;
+    expect(JSON.stringify(after)).toMatch(/iron-plate/);
+    expect(flagOf(after, 'cavern-tablet-cracked')).toBe(1);
+  });
+
+  it('fought the Relicanth: every word on the walls is THIEF', () => {
+    const run = below('t34-thief', (r) => setFlag(r, 'sunken-relicanth-fought'));
+    expect(scene(run, 'gn-34-corridor').intro).toMatch(/THIEF/);
+  });
+});

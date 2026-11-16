@@ -425,7 +425,7 @@ const gn33: Json[] = [
     ch('Read the marks.', out(say(
       'High-water marks, carved and dated, each a little higher. The lowest are at the ankle.',
       'They go up slowly: a hand\'s width in a lifetime.',
-    ), when('sunken-drain-h', { min: 1 }, [setTo('sunken-marks-top', 1)], 'With the street drained you can read them to the top: over the lintel. The last date is very neat.'),
+    ), setTo('sunken-marks', 1), when('sunken-drain-h', { min: 1 }, [setTo('sunken-marks-top', 1)], 'With the street drained you can read them to the top: over the lintel. The last date is very neat.'),
       when('aqua-flooded', { min: 1 }, [], 'At the very top, one new line. Very recent. Cut by nobody.'), scene('gn-33-houses'))),
     ch('Turn the Houses\' bronze wheel.', out('It turns. Water moves somewhere behind the walls.', scene('gn-33-wheel-h'))),
     ch('Go to the windowsill.', out('The clay boat, pointing out to sea.', scene('gn-33-sill'))),
@@ -523,7 +523,122 @@ const gn33: Json[] = [
   ]),
 ];
 
-export const EVENTS: Json[] = [...gn31, ...gn32, ...gn33];
+// =====================================================================================================================
+// gn.34  CAVERNS-O-MIGHTY  (the stage after the Sunken City, step 9, must-see while the Small Tablet is carried; the ground opens;
+// three chambers and an end). The Unown are the cave. Each chamber asks for a word whose answer was in the Sunken City; a
+// player who never saw it can still try letters until a word fits (`cavern-guessed`). The last word picks the Regi.
+// =====================================================================================================================
+const UNOWN_TINT = '#5a4f6e';
+const deep = (o: Json = {}): Json => ({ tint: UNOWN_TINT, tags: ['Legendary', 'Exploration', 'Mystery'], effect: 'flicker', pokemon: 'unown', ...o });
+const chamber = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, deep(o), intro, choices);
+/** The Relicanth was fought and beaten: every word on the walls is the same one. */
+const THIEF = { id: 'thief', when: [is('sunken-relicanth-fought')], notice: '*Every word on the walls is the same one, the whole way down. THIEF.*' };
+/** Fight a lot of them and the walls get harder to read. */
+const FADED = { id: 'faded', when: [is('cavern-unown-beaten', 3)], notice: '*So many letters are gone from the walls now. What\'s left is hard to read.*' };
+const unownFight = (back: string): Json => ch('Fight the Unown.', fight('They come off the wall like leaves in a wind.', inside({
+  ...wild({ species: ['unown'], lv: 1, win: [flag('cavern-unown-beaten'), scene(back)] }), caught: [scene(back)], exact: true, lose: [scene(back)],
+})));
+const SOLVED = (n: number): Json[] => [setTo(`cavern-word-${n}`, 1), flag('cavern-solved'), scene('gn-34-lintel')];
+/** A wrong letter drifts back out. */
+const wrong = (label: string): Json => ch(label, out('The letters line up in the niches, then one drifts back out. Not that.', flag('cavern-tries')));
+const guess = (n: number, word: string): Json => ch('Try letters until a word fits.', out(`It takes a long time. Letters in, letters out. Then: ${word}. The chamber opens.`, flag('cavern-guessed'), ...SOLVED(n)));
+const REGI = (key: string): Json[] => [gn('cast', { key: 'cavern-regi', species: [key] })];
+const CAVERN_DONE: Json[] = [flag('cavern-done'), leavePseudo()];
+const regiFight = (calmed: boolean): Json => inside({
+  ...wild({ species: ['@cavern-regi'], lv: 2, win: [flag('cavern-regi-defeated'), scene('gn-34-defeated')] }),
+  caught: [flag('cavern-regi-caught'), ...CAVERN_DONE], exact: true, lose: [...CAVERN_DONE],
+  ...(calmed ? { rule: { foeStages: { atk: -1, def: -1, spa: -1, spd: -1, spe: -1 } } } : {}),
+});
+const RARE_OF: [string, number, string][] = [['regirock', 1, 'stone-plate'], ['regice', 2, 'icicle-plate'], ['registeel', 3, 'iron-plate']];
+
+const gn34: Json[] = [
+  gev('gn-34-door', 'The Ground Opens', deep({ stop: 'event', rarity: 'rare', forced: true, requires: [is('sunken-tablet'), laterStage('sunken-tablet-at'), not('cavern-done'), not('cavern-entered')] }), say(
+    '*The Small Tablet\'s warm. Then it\'s hot.*',
+    '*The marks on it move. They line up. They point down.*',
+    '*The ground in front of you folds open like a book.*',
+  ), [
+    ch('Go down.', out('Steps, cut for feet a little bigger than yours. The walls are moving.', flag('cavern-entered'), setTo('cavern-solved', 0), cw('gn-34-corridor'))),
+  ]),
+  // ---- The long corridor ----
+  chamber('gn-34-corridor', 'Caverns-o-Mighty: The Corridor', { remembers: [THIEF] }, say(
+    'The Unown are the cave. They\'re the only things alive down here, and they\'re on every wall.',
+    'They spell words. Not to you. To each other. HERE. WAIT. STILL. A long one: WE KEPT IT.',
+    '*Halfway along, they stop. They arrange themselves into your name. And hold it. Then the letters look at you, all at once, one eye each.*',
+  ), [
+    ch('Say it aloud.', out('Your own name comes back off the walls, softer each time, until it\'s only the Unown saying it.', setTo('unown-name', 1), cw('gn-34-lintel'))),
+    ch('Spell something back.', out('You hold up your hands and wait. The letters come.', scene('gn-34-spell'))),
+    ch('Walk on.', out('The name stays behind you. It\'s spelled right.', cw('gn-34-lintel'))),
+  ]),
+  chamber('gn-34-spell', 'Caverns-o-Mighty: Spell Something Back', {}, 'Which word? One you\'ve seen on the walls.', [
+    ...['HERE', 'WAIT', 'STILL', 'WE KEPT IT'].map((w, i) => ch(`${w}.`, out(`They copy it, pleased. ${w}, all down the corridor.`, flag('unown-spoke'), setTo('unown-word', i + 1), cw('gn-34-lintel')))),
+  ]),
+  // ---- The lintels: three Unown on each door say where it goes, before you step through ----
+  chamber('gn-34-lintel', 'Caverns-o-Mighty: The Doors', {
+    remembers: [{ id: 'done', when: [is('cavern-word-1'), is('cavern-word-2'), is('cavern-word-3')], notice: 'The three Unown on the last lintel rearrange themselves. Now they spell END.', addChoices: [ch('Through the door marked END.', out('Seven dots, somewhere ahead, waiting to light.', cw('gn-34-end')))] }, THIEF, FADED],
+  }, 'Doors, and over each one, three Unown on the lintel. When they rearrange, the door goes somewhere else. You can read where before you step through.', [
+    chIf([not('cavern-word-1')], 'Through the door marked SCALE.', out('A chamber with a carving of a balance.', scene('gn-34-scale'))),
+    chIf([not('cavern-word-2')], 'Through the door marked LINE.', out('A chamber with a carving of a doorway.', scene('gn-34-line'))),
+    chIf([not('cavern-word-3')], 'Through the door marked HANDS.', out('A chamber with a carving of two hands.', scene('gn-34-hands'))),
+  ]),
+  // ---- 1. The Scale ----
+  chamber('gn-34-scale', 'Caverns-o-Mighty: The Scale', { remembers: [THIEF, FADED] }, say(
+    'A carving of a balance, with a fish on one side and nothing on the other. Below it, a row of empty niches.',
+    'Loose Unown drift in the air. You can lead them, one at a time, to the niches.',
+  ), [
+    chIf([is('sunken-weight'), is('cavern-unown-beaten', 0, 2)], 'Spell TRADE.', out('The scale-weight, stamped with a fish. T, R, A, D, E. The niches glow, one by one.', ...SOLVED(1))),
+    wrong('Spell FISH.'),
+    guess(1, 'TRADE'),
+    unownFight('gn-34-scale'),
+  ]),
+  // ---- 2. The Line ----
+  chamber('gn-34-line', 'Caverns-o-Mighty: The Line', { remembers: [THIEF, FADED] }, say(
+    'A carving of a doorway, with lines beside it, each one higher than the last. A row of empty niches.',
+  ), [
+    chIf([is('sunken-marks'), is('cavern-unown-beaten', 0, 2)], 'Spell RISING.', out('The high-water marks, a hand\'s width in a lifetime. R, I, S, I, N, G.', ...SOLVED(2))),
+    wrong('Spell DOOR.'),
+    guess(2, 'RISING'),
+    unownFight('gn-34-line'),
+  ]),
+  // ---- 3. The Hands: your own choice of three ----
+  chamber('gn-34-hands', 'Caverns-o-Mighty: The Hands', { remembers: [THIEF, FADED] }, say(
+    'A carving of two hands, open, something small between them. A row of empty niches.',
+    'The last figure in the mural, looking back, putting something down.',
+  ), [
+    chIf([is('sunken-mural')], 'Spell KEPT.', out('K, E, P, T. It kept. It\'s still keeping.', setTo('cavern-last', 1), ...REGI('regirock'), ...SOLVED(3))),
+    chIf([is('sunken-mural')], 'Spell LEFT.', out('L, E, F, T. What\'s left when everyone\'s gone.', setTo('cavern-last', 2), ...REGI('regice'), ...SOLVED(3))),
+    chIf([is('sunken-mural')], 'Spell GIVEN.', out('G, I, V, E, N. Made, and handed over.', setTo('cavern-last', 3), ...REGI('registeel'), ...SOLVED(3))),
+    chIf([not('sunken-mural')], 'Try letters until a word fits.', out('Letters in, letters out, until the niches glow. You couldn\'t say which word it was.', flag('cavern-guessed'),
+      pick('cavern-last', 1, 1, 1), ...RARE_OF.map(([sp, n]) => when('cavern-last', { min: n, max: n }, REGI(sp))), ...SOLVED(3))),
+  ]),
+  // ---- The end ----
+  chamber('gn-34-end', 'Caverns-o-Mighty: The End', {
+    pokemon: 'regirock',
+    remembers: [
+      { id: 'guessed', when: [is('cavern-guessed')], notice: '*The dots light, but the door behind them opens on one you didn\'t choose.*' },
+      THIEF,
+      { id: 'spoke', when: [is('unown-spoke')], notice: '*On the walls, all the way round, the Unown spell the word you gave them.*' },
+    ],
+  }, say(
+    '*Seven dots light, one after another.*',
+    '*It doesn\'t move toward you. It was put here to wait for the tablet, and the tablet\'s come.*',
+  ), [
+    ch('Hold out the tablet.', out('It takes it. It sets it into its own chest, where there\'s a space the right size.', setTo('cavern-tablet-given', 1), scene('gn-34-regi'))),
+    ch('Battle.', fight('The dots flare.', regiFight(false))),
+    ch('Throw a Ball.', out('It bounces off. At full strength, there was almost no chance: about one in a hundred. You could see that.', flag('cavern-ball'), scene('gn-34-end'))),
+  ]),
+  chamber('gn-34-regi', 'Caverns-o-Mighty: It Has What It Waited For', { pokemon: 'regirock' }, 'It has what it was waiting for. It stands a little lower now, the way you do after a long day.', [
+    chIf([not('cavern-guessed')], 'Battle.', fight('It fights, but its heart isn\'t in it.', regiFight(true))),
+    chIf([is('cavern-guessed')], 'Battle.', fight('It fights at full strength. It doesn\'t know you.', regiFight(false))),
+  ]),
+  chamber('gn-34-defeated', 'Caverns-o-Mighty: Still', { pokemon: 'regirock' }, say(
+    'It goes still, the dots dark. Where it stood, something rare of its own kind, and the Small Tablet, cracked.',
+    'The tablet hums, faintly, when you turn toward other sealed doors.',
+  ), [ch('Take them.', out('Cold, both of them.',
+    ...RARE_OF.map(([, n, plate]) => when('cavern-last', { min: n, max: n }, [item(plate)])),
+    flag('cavern-tablet-cracked'), ...CAVERN_DONE))]),
+];
+
+export const EVENTS: Json[] = [...gn31, ...gn32, ...gn33, ...gn34];
 
 export const REMOVE: string[] = [];
 
@@ -543,9 +658,15 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'A+1; the Relicanth A+2', often: 'run', badge: 'own', dressing: { kanto: 'Off the Seafoam coast: the Sunken City', elsewhere: 'The Sunken City' },
     note: 'Badge: a drowned tower. Three districts in any order, then the archive. A causeway at low tide, a dive at high. "Once per save" is once per run (no memory across runs).',
   },
+  'gn-34-door': {
+    gn: 'gn.34', shape: 'Door', earliest: 'A10', home: 9, window: [7, 12], sits: 'must-see', attaches: 'instead', tags: ['Pseudo Stage', 'Legendary'],
+    level: 'Unown A+1; the Regi A+2', often: 'run', badge: 'None', dressing: { kanto: 'Under the next stage: Caverns-o-Mighty', elsewhere: 'Caverns-o-Mighty' },
+    note: 'No badge: the ground opens. The stage after the Sunken City, must-see while the Small Tablet is carried. "Before the battle; the node\'s battle doesn\'t happen": it takes the battle\'s place.',
+  },
 };
 
 export const CHAINS: Json[] = [
+  { id: 'ps_gn_unown', name: 'Caverns-o-Mighty', entry: 'gn-34-door', themeId: 'psychic-ghost', tint: UNOWN_TINT, mood: 'unown caverns', start: 'opened' },
   { id: 'ps_gn_sunken', name: 'The Sunken City', entry: 'gn-33-door', themeId: 'water-ghost', tint: SUNK_TINT, mood: 'sunken city', start: 'opened' },
   { id: 'ps_gn_crystal', name: 'The Crystal Caverns', entry: 'gn-32-door', themeId: 'rock-fairy', tint: CRYSTAL_TINT, mood: 'crystal cave', start: 'opened' },
   { id: 'ps_gn_forest', name: 'The Forgotten Forest', entry: 'gn-31-door', themeId: 'grass-bug', tint: FOREST_TINT, mood: 'ancient forest', start: 'opened' },

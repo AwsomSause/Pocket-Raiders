@@ -1889,5 +1889,30 @@
   "tags": [
    "water"
   ]
+ },
+ "gn-34-door": {
+  "gn": "gn.34",
+  "shape": "Door",
+  "earliest": "A10",
+  "home": 9,
+  "window": [
+   7,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "level": "Unown A+1; the Regi A+2",
+  "often": "run",
+  "badge": "None",
+  "dressing": {
+   "kanto": "Under the next stage: Caverns-o-Mighty",
+   "elsewhere": "Caverns-o-Mighty"
+  },
+  "note": "No badge: the ground opens. The stage after the Sunken City, must-see while the Small Tablet is carried. \"Before the battle; the node's battle doesn't happen\": it takes the battle's place.",
+  "kinds": [
+   "Pseudo Stage",
+   "Legendary"
+  ],
+  "tags": []
  }
 }
