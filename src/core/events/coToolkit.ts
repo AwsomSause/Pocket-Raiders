@@ -9,7 +9,7 @@ import { typeEffectiveness } from '../battle/damage';
 import { getSpecies, maxHp } from '../pokemon';
 import { hashSeed, Rng } from '../rng';
 import type { BattleEvent } from '../battle/engine';
-import { bagCount, barter, hasEgg, returnEgg, barterGive, barterHas, barterStock, copyHeld, helpedReturn, noteHelped, notePicked, noted, rejoin, sideBattleBegin, spendFromBag, takeSoon } from './coHelpers';
+import { bagCount, barter, boxBond, hereGymType, hasEgg, returnEgg, barterGive, barterHas, barterStock, copyHeld, helpedReturn, noteHelped, notePicked, noted, rejoin, sideBattleBegin, spendFromBag, takeSoon } from './coHelpers';
 import type { PokemonInstance, RunState } from '../state';
 
 const RULES: { multiplier: { veryBad: number; bad: number; even: number; favours: number }; words: Record<string, string> } = data.rules;
@@ -64,12 +64,13 @@ export function fillCoText(content: Content, run: Run, text: string): string {
     nextRegion: () => content.regions.get(run.regionOrder[run.regionIndex + 1] ?? '')?.name ?? 'the League',
     // New events (NE93): the party Pokémon with the lowest friendship (the first of them on a tie).
     lowestBond: () => nameOf(content, [...run.party].sort((a, b) => a.friendship - b.friendship)[0] ?? lead),
+    gymType: () => { const t = hereGymType(content, run, false); return t ? t[0]!.toUpperCase() + t.slice(1) : 'something'; },
     // New events (NE41): the run's last region.
     finalRegion: () => content.regions.get(run.regionOrder[run.regionOrder.length - 1] ?? '')?.name ?? 'the League',
   };
   const item = (id: string | null) => (id ? content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? id : 'nothing of that kind');
   return text
-    .replace(/\{(lead|starter|most|least|impostorType|nextRegion|finalRegion|lowestBond)\}/g, (_, k: string) => table[k]!())
+    .replace(/\{(lead|starter|most|least|impostorType|nextRegion|finalRegion|lowestBond|gymType)\}/g, (_, k: string) => table[k]!())
     .replace(/\{flag:([a-z][a-z0-9-]*)\}/g, (_, k: string) => String(num(run, k)))
     .replace(/\{(give|stock):(common|uncommon|rare)\}/g, (_, k: string, t: 'common') => item(k === 'give' ? barterGive(content, run, t) : barterStock(run, t)))
     .replace(/\{note:([a-z][a-z0-9-]*)\}/g, (_, k: string) => { const m = noted(run, k); return m ? m.care?.nickname || (content.species.get(m.speciesId)?.name ?? m.speciesId) : 'your Pokémon'; });
@@ -173,12 +174,13 @@ export function coRegionPick(run: Pick<Run, 'seed' | 'regionIndex' | 'stage'>, t
 
 // ---------- conditions and effects ----------
 
-export type CoCondition = Extract<EventCondition, { kind: 'record' | 'barterHas' | 'bagHas' | 'keptGoods' | 'eggOf' }>;
+export type CoCondition = Extract<EventCondition, { kind: 'record' | 'barterHas' | 'bagHas' | 'keptGoods' | 'eggOf' | 'gymHere' }>;
 export function coConditionMet(content: Content, run: Run, c: CoCondition): boolean {
   switch (c.kind) {
     case 'record': return recordOf(run) === c.is;
     case 'keptGoods': return keptGoods(run);
     case 'eggOf': return hasEgg(run, c.species);
+    case 'gymHere': return hereGymType(content, run, true) !== null;
     case 'barterHas': return barterHas(content, run, c.tier, c.berry);
     case 'bagHas': return bagCount(run, c.ids, c.suffix) >= c.count;
   }
@@ -188,12 +190,13 @@ export function coConditionText(c: CoCondition): string {
     case 'record': return c.is === 'low' ? 'Only if the road thinks badly of you' : c.is === 'high' ? 'Needs a good name on this road' : 'Needs an ordinary name on this road';
     case 'keptGoods': return 'Only if you kept something that was not yours';
     case 'eggOf': return 'Needs the Egg';
+    case 'gymHere': return 'Only after a Gym in this region';
     case 'barterHas': return `Needs a${c.tier === 'uncommon' ? 'n Uncommon' : c.tier === 'rare' ? ' Rare' : ' Common'} item to trade${c.berry ? ', and a Berry' : ''}`;
     case 'bagHas': return `Needs ${c.label ?? (c.suffix === '-berry' ? 'a Berry' : 'the right item')}${c.count > 1 ? ` (${c.count})` : ''}`;
   }
 }
 
-export type CoEffect = Extract<EventEffect, { kind: 'ruleRead' | 'rulePrize' | 'pickTest' | 'timeMachine' | 'barter' | 'spendBag' | 'notePicked' | 'rejoin' | 'copyHeld' | 'helped' | 'returnEgg' }>;
+export type CoEffect = Extract<EventEffect, { kind: 'ruleRead' | 'rulePrize' | 'pickTest' | 'timeMachine' | 'barter' | 'spendBag' | 'notePicked' | 'rejoin' | 'copyHeld' | 'helped' | 'returnEgg' | 'boxBond' | 'gymTypeItem' }>;
 export function coEffectWords(e: CoEffect): string {
   switch (e.kind) {
     case 'barter': return e.give ? 'a fair trade' : 'a free trade';
@@ -207,12 +210,16 @@ export function coEffectWords(e: CoEffect): string {
     case 'rulePrize': return `prize money (₽${e.amount} × the rule's multiplier)`;
     case 'pickTest': return '';
     case 'timeMachine': return `your lead steps into the ${e.era}`;
+    case 'boxBond': return '';
+    case 'gymTypeItem': return 'an old badge';
   }
 }
 
 /** Applies one of this file's effects. `pickedUid` is the party Pokémon the player pointed at (a `pick` choice); `gift` gives an item the usual way (events.ts giveItem). Returns the change in words. */
 export function applyCoEffect(content: Content, run: Run, e: CoEffect, pickedUid: string | undefined, gift: (id: string) => string, hatchMon?: (speciesId: string, level: number, shiny: boolean) => PokemonInstance): string {
   switch (e.kind) {
+    case 'boxBond': boxBond(run, e.key); return '';
+    case 'gymTypeItem': { const t = hereGymType(content, run, false); return t ? gift(`${e.prefix}-${t}`) : ''; }
     case 'returnEgg': return hatchMon ? returnEgg(content, run, e.species, e.hatch, hatchMon) : '';
     case 'barter': return barter(content, run, e.give, e.get, e.berry, gift);
     case 'spendBag': return spendFromBag(content, run, e.ids, e.suffix, e.count);

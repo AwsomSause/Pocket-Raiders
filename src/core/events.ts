@@ -278,6 +278,7 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     case 'bagHas':
     case 'keptGoods':
     case 'eggOf':
+    case 'gymHere':
       return coConditionMet(content, run, c);
     case 'partyBlissful':
       return run.party.some((m) => m.blissful);
@@ -523,6 +524,7 @@ export function conditionText(content: Content, c: EventCondition): string {
     case 'bagHas':
     case 'keptGoods':
     case 'eggOf':
+    case 'gymHere':
       return coConditionText(c);
     case 'partyBlissful':
       return 'Needs a Blissful Pokémon in your party';
@@ -1266,6 +1268,8 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'copyHeld':
     case 'helped':
     case 'returnEgg':
+    case 'boxBond':
+    case 'gymTypeItem':
       return coEffectWords(e);
     case 'friendshipLine':
       return `${content.species.get(e.species)?.name ?? e.species}: friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
@@ -1731,6 +1735,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'copyHeld':
     case 'helped':
     case 'returnEgg':
+    case 'boxBond':
+    case 'gymTypeItem':
       return applyCoEffect(content, run, e, tradeUid, (id) => giveItem(content, run, id, 1, rng), (speciesId, level, shiny) => {
         const mon = newMon(content, run, speciesId, level, 'p');
         mon.shiny = shiny;

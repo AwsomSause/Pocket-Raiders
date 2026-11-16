@@ -1,0 +1,7 @@
+{
+ "category": "families-c",
+ "note": "Chain pseudo-stages from STORY_FAMILIES_9/10 (SF65 Lapras ride: three sea nodes).",
+ "chains": [
+  { "id": "ps_fc_lapras_sea", "name": "The Open Sea", "entry": "r133-lapras-ferry", "themeId": "water-ice", "tint": "#102838", "mood": "rain on grey water, and a song nobody answers", "start": "opened" }
+ ]
+}

@@ -7,6 +7,7 @@ import data from '../../data/catalogOverhaul/familiesC.json';
 import type { Content } from '../contentSchema';
 import { fnv1a } from '../expansion/hash';
 import { getSpecies, maxHp } from '../pokemon';
+import { currentRegion } from '../regions';
 import type { PokemonInstance, RunState } from '../state';
 import type { BattleEvent } from '../battle/engine';
 
@@ -218,4 +219,30 @@ export function returnEgg(content: Content, run: Run, species: string, hatch: bo
   const mon = hatchMon(egg.speciesId, egg.level, egg.shiny);
   run.pending.push({ kind: 'caught', mon });
   return `The Egg hatched into ${speciesName(content, egg.speciesId)}!`;
+}
+
+// ---------- SF69: a follower that evolves only if it never sees the PC ----------
+
+/** Binds the newest party Pokémon to `key` (its uid is remembered this run). */
+export function boxBond(run: Run, key: string): void {
+  const mon = run.party[run.party.length - 1];
+  if (mon) run.story.flags[`co:boxbond-${key}`] = mon.uid;
+}
+/** Called when a Pokémon goes into the PC: a bound one is marked as boxed for the rest of the run. */
+export function noteBoxed(run: Run, mon: Pick<PokemonInstance, 'uid'>): void {
+  for (const [k, v] of Object.entries(run.story.flags)) if (k.startsWith('co:boxbond-') && v === mon.uid) run.story.flags[`co:boxed-${k.slice('co:boxbond-'.length)}`] = mon.uid;
+}
+/** True when this Pokémon was bound and has been in the PC: it does not evolve. */
+export function boxedNoEvolve(run: Pick<Run, 'story'>, mon: Pick<PokemonInstance, 'uid'>): boolean {
+  return Object.entries(run.story.flags).some(([k, v]) => k.startsWith('co:boxed-') && v === mon.uid);
+}
+
+// ---------- GL2: the Gym whose floor the janitor sweeps ----------
+
+/** The type of this region's Gym: the last one beaten here (or, unless `beatenOnly`, the first not met yet). Null if none. */
+export function hereGymType(content: Content, run: Run, beatenOnly: boolean): string | null {
+  const leaders = currentRegion(content, run).gymLeaders.filter((id) => content.bosses.has(id));
+  const beaten = [...run.usedLeaders].reverse().find((id) => leaders.includes(id));
+  const id = beaten ?? (beatenOnly ? undefined : leaders.find((l) => !run.usedLeaders.includes(l)) ?? leaders[0]);
+  return id ? (content.bosses.get(id)!.types[0] ?? null) : null;
 }

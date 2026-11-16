@@ -35,6 +35,7 @@ import { count, discover } from './progress';
 import { runLevelCap } from './regions';
 import { hashSeed, Rng } from './rng';
 import type { PendingDecision, RunState } from './state';
+import { boxedNoEvolve } from './events/coHelpers';
 
 export class RewardConfigError extends Error {
   constructor(message: string) {
@@ -256,7 +257,7 @@ export function applyReward(content: Content, run: RunState, archetype: Archetyp
       messages.push(`${nameOf(content, mon.speciesId)} grew to level ${result.newLevel}!`);
       for (const m of result.learnedMoves) messages.push(`${nameOf(content, mon.speciesId)} learned ${content.moves.get(m)!.name}!`);
       for (const m of result.skippedMoves) pending.push({ kind: 'learnMove', uid: mon.uid, moveId: m });
-      for (const evo of evolveFully(content, mon, run.regionOrder[run.regionIndex], evolutionLevelOffset(runArchetype(content, run).modifiers), bondEvolves(content, run, mon))) {
+      for (const evo of boxedNoEvolve(run, mon) ? [] : evolveFully(content, mon, run.regionOrder[run.regionIndex], evolutionLevelOffset(runArchetype(content, run).modifiers), bondEvolves(content, run, mon))) {
         count(run, 'evolutions');
         messages.push(`${nameOf(content, evo.from)} evolved into ${nameOf(content, evo.to)}!`);
         for (const m of evo.learnedMoves) messages.push(`${nameOf(content, evo.to)} learned ${content.moves.get(m)!.name}!`);

@@ -2973,6 +2973,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('keptGoods') }),
   /** Catalog Overhaul SF59: the player still carries an unhatched Egg of this species. */
   z.object({ kind: z.literal('eggOf'), species: z.string().min(1) }),
+  /** GL2: a Gym of the current region was beaten this run. */
+  z.object({ kind: z.literal('gymHere') }),
   z.object({ kind: z.literal('barterHas'), tier: z.enum(['common', 'uncommon', 'rare']), berry: z.boolean().default(false) }),
   /** Catalog Overhaul (families-c): the bag holds `count` of these items (or of any item ending in `suffix`, like "-berry"). */
   z.object({ kind: z.literal('bagHas'), ids: z.array(z.string()).default([]), suffix: z.string().optional(), count: z.number().int().min(1).default(1), label: z.string().optional() }),
@@ -3323,6 +3325,10 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** SF61: a Pokémon from the region's list in familiesC.json `regionJoin[table]` joins (as a Shadow with `shadow`). */
   z.object({ kind: z.literal('regionJoin'), table: z.string().min(1), shadow: z.boolean().default(false), levelBonus: z.number().int().default(0) }),
   z.object({ kind: z.literal('returnEgg'), species: z.string().min(1), hatch: z.boolean().default(false) }),
+  /** SF69: the newest party Pokémon is bound to `key`: once it is put in the PC it never evolves again this run. */
+  z.object({ kind: z.literal('boxBond'), key: z.string().min(1) }),
+  /** GL2: the item `<prefix>-<type>` for this region's Gym (the last one beaten here, else the first not yet met). */
+  z.object({ kind: z.literal('gymTypeItem'), prefix: z.string().min(1) }),
   /** SF63: a Pokémon the player helped; one comes back once a region at the worst moment (`rare`: SF63.8's, the one that returns). */
   z.object({ kind: z.literal('helped'), species: z.string().min(1), rare: z.boolean().default(false) }),
   /** Clone Core (New Island): your lead's moves are copied onto the other party Pokémon you pick (the lowest-level one when none is picked). */

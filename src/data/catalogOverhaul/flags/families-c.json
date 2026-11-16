@@ -196,6 +196,16 @@
    "key": "apprentice-copy-caught-weak",
    "setBy": "wounded-rare",
    "readBy": "families-a SF2 (The Apprentice copies it)"
+  },
+  {
+   "key": "sign-dialga",
+   "setBy": "r169-hoothoot-clock-tower",
+   "readBy": "legends (Signs and Tellings API)"
+  },
+  {
+   "key": "telling-deoxys",
+   "setBy": "r141-starlit-cave-loomians",
+   "readBy": "legends (Signs and Tellings API)"
   }
  ]
 }
