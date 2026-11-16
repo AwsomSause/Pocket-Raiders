@@ -534,6 +534,34 @@
   {
    "key": "allstar-champion",
    "rule": "core/greenneedle/allstar.ts (gn.46)"
+  },
+  {
+   "key": "ex-backed",
+   "rule": "core/greenneedle/exhibition.ts (gn.47)"
+  },
+  {
+   "key": "ex-again",
+   "rule": "core/greenneedle/exhibition.ts (gn.47)"
+  },
+  {
+   "key": "ex-watched",
+   "rule": "core/greenneedle/exhibition.ts (gn.47)"
+  },
+  {
+   "key": "ex-outcome",
+   "rule": "core/greenneedle/exhibition.ts (gn.47)"
+  },
+  {
+   "key": "ex-winner",
+   "rule": "core/greenneedle/exhibition.ts (gn.47)"
+  },
+  {
+   "key": "ex-ripple",
+   "rule": "core/greenneedle/exhibition.ts (gn.47)"
+  },
+  {
+   "key": "ex-ripple-done",
+   "rule": "core/greenneedle/exhibition.ts (gn.47)"
   }
  ]
 }

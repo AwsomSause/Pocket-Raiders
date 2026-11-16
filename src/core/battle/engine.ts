@@ -4174,6 +4174,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (baseAccuracy !== null) {
       if (user.side === 'player' && user.mon.moves.find((m) => m.id === move.id)?.star) accuracy *= 1.05;
       if (user.side === 'player') accuracy *= growthAccuracyMultiplier(ctx.content.balance.overhaulGrowth, user.mon, move.accuracy, move.category, ctx.battle.weather?.id ?? null, move.type, Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0)), { moveId: move.id, growthMove: user.mon.growthMove, scout: target.vol.turnsOut <= 1, lowersSpe: Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0 && c.stat === 'spe')) });
+      // Greenneedle gn.47: a move copied from the Exhibition doesn't quite work yet (10% less accurate).
+      if (ctx.battle.storyEffects.includes(`ex-copied:${user.mon.uid}:${move.id}`)) accuracy *= 0.9;
       if (userAbility === 'compound-eyes') accuracy *= 1.3;
       if (userAbility === 'victory-star') accuracy *= 1.1;
       if (userAbility === 'hustle' && move.category === 'physical') accuracy *= 0.8;

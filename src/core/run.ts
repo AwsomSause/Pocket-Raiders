@@ -24,6 +24,7 @@ import { unflinchingStart } from './greenneedle/daycare';
 import { gavelStart } from './greenneedle/auction';
 import { lessonAfterstory } from './greenneedle/champion';
 import { allstarRecord, allstarTurn } from './greenneedle/allstar';
+import { exRipple } from './greenneedle/exhibition';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
 import { revivalFee } from './battle/revivalStatus';
@@ -3147,9 +3148,12 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   gavelStart(run);
   // Greenneedle gn.45: the Champion who taught your ace a move opens with it.
   const afterstory = lessonAfterstory(content, run);
+  // Greenneedle gn.47: a trainer of a later stage talks about the Exhibition, and copied a move from it.
+  const ripple = exRipple(content, run);
   kantoSweetAir(content, run);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   if (afterstory) events.push({ type: 'raid', tone: 'info', text: afterstory });
+  if (ripple) events.push({ type: 'raid', tone: 'info', text: ripple });
   run.rng.battle = rng.state;
   noteBattle(content, run);
   wildBehaviorEffect(content, run, events);

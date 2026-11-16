@@ -207,6 +207,30 @@
   ],
   "tags": []
  },
+ "gn-47-door": {
+  "gn": "gn.47",
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "If invited: A+2, with no loss cost",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Pokémon League Exhibition",
+   "elsewhere": "The Pokémon League Exhibition"
+  },
+  "note": "Badge: a ticket. Once per region; each matchup once per run. Until towns exist it sits on step 15. The match is told in three parts (core/greenneedle/exhibition.ts); a move watched closely is free once at any move tutor; a trainer in a later stage copies a move from it.",
+  "kinds": [
+   "Onlooker"
+  ],
+  "tags": []
+ },
  "gn-45-field": {
   "gn": "gn.45",
   "shape": "Single",

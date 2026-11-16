@@ -28,6 +28,7 @@ import { applyFusion, fusionOptions, TERA_FORGE } from '../moveFusion';
 import { TYPE_NAMES } from '../contentSchema';
 import { isHostile } from '../rivals/outcome';
 import { changeFriendship } from '../friendship';
+import { exSeenMoves, exSeenTaught } from '../greenneedle/exhibition';
 import { ATTRIBUTE_KEYS, METER_ATTRIBUTES, type Content, type Item, type StatName } from '../contentSchema';
 import type { PokemonInstance, RunState, SideStop } from '../state';
 import { recordTraded } from '../story/hooks';
@@ -86,6 +87,14 @@ function replaceText(content: Content, mon: PokemonInstance, moveId: string): st
   const at = replacedIndex(content, mon);
   const forgets = at < 0 ? 'learns it in a free slot' : `forgets ${moveName(content, mon.moves[at]!.id)}`;
   return `${monName(content, mon)} ${forgets}. ${moveName(content, moveId)}: ${moveCard(content, moveId)}.`;
+}
+
+/** A move it doesn't know and can legally learn (level-up, TM/tutor or egg). */
+function canLearnSeen(content: Content, mon: PokemonInstance, id: string): boolean {
+  if (mon.moves.some((m) => m.id === id) || !content.moves.has(id)) return false;
+  const species = getSpecies(content, mon.speciesId);
+  const pool = content.learnables.get(species.id) ?? (species.form ? content.learnables.get(species.form.base) : undefined) ?? [];
+  return pool.includes(id) || species.learnset.some((e) => e.move === id);
 }
 
 /** Moves a Pokémon could learn here that it does not know: TM/tutor/egg moves (tutor) or level-up moves up to its level (reminder). */
@@ -249,6 +258,8 @@ export function serviceView(content: Content, run: RunState, sideId: string): Se
     }
     case 'tutor':
       for (const m of run.party) for (const id of tutorMoves(content, m, sideId, run)) add(`tutor:${m.uid}:${id}`, `${monName(content, m)}: ${moveName(content, id)}`, replaceText(content, m, id), price(run, C.tutor), side.used ? 'The tutor has already taught someone.' : null);
+      // Greenneedle gn.47: a move watched closely at the Exhibition, free, once, for a Pokémon that can legally learn it.
+      for (const id of exSeenMoves(run)) for (const m of run.party) if (canLearnSeen(content, m, id)) add(`seen:${m.uid}:${id}`, `${monName(content, m)}: ${moveName(content, id)} (seen at the Exhibition)`, replaceText(content, m, id), 0);
       // S155 Move Fusion: two known moves of fusing types become one hybrid move.
       for (const m of run.party) for (const f of fusionOptions(content, m)) add(`fuse:${m.uid}:${f.result}`, `${monName(content, m)}: fuse ${moveName(content, f.a)} + ${moveName(content, f.b)}`, `Both are used up and become ${moveName(content, f.result)}.`, price(run, C.tutor) * 2, side.used ? 'The tutor has already taught someone.' : null);
       break;
@@ -412,14 +423,17 @@ export function useService(content: Content, current: RunState, sideId: string, 
       mon!.status = null;
       message = `${monName(content, mon!)} is back on its feet.`;
       break;
+    case 'seen':
     case 'tutor':
     case 'remind': {
+      // A move seen at the Exhibition (gn.47) is taught like a tutor move, once.
+      if (kind === 'seen') exSeenTaught(run, arg!);
       const at = replacedIndex(content, mon!);
       const slot = { id: arg!, pp: content.moves.get(arg!)!.pp };
       const forgot = at < 0 ? null : mon!.moves[at]!.id;
       if (at < 0) mon!.moves.push(slot);
       else mon!.moves[at] = slot;
-      count(run, kind === 'tutor' ? 'tutorMoves' : 'remindedMoves');
+      count(run, kind === 'remind' ? 'remindedMoves' : 'tutorMoves');
       message = `${monName(content, mon!)} learned ${moveName(content, arg!)}${forgot ? ` and forgot ${moveName(content, forgot)}` : ''}.`;
       break;
     }
@@ -639,7 +653,7 @@ export function useService(content: Content, current: RunState, sideId: string, 
     default:
       throw new Error(`Unknown option "${optionId}"`);
   }
-  if (!view.service.reusable) side.used = true;
+  if (!view.service.reusable && kind !== 'seen') side.used = true;
   count(run, 'serviceUses');
   return { run, message };
 }

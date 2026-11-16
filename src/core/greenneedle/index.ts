@@ -25,6 +25,7 @@ import { museumArrive } from './museum';
 import { daycareLeave, daycareReturn, eggShape, parentAndChild } from './daycare';
 import { eggMoveOptions, familyId } from '../mastery';
 import { pairBondLevel } from '../bond';
+import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
 import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
 import { CHAMPION_NAME, onevoneChampion, onevoneEnd, onevoneEnter, onevoneStart, entrantOf } from './onevone';
@@ -56,6 +57,8 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   text = text.replace(/\{lot:([1-6]):([a-z]+)\}/g, (_, n: string, part: string) => lotToken(run, Number(n), part));
   text = text.replace(/\{money:([a-z0-9-]+)\}/g, (_, k: string) => `₽${gnFlag(run, k).toLocaleString('en-GB')}`);
   // gn.44: the reigning 1v1 champion, a different trainer each region.
+  // gn.47: the Exhibition.
+  if (text.includes('{ex:')) text = exTokens(content, run, text);
   // gn.46: the All-Star bracket.
   if (text.includes('{allstar')) text = allstarTokens(run, text);
   // gn.45: the region's Champion, off duty (cast when the lesson starts).
@@ -186,6 +189,8 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'allstarUnbeaten') return allstarUnbeaten(run);
   if (c.test === 'rivalTrustMax') return rivalTrustMax(run);
   if (c.test === 'rivalTrustBelow') return !rivalTrustMax(run);
+  if (c.test === 'exKnown') return exKnown(run);
+  if (c.test === 'exLeft') return !!nextMatchup(run);
   if (c.test === 'rivalAhead') return run.story.rivals.some((r) => (r.world?.lead ?? 0) >= 2);
   if (c.test === 'eggMoveKnown') return run.party.some((m) => { const egg = new Set(eggMoveOptions(content, familyId(content, m.speciesId)).map((o) => o.id)); return m.moves.some((mv) => egg.has(mv.id)); });
   if (c.test === 'natureIs') return run.party.some((m) => m.nature === c.key);
@@ -532,6 +537,14 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return onevoneEnd(run, e.n ?? 0);
     case 'onevoneChampion':
       return onevoneChampion(content, run);
+    case 'exDraw':
+      return exDraw(run);
+    case 'exBack':
+      return exBack(run, e.n ?? 0);
+    case 'exWatch':
+      return exWatch(content, run, e.n ?? 1, e.key ?? 'cheer');
+    case 'exResult':
+      return exResult(content, run);
     case 'allstarDraw':
       return allstarDraw(content, run);
     case 'allstarChampion':
@@ -657,6 +670,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (rule === 'champlesson' || rule === 'champexam') lessonStart(content, run, battle, makeFull(content));
   // gn.46: the All-Star bracket. Their teams, upgraded; the final: shaking hands, and a Pokémon that remembers wearing your colours.
   if (rule === 'allstar-qf' || rule === 'allstar-sf') allstarStart(content, run, battle, rule === 'allstar-qf' ? 'qf' : 'sf', makeFull(content));
+  // gn.47: the Exhibition's winner, with their own three.
+  if (rule === 'exhibition') exStart(content, run, battle, makeFull(content));
   if (rule === 'allstar-final') {
     if (gnFlag(run, 'allstar-shake') > 0) battle.storyEffects.push('allstar-shake');
     if (gnFlag(run, 'x-rival-swapped-teams') > 0 || gnFlag(run, 'rival-colours-kept') > 0) battle.storyEffects.push(`${FOE_WAITS}One of their Pokémon looks across at you, not at your Pokémon. It wore your colours once. It hesitates.`);

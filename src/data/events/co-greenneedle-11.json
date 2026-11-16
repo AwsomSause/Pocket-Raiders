@@ -2158,6 +2158,873 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-47-door",
+   "name": "The Pokémon League Exhibition",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "ex-at"
+    },
+    {
+     "kind": "gn",
+     "test": "exLeft"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2f3f6b",
+    "effect": "none"
+   },
+   "intro": "*A stadium lit up like daytime. On every screen, two faces you've seen on posters your whole life.*\n\nTonight: **{ex:a}** against **{ex:b}**. {ex:what}",
+   "choices": [
+    {
+     "label": "Join the queue.",
+     "success": {
+      "text": "The queue goes round the building twice. Nobody minds. Everyone is talking about the same thing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "ex-at"
+       },
+       {
+        "kind": "gn",
+        "op": "exDraw"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-queue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you, the whole stadium roars at once, and you nearly turn round.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-47-queue",
+   "name": "The Pokémon League Exhibition: The Queue",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f3f6b",
+    "effect": "none"
+   },
+   "intro": "Halfway down the queue, a microphone appears under your nose. Behind it, a reporter in a very bright coat.\n\n**Reporter, Marit Achterberg:** \"You're a trainer! Quick: who've you got, and *why?*\"",
+   "choices": [
+    {
+     "label": "{ex:a}.",
+     "success": {
+      "text": "Marit grins. \"And why?\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "exBack",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-why"
+       }
+      ]
+     }
+    },
+    {
+     "label": "{ex:b}.",
+     "success": {
+      "text": "Marit grins. \"And why?\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "exBack",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-why"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I don't mind who wins. I want to see it.\"",
+     "success": {
+      "text": "Marit laughs. \"Diplomatic!\" It's broadcast. On the big screen inside, both of them hear it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "exBack",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ex-reason",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-match-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-47-why",
+   "name": "The Pokémon League Exhibition: On Air",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ex-again",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**Marit:** \"Wait. You again. You backed them last time too. You're loyal. Or stubborn. Which is it?\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f3f6b",
+    "effect": "none"
+   },
+   "intro": "The microphone hovers. Somewhere behind Marit, a camera light goes red. You are, apparently, live.",
+   "choices": [
+    {
+     "label": "\"They're stronger.\"",
+     "success": {
+      "text": "\"Simple! I like simple.\" It's broadcast. Inside, on the big screen, both of them hear it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ex-reason",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-match-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"They've got more to prove.\"",
+     "success": {
+      "text": "\"Ooh. Spicy.\" It's broadcast. Inside, on the big screen, both of them hear it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ex-reason",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-match-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I like how they treat their Pokémon.\"",
+     "success": {
+      "text": "Marit lowers the microphone for a second. \"That's a good reason,\" she says, off air. Then it's back up, and broadcast.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ex-reason",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-match-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-47-match-1",
+   "name": "The Pokémon League Exhibition: The Match",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Combat"
+   ],
+   "remembers": [
+    {
+     "id": "known",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "exKnown"
+      }
+     ],
+     "notice": "Before the first move, one of them scans the stands, row by row. They find you. They nod, just once, and turn back to the field."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f3f6b",
+    "effect": "none"
+   },
+   "intro": "Six on six. The stadium goes quiet in the way only a very big room can.\n\n{ex:phase-1}",
+   "choices": [
+    {
+     "label": "Cheer.",
+     "success": {
+      "text": "You cheer, loud enough to hear yourself on the big screen.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "exWatch",
+        "n": 1,
+        "key": "cheer"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-match-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch closely.",
+     "success": {
+      "text": "You stop watching the Pokémon, and watch the hands.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "exWatch",
+        "n": 1,
+        "key": "watch"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-match-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look at the crowd.",
+     "success": {
+      "text": "You look away from the field, just for a second.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "exWatch",
+        "n": 1,
+        "key": "crowd"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-match-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-47-match-2",
+   "name": "The Pokémon League Exhibition: The Match",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f3f6b",
+    "effect": "none"
+   },
+   "intro": "Halfway. Both of them are down to three.\n\n{ex:phase-2}",
+   "choices": [
+    {
+     "label": "Cheer.",
+     "success": {
+      "text": "You cheer, loud enough to hear yourself on the big screen.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "exWatch",
+        "n": 2,
+        "key": "cheer"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-match-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch closely.",
+     "success": {
+      "text": "You stop watching the Pokémon, and watch the hands.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "exWatch",
+        "n": 2,
+        "key": "watch"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-match-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look at the crowd.",
+     "success": {
+      "text": "You look away from the field, just for a second.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "exWatch",
+        "n": 2,
+        "key": "crowd"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-match-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-47-match-3",
+   "name": "The Pokémon League Exhibition: The Match",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f3f6b",
+    "effect": "none"
+   },
+   "intro": "The last of it. Nobody in the stadium is sitting down any more.\n\n{ex:phase-3}",
+   "choices": [
+    {
+     "label": "Cheer.",
+     "success": {
+      "text": "You cheer, loud enough to hear yourself on the big screen.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "exWatch",
+        "n": 3,
+        "key": "cheer"
+       },
+       {
+        "kind": "gn",
+        "op": "exResult"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ex-outcome",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "expert-belt",
+           "shell-bell",
+           "scope-lens",
+           "quick-claw"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ex-outcome",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "expert-belt",
+           "shell-bell",
+           "scope-lens",
+           "quick-claw"
+          ]
+         }
+        ],
+        "text": "Your lead stands a little straighter after. Bond +1."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ex-outcome",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "They shake your hand, and hold on a moment longer than they need to."
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "ex-invite",
+        "n": 25
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ex-watched",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ex-invite",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch closely.",
+     "success": {
+      "text": "You stop watching the Pokémon, and watch the hands.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "exWatch",
+        "n": 3,
+        "key": "watch"
+       },
+       {
+        "kind": "gn",
+        "op": "exResult"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ex-outcome",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "expert-belt",
+           "shell-bell",
+           "scope-lens",
+           "quick-claw"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ex-outcome",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "expert-belt",
+           "shell-bell",
+           "scope-lens",
+           "quick-claw"
+          ]
+         }
+        ],
+        "text": "Your lead stands a little straighter after. Bond +1."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ex-outcome",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "They shake your hand, and hold on a moment longer than they need to."
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "ex-invite",
+        "n": 25
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ex-watched",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ex-invite",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look at the crowd.",
+     "success": {
+      "text": "You look away from the field, just for a second.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "exWatch",
+        "n": 3,
+        "key": "crowd"
+       },
+       {
+        "kind": "gn",
+        "op": "exResult"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ex-outcome",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "expert-belt",
+           "shell-bell",
+           "scope-lens",
+           "quick-claw"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ex-outcome",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "expert-belt",
+           "shell-bell",
+           "scope-lens",
+           "quick-claw"
+          ]
+         }
+        ],
+        "text": "Your lead stands a little straighter after. Bond +1."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ex-outcome",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "They shake your hand, and hold on a moment longer than they need to."
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "ex-invite",
+        "n": 25
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ex-watched",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ex-invite",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-47-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-47-after",
+   "name": "The Pokémon League Exhibition: After",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "invited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ex-invite",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**{ex:winner}, into the microphone:** \"There's a trainer in row nine who's been watching my hands for ten minutes. Come down. Let's see what you saw.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f3f6b",
+    "effect": "none"
+   },
+   "intro": "The stadium empties slowly. Nobody wants to be the first to leave a night like that.",
+   "choices": [
+    {
+     "label": "Go down.",
+     "success": {
+      "text": "Every head in the stadium turns to row nine. You walk down. Your legs are shaking. Your Pokémon's aren't.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-47-lost"
+        }
+       ],
+       "rule": {
+        "gn": "exhibition"
+       },
+       "name": "Exhibition",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "life-orb",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf",
+          "assault-vest",
+          "focus-sash"
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ex-known",
+         "n": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Beat the Exhibition's winner, three on three, in front of a full stadium. The crowd learned your name.",
+         "importance": 75
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-47-won"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ex-invite",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Stay in your seat.",
+     "success": {
+      "text": "You shake your head. {ex:winner} laughs into the microphone. \"Shy! Next time, row nine.\"",
+      "effects": []
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ex-invite",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "Outside, people are still doing the moves with their hands, arguing about the second half.",
+      "effects": []
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ex-invite",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-47-won",
+   "name": "The Pokémon League Exhibition: Row Nine",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f3f6b",
+    "effect": "none"
+   },
+   "intro": "The stadium says your name. All of it, at once. You didn't know it knew your name.\n\n**{ex:winner}:** \"You did see it. And you can do it. Come and find me when it's official.\"",
+   "choices": [
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "Marit is waiting at the exit with the microphone. You walk straight past her, smiling. She lets you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-47-lost",
+   "name": "The Pokémon League Exhibition: Row Nine",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f3f6b",
+    "effect": "none"
+   },
+   "intro": "{ex:winner} heals your team, there on the field, in front of everyone.\n\n\"You did see it. You just can't do it yet.\"",
+   "choices": [
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "The crowd claps you all the way back up to row nine. You sit down. Your hands are still shaking.",
+      "effects": []
+     }
+    }
+   ]
   }
  ]
 }

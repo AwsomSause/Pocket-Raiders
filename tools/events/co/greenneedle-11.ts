@@ -1,7 +1,7 @@
 // Greenneedle, part 11: gn.44 The 1v1 Championship (doc GREENNEEDLE_REWORKED_PLACED_10.md).
 // Build: npm run co:build -- greenneedle-11   then   npm run co:gn
 import { $, any, ch, fight, heal, out, trainer, wild, type Json } from '../dsl.ts';
-import { bond, chIf, gev, gn, is, moment, not, notThisRegion, rm, say, scene, setTo, stampRegion, type Placement } from './_gn.ts';
+import { bond, chIf, gev, gn, is, moment, not, notThisRegion, rm, roll, say, scene, setTo, stampRegion, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -245,7 +245,92 @@ const gn46: Json[] = [
   ), [ch('Leave.', out('On the way out, someone shouts your name from the back. You never find out who.'))]),
 ];
 
-export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46];
+// =====================================================================================================================
+// gn.47  THE POKÉMON LEAGUE EXHIBITION  (a Town or Hub event; until towns exist, step 15, optional, window 13–17; once per region,
+// from A8; each matchup once per run). Watch a famous match from the stands (core/greenneedle/exhibition.ts): back one side on air,
+// three moments while it runs, and the winner may reward you, or invite you down (25%, or always after watching closely three times).
+// =====================================================================================================================
+const EX_TINT = '#2f3f6b';
+const ex = (o: Json = {}): Json => ({ tint: EX_TINT, tags: ['Story'], effect: 'none', ...o });
+const EX_RARE = ['leftovers', 'expert-belt', 'shell-bell', 'scope-lens', 'quick-claw'];
+const EX_EPIC = ['life-orb', 'choice-band', 'choice-specs', 'choice-scarf', 'assault-vest', 'focus-sash'];
+/** One of the three moments while the match runs. */
+const exMoment = (i: number, next: Json[]): Json[] => [
+  ch('Cheer.', out('You cheer, loud enough to hear yourself on the big screen.', gn('exWatch', { n: i, key: 'cheer' }), ...next)),
+  ch('Watch closely.', out('You stop watching the Pokémon, and watch the hands.', gn('exWatch', { n: i, key: 'watch' }), ...next)),
+  ch('Look at the crowd.', out('You look away from the field, just for a second.', gn('exWatch', { n: i, key: 'crowd' }), ...next)),
+];
+const exEnd: Json[] = [
+  gn('exResult'),
+  when('ex-outcome', { min: 1, max: 1 }, [any(...EX_RARE)]),
+  when('ex-outcome', { min: 3, max: 3 }, [bond(1), any(...EX_RARE)], 'Your lead stands a little straighter after. Bond +1.'),
+  when('ex-outcome', { min: 4, max: 4 }, [], 'They shake your hand, and hold on a moment longer than they need to.'),
+  roll('ex-invite', 25),
+  when('ex-watched', { min: 3 }, [setTo('ex-invite', 1)]),
+  scene('gn-47-after'),
+];
+
+const gn47: Json[] = [
+  gev('gn-47-door', 'The Pokémon League Exhibition', ex({ stop: 'event', rarity: 'uncommon', requires: [notThisRegion('ex-at'), gnc('exLeft')] }), say(
+    '*A stadium lit up like daytime. On every screen, two faces you\'ve seen on posters your whole life.*',
+    'Tonight: **{ex:a}** against **{ex:b}**. {ex:what}',
+  ), [
+    ch('Join the queue.', out('The queue goes round the building twice. Nobody minds. Everyone is talking about the same thing.', stampRegion('ex-at'), gn('exDraw'), scene('gn-47-queue'))),
+    ch('Walk on.', out('You walk on. Behind you, the whole stadium roars at once, and you nearly turn round.')),
+  ]),
+  rm('gn-47-queue', 'The Pokémon League Exhibition: The Queue', ex(), say(
+    'Halfway down the queue, a microphone appears under your nose. Behind it, a reporter in a very bright coat.',
+    '**Reporter, Marit Achterberg:** "You\'re a trainer! Quick: who\'ve you got, and *why?*"',
+  ), [
+    ch('{ex:a}.', out('Marit grins. "And why?"', gn('exBack', { n: 1 }), scene('gn-47-why'))),
+    ch('{ex:b}.', out('Marit grins. "And why?"', gn('exBack', { n: 2 }), scene('gn-47-why'))),
+    ch('"I don\'t mind who wins. I want to see it."', out('Marit laughs. "Diplomatic!" It\'s broadcast. On the big screen inside, both of them hear it.', gn('exBack', { n: 0 }), setTo('ex-reason', 4), scene('gn-47-match-1'))),
+  ]),
+  rm('gn-47-why', 'The Pokémon League Exhibition: On Air', ex({ remembers: [
+    { id: 'again', when: [is('ex-again')], notice: '**Marit:** "Wait. You again. You backed them last time too. You\'re loyal. Or stubborn. Which is it?"' },
+  ] }), say(
+    'The microphone hovers. Somewhere behind Marit, a camera light goes red. You are, apparently, live.',
+  ), [
+    ch('"They\'re stronger."', out('"Simple! I like simple." It\'s broadcast. Inside, on the big screen, both of them hear it.', setTo('ex-reason', 1), scene('gn-47-match-1'))),
+    ch('"They\'ve got more to prove."', out('"Ooh. Spicy." It\'s broadcast. Inside, on the big screen, both of them hear it.', setTo('ex-reason', 2), scene('gn-47-match-1'))),
+    ch('"I like how they treat their Pokémon."', out('Marit lowers the microphone for a second. "That\'s a good reason," she says, off air. Then it\'s back up, and broadcast.', setTo('ex-reason', 3), scene('gn-47-match-1'))),
+  ]),
+  rm('gn-47-match-1', 'The Pokémon League Exhibition: The Match', ex({ tags: ['Story', 'Combat'], remembers: [
+    { id: 'known', when: [gnc('exKnown')], notice: 'Before the first move, one of them scans the stands, row by row. They find you. They nod, just once, and turn back to the field.' },
+  ] }), say(
+    'Six on six. The stadium goes quiet in the way only a very big room can.',
+    '{ex:phase-1}',
+  ), exMoment(1, [scene('gn-47-match-2')])),
+  rm('gn-47-match-2', 'The Pokémon League Exhibition: The Match', ex({ tags: ['Story', 'Combat'] }), say(
+    'Halfway. Both of them are down to three.',
+    '{ex:phase-2}',
+  ), exMoment(2, [scene('gn-47-match-3')])),
+  rm('gn-47-match-3', 'The Pokémon League Exhibition: The Match', ex({ tags: ['Story', 'Combat'] }), say(
+    'The last of it. Nobody in the stadium is sitting down any more.',
+    '{ex:phase-3}',
+  ), exMoment(3, exEnd)),
+  rm('gn-47-after', 'The Pokémon League Exhibition: After', ex({ remembers: [
+    { id: 'invited', when: [is('ex-invite')], notice: '**{ex:winner}, into the microphone:** "There\'s a trainer in row nine who\'s been watching my hands for ten minutes. Come down. Let\'s see what you saw."' },
+  ] }), say(
+    'The stadium empties slowly. Nobody wants to be the first to leave a night like that.',
+  ), [
+    chIf([is('ex-invite')], 'Go down.', fight('Every head in the stadium turns to row nine. You walk down. Your legs are shaking. Your Pokémon\'s aren\'t.', { ...trainer('Exhibition', { cls: 'ace-trainer', size: 3, lv: 2, friendly: true, rule: { gn: 'exhibition' },
+      win: [any(...EX_EPIC), setTo('ex-known', 1), moment('Beat the Exhibition\'s winner, three on three, in front of a full stadium. The crowd learned your name.', 75), scene('gn-47-won')],
+      lose: [heal(1), scene('gn-47-lost')] }) })),
+    chIf([is('ex-invite')], 'Stay in your seat.', out('You shake your head. {ex:winner} laughs into the microphone. "Shy! Next time, row nine."')),
+    chIf([not('ex-invite')], 'Leave.', out('Outside, people are still doing the moves with their hands, arguing about the second half.')),
+  ]),
+  rm('gn-47-won', 'The Pokémon League Exhibition: Row Nine', ex(), say(
+    'The stadium says your name. All of it, at once. You didn\'t know it knew your name.',
+    '**{ex:winner}:** "You did see it. And you can do it. Come and find me when it\'s official."',
+  ), [ch('Leave.', out('Marit is waiting at the exit with the microphone. You walk straight past her, smiling. She lets you.'))]),
+  rm('gn-47-lost', 'The Pokémon League Exhibition: Row Nine', ex(), say(
+    '{ex:winner} heals your team, there on the field, in front of everyone.',
+    '"You did see it. You just can\'t do it yet."',
+  ), [ch('Leave.', out('The crowd claps you all the way back up to row nine. You sit down. Your hands are still shaking.'))]),
+];
+
+export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46, ...gn47];
 export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
@@ -260,6 +345,12 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'A+1; the final A+2', often: 'run', badge: 'own',
     dressing: { kanto: 'The All-Star Tournament', elsewhere: 'The All-Star Tournament' },
     note: 'Badge: three stars. Once per run, late; needs seven named trainers met this run. Until towns exist it sits on step 16. Entrants are drawn from the trainers fought this run (core/greenneedle/allstar.ts); the strongest rival is always in the final.',
+  },
+  'gn-47-door': {
+    gn: 'gn.47', shape: 'Single', earliest: 'A8', home: 15, window: [13, 17], sits: 'optional', attaches: 'town', tags: ['Onlooker'],
+    level: 'If invited: A+2, with no loss cost', often: 'region', badge: 'own',
+    dressing: { kanto: 'The Pokémon League Exhibition', elsewhere: 'The Pokémon League Exhibition' },
+    note: 'Badge: a ticket. Once per region; each matchup once per run. Until towns exist it sits on step 15. The match is told in three parts (core/greenneedle/exhibition.ts); a move watched closely is free once at any move tutor; a trainer in a later stage copies a move from it.',
   },
   'gn-45-field': {
     gn: 'gn.45', shape: 'Single', earliest: 'A10', home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', tags: ['Companion Story'],

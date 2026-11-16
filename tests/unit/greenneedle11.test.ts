@@ -416,3 +416,114 @@ describe('gn.46 The All-Star Tournament', () => {
     expect(go.run.battle!.eventRule?.catchTimes).toBe(4);
   });
 });
+
+// ---------- gn.47 The Pokémon League Exhibition ----------
+import { exRipple, MATCHUPS, matchupOf, nextMatchup, winnerOf } from '../../src/core/greenneedle/exhibition';
+import { serviceView, useService } from '../../src/core/services/flow';
+
+/** Into the queue at the Exhibition. */
+function queue(seed: string, prep?: (run: RunState) => void): RunState {
+  const run = gnRun(seed);
+  prep?.(run);
+  open(run, 'gn-47-door');
+  return choose(run, 'gn-47-door', 'Join the queue.').run;
+}
+/** Backs a side for a reason, and makes the three moments. */
+function watch(run: RunState, back: 'a' | 'b' | 'none', reason: string | null, moments: [string, string, string]): { run: RunState; text: string; changes: string[] } {
+  const m = matchupOf(run)!;
+  const name = (id: string) => content.bosses.get(id)!.name;
+  run = back === 'none' ? choose(run, 'gn-47-queue', '"I don\'t mind who wins. I want to see it."').run : choose(run, 'gn-47-queue', `${name(back === 'a' ? m.a : m.b)}.`).run;
+  if (reason) run = choose(run, 'gn-47-why', reason).run;
+  run = choose(run, 'gn-47-match-1', moments[0]).run;
+  run = choose(run, 'gn-47-match-2', moments[1]).run;
+  return choose(run, 'gn-47-match-3', moments[2]);
+}
+
+describe('gn.47 The Pokémon League Exhibition', () => {
+  it('a matchup is drawn (fixed by the seed), named at the door; each one once a run', () => {
+    const run = gnRun('t47-door');
+    const m = nextMatchup(run)!;
+    expect(scene(run, 'gn-47-door').intro).toContain(`Tonight: **${content.bosses.get(m.a)!.name}** against **${content.bosses.get(m.b)!.name}**.`);
+    const q = queue('t47-door');
+    expect(matchupOf(q)!.id).toBe(m.id);
+    expect(flagOf(q, `ex-used-${m.id}`)).toBe(1);
+    expect(nextMatchup(q)!.id).not.toBe(m.id);
+    for (const x of MATCHUPS) setFlag(q, `ex-used-${x.id}`, 1);
+    expect(nextMatchup(q)).toBeUndefined();
+  });
+
+  it('back the winner because they\'re stronger: a nod and a Rare item; watch closely three times and you\'re invited down', () => {
+    const run = queue('t47-strong');
+    const m = matchupOf(run)!;
+    const side = winnerOf(run, m) === 1 ? 'a' : 'b';
+    const r = watch(run, side, '"They\'re stronger."', ['Watch closely.', 'Watch closely.', 'Watch closely.']);
+    expect(said(r)).toContain('They look up at your seat, and nod.');
+    expect(flagOf(r.run, 'ex-invite')).toBe(1);
+    expect(scene(r.run, 'gn-47-after').labels).toEqual(['Go down.', 'Stay in your seat.']);
+    expect(scene(r.run, 'gn-47-after').intro).toContain('Come down. Let\'s see what you saw.');
+    const fight = choose(r.run, 'gn-47-after', 'Go down.');
+    const winner = content.bosses.get(winnerOf(run, m) === 1 ? m.a : m.b)!;
+    expect(fight.run.battle!.enemyTeam.map((x) => x.speciesId)).toEqual(winner.signature.slice(0, 3));
+    expect(fight.run.battle!.trainer!.name).toBe(winner.name);
+    const lost = lose(fight.run);
+    expect(opened(lost, 'gn-47-lost')).toBe(true);
+    expect(lost.party.every((x) => x.hp === maxHp(content, x))).toBe(true);
+  });
+
+  it('watching closely teaches a move free, once, at any move tutor (if it can legally learn it)', () => {
+    const run = queue('t47-tutor');
+    const r = watch(run, 'none', null, ['Watch closely.', 'Cheer.', 'Look at the crowd.']);
+    const move = matchupOf(r.run)!.seen[0];
+    expect(flagOf(r.run, `ex-seen:${move}`)).toBe(1);
+    expect(flagOf(r.run, 'ex-outcome')).toBe(5);
+    const sp = [...content.species.keys()].find((id) => content.learnables.get(id)?.includes(move))!;
+    const learner = createPokemon(content, sp, 30, 'learner');
+    learner.moves = learner.moves.filter((x) => x.id !== move).slice(0, 3);
+    const t = structuredClone(r.run);
+    t.party = [learner];
+    const here = t.stage!.map.nodes.find((n) => n.id === t.stage!.current)!;
+    here.sides.push({ id: 'tutor-x', kind: 'service', serviceId: 'tutor', used: false });
+    const opt = serviceView(content, t, 'tutor-x').options.find((o) => o.id === `seen:learner:${move}`);
+    expect(opt).toBeTruthy();
+    expect(opt!.cost).toBe(0);
+    const after = useService(content, t, 'tutor-x', opt!.id).run;
+    expect(after.party[0]!.moves.some((x) => x.id === move)).toBe(true);
+    expect(flagOf(after, `ex-seen:${move}`)).toBe(0);
+    expect(serviceView(content, after, 'tutor-x').options.some((o) => o.id.startsWith('seen:'))).toBe(false);
+  });
+
+  it('back the loser: they find you after; back the same one twice and the reporter remembers', () => {
+    const run = queue('t47-loser');
+    const m = matchupOf(run)!;
+    const side = winnerOf(run, m) === 1 ? 'b' : 'a';
+    const r = watch(run, side, '"They\'ve got more to prove."', ['Cheer.', 'Cheer.', 'Cheer.']);
+    expect(said(r)).toContain('"You backed me. On air. That was either kind or foolish."');
+    const who = side === 'a' ? m.a : m.b;
+    expect(flagOf(r.run, `ex-backed-${who}`)).toBe(1);
+    setFlag(r.run, 'ex-again', 1);
+    expect(scene(r.run, 'gn-47-why').intro).toContain('You\'re loyal. Or stubborn. Which is it?');
+  });
+
+  it('how they treat their Pokémon: their ace comes to the barrier, Bond +1 for your lead', () => {
+    const run = queue('t47-treat');
+    const m = matchupOf(run)!;
+    const lead = run.party[0]!.friendship;
+    const r = watch(run, winnerOf(run, m) === 1 ? 'a' : 'b', '"I like how they treat their Pokémon."', ['Look at the crowd.', 'Cheer.', 'Cheer.']);
+    expect(said(r)).toContain('Their ace comes over to the barrier');
+    expect(r.run.party[0]!.friendship).toBe(lead + 5);
+  });
+
+  it('ripples: a trainer of a later stage talks about it, and copied a move (10% less accurate for them)', () => {
+    const run = queue('t47-ripple');
+    const r = watch(run, 'none', null, ['Cheer.', 'Cheer.', 'Cheer.']).run;
+    const move = matchupOf(r)!.seen[1];
+    r.battle = { kind: 'trainer', enemyTeam: [createPokemon(content, 'rattata', 20, 'foe')], enemyIndex: 0, storyEffects: [], trainer: { classId: 'youngster', name: 'Youngster Joey', leaderId: null } } as unknown as RunState['battle'];
+    expect(exRipple(content, r)).toBe('');
+    r.stage!.index += 1;
+    const line = exRipple(content, r);
+    expect(line).toContain('Youngster Joey: "Did you see');
+    expect(r.battle!.enemyTeam[0]!.moves.some((x) => x.id === move)).toBe(true);
+    expect(r.battle!.storyEffects).toContain(`ex-copied:foe:${move}`);
+    expect(exRipple(content, r)).toBe('');
+  });
+});
