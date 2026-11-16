@@ -2445,6 +2445,86 @@
   ],
   "tags": []
  },
+ "gn-58-bug": {
+  "gn": "gn.58",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 1,
+  "window": [
+   1,
+   3
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "The Flight North bug (gn.13), let go: its silhouette at step 1, two or more stages later. Looking up gives the two-note cry. Once.",
+  "kinds": [
+   "Reunion Episode"
+  ],
+  "tags": []
+ },
+ "gn-58-cubone": {
+  "gn": "gn.58",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "The Cubone (gn.22), left at the grave: at a graveyard (ghost theme) it sets a flat stone on a mound that is not its mother's.",
+  "kinds": [
+   "Reunion Episode"
+  ],
+  "tags": []
+ },
+ "gn-58-mimikyu": {
+  "gn": "gn.58",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "The Mimikyu (gn.37), who stayed: back at the mansion (ghost theme), in the coat, with the table laid for three.",
+  "kinds": [
+   "Reunion Episode"
+  ],
+  "tags": []
+ },
+ "gn-58-made": {
+  "gn": "gn.58",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 8,
+  "window": [
+   4,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "The made Pokémon (gn.38), shut down and free: met where you would least expect, helping a farmer or carrying a child's kite.",
+  "kinds": [
+   "Reunion Episode"
+  ],
+  "tags": []
+ },
  "gn-59-fire": {
   "gn": "gn.59",
   "shape": "Single",
@@ -6136,6 +6216,54 @@
   ],
   "tags": []
  },
+ "gn-new-27-door": {
+  "gn": "gn.new.27",
+  "shape": "Hub",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "town",
+  "level": "Everyone is set to level 5 (your three entrants, first-stage only; the foes too)",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Little Cup",
+   "elsewhere": "The Little Cup"
+  },
+  "note": "Must-see, once per region, step 15; fallback step 5 of the next stage. Four rounds on one node. No experience in the Cup. An entrant ready to evolve may cancel (Bond +2, sets littlecup-cancelled) or evolve and withdraw.",
+  "kinds": [
+   "Tournament Episode"
+  ],
+  "tags": []
+ },
+ "gn-new-27-letter": {
+  "gn": "gn.new.27",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 1,
+  "window": [
+   1,
+   2
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "A Letter",
+   "elsewhere": "A Letter"
+  },
+  "note": "Step 1 of the stage after the Cup: Tansy-Jane writes, how you beat it or how you could have.",
+  "kinds": [
+   "Story"
+  ],
+  "tags": []
+ },
  "gn-new-28-bridge": {
   "gn": "gn.new.28",
   "shape": "Single",
@@ -8021,134 +8149,6 @@
   "note": "Finale: only on the run's last stage (the last stage of the last region), step 19, before the final battle. Once per run. +1% to every stat of the party in the last battle per filled place, capped at 10%.",
   "kinds": [
    "Finale"
-  ],
-  "tags": []
- },
- "gn-58-bug": {
-  "gn": "gn.58",
-  "shape": "Single",
-  "earliest": "A3",
-  "home": 1,
-  "window": [
-   1,
-   3
-  ],
-  "sits": "optional",
-  "attaches": "before",
-  "level": "None",
-  "often": "run",
-  "badge": "own",
-  "note": "The Flight North bug (gn.13), let go: its silhouette at step 1, two or more stages later. Looking up gives the two-note cry. Once.",
-  "kinds": [
-   "Reunion Episode"
-  ],
-  "tags": []
- },
- "gn-58-cubone": {
-  "gn": "gn.58",
-  "shape": "Single",
-  "earliest": "A3",
-  "home": 9,
-  "window": [
-   6,
-   12
-  ],
-  "sits": "optional",
-  "attaches": "before",
-  "level": "None",
-  "often": "run",
-  "badge": "own",
-  "note": "The Cubone (gn.22), left at the grave: at a graveyard (ghost theme) it sets a flat stone on a mound that is not its mother's.",
-  "kinds": [
-   "Reunion Episode"
-  ],
-  "tags": []
- },
- "gn-58-mimikyu": {
-  "gn": "gn.58",
-  "shape": "Single",
-  "earliest": "A3",
-  "home": 9,
-  "window": [
-   6,
-   12
-  ],
-  "sits": "optional",
-  "attaches": "before",
-  "level": "None",
-  "often": "run",
-  "badge": "own",
-  "note": "The Mimikyu (gn.37), who stayed: back at the mansion (ghost theme), in the coat, with the table laid for three.",
-  "kinds": [
-   "Reunion Episode"
-  ],
-  "tags": []
- },
- "gn-58-made": {
-  "gn": "gn.58",
-  "shape": "Single",
-  "earliest": "A3",
-  "home": 8,
-  "window": [
-   4,
-   14
-  ],
-  "sits": "optional",
-  "attaches": "before",
-  "level": "None",
-  "often": "run",
-  "badge": "own",
-  "note": "The made Pokémon (gn.38), shut down and free: met where you would least expect, helping a farmer or carrying a child's kite.",
-  "kinds": [
-   "Reunion Episode"
-  ],
-  "tags": []
- },
- "gn-new-27-door": {
-  "gn": "gn.new.27",
-  "shape": "Hub",
-  "earliest": "A3",
-  "home": 15,
-  "window": [
-   13,
-   17
-  ],
-  "sits": "must-see",
-  "attaches": "town",
-  "level": "Everyone is set to level 5 (your three entrants, first-stage only; the foes too)",
-  "often": "region",
-  "badge": "own",
-  "dressing": {
-   "kanto": "The Little Cup",
-   "elsewhere": "The Little Cup"
-  },
-  "note": "Must-see, once per region, step 15; fallback step 5 of the next stage. Four rounds on one node. No experience in the Cup. An entrant ready to evolve may cancel (Bond +2, sets littlecup-cancelled) or evolve and withdraw.",
-  "kinds": [
-   "Tournament Episode"
-  ],
-  "tags": []
- },
- "gn-new-27-letter": {
-  "gn": "gn.new.27",
-  "shape": "Single",
-  "earliest": "A3",
-  "home": 1,
-  "window": [
-   1,
-   2
-  ],
-  "sits": "optional",
-  "attaches": "after",
-  "level": "None",
-  "often": "region",
-  "badge": "own",
-  "dressing": {
-   "kanto": "A Letter",
-   "elsewhere": "A Letter"
-  },
-  "note": "Step 1 of the stage after the Cup: Tansy-Jane writes, how you beat it or how you could have.",
-  "kinds": [
-   "Story"
   ],
   "tags": []
  }
