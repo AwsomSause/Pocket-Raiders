@@ -224,7 +224,10 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
   const many = v === 3 ? n > 4 : Math.ceil(n / 2) > 2;
   const cell = (o: BattleOption, k: number, st = ''): string => {
     const tc = o.type ? TYPE_COLORS[cap(o.type)] : undefined;
-    return `<div class="btn${k === on ? ' on' : ''}${tc ? ' mv' : ''}" style="${tc ? `--tc:${tc};` : ''}${o.off ? 'opacity:.5;' : ''}${many ? 'font-size:15px;' : ''}min-width:0;${st}"${act('pick', k)} data-over="over"${o.tip ? ` data-tip="${esc(o.tip)}"` : ''}><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">${esc(o.label)}</span>${o.sub ? `<small>${esc(o.sub)}</small>` : ''}</div>`;
+    // A long move name beside its PP ("Struggle Bug  PP 20/20") steps down a size so the whole name fits the button.
+    const long = o.sub ? o.label.length + o.sub.length : 0;
+    const fit = long > 22 ? 'font-size:12px;padding:0 8px;gap:4px;' : long > 17 ? 'font-size:14px;padding:0 10px;gap:6px;' : '';
+    return `<div class="btn${k === on ? ' on' : ''}${tc ? ' mv' : ''}" style="${tc ? `--tc:${tc};` : ''}${o.off ? 'opacity:.5;' : ''}${many ? 'font-size:15px;' : ''}${fit}min-width:0;${st}"${act('pick', k)} data-over="over"${o.tip ? ` data-tip="${esc(o.tip)}"` : ''}><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">${esc(o.label)}</span>${o.sub ? `<small style="flex-shrink:0${fit ? ';font-size:11px' : ''}">${esc(o.sub)}</small>` : ''}</div>`;
   };
   const msg = esc(d.text).replace(/\n/g, '<br>');
   const h = many ? 34 : 44;
