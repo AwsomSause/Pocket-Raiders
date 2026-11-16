@@ -24,6 +24,8 @@ test('a party scene shows on the map, resolves once, and lands in the Album', as
     const { session, game } = (window as any).__pkr;
     const run = structuredClone(session.run);
     run.stage.current = run.stage.map.nodes[0].id;
+    // Only the party scene: a placed story stop on the first node would hold the map ("Finish ... before moving on").
+    for (const n of run.stage.map.nodes) if (n.id === run.stage.current || n.column <= 1) n.sides = [];
     run.partyLife.scene = { id: 'talk-question', key: 'e2e', caption: 'The team talked on the road.', uids: [run.party[0].uid], lines: ['The team shares a quiet moment on the road.'], choices: [], dflt: 0 };
     run.partyLife.rolledFor = 'e2e';
     session.run = run;
