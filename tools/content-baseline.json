@@ -1,5 +1,5 @@
 {
- "unsupported-moves": 70,
+ "unsupported-moves": 73,
  "unsupported-learnset-entries": 0,
  "special-form-leaks": 0,
  "species-no-usable-moves": 0,
@@ -43,9 +43,9 @@
  "mechanics-without-proof": 0,
  "supported.species": 1025,
  "supported.form": 106,
- "supported.move": 1291,
- "supported.ability": 325,
- "supported.item": 299,
- "supported.evolution": 640,
+ "supported.move": 1434,
+ "supported.ability": 359,
+ "supported.item": 363,
+ "supported.evolution": 666,
  "supported.mechanic": 47
 }
