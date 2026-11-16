@@ -92,5 +92,21 @@
    "attackFrom": "best",
    "champMove": "seen-it"
   }
+ },
+ {
+  "id": "house-call",
+  "name": "House Call",
+  "type": "electric",
+  "category": "status",
+  "power": null,
+  "accuracy": null,
+  "pp": 5,
+  "priority": 0,
+  "critStage": 0,
+  "target": "self",
+  "flags": [],
+  "effects": {
+   "heal": 0.5
+  }
  }
 ]
