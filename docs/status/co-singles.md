@@ -171,3 +171,4 @@ Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callba
 | Battle Moments "after the battle, one choice" | The room opens beside the next node (a side stop you can skip) | A screen right after the battle |
 | Refusal "+1 trust" | Bond Engine trust +10 (trust runs 0 to 100) | A trust scale of its own |
 | Two moments with choices in one battle | The room for each opens; both use the Pokémon of the later one | One Pokémon per room |
+| Rarity order (common > uncommon > rare) with the doc's many Rare gifts | Kice's call (2026-11-16): `rarityOrder.test.ts` weighs each gift by how often its stop comes up. Plume, Root and Claw Fossils are uncommon, as the SF155 fossil dig calls them the common fossils (old-seed fingerprints STORY1, 2, 5, 6 re-pinned for it) | Nothing |

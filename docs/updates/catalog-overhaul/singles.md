@@ -60,7 +60,7 @@ Known limits: week effects last the region rather than a calendar week, the Equi
 
 **Batch 13: market weeks and activity weeks (50 events).**
 - Sales have real choices now: queue early at Black Friday for the best deal on each shelf, or wait for 20% off everything. Pay full price at a closing shop and he is still open, and grateful, next region.
-- Odds are printed: the lottery is 1 in 20, the prize wheel 1 in 4, the held-item storm 3 in 5 common.
+- Odds are printed: the lottery is 1 in 20, the prize wheel 1 in 4, the held-item storm 3 in 4 uncommon.
 - Activity weeks put their stop on every stage: the Mystery Dungeon, the Express Train, ferries, the Pokéathlon, the Bug Contest, campfires where you tell your own Pokémon's story.
 
 Known limits: a few places the doc names (Wicker's Cart, the Sunken City, the Weather Station) belong to other rows and are not built yet, so the week uses the closest stop that exists until they are; loyalty points count stops, not money.

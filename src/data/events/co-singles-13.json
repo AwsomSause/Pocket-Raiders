@@ -171,7 +171,7 @@
     "cast": [],
     "effect": "sparkle"
    },
-   "intro": "**\"Hold onto your hats!\"** A freak wind is blowing through the markets, and it is raining held items. Printed on the warning sign: 3 in 5 common, 2 in 5 rare.",
+   "intro": "**\"Hold onto your hats!\"** A freak wind is blowing through the markets, and it is raining held items. Printed on the warning sign: 3 in 4 uncommon, 1 in 4 rare.",
    "choices": [
     {
      "label": "Catch one.",
@@ -2002,7 +2002,7 @@
     "cast": [],
     "effect": "none"
    },
-   "intro": "The wind is back, and it is raining held items again. Same odds: 3 in 5 common, 2 in 5 rare.",
+   "intro": "The wind is back, and it is raining held items again. Same odds: 3 in 4 uncommon, 1 in 4 rare.",
    "choices": [
     {
      "label": "Catch one.",

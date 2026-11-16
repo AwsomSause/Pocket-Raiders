@@ -655,12 +655,9 @@
        {
         "kind": "itemFrom",
         "ids": [
-         "leftovers",
-         "focus-sash",
-         "life-orb",
-         "choice-band",
-         "choice-specs",
-         "choice-scarf"
+         "quick-claw",
+         "wide-lens",
+         "pp-up"
         ]
        }
       ]
@@ -674,12 +671,9 @@
        {
         "kind": "itemFrom",
         "ids": [
-         "leftovers",
-         "focus-sash",
-         "life-orb",
-         "choice-band",
-         "choice-specs",
-         "choice-scarf"
+         "quick-claw",
+         "wide-lens",
+         "pp-up"
         ]
        }
       ]
