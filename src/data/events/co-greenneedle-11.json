@@ -7503,6 +7503,1413 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-52-manor",
+   "name": "The Evil Team's Pokémon Auction",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Shop"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 2
+    },
+    {
+     "kind": "flag",
+     "key": "ta-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "corin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "defector",
+       "atLeast": 1,
+       "atMost": 1
+      },
+      {
+       "kind": "flag",
+       "key": "defector-trust",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "Then Jenny steps aside, and it's Corin behind her, hat low. \"I left the corridor door on the latch. Behind the stage. You're welcome.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "*A manor with every window lit and no cars outside. Guests arriving on foot, in masks.*\n\n**Officer Jenny, in the hedge:** \"It's tonight. Everything they've taken this season, sold in one room.\"\n\n\"One lot's alive, and rare, and frightened. You'll need to be somebody else to get in.\"",
+   "choices": [
+    {
+     "label": "Go as a rich buyer.",
+     "success": {
+      "text": "\"Of the northern Vantongerens,\" you tell the door. \"Distantly.\" The door bows. Money opens doors. Pretending to have it opens most.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "taStart",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "defector-trust",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ta-corridor",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "ta-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "ta-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-viewing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go as a rival team's agent.",
+     "success": {
+      "text": "A different team's pin on your lapel, borrowed. You're here to see what the competition's selling. Someone here may know the real agent.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "taStart",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-ask",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "defector-trust",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ta-corridor",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "ta-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "ta-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-office"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "evil",
+       "lacks": "disguise"
+      }
+     ]
+    },
+    {
+     "label": "Go as a rival team's agent.",
+     "success": {
+      "text": "You wore their uniform once already. You know how they stand, how they nod. Nobody here will think to test you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "taStart",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-ask",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "defector-trust",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ta-corridor",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "ta-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "ta-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-office"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "evil",
+       "has": "disguise"
+      }
+     ]
+    },
+    {
+     "label": "Go as a caterer.",
+     "success": {
+      "text": "A white jacket and a tray of something with too much aspic. Nobody looks at a caterer. Nobody lets one bid, either.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "taStart",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "ta-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "ta-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-kitchen"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-viewing",
+   "name": "The Evil Auction: The Viewing Room",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "Glass cases under soft lights. A held item. A case of Balls. A fossil. An egg in straw. An antique vase.\n\nA steward hovers, in case you'd like anything up close.",
+   "choices": [
+    {
+     "label": "Look closely at the antique.",
+     "success": {
+      "text": "You lean in. The glaze is still tacky. Somebody made this last week. It's a fake.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-viewed",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go to the floor.",
+     "success": {
+      "text": "You take a paddle with a number on it, and a seat near the front.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-office",
+   "name": "The Evil Auction: The Back Office",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "A desk, a lamp, a ledger left open by someone who'll be back in a minute.",
+   "choices": [
+    {
+     "label": "Read the ledger.",
+     "success": {
+      "text": "Names, prices, buyers. One line: *Sinnoh job, settled in Rare Candy.* And a plan of the house: a service corridor runs behind the stage.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-ledger",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-corridor",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go to the floor.",
+     "success": {
+      "text": "You leave the ledger as it was, and take a seat at the back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-lot-1",
+   "name": "The Evil Auction: Lot 1, A Held Item",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Shop"
+   ],
+   "remembers": [
+    {
+     "id": "pryde",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-exposed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In the third row, in a mask that fools nobody: Octavian Pryde, the honest auctioneer. He looks horrified. He's taking notes for the police."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "Lot 1: a held item, stolen from a trainer two towns over. Its fair value's on your screen: ₽1,200.\n\nA woman in a fox mask bids on everything, early and high. A man by the pillar never bids at all. He just watches who does.\n\nAnd a caterer with a tray of small pastries, who is {rival}. Out of the side of their mouth: \"Don't. Say. Anything.\"",
+   "choices": [
+    {
+     "label": "Bid to its fair value.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "Your paddle goes up, once, twice. The fox mask lets you have it. Fair's fair.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "quick-claw",
+         "kings-rock",
+         "scope-lens",
+         "razor-claw"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "taLot",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You let it go. It sells to someone in a rabbit mask, for too much.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "taLot",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-lot-2",
+   "name": "The Evil Auction: Lot 2, A Case of Rare Balls",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "Lot 2: a case of rare Balls. The bidding climbs, and climbs. Soon there's only you and one other paddle, by the stage.\n\nThe other paddle belongs to the house. The auctioneer doesn't look away from you. He's waiting to see how deep your pockets go.",
+   "choices": [
+    {
+     "label": "Keep bidding.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3000
+      }
+     ],
+     "success": {
+      "text": "You win. Everyone in the room now knows exactly how much money you have. Including the man by the pillar.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3000
+       },
+       {
+        "kind": "item",
+        "id": "ultra-ball",
+        "count": 5
+       },
+       {
+        "kind": "gn",
+        "op": "taLot",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Drop out early.",
+     "success": {
+      "text": "You lower your paddle. The house bidder stops too, at once. The auctioneer's smile goes thin. You saw it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-trap-balls",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "taLot",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-lot-3",
+   "name": "The Evil Auction: Lot 3, A Fossil",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "Lot 3: a fossil, honest, in a velvet box. The fox mask doesn't bother with this one.",
+   "choices": [
+    {
+     "label": "Bid.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "Yours, at a fair price. It's heavier than it looks.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "old-amber",
+         "helix-fossil",
+         "dome-fossil"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "taLot",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "ta-ask",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-52-lot-4",
+          "gn-52-question"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "It goes to a quiet man in a heron mask, who holds it like a baby.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "taLot",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "ta-ask",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-52-lot-4",
+          "gn-52-question"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-question",
+   "name": "The Evil Auction: A Question",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Shop"
+   ],
+   "remembers": [
+    {
+     "id": "ledger",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ta-ledger",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You read it in the ledger an hour ago: *Sinnoh job, settled in Rare Candy.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "A guest slides into the seat beside you. \"You're with them, aren't you? Remind me. How did we pay the man from the Sinnoh job?\"\n\nHe's smiling. Only the real agent would know.",
+   "choices": [
+    {
+     "label": "\"Cash, as always.\"",
+     "success": {
+      "text": "His smile stays exactly where it is. He gets up, and goes to stand by the pillar. Your cover's gone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-blown",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"In Rare Candy.\"",
+     "success": {
+      "text": "\"Ha. Course we did.\" He pats your knee and moves on. You breathe again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"We didn't. He owed us.\"",
+     "success": {
+      "text": "\"Did he.\" Not a question. He gets up, and goes to stand by the pillar. Your cover's gone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-blown",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-lot-4",
+   "name": "The Evil Auction: Lot 4, An Antique",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Shop"
+   ],
+   "remembers": [
+    {
+     "id": "fake",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ta-viewed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You saw it close up in the viewing room. The glaze was still tacky. It's a fake."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "Lot 4: \"An antique.\" A vase, very old, the auctioneer says. The fox mask bids on it as if she knows something.",
+   "choices": [
+    {
+     "label": "Bid.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "You win it. The vase is warm from the lights. You carry it carefully, the way people carry things they paid for.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "gn",
+        "op": "taLot",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You let it go. Somebody always buys the vase.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "taLot",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-lot-5",
+   "name": "The Evil Auction: Lot 5, An Egg",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "Lot 5: an egg, in straw. The bidding's slow, and cheap. Too cheap. Nobody wants to look like they know what it is.\n\nIt's worth more. Knowing that is the dangerous part.",
+   "choices": [
+    {
+     "label": "Bid low, like everyone.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "You bid like you're bored. It's yours for almost nothing. The man by the pillar doesn't look up.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-trap-egg",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "taLot",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bid what it's really worth.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "You bid its real price. The room goes quiet. The man by the pillar writes something down.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-noticed",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "taLot",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You let it go. Someone else gets a bargain, and doesn't know it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-trap-egg",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "taLot",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-lot-6"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-lot-6",
+   "name": "The Evil Auction: Lot 6, The Rare Pokémon",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Shop"
+   ],
+   "remembers": [
+    {
+     "id": "blown",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ta-blown",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The man by the pillar isn't watching the lot. He's watching you. Two guards drift closer."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "*The last lot. A cage under a cloth. The cloth comes off.*\n\n*It's small. It's a {cast:ta-rare}, a kind the region hardly sees. It's looking at the room the way something looks at weather.*",
+   "choices": [
+    {
+     "label": "Bid it home.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 4500
+      }
+     ],
+     "success": {
+      "text": "The fox mask pushes the price high, and higher. You go higher. It's handed to you in its cage. Nobody's the wiser. The team has your money.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -4500
+       },
+       {
+        "kind": "gn",
+        "op": "taRare",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "taLot",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-out"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ta-blown",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Bid, and send a Pokémon round the back.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You bid, and bid, holding the room. Then, from behind the stage, a signal: a tap, twice. You stop. The cage is already empty.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "gn",
+        "op": "taRare",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-out"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The signal comes late. You're still bidding when the gavel falls, at its full price. It's yours, the expensive way.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -4500
+       },
+       {
+        "kind": "gn",
+        "op": "taRare",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "taLot",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-out"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ta-blown",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "ta-corridor",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Raise the alarm.",
+     "success": {
+      "text": "The fox mask's whistle, loud as a train. Guards from every door, and the man by the pillar, taking off his mask.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-alarm",
+        "n": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 2
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "The Lieutenant",
+       "size": 3,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "taRare",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-52-out"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-52-out"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-kitchen",
+   "name": "The Evil Auction: The Kitchens",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "Steam and shouting. A chef throws a tray at you and points at a door. You go through the door.\n\nAnother caterer is already there, hiding behind a tray of small pastries. It's {rival}. \"Don't. Say. Anything.\"",
+   "choices": [
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing. {rival} nods once, the way people do in heist films, and points down the stairs.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-cellar"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-cellar",
+   "name": "The Evil Auction: The Cellar",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "Wine, and crates, and crates that aren't wine. At the far end, a door marked SERVICE.",
+   "choices": [
+    {
+     "label": "Take the service corridor.",
+     "success": {
+      "text": "The corridor runs behind the stage. Through the boards, the auctioneer's voice. Lot 6.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-corridor",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-corridor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-corridor",
+   "name": "The Evil Auction: The Service Corridor",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "The cage is wheeled back here between lots. You have a minute. Maybe.\n\nA key on a hook, by the door. A lock that's old. And {rival}, already here, holding the far door open with one foot.",
+   "choices": [
+    {
+     "label": "Take the key from the hook.",
+     "success": {
+      "text": "The key turns. The cage opens. It doesn't move. Then it does, straight into your jacket, shaking.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "taRare",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-out"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your Pokémon pick the lock.",
+     "success": {
+      "text": "A click like a knuckle. The cage swings open. It looks at your Pokémon, and then at you, and comes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "taRare",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-out"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ghost",
+        "steel"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Let your rival hold the door.",
+     "success": {
+      "text": "{rival} holds the door. You wheel the whole cage out into the night. \"Never mention the tray,\" they say.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "taRare",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-52-out"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Raise the alarm.",
+     "success": {
+      "text": "You yank the fire bell. Guards from every door, and a man who never bids, taking off his mask.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-alarm",
+        "n": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 2
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "The Lieutenant",
+       "size": 3,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "taRare",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-52-out"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-52-out"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-out",
+   "name": "The Evil Auction: Outside",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "alarm",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ta-alarm",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Everything's seized: the lots, the ledgers, the guests' coats. The team knows your face now."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "Outside, the cold, and the dark garden. {rival} is gone already, with the pastries.",
+   "choices": [
+    {
+     "label": "Walk home.",
+     "success": {
+      "text": "You walk home under the stars. Somewhere behind you, the manor's lights are still burning.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "taEnd"
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        }
+       },
+       {
+        "kind": "moment",
+        "text": "Went undercover at the evil team's auction, in a mask.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-later",
+   "name": "The Evil Auction: Someone Knew",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ta-traps",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ta-later",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "ta-stage"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "A lieutenant of the team, on a bench, talking into a phone he thinks nobody can hear.\n\n\"Someone at the auction knew what they were doing. Didn't fall for the Balls. Didn't fall for the egg. I'd like to know who.\"",
+   "choices": [
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You walk past him. He doesn't look up. He doesn't know. He never will.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-later",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-52-sale",
+   "name": "The Evil Auction: For Sale",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ta-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "ta-at"
+    },
+    {
+     "kind": "flag",
+     "key": "ta-sale",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a1f2b",
+    "effect": "none"
+   },
+   "intro": "A manor you've been in before, with every window dark. A sign on the gate.\n\nIt says: *Motivated seller.*",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on, smiling.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ta-sale",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

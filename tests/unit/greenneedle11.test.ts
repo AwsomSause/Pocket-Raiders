@@ -968,6 +968,8 @@ describe('gn.50 The Evil Team\'s Betrayal', () => {
 
 // ---- gn.51 The Pokémon Smuggling Ring ----
 import { CARGO, farFromHome, homeOf, smuggleRest } from '../../src/core/greenneedle/smuggling';
+import { taRoomsAfraid } from '../../src/core/greenneedle/teamauction';
+import { step } from './autoplay';
 import { castOf as castOfGn } from '../../src/core/greenneedle';
 import { switchProblem } from '../../src/core/battle/engine';
 
@@ -1108,5 +1110,123 @@ describe('gn.51 The Pokémon Smuggling Ring', () => {
     expect(flagOf(run, 'smuggle-cards')).toBe(1);
     open(run, 'gn-51-door');
     expect(scene(run, 'gn-51-door').intro.match(/☑/g)).toHaveLength(1);
+  });
+});
+
+// ---- gn.52 The Evil Team's Pokémon Auction ----
+const manor = (seed: string, money = 20000): RunState => {
+  const run = betrayalRun(seed, 3);
+  run.money = money;
+  open(run, 'gn-52-manor');
+  return run;
+};
+/** Clears a decision the prize opened (the fossil asks what to do with it). */
+const settle = (run: RunState): RunState => {
+  let r = run;
+  for (let i = 0; i < 5 && r.phase === 'decision'; i += 1) r = step(content, r).run;
+  return r;
+};
+const rareOf = (run: RunState) => [...run.party, ...run.box].find((m) => m.gn?.some((t) => t.startsWith('afraid-rooms:')));
+
+describe('gn.52 The Evil Team\'s Pokémon Auction', () => {
+  it('three disguises; the buyer sees the viewing room (the antique\'s a fake), the agent the ledger, the caterer the kitchens', () => {
+    const run = manor('t52-door');
+    expect(scene(run, 'gn-52-manor').labels).toEqual(['Go as a rich buyer.', 'Go as a rival team\'s agent.', 'Go as a caterer.']);
+    const buyer = choose(choose(run, 'gn-52-manor', 'Go as a rich buyer.').run, 'gn-52-viewing', 'Look closely at the antique.').run;
+    expect(flagOf(buyer, 'ta-disguise')).toBe(1);
+    expect(scene(buyer, 'gn-52-lot-4').intro).toContain('It\'s a fake.');
+    const agent = choose(run, 'gn-52-manor', 'Go as a rival team\'s agent.').run;
+    expect(opened(agent, 'gn-52-office')).toBe(true);
+    const caterer = choose(run, 'gn-52-manor', 'Go as a caterer.').run;
+    expect(opened(caterer, 'gn-52-kitchen')).toBe(true);
+  });
+
+  it('the bidder keeps cover by winning three lots and dodging both traps: the ledger (a File), and the lieutenant wonders later', () => {
+    let run = choose(choose(manor('t52-buyer'), 'gn-52-manor', 'Go as a rich buyer.').run, 'gn-52-viewing', 'Go to the floor.').run;
+    expect(scene(run, 'gn-52-lot-1').intro).toContain('fox mask');
+    run = choose(run, 'gn-52-lot-1', 'Bid to its fair value.').run;
+    run = choose(run, 'gn-52-lot-2', 'Drop out early.').run;
+    run = settle(choose(run, 'gn-52-lot-3', 'Bid.').run);
+    run = choose(run, 'gn-52-lot-4', 'Let it go.').run;
+    run = choose(run, 'gn-52-lot-5', 'Bid low, like everyone.').run;
+    expect(flagOf(run, 'ta-lots')).toBe(3);
+    const before = run.money;
+    run = choose(run, 'gn-52-lot-6', 'Bid it home.').run;
+    expect(run.money).toBe(before - 4500);
+    expect(rareOf(run)).toBeDefined();
+    run = choose(run, 'gn-52-out', 'Walk home.').run;
+    expect(flagOf(run, 'ta-cover')).toBe(1);
+    expect(flagOf(run, 'team-rocket-files')).toBe(1);
+    expect(flagOf(run, 'ta-traps')).toBe(1);
+  });
+
+  it('a rich buyer who refuses three lots in a row draws looks: the cover\'s blown, and only the alarm is left', () => {
+    let run = choose(choose(manor('t52-looks'), 'gn-52-manor', 'Go as a rich buyer.').run, 'gn-52-viewing', 'Go to the floor.').run;
+    run = choose(run, 'gn-52-lot-1', 'Let it go.').run;
+    run = choose(run, 'gn-52-lot-2', 'Drop out early.').run;
+    const r = choose(run, 'gn-52-lot-3', 'Let it go.');
+    expect(said(r)).toContain('Heads turn.');
+    expect(flagOf(r.run, 'ta-blown')).toBe(1);
+    run = choose(r.run, 'gn-52-lot-4', 'Let it go.').run;
+    run = choose(run, 'gn-52-lot-5', 'Let it go.').run;
+    expect(scene(run, 'gn-52-lot-6').labels).toEqual(['Raise the alarm.']);
+    const after = win(choose(run, 'gn-52-lot-6', 'Raise the alarm.').run);
+    expect(flagOf(after, 'ta-rare')).toBe(3);
+    const out = choose(after, 'gn-52-out', 'Walk home.').run;
+    expect(flagOf(out, 'ta-cover')).toBe(0);
+  });
+
+  it('the agent: one guest asks the question; the ledger has the answer; the old uniform (SF130) means nobody asks', () => {
+    let run = choose(manor('t52-agent'), 'gn-52-manor', 'Go as a rival team\'s agent.').run;
+    run = choose(run, 'gn-52-office', 'Read the ledger.').run;
+    run = choose(run, 'gn-52-lot-1', 'Let it go.').run;
+    run = choose(run, 'gn-52-lot-2', 'Drop out early.').run;
+    run = settle(choose(run, 'gn-52-lot-3', 'Bid.').run);
+    expect(scene(run, 'gn-52-question').intro).toContain('settled in Rare Candy');
+    expect(flagOf(choose(run, 'gn-52-question', '"Cash, as always."').run, 'ta-blown')).toBe(1);
+    run = choose(run, 'gn-52-question', '"In Rare Candy."').run;
+    expect(flagOf(run, 'ta-blown')).toBe(0);
+    expect(scene(run, 'gn-52-lot-6').labels).toContain('Bid, and send a Pokémon round the back.');
+    const uniform = manor('t52-uniform');
+    setFlag(uniform, 'team-rocket-disguise');
+    let u = choose(uniform, 'gn-52-manor', 'Go as a rival team\'s agent.').run;
+    u = choose(u, 'gn-52-office', 'Go to the floor.').run;
+    u = choose(u, 'gn-52-lot-1', 'Let it go.').run;
+    u = choose(u, 'gn-52-lot-2', 'Drop out early.').run;
+    u = settle(choose(u, 'gn-52-lot-3', 'Bid.').run);
+    expect(opened(u, 'gn-52-lot-4')).toBe(true);
+  });
+
+  it('the caterer rescues it from the service corridor for nothing; the rival holds the door (+2 Trust); it\'s afraid of rooms for a stage', () => {
+    let run = choose(manor('t52-caterer'), 'gn-52-manor', 'Go as a caterer.').run;
+    run = choose(run, 'gn-52-kitchen', 'Say nothing.').run;
+    run = choose(run, 'gn-52-cellar', 'Take the service corridor.').run;
+    expect(scene(run, 'gn-52-corridor').labels).toEqual(['Take the key from the hook.', 'Let your rival hold the door.', 'Raise the alarm.']);
+    const money = run.money;
+    run = choose(run, 'gn-52-corridor', 'Let your rival hold the door.').run;
+    expect(run.money).toBe(money);
+    expect(flagOf(run, 'ta-rare')).toBe(2);
+    run = choose(run, 'gn-52-out', 'Walk home.').run;
+    expect(flagOf(run, 'ta-cover')).toBe(1);
+    const mon = rareOf(run)!;
+    const i = run.party.indexOf(mon);
+    expect(i).toBeGreaterThanOrEqual(0);
+    mon.hp = 1;
+    const healed = taRoomsAfraid(content, run, run.party.map((m) => m.hp), stageNumber(content, run));
+    expect(healed).toContain('won\'t come inside');
+    expect(taRoomsAfraid(content, run, run.party.map((m) => m.hp), stageNumber(content, run) + 1)).toBe('');
+  });
+
+  it('the defector (Trust 3+) is the contact and left the corridor door on the latch; the manor is for sale in a later region', () => {
+    const run = manor('t52-corin');
+    setFlag(run, 'defector', 1);
+    setFlag(run, 'defector-trust', 3);
+    expect(scene(run, 'gn-52-manor').intro).toContain('on the latch');
+    const b = choose(run, 'gn-52-manor', 'Go as a rich buyer.').run;
+    expect(flagOf(b, 'ta-corridor')).toBe(1);
+    setFlag(b, 'ta-done');
+    b.regionIndex += 1;
+    open(b, 'gn-52-sale');
+    expect(scene(b, 'gn-52-sale').intro).toContain('Motivated seller.');
   });
 });

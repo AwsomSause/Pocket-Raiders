@@ -543,6 +543,70 @@
   ],
   "tags": []
  },
+ "gn-52-manor": {
+  "gn": "gn.52",
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 16,
+  "window": [
+   14,
+   18
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "level": "If it comes to a fight: A+1",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Evil Team's Pokémon Auction",
+   "elsewhere": "The Evil Team's Pokémon Auction"
+  },
+  "note": "Badge: a mask. At night. Only in a region with an evil-team story. SF125's pop-up black-market auction is a street-corner copy of this. gn-52-later (the lieutenant wonders, a later stage) and gn-52-sale (the manor for sale, a later region) are its afterstories.",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-52-later": {
+  "gn": "gn.52",
+  "shape": "Single",
+  "earliest": "A9",
+  "home": 8,
+  "window": [
+   2,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Only when both auction traps were avoided.",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-52-sale": {
+  "gn": "gn.52",
+  "shape": "Single",
+  "earliest": "A9",
+  "home": 6,
+  "window": [
+   2,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: \"Motivated seller.\" (a later region of the same run).",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
  "gn-45-field": {
   "gn": "gn.45",
   "shape": "Single",

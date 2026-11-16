@@ -28,6 +28,7 @@ import { pairBondLevel } from '../bond';
 import { draftAldhelm, draftBattleStart, draftEnd, draftFriend, draftLetter, draftPick, draftRecruit, draftStart, draftTokens, draftWon } from './draft';
 import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
 import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorStart, defectorTokens, defectorTrust, guestOf } from './defector';
+import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -595,6 +596,14 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return smuggleJoin(content, run, host);
     case 'smugglePostcard':
       return smugglePostcard(run);
+    case 'taStart':
+      return taStart(content, run, e.n ?? 1, host.float);
+    case 'taLot':
+      return taLot(run, e.n ?? 0);
+    case 'taRare':
+      return taRare(run, e.n ?? 1, host.stage, host);
+    case 'taEnd':
+      return taEnd(run, host);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':

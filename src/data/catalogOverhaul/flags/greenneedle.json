@@ -604,6 +604,10 @@
   {
    "key": "smuggle-rehab",
    "rule": "core/greenneedle/smuggling.ts (gn.51 The Pokémon Smuggling Ring)"
+  },
+  {
+   "key": "defector",
+   "rule": "core/greenneedle/defector.ts (gn.50 The Evil Team's Betrayal)"
   }
  ]
 }

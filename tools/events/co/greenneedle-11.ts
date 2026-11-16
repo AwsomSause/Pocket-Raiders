@@ -1,8 +1,8 @@
 // Greenneedle, part 11: gn.44 The 1v1 Championship (doc GREENNEEDLE_REWORKED_PLACED_10.md).
 // Build: npm run co:build -- greenneedle-11   then   npm run co:gn
-import { $, any, anyType, br, ch, fight, flag, heal, item, join, out, scout, takeNode, trainer, wild, type Json } from '../dsl.ts';
-import { bond, chIf, exactly, gev, gn, is, laterStage, moment, not, notThisRegion, rm, roll, say, scene, setTo, stampRegion, stampStage, when, type Placement } from './_gn.ts';
-import { evil, foe } from './_evil-story-kit.ts';
+import { $, any, anyType, br, ch, egg, fight, flag, heal, item, join, money, out, scout, takeNode, trainer, wild, type Json } from '../dsl.ts';
+import { bond, chIf, exactly, gev, gn, is, laterStage, moment, not, notThisRegion, rm, roll, route, say, scene, setTo, stampRegion, stampStage, when, type Placement } from './_gn.ts';
+import { evil, foe, rivalTrust } from './_evil-story-kit.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -789,7 +789,156 @@ const gn51: Json[] = [
   ), [ch('Pin it up.', out('You pin it up. On the list, one more tick.', gn('smugglePostcard'), stampRegion('smuggle-card-at')))]),
 ];
 
-export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46, ...gn47, ...gn48, ...gn49, KANTO_SNORLAX, ...gn50, ...gn51];
+// =====================================================================================================================
+// gn.52  THE EVIL TEAM'S POKÉMON AUCTION  (step 16, side branch, window 14–18, at night; instead of the battle; once per run, A8,
+// only with an evil-team story). A disguise opens rooms; six lots, two traps, three must be won to keep a bidder's cover; the rare
+// lot bought, rescued from the service corridor, or seized when the alarm goes up (core/greenneedle/teamauction.ts).
+// =====================================================================================================================
+const MASK_TINT = '#3a1f2b';
+const mask = (o: Json = {}): Json => ({ tint: MASK_TINT, tags: ['Evil Team', 'Shop'], effect: 'none', ...o });
+const lot = (won: boolean): Json => gn('taLot', { n: won ? 1 : 0 });
+const CORRIDOR_BY_TRUST = when('defector-trust', { min: 3 }, [setTo('ta-corridor', 1)]);
+const FLOOR_PEOPLE = say(
+  'A woman in a fox mask bids on everything, early and high. A man by the pillar never bids at all. He just watches who does.',
+  'And a caterer with a tray of small pastries, who is {rival}. Out of the side of their mouth: "Don\'t. Say. Anything."',
+);
+const lotRoom = (n: number, name: string, intro: string, choices: Json[], o: Json = {}): Json => rm(`gn-52-lot-${n}`, `The Evil Auction: Lot ${n}, ${name}`, mask(o), intro, choices);
+const nextLot = (n: number): Json => (n === 3 ? route('ta-ask', 'gn-52-lot-4', 'gn-52-question') : scene(`gn-52-lot-${n + 1}`));
+
+const gn52: Json[] = [
+  gev('gn-52-manor', 'The Evil Team\'s Pokémon Auction', mask({ stop: 'event', rarity: 'rare', requires: [{ kind: 'evil', after: 2 }, not('ta-done')], remembers: [
+    { id: 'corin', when: [exactly('defector', 1), is('defector-trust', 3)], notice: 'Then Jenny steps aside, and it\'s Corin behind her, hat low. "I left the corridor door on the latch. Behind the stage. You\'re welcome."' },
+  ] }), say(
+    '*A manor with every window lit and no cars outside. Guests arriving on foot, in masks.*',
+    '**Officer Jenny, in the hedge:** "It\'s tonight. Everything they\'ve taken this season, sold in one room."',
+    '"One lot\'s alive, and rare, and frightened. You\'ll need to be somebody else to get in."',
+  ), [
+    ch('Go as a rich buyer.', out('"Of the northern Vantongerens," you tell the door. "Distantly." The door bows. Money opens doors. Pretending to have it opens most.',
+      gn('taStart', { n: 1 }), CORRIDOR_BY_TRUST, stampRegion('ta-at'), stampStage('ta-stage'), scene('gn-52-viewing'))),
+    chIf([{ kind: 'evil', lacks: 'disguise' }], 'Go as a rival team\'s agent.', out('A different team\'s pin on your lapel, borrowed. You\'re here to see what the competition\'s selling. Someone here may know the real agent.',
+      gn('taStart', { n: 2 }), setTo('ta-ask', 1), CORRIDOR_BY_TRUST, stampRegion('ta-at'), stampStage('ta-stage'), scene('gn-52-office'))),
+    chIf([{ kind: 'evil', has: 'disguise' }], 'Go as a rival team\'s agent.', out('You wore their uniform once already. You know how they stand, how they nod. Nobody here will think to test you.',
+      gn('taStart', { n: 2 }), setTo('ta-ask', 0), CORRIDOR_BY_TRUST, stampRegion('ta-at'), stampStage('ta-stage'), scene('gn-52-office'))),
+    ch('Go as a caterer.', out('A white jacket and a tray of something with too much aspic. Nobody looks at a caterer. Nobody lets one bid, either.',
+      gn('taStart', { n: 3 }), stampRegion('ta-at'), stampStage('ta-stage'), scene('gn-52-kitchen'))),
+  ]),
+  // ---- The buyer: the viewing room ----
+  rm('gn-52-viewing', 'The Evil Auction: The Viewing Room', mask(), say(
+    'Glass cases under soft lights. A held item. A case of Balls. A fossil. An egg in straw. An antique vase.',
+    'A steward hovers, in case you\'d like anything up close.',
+  ), [
+    ch('Look closely at the antique.', out('You lean in. The glaze is still tacky. Somebody made this last week. It\'s a fake.', setTo('ta-viewed', 1), scene('gn-52-lot-1'))),
+    ch('Go to the floor.', out('You take a paddle with a number on it, and a seat near the front.', scene('gn-52-lot-1'))),
+  ]),
+  // ---- The agent: the back office ----
+  rm('gn-52-office', 'The Evil Auction: The Back Office', mask(), say(
+    'A desk, a lamp, a ledger left open by someone who\'ll be back in a minute.',
+  ), [
+    ch('Read the ledger.', out(say(
+      'Names, prices, buyers. One line: *Sinnoh job, settled in Rare Candy.* And a plan of the house: a service corridor runs behind the stage.',
+    ), setTo('ta-ledger', 1), setTo('ta-corridor', 1), scene('gn-52-lot-1'))),
+    ch('Go to the floor.', out('You leave the ledger as it was, and take a seat at the back.', scene('gn-52-lot-1'))),
+  ]),
+  // ---- The floor: six lots ----
+  lotRoom(1, 'A Held Item', say(
+    'Lot 1: a held item, stolen from a trainer two towns over. Its fair value\'s on your screen: ₽1,200.',
+    FLOOR_PEOPLE,
+  ), [
+    ch('Bid to its fair value.', out('Your paddle goes up, once, twice. The fox mask lets you have it. Fair\'s fair.', $(-1200), any('quick-claw', 'kings-rock', 'scope-lens', 'razor-claw'), lot(true), nextLot(1)), { requires: [money(1200)] }),
+    ch('Let it go.', out('You let it go. It sells to someone in a rabbit mask, for too much.', lot(false), nextLot(1))),
+  ], { remembers: [
+    { id: 'pryde', when: [is('auction-exposed')], notice: 'In the third row, in a mask that fools nobody: Octavian Pryde, the honest auctioneer. He looks horrified. He\'s taking notes for the police.' },
+  ] }),
+  lotRoom(2, 'A Case of Rare Balls', say(
+    'Lot 2: a case of rare Balls. The bidding climbs, and climbs. Soon there\'s only you and one other paddle, by the stage.',
+    'The other paddle belongs to the house. The auctioneer doesn\'t look away from you. He\'s waiting to see how deep your pockets go.',
+  ), [
+    ch('Keep bidding.', out('You win. Everyone in the room now knows exactly how much money you have. Including the man by the pillar.', $(-3000), item('ultra-ball', 5), lot(true), nextLot(2)), { requires: [money(3000)] }),
+    ch('Drop out early.', out('You lower your paddle. The house bidder stops too, at once. The auctioneer\'s smile goes thin. You saw it.', setTo('ta-trap-balls', 1), lot(false), nextLot(2))),
+  ]),
+  lotRoom(3, 'A Fossil', say('Lot 3: a fossil, honest, in a velvet box. The fox mask doesn\'t bother with this one.'), [
+    ch('Bid.', out('Yours, at a fair price. It\'s heavier than it looks.', $(-1500), any('old-amber', 'helix-fossil', 'dome-fossil'), lot(true), nextLot(3)), { requires: [money(1500)] }),
+    ch('Let it go.', out('It goes to a quiet man in a heron mask, who holds it like a baby.', lot(false), nextLot(3))),
+  ]),
+  rm('gn-52-question', 'The Evil Auction: A Question', mask({ remembers: [
+    { id: 'ledger', when: [is('ta-ledger')], notice: 'You read it in the ledger an hour ago: *Sinnoh job, settled in Rare Candy.*' },
+  ] }), say(
+    'A guest slides into the seat beside you. "You\'re with them, aren\'t you? Remind me. How did we pay the man from the Sinnoh job?"',
+    'He\'s smiling. Only the real agent would know.',
+  ), [
+    ch('"Cash, as always."', out('His smile stays exactly where it is. He gets up, and goes to stand by the pillar. Your cover\'s gone.', setTo('ta-blown', 1), scene('gn-52-lot-4'))),
+    ch('"In Rare Candy."', out('"Ha. Course we did." He pats your knee and moves on. You breathe again.', scene('gn-52-lot-4'))),
+    ch('"We didn\'t. He owed us."', out('"Did he." Not a question. He gets up, and goes to stand by the pillar. Your cover\'s gone.', setTo('ta-blown', 1), scene('gn-52-lot-4'))),
+  ]),
+  lotRoom(4, 'An Antique', say('Lot 4: "An antique." A vase, very old, the auctioneer says. The fox mask bids on it as if she knows something.'), [
+    ch('Bid.', out('You win it. The vase is warm from the lights. You carry it carefully, the way people carry things they paid for.', $(-1000), lot(true), nextLot(4)), { requires: [money(1000)] }),
+    ch('Let it go.', out('You let it go. Somebody always buys the vase.', lot(false), nextLot(4))),
+  ], { remembers: [
+    { id: 'fake', when: [is('ta-viewed')], notice: 'You saw it close up in the viewing room. The glaze was still tacky. It\'s a fake.' },
+  ] }),
+  lotRoom(5, 'An Egg', say(
+    'Lot 5: an egg, in straw. The bidding\'s slow, and cheap. Too cheap. Nobody wants to look like they know what it is.',
+    'It\'s worth more. Knowing that is the dangerous part.',
+  ), [
+    ch('Bid low, like everyone.', out('You bid like you\'re bored. It\'s yours for almost nothing. The man by the pillar doesn\'t look up.', $(-600), egg(), setTo('ta-trap-egg', 1), lot(true), scene('gn-52-lot-6')), { requires: [money(600)] }),
+    ch('Bid what it\'s really worth.', out('You bid its real price. The room goes quiet. The man by the pillar writes something down.', $(-1600), egg(), setTo('ta-noticed', 1), lot(true), scene('gn-52-lot-6')), { requires: [money(1600)] }),
+    ch('Let it go.', out('You let it go. Someone else gets a bargain, and doesn\'t know it.', setTo('ta-trap-egg', 1), lot(false), scene('gn-52-lot-6'))),
+  ]),
+  lotRoom(6, 'The Rare Pokémon', say(
+    '*The last lot. A cage under a cloth. The cloth comes off.*',
+    '*It\'s small. It\'s a {cast:ta-rare}, a kind the region hardly sees. It\'s looking at the room the way something looks at weather.*',
+  ), [
+    chIf([not('ta-blown')], 'Bid it home.', out('The fox mask pushes the price high, and higher. You go higher. It\'s handed to you in its cage. Nobody\'s the wiser. The team has your money.',
+      $(-4500), gn('taRare', { n: 1 }), lot(true), scene('gn-52-out')), { requires: [money(4500)] }),
+    chIf([not('ta-blown'), is('ta-corridor')], 'Bid, and send a Pokémon round the back.', out('You bid, and bid, holding the room. Then, from behind the stage, a signal: a tap, twice. You stop. The cage is already empty.',
+      $(-500), gn('taRare', { n: 2 }), scene('gn-52-out')), {
+      prompt: { id: 'echo-rhythm', needs: 'ok' },
+      fail: out('The signal comes late. You\'re still bidding when the gavel falls, at its full price. It\'s yours, the expensive way.', $(-4500), gn('taRare', { n: 1 }), lot(true), scene('gn-52-out')),
+    }),
+    ch('Raise the alarm.', fight('The fox mask\'s whistle, loud as a train. Guards from every door, and the man by the pillar, taking off his mask.', {
+      ...foe('executive', 'The Lieutenant', 3, { lv: 1, win: [gn('taRare', { n: 3 }), scene('gn-52-out')] }), friendly: true, lose: [scene('gn-52-out')] },
+      setTo('ta-alarm', 1), evil({ heat: 2 }))),
+  ], { remembers: [
+    { id: 'blown', when: [is('ta-blown')], notice: 'The man by the pillar isn\'t watching the lot. He\'s watching you. Two guards drift closer.' },
+  ] }),
+  // ---- The caterer: kitchens, cellar, the service corridor ----
+  rm('gn-52-kitchen', 'The Evil Auction: The Kitchens', mask(), say(
+    'Steam and shouting. A chef throws a tray at you and points at a door. You go through the door.',
+    'Another caterer is already there, hiding behind a tray of small pastries. It\'s {rival}. "Don\'t. Say. Anything."',
+  ), [ch('Say nothing.', out('You say nothing. {rival} nods once, the way people do in heist films, and points down the stairs.', scene('gn-52-cellar')))]),
+  rm('gn-52-cellar', 'The Evil Auction: The Cellar', mask(), say(
+    'Wine, and crates, and crates that aren\'t wine. At the far end, a door marked SERVICE.',
+  ), [ch('Take the service corridor.', out('The corridor runs behind the stage. Through the boards, the auctioneer\'s voice. Lot 6.', setTo('ta-corridor', 1), scene('gn-52-corridor')))]),
+  rm('gn-52-corridor', 'The Evil Auction: The Service Corridor', mask(), say(
+    'The cage is wheeled back here between lots. You have a minute. Maybe.',
+    'A key on a hook, by the door. A lock that\'s old. And {rival}, already here, holding the far door open with one foot.',
+  ), [
+    ch('Take the key from the hook.', out('The key turns. The cage opens. It doesn\'t move. Then it does, straight into your jacket, shaking.', gn('taRare', { n: 2 }), scene('gn-52-out'))),
+    chIf([anyType('ghost', 'steel')], 'Let your Pokémon pick the lock.', out('A click like a knuckle. The cage swings open. It looks at your Pokémon, and then at you, and comes.', gn('taRare', { n: 2 }), scene('gn-52-out'))),
+    ch('Let your rival hold the door.', out('{rival} holds the door. You wheel the whole cage out into the night. "Never mention the tray," they say.', gn('taRare', { n: 2 }), scene('gn-52-out'))),
+    ch('Raise the alarm.', fight('You yank the fire bell. Guards from every door, and a man who never bids, taking off his mask.', {
+      ...foe('executive', 'The Lieutenant', 3, { lv: 1, win: [gn('taRare', { n: 3 }), scene('gn-52-out')] }), friendly: true, lose: [scene('gn-52-out')] },
+      setTo('ta-alarm', 1), evil({ heat: 2 }))),
+  ]),
+  rm('gn-52-out', 'The Evil Auction: Outside', mask({ tags: ['Evil Team', 'Story'], remembers: [
+    { id: 'alarm', when: [is('ta-alarm')], notice: 'Everything\'s seized: the lots, the ledgers, the guests\' coats. The team knows your face now.' },
+  ] }), say(
+    'Outside, the cold, and the dark garden. {rival} is gone already, with the pastries.',
+  ), [
+    ch('Walk home.', out('You walk home under the stars. Somewhere behind you, the manor\'s lights are still burning.', gn('taEnd'), rivalTrust(2), moment('Went undercover at the evil team\'s auction, in a mask.', 65))),
+  ]),
+  // ---- Later: the lieutenant wonders; the manor's for sale ----
+  gev('gn-52-later', 'The Evil Auction: Someone Knew', mask({ stop: 'event', rarity: 'rare', tags: ['Evil Team'], requires: [is('ta-traps'), not('ta-later'), laterStage('ta-stage')] }), say(
+    'A lieutenant of the team, on a bench, talking into a phone he thinks nobody can hear.',
+    '"Someone at the auction knew what they were doing. Didn\'t fall for the Balls. Didn\'t fall for the egg. I\'d like to know who."',
+  ), [ch('Say nothing.', out('You walk past him. He doesn\'t look up. He doesn\'t know. He never will.', setTo('ta-later', 1)))]),
+  gev('gn-52-sale', 'The Evil Auction: For Sale', mask({ stop: 'event', rarity: 'rare', tags: ['Story'], requires: [is('ta-done'), notThisRegion('ta-at'), not('ta-sale')] }), say(
+    'A manor you\'ve been in before, with every window dark. A sign on the gate.',
+    'It says: *Motivated seller.*',
+  ), [ch('Walk on.', out('You walk on, smiling.', setTo('ta-sale', 1)))]),
+];
+
+export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46, ...gn47, ...gn48, ...gn49, KANTO_SNORLAX, ...gn50, ...gn51, ...gn52];
 export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
@@ -859,6 +1008,14 @@ export const PLACEMENT: Record<string, Placement> = {
     note: 'Badge: a crate. Better at night. The rescued Pokémon walks beside the player and opens its own scene at each rest stop (run.ts) until it climbs in. Postcards (gn-51-postcard) come one a region afterwards.',
   },
   'gn-51-postcard': { gn: 'gn.51', shape: 'Single', earliest: 'A7', home: 4, window: [1, 8], sits: 'optional', attaches: 'rest', tags: ['Evil Team'], level: 'None', often: 'region', badge: 'own', note: 'Afterstory: one postcard a region, until all four are home.' },
+  'gn-52-manor': {
+    gn: 'gn.52', shape: 'Single', earliest: 'A8', home: 16, window: [14, 18], sits: 'side-branch', attaches: 'instead', tags: ['Evil Team'],
+    level: 'If it comes to a fight: A+1', often: 'run', badge: 'own',
+    dressing: { kanto: 'The Evil Team\'s Pokémon Auction', elsewhere: 'The Evil Team\'s Pokémon Auction' },
+    note: 'Badge: a mask. At night. Only in a region with an evil-team story. SF125\'s pop-up black-market auction is a street-corner copy of this. gn-52-later (the lieutenant wonders, a later stage) and gn-52-sale (the manor for sale, a later region) are its afterstories.',
+  },
+  'gn-52-later': { gn: 'gn.52', shape: 'Single', earliest: 'A9', home: 8, window: [2, 16], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Only when both auction traps were avoided.' },
+  'gn-52-sale': { gn: 'gn.52', shape: 'Single', earliest: 'A9', home: 6, window: [2, 12], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: "Motivated seller." (a later region of the same run).' },
   'gn-45-field': {
     gn: 'gn.45', shape: 'Single', earliest: 'A10', home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', tags: ['Companion Story'],
     level: 'The lesson A−1 (three Pokémon); the exam A+2 (six)', often: 'run', badge: 'own',
