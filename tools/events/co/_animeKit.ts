@@ -95,3 +95,9 @@ export interface QuestlineIndex {
   /** What the doc asks for that the game cannot do yet, per questline (real limits only; goes into docs/status/co-anime.md). */
   LIMITS: Record<string, string[]>;
 }
+
+// ---------- the rival slot (rivals thread, core/rivals/questlines.ts): one rival beat per stage, steps 3-18 ----------
+/** Condition: this stage's rival slot is still free (rival stories AQ23, AQ54-AQ58, AQ60 put it in `requires`). */
+export const slotFree = (): Json => ({ kind: 'rivalQuest', slotFree: true });
+/** Effect: this beat used the stage's rival slot (in every choice that plays the beat). */
+export const takeSlot = (): Json => ({ kind: 'rivalQuest', takeSlot: true });

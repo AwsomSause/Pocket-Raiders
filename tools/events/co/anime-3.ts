@@ -4,8 +4,8 @@
 //   AN25 The Fake Family          (Stage-Three)   AN26 The Stand             (Single)        AN27 The Magical Bakery (Single)
 // Script: QUESTLINES_ANIME_INSPIRED.md lines 470-697. Placement: QUESTLINES_PLACED.md lines 247-255.
 // Build: npm run co:build -- anime-3
-import { $, bondIs, ch, egg, ev, fight, flag, flagAgo, flagAt, flagIs, fr, gym, heal, hurt, item, leave, out, relic, room, scout, type Json } from '../dsl.ts';
-import { AN, age, beast, bondLine, duel, gain, later, moment, monDuel, notYet, seen, stageOf, tagTypes, temp, type Place } from './_animeKit.ts';
+import { $, bondIs, ch, egg, ev, fight, flag, flagAgo, flagAt, flagIs, fr, gym, heal, hurt, item, leave, out, room, scout, type Json } from '../dsl.ts';
+import { AN, age, duel, gain, later, moment, monDuel, stageOf, tagTypes, temp, type Place } from './_animeKit.ts';
 
 export { CATEGORY } from './_animeKit.ts';
 
@@ -17,6 +17,8 @@ export const QUESTLINES: Record<string, string> = {
   AN23: 'an23-the-descent',
   AN24: 'an24-sword-of-the-insect',
   AN25: 'an25-fake-family',
+  AN26: 'an26-the-stand',
+  AN27: 'an27-magical-bakery',
 };
 
 export const PLACEMENT: Record<string, Place> = {
@@ -27,6 +29,8 @@ export const PLACEMENT: Record<string, Place> = {
   'an23-the-descent': { shape: 'Door', earliest: 'A9', home: 14, window: [12, 16], sits: 'optional', tags: ['cave'], beats: ['an23-the-letter', 'an23-at-night', 'an23-floor-1', 'an23-floor-2', 'an23-floor-3', 'an23-the-bottom', 'an23-climb-4', 'an23-climb-3', 'an23-climb-2', 'an23-climb-1', 'an23-daylight'], note: 'Chain pseudo-stage ps_an23_descent (src/data/catalogOverhaul/pseudo/anime-3.json): four floors down (no cost), four climbs up (15% HP each, half with a Ground- or Poison-type at Bond 3), then daylight.' },
   'an24-sword-of-the-insect': { shape: 'Stage-Three', earliest: 'A5', home: 6, window: [4, 8], sits: 'optional', tags: ['bug'], beats: ['an24-not-knowing', 'an24-who-she-is', 'an24-second-night', 'an24-third-night', 'an24-dawn'], note: 'Bug stages; Night. Three nights: Steps 6, 12 and 17. The scientist fight is at Step 17.' },
   'an25-fake-family': { shape: 'Stage-Three', earliest: 'A5', home: 'town', sits: 'optional', attaches: 'town', tags: ['city'], beats: ['an25-interview', 'an25-interview-mama', 'an25-interview-daughter', 'an25-what-papa-found'], note: 'The town (a school entrance); then Step 12 (the interview, three rooms in one node) and Step 17.' },
+  'an26-the-stand': { shape: 'Single', earliest: 'A6', home: 13, window: [10, 16], sits: 'optional', tags: ['eerie'], level: 'A+1' },
+  'an27-magical-bakery': { shape: 'Single', earliest: 'A2', home: 'town', window: [4, 10], sits: 'optional', attaches: 'town', tags: ['city', 'fairy'], note: 'The town; else Step 7 (window 4-10). City and Fairy stages.' },
 };
 
 /** Doc choices that are not buttons (questline -> label -> reason). */
@@ -40,7 +44,6 @@ export const LIMITS: Record<string, string[]> = {
     'Afterstory: the stranger is a Final Reunion guest (flag reunion-guest-swap-stranger); their "Have we met?" line belongs to the reunion thread.',
   ],
   AN20: [
-    'Remembers "the lieutenant is recruiting psychic children (a Galactic or Plasma run)" reads the run\'s evil team (Galactic or Plasma); the recruiter is that team\'s commander (Saturn or Zinzolin) at the last beat.',
     'The grunts in "Show me" are drawn as generic roughnecks, not in the run\'s team uniform.',
     'Afterstory "he finishes last in the town marathon in a later run" is not built (nothing crosses runs).',
   ],
@@ -59,6 +62,17 @@ export const LIMITS: Record<string, string[]> = {
   AN24: [
     'Remembers "the player completed The Shedinja Question" reads flag shedinja-accepted at 3 or more (the Shedinja Question\'s three acceptances), which the greenneedle thread (gn.new.07) must set.',
   ],
+  AN26: [
+    'In "Fight", the Dusclops refuses to fight at all (his team is two other Pokémon); the doc\'s "refuses to attack the player\'s lead" inside the battle is told in the text only.',
+    'Remembers "the player\'s lead is a Ghost-type at High Bond" reads the first able Ghost-type in the party at Bond 3 or more (no condition reads the lead\'s type).',
+    'The Duskull\'s "+5% Defense to the lead" is a held item, The Standing Shadow (Defense +5%), to put on the lead: there is no lead-only stat effect.',
+    'Afterstory "he becomes a Channeler in the Road Roster" sets flag an26-channeler; the Road Roster thread must read it.',
+  ],
+  AN27: [
+    '"+1 Sp. Atk for one battle" for the player and their lead is +5% Sp. Atk for the whole team in the next battle (the pack word for +1; a short boost cannot pick one Pokémon).',
+    'The game has one Alcremie form: the flavour you choose is remembered as a flag and in the text, and the Milcery comes with the Strawberry Sweet it evolves with.',
+    'Afterstory "the bakery sells a cake shaped like the player\'s lead in later runs" is not built (nothing crosses runs).',
+  ],
 };
 
 /** Questlines re-read line by line against the doc after their tests passed. */
@@ -70,6 +84,8 @@ export const CHECKED: Record<string, string> = {
   AN23: '2026-11-15',
   AN24: '2026-11-15',
   AN25: '2026-11-15',
+  AN26: '2026-11-16',
+  AN27: '2026-11-16',
 };
 
 const EERIE = tagTypes('eerie');
@@ -78,6 +94,8 @@ const SEA = tagTypes('water');
 const WOOD = tagTypes('forest');
 const CAVE = tagTypes('cave');
 const BUG = tagTypes('bug');
+const SWEET = tagTypes('city', 'fairy');
+const MILCERY = (flavour: string, key: string, line: string): Json => ch(flavour, out(line, gain('milcery', { bond: 10 }), item('strawberry-sweet'), flag(`an27-flavour-${key}`), moment(`A baker spun, and so did the cream. Your Milcery chose ${flavour.toLowerCase().replace(/\.$/, '')}.`, 60)));
 /** AN23: the climb is halved for a Ground- or Poison-type at High Bond (Bond 3). */
 const CLIMB_PARTNER = [bondIs(3, { types: ['ground', 'poison'] })];
 /** The run's evil team is this one (core/evil). */
@@ -421,6 +439,45 @@ export const EVENTS: Json[] = [
     [
       ch('Help Papa.', fight('The father moves like smoke. The mother moves like a closing door. You take the two in front.', duel('The Warehouse Guards', { cls: 'roughneck', size: 3, format: 'doubles', types: ['dark', 'poison'], win: [gain('espurr', { bond: 10 }), flag('an25-plan-foiled'), moment('A pretend family let you be their friend, and you helped them empty a warehouse of stolen Pokémon.', 70)] }, { lose: [gain('espurr', { bond: 10 }), flag('an25-plan-foiled'), flag('an25-mama-finished-it'), moment('A pretend family let you be their friend. The mother finished the fight you started.', 65)] }))),
       ch('Stay with the girl.', out('You keep her behind you while her parents do whatever it is they do. It is very fast and very quiet and you do not see much of it. She does not watch either. She is busy telling you what everyone is thinking, in a whisper: the grunts are thinking ow. When it is over the doors are open and the Pokémon are walking out free. Her Espurr hops from her arms into yours. "It wants to come with you," she says. "It told me. It thinks you\'re a good friend. For a pretend one."', gain('espurr', { bond: 10 }), fr(3), flag('an25-plan-foiled'), flag('an25-stayed-with-her'), moment('A pretend family let you be their friend, and you kept the girl safe while they emptied a warehouse.', 70))),
+    ]),
+  // ---------------- AN26. The Stand ----------------
+  ev('an26-the-stand', 'The Stand', AN, { rarity: 'uncommon', minStage: stageOf('A6'), types: EERIE, cast: ['trainer.biker'], pokemon: 'dusclops', tint: '#1c1626', effect: 'flicker',
+    remembers: [{ id: 'ghost-lead', when: [bondIs(3, { types: ['ghost'] })], notice: 'Your Ghost-type, the one closest to you, drifts forward. The Dusclops drifts forward. They stop a hand apart and look at each other with the long, unhurried look of two things that have both been somewhere nobody else has. The delinquent sees it. His mouth falls open. "It\'s never looked at anyone like that," he says. "Not since him."',
+      addChoices: [ch('Let the ghosts talk.', out('They do not make a sound. They do not need to. After a while the Dusclops turns its one red eye on the delinquent, and then it does something it has never done: it puts its big grey hand on his shoulder, the way an old man would. He takes his sunglasses off. He does not say anything for a long time. Then: "Thanks. I didn\'t know it could still do that."', flag('an26-ghosts-met'), fr(5, { types: ['ghost'] }), room('an26-the-one-behind')))] }] },
+    'Under a railway bridge, a delinquent leans on the wall with his arms folded: long coat, dark glasses, and a pompadour so enormous it has its own weather. Behind him floats a Dusclops. When he shifts his weight, it shifts. When he cracks his knuckles, it cracks its knuckles, a beat late, gently, like an echo. He sees you looking past him and goes stiff. "You can see it? Nobody can see it." He pushes off the wall. "It showed up when my grandad died. It punches people for me." The Dusclops does not punch anyone. It is not looking at you at all. It is looking at {lead}, very steadily, with its one red eye.',
+    [
+      ch('Fight.', fight('"Fine. You asked for it." He throws out his Poké Balls. Behind him, the Dusclops does not move. When he points at {lead} and shouts, it turns its head away.', duel('The Pompadour', { cls: 'roughneck', size: 2, team: ['scrafty', 'pangoro'], lv: 1, win: [flag('stand-fought'), room('an26-the-one-behind')] }, { lose: [flag('stand-fought'), flag('an26-fight-lost'), room('an26-the-one-behind')] }))),
+      ch('Your grandad\'s?', out('He goes quiet. All the swagger drains out of him at once, and he is just a kid under a lot of hair. "It was his," he says. "It stayed." He takes off his sunglasses. His eyes are red round the edges. "He used to do my hair. Every morning. Took ages." Behind him the Dusclops lifts one hand, slowly, and smooths the side of the pompadour, and he lets it.', flag('stand-grandad'), fr(2), room('an26-the-one-behind'))),
+      ch('It doesn\'t punch for you.', out('He opens his mouth to argue. Nothing comes out. He looks over his shoulder at the Dusclops, and it looks back at him, patient as a grandfather. "...No," he says at last, very quietly. "It stops me." He sits down on the kerb. "Every time I go to swing at someone, it grabs my arm. I tell everyone it\'s the other way round. Sounds better."', flag('stand-truth'), fr(2), room('an26-the-one-behind'))),
+    ]),
+  ev('an26-the-one-behind', 'The One Behind You', AN, { room: true, cast: ['trainer.biker'], pokemon: 'duskull', tint: '#1c1626', effect: 'flicker' },
+    'As you turn to go, something small comes out from behind the Dusclops\'s back, where it must have been hiding all along: a Duskull, round and grey, with a single red light for an eye. It floats straight past the delinquent, past you, and takes up position just behind {lead}\'s shoulder, a little above, exactly the way the Dusclops stands behind him. It folds its arms. The delinquent laughs, a real laugh. "Grandad\'s old one had a little one. Looks like it picked you." He puts his glasses back on. "Maybe I\'ll do something with this. Channel it. Help people see their own."',
+    [
+      ch('Let it stand behind {lead}.', out('It stays where it is. When {lead} moves, it moves, a beat late, gently. You feel steadier with it there, the way you feel steadier with your back to a wall. The delinquent salutes you with two fingers, pompadour first, and walks off under the bridge with his grandad\'s ghost at his back.', gain('duskull', { bond: 10 }), item('standing-shadow'), flag('an26-channeler'), moment('A delinquent\'s grandfather stood behind him as a Dusclops. A little Duskull chose to stand behind yours.', 65))),
+      ch('Tell it to stay with him.', out('"He needs it more," you say. The Duskull looks at you, at the delinquent, and floats back to him, and settles behind his other shoulder, opposite the Dusclops. He stands there with a ghost on either side, trying very hard not to cry. "Two of them," he says. "Grandad, you show-off." He waves you off with two fingers.', fr(5), flag('an26-channeler'), flag('an26-duskull-stayed'))),
+    ]),
+  // ---------------- AN27. The Magical Bakery ----------------
+  ev('an27-magical-bakery', 'The Magical Bakery', AN, { rarity: 'uncommon', minStage: stageOf('A2'), types: SWEET, cast: ['trainer.pr/baker'], pokemon: 'milcery', tint: '#3a2430', effect: 'sparkle' },
+    'A little bakery on the corner, with a striped awning and a bell over the door. Inside, the cream has got up and is walking about: small soft blobs of it, wandering across the counter, climbing the cake stands, peering into the till. They are Milcery, a dozen of them, and they smell of vanilla. Behind the counter a baker girl in a flour-covered apron claps her hands. "When I spin, I transform! So does the cream!" Her Milcery spins on the counter. So does she, round and round, in a cloud of flour, and when it settles she is in a frilly apron with ribbons on it and is holding a whisk like a sword. She points it at the back door. "A sugar monster ate the shop\'s sugar. All of it. Help me?" From the back room comes a long, enormous, satisfied burp.',
+    [
+      ch('Spin.', fight('You spin. You feel ridiculous for exactly one turn, and then you do not, because {lead} is spinning too, and the flour is glittering, and when you stop you are both, somehow, sparkling. "TRANSFORMED!" the baker shouts. You charge the back room together. Inside is a Gulpin so large it fills the doorway, with sugar on its face.', monDuel('The Sugar Monster', 'gulpin', 1, { win: [flag('bake-spun'), room('an27-flavour')], lose: [flag('bake-spun'), flag('an27-monster-won'), room('an27-flavour')] }), temp('Transformed', [{ kind: 'statMultiplier', stat: 'spa', value: 1.05 }], 1))),
+      ch('Fight it plainly.', fight('You do not spin. The baker looks a little disappointed, but follows you into the back room with her whisk up. The sugar monster is a Gulpin, but a very large one: it fills the doorway, and it has sugar on its face, and it is not sorry.', monDuel('A Very Large Gulpin', 'gulpin', 1, { win: [flag('an27-fought-plain'), room('an27-flavour')], lose: [flag('an27-fought-plain'), flag('an27-monster-won'), room('an27-flavour')] }))),
+      ch('Ask the monster why.', out('You put your head round the back door. The sugar monster is a Gulpin, a very large one, sitting in a pile of empty sacks. It looks at you with sugar on its face and, slowly, its huge mouth wobbles. It is not a monster. It is starving. Through the back window you can see why: where there should be a garden, there is a car park, new and grey. "There was a berry patch there," the baker whispers. "Before they paved it."', flag('bake-why'), room('an27-paved-patch'))),
+    ]),
+  ev('an27-paved-patch', 'The Paved Patch', AN, { room: true, cast: ['trainer.pr/baker'], pokemon: 'gulpin', tint: '#3a2430', effect: 'none' },
+    'The Gulpin follows you out to the car park and stands where its patch used to be, looking at the tarmac. It puts one stubby arm on the ground, as if feeling for roots. The baker stands beside it with her whisk hanging down. "It used to come to the back door every morning," she says. "I gave it the broken biscuits. I thought it just stopped coming." There is one bare strip of earth left at the edge, by the bins.',
+    [
+      ch('Plant a Berry tree.', out('You dig the strip with your hands and the baker\'s cake slice. You plant the best berry you have. You water it with the bakery\'s watering can, the one shaped like a teapot. The Gulpin watches every second. By evening a green shoot is up, and the Gulpin is sitting beside it, guarding it, not eating anything. "It can be the taster," the baker says. "It eats one of everything and tells me if it\'s good." The Gulpin, solemnly, burps yes.', flag('an27-tree-planted'), fr(3), room('an27-flavour'))),
+      ch('Fight it after all.', fight('You are sorry for it. The sugar is still gone. The Gulpin seems to understand that, and squares up, sad and enormous, in the middle of the car park.', monDuel('A Very Large Gulpin', 'gulpin', 1, { win: [flag('an27-fought-hungry'), room('an27-flavour')], lose: [flag('an27-fought-hungry'), flag('an27-monster-won'), room('an27-flavour')] }))),
+    ]),
+  ev('an27-flavour', 'The Flavour of Your Choice', AN, { room: true, cast: ['trainer.pr/baker'], pokemon: 'milcery', tint: '#3a2430', effect: 'hearts',
+    remembers: [{ id: 'taster', when: [flagIs('an27-tree-planted')], notice: 'Through the back window you can see the Gulpin, sitting by its green shoot with a crumb on its lip, wearing a paper hat that says TASTER.' }] },
+    'The bakery is quiet again. The baker has spun back into her floury apron and is counting what is left. One of the Milcery has not wandered off with the others. It has climbed up your sleeve and is sitting on your shoulder, smelling of vanilla, wobbling. "Oh," the baker says. "It\'s chosen you. They do that." She takes down a jar of something pink. "When it grows up, it becomes whatever you dream for it. What flavour?"',
+    [
+      MILCERY('Vanilla cream.', 'vanilla', '"Classic," she says approvingly. She gives you a little Strawberry Sweet in a paper twist. "For when it\'s ready." The Milcery wobbles happily. It already smells of vanilla, and it plans to keep it that way.'),
+      MILCERY('Ruby swirl.', 'ruby', '"Bold," she says, grinning. She gives you a little Strawberry Sweet in a paper twist. "For when it\'s ready." The Milcery goes faintly pink, as if practising.'),
+      MILCERY('Matcha.', 'matcha', '"Ooh, grown-up," she says. She gives you a little Strawberry Sweet in a paper twist. "For when it\'s ready." The Milcery makes a small, serious face, as if trying to be bitter, and fails.'),
+      MILCERY('Salted caramel.', 'caramel', '"My favourite," she whispers, as if it is a secret. She gives you a little Strawberry Sweet in a paper twist. "For when it\'s ready." The Milcery spins once on your shoulder, exactly the way she does.'),
     ]),
 ];
 

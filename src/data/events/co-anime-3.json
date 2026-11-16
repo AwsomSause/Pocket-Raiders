@@ -3978,6 +3978,636 @@
      }
     }
    ]
+  },
+  {
+   "id": "an26-the-stand",
+   "name": "The Stand",
+   "group": "Anime-inspired questlines",
+   "rarity": "uncommon",
+   "minStage": 6,
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "remembers": [
+    {
+     "id": "ghost-lead",
+     "when": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 3,
+       "who": {
+        "types": [
+         "ghost"
+        ]
+       }
+      }
+     ],
+     "notice": "Your Ghost-type, the one closest to you, drifts forward. The Dusclops drifts forward. They stop a hand apart and look at each other with the long, unhurried look of two things that have both been somewhere nobody else has. The delinquent sees it. His mouth falls open. \"It's never looked at anyone like that,\" he says. \"Not since him.\"",
+     "addChoices": [
+      {
+       "label": "Let the ghosts talk.",
+       "success": {
+        "text": "They do not make a sound. They do not need to. After a while the Dusclops turns its one red eye on the delinquent, and then it does something it has never done: it puts its big grey hand on his shoulder, the way an old man would. He takes his sunglasses off. He does not say anything for a long time. Then: \"Thanks. I didn't know it could still do that.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "an26-ghosts-met",
+          "amount": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": {
+           "types": [
+            "ghost"
+           ]
+          }
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "an26-the-one-behind"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "pokemon": "dusclops",
+    "tint": "#1c1626",
+    "effect": "flicker"
+   },
+   "intro": "Under a railway bridge, a delinquent leans on the wall with his arms folded: long coat, dark glasses, and a pompadour so enormous it has its own weather. Behind him floats a Dusclops. When he shifts his weight, it shifts. When he cracks his knuckles, it cracks its knuckles, a beat late, gently, like an echo. He sees you looking past him and goes stiff. \"You can see it? Nobody can see it.\" He pushes off the wall. \"It showed up when my grandad died. It punches people for me.\" The Dusclops does not punch anyone. It is not looking at you at all. It is looking at {lead}, very steadily, with its one red eye.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "\"Fine. You asked for it.\" He throws out his Poké Balls. Behind him, the Dusclops does not move. When he points at {lead} and shouts, it turns its head away.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "scrafty",
+        "pangoro"
+       ],
+       "name": "The Pompadour",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "stand-fought",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an26-the-one-behind"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "stand-fought",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "an26-fight-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an26-the-one-behind"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Your grandad's?",
+     "success": {
+      "text": "He goes quiet. All the swagger drains out of him at once, and he is just a kid under a lot of hair. \"It was his,\" he says. \"It stayed.\" He takes off his sunglasses. His eyes are red round the edges. \"He used to do my hair. Every morning. Took ages.\" Behind him the Dusclops lifts one hand, slowly, and smooths the side of the pompadour, and he lets it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stand-grandad",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an26-the-one-behind"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It doesn't punch for you.",
+     "success": {
+      "text": "He opens his mouth to argue. Nothing comes out. He looks over his shoulder at the Dusclops, and it looks back at him, patient as a grandfather. \"...No,\" he says at last, very quietly. \"It stops me.\" He sits down on the kerb. \"Every time I go to swing at someone, it grabs my arm. I tell everyone it's the other way round. Sounds better.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stand-truth",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an26-the-one-behind"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an26-the-one-behind",
+   "name": "The One Behind You",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "pokemon": "duskull",
+    "tint": "#1c1626",
+    "effect": "flicker"
+   },
+   "intro": "As you turn to go, something small comes out from behind the Dusclops's back, where it must have been hiding all along: a Duskull, round and grey, with a single red light for an eye. It floats straight past the delinquent, past you, and takes up position just behind {lead}'s shoulder, a little above, exactly the way the Dusclops stands behind him. It folds its arms. The delinquent laughs, a real laugh. \"Grandad's old one had a little one. Looks like it picked you.\" He puts his glasses back on. \"Maybe I'll do something with this. Channel it. Help people see their own.\"",
+   "choices": [
+    {
+     "label": "Let it stand behind {lead}.",
+     "success": {
+      "text": "It stays where it is. When {lead} moves, it moves, a beat late, gently. You feel steadier with it there, the way you feel steadier with your back to a wall. The delinquent salutes you with two fingers, pompadour first, and walks off under the bridge with his grandad's ghost at his back.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "duskull"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "item",
+        "id": "standing-shadow",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an26-channeler",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A delinquent's grandfather stood behind him as a Dusclops. A little Duskull chose to stand behind yours.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell it to stay with him.",
+     "success": {
+      "text": "\"He needs it more,\" you say. The Duskull looks at you, at the delinquent, and floats back to him, and settles behind his other shoulder, opposite the Dusclops. He stands there with a ghost on either side, trying very hard not to cry. \"Two of them,\" he says. \"Grandad, you show-off.\" He waves you off with two fingers.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an26-channeler",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an26-duskull-stayed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an27-magical-bakery",
+   "name": "The Magical Bakery",
+   "group": "Anime-inspired questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "normal",
+    "electric",
+    "steel",
+    "fairy"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/baker"
+    ],
+    "pokemon": "milcery",
+    "tint": "#3a2430",
+    "effect": "sparkle"
+   },
+   "intro": "A little bakery on the corner, with a striped awning and a bell over the door. Inside, the cream has got up and is walking about: small soft blobs of it, wandering across the counter, climbing the cake stands, peering into the till. They are Milcery, a dozen of them, and they smell of vanilla. Behind the counter a baker girl in a flour-covered apron claps her hands. \"When I spin, I transform! So does the cream!\" Her Milcery spins on the counter. So does she, round and round, in a cloud of flour, and when it settles she is in a frilly apron with ribbons on it and is holding a whisk like a sword. She points it at the back door. \"A sugar monster ate the shop's sugar. All of it. Help me?\" From the back room comes a long, enormous, satisfied burp.",
+   "choices": [
+    {
+     "label": "Spin.",
+     "success": {
+      "text": "You spin. You feel ridiculous for exactly one turn, and then you do not, because {lead} is spinning too, and the flour is glittering, and when you stop you are both, somehow, sparkling. \"TRANSFORMED!\" the baker shouts. You charge the back room together. Inside is a Gulpin so large it fills the doorway, with sugar on its face.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Transformed",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spa",
+          "value": 1.05
+         }
+        ],
+        "battles": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Sugar Monster",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "bake-spun",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an27-flavour"
+        }
+       ],
+       "lineup": [
+        "gulpin"
+       ],
+       "spritePokemon": "gulpin",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "bake-spun",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "an27-monster-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an27-flavour"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Fight it plainly.",
+     "success": {
+      "text": "You do not spin. The baker looks a little disappointed, but follows you into the back room with her whisk up. The sugar monster is a Gulpin, but a very large one: it fills the doorway, and it has sugar on its face, and it is not sorry.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "A Very Large Gulpin",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "an27-fought-plain",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an27-flavour"
+        }
+       ],
+       "lineup": [
+        "gulpin"
+       ],
+       "spritePokemon": "gulpin",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "an27-fought-plain",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "an27-monster-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an27-flavour"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask the monster why.",
+     "success": {
+      "text": "You put your head round the back door. The sugar monster is a Gulpin, a very large one, sitting in a pile of empty sacks. It looks at you with sugar on its face and, slowly, its huge mouth wobbles. It is not a monster. It is starving. Through the back window you can see why: where there should be a garden, there is a car park, new and grey. \"There was a berry patch there,\" the baker whispers. \"Before they paved it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bake-why",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an27-paved-patch"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an27-paved-patch",
+   "name": "The Paved Patch",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/baker"
+    ],
+    "pokemon": "gulpin",
+    "tint": "#3a2430",
+    "effect": "none"
+   },
+   "intro": "The Gulpin follows you out to the car park and stands where its patch used to be, looking at the tarmac. It puts one stubby arm on the ground, as if feeling for roots. The baker stands beside it with her whisk hanging down. \"It used to come to the back door every morning,\" she says. \"I gave it the broken biscuits. I thought it just stopped coming.\" There is one bare strip of earth left at the edge, by the bins.",
+   "choices": [
+    {
+     "label": "Plant a Berry tree.",
+     "success": {
+      "text": "You dig the strip with your hands and the baker's cake slice. You plant the best berry you have. You water it with the bakery's watering can, the one shaped like a teapot. The Gulpin watches every second. By evening a green shoot is up, and the Gulpin is sitting beside it, guarding it, not eating anything. \"It can be the taster,\" the baker says. \"It eats one of everything and tells me if it's good.\" The Gulpin, solemnly, burps yes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an27-tree-planted",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an27-flavour"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight it after all.",
+     "success": {
+      "text": "You are sorry for it. The sugar is still gone. The Gulpin seems to understand that, and squares up, sad and enormous, in the middle of the car park.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "A Very Large Gulpin",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "an27-fought-hungry",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an27-flavour"
+        }
+       ],
+       "lineup": [
+        "gulpin"
+       ],
+       "spritePokemon": "gulpin",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "an27-fought-hungry",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "an27-monster-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an27-flavour"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "an27-flavour",
+   "name": "The Flavour of Your Choice",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "taster",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an27-tree-planted",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Through the back window you can see the Gulpin, sitting by its green shoot with a crumb on its lip, wearing a paper hat that says TASTER."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/baker"
+    ],
+    "pokemon": "milcery",
+    "tint": "#3a2430",
+    "effect": "hearts"
+   },
+   "intro": "The bakery is quiet again. The baker has spun back into her floury apron and is counting what is left. One of the Milcery has not wandered off with the others. It has climbed up your sleeve and is sitting on your shoulder, smelling of vanilla, wobbling. \"Oh,\" the baker says. \"It's chosen you. They do that.\" She takes down a jar of something pink. \"When it grows up, it becomes whatever you dream for it. What flavour?\"",
+   "choices": [
+    {
+     "label": "Vanilla cream.",
+     "success": {
+      "text": "\"Classic,\" she says approvingly. She gives you a little Strawberry Sweet in a paper twist. \"For when it's ready.\" The Milcery wobbles happily. It already smells of vanilla, and it plans to keep it that way.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "milcery"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "item",
+        "id": "strawberry-sweet",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an27-flavour-vanilla",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A baker spun, and so did the cream. Your Milcery chose vanilla cream.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ruby swirl.",
+     "success": {
+      "text": "\"Bold,\" she says, grinning. She gives you a little Strawberry Sweet in a paper twist. \"For when it's ready.\" The Milcery goes faintly pink, as if practising.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "milcery"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "item",
+        "id": "strawberry-sweet",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an27-flavour-ruby",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A baker spun, and so did the cream. Your Milcery chose ruby swirl.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Matcha.",
+     "success": {
+      "text": "\"Ooh, grown-up,\" she says. She gives you a little Strawberry Sweet in a paper twist. \"For when it's ready.\" The Milcery makes a small, serious face, as if trying to be bitter, and fails.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "milcery"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "item",
+        "id": "strawberry-sweet",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an27-flavour-matcha",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A baker spun, and so did the cream. Your Milcery chose matcha.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Salted caramel.",
+     "success": {
+      "text": "\"My favourite,\" she whispers, as if it is a secret. She gives you a little Strawberry Sweet in a paper twist. \"For when it's ready.\" The Milcery spins once on your shoulder, exactly the way she does.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "milcery"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "item",
+        "id": "strawberry-sweet",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an27-flavour-caramel",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A baker spun, and so did the cream. Your Milcery chose salted caramel.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }
