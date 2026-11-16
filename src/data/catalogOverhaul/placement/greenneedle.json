@@ -2759,5 +2759,225 @@
    "Mystery Episode"
   ],
   "tags": []
+ },
+ "gn-new-35-s1": {
+  "gn": "gn.new.35",
+  "shape": "Region",
+  "earliest": "A9",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "rest",
+  "stages": [
+   1
+  ],
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn-new-35",
+  "beat": 1,
+  "note": "S1, Step 10 (must-see; at a + node if one is near), fallback Step 19. Once a run, from A9. One rest per stage, S1–S7; the ending is S8, Step 19.",
+  "kinds": [
+   "Story"
+  ],
+  "tags": []
+ },
+ "gn-new-35-s2": {
+  "gn": "gn.new.35",
+  "shape": "Region",
+  "earliest": "A9",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "rest",
+  "stages": [
+   2
+  ],
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn-new-35",
+  "beat": 2,
+  "note": "S2, Step 10 (must-see), fallback Step 19.",
+  "kinds": [
+   "Story"
+  ],
+  "tags": []
+ },
+ "gn-new-35-s3": {
+  "gn": "gn.new.35",
+  "shape": "Region",
+  "earliest": "A9",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "rest",
+  "stages": [
+   3
+  ],
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn-new-35",
+  "beat": 3,
+  "note": "S3, Step 10 (must-see), fallback Step 19.",
+  "kinds": [
+   "Story"
+  ],
+  "tags": []
+ },
+ "gn-new-35-s4": {
+  "gn": "gn.new.35",
+  "shape": "Region",
+  "earliest": "A9",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "rest",
+  "stages": [
+   4
+  ],
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn-new-35",
+  "beat": 4,
+  "note": "S4, Step 10 (must-see), fallback Step 19.",
+  "kinds": [
+   "Story"
+  ],
+  "tags": []
+ },
+ "gn-new-35-s5": {
+  "gn": "gn.new.35",
+  "shape": "Region",
+  "earliest": "A9",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "rest",
+  "stages": [
+   5
+  ],
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn-new-35",
+  "beat": 5,
+  "note": "S5, Step 10 (must-see), fallback Step 19.",
+  "kinds": [
+   "Story"
+  ],
+  "tags": []
+ },
+ "gn-new-35-s6": {
+  "gn": "gn.new.35",
+  "shape": "Region",
+  "earliest": "A9",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "rest",
+  "stages": [
+   6
+  ],
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn-new-35",
+  "beat": 6,
+  "note": "S6, Step 10 (must-see), fallback Step 19.",
+  "kinds": [
+   "Story"
+  ],
+  "tags": []
+ },
+ "gn-new-35-s7": {
+  "gn": "gn.new.35",
+  "shape": "Region",
+  "earliest": "A9",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "rest",
+  "stages": [
+   7
+  ],
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn-new-35",
+  "beat": 7,
+  "note": "S7, Step 10 (must-see), fallback Step 19.",
+  "kinds": [
+   "Story"
+  ],
+  "tags": []
+ },
+ "gn-new-35-end": {
+  "gn": "gn.new.35",
+  "shape": "Region",
+  "earliest": "A9",
+  "home": 19,
+  "window": [
+   17,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "rest",
+  "stages": [
+   8
+  ],
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn-new-35",
+  "beat": 8,
+  "note": "The ending, S8 Step 19.",
+  "kinds": [
+   "Story"
+  ],
+  "tags": []
+ },
+ "gn-new-35-after": {
+  "gn": "gn.new.35",
+  "shape": "Single",
+  "earliest": "A9",
+  "home": 10,
+  "window": [
+   4,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: next region, a rest.",
+  "kinds": [
+   "Story"
+  ],
+  "tags": []
  }
 }

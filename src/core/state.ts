@@ -25,6 +25,7 @@ import { freshHyperBattle } from './battle/hyper';
 import { SpectacleBattleSchema } from './battle/spectacle';
 import { TraitsSchema, type Traits } from './expansion/traits';
 import { StoryTraitsSchema, type StoryTraits } from './expansion/storyTraits';
+import type { TwiceToldStore } from './greenneedle/twiceTold';
 import { PondMarkSchema } from './episodes/poliPond';
 import { TimedStageSchema, VariantsSchema, type TimedStage, type Variants } from './expansion/variantLines';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
@@ -606,6 +607,7 @@ export const freshExtra = () => ({
   variantTimed: [] as TimedStage[],
   traits: {} as Traits,
   storyTraits: {} as StoryTraits,
+  twiceTold: {} as TwiceToldStore,
   /** Lights Out: turns of darkness left (accuracy -10% for both sides). */
   darkTurns: 0,
   /** Payout: its holder knocked out a foe this battle, so the prize money is doubled. */
@@ -842,6 +844,8 @@ export const BattleStateSchema = z.object({
     traits: TraitsSchema,
     /** Beta 0.7 team-wide story traits (core/expansion/storyTraits.ts): uid -> trait. Off unless the run's `storyTraits` setting is on. */
     storyTraits: StoryTraitsSchema,
+    /** gn.new.35 Twice-Told (core/greenneedle/twiceTold.ts): target uid -> the first move used against it and how often. */
+    twiceTold: z.record(z.string(), z.object({ move: z.string(), n: z.number().int() })).default({}),
     darkTurns: z.number().int().min(0).default(0),
     payout: z.boolean().default(false),
     /** Galar big-battle moments already used (evolve-and-survive per Pokémon, the thread, the cheat) and ones pending this hit (galarMoments.ts). */

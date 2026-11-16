@@ -47,6 +47,7 @@ import type { UltraRuleId } from '../ultra/beasts';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
 import { rallyStages } from './rally';
 import { storyHype, storyNoCrit, storyOldHabits } from '../expansion/storyTraits';
+import { twiceToldPower } from '../greenneedle/twiceTold';
 import { KINDNESS_USES } from '../episodes/poliPond';
 import { HOUSE_WINS_STAGES, LIGHTS_OUT_ACCURACY, LIGHTS_OUT_TURNS, housePending, isHousePair, takeHousePending, traitDoubleEntry, traitDrill, traitFeedHeal, traitFoodKnocked, traitLightsOut, traitOverhears, traitPayout, traitSeatMessage, traitTakesBerry, GRID_TIE_SHARE, traitBloodScent, traitGridTie, traitLingering, traitOnSchedule, traitSubtraction, traitUndertow, traitUpdraft } from '../expansion/traits';
 import { ACCESSORY_TORN_MESSAGE, SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantAccessory, variantAccessoryTorn, variantCheer, variantEndTurnStages, variantGimmickTick, variantGadget, variantIncoming, variantItemMove, variantLosesTurn, variantNeverMisses, variantOnEntry, variantOutgoing, variantPriorityBonus, variantSnagRefuses, variantTagCall } from '../expansion/variantLines';
@@ -4426,6 +4427,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (user.side === 'enemy') {
         powerMult *= storyHype(ctx.battle.extra.storyTraits, user.mon.uid, ctx.battle.enemyIndex, ctx.battle.turn);
         powerMult *= storyOldHabits(ctx.battle.extra.storyTraits, user.mon.uid, target.mon.hp, maxHp(ctx.content, target.mon));
+        powerMult *= twiceToldPower(ctx.battle.extra.twiceTold, target.mon.uid, target.mon.gn, move.id);
       }
       if (userAbility === 'technician' && power <= 60) powerMult *= 1.5;
       const flagBoost = userAbility ? FLAG_BOOST[userAbility] : undefined;
