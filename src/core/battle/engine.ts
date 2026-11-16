@@ -2475,6 +2475,16 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
     }
     return;
   }
+  if (ability === 'before-the-fall') {
+    // Before the Fall (gn.new.34, the Warning): once a battle, the foe's single strongest move is named.
+    const tag = `fall-told:${c.side}`;
+    if (!ctx.battle.storyEffects.includes(tag)) {
+      ctx.battle.storyEffects.push(tag);
+      const best = other.mon.moves.map((m) => ctx.content.moves.get(m.id)).filter((m) => !!m).sort((x, y) => (y!.power ?? 0) - (x!.power ?? 0))[0];
+      announce(c, ability, events);
+      if (best) events.push(say(c.side, 'signature', `${getSpecies(ctx.content, c.mon.speciesId).name} knows what is coming: ${best.name}.`, c.mon.uid));
+    }
+  }
   if (ability === 'hush') {
     // Hush (catalog overhaul, the Hushed One): the air goes silent. Sound moves fail for three turns on both sides (the Throat Chop block).
     announce(c, ability, events);
@@ -4399,6 +4409,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (userAbility === 'merciless' && target.mon.status?.id === 'psn') crit = true;
       if (foeAbility === 'battle-armor' || foeAbility === 'shell-armor' || ctx.battle.sideEffects[target.side].luckyChant > 0) crit = false;
       if (storyNoCrit(ctx.battle.extra.storyTraits, user.mon.uid)) crit = false;
+      // Before the Fall: the first critical hit against a side with this ability each battle is an ordinary hit.
+      if (crit && foeAbility === 'before-the-fall' && !ctx.battle.storyEffects.includes(`fall-spent:${target.side}`)) {
+        ctx.battle.storyEffects.push(`fall-spent:${target.side}`);
+        crit = false;
+      }
       if (user.side === 'player' && ctx.battle.noPlayerCrit) crit = false;
       if (crit) user.vol.laserFocus = false;
       (ctx.battle.critStreak ??= {})[user.mon.uid] = crit ? (ctx.battle.critStreak[user.mon.uid] ?? 0) + 1 : 0;

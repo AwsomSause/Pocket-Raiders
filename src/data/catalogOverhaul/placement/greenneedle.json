@@ -2759,5 +2759,69 @@
    "Mystery Episode"
   ],
   "tags": []
+ },
+ "gn-new-34": {
+  "gn": "gn.new.34",
+  "shape": "World Event",
+  "earliest": "A6",
+  "sits": "must-see",
+  "level": "no battles unless driven off (A+0)",
+  "often": "run",
+  "beats": [
+   {
+    "beat": "The warning (must-see)",
+    "event": "gn-new-34",
+    "stage": "S(n)",
+    "home": 5,
+    "window": [
+     4,
+     8
+    ]
+   },
+   {
+    "beat": "The slide",
+    "event": "gn-new-34-slide",
+    "stage": "S(n)",
+    "home": 10,
+    "window": [
+     9,
+     14
+    ]
+   },
+   {
+    "beat": "The slide, after a drive-off",
+    "event": "gn-new-34-slide-driven",
+    "stage": "S(n)",
+    "home": 10,
+    "window": [
+     9,
+     14
+    ]
+   },
+   {
+    "beat": "The pile of stones",
+    "event": "gn-new-34-shrine",
+    "stage": "a later region",
+    "home": 8,
+    "window": [
+     4,
+     14
+    ]
+   }
+  ],
+  "note": "Fallback: the warning at Step 15, the slide at Step 19. Once per run; six turns if believed, three if driven off.",
+  "kinds": [
+   "World Event",
+   "Pokémon",
+   "Story"
+  ],
+  "tags": [
+   "high"
+  ],
+  "home": 5,
+  "window": [
+   4,
+   8
+  ]
  }
 }
