@@ -991,6 +991,15 @@ export const ArchetypeModifierSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('foeMissBoost'), stages: z.number().int().min(1).max(2) }),
   /** The foe's first move of each battle is shown before you pick. */
   z.object({ kind: z.literal('foeMovePreview') }),
+  // ---------- Legendary Blessings (core/blessings) ----------
+  /** Heatran: the first damaging Fire move used against your side in each battle is absorbed; its target gains +1 Sp. Atk. */
+  z.object({ kind: z.literal('fireAbsorbFirst') }),
+  /** Thundurus: your status moves have +1 priority on the first `turns` turns of every battle. */
+  z.object({ kind: z.literal('statusPriorityTurns'), turns: z.number().int().min(1).max(3) }),
+  /** Landorus: at the start of every boss and rival battle the opposing lead's stats move by `value` stages. */
+  z.object({ kind: z.literal('foeLeadStages'), stats: z.array(z.enum(['atk', 'def', 'spa', 'spd', 'spe'])).min(1), value: z.number().int().min(-2).max(2) }),
+  /** Thundurus's Rite: the opposing lead of the next trainer battle starts paralysed (not a boss's last Pokémon, not an Electric-type). */
+  z.object({ kind: z.literal('foeLeadParalysed') }),
   /** The next battle you lose without ending the run gives `value`× experience (1.5 = +50%); used up after one loss. */
   z.object({ kind: z.literal('lostBattleXp'), value: z.number().positive() }),
 ]);

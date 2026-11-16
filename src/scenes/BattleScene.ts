@@ -96,6 +96,7 @@ import { itemCard, itemFooter } from '../core/itemPreview';
 import { battleOpening, runHealMultiplier } from '../core/run';
 import { rewindTurnsAvailable } from '../core/rewind';
 import { reverseSideProblem } from '../core/legends/reverseSide';
+import { calmProblem } from '../core/blessings';
 import { partyPreviews, quickSummaryText } from '../ui/itemScreen';
 import { animationStrength, animationTimeScale, animSettingsFrom } from '../core/accessibility';
 import { transformAnimId } from '../core/presentation/transformAnims';
@@ -3765,6 +3766,9 @@ export class BattleScene extends Phaser.Scene {
     // Catalog Overhaul (legends row B): The Renegade's Reverse Side, once per stage, out of a battle that is not a boss's.
     const reverseAt = (!this.duo || this.cmdSpot === 0) && reverseSideProblem(this.run) === null ? options.length : -1;
     if (reverseAt >= 0) options.push({ label: 'Reverse Side' });
+    // Lugia's blessing: the Calm, once per stage (single battles; it does not take the turn).
+    const calmAt = !this.duo && calmProblem(this.run) === null ? options.length : -1;
+    if (calmAt >= 0) options.push({ label: 'Calm' });
     // A combined style (Wii channel grid) puts the moves in place of Fight: picking one opens the move menu and uses it.
     const combined = this.skin?.layout.combined && !this.duo ? this.combinedMoves() : [];
     const k = combined.length;
@@ -3805,6 +3809,7 @@ export class BattleScene extends Phaser.Scene {
         else if (i === scanAt) void this.scanFoe();
         else if (i === rewindAt) this.showRewindMenu(rewindMax);
         else if (i === reverseAt) void this.stepToReverseSide();
+        else if (i === calmAt) void this.callCalm();
         else if (i === lastResortAt) {
           void this.playLastResort();
         } else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
@@ -3873,6 +3878,16 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** The three raid cheers: Offense, Defense, Healing (each costs one of three cheers and the turn). */
+  /** Lugia's Calm: clears weather, terrain and stat changes (core/blessings callCalm), then the screen redraws from the run. */
+  private async callCalm(): Promise<void> {
+    this.menu?.destroy();
+    this.menu = null;
+    const message = services().session.callCalm();
+    if (!message) return this.showRootMenu();
+    await this.say(message);
+    this.scene.start(sceneForRun(services().session.run!));
+  }
+
   /** The Renegade's Reverse Side: the battle ends with nothing won or lost, and the map shows the node's other side. */
   private async stepToReverseSide(): Promise<void> {
     this.menu?.destroy();

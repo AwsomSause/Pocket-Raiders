@@ -4,7 +4,7 @@
 // the blessing was rolled at run start. Respects the animation setting (off = everything shown at once).
 
 import Phaser from 'phaser';
-import { getBlessing } from '../core/blessings';
+import { getBlessing, VOWS } from '../core/blessings';
 import { services } from '../game/services';
 import { playCry } from '../ui/audio';
 import { onInputAction } from '../ui/input';
@@ -84,15 +84,36 @@ export class BlessingScene extends Phaser.Scene {
       steps.forEach(([delay, fn], i) => this.timers.push(this.time.delayedCall(fast ? delay / 3 : delay, () => { fn(); if (i === steps.length - 1) this.finished = true; })));
     }
 
+    // Zekrom's blessing: swear one vow before the run goes on (a choice; the bonus itself is a battle perk).
+    let vowAt = -1;
+    let vowRows: Phaser.GameObjects.Text[] = [];
+    const drawVows = () => vowRows.forEach((t, i) => t.setColor(i === vowAt ? '#fff2c0' : '#a898c0').setText(`${i === vowAt ? '▶ ' : '   '}${VOWS[i]!.label}: ${VOWS[i]!.text}`));
+    const askVow = (): boolean => {
+      if (def.effect.kind !== 'vow' || run.expansion?.blessing?.vow) return false;
+      if (vowAt < 0) {
+        vowAt = 0;
+        sum.setText('Swear one vow for the run:');
+        prompt.setText('Up/Down to choose, Enter to swear');
+        vowRows = VOWS.map((_, i) => this.add.text(x, 446 + i * 30, '', textStyle(17, '#a898c0', { wordWrap: { width: w } })).setInteractive({ useHandCursor: true }).on('pointerdown', (_p: unknown, _x: unknown, _y: unknown, e: Phaser.Types.Input.EventData) => { e.stopPropagation(); vowAt = i; next(); }));
+        drawVows();
+        return true;
+      }
+      session.swearVow(VOWS[vowAt]!.id);
+      return false;
+    };
     const next = () => {
       if (this.leaving) return;
       if (!this.finished) return this.finish();
+      if (askVow()) return;
       this.leaving = true;
       if (run.expansion?.blessing) run.expansion.blessing.seen = true;
       session.saveRunNow();
       this.scene.start('Briefing');
     };
-    onInputAction(this, (a) => { if (a === 'confirm' || a === 'back') next(); });
+    onInputAction(this, (a) => {
+      if (vowAt >= 0 && (a === 'up' || a === 'down')) { vowAt = (vowAt + (a === 'up' ? VOWS.length - 1 : 1)) % VOWS.length; drawVows(); return; }
+      if (a === 'confirm' || (a === 'back' && vowAt < 0)) next();
+    });
     this.input.on('pointerdown', next);
   }
 

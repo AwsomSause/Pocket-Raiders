@@ -19,7 +19,9 @@ const BlessingDefSchema = z.object({
   id: z.string().min(1), name: z.string().min(1), legendary: z.string().min(1), speciesId: z.string().min(1),
   tier: z.enum(BLESSING_TIERS), item: z.string().min(1), objectText: z.string().min(1), passage: z.string().min(1),
   headline: z.string().min(1), summary: z.string().min(1),
-  effect: z.object({ kind: z.enum(['none', 'healMostHurt', 'shopDiscount', 'sacredAsh', 'perks', 'rewinds', 'reverseSide']) }),
+  effect: z.object({ kind: z.enum(['none', 'healMostHurt', 'shopDiscount', 'sacredAsh', 'perks', 'rewinds', 'reverseSide', 'calm', 'sight', 'insight', 'vow', 'vessel', 'bolt']) }),
+  /** Perks used instead of `perks` once the blessing is in Communion (omitted: the same perks). */
+  communionPerks: z.array(ArchetypeModifierSchema).optional(),
   /** false: never rolled at run start; only an event offers it (`takeBlessing`), so adding it moves no seed's roll. */
   pool: z.boolean().default(true),
   /** Battle perks (the same rules trainers use) that this blessing adds. */
@@ -32,7 +34,7 @@ export type BlessingDef = z.infer<typeof BlessingDefSchema>;
 
 const FileSchema = z.object({
   tiers: z.record(z.enum(BLESSING_TIERS), z.object({ chance: z.number().positive(), influence: z.number().int().min(0) })),
-  balance: z.object({ lele: z.object({ healPercent: z.number(), communionPartyPercent: z.number() }), fezandipiti: z.object({ discountPercent: z.number(), communionDiscountPercent: z.number() }), renegade: z.object({ ghostEncounterWeight: z.number().positive() }) }),
+  balance: z.object({ lele: z.object({ healPercent: z.number(), communionPartyPercent: z.number() }), fezandipiti: z.object({ discountPercent: z.number(), communionDiscountPercent: z.number() }), renegade: z.object({ ghostEncounterWeight: z.number().positive() }), zekrom: z.object({ vowStatPercent: z.number(), communionVowStatPercent: z.number() }) }),
   blessings: z.array(BlessingDefSchema).min(1),
 });
 const data = FileSchema.parse(raw);
@@ -103,19 +105,61 @@ export function runBlessing(run: RunState): BlessingDef | undefined {
   return def && playable(def) ? def : undefined;
 }
 
+/** A perk's bonus halved toward no change (1.15 -> 1.075, 0.5 -> 0.75; a Tailwind of 2 turns -> 1): The Empty Vessel's weaker copy. */
+function weakerPerk<T extends Perks[number]>(p: T): T {
+  const half = (v: number) => Math.round((1 + (v - 1) / 2) * 1000) / 1000;
+  const out: Record<string, unknown> = { ...p };
+  if (typeof out.value === 'number' && !Number.isInteger(out.value)) out.value = half(out.value);
+  if (typeof out.first === 'number') out.first = half(out.first);
+  if (p.kind === 'battleStart' && typeof out.turns === 'number') out.turns = Math.max(1, Math.floor(out.turns / 2));
+  return out as T;
+}
+
+/** Blessings The Empty Vessel may copy: every playable rolled blessing except itself and Zekrom's (a vow is sworn at the opening). */
+export const vesselCanCopy = (def: BlessingDef): boolean => playable(def) && def.pool && !['vessel', 'vow', 'reverseSide'].includes(def.effect.kind);
+
+/**
+ * The blessing whose effect the run has now. Usually the run's own; The Empty Vessel (Kyurem) has none until it copies one,
+ * then a weaker copy of it (perk bonuses halved). The copy never reaches its own Communion form (see `inCommunionForm`).
+ */
+export function effectBlessing(run: RunState): BlessingDef | undefined {
+  const def = runBlessing(run);
+  if (def?.effect.kind !== 'vessel') return def;
+  const copy = run.expansion?.blessing?.copy ? getBlessing(run.expansion.blessing.copy) : undefined;
+  if (!copy || !vesselCanCopy(copy)) return undefined;
+  return { ...copy, perks: copy.perks.map(weakerPerk), communionPerks: undefined };
+}
+
+/** The blessing's Communion form is on (Kyurem's copy never has it: its Communion only gives the copy's Rite). */
+export const inCommunionForm = (run: RunState): boolean => !!run.expansion?.blessing?.communion && !run.expansion.blessing.copy;
+
 /** Price factor for shops (Fezandipiti): 0.9 with the blessing, otherwise 1. */
 export function blessingShopFactor(run: RunState): number {
-  if (runBlessing(run)?.effect.kind !== 'shopDiscount') return 1;
-  const pct = run.expansion?.blessing?.communion ? data.balance.fezandipiti.communionDiscountPercent : data.balance.fezandipiti.discountPercent;
+  if (effectBlessing(run)?.effect.kind !== 'shopDiscount') return 1;
+  const pct = inCommunionForm(run) ? data.balance.fezandipiti.communionDiscountPercent : data.balance.fezandipiti.discountPercent;
   return 1 - pct / 100;
 }
 
+/** Zekrom: the vow is sworn and still kept (or held by the Rite). */
+export const vowKept = (run: RunState): boolean => !!run.expansion?.blessing?.vow && !run.expansion.blessing.vowBroken;
+
 /** Battle perks this blessing adds right now (empty for most). First-battle blessings drop out once the stage's first battle is done. */
 export function blessingPerks(run: RunState): Perks {
-  const def = runBlessing(run);
-  if (!def || def.perks.length === 0) return [];
-  if (def.firstBattleOfStage && run.stage && run.expansion?.blessing?.stagesDone.includes(`${run.regionIndex}:${run.stage.index}`)) return [];
-  return def.perks;
+  const def = effectBlessing(run);
+  if (!def) return [];
+  const state = run.expansion!.blessing!;
+  const extra: Perks[number][] = [];
+  // Zekrom: +10% to every stat (15% in Communion) while the vow is kept.
+  if (def.effect.kind === 'vow' && vowKept(run)) {
+    const pct = inCommunionForm(run) ? data.balance.zekrom.communionVowStatPercent : data.balance.zekrom.vowStatPercent;
+    for (const stat of ['atk', 'def', 'spa', 'spd', 'spe'] as const) extra.push({ kind: 'statMultiplier', stat, value: 1 + pct / 100 });
+  }
+  // Thundurus's Rite waits for the next trainer battle.
+  if (state.riteArmed && def.effect.kind === 'bolt') extra.push({ kind: 'foeLeadParalysed' });
+  const own = inCommunionForm(run) && def.communionPerks ? def.communionPerks : def.perks;
+  if (own.length === 0) return extra;
+  if (def.firstBattleOfStage && run.stage && state.stagesDone.includes(`${run.regionIndex}:${run.stage.index}`)) return extra;
+  return [...own, ...extra];
 }
 
 /** Communion: obtaining the blessing's own Legendary (party or PC) turns the blessing into its stronger form. Returns true the moment it happens. */
@@ -129,21 +173,23 @@ export function syncCommunion(run: RunState): boolean {
   return true;
 }
 
-/** The Rite (once per run, after Communion): what it is and whether it can be used. Tapu Lele's heals the party; Dialga's goes back a stage. */
+/** The Rite (once per run, after Communion): what it is and whether it can be used. Tapu Lele's heals the party; Dialga's goes back a stage; Thundurus's bolt waits for the next trainer battle. */
 export function blessingRite(run: RunState): { label: string; hint: string; ready: boolean } | null {
-  const def = runBlessing(run);
+  const def = effectBlessing(run);
   const state = run.expansion?.blessing;
   if (!def || !state?.communion) return null;
   if (def.effect.kind === 'healMostHurt') return { label: 'Rite of Healing', hint: 'Restore the whole party fully, once this run.', ready: !state.riteUsed };
   if (def.effect.kind === 'rewinds') return { label: 'Rite of Time', hint: 'Go back to the start of this stage. Levels, moves and species are kept; items and events of the stage are not. Once this run, from the map.', ready: !state.riteUsed && run.phase === 'map' && stageRewindReady(run) };
+  if (def.effect.kind === 'bolt') return { label: 'A Bolt on Request', hint: state.riteArmed ? 'Armed: the lead of your next trainer battle starts paralysed.' : 'The lead of your next trainer battle starts paralysed (not a boss\'s last Pokémon, not an Electric-type). Once this run.', ready: !state.riteUsed };
+  if (def.effect.kind === 'vow') return { label: 'The Vow Holds', hint: state.riteUsed ? 'Used: the vow held once when it would have broken.' : 'Once, when your vow would break, it holds instead. It works by itself.', ready: false };
   return null;
 }
 
-/** Uses the Rite. Returns the run to carry on with (Dialga's is a rebuilt run, Lele's the same one, mutated) and a message, or null when it can't be used. */
+/** Uses the Rite. Returns the run to carry on with (Dialga's is a rebuilt run, the others the same one, mutated) and a message, or null when it can't be used. */
 export function useBlessingRite(content: Content, run: RunState): { run: RunState; message: string } | null {
   const rite = blessingRite(run);
   if (!rite?.ready) return null;
-  const kind = runBlessing(run)!.effect.kind;
+  const kind = effectBlessing(run)!.effect.kind;
   if (kind === 'rewinds') {
     const back = rewindStage(content, run, { keepTeam: true });
     if (!back) return null;
@@ -151,9 +197,102 @@ export function useBlessingRite(content: Content, run: RunState): { run: RunStat
     back.expansion = { ...back.expansion, blessing: { ...jsonCopy(run.expansion!.blessing!), riteUsed: true } };
     return { run: back, message: 'Dialga turns the hourglass: the stage begins again.' };
   }
+  if (kind === 'bolt') {
+    run.expansion!.blessing!.riteUsed = true;
+    run.expansion!.blessing!.riteArmed = true;
+    return { run, message: 'Thundurus laughs somewhere above the clouds. The next trainer you meet will feel it first.' };
+  }
   for (const m of run.party) { m.hp = maxHp(content, m); m.status = null; }
   run.expansion!.blessing!.riteUsed = true;
   return { run, message: 'Tapu Lele scatters its petals: the whole party is restored.' };
+}
+
+/**
+ * Zekrom: the vow breaks (once broken, the bonus is gone). In Communion the Rite holds it the first time instead. Returns the journal line.
+ * `vow` names which vow the act breaks; nothing happens for a different vow, another blessing, or a vow already broken.
+ */
+export function breakVow(run: RunState, vow: NonNullable<BlessingState['vow']>): string | null {
+  const state = run.expansion?.blessing;
+  if (effectBlessing(run)?.effect.kind !== 'vow' || !state || state.vow !== vow || state.vowBroken) return null;
+  if (state.communion && !state.riteUsed) {
+    state.riteUsed = true;
+    const line = 'The vow should have broken. Zekrom would not let it: the vow holds.';
+    run.journal = [...(run.journal ?? []), line];
+    return line;
+  }
+  state.vowBroken = true;
+  const line = 'The vow is broken. The black stone goes quiet.';
+  run.journal = [...(run.journal ?? []), line];
+  return line;
+}
+
+/** Zekrom's vow Strike no one first: the first damage of a trainer battle must not be yours. Reads one turn's engine events (mutates `run`). */
+export function noteFirstBlood(run: RunState, events: readonly { type: string; side?: string }[]): string | null {
+  const b = run.battle;
+  if (!b || b.kind !== 'trainer' || run.expansion?.blessing?.vow !== 'strike-no-one-first' || b.storyEffects.includes('first-blood')) return null;
+  const first = events.find((e) => e.type === 'damage');
+  if (!first) return null;
+  b.storyEffects.push('first-blood');
+  return first.side === 'enemy' ? breakVow(run, 'strike-no-one-first') : null;
+}
+
+/** Zekrom: the three vows of the opening (two are built; see the blessing's limits). */
+export const VOWS: ReadonlyArray<{ id: NonNullable<BlessingState['vow']>; label: string; text: string }> = [
+  { id: 'no-one-behind', label: 'Leave no Pokémon behind', text: 'Release or trade away no Pokémon this run.' },
+  { id: 'strike-no-one-first', label: 'Strike no one first', text: 'In trainer battles, never be the first to deal damage.' },
+];
+
+/** Zekrom's opening: swears the vow (once). Returns false when there is nothing to swear. */
+export function swearVow(run: RunState, vow: NonNullable<BlessingState['vow']>): boolean {
+  const state = run.expansion?.blessing;
+  if (runBlessing(run)?.effect.kind !== 'vow' || !state || state.vow) return false;
+  state.vow = vow;
+  return true;
+}
+
+/** Lugia, The Guardian of the Sea: why the Calm can't be called in this battle now, or null when it can. Once per stage, single battles. */
+export function calmProblem(run: RunState): string | null {
+  const b = run.battle;
+  if (run.phase !== 'battle' || !b || b.outcome) return 'Not in a battle.';
+  if (effectBlessing(run)?.effect.kind !== 'calm') return 'Only Lugia\'s blessing calls the Calm.';
+  if (b.doubles) return 'Not in a double battle.';
+  if (run.expansion!.blessing!.calmStages?.includes(calmKey(run))) return 'Once per stage.';
+  return null;
+}
+const calmKey = (run: RunState): string => `${run.regionIndex}:${run.stage?.index ?? 0}`;
+
+/**
+ * Calls the Calm: weather, terrain and every stat change on both sides are cleared (in Communion the player's own boosts stay).
+ * Uses no random number and does not take the turn. Mutates `run`; returns the message, or null when it can't be used.
+ */
+export function callCalm(run: RunState): string | null {
+  if (calmProblem(run)) return null;
+  const b = run.battle!;
+  const state = run.expansion!.blessing!;
+  state.calmStages = [...(state.calmStages ?? []), calmKey(run)];
+  b.weather = null;
+  b.terrain = null;
+  const keepMine = inCommunionForm(run);
+  for (const k of Object.keys(b.enemyStages) as (keyof typeof b.enemyStages)[]) b.enemyStages[k] = 0;
+  for (const k of Object.keys(b.playerStages) as (keyof typeof b.playerStages)[]) if (!keepMine || b.playerStages[k] < 0) b.playerStages[k] = 0;
+  return keepMine ? 'Lugia\'s Calm: the sea goes flat. The storm and every trick of the foe are gone; your own strength stays.' : 'Lugia\'s Calm: the sea goes flat. Weather, terrain and every stat change are gone.';
+}
+
+/**
+ * The Empty Vessel (Kyurem): the first Sign of another Legendary that has a blessing fills it; it becomes a weaker copy of that
+ * blessing for the rest of the run. `who` is a species id or a Sign group (the first member with a blessing). Returns the journal line.
+ */
+export function fillVessel(run: RunState, who: string, groups: Readonly<Record<string, readonly string[]>>): string | null {
+  const state = run.expansion?.blessing;
+  if (runBlessing(run)?.effect.kind !== 'vessel' || !state || state.copy) return null;
+  const names = groups[who] ?? [who];
+  const pick = names.map((sp) => BLESSINGS.find((b) => b.speciesId === sp && vesselCanCopy(b))).find(Boolean);
+  if (!pick) return null;
+  state.copy = pick.id;
+  if (pick.effect.kind === 'rewinds') grantRewinds(run, 'blessing');
+  const line = `The Empty Vessel fills: it takes the shape of ${pick.legendary}'s blessing, ${pick.name} (a weaker copy).`;
+  run.journal = [...(run.journal ?? []), line];
+  return line;
 }
 
 /**
@@ -162,11 +301,14 @@ export function useBlessingRite(content: Content, run: RunState): { run: RunStat
  * Returns the names' uids it touched (for tests and the journal).
  */
 export function blessingAfterBattle(content: Content, run: RunState): string[] {
-  const def = runBlessing(run);
   const state = run.expansion?.blessing;
-  if (!def || !state) return [];
+  if (!runBlessing(run) || !state) return [];
   const touched: string[] = [];
   syncCommunion(run);
+  // Thundurus's Rite is spent by the trainer battle it waited for.
+  if (state.riteArmed && run.battle?.kind === 'trainer') state.riteArmed = false;
+  const def = effectBlessing(run);
+  if (!def) return touched;
   if (def.firstBattleOfStage && run.stage) {
     const key = `${run.regionIndex}:${run.stage.index}`;
     if (!state.stagesDone.includes(key)) state.stagesDone = [...state.stagesDone, key];
@@ -191,7 +333,7 @@ export function blessingAfterBattle(content: Content, run: RunState): string[] {
       touched.push(m.uid);
     }
     // Communion: the rest of the party recovers a little too.
-    if (state.communion) {
+    if (inCommunionForm(run)) {
       for (const m of run.party) {
         if (m.hp <= 0 || m.uid === run.battle?.loaner || m.uid === worst?.uid) continue;
         m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * data.balance.lele.communionPartyPercent / 100));
@@ -199,7 +341,7 @@ export function blessingAfterBattle(content: Content, run: RunState): string[] {
     }
   }
   // Ho-Oh in Communion: after a boss battle the first fainted Pokémon (party order) rises at half HP.
-  if (def.effect.kind === 'sacredAsh' && state.communion && run.battle && isBossClass(run.battle.trainer?.classId)) {
+  if (def.effect.kind === 'sacredAsh' && inCommunionForm(run) && run.battle && isBossClass(run.battle.trainer?.classId)) {
     const m = run.party.find((p) => p.hp <= 0 && p.uid !== run.battle?.loaner);
     if (m) { m.hp = Math.max(1, Math.floor(maxHp(content, m) / 2)); touched.push(m.uid); }
   }

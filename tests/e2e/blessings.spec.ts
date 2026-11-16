@@ -59,3 +59,30 @@ test('a fresh profile has Blessings and Ultra Beasts on by default (settings v44
     await waitForScene(page, key);
   }
 });
+
+test("Zekrom's blessing asks for a vow on the opening screen before the briefing", async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await toStarter(page, true);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Blessing');
+  // Swap the rolled blessing for Zekrom's and replay the opening.
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    Object.assign(pkr.session.run.expansion.blessing, { id: 'zekrom', tier: 'divine', seen: false });
+    pkr.game.scene.getScene('Blessing').scene.restart();
+  });
+  await page.waitForTimeout(600);
+  await page.keyboard.press('Enter'); // finishes the sequence
+  await page.waitForTimeout(300);
+  await page.keyboard.press('Enter'); // shows the vows
+  await page.waitForTimeout(300);
+  expect(await scene(page)).toBe('Blessing');
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(150);
+  await page.screenshot({ path: 'test-results/blessing-zekrom-vow.png' });
+  await page.keyboard.press('Enter'); // swears Strike no one first
+  await waitForScene(page, 'Briefing');
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.expansion.blessing.vow)).toBe('strike-no-one-first');
+  expect(errors).toEqual([]);
+});

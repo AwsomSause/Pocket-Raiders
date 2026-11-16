@@ -248,7 +248,7 @@ import type { TotemDef } from './totem/schema';
 import { createStreams, hashSeed, Rng, withStream } from './rng';
 import { lastChanceRevive } from './lastChance';
 import { reverseSideProblem, useReverseSide } from './legends/reverseSide';
-import { assignBlessing, blessingAfterBattle, blessingPerks, blessingShopFactor, syncCommunion } from './blessings';
+import { assignBlessing, blessingAfterBattle, blessingPerks, blessingShopFactor, callCalm, effectBlessing, inCommunionForm, noteFirstBlood, syncCommunion } from './blessings';
 import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPurchase, recentCopies } from './priceSwing';
 import { closeNodeMenu, freshNodeMenuState, menuBlocker, nodeMenusAllowed } from './nodeMenu/flow';
 import { BattleStateSchema, currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
@@ -1536,6 +1536,16 @@ export function mapPreviews(content: Content, run: RunState): Record<string, Nod
     const battle = moveToNode(content, run, node.id, () => undefined).battle;
     if (!battle?.trainer || !scoutedLead(run, battle.trainer.classId)) continue;
     out[node.id] = { itemId: null, source: `${mainRival(run)?.name ?? 'Your rival'}'s notes`, team: battle.enemyTeam.slice(0, 1).map((m) => ({ speciesId: m.speciesId, level: m.level })), trainerName: battle.trainer.name };
+  }
+  // Latias's blessing, Sight Sharing: every wild and trainer battle ahead shows the opponent's lead (in Communion, the whole team).
+  if (effectBlessing(run)?.effect.kind === 'sight') {
+    const whole = inCommunionForm(run);
+    for (const node of held ? [] : mapChoices(content, run)) {
+      if ((node.kind !== 'trainer' && node.kind !== 'wild') || out[node.id] || !run.party.some((p) => p.hp > 0)) continue;
+      const battle = moveToNode(content, run, node.id, () => undefined).battle;
+      if (!battle) continue;
+      out[node.id] = { itemId: null, source: 'Latias\'s sight', team: (whole ? battle.enemyTeam : battle.enemyTeam.slice(0, 1)).map((m) => ({ speciesId: m.speciesId, level: m.level })), trainerName: battle.trainer?.name ?? null };
+    }
   }
   const gym = stage.map.nodes.find((n) => n.kind === 'gym');
   const teamItem = perks('gymTeam') ?? perks('gymAce');
@@ -3337,6 +3347,13 @@ export function stepToReverseSide(content: Content, current: RunState): { run: R
   return { run, message: 'You step sideways out of the fight, and back onto the path.' };
 }
 
+/** Lugia's blessing: calls the Calm in this battle (once per stage; it does not take the turn). Null when it can't be used. */
+export function callLugiaCalm(current: RunState): { run: RunState; message: string } | null {
+  const run = structuredClone(current);
+  const message = callCalm(run);
+  return message ? { run, message } : null;
+}
+
 export function takeTurn(content: Content, current: RunState, action: PlayerAction, dialogue: DialogueFrequency = 'normal'): TurnResult {
   assertPhase(current, 'battle');
   const run = structuredClone(current);
@@ -3365,6 +3382,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // S7: the Story Run partner's banked Impossible Feat (the engine checks the moment; no RNG).
   turnCtx.feat = featGate(content, run) ?? undefined;
   const engineEvents: BattleEvent[] = [...shaped.events, ...(battle.doubles ? resolveDoublesTurn(turnCtx, doublesAction(turnCtx, action)) : resolveTurn(turnCtx, shaped.action))];
+  const vowLine = noteFirstBlood(run, engineEvents); // Zekrom's vow: Strike no one first
+  if (vowLine) engineEvents.push({ type: 'raid', tone: 'info', text: vowLine });
   // Beta 4.4: a Hyper moment unlocks a move in the Hyper slot for the rest of the battle.
   engineEvents.push(...grantHyperMoves(content, run, engineEvents));
   // A practiced pair hands over after a faint (yours, or a rival's).

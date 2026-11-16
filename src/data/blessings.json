@@ -33,6 +33,10 @@
     },
     "renegade": {
       "ghostEncounterWeight": 1.5
+    },
+    "zekrom": {
+      "vowStatPercent": 10,
+      "communionVowStatPercent": 15
     }
   },
   "blessings": [
@@ -261,6 +265,183 @@
       "pool": false,
       "status": "limited",
       "limits": "Never rolled at the start of a run: only The Rift Whisper offers it, mid-run, in place of the run's blessing. The Reverse Side opens Distortion Incident, then Distortion World, inside the node (pseudo-stage caps still hold: past them the step-out alone happens). Communion (see every node's reverse side) and the Rite (a mirror stage) are not built."
+    },
+    {
+      "id": "lugia",
+      "name": "The Guardian of the Sea",
+      "legendary": "Lugia",
+      "speciesId": "lugia",
+      "tier": "greater",
+      "item": "item.gen5/silver-wing",
+      "objectText": "a silver bell, glowing faintly",
+      "passage": "When the fire and the ice and the lightning quarrel, there is one beneath the sea who is not angry; and the world is kept by that one's patience.",
+      "headline": "A LONG NOTE UNDER WATER",
+      "summary": "Once per stage, call a Calm in battle (Calm on the battle menu): weather, terrain and every stat change on both sides are cleared. It does not take your turn.",
+      "effect": {
+        "kind": "calm"
+      },
+      "status": "limited",
+      "limits": "Single battles only. Communion works (the Calm keeps your own boosts); the Rite, the Song (end a wild battle in peace with full rewards), is not built."
+    },
+    {
+      "id": "latias",
+      "name": "The Glass Wing",
+      "legendary": "Latias",
+      "speciesId": "latias",
+      "tier": "greater",
+      "item": "item.gen5/soul-dew",
+      "objectText": "a feather that bends the light round it",
+      "passage": "She folds the light and goes among people as one of them, to see what they are like. She likes them.",
+      "headline": "SIGHT SHARING",
+      "summary": "Sight Sharing: on the map, every wild and trainer battle ahead shows the opponent's lead. In Communion, their whole team.",
+      "effect": {
+        "kind": "sight"
+      },
+      "status": "limited",
+      "limits": "Shown on the map before you pick the node (gym and event battles are not shown). The Rite (share sight with a rival for a stage) is not built."
+    },
+    {
+      "id": "heatran",
+      "name": "The Magma Heart",
+      "legendary": "Heatran",
+      "speciesId": "heatran",
+      "tier": "greater",
+      "item": "item.gen5/magma-stone",
+      "objectText": "a stone, cool outside and hot within",
+      "passage": "It walks on the roof of the cave as if the cave were turned over, and the fire in it is the mountain's own.",
+      "headline": "A DEEP SLOW BUBBLING",
+      "summary": "The first Fire move used against your side in each battle is absorbed, and its target gains +1 Sp. Atk.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "fireAbsorbFirst"
+        }
+      ],
+      "status": "limited",
+      "limits": "Single battles. Communion (extra ore and no hazard harm in volcano and cave stages) and the Rite (erupt) are not built."
+    },
+    {
+      "id": "thundurus",
+      "name": "The Bolt",
+      "legendary": "Thundurus",
+      "speciesId": "thundurus",
+      "tier": "greater",
+      "item": "item.gen5/zap-plate",
+      "objectText": "a scorched drumskin",
+      "passage": "It throws its lightning as a boy throws stones at a pond, to see the splash.",
+      "headline": "THUNDER, CLOSE, WITH LAUGHTER IN IT",
+      "summary": "On the first turn of every battle your status moves have +1 priority. In Communion, the first two turns.",
+      "effect": {
+        "kind": "bolt"
+      },
+      "perks": [
+        {
+          "kind": "statusPriorityTurns",
+          "turns": 1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "statusPriorityTurns",
+          "turns": 2
+        }
+      ],
+      "status": "supported",
+      "limits": "Rite, a bolt on request: the lead of your next trainer battle starts paralysed (not a boss's last Pokémon, not an Electric-type)."
+    },
+    {
+      "id": "landorus",
+      "name": "The Abundant Land",
+      "legendary": "Landorus",
+      "speciesId": "landorus",
+      "tier": "greater",
+      "item": "item.gen5/miracle-seed",
+      "objectText": "a seed sprouting in dry earth",
+      "passage": "It came between the wind and the thunder and bade them be still; and where it had stood the crops were tall.",
+      "headline": "RAIN ON A FIELD",
+      "summary": "At the start of every boss and rival battle the opposing lead has -1 Attack. In Communion, -1 Sp. Atk too.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "foeLeadStages",
+          "stats": [
+            "atk"
+          ],
+          "value": -1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "foeLeadStages",
+          "stats": [
+            "atk",
+            "spa"
+          ],
+          "value": -1
+        }
+      ],
+      "status": "limited",
+      "limits": "Single battles. The Rite (fertile ground: a stage gains a shop and a Berry grove) is not built."
+    },
+    {
+      "id": "reshiram",
+      "name": "The Truth",
+      "legendary": "Reshiram",
+      "speciesId": "reshiram",
+      "tier": "divine",
+      "item": "item.gen5/light-stone",
+      "objectText": "a white stone, warm",
+      "passage": "They were one, and two brothers divided them; and this is the one that would rather know than hope.",
+      "headline": "A STEADY FIRE",
+      "summary": "In events, every choice shows what it will actually cause. In Communion, the foe's first move of each battle is shown before you pick.",
+      "effect": {
+        "kind": "insight"
+      },
+      "communionPerks": [
+        {
+          "kind": "foeMovePreview"
+        }
+      ],
+      "status": "limited",
+      "limits": "Lying speakers are not marked. Communion shows the foe's first move, not its whole move list. The Rite (make someone show their real plan) is not built."
+    },
+    {
+      "id": "zekrom",
+      "name": "The Ideal",
+      "legendary": "Zekrom",
+      "speciesId": "zekrom",
+      "tier": "divine",
+      "item": "item.gen5/dark-stone",
+      "objectText": "a black stone, humming",
+      "passage": "And this is the one that would rather hope than know. Do not ask which brother was right. They burned the country finding out.",
+      "headline": "SWEAR ONE VOW",
+      "summary": "Swear a vow for the run. While it is kept your Pokémon have +10% to every stat (15% in Communion). Broken, the bonus is gone.",
+      "effect": {
+        "kind": "vow"
+      },
+      "status": "limited",
+      "limits": "Two of the three vows are built (Leave no Pokémon behind: no release or trade; Strike no one first: in trainer battles never deal the first damage). Refuse no one who asks is not built. The Rite (the vow holds once) works by itself."
+    },
+    {
+      "id": "kyurem",
+      "name": "The Empty Vessel",
+      "legendary": "Kyurem",
+      "speciesId": "kyurem",
+      "tier": "primordial",
+      "item": "item.gen5/nevermeltice",
+      "objectText": "a block of ice with a hollow in it",
+      "passage": "When the two were divided, something was left over. It is cold, and it is hungry, and it is waiting to be made whole by whatever comes near.",
+      "headline": "NOTHING, YET",
+      "summary": "None, yet. The first Sign you find of another Legendary fills the vessel: it becomes a weaker copy of that blessing (perk bonuses halved) for the rest of the run. Catching Kyurem gives the copy's Rite.",
+      "effect": {
+        "kind": "vessel"
+      },
+      "status": "limited",
+      "limits": "The copy never reaches its own Communion form. It cannot copy Zekrom's vow or The Renegade. Kyurem in Communion with Zekrom or Reshiram earns the DNA Splicers fusion."
     }
   ]
 }

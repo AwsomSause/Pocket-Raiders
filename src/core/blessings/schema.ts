@@ -21,6 +21,15 @@ export const BlessingStateSchema = z.object({
   riteUsed: z.boolean().default(false),
   /** Stages (`region:stage`) whose first battle has been fought (for first-battle-of-the-stage blessings). */
   stagesDone: z.array(z.string()).default([]),
+  /** Lugia: stages (`region:stage`) where the Calm was already called. */
+  calmStages: z.array(z.string()).optional(),
+  /** A Rite that waits for the next fitting battle (Thundurus's bolt). */
+  riteArmed: z.boolean().optional(),
+  /** Zekrom: the vow sworn for the run, and whether it was broken. The Rite (after Communion) holds it once. */
+  vow: z.enum(['no-one-behind', 'strike-no-one-first']).optional(),
+  vowBroken: z.boolean().optional(),
+  /** Kyurem, The Empty Vessel: the blessing it copied from the first Sign of another Legendary. */
+  copy: z.string().optional(),
 });
 export type BlessingState = z.infer<typeof BlessingStateSchema>;
 
