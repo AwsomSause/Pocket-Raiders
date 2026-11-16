@@ -92,6 +92,9 @@ test('the healing spot and the shop work from the map', async ({ page }) => {
     delete session.run.expansion.nodeMenus;
     // Dynamic Prices (S67) swing prices a little; this test is about something else, so switch the swing off.
     session.content.balance.priceSwing = { range: 0, repeat: 0, repeatCap: 0 };
+    // Dated game events (a Market Week's sale) change prices by the calendar; this test is about the shop itself.
+    session.run.gameEvents = [];
+    session.run.perkEffects = [];
     const node = session.run.stage.map.nodes.find((n: any) => n.id === session.run.stage.current);
     // The generator may also place a "?" event stop here by chance; this test is about Heal and Shop, so keep only those.
     node.sides = node.sides.filter((s: any) => s.kind === 'heal');

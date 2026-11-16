@@ -1,0 +1,236 @@
+{
+ "catalogOverhaul": "places",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "lastSecondResolve",
+   "name": "Last-Second Resolve",
+   "group": "Heated Moments",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "heated-last-second-resolve",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5a2a1a",
+    "effect": "none"
+   },
+   "intro": "After the battle you can still hear it: \"Not yet. NOT YET.\" Their Pokémon held on at 1 HP when it had no right to, on nothing but will. Your rival is breathing hard, watching you, waiting to see what you will say about it.",
+   "choices": [
+    {
+     "label": "\"Respect.\"",
+     "success": {
+      "text": "You say it plainly, and you mean it. Your rival looks at you for a long second, then grins, and wipes their face on their sleeve. \"Yeah. It was something, wasn't it?\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "heated-last-second-resolve",
+        "amount": -99
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"That was unfair.\"",
+     "success": {
+      "text": "\"Unfair?\" Your rival's face goes hard. \"It wanted to win. That's all it was.\" They turn away before you can answer, and do not look back.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": -1,
+         "rivalry": 1
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "heated-last-second-resolve",
+        "amount": -99
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "newMove",
+   "name": "The New Move",
+   "group": "Heated Moments",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "heated-new-move",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5a2a1a",
+    "effect": "none"
+   },
+   "intro": "In the middle of the fight, at half its strength, one of your Pokémon looked back at you, and you knew: it had found something new, something it had never shown you. Now, with the battle done, it is still looking at you, waiting.",
+   "choices": [
+    {
+     "label": "\"Learn it.\"",
+     "success": {
+      "text": "You kneel down and let it show you again, slowly this time. It is fierce and proud and a little clumsy, and it is its own. You make room for it.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "learnMove"
+       },
+       {
+        "kind": "flag",
+        "key": "heated-new-move",
+        "amount": -99
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not now.\"",
+     "success": {
+      "text": "You rest a hand on its head. \"Not now. But I saw it.\" It seems to understand. It keeps the move for later, folded up inside it like a letter.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "heated-new-move",
+        "amount": -99
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "overdriveBreakthrough",
+   "name": "The Overdrive Breakthrough",
+   "group": "Heated Moments",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "heated-overdrive-breakthrough",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5a2a1a",
+    "effect": "none"
+   },
+   "intro": "In the battle your lead roared, and for a moment it was more than itself: a light came off it that you have never seen before. It is quiet now. It is sitting very close to you, as if it is a little frightened of what it did.",
+   "choices": [
+    {
+     "label": "Sit with it.",
+     "success": {
+      "text": "You sit with it until it stops shaking. You tell it that you saw, and that it was wonderful, and that it is still yours. It leans its whole weight against you and falls asleep.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "heated-overdrive-breakthrough",
+        "amount": -99
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "midBattleEvolution",
+   "name": "The Breakthrough Evolution",
+   "group": "Heated Moments",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "heated-mid-battle-evolution",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5a2a1a",
+    "effect": "none"
+   },
+   "intro": "\"It... it's evolving. NOW?\" In the middle of your battle, your rival's Pokémon changed, there in the light, and became something new. Now your rival is holding it, half laughing, half crying, and looking over at you.",
+   "choices": [
+    {
+     "label": "\"Congratulations.\"",
+     "success": {
+      "text": "You say it and you mean it. Your rival laughs properly then, and holds the new Pokémon up so you can see. \"Look at it! LOOK at it!\" You look.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "heated-mid-battle-evolution",
+        "amount": -99
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Great timing.\"",
+     "success": {
+      "text": "Your rival snorts. \"Right in the middle of losing, yes.\" Then softer: \"It waited for a reason. I think it wanted you to see.\" You did.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "heated-mid-battle-evolution",
+        "amount": -99
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

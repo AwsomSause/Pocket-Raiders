@@ -1,0 +1,1893 @@
+{
+ "catalogOverhaul": "markets",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "trading-post",
+   "name": "The Trading Post",
+   "group": "Trades",
+   "stop": "trade",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#102838",
+    "effect": "glint"
+   },
+   "intro": "A trainer waves a Poké Ball over a plank counter. Lenny Fosk: \"Swap with me? Mine's much stronger than it looks.\" The Honest Trade Card says it plainly: it bites. \"Only me, so far.\"",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Lenny hands the Ball over carefully, fingers well clear of the latch. \"Feed it before you pet it. Trust me.\"",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "trading-post",
+        "pool": "lenny-post"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the bite.",
+     "success": {
+      "text": "Lenny: \"It was a stray. It bit the hand that caught it.\" He shows you the scar, almost proudly. \"It's never bitten anyone who fed it first.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lenny-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "trading-post"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No thanks.",
+     "success": {
+      "text": "\"Your loss,\" Lenny says, and rubs his scar. \"Probably.\"",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lenny-fed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lenny-fed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Pokémon is curled against the bars, licking Berry juice off its paw. It watches you, calm.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Trade.",
+       "success": {
+        "text": "It comes to you without a sound. Lenny stares. \"Huh. It likes you. It never liked me.\"",
+        "effects": [
+         {
+          "kind": "honestTrade",
+          "id": "trading-post",
+          "pool": "lenny-post-fed"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "lenny-feed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lenny-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Lenny nods at your bag. \"Got a Berry? Go on. Slowly.\"",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Feed it a Berry.",
+       "requires": [
+        {
+         "kind": "holdsAny",
+         "ids": [
+          "oran-berry",
+          "pecha-berry",
+          "cheri-berry",
+          "chesto-berry",
+          "rawst-berry",
+          "aspear-berry",
+          "persim-berry",
+          "leppa-berry",
+          "sitrus-berry",
+          "lum-berry"
+         ],
+         "count": 1,
+         "label": "a Berry"
+        }
+       ],
+       "success": {
+        "text": "You hold out a Berry, very still. A long sniff. Then it takes it, gently, and keeps your hand for a moment longer than it needs to.",
+        "effects": [
+         {
+          "kind": "market",
+          "action": "payItem",
+          "only": [
+           "oran-berry",
+           "pecha-berry",
+           "cheri-berry",
+           "chesto-berry",
+           "rawst-berry",
+           "aspear-berry",
+           "persim-berry",
+           "leppa-berry",
+           "sitrus-berry",
+           "lum-berry"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "lenny-fed",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "trading-post"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wx-sandstorm-camp",
+   "name": "The Sandstorm Camp",
+   "group": "Trades",
+   "rarity": "uncommon",
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a20",
+    "effect": "fog"
+   },
+   "intro": "Nomads in a ring of tents as a sandstorm howls. They signal you in. Elder Yusra: \"Sit out the storm. Trade if you like. Our prices are posted.\" They are, on a board by the fire.",
+   "choices": [
+    {
+     "label": "Shelter and trade.",
+     "success": {
+      "text": "Sweet tea, a rug by the fire, the storm hammering at the felt. Your team sleeps in a heap. Then Yusra lays out the trade board and the camp's goods.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sandstorm-camp-trade"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter only.",
+     "success": {
+      "text": "You sleep through the storm in the warm dark of a tent, your team curled around you. In the morning the dunes have moved, and you are rested.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You pull your scarf over your face and walk into it. Sand in every seam, every eye. The storm follows you down the road.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "party",
+        "except": [
+         "ground",
+         "rock",
+         "steel"
+        ]
+       },
+       {
+        "kind": "front",
+        "weather": "sand",
+        "columns": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "group": "Trades",
+   "callback": false,
+   "id": "sandstorm-camp-trade",
+   "name": "The Sandstorm Camp",
+   "intro": "Yusra's trade board, chalked fresh: one Pokémon on offer from the deep desert, and the camp's goods. \"Our caravans trade, always. Everything is written down.\"",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Yusra seals it with a handshake and a pinch of sand dropped on both your palms. \"So the desert remembers.\"",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "wx-sandstorm-camp",
+        "pool": "desert-ruins"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Browse the goods.",
+     "success": {
+      "text": "Soft sand, hard stone, dried fruit, spices: priced on slate, nothing hidden.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rest by the fire.",
+     "success": {
+      "text": "You sit with the elders while the storm wears itself out. Nobody says much. It is the best hour of the week.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "heavyweight-swap",
+   "name": "The Heavyweight Hauler",
+   "group": "Trades",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "effect": "shake"
+   },
+   "intro": "A cart the size of a cottage, and a big tired man beside it. Hauler Brannoc: \"My cart needs a big strong one. A hundred kilos or more.\" He offers a sturdy Steel-type.",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Brannoc looks over both cards once more, then nods. \"Fair is fair.\" The swap is made gently, hand to hand.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "heavyweight-swap",
+        "pool": "heavyweight-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask why.",
+     "success": {
+      "text": "Brannoc: \"My old cart-puller's retiring. She deserves a rest.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "heavyweight-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No thanks.",
+     "success": {
+      "text": "\"Another time, maybe.\" Brannoc doesn't push.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "heavyweight-swap-looks",
+     "when": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 4,
+       "who": "any"
+      }
+     ],
+     "notice": "One of your Pokémon, one you have been through everything with, looks up at you, and waits.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "It stays.",
+       "success": {
+        "text": "You rest a hand on it. \"I'm sorry. Not this one.\" Brannoc smiles. \"I'd have said the same.\"",
+        "effects": []
+       }
+      },
+      {
+       "label": "It's okay. Go.",
+       "success": {
+        "text": "You nod to it. It looks at you a long moment, then goes. The swap is made, and it does not look back until the very last step.",
+        "effects": [
+         {
+          "kind": "honestTrade",
+          "id": "heavyweight-swap",
+          "pool": "heavyweight-swap"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "monster-breeder",
+   "name": "The Monster Breeder",
+   "group": "Trades",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "effect": "rattle"
+   },
+   "intro": "A ranch gone quiet, fences mended for animals that are not there. Breeder Kesh: \"I raise only the Monster egg group. Bring me one, and take something fierce.\"",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Kesh looks over both cards once more, then nods. \"Fair is fair.\" The swap is made gently, hand to hand.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "monster-breeder",
+        "pool": "monster-breeder"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask why.",
+     "success": {
+      "text": "Kesh: \"I want the ranch loud again.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "monster-breeder"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No thanks.",
+     "success": {
+      "text": "\"Another time, maybe.\" Kesh doesn't push.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "monster-breeder-looks",
+     "when": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 4,
+       "who": "any"
+      }
+     ],
+     "notice": "One of your Pokémon, one you have been through everything with, looks up at you, and waits.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "It stays.",
+       "success": {
+        "text": "You rest a hand on it. \"I'm sorry. Not this one.\" Kesh smiles. \"I'd have said the same.\"",
+        "effects": []
+       }
+      },
+      {
+       "label": "It's okay. Go.",
+       "success": {
+        "text": "You nod to it. It looks at you a long moment, then goes. The swap is made, and it does not look back until the very last step.",
+        "effects": [
+         {
+          "kind": "honestTrade",
+          "id": "monster-breeder",
+          "pool": "monster-breeder"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "pikachu-collector",
+   "name": "The Pikachu and Eevee Collector",
+   "group": "Trades",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "A cottage with Pikachu curtains and an Eevee doormat. Pippa Lune: \"Pikachu and Eevee only. I know. I know. Pick any of my three rare ones in return.\"",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Pippa opens three Balls on the table, one at a time, and steps back. \"Choose. Take your time.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pikachu-collector-pick"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask why.",
+     "success": {
+      "text": "Pippa Lune: \"My daughter loved them. She's grown. I miss the noise.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pikachu-collector"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No thanks.",
+     "success": {
+      "text": "\"Another time, maybe.\" Pippa Lune doesn't push.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pikachu-collector-looks",
+     "when": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 4,
+       "who": "any"
+      }
+     ],
+     "notice": "One of your Pokémon, one you have been through everything with, looks up at you, and waits.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "It stays.",
+       "success": {
+        "text": "You rest a hand on it. \"I'm sorry. Not this one.\" Pippa Lune smiles. \"I'd have said the same.\"",
+        "effects": []
+       }
+      },
+      {
+       "label": "It's okay. Go.",
+       "success": {
+        "text": "You nod to it. It looks at you a long moment, then goes. The swap is made, and it does not look back until the very last step.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "pikachu-collector-pick"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "group": "Trades",
+   "callback": false,
+   "id": "pikachu-collector-pick",
+   "name": "The Pikachu and Eevee Collector",
+   "intro": "Three rare Pokémon on Pippa's table, three cards. She wants a Pikachu or an Eevee for whichever you choose.",
+   "choices": [
+    {
+     "label": "The Riolu.",
+     "success": {
+      "text": "Pippa hugs your Pikachu or Eevee before she even says thank you.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "pikachu-collector-riolu",
+        "wants": {
+         "label": "a Pikachu or an Eevee",
+         "species": [
+          "pikachu",
+          "eevee"
+         ]
+        },
+        "gives": {
+         "marks": [],
+         "species": "riolu",
+         "nature": "jolly",
+         "quirk": "gentle",
+         "ot": "Pippa Lune",
+         "why": "My daughter loved them. She's grown. I miss the noise."
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Scyther.",
+     "success": {
+      "text": "Pippa hugs your Pikachu or Eevee before she even says thank you.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "pikachu-collector-scyther",
+        "wants": {
+         "label": "a Pikachu or an Eevee",
+         "species": [
+          "pikachu",
+          "eevee"
+         ]
+        },
+        "gives": {
+         "marks": [],
+         "species": "scyther",
+         "nature": "adamant",
+         "quirk": "show-off",
+         "ot": "Pippa Lune",
+         "why": "My daughter loved them. She's grown. I miss the noise."
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Larvitar.",
+     "success": {
+      "text": "Pippa hugs your Pikachu or Eevee before she even says thank you.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "pikachu-collector-larvitar",
+        "wants": {
+         "label": "a Pikachu or an Eevee",
+         "species": [
+          "pikachu",
+          "eevee"
+         ]
+        },
+        "gives": {
+         "marks": [],
+         "species": "larvitar",
+         "nature": "careful",
+         "quirk": "collector",
+         "ot": "Pippa Lune",
+         "why": "My daughter loved them. She's grown. I miss the noise."
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "None.",
+     "success": {
+      "text": "\"That's alright.\" She puts the Balls away. \"They'll keep me company.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "red-collector",
+   "name": "The Red Collector",
+   "group": "Trades",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#381810",
+    "effect": "fire"
+   },
+   "intro": "A red door, a red coat, red roses. Rudy Vermilion: \"Everything I own is red. Everything. Trade me a red one, and take a Fire-type.\"",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Rudy Vermilion looks over both cards once more, then nods. \"Fair is fair.\" The swap is made gently, hand to hand.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "red-collector",
+        "pool": "red-collector"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask why.",
+     "success": {
+      "text": "Rudy Vermilion: \"My house is red. My Pokémon are red. I'm happy. Don't ask.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "red-collector"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No thanks.",
+     "success": {
+      "text": "\"Another time, maybe.\" Rudy Vermilion doesn't push.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "red-collector-looks",
+     "when": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 4,
+       "who": "any"
+      }
+     ],
+     "notice": "One of your Pokémon, one you have been through everything with, looks up at you, and waits.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "It stays.",
+       "success": {
+        "text": "You rest a hand on it. \"I'm sorry. Not this one.\" Rudy Vermilion smiles. \"I'd have said the same.\"",
+        "effects": []
+       }
+      },
+      {
+       "label": "It's okay. Go.",
+       "success": {
+        "text": "You nod to it. It looks at you a long moment, then goes. The swap is made, and it does not look back until the very last step.",
+        "effects": [
+         {
+          "kind": "honestTrade",
+          "id": "red-collector",
+          "pool": "red-collector"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "water-fan-swap",
+   "name": "The Water Fan",
+   "group": "Trades",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "effect": "rain"
+   },
+   "intro": "A woman in waders, knee-deep in a half-dug hole. Marée: \"Water is life! Trade me a Water-type and I'll find you a Dragon.\"",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Marée looks over both cards once more, then nods. \"Fair is fair.\" The swap is made gently, hand to hand.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "water-fan-swap",
+        "pool": "water-fan-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask why.",
+     "success": {
+      "text": "Marée: \"I'm building a pond. A big one.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "water-fan-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No thanks.",
+     "success": {
+      "text": "\"Another time, maybe.\" Marée doesn't push.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "water-fan-swap-looks",
+     "when": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 4,
+       "who": "any"
+      }
+     ],
+     "notice": "One of your Pokémon, one you have been through everything with, looks up at you, and waits.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "It stays.",
+       "success": {
+        "text": "You rest a hand on it. \"I'm sorry. Not this one.\" Marée smiles. \"I'd have said the same.\"",
+        "effects": []
+       }
+      },
+      {
+       "label": "It's okay. Go.",
+       "success": {
+        "text": "You nod to it. It looks at you a long moment, then goes. The swap is made, and it does not look back until the very last step.",
+        "effects": [
+         {
+          "kind": "honestTrade",
+          "id": "water-fan-swap",
+          "pool": "water-fan-swap"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "offer-you-cant-refuse",
+   "name": "An Offer You Can't Refuse",
+   "group": "Trades",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "effect": "glint"
+   },
+   "intro": "A boy in a velvet suit, a butler holding his wallet. Montgomery IV points at your team. \"I'll pay a fortune for that one!\" The offer, in full: ₽5,000.",
+   "choices": [
+    {
+     "label": "Ask my Pokémon.",
+     "success": {
+      "text": "You kneel and ask it, honestly. It thinks about the velvet and the butler and the fortune, and shrugs: it would go. Montgomery: \"Excellent!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rich-kid-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "offer-you-cant-refuse"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sell.",
+     "success": {
+      "text": "The butler counts out ₽5,000 in crisp notes. Montgomery hugs your Pokémon too hard. It puts up with it.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "any Pokémon",
+         "species": []
+        }
+       },
+       {
+        "kind": "money",
+        "amount": 5000
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Everything has a price,\" Montgomery says. The butler, behind him, gives you the smallest nod.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rich-kid-bond",
+     "when": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 4,
+       "who": "lead"
+      }
+     ],
+     "notice": "Your lead hides behind your legs. Montgomery: \"...Oh. It likes you. That's fine. I didn't know that was a thing.\"",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Sell.",
+       "success": {
+        "text": "The money is counted out. Your Pokémon looks back at you the whole way to the carriage. People who saw it will talk.",
+        "effects": [
+         {
+          "kind": "tradeAway",
+          "want": {
+           "label": "any Pokémon",
+           "species": []
+          }
+         },
+         {
+          "kind": "money",
+          "amount": 5000
+         },
+         {
+          "kind": "flag",
+          "key": "rep-lost",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "swap-quirky",
+   "name": "The Collector's Swap",
+   "group": "Trades",
+   "stop": "trade",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2b2230",
+    "effect": "none"
+   },
+   "intro": "Hesper, a collector with a ledger of histories: \"This one has a history. It's been in a flood.\" The card lists its marks: survived a flood; raised by a ferryman.",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Hesper writes your name under the ferryman's in the ledger. \"It's seen a lot of water. Show it some land.\"",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "swap-quirky",
+        "wants": {
+         "label": "any Pokémon",
+         "species": []
+        },
+        "gives": {
+         "marks": [
+          "survived a flood",
+          "raised by a ferryman"
+         ],
+         "species": "lotad",
+         "nature": "calm",
+         "quirk": "old",
+         "ot": "Hesper",
+         "why": "It's been passed hand to hand since the flood. It should stay somewhere."
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read its history.",
+     "success": {
+      "text": "The ledger: born on a marsh, raised on a ferry by an old man called Haddon, swept off in the great flood, found three days later sitting on a floating door.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "swap-quirky"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Hesper closes the ledger gently. \"Its story will keep.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "swap-quirky-memory",
+   "name": "It Remembers the Ferryman",
+   "group": "Trades",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "trade-swap-quirky",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "bondLevel",
+     "atLeast": 5,
+     "who": {
+      "species": [
+       "lotad",
+       "lombre",
+       "ludicolo"
+      ]
+     }
+    }
+   ],
+   "intro": "At a river crossing, the Pokémon from the flood stops dead. A raft, an old man poling it. It runs to the bank and calls, and calls. The old man waves his hat.",
+   "choices": [
+    {
+     "label": "Wave back.",
+     "success": {
+      "text": "Old Haddon, the ferryman, poles over and holds its face in his hands. \"There you are. There you are.\" He looks at you. \"Thank you for keeping it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ferryman-remembered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-altar-swaps",
+   "name": "The Altar of Swaps",
+   "group": "Trades",
+   "stop": "trade",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c2a",
+    "effect": "float"
+   },
+   "intro": "A stone altar with three Poké Balls in three hollows, each with a card. Words cut in the stone: LEAVE ONE OF YOURS. TAKE ONE OF MINE. WE KEEP IT FAIR.",
+   "choices": [
+    {
+     "label": "Swap.",
+     "success": {
+      "text": "You step up to the altar. The three cards turn face-up on their own.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-altar-swaps-pick"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look at all three.",
+     "success": {
+      "text": "Three Pokémon, three cards: level, nature, history, all shown. Each one looks back at you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-altar-swaps-pick"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "The altar keeps its three. The cards turn face-down again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "group": "Trades",
+   "callback": false,
+   "id": "rk-altar-swaps-pick",
+   "name": "The Altar of Swaps",
+   "intro": "Three hollows, three cards face-up: one from the forest, one from the mountains, one from the shore. The stone waits.",
+   "choices": [
+    {
+     "label": "The forest one.",
+     "success": {
+      "text": "You set yours in the hollow. The forest Pokémon steps out of the stone as if it had always been yours.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "rk-altar-forest",
+        "pool": "forest-grove"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The mountain one.",
+     "success": {
+      "text": "You set yours in the hollow. The mountain Pokémon shakes rock dust from itself and steps out.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "rk-altar-mountain",
+        "pool": "mountain-mine"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The shore one.",
+     "success": {
+      "text": "You set yours in the hollow. The shore Pokémon steps out smelling of salt.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "rk-altar-shore",
+        "pool": "coastal-harbour"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "The cards turn face-down. The altar is patient.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-draft-pool",
+   "name": "The Draft Pool",
+   "group": "Trades",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#142a2a",
+    "effect": "sparkle"
+   },
+   "intro": "Five Pokémon behind a rope, all looking for a trainer. A sign: TAKE ONE. THE OTHERS GO TO THE NEXT TRAINER THROUGH. Every card is pinned to the rope.",
+   "choices": [
+    {
+     "label": "Look at the first three.",
+     "success": {
+      "text": "Three cards on the rope, three hopeful faces.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-draft-pool-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look at the other two.",
+     "success": {
+      "text": "Two cards at the end of the rope.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-draft-pool-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "None.",
+     "success": {
+      "text": "You leave them for the next trainer through. One of them watches you go.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "group": "Trades",
+   "callback": false,
+   "id": "rk-draft-pool-a",
+   "name": "The Draft Pool",
+   "intro": "The first three: a forest one, a mountain one, a shore one. Each card is honest.",
+   "choices": [
+    {
+     "label": "The forest one.",
+     "success": {
+      "text": "It ducks under the rope and sits on your foot. The others wave it off.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "draft-forest",
+        "pool": "forest-grove",
+        "gift": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "The mountain one.",
+     "success": {
+      "text": "It steps over the rope like it was never there.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "draft-mountain",
+        "pool": "mountain-mine",
+        "gift": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "The shore one.",
+     "success": {
+      "text": "It slides under the rope and shakes itself dry all over you.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "draft-shore",
+        "pool": "coastal-harbour",
+        "gift": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "None.",
+     "success": {
+      "text": "You leave the rope as you found it.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "group": "Trades",
+   "callback": false,
+   "id": "rk-draft-pool-b",
+   "name": "The Draft Pool",
+   "intro": "The other two: one from the snow, one from the farms. Their cards hang a little lower.",
+   "choices": [
+    {
+     "label": "The snow one.",
+     "success": {
+      "text": "It shivers once, then follows you, already warmer.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "draft-snow",
+        "pool": "snow-ice",
+        "gift": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "The farm one.",
+     "success": {
+      "text": "It trots out, pleased with itself, and nudges your hand.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "draft-farm",
+        "pool": "farm-ranch",
+        "gift": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "None.",
+     "success": {
+      "text": "You leave the rope as you found it.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-free-pick-altar",
+   "name": "The Free Pick Altar",
+   "group": "Trades",
+   "stop": "shrine",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2014",
+    "effect": "glint"
+   },
+   "intro": "Three relics glow on a stone altar, red, blue and gold, each with its power cut beneath it. \"Take one. The others vanish.\"",
+   "choices": [
+    {
+     "label": "The Red Relic: hit harder.",
+     "success": {
+      "text": "Warmth in your fists. The other two relics fade like breath on glass.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-altar-red",
+        "name": "Red Relic",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.08
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Blue Relic: heal after fights.",
+     "success": {
+      "text": "A cool calm settles over the team. The other two fade.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-altar-blue",
+        "name": "Blue Relic",
+        "effects": [
+         {
+          "kind": "postBattleHeal",
+          "percent": 6
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Gold Relic: richer rewards.",
+     "success": {
+      "text": "The weight of wealth in your pocket. The other two fade.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-altar-gold",
+        "name": "Gold Relic",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.25
+         },
+         {
+          "kind": "rareItemWeight",
+          "value": 1.15
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "christmas-eve-gift-swap",
+   "name": "The Christmas Eve Swap",
+   "group": "Trades",
+   "rarity": "uncommon",
+   "gameEvent": "winter-festival",
+   "scene": {
+    "cast": [
+     "trainer.snow_worker_m"
+    ],
+    "tint": "#0c1a2c",
+    "effect": "snow"
+   },
+   "intro": "Snow, lanterns, and a figure in a long coat with a sack. \"Give me something, I'll give you something. Same tier, I promise.\" The tiers are chalked on the sack.",
+   "choices": [
+    {
+     "label": "Give a Common.",
+     "requires": [
+      {
+       "kind": "holdsAny",
+       "ids": [
+        "potion",
+        "poke-ball",
+        "oran-berry",
+        "pecha-berry",
+        "repel",
+        "antidote",
+        "parlyz-heal",
+        "awakening",
+        "escape-rope"
+       ],
+       "count": 1,
+       "label": "a Common item"
+      }
+     ],
+     "success": {
+      "text": "You hand over something small. The figure hands back a parcel in red paper. Inside: something just as good, and new.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "payItem",
+        "only": [
+         "potion",
+         "poke-ball",
+         "oran-berry",
+         "pecha-berry",
+         "repel",
+         "antidote",
+         "parlyz-heal",
+         "awakening",
+         "escape-rope"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "poke-ball",
+         "oran-berry",
+         "pecha-berry",
+         "repel",
+         "antidote",
+         "parlyz-heal",
+         "awakening",
+         "escape-rope"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give an Uncommon.",
+     "requires": [
+      {
+       "kind": "holdsAny",
+       "ids": [
+        "super-potion",
+        "great-ball",
+        "full-heal",
+        "sitrus-berry",
+        "ether",
+        "revive",
+        "heart-scale"
+       ],
+       "count": 1,
+       "label": "an Uncommon item"
+      }
+     ],
+     "success": {
+      "text": "Green paper, a gold ribbon. The figure tips their hat.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "payItem",
+        "only": [
+         "super-potion",
+         "great-ball",
+         "full-heal",
+         "sitrus-berry",
+         "ether",
+         "revive",
+         "heart-scale"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "super-potion",
+         "great-ball",
+         "full-heal",
+         "sitrus-berry",
+         "ether",
+         "revive",
+         "heart-scale"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give a Rare.",
+     "requires": [
+      {
+       "kind": "holdsAny",
+       "ids": [
+        "hyper-potion",
+        "ultra-ball",
+        "max-revive",
+        "pp-up",
+        "leftovers",
+        "focus-sash",
+        "scope-lens",
+        "expert-belt"
+       ],
+       "count": 1,
+       "label": "a Rare item"
+      }
+     ],
+     "success": {
+      "text": "Silver paper, and a card: \"Merry Christmas. Same tier, as promised.\"",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "payItem",
+        "only": [
+         "hyper-potion",
+         "ultra-ball",
+         "max-revive",
+         "pp-up",
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "expert-belt"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "hyper-potion",
+         "ultra-ball",
+         "max-revive",
+         "pp-up",
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "expert-belt"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just say Merry Christmas.",
+     "success": {
+      "text": "\"And to you.\" The figure hands you a sweet anyway, and is gone into the snow.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "global-trade",
+   "name": "The Global Trade Booth",
+   "group": "Trades",
+   "stop": "trade",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#102838",
+    "effect": "glint"
+   },
+   "intro": "A booth humming with a screen linked to trainers around the world. Every offer shows the trainer, the Pokémon's history and the reason for trading.",
+   "choices": [
+    {
+     "label": "Browse offers.",
+     "success": {
+      "text": "The screen fills: three offers from three corners of the world, every card complete.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "global-trade-offers"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Post my own.",
+     "success": {
+      "text": "You post your offer: what you would give, honestly marked. \"Replies usually come within a few stops,\" the screen says.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gts-posted",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "global-trade-reply",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "The screen dims to a slow world map, lights blinking where trainers are trading.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "group": "Trades",
+   "callback": false,
+   "id": "global-trade-offers",
+   "name": "The Global Trade Booth",
+   "intro": "Three offers on the screen, each with a trainer's name, a history and a reason.",
+   "choices": [
+    {
+     "label": "The first offer.",
+     "success": {
+      "text": "Accepted. A whirr, a flash, a Ball in the tray, still warm from the other side of the world.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "gts-1",
+        "pool": "global-trade"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The second offer.",
+     "success": {
+      "text": "Accepted. The tray opens on a Ball with a note taped to it.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "gts-2",
+        "pool": "global-trade"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The third offer.",
+     "success": {
+      "text": "Accepted. The screen shows the trainer waving.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "gts-3",
+        "pool": "global-trade"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "The offers stay up for the next trainer.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "group": "Trades",
+   "callback": false,
+   "id": "global-trade-reply",
+   "name": "A Reply from the Global Trade",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "gts-posted",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "A booth on the road pings as you pass: a reply to your offer, from a trainer far away. Their card is complete.",
+   "choices": [
+    {
+     "label": "Accept.",
+     "success": {
+      "text": "The trade goes through. A message comes with it: \"Look after mine. I'll look after yours.\"",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "gts-reply",
+        "pool": "global-trade"
+       },
+       {
+        "kind": "flag",
+        "key": "gts-posted",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline.",
+     "success": {
+      "text": "You decline politely. The trainer replies: \"No worries! Good luck out there.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gts-posted",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "barter-barge",
+   "name": "The Barter Barge",
+   "group": "Trades",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A flat barge piled with crates, and an old man on a stool. Old Quint: \"No coins. Two items, I hand one back.\" Both tiers chalked on the hull: two Common for one Uncommon.",
+   "choices": [
+    {
+     "label": "Trade two for one.",
+     "requires": [
+      {
+       "kind": "holdsAny",
+       "ids": [
+        "potion",
+        "poke-ball",
+        "oran-berry",
+        "pecha-berry",
+        "repel",
+        "antidote",
+        "parlyz-heal",
+        "awakening",
+        "escape-rope"
+       ],
+       "count": 2,
+       "label": "two Common items"
+      }
+     ],
+     "success": {
+      "text": "Quint weighs each in his palm, nods, and hands one back from a crate. \"Fair. The barge never takes a worse deal than it'd take itself.\"",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "payItem",
+        "only": [
+         "potion",
+         "poke-ball",
+         "oran-berry",
+         "pecha-berry",
+         "repel",
+         "antidote",
+         "parlyz-heal",
+         "awakening",
+         "escape-rope"
+        ],
+        "amount": 2
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "super-potion",
+         "great-ball",
+         "full-heal",
+         "sitrus-berry",
+         "ether",
+         "revive",
+         "heart-scale"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Quint goes back to his pipe. The barge drifts on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ghost-trader",
+   "name": "The Ghost Trader",
+   "group": "Trades",
+   "stop": "haunted",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#14102a",
+    "effect": "glint"
+   },
+   "intro": "A spectral figure behind a counter that is not quite there. The Ghost Trader: \"I deal in what you don't need. Give me something you love.\"",
+   "choices": [
+    {
+     "label": "What do you want?",
+     "success": {
+      "text": "\"The thing you reach for most. A Berry, worn smooth by your hand.\" It points at your bag. It knows exactly which.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ghost-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ghost-trader"
+       }
+      ]
+     }
+    },
+    {
+     "label": "What would you give?",
+     "success": {
+      "text": "\"Something rare. And the memory of what you gave me, to keep.\" It smiles. \"Loved things keep me here a little longer.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ghost-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ghost-trader"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"No one ever says yes the first time.\" It fades, counter and all.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "ghost-deal",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ghost-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Ghost Trader waits, hands folded.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Give it.",
+       "requires": [
+        {
+         "kind": "holdsAny",
+         "ids": [
+          "oran-berry",
+          "pecha-berry",
+          "cheri-berry",
+          "chesto-berry",
+          "rawst-berry",
+          "aspear-berry",
+          "persim-berry",
+          "leppa-berry",
+          "sitrus-berry",
+          "lum-berry"
+         ],
+         "count": 1,
+         "label": "a Berry"
+        }
+       ],
+       "success": {
+        "text": "You hand it over. The ghost holds it like something precious, and a Rare item is on the counter. You remember the Berry perfectly. You always will.",
+        "effects": [
+         {
+          "kind": "market",
+          "action": "payItem",
+          "only": [
+           "oran-berry",
+           "pecha-berry",
+           "cheri-berry",
+           "chesto-berry",
+           "rawst-berry",
+           "aspear-berry",
+           "persim-berry",
+           "leppa-berry",
+           "sitrus-berry",
+           "lum-berry"
+          ]
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "hyper-potion",
+           "ultra-ball",
+           "max-revive",
+           "pp-up",
+           "leftovers",
+           "focus-sash",
+           "scope-lens",
+           "expert-belt"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "ghost-traded",
+          "amount": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "No.",
+       "success": {
+        "text": "\"Keep it, then. Love it a little longer.\" It fades.",
+        "effects": []
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,4679 @@
+{
+ "catalogOverhaul": "legends",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "co-wre-ww-1",
+   "name": "The Harbour Wall",
+   "group": "Whole Run: The Weather War",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-weather",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ww-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ww-beat",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#000000",
+    "effect": "rain"
+   },
+   "intro": "THE HARBOUR WALL\n\nA woman on a harbour wall is measuring the tide with a stick. She has notches cut in it, one for every year.\n\n\"Four fingers higher than last year. Four. Nobody listens to a meteorologist until it is raining in their kitchen.\"",
+   "choices": [
+    {
+     "label": "HELP HER MEASURE",
+     "success": {
+      "text": "You hold the stick steady while she reads it. She writes the number in a notebook already full of numbers, and underlines it twice. \"Thank you. Now there are two of us who know.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-b1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-trust",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-measured",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You helped a meteorologist measure a tide that should not be that high.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "WALK ON",
+     "success": {
+      "text": "You walk on. Behind you, the sea comes over the harbour wall for the first time in living memory, and nobody is measuring it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-b1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-sea",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-ww-2",
+   "name": "The Changed Coast",
+   "group": "Whole Run: The Weather War",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-weather",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ww-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ww-beat",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.archie-gen6",
+     "boss.maxie-gen6"
+    ],
+    "tint": "#000000",
+    "effect": "rain"
+   },
+   "intro": "THE CHANGED COAST\n\nHalf of this town is in the sea now. The other half is cracked and dry where a river used to run. Archie is helping people carry furniture out of the water. Maxie is a street away, helping people dig a well. Each of them asks you for one small, reasonable favour.",
+   "choices": [
+    {
+     "label": "Carry Archie's crates to the boats.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "leadType",
+         "type": "water"
+        }
+       ],
+       "text": "Your Water-type swims the crates out two at a time. Archie laughs out loud. \"Now that is a partner.\" The tide is a little higher by evening.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "ww-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ww-sea",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "ww-archie",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Archie claps you on the back. \"The sea gives room to everyone, mate. Remember that.\" The tide is a little higher by evening.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-sea",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-archie",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help Maxie dig his well.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "leadType",
+         "type": "ground"
+        }
+       ],
+       "text": "Your Ground-type finds the water table in three swings. Maxie looks at it for a long time. \"Remarkable.\" The ground is a little drier by evening.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "ww-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ww-land",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "ww-maxie",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Maxie wipes his glasses. \"Land is what people stand on. Thank you.\" The ground is a little drier by evening.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-land",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-maxie",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the town the meteorologist's numbers.",
+     "success": {
+      "text": "You stand on a bench and read them out. Most people walk past. Three stop. One writes them down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-trust",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-ww-3",
+   "name": "The Dam",
+   "group": "Whole Run: The Weather War",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-weather",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ww-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ww-beat",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.archie-gen6",
+     "boss.maxie-gen6"
+    ],
+    "tint": "#000000",
+    "effect": "rain"
+   },
+   "intro": "THE DAM\n\nA dam above two towns. Open it, and the valley town floods to save the city below. Keep it shut, and the city's reservoir fails before the month is out. The lever is in your hand because nobody else would take it.",
+   "choices": [
+    {
+     "label": "Open the dam.",
+     "success": {
+      "text": "The valley town fills like a bowl. Everyone got out; you made sure of it. Nobody will live there again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-sea",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You opened the dam. The valley town is under water now.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it shut.",
+     "success": {
+      "text": "The city goes thirsty. Rationing, then queues, then the first fights over water. The valley town is safe.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-land",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You kept the dam shut. The city went thirsty.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "Get both of them into one room.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "ww-archie",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "ww-maxie",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "It takes a whole night. Archie and Maxie sit across a table from each other for the first time in years, and argue, and halfway through the argument they both stop, because they have said the same sentence. The dam opens halfway. Nobody is happy. Nobody drowns and nobody goes thirsty.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-trust",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "ww-third",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You got Archie and Maxie into one room, and the dam opened halfway.",
+        "importance": 90
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-ww-4",
+   "name": "The Orbs",
+   "group": "Whole Run: The Weather War",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-weather",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ww-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ww-beat",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "flag",
+     "key": "ww-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.steven-gen6"
+    ],
+    "tint": "#000000",
+    "effect": "none"
+   },
+   "intro": "THE ORBS\n\nSteven has two stones on a cloth in front of him: one blue, one red, both warm. \"They are calling to something. Two somethings. Archie and Maxie each want one, and each of them is half right about what will happen if the other gets theirs.\"",
+   "choices": [
+    {
+     "label": "Take the Blue Orb to Archie.",
+     "success": {
+      "text": "Archie holds it up to the light like a child. The rain does not stop for three days.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-sea",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the Red Orb to Maxie.",
+     "success": {
+      "text": "Maxie does not hold it up. He puts it in his coat and says nothing. The sun does not set properly for three days.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-land",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them both with Steven.",
+     "success": {
+      "text": "\"Thank you,\" Steven says. \"That was the hard one.\" He wraps them back up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-trust",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-steven",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-ww-5",
+   "name": "Where the Rain Meets the Sun",
+   "group": "Whole Run: The Weather War",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-weather",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ww-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ww-beat",
+     "atLeast": 4,
+     "atMost": 4
+    },
+    {
+     "kind": "flag",
+     "key": "ww-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.archie-gen6",
+     "boss.maxie-gen6"
+    ],
+    "tint": "#000000",
+    "effect": "rain"
+   },
+   "intro": "WHERE THE RAIN MEETS THE SUN\n\nA plain where a storm and a drought have met head on. Rain falls on one side of a line you could step over. On the other, the grass is burning. Aqua and Magma grunts are already fighting across it.",
+   "choices": [
+    {
+     "label": "Stop the Aqua side.",
+     "success": {
+      "text": "You wade into the rain.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "ww-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ww-sea",
+         "amount": 1
+        }
+       ],
+       "team": [
+        "sharpedo",
+        "crawdaunt",
+        "mightyena",
+        "walrein"
+       ],
+       "format": "doubles",
+       "name": "Team Aqua",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ww-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ww-land",
+         "amount": 1
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Stop the Magma side.",
+     "success": {
+      "text": "You walk into the heat.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "ww-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ww-land",
+         "amount": 1
+        }
+       ],
+       "team": [
+        "camerupt",
+        "torkoal",
+        "mightyena",
+        "claydol"
+       ],
+       "format": "doubles",
+       "name": "Team Magma",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ww-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ww-sea",
+         "amount": 1
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Stand on the line and stop both.",
+     "success": {
+      "text": "You stand on the line, rain on one shoulder and sun on the other.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "ww-beat",
+         "amount": 1
+        }
+       ],
+       "team": [
+        "sharpedo",
+        "camerupt",
+        "crawdaunt",
+        "torkoal",
+        "walrein",
+        "claydol"
+       ],
+       "format": "doubles",
+       "name": "Aqua and Magma",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ww-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ww-trust",
+         "amount": 2
+        },
+        {
+         "kind": "moment",
+         "text": "You stood on the line between the rain and the sun, and both sides stopped.",
+         "importance": 90
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-ww-6",
+   "name": "The Stolen Numbers",
+   "group": "Whole Run: The Weather War",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-weather",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ww-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ww-beat",
+     "atLeast": 5,
+     "atMost": 5
+    },
+    {
+     "kind": "flag",
+     "key": "ww-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.wallace-gen6"
+    ],
+    "tint": "#000000",
+    "effect": "none"
+   },
+   "intro": "THE STOLEN NUMBERS\n\nWallace shows you the morning paper. The meteorologist's measurements are on the front page, under Maxie's name. Nobody is listening to her now either; they are listening to him.",
+   "choices": [
+    {
+     "label": "Stand up for her in public.",
+     "success": {
+      "text": "You and Wallace go on the radio. Half the city believes you. She sends you a note with a single number on it: today's tide.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-trust",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go: at least people are listening.",
+     "success": {
+      "text": "People are listening. To the wrong man, for the wrong reasons, but listening.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-land",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-ww-7",
+   "name": "Two Gifts",
+   "group": "Whole Run: The Weather War",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-weather",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ww-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ww-beat",
+     "atLeast": 6,
+     "atMost": 6
+    },
+    {
+     "kind": "flag",
+     "key": "ww-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.archie-gen6",
+     "boss.maxie-gen6"
+    ],
+    "tint": "#000000",
+    "effect": "none"
+   },
+   "intro": "TWO GIFTS\n\nArchie and Maxie each come to you the same evening, separately, with the same offer: a Pokémon raised in the weather they want, and a place in the world they mean to make.",
+   "choices": [
+    {
+     "label": "Take Archie's Wailmer.",
+     "success": {
+      "text": "\"Room for everyone,\" Archie says again, and means it.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "wailmer"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-sea",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take Maxie's Numel.",
+     "success": {
+      "text": "\"Somewhere to stand,\" Maxie says, and means it.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "numel"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-land",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse both, and look up.",
+     "success": {
+      "text": "You refuse them both. That night you notice that the clouds above the city are moving in a circle, very high up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-sky",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-ww-8",
+   "name": "The Sky Pillar",
+   "group": "Whole Run: The Weather War",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-weather",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ww-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ww-beat",
+     "atLeast": 7,
+     "atMost": 7
+    },
+    {
+     "kind": "flag",
+     "key": "ww-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.steven-gen6"
+    ],
+    "pokemon": "rayquaza",
+    "tint": "#000000",
+    "effect": "sparkle"
+   },
+   "intro": "THE SKY PILLAR\n\nAt the top of a tower older than either of them, something long and green is asleep in the wind. Steven, out of breath: \"The third one. It stops them. It has always stopped them. It only has to be woken.\"",
+   "choices": [
+    {
+     "label": "Wake it.",
+     "success": {
+      "text": "You shout into the wind. It opens one eye. It does not move yet. But it is awake now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-sky",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You woke Rayquaza at the top of the Sky Pillar.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it sleep.",
+     "success": {
+      "text": "You leave it sleeping. Whatever happens next, it will happen without it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-ww-9",
+   "name": "The Last Measurement",
+   "group": "Whole Run: The Weather War",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-weather",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ww-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ww-beat",
+     "atLeast": 8,
+     "atMost": 8
+    },
+    {
+     "kind": "flag",
+     "key": "ww-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#100808",
+    "effect": "rain"
+   },
+   "intro": "THE LAST MEASUREMENT\n\nThe meteorologist is on the League steps with her stick. The water is over the first step. \"Tomorrow they both wake. I measured it.\"",
+   "choices": [
+    {
+     "label": "Measure it with her.",
+     "success": {
+      "text": "You hold the stick. She reads it, and writes it down, and does not underline it this time. \"Two of us still know.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-trust",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rest.",
+     "success": {
+      "text": "You sleep to the sound of rain on one side of the tent and silence on the other.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-beat",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-ww-10",
+   "name": "Both Wake",
+   "group": "Whole Run: The Weather War",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-weather",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ww-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ww-b1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "regionsLeft",
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "kyogre",
+    "tint": "#000000",
+    "effect": "rain"
+   },
+   "intro": "BOTH WAKE\n\nOut at sea something blue rises, and inland something red climbs out of a crater. The map floods and dries, turn by turn. Your job is to keep both from winning until the sky answers. Or to choose a side, and live in that world.",
+   "choices": [
+    {
+     "label": "Keep both from winning.",
+     "success": {
+      "text": "The arena floods. Then it dries. Then it floods.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "kyogre",
+        "groudon"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-wre-ww-end"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "ww-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ww-end-storm",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "The Long Storm: every weather at once",
+         "effects": [
+          {
+           "kind": "bossDamageTakenMultiplier",
+           "value": 1.1
+          }
+         ],
+         "until": "region"
+        }
+       ],
+       "rule": {
+        "surviveTurns": 8,
+        "weatherCycle": [
+         "rain",
+         "sun"
+        ]
+       }
+      }
+     }
+    },
+    {
+     "label": "Stand with the sea.",
+     "success": {
+      "text": "You turn on the red one.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "groudon"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ww-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ww-end-drowned",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "The Drowned World",
+         "effects": [
+          {
+           "kind": "typeDamageMultiplier",
+           "type": "water",
+           "value": 1.2
+          }
+         ],
+         "until": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "The Weather War: the Drowned World. The Champion fights in the rain.",
+         "importance": 100
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "ww-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ww-end-storm",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "The Long Storm: every weather at once",
+         "effects": [
+          {
+           "kind": "bossDamageTakenMultiplier",
+           "value": 1.1
+          }
+         ],
+         "until": "region"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stand with the land.",
+     "success": {
+      "text": "You turn on the blue one.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "kyogre"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ww-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ww-end-dry",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "The Dry World",
+         "effects": [
+          {
+           "kind": "typeDamageMultiplier",
+           "type": "ground",
+           "value": 1.2
+          }
+         ],
+         "until": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "The Weather War: the Dry World. The Champion fights in the sun.",
+         "importance": 100
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "ww-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ww-end-storm",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "The Long Storm: every weather at once",
+         "effects": [
+          {
+           "kind": "bossDamageTakenMultiplier",
+           "value": 1.1
+          }
+         ],
+         "until": "region"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-ww-end",
+   "name": "The Weather War: The Sky Answers",
+   "group": "Whole Run: The Weather War",
+   "room": true,
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "pokemon": "rayquaza",
+    "tint": "#202040",
+    "effect": "sparkle"
+   },
+   "intro": "You held. The rain and the sun are both still there, and so are you.",
+   "choices": [
+    {
+     "label": "Look up.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "ww-sky",
+       "atLeast": 2,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "ww-trust",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The sky answers. Something long and green comes down through the clouds, and both of them stop, and listen, and go back to sleep. Later, Archie and Maxie are seen building a sea wall together, arguing the whole time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-end-balance",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Balance: the weather holds",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 1.15
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "The Weather War: Balance. Both of them sleep.",
+        "importance": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold on.",
+     "success": {
+      "text": "Nobody comes. Neither of them sleeps. The Champion battle will be fought in every weather at once.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ww-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ww-end-storm",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The Long Storm: every weather at once",
+        "effects": [
+         {
+          "kind": "bossDamageTakenMultiplier",
+          "value": 1.1
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "The Weather War: the Long Storm.",
+        "importance": 100
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-mo-1",
+   "name": "What Are You For?",
+   "group": "Whole Run: The Made One",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-made",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mo-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "mo-beat",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mewtwo",
+    "tint": "#000000",
+    "effect": "flicker"
+   },
+   "intro": "WHAT ARE YOU FOR?\n\nA Pokémon you do not recognise is sitting by the road in a torn cloak, looking at its own hands. It asks one question, directly into your head.\n\nWhat are you for?",
+   "choices": [
+    {
+     "label": "ANSWER",
+     "success": {
+      "text": "You try. It listens to all of it, very still.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-b1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-mo-1-answer"
+       }
+      ]
+     }
+    },
+    {
+     "label": "SAY NOTHING",
+     "success": {
+      "text": "It waits. Then it gets up and walks away along the road, and you realise it is going the same way you are. It will decide what you are for by watching.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-b1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-watch",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-mo-1-answer",
+   "name": "What Are You For? (Answer)",
+   "group": "Whole Run: The Made One",
+   "room": true,
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "pokemon": "mewtwo",
+    "tint": "#000000",
+    "effect": "none"
+   },
+   "intro": "What are you for?",
+   "choices": [
+    {
+     "label": "\"For them.\" (your Pokémon)",
+     "success": {
+      "text": "It looks at your party, one by one, as if counting them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-kindness",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-purpose",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"For winning.\"",
+     "success": {
+      "text": "It nods slowly, as if that were a thing it already knew how to do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-tools",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I don't know yet.\"",
+     "success": {
+      "text": "Something in its face changes. It is the first answer that has sounded like its own.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-purpose",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-mo-2",
+   "name": "The Healed Town",
+   "group": "Whole Run: The Made One",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-made",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mo-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "mo-beat",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mewtwo",
+    "tint": "#000000",
+    "effect": "none"
+   },
+   "intro": "THE HEALED TOWN\n\nEvery Pokémon in this town woke up healed this morning, even the old ones, even the ones that were not sick. Nobody saw who did it. You know who did it. It is watching you from a roof, to see what you do when one of yours goes down.\n\nOne of yours goes down, in a training spar, badly.",
+   "choices": [
+    {
+     "label": "Carry it to the Pokémon Center yourself.",
+     "success": {
+      "text": "You carry it the whole way. On the roof, something tilts its head.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-kindness",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Swap it out and keep going.",
+     "success": {
+      "text": "You swap it out. On the roof, something learns that this is what you do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-tools",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-mo-3",
+   "name": "Before It Understands",
+   "group": "Whole Run: The Made One",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-made",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mo-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "mo-beat",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "pokemon": "mewtwo",
+    "tint": "#000000",
+    "effect": "flicker"
+   },
+   "intro": "BEFORE IT UNDERSTANDS\n\nA geneticist who has stopped sleeping finds you. He has not shaved in weeks.\n\n\"Please. Help me bring it back. Before it understands what was done to it.\"\n\nIt is standing right there. It has heard every word.",
+   "choices": [
+    {
+     "label": "Help him.",
+     "success": {
+      "text": "It lets itself be led a little way. Then it stops, and looks at you, and is gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-leash",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse him.",
+     "success": {
+      "text": "The geneticist sits down in the road. The Made One walks a little closer to you than before.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-purpose",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask it what it wants.",
+     "success": {
+      "text": "Nobody has asked it that. It does not answer. But it stays to think about it, which is an answer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-purpose",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You asked the Made One what it wanted. Nobody had before.",
+        "importance": 90
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-mo-4",
+   "name": "The Mansion Notes",
+   "group": "Whole Run: The Made One",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-made",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mo-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "mo-beat",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "flag",
+     "key": "mo-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.blaine"
+    ],
+    "tint": "#000000",
+    "effect": "fire"
+   },
+   "intro": "THE MANSION NOTES\n\nBlaine has the old notes from the burned mansion in a tin box. \"I was there. I am not proud of it. These say what it is, and what it was made from, and how to make it obey.\"",
+   "choices": [
+    {
+     "label": "Burn them.",
+     "success": {
+      "text": "Blaine strikes the match himself. \"Good,\" he says, and his voice cracks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-leash",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-kindness",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep them.",
+     "success": {
+      "text": "You keep them. They are heavier than paper should be.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-leash",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give them to it.",
+     "success": {
+      "text": "It reads all of them in a second, standing very still, and hands them back. It knows now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-purpose",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-mo-5",
+   "name": "The Collection",
+   "group": "Whole Run: The Made One",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-made",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mo-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "mo-beat",
+     "atLeast": 4,
+     "atMost": 4
+    },
+    {
+     "kind": "flag",
+     "key": "mo-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.giovanni-rocketboss"
+    ],
+    "pokemon": "mewtwo",
+    "tint": "#000000",
+    "effect": "shake"
+   },
+   "intro": "THE COLLECTION\n\nGiovanni's people come to collect it, with nets that hum and a truck with no windows. It has backed against a wall. It could flatten all of them, and it is looking at you to see if it should.",
+   "choices": [
+    {
+     "label": "Stand in front of it.",
+     "success": {
+      "text": "You stand in front of it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "mo-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mo-leash",
+         "amount": 1
+        }
+       ],
+       "format": "doubles",
+       "name": "Team Rocket",
+       "bossId": "giovanni",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "mo-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mo-leash",
+         "amount": -1
+        },
+        {
+         "kind": "flag",
+         "key": "mo-kindness",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You stood between the Made One and Team Rocket.",
+         "importance": 90
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Nod to it.",
+     "success": {
+      "text": "It flattens all of them. It is very quick, and very quiet, and afterwards it looks at you to see if that was right.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-tools",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-leash",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-mo-6",
+   "name": "Who Called Them",
+   "group": "Whole Run: The Made One",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-made",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mo-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "mo-beat",
+     "atLeast": 5,
+     "atMost": 5
+    },
+    {
+     "kind": "flag",
+     "key": "mo-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#000000",
+    "effect": "none"
+   },
+   "intro": "WHO CALLED THEM\n\nIt was the geneticist who called Giovanni. He tells you himself, crying. He wanted it safe. He wanted it back. He did not know which.",
+   "choices": [
+    {
+     "label": "Forgive him.",
+     "success": {
+      "text": "He did not expect that. Neither did it. It watches you put a hand on his shoulder.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-kindness",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell it the truth about him.",
+     "success": {
+      "text": "It goes and stands in front of the geneticist for a long time. Then it leaves him alone, which is a choice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-purpose",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-mo-7",
+   "name": "A Fair Price",
+   "group": "Whole Run: The Made One",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-made",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mo-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "mo-beat",
+     "atLeast": 6,
+     "atMost": 6
+    },
+    {
+     "kind": "flag",
+     "key": "mo-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.giovanni-rocketboss"
+    ],
+    "tint": "#000000",
+    "effect": "none"
+   },
+   "intro": "A FAIR PRICE\n\nGiovanni comes himself, with a case. \"You have been taking care of my property. I will pay you for your trouble. Generously.\"",
+   "choices": [
+    {
+     "label": "Take the money.",
+     "success": {
+      "text": "₽20,000. He does not count it out; he knows you will. Somewhere, something hears the case close.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 20000
+       },
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-leash",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "mo-tools",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-sold",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It isn't yours.\"",
+     "success": {
+      "text": "\"Everything is mine eventually,\" Giovanni says, and leaves the case on the ground for you to think about. You leave it there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-purpose",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-mo-8",
+   "name": "The Child",
+   "group": "Whole Run: The Made One",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-made",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mo-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "mo-beat",
+     "atLeast": 7,
+     "atMost": 7
+    },
+    {
+     "kind": "flag",
+     "key": "mo-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#000000",
+    "effect": "flicker"
+   },
+   "intro": "THE CHILD\n\nA child who is not quite there walks beside you for an afternoon. She flickers at the edges. She is a recording the geneticist made of his daughter, and the Made One was made to bring her back, and could not, and does not know that yet.",
+   "choices": [
+    {
+     "label": "Tell it.",
+     "success": {
+      "text": "It already half knew. It sits down where the child was standing and does not get up until dark.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-purpose",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Spare it.",
+     "success": {
+      "text": "You say nothing. It is kinder today. It will not be kinder tomorrow.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-kindness",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-mo-9",
+   "name": "By the Fire",
+   "group": "Whole Run: The Made One",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-made",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mo-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "mo-beat",
+     "atLeast": 8,
+     "atMost": 8
+    },
+    {
+     "kind": "flag",
+     "key": "mo-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mewtwo",
+    "tint": "#100808",
+    "effect": "fire"
+   },
+   "intro": "BY THE FIRE\n\nThe night before the League it comes and sits at your fire for the first time. Your Pokémon make room.",
+   "choices": [
+    {
+     "label": "Ask it: what are you for?",
+     "success": {
+      "text": "It thinks about it for a long time. It does not answer. It does not need to; it is sitting at your fire.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-purpose",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just sit.",
+     "success": {
+      "text": "Nobody says anything. Your Pokémon fall asleep against it, one by one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-kindness",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-mo-10",
+   "name": "The Switch",
+   "group": "Whole Run: The Made One",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-made",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mo-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "mo-b1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "regionsLeft",
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.giovanni-rocketboss"
+    ],
+    "pokemon": "mewtwo",
+    "tint": "#000000",
+    "effect": "flicker"
+   },
+   "intro": "THE SWITCH\n\nIts makers arrive at the League with a way to switch it off: a small grey box, and a man who knows how to use it. It looks at you, and asks the first question again.\n\nWhat are you for?",
+   "choices": [
+    {
+     "label": "Stand between it and them.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "mo-tools",
+       "atLeast": 0,
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "You stand between it and its makers.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "mo-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mo-end-obeys",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "It Obeys: the Champion has a new Pokémon",
+         "effects": [
+          {
+           "kind": "bossDamageTakenMultiplier",
+           "value": 1.1
+          }
+         ],
+         "until": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "The Made One: It Obeys. It was taken back.",
+         "importance": 100
+        }
+       ],
+       "format": "doubles",
+       "name": "Its Makers",
+       "bossId": "giovanni",
+       "size": 6,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-wre-mo-end"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Face it.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "mo-tools",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "It has watched you use your Pokémon as tools all run. It learned. It is right to be angry.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mewtwo"
+       ],
+       "types": [],
+       "levelBonus": 6,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "mo-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mo-end-against",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "The Made One decided against you. You beat it, and it was still right.",
+         "importance": 100
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "mo-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mo-end-against",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "It Decides Against Us",
+         "effects": [
+          {
+           "kind": "bossDamageTakenMultiplier",
+           "value": 1.1
+          }
+         ],
+         "until": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "The Made One decided against you.",
+         "importance": 100
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-mo-end",
+   "name": "The Made One: Its Answer",
+   "group": "Whole Run: The Made One",
+   "room": true,
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "pokemon": "mewtwo",
+    "tint": "#202030",
+    "effect": "none"
+   },
+   "intro": "Its makers are gone. The grey box is broken on the steps. It is waiting to see what you will do, and what it will do.",
+   "choices": [
+    {
+     "label": "Let it choose.",
+     "success": {
+      "text": "It chooses. It leaves, free, and at the top of the steps it turns and nods once.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-end-chooses",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "It Chooses",
+        "effects": [
+         {
+          "kind": "bossDamageMultiplier",
+          "value": 1.1
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "The Made One: It Chooses. It nodded once and left.",
+        "importance": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask it to stay.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "mo-kindness",
+       "atLeast": 3,
+       "atMost": 99
+      },
+      {
+       "kind": "partySize",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "It stays. It never asks the question again.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "mewtwo"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-end-stays",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Made One: It Stays.",
+        "importance": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them have it.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "mo-leash",
+       "atLeast": 4,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You step aside. It looks at you once, and goes with them. The Champion has a new Pokémon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mo-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mo-end-obeys",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "It Obeys: the Champion has a new Pokémon",
+        "effects": [
+         {
+          "kind": "bossDamageTakenMultiplier",
+          "value": 1.1
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "The Made One: It Obeys.",
+        "importance": 100
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-sd-1",
+   "name": "The Paper Tag",
+   "group": "Whole Run: The Seven Days",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-seven",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sd-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "sd-beat",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "jirachi",
+    "tint": "#000010",
+    "effect": "sparkle"
+   },
+   "intro": "THE PAPER TAG\n\nA comet is overhead. A child hands you a paper tag on a string. \"You write a wish on it. You only get one. It is awake for seven days.\"",
+   "choices": [
+    {
+     "label": "WRITE ONE",
+     "success": {
+      "text": "You write it and tie it to the festival tree. In the morning your Pokémon are all a little stronger. In the next town, a girl is crying because the race she trained all year for was won by someone else.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "sd-b1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-wishes",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-cost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-paid-runner",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "KEEP IT BLANK",
+     "success": {
+      "text": "You fold the blank tag and keep it in your pocket. The child looks at you as if you have done something very strange, and very good.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sd-b1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-blank",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-sd-2",
+   "name": "The Second Day",
+   "group": "Whole Run: The Seven Days",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-seven",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sd-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "sd-beat",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "remembers": [
+    {
+     "id": "cost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sd-wishes",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "You think, for a moment, about the last person whose wish did not come true so that yours could."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "jirachi",
+    "tint": "#000010",
+    "effect": "sparkle"
+   },
+   "intro": "THE SECOND DAY\n\nThe second day. A woman at a Pokémon Center tells you, without being asked, that she has been praying for a Revive for her Lillipup for a week. Then the comet passes over, and a Revive is in your bag, not hers.",
+   "choices": [
+    {
+     "label": "Make the wish.",
+     "success": {
+      "text": "You keep it. Later you see her leave the Center alone.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "max-revive",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-wishes",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-cost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-paid-lillipup",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it pass.",
+     "success": {
+      "text": "You give her the Revive you found. She cannot speak.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-kept",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-sd-3",
+   "name": "Two Wishes",
+   "group": "Whole Run: The Seven Days",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-seven",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sd-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "sd-beat",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "jirachi",
+    "tint": "#000010",
+    "effect": "sparkle"
+   },
+   "intro": "TWO WISHES\n\nTwo people have wished for opposite things. A fisherman wished for rain for his river. A farmer, a valley away, wished for a dry harvest. You are holding the tag that decides it, because somehow it ended up in your pocket.",
+   "choices": [
+    {
+     "label": "Give it to the fisherman.",
+     "success": {
+      "text": "It rains. The river fills. The farmer's harvest rots in the field.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-cost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-paid-farmer",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it to the farmer.",
+     "success": {
+      "text": "It stays dry. The harvest comes in. The river is a line of stones.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-cost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-paid-fisherman",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tear it in half.",
+     "success": {
+      "text": "You tear the tag. It rains a little, and dries a little, and neither of them gets what they wished for, and neither of them loses everything.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-kept",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-sd-4",
+   "name": "The Astronomer",
+   "group": "Whole Run: The Seven Days",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-seven",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sd-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "sd-beat",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "flag",
+     "key": "sd-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#000010",
+    "effect": "sparkle"
+   },
+   "intro": "THE ASTRONOMER\n\nA travelling astronomer has a telescope set up on a hill. \"Seven days. It wakes for seven days every thousand years and grants what it is asked. But a wish is not made of nothing. It is made of someone else's.\"",
+   "choices": [
+    {
+     "label": "\"Whose?\"",
+     "success": {
+      "text": "\"Whoever was next in line.\" He shows you the comet's tail through the lens. It is made of paper tags.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Then I won't wish.\"",
+     "success": {
+      "text": "\"Most people say that,\" he says kindly. \"On the first day.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-kept",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-sd-5",
+   "name": "The Festival",
+   "group": "Whole Run: The Seven Days",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-seven",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sd-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "sd-beat",
+     "atLeast": 4,
+     "atMost": 4
+    },
+    {
+     "kind": "flag",
+     "key": "sd-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "jirachi",
+    "tint": "#000010",
+    "effect": "confetti"
+   },
+   "intro": "THE FESTIVAL\n\nThe fifth day is a festival, and Jirachi comes down to it. It wants to play. It is very small and very strong and has not played with anyone for a thousand years.",
+   "choices": [
+    {
+     "label": "Play with it.",
+     "success": {
+      "text": "It giggles the whole time.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "jirachi"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "sd-beat",
+         "amount": 1
+        },
+        {
+         "kind": "friendship",
+         "amount": 10,
+         "who": "party"
+        },
+        {
+         "kind": "moment",
+         "text": "Jirachi played with your party at the festival.",
+         "importance": 90
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "sd-beat",
+         "amount": 1
+        }
+       ],
+       "rule": {
+        "noItems": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Watch the lanterns with it.",
+     "success": {
+      "text": "It sits on your shoulder and watches the lanterns go up. Every lantern has a wish on it. It reads all of them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-sd-6",
+   "name": "Your Rival's Wish",
+   "group": "Whole Run: The Seven Days",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-seven",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sd-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "sd-beat",
+     "atLeast": 5,
+     "atMost": 5
+    },
+    {
+     "kind": "flag",
+     "key": "sd-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "remembers": [
+    {
+     "id": "cost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sd-wishes",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "You think, for a moment, about the last person whose wish did not come true so that yours could."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "jirachi",
+    "tint": "#000010",
+    "effect": "sparkle"
+   },
+   "intro": "YOUR RIVAL'S WISH\n\nYour rival comes to you with a confession: they found a tag with your handwriting on it and made a wish with it. Now they want you to have one back. The comet is right overhead.",
+   "choices": [
+    {
+     "label": "Make the wish.",
+     "success": {
+      "text": "You wish. The next battle against your rival is easier than it should be, and they look at you strangely afterwards.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "A wish on your rival",
+        "effects": [
+         {
+          "kind": "rivalLevelOffset",
+          "value": -5
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-wishes",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-cost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-paid-rival",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it pass.",
+     "success": {
+      "text": "You tell them to keep it. They look relieved, and then ashamed of being relieved.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-kept",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-sd-7",
+   "name": "The Skipped Road",
+   "group": "Whole Run: The Seven Days",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-seven",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sd-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "sd-beat",
+     "atLeast": 6,
+     "atMost": 6
+    },
+    {
+     "kind": "flag",
+     "key": "sd-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    }
+   ],
+   "remembers": [
+    {
+     "id": "cost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sd-wishes",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "You think, for a moment, about the last person whose wish did not come true so that yours could."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "jirachi",
+    "tint": "#000010",
+    "effect": "sparkle"
+   },
+   "intro": "THE SKIPPED ROAD\n\nThe seventh-to-last night. A tag on the road reads, in your own writing, \"I wish I were further along.\" You do not remember writing it.",
+   "choices": [
+    {
+     "label": "Make the wish.",
+     "success": {
+      "text": "The road folds. You are further along. Somewhere behind you, a family's wagon breaks down on that same road, and no one comes.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-wishes",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-cost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-paid-wagon",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it pass.",
+     "success": {
+      "text": "You leave the tag on the road. Someone else will find it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-kept",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-sd-8",
+   "name": "The Ones Who Paid",
+   "group": "Whole Run: The Seven Days",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-seven",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sd-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "sd-beat",
+     "atLeast": 7,
+     "atMost": 7
+    },
+    {
+     "kind": "flag",
+     "key": "sd-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    }
+   ],
+   "remembers": [
+    {
+     "id": "none",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sd-cost",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "THE ONES WHO PAID\n\nYou walk back along the road you came by. Everyone you met is still there. Nobody paid for anything of yours."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#000010",
+    "effect": "sparkle"
+   },
+   "intro": "THE ONES WHO PAID\n\nYou walk back along the road you came by, and you see them: the girl who lost the race, the woman with the Lillipup, the ones whose wishes did not come true so that yours could. They do not know it was you. You know.",
+   "choices": [
+    {
+     "label": "Tell them.",
+     "success": {
+      "text": "Some of them are angry. One of them thanks you for telling them. That one is worse.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-kept",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-sd-9",
+   "name": "The Sixth Night",
+   "group": "Whole Run: The Seven Days",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-seven",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sd-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "sd-beat",
+     "atLeast": 8,
+     "atMost": 8
+    },
+    {
+     "kind": "flag",
+     "key": "sd-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "jirachi",
+    "tint": "#100808",
+    "effect": "fire"
+   },
+   "intro": "THE SIXTH NIGHT\n\nJirachi is asleep in your hat. Tomorrow is the seventh day. It is already yawning.",
+   "choices": [
+    {
+     "label": "Let it sleep.",
+     "success": {
+      "text": "You let it sleep. Your party sleeps around you like a wall.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sd-beat",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-sd-10",
+   "name": "The Seventh Night",
+   "group": "Whole Run: The Seven Days",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-seven",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sd-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "sd-b1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "regionsLeft",
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "jirachi",
+    "tint": "#000010",
+    "effect": "sparkle"
+   },
+   "intro": "THE SEVENTH NIGHT\n\nThere is one wish left in the world, and everybody you met is on the hill. Jirachi floats in the middle of them, very tired, and asks you who should have it.",
+   "choices": [
+    {
+     "label": "Hold out your blank tag.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "sd-blank",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sd-wishes",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Jirachi smiles. The only wish that costs nobody anything is one nobody else wanted: it gives you its own. Your whole party is made whole, and stronger, and nobody on the hill is any poorer.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "levels",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "sd-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-end-blank",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The Blank Tag: a wish that cost nobody",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.1
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "The Seven Days: the Blank Tag. A wish that cost nobody anything.",
+        "importance": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it to someone else.",
+     "success": {
+      "text": "You point at the girl who lost the race. She does not know why. Her wish comes true, and you will find out a region from now what it was.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sd-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-end-given",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Given Away",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 1.15
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "The Seven Days: Given Away.",
+        "importance": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it. Take all of it.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "sd-wishes",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You take it. You have had everything you asked for. When you look round, the hill is empty.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 5
+       },
+       {
+        "kind": "flag",
+        "key": "sd-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-end-seven",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Seven for One",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.15
+         },
+         {
+          "kind": "friendshipMultiplier",
+          "value": 0.7
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "The Seven Days: Seven for One. The hill was empty.",
+        "importance": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask it to remember you.",
+     "success": {
+      "text": "It is not a wish. It does not cost anyone anything. Jirachi yawns, and nods, and goes to sleep for a thousand years, and remembers you.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sd-end-goodnight",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Seven Days: Goodnight. Jirachi remembers you.",
+        "importance": 100
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-wf-1",
+   "name": "The Man Under the Tree",
+   "group": "Whole Run: The Weapon and the Flower",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-flower",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wf-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "wf-beat",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.az"
+    ],
+    "tint": "#000000",
+    "effect": "fog"
+   },
+   "intro": "THE MAN UNDER THE TREE\n\nA giant of a man is sitting under a tree far too small for him. He asks if you have seen a Floette with a red flower. He has been asking for three thousand years.",
+   "choices": [
+    {
+     "label": "SIT WITH HIM",
+     "success": {
+      "text": "You sit. He does not say anything else for an hour. Then he tells you her name. Then he gets up and walks the same road as you, a little behind.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-b1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-grief",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-sat",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You sat with a very tall, very old man under a small tree.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "KEEP WALKING",
+     "success": {
+      "text": "You keep walking. A while later you notice him on the road behind you, a little behind, always.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-b1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-wf-2",
+   "name": "The Garden",
+   "group": "Whole Run: The Weapon and the Flower",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-flower",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wf-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "wf-beat",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#000000",
+    "effect": "sparkle"
+   },
+   "intro": "THE GARDEN\n\nEvery flower in this valley bloomed overnight, all at once, around a black stone that hums. A man with a mane of red hair is buying the whole valley. Lysandre.\n\n\"Look at it. Perfect, for one morning. It cannot be shared; the moment it is shared, it is trampled.\"",
+   "choices": [
+    {
+     "label": "\"He has a point.\"",
+     "success": {
+      "text": "He smiles at you as if you were a student who had got the answer right.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-beauty",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Then don't share it. Leave it alone.\"",
+     "success": {
+      "text": "\"You understand nothing,\" he says, and walks away, and you think he is not sure.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help the old man search the flowers.",
+     "success": {
+      "text": "There is no Floette with a red flower. But there is a red petal, pressed into the black stone, three thousand years old.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-flower",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-wf-3",
+   "name": "What the Machine Eats",
+   "group": "Whole Run: The Weapon and the Flower",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-flower",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wf-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "wf-beat",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.az"
+    ],
+    "tint": "#000000",
+    "effect": "flicker"
+   },
+   "intro": "WHAT THE MACHINE EATS\n\nOne of your Pokémon is lost in this story: it goes into the black stone in the garden after a petal, and does not come out. The old man tells you, without being asked, that the machine could return it.\n\nThen he tells you what the machine eats.",
+   "choices": [
+    {
+     "label": "\"I want it back.\"",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "He nods. He wanted his back too.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "a Pokémon"
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-key",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-want",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "One of your Pokémon was lost in the black stone. You want it back.",
+        "importance": 95
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No machine.\"",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "He closes his eyes. \"No. No machine.\" It is the first time in three thousand years he has said it to someone else.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "a Pokémon"
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-grief",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-flower",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "One of your Pokémon was lost in the black stone. You would not feed the machine for it.",
+        "importance": 95
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull it out yourself.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "wf-sat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You reach into the stone up to the shoulder. It is very cold. Your Pokémon comes out with you, shaking. The old man stares at you as if you had done something impossible.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-flower",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-wf-4",
+   "name": "The Professor",
+   "group": "Whole Run: The Weapon and the Flower",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-flower",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wf-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "wf-beat",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "flag",
+     "key": "wf-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.sycamore"
+    ],
+    "tint": "#000000",
+    "effect": "none"
+   },
+   "intro": "THE PROFESSOR\n\nProfessor Sycamore has the history spread across three tables. \"A war. A king who loved a Pokémon. A machine that gave life, and then took it, from everyone at once. Lysandre is a friend of mine. I should have seen this.\"",
+   "choices": [
+    {
+     "label": "\"Help me find the key.\"",
+     "success": {
+      "text": "\"There is a key. Lysandre has the lock.\" He gives you the address of a café.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-key",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tell me about the king.\"",
+     "success": {
+      "text": "He tells you. When he is finished, the old man, who has been standing at the back of the room the whole time, has gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-grief",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-wf-5",
+   "name": "The Café",
+   "group": "Whole Run: The Weapon and the Flower",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-flower",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wf-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "wf-beat",
+     "atLeast": 4,
+     "atMost": 4
+    },
+    {
+     "kind": "flag",
+     "key": "wf-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#000000",
+    "effect": "fire"
+   },
+   "intro": "THE CAFÉ\n\nA red café, with a lift behind the counter that only goes down. Team Flare is guarding the key to the lock that Lysandre found.",
+   "choices": [
+    {
+     "label": "Take the key.",
+     "success": {
+      "text": "You go down.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "wf-beat",
+         "amount": 1
+        }
+       ],
+       "format": "doubles",
+       "name": "Team Flare",
+       "bossId": "lysandre",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "wf-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "wf-key",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "wf-key",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You took the key to the ultimate weapon from Team Flare.",
+         "importance": 90
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Let Lysandre explain.",
+     "success": {
+      "text": "He makes you tea. He explains. He is not a cultist. He is a man who loves the world and has concluded it cannot be shared. He is very persuasive.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-beauty",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-wf-6",
+   "name": "What He Did With It",
+   "group": "Whole Run: The Weapon and the Flower",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-flower",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wf-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "wf-beat",
+     "atLeast": 5,
+     "atMost": 5
+    },
+    {
+     "kind": "flag",
+     "key": "wf-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.az"
+    ],
+    "tint": "#000000",
+    "effect": "none"
+   },
+   "intro": "WHAT HE DID WITH IT\n\nThe old man tells you the last piece. He built the machine to bring her back, and it did. Then the war took his brother, and he used it again: as a weapon. It ended the war. She saw what it had taken, and left him.",
+   "choices": [
+    {
+     "label": "\"You are still allowed to grieve.\"",
+     "success": {
+      "text": "He looks at you for a long time, and something in his face lets go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-grief",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-flower",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You should have known.\"",
+     "success": {
+      "text": "\"Yes,\" he says. \"I should have.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-grief",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-wf-7",
+   "name": "The Seat Beside Him",
+   "group": "Whole Run: The Weapon and the Flower",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-flower",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wf-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "wf-beat",
+     "atLeast": 6,
+     "atMost": 6
+    },
+    {
+     "kind": "flag",
+     "key": "wf-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#000000",
+    "effect": "fire"
+   },
+   "intro": "THE SEAT BESIDE HIM\n\nLysandre offers you a seat beside him in the world that comes after. \"Not everyone. Just the ones who can see it. You can see it.\"",
+   "choices": [
+    {
+     "label": "Accept.",
+     "success": {
+      "text": "He is genuinely happy. It is the strangest thing you have seen all run.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-beauty",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "wf-seat",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "He is genuinely sad. \"Then you will be trampled with the rest.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-wf-8",
+   "name": "Behind the Weapon",
+   "group": "Whole Run: The Weapon and the Flower",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-flower",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wf-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "wf-beat",
+     "atLeast": 7,
+     "atMost": 7
+    },
+    {
+     "kind": "flag",
+     "key": "wf-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    }
+   ],
+   "remembers": [
+    {
+     "id": "found",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "wf-flower",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "At the edge of the field, very small, there is a Floette with a red flower. She is watching the old man. She has been watching him for a long time."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.diantha"
+    ],
+    "pokemon": "xerneas",
+    "tint": "#000000",
+    "effect": "sparkle"
+   },
+   "intro": "BEHIND THE WEAPON\n\nDiantha takes you to a field where a great tree stands on one side and a great cocoon on the other. \"This is what powers it. Life, and the end of life. Lysandre means to use both.\"",
+   "choices": [
+    {
+     "label": "Look for the Floette.",
+     "success": {
+      "text": "You look. If she is here, she is not ready to be found.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-flower",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay with Diantha.",
+     "success": {
+      "text": "She tells you she will be at the League tomorrow, whatever happens, and that she will remember who stood where.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-wf-9",
+   "name": "Still Walking",
+   "group": "Whole Run: The Weapon and the Flower",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-flower",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wf-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "wf-beat",
+     "atLeast": 8,
+     "atMost": 8
+    },
+    {
+     "kind": "flag",
+     "key": "wf-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.az"
+    ],
+    "tint": "#100808",
+    "effect": "fire"
+   },
+   "intro": "STILL WALKING\n\nThe night before the League, the old man sits at your fire for the first time. He does not ask about the Floette. He asks about your Pokémon, one by one, by name.",
+   "choices": [
+    {
+     "label": "Tell him.",
+     "success": {
+      "text": "You tell him. He listens to every one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-grief",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-wf-10",
+   "name": "The Weapon Is Charged",
+   "group": "Whole Run: The Weapon and the Flower",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-flower",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wf-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "wf-b1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "regionsLeft",
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lysandre",
+     "boss.az"
+    ],
+    "pokemon": "yveltal",
+    "tint": "#000000",
+    "effect": "fire"
+   },
+   "intro": "THE WEAPON IS CHARGED\n\nUnder the League the weapon is charged. Lysandre is waiting beside it, and the seat beside him is still empty. The old man asks you for the key. You are holding it.",
+   "choices": [
+    {
+     "label": "Face Lysandre.",
+     "success": {
+      "text": "\"You could have seen it,\" he says.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "wf-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "wf-end-beautiful",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "The Beautiful World: a silent, perfect garden",
+         "effects": [
+          {
+           "kind": "bossDamageTakenMultiplier",
+           "value": 1.15
+          }
+         ],
+         "until": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "The Weapon and the Flower: the Beautiful World. Lysandre won.",
+         "importance": 100
+        }
+       ],
+       "format": "doubles",
+       "name": "Lysandre",
+       "bossId": "lysandre",
+       "size": 6,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-wre-wf-end"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-wf-end",
+   "name": "The Weapon and the Flower: The Key",
+   "group": "Whole Run: The Weapon and the Flower",
+   "room": true,
+   "rarity": "epic",
+   "scene": {
+    "cast": [
+     "boss.az"
+    ],
+    "tint": "#202020",
+    "effect": "sparkle"
+   },
+   "intro": "Lysandre is beaten. The weapon is still charged. The old man holds out his hand for the key.",
+   "choices": [
+    {
+     "label": "Give him the key.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "wf-flower",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He breaks it over his knee. The weapon goes dark. At the edge of the room, very small, a Floette with a red flower comes out from behind a pillar, by her own choice, which is the only way she ever would. He does not move. She comes all the way to him.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-end-buried",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Buried: the weapon is broken",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 1.2
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "The Weapon and the Flower: Buried. She came back by her own choice.",
+        "importance": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use it once more.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "wf-want",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You fire it once, to bring one life back. It does. The game shows you, in full, what it took: every flower in the garden valley, and the tree, and the old man, who smiles, because he understands.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "floette"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-end-fired",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Fired Once More",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.1
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "The Weapon and the Flower: Fired Once More. You saw what it took.",
+        "importance": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the seat.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "wf-seat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You sit beside the empty chair. The weapon fires. The Champion battle will take place in a silent, perfect garden.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-end-beautiful",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The Beautiful World: a silent, perfect garden",
+        "effects": [
+         {
+          "kind": "bossDamageTakenMultiplier",
+          "value": 1.15
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "The Weapon and the Flower: the Beautiful World.",
+        "importance": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the key and walk.",
+     "success": {
+      "text": "Nobody wins. The weapon stays charged and unfired. The old man goes on down the road, and you walk with him a while.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wf-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wf-end-walking",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Weapon and the Flower: Still Walking.",
+        "importance": 100
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

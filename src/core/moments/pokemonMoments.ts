@@ -14,7 +14,7 @@ import { Rng, hashSeed } from '../rng';
 import type { Content, Species } from '../contentSchema';
 import type { PokemonInstance } from '../state';
 
-export const MOMENT_TRIGGERS = ['runEnd', 'lethal', 'faint', 'ally', 'start', 'low', 'ko', 'enter', 'super', 'crit', 'weather', 'status', 'rest', 'catch'] as const;
+export const MOMENT_TRIGGERS = ['runEnd', 'lethal', 'faint', 'ally', 'start', 'low', 'ko', 'enter', 'super', 'crit', 'weather', 'status', 'rest', 'catch', 'turn', 'allyLethal', 'evolve'] as const;
 export type MomentTrigger = (typeof MOMENT_TRIGGERS)[number];
 
 /** Triggers in priority order: when several moments could be the cinematic of one battle, the earlier one wins. */
@@ -78,8 +78,8 @@ export const MomentEffectSchema = z.object({
   healTeam: z.boolean().optional(),
   /** Catch moments: the Pokémon rolls a talent (once) if it has none. */
   talentRoll: z.boolean().optional(),
-  /** Entry moments: HP restored now, as a percent of max HP. */
-  healNowPct: z.number().int().min(1).max(100).optional(),
+  /** Entry moments: HP restored now, as a percent of max HP (12.5 = an eighth). */
+  healNowPct: z.number().min(1).max(100).optional(),
   /** Own stat boosts from `boost` / `boostBest` fade after this many turns (absent = last the battle). */
   boostTurns: z.number().int().min(1).max(5).optional(),
   /** The next move of this type does this much more damage (percent); spent when it lands. */
@@ -93,6 +93,111 @@ export const MomentEffectSchema = z.object({
   /** Run-end revive: HP multiplier on max HP, and the Overcharged state. */
   reviveHpMult: z.number().min(1).max(3).optional(),
   overcharged: z.boolean().optional(),
+  /** Rest moments: a scene with choices opens as a stop beside this one (an event built as a room, e.g. PA11 Not From Here). */
+  openEvent: z.string().optional(),
+  /** Run-end revive into one of the last-stand statuses (PA17 to PA31, the `revivalStatuses` table): full HP, the status until the battle ends. */
+  revivalStatus: z.string().optional(),
+  // Catalog Overhaul (POKEMON_MOMENTS.md, the pack's statuses and effects).
+  /** Rest moments: Bond points gained (pack Bond, converted like the event effect). */
+  bond: z.number().int().min(1).max(5).optional(),
+  /** It survives the next hit that would knock it out, at 1 HP (once). */
+  endure: z.boolean().optional(),
+  /** Kindled: its moves of this type do `pct`% more for the rest of the battle. */
+  kindle: z.object({ type: z.string(), pct: z.number().int().min(1).max(200) }).optional(),
+  /** The next Pokémon of this type you send in is Kindled. */
+  kindleNext: z.object({ type: z.string(), pct: z.number().int().min(1).max(200) }).optional(),
+  /** Remembered: the next Pokémon you send in gets +10% to every stat but HP until the battle ends. */
+  rememberedNext: z.boolean().optional(),
+  /** It can't be switched out for this many turns. */
+  rooted: z.number().int().min(1).max(5).optional(),
+  /** Resolute: can't be flinched or confused, and its next move has +1 priority. */
+  resolute: z.boolean().optional(),
+  /** Its next move (from the next turn on) has this much extra priority. */
+  nextPriority: z.number().int().min(1).max(2).optional(),
+  /** The foe is badly poisoned. */
+  foeBadPoison: z.boolean().optional(),
+  /** Its first Ground move this battle hits Flying-types. */
+  groundHitsFlying: z.boolean().optional(),
+  /** Run-end revive: HP as a percent of max HP (instead of `reviveHpMult`). */
+  reviveHpPct: z.number().int().min(1).max(100).optional(),
+  /** Guarded (PA3): the next ally sent in is guarded by this Pokémon, which takes the next hit meant for it; that ally's Defence +1. */
+  guardNext: z.boolean().optional(),
+  /** Its first super-effective hit taken does this much less damage (percent). */
+  firstSuperCut: z.number().int().min(1).max(100).optional(),
+  /** The Pack: every matching party member gets +pct% to every stat but HP for each other matching member in the party. */
+  packStat: z.number().int().min(1).max(25).optional(),
+  // Group moments (PG1 to PG18).
+  /** Each party member in scope gets this percent on its best stat (PG1 Sibling Rivalry). */
+  packBest: z.number().int().min(1).max(50).optional(),
+  /** Percent on named stats for the battle (PG15 Two Halves). */
+  statPct: z.partialRecord(z.enum(['atk', 'def', 'spa', 'spd', 'spe']), z.number().int().min(1).max(50)).optional(),
+  /** This species' weather, for one turn (PG3 The Three Skies). */
+  weatherBySpecies: z.record(z.string(), z.enum(['rain', 'sun', 'sand', 'snow', 'hail'])).optional(),
+  /** Resolute (no flinch, no confusion) on every party member in scope (PG6). */
+  resoluteAll: z.boolean().optional(),
+  /** +N to its higher defence, Defence or Sp. Def (PG7). */
+  bestDefStage: z.number().int().min(1).max(3).optional(),
+  /** +N to its highest stat of the five (PG16). */
+  boostTop: z.number().int().min(1).max(3).optional(),
+  /** Trick Room for this many turns (PG9, Palkia). */
+  trickRoom: z.number().int().min(1).max(8).optional(),
+  /** The terrain on the field lasts this many turns (PG10). */
+  terrainTurns: z.number().int().min(1).max(12).optional(),
+  /** Its Ruin ability also lowers this stat (PG11), by species. */
+  ruinExtra: z.record(z.string(), z.enum(['atk', 'def', 'spa', 'spd'])).optional(),
+  /** It won't attack these species (PG12). */
+  noAttackFoe: z.array(z.string()).optional(),
+  /** It takes this percent less from the type its own type beats (PG13: grass from water, fire from grass, water from fire). */
+  typeGuard: z.number().int().min(1).max(50).optional(),
+  /** Rest: names the next region's legend (PG5). */
+  legendHint: z.boolean().optional(),
+  // Species and individual moments (PS, PI).
+  /** It evolves into `to` when the battle ends, if it is still standing (and, with `turns`, the battle lasted that many turns): PS1, PS20, PS28. */
+  evolveAfter: z.object({ to: z.string(), turns: z.number().int().min(1).max(10).optional() }).optional(),
+  /** Each time a party member of these species comes in for the rest of the battle, it gets +n to the stat (PS2). */
+  entryBoost: z.object({ species: z.array(z.string()).min(1), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']), n: z.number().int().min(1).max(3) }).optional(),
+  /** Both sides lose this turn's move (PS3). */
+  bothSkip: z.boolean().optional(),
+  /** Names the opponent's next Pokémon; raised brave from a baby (PA4 three times), its held items too (PS5). */
+  revealNext: z.boolean().optional(),
+  /** Its first Counter or Mirror Coat does this many times the damage (PS9). */
+  counterMult: z.number().int().min(2).max(4).optional(),
+  /** Its first move goes last and does double damage (PS13). */
+  slowFirst: z.boolean().optional(),
+  /** Its Illusion soaks the first super-effective hit as neutral (PS12). */
+  wrongFace: z.boolean().optional(),
+  /** Every move in the battle gets this much accuracy, both sides (PS15). */
+  accAll: z.number().int().min(1).max(30).optional(),
+  /** Ally moments: the fallen ally haunts the foe (PS18). */
+  hauntFallen: z.object({ turns: z.number().int().min(1).max(5), pct: z.number().int().min(1).max(100) }).optional(),
+  /** It learns a random attacking move it doesn't know, for this battle (PS33). */
+  randomMove: z.boolean().optional(),
+  /** Schooling holds once more, whatever its HP (PS38). */
+  schoolOnce: z.boolean().optional(),
+  /** Uses up a run flag (`{uid}` = this Pokémon) once the moment plays (PS8: the long sleep is spent on one battle). */
+  spendFlag: z.string().optional(),
+  /** Evolution moments: it becomes this form instead (PS22). */
+  evolveForm: z.string().optional(),
+  /** Rest: sets this run flag (`{uid}` = this Pokémon) (PS10). */
+  setFlag: z.string().optional(),
+  /** Rest: every party status is cured (PS16). */
+  cureTeam: z.boolean().optional(),
+  /** Rest: the party member lowest on HP gets back this percent of its max HP (PS16). */
+  healLowestPct: z.number().int().min(1).max(100).optional(),
+  /** Rest: one present from this list, picked by the moment's own roll (PS45). */
+  present: z.array(z.string()).min(1).optional(),
+  /** Its Protosynthesis or Quark Drive is on without sun or terrain. */
+  paradoxDrive: z.boolean().optional(),
+  /** The Little Ones (PA4): if it lands a move this battle, it gains this much Bond afterwards, win or lose. */
+  braveBond: z.number().int().min(1).max(5).optional(),
+  /** Every stat's effort +N. */
+  evAll: z.number().int().min(1).max(10).optional(),
+  /** Rest moments: an item tied to the species (by species id). */
+  giveItem: z.record(z.string(), z.string()).optional(),
+  /** Names the opponent's ace (its strongest Pokémon) before it comes out. */
+  revealAce: z.boolean().optional(),
+  /** Haunting: after it faints it stays as a spirit for `turns` turns, striking with its best move at `pct`% power each turn; it can't be hit. */
+  haunting: z.object({ turns: z.number().int().min(1).max(5), pct: z.number().int().min(1).max(100), foeAccDown: z.number().int().min(1).max(50).optional() }).optional(),
 });
 export type MomentEffect = z.infer<typeof MomentEffectSchema>;
 
@@ -105,6 +210,8 @@ const ScopeSchema = z.object({
   tags: z.array(z.string()).optional(),
   /** A stat-shape role (wall, glass-cannon, support), worked out from base stats (see `roleOf`). */
   role: z.string().optional(),
+  /** Any Pokémon: individual moments (PI), whose requirements pick the one it is about. */
+  all: z.boolean().optional(),
 });
 
 export const PokemonMomentSchema = z.object({
@@ -125,6 +232,67 @@ export const PokemonMomentSchema = z.object({
       night: z.boolean().optional(),
       /** The foe has all of these types. */
       foeTypes: z.array(z.string()).optional(),
+      /** Last Stand: it is the only one of your Pokémon still standing. */
+      lastStanding: z.boolean().optional(),
+      /** The hit came while it was at full HP. */
+      fullHp: z.boolean().optional(),
+      /** The foe in front is below this percent of its max HP. */
+      foeHpBelow: z.number().int().min(1).max(99).optional(),
+      /** Your side has a Tailwind, or strong winds blow. */
+      tailwind: z.boolean().optional(),
+      /** It was knocked out by a contact move. */
+      contact: z.boolean().optional(),
+      /** The foe in front has a type this Pokémon is weak to, and is not in the named group (a "modern" Pokémon). */
+      foeWeakTo: z.boolean().optional(),
+      foeNotGroup: z.string().optional(),
+      /** The foe in front is this Pokémon's counterpart, as listed in the `counterparts` table. */
+      foeCounterpart: z.boolean().optional(),
+      /** Not when an opponent shares one of its trios or pairs (groups named `trio-*`). */
+      notVsOwnTrio: z.boolean().optional(),
+      /** Only the run's chosen starter. */
+      starter: z.boolean().optional(),
+      /** The foe in front is at least this many levels higher. */
+      foeLevelAbove: z.number().int().min(1).max(100).optional(),
+      /** At least `n` living party members from each named group (PG9, PG15). */
+      partyGroups: z.array(z.object({ group: z.string(), n: z.number().int().min(1).max(6) })).optional(),
+      /** The foe in front is one of these species (PG12). */
+      foeSpecies: z.array(z.string()).optional(),
+      /** All three starter lines of one region are in the party (PG13), this Pokémon among them. */
+      starterTrio: z.boolean().optional(),
+      /** It has the highest Bond of the party members in scope (PG14). */
+      topBond: z.boolean().optional(),
+      /** A run flag (with `{uid}` standing for this Pokémon) is at least `n`. */
+      flagAtLeast: z.object({ key: z.string(), n: z.number().int().min(1) }).optional(),
+      /** The same kind of run flag is still below `n` (PA4: a baby that hasn't grown brave yet). */
+      flagBelow: z.object({ key: z.string(), n: z.number().int().min(1) }).optional(),
+      /** Evolution moments: it has reached the final form of its line. */
+      finalForm: z.boolean().optional(),
+      /** Evolution moments: it came out of a cocoon it had been in since an earlier stage. */
+      fromCocoon: z.boolean().optional(),
+      /** Its Mythical promise is kept. */
+      promiseKept: z.boolean().optional(),
+      /** A named opponent: a trainer battle, not a wild one. */
+      named: z.boolean().optional(),
+      /** The opponent's ace (its strongest Pokémon) has one of these types. */
+      foeAceTypes: z.array(z.string()).optional(),
+      /** A Gym Leader's battle (PS1). */
+      gymLeader: z.boolean().optional(),
+      /** Its Disguise has broken this battle (PS11). */
+      disguiseBroken: z.boolean().optional(),
+      /** The foe it knocked out this turn is one of these species (PS20). */
+      koSpecies: z.array(z.string()).optional(),
+      /** The foe it knocked out this turn was a Legendary, or a trainer's ace (PS44). */
+      koLegendOrAce: z.boolean().optional(),
+      /** It has landed this many critical hits this battle (PS28). */
+      critsAtLeast: z.number().int().min(1).max(10).optional(),
+      /** It has used this move at least `n` times this run (PS21). */
+      moveUses: z.object({ move: z.string(), n: z.number().int().min(1) }).optional(),
+      /** Its own stat stage is at least `n` (PS32). */
+      stageAtLeast: z.object({ stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']), n: z.number().int().min(1).max(6) }).optional(),
+      /** The run's final opponent: the last region's Champion (PI5). */
+      finalBoss: z.boolean().optional(),
+      /** It has the most knockouts in the party this run (PI5). */
+      mostKos: z.boolean().optional(),
     })
     .optional(),
   /** Ally moments: `same` = the fallen Pokémon must match this moment's scope too; `any` = any ally falling counts. */
@@ -133,21 +301,89 @@ export const PokemonMomentSchema = z.object({
   hpBelow: z.number().int().min(1).max(99).optional(),
   /** 0–1. */
   chance: z.number().min(0).max(1),
-  limit: z.enum(['battle', 'run']),
+  /** The chance grows by `perStep` for each Bond level above `above`, up to `max` (PA1). */
+  chanceBond: z.object({ above: z.number().int().min(0).max(5), perStep: z.number().min(0).max(1), max: z.number().min(0).max(1) }).optional(),
+  /** These evolution lines (by root or member) get `plus` on top. */
+  chancePlus: z.object({ species: z.array(z.string()), plus: z.number().min(0).max(1), /** Only these species, not their whole lines (the revivals' signature species). */ exact: z.boolean().optional() }).optional(),
+  /** Run-end order (pack §0.3): individual, species, group, archetype, type. Lower goes first. */
+  layer: z.enum(['individual', 'species', 'group', 'archetype', 'type']).optional(),
+  /** `region`: once per region (rest moments). */
+  limit: z.enum(['battle', 'run', 'region']),
   tier: z.enum(['minor', 'major', 'landmark']),
   status: z.enum(['supported', 'limited', 'disabled']),
   effectText: z.string(),
   presentation: z.string(),
   effect: MomentEffectSchema.optional(),
   /** A full-screen scene: black fade, static, then these lines one by one. */
-  scene: z.object({ fadeMs: z.number().int(), staticMs: z.number().int(), lines: z.array(z.string()).min(1), clips: z.array(z.string()).optional(), after: z.string() }).optional(),
+  scene: z.object({
+    fadeMs: z.number().int(), staticMs: z.number().int(), lines: z.array(z.string()).min(1), clips: z.array(z.string()).optional(), after: z.string(),
+    /** Last-stand scenes (PA17 to PA31): the sound in the dark, the one voice clip under all the lines, the theme, and the colours. */
+    sound: z.string().optional(), voice: z.string().optional(), theme: z.string().optional(),
+    veil: z.string().regex(/^#[0-9a-f]{6}$/).optional(), glow: z.string().regex(/^#[0-9a-f]{6}$/).optional(), textColor: z.string().regex(/^#[0-9a-f]{6}$/).optional(),
+    /** The last beat (step 3 of the pack's scene), shown after the voice. */
+    rise: z.string().optional(),
+  }).optional(),
+  /** Remembered variants of a run-end scene: a run flag (`{uid}` = this Pokémon), species, or party count of a group changes a line, the chance, or adds an effect. */
+  remembers: z.array(z.object({
+    flag: z.string().optional(), species: z.array(z.string()).optional(), groupCount: z.object({ group: z.string(), n: z.number().int().min(1) }).optional(),
+    line: z.tuple([z.number().int().min(0), z.string()]).optional(), add: z.string().optional(), chance: z.number().min(0).max(1).optional(),
+    resolute: z.boolean().optional(), boost: z.record(z.string(), z.number().int()).optional(), feePct: z.number().int().min(0).max(100).optional(), allyDef: z.number().int().optional(),
+  })).optional(),
 });
 export type PokemonMoment = z.infer<typeof PokemonMomentSchema>;
 
-const FileSchema = z.object({ status: z.string(), note: z.string(), groups: z.record(z.string(), z.array(z.string())), moments: z.array(PokemonMomentSchema) });
+/**
+ * The last-stand statuses (POKEMON_MOMENTS.md Part 2B): what each one pays and what it costs. Every number is data. The battle rules are in
+ * core/battle/revivalStatus.ts; stat multipliers apply in calcStats so max HP changes too.
+ */
+const RevivalStatusSchema = z.object({
+  name: z.string(),
+  /** The honest line shown when it starts: the payoff and the cost. */
+  chip: z.string(),
+  stats: z.partialRecord(z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe']), z.number().min(0.1).max(5)).default({}),
+  movePower: z.number().min(0.1).max(5).optional(),
+  typePower: z.record(z.string(), z.number().min(0.1).max(5)).optional(),
+  taken: z.number().min(0.1).max(5).optional(),
+  statusImmune: z.boolean().optional(), noHeal: z.boolean().optional(), noFlinch: z.boolean().optional(), noSwitch: z.boolean().optional(),
+  noProtect: z.boolean().optional(), noPhysical: z.boolean().optional(), forceBest: z.boolean().optional(), everyOther: z.boolean().optional(),
+  /** Percent of max HP at the end of each turn: negative loses, positive restores. */
+  turnHpPct: z.number().min(-50).max(50).optional(),
+  /** The foe in front loses this stage each turn. */
+  foeStage: z.object({ stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']), n: z.number().int() }).optional(),
+  /** An attacker that hits it loses a stage: Speed, or its highest stat. */
+  onHit: z.enum(['spe', 'highest']).optional(),
+  countdown: z.object({ turns: z.number().int().min(1), move: z.string() }).optional(),
+  /** It can't fall below 1 HP for this many turns; at the end of the last one, if the battle isn't won, it faints. */
+  oathTurns: z.number().int().min(1).optional(),
+  /** Bodies: each hit removes one whatever the damage; at none it faints. Its moves hit twice at `twicePct` power. */
+  bodies: z.number().int().min(2).optional(), twicePct: z.number().int().min(1).max(100).optional(),
+  /** Protosynthesis on without sun: the bonus times this, on this many of its best stats. */
+  primal: z.object({ mult: z.number().min(1), stats: z.number().int().min(1).max(5) }).optional(),
+  weather: z.object({ id: z.enum(['rain', 'sun', 'sand', 'snow', 'hail']), turns: z.number().int().min(1) }).optional(),
+  /** Every Pokémon on the field (itself too) loses this percent of max HP each turn. */
+  fieldChipPct: z.number().min(0).max(50).optional(),
+  freezePct: z.number().int().min(0).max(100).optional(),
+  immuneTypes: z.array(z.string()).optional(), immuneContact: z.boolean().optional(),
+  night: z.boolean().optional(),
+  stages: z.partialRecord(z.enum(['atk', 'def', 'spa', 'spd', 'spe', 'acc', 'eva']), z.number().int()).optional(),
+  evasionCap: z.number().int().optional(),
+  /** Percent of this battle's prize money the Collector takes (stated before the battle resumes). */
+  feePct: z.number().int().min(0).max(100).optional(),
+});
+export type RevivalStatus = z.infer<typeof RevivalStatusSchema>;
+
+const FileSchema = z.object({ status: z.string(), note: z.string(), groups: z.record(z.string(), z.array(z.string())), counterparts: z.record(z.string(), z.array(z.string())).default({}), revivalStatuses: z.record(z.string(), RevivalStatusSchema).default({}), regionLegends: z.record(z.string(), z.array(z.string())).default({}), starterTrios: z.array(z.tuple([z.array(z.string()), z.array(z.string()), z.array(z.string())])).default([]), moments: z.array(PokemonMomentSchema) });
 const file = FileSchema.parse(raw);
 
 export const MOMENT_GROUPS: Readonly<Record<string, readonly string[]>> = file.groups;
+/** PA12: a Paradox Pokémon and the modern species it mirrors. */
+/** PA17 to PA31: the last-stand statuses by id. */
+export const REVIVAL_STATUSES: Readonly<Record<string, RevivalStatus>> = file.revivalStatuses;
+/** PG5: each region's legend, by region id (the hint names the next one). */
+export const REGION_LEGENDS: Readonly<Record<string, readonly string[]>> = file.regionLegends;
+/** PG13: each region's starter lines as [grass, fire, water]. */
+export const STARTER_TRIOS: readonly (readonly [readonly string[], readonly string[], readonly string[]])[] = file.starterTrios;
+export const MOMENT_COUNTERPARTS: Readonly<Record<string, readonly string[]>> = file.counterparts;
 export const POKEMON_MOMENTS: readonly PokemonMoment[] = file.moments;
 const BY_ID = new Map(POKEMON_MOMENTS.map((m) => [m.id, m]));
 export const pokemonMoment = (id: string): PokemonMoment | undefined => BY_ID.get(id);
@@ -170,6 +406,7 @@ export function momentMatches(content: Content, m: PokemonMoment, speciesId: str
   const sp = content.species.get(speciesId);
   if (!sp) return false;
   const s = m.scope;
+  if (s.all) return true;
   if (s.species?.includes(speciesId)) return true;
   if (s.lines && lineIds(content, speciesId).some((id) => s.lines!.includes(id))) return true;
   if (s.types?.some((t) => sp.types.includes(t as never))) return true;
@@ -192,7 +429,7 @@ export function roleOf(sp: Pick<Species, 'baseStats'>): 'wall' | 'glass-cannon' 
 
 /** The supported moments for a trigger that apply to this Pokémon, most specific first (species, line, group, tag, type). */
 export function momentsFor(content: Content, mon: Pick<PokemonInstance, 'speciesId'>, trigger: MomentTrigger): PokemonMoment[] {
-  const specificity = (m: PokemonMoment): number => (m.scope.species ? 0 : m.scope.lines ? 1 : m.scope.groups ? 2 : m.scope.tags ? 3 : 4);
+  const specificity = (m: PokemonMoment): number => (m.scope.all ? -1 : m.scope.species ? 0 : m.scope.lines ? 1 : m.scope.groups ? 2 : m.scope.tags ? 3 : 4);
   return POKEMON_MOMENTS.filter((m) => m.status !== 'disabled' && m.trigger === trigger && momentMatches(content, m, mon.speciesId)).sort((a, b) => specificity(a) - specificity(b));
 }
 
@@ -208,6 +445,10 @@ export interface MomentHooks {
   noteCinematic: (tier: PokemonMoment['tier']) => void;
   /** True when the run would really end now (no checkpoint, Safety Net or recorder could still save it). */
   runWouldEnd: () => boolean;
+  /** The run's chosen starter (PA10). */
+  starterUid?: string | null;
+  /** This battle is the run's final opponent: the last region's Champion (PI5). */
+  finalBoss?: boolean;
 }
 
 /** One stateless roll: true with probability `chance`. Same inputs, same answer. */

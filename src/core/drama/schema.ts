@@ -99,6 +99,8 @@ export const DramaEventDefSchema = z.object({
   chance: z.number().min(0).max(100),
   /** Writes a Chronicle entry and a rival memory flag. */
   records: z.boolean(),
+  /** Catalog Overhaul SF100: a heated moment. After the battle a short scene asks the player about it (tools/events/co/places-11.ts); at most one per region and three per run. */
+  heated: z.boolean().optional(),
   requires: z.string(),
   lines: z.array(z.string()),
   voices: z.array(z.enum(VOICES)).optional(),
@@ -110,6 +112,10 @@ export const DramaEventDefSchema = z.object({
   aiShift: z.number().min(-1).max(1).optional(),
   traitShift: z.record(z.string(), z.number().int()).optional(),
   shiftText: z.string().optional(),
+  /** Catalog Overhaul SF161: a narrated moment. The line is spoken under your Pokémon's name (`foe`) or the foe's (`name`), not the trainer's. */
+  narrate: z.enum(['foe', 'name']).optional(),
+  /** Catalog Overhaul SF161: the room (events id) that offers the one after-battle choice; it opens beside the next node. */
+  after: z.string().optional(),
 });
 export type DramaEventDef = z.infer<typeof DramaEventDefSchema>;
 

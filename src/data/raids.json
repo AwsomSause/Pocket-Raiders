@@ -2704,6 +2704,61 @@
         "joinChance": 0
       },
       "special": "canon"
+    },
+    {
+      "id": "power-spot-eruption",
+      "name": "Power Spot Eruption",
+      "tier": 4,
+      "blurb": "A Power Spot erupts. Something giant stands in the red light. Break its shield, ride out the surge, finish it.",
+      "species": [
+        "coalossal",
+        "drednaw",
+        "centiskorch",
+        "sandaconda",
+        "copperajah",
+        "orbeetle",
+        "corviknight"
+      ],
+      "levelBonus": 3,
+      "hpBoostPercent": 300,
+      "entryCost": 0,
+      "shield": {
+        "at": [
+          0.75
+        ],
+        "points": 0.15
+      },
+      "phases": [
+        {
+          "atHp": 0.75,
+          "text": "The shield breaks! The Power Spot surges and the giant swells with red light!",
+          "boost": {
+            "atk": 1,
+            "spa": 1
+          },
+          "clearPlayerStages": false
+        },
+        {
+          "atHp": 0.3,
+          "text": "The final phase! The column of energy roars. It is now or never.",
+          "boost": {
+            "spe": 1
+          },
+          "cleanse": true
+        }
+      ],
+      "rewards": {
+        "moneyPerLevel": 130,
+        "items": [
+          {
+            "item": "dynamax-candy",
+            "chance": 1
+          }
+        ],
+        "draftExtra": 1,
+        "joinChance": 0.3
+      },
+      "capture": 0.2
     }
   ],
   "denTriggers": [

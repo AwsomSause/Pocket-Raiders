@@ -63,3 +63,24 @@ describe('UI mock-ups settings (settings v43)', () => {
     expect(display.slice(0, 2)).toEqual(['uiStyle', 'reduxSkin']);
   });
 });
+
+describe('Blessings and Ultra Beasts on by default (settings v44)', () => {
+  it('a v43 save with both off turns both on and keeps every other setting, Mythical Promises included', () => {
+    const storage = new MemoryStorageProvider();
+    const old = new SaveManager(storage, content).loadSettings();
+    const expansion = { ...old.expansion, blessingsEnabled: false, ultraBeastsEnabled: false, mythicalsEnabled: false, rewinds: true };
+    storage.set('pkr.settings', JSON.stringify({ format: 'pkmn-roguelike', record: 'settings', schemaVersion: 43, savedAt: '', data: { ...old, musicVolume: 0.2, expansion } }));
+    const loaded = new SaveManager(storage, content).loadSettings();
+    expect(loaded.expansion).toEqual({ ...expansion, blessingsEnabled: true, ultraBeastsEnabled: true });
+    expect(loaded.musicVolume).toBe(0.2);
+  });
+
+  it('new settings start with both on, and a player who turns them off keeps them off after a reload', () => {
+    const storage = new MemoryStorageProvider();
+    const fresh = new SaveManager(storage, content).loadSettings();
+    expect([fresh.expansion.blessingsEnabled, fresh.expansion.ultraBeastsEnabled, fresh.expansion.mythicalsEnabled]).toEqual([true, true, true]);
+    new SaveManager(storage, content).saveSettings({ ...fresh, expansion: { ...fresh.expansion, blessingsEnabled: false, ultraBeastsEnabled: false } });
+    const again = new SaveManager(storage, content).loadSettings();
+    expect([again.expansion.blessingsEnabled, again.expansion.ultraBeastsEnabled]).toEqual([false, false]);
+  });
+});

@@ -1,1 +1,78 @@
-{ "category": "legends", "chains": [] }
+{
+ "category": "legends",
+ "note": "Door shapes of the legends questlines (Alphas A2-A4, Mega Anomaly M4, Legendary L4 and L5, Ultra U4 and U5). Rooms are co-* events in co-legends-*.json.",
+ "chains": [
+  {
+   "id": "ps_black_tide",
+   "name": "The Black Tide",
+   "entry": "story-alpha-black-tide",
+   "themeId": "water-dark",
+   "tint": "#203858",
+   "mood": "storm sea",
+   "start": "opened"
+  },
+  {
+   "id": "ps_frostbound",
+   "name": "The Frostbound Pass",
+   "entry": "story-alpha-frostbound",
+   "themeId": "ice-dragon",
+   "tint": "#9ab8d0",
+   "mood": "frozen pass",
+   "start": "opened"
+  },
+  {
+   "id": "ps_hushed_moor",
+   "name": "The Hushed Moor",
+   "entry": "story-alpha-hushed-one",
+   "themeId": "normal-flying",
+   "tint": "#3a3048",
+   "mood": "silent dusk",
+   "start": "opened"
+  },
+  {
+   "id": "ps_mirror_spider",
+   "name": "The Mirror-Spider Ruin",
+   "entry": "co-m4-mirror",
+   "themeId": "rock-ghost",
+   "tint": "#404858",
+   "mood": "pale ruin",
+   "start": "opened"
+  },
+  {
+   "id": "ps_lugia_whirl",
+   "name": "Under the Whirl",
+   "entry": "co-l4-whirl",
+   "themeId": "water-ice",
+   "tint": "#4070a0",
+   "mood": "four islands",
+   "start": "opened"
+  },
+  {
+   "id": "ps_mewtwo_lab",
+   "name": "The Lab at the End of the Cave",
+   "entry": "co-l5-cave",
+   "themeId": "psychic-dark",
+   "tint": "#504060",
+   "mood": "humming cave",
+   "start": "opened"
+  },
+  {
+   "id": "ps_ultra_midway",
+   "name": "The Midway",
+   "entry": "co-u4-midway",
+   "themeId": "psychic-dark",
+   "tint": "#e060a0",
+   "mood": "an empty fairground at night",
+   "start": "opened"
+  },
+  {
+   "id": "ps_ultra_ruin",
+   "name": "The Ruined City",
+   "entry": "co-u5-city",
+   "themeId": "rock-ghost",
+   "tint": "#606060",
+   "mood": "a city with nothing in it",
+   "start": "opened"
+  }
+ ]
+}

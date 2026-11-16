@@ -1,0 +1,1537 @@
+{
+ "catalogOverhaul": "singles",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "archaeology-dig",
+   "name": "The Careful Dig",
+   "group": "Set Pieces",
+   "stop": "fossil",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "boss.bill"
+    ],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "A professor hands you a soft brush and a cold chisel, and points at a slab of rock with something curled inside it. \"Gently now. The fossil does not forgive haste.\"",
+   "choices": [
+    {
+     "label": "Brush slowly.",
+     "success": {
+      "text": "You brush for an hour, grain by grain, your team holding their breath beside you. It comes out whole: a fossil, perfect, a shape from a world that ended long ago, lying in your hands.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "helix-fossil",
+         "dome-fossil",
+         "plume-fossil",
+         "root-fossil",
+         "claw-fossil"
+        ]
+       },
+       {
+        "kind": "moment",
+        "text": "Brushed a whole fossil out of the rock.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Chisel fast.",
+     "chance": 0.5,
+     "success": {
+      "text": "Chip, chip, crack, and out it comes, whole, by pure luck. The professor lets out a breath they had been holding the whole time.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "helix-fossil",
+         "dome-fossil",
+         "plume-fossil",
+         "root-fossil",
+         "claw-fossil"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Chip, chip, CRACK. The fossil splits down the middle and crumbles. The professor says nothing at all, which is worse.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fossil-dig",
+   "name": "Fossil Dig",
+   "group": "One event for every type",
+   "stop": "fossil",
+   "types": [
+    "ground",
+    "rock"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "effect": "shake"
+   },
+   "intro": "A hiker hands you a shovel and points at a bank of old clay. \"They turn up here all the time. The common ones, anyway.\"",
+   "choices": [
+    {
+     "label": "Dig.",
+     "success": {
+      "text": "You dig until your arms burn, and there it is in the clay, a fossil, the common kind and still a little miracle.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "plume-fossil",
+         "root-fossil",
+         "claw-fossil"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "bug-contest",
+   "name": "Bug-Catching Contest",
+   "group": "One event for every type",
+   "types": [
+    "bug"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.bug_catcher"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "A park full of nets and nervous trainers. A judge with a set of scales: **\"Bug-Catching Contest! Catch the finest Bug-type in the park, and I'll weigh it!\"**",
+   "choices": [
+    {
+     "label": "Enter.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "bug-contest-won",
+         "atLeast": 1,
+         "regionsAgo": 1
+        }
+       ],
+       "text": "Before you even start, the judge waves their book at you. \"Last region's champion! I still tell people about your Bug-type.\" Then you go and win again. The new one joins you, with a Sun Stone.",
+       "effects": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [],
+         "types": [
+          "bug"
+         ],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "item",
+         "id": "sun-stone",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You crawl through the long grass for an hour and come back with a beauty. The judge weighs it, measures it, and holds it up for the crowd: the winner. Your Bug-type joins you, and the prize is a Sun Stone. \"I'll remember this one,\" says the judge, and writes its name in a book.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [
+         "bug"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "sun-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bug-contest-won",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "Won the Bug-Catching Contest.",
+        "importance": 45
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cry-shrine",
+   "name": "The Shrine of Cries",
+   "group": "Set Pieces",
+   "stop": "shrine",
+   "rarity": "rare",
+   "minStage": 4,
+   "scene": {
+    "cast": [],
+    "tint": "#201830",
+    "effect": "glint"
+   },
+   "intro": "A stone door with three notches shaped like sound. Carved above it: **\"Only living cries open me. Three, and all different.\"**",
+   "choices": [
+    {
+     "label": "Let three Pokémon cry.",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 3
+      }
+     ],
+     "success": {
+      "text": "Three of your Pokémon cry out together, three different voices, and the notches glow one by one. The door grinds open on a small dark shrine, and in it, an old shape carved in the stone that you would swear is watching you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Opened the Cry Shrine.",
+        "importance": 45
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You leave the door quiet.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "escape-room",
+   "name": "The Locked Cellar",
+   "group": "Set Pieces",
+   "stop": "hideout",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c1c28",
+    "effect": "none"
+   },
+   "intro": "The door slams behind you. A cellar with shelves of jars, each with a Pokémon's picture on it, and a note: **\"The way out is in the order of things. The order you know best.\"**",
+   "choices": [
+    {
+     "label": "Line them up in the order you met your team.",
+     "success": {
+      "text": "{starter} first, of course, and then each of the others in the order they came to you, and with every jar you set down, you remember the day. The last jar clicks into place, and a key drops out of the shelf.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "escape-room-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Line them up by size.",
+     "success": {
+      "text": "Smallest to biggest. It looks very tidy. Nothing happens. The way out is in a different order.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "escape-room-2",
+   "name": "The Locked Cellar: The Second Lock",
+   "group": "Set Pieces",
+   "stop": "hideout",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c1c28",
+    "effect": "none"
+   },
+   "intro": "The key opens a little chest with three bottles and a riddle: **\"The left one lies. The right one lies. The middle one tells the truth.\"**",
+   "choices": [
+    {
+     "label": "The left bottle.",
+     "success": {
+      "text": "The label says \"Drink me to get out.\" It lies. It tastes of old socks.",
+      "effects": []
+     }
+    },
+    {
+     "label": "The middle bottle.",
+     "success": {
+      "text": "The label says \"The door is behind the wine rack.\" It is. You push it open, and in a crate by the steps, someone left a little purse of money for whoever got this far.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "moment",
+        "text": "Escaped the cellar.",
+        "importance": 30
+       }
+      ]
+     }
+    },
+    {
+     "label": "The right bottle.",
+     "success": {
+      "text": "The label says \"There is no way out.\" It lies, which is a comfort, but it does not tell you where the way out is.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "game-show-1",
+   "name": "The Game Show: Round One",
+   "group": "Set Pieces",
+   "stop": "contest",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2a1030",
+    "effect": "sparkle"
+   },
+   "intro": "Lights! Music! A host with a huge grin. \"Three questions, and the grand prize! Question one, and it's about YOU: who was your very first partner on this run?\"",
+   "choices": [
+    {
+     "label": "{starter}.",
+     "success": {
+      "text": "\"CORRECT! Of course it is!\" {starter} looks at you like you have done something wonderful. \"On to question two!\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "game-show-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Magikarp.",
+     "success": {
+      "text": "\"Oh, no! The audience gasps!\" So does your starter. The host sends you off with a smile and a key ring.",
+      "effects": []
+     }
+    },
+    {
+     "label": "I don't remember.",
+     "success": {
+      "text": "\"You don't...?\" The host looks at your starter. Your starter looks at you. The audience boos, gently.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "game-show-2",
+   "name": "The Game Show: Round Two",
+   "group": "Set Pieces",
+   "stop": "contest",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2a1030",
+    "effect": "sparkle"
+   },
+   "intro": "\"Question two! How many types of Pokémon are there?\"",
+   "choices": [
+    {
+     "label": "17.",
+     "success": {
+      "text": "\"Ooh! So close! You forgot one!\" The host gives you a key ring anyway.",
+      "effects": []
+     }
+    },
+    {
+     "label": "18.",
+     "success": {
+      "text": "\"EIGHTEEN! CORRECT! Final question!\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "game-show-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "19.",
+     "success": {
+      "text": "\"Nineteen? Have you found one we don't know about?\" The host gives you a key ring and a curious look.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "game-show-3",
+   "name": "The Game Show: The Final Question",
+   "group": "Set Pieces",
+   "stop": "contest",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2a1030",
+    "effect": "sparkle"
+   },
+   "intro": "\"Final question for the GRAND PRIZE! Which Pokémon is number 25 in the National Pokédex?\"",
+   "choices": [
+    {
+     "label": "Pichu.",
+     "success": {
+      "text": "\"Pichu is number 172! So close, so far!\" The audience sighs with you. A consolation prize: ₽200.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pikachu.",
+     "success": {
+      "text": "\"PIKACHU! NUMBER TWENTY-FIVE! WE HAVE A WINNER!\" Confetti, music, the audience on its feet, and the grand prize pressed into your hands: a Rare Candy and ₽1,000.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       },
+       {
+        "kind": "money",
+        "amount": 1000
+       },
+       {
+        "kind": "moment",
+        "text": "Won the grand prize on the game show.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Raichu.",
+     "success": {
+      "text": "\"Raichu is twenty-six! Off by one!\" The audience groans. A consolation prize: ₽200.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hide-and-seek",
+   "name": "A Game of Hide and Seek",
+   "group": "Set Pieces",
+   "stop": "mirage",
+   "rarity": "rare",
+   "minStage": 4,
+   "scene": {
+    "cast": [],
+    "pokemon": "celebi",
+    "tint": "#14301c",
+    "effect": "sparkle"
+   },
+   "intro": "Leaves rustle. Something tiny and pink giggles and ducks out of sight. A voice in your head, very pleased with itself: **\"Find me!\"** The giggle came from somewhere above.",
+   "choices": [
+    {
+     "label": "Behind the tree.",
+     "success": {
+      "text": "Nobody behind the tree. A giggle from somewhere else entirely.",
+      "effects": []
+     }
+    },
+    {
+     "label": "In the tall grass.",
+     "success": {
+      "text": "Nothing in the grass but a startled Caterpie. The giggle moves.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Up in the branches.",
+     "success": {
+      "text": "You look up. Two enormous blue eyes look down at you from the leaves. \"Found me,\" says the voice, delighted, and then it is gone, with a sound like a laugh, and you will tell this story for the rest of your life.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-mew",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Played hide-and-seek with something pink.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lore-riddle-1",
+   "name": "The Lore Book: First Riddle",
+   "group": "Set Pieces",
+   "stop": "library",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2a1c",
+    "effect": "none"
+   },
+   "intro": "A dusty book falls open in your hands. **\"I have hands but cannot hold. I tick and tock, and I am old. Where do I rest?\"**",
+   "choices": [
+    {
+     "label": "A clock tower.",
+     "success": {
+      "text": "The book flutters to a new page. A drawing of a clock tower, and under it, the next riddle.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lore-riddle-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A tree.",
+     "success": {
+      "text": "The book closes itself with a soft, disappointed thump.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "lore-riddle-2",
+   "name": "The Lore Book: Second Riddle",
+   "group": "Set Pieces",
+   "stop": "library",
+   "rarity": "uncommon",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2a1c",
+    "effect": "none"
+   },
+   "intro": "The next page: **\"I am sweet in spring and sour in the fall. I wear a coat and hide a stone. What am I?\"**",
+   "choices": [
+    {
+     "label": "A Berry.",
+     "success": {
+      "text": "The page unfolds into a map, inked by hand, with an X under an old tree.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lore-riddle-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A peach.",
+     "success": {
+      "text": "Close. Not close enough. The book closes.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "lore-riddle-3",
+   "name": "The Lore Book: The Treasure",
+   "group": "Set Pieces",
+   "stop": "treasure",
+   "rarity": "uncommon",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2a1c",
+    "effect": "none"
+   },
+   "intro": "The map ends under an old tree. A chest sits half-buried in its roots.",
+   "choices": [
+    {
+     "label": "Dig.",
+     "success": {
+      "text": "You dig it out with your hands and your team's paws. Inside, wrapped in cloth that crumbles when you touch it: something rare and old, left for whoever could read the riddles.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "comet-shard",
+         "sacred-ash",
+         "poke-radar",
+         "super-rod",
+         "x-attack-6",
+         "x-speed-6"
+        ]
+       },
+       {
+        "kind": "moment",
+        "text": "Followed the riddle book to its treasure.",
+        "importance": 45
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mind-reader",
+   "name": "Mind Reader",
+   "group": "One event for every type",
+   "types": [
+    "psychic"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "effect": "float"
+   },
+   "intro": "A mind-reader at a little table fans out five cards. \"Guess my card. One in five. Or, if you have a friend who can read minds...\"",
+   "choices": [
+    {
+     "label": "Pick a card.",
+     "chance": 0.2,
+     "success": {
+      "text": "You pick the third card. The mind-reader stares. \"...Yes.\" They hand over their bent spoon, a little shaken. \"A Twisted Spoon. You've earned it.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "twisted-spoon",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Not that one. \"One in five,\" says the mind-reader kindly, putting the cards away.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Let your Psychic-type read it.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "psychic"
+      }
+     ],
+     "success": {
+      "text": "Your Psychic-type stares at the mind-reader for a long moment. The mind-reader stares back. Then they both laugh, and the mind-reader hands over the spoon. \"Fair's fair. A Twisted Spoon.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "twisted-spoon",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "types": [
+          "psychic"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "parrot-teacher",
+   "name": "The Parrot Pokémon",
+   "group": "Set Pieces",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "pokemon": "chatot",
+    "tint": "#1c3020",
+    "effect": "none"
+   },
+   "intro": "A Chatot hops onto your shoulder and looks you in the eye. \"Teach me! Teach me a word!\"",
+   "choices": [
+    {
+     "label": "\"Hello!\"",
+     "success": {
+      "text": "\"Hello!\" The Chatot says it back, perfectly, in your voice, and then again, and then flies off saying it to everybody.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "parrot-phrase",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "parrot-hello",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Never give up!\"",
+     "success": {
+      "text": "\"Never give up!\" The Chatot says it back, perfectly, in your voice, and then again, and then flies off saying it to everybody.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "parrot-phrase",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "parrot-never-give-up",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Good luck!\"",
+     "success": {
+      "text": "\"Good luck!\" The Chatot says it back, perfectly, in your voice, and then again, and then flies off saying it to everybody.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "parrot-phrase",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "parrot-good-luck",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Thank you!\"",
+     "success": {
+      "text": "\"Thank you!\" The Chatot says it back, perfectly, in your voice, and then again, and then flies off saying it to everybody.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "parrot-phrase",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "parrot-thank-you",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "parrot-repeats",
+   "name": "The Parrot Remembers",
+   "group": "Set Pieces",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "parrot-phrase",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "chatot",
+    "tint": "#1c3020",
+    "effect": "none"
+   },
+   "intro": "A familiar squawk overhead. The Chatot. And everyone you pass on this road seems to be saying the same thing.",
+   "choices": [
+    {
+     "label": "Wave.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "parrot-hello",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The Chatot lands on your shoulder and shouts \"Hello!\" in your own voice, and flies off again. All the way down the road, people you pass say it to you: \"Hello!\" Some of them are smiling.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "lead"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "parrot-never-give-up",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The Chatot lands on your shoulder and shouts \"Never give up!\" in your own voice, and flies off again. All the way down the road, people you pass say it to you: \"Never give up!\" Some of them are smiling.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "lead"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "parrot-good-luck",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The Chatot lands on your shoulder and shouts \"Good luck!\" in your own voice, and flies off again. All the way down the road, people you pass say it to you: \"Good luck!\" Some of them are smiling.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "lead"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "parrot-thank-you",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The Chatot lands on your shoulder and shouts \"Thank you!\" in your own voice, and flies off again. All the way down the road, people you pass say it to you: \"Thank you!\" Some of them are smiling.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "lead"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "The Chatot lands on your shoulder, shouts your word in your own voice, and flies off again. People keep saying it to you all the way down the road.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "passing-caravan",
+   "name": "The Passing Caravan",
+   "group": "Set Pieces",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2a1c",
+    "effect": "none"
+   },
+   "intro": "A caravan rolls by on the other road. The drivers wave. A small child leans out of the back window, staring at your Pokémon with enormous eyes.",
+   "choices": [
+    {
+     "label": "Wave.",
+     "success": {
+      "text": "You wave. The child waves back with their whole arm until the caravan is out of sight. You do not know it yet, but that was Tib, long before they ever met you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tib-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call out.",
+     "success": {
+      "text": "\"Hello!\" you shout. The child shouts back, \"I'm TIB!\" and the caravan rolls away. You will hear that name again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tib-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tib-name-heard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sleeping-npc",
+   "name": "A Sleeping Stranger",
+   "group": "Set Pieces",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c1c28",
+    "effect": "none"
+   },
+   "intro": "A trainer is asleep against a rock, muttering in their sleep. It sounds like a battle plan.",
+   "choices": [
+    {
+     "label": "Lean in.",
+     "success": {
+      "text": "You lean in. \"...lead with the... then switch to...\" It is your rival's plan, word for word: you know now who they will open with, and every fight between here and there.",
+      "effects": [
+       {
+        "kind": "riftPreview"
+       },
+       {
+        "kind": "flag",
+        "key": "rival-plan-heard",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a blanket.",
+     "success": {
+      "text": "You tuck your spare blanket round them and walk on. Later, far down the road, someone waves at you from a hilltop, wrapped in a blanket.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kindness",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tap-the-silhouette",
+   "name": "A Silhouette in the Grass",
+   "group": "Set Pieces",
+   "stop": "wild",
+   "scene": {
+    "cast": [],
+    "tint": "#101820",
+    "effect": "none"
+   },
+   "intro": "A shape moves in the tall grass. A faint cry: \"Vee?\" Fluffy tail, long ears. Who is it?",
+   "choices": [
+    {
+     "label": "An Eevee.",
+     "success": {
+      "text": "\"Vee!\" It is, and it is very pleased you knew. It does not run. It comes right up to you, curious, and is much easier to catch than any wild one has a right to be.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "It came to you: easier to catch",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.25
+         }
+        ],
+        "battles": 1,
+        "until": "wild"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "eevee"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "A Buneary.",
+     "success": {
+      "text": "It hears the wrong name, flattens its ears, and is gone in a rustle of grass.",
+      "effects": []
+     }
+    },
+    {
+     "label": "A Pikachu.",
+     "success": {
+      "text": "It hears the wrong name, gives a disgusted \"Vee!\", and is gone.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "voting-booth",
+   "name": "The Voting Booth",
+   "group": "Set Pieces",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1e2a2a",
+    "effect": "none"
+   },
+   "intro": "A little booth with ballots stands at a fork in the road. **\"Everyone votes,\"** says the sign. Your Pokémon crowd round it, very seriously.",
+   "choices": [
+    {
+     "label": "Let them vote.",
+     "chance": 0.5,
+     "success": {
+      "text": "Pawprints on ballots. The count: THE QUIET PATH wins. The ones who voted for it strut down it at the front, and you all take it slow and easy.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Pawprints on ballots. The count: THE LONG ROAD wins. The ones who voted for it lead the way, very proud, and from the long road you can see everything ahead.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "academy-exam",
+   "name": "The Academy Exam",
+   "group": "Holiday events",
+   "types": [
+    "psychic"
+   ],
+   "gameEvent": "trainer-academy",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#101830",
+    "effect": "glint"
+   },
+   "intro": "Trainer Academy week. An examiner has set up a desk on the road. \"Open exam! Three questions, then a battle. Pass, and you leave with a Mastery Shard.\"",
+   "choices": [
+    {
+     "label": "Sit it.",
+     "success": {
+      "text": "Three questions: type matchups, a status rule, and one about patience that makes you think. You answer all three. \"Now the practical,\" says the examiner, and sends out their team.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Academy Examiner",
+       "classId": "veteran",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "train",
+         "what": "masteryShard"
+        },
+        {
+         "kind": "moment",
+         "text": "Passed the Trainer Academy exam.",
+         "importance": 40
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You watch the other trainers sit it. You learn a lot from their mistakes, and a little from their nerves.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "earth-week-cleanup",
+   "name": "The Big Cleanup",
+   "group": "Holiday events",
+   "types": [
+    "ground",
+    "grass"
+   ],
+   "gameEvent": "earth-week",
+   "scene": {
+    "cast": [],
+    "tint": "#182010",
+    "effect": "none"
+   },
+   "intro": "Earth Week. Volunteers are clearing litter from a riverbank, and a Wingull is tangled in a plastic ring. \"Many hands!\" says the organiser.",
+   "choices": [
+    {
+     "label": "Join (a node).",
+     "success": {
+      "text": "You spend the whole stretch on it: bags and bags of rubbish, and the Wingull, freed, sitting on your head for an hour out of sheer gratitude. The river looks like a river again.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kindness",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Spent a day cleaning the riverbank.",
+        "importance": 45
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. The volunteers keep going without you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "friendship-picnic",
+   "name": "The Friendship Picnic",
+   "group": "Holiday events",
+   "types": [
+    "fairy",
+    "normal"
+   ],
+   "gameEvent": "friendship-festival",
+   "scene": {
+    "cast": [],
+    "tint": "#301020",
+    "effect": "hearts"
+   },
+   "intro": "The Friendship Festival. Blankets, sweets and Pokémon everywhere. Someone has left you a seat.",
+   "choices": [
+    {
+     "label": "Sit.",
+     "success": {
+      "text": "You sit and eat sweets and watch everyone else's Pokémon play. It is lovely.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring the team.",
+     "success": {
+      "text": "Your whole team piles onto the blanket, and the afternoon goes by in a heap of crumbs and naps and new friends.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "harvest-berry-fair",
+   "name": "The Berry Fair",
+   "group": "Holiday events",
+   "types": [
+    "grass"
+   ],
+   "gameEvent": "harvest-festival",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2008",
+    "effect": "sparkle"
+   },
+   "intro": "The Harvest Festival's Berry Fair: tables of enormous berries, rosettes, and farmers eyeing each other's produce.",
+   "choices": [
+    {
+     "label": "Enter a Berry.",
+     "chance": 0.5,
+     "success": {
+      "text": "You enter the best berry you have found on the road. It wins a rosette, and ₽300 in prize money.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "moment",
+        "text": "Won a rosette at the Berry Fair.",
+        "importance": 30
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your berry is very nice. The winning berry is the size of a Snorlax's head. You get a participation sticker.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Judge.",
+     "success": {
+      "text": "They need a judge, and you have an honest face. You taste forty berries, and the winner thanks you with a rare one of their own.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "liechi-berry",
+         "ganlon-berry",
+         "salac-berry",
+         "petaya-berry",
+         "apicot-berry"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pokemon-day-parade",
+   "name": "The Anniversary Parade",
+   "group": "Holiday events",
+   "gameEvent": "pokemon-day",
+   "scene": {
+    "cast": [],
+    "tint": "#202008",
+    "effect": "sparkle"
+   },
+   "intro": "Pokémon Day! A parade of every kind of Pokémon marching through town with ribbons and drums.",
+   "choices": [
+    {
+     "label": "March with them.",
+     "success": {
+      "text": "You march at the front with {starter}, who has never been so proud of anything in its life.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "starter"
+       },
+       {
+        "kind": "moment",
+        "text": "Marched in the Pokémon Day parade.",
+        "importance": 35
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "spring-bloom-guardian",
+   "name": "The Bloom Guardian",
+   "group": "Holiday events",
+   "rarity": "uncommon",
+   "types": [
+    "grass",
+    "fairy"
+   ],
+   "minStage": 2,
+   "gameEvent": "spring-bloom",
+   "scene": {
+    "cast": [],
+    "tint": "#103018",
+    "effect": "sparkle"
+   },
+   "intro": "Spring bloom. A meadow full of Gracidea, and in the middle, the first bloom of the year, glowing faintly. Something small and green is curled up beside it, guarding it.",
+   "choices": [
+    {
+     "label": "Don't pick the bloom.",
+     "success": {
+      "text": "You leave the bloom where it is. The little guardian opens one eye, sees you walking away, and closes it again, content.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask to see it.",
+     "success": {
+      "text": "You kneel and ask, quietly. The little guardian sits up, looks at you a long while, and then moves aside to let you see. The bloom opens in your presence, and the meadow smells of thanks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-shaymin",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Was shown the first bloom of spring.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "spring-egg-hunt",
+   "name": "The Egg Hunt",
+   "group": "Holiday events",
+   "types": [
+    "grass",
+    "fairy"
+   ],
+   "gameEvent": "spring-bloom",
+   "scene": {
+    "cast": [],
+    "tint": "#183018",
+    "effect": "sparkle"
+   },
+   "intro": "Painted eggs hidden all over the meadow. Children everywhere. One egg, you notice, is not painted at all. It is warm.",
+   "choices": [
+    {
+     "label": "Hunt.",
+     "success": {
+      "text": "You find three: two painted wooden ones, and one real egg, warm, that seems to lean toward your voice when you speak. You keep that one.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "egg-that-listened",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Found an egg that listens.",
+        "importance": 50
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "stargazing-meteor-watch",
+   "name": "The Meteor Watch",
+   "group": "Holiday events",
+   "types": [
+    "psychic",
+    "fairy"
+   ],
+   "gameEvent": "stargazing-nights",
+   "scene": {
+    "cast": [],
+    "tint": "#080820",
+    "effect": "sparkle"
+   },
+   "intro": "Stargazing night. Everyone lying in the grass. A meteor streaks overhead, green and wrong, and comes down somewhere close.",
+   "choices": [
+    {
+     "label": "Make a wish.",
+     "success": {
+      "text": "You make a wish. You will not say what. Your lead, lying beside you, looks like it made one too.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow where it fell.",
+     "success": {
+      "text": "You follow it into the hills. A crater, still steaming, and in it, a shard of green crystal that hums, and for one second, a shape standing at the edge of the light that is not quite a Pokémon you know. Then it is gone.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "star-piece",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "telling-deoxys",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Followed a falling star.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "summer-beach-tournament",
+   "name": "The Beach Tournament",
+   "group": "Holiday events",
+   "rarity": "uncommon",
+   "types": [
+    "water"
+   ],
+   "minStage": 2,
+   "gameEvent": "summer-splash",
+   "scene": {
+    "cast": [],
+    "tint": "#082838",
+    "effect": "none"
+   },
+   "intro": "Summer Splash. A sandcastle stadium hosts the beach's biggest tournament: three rounds, one champion, one Shell Bell.",
+   "choices": [
+    {
+     "label": "Enter.",
+     "success": {
+      "text": "Round one, round two, and the final, in the sun and the spray, with the crowd stamping in the stands.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Beach Tournament",
+       "classId": "swimmer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "shell-bell",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Won the beach tournament.",
+         "importance": 45
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

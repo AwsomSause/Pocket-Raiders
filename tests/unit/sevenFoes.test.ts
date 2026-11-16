@@ -13,7 +13,8 @@ function fight(seventh: boolean, team: string[]) {
   const base = [...content.events.values()].find((e) => e.choices.some((c) => c.success.battle?.kind === 'trainer'))!;
   const event = structuredClone(base);
   event.id = id;
-  event.choices = [{ ...structuredClone(base.choices[0]!), success: { text: 'x', effects: [], battle: { kind: 'trainer', name: 'Boss', size: team.length, levelBonus: 0, shadow: 0, chain: 1, ghost: false, retired: false, rival: false, types: [], team, ...(seventh ? { seventh: true } : {}) } } }] as never;
+  // The copied choice keeps no requirement of its own (the first trainer event may cost money or need an item).
+  event.choices = [{ ...structuredClone(base.choices[0]!), requires: [], check: undefined, chance: undefined, success: { text: 'x', effects: [], battle: { kind: 'trainer', name: 'Boss', size: team.length, levelBonus: 0, shadow: 0, chain: 1, ghost: false, retired: false, rival: false, types: [], team, ...(seventh ? { seventh: true } : {}) } } }] as never;
   content.events.set(id, event);
   try {
     const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'r', seed: 'seven', archetypeId: 'red' }), 0));
