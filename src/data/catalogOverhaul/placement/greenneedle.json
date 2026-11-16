@@ -2778,7 +2778,7 @@
    "kanto": "The Day the Center Closed",
    "elsewhere": "The Day the Center Closed"
   },
-  "note": "Once per region, step 5 (fallback step 15). Six patients, one helper each; mistakes lengthen the queue, never worsen anything. Reward Standing Welcome: the first Center heal of the region also gives back one Revive (core/greenneedle/welcome.ts).",
+  "note": "Once per region, step 5 (fallback step 15). Six patients, one helper each; each mistake adds one more patient to the queue (up to four), never worsens anything. For the Company patient the player points at a Pokémon, and only the one with the most Bond is right. Reward Standing Welcome: the first Center heal of the region also gives back one Revive (core/greenneedle/welcome.ts).",
   "kinds": [
    "Minigame Episode"
   ],

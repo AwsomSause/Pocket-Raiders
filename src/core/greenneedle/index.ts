@@ -36,6 +36,7 @@ import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, 
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
 import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
+import { rememberedPick } from '../co/pickMemory';
 import { CHAMPION_NAME, onevoneChampion, onevoneEnd, onevoneEnter, onevoneStart, entrantOf } from './onevone';
 import { GAVEL, auctionArrive, auctionOpen, auctionReturn, auctionRound, lotToken } from './auction';
 import { aceHere, bagBack, bagLeave, bench, brainRecord, brainStart, bring, frontierClear, leadInitiative, palaceShape, rent, swapIn, unbench } from './frontier';
@@ -189,6 +190,11 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
     const level = Math.max(1, Math.round(sc.start + (sc.end - sc.start) * sc.t));
     const bar = (calcStats(content, createPokemon(content, c.key!, level, 'gn-bar')).atk * (c.n ?? 100)) / 100;
     return run.party.some((m) => m.hp > 0 && calcStats(content, m).atk > bar);
+  }
+  // gn.new.18: the Pokémon the player pointed at is (tied for) the most loved of the party: no one has more friendship.
+  if (c.test === 'pickedTopBond') {
+    const mon = rememberedPick(run);
+    return !!mon && run.party.every((m) => m.friendship <= mon.friendship);
   }
   // gn.36: a party Pokémon holds item `key` (Safety Goggles see through a sandstorm); one has ability `key` (Desert Guide).
   if (c.test === 'holds') return run.party.some((m) => (m.held?.[c.key!] ?? 0) > 0);
