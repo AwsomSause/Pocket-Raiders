@@ -56,6 +56,18 @@ export function codeNameOf(run: Pick<RunState, 'expansion'>): string | null {
   return n ? `${n.name} "${n.alias}"` : null;
 }
 
+/** The code-name card after joining (the mock-ups' card page): the alias, the rank tag, who named you and the card's lines; null before joining. */
+export function codeNameCard(run: Pick<RunState, 'expansion'>, teamName: string, regionName: string): { alias: string; rank: string; givenBy: string; facts: [string, string][] } | null {
+  const s = standWithOf(run);
+  const n = s && codeNameFor(s.team);
+  if (!s || !n) return null;
+  const band = bandOf(s.rep);
+  return {
+    alias: n.alias, rank: band?.rank ?? 'Recruit', givenBy: n.givenBy,
+    facts: [['Code name', n.name], ['Team', `${teamName}, ${regionName}`], ['Reputation', `${s.rep >= 0 ? '+' : ''}${s.rep}`], ['Uniform', band ? 'Issued' : 'Not yet'], ['Standing', band?.band ?? 'Probation']],
+  };
+}
+
 const clampRep = (n: number) => Math.max(-100, Math.min(100, n));
 
 /**

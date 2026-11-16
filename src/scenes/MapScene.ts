@@ -69,7 +69,7 @@ import { storyRegionTrack } from '../core/presentation/storyMusic';
 import { isStoryCampaign } from '../core/campaign/circuit';
 import { badgeIconId } from '../assets/storyIcons';
 import { storyIcon } from '../ui/storyIcon';
-import { notify } from '../ui/overlays';
+import { notify, setLogKeyTaken } from '../ui/overlays';
 import { mapTrack, storyRegionMusic } from '../core/presentation/battleMusic';
 import { openBondMenu } from '../ui/bondMenu';
 import { openPartyScene, openScrapbook } from '../ui/partyLifeUi';
@@ -124,6 +124,7 @@ import { askText } from '../ui/redux/ask';
 import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
 import type { BattlePanel } from '../ui/redux/screens/battle';
 import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../ui/redux/screens/map';
+import { bestMedalWord } from '../ui/redux/screens/minigame';
 import { confirmBox } from '../ui/redux/screens/saves';
 import { bookRows, bookView, dossierView, nodeMenuView, pauseView, reportView, rollView, trackView, type NodeMenuCard } from '../ui/redux/screens/popups';
 import { bracketView as rxBracketView, galarHome, galarPage } from '../ui/redux/screens/bracket';
@@ -1320,6 +1321,9 @@ export class MapScene extends Phaser.Scene {
 
     // Ideas W4: Legend (L) explains every icon on the map.
     this.input.keyboard?.on('keydown-L', () => this.toggleLegend());
+    // New UI: on the map L is the Legend alone (the interaction log's window would lie over it); Shift+L opens the log.
+    setLogKeyTaken(() => reduxOn() && this.scene.isActive() && (Boolean(this.legend) || (!this.busy && !this.picker)));
+    this.events.once('shutdown', () => setLogKeyTaken(null));
     const legendTag = this.add.text(GAME_WIDTH - 24, 402, 'L: map legend', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('legend-tag');
     legendTag.on('pointerdown', () => this.toggleLegend());
     // Beta 0.6 R7: R opens the Rival Report pop-up (only once a rival has been met).
@@ -1889,13 +1893,26 @@ export class MapScene extends Phaser.Scene {
   private openMinigame(sideId: string): void {
     const { session } = services();
     const pv = minigamePreview(session.content, session.run!, sideId, session.settings.expansion.minigamesDifficulty);
+    // New look: the card's picture is your lead Pokémon, as the mock-up puts one beside the tier.
+    const lead = session.run!.party[0];
     const picker: Picker = new Picker(this, {
-      title: `${pv.name} - ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left`,
+      // New look: the game's name in the band and the attempts as a chip; the tier list is a menu on the run's teal (a game called "Memory" is not a board).
+      title: reduxOn() ? `${pv.name} · ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left` : `${pv.name} - ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left`,
+      kind: 'menu',
+      area: 'run',
       columns: 1,
       rowHeight: 120,
       rows: pv.tiers.map((t) => ({
         problem: pv.attemptsLeft > 0 ? null : 'No attempts left',
-        hint: `${pv.instructions} ${pv.scoring}`,
+        hint: reduxOn() ? pv.blurb : `${pv.instructions} ${pv.scoring}`,
+        // New look: the mock-up's tier list (the tier, what it pays) with the medals and the best on the card.
+        menu: {
+          label: `${t.label}${t.index === pv.recommendedTier ? ' (your setting)' : ''}`,
+          note: `×${t.money} money`,
+          detail: `${pv.instructions} ${pv.scoring}`,
+          sprite: lead ? monFile(this, lead.speciesId, 'front', lead.shiny) : null,
+          facts: [['Kind', pv.category], ['Tiers', pv.tiers.map((x) => x.label).join(', ')], ['Pays', `×${t.money} money${t.items ? ' and maybe an item' : ''}`], ['Medals', pv.medals], ['Best', bestMedalWord(pv.best)]],
+        },
         draw: (scene, box, w) => {
           box.add(scene.add.text(16, 8, `${pv.name}  ·  ${t.label}${t.index === pv.recommendedTier ? '  (your setting)' : ''}`, textStyle(22)));
           box.add(scene.add.text(16, 40, `${pv.instructions} ${pv.scoring}`, textStyle(15, '#ffd0a0', { wordWrap: { width: w - 32 } })));
@@ -2192,9 +2209,12 @@ export class MapScene extends Phaser.Scene {
     const { session } = services();
     const content = session.content;
     const offer = fishingOffer(content, session.run!, sideId);
+    // New UI: the mock-up's fishing window over the map ("! A bite !"), the bites listed in it.
+    const rxOn = reduxOn();
     const picker: Picker = new Picker(this, {
       glass: true,
-      title: 'Something is biting! Which one?',
+      title: rxOn ? 'Which one do you reel in?' : 'Something is biting! Which one?',
+      ...(rxOn ? { dock: true, window: { top: 160, center: true, lead: '! A bite !' } } : {}),
       columns: 1,
       rowHeight: 64,
       rows: offer.map((o) => {
@@ -2203,6 +2223,7 @@ export class MapScene extends Phaser.Scene {
         return {
           ...row,
           hint: `${row.hint}  ·  Lv${o.level}`,
+          ...(rxOn ? { menu: { label: species.name, note: `Lv${o.level}`, detail: `${row.hint}  ·  Lv${o.level}`, sprite: monFile(this, o.speciesId, 'front') } } : {}),
           draw: (scene, box, w, h) => {
             row.draw(scene, box, w, h);
             box.add(scene.add.text(w - 16, h / 2, `Lv${o.level}`, textStyle(22)).setOrigin(1, 0.5));

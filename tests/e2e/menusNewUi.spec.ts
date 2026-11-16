@@ -358,6 +358,7 @@ test('New UI: Esc on the map opens the mock-up pause menu; its buttons open the 
   await expect(map()).toContainText('End this run?');
   await expect(map()).toContainText('Your progress is banked as a defeat. This cannot be undone.');
   await expect(map().locator('.btn.on[data-act="confirm"]')).toHaveText('Keep playing');
+  await page.screenshot({ path: 'test-results/newui-confirm.png' });
   await page.screenshot({ path: 'test-results/newui-pause-confirm.png' });
   // Enter on "Keep playing" and Esc both go back to the pause menu; a click beside the box does nothing; the run goes on.
   await page.keyboard.press('Enter');
@@ -394,6 +395,7 @@ test('New UI: F2 opens the mock-up debug window (Scene, Seed, RNG stream, FPS an
   await expect(win.locator('.tg')).toHaveText(['Scene jump', 'Story log', 'Asset viewer', 'Moment viewer', 'Save creator', 'Extended Cut']);
   await expect(win.locator('.tg:not(.no)')).toHaveText('Scene jump');
   await expect(win.locator('.dbg-tool')).toHaveCount(0);
+  await page.screenshot({ path: 'test-results/newui-debug.png' });
   // The old panel and the corner frame meter step aside while the window is open.
   await expect(page.locator('#debug-panel')).toBeHidden();
   await expect(page.locator('#fps-meter')).toBeHidden();

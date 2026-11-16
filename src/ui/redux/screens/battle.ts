@@ -329,6 +329,10 @@ export interface BattleListModel {
   top?: number;
   /** The player can step back out of it (a small Back line shows). */
   back?: boolean;
+  /** In the middle of the screen (a map stop's quick choice, as the mock-up's fishing window) instead of over the field's left side. */
+  center?: boolean;
+  /** A big pulsing headline over a gold bar ("! A bite !"), above the title. */
+  lead?: string;
 }
 
 /** "Bag  (P pins to the hotbar)": the title, and the words in brackets as a small note. */
@@ -357,5 +361,8 @@ export function battleListView(_c: ReduxCtx, d: BattleListModel): string {
   const none = n ? '' : '<div class="sm" style="opacity:.7">Nothing here.</div>';
   const where = n > BATTLE_LIST_ROWS ? `${s + 1}–${end} of ${n}` : '';
   const foot = where || d.note || d.back ? `<div class="row sm" style="gap:8px;opacity:.8"><span class="grow">${esc([where, d.note].filter(Boolean).join(' · '))}</span>${d.back ? `<span style="cursor:pointer"${act('back')}><kbd>Esc</kbd>back</span>` : ''}</div>` : '';
-  return W(`${tabs}${d.title && !items ? `<b class="acc">${esc(d.title)}</b>` : ''}${rows}${none}${foot}`, `position:absolute;left:20px;top:${d.top ?? 92}px;width:330px;display:flex;flex-direction:column;gap:${items ? 7 : 5}px;padding:10px 12px;z-index:4`);
+  const lead = d.lead ? `<b class="acc pulse" style="font-size:24px;text-align:center">${esc(d.lead)}</b><div class="hp gold" style="height:12px"><i style="width:68%"></i></div>` : '';
+  const title = d.title && !items ? `<b class="acc"${d.lead ? ' style="text-align:center"' : ''}>${esc(d.title)}</b>` : '';
+  const [x, w, pad] = d.center ? ['300px', '360px', '16px 18px'] : ['20px', '330px', '10px 12px'];
+  return W(`${tabs}${lead}${title}${rows}${none}${foot}`, `position:absolute;left:${x};top:${d.top ?? 92}px;width:${w};display:flex;flex-direction:column;gap:${items ? 7 : d.lead ? 8 : 5}px;padding:${pad};z-index:4`);
 }

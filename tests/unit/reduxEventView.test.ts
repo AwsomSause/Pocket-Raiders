@@ -154,3 +154,18 @@ describe('New UI event screen: a department store floor (mock-up `store`)', () =
     expect(eventView(ctx(0), model({ store: null }))).toBe(eventView(ctx(0), model()));
   });
 });
+
+describe('Stand With Them code-name card', () => {
+  const card = { name: 'House Card', rank: 'Specialist', facts: [['Code name', 'Provisional Agent 000'], ['Team', 'Team Rocket, Kanto']] as [string, string][], trainer: null, badges: 2 };
+  const out = (step: 'text' | 'rewards') => ({ step, ok: true, changes: ['Joined Team Rocket'], next: 'Continue' });
+  it('the joining outcome is read on the card, and a click turns it like the outcome page', () => {
+    const html = eventView(ctx(0), model({ codeCard: card, outcome: out('text'), lines: [{ who: null, text: 'Giovanni names you Provisional Agent 000.' }] }));
+    for (const bit of ['Code Name', 'House Card', 'Specialist', 'Provisional Agent 000', 'Team Rocket, Kanto', 'Giovanni names you']) expect(html).toContain(bit);
+    expect(html).toContain('data-act="next"');
+    expect(html).not.toContain('data-act="back"');
+  });
+  it('the rewards step and the choices are the plain event page', () => {
+    expect(eventView(ctx(0), model({ codeCard: card, outcome: out('rewards') }))).not.toContain('House Card');
+    expect(eventView(ctx(0), model({ codeCard: card }))).not.toContain('House Card');
+  });
+});

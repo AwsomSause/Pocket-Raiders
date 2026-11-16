@@ -31,6 +31,7 @@ import Phaser from 'phaser';
 import { wildBehavior } from '../core/wildBehavior';
 import { enemyIntent, foePreviewIntent, trainerTaunt } from '../core/battle/intent';
 import { nextSwitchLine } from '../core/rivals/questlines';
+import { winConditionLine } from '../core/rivals/tier5';
 import { explainMoment, explanationText, FAMILY_NAMES, unseenKeys } from '../core/story/hyperRules';
 import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
 import { armFeat, featCharged } from '../core/story2/feats';
@@ -128,7 +129,8 @@ import { battleView, panelOf, splitChoice, type BattleBox, type BattleEvolve, ty
 import { artOf, monFile } from '../ui/redux/game';
 import { moveTipOf, ownAbilityCard, seenFact } from '../ui/redux/tips';
 import { versusView, type VersusModel } from '../ui/redux/screens/versus';
-import type { CutModel } from '../ui/redux/screens/cut';
+import { eventView } from '../ui/redux/screens/event';
+import { shortestSentence, type CutModel } from '../ui/redux/screens/cut';
 import type { Art } from '../ui/redux/templates';
 import { playCutMoment } from '../ui/redux/moment';
 import { rxFileOf } from '../ui/redux/assets';
@@ -2772,7 +2774,8 @@ export class BattleScene extends Phaser.Scene {
     }
     const model: VersusModel = {
       name: boss && !standIn ? boss.name : trainer.name,
-      role: boss ? boss.title.replace(boss.name, '').trim() : battle.rivalId || battle.rival ? 'Rival' : cls?.name ?? '',
+      // A tier-5 rival names its win condition before the fight (the mock-up's "Rival · plans to sweep").
+      role: boss ? boss.title.replace(boss.name, '').trim() : battle.rivalId || battle.rival ? (battle.rivalBrain ? `Rival · ${winConditionLine(battle.rivalBrain.winCondition)}` : 'Rival') : cls?.name ?? '',
       cast: artOf(this, this.trainerArt()?.assetId),
       line,
       evil: !!team && Object.values(team.ranks).some((r) => r.name === trainer.name),
@@ -2949,7 +2952,24 @@ export class BattleScene extends Phaser.Scene {
     const battle = this.run.battle!;
     const { content } = services().session;
     if (battle.raid) {
+      // A Colossus raid (`ss-<team>-<apex>`) is an Apex: the team's leader stands with it on the card, as on the mock-up's Apex record.
+      const apexTeam = battle.raid.id.startsWith('ss-') ? content.evilTeams.teams.find((t) => t.id === battle.raid!.id.split('-')[1]) : undefined;
+      const apexDef = apexTeam ? content.raids.raids.find((r) => r.id === battle.raid!.id) : undefined;
+      if (apexTeam && apexDef) {
+        const leader = artOf(this, apexTeam.ranks.leader.sprite);
+        await this.bigMoment(bossIntroMoment({ role: 'raid' }), `raid.${battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'APEX', apexDef.name, false, { cast: leader ?? this.rxMe(), role: `Apex · ${apexTeam.name}`, line: shortestSentence(apexDef.blurb), evil: true });
+        return;
+      }
       await this.bigMoment(bossIntroMoment({ role: 'raid' }), `raid.${battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID BOSS', this.speciesName(battle.enemyTeam[0]!), false, { cast: this.rxMe(), role: 'Raid Boss', line: 'The den glows red.' });
+      return;
+    }
+    if (battle.totem) {
+      // New UI: a Totem Pokémon is revealed on the cutscene card (the mock-up's Totem boss card), with its aura as the line.
+      if (this.rx) {
+        const tdef = content.totems.totems.find((x) => x.id === battle.totem!.id);
+        const calls = tdef?.ally ? ' It calls for help.' : '';
+        await this.bigMoment(bossIntroMoment({ role: 'raid' }), `totem.${battle.totem.id}`, 'TOTEM POKÉMON', tdef?.name ?? `Totem ${this.speciesName(battle.enemyTeam[0]!)}`, false, { cast: this.rxMe(), role: 'Totem Pokémon', line: `${(tdef?.aura?.text ?? 'Its aura flares.').split(/(?<=\.)\s/)[0]}${calls}` });
+      }
       return;
     }
     if (!battle.trainer) {
@@ -3017,6 +3037,7 @@ export class BattleScene extends Phaser.Scene {
         say: (text) => this.say(text),
         announce: (text) => this.speakWithArt('Reporter', INTERVIEWERS_SPRITE, text, 'crowd'),
         opponentSays: (name, assetId, text) => this.speakWithArt(name, assetId, text, 'crowd'),
+        tag: (text) => { this.rxAirTag = text; },
         // Read when a moment plays (the New layer is mounted after this director is made).
         get card() {
           return rxOn() ? rxCard : undefined;
@@ -3293,15 +3314,16 @@ export class BattleScene extends Phaser.Scene {
     this.menu = new Menu(this, {
       x: COMMAND_X + 24,
       y: MESSAGE_Y + 26,
-      options: choices.map((c) => ({ label: c.label })),
+      // New UI: the mock-up's target picker ends on a Back button (Esc does the same in both looks).
+      options: [...choices.map((c) => ({ label: c.label })), ...(this.rx ? [{ label: 'Back' }] : [])],
       columns: 1,
       itemWidth: 340,
       itemHeight: 46,
       fontSize: 26,
       color: this.btnText,
-      glass: { paint: this.skin?.pill, tints: choices.map((c) => mixColor(c.tint, 0x000000, 0.3)), motion: this.motion },
-      onFocus: aim,
-      onSelect: (i) => this.submit(action, choices[i]!.target),
+      glass: { paint: this.skin?.pill, tints: [...choices.map((c) => mixColor(c.tint, 0x000000, 0.3)), ...(this.rx ? [0x303848] : [])], motion: this.motion },
+      onFocus: (i) => { if (i < choices.length) aim(i); },
+      onSelect: (i) => (i < choices.length ? this.submit(action, choices[i]!.target) : this.showMoveMenu()),
       onBack: () => this.showMoveMenu(),
     });
   }
@@ -4724,6 +4746,45 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
+  /** New UI: the broadcast page's tag while an interview plays (set by the stadium director), else null. */
+  private rxAirTag: string | null = null;
+
+  /**
+   * New UI: one stadium broadcast line as the mock-ups' talk page over the field (the Galar interview): the stadium
+   * behind, the speaker's picture, their name on the plate and the line in the text box. A key, a click or the
+   * auto-advance timer goes on. Presentation only.
+   */
+  private rxBroadcast(speaker: string, text: string, artId: string | null): Promise<void> {
+    const settings = services().session.settings;
+    const backdrop = this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null;
+    const cast = artOf(this, artId);
+    const tag = this.rxAirTag ?? 'Live from the stadium';
+    return new Promise<void>((resolve) => {
+      let over = false;
+      const end = (): void => {
+        if (over) return;
+        over = true;
+        auto?.remove(false);
+        if (this.advance === end) this.advance = null;
+        view.destroy();
+        resolve();
+      };
+      const view = mountRedux(this, {
+        render: (c) => eventView(c, {
+          name: 'Stadium broadcast', tag, lines: [{ who: speaker, text }], speaker, page: { at: 0, of: 1 },
+          art: backdrop, tint: null, fx: null, cast, mon: null,
+          choices: [{ label: 'Go on', sub: '', chance: '', locked: false }], index: 0,
+          money: null, outcome: null, pick: null, countdown: '', timer: null,
+        }),
+        acts: { pick: end, page: end, next: end },
+        card: true,
+      });
+      const auto = settings.autoAdvance ? this.time.delayedCall(MESSAGE_DELAYS[settings.messageDelay] + text.length * LETTER_MS[settings.speechSpeed] * 1.4, end) : null;
+      // A press that closed the line before must not close this one too.
+      this.time.delayedCall(120, () => { if (!over) this.advance = end; });
+    });
+  }
+
   private async speak(speaker: string, text: string, voice: SpeechVoice = 'calm', shout = false, artOverride?: { assetId: string; look?: 'crowd' | 'champion' }): Promise<void> {
     const settings = services().session.settings;
     const content = services().session.content;
@@ -4747,6 +4808,8 @@ export class BattleScene extends Phaser.Scene {
       void hop(this, this.enemySprite, this.motion);
     };
     const look = artOverride?.look ?? (this.stadium && (isFoe ? boss?.role === 'champion' : Boolean(this.hostArtFor(speaker))) ? 'champion' : undefined);
+    // New UI: a stadium broadcast line (the reporter, a guest in the stands, a round's opponent) is the mock-ups' talk page.
+    if (this.rx && this.stadium && (artOverride?.look === 'crowd' || speaker === 'Reporter')) return this.rxBroadcast(speaker, plain, artOverride?.assetId ?? this.hostArtFor(speaker));
     const line = storyLine(this, {
       speaker,
       role,

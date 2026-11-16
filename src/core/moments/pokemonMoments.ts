@@ -376,6 +376,27 @@ const FileSchema = z.object({ status: z.string(), note: z.string(), groups: z.re
 const file = FileSchema.parse(raw);
 
 export const MOMENT_GROUPS: Readonly<Record<string, readonly string[]>> = file.groups;
+
+/**
+ * The party Pokémon an event is about: the first party member in the group (or of the species) the event asks for,
+ * null when it asks for none. Presentation only: the event page stands it in the picture when the event names no art.
+ */
+export function partyStarOf(requires: readonly { kind: string; group?: string; species?: string }[], party: readonly { speciesId: string }[]): string | null {
+  for (const c of requires) {
+    const hit = c.kind === 'partyGroup' ? party.find((m) => MOMENT_GROUPS[c.group ?? '']?.includes(m.speciesId) ?? false)
+      : c.kind === 'partySpecies' ? party.find((m) => m.speciesId === c.species) : undefined;
+    if (hit) return hit.speciesId;
+  }
+  return null;
+}
+/** The group of the camp rest events; each is about one of the team, never named. */
+export const CAMP_REST_GROUP = 'Rests, camp and bond';
+/** The Pokémon a camp rest's picture shows: the second one still standing (the lead travels with you), else the first standing, else the lead. */
+export function campStarOf(group: string, party: readonly { speciesId: string; hp: number }[]): string | null {
+  if (group !== CAMP_REST_GROUP || !party.length) return null;
+  const up = party.filter((m) => m.hp > 0);
+  return (up[1] ?? up[0] ?? party[0])!.speciesId;
+}
 /** PA12: a Paradox Pokémon and the modern species it mirrors. */
 /** PA17 to PA31: the last-stand statuses by id. */
 export const REVIVAL_STATUSES: Readonly<Record<string, RevivalStatus>> = file.revivalStatuses;

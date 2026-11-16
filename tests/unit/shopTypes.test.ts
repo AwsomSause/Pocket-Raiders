@@ -65,6 +65,25 @@ describe('shop view (what every style draws)', () => {
     expect(stone?.users).toEqual(['pika']);
     expect(view(r).rows.find((x) => x.itemId === 'poke-ball')?.users).toBeNull();
   });
+
+  it('the New shop page\'s focus line says who can use it, what you own and your money, without repeating what it does', () => {
+    const r = run();
+    r.money = 640;
+    r.inventory = { ...r.inventory, 'poke-ball': 3 };
+    const ball = view(r).rows.find((x) => x.itemId === 'poke-ball')!;
+    expect(ball.who).toBe('You have 3 · ₽640 to spend');
+    expect(ball.who).not.toContain(ball.description);
+    r.inventory = { ...r.inventory, 'poke-ball': 0 };
+    expect(view(r).rows.find((x) => x.itemId === 'poke-ball')!.who).toBe('₽640 to spend');
+  });
+
+  it('only items sold one at a time (Mega Stones, Z-Crystals, key items) have no "Buy 5"', () => {
+    const r = run();
+    r.badges = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const rows = view(r).rows;
+    expect(rows.find((x) => x.itemId === 'poke-ball')!.single).toBe(false);
+    for (const row of rows) expect(row.single).toBe(oneOnly(content, row.itemId));
+  });
 });
 
 describe('each shop kind sells its own goods, with its own perk', () => {

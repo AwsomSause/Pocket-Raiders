@@ -16,7 +16,7 @@ import { sceneForRun } from './routing';
 import { arenaFor, getTheme } from '../core/themes';
 import { artOf, partyChips } from '../ui/redux/game';
 import { mountRedux, reduxOn } from '../ui/redux/stage';
-import { gameView } from '../ui/redux/screens/minigame';
+import { bestMedalWord, gameView } from '../ui/redux/screens/minigame';
 
 const MEDAL_SFX: Record<string, string> = { gold: 'se.shiny', silver: 'se.level_up', bronze: 'se.level_up', none: 'ui.error' };
 const MEDAL_COLOR: Record<string, number> = { gold: 0xf5c842, silver: 0xd0d8e0, bronze: 0xd08848, none: 0x707080 };
@@ -120,6 +120,7 @@ export class MinigameScene extends Phaser.Scene {
           gameView(c, {
             title: `${def.name} · ${def.difficultyTiers[run.minigame!.tier]!.label}`,
             hud: view0.hud,
+            best: bestMedalWord(run.minigames.best[def.id]),
             prompt: outcome ? outcome.lines.join(' ') : view0.prompt,
             medal: outcome ? outcome.medal : null,
             art,

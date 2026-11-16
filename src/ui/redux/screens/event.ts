@@ -8,6 +8,7 @@ import type { ReduxCtx } from '../stage';
 import { priceOf } from '../storeFloors';
 import { figure, type Art } from '../templates';
 import { bracketView, type BracketModel, type RoundChip } from './bracket';
+import { runCardView, type RunCardModel } from './over';
 import { honestView, type HonestModel } from './stops';
 import { teamView, type TeamModel } from './team';
 
@@ -45,6 +46,8 @@ export interface EventModel {
   title?: string | null;
   /** Catalog Overhaul: the Honest Trade Card as a page of its own (while a Pokémon is picked for the trade, or when the card is read with T). */
   honest?: HonestModel | null;
+  /** Stand With Them: the code-name card that the joining outcome's text is read on (the mock-ups' card page). */
+  codeCard?: Pick<RunCardModel, 'name' | 'rank' | 'facts' | 'trainer' | 'badges'> | null;
   /** The event has a trade card to read: a tag on the tag row opens it (T). */
   cardHint?: boolean;
   /** gn.new.29: the rival's team as a page of its own (R opens it, Enter closes it), and whether the rival's scene has one to read. */
@@ -71,6 +74,10 @@ export function eventView(c: ReduxCtx, d: EventModel): string {
   if (d.bracket) return bracketView(c, d.bracket);
   if (d.honest) return honestView(c, d.honest);
   if (d.team) return teamView(c, d.team);
+  if (d.codeCard && d.outcome?.step === 'text') {
+    const text = d.lines.map((l) => (l.who ? `${l.who}: ${l.text}` : l.text)).join(' ');
+    return runCardView(c, { ...d.codeCard, title: 'Code Name', team: [], text, hints: [['Enter', 'next']], area: 'story', save: false, tap: 'next' });
+  }
   const v = c.v(4), out = d.outcome, more = d.page.at < d.page.of - 1, ch = out || more ? [] : d.choices;
   const talk = d.lines.some((l) => l.who !== null);
   /** The page as HTML. `plated`: the layout shows the speaker on a name plate, so their own lines need no name. */

@@ -256,4 +256,11 @@ describe('Master tier (Beta 0.6 MG1)', () => {
     const t = (d: 'easy' | 'normal' | 'hard') => minigamePreview(content, run, 'mg-test', d).recommendedTier;
     expect([t('easy'), t('normal'), t('hard')]).toEqual([0, 1, 3]);
   });
+  it('each tier says what it pays: the money multiplier, and whether a medal can pay an item', () => {
+    const run = stopRun('mg-tiers', 'pokemon-memory');
+    const eco = content.minigames.economy;
+    const tiers = minigamePreview(content, run, 'mg-test').tiers;
+    expect(tiers.map((x) => x.money)).toEqual(eco.tierMultipliers.slice(0, tiers.length));
+    expect(tiers.map((x) => x.items)).toEqual(tiers.map((x) => x.index + 1 >= eco.itemMinTier));
+  });
 });

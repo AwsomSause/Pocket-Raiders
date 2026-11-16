@@ -31,6 +31,9 @@ export interface PromptOptions {
   mic?: boolean;
 }
 
+/** New UI: the shout prompt's twelve level bars at full loudness, in pixels (the mock-up's microphone prompt). */
+const SHOUT_BARS = [20, 34, 48, 30, 44, 26, 38, 50, 22, 36, 46, 28] as const;
+
 /** Runs one prompt and resolves with its result. Cleans up all its objects and listeners. */
 export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: PromptOptions = {}): Promise<PromptResult> {
   return new Promise((resolve) => {
@@ -160,7 +163,7 @@ export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: 
           : `<b class="acc${motion === 'full' ? ' pulse' : ''}" style="font-size:24px">${esc(def.label)}</b>`;
         // The data's hints describe the old ring; the bar gets the mock-up's words, keeping any extra context after a colon.
         const extra = /:\s*(.+)$/.exec(def.hint)?.[1] ?? '';
-        const words = def.kind === 'timing' ? `Press Enter when the bar is in the gold zone.${extra ? ` ${extra.charAt(0).toUpperCase()}${extra.slice(1)}` : ''}` : def.kind === 'hold' ? 'Hold Enter, then let go when the bar is in the gold zone.' : def.hint;
+        const words = def.kind === 'shout' ? (meter ? 'Speak, or press Enter to shout instead.' : 'Press Enter to shout.') : def.kind === 'timing' ? `Press Enter when the bar is in the gold zone.${extra ? ` ${extra.charAt(0).toUpperCase()}${extra.slice(1)}` : ''}` : def.kind === 'hold' ? 'Hold Enter, then let go when the bar is in the gold zone.' : def.hint;
         const hintLine = `<div class="sm">${esc(words)} <span style="opacity:.7">(Esc skips)</span></div>`;
         const frame = (body: string, st = `left:${left}px;width:${BOX.w}px;top:${cy - 80}px`): string => '<div class="fill hit"></div>' + W(head + body + hintLine, `position:absolute;${st};display:flex;flex-direction:column;gap:10px;padding:16px 18px;text-align:center;z-index:2;pointer-events:none`);
         switch (def.kind) {
@@ -180,8 +183,13 @@ export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: 
             const dots = def.beatsMs.map((b) => `<u style="position:absolute;left:${pct(b / last)};top:-3px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 2px #0006"></u>`).join('');
             return frame(`<div class="hp" style="height:8px;position:relative;overflow:visible;margin:8px 0">${dots}<u style="position:absolute;left:${pct(t / last)};top:-7px;width:22px;height:22px;margin-left:-11px;border-radius:50%;background:${t < pulseUntil ? '#78f090' : '#9fe8ff'};box-shadow:0 0 0 2px #fff"></u></div>`);
           }
-          case 'shout':
-            return frame(bar(Math.min(1, level * 3)) + `<div class="row" style="justify-content:center">${key}<b>Shout!</b></div>`);
+          case 'shout': {
+            // The mock-up's microphone prompt: twelve level bars over the dimmed screen. They rise with the microphone;
+            // with no microphone they stay low and Enter is the shout.
+            const k = Math.min(1, level * 3);
+            const bars = SHOUT_BARS.map((h) => `<i style="flex:1;height:${Math.round(h * (0.3 + 0.7 * k))}px;background:var(--acc)"></i>`).join('');
+            return '<div class="shade"></div>' + frame(`<div class="row" style="gap:4px;height:50px;align-items:flex-end">${bars}</div>`);
+          }
           case 'drag': {
             // The drag field sits exactly where the pointer maths expects it (the same box the canvas drew).
             const at = (v: readonly [number, number], st: string): string => `<u style="position:absolute;left:${v[0]}%;top:${v[1]}%;${st}"></u>`;
