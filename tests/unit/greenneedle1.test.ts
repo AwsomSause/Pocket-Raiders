@@ -4,6 +4,7 @@ import { fitsStage, positioned } from '../../src/core/co/placement';
 import { RunStateSchema } from '../../src/core/state';
 import { conditionMet } from '../../src/core/events';
 import { freshEvil } from '../../src/core/evil/schema';
+import { aceEggSpecies } from '../../src/core/greenneedle/damian';
 import { moonRaid } from '../../src/core/greenneedle/moon';
 import { content } from './helpers';
 import { choose, flagOf, gnRun, lose, open, openSide, scene, setFlag, win } from './helpers/gnPlay';
@@ -478,6 +479,103 @@ describe("gn.05 Damian's Unofficial Gym", () => {
     const walked = choose(rain, 'gn-05-barn', 'Walk on.').run;
     expect(flagOf(walked, 'damian-closed-thinking')).toBe(1);
     expect(flagOf(walked, 'damian-meetings')).toBe(1);
+  });
+});
+
+describe("gn.05 Damian: back next region after 'Closed. Thinking.', a new theme each meeting, the ace's egg", () => {
+  const closedThenHall = (seed: string) => {
+    let run = gnRun(seed);
+    run.regionIndex = 0;
+    setFlag(run, 'rain-damian-beaten', 1);
+    open(run, 'gn-05-barn');
+    run = choose(run, 'gn-05-barn', 'Walk on.').run;
+    run.regionIndex = 1;
+    open(run, 'gn-05-hall');
+    return run;
+  };
+  it('the barn was shut and no theme was ever picked: the hall can still be played to the end', () => {
+    let run = closedThenHall('gnfix05-closed');
+    expect(flagOf(run, 'damian-theme')).toBe(0);
+    expect(content.events.get('gn-05-hall')!.requires.every((c) => conditionMet(content, run, c))).toBe(true);
+    expect(scene(run, 'gn-05-hall').intro).toMatch(/I did some thinking/);
+    run = choose(run, 'gn-05-hall', 'Challenge the Gym.').run;
+    expect([1, 2, 3]).toContain(flagOf(run, 'damian-theme'));
+    run = win(choose(run, 'gn-05-hall-hired', 'Battle the hired trainer.').run);
+    // Tully and Bex have three Pokémon each, one after the other, and know the buttons (no Splash, no hunting).
+    const tully = choose(run, 'gn-05-hall-friends', 'Battle Tully.').run;
+    expect(tully.battle!.enemyTeam).toHaveLength(3);
+    expect(tully.battle!.storyEffects.some((x) => x.includes('Splash'))).toBe(false);
+    run = win(tully);
+    const bex = choose(run, 'gn-05-hall-bex', 'Battle Bex.').run;
+    expect(bex.battle!.enemyTeam).toHaveLength(3);
+    expect(bex.battle!.storyEffects.some((x) => x.includes('TOP LEFT'))).toBe(false);
+    run = win(bex);
+    // The Leader's room always has its button now.
+    expect(scene(run, 'gn-05-hall-damian').labels).toEqual(['Battle Damian.']);
+    const damian = choose(run, 'gn-05-hall-damian', 'Battle Damian.').run;
+    const team = damian.battle!.enemyTeam;
+    expect(team).toHaveLength(4);
+    expect(team[3]!.level).toBeGreaterThan(Math.max(...team.slice(0, 3).map((m) => m.level)));
+    run = win(damian);
+    run = choose(run, 'gn-05-hall-won', 'Tell him it was closer.').run;
+    expect(flagOf(run, 'damian-meetings')).toBe(2);
+    // The week is over: the next meeting draws its own theme.
+    expect(flagOf(run, 'damian-theme')).toBe(0);
+  });
+  it('a retry the same day keeps the theme; a new meeting may draw a different one', () => {
+    let run = gnRun('gnfix05-theme');
+    run.regionIndex = 0;
+    open(run, 'gn-05-barn');
+    run = choose(run, 'gn-05-barn', 'Challenge the Gym.').run;
+    const first = flagOf(run, 'damian-theme');
+    run = lose(choose(run, 'gn-05-tully', 'Battle Tully.').run);
+    run = choose(run, 'gn-05-lost', 'Go again.').run;
+    run = choose(run, 'gn-05-barn', 'Challenge the Gym.').run;
+    expect(flagOf(run, 'damian-theme')).toBe(first);
+    const themes = new Set<number>();
+    for (let i = 0; i < 12; i++) {
+      const hall = closedThenHall(`gnfix05-week-${i}`);
+      themes.add(flagOf(choose(hall, 'gn-05-hall', 'Challenge the Gym.').run, 'damian-theme'));
+    }
+    expect(themes.size).toBeGreaterThan(1);
+  });
+  it('the real Gym: five Pokémon, the ace two levels up, and the egg is his ace\'s own kind', () => {
+    let run = gnRun('gnfix05-gym');
+    run.regionIndex = 2;
+    setFlag(run, 'damian-meetings', 2);
+    setFlag(run, 'damian-region', 2);
+    run.regionIndex = 3;
+    open(run, 'gn-05-gym');
+    expect(scene(run, 'gn-05-gym').labels).toEqual(['Challenge Damian.', 'Walk on.']);
+    run = choose(run, 'gn-05-gym', 'Challenge Damian.').run;
+    expect([1, 2, 3]).toContain(flagOf(run, 'damian-theme'));
+    const fight = choose(run, 'gn-05-gym-damian', 'Battle Damian.').run;
+    const team = fight.battle!.enemyTeam;
+    expect(team).toHaveLength(5);
+    const ace = team[4]!;
+    expect(aceEggSpecies(content, fight)).toBeTruthy();
+    const kin = aceEggSpecies(content, fight)!;
+    // The egg is the first stage of the ace's family.
+    let s = content.species.get(ace.speciesId)!;
+    while (s.evolutionStage > 1 && s.evolvesFrom && content.species.get(s.evolvesFrom)) s = content.species.get(s.evolvesFrom)!;
+    expect([s.id, s.form?.base]).toContain(kin);
+    run = win(fight);
+    const eggs = run.eggs?.length ?? 0;
+    run = choose(run, 'gn-05-gym-won', 'Take the badge, and the egg.').run;
+    expect(run.eggs).toHaveLength(eggs + 1);
+    expect(run.eggs![eggs]!.speciesId).toBe(kin);
+    expect(flagOf(run, 'damian-meetings')).toBe(3);
+    expect(RunStateSchema.safeParse(run).success).toBe(true);
+  });
+  it('an old save that never saw his ace still gets an egg (of the theme\'s type)', () => {
+    const run = gnRun('gnfix05-old');
+    expect(aceEggSpecies(content, run)).toBeUndefined();
+    setFlag(run, 'damian-meetings', 2);
+    setFlag(run, 'damian-theme', 1);
+    open(run, 'gn-05-gym-won');
+    const eggs = run.eggs?.length ?? 0;
+    const done = choose(run, 'gn-05-gym-won', 'Take the badge, and the egg.').run;
+    expect(done.eggs).toHaveLength(eggs + 1);
   });
 });
 

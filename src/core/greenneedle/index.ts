@@ -13,6 +13,7 @@ import { addItem } from '../items';
 import { typeEffectiveness } from '../battle/damage';
 import type { TypeName } from '../contentSchema';
 import { SLUDGE_TURNS } from './factory';
+import { aceEggSpecies, rememberAce } from './damian';
 import { MOON_RAID_LOST, MOON_RAID_WON, moonRaid } from './moon';
 import { bondLevel, firstCatch } from '../co/who';
 import { NATURE_IDS } from '../natures';
@@ -1003,6 +1004,12 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'stageMod':
       setGnFlag(run, e.key!, host.stage % e.n!);
       return '';
+    case 'damianEgg': {
+      // The egg of the ace he last sent out; a run that never saw it (an old save) gets the fallback in `then`.
+      const species = aceEggSpecies(content, run);
+      if (!species) return (e.then ?? []).map((x) => host.apply(x)).filter(Boolean).join(' · ');
+      return host.apply({ kind: 'egg', species: [species], types: [], levelBonus: 0, shinyMultiplier: 1, left: 3, unit: 'battle' });
+    }
     case 'moonRaid': {
       // Only ever raises the flags (a test or another row may have set them already).
       const raid = moonRaid(run);
@@ -1091,6 +1098,7 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (battle.eventRule?.gn === 'slowking' && gnFlag(run, 'pink-quiz') >= 3) for (const foe of battle.enemyTeam) if (foe.speciesId === 'slowking') foe.moves = foe.moves.slice(0, Math.max(1, Math.ceil(foe.moves.length / 2)));
   if (battle.eventRule?.gn === 'bex') battle.storyEffects.push(`${FOE_WAITS}Bex is looking for the attack one. "TOP LEFT!" shouts Damian, from the back.`);
   if (battle.eventRule?.gn === 'damian') trainAce(content, battle.enemyTeam[battle.enemyTeam.length - 1], battle.eventRule.ace ?? 1);
+  if (battle.eventRule?.gn === 'damian') rememberAce(run, battle.enemyTeam[battle.enemyTeam.length - 1]?.speciesId);
   const lead = run.party[battle.activeIndex];
   // The Squirtle Squad (gn.08): the Leader's level is what a Lesser recruit has to reach before it may go back and challenge it.
   if (battle.event?.eventId === 'gn-08-leader' && battle.enemyTeam[0]) setGnFlag(run, 'squad-leader-level', battle.enemyTeam[0].level);

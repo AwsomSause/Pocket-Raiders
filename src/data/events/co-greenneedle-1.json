@@ -4589,12 +4589,21 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
+        "op": "when",
         "key": "damian-theme",
-        "weights": [
-         1,
-         1,
-         1
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "damian-theme",
+          "weights": [
+           1,
+           1,
+           1
+          ]
+         }
         ]
        },
        {
@@ -4705,6 +4714,12 @@
           "kind": "gn",
           "op": "stampRegion",
           "key": "damian-passed"
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "damian-theme",
+          "n": 0
          }
         ],
         "text": "Whatever he is thinking about, he is thinking about it hard. You have a feeling you will find out next region."
@@ -5040,6 +5055,12 @@
         "kind": "gn",
         "op": "stampRegion",
         "key": "damian-passed"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "damian-theme",
+        "n": 0
        }
       ]
      }
@@ -5262,6 +5283,52 @@
       "text": "**Hired Gym Trainer:** \"I'm just here for the afternoon. Let's get this over with.\" Behind them, Damian is mouthing the words along, proudly.",
       "effects": [
        {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "damian-theme",
+          "weights": [
+           1,
+           1,
+           1
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "This week is fire: paper flames taped to every pillar, and a bucket of sand by the door, just in case."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "This week is water: blue streamers, a paddling pool in the corner, and a Magikarp drawn on the wall with a crown on."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "This week is \"strong ones\": a punching bag made of a feed sack, and the word STRONG painted on it, twice."
+       },
+       {
         "kind": "addEvent",
         "eventId": "gn-05-hall-hired"
        }
@@ -5356,16 +5423,68 @@
    "intro": "Tully and Bex, side by side, three Poké Balls each. Tully has a wristband. Bex has a list of the buttons written on one hand.\n\n**Bex:** \"Top left is the attack one. We checked.\"\n\n**Tully:** \"Twice!\"",
    "choices": [
     {
-     "label": "Battle Tully and Bex.",
+     "label": "Battle Tully.",
      "success": {
-      "text": "They throw at the same moment, which they have clearly practised, and are clearly delighted about.",
+      "text": "**Tully:** \"Three of them now! Three! And I know what they all do!\" He does not Splash once.",
       "effects": [],
       "battle": {
        "kind": "trainer",
-       "format": "doubles",
-       "name": "Tully and Bex",
+       "name": "Gym Trainer Tully",
        "classId": "swimmer",
-       "size": 6,
+       "size": 3,
+       "types": [],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-hall-bex"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "damian-lost-once",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-lost"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-hall-bex",
+   "name": "Gym Trainer Bex",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.camper"
+    ],
+    "effect": "none"
+   },
+   "intro": "Bex steps up as Tully steps back, and they slap hands on the way past, which they have clearly practised, and are clearly delighted about.\n\nBex looks at the list on one hand, once, and then puts the hand away.",
+   "choices": [
+    {
+     "label": "Battle Bex.",
+     "success": {
+      "text": "**Bex:** \"Top left. I don't even have to look.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Gym Trainer Bex",
+       "classId": "camper",
+       "size": 3,
        "types": [],
        "levelBonus": -2,
        "win": [
@@ -5407,7 +5526,7 @@
     ],
     "effect": "shake"
    },
-   "intro": "Damian on the stage, under a light somebody is holding for him. Four of his, and then the one he trained.\n\n**Damian:** \"I got better. I want you to see. That's all. That's the whole reason.\"",
+   "intro": "Damian on the stage, under a light somebody is holding for him. Four of his, and the last of them is the one he trained.\n\n**Damian:** \"I got better. I want you to see. That's all. That's the whole reason.\"",
    "choices": [
     {
      "label": "Battle Damian.",
@@ -5418,7 +5537,7 @@
        "kind": "trainer",
        "name": "Damian",
        "classId": "ace-trainer",
-       "size": 5,
+       "size": 4,
        "types": [
         "fire"
        ],
@@ -5465,7 +5584,7 @@
        "kind": "trainer",
        "name": "Damian",
        "classId": "ace-trainer",
-       "size": 5,
+       "size": 4,
        "types": [
         "water"
        ],
@@ -5512,7 +5631,7 @@
        "kind": "trainer",
        "name": "Damian",
        "classId": "ace-trainer",
-       "size": 5,
+       "size": 4,
        "types": [
         "fighting",
         "rock"
@@ -5596,6 +5715,12 @@
         "kind": "gn",
         "op": "stampRegion",
         "key": "damian-passed"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "damian-theme",
+        "n": 0
        }
       ]
      }
@@ -5644,13 +5769,104 @@
     {
      "label": "Challenge Damian.",
      "success": {
-      "text": "He does not shout. He does not need to. He just nods, once, and throws.",
+      "text": "He does not shout. He does not need to. He just nods, once, and walks to his end of the floor.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "damian-theme",
+          "weights": [
+           1,
+           1,
+           1
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "This week is fire: paper flames taped to every pillar, and a bucket of sand by the door, just in case."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "This week is water: blue streamers, a paddling pool in the corner, and a Magikarp drawn on the wall with a crown on."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "This week is \"strong ones\": a punching bag made of a feed sack, and the word STRONG painted on it, twice."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-05-gym-damian"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. He does not wave this time. He nods, the way the real Gym Leaders do, and goes back inside to wait.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "damian-passed"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-gym-damian",
+   "name": "Leader Damian",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.damian"
+    ],
+    "effect": "glint"
+   },
+   "intro": "Stone pillars. A marked floor. Five Poké Balls on his belt, and he does not touch the last one yet.\n\n**Damian:** \"I'm not going to go easy on you.\"",
+   "choices": [
+    {
+     "label": "Battle Damian.",
+     "success": {
+      "text": "He just nods, once, and throws.",
       "effects": [],
       "battle": {
        "kind": "trainer",
        "name": "Damian",
        "classId": "ace-trainer",
-       "size": 6,
+       "size": 5,
        "types": [
         "fire"
        ],
@@ -5689,15 +5905,15 @@
      ]
     },
     {
-     "label": "Challenge Damian.",
+     "label": "Battle Damian.",
      "success": {
-      "text": "He does not shout. He does not need to. He just nods, once, and throws.",
+      "text": "He just nods, once, and throws.",
       "effects": [],
       "battle": {
        "kind": "trainer",
        "name": "Damian",
        "classId": "ace-trainer",
-       "size": 6,
+       "size": 5,
        "types": [
         "water"
        ],
@@ -5736,15 +5952,15 @@
      ]
     },
     {
-     "label": "Challenge Damian.",
+     "label": "Battle Damian.",
      "success": {
-      "text": "He does not shout. He does not need to. He just nods, once, and throws.",
+      "text": "He just nods, once, and throws.",
       "effects": [],
       "battle": {
        "kind": "trainer",
        "name": "Damian",
        "classId": "ace-trainer",
-       "size": 6,
+       "size": 5,
        "types": [
         "fighting",
         "rock"
@@ -5782,19 +5998,6 @@
        "atMost": 3
       }
      ]
-    },
-    {
-     "label": "Walk on.",
-     "success": {
-      "text": "You walk on. He does not wave this time. He nods, the way the real Gym Leaders do, and goes back inside to wait.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "stampRegion",
-        "key": "damian-passed"
-       }
-      ]
-     }
     }
    ]
   },
@@ -5828,62 +6031,68 @@
        },
        {
         "kind": "gn",
-        "op": "when",
-        "key": "damian-theme",
-        "min": 1,
-        "max": 1,
+        "op": "damianEgg",
         "then": [
          {
-          "kind": "egg",
-          "species": [],
-          "types": [
-           "fire"
-          ],
-          "levelBonus": 0,
-          "shinyMultiplier": 1,
-          "left": 3,
-          "unit": "battle"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "damian-theme",
-        "min": 2,
-        "max": 2,
-        "then": [
+          "kind": "gn",
+          "op": "when",
+          "key": "damian-theme",
+          "min": 1,
+          "max": 1,
+          "then": [
+           {
+            "kind": "egg",
+            "species": [],
+            "types": [
+             "fire"
+            ],
+            "levelBonus": 0,
+            "shinyMultiplier": 1,
+            "left": 3,
+            "unit": "battle"
+           }
+          ]
+         },
          {
-          "kind": "egg",
-          "species": [],
-          "types": [
-           "water"
-          ],
-          "levelBonus": 0,
-          "shinyMultiplier": 1,
-          "left": 3,
-          "unit": "battle"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "damian-theme",
-        "min": 3,
-        "max": 3,
-        "then": [
+          "kind": "gn",
+          "op": "when",
+          "key": "damian-theme",
+          "min": 2,
+          "max": 2,
+          "then": [
+           {
+            "kind": "egg",
+            "species": [],
+            "types": [
+             "water"
+            ],
+            "levelBonus": 0,
+            "shinyMultiplier": 1,
+            "left": 3,
+            "unit": "battle"
+           }
+          ]
+         },
          {
-          "kind": "egg",
-          "species": [],
-          "types": [
-           "fighting",
-           "rock"
-          ],
-          "levelBonus": 0,
-          "shinyMultiplier": 1,
-          "left": 3,
-          "unit": "battle"
+          "kind": "gn",
+          "op": "when",
+          "key": "damian-theme",
+          "min": 3,
+          "max": 3,
+          "then": [
+           {
+            "kind": "egg",
+            "species": [],
+            "types": [
+             "fighting",
+             "rock"
+            ],
+            "levelBonus": 0,
+            "shinyMultiplier": 1,
+            "left": 3,
+            "unit": "battle"
+           }
+          ]
          }
         ]
        },
@@ -5902,6 +6111,12 @@
         "kind": "gn",
         "op": "stampRegion",
         "key": "damian-passed"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "damian-theme",
+        "n": 0
        },
        {
         "kind": "moment",

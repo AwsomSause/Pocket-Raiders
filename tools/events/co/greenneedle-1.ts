@@ -635,7 +635,9 @@ const DAMIAN_FIGHT = (types: string[], size: number, lv: number, win: Json[]): J
 });
 const withWin = (b: Json, win: Json[]): Json => ({ ...b, win });
 /** Meeting `n` is done: he is met once per region, and comes back in the next one. */
-const MET = (n: number): Json[] => [setTo('damian-meetings', n), stampRegion('damian-region'), stampRegion('damian-passed')];
+const MET = (n: number): Json[] => [setTo('damian-meetings', n), stampRegion('damian-region'), stampRegion('damian-passed'), setTo('damian-theme', 0)];
+/** "Whatever Damian liked this week": the theme is drawn once for each meeting (a retry the same day keeps it), and the decorations say which. */
+const THEME_PICK: Json[] = [when('damian-theme', { min: 0, max: 0 }, [pick('damian-theme', 1, 1, 1)]), ...THEMES.map(([n, , text]) => when('damian-theme', { min: n, max: n }, [], text))];
 
 const gn05: Json[] = [
   // ---- meeting 1: the barn ----
@@ -662,7 +664,7 @@ const gn05: Json[] = [
   ), [
     chIf([not('rain-damian-beaten')], 'Challenge the Gym.', out(
       '**Damian:** "YES. Right. Rules: you beat my Gym Trainers, then you face the Leader. That\'s me. I\'m the Leader."',
-      pick('damian-theme', 1, 1, 1), ...THEMES.map(([n, , text]) => when('damian-theme', { min: n, max: n }, [], text)), room('gn-05-tully'),
+      ...THEME_PICK, room('gn-05-tully'),
     )),
     chIf([not('rain-damian-beaten'), not('gn-05-asked')], "Ask if it's a real Gym.", out(
       '**Damian:** "It\'s got a sign." He points at it, in case you missed it. He looks at it himself for a moment, proudly, the way you look at something you made.',
@@ -735,7 +737,7 @@ const gn05: Json[] = [
     'By the door stands a real Gym Trainer, in a real uniform, who is very clearly being paid and very clearly embarrassed about it.',
     '**Damian:** "You! Look! A hall! Tully and Bex know the buttons now! ALL the buttons!"',
   ), [
-    ch('Challenge the Gym.', out('**Hired Gym Trainer:** "I\'m just here for the afternoon. Let\'s get this over with." Behind them, Damian is mouthing the words along, proudly.', room('gn-05-hall-hired'))),
+    ch('Challenge the Gym.', out('**Hired Gym Trainer:** "I\'m just here for the afternoon. Let\'s get this over with." Behind them, Damian is mouthing the words along, proudly.', ...THEME_PICK, room('gn-05-hall-hired'))),
     ch('Walk on.', out('You walk on. Damian waves from the door with both arms until you are out of sight.', stampRegion('damian-passed'))),
   ]),
   rm('gn-05-hall-hired', 'The Hired Gym Trainer', damian({ cast: ['trainer.ace-trainer'], effect: 'none' }), say(
@@ -750,16 +752,20 @@ const gn05: Json[] = [
     '**Bex:** "Top left is the attack one. We checked."',
     '**Tully:** "Twice!"',
   ), [
-    ch('Battle Tully and Bex.', fight('They throw at the same moment, which they have clearly practised, and are clearly delighted about.', {
-      ...inside(trainer('Tully and Bex', { cls: 'swimmer', format: 'doubles', size: 6, lv: -2, win: [room('gn-05-hall-damian')] })), lose: DAMIAN_LOST,
-    })),
+    ch('Battle Tully.', fight('**Tully:** "Three of them now! Three! And I know what they all do!" He does not Splash once.', withWin(FRIEND('Gym Trainer Tully', 'swimmer', 3), [room('gn-05-hall-bex')]))),
+  ]),
+  rm('gn-05-hall-bex', 'Gym Trainer Bex', damian({ cast: ['trainer.camper'], effect: 'none' }), say(
+    'Bex steps up as Tully steps back, and they slap hands on the way past, which they have clearly practised, and are clearly delighted about.',
+    'Bex looks at the list on one hand, once, and then puts the hand away.',
+  ), [
+    ch('Battle Bex.', fight('**Bex:** "Top left. I don\'t even have to look."', withWin(FRIEND('Gym Trainer Bex', 'camper', 3), [room('gn-05-hall-damian')]))),
   ]),
   rm('gn-05-hall-damian', 'Leader Damian', damian({ cast: ['trainer.damian'], effect: 'shake' }), say(
-    'Damian on the stage, under a light somebody is holding for him. Four of his, and then the one he trained.',
+    'Damian on the stage, under a light somebody is holding for him. Four of his, and the last of them is the one he trained.',
     '**Damian:** "I got better. I want you to see. That\'s all. That\'s the whole reason."',
   ), THEMES.map(([n, types]) => chIf([exactly('damian-theme', n)], 'Battle Damian.', fight(
     '**Damian:** "Same as before. Except BETTER."',
-    DAMIAN_FIGHT(types, 5, 0, [room('gn-05-hall-won')]),
+    DAMIAN_FIGHT(types, 4, 0, [room('gn-05-hall-won')]),
   )))),
   rm('gn-05-hall-won', 'Better', damian({ cast: ['trainer.damian'], effect: 'confetti' }), say(
     '**Damian:** "Ha! Okay. OKAY. You\'re still better. But it was closer. Wasn\'t it closer?"',
@@ -777,12 +783,19 @@ const gn05: Json[] = [
     '**Damian:** "It\'s official. They sent a man with a clipboard. He said the pillars had to be real. So they\'re real."',
     '**Damian:** "I\'m not going to go easy on you. You never went easy on me. That\'s why there\'s pillars."',
   ), [
-    ...THEMES.map(([n, types]) => chIf([exactly('damian-theme', n)], 'Challenge Damian.', fight(
-      'He does not shout. He does not need to. He just nods, once, and throws.',
-      DAMIAN_FIGHT(types, 6, 1, [room('gn-05-gym-won')]),
-    ))),
+    ch('Challenge Damian.', out(
+      'He does not shout. He does not need to. He just nods, once, and walks to his end of the floor.',
+      ...THEME_PICK, room('gn-05-gym-damian'),
+    )),
     ch('Walk on.', out('You walk on. He does not wave this time. He nods, the way the real Gym Leaders do, and goes back inside to wait.', stampRegion('damian-passed'))),
   ]),
+  rm('gn-05-gym-damian', 'Leader Damian', damian({ cast: ['trainer.damian'], effect: 'glint' }), say(
+    'Stone pillars. A marked floor. Five Poké Balls on his belt, and he does not touch the last one yet.',
+    '**Damian:** "I\'m not going to go easy on you."',
+  ), THEMES.map(([n, types]) => chIf([exactly('damian-theme', n)], 'Battle Damian.', fight(
+    'He just nods, once, and throws.',
+    DAMIAN_FIGHT(types, 5, 1, [room('gn-05-gym-won')]),
+  )))),
   rm('gn-05-gym-won', 'A Real Badge', damian({ cast: ['trainer.damian'], effect: 'confetti' }), say(
     'He looks at his ace for a long time after it goes down. Then he recalls it, and thanks it, quietly, so only it can hear.',
     '**Damian:** "There. That one\'s real. It\'s got a number on the back and everything."',
@@ -790,7 +803,7 @@ const gn05: Json[] = [
   ), [
     ch('Take the badge, and the egg.', out(
       'The badge has a number on the back. He is right. It is real. Beside it, in your bag, the bottle cap rattles, and you find you would not trade one for the other.',
-      item('damian-badge'), ...THEMES.map(([n, types]) => when('damian-theme', { min: n, max: n }, [egg({ types, left: 3, unit: 'battle' })])), ...MET(3),
+      item('damian-badge'), gn('damianEgg', { then: THEMES.map(([n, types]) => when('damian-theme', { min: n, max: n }, [egg({ types, left: 3, unit: 'battle' })])) }), ...MET(3),
       moment('Damian\'s Gym is real now. The pillars are stone. He did not go easy.', 70),
     )),
   ]),
