@@ -27,6 +27,8 @@ export interface PickerBridge {
   mon?: (i: number) => { speciesId: string; shiny: boolean; hp: number; mark: string } | undefined;
   /** A board row said outright (Bonds): its line, bar and tag are not read off the canvas row. */
   board?: (i: number) => { title: string; sub: string; pct: number; tag: string } | undefined;
+  /** A grid cell said outright (the Pokédex): its picture, and the detail card's title and line. */
+  cell?: (i: number) => { file: string | null; title: string; body: string; off?: boolean; sil?: boolean } | undefined;
   /** The item a row stands for, if any (Bag). */
   item?: (i: number) => string | undefined;
   /** A row's picture by asset id, for rows that draw none themselves (the Berry Bestiary's icons). */
@@ -130,8 +132,12 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
   let body: string;
   if (n === 0 && kind !== 'bag') body = H(name, area, hints) + `<div class="abs cen" style="left:0;right:0;top:220px;display:flex;font-size:26px;opacity:.6">Nothing here yet</div>` + TX(esc(text));
   else if (kind === 'grid') {
-    const cur = row(index), found = Array.from({ length: n }, (_, i) => p.problem(i) === null).filter(Boolean).length;
-    body = gridView(c, { title: name, area, hints, n, cell: (i) => { const r = row(i); return { art: r.art, label: r.label, off: p.problem(i) !== null }; }, index, detail: { title: cur.label, body: cur.note, facts: cur.tag ? [['', cur.tag]] : [], art: cur.art }, found, total: n, text });
+    // A cell the room said outright (the Pokédex) is not read off the canvas row.
+    const said = p.cell?.(index), on = (i: number): boolean => { const x = p.cell?.(i); return x ? !x.off : p.problem(i) === null; };
+    const cur = said ? null : row(index), found = Array.from({ length: n }, (_, i) => on(i)).filter(Boolean).length;
+    const artOf = (file: string | null): { file: string; atlas: boolean } | null => (file ? { file, atlas: true } : null);
+    const detail = said ? { title: said.title, body: said.body, art: said.off ? null : artOf(said.file) } : { title: cur!.label, body: cur!.note, facts: cur!.tag ? [['', cur!.tag] as const] : [], art: cur!.art };
+    body = gridView(c, { title: name, area, hints, n, cell: (i) => { const x = p.cell?.(i); if (x) return { art: artOf(x.file), label: '', off: x.off, sil: x.sil }; const r = row(i); return { art: r.art, label: r.label, off: p.problem(i) !== null }; }, index, detail, found, total: n, text });
   } else if (kind === 'bag') {
     const strip = services().session.run ? partyStrip(partyChips(scene), 'left:24px;right:24px;bottom:100px', bagNotes(p.item?.(index))) : '';
     body = bagView(c, { title: name, hints, pockets: p.tabs ? { labels: p.tabs.labels, index: p.tabs.index } : null, n, item: (i) => ({ ...row(i), off: p.problem(i) !== null }), index, strip, text });

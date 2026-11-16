@@ -45,6 +45,8 @@ export interface PickerRow {
   mon?: { speciesId: string; shiny: boolean; hp: number; mark: string };
   /** A board row said outright (the New UI's Bond screen): the line under the name, a bar (0 to 100) and a tag. */
   board?: { title: string; sub: string; pct: number; tag: string };
+  /** A grid cell said outright (the New UI's Pokédex): its picture (atlas file) and the detail card's title and line. `off` is a "?" cell, `sil` a shadow. */
+  cell?: { file: string | null; title: string; body: string; off?: boolean; sil?: boolean };
   /** The row's picture by asset id, for a row that draws none (the New UI's grid cells show it). */
   art?: string;
 }
@@ -284,6 +286,7 @@ export class Picker implements PickerLike {
         art: (i) => config.rows[i]?.art,
         mon: (i) => config.rows[i]?.mon,
         board: (i) => config.rows[i]?.board,
+        cell: (i) => config.rows[i]?.cell,
         top: win?.top,
         tabs: config.tabs,
         canBack: Boolean(config.onBack),

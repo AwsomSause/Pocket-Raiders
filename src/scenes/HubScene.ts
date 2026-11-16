@@ -50,6 +50,7 @@ import { DexInfo } from '../ui/dexInfo';
 import { DexBrowser, hasDexLook } from '../ui/dexBrowser';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { dexState } from '../core/presentation/dexInfo';
+import { tallyOf } from '../core/dexResearch';
 import { itemVisual, pokemonIcon, trainerVisual } from '../ui/sprites';
 import { loadAssets, preloadPokemon, queueAssets } from '../ui/lazyAssets';
 import { currencyChip, drawLogo } from '../ui/showcase';
@@ -1136,12 +1137,22 @@ export class HubScene extends Phaser.Scene {
       hint: 'Enter switches the tab: All, Seen, Owned, Mastered (gold rank or better).',
       draw: (scene, box) => box.add(scene.add.text(12, 12, `Tab: ${tab.toUpperCase()} (${shown.length}/${set.members.length})  ›`, textStyle(20, COLORS.gold))),
     };
-    const rows: PickerRow[] = [tabRow, ...shown.map((id): PickerRow => {
+    // New UI: the mock-up's wall of species pictures. The tabs sit in the header, so the list has no tab row.
+    const wall = reduxOn();
+    const TABS = ['all', 'seen', 'owned', 'mastered'] as const;
+    const rows: PickerRow[] = [...(wall ? [] : [tabRow]), ...shown.map((id): PickerRow => {
       const sp = session.content.species.get(id)!;
       const state = dexState(session.profile, id);
       const shadow = state === 'unknown' ? hinted.get(id) : undefined;
+      const no = `No. ${String(sp.dex).padStart(4, '0')}`;
+      const tally = tallyOf(session.profile, id);
       return {
         problem: null,
+        cell: wall
+          ? state === 'unknown'
+            ? { file: shadow ? monFile(this, id, 'front') : null, title: no, body: shadow ? `A shadow from your field notes: ${shadow.join(' / ')} type.` : 'Not met yet.', off: true, sil: Boolean(shadow) }
+            : { file: monFile(this, id, 'front'), title: sp.name, body: `${no} · Seen ${tally.seen} · Caught ${tally.caught}` }
+          : undefined,
         hint: shadow ? `A silhouette from your field notes: ${shadow.join(' / ')} type. Not met yet.` : state === 'unknown' ? 'Not met yet.' : `${sp.name}: ${sp.types.join(' / ')}. Enter opens its page.`,
         draw: (scene, box, _w, h) => {
           if (shadow) {
@@ -1185,14 +1196,14 @@ export class HubScene extends Phaser.Scene {
       rows,
       columns: 2,
       rowHeight: 48,
+      tabs: wall ? { labels: ['All', 'Seen', 'Owned', 'Mastered'], index: TABS.indexOf(tab), onChange: (i) => { this.dexTab = TABS[i]!; this.openDexSet(set); } } : undefined,
       onSelect: (i) => {
-        if (i === 0) {
-          const order = ['all', 'seen', 'owned', 'mastered'] as const;
-          this.dexTab = order[(order.indexOf(this.dexTab) + 1) % order.length]!;
+        if (!wall && i === 0) {
+          this.dexTab = TABS[(TABS.indexOf(this.dexTab) + 1) % TABS.length]!;
           this.openDexSet(set);
           return;
         }
-        this.dexInfo = new DexInfo(this, session.content, session.profile, shown[i - 1]!, () => {
+        this.dexInfo = new DexInfo(this, session.content, session.profile, shown[wall ? i : i - 1]!, () => {
           this.dexInfo = null;
         });
       },
