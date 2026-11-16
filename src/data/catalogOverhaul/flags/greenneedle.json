@@ -247,6 +247,10 @@
    "rule": "core/greenneedle/museum.ts (gn.41 The Pokémon Museum)"
   },
   {
+   "key": "museum-set",
+   "rule": "core/greenneedle/museum.ts (gn.41: which collection this region's museum shows)"
+  },
+  {
    "key": "frontier-cleared",
    "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
   },
