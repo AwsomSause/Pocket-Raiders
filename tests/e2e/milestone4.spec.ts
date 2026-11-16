@@ -126,6 +126,14 @@ test('beating the last champion shows the victory screen', async ({ page }) => {
     while (session.run.phase === 'decision') session.resolveDecision({ kind: 'skipMove' });
     (window as any).__pkr.game.scene.getScene('Map').scene.start('GameOver');
   });
+  // NE100 The Road Home plays first (after the final battle, win or lose); answering it goes on to the results.
+  await waitForScene(page, 'Event');
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const side = session.run.stage.map.nodes.flatMap((n: any) => n.sides).find((x: any) => x.eventId === 'ne100-road-home');
+    session.chooseEvent(side.id, 0);
+    game.scene.getScene('Event').scene.start('GameOver');
+  });
   await waitForScene(page, 'GameOver');
   const r = await run(page);
   expect(r.victory).toBe(true);
