@@ -21,7 +21,9 @@
   "hoenn-took-all": "Evil Team row: chose \"Take it all\" in Hoenn (read by gn.38's researchers)",
   "called-it-for-us": "Evil Team row: chose \"Call it for us\" (read by gn.38's researchers)",
   "lantern-boat": "gn.new.36 The Lantern Sea (read by gn.33)",
-  "sunken-bell": "SF41.1 The Sunken City, the ovc-sunken-bell chain (overhaul/event_chains.json; read by gn.33)"
+  "sunken-bell": "SF41.1 The Sunken City, the ovc-sunken-bell chain (overhaul/event_chains.json; read by gn.33)",
+  "night-shift-sneasel": "gn.new.24 The Night Shift (the Sneasel stayed; read by gn.40)",
+  "egg-listened-hatched": "gn.new.05 The Egg That Listened (it hatched for you; read by gn.40)"
  },
  "flags": [
   {
@@ -207,6 +209,14 @@
   {
    "key": "market-josune-lowballed",
    "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "daycare-held",
+   "rule": "core/greenneedle/daycare.ts (gn.40 The Pokémon Day-Care Village)"
+  },
+  {
+   "key": "daycare-at",
+   "rule": "core/greenneedle/daycare.ts (gn.40 The Pokémon Day-Care Village)"
   }
  ]
 }

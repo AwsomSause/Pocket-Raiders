@@ -2042,5 +2042,48 @@
    "Hub Destination"
   ],
   "tags": []
+ },
+ "gn-40-door": {
+  "gn": "gn.40",
+  "shape": "Hub",
+  "earliest": "A4",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "No battles",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Pokémon Day-Care Village",
+   "elsewhere": "The Pokémon Day-Care Village"
+  },
+  "note": "Badge: an egg. Once per region; the same village, and it remembers (within the run). Until towns exist it sits on step 5. The pair left there comes home in the next region (gn-40-return).",
+  "kinds": [
+   "Hub Destination",
+   "Community Episode"
+  ],
+  "tags": []
+ },
+ "gn-40-return": {
+  "gn": "gn.40",
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 3,
+  "window": [
+   1,
+   20
+  ],
+  "sits": "optional",
+  "level": "none",
+  "often": "run",
+  "note": "Only while two Pokémon are at the village, in a later region.",
+  "kinds": [
+   "Afterstory"
+  ],
+  "tags": []
  }
 }

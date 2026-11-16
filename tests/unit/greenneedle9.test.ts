@@ -1,8 +1,12 @@
-// Greenneedle part 9: gn.39 The Travelling Pokémon Market (tools/events/co/greenneedle-9.ts; rules in src/core/greenneedle/market.ts).
+// Greenneedle part 9: gn.39 The Travelling Pokémon Market, gn.40 The Pokémon Day-Care Village (tools/events/co/greenneedle-9.ts; rules in src/core/greenneedle/market.ts).
 import { describe, expect, it } from 'vitest';
-import type { RunState } from '../../src/core/state';
+import type { PokemonInstance, RunState } from '../../src/core/state';
+import { createPokemon } from '../../src/core/pokemon';
+import { hatchEgg } from '../../src/core/eggs';
+import { pairBondLevel } from '../../src/core/bond';
+import { atDaycare, compatible, unflinching, unflinchingStart } from '../../src/core/greenneedle/daycare';
 import { content } from './helpers';
-import { conditionMet } from '../../src/core/events';
+import { chooseEvent, conditionMet } from '../../src/core/events';
 import { marketPrice, penCandidates, penSpecies } from '../../src/core/greenneedle/market';
 import { rarityIn } from '../../src/core/rarity';
 import { choose, flagOf, gnRun, open, scene, setFlag } from './helpers/gnPlay';
@@ -197,5 +201,162 @@ describe('gn.39 The Travelling Pokémon Market', () => {
     expect(said(found)).toMatch(/Carmela's loupe/);
     expect(said(found)).toMatch(/Moon Stone, no charge/);
     expect(flagOf(found.run, 'market-carmela-gift')).toBe(1);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------------------------------
+// gn.40 The Pokémon Day-Care Village (core/greenneedle/daycare.ts)
+// ---------------------------------------------------------------------------------------------------------------------
+const addMon = (run: RunState, species: string, level = 20): PokemonInstance => {
+  const mon = createPokemon(content, species, level, `p${run.nextUid}`);
+  run.nextUid += 1;
+  run.party.push(mon);
+  return mon;
+};
+function village(seed: string, prep?: (run: RunState) => void): RunState {
+  const run = gnRun(seed);
+  run.money = 20000;
+  prep?.(run);
+  open(run, 'gn-40-door');
+  return choose(run, 'gn-40-door', 'Walk into the village.').run;
+}
+/** Picks a choice that asks for a party Pokémon. */
+function choosePick(run: RunState, eventId: string, label: string, uid: string): RunState {
+  const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+  const side = here.sides.find((x) => x.kind === 'event' && !x.used && x.eventId === eventId)!;
+  return chooseEvent(content, run, side.id, scene(run, eventId).labels.indexOf(label), uid).run;
+}
+const newestEgg = (run: RunState) => run.eggs[run.eggs.length - 1]!;
+
+describe('gn.40 The Pokémon Day-Care Village', () => {
+  it('opens with Mr. Holloway; the first visit counts, and the adoption egg and Bronwen\'s pair are the first of each', () => {
+    const run = village('t40-open');
+    expect(flagOf(run, 'daycare-visits')).toBe(1);
+    expect(flagOf(run, 'daycare-egg')).toBe(1);
+    expect(flagOf(run, 'daycare-pair')).toBe(1);
+    expect(scene(run, 'gn-40-square').labels).toEqual(['The day-care.', 'Walk round the village.', 'The edge of the village.', 'Leave the village.']);
+  });
+
+  it('two left for a region come home a level a stage stronger, knowing each other, with an egg if they could', () => {
+    let run = village('t40-leave', (r) => {
+      addMon(r, 'eevee');
+      addMon(r, 'growlithe');
+    });
+    const [, a, b] = run.party as [PokemonInstance, PokemonInstance, PokemonInstance];
+    run = choose(run, 'gn-40-square', 'The day-care.').run;
+    run = choose(run, 'gn-40-daycare', 'Leave two Pokémon.').run;
+    run = choosePick(run, 'gn-40-leave-1', 'This one.', a.uid);
+    run = choosePick(run, 'gn-40-leave-2', 'This one.', b.uid);
+    expect(run.party.map((m) => m.uid)).not.toContain(a.uid);
+    expect(atDaycare(run).map((m) => m.uid).sort()).toEqual([a.uid, b.uid].sort());
+    expect(scene(run, 'gn-40-daycare').labels).not.toContain('Leave two Pokémon.');
+    // A region later: three stages away.
+    setFlag(run, 'daycare-at', flagOf(run, 'daycare-at') - 3);
+    setFlag(run, 'daycare-region', 0);
+    const levels = [a.level, b.level];
+    open(run, 'gn-40-return');
+    const r = choose(run, 'gn-40-return', 'Take them home.');
+    const home = r.run.party.filter((m) => m.uid === a.uid || m.uid === b.uid);
+    expect(home.map((m) => m.level)).toEqual(levels.map((l) => l + 3));
+    expect(said(r)).toMatch(/They know each other now/);
+    expect(pairBondLevel(r.run, a.uid, b.uid)).toBe(2);
+    expect(said(r)).toMatch(/there's an egg waiting/);
+    const egg = newestEgg(r.run);
+    const hatched = hatchEgg(content, r.run, egg);
+    expect(hatched.marks).toContain('looks for the Old Dog in every town');
+    expect(hatched.marks).toContain('a card came from the Day-Care Village, with a pawprint in ink');
+    expect(hatched.gn).toContain(`child-of:${a.uid}`);
+  });
+
+  it('a pair that could never make an egg comes home without one', () => {
+    let run = village('t40-noegg', (r) => {
+      addMon(r, 'eevee');
+      addMon(r, 'magikarp');
+    });
+    const [, a, b] = run.party as [PokemonInstance, PokemonInstance, PokemonInstance];
+    expect(compatible(content, a, b)).toBe(false);
+    run = choose(run, 'gn-40-square', 'The day-care.').run;
+    run = choose(run, 'gn-40-daycare', 'Leave two Pokémon.').run;
+    run = choosePick(run, 'gn-40-leave-1', 'This one.', a.uid);
+    run = choosePick(run, 'gn-40-leave-2', 'This one.', b.uid);
+    const eggs = run.eggs.length;
+    setFlag(run, 'daycare-region', 0);
+    open(run, 'gn-40-return');
+    const r = choose(run, 'gn-40-return', 'Take them home.');
+    expect(r.run.eggs.length).toBe(eggs);
+    expect(said(r)).not.toMatch(/egg waiting/);
+  });
+
+  it('the adoption: the answer shapes the hatchling (held: Bond higher; "No.": bold; "A bit.": hatches sooner)', () => {
+    let run = choose(village('t40-adopt'), 'gn-40-square', 'The edge of the village.').run;
+    run = choose(run, 'gn-40-edge', 'The egg with a story.').run;
+    expect(scene(run, 'gn-40-adopt-1').intro).toMatch(/What'll you do the first time it's frightened again/);
+    const held = choose(run, 'gn-40-adopt-1', 'Hold it.');
+    expect(said(held)).toMatch(/We don't sell these ones\. We place them\./);
+    const mon = hatchEgg(content, held.run, newestEgg(held.run));
+    expect(mon.friendship).toBeGreaterThanOrEqual(150);
+    expect(scene(held.run, 'gn-40-edge').labels).not.toContain('The egg with a story.');
+    const door = village('t40-door', (r) => setFlag(r, 'daycare-visits', 1));
+    expect(flagOf(door, 'daycare-egg')).toBe(2);
+    let d = choose(door, 'gn-40-square', 'The edge of the village.').run;
+    d = choose(d, 'gn-40-edge', 'The egg with a story.').run;
+    d = choose(d, 'gn-40-adopt-2', 'No.').run;
+    expect(hatchEgg(content, d, newestEgg(d)).nature).toBe('bold');
+    const late = village('t40-late', (r) => setFlag(r, 'daycare-visits', 2));
+    let c = choose(late, 'gn-40-square', 'The edge of the village.').run;
+    c = choose(c, 'gn-40-edge', 'The egg with a story.').run;
+    c = choose(c, 'gn-40-adopt-3', 'A bit.').run;
+    expect(newestEgg(c).left).toBe(1);
+    expect(hatchEgg(content, c, newestEgg(c)).marks).toContain('hatched early, and knows it');
+  });
+
+  it('"Let it see I\'m not afraid": it can\'t be made to flinch in its first battle, and only that one', () => {
+    let run = choose(village('t40-brave'), 'gn-40-square', 'The edge of the village.').run;
+    run = choose(run, 'gn-40-edge', 'The egg with a story.').run;
+    run = choose(run, 'gn-40-adopt-1', 'Let it see I\'m not afraid.').run;
+    const mon = hatchEgg(content, run, newestEgg(run));
+    run.party.push(mon);
+    unflinchingStart(run);
+    expect(unflinching(mon)).toBe(true);
+    unflinchingStart(run);
+    expect(unflinching(mon)).toBe(false);
+  });
+
+  it('the hatching: holding it needs good Bond across the party', () => {
+    let run = choose(village('t40-hatch'), 'gn-40-square', 'Walk round the village.').run;
+    run = choose(run, 'gn-40-village', 'On through the village.').run;
+    run = choose(run, 'gn-40-village-2', 'Wait by the step.').run;
+    expect(scene(run, 'gn-40-hatch').labels).toEqual(['Cheer.', 'Stay at the back.', 'Ask to hold it.']);
+    const cold = structuredClone(run);
+    for (const m of cold.party) m.friendship = 60;
+    const no = choose(cold, 'gn-40-hatch', 'Ask to hold it.');
+    expect(said(no)).toMatch(/Not today, love/);
+    for (const m of run.party) m.friendship = 120;
+    const yes = choose(run, 'gn-40-hatch', 'Ask to hold it.');
+    expect(said(yes)).toMatch(/puts it in your arms/);
+    expect(scene(yes.run, 'gn-40-village-2').labels).not.toContain('Wait by the step.');
+  });
+
+  it('the breeding board pays a rare item for a calm one, once a visit', () => {
+    let run = choose(village('t40-board'), 'gn-40-square', 'Walk round the village.').run;
+    run = choose(run, 'gn-40-village', 'On through the village.').run;
+    run = choose(run, 'gn-40-village-2', 'The breeding board.').run;
+    run.party[0]!.nature = 'calm';
+    const r = choose(run, 'gn-40-board', 'One with a calm nature.');
+    expect(r.success).toBe(true);
+    expect(scene(r.run, 'gn-40-board').labels).not.toContain('One with a calm nature.');
+  });
+
+  it('Bronwen\'s pair: the sign names it; a Nidoran pair brings an egg with both lines\' best moves', () => {
+    let run = choose(village('t40-bronwen'), 'gn-40-square', 'The edge of the village.').run;
+    run = choose(run, 'gn-40-edge', 'Bronwen\'s caravan.').run;
+    expect(scene(run, 'gn-40-bronwen-1').intro).toMatch(/A NIDORAN♀ AND A NIDORAN♂/);
+    addMon(run, 'nidoran-f');
+    addMon(run, 'nidoran-m');
+    const r = choose(run, 'gn-40-bronwen-1', 'Show her the pair.');
+    expect(r.success).toBe(true);
+    const mon = hatchEgg(content, r.run, newestEgg(r.run));
+    expect(mon.moves.map((m) => m.id)).toEqual(expect.arrayContaining(['earth-power', 'megahorn']));
+    expect(scene(r.run, 'gn-40-bronwen-1').intro).toMatch(/already given you this visit's/);
   });
 });

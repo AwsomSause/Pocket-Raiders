@@ -21306,6 +21306,2748 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-40-door",
+   "name": "The Pokémon Day-Care Village",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "daycare-region"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "*Low fences. A hill of clover. Pokémon of four generations asleep in one heap by a gate.*\n\n**Mr. Holloway:** \"Mind the little ones underfoot. And the big ones. And the middle ones, they bite.\"",
+   "choices": [
+    {
+     "label": "Walk into the village.",
+     "success": {
+      "text": "The heap by the gate shifts to let you through, and settles again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-region"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-visits",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-egg",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-egg",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-egg",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-egg",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-egg",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-egg",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-egg",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-egg",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 9,
+        "max": 9,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-egg",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-pair",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-pair",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-pair",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-pair",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-pair",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-pair",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-pair",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-pair",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-visits",
+        "min": 9,
+        "max": 9,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "daycare-pair",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "daycareReturn"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-square"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "A Nidoran trots after you to the end of the fence, decides against it, and trots back.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-square",
+   "name": "The Day-Care Village",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "listened",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "egg-listened-hatched",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Mrs. Holloway sees the one that hatched from the Egg That Listened. \"That's one of ours. It heard a lot, that one.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "A square of packed earth, a well, and the day-care itself: a long low house with a step the size of a bed.\n\nOn the step, an old Arcanine, grey at the muzzle, asleep. Hatchlings are climbing on it. It doesn't mind.",
+   "choices": [
+    {
+     "label": "The day-care.",
+     "success": {
+      "text": "Mr. Holloway is at the counter, writing in a ledger with a very short pencil.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk round the village.",
+     "success": {
+      "text": "Round by the clover hill.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-village"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The edge of the village.",
+     "success": {
+      "text": "Out past the last fence, where Mrs. Holloway keeps the special eggs, and a caravan is parked.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the village.",
+     "success": {
+      "text": "Mr. Holloway raises the short pencil in farewell. \"Next region,\" he says. \"We'll be here. We're always here.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "daycare-left-village",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-daycare",
+   "name": "The Day-Care",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "full",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "daycare-held",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "Two of yours are here already, asleep in the heap by the gate. \"They're fine,\" says Mr. Holloway. \"Better than fine. Come back next region.\"",
+     "hide": [
+      0
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "**Mr. Holloway**, behind a counter of scrubbed wood. \"Leave two with us and they stay a region. A level a stage, near enough. If they're a pair that could, there'll be an egg when you're back.\"\n\n\"And they come back knowing each other. You'll see it, when they're out together.\"",
+   "choices": [
+    {
+     "label": "Leave two Pokémon.",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 3
+      }
+     ],
+     "success": {
+      "text": "He opens the ledger at a clean page.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-leave-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy eggs.",
+     "success": {
+      "text": "He lifts the lid on a straw-lined crate.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-egg",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-40-eggs-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-egg",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-40-eggs-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-egg",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-40-eggs-3"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Mrs. Holloway's egg moves.",
+     "success": {
+      "text": "Mrs. Holloway comes in from the back, wiping her hands.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-eggmove"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "daycare-move-at"
+      }
+     ]
+    },
+    {
+     "label": "Back to the square.",
+     "success": {
+      "text": "Back to the square, past a heap of sleeping Pokémon who don't move.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-square"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-leave-1",
+   "name": "The Day-Care: The First One",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "Mr. Holloway licks the pencil. \"First one?\"",
+   "choices": [
+    {
+     "label": "This one.",
+     "pick": {},
+     "success": {
+      "text": "It goes and lies down in the heap by the gate as if it's always lived here.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "daycareLeave"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-leave-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "He closes the ledger. \"Any time.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-leave-2",
+   "name": "The Day-Care: The Second One",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "\"And the second?\"",
+   "choices": [
+    {
+     "label": "This one.",
+     "pick": {},
+     "success": {
+      "text": "It goes and finds the first one in the heap. Neither of them looks back. That's how you know it's fine.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "daycareLeave"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-left-pair",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just the one.",
+     "success": {
+      "text": "\"One's fine. One gets spoilt.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-eggs-1",
+   "name": "The Day-Care: Eggs",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "Three eggs in a straw-lined crate. Mr. Holloway names two of them. The third he just pats.\n\nPrices are chalked on the crate, by how rare.",
+   "choices": [
+    {
+     "label": "An Eevee egg (₽1,200).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "Cream, with a brown band. \"Eevee. Popular. Priced like it.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "eevee"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Ralts egg (₽1,500).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "White with a green crown. \"Ralts. Shy. Worth it.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "ralts"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A surprise (₽900).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "\"Couldn't tell you. Neither could the mother.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the counter.",
+     "success": {
+      "text": "He puts the lid back on the crate.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-eggs-2",
+   "name": "The Day-Care: Eggs",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "Three eggs in a straw-lined crate. Mr. Holloway names two of them. The third he just pats.\n\nPrices are chalked on the crate, by how rare.",
+   "choices": [
+    {
+     "label": "A Growlithe egg (₽1,000).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "Orange and black, warm as toast. \"Growlithe. The Old Dog's grandchildren, near enough.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "growlithe"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Riolu egg (₽1,500).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "Blue with a black ring. \"Riolu. It'll know you before you know it.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "riolu"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A surprise (₽900).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "\"Found in the hay. No idea. Good luck.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the counter.",
+     "success": {
+      "text": "He puts the lid back on the crate.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-eggs-3",
+   "name": "The Day-Care: Eggs",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "Three eggs in a straw-lined crate. Mr. Holloway names two of them. The third he just pats.\n\nPrices are chalked on the crate, by how rare.",
+   "choices": [
+    {
+     "label": "A Snorunt egg (₽900).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "Cold to the touch. \"Snorunt. Keep it out of the sun.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "snorunt"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Larvesta egg (₽2,000).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2000
+      }
+     ],
+     "success": {
+      "text": "Hot to the touch. \"Larvesta. Keep it out of the hay.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2000
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "larvesta"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A surprise (₽900).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "\"It hums. That's all I know.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the counter.",
+     "success": {
+      "text": "He puts the lid back on the crate.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-eggmove",
+   "name": "Mrs. Holloway's Egg Moves",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "**Mrs. Holloway** teaches one egg move a visit, to a Pokémon that could have hatched knowing it. She looks at your lead for a long time first.\n\n\"I don't take Heart Scales, love. You use those the minute you find them. Coins.\"",
+   "choices": [
+    {
+     "label": "Pay ₽1,000.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "She takes your lead's face in both hands and says something to it you don't catch. It practises the move all afternoon.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "eggMove"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-move-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this time.",
+     "success": {
+      "text": "\"It'll keep. They always keep.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-daycare"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-village",
+   "name": "The Village",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "Families of Pokémon that have lived here for generations. The village has names for them.",
+   "choices": [
+    {
+     "label": "The Clover Hill lot.",
+     "success": {
+      "text": "Up the clover hill.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-clover"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Pond lot.",
+     "success": {
+      "text": "Down to the pond.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-pond"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Roof lot.",
+     "success": {
+      "text": "Past the thatched roofs.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-roof"
+       }
+      ]
+     }
+    },
+    {
+     "label": "On through the village.",
+     "success": {
+      "text": "On, towards the day-care step and the board by the well.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-village-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-clover",
+   "name": "The Clover Hill Lot",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "nidoqueen",
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "Nidoran, Nidorina, Nidorino, and a Nidoqueen who's everyone's grandmother.\n\nAt dusk she counts them, with one claw. She always gets one too many.",
+   "choices": [
+    {
+     "label": "Count them too.",
+     "success": {
+      "text": "You count. You get one too many as well. The Nidoqueen gives you a look of deep fellow-feeling.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-village"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to it.",
+     "success": {
+      "text": "She starts again from the top.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-village"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-pond",
+   "name": "The Pond Lot",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "wooper",
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "Marill and Azumarill, bobbing. And one Wooper, bobbing with them, who thinks it's one of them.\n\nIt's been told. It doesn't believe it.",
+   "choices": [
+    {
+     "label": "Tell it.",
+     "success": {
+      "text": "You tell it, gently. The Wooper looks at you, then at the Marill, then at you, and bobs, firmly, like a Marill.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-village"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it be.",
+     "success": {
+      "text": "It bobs. The Marill bob. Nobody here minds.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-village"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-roof",
+   "name": "The Roof Lot",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tranquill",
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "Pidove and Tranquill along the thatch, in a row.",
+   "choices": [
+    {
+     "label": "Look up.",
+     "success": {
+      "text": "They leave, all at once, in a clatter of wings.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-roof-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "They watch you go. You can feel it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-village"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-roof-2",
+   "name": "The Roof Lot",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "pidove",
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "The thatch is empty.",
+   "choices": [
+    {
+     "label": "Look down.",
+     "success": {
+      "text": "A flutter, a scrape of claws. When you look up again, they're all back, in a row, looking innocent.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-village"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep looking up.",
+     "success": {
+      "text": "Nothing. Nothing. Nothing. You give up. You look down. Behind you, a flutter, a scrape of claws.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-village"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-village-2",
+   "name": "The Village: The Step and the Well",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "sneasel",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "night-shift-sneasel",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the fence, the Sneasel that stayed after the Night Shift. Hatchlings are climbing on it, too. It's pretending not to like it."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "The day-care step, and the Old Dog asleep across it. It's raised forty years of hatchlings. They climb on it. It lets them.\n\nBy the well, a board of breeding requests, pinned with clothes pegs.",
+   "choices": [
+    {
+     "label": "Wait by the step.",
+     "success": {
+      "text": "A bell rings, somewhere in the house. Everyone in the village stops what they're doing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-hatch-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-hatch"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "daycare-hatch-at"
+      }
+     ]
+    },
+    {
+     "label": "The breeding board.",
+     "success": {
+      "text": "Three requests, in three hands.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-board"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the square.",
+     "success": {
+      "text": "Back to the square, past a heap of sleeping Pokémon who don't move.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-square"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-hatch",
+   "name": "The Hatching",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "arcanine",
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "*A bell. Everyone stops. Mrs. Holloway carries the egg out on a cushion and sets it on the step, between the Old Dog's paws.*\n\n*It cracks. Nobody breathes. A very small face.*\n\n*The Old Dog licks it, once. The village cheers. Somebody's already made a cake.*",
+   "choices": [
+    {
+     "label": "Cheer.",
+     "success": {
+      "text": "You cheer with everyone else. The hatchling sneezes. The village cheers again, louder, for the sneeze.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-village-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay at the back.",
+     "success": {
+      "text": "You stay at the back, by the fence. The Old Dog looks up over the crowd, finds you, and puts its head down again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-village-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask to hold it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "gn",
+         "test": "partyBond",
+         "n": 2
+        }
+       ],
+       "text": "Mrs. Holloway looks at your hands, and then at your team. Every one of them is watching you, not her. \"Yes,\" she says, and puts it in your arms. It is warm, and it weighs nothing, and it yawns.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "amount": 6,
+         "who": "party"
+        },
+        {
+         "kind": "moment",
+         "text": "You held a hatchling on the day-care step, the morning it was born.",
+         "importance": 60
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-40-village-2"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Mrs. Holloway looks at your hands, and then at your team, for a long moment. \"Not today, love. Next time.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-village-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-board",
+   "name": "The Breeding Board",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "Three requests, pinned with clothes pegs. Meet one, and the village pays in something rare.",
+   "choices": [
+    {
+     "label": "A Pokémon that knows a move its parents taught it.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "eggMoveKnown"
+      }
+     ],
+     "success": {
+      "text": "Mr. Holloway checks it over, and writes your name on the board.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "ability-capsule",
+         "life-orb",
+         "choice-scarf",
+         "leftovers",
+         "focus-sash"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-req-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-board"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "daycare-req-1"
+      }
+     ]
+    },
+    {
+     "label": "One with a calm nature.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "natureIs",
+       "key": "calm"
+      }
+     ],
+     "success": {
+      "text": "Your calm one sits through Mr. Holloway's whole inspection without blinking. He's impressed.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "ability-capsule",
+         "life-orb",
+         "choice-scarf",
+         "leftovers",
+         "focus-sash"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-req-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-board"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "daycare-req-2"
+      }
+     ]
+    },
+    {
+     "label": "A pair that get on.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "pairGetsOn"
+      }
+     ],
+     "success": {
+      "text": "The two of them sit together in the clover and groom each other. That's the request met.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "ability-capsule",
+         "life-orb",
+         "choice-scarf",
+         "leftovers",
+         "focus-sash"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-req-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-board"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "daycare-req-3"
+      }
+     ]
+    },
+    {
+     "label": "Back to the step.",
+     "success": {
+      "text": "The clothes pegs rattle in the wind.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-village-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-edge",
+   "name": "The Edge of the Village",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "The last fence. Mrs. Holloway's egg shed, with one egg in it that has a story. And Bronwen Okafor's caravan, with a sign outside.",
+   "choices": [
+    {
+     "label": "The egg with a story.",
+     "success": {
+      "text": "Mrs. Holloway is already at the shed door.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-egg",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-40-adopt-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-egg",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-40-adopt-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-egg",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-40-adopt-3"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "daycare-adopt-at"
+      }
+     ]
+    },
+    {
+     "label": "Bronwen's caravan.",
+     "success": {
+      "text": "A kettle on, a sign out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-pair",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-40-bronwen-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-pair",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-40-bronwen-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-pair",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-40-bronwen-3"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-pair",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-40-bronwen-4"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the square.",
+     "success": {
+      "text": "Back to the square, past a heap of sleeping Pokémon who don't move.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-square"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-adopt-1",
+   "name": "The Adoption: Found in a Storm",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "**Mrs. Holloway**, with an egg in a shawl. Washed up against the fence after the storm, still warm. Mrs. Holloway kept it by the stove all night.\n\n\"It's been frightened already. What'll you do the first time it's frightened again?\"",
+   "choices": [
+    {
+     "label": "Hold it.",
+     "success": {
+      "text": "She nods, slowly. \"Then it'll start out knowing you will.\"\n\n**Mrs. Holloway, handing it over:** \"We don't sell these ones. We place them.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-adopt-at"
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [
+         "water",
+         "flying"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "eggShape",
+        "key": "storm-hold"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-adopted-storm-hold",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it see I'm not afraid.",
+     "success": {
+      "text": "\"Good. They learn that faster than anything.\"\n\n**Mrs. Holloway, handing it over:** \"We don't sell these ones. We place them.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-adopt-at"
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [
+         "water",
+         "flying"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "eggShape",
+        "key": "storm-brave"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-adopted-storm-brave",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stand in front.",
+     "success": {
+      "text": "\"It'll grow up wanting to do the same. You watch.\"\n\n**Mrs. Holloway, handing it over:** \"We don't sell these ones. We place them.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-adopt-at"
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [
+         "water",
+         "flying"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "eggShape",
+        "key": "storm-front"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-adopted-storm-front",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "She tucks the shawl back round it. \"It'll keep.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-adopt-2",
+   "name": "The Adoption: Left on a Doorstep",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "**Mrs. Holloway**, with an egg in a shawl. In a basket on the step, with a note: *\"I can't. Please.\"*\n\n\"Someone couldn't keep it. Will you tell it that, when it's older?\"",
+   "choices": [
+    {
+     "label": "Yes.",
+     "success": {
+      "text": "\"Then it'll be a gentle one. They always are, the ones who know.\"\n\n**Mrs. Holloway, handing it over:** \"We don't sell these ones. We place them.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-adopt-at"
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "eggShape",
+        "key": "door-yes"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-adopted-door-yes",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Then it'll be a bold one. Nothing behind it but forwards.\"\n\n**Mrs. Holloway, handing it over:** \"We don't sell these ones. We place them.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-adopt-at"
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "eggShape",
+        "key": "door-no"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-adopted-door-no",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'll tell it someone wanted it safe.",
+     "success": {
+      "text": "She has to look away for a moment. \"It'll be careful, that one. Like whoever wrote the note.\"\n\n**Mrs. Holloway, handing it over:** \"We don't sell these ones. We place them.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-adopt-at"
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "eggShape",
+        "key": "door-safe"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-adopted-door-safe",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "She tucks the shawl back round it. \"It'll keep.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-adopt-3",
+   "name": "The Adoption: The Last of a Clutch",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "**Mrs. Holloway**, with an egg in a shawl. The others hatched and went. This one's late. It rocks, sometimes, and then thinks better of it.\n\n\"It's slow. Does that bother you?\"",
+   "choices": [
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Then it'll hatch when it's ready, and it'll be the better for it.\"\n\n**Mrs. Holloway, handing it over:** \"We don't sell these ones. We place them.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-adopt-at"
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "slowpoke"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "eggShape",
+        "key": "clutch-no"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-adopted-clutch-no",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A bit.",
+     "success": {
+      "text": "\"Then it'll hurry. It'll know it hurried, mind.\"\n\n**Mrs. Holloway, handing it over:** \"We don't sell these ones. We place them.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-adopt-at"
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "slowpoke"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "eggShape",
+        "key": "clutch-bit"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-adopted-clutch-bit",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'm slow too.",
+     "success": {
+      "text": "She laughs, properly. \"Then you'll get on.\"\n\n**Mrs. Holloway, handing it over:** \"We don't sell these ones. We place them.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-adopt-at"
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "slowpoke"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "eggShape",
+        "key": "clutch-slow"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-adopted-clutch-slow",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "She tucks the shawl back round it. \"It'll keep.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-bronwen-1",
+   "name": "Bronwen's Caravan",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "given",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "daycare-bronwen-at",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Bronwen's already given you this visit's. \"Come back next time. Different pair.\"",
+     "hide": [
+      0
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "**Bronwen Okafor**, Nan's cousin, in a caravan at the edge of the village, with a hand-painted sign outside:\n\n*THIS VISIT: A NIDORAN♀ AND A NIDORAN♂.*\n\n\"Bring me that, and I'll give you something you won't find on a road.\"",
+   "choices": [
+    {
+     "label": "Show her the pair.",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "nidoran-f"
+      },
+      {
+       "kind": "partySpecies",
+       "species": "nidoran-m"
+      }
+     ],
+     "success": {
+      "text": "\"There. An egg with both lines' best move in it. Earth Power from her side, Megahorn from his.\"",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "nidoran-f",
+         "nidoran-m"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "eggShape",
+        "key": "nidoran-best"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-bronwen-at"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-breeder-pair",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the village.",
+     "success": {
+      "text": "She waves you off with a teaspoon.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-bronwen-2",
+   "name": "Bronwen's Caravan",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "given",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "daycare-bronwen-at",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Bronwen's already given you this visit's. \"Come back next time. Different pair.\"",
+     "hide": [
+      0
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "**Bronwen Okafor**, Nan's cousin, in a caravan at the edge of the village, with a hand-painted sign outside:\n\n*THIS VISIT: A VOLBEAT AND AN ILLUMISE.*\n\n\"Bring me that, and I'll give you something you won't find on a road.\"",
+   "choices": [
+    {
+     "label": "Show her the pair.",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "volbeat"
+      },
+      {
+       "kind": "partySpecies",
+       "species": "illumise"
+      }
+     ],
+     "success": {
+      "text": "\"Raised under the same lantern. It knows Tail Glow and Quiver Dance, both. They don't, usually.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "volbeat",
+         "illumise"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "tail-glow",
+         "quiver-dance",
+         "bug-buzz",
+         "moonlight"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-bronwen-at"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-breeder-pair",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the village.",
+     "success": {
+      "text": "She waves you off with a teaspoon.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-bronwen-3",
+   "name": "Bronwen's Caravan",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "given",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "daycare-bronwen-at",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Bronwen's already given you this visit's. \"Come back next time. Different pair.\"",
+     "hide": [
+      0
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "**Bronwen Okafor**, Nan's cousin, in a caravan at the edge of the village, with a hand-painted sign outside:\n\n*THIS VISIT: A ZANGOOSE AND A SEVIPER THAT GET ON.*\n\n\"Bring me that, and I'll give you something you won't find on a road.\"",
+   "choices": [
+    {
+     "label": "Show her the pair.",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "zangoose"
+      },
+      {
+       "kind": "partySpecies",
+       "species": "seviper"
+      },
+      {
+       "kind": "gn",
+       "test": "hasAbility",
+       "key": "truce"
+      }
+     ],
+     "success": {
+      "text": "\"I didn't think I'd ever see it.\" A kit raised by both of them, and it already knows the Truce.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "zangoose",
+         "seviper"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "truce"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-bronwen-at"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-breeder-pair",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the village.",
+     "success": {
+      "text": "She waves you off with a teaspoon.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-bronwen-4",
+   "name": "Bronwen's Caravan",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "given",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "daycare-bronwen-at",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Bronwen's already given you this visit's. \"Come back next time. Different pair.\"",
+     "hide": [
+      0
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "**Bronwen Okafor**, Nan's cousin, in a caravan at the edge of the village, with a hand-painted sign outside:\n\n*THIS VISIT: ANY POKÉMON AND ITS OWN PARENT.*\n\n\"Bring me that, and I'll give you something you won't find on a road.\"",
+   "choices": [
+    {
+     "label": "Show her the pair.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "parentAndChild"
+      }
+     ],
+     "success": {
+      "text": "\"Mother and child, in one party. Here. A Destiny Knot, and my best egg.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "destiny-knot",
+        "count": 1
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle",
+        "tier": "rare"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "daycare-bronwen-at"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-breeder-pair",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the village.",
+     "success": {
+      "text": "She waves you off with a teaspoon.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-40-edge"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-40-return",
+   "name": "Back From the Day-Care",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "daycare-held",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "daycare-region"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5e7a3a",
+    "effect": "none"
+   },
+   "intro": "Mr. Holloway, at the side of the road, in a cart, with a very short pencil behind his ear. Asleep in the back of the cart: your two.\n\n\"Thought we'd save you the walk. They've been good. Mostly.\"",
+   "choices": [
+    {
+     "label": "Take them home.",
+     "success": {
+      "text": "They wake up, and see you, and are out of the cart before it's stopped.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "daycareReturn"
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

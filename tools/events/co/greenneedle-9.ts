@@ -1,8 +1,8 @@
-// Greenneedle, part 9: gn.39 The Travelling Pokémon Market (doc GREENNEEDLE_REWORKED_PLACED_9.md).
+// Greenneedle, part 9: gn.39 The Travelling Pokémon Market, gn.40 The Pokémon Day-Care Village (doc GREENNEEDLE_REWORKED_PLACED_9.md).
 // Build: npm run co:build -- greenneedle-9   then   npm run co:gn
-import { any, ch, egg, fight, flag, item, out, trade, wild, type Json } from '../dsl.ts';
+import { any, br, ch, egg, fight, flag, item, join, out, trade, wild, type Json } from '../dsl.ts';
 import { anyFlag } from './_ne.ts';
-import { chIf, exactly, gev, gn, is, not, notThisRegion, pick, rm, say, scene, setTo, stampRegion, when, type Placement } from './_gn.ts';
+import { bondAll, chIf, exactly, gev, gn, is, not, notThisRegion, pick, rm, say, scene, setTo, stampRegion, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -246,7 +246,176 @@ const gn39: Json[] = [
   ]),
 ];
 
-export const EVENTS: Json[] = [...gn39];
+// =====================================================================================================================
+// gn.40  THE POKÉMON DAY-CARE VILLAGE  (Hub Destination at a Town node; until towns exist, step 5, optional; once per region, and it remembers).
+// Services (leave two for a region, eggs, an egg move, the breeding board), village life (the four families, the hatching), one
+// adoption a visit (the answer shapes the hatchling: core/greenneedle/daycare.ts), and Bronwen Okafor's pair. The pair left here comes
+// home in the next region (gn-40-return, or the next visit): a level a stage, knowing each other, an egg if they're compatible.
+// =====================================================================================================================
+const VILLAGE_TINT = '#5e7a3a';
+const village = (o: Json = {}): Json => ({ tint: VILLAGE_TINT, tags: ['Pokémon', 'Relationship', 'Story'], effect: 'none', ...o });
+const toSquare40 = (label = 'Back to the square.'): Json => ch(label, out('Back to the square, past a heap of sleeping Pokémon who don\'t move.', scene('gn-40-square')));
+/** Visits counted 1, 2, 3...; the adoption egg turns every three, Bronwen's pair every four. */
+const cycle = (key: string, n: number): Json[] => Array.from({ length: 9 }, (_, i) => when('daycare-visits', { min: i + 1, max: i + 1 }, [setTo(key, (i % n) + 1)]));
+const byVisit = (key: string, n: number, base: string): Json[] => Array.from({ length: n }, (_, i) => when(key, { min: i + 1, max: i + 1 }, [scene(`${base}-${i + 1}`)]));
+const once = (key: string): Json => notThisRegion(key);
+const gnc = (test: string, o: Json = {}): Json => ({ kind: 'gn', test, ...o });
+const RARE_ITEM = ['rare-candy', 'ability-capsule', 'life-orb', 'choice-scarf', 'leftovers', 'focus-sash'];
+
+/** Eggs for sale: two told, one a surprise; the price by rarity. */
+const EGG_SALE: [string, string[] | null, number, string][][] = [
+  [['An Eevee egg', ['eevee'], 1200, 'Cream, with a brown band. "Eevee. Popular. Priced like it."'], ['A Ralts egg', ['ralts'], 1500, 'White with a green crown. "Ralts. Shy. Worth it."'], ['A surprise', null, 900, '"Couldn\'t tell you. Neither could the mother."']],
+  [['A Growlithe egg', ['growlithe'], 1000, 'Orange and black, warm as toast. "Growlithe. The Old Dog\'s grandchildren, near enough."'], ['A Riolu egg', ['riolu'], 1500, 'Blue with a black ring. "Riolu. It\'ll know you before you know it."'], ['A surprise', null, 900, '"Found in the hay. No idea. Good luck."']],
+  [['A Snorunt egg', ['snorunt'], 900, 'Cold to the touch. "Snorunt. Keep it out of the sun."'], ['A Larvesta egg', ['larvesta'], 2000, 'Hot to the touch. "Larvesta. Keep it out of the hay."'], ['A surprise', null, 900, '"It hums. That\'s all I know."']],
+];
+const eggRoom = (i: number): Json => rm(`gn-40-eggs-${i + 1}`, 'The Day-Care: Eggs', village(), say('Three eggs in a straw-lined crate. Mr. Holloway names two of them. The third he just pats.', 'Prices are chalked on the crate, by how rare.'), [
+  ...EGG_SALE[i]!.map(([name, sp, price, line]) => ch(`${name} (${fmt(price)}).`, out(line, { kind: 'money', amount: -price }, egg(sp ? { species: sp } : {}), scene('gn-40-daycare')), { requires: [{ kind: 'money', atLeast: price }] })),
+  ch('Back to the counter.', out('He puts the lid back on the crate.', scene('gn-40-daycare'))),
+]);
+
+/** The adoption eggs: a story, one question, three answers; the answer shapes the hatchling (daycare.ts EGG_SHAPES). */
+const ADOPT: { name: string; story: string; q: string; egg: Json; answers: [string, string, string][] }[] = [
+  { name: 'Found in a Storm', story: 'Washed up against the fence after the storm, still warm. Mrs. Holloway kept it by the stove all night.', q: '"It\'s been frightened already. What\'ll you do the first time it\'s frightened again?"', egg: egg({ types: ['water', 'flying'] }),
+    answers: [['Hold it.', 'storm-hold', 'She nods, slowly. "Then it\'ll start out knowing you will."'], ['Let it see I\'m not afraid.', 'storm-brave', '"Good. They learn that faster than anything."'], ['Stand in front.', 'storm-front', '"It\'ll grow up wanting to do the same. You watch."']] },
+  { name: 'Left on a Doorstep', story: 'In a basket on the step, with a note: *"I can\'t. Please."*', q: '"Someone couldn\'t keep it. Will you tell it that, when it\'s older?"', egg: egg({}),
+    answers: [['Yes.', 'door-yes', '"Then it\'ll be a gentle one. They always are, the ones who know."'], ['No.', 'door-no', '"Then it\'ll be a bold one. Nothing behind it but forwards."'], ['I\'ll tell it someone wanted it safe.', 'door-safe', 'She has to look away for a moment. "It\'ll be careful, that one. Like whoever wrote the note."']] },
+  { name: 'The Last of a Clutch', story: 'The others hatched and went. This one\'s late. It rocks, sometimes, and then thinks better of it.', q: '"It\'s slow. Does that bother you?"', egg: egg({ species: ['slowpoke'] }),
+    answers: [['No.', 'clutch-no', '"Then it\'ll hatch when it\'s ready, and it\'ll be the better for it."'], ['A bit.', 'clutch-bit', '"Then it\'ll hurry. It\'ll know it hurried, mind."'], ['I\'m slow too.', 'clutch-slow', 'She laughs, properly. "Then you\'ll get on."']] },
+];
+const adoptRoom = (i: number): Json => {
+  const a = ADOPT[i]!;
+  return rm(`gn-40-adopt-${i + 1}`, `The Adoption: ${a.name}`, village(), say(`**Mrs. Holloway**, with an egg in a shawl. ${a.story}`, a.q), [
+    ...a.answers.map(([label, shape, line]) => ch(label, out(say(line, '**Mrs. Holloway, handing it over:** "We don\'t sell these ones. We place them."'), stampRegion('daycare-adopt-at'), { ...a.egg }, gn('eggShape', { key: shape }), flag(`daycare-adopted-${shape}`), scene('gn-40-edge')))),
+    ch('Not yet.', out('She tucks the shawl back round it. "It\'ll keep."', scene('gn-40-edge'))),
+  ]);
+};
+
+/** Bronwen Okafor's pair, one a visit, named on the sign outside her caravan. */
+const has = (sp: string): Json => ({ kind: 'partySpecies', species: sp });
+const PAIRS: { sign: string; needs: Json[]; give: Json[]; line: string }[] = [
+  { sign: 'A Nidoran♀ and a Nidoran♂.', needs: [has('nidoran-f'), has('nidoran-m')], give: [egg({ species: ['nidoran-f', 'nidoran-m'] }), gn('eggShape', { key: 'nidoran-best' })], line: '"There. An egg with both lines\' best move in it. Earth Power from her side, Megahorn from his."' },
+  { sign: 'A Volbeat and an Illumise.', needs: [has('volbeat'), has('illumise')], give: [{ ...join({ species: ['volbeat', 'illumise'] }), moves: ['tail-glow', 'quiver-dance', 'bug-buzz', 'moonlight'] }], line: '"Raised under the same lantern. It knows Tail Glow and Quiver Dance, both. They don\'t, usually."' },
+  { sign: 'A Zangoose and a Seviper that get on.', needs: [has('zangoose'), has('seviper'), gnc('hasAbility', { key: 'truce' })], give: [{ ...join({ species: ['zangoose', 'seviper'] }), ability: 'truce' }], line: '"I didn\'t think I\'d ever see it." A kit raised by both of them, and it already knows the Truce.' },
+  { sign: 'Any Pokémon and its own parent.', needs: [gnc('parentAndChild')], give: [item('destiny-knot'), { ...egg({}), tier: 'rare' }], line: '"Mother and child, in one party. Here. A Destiny Knot, and my best egg."' },
+];
+const pairRoom = (i: number): Json => {
+  const p = PAIRS[i]!;
+  return rm(`gn-40-bronwen-${i + 1}`, 'Bronwen\'s Caravan', village({ remembers: [{ id: 'given', when: [is('daycare-bronwen-at')], notice: 'Bronwen\'s already given you this visit\'s. "Come back next time. Different pair."', hide: [0] }] }), say(
+    '**Bronwen Okafor**, Nan\'s cousin, in a caravan at the edge of the village, with a hand-painted sign outside:',
+    `*THIS VISIT: ${p.sign.toUpperCase()}*`,
+    '"Bring me that, and I\'ll give you something you won\'t find on a road."',
+  ), [
+    ch('Show her the pair.', out(p.line, ...p.give, stampRegion('daycare-bronwen-at'), flag('daycare-breeder-pair'), scene('gn-40-edge')), { requires: p.needs }),
+    ch('Back to the village.', out('She waves you off with a teaspoon.', scene('gn-40-edge'))),
+  ]);
+};
+
+const gn40: Json[] = [
+  gev('gn-40-door', 'The Pokémon Day-Care Village', village({ stop: 'event', rarity: 'common', requires: [notThisRegion('daycare-region')] }), say(
+    '*Low fences. A hill of clover. Pokémon of four generations asleep in one heap by a gate.*',
+    '**Mr. Holloway:** "Mind the little ones underfoot. And the big ones. And the middle ones, they bite."',
+  ), [
+    ch('Walk into the village.', out('The heap by the gate shifts to let you through, and settles again.', stampRegion('daycare-region'), flag('daycare-visits'), ...cycle('daycare-egg', 3), ...cycle('daycare-pair', 4), gn('daycareReturn'), scene('gn-40-square'))),
+    ch('Walk on.', out('A Nidoran trots after you to the end of the fence, decides against it, and trots back.')),
+  ]),
+  rm('gn-40-square', 'The Day-Care Village', village({ remembers: [{ id: 'listened', when: [is('egg-listened-hatched')], notice: 'Mrs. Holloway sees the one that hatched from the Egg That Listened. "That\'s one of ours. It heard a lot, that one."' }] }), say(
+    'A square of packed earth, a well, and the day-care itself: a long low house with a step the size of a bed.',
+    'On the step, an old Arcanine, grey at the muzzle, asleep. Hatchlings are climbing on it. It doesn\'t mind.',
+  ), [
+    ch('The day-care.', out('Mr. Holloway is at the counter, writing in a ledger with a very short pencil.', scene('gn-40-daycare'))),
+    ch('Walk round the village.', out('Round by the clover hill.', scene('gn-40-village'))),
+    ch('The edge of the village.', out('Out past the last fence, where Mrs. Holloway keeps the special eggs, and a caravan is parked.', scene('gn-40-edge'))),
+    ch('Leave the village.', out('Mr. Holloway raises the short pencil in farewell. "Next region," he says. "We\'ll be here. We\'re always here."', flag('daycare-left-village'))),
+  ]),
+  rm('gn-40-daycare', 'The Day-Care', village({ remembers: [{ id: 'full', when: [is('daycare-held', 2)], notice: 'Two of yours are here already, asleep in the heap by the gate. "They\'re fine," says Mr. Holloway. "Better than fine. Come back next region."', hide: [0] }] }), say(
+    '**Mr. Holloway**, behind a counter of scrubbed wood. "Leave two with us and they stay a region. A level a stage, near enough. If they\'re a pair that could, there\'ll be an egg when you\'re back."',
+    '"And they come back knowing each other. You\'ll see it, when they\'re out together."',
+  ), [
+    ch('Leave two Pokémon.', out('He opens the ledger at a clean page.', scene('gn-40-leave-1')), { requires: [{ kind: 'partySize', atLeast: 3 }] }),
+    ch('Buy eggs.', out('He lifts the lid on a straw-lined crate.', ...byVisit('daycare-egg', 3, 'gn-40-eggs'))),
+    chIf([once('daycare-move-at')], 'Mrs. Holloway\'s egg moves.', out('Mrs. Holloway comes in from the back, wiping her hands.', scene('gn-40-eggmove'))),
+    toSquare40(),
+  ]),
+  rm('gn-40-leave-1', 'The Day-Care: The First One', village(), 'Mr. Holloway licks the pencil. "First one?"', [
+    ch('This one.', out('It goes and lies down in the heap by the gate as if it\'s always lived here.', gn('daycareLeave'), scene('gn-40-leave-2')), { pick: {} }),
+    ch('Not today.', out('He closes the ledger. "Any time."', scene('gn-40-daycare'))),
+  ]),
+  rm('gn-40-leave-2', 'The Day-Care: The Second One', village(), '"And the second?"', [
+    ch('This one.', out('It goes and finds the first one in the heap. Neither of them looks back. That\'s how you know it\'s fine.', gn('daycareLeave'), flag('daycare-left-pair'), scene('gn-40-daycare')), { pick: {} }),
+    ch('Just the one.', out('"One\'s fine. One gets spoilt."', scene('gn-40-daycare'))),
+  ]),
+  ...[0, 1, 2].map(eggRoom),
+  rm('gn-40-eggmove', 'Mrs. Holloway\'s Egg Moves', village(), say(
+    '**Mrs. Holloway** teaches one egg move a visit, to a Pokémon that could have hatched knowing it. She looks at your lead for a long time first.',
+    '"I don\'t take Heart Scales, love. You use those the minute you find them. Coins."',
+  ), [
+    ch(`Pay ${fmt(1000)}.`, out('She takes your lead\'s face in both hands and says something to it you don\'t catch. It practises the move all afternoon.', { kind: 'money', amount: -1000 }, { kind: 'eggMove' }, stampRegion('daycare-move-at'), scene('gn-40-daycare')), { requires: [{ kind: 'money', atLeast: 1000 }] }),
+    ch('Not this time.', out('"It\'ll keep. They always keep."', scene('gn-40-daycare'))),
+  ]),
+  // ---- Village life ----
+  rm('gn-40-village', 'The Village', village(), 'Families of Pokémon that have lived here for generations. The village has names for them.', [
+    ch('The Clover Hill lot.', out('Up the clover hill.', scene('gn-40-clover'))),
+    ch('The Pond lot.', out('Down to the pond.', scene('gn-40-pond'))),
+    ch('The Roof lot.', out('Past the thatched roofs.', scene('gn-40-roof'))),
+    ch('On through the village.', out('On, towards the day-care step and the board by the well.', scene('gn-40-village-2'))),
+  ]),
+  rm('gn-40-clover', 'The Clover Hill Lot', village({ pokemon: 'nidoqueen' }), say('Nidoran, Nidorina, Nidorino, and a Nidoqueen who\'s everyone\'s grandmother.', 'At dusk she counts them, with one claw. She always gets one too many.'), [
+    ch('Count them too.', out('You count. You get one too many as well. The Nidoqueen gives you a look of deep fellow-feeling.', scene('gn-40-village'))),
+    ch('Leave them to it.', out('She starts again from the top.', scene('gn-40-village'))),
+  ]),
+  rm('gn-40-pond', 'The Pond Lot', village({ pokemon: 'wooper' }), say('Marill and Azumarill, bobbing. And one Wooper, bobbing with them, who thinks it\'s one of them.', 'It\'s been told. It doesn\'t believe it.'), [
+    ch('Tell it.', out('You tell it, gently. The Wooper looks at you, then at the Marill, then at you, and bobs, firmly, like a Marill.', scene('gn-40-village'))),
+    ch('Let it be.', out('It bobs. The Marill bob. Nobody here minds.', scene('gn-40-village'))),
+  ]),
+  rm('gn-40-roof', 'The Roof Lot', village({ pokemon: 'tranquill' }), 'Pidove and Tranquill along the thatch, in a row.', [
+    ch('Look up.', out('They leave, all at once, in a clatter of wings.', scene('gn-40-roof-2'))),
+    ch('Walk on.', out('They watch you go. You can feel it.', scene('gn-40-village'))),
+  ]),
+  rm('gn-40-roof-2', 'The Roof Lot', village({ pokemon: 'pidove' }), 'The thatch is empty.', [
+    ch('Look down.', out('A flutter, a scrape of claws. When you look up again, they\'re all back, in a row, looking innocent.', scene('gn-40-village'))),
+    ch('Keep looking up.', out('Nothing. Nothing. Nothing. You give up. You look down. Behind you, a flutter, a scrape of claws.', scene('gn-40-village'))),
+  ]),
+  rm('gn-40-village-2', 'The Village: The Step and the Well', village({ remembers: [{ id: 'sneasel', when: [is('night-shift-sneasel')], notice: 'On the fence, the Sneasel that stayed after the Night Shift. Hatchlings are climbing on it, too. It\'s pretending not to like it.' }] }), say(
+    'The day-care step, and the Old Dog asleep across it. It\'s raised forty years of hatchlings. They climb on it. It lets them.',
+    'By the well, a board of breeding requests, pinned with clothes pegs.',
+  ), [
+    chIf([once('daycare-hatch-at')], 'Wait by the step.', out('A bell rings, somewhere in the house. Everyone in the village stops what they\'re doing.', stampRegion('daycare-hatch-at'), scene('gn-40-hatch'))),
+    ch('The breeding board.', out('Three requests, in three hands.', scene('gn-40-board'))),
+    toSquare40(),
+  ]),
+  rm('gn-40-hatch', 'The Hatching', village({ pokemon: 'arcanine' }), say(
+    '*A bell. Everyone stops. Mrs. Holloway carries the egg out on a cushion and sets it on the step, between the Old Dog\'s paws.*',
+    '*It cracks. Nobody breathes. A very small face.*',
+    '*The Old Dog licks it, once. The village cheers. Somebody\'s already made a cake.*',
+  ), [
+    ch('Cheer.', out('You cheer with everyone else. The hatchling sneezes. The village cheers again, louder, for the sneeze.', bondAll(1), scene('gn-40-village-2'))),
+    ch('Stay at the back.', out('You stay at the back, by the fence. The Old Dog looks up over the crowd, finds you, and puts its head down again.', scene('gn-40-village-2'))),
+    ch('Ask to hold it.', out('Mrs. Holloway looks at your hands, and then at your team, for a long moment. "Not today, love. Next time."', scene('gn-40-village-2')), { branches: [
+      br([gnc('partyBond', { n: 2 })], 'Mrs. Holloway looks at your hands, and then at your team. Every one of them is watching you, not her. "Yes," she says, and puts it in your arms. It is warm, and it weighs nothing, and it yawns.', bondAll(2), { kind: 'moment', text: 'You held a hatchling on the day-care step, the morning it was born.', importance: 60 }, scene('gn-40-village-2')),
+    ] }),
+  ]),
+  rm('gn-40-board', 'The Breeding Board', village(), say('Three requests, pinned with clothes pegs. Meet one, and the village pays in something rare.'), [
+    chIf([once('daycare-req-1')], 'A Pokémon that knows a move its parents taught it.', out('Mr. Holloway checks it over, and writes your name on the board.', any(...RARE_ITEM), stampRegion('daycare-req-1'), scene('gn-40-board')), { requires: [gnc('eggMoveKnown')] }),
+    chIf([once('daycare-req-2')], 'One with a calm nature.', out('Your calm one sits through Mr. Holloway\'s whole inspection without blinking. He\'s impressed.', any(...RARE_ITEM), stampRegion('daycare-req-2'), scene('gn-40-board')), { requires: [gnc('natureIs', { key: 'calm' })] }),
+    chIf([once('daycare-req-3')], 'A pair that get on.', out('The two of them sit together in the clover and groom each other. That\'s the request met.', any(...RARE_ITEM), stampRegion('daycare-req-3'), scene('gn-40-board')), { requires: [gnc('pairGetsOn')] }),
+    ch('Back to the step.', out('The clothes pegs rattle in the wind.', scene('gn-40-village-2'))),
+  ]),
+  // ---- The edge: the adoption, and Bronwen's caravan ----
+  rm('gn-40-edge', 'The Edge of the Village', village(), 'The last fence. Mrs. Holloway\'s egg shed, with one egg in it that has a story. And Bronwen Okafor\'s caravan, with a sign outside.', [
+    chIf([once('daycare-adopt-at')], 'The egg with a story.', out('Mrs. Holloway is already at the shed door.', ...byVisit('daycare-egg', 3, 'gn-40-adopt'))),
+    ch('Bronwen\'s caravan.', out('A kettle on, a sign out.', ...byVisit('daycare-pair', 4, 'gn-40-bronwen'))),
+    toSquare40(),
+  ]),
+  ...[0, 1, 2].map(adoptRoom),
+  ...[0, 1, 2, 3].map(pairRoom),
+  // The pair left here comes home in the next region, if the village isn't there to visit first.
+  gev('gn-40-return', 'Back From the Day-Care', village({ stop: 'event', rarity: 'common', callback: true, requires: [is('daycare-held'), notThisRegion('daycare-region')] }), say(
+    'Mr. Holloway, at the side of the road, in a cart, with a very short pencil behind his ear. Asleep in the back of the cart: your two.',
+    '"Thought we\'d save you the walk. They\'ve been good. Mostly."',
+  ), [ch('Take them home.', out('They wake up, and see you, and are out of the cart before it\'s stopped.', gn('daycareReturn')))]),
+];
+
+export const EVENTS: Json[] = [...gn39, ...gn40];
 
 export const REMOVE: string[] = [];
 
@@ -256,6 +425,12 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'No battles, except the rare-encounter stall (A+0)', often: 'region', badge: 'own', dressing: { kanto: 'The Travelling Pokémon Market', elsewhere: 'The Travelling Pokémon Market' },
     note: 'Badge: a striped awning. Once per region, in every region, with the same vendors and new stock. Until towns exist it sits on step 10. Vendors remember within the run (no memory across runs).',
   },
+  'gn-40-door': {
+    gn: 'gn.40', shape: 'Hub', earliest: 'A4', home: 5, window: [3, 8], sits: 'optional', attaches: 'town', tags: ['Hub Destination', 'Community Episode'],
+    level: 'No battles', often: 'region', badge: 'own', dressing: { kanto: 'The Pokémon Day-Care Village', elsewhere: 'The Pokémon Day-Care Village' },
+    note: 'Badge: an egg. Once per region; the same village, and it remembers (within the run). Until towns exist it sits on step 5. The pair left there comes home in the next region (gn-40-return).',
+  },
+  'gn-40-return': { gn: 'gn.40', shape: 'Single', earliest: 'A4', home: 3, window: [1, 20], sits: 'optional', tags: ['Afterstory'], level: 'none', often: 'run', note: 'Only while two Pokémon are at the village, in a later region.' },
 };
 
 export const CHAINS: Json[] = [];

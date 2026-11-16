@@ -18,6 +18,7 @@
 
 import { ownTypes } from '../co/typeShift';
 import { golemBlueType, golemColour } from '../greenneedle/crystals';
+import { unflinching } from '../greenneedle/daycare';
 import { earthLine, overchargeSelfHurt } from '../greenneedle/ridge';
 import { foresightBegin } from './foresight';
 import { CARE } from '../care/mods';
@@ -4928,7 +4929,7 @@ function foeMissLesson(ctx: BattleContext, target: Combatant, events: BattleEven
 
 /** Makes the target flinch, unless Inner Focus stops it or it is Dynamaxed. */
 function flinch(ctx: BattleContext, user: Combatant, target: Combatant): void {
-  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed && !momentNoFlinch(ctx, target) && !revivalNoFlinch(target)) target.flinched = true;
+  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed && !momentNoFlinch(ctx, target) && !revivalNoFlinch(target) && !(target.side === 'player' && unflinching(target.mon))) target.flinched = true;
 }
 
 /** Greenneedle gn.38 Self-Made: once per battle, when an opponent's ability would affect it, it isn't. True when it stepped in. */

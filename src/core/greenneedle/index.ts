@@ -21,6 +21,10 @@ import { tideOf } from '../clock';
 import { lightning } from './ridge';
 import { labCast, labForm } from './lab';
 import { marketArrive, marketBuy, marketOffer, marketUndercut } from './market';
+import { museumArrive } from './museum';
+import { daycareLeave, daycareReturn, eggShape, parentAndChild } from './daycare';
+import { eggMoveOptions, familyId } from '../mastery';
+import { pairBondLevel } from '../bond';
 
 type Cue = { type: 'spectacle'; kind: 'arena'; side: 'player' | 'enemy'; text: string; uid?: string };
 const cue = (side: 'player' | 'enemy', text: string, uid?: string): Cue => ({ type: 'spectacle', kind: 'arena', side, text, ...(uid ? { uid } : {}) });
@@ -141,6 +145,13 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   }
   // gn.36: a party Pokémon holds item `key` (Safety Goggles see through a sandstorm); one has ability `key` (Desert Guide).
   if (c.test === 'holds') return run.party.some((m) => (m.held?.[c.key!] ?? 0) > 0);
+  // gn.40, the Day-Care Village's board and Bronwen's pairs.
+  if (c.test === 'parentAndChild') return parentAndChild(run);
+  if (c.test === 'eggMoveKnown') return run.party.some((m) => { const egg = new Set(eggMoveOptions(content, familyId(content, m.speciesId)).map((o) => o.id)); return m.moves.some((mv) => egg.has(mv.id)); });
+  if (c.test === 'natureIs') return run.party.some((m) => m.nature === c.key);
+  if (c.test === 'pairGetsOn') return run.party.some((a, i) => run.party.some((b, j) => j > i && pairBondLevel(run, a.uid, b.uid) >= 1));
+  // Every Pokémon in the party at Bond level `n` or more (balance co.bondLevelStep friendship a level).
+  if (c.test === 'partyBond') return run.party.length > 0 && run.party.every((m) => Math.floor(m.friendship / content.balance.co.bondLevelStep) >= (c.n ?? 1));
   if (c.test === 'hasAbility') return run.party.some((m) => m.fixedAbility === c.key || abilityOf(content, m) === c.key);
   if (c.test === 'holdsItem') return run.party.some((m) => Object.entries(m.held ?? {}).some(([id, n]) => n > 0 && !id.endsWith('-berry')));
   if (c.test === 'hasMark') return run.party.some((m) => m.gn?.includes(c.key!));
@@ -392,6 +403,19 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       if (r.price === null) return [r.line, e.type ? host.apply({ kind: 'gn', op: 'scene', key: e.type }) : ''].filter(Boolean).join(' · ');
       return [r.line, ...(e.then ?? []).map((x) => host.apply(x))].filter(Boolean).join(' · ');
     }
+    case 'daycareLeave':
+      return daycareLeave(content, run, host.picked, host.stage);
+    case 'daycareReturn': {
+      const r = daycareReturn(content, run, host.stage, (mon, n) => void addLevels(content, mon, n));
+      if (!r.eggOf) return r.line;
+      const laid = host.apply({ kind: 'egg', species: [familyId(content, r.eggOf.speciesId)], types: [], levelBonus: 0, shinyMultiplier: 1, left: 3, unit: 'battle' });
+      eggShape(run, 'habit-daycare', r.parents);
+      return [r.line, laid].filter(Boolean).join(' · ');
+    }
+    case 'eggShape':
+      return eggShape(run, e.key!);
+    case 'museumArrive':
+      return museumArrive(run, host.region);
     case 'marketUndercut':
       return marketUndercut(run, e.key!, e.n!);
     case 'markLead': {
