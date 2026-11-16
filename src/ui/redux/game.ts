@@ -11,6 +11,7 @@ import { esc, hpb, mini, W } from './kit';
 import type { Art } from './templates';
 import type { PartyCard } from './screens/party';
 import { summaryInfo } from '../summaryLook';
+import { rivalBossFor } from '../../core/rivals/major';
 
 const manifestOf = (scene: Phaser.Scene): AssetManifest | undefined => scene.cache.json.get('manifest') as AssetManifest | undefined;
 
@@ -62,6 +63,6 @@ export function characterArt(characterId: string | undefined | null): Art | null
 export function rivalArt(scene: Phaser.Scene, rival: { classId: string; name: string } | undefined | null): Art | null {
   if (!rival) return null;
   const content = services().session.content;
-  const character = rival.classId === 'rival' ? content.bosses.get(rival.name.toLowerCase()) : undefined;
+  const character = rival.classId === 'rival' ? rivalBossFor(content, rival.name) : undefined;
   return artOf(scene, character ? character.sprites.default : content.trainers.get(rival.classId)?.spriteAssetId);
 }

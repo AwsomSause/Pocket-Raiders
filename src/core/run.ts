@@ -114,6 +114,7 @@ import {
   planEliteFour,
   planGymLeader,
   planFirstRival,
+  rivalNamesExcluded,
   planTrainer,
   planWild,
   type TrainerPlan,
@@ -2309,7 +2310,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     // The first rival: the first ordinary trainer of balance.rival.stage is scripted (one starter-line Pokémon).
     const firstRival = node.kind === 'trainer' && !rematch && stageNumber === content.balance.rival.stage && node.column >= content.balance.rival.column && run.story.flags[FIRST_RIVAL_FLAG] === undefined;
     if (firstRival) {
-      plan = planFirstRival(content, run.seed, Math.min(runLevelCap(content, run), Math.max(content.balance.rival.level, ...run.party.map((m) => m.level))));
+      plan = planFirstRival(content, run.seed, Math.min(runLevelCap(content, run), Math.max(content.balance.rival.level, ...run.party.map((m) => m.level))), rivalNamesExcluded(content, run.archetypeId));
       plan = storyFirstRivalPlan(content, run, plan) ?? plan;
       run.story.flags[FIRST_RIVAL_FLAG] = 'fighting';
     }

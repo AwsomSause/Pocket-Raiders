@@ -342,6 +342,264 @@
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
       "poolClass": "secondary"
+    },
+    "Red": {
+      "home": "Kanto",
+      "personality": "ice-queen-king",
+      "style": "attrition",
+      "pool": [
+        "lapras",
+        "snorlax",
+        "eevee",
+        "pikachu"
+      ],
+      "lines": {
+        "intro": "{rival} says nothing, and {ace} is already ready.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Manga Red": {
+      "home": "Kanto",
+      "personality": "natural-talent",
+      "style": "improviser",
+      "pool": [
+        "poliwag",
+        "aerodactyl",
+        "snorlax",
+        "eevee"
+      ],
+      "lines": {
+        "intro": "{rival} grins: {ace} has been waiting for this one.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary",
+      "sprite": "red"
+    },
+    "Ethan": {
+      "home": "Johto",
+      "personality": "naturalist",
+      "style": "trust-fighter",
+      "pool": [
+        "togepi",
+        "natu",
+        "sudowoodo",
+        "marill"
+      ],
+      "lines": {
+        "intro": "{rival} is back, and {ace} trusts every call.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Manga Gold": {
+      "home": "Johto",
+      "personality": "chaos-agent",
+      "style": "gambit",
+      "pool": [
+        "pichu",
+        "togepi",
+        "aipom",
+        "poliwag"
+      ],
+      "lines": {
+        "intro": "{rival} is back with a wild plan, and {ace} is in on it!",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary",
+      "sprite": "ethan"
+    },
+    "Dawn": {
+      "home": "Sinnoh",
+      "personality": "showboat",
+      "style": "combo-artist",
+      "pool": [
+        "buneary",
+        "pachirisu",
+        "swinub",
+        "eevee"
+      ],
+      "lines": {
+        "intro": "{rival} strikes a pose. {ace} is ready to shine!",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Lucas": {
+      "home": "Sinnoh",
+      "personality": "pragmatist",
+      "style": "resource-manager",
+      "pool": [
+        "starly",
+        "shinx",
+        "gible",
+        "geodude"
+      ],
+      "lines": {
+        "intro": "{rival} is back, and {ace} has a plan.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Hilbert": {
+      "home": "Unova",
+      "personality": "innovator",
+      "style": "blitz",
+      "pool": [
+        "lillipup",
+        "pidove",
+        "sandile",
+        "tympole"
+      ],
+      "lines": {
+        "intro": "{rival} is back, and {ace} is fired up!",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Rosa": {
+      "home": "Unova",
+      "personality": "caretaker",
+      "style": "protector",
+      "pool": [
+        "minccino",
+        "munna",
+        "audino",
+        "petilil"
+      ],
+      "lines": {
+        "intro": "{rival} is back, and {ace} is happy to see you!",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Serena": {
+      "home": "Kalos",
+      "personality": "perfectionist",
+      "style": "combo-artist",
+      "pool": [
+        "fletchling",
+        "pancham",
+        "eevee",
+        "dedenne"
+      ],
+      "lines": {
+        "intro": "{rival} is back, and {ace} has been practising.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Marnie": {
+      "home": "Galar",
+      "personality": "secret-softie",
+      "style": "disruptor",
+      "pool": [
+        "impidimp",
+        "morpeko",
+        "croagunk",
+        "purrloin"
+      ],
+      "lines": {
+        "intro": "{rival} mutters that {ace} will beat you. Don't take it lightly.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Tracey Sketchit": {
+      "home": "Kanto",
+      "personality": "scholar",
+      "style": "scout",
+      "pool": [
+        "marill",
+        "venonat",
+        "krabby",
+        "hoppip"
+      ],
+      "lines": {
+        "intro": "{rival} has sketched your whole team, and {ace} is ready.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Alain": {
+      "home": "Kalos",
+      "personality": "former-antagonist",
+      "style": "overdrive-specialist",
+      "pool": [
+        "riolu",
+        "sneasel",
+        "beldum",
+        "bagon"
+      ],
+      "lines": {
+        "intro": "{rival} is back to be stronger, and {ace} is with them.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Kris": {
+      "home": "Johto",
+      "personality": "tactician",
+      "style": "counter-builder",
+      "pool": [
+        "togepi",
+        "girafarig",
+        "mareep",
+        "pineco"
+      ],
+      "lines": {
+        "intro": "{rival} is back, and {ace} has studied every move you made.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Lyra": {
+      "home": "Johto",
+      "personality": "spiritualist",
+      "style": "guardian",
+      "pool": [
+        "marill",
+        "togepi",
+        "mareep",
+        "hoppip"
+      ],
+      "lines": {
+        "intro": "{rival} is back, and {ace} is thrilled to battle you!",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Green": {
+      "home": "Kanto",
+      "personality": "pragmatist",
+      "style": "attrition",
+      "pool": [
+        "vulpix",
+        "gastly",
+        "kangaskhan",
+        "clefairy",
+        "jigglypuff"
+      ],
+      "lines": {
+        "intro": "{rival} is back, and {ace} has the numbers on its side.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
     }
   },
   "config": {
