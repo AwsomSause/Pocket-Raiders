@@ -2341,6 +2341,30 @@
   ],
   "tags": []
  },
+ "gn-56-door": {
+  "gn": "gn.56",
+  "shape": "Recurring",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "The rare Pokémon at the end of each case: A+0",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Slowpoke Detective Agency",
+   "elsewhere": "The Slowpoke Detective Agency"
+  },
+  "note": "Badge: a magnifying glass. A Town or Hub stop (until towns exist, step 5). Three cases across three regions, one a region. Six clues a case (three real); the clues read right set the reward tier. SF119 Quennell and NE89 are remembered in the office.",
+  "kinds": [
+   "Mystery Episode"
+  ],
+  "tags": []
+ },
  "gn-26-door": {
   "gn": "gn.26",
   "shape": "Door",
