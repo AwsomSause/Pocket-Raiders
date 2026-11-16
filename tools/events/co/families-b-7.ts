@@ -401,3 +401,15 @@ export const RULED: Record<string, string> = Object.fromEntries([
   ...TELLINGS.flatMap(steps).map((id) => [id, 'Mythical Tellings and Ultra Static (legends)']),
 ]);
 export const REMOVE: string[] = [...Object.keys(MERGED), ...Object.keys(RULED)];
+
+// Anime questlines (anime thread, co-anime-2.json on claude/project-thread-qegswb). Not retired yet: the gate needs the targets live.
+// Once anime's events are on this branch, spread ANIME_MERGE into MERGED (and rebuild + regenerate status).
+const door = (k: string, into: string) => Object.fromEntries([1, 2, 3].map((n) => [`ovc-${k}-s${n}`, into]));
+const beats = (k: string, into: [string, string, string]) => Object.fromEntries(into.map((t, i) => [`ovc-${k}-s${i + 1}`, t]));
+export const ANIME_MERGE: Record<string, string> = {
+  ...door('paper-city', 'an12-paper-city'), ...door('ice-library', 'an13-ice-library'), ...door('mushroom-queen', 'an15-mushroom-queen'),
+  ...beats('thousand-lanterns', ['an14-thousand-lanterns', 'an14-the-guardian', 'an14-lantern-night']),
+  ...beats('ember-pilgrim', ['an16-ember-pilgrim', 'an16-halfway', 'an16-regions-end']),
+  ...beats('the-hundred-year-egg', ['an17-hundred-year-egg', 'an17-in-the-bag', 'an17-the-hatching']),
+  ...beats('the-friend-you-didnt-make', ['an18-friend-you-didnt-make', 'an18-second-morning', 'an18-third-morning']),
+};
