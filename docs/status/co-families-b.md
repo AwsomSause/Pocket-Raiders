@@ -11,8 +11,8 @@ Branch `claude/project-thread-795gak` (resumed 2026-11-16 in batch 3; PR into ui
 
 ## Still to do
 - Retired 2026-11-16: 75 legend and Telling chain steps (rule, legends PR #1326); ovc-rival-note and ovc-rival-gift (merged into rival-map-note, rival-trap-gift).
-- 21 owned ids left live, waiting on anime:
-  - 21 anime ids. Merge map from anime (2026-11-16; events on branch claude/project-thread-qegswb, co-anime-2.json): ovc-paper-city-s1..s3 -> an12-paper-city; ovc-ice-library-s1..s3 -> an13-ice-library; ovc-mushroom-queen-s1..s3 -> an15-mushroom-queen; ovc-thousand-lanterns s1/s2/s3 -> an14-thousand-lanterns / an14-the-guardian / an14-lantern-night; ovc-ember-pilgrim -> an16-ember-pilgrim / an16-halfway / an16-regions-end; ovc-the-hundred-year-egg -> an17-hundred-year-egg / an17-in-the-bag / an17-the-hatching; ovc-the-friend-you-didnt-make -> an18-friend-you-didnt-make / an18-second-morning / an18-third-morning. Ready as ANIME_MERGE in families-b-7.ts: spread it into MERGED once anime is on the same branch; the gate needs the targets live.
+- Done 2026-11-16 (lead, batch-3 combine): the 21 anime ids are retired as merged into the anime events (`ANIME_MERGE` spread into `MERGED`, status updated).
+  - The map, for reference. Merge map from anime (2026-11-16; events on branch claude/project-thread-qegswb, co-anime-2.json): ovc-paper-city-s1..s3 -> an12-paper-city; ovc-ice-library-s1..s3 -> an13-ice-library; ovc-mushroom-queen-s1..s3 -> an15-mushroom-queen; ovc-thousand-lanterns s1/s2/s3 -> an14-thousand-lanterns / an14-the-guardian / an14-lantern-night; ovc-ember-pilgrim -> an16-ember-pilgrim / an16-halfway / an16-regions-end; ovc-the-hundred-year-egg -> an17-hundred-year-egg / an17-in-the-bag / an17-the-hatching; ovc-the-friend-you-didnt-make -> an18-friend-you-didnt-make / an18-second-morning / an18-third-morning. Ready as ANIME_MERGE in families-b-7.ts: spread it into MERGED once anime is on the same branch; the gate needs the targets live.
 - Greenneedle asked to set `last-stop-ticket` and `ovt-last-stop` in The Last Stop (Last Train needs them).
 
 ## Known limits

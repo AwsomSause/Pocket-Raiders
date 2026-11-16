@@ -385,12 +385,23 @@ export const EVENTS: Json[] = [
   ...LAST_TRAINER, ...BEYOND_GATE, ...MOON_MARKET, ...MIRROR_RUN, ...ORCHESTRA, ...MUSEUM, ...FERRIS, ...SMALL_BATTLES, ...SINGLE_BERRY, ...SNOW_GLOBE,
   ...DANCE_EDGE, ...WELL_SONG, ...LONG_NIGHT, ...LAST_TRAIN,
 ];
+// Anime questlines (anime thread, co-anime-2.json): retired into the anime events (merged by the lead in the batch-3 combine).
+const door = (k: string, into: string) => Object.fromEntries([1, 2, 3].map((n) => [`ovc-${k}-s${n}`, into]));
+const beats = (k: string, into: [string, string, string]) => Object.fromEntries(into.map((t, i) => [`ovc-${k}-s${i + 1}`, t]));
+export const ANIME_MERGE: Record<string, string> = {
+  ...door('paper-city', 'an12-paper-city'), ...door('ice-library', 'an13-ice-library'), ...door('mushroom-queen', 'an15-mushroom-queen'),
+  ...beats('thousand-lanterns', ['an14-thousand-lanterns', 'an14-the-guardian', 'an14-lantern-night']),
+  ...beats('ember-pilgrim', ['an16-ember-pilgrim', 'an16-halfway', 'an16-regions-end']),
+  ...beats('the-hundred-year-egg', ['an17-hundred-year-egg', 'an17-in-the-bag', 'an17-the-hatching']),
+  ...beats('the-friend-you-didnt-make', ['an18-friend-you-didnt-make', 'an18-second-morning', 'an18-third-morning']),
+};
 // The ledger folds the old three-step Last Train into the single FE8 scene (MERGE).
 export const MERGED: Record<string, string> = {
   'ovc-last-train-s2': 'ovc-last-train-s1', 'ovc-last-train-s3': 'ovc-last-train-s1',
   // Rival beats (rivals thread, Rival questlines R3 and R15).
   'ovc-rival-note-s1': 'rival-map-note', 'ovc-rival-note-s2': 'rival-map-note',
   'ovc-rival-gift-s1': 'rival-trap-gift', 'ovc-rival-gift-s2': 'rival-trap-gift',
+  ...ANIME_MERGE,
 };
 // Old chains the ledger hands to the legends systems (legends thread, PR #1326): retired, the rule that covers them.
 const LEGEND_CHAINS = ['lugia-shrine', 'hooh-pursuit', 'birds-trial', 'mewtwo-crisis', 'beasts-pursuit', 'weather-crisis', 'eon-pursuit', 'regis-shrine', 'time-space-trial', 'giratina-shrine', 'lake-trial', 'ideals-calling', 'aura-crisis', 'sun-moon-shrine', 'sword-shield-calling', 'ruin-quartet-shrine', 'guardians-trial', 'justice-trial', 'necrozma-crisis', 'eternal-crisis'];
@@ -402,14 +413,3 @@ export const RULED: Record<string, string> = Object.fromEntries([
 ]);
 export const REMOVE: string[] = [...Object.keys(MERGED), ...Object.keys(RULED)];
 
-// Anime questlines (anime thread, co-anime-2.json on claude/project-thread-qegswb). Not retired yet: the gate needs the targets live.
-// Once anime's events are on this branch, spread ANIME_MERGE into MERGED (and rebuild + regenerate status).
-const door = (k: string, into: string) => Object.fromEntries([1, 2, 3].map((n) => [`ovc-${k}-s${n}`, into]));
-const beats = (k: string, into: [string, string, string]) => Object.fromEntries(into.map((t, i) => [`ovc-${k}-s${i + 1}`, t]));
-export const ANIME_MERGE: Record<string, string> = {
-  ...door('paper-city', 'an12-paper-city'), ...door('ice-library', 'an13-ice-library'), ...door('mushroom-queen', 'an15-mushroom-queen'),
-  ...beats('thousand-lanterns', ['an14-thousand-lanterns', 'an14-the-guardian', 'an14-lantern-night']),
-  ...beats('ember-pilgrim', ['an16-ember-pilgrim', 'an16-halfway', 'an16-regions-end']),
-  ...beats('the-hundred-year-egg', ['an17-hundred-year-egg', 'an17-in-the-bag', 'an17-the-hatching']),
-  ...beats('the-friend-you-didnt-make', ['an18-friend-you-didnt-make', 'an18-second-morning', 'an18-third-morning']),
-};
