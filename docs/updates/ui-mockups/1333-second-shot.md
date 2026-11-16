@@ -1,4 +1,4 @@
-# New UI: the Second Shot box
+# #1333 New UI: the Second Shot box
 
 **Player gets:**
 - When you lose a battle of an Extended Cut climax, a box now tells you what that means before the screen leaves. The first loss: **Second Shot**, you go back to the last save point with your team patched up, and one more loss ends the climax (button "Try again"). The second loss: **The climax is lost**, it ends with its worst ending and the run goes on (button "Go on").

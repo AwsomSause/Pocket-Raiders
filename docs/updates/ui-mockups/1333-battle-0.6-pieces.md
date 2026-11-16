@@ -1,4 +1,4 @@
-# #1324 New UI: the Beta 0.6 battle pieces
+# #1333 New UI: the Beta 0.6 battle pieces
 
 **Player gets:** (New look; the battle screen's own styles are untouched)
 - **Item budget:** while the Item window is open, a small window at the top right shows how many healing items and revives this battle has used out of the most it allows (10 and 6).

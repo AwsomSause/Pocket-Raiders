@@ -1,4 +1,4 @@
-# New UI: the Extended Cut phase list
+# #1333 New UI: the Extended Cut phase list
 
 **Player gets:** (New look)
 - During an Extended Cut climax, every wide page (Breather, the Seal, Convoy, Front, Debate, the Apex) shows a **P phases** hint at the top right. Press P (or click the hint) to open the **phase list**: every phase of the longer climax in order, with its kind and how many fights it holds, and a tag for Done, Now, Next or Ahead.

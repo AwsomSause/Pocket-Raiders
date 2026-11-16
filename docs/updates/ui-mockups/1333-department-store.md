@@ -1,4 +1,4 @@
-# New UI: the Celadon Department Store floors
+# #1333 New UI: the Celadon Department Store floors
 
 **Player gets:** (New look)
 - Every room of the Celadon Department Store (the lift, the five floors, the roof, the hidden half floor) now draws as the mock-up's **store page**: the floor directory down the left with the floor you are on lit, the floor's goods as rows with their price at the right, your coins at the top right, your party along the bottom, and the clerk's words in the text box.

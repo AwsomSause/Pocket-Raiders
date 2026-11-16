@@ -1,4 +1,4 @@
-# New UI: the node event menu
+# #1333 New UI: the node event menu
 
 **Player gets:** (New look)
 - The node's menu ("Here (4)" on the map) now opens in the New look: the map dims and the node's stops stand in a row of cards, each with its kind (Shop, Rest, Story...) in its colour, its name, one line about it, and where it stands (Required, Optional, Done, Locked).
