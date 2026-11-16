@@ -73,3 +73,6 @@ const NODE_KINDS: Record<string, readonly [string, string]> = {
 };
 export const nodeStyle = (kind: string): readonly [string, string] => NODE_KINDS[kind] ?? ['#8a8a7a', kind.charAt(0).toUpperCase()];
 export const nodeDot = (kind: string, x: number, y: number, cur = false, off = false, attr = ''): string => { const [c, ch] = nodeStyle(kind); return `<div class="nd${off ? ' off' : ''}" style="left:${x}px;top:${y}px;--c:${c}"${attr}>${ch}${cur ? '<u></u>' : ''}</div>`; };
+
+/** The words a picture's stand-in shows while its file is still loading (ui/sprites.ts placeholder): never part of a row's text. */
+export const isArtPlaceholder = (text: string): boolean => /\(art missing\)\s*$/.test(text);

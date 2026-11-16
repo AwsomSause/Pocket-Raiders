@@ -46,3 +46,24 @@ export function localStats(profile: Pick<Profile, 'runHistory'>): LocalStats {
     topPartyMembers: top(party, 3).map(([id, count]) => ({ id, count })),
   };
 }
+
+/**
+ * The same numbers as tiles and one line of text (New UI): eight tiles, the rest in words. `trainer` and `mon` turn
+ * ids into names.
+ */
+export function statTiles(s: LocalStats, trainer: (id: string) => string, mon: (id: string) => string): { tiles: [string, string][]; text: string } {
+  const t = s.topTrainers[0], m = s.topPartyMembers[0], k = s.topKillers[0];
+  return {
+    tiles: [
+      ['Runs', String(s.runs)],
+      ['Wins', String(s.wins)],
+      ['Win rate', `${s.winRate}%`],
+      ['Longest run', String(s.bestEncounters)],
+      ['Average run', String(s.avgEncounters)],
+      ['Regions per run', String(s.avgRegions)],
+      ['Top trainer', t ? trainer(t.id) : '–'],
+      ['Most used', m ? mon(m.id) : '–'],
+    ],
+    text: `Run length is counted in encounters.${k ? ` Beaten most by ${mon(k.id)} (${k.count}×).` : ''} Assisted runs: ${s.assisted}. Worked out on this device; nothing is sent anywhere.`,
+  };
+}

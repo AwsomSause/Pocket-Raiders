@@ -289,9 +289,13 @@ export class PlazaScene extends Phaser.Scene {
       rowHeight: 64,
       rows: d.sections.map((s) => ({
         problem: s.count === 0 ? 'Nothing here right now.' : null,
-        hint: s.title,
+        hint: reduxOn() ? `${d.name}: ${s.title}, ${s.count} on offer.` : s.title,
         draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
-          box.add(scene.add.text(16, 8, `${s.title}   (${s.count})`, textStyle(22)));
+          // New UI: the count is the row's note at the right (the mock-up's district menu), not part of the name.
+          if (reduxOn()) {
+            box.add(scene.add.text(16, 8, s.title, textStyle(22)));
+            box.add(scene.add.text(w - 16, 8, `${s.count} on offer`, textStyle(15, '#d8d0e0')).setOrigin(1, 0));
+          } else box.add(scene.add.text(16, 8, `${s.title}   (${s.count})`, textStyle(22)));
           box.add(scene.add.text(16, 36, this.sectionBlurb(s.id), textStyle(15, '#d8d0e0', { wordWrap: { width: w - 32 } })));
         },
       })),

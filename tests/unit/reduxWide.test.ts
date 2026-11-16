@@ -156,3 +156,19 @@ describe('Colossus plate', () => {
     expect(html).toContain('right:24px;top:76px;display:flex;flex-direction:column;gap:8px');
   });
 });
+
+describe('wide page header during an Extended Cut climax', () => {
+  const plain = { ...base(), body: { kind: 'plain' as const, lines: ['One.'] } };
+  it('offers the phase list as a key hint that can also be clicked', () => {
+    const html = wideView(ctx, plain, true);
+    expect(html).toContain('data-act="phases"');
+    expect(html).toContain('<kbd>P</kbd>phases');
+    expect(html).toContain('<kbd>Enter</kbd>choose');
+  });
+  it('has no such hint outside the climax', () => {
+    for (const html of [wideView(ctx, plain), wideView(ctx, plain, false)]) {
+      expect(html).not.toContain('data-act="phases"');
+      expect(html).not.toContain('phases');
+    }
+  });
+});

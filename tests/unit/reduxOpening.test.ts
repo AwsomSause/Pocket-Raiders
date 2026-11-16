@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { bootView, creditsRows, creditsView, type BootModel, type CreditsModel } from '../../src/ui/redux/screens/boot';
 import { eventView, type EventModel } from '../../src/ui/redux/screens/event';
 import { FORM_KEYS, beatTag, formView, typeKey, vanceLine, type FormModel } from '../../src/ui/redux/screens/prologue';
+import { DESK_ROWS, deskItems, type DeskInput } from '../../src/ui/redux/screens/run';
 import { pageLines } from '../../src/ui/redux/script';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 
@@ -178,5 +179,30 @@ describe('talk page used by the welcome log and the tutorial', () => {
   it('more than five choices stand in two columns in the wide-box layout', () => {
     expect(eventView(ctx(2), page({ choices: Array.from({ length: 6 }, (_, k) => choice(`L${k}`)) }))).toContain('grid-auto-flow:column');
     expect(eventView(ctx(2), page({ choices: Array.from({ length: 5 }, (_, k) => choice(`L${k}`)) }))).not.toContain('grid-auto-flow:column');
+  });
+});
+
+describe('New UI Preparation Desk rows (the mock-up menu)', () => {
+  const desk = (over: Partial<DeskInput> = {}): DeskInput => ({ campaign: 'Full campaign', mode: 'Standard', difficulty: 'Hard', prep: null, modifiers: 0, deathBlock: false, seed: null, saved: 0, slots: 3, ...over });
+  it('has one row per desk row, in the mock-up order, with Depart last', () => {
+    const rows = deskItems(desk());
+    expect(rows.map((r) => r.label)).toEqual(['Campaign', 'Mode', 'Preparation', 'Modifiers', 'Seed & Codes', 'Loadout presets', 'Depart']);
+    expect(rows.length).toBe(DESK_ROWS.length);
+    expect(DESK_ROWS[DESK_ROWS.length - 1]).toBe('start');
+  });
+  it('says what each row is set to', () => {
+    const notes = deskItems(desk({ prep: 'Trail Kit', modifiers: 2, deathBlock: true, seed: 'abc', saved: 1 })).map((r) => r.note);
+    expect(notes).toEqual(['Full campaign', 'Standard · Hard', 'Trail Kit', '3 on', 'abc', '1 of 3 saved', 'Pick your starter']);
+  });
+  it('an empty setup reads None, Random and 0 on; a mode and difficulty of the same name show once', () => {
+    const notes = deskItems(desk({ difficulty: 'Standard', seed: '' })).map((r) => r.note);
+    expect(notes.slice(1, 5)).toEqual(['Standard', 'None', '0 on', 'Random']);
+  });
+  it('a long seed is cut to fit its row, and odd counts stay inside their ends', () => {
+    const rows = deskItems(desk({ seed: 'PR1.' + 'x'.repeat(60), modifiers: -4, saved: 9 }));
+    expect(rows[4]!.note.length).toBe(20);
+    expect(rows[4]!.note.endsWith('…')).toBe(true);
+    expect(rows[3]!.note).toBe('0 on');
+    expect(rows[5]!.note).toBe('3 of 3 saved');
   });
 });

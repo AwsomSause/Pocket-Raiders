@@ -1,7 +1,7 @@
 // New UI run end, ported from the mock-ups' `over` template (defeat and victory), the run card (`card` template) and
 // the full report as paged text over the page. Pure drawing and pure paging; the scene keeps the state and the input.
 
-import { act, B, bg, esc, facts, H, keys, mini, TX, W } from '../kit';
+import { act, type Area, B, bg, esc, facts, H, keys, mini, TX, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { type Art, figure, pic } from '../templates';
 
@@ -53,6 +53,10 @@ export interface RunCardModel {
   team: readonly (string | null)[];
   text: string;
   hints: readonly Fact[];
+  /** The header band's colour (the run card is a run-end page; the hub's Trainer Card is a hub page). */
+  area?: Area;
+  /** False for a card that cannot be saved as a picture: a click on it does nothing. */
+  save?: boolean;
 }
 
 const BADGE_COLORS = ['#e8622a', '#3d8bea', '#3fae5a', '#d8a810', '#7a5ad8', '#d8483a', '#2aa6a0', '#c85aa8'] as const;
@@ -62,8 +66,8 @@ export function runCardView(c: ReduxCtx, d: RunCardModel): string {
   const lit = Math.max(0, Math.min(8, Math.floor(d.badges)));
   const discs = `<div class="row" style="gap:6px;margin-top:4px">${Array.from({ length: 8 }, (_, k) => `<i style="width:26px;height:26px;border-radius:50%;background:${k < lit ? BADGE_COLORS[k] : 'var(--p2)'};box-shadow:0 0 0 2px var(--l)"></i>`).join('')}</div>`;
   const team = v ? `<div class="col" style="gap:6px">${d.team.slice(0, 3).map((f) => (f ? mini(f, 60) : '')).join('')}</div>` : '';
-  const card = W(`<div class="row" style="gap:22px;align-items:flex-start"><div class="cell" style="width:${cell}px;height:${cell}px;flex:none;overflow:hidden">${figure(d.trainer, Math.round(cell * 0.85))}</div><div class="col grow" style="gap:9px"><div class="row"><b class="acc" style="font-size:26px">${esc(d.name)}</b><span class="tg">${esc(d.rank)}</span></div>${facts(d.facts)}${discs}</div>${team}</div>`, 'padding:20px 24px;cursor:pointer', '', act('save'));
-  return `<div class="fill"${act('back')}></div>` + H(d.title, 'end', d.hints) + `<div class="abs" style="left:${side}px;right:${side}px;top:78px">${card}</div>` + TX(esc(d.text));
+  const card = W(`<div class="row" style="gap:22px;align-items:flex-start"><div class="cell" style="width:${cell}px;height:${cell}px;flex:none;overflow:hidden">${figure(d.trainer, Math.round(cell * 0.85))}</div><div class="col grow" style="gap:9px"><div class="row"><b class="acc" style="font-size:26px">${esc(d.name)}</b><span class="tg">${esc(d.rank)}</span></div>${facts(d.facts)}${discs}</div>${team}</div>`, d.save === false ? 'padding:20px 24px' : 'padding:20px 24px;cursor:pointer', '', d.save === false ? '' : act('save'));
+  return `<div class="fill"${act('back')}></div>` + H(d.title, d.area ?? 'end', d.hints) + `<div class="abs" style="left:${side}px;right:${side}px;top:78px">${card}</div>` + TX(esc(d.text));
 }
 
 /** A short line that ends with a colon heads the lines under it ("Run timeline:"). */

@@ -246,3 +246,43 @@ export function pauseView(d: PauseModel): string {
     `<div class="abs col" style="left:340px;right:340px;top:110px;gap:9px;z-index:31"><b class="cen" style="font-size:28px;text-align:center;color:#fff">Paused</b>${buttons}${d.note ? `<span class="sm" style="text-align:center;color:#fff">${esc(d.note)}</span>` : ''}</div>`
   );
 }
+
+// ---------- Node event menu (Beta 0.7): the stops of a node, as a row of cards over the map ----------
+
+export interface NodeMenuCard {
+  /** The category word ("Shop", "Rest") and its colour. */
+  kind: string;
+  color: string;
+  name: string;
+  text: string;
+  /** "Required", "Optional", "Done", "Locked"... */
+  status: string;
+  /** Done or locked: it cannot be picked. */
+  off: boolean;
+  must: boolean;
+}
+export interface NodeMenuModel {
+  /** The node's battle, once it is won ('' when the node has none). */
+  header: string;
+  cards: NodeMenuCard[];
+  index: number;
+}
+
+/** The node's menu: the map dims and its stops stand in a row (the reward draft's row of cards). A click beside them closes it. */
+export function nodeMenuView(d: NodeMenuModel): string {
+  const n = Math.max(1, d.cards.length), w = Math.min(200, Math.floor((912 - 12 * (n - 1)) / n));
+  const cards = d.cards.map((r, k) => W(
+    `<span class="tg" style="background:${r.color};color:#fff">${esc(r.kind)}</span>` +
+    `<b style="font-size:15px;text-align:center;line-height:18px;max-height:54px;overflow:hidden">${esc(r.name)}</b>` +
+    `<span class="sm grow" style="font-size:12px;text-align:center;line-height:16px;overflow:hidden">${esc(r.text)}</span>` +
+    `<span class="tg${r.must && !r.off ? '' : ' no'}">${esc(r.status)}</span>`,
+    `width:${w}px;height:230px;align-items:center;gap:8px;padding:14px 10px;cursor:pointer${r.off ? ';filter:brightness(.62)' : ''}`,
+    `col${k === d.index ? ' sel' : ''}`,
+    `${act('menu', k)} data-over="menuOver"`,
+  )).join('');
+  return (
+    `<div class="shade hit" style="z-index:30;background:#000b"${act('menu', -1)}></div>` +
+    `<div class="abs col" style="left:24px;right:24px;top:46px;gap:6px;align-items:center;z-index:31;pointer-events:none"><b style="font-size:28px;color:#fff">What to do here?</b><span class="sm" style="color:#fff">${d.header ? `${esc(d.header)}: done · ` : ''}<kbd>Enter</kbd>pick <kbd>Esc</kbd>close</span></div>` +
+    `<div class="abs row hit" style="left:24px;right:24px;top:130px;gap:12px;justify-content:center;z-index:31">${cards}</div>`
+  );
+}

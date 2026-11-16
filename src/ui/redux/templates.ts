@@ -33,6 +33,13 @@ const pickAttr = (k: number): string => `${act('pick', k)} data-over="over"`;
 const off = (h: string, disabled?: boolean): string => (disabled ? h.replace(/class="(btn|win)/, 'class="$1 off') : h);
 
 /** The mock-ups' `menu` template: A list with a detail window, B two-column cards, C a carousel of three. */
+/** A list row is 380 wide: when the name and its note cannot both fit, the row keeps the note's first part (the
+ *  detail card beside the list shows all of it), so the name is not cut to "Captain …". */
+export function rowNote(label: string, note: string): string {
+  if (label.length * 9.6 + note.length * 7.4 <= 330) return note;
+  return note.split(' · ')[0] ?? note;
+}
+
 export function menuView(c: ReduxCtx, d: MenuModel): string {
   const v = c.v(3), it = d.items, n = it.length, cur = it[d.index], text = TX(esc(d.text ?? '')) + (d.tabs ? tabsBar(d.tabs.labels, d.tabs.index) : '');
   const head = H(d.title, d.area ?? 'sys', d.hints);
@@ -45,8 +52,28 @@ export function menuView(c: ReduxCtx, d: MenuModel): string {
     return head + `<div class="abs row" style="left:0;right:0;top:96px;justify-content:center;gap:24px">${trio.map((k) => { const x = it[k]!, mid = k === d.index; return off(W(`${d.detail?.sprite && mid ? mini(d.detail.sprite, 96) : ''}<b style="font-size:${mid ? 24 : 18}px">${esc(x.label)}</b><div class="sm">${esc(x.note ?? '')}</div>`, `width:${mid ? 300 : 210}px;height:${mid ? 240 : 180}px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center`, mid ? '' : 'dim', pickAttr(k)), x.disabled); }).join('')}</div><div class="abs row" style="left:0;right:0;top:372px;justify-content:center;gap:8px">${it.map((_, k) => `<i style="width:${k === d.index ? 28 : 10}px;height:10px;border-radius:5px;background:var(--${k === d.index ? 'acc' : 'p2'})"></i>`).join('')}</div>` + text;
   }
   const s = scrollStart(n, d.index, 7), det = d.detail;
-  return head + `<div class="abs col" style="left:24px;top:70px;width:380px;gap:9px">${it.slice(s, s + 7).map((x, q) => off(B(`<span style="min-width:0;overflow:hidden;text-overflow:ellipsis">${esc(x.label)}</span>`, s + q === d.index, '', esc(x.note ?? ''), pickAttr(s + q)), x.disabled)).join('')}</div>` + dots(n, s, 7, 'left:28px;top:432px') +
+  return head + `<div class="abs col" style="left:24px;top:70px;width:380px;gap:9px">${it.slice(s, s + 7).map((x, q) => off(B(`<span style="min-width:0;overflow:hidden;text-overflow:ellipsis">${esc(x.label)}</span>`, s + q === d.index, '', esc(rowNote(x.label, x.note ?? '')), pickAttr(s + q)), x.disabled)).join('')}</div>` + dots(n, s, 7, 'left:28px;top:432px') +
     `<div class="abs" style="left:436px;right:26px;top:74px">${W(`<div class="row">${det?.sprite ? mini(det.sprite, 64) : ''}<b class="acc" style="font-size:22px">${esc(det?.title ?? cur?.label ?? '')}</b></div><div style="line-height:23px;white-space:pre-line;max-height:300px;overflow:hidden">${esc(det?.body ?? cur?.note ?? '')}</div>${facts(det?.facts)}`, 'display:flex;flex-direction:column;gap:9px')}</div>` + text;
+}
+
+export interface StatsModel {
+  title: string;
+  area?: Area;
+  /** Label and number, eight at most; the first one is lit. */
+  tiles: readonly (readonly [string, string])[];
+  /** Tiles across: four, or three for longer values. */
+  cols?: number;
+  /** A tile that is a button: a click picks row `press` of the list behind the page (the timer's switch). */
+  press?: number;
+  text: string;
+  hints?: readonly (readonly [string, string])[];
+}
+
+/** The mock-ups' `stats` template: a grid of number tiles over the text box (Me, My stats, Speedrun timer). */
+export function statsView(_c: ReduxCtx, d: StatsModel): string {
+  const size = (v: string): number => (v.length > 14 ? 18 : v.length > 9 ? 23 : 30);
+  return H(d.title, d.area ?? 'hub', d.hints) +
+    `<div class="abs" style="left:24px;right:24px;top:74px;display:grid;grid-template-columns:repeat(${d.cols === 3 ? 3 : 4},1fr);gap:18px">${d.tiles.slice(0, 8).map(([a, b], k) => W(`<span class="sm">${esc(a)}</span><b${k ? '' : ' class="acc"'} style="font-size:${size(b)}px;line-height:32px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(b)}</b>`, 'display:flex;flex-direction:column;gap:6px;padding:14px 16px;min-width:0', '', d.press === k ? act('pick', k) : '')).join('')}</div>` + TX(esc(d.text));
 }
 
 export interface SettingsModel {
@@ -125,7 +152,7 @@ export function gridView(c: ReduxCtx, d: GridModel): string {
     return head + `<div class="abs" style="left:24px;right:24px;top:70px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px">${Array.from({ length: Math.min(10, n - s) }, (_, q) => { const i = s + q, r = d.cell(i); return W(`<div class="cell${r.off ? ' off' : ''}" style="width:92px;height:92px;background:#0000">${pic(r.art, 84, r.sil ? 'sil' : '') || (r.off ? '?' : '')}</div><b style="font-size:14px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.label)}</b>`, 'display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;min-width:0', i === d.index ? 'sel' : '', pickAttr(i)); }).join('')}</div>` + dots(n, s, 10, 'right:28px;top:438px') + TX(esc(d.text));
   }
   const s = Math.floor(scrollStart(n, d.index, 18) / 6) * 6, det = d.detail;
-  return head + `<div class="abs col" style="left:24px;top:74px;width:264px;gap:16px">${W(`<div class="row">${pic(det.art, 56)}<b class="acc" style="font-size:20px">${esc(det.title)}</b></div>${det.sub ? `<b style="font-size:14px">${esc(det.sub)}</b>` : ''}<div class="sm" style="line-height:20px;max-height:${det.facts?.length ? 100 : 160}px;overflow:hidden">${esc(det.body ?? '')}</div>${facts(det.facts)}`, 'display:flex;flex-direction:column;gap:8px')}${W(`<div class="row"><span class="grow">${esc(d.foundLabel ?? 'Found')}</span><b>${d.found}</b><span>/ ${d.total}</span></div>${hpb(d.total ? Math.round((d.found / d.total) * 100) : 0, 0, ' gold')}`, 'display:flex;flex-direction:column;gap:8px')}</div><div class="abs" style="left:316px;right:24px;top:72px;display:grid;grid-template-columns:repeat(6,1fr);gap:10px">${Array.from({ length: Math.min(18, n - s) }, (_, q) => { const i = s + q, r = d.cell(i); return `<div class="cell${r.off ? ' off' : ''}${i === d.index ? ' sel' : ''}"${pickAttr(i)}>${pic(r.art, 76, r.sil ? 'sil' : '') || `<span style="font-size:13px;font-weight:700;text-align:center;padding:4px;overflow:hidden">${r.off && !r.label ? '?' : esc(r.label)}</span>`}</div>`; }).join('')}${n < 18 ? '<div class="cell off">?</div>'.repeat(18 - n) : ''}</div>` + dots(n, s, 18, 'left:28px;top:438px') + TX(esc(d.text));
+  return head + `<div class="abs col" style="left:24px;top:74px;width:264px;gap:16px">${W(`<div class="row">${pic(det.art, 56)}<b class="acc" style="font-size:20px">${esc(det.title)}</b></div>${det.sub ? `<b style="font-size:14px">${esc(det.sub)}</b>` : ''}<div class="sm" style="line-height:20px;max-height:${det.facts?.length ? 100 : 160}px;overflow:hidden">${esc(det.body ?? '')}</div>${facts(det.facts)}`, 'display:flex;flex-direction:column;gap:8px')}${W(`<div class="row"><span class="grow">${esc(d.foundLabel ?? 'Found')}</span><b>${d.found}</b><span>/ ${d.total}</span></div>${hpb(d.total ? Math.round((d.found / d.total) * 100) : 0, 0, ' gold')}`, 'display:flex;flex-direction:column;gap:8px')}</div><div class="abs" style="left:316px;right:24px;top:72px;display:grid;grid-template-columns:repeat(6,1fr);gap:10px">${Array.from({ length: Math.min(18, n - s) }, (_, q) => { const i = s + q, r = d.cell(i); return `<div class="cell${r.off ? ' off' : ''}${i === d.index ? ' sel' : ''}"${pickAttr(i)}>${pic(r.art, 76, r.sil ? 'sil' : '') || `<span style="font-size:13px;font-weight:700;text-align:center;padding:4px;overflow:hidden">${r.off && !r.label ? '?' : esc(r.label)}</span>`}</div>`; }).join('')}${n < 18 ? '<div class="cell off">?</div>'.repeat(18 - n) : ''}</div>` + dots(n, s, 18, 'right:28px;top:392px') + TX(esc(d.text));
 }
 
 /** A board row (quests, chains, tasks): a title, a line under it, an optional progress bar (0 to 100) and a state tag. */

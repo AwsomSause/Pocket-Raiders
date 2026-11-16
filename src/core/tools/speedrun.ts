@@ -44,3 +44,15 @@ export function parseSplits(text: string | null): Splits | null {
     return null;
   }
 }
+
+/**
+ * The timer page as number tiles (New UI): the switch, the run's time, the last five splits and the category.
+ * Eight tiles at most.
+ */
+export function speedrunTiles(on: boolean, s: Splits | null, now: number, category: string | null): [string, string][] {
+  const time: [string, string] = !s ? ['Current', '–'] : s.finished !== undefined ? ['Finished', formatMs(s.finished)] : ['Current', formatMs(now - s.startedAt)];
+  const splits = (s?.splits ?? []).slice(-5).map((x): [string, string] => [`Split: ${x.label}`, formatMs(x.ms)]);
+  const tiles: [string, string][] = [['Timer', on ? 'On' : 'Off'], time, ...(splits.length ? splits : [['Splits', 'None yet'] as [string, string]])];
+  if (category) tiles.push(['Category', category]);
+  return tiles.slice(0, 8);
+}
