@@ -1,7 +1,7 @@
 // SF145 The Plush Workshops (Catalog Overhaul singles): Mrs. Brisby sews a Canari Pal of her colour up a level for ₽100, to Lv.3 at most.
 import { describe, expect, it } from 'vitest';
 import { applyEffect, chooseEvent } from '../../src/core/events';
-import { Rng } from '../../src/core/rng';
+import { hashSeed, Rng } from '../../src/core/rng';
 import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
@@ -14,7 +14,7 @@ function atWorkshop(colour: string, give: string | null): { run: RunState; side:
   node.sides = [{ id: 'plush', kind: 'event', used: false, eventId: `plush-workshop-${colour}` }];
   run.stage!.current = node.id;
   run.money = 1000;
-  if (give) applyEffect(content, run, { kind: 'item', id: give, count: 1 }, new Rng(1));
+  if (give) applyEffect(content, run, { kind: 'item', id: give, count: 1 }, new Rng(hashSeed('plush')));
   return { run, side: 'plush' };
 }
 
