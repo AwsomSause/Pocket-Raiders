@@ -578,6 +578,22 @@
   {
    "key": "draft-asked",
    "rule": "core/greenneedle/draft.ts (gn.48)"
+  },
+  {
+   "key": "defector-m1",
+   "rule": "core/greenneedle/defector.ts (gn.50 The Evil Team's Betrayal)"
+  },
+  {
+   "key": "defector-m2",
+   "rule": "core/greenneedle/defector.ts (gn.50 The Evil Team's Betrayal)"
+  },
+  {
+   "key": "defector-trust",
+   "rule": "core/greenneedle/defector.ts (gn.50 The Evil Team's Betrayal)"
+  },
+  {
+   "key": "defector-end",
+   "rule": "core/greenneedle/defector.ts (gn.50 The Evil Team's Betrayal)"
   }
  ]
 }

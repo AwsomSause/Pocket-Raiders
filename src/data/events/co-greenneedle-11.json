@@ -5220,6 +5220,1459 @@
     }
    ],
    "canon": "cs.kanto.route.snorlax"
+  },
+  {
+   "id": "gn-50-offer",
+   "name": "The Evil Team's Betrayal",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 1
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "defector-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "liar",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "honest-lied",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Corin glances at you sideways. \"Someone told me you lie when it suits you. We'll see.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2f2a3a",
+    "effect": "none"
+   },
+   "intro": "*A doorway, half out of the rain. Someone in a {defector:team} jacket is watching the street. Watching you.*\n\n**The defector, Corin Bellweather, hat low, in a doorway:** \"Don't look round. Keep walking, slowly. I'm one of them. I'm about to not be.\"\n\n**Corin:** \"They're closing my section. 'Closing' means we take the blame for the whole operation and the bosses walk.\"\n\n\"There are documents that prove it. I can't get to them alone.\" A breath. \"{defector:reason}\"",
+   "choices": [
+    {
+     "label": "I'll help.",
+     "success": {
+      "text": "They breathe out, all the way, like they've been holding it for weeks. \"Next stage. I'll find you. Don't find me.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorStart",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "defector-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "defector-step"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why should I trust you?",
+     "success": {
+      "text": "\"You shouldn't. I wouldn't. Here.\" They press a Poké Ball into your hand: their one Pokémon. \"Hold that till we're done.\"\n\nThe Ball is warm. Whatever's inside it turns over once, and settles, like it's been passed between hands before.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorStart",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "defector-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "defector-step"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'm turning you in.",
+     "success": {
+      "text": "You walk on. Then you walk to the people who'd pay to know: the Rangers, the police, the other team. It doesn't much matter which.\n\nThey pay well. Nobody asks how you knew. You don't look at the doorway on the way back. It's empty anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorStart",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "defector-at"
+       },
+       {
+        "kind": "money",
+        "amount": 3000
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "life-orb",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "leftovers",
+         "focus-sash",
+         "assault-vest",
+         "expert-belt"
+        ]
+       },
+       {
+        "kind": "moment",
+        "text": "Turned in a {defector:team} member who asked for help.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-50-meet-1",
+   "name": "The Evil Team's Betrayal: The Envelope",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "defector",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "defector-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "defector-step"
+    },
+    {
+     "kind": "flag",
+     "key": "defector-m1",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "defector-m2",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "defector-docs",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "unsealed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "honest-lied",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The envelope isn't sealed. The flap just sits there, folded over, asking. Corin watches you notice."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2f2a3a",
+    "effect": "none"
+   },
+   "intro": "**Corin:** \"You came. I'd half bet you wouldn't.\"\n\n*They hand over an envelope.* \"Carry that to the next stage. Don't open it. It's nothing. It's a test.\"\n\n\"I'm telling you it's a test, which is either very honest or very stupid.\"",
+   "choices": [
+    {
+     "label": "Carry it.",
+     "success": {
+      "text": "You put it in your inside pocket. It weighs nothing. You feel it all the way to the next stage.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorMeet",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "defector-envelope",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "defector-step"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-50-leave-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "You open it the moment they turn the corner. A blank page, and one line, in their small careful hand:\n\n*\"Thought so.\"*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorMeet",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "defectorTrust",
+        "n": -2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "defector-envelope",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "defector-step"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-50-leave-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-50-leave-1",
+   "name": "The Evil Team's Betrayal: Corin Goes",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f2a3a",
+    "effect": "none"
+   },
+   "intro": "Corin turns up their collar and steps back into the crowd. In three steps they're just another hat.",
+   "choices": [
+    {
+     "label": "Let them go.",
+     "success": {
+      "text": "You let them go. You don't look where. Somehow that feels like the most useful thing you've done all day.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "defector-trust",
+        "min": 3,
+        "then": [
+         {
+          "kind": "scout",
+          "columns": 3
+         }
+        ],
+        "text": "Corin slips you a scrap of paper: a route, and where the patrols will be on it."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow them.",
+     "success": {
+      "text": "You follow, two streets back. They stop at a corner and say, without turning round, \"Go home.\" Trust falls.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorTrust",
+        "n": -1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "defector-followed",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "defector-trust",
+        "min": 3,
+        "then": [
+         {
+          "kind": "scout",
+          "columns": 3
+         }
+        ],
+        "text": "Corin slips you a scrap of paper: a route, and where the patrols will be on it."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give their Pokémon back.",
+     "success": {
+      "text": "You hold out the Ball. Corin looks at it for a long time before they take it. \"I didn't ask.\" \"I know.\" Trust rises.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorReturn",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "defector-trust",
+        "min": 3,
+        "then": [
+         {
+          "kind": "scout",
+          "columns": 3
+         }
+        ],
+        "text": "Corin slips you a scrap of paper: a route, and where the patrols will be on it."
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "defectorGuest"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-50-meet-2",
+   "name": "The Evil Team's Betrayal: The Split Lip",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "defector",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "defector-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "defector-step"
+    },
+    {
+     "kind": "flag",
+     "key": "defector-m2",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "defector-docs",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "missed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "defector-m1",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Corin doesn't mention the meeting you missed. That's worse than if they had."
+    },
+    {
+     "id": "opened",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "defector-envelope",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "They don't ask about the envelope. They already know."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2f2a3a",
+    "effect": "none"
+   },
+   "intro": "*Corin's got a split lip, and isn't mentioning it.*\n\n**Corin:** \"Day after tomorrow. Records room. I can get the door. I can't get the guard. That's you.\"",
+   "choices": [
+    {
+     "label": "What happened to your face?",
+     "success": {
+      "text": "\"Walked into a door.\" They hold your eye. \"A door with a {defector:team} badge on it. It's fine. It's nearly over.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorMeet",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "defector-unasked",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "defectorTrust",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "defector-unasked",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "defector-step"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-50-leave-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Understood.",
+     "success": {
+      "text": "They nod, once. It's the first time you've seen them smile. It splits the lip again. They don't care.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorMeet",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "defector-unasked",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "defectorTrust",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "defector-unasked",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "defector-step"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-50-leave-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "What are you doing between these meetings?",
+     "success": {
+      "text": "\"Nothing you need.\" Not angry. Just a door, closing gently. You don't get to know that part.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorMeet",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "defector-unasked",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "defector-step"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-50-leave-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-50-leave-2",
+   "name": "The Evil Team's Betrayal: Corin Goes",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f2a3a",
+    "effect": "none"
+   },
+   "intro": "Corin touches the split lip once, as if checking it's still there, and walks away without hurrying.",
+   "choices": [
+    {
+     "label": "Let them go.",
+     "success": {
+      "text": "You let them go. You don't look where. Somehow that feels like the most useful thing you've done all day.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "defector-trust",
+        "min": 3,
+        "then": [
+         {
+          "kind": "scout",
+          "columns": 3
+         }
+        ],
+        "text": "Corin slips you a scrap of paper: a route, and where the patrols will be on it."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow them.",
+     "success": {
+      "text": "You follow, two streets back. They stop at a corner and say, without turning round, \"Go home.\" Trust falls.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorTrust",
+        "n": -1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "defector-followed",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "defector-trust",
+        "min": 3,
+        "then": [
+         {
+          "kind": "scout",
+          "columns": 3
+         }
+        ],
+        "text": "Corin slips you a scrap of paper: a route, and where the patrols will be on it."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give their Pokémon back.",
+     "success": {
+      "text": "You hold out the Ball. Corin looks at it for a long time before they take it. \"I didn't ask.\" \"I know.\" Trust rises.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorReturn",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "defector-trust",
+        "min": 3,
+        "then": [
+         {
+          "kind": "scout",
+          "columns": 3
+         }
+        ],
+        "text": "Corin slips you a scrap of paper: a route, and where the patrols will be on it."
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "defectorGuest"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-50-word-grunt",
+   "name": "The Evil Team's Betrayal: A Grunt Talks",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "defector",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "defector-at"
+    },
+    {
+     "kind": "flag",
+     "key": "defector-m1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "defector-word-grunt",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2f2a3a",
+    "effect": "none"
+   },
+   "intro": "A {defector:team} Grunt, beaten, sitting on a kerb, talking mostly to himself.\n\n\"Someone's been warning the families. Three of our lot got letters: 'get out by Friday.' Who does that? Who even knows the addresses?\"",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. You think you know who knows the addresses. You keep it to yourself.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "defector-word-grunt",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask who sent the letters.",
+     "success": {
+      "text": "He shrugs. \"Someone in payroll, maybe. Someone careful.\" Asking about Corin feels like checking up on them. It is. Trust falls.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorTrust",
+        "n": -1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "defector-word-grunt",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-50-word-town",
+   "name": "The Evil Team's Betrayal: A Neighbour Talks",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "defector",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "defector-at"
+    },
+    {
+     "kind": "flag",
+     "key": "defector-m1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "defector-word-town",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2f2a3a",
+    "effect": "none"
+   },
+   "intro": "A woman sweeping her step stops when you pass, the way people do when they need to tell someone.\n\n\"A fellow in a hat paid my neighbour's rent. Wouldn't say why. Her lad's in that gang. Was. He left on Tuesday.\"",
+   "choices": [
+    {
+     "label": "Smile and walk on.",
+     "success": {
+      "text": "You smile. She goes back to sweeping, a bit lighter.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "defector-word-town",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the fellow in the hat.",
+     "success": {
+      "text": "\"Tall. Tired. Kind eyes, if you looked.\" She narrows hers at you. \"Why?\" Trust falls.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorTrust",
+        "n": -1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "defector-word-town",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-50-word-radio",
+   "name": "The Evil Team's Betrayal: The Radio",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "defector",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "defector-at"
+    },
+    {
+     "kind": "flag",
+     "key": "defector-m1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "defector-word-radio",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2f2a3a",
+    "effect": "none"
+   },
+   "intro": "A radio left on in an empty hut, tuned to {defector:team}'s band. Static, then a voice:\n\n\"Section nine roster's been altered. Fourteen names gone. Find out who.\"",
+   "choices": [
+    {
+     "label": "Turn it off.",
+     "success": {
+      "text": "You turn it off. In the quiet you think about fourteen names, and the person who took them off a list.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "defector-word-radio",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the Rangers.",
+     "success": {
+      "text": "You tell a Ranger what you heard. She writes it down. Somewhere, the net round Corin pulls a little tighter. Trust falls.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorTrust",
+        "n": -1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "defector-word-radio",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell your rival.",
+     "success": {
+      "text": "Your rival listens, and whistles, and promises not to tell anyone. They tell two people. Trust falls.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorTrust",
+        "n": -1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "defector-word-radio",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-50-docs",
+   "name": "The Evil Team's Betrayal: The Records Room",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "defector",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "defector-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "defector-step"
+    },
+    {
+     "kind": "flag",
+     "key": "defector-docs",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "missed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "defector-m2",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Corin had to find out about the guard from someone else. \"You weren't there,\" is all they say."
+    },
+    {
+     "id": "guest",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "defectorGuest"
+      }
+     ],
+     "notice": "Corin holds out a hand for their Ball before anything else. \"I'll need it in there.\" You give it back. They had to ask."
+    },
+    {
+     "id": "route",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "defector-trust",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "Corin's scrap of paper got you here without meeting a single patrol."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2f2a3a",
+    "effect": "none"
+   },
+   "intro": "*A {defector:team} site, after dark. Corin has the door: a key on a long string, a nod.*\n\nInside, one guard, at a desk, between you and the records room. He's awake. He's bored. Bored is dangerous.",
+   "choices": [
+    {
+     "label": "Take the guard.",
+     "success": {
+      "text": "He stands, reaching for a Ball, looking more relieved than anything. Something finally happening.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorMeet",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "defectorReturn",
+        "n": 0
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Records Room Guard",
+       "size": 2,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-50-cabinet"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-50-caught-out"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Use a key.",
+     "success": {
+      "text": "Your Hideout key fits the side door. The guard never looks up. Corin stares at you. \"Where did you get that?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-key",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "defectorMeet",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "defectorReturn",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-50-cabinet"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-key",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-50-caught-out",
+   "name": "The Evil Team's Betrayal: Out the Window",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f2a3a",
+    "effect": "none"
+   },
+   "intro": "You come round in an alley. Corin got you out, somehow, through a window too small for either of you.\n\nNo files. Corin sits against the wall with their head on their knees. \"Well,\" they say. \"Well.\"",
+   "choices": [
+    {
+     "label": "Get up.",
+     "success": {
+      "text": "You get up. You help them up. Neither of you says the next part out loud.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "defector-files",
+        "n": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-50-cabinet",
+   "name": "The Evil Team's Betrayal: Fourteen Folders",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f2a3a",
+    "effect": "none"
+   },
+   "intro": "*A filing cabinet. Corin's hands are shaking. They pull one folder, and then stop, and pull fourteen more.*\n\n**Corin:** \"Those are the others. In my section. If I only clear my own name, they still hang.\"\n\nDown the corridor, a door. Footsteps that haven't decided which way to go yet.",
+   "choices": [
+    {
+     "label": "Take them all.",
+     "success": {
+      "text": "Fifteen folders don't fit in one jacket. A drawer bangs. Somewhere, an alarm. Someone's coming.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Night Patrol",
+       "size": 2,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "defector-files",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "defectorTrust",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-50-out"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "defector-files",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-50-out"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "There's no time. Just yours.",
+     "success": {
+      "text": "Corin puts the fourteen folders back, one at a time, very carefully, as if they might wake. They don't speak on the way out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "defector-files",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the boss's file too.",
+     "success": {
+      "text": "The boss's drawer is locked. You open it anyway. The first alarm; then, as you run, a second.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "specialist",
+       "name": "Night Patrol",
+       "size": 3,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "defector-files",
+         "n": 3
+        },
+        {
+         "kind": "evil",
+         "mark": "files"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-50-out"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "defector-files",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-50-out"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-50-out",
+   "name": "The Evil Team's Betrayal: Outside",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f2a3a",
+    "effect": "none"
+   },
+   "intro": "Outside. Cold air. Running feet going the wrong way, behind you. Corin leans on a wall and laughs, once, like a cough.",
+   "choices": [
+    {
+     "label": "Breathe.",
+     "success": {
+      "text": "Fourteen people you'll never meet will sleep tonight. Corin hands you nothing, says nothing. Doesn't need to.",
+      "effects": []
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "defector-files",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Breathe.",
+     "success": {
+      "text": "The boss's file is in your bag. Their Plan, in their own words, a stage early. Corin looks at it like it might bite.",
+      "effects": []
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "defector-files",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ]
+    },
+    {
+     "label": "Breathe.",
+     "success": {
+      "text": "One folder. Theirs. It's something. It isn't enough, and you both know which part isn't.",
+      "effects": []
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "defector-files",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-50-end",
+   "name": "The Evil Team's Betrayal: The Climax",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "defector-at"
+    },
+    {
+     "kind": "flag",
+     "key": "defector",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "defector-end",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "evil",
+     "after": 6
+    }
+   ],
+   "remembers": [
+    {
+     "id": "fourteen",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "defector-files",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "And somewhere behind the walls, a side door is standing open. You hear boots. A lot of boots. They're on your side."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2f2a3a",
+    "effect": "none"
+   },
+   "intro": "*The {defector:team} site where it all ends. {defector:boss} is inside.*\n\n{defector:ending}",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You go in. Whatever happened in doorways and records rooms, it comes with you now.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorEnd"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "defector",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Corin's team comes out one by one, and each of them is looking at one of yours. They studied you. Of course they did.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "defectorEnd"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [],
+       "rule": {
+        "gn": "defector"
+       },
+       "name": "Corin Bellweather",
+       "classId": "worker",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "defector-boss-won",
+         "n": 1
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "defector",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-50-postcard",
+   "name": "The Evil Team's Betrayal: A Postcard",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "defector-end",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "defector-at"
+    },
+    {
+     "kind": "flag",
+     "key": "defector-postcard",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2f2a3a",
+    "effect": "none"
+   },
+   "intro": "A postcard, in with the rest of the post. A beach you've never seen. No return address.\n\nOn the back, in a small, careful hand: *Got out. Thank you for the part you did. —C.*",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You keep it. You couldn't say which part they meant.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "defector-postcard",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

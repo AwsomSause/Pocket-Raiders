@@ -328,6 +328,177 @@
   ],
   "tags": []
  },
+ "gn-50-offer": {
+  "gn": "gn.50",
+  "shape": "Region-long",
+  "earliest": "A5",
+  "home": 8,
+  "window": [
+   6,
+   11
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "level": "The theft: A+1. The defector as a boss: A+2",
+  "often": "region",
+  "badge": "None",
+  "beats": [
+   {
+    "beat": "The offer (must-see, before the battle)",
+    "event": "gn-50-offer",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     11
+    ]
+   },
+   {
+    "beat": "Meeting 1 (optional, after the battle)",
+    "event": "gn-50-meet-1",
+    "stage": "S4",
+    "home": 13,
+    "window": [
+     11,
+     16
+    ]
+   },
+   {
+    "beat": "Meeting 2 (optional, after the battle)",
+    "event": "gn-50-meet-2",
+    "stage": "S5",
+    "home": 6,
+    "window": [
+     4,
+     9
+    ]
+   },
+   {
+    "beat": "The documents (after the battle)",
+    "event": "gn-50-docs",
+    "stage": "S6",
+    "home": 15,
+    "window": [
+     13,
+     18
+    ]
+   },
+   {
+    "beat": "The ending (must-see)",
+    "event": "gn-50-end",
+    "stage": "the team's climax (before the Hideout)"
+   }
+  ],
+  "dressing": {
+   "kanto": "The Evil Team's Betrayal",
+   "elsewhere": "The Evil Team's Betrayal"
+  },
+  "note": "Badge: none for the offer, a folded note after. Only in a region with an evil-team story. Corin Bellweather is rank and file, not the lieutenant. The three \"their own story\" pieces (gn-50-word-grunt / -town / -radio) sit after any battle in S4-S6, optional; gn-50-postcard comes in a later region after the 0-2 Trust ending.",
+  "kinds": [
+   "Evil Team",
+   "Interrupting Episode",
+   "Region-Wide Story"
+  ],
+  "tags": [],
+  "stages": [
+   3
+  ]
+ },
+ "gn-50-word-grunt": {
+  "gn": "gn.50",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 10,
+  "window": [
+   2,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "stages": [
+   4,
+   5,
+   6
+  ],
+  "level": "None",
+  "often": "region",
+  "badge": "own",
+  "note": "A beaten Grunt, at a team node. Badge: a folded note.",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-50-word-town": {
+  "gn": "gn.50",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 10,
+  "window": [
+   2,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "stages": [
+   4,
+   5,
+   6
+  ],
+  "level": "None",
+  "often": "region",
+  "badge": "own",
+  "note": "A town NPC. Badge: a folded note.",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-50-word-radio": {
+  "gn": "gn.50",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 10,
+  "window": [
+   2,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "stages": [
+   4,
+   5,
+   6
+  ],
+  "level": "None",
+  "often": "region",
+  "badge": "own",
+  "note": "The team's radio chatter. Badge: a folded note.",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-50-postcard": {
+  "gn": "gn.50",
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 4,
+  "window": [
+   1,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory of the 0-2 Trust ending, in a later region.",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
  "gn-45-field": {
   "gn": "gn.45",
   "shape": "Single",

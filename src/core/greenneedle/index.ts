@@ -27,6 +27,7 @@ import { eggMoveOptions, familyId } from '../mastery';
 import { pairBondLevel } from '../bond';
 import { draftAldhelm, draftBattleStart, draftEnd, draftFriend, draftLetter, draftPick, draftRecruit, draftStart, draftTokens, draftWon } from './draft';
 import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
+import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorStart, defectorTokens, defectorTrust, guestOf } from './defector';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
 import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
@@ -61,6 +62,8 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   // gn.44: the reigning 1v1 champion, a different trainer each region.
   // gn.48: the Draft's table.
   if (text.includes('{draft:')) text = draftTokens(content, run, text);
+  // gn.50: the defector.
+  if (text.includes('{defector:')) text = defectorTokens(content, run, text);
   // gn.47: the Exhibition.
   if (text.includes('{ex:')) text = exTokens(content, run, text);
   // gn.46: the All-Star bracket.
@@ -199,6 +202,7 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   // gn.49: a flute to play (or the Exploud you healed roars for you: that counts as music).
   if (c.test === 'fluteReady') return fluteReady(run, run.regionOrder[run.regionIndex] ?? '') || gnFlag(run, 'exploud-healed') > 0;
   if (c.test === 'foodReady') return foodReady(run);
+  if (c.test === 'defectorGuest') return !!guestOf(run);
   if (c.test === 'rivalAhead') return run.story.rivals.some((r) => (r.world?.lead ?? 0) >= 2);
   if (c.test === 'eggMoveKnown') return run.party.some((m) => { const egg = new Set(eggMoveOptions(content, familyId(content, m.speciesId)).map((o) => o.id)); return m.moves.some((mv) => egg.has(mv.id)); });
   if (c.test === 'natureIs') return run.party.some((m) => m.nature === c.key);
@@ -567,6 +571,16 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return snorlaxFollow(run, host.stage);
     case 'snorlaxCaught':
       return snorlaxCaught(run);
+    case 'defectorStart':
+      return defectorStart(content, run, e.n ?? 1, host);
+    case 'defectorTrust':
+      return defectorTrust(run, e.n ?? 0);
+    case 'defectorMeet':
+      return defectorMeet(run, e.n ?? 1);
+    case 'defectorReturn':
+      return defectorReturn(run, (e.n ?? 0) > 0);
+    case 'defectorEnd':
+      return defectorEnd(run);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
@@ -703,6 +717,9 @@ export function gnBattleStart(content: Content, run: RunState): void {
   // gn.47: the Exhibition's winner, with their own three.
   if (rule === 'exhibition') exStart(content, run, battle, makeFull(content));
   // gn.48: a draft battle (n on n), or the bracket against one of the other drafters (`slot`).
+  // gn.50: the defector as a boss (each of theirs answers one of yours); at the team's climax, Corin beside you and the corridor held.
+  if (rule === 'defector') defectorBossStart(content, run, battle, makeFull(content));
+  defectorClimax(content, run, battle, makeFull(content));
   // gn.49: the Sleeping Snorlax, double HP and half asleep.
   if (rule === 'snorlax') snorlaxStart(content, battle);
   if (rule === 'draft') draftBattleStart(content, run, battle, battle.eventRule?.slot, makeFull(content));

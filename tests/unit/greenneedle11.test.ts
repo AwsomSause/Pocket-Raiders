@@ -814,3 +814,154 @@ describe('gn.49 The Sleeping Snorlax', () => {
     expect(kanto.choices.map((c) => c.label)).toEqual(scene(run, 'gn-49-hill').labels);
   });
 });
+
+// ---- gn.50 The Evil Team's Betrayal ----
+import { evilOf, evilTeam } from '../../src/core/evil/teams';
+import { DEFECTOR, defectorClimax, GUEST, guestOf, trustOf } from '../../src/core/greenneedle/defector';
+
+const betrayalRun = (seed: string, beat = 2): RunState => {
+  const run = gnRun(seed);
+  const s = evilOf(run);
+  s.teamId = 'rocket';
+  s.beat = beat;
+  return run;
+};
+/** Into the next stage (the meetings wait for a later stage than the last beat). */
+const nextStage = (run: RunState): void => {
+  run.stage!.index += 1;
+};
+const helped = (seed: string, label = 'I\'ll help.'): RunState => {
+  const run = betrayalRun(seed);
+  open(run, 'gn-50-offer');
+  return choose(run, 'gn-50-offer', label).run;
+};
+
+describe('gn.50 The Evil Team\'s Betrayal', () => {
+  it('the offer: the doc\'s three choices; help (Trust 1), "why trust you" (Trust 2, their one Pokémon to hold), or turn them in (paid now)', () => {
+    const run = betrayalRun('t50-offer');
+    open(run, 'gn-50-offer');
+    expect(scene(run, 'gn-50-offer').labels).toEqual(['I\'ll help.', 'Why should I trust you?', 'I\'m turning you in.']);
+    expect(scene(run, 'gn-50-offer').intro).toContain('Team Rocket');
+    const help = choose(run, 'gn-50-offer', 'I\'ll help.').run;
+    expect([flagOf(help, 'defector'), trustOf(help)]).toEqual([1, 1]);
+    const why = choose(run, 'gn-50-offer', 'Why should I trust you?').run;
+    expect(trustOf(why)).toBe(2);
+    expect(guestOf(why)?.gn).toContain(GUEST);
+    const money = run.money;
+    const exposed = choose(run, 'gn-50-offer', 'I\'m turning you in.').run;
+    expect(flagOf(exposed, 'defector')).toBe(2);
+    expect(exposed.money).toBeGreaterThan(money);
+    const noTeam = gnRun('t50-none');
+    open(noTeam, 'gn-50-offer');
+    expect(() => choose(noTeam, 'gn-50-offer', 'I\'ll help.')).not.toThrow();
+  });
+
+  it('meeting 1: turning up +1; opening the envelope -2 ("Thought so."); following them -1; giving their Pokémon back unasked +1', () => {
+    let run = helped('t50-m1', 'Why should I trust you?');
+    nextStage(run);
+    open(run, 'gn-50-meet-1');
+    expect(scene(run, 'gn-50-meet-1').labels).toEqual(['Carry it.', 'Open it.']);
+    const opened1 = choose(run, 'gn-50-meet-1', 'Open it.');
+    expect(said(opened1)).toContain('Thought so.');
+    expect(trustOf(opened1.run)).toBe(1);
+    run = choose(run, 'gn-50-meet-1', 'Carry it.').run;
+    expect(trustOf(run)).toBe(3);
+    expect(scene(run, 'gn-50-leave-1').labels).toEqual(['Let them go.', 'Follow them.', 'Give their Pokémon back.']);
+    expect(said(choose(run, 'gn-50-leave-1', 'Let them go.'))).toContain('a route, and where the patrols will be on it');
+    expect(trustOf(choose(run, 'gn-50-leave-1', 'Follow them.').run)).toBe(2);
+    const back = choose(run, 'gn-50-leave-1', 'Give their Pokémon back.').run;
+    expect(trustOf(back)).toBe(4);
+    expect(guestOf(back)).toBeUndefined();
+  });
+
+  it('meeting 2: a missed meeting costs 1; not asking where they go earns 1 once; asking costs nothing', () => {
+    let run = helped('t50-m2');
+    nextStage(run);
+    open(run, 'gn-50-meet-2');
+    expect(scene(run, 'gn-50-meet-2').labels).toEqual(['What happened to your face?', 'Understood.', 'What are you doing between these meetings?']);
+    expect(scene(run, 'gn-50-meet-2').intro).toContain('the meeting you missed');
+    expect(trustOf(choose(run, 'gn-50-meet-2', 'Understood.').run)).toBe(2);
+    run = choose(run, 'gn-50-meet-2', 'What are you doing between these meetings?').run;
+    expect(trustOf(run)).toBe(1);
+  });
+
+  it('the records room: the guard at A+1, then "Take them all." (+1, the fourteen) or the boss\'s file (a File for the main story)', () => {
+    const run = helped('t50-docs');
+    nextStage(run);
+    open(run, 'gn-50-docs');
+    expect(scene(run, 'gn-50-docs').labels).toEqual(['Take the guard.']);
+    let r = win(choose(run, 'gn-50-docs', 'Take the guard.').run);
+    expect(scene(r, 'gn-50-cabinet').labels).toEqual(['Take them all.', 'There\'s no time. Just yours.', 'Take the boss\'s file too.']);
+    const all = win(choose(r, 'gn-50-cabinet', 'Take them all.').run);
+    expect(flagOf(all, 'defector-files')).toBe(2);
+    expect(trustOf(all)).toBe(1);
+    const boss = win(choose(r, 'gn-50-cabinet', 'Take the boss\'s file too.').run);
+    expect(flagOf(boss, 'defector-files')).toBe(3);
+    expect(flagOf(boss, 'team-rocket-files')).toBe(1);
+    r = choose(r, 'gn-50-cabinet', 'There\'s no time. Just yours.').run;
+    expect(flagOf(r, 'defector-files')).toBe(1);
+    const keyed = helped('t50-key');
+    nextStage(keyed);
+    setFlag(keyed, 'hideout-key', 1);
+    open(keyed, 'gn-50-docs');
+    const k = choose(keyed, 'gn-50-docs', 'Use a key.').run;
+    expect(flagOf(k, 'hideout-key')).toBe(0);
+  });
+
+  it('the ending: Trust 5 walks in beside you (a tag partner) and the fourteen hold the corridor; 3-4 a map (one Hideout room skipped); 0-2 a postcard later', () => {
+    const run = helped('t50-end', 'I\'ll help.');
+    evilOf(run).beat = 6;
+    setFlag(run, 'defector-trust', 5);
+    setFlag(run, 'defector-files', 2);
+    open(run, 'gn-50-end');
+    expect(scene(run, 'gn-50-end').intro).toContain('Ordinary clothes');
+    expect(scene(run, 'gn-50-end').intro).toContain('A lot of boots');
+    const ended = choose(run, 'gn-50-end', 'Go in.').run;
+    expect(flagOf(ended, 'defector-end')).toBe(1);
+    open(ended, 'evil-rocket-hideout-boss');
+    const fight = choose(ended, 'evil-rocket-hideout-boss', 'Battle.').run;
+    expect(fight.battle!.trainer?.name).toBe(evilTeam(content, fight)!.ranks.leader.name);
+    expect(fight.battle!.doubles).toBeTruthy();
+    expect(fight.party.some((m) => m.uid === fight.battle!.loaner)).toBe(true);
+    expect(fight.battle!.enemyVolatile.trapped).toBe(true);
+    const map = helped('t50-map');
+    evilOf(map).beat = 6;
+    setFlag(map, 'defector-trust', 3);
+    open(map, 'gn-50-end');
+    expect(flagOf(choose(map, 'gn-50-end', 'Go in.').run, 'hideout-key')).toBe(1);
+    const alone = helped('t50-alone');
+    evilOf(alone).beat = 6;
+    setFlag(alone, 'defector-trust', 0);
+    open(alone, 'gn-50-end');
+    const post = choose(alone, 'gn-50-end', 'Go in.').run;
+    expect(flagOf(post, 'defector-end')).toBe(3);
+    post.regionIndex += 1;
+    open(post, 'gn-50-postcard');
+    expect(scene(post, 'gn-50-postcard').intro).toContain('No return address');
+  });
+
+  it('exposed: Corin comes back at the climax as a boss at A+2, each of their Pokémon answering one of yours', () => {
+    const run = helped('t50-boss', 'I\'m turning you in.');
+    evilOf(run).beat = 6;
+    run.party = [...run.party, createPokemon(content, 'bulbasaur', 20, 'p-bulba')];
+    open(run, 'gn-50-end');
+    expect(scene(run, 'gn-50-end').intro).toContain('I asked you for one thing.');
+    const b = choose(run, 'gn-50-end', 'Battle.').run;
+    expect(b.battle!.trainer?.name).toBe(DEFECTOR);
+    expect(b.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(b.party.filter((m) => m.hp > 0).map((m) => answerTo(content, m.speciesId) ?? m.speciesId));
+    expect(flagOf(b, 'defector-end')).toBe(4);
+    const after = lose(b);
+    expect(after.phase).toBe('map');
+  });
+
+  it('no climax help in another region, and nothing without the files', () => {
+    const run = helped('t50-other');
+    setFlag(run, 'defector-trust', 5);
+    setFlag(run, 'defector-end', 1);
+    run.regionIndex += 1;
+    const battle = { trainer: { name: evilTeam(content, run)!.ranks.leader.name }, enemyTeam: [run.party[0], run.party[0]], storyEffects: [], enemyVolatile: { trapped: false }, activeIndex: 0, turn: 1 } as unknown as NonNullable<RunState['battle']>;
+    defectorClimax(content, run, battle, (sp, lv, uid) => createPokemon(content, sp, lv, uid));
+    expect(battle.doubles).toBeFalsy();
+    expect(battle.enemyVolatile.trapped).toBe(false);
+  });
+});

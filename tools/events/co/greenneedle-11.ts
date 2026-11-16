@@ -1,7 +1,8 @@
 // Greenneedle, part 11: gn.44 The 1v1 Championship (doc GREENNEEDLE_REWORKED_PLACED_10.md).
 // Build: npm run co:build -- greenneedle-11   then   npm run co:gn
-import { $, any, br, ch, fight, flag, heal, item, join, out, takeNode, trainer, wild, type Json } from '../dsl.ts';
-import { bond, chIf, gev, gn, is, moment, not, notThisRegion, rm, roll, say, scene, setTo, stampRegion, when, type Placement } from './_gn.ts';
+import { $, any, br, ch, fight, flag, heal, item, join, out, scout, takeNode, trainer, wild, type Json } from '../dsl.ts';
+import { bond, chIf, exactly, gev, gn, is, laterStage, moment, not, notThisRegion, rm, roll, say, scene, setTo, stampRegion, stampStage, when, type Placement } from './_gn.ts';
+import { evil, foe } from './_evil-story-kit.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -540,7 +541,148 @@ const gn49: Json[] = [
 // Kanto: the canon space on the route (cs.kanto.route.snorlax) shows the same story.
 const KANTO_SNORLAX: Json = { ...gev('cs-kanto-route-snorlax', 'The Sleeping Snorlax', hill({ stop: 'event', rarity: 'common', group: 'Canon Spaces: Kanto', requires: [not('snorlax-met')], remembers: HILL_REMEMBERS }), HILL_INTRO, HILL_CHOICES), canon: 'cs.kanto.route.snorlax' };
 
-export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46, ...gn47, ...gn48, ...gn49, KANTO_SNORLAX];
+const DEFECTOR_NAME = 'Corin Bellweather';
+// =====================================================================================================================
+// gn.50  THE EVIL TEAM'S BETRAYAL  (region-long, once per region, from A5, in a region with an evil-team story). The offer (S3),
+// meeting 1 (S4), meeting 2 (S5), the records room (S6), the ending at the team's climax. Trust 0–5 (core/greenneedle/defector.ts).
+// The defector, Corin Bellweather, is rank and file, not the lieutenant (that's SF13 A5's Trouble Inside).
+// =====================================================================================================================
+const NOTE_TINT = '#2f2a3a';
+const note = (o: Json = {}): Json => ({ tint: NOTE_TINT, tags: ['Evil Team', 'Story'], effect: 'none', ...o });
+const here = gnc('thisRegion', { key: 'defector-at' });
+const helping = exactly('defector', 1);
+const trust = (n: number): Json => gn('defectorTrust', { n });
+/** Trust 3+: Corin shares a route (one free scouting of the team's nodes, each stage they meet you). */
+const SHARE = when('defector-trust', { min: 3 }, [scout(3)], 'Corin slips you a scrap of paper: a route, and where the patrols will be on it.');
+/** After each meeting, Corin leaves the way they came. Following them is checking up on them. */
+const leaving = (id: string, name: string, line: string): Json => rm(id, name, note(), line, [
+  ch('Let them go.', out('You let them go. You don\'t look where. Somehow that feels like the most useful thing you\'ve done all day.', SHARE)),
+  ch('Follow them.', out('You follow, two streets back. They stop at a corner and say, without turning round, "Go home." Trust falls.', trust(-1), setTo('defector-followed', 1), SHARE)),
+  chIf([gnc('defectorGuest')], 'Give their Pokémon back.', out('You hold out the Ball. Corin looks at it for a long time before they take it. "I didn\'t ask." "I know." Trust rises.', gn('defectorReturn', { n: 1 }), SHARE)),
+]);
+
+const gn50: Json[] = [
+  gev('gn-50-offer', 'The Evil Team\'s Betrayal', note({ stop: 'event', rarity: 'rare', requires: [{ kind: 'evil', after: 1 }, notThisRegion('defector-at')], remembers: [
+    { id: 'liar', when: [is('honest-lied')], notice: 'Corin glances at you sideways. "Someone told me you lie when it suits you. We\'ll see."' },
+  ] }), say(
+    '*A doorway, half out of the rain. Someone in a {defector:team} jacket is watching the street. Watching you.*',
+    '**The defector, Corin Bellweather, hat low, in a doorway:** "Don\'t look round. Keep walking, slowly. I\'m one of them. I\'m about to not be."',
+    '**Corin:** "They\'re closing my section. \'Closing\' means we take the blame for the whole operation and the bosses walk."',
+    '"There are documents that prove it. I can\'t get to them alone." A breath. "{defector:reason}"',
+  ), [
+    ch('I\'ll help.', out('They breathe out, all the way, like they\'ve been holding it for weeks. "Next stage. I\'ll find you. Don\'t find me."',
+      gn('defectorStart', { n: 1 }), stampRegion('defector-at'), stampStage('defector-step'))),
+    ch('Why should I trust you?', out(say(
+      '"You shouldn\'t. I wouldn\'t. Here." They press a Poké Ball into your hand: their one Pokémon. "Hold that till we\'re done."',
+      'The Ball is warm. Whatever\'s inside it turns over once, and settles, like it\'s been passed between hands before.',
+    ), gn('defectorStart', { n: 2 }), stampRegion('defector-at'), stampStage('defector-step'))),
+    ch('I\'m turning you in.', out(say(
+      'You walk on. Then you walk to the people who\'d pay to know: the Rangers, the police, the other team. It doesn\'t much matter which.',
+      'They pay well. Nobody asks how you knew. You don\'t look at the doorway on the way back. It\'s empty anyway.',
+    ), gn('defectorStart', { n: 3 }), stampRegion('defector-at'), $(3000), any(...RARE_ITEMS), moment('Turned in a {defector:team} member who asked for help.', 55))),
+  ]),
+  gev('gn-50-meet-1', 'The Evil Team\'s Betrayal: The Envelope', note({ stop: 'event', rarity: 'rare', requires: [helping, here, laterStage('defector-step'), not('defector-m1'), not('defector-m2'), not('defector-docs')], remembers: [
+    { id: 'unsealed', when: [is('honest-lied')], notice: 'The envelope isn\'t sealed. The flap just sits there, folded over, asking. Corin watches you notice.' },
+  ] }), say(
+    '**Corin:** "You came. I\'d half bet you wouldn\'t."',
+    '*They hand over an envelope.* "Carry that to the next stage. Don\'t open it. It\'s nothing. It\'s a test."',
+    '"I\'m telling you it\'s a test, which is either very honest or very stupid."',
+  ), [
+    ch('Carry it.', out('You put it in your inside pocket. It weighs nothing. You feel it all the way to the next stage.', gn('defectorMeet', { n: 1 }), setTo('defector-envelope', 1), stampStage('defector-step'), scene('gn-50-leave-1'))),
+    ch('Open it.', out(say(
+      'You open it the moment they turn the corner. A blank page, and one line, in their small careful hand:',
+      '*"Thought so."*',
+    ), gn('defectorMeet', { n: 1 }), trust(-2), setTo('defector-envelope', 2), stampStage('defector-step'), scene('gn-50-leave-1'))),
+  ]),
+  leaving('gn-50-leave-1', 'The Evil Team\'s Betrayal: Corin Goes', 'Corin turns up their collar and steps back into the crowd. In three steps they\'re just another hat.'),
+  gev('gn-50-meet-2', 'The Evil Team\'s Betrayal: The Split Lip', note({ stop: 'event', rarity: 'rare', requires: [helping, here, laterStage('defector-step'), not('defector-m2'), not('defector-docs')], remembers: [
+    { id: 'missed', when: [not('defector-m1')], notice: 'Corin doesn\'t mention the meeting you missed. That\'s worse than if they had.' },
+    { id: 'opened', when: [exactly('defector-envelope', 2)], notice: 'They don\'t ask about the envelope. They already know.' },
+  ] }), say(
+    '*Corin\'s got a split lip, and isn\'t mentioning it.*',
+    '**Corin:** "Day after tomorrow. Records room. I can get the door. I can\'t get the guard. That\'s you."',
+  ), [
+    ch('What happened to your face?', out('"Walked into a door." They hold your eye. "A door with a {defector:team} badge on it. It\'s fine. It\'s nearly over."',
+      gn('defectorMeet', { n: 2 }), when('defector-unasked', { min: 0, max: 0 }, [trust(1), setTo('defector-unasked', 1)]), stampStage('defector-step'), scene('gn-50-leave-2'))),
+    ch('Understood.', out('They nod, once. It\'s the first time you\'ve seen them smile. It splits the lip again. They don\'t care.',
+      gn('defectorMeet', { n: 2 }), when('defector-unasked', { min: 0, max: 0 }, [trust(1), setTo('defector-unasked', 1)]), stampStage('defector-step'), scene('gn-50-leave-2'))),
+    ch('What are you doing between these meetings?', out('"Nothing you need." Not angry. Just a door, closing gently. You don\'t get to know that part.',
+      gn('defectorMeet', { n: 2 }), setTo('defector-unasked', 2), stampStage('defector-step'), scene('gn-50-leave-2'))),
+  ]),
+  leaving('gn-50-leave-2', 'The Evil Team\'s Betrayal: Corin Goes', 'Corin touches the split lip once, as if checking it\'s still there, and walks away without hurrying.'),
+  // ---- Their own story: pieces the player only hears about, from other people ----
+  gev('gn-50-word-grunt', 'The Evil Team\'s Betrayal: A Grunt Talks', note({ stop: 'event', rarity: 'rare', requires: [helping, here, is('defector-m1'), not('defector-word-grunt')] }), say(
+    'A {defector:team} Grunt, beaten, sitting on a kerb, talking mostly to himself.',
+    '"Someone\'s been warning the families. Three of our lot got letters: \'get out by Friday.\' Who does that? Who even knows the addresses?"',
+  ), [
+    ch('Walk on.', out('You walk on. You think you know who knows the addresses. You keep it to yourself.', setTo('defector-word-grunt', 1))),
+    ch('Ask who sent the letters.', out('He shrugs. "Someone in payroll, maybe. Someone careful." Asking about Corin feels like checking up on them. It is. Trust falls.', trust(-1), setTo('defector-word-grunt', 1))),
+  ]),
+  gev('gn-50-word-town', 'The Evil Team\'s Betrayal: A Neighbour Talks', note({ stop: 'event', rarity: 'rare', requires: [helping, here, is('defector-m1'), not('defector-word-town')] }), say(
+    'A woman sweeping her step stops when you pass, the way people do when they need to tell someone.',
+    '"A fellow in a hat paid my neighbour\'s rent. Wouldn\'t say why. Her lad\'s in that gang. Was. He left on Tuesday."',
+  ), [
+    ch('Smile and walk on.', out('You smile. She goes back to sweeping, a bit lighter.', setTo('defector-word-town', 1))),
+    ch('Ask about the fellow in the hat.', out('"Tall. Tired. Kind eyes, if you looked." She narrows hers at you. "Why?" Trust falls.', trust(-1), setTo('defector-word-town', 1))),
+  ]),
+  gev('gn-50-word-radio', 'The Evil Team\'s Betrayal: The Radio', note({ stop: 'event', rarity: 'rare', requires: [helping, here, is('defector-m1'), not('defector-word-radio')] }), say(
+    'A radio left on in an empty hut, tuned to {defector:team}\'s band. Static, then a voice:',
+    '"Section nine roster\'s been altered. Fourteen names gone. Find out who."',
+  ), [
+    ch('Turn it off.', out('You turn it off. In the quiet you think about fourteen names, and the person who took them off a list.', setTo('defector-word-radio', 1))),
+    ch('Tell the Rangers.', out('You tell a Ranger what you heard. She writes it down. Somewhere, the net round Corin pulls a little tighter. Trust falls.', trust(-1), setTo('defector-word-radio', 1))),
+    ch('Tell your rival.', out('Your rival listens, and whistles, and promises not to tell anyone. They tell two people. Trust falls.', trust(-1), setTo('defector-word-radio', 1))),
+  ]),
+  // ---- The documents: the records room, in a team site ----
+  gev('gn-50-docs', 'The Evil Team\'s Betrayal: The Records Room', note({ stop: 'event', rarity: 'rare', requires: [helping, here, laterStage('defector-step'), not('defector-docs')], remembers: [
+    { id: 'missed', when: [not('defector-m2')], notice: 'Corin had to find out about the guard from someone else. "You weren\'t there," is all they say.' },
+    { id: 'guest', when: [gnc('defectorGuest')], notice: 'Corin holds out a hand for their Ball before anything else. "I\'ll need it in there." You give it back. They had to ask.' },
+    { id: 'route', when: [is('defector-trust', 3)], notice: 'Corin\'s scrap of paper got you here without meeting a single patrol.' },
+  ] }), say(
+    '*A {defector:team} site, after dark. Corin has the door: a key on a long string, a nod.*',
+    'Inside, one guard, at a desk, between you and the records room. He\'s awake. He\'s bored. Bored is dangerous.',
+  ), [
+    ch('Take the guard.', fight('He stands, reaching for a Ball, looking more relieved than anything. Something finally happening.', { ...foe('grunt', 'Records Room Guard', 2, { lv: 1, win: [scene('gn-50-cabinet')] }), friendly: true, lose: [scene('gn-50-caught-out')] }, gn('defectorMeet', { n: 3 }), gn('defectorReturn', { n: 0 }))),
+    chIf([is('hideout-key')], 'Use a key.', out('Your Hideout key fits the side door. The guard never looks up. Corin stares at you. "Where did you get that?"', flag('hideout-key', -1), gn('defectorMeet', { n: 3 }), gn('defectorReturn', { n: 0 }), scene('gn-50-cabinet'))),
+  ]),
+  rm('gn-50-caught-out', 'The Evil Team\'s Betrayal: Out the Window', note(), say(
+    'You come round in an alley. Corin got you out, somehow, through a window too small for either of you.',
+    'No files. Corin sits against the wall with their head on their knees. "Well," they say. "Well."',
+  ), [ch('Get up.', out('You get up. You help them up. Neither of you says the next part out loud.', setTo('defector-files', 0)))]),
+  rm('gn-50-cabinet', 'The Evil Team\'s Betrayal: Fourteen Folders', note(), say(
+    '*A filing cabinet. Corin\'s hands are shaking. They pull one folder, and then stop, and pull fourteen more.*',
+    '**Corin:** "Those are the others. In my section. If I only clear my own name, they still hang."',
+    'Down the corridor, a door. Footsteps that haven\'t decided which way to go yet.',
+  ), [
+    ch('Take them all.', fight('Fifteen folders don\'t fit in one jacket. A drawer bangs. Somewhere, an alarm. Someone\'s coming.', { ...foe('grunt', 'Night Patrol', 2, { lv: 1, win: [setTo('defector-files', 2), trust(1), scene('gn-50-out')] }), friendly: true, lose: [setTo('defector-files', 1), scene('gn-50-out')] })),
+    ch('There\'s no time. Just yours.', out('Corin puts the fourteen folders back, one at a time, very carefully, as if they might wake. They don\'t speak on the way out.', setTo('defector-files', 1))),
+    ch('Take the boss\'s file too.', fight('The boss\'s drawer is locked. You open it anyway. The first alarm; then, as you run, a second.', { ...foe('specialist', 'Night Patrol', 3, { lv: 1, win: [setTo('defector-files', 3), evil({ mark: 'files' }), scene('gn-50-out')] }), friendly: true, lose: [setTo('defector-files', 1), scene('gn-50-out')] })),
+  ]),
+  rm('gn-50-out', 'The Evil Team\'s Betrayal: Outside', note(), say(
+    'Outside. Cold air. Running feet going the wrong way, behind you. Corin leans on a wall and laughs, once, like a cough.',
+  ), [
+    chIf([exactly('defector-files', 2)], 'Breathe.', out('Fourteen people you\'ll never meet will sleep tonight. Corin hands you nothing, says nothing. Doesn\'t need to.')),
+    chIf([exactly('defector-files', 3)], 'Breathe.', out('The boss\'s file is in your bag. Their Plan, in their own words, a stage early. Corin looks at it like it might bite.')),
+    chIf([exactly('defector-files', 1)], 'Breathe.', out('One folder. Theirs. It\'s something. It isn\'t enough, and you both know which part isn\'t.')),
+  ]),
+  // ---- The ending, at the team's climax ----
+  gev('gn-50-end', 'The Evil Team\'s Betrayal: The Climax', note({ stop: 'event', rarity: 'rare', requires: [here, is('defector'), not('defector-end'), { kind: 'evil', after: 6 }], remembers: [
+    { id: 'fourteen', when: [exactly('defector-files', 2)], notice: 'And somewhere behind the walls, a side door is standing open. You hear boots. A lot of boots. They\'re on your side.' },
+  ] }), say(
+    '*The {defector:team} site where it all ends. {defector:boss} is inside.*',
+    '{defector:ending}',
+  ), [
+    chIf([helping], 'Go in.', out('You go in. Whatever happened in doorways and records rooms, it comes with you now.', gn('defectorEnd'))),
+    chIf([exactly('defector', 2)], 'Battle.', fight('Corin\'s team comes out one by one, and each of them is looking at one of yours. They studied you. Of course they did.', {
+      ...trainer(DEFECTOR_NAME, { cls: 'worker', size: 6, lv: 2, friendly: true, rule: { gn: 'defector' }, win: [setTo('defector-boss-won', 1)], lose: [] }) }, gn('defectorEnd'))),
+  ]),
+  gev('gn-50-postcard', 'The Evil Team\'s Betrayal: A Postcard', note({ stop: 'event', rarity: 'rare', requires: [exactly('defector-end', 3), notThisRegion('defector-at'), not('defector-postcard')] }), say(
+    'A postcard, in with the rest of the post. A beach you\'ve never seen. No return address.',
+    'On the back, in a small, careful hand: *Got out. Thank you for the part you did. —C.*',
+  ), [ch('Keep it.', out('You keep it. You couldn\'t say which part they meant.', setTo('defector-postcard', 1)))]),
+];
+
+export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46, ...gn47, ...gn48, ...gn49, KANTO_SNORLAX, ...gn50];
 export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
@@ -586,6 +728,23 @@ export const PLACEMENT: Record<string, Placement> = {
     dressing: { kanto: 'The Sleeping Snorlax, Again', elsewhere: 'The Sleeping Snorlax, Again' },
     note: 'Afterstory: a Snorlax that did not join, asleep across the road in a later region. Fought, it needs "Ask nicely."',
   },
+  'gn-50-offer': {
+    gn: 'gn.50', shape: 'Region-long', earliest: 'A5', home: 8, window: [6, 11], sits: 'must-see', attaches: 'before', tags: ['Evil Team', 'Interrupting Episode', 'Region-Wide Story'],
+    level: 'The theft: A+1. The defector as a boss: A+2', often: 'region', badge: 'None',
+    beats: [
+      { beat: 'The offer (must-see, before the battle)', event: 'gn-50-offer', stage: 'S3', home: 8, window: [6, 11] },
+      { beat: 'Meeting 1 (optional, after the battle)', event: 'gn-50-meet-1', stage: 'S4', home: 13, window: [11, 16] },
+      { beat: 'Meeting 2 (optional, after the battle)', event: 'gn-50-meet-2', stage: 'S5', home: 6, window: [4, 9] },
+      { beat: 'The documents (after the battle)', event: 'gn-50-docs', stage: 'S6', home: 15, window: [13, 18] },
+      { beat: 'The ending (must-see)', event: 'gn-50-end', stage: 'the team\'s climax (before the Hideout)' },
+    ],
+    dressing: { kanto: 'The Evil Team\'s Betrayal', elsewhere: 'The Evil Team\'s Betrayal' },
+    note: 'Badge: none for the offer, a folded note after. Only in a region with an evil-team story. Corin Bellweather is rank and file, not the lieutenant. The three "their own story" pieces (gn-50-word-grunt / -town / -radio) sit after any battle in S4-S6, optional; gn-50-postcard comes in a later region after the 0-2 Trust ending.',
+  },
+  'gn-50-word-grunt': { gn: 'gn.50', shape: 'Single', earliest: 'A5', home: 10, window: [2, 18], sits: 'optional', attaches: 'after', tags: ['Evil Team'], stages: [4, 5, 6], level: 'None', often: 'region', badge: 'own', note: 'A beaten Grunt, at a team node. Badge: a folded note.' },
+  'gn-50-word-town': { gn: 'gn.50', shape: 'Single', earliest: 'A5', home: 10, window: [2, 18], sits: 'optional', attaches: 'town', tags: ['Evil Team'], stages: [4, 5, 6], level: 'None', often: 'region', badge: 'own', note: 'A town NPC. Badge: a folded note.' },
+  'gn-50-word-radio': { gn: 'gn.50', shape: 'Single', earliest: 'A5', home: 10, window: [2, 18], sits: 'optional', attaches: 'rest', tags: ['Evil Team'], stages: [4, 5, 6], level: 'None', often: 'region', badge: 'own', note: 'The team\'s radio chatter. Badge: a folded note.' },
+  'gn-50-postcard': { gn: 'gn.50', shape: 'Single', earliest: 'A6', home: 4, window: [1, 8], sits: 'optional', attaches: 'rest', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory of the 0-2 Trust ending, in a later region.' },
   'gn-45-field': {
     gn: 'gn.45', shape: 'Single', earliest: 'A10', home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', tags: ['Companion Story'],
     level: 'The lesson A−1 (three Pokémon); the exam A+2 (six)', often: 'run', badge: 'own',
