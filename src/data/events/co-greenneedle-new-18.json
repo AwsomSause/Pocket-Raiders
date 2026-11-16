@@ -46,6 +46,18 @@
        {
         "kind": "gn",
         "op": "setFlag",
+        "key": "gn18-left",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn18-called",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
         "key": "gn18-done",
         "n": 1
        },
@@ -122,6 +134,17 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-new-18-calm"
@@ -140,6 +163,17 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-new-18-calm"
@@ -156,6 +190,17 @@
         "kind": "flag",
         "key": "gn18-mess",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
        },
        {
         "kind": "gn",
@@ -219,6 +264,17 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-new-18-carry"
@@ -237,6 +293,17 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-new-18-carry"
@@ -253,6 +320,17 @@
         "kind": "flag",
         "key": "gn18-mess",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
        },
        {
         "kind": "gn",
@@ -307,6 +385,17 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-new-18-cool"
@@ -325,6 +414,17 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-new-18-cool"
@@ -341,6 +441,17 @@
         "kind": "flag",
         "key": "gn18-mess",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
        },
        {
         "kind": "gn",
@@ -404,6 +515,17 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-new-18-company"
@@ -422,6 +544,17 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-new-18-company"
@@ -438,6 +571,17 @@
         "kind": "flag",
         "key": "gn18-mess",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
        },
        {
         "kind": "gn",
@@ -469,10 +613,45 @@
    "intro": "The fifth patient is a Pidgey with nothing wrong at all, except that no one has come to pick it up.\n\nThe Chansey points to the empty chair beside it. It needs company.",
    "choices": [
     {
-     "label": "Send the one who loves you most.",
+     "label": "Pick who sits with it.",
+     "pick": {},
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "gn",
+         "test": "pickedTopBond"
+        }
+       ],
+       "text": "Yours hops up beside it and stays. They do not talk. The Pidgey leans, a little, and keeps leaning.",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-18-bandage"
+        }
+       ]
+      }
+     ],
      "success": {
-      "text": "Yours hops up beside it and stays. They do not talk. The Pidgey leans, a little, and keeps leaning.",
+      "text": "It sits down, politely. It is not the one that Pidgey would have wanted. The Pidgey knows, and the queue grows.",
       "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
        {
         "kind": "gn",
         "op": "scene",
@@ -490,6 +669,17 @@
         "kind": "flag",
         "key": "gn18-mess",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
        },
        {
         "kind": "gn",
@@ -510,6 +700,17 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-new-18-bandage"
@@ -526,6 +727,17 @@
         "kind": "flag",
         "key": "gn18-mess",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
        },
        {
         "kind": "gn",
@@ -564,7 +776,7 @@
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-new-18-end"
+        "key": "gn-new-18-queue"
        }
       ]
      }
@@ -580,9 +792,20 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-new-18-end"
+        "key": "gn-new-18-queue"
        }
       ]
      }
@@ -598,9 +821,20 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-new-18-end"
+        "key": "gn-new-18-queue"
        }
       ]
      }
@@ -616,9 +850,637 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-18-queue",
+   "name": "The Day the Center Closed: The Queue",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "npc.nurse"
+    ],
+    "pokemon": "chansey",
+    "tint": "#e8d5d9",
+    "effect": "none"
+   },
+   "intro": "You look at the clipboard. The Chansey looks at the bench.",
+   "choices": [
+    {
+     "label": "Call the next name.",
+     "success": {
+      "text": "The Chansey straightens up and calls the name. Someone new, very small, comes forward.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-called",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn18-called",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-18-extra-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn18-called",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-18-extra-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn18-called",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-18-extra-3"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn18-called",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-18-extra-4"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn18-left",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Cross off the last name.",
+     "success": {
+      "text": "The bench is empty. The Chansey stares at the clipboard as if it might add another. It does not.",
+      "effects": [
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-new-18-end"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn18-left",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-18-extra-1",
+   "name": "The Day the Center Closed: Another patient: a cough",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "npc.nurse"
+    ],
+    "pokemon": "chansey",
+    "tint": "#e8d5d9",
+    "effect": "none"
+   },
+   "intro": "Someone new has joined the bench: a Rattata with a cough like a rusty hinge.\n\nThe Chansey sighs through its whole body, and writes the name at the bottom of the list.",
+   "choices": [
+    {
+     "label": "Do it yourself.",
+     "success": {
+      "text": "You hold the spoon, and it takes the syrup with a face like a betrayal. The cough eases. It forgives you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Fire-type.",
+     "success": {
+      "text": "It warms the Rattata, which was never the problem. The cough goes on, and so does the queue.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Water- or Ice-type.",
+     "success": {
+      "text": "A cold drink. The Rattata coughs harder. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Psychic- or Fairy-type.",
+     "success": {
+      "text": "It hums at the cough. The cough hums back. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-18-extra-2",
+   "name": "The Day the Center Closed: Another patient: a sleepless night",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "npc.nurse"
+    ],
+    "pokemon": "chansey",
+    "tint": "#e8d5d9",
+    "effect": "none"
+   },
+   "intro": "A Hoothoot has not slept in three days, and says so, loudly, in the waiting room.\n\nThe Chansey holds up a finger: shh. It needs calming. Everyone in the room needs it.",
+   "choices": [
+    {
+     "label": "Send a Psychic- or Fairy-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "psychic",
+        "fairy"
+       ]
+      }
+     ],
+     "success": {
+      "text": "A low hum, a slow wave of calm. The Hoothoot's eyes close mid-word. The bench goes quiet.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send your strongest.",
+     "success": {
+      "text": "It stands guard, and the Hoothoot stares at it all night. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Fire-type.",
+     "success": {
+      "text": "A warm blanket of a Pokémon. The Hoothoot is warm and wide awake. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do it yourself.",
+     "success": {
+      "text": "You read it a pamphlet. It stays awake out of pure spite. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-18-extra-3",
+   "name": "The Day the Center Closed: Another patient: a heavy one",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "npc.nurse"
+    ],
+    "pokemon": "chansey",
+    "tint": "#e8d5d9",
+    "effect": "none"
+   },
+   "intro": "A Slowpoke sat down in the doorway at dawn, and has not found a reason to get up.\n\nThe Chansey tries to push it. It does not move. It needs carrying, and something strong to do it.",
+   "choices": [
+    {
+     "label": "Send your strongest.",
+     "success": {
+      "text": "Yours lifts the Slowpoke, with its whole yawn, and sets it on a bed. It wakes up an hour later, delighted.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Water- or Ice-type.",
+     "success": {
+      "text": "It chills the Slowpoke, which does nothing at all. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Fire-type.",
+     "success": {
+      "text": "It warms the Slowpoke, which is now a warm Slowpoke in a doorway. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do it yourself.",
+     "success": {
+      "text": "You get its tail. It does not get you. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-18-extra-4",
+   "name": "The Day the Center Closed: Another patient: last name on the list",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "npc.nurse"
+    ],
+    "pokemon": "chansey",
+    "tint": "#e8d5d9",
+    "effect": "none"
+   },
+   "intro": "The last one on the list is a Spearow with a bandaged wing, waiting very politely, in a bench of one.\n\nThe Chansey holds up a roll of gauze. Yours, again.",
+   "choices": [
+    {
+     "label": "Do it yourself.",
+     "success": {
+      "text": "Careful, tight, kind. The Spearow tests the wing, and stays on the bench to watch you leave.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send your strongest.",
+     "success": {
+      "text": "It tries, and has no thumbs. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Fire-type.",
+     "success": {
+      "text": "The gauze is a little singed. The Spearow is a little singed. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Water- or Ice-type.",
+     "success": {
+      "text": "Wet gauze slides right off. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn18-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "gn18-left",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-queue"
        }
       ]
      }
