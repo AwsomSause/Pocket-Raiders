@@ -799,6 +799,4010 @@
      }
     }
    ]
+  },
+  {
+   "id": "aq25-gliscor-stayed",
+   "name": "The Gliscor Who Stayed to Train",
+   "group": "Pokémon-anime questlines",
+   "rarity": "rare",
+   "minStage": 5,
+   "types": [
+    "flying",
+    "rock"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.bird_keeper_m"
+    ],
+    "pokemon": "gligar",
+    "tint": "#1e2a3a",
+    "effect": "float"
+   },
+   "intro": "A cliff above a long valley, and a flight school at the top of it: a wind sock, a bench, a whistle on a string. A Gligar stands at the edge with its pincers out. It runs. It jumps. It glides about three metres and lands on its face. It gets up and walks back, very small against all that sky. The instructor, a lean man in a long scarf, sighs the way only teachers sigh. \"Fenwick Gale. That one's got a Gliscor's heart in a Gligar's body. It just needs a reason.\" The Gligar looks at the drop. Then, for some reason, it looks at you.",
+   "choices": [
+    {
+     "label": "Push it off the cliff.",
+     "success": {
+      "text": "Before anyone can argue, you give it a shove. It drops like a stone, screaming, flailing, and then somehow its wings catch. It flies: badly, terrified, in one lurching circle, and lands in a bush far below. When it climbs back up, it walks straight past you to the instructor. It does come with you when you leave. But it rides as far from you as it can get, and it watches your hands.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "gligar"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-pushed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-distrust",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fly beside it.",
+     "pick": {
+      "types": [
+       "flying"
+      ]
+     },
+     "success": {
+      "text": "Your Flying-type walks to the edge beside it and waits. The Gligar looks at it, and at the drop, and back. They jump together. Your Pokémon does not flap; it only spreads its wings and leans, and the Gligar copies it, wing for wing, all the way down the valley and back up on the warm air. It lands on its feet. It stares at its feet. That evening it follows the two of you down the path, and nobody has to ask.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "gligar"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 15
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-flew-beside",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Razor Fang.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "razor-fang"
+      }
+     ],
+     "success": {
+      "text": "You hold out the Razor Fang. The instructor raises an eyebrow and says nothing. The Gligar takes it in both pincers, very carefully, as if it might bite back. That night, on the cliff, under no moon at all, it starts to glow. In the morning a Gliscor is hanging upside down from your tent pole, grinning. It flies, too. It flies as if it had always meant to, and only been waiting to be asked.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "razor-fang"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "gliscor"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-fang",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it to its teacher.",
+     "success": {
+      "text": "The Gligar watches you go from the edge of the cliff. Behind you, faintly: a whistle, a run, a jump, and a small, determined thump.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq25-wont-look",
+   "name": "Not Your Hands",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq25-distrust",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "gligar",
+     "bond": 0
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq25-pushed",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gligar",
+    "tint": "#1e2a3a",
+    "effect": "none"
+   },
+   "intro": "A whole stage, and it has not once let you near it. It eats when you have walked away. It sleeps facing you. When you lift a hand to point at something it flinches, and then looks ashamed of flinching. Tonight it sits on the edge of a ridge, looking down, the way it looked down from the cliff before you pushed.",
+   "choices": [
+    {
+     "label": "Say sorry.",
+     "success": {
+      "text": "You sit down a long way from it and tell it you are sorry, and that you will never push it again, off anything, ever. It does not look round. But later, when you have nearly fallen asleep, there is a small weight against your back, and a pincer resting, very lightly, on your sleeve.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq25-distrust",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-forgiven",
+        "amount": 1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "gligar",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Jump first.",
+     "success": {
+      "text": "You walk to the edge and step off it, onto a ledge a little way down that it cannot see. It shrieks and comes over the edge after you, wings wide, without stopping to think at all. It lands on the ledge beside you, shaking, and glares. Then it laughs, a dry clicking laugh, and it does not move away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq25-distrust",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-forgiven",
+        "amount": 1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "gligar",
+        "amount": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq25-three-metres",
+   "name": "Three Metres",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq25-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aq25-distrust",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "partyLine",
+     "species": "gligar",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq25-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gligar",
+    "tint": "#1e2a3a",
+    "effect": "none"
+   },
+   "intro": "Camp on a hillside. It has found a boulder about as tall as you and has been jumping off it all evening. Three metres of glide, then its face. Three metres, face. It never gets any further. It never stops. The rest of your team has stopped pretending not to watch.",
+   "choices": [
+    {
+     "label": "Catch it at the end.",
+     "success": {
+      "text": "You stand where its face usually lands. It glides, lands in your arms instead, and is so surprised it forgets to be embarrassed. It climbs straight back up the boulder. Three metres and you. Three metres and you. By dark it is getting four.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gligar",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it land on its face.",
+     "success": {
+      "text": "You let it land on its face, every time, and every time you clap. At first it is not sure whether you are laughing at it. You are not, and it works that out. By dark it has started taking a bow before it climbs back up.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gligar",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq25-the-wind",
+   "name": "Reading the Wind",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq25-three-metres"
+    },
+    {
+     "kind": "partyLine",
+     "species": "gligar",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gligar",
+    "tint": "#1e2a3a",
+    "effect": "float"
+   },
+   "intro": "A gusty ridge. It stands at the edge with its pincers raised, feeling the wind push and pull at it, and every time it nearly jumps, the wind changes its mind. It looks back at you as if you might know something the wind does not.",
+   "choices": [
+    {
+     "label": "Wait for the gust.",
+     "success": {
+      "text": "You hold up a hand. Wait. Wait. The grass goes flat, and you drop your hand, and it jumps into the gust. It goes up instead of down. For the first time in its life, it goes up. It comes back down the long way, slowly, showing off to every Pokémon you own.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gligar",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Jump in the lull.",
+     "success": {
+      "text": "You tell it to go in the still moment between gusts. It drops a little, then the next gust catches it and carries it sideways along the ridge, startled and delighted, all the way to the trees. It walks back an hour later covered in leaves, very pleased with the wind and with you.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gligar",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq25-over-the-tent",
+   "name": "Over the Tent",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq25-the-wind"
+    },
+    {
+     "kind": "partyLine",
+     "species": "gligar",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gligar",
+    "tint": "#24324a",
+    "effect": "float"
+   },
+   "intro": "Morning. Something passes over the camp, high up, and its shadow crosses every sleeping face. Your Pokémon sit up one by one. It is the one that used to land on its face. It is circling the tent, round and round, higher than it has ever been. It does not know how to come down.",
+   "choices": [
+    {
+     "label": "Talk it down.",
+     "success": {
+      "text": "You stand in the open and talk to it the whole way, the way you would talk to someone on a ledge. Lower. Lower. Feet out. It lands, wobbles, and stays up. Then it looks at you with its whole face lit, as if you had done it, and not it.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gligar",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it work it out.",
+     "success": {
+      "text": "You only watch. It goes round six more times, thinking. Then it folds one wing, drops, opens it, and lands on the tent pole as if it had planned to all along. The tent falls down. Nobody minds at all.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gligar",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq25-a-reason",
+   "name": "A Reason",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 7,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq25-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aq25-distrust",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq25-met",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "gligar",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "flying",
+    "rock"
+   ],
+   "remembers": [
+    {
+     "id": "fang",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq25-fang",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It has been a Gliscor since the night of the Razor Fang. It has never yet had to find out what that is for."
+    },
+    {
+     "id": "pushed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq25-pushed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It looks at the drop. It looks at you. You keep your hands at your sides. It nods, once: it knows. This time it is going on its own."
+    },
+    {
+     "id": "flew-beside",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq25-flew-beside",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your Flying-type steps up beside it out of habit, ready to lean into the wind together. It shakes its head. Not this time. This one is its own."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.bird_keeper_m"
+    ],
+    "pokemon": "gligar",
+    "tint": "#1a2232",
+    "effect": "rain"
+   },
+   "intro": "High cliffs in a storm, and a flight school's camp pitched under them: Instructor Gale and his whole class of Gligar, out for training. A young Gligar has tried the cliff alone and the wind has taken it. It is clinging to a ledge halfway down, wings torn wide open by the gusts, crying. Gale is already uncoiling a rope. Your own one walks to the edge and stands there, very still, looking down at the ledge. It has a reason now.",
+   "choices": [
+    {
+     "label": "Send it.",
+     "success": {
+      "text": "\"Go,\" you say. It goes. It does not glide; it dives, wings folded, straight down the face of the cliff, and halfway there it starts to glow. Something bigger opens its wings above the ledge. It catches the little one in its tail, turns on the gust, and comes back up the storm the way you climb stairs. Gale drops his rope and forgets to pick it up.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "gligar",
+        "to": "gliscor"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "gligar",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-turned",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Gligar dove off a cliff in a storm to catch a smaller one, and came back up a Gliscor.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go down the rope yourself.",
+     "success": {
+      "text": "You take Gale's rope and go over the edge. You get three metres. It cannot stand it. It comes past you in a dive, glowing, and the thing that opens its wings above the ledge is not a Gligar any more. It scoops up the little one, then circles back for you, and hauls on the rope until your boots are on the grass. It looks furious. It looks proud.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "gligar",
+        "to": "gliscor"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "gligar",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-turned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-roped",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Gligar dove off a cliff in a storm to catch a smaller one, and came back up a Gliscor.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq25-stay-to-train",
+   "name": "Ready to Train",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 9,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq25-turned",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq25-met",
+     "atLeast": 4,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "gligar",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "flying",
+    "rock"
+   ],
+   "remembers": [
+    {
+     "id": "flier-close",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq25-flew-beside",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "partyLine",
+       "species": "gligar",
+       "bond": 4
+      }
+     ],
+     "notice": "It lands beside your Flying-type, the one that leaned into the wind with it on the first day, and nudges it toward the bench. It wants its first teacher to stay too. Then it looks at you: that part is yours to decide.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Ask it.",
+       "success": {
+        "text": "You ask. It does not even look at the bench. It looks at you, and lands on your shoulder, and folds its wings as if that were the end of the question. Gale grins. \"That's a reason, right there,\" he says. \"Off you go, the pair of you. Come back and show my lot how it's done.\"",
+        "effects": [
+         {
+          "kind": "friendshipLine",
+          "species": "gligar",
+          "amount": 10
+         },
+         {
+          "kind": "flag",
+          "key": "aq25-asked",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq25-came",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "reunion-guest-gliscor",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "You asked your Gliscor whether it would stay to train. It chose you.",
+          "importance": 75
+         }
+        ]
+       }
+      },
+      {
+       "label": "Let them both stay.",
+       "success": {
+        "text": "You nod. Your Flying-type steps up beside the Gliscor, and the two of them turn to face the bench of young Gligar like a pair of teachers on the first day of term. Gale shakes your hand for a long time. The smallest Gligar from the bench climbs onto your boot and stays there. \"Take that one,\" Gale says. \"It'll have the best teachers in the world to live up to.\"",
+        "effects": [
+         {
+          "kind": "tradeAway",
+          "want": {
+           "label": "your Gliscor (it stays to train)",
+           "species": [
+            "gligar",
+            "gliscor"
+           ]
+          }
+         },
+         {
+          "kind": "tradeAway",
+          "want": {
+           "label": "your Flying-type (it stays to teach)",
+           "type": "flying"
+          }
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "gligar"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 10
+         },
+         {
+          "kind": "flag",
+          "key": "aq25-stayed",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq25-flier-stayed",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "reunion-guest-gliscor",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Your Gliscor stayed at the cliff to train, and the Flying-type that first taught it to glide stayed with it.",
+          "importance": 75
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "flier",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq25-flew-beside",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It lands beside your Flying-type, the one that leaned into the wind with it on the first day, and nudges it toward the bench. It wants its first teacher to stay too. Then it looks at you: that part is yours to decide.",
+     "addChoices": [
+      {
+       "label": "Let them both stay.",
+       "success": {
+        "text": "You nod. Your Flying-type steps up beside the Gliscor, and the two of them turn to face the bench of young Gligar like a pair of teachers on the first day of term. Gale shakes your hand for a long time. The smallest Gligar from the bench climbs onto your boot and stays there. \"Take that one,\" Gale says. \"It'll have the best teachers in the world to live up to.\"",
+        "effects": [
+         {
+          "kind": "tradeAway",
+          "want": {
+           "label": "your Gliscor (it stays to train)",
+           "species": [
+            "gligar",
+            "gliscor"
+           ]
+          }
+         },
+         {
+          "kind": "tradeAway",
+          "want": {
+           "label": "your Flying-type (it stays to teach)",
+           "type": "flying"
+          }
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "gligar"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 10
+         },
+         {
+          "kind": "flag",
+          "key": "aq25-stayed",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq25-flier-stayed",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "reunion-guest-gliscor",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Your Gliscor stayed at the cliff to train, and the Flying-type that first taught it to glide stayed with it.",
+          "importance": 75
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "close",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "gligar",
+       "bond": 4
+      }
+     ],
+     "notice": "It has not been more than a wing's length from you in a long time. It is not now, either.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Ask it.",
+       "success": {
+        "text": "You ask. It does not even look at the bench. It looks at you, and lands on your shoulder, and folds its wings as if that were the end of the question. Gale grins. \"That's a reason, right there,\" he says. \"Off you go, the pair of you. Come back and show my lot how it's done.\"",
+        "effects": [
+         {
+          "kind": "friendshipLine",
+          "species": "gligar",
+          "amount": 10
+         },
+         {
+          "kind": "flag",
+          "key": "aq25-asked",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq25-came",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "reunion-guest-gliscor",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "You asked your Gliscor whether it would stay to train. It chose you.",
+          "importance": 75
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.bird_keeper_m"
+    ],
+    "pokemon": "gliscor",
+    "tint": "#24324a",
+    "effect": "float"
+   },
+   "intro": "The flight school on the cliff again, wind sock and bench and whistle. Your Gliscor lands on the very edge, perfectly, without a wobble. Instructor Gale watches it for a long time. \"It's ready to train with the best,\" he says at last. \"Here. With me.\" He nods at the way it keeps glancing back at you. \"But it won't leave you. Not unless you tell it to.\" On the bench, a row of young Gligar hold their breath.",
+   "choices": [
+    {
+     "label": "Stay and train.",
+     "success": {
+      "text": "You tell it. It understands before you have finished. It flies one slow circle over your head, low enough to ruffle your hair, and lands beside Gale, facing the class. Then the smallest Gligar on the bench, the one that lands on its face, hops down and climbs onto your boot and will not get off. \"Take that one,\" Gale says, rubbing his eyes. \"It needs a reason too.\"",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "your Gliscor (it stays to train)",
+         "species": [
+          "gligar",
+          "gliscor"
+         ]
+        }
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "gligar"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-gliscor",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Gliscor stayed at the cliff to train with the best. It landed perfectly.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come with me.",
+     "success": {
+      "text": "It is on your shoulder before the words are out, heavy and warm and grinning. Gale laughs, and it is not a sad laugh. \"Thought so. Come back and show my lot how to land, then.\" When you walk away, the whole bench of young Gligar jump off the cliff after you, one by one, and glide three metres, and land on their faces.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gligar",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-came",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-gliscor",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Gliscor was ready to train with the best, and chose to fly on with you.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask it.",
+     "success": {
+      "text": "You ask. It looks at you for a long time. It looks at the bench of young Gligar, and at the edge it once could not jump from, and you watch it decide. It presses its forehead against yours. Then it flies to Gale's side. The best student from the bench walks over to you without being told, chin up, ready. \"It chose that one for you,\" Gale says quietly.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "your Gliscor (it chose to stay)",
+         "species": [
+          "gligar",
+          "gliscor"
+         ]
+        }
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "gligar"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq25-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-gliscor",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You asked your Gliscor, and it chose to stay at the cliff and train. It chose your next friend for you.",
+        "importance": 75
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq26-scalchop",
+   "name": "The Scalchop",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/doctor_f"
+    ],
+    "pokemon": "oshawott",
+    "tint": "#1c2a3c",
+    "effect": "rattle"
+   },
+   "intro": "An Oshawott is flat on its back on the Pokémon Center floor, arms out, wailing. There is a pale round patch on its belly where something has always been, and is not. It cries. Loudly. The whole Center is staring. The nurse leans over the counter and shouts above the noise. \"Since six this morning! It won't be picked up! It keeps patting the place!\" It pats the place. It finds it empty. It starts again, louder.",
+   "choices": [
+    {
+     "label": "Search the river.",
+     "success": {
+      "text": "\"It lost it by the river?\" The nurse nods hard. The Oshawott stops mid-wail, one eye open. You hold the door. It gets up, sniffing, and trots out after you, patting its belly every few steps in case the scalchop has come back by itself. The river runs beside the road for the next three stretches. You will search them all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq26-searching",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq26-river-shell",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Make it a new one.",
+     "success": {
+      "text": "You sit at the Center table with a flat shell, a scrap of driftwood and a coin, and you carve. It takes an hour. When you hold it out, the Oshawott looks at it. It looks at you. It pushes it away with one foot. A minute passes. It pulls it back with the same foot. It tries it on. It is wrong. It is the wrong size and the wrong colour and the wrong everything. It keeps it on. When you leave, it leaves with you, holding it in place with one paw.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "oshawott"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq26-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq26-new-scalchop",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You carved an Oshawott a new scalchop. It was wrong. It kept it on.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Comfort it.",
+     "success": {
+      "text": "You sit down on the Center floor. It climbs into your lap without being asked and cries into your coat for some time, great shuddering sobs, until the nurse brings you both a tissue. Then it stops. It wipes its nose. It gets down. It marches to the door, and looks back at you, and waits. It is going to find the thing itself, and it would like you to come.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq26-comforted",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq26-searching",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq26-river-shell",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq26-river-shell",
+   "name": "The Wrong Shell",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq26-searching",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "leading",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq26-comforted",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It walks in front, nose down, as if it were the one who had hired you."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "oshawott",
+    "tint": "#1c2a3c",
+    "effect": "none"
+   },
+   "intro": "The first stretch of river. The Oshawott wades along the shallows, patting stones. Suddenly it dives, and comes up with a shell: round, pale, about the right size. It holds it to its belly. It holds it there for a long, hopeful moment.",
+   "choices": [
+    {
+     "label": "Keep looking.",
+     "success": {
+      "text": "It is the wrong shell. You can both tell. It looks at the thing with real contempt, as if the shell has tried to trick it, and throws it back in the river. Then it squares its shoulders and walks on downstream, patting its belly as it goes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq26-river-1",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq26-river-cap",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq26-river-cap",
+   "name": "Something on Its Head",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq26-river-1",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "leading",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq26-comforted",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It is the Oshawott that spots it first, and it is already running."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "corphish",
+    "tint": "#1c2a3c",
+    "effect": "none"
+   },
+   "intro": "The second stretch. A Corphish is sitting on a rock in the middle of the current, and it is wearing something round and pale on its head. The Oshawott goes rigid. Then it charges into the water with a battle cry, and the Corphish raises its claws, very confused.",
+   "choices": [
+    {
+     "label": "Apologise to the Corphish.",
+     "success": {
+      "text": "You get there just as the Oshawott snatches the thing off its head. It is a bottle cap. The Oshawott stares at it. The Corphish stares at the Oshawott. You apologise to the Corphish. The Oshawott, after a pause, apologises too, with a small stiff bow, and gives the bottle cap back. The Corphish puts it back on. Everyone is very polite. Downstream, the water goes deeper.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq26-river-2",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq26-river-basculin",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq26-river-basculin",
+   "name": "The Snail Cracker",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq26-river-2",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "leading",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq26-comforted",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You did not find it. The Oshawott did. It is already in the water."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "basculin",
+    "tint": "#16242e",
+    "effect": "rattle"
+   },
+   "intro": "The third stretch, where the river runs deep and green under a bank. A Basculin is there with a friend, and it has something in its teeth: round and pale, with a little ridge along the edge. It is using it to crack snails against a stone. Crack. Crack. The Oshawott makes a sound you have never heard a Pokémon make. Then it walks into the river with no weapon at all, and it is braver than anything has a right to be.",
+   "choices": [
+    {
+     "label": "Fight beside it.",
+     "success": {
+      "text": "The Oshawott squares up to both Basculin, chin high, paws empty. You send your lead in beside it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Basculin",
+       "ally": "oshawott",
+       "size": 2,
+       "types": [],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq26-basculin-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq26-scalchop-back"
+        }
+       ],
+       "friendly": true,
+       "lineup": [
+        "basculin",
+        "basculin"
+       ],
+       "spritePokemon": "basculin",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq26-basculin-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq26-scalchop-back"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq26-scalchop-back",
+   "name": "It Salutes",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "found-it",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq26-comforted",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It found it. You only came along. It knows that, and it knows you know.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Salute back.",
+       "success": {
+        "text": "You salute back. It holds the salute a moment longer than you, because it can. Then it puts the scalchop away on its belly, pats it twice, and walks over to stand by your boot as if it has always stood there. It found the thing itself. It would like to find the next one with you.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "oshawott"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 20
+         },
+         {
+          "kind": "flag",
+          "key": "aq26-met",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq26-real-scalchop",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "An Oshawott lost its scalchop, and went and found it itself. You were there.",
+          "importance": 55
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "lost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq26-basculin-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Basculin won, but the Oshawott would not stop, and in the end it simply let go of the thing and swam off. It was only a snail tool to it."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "oshawott",
+    "tint": "#1c2a3c",
+    "effect": "sparkle"
+   },
+   "intro": "The scalchop comes up in the foam. The Oshawott catches it in both paws. It puts it on. It checks it. It checks it again. Then it turns round to you, draws it from its belly like a sword, and salutes.",
+   "choices": [
+    {
+     "label": "Salute back.",
+     "success": {
+      "text": "You salute back. It holds the salute a moment longer than you, because it can. Then it puts the scalchop away on its belly, pats it twice, and walks over to stand by your boot as if it has always stood there.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "oshawott"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq26-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq26-real-scalchop",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You found an Oshawott's scalchop in a Basculin's teeth. It saluted.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go home.",
+     "success": {
+      "text": "You wave it back toward the Center and the nurse who has been worrying since six. It looks at you, and at the road, and goes, checking its scalchop every few steps. At the bend it turns and salutes once more.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq26-one-paw",
+   "name": "One Paw on It",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq26-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "oshawott",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq26-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "oshawott",
+    "tint": "#1c2a3c",
+    "effect": "none"
+   },
+   "intro": "Camp, late. Everyone is asleep. The Oshawott is asleep too, flat on its back the way it was on the Center floor. But this time it is not wailing. One paw rests on the scalchop, and every so often, in its sleep, it pats it.",
+   "choices": [
+    {
+     "label": "Pull the blanket up.",
+     "success": {
+      "text": "You tuck the blanket round it, careful of the paw. It does not wake. It pats the scalchop, and then, still asleep, pats your hand, as if checking that is still there too.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "oshawott",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq26-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it as it is.",
+     "success": {
+      "text": "You leave it be. Near dawn it rolls over without letting go, and ends up hugging the scalchop with both arms, snoring, very content. You do not wake it until you have to.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "oshawott",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq26-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq26-four-seconds",
+   "name": "Four Seconds",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq26-one-paw"
+    },
+    {
+     "kind": "partyLine",
+     "species": "oshawott",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "oshawott",
+    "tint": "#1c2a3c",
+    "effect": "none"
+   },
+   "intro": "At a rest stop the Oshawott walks up to {lead}, takes the scalchop off its belly, and holds it out. A loan. To look at. It is very solemn about it.",
+   "choices": [
+    {
+     "label": "Watch it count.",
+     "success": {
+      "text": "{lead} takes the scalchop, very carefully. The Oshawott counts out loud on its claws. One. Two. Three. Four. At four it takes it back, polishes it, and puts it away. It looks extremely proud of itself. That was four whole seconds.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "oshawott",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq26-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask to hold it too.",
+     "success": {
+      "text": "It looks at you for a long time. Then it holds it out to you as well. You get three seconds. It counts them out loud, fast. But you got them.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "oshawott",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq26-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq26-own-head",
+   "name": "On Its Own Head",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq26-four-seconds"
+    },
+    {
+     "kind": "partyLine",
+     "species": "oshawott",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "oshawott",
+    "tint": "#1c2a3c",
+    "effect": "rattle"
+   },
+   "intro": "A wail goes up from the edge of camp, the old wail, the Center wail. The Oshawott is turning in circles, patting its belly. The pale patch is bare. It has lost it again. Everyone stops what they are doing. The scalchop is on its own head. It has been on its own head the whole time.",
+   "choices": [
+    {
+     "label": "Point at its head.",
+     "success": {
+      "text": "You point. It stops. It reaches up. It finds the scalchop. It takes it down and looks at it as if it has never seen it before, and then at you, and then it laughs, a small embarrassed squeak, and hides its face behind it.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "oshawott",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq26-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help it look.",
+     "success": {
+      "text": "You search the whole camp with it, very seriously, under every bag. Your team joins in. Finally {lead} reaches up and lifts it off its head and hands it over. It stares. Then it hugs {lead}, and then you, scalchop and all.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "oshawott",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq26-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq26-both-scalchops",
+   "name": "Which Is Which",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq26-new-scalchop",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aq26-real-scalchop-found",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "oshawott",
+     "bond": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "oshawott",
+    "tint": "#1c2a3c",
+    "effect": "sparkle"
+   },
+   "intro": "The real scalchop. It was there among the other things, round and pale with its little ridge, and the Oshawott saw it before you did and went very quiet. Now it is holding two: the real one and the wrong one you carved for it. It looks from one to the other for a long time.",
+   "choices": [
+    {
+     "label": "Ask which is which.",
+     "success": {
+      "text": "It puts them both on, one over the other. It pats them. It will not say which is on top. When you ask again, it looks at you as if that is a very strange question, and pats them both again, and walks on.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "oshawott",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq26-wears-both",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Oshawott wears two scalchops, one over the other. It will not say which is which.",
+        "importance": 50
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq27-snivy-left",
+   "name": "The Snivy Who Left Its Trainer",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "snivy",
+    "tint": "#1a2a1a",
+    "effect": "none"
+   },
+   "intro": "A Snivy is lying along a branch above the path, chin on its hands, eyes half shut. It is alone. It left its trainer because he was useless, and it has not missed him once, or so its face says. It watched your last battle from up there, every move of it. It has formed a view. Now it opens its eyes a little wider and looks down at you, as if to ask whether you are useless too.",
+   "choices": [
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It drops from the branch and lands without a sound, one on one, and stronger than it looks. It opens with Attract and watches what you do about it. Then Leaf Storm, and it watches again. It is not judging the win. It is judging the calls.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Snivy",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "snivy"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "friendship": 10
+        },
+        {
+         "kind": "flag",
+         "key": "aq27-met",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq27-tested",
+         "amount": 1
+        }
+       ],
+       "lineup": [
+        "snivy"
+       ],
+       "spritePokemon": "snivy",
+       "friendly": true,
+       "foeMoves": [
+        "attract",
+        "leaf-storm"
+       ],
+       "lose": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "snivy"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq27-met",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq27-tested",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq27-test-lost",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it be.",
+     "success": {
+      "text": "You nod to it and walk on. Behind you, four branches back, a rustle. Then three branches back. Then two. When you turn round it is lying on a branch with its eyes shut, as if it has been there all day and has never heard of you. It is following you. It will deny it to the end of the road. At camp that night it is sitting on your pack.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "snivy"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq27-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq27-followed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about its trainer.",
+     "success": {
+      "text": "It does not look at you. It points with its tail, lazily, down the path. A boy is coming along it with a net and a great many scratches, peering into every bush, calling a name over and over until his voice cracks. He is still looking for it. The Snivy watches him pass right underneath, and shuts its eyes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq27-boy-seen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq27-after-asking"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq27-after-asking",
+   "name": "Out of Sight",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq27-boy-seen",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "snivy",
+    "tint": "#1a2a1a",
+    "effect": "none"
+   },
+   "intro": "The boy's voice fades round the bend. The Snivy opens its eyes once he is out of sight, and looks at the place where he was for a long time. Then it looks at you, and something in its face says the matter is closed. It is waiting to see what you will do about that.",
+   "choices": [
+    {
+     "label": "Let it come.",
+     "success": {
+      "text": "You hold out an arm. It ignores the arm, drops onto your shoulder instead, and settles there as if it chose the shoulder and not you. Down the path, very faintly, the boy is still calling. It does not turn its head.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "snivy"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq27-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it on its branch.",
+     "success": {
+      "text": "You leave it where it is. When you look back from the bend, it is still watching the way the boy went.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq27-above-everyone",
+   "name": "Above Everyone",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq27-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "snivy",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq27-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "snivy",
+    "tint": "#1a2a1a",
+    "effect": "none"
+   },
+   "intro": "Camp. Your Pokémon are in a heap round the fire. The Snivy is not. It is sitting apart, on a rock taller than anyone else's rock, arms folded, watching the heap with the expression of someone who has been invited to a party they consider beneath them.",
+   "choices": [
+    {
+     "label": "Leave it up there.",
+     "success": {
+      "text": "You leave it be. Much later, when the fire is low, you notice that the rock it chose is the one closest to you. You do not mention it. It would only move.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "snivy",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq27-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring it some food.",
+     "success": {
+      "text": "You take a bowl up to the rock. It looks at the bowl as if it is beneath it, too. When you come back for the bowl, it is empty and very clean, and the Snivy is looking the other way.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "snivy",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq27-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq27-an-understanding",
+   "name": "An Understanding",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq27-above-everyone"
+    },
+    {
+     "kind": "partyLine",
+     "species": "snivy",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "snivy",
+    "tint": "#1a2a1a",
+    "effect": "none"
+   },
+   "intro": "A road battle, and you make a bad call: the wrong switch, a turn too late, and {lead} takes a hit it did not need to take. The Snivy says nothing. It looks at {lead}. {lead} looks at the Snivy. Something passes between them that you are not part of.",
+   "choices": [
+    {
+     "label": "Say it was a bad call.",
+     "success": {
+      "text": "\"That was a bad call,\" you say, out loud, to both of them. The Snivy turns its head and looks at you properly for the first time all day. It nods, very slightly. A useless trainer never says that.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "snivy",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq27-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing and rub {lead}'s head. Later you catch the two of them sitting together, the Snivy talking in low sharp chirps, {lead} nodding. They have an understanding. You suspect it is about you, and that it is not all bad.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "snivy",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq27-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq27-one-branch-lower",
+   "name": "One Branch Lower",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq27-an-understanding"
+    },
+    {
+     "kind": "partyLine",
+     "species": "snivy",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "snivy",
+    "tint": "#1a2a1a",
+    "effect": "none"
+   },
+   "intro": "A road battle, and this time you make a good call: the right switch at the right moment, and the fight turns on it. The Snivy does not react at all. Later, at camp, it is sitting in its tree as usual. But it is sitting one branch lower than it was yesterday.",
+   "choices": [
+    {
+     "label": "Pretend not to notice.",
+     "success": {
+      "text": "You pretend not to notice. It pretends not to notice you pretending. In the morning it is still on the lower branch, and it gets down from it onto your shoulder without any fuss at all.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "snivy",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq27-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say goodnight to it.",
+     "success": {
+      "text": "\"Goodnight,\" you say, to the lower branch. There is a long pause. Then a small sharp chirp comes down out of the dark: goodnight, and also, you think, that was a good call.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "snivy",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq27-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq27-the-book",
+   "name": "The Boy With the Book",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq27-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq27-met",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "snivy",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "remembers": [
+    {
+     "id": "boy-seen",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq27-boy-seen",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know him. He is the boy who walked under its branch that first day, calling its name, while it shut its eyes."
+    },
+    {
+     "id": "tested",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq27-tested",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Snivy once tested you, one on one, to see what your calls were worth. It is looking at him now the same way."
+    },
+    {
+     "id": "followed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq27-followed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It followed you four branches back once, and denied it. It is not denying anything now. It is very still."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.bug_catcher"
+    ],
+    "pokemon": "patrat",
+    "tint": "#1a2a1a",
+    "effect": "none"
+   },
+   "intro": "The boy with the net. He has a Pokémon now, a Patrat, which is doing exactly what it likes. He is thinner. He has found you. \"That's mine,\" says Tomas Wooldridge. \"I've looked everywhere. I had no idea what I was doing. I know I didn't.\" He swallows. \"I've been reading. I've got a book.\" He has. It is stuffed with a great many bits of paper. The Snivy looks at him. Then it looks at the book.",
+   "choices": [
+    {
+     "label": "It chose to leave.",
+     "success": {
+      "text": "\"It chose to leave,\" you say. \"That was its call, and it was a good one.\" Tomas goes red. He does not argue. He holds the book tighter. The Snivy turns and looks at you, a long level look, because you spoke for it and not about it. Then it looks back at the boy. It is deciding.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "snivy",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq27-spoke-for-it",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq27-it-decides"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show me what you've learned.",
+     "success": {
+      "text": "He is still bad. He is bad in a new way: he is trying. He calls a switch a turn late, and then says, \"No. Wait. That was late,\" out loud, to himself, and writes it down. The Snivy is watching him. Not the battle. Him.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "patrat"
+       ],
+       "name": "Tomas Wooldridge",
+       "classId": "bug-catcher",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq27-shown",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq27-it-decides"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq27-shown",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq27-it-decides"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "It's up to it.",
+     "success": {
+      "text": "\"It's up to it,\" you say, and you step back, so there is nobody between the two of them. Tomas looks at the Snivy. The Snivy looks at Tomas. Neither of them says anything for a long time. It is deciding.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq27-left-to-it",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq27-it-decides"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq27-it-decides",
+   "name": "The Snivy Decides",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "stays",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "snivy",
+       "bond": 3
+      }
+     ],
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "goes",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "snivy",
+       "bond": 0
+      }
+     ],
+     "hide": [
+      0
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "snivy",
+    "tint": "#1a2a1a",
+    "effect": "none"
+   },
+   "intro": "The Snivy walks out into the space between you and the boy. It stops. It looks at you, and at Tomas, and at the book under his arm with all its bits of paper. Nobody tells it anything. This is its call.",
+   "choices": [
+    {
+     "label": "Let it choose.",
+     "requires": [
+      {
+       "kind": "partyLine",
+       "species": "snivy",
+       "bond": 3
+      }
+     ],
+     "success": {
+      "text": "It walks to the boy. It reaches up and puts one vine flat on the book, and pushes it back at him, firmly: keep reading. Then it turns round and walks back to you and climbs to your shoulder without looking back. Tomas laughs, wet and surprised, and opens the book to a new page, and writes something down.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "snivy",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq27-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Snivy that left its useless trainer looked at his book, told him to keep reading, and stayed with you.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it choose.",
+     "success": {
+      "text": "It looks at you for a moment. It is not sorry. It is a little sorry. It drops something into your hand: a Miracle Seed, warm from being held. Then it walks to Tomas and climbs onto his shoulder, and taps the book with one vine, as if to say: from the start, then. They go off down the path, already arguing.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "your Snivy (it goes back to Tomas)",
+         "species": [
+          "snivy",
+          "servine",
+          "serperior"
+         ]
+        }
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq27-went-back",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Snivy chose to go back to the boy with the book. It left you a Miracle Seed.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq27-badly",
+   "name": "Winning, Badly",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq27-went-back",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq27-went-back",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.bug_catcher"
+    ],
+    "pokemon": "snivy",
+    "tint": "#1a2a1a",
+    "effect": "confetti"
+   },
+   "intro": "A small crowd at the edge of a town, and a cheer going up. A boy is winning something, badly: a little local cup, mostly by accident. It is Tomas, with his book open under one arm. The Snivy is on his shoulder with its eyes shut, completely unbearable, as if it had done all of it.",
+   "choices": [
+    {
+     "label": "Cheer for them.",
+     "success": {
+      "text": "You cheer, loudly. Tomas sees you and waves the book. The Snivy opens one eye, finds you in the crowd, and shuts it again. But its tail flicks, once, which from a Snivy is a great deal.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq27-cheered",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You saw Tomas win a little cup, badly, with your old Snivy on his shoulder.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch from the back.",
+     "success": {
+      "text": "You watch from the back and do not let them see you. The Snivy sees you anyway; it always did. It does not open its eyes. It only lifts its chin a little higher, so you can see how well it is doing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq27-cheered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq28-tepig-waited",
+   "name": "The Tepig Who Waited",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "remembers": [
+    {
+     "id": "charmander",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq05-charmander-met",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "partyLine",
+       "species": "charmander",
+       "bond": 0
+      }
+     ],
+     "notice": "Your Charmander walks up to the post without being asked and sits down beside it, tail flame held carefully away from the rope. Two Fire-types, side by side. Both of them were once left somewhere to wait.",
+     "addChoices": [
+      {
+       "label": "Let them sit together.",
+       "success": {
+        "text": "You let them. The Charmander leans, very slightly, until its shoulder touches the Tepig's. The Tepig goes stiff. Then it leans back. You undo the rope and the muzzle while they sit there, and it does not seem to notice, and when you stand up to go, both of them stand up too.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "tepig"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 15
+         },
+         {
+          "kind": "friendshipLine",
+          "species": "charmander",
+          "amount": 5
+         },
+         {
+          "kind": "flag",
+          "key": "aq28-met",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq28-sat-with-charmander",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_f"
+    ],
+    "pokemon": "tepig",
+    "tint": "#2a1c14",
+    "effect": "none"
+   },
+   "intro": "A Tepig is tied to a post at the edge of town, a muzzle strapped over its snout. Its trainer said he would be back. It has been waiting a long time. You can count its ribs. A girl in a school jumper is crouched beside it, pushing berries one at a time through the gap in the muzzle. She does not look up. \"He's not coming back,\" Nell says. \"I keep telling it. It keeps watching the road.\" The Tepig keeps watching the road.",
+   "choices": [
+    {
+     "label": "Untie it.",
+     "success": {
+      "text": "You undo the knot. Nell helps with the muzzle buckle, which is stiff with rain. The Tepig shakes its head and snorts a tiny puff of smoke, its first in days. Then it sits back down exactly where it was, against the post, facing the road. It does not leave. The rope lies loose in the grass beside it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq28-untied",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq28-still-waiting"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait with it.",
+     "success": {
+      "text": "You sit down by the post. Nell shares her berries. Hours pass; the shadows swing all the way round. At dusk a trainer comes up the road in a sharp jacket, a Scrafty swaggering at his side. The Tepig stands up so fast the post rattles. He glances down. \"Still here? Go on. Shoo. I've got a real one now.\" He walks on. The Tepig watches him all the way out of sight. Then it lies down and puts its chin on your boot.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "tepig"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-waited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-saw-him",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find the trainer.",
+     "success": {
+      "text": "You find him at the battle club in town, showing his new Scrafty to anyone who will look. You tell him about the post. He laughs. He laughs for a long time. \"That thing? Thought it'd have wandered off by now.\" When you get back, Nell has untied it. The Tepig did not hear him laugh. But it looks at your face, and it knows, and when you walk away from the post it walks with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "tepig"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-he-laughed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-saw-him",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq28-still-waiting",
+   "name": "Still Waiting",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq28-untied",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_f"
+    ],
+    "pokemon": "tepig",
+    "tint": "#2a1c14",
+    "effect": "none"
+   },
+   "intro": "Free, the Tepig is exactly where it was when it was tied. It is not the rope that kept it at the post. Nell sits back on her heels. \"See?\" she says, very quietly. \"It's not the rope.\" The road is empty in both directions.",
+   "choices": [
+    {
+     "label": "Wait with it.",
+     "success": {
+      "text": "You sit down by the post. Nell shares her berries. Hours pass; the shadows swing all the way round. At dusk a trainer comes up the road in a sharp jacket, a Scrafty swaggering at his side. The Tepig stands up so fast the post rattles. He glances down. \"Still here? Go on. Shoo. I've got a real one now.\" He walks on. The Tepig watches him all the way out of sight. Then it lies down and puts its chin on your boot.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "tepig"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-waited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-saw-him",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find the trainer.",
+     "success": {
+      "text": "You find him at the battle club in town, showing his new Scrafty to anyone who will look. You tell him about the post. He laughs. He laughs for a long time. \"That thing? Thought it'd have wandered off by now.\" When you get back, Nell has untied it. The Tepig did not hear him laugh. But it looks at your face, and it knows, and when you walk away from the post it walks with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "tepig"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-he-laughed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-saw-him",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it with Nell.",
+     "success": {
+      "text": "\"I'll keep feeding it,\" Nell says. \"Somebody has to.\" When you look back from the bend, they are both sitting by the post, watching the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq28-too-fast",
+   "name": "Too Fast",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq28-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "tepig",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq28-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tepig",
+    "tint": "#2a1c14",
+    "effect": "none"
+   },
+   "intro": "Dinner at camp. The Tepig eats as if somebody is going to take the bowl away: head down, fast, one eye on the dark. It finishes before anyone else has started. Then it sits by the empty bowl and watches the others eat, very still, not asking.",
+   "choices": [
+    {
+     "label": "Sit with it while it eats.",
+     "success": {
+      "text": "Next meal you sit down beside it with your own bowl and eat slowly, very slowly, and do not look at it. Halfway through, it slows down too. Nobody takes anything. By the end it is the last to finish, and it seems surprised.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "tepig",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a second bowl.",
+     "success": {
+      "text": "You fill the bowl again without a word. It looks at the bowl, and at you, as if this were a trick it has not been taught. Then it eats the second one slowly, and falls asleep with its nose in it.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "tepig",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq28-another-post",
+   "name": "Another Post",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq28-too-fast"
+    },
+    {
+     "kind": "partyLine",
+     "species": "tepig",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tepig",
+    "tint": "#2a1c14",
+    "effect": "none"
+   },
+   "intro": "A town, and a hitching post outside a shop, just a post with a ring on it. The Tepig stops dead in front of it. It does not move. It is not looking at the post. It is looking at the road beyond it.",
+   "choices": [
+    {
+     "label": "Wait until it's ready.",
+     "success": {
+      "text": "You wait, beside it, as long as it takes. It takes a long time. Then it turns its back on the post, carefully, and presses its side against your leg, and the two of you go into the shop together.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "tepig",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on with it.",
+     "success": {
+      "text": "\"Come on,\" you say, and walk on. Three steps. Four. Behind you, a scrabble of hooves. It catches up, and walks so close to your heels that you nearly trip, and does not look back at the post again.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "tepig",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq28-sneeze",
+   "name": "A Sneeze",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq28-another-post"
+    },
+    {
+     "kind": "partyLine",
+     "species": "tepig",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tepig",
+    "tint": "#3a2414",
+    "effect": "fire"
+   },
+   "intro": "Morning, and the Tepig sneezes. A proper fireball comes out of its snout and sets light to the edge of your map. It stares at the flame. Nobody ever let it do that with the muzzle on. It sneezes again, on purpose this time, and its whole face lights up brighter than the fire.",
+   "choices": [
+    {
+     "label": "Laugh with it.",
+     "success": {
+      "text": "You stamp out the map and laugh, and it laughs too, a squealing snorting laugh, and sneezes again, and you have to stamp that out too. It spends the whole morning sneezing at things. It has never been so pleased with itself.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "tepig",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Toast something on it.",
+     "success": {
+      "text": "You hold out a stick with a berry on the end. It looks at the berry. It sneezes. The berry is toasted to perfection. It eats it, very proud, and then lines up every berry in your bag and toasts them one by one.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "tepig",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq28-in-front-of-him",
+   "name": "In Front of Him",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq28-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq28-met",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "tepig",
+     "bond": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "saw-him",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq28-saw-him",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It knows him. The last time it saw him he was telling it to go away. It is not watching the road now. It is watching him."
+    },
+    {
+     "id": "charmander",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq28-sat-with-charmander",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "partyLine",
+       "species": "charmander",
+       "bond": 0
+      }
+     ],
+     "notice": "Your Charmander steps up beside it, the way it sat beside it at the post. The Tepig shakes its head. This one is its own."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_m"
+    ],
+    "pokemon": "scrafty",
+    "tint": "#2a1c14",
+    "effect": "fire"
+   },
+   "intro": "Outside a battle club, a trainer in a sharp jacket is showing off his Scrafty to a ring of kids. Corwin Haskett. He sees the Tepig at your heel and grins. \"Is that my old one? The one that waited?\" He laughs. \"Tied it to a post and it just stayed there. Couldn't even run off right.\" The Tepig steps out in front of you. It is not shaking. Smoke curls out of its nose.",
+   "choices": [
+    {
+     "label": "Let it fight.",
+     "success": {
+      "text": "\"Go on, then,\" Corwin says, still grinning. \"Scrafty, teach it something.\" The Tepig plants its feet and does not wait for anyone to tell it anything.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "scrafty"
+       ],
+       "name": "Corwin Haskett",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "formChange",
+         "from": "tepig",
+         "to": "pignite"
+        },
+        {
+         "kind": "friendshipLine",
+         "species": "tepig",
+         "amount": 10
+        },
+        {
+         "kind": "flag",
+         "key": "aq28-turned",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq28-beat-him",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq28-walk-away"
+        }
+       ],
+       "friendly": true,
+       "rule": {
+        "leadType": "fire"
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq28-turned",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq28-walk-away"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You turn to go. The Tepig does not move at once. It looks at Corwin for a long moment, the way it used to look at the road. Then it turns its back on him, deliberately, and trots after you. Behind you the grin slides off his face. He does not know why. The Tepig does.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "tepig",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-turned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq28-walked-on",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq28-walk-away"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq28-walk-away",
+   "name": "Walking Away",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq28-turned",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "beat-him",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq28-beat-him",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The Scrafty is down. Corwin is staring, mouth open, at the Pokémon that knocked it out: bigger now, round and blazing, a Pignite with fire round its belly like a belt. The kids have gone silent. Then one of them starts clapping, and they all do. Your Pignite does not look at him. It looks at you."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tepig",
+    "tint": "#3a2414",
+    "effect": "sparkle"
+   },
+   "intro": "The battle club is behind you. Corwin is still standing outside it. The Tepig walks beside you, close, the way it walks now, and it does not look back once. It does not need to watch any road any more.",
+   "choices": [
+    {
+     "label": "Walk on together.",
+     "success": {
+      "text": "You walk on together. At the edge of town there is a post with a ring on it. It walks straight past.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq28-free",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Tepig that waited at a post stood in front of its old trainer, and then walked away with you.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq29-seamstress",
+   "name": "The Seamstress",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "leavanny",
+    "tint": "#1c2a14",
+    "effect": "none"
+   },
+   "intro": "A forest where every baby Pokémon is dressed. A Pidgey chick in a cap of folded leaf. Two Caterpie in matching waistcoats. In a clearing a Leavanny is sewing, all four arms busy, a tiny coat taking shape in its lap for a Pichu that sits beside it, shivering. It bites off the last thread and buttons the Pichu in. The Pichu stops shivering at once. Then the Leavanny looks up, finds your smallest Pokémon, and starts measuring it with a length of silk.",
+   "choices": [
+    {
+     "label": "Let it.",
+     "success": {
+      "text": "Your smallest Pokémon stands very still, chin up, while the Leavanny measures its neck twice and its chest once and hums. Four arms fly. A leaf scarf, stitched in silk so fine you cannot see it, is wound twice round its neck and tucked in. It fits perfectly. Your Pokémon will not stop looking at itself in every puddle on the way out of the forest.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "leaf-scarf",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-leavanny-scarf",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Leavanny in a forest of dressed babies sewed your smallest Pokémon a leaf scarf.",
+        "importance": 45
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help it sew.",
+     "success": {
+      "text": "You sit down in the clearing and hold the leaves while it cuts. It shows you a stitch, patiently, three times. By evening you have made three garments between you: a hat for an Oddish, mittens for a Sandshrew, a very small jacket for a Joltik. Your stitches are terrible. It keeps them in anyway. All afternoon a Sewaddle in a hood has been watching you from a leaf above, not blinking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-leavanny-helped",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq29-sewaddle-asks",
+        "nodes": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask it to come.",
+     "success": {
+      "text": "You ask it. It understands; it stops sewing. It looks at you for a long time. Then it looks at the Pichu in its new coat, and the Pidgey chick in its cap, and the two Caterpie, and all the others in the clearing who were cold before it came. It puts one arm on your hand, gently. It cannot leave them. It goes back to its sewing, and you can see it is sorry.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq29-asked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq29-sewaddle-asks",
+   "name": "A Sewaddle in a Hood",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq-leavanny-helped",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sewaddle",
+    "tint": "#1c2a14",
+    "effect": "none"
+   },
+   "intro": "Two stretches of road from the forest, something drops onto your pack from an overhanging branch. It is the Sewaddle in the hood, the one that watched you all afternoon. It has followed you the whole way. It has brought a scarf it sewed itself, crooked, from a leaf much too big for it, with stitches almost as terrible as yours. It holds the scarf out to you, and then it holds itself out too. It is asking to come.",
+   "choices": [
+    {
+     "label": "Take it with you.",
+     "success": {
+      "text": "You wind its crooked scarf round its neck and it beams. It climbs into the top of your pack, among your things, and immediately starts mending the lining. Somewhere behind you in the forest, you suspect, a Leavanny knew exactly where it was going, and let it.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "sewaddle"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "item",
+        "id": "leaf-scarf",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq29-met",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Sewaddle followed you out of the forest of dressed babies, in a hood and a crooked scarf, and asked to come.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it home.",
+     "success": {
+      "text": "You lift it down and point it back the way it came. It looks at you for a long moment, holding its scarf. Then it goes, slowly, wearing the scarf, so at least that came with you a little way.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq29-a-patch",
+   "name": "A Patch",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq29-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "sewaddle",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq29-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sewaddle",
+    "tint": "#1c2a14",
+    "effect": "none"
+   },
+   "intro": "Your bag has had a hole in the bottom corner since the first region. Things fall out of it. This morning things do not fall out of it. There is a patch over the hole: a leaf, sewn on with silk so neat you can barely see the stitches. The Sewaddle is pretending to be asleep.",
+   "choices": [
+    {
+     "label": "Thank it.",
+     "success": {
+      "text": "\"Thank you,\" you say, to the pretending. One eye opens. It looks very pleased, and very busy, and it closes the eye again so you will not see how pleased.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "sewaddle",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq29-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show it another tear.",
+     "success": {
+      "text": "You hold up your sleeve, where the cuff has frayed. It is awake instantly. By lunch the cuff is mended and so is the other cuff, and your collar, and a sock you did not know had a hole.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "sewaddle",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq29-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq29-measuring",
+   "name": "Measuring",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq29-a-patch"
+    },
+    {
+     "kind": "partyLine",
+     "species": "sewaddle",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sewaddle",
+    "tint": "#1c2a14",
+    "effect": "none"
+   },
+   "intro": "At night the Sewaddle goes round the camp with a thread of silk, measuring your Pokémon while they sleep. Neck, chest, the length of a tail. It writes nothing down. It remembers. When it gets to {lead}, {lead} wakes up and stares at it.",
+   "choices": [
+    {
+     "label": "Hold still for it.",
+     "success": {
+      "text": "You lie down beside {lead} and hold still, very obviously, to show how it is done. {lead} sighs and holds still too. The Sewaddle measures you both, very solemnly, and then curls up between you and goes to sleep with the thread still in its mouth.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "sewaddle",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq29-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them sort it out.",
+     "success": {
+      "text": "{lead} growls. The Sewaddle does not move. It holds up the thread, patient. After a long standoff, {lead} lies back down and lets itself be measured, grumbling. In the morning there is a leaf hat beside its head, in exactly its size.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "sewaddle",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq29-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq29-cold-night",
+   "name": "A Cold Night",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq29-measuring"
+    },
+    {
+     "kind": "partyLine",
+     "species": "sewaddle",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sewaddle",
+    "tint": "#141c24",
+    "effect": "snow"
+   },
+   "intro": "The coldest night of the run so far. Frost on the tent. Your Pokémon have packed themselves into one shivering heap. The Sewaddle is not in the heap. It is outside in the cold, by the last of the fire, sewing as fast as it can with leaves gone stiff with frost.",
+   "choices": [
+    {
+     "label": "Hold the leaves.",
+     "success": {
+      "text": "You go out and hold the leaves for it, the way you once held them for a Leavanny in a forest. It works all night. By dawn there is a blanket of leaves over the whole heap, and over you. It crawls under the edge of it last, and falls asleep with its head on your arm.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "sewaddle",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq29-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it work.",
+     "success": {
+      "text": "You leave it to it and watch from the tent door. It works all night without stopping. By dawn there is a blanket of leaves over the whole heap. It looks at the heap. It looks at you. It is, you realise, waiting to be told it is good. You tell it.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "sewaddle",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq29-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq29-a-coat",
+   "name": "A Coat for Someone Else",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq29-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq29-met",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "sewaddle",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "remembers": [
+    {
+     "id": "helped",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-leavanny-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It sews the way its parent sewed in the forest, the way it watched you try to, all those terrible stitches ago."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pichu",
+    "tint": "#141c24",
+    "effect": "snow"
+   },
+   "intro": "Snow by the road, and in the snow a Pichu, alone, too small for the weather and shaking so hard its ears rattle. Your Sewaddle is off your pack before you have stopped walking. It looks at the Pichu the way the Leavanny looked at the Pichu in the forest: measuring. Then it gathers every leaf it can reach and begins.",
+   "choices": [
+    {
+     "label": "Keep the fire going for it.",
+     "success": {
+      "text": "You build a fire beside the road and keep it going all night while it sews. Somewhere in the small hours its silk runs out, and it keeps going anyway, and begins to glow. In the morning the Pichu is buttoned into a coat that fits it perfectly, and the one who sewed it is a Leavanny, tall and green, four arms folded, very tired, and very proud.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "sewaddle",
+        "to": "leavanny"
+       },
+       {
+        "kind": "formChange",
+        "from": "swadloon",
+        "to": "leavanny"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "sewaddle",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq29-turned",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Sewaddle sewed a coat all night for a Pichu in the snow, and in the morning it was a Leavanny.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it work alone.",
+     "success": {
+      "text": "You step back and let it work. It does not look up once. Some time before dawn it begins to glow, and does not stop sewing. When the sun comes up, a Leavanny is buttoning a Pichu into a coat that fits it perfectly, and then, without a word, it starts measuring you.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "sewaddle",
+        "to": "leavanny"
+       },
+       {
+        "kind": "formChange",
+        "from": "swadloon",
+        "to": "leavanny"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "sewaddle",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq29-turned",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Sewaddle sewed a coat all night for a Pichu in the snow, and in the morning it was a Leavanny.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq30-sunglasses",
+   "name": "The Sunglasses",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [
+    "fire",
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sandile",
+    "tint": "#3a2a14",
+    "effect": "shake"
+   },
+   "intro": "The sand in front of you heaves, and a Sandile bursts out of it wearing sunglasses. It strikes a pose. It points at you, very slowly, with great style, and roars a challenge. Then it takes one step forward and falls into a hole. There is a long pause. The sunglasses stay on. It climbs out, dusts itself off, finds its pose again, and challenges you again, as if nothing happened.",
+   "choices": [
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "You accept. It is delighted. It is also terrible: it bites a rock, it trips on its own tail, it Sand-Attacks itself. It keeps going. It keeps going long after anything sensible would have stopped.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Sandile in Sunglasses",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq30-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq30-follows",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq30-again",
+         "nodes": 5
+        }
+       ],
+       "lineup": [
+        "sandile"
+       ],
+       "spritePokemon": "sandile",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq30-follows",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq30-again",
+         "nodes": 5
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Help it out of the hole.",
+     "success": {
+      "text": "You reach down and haul it out before it can pretend it meant to be in there. It goes very red under the scales. It straightens its sunglasses. It mutters something that sounds like thanks, and something else that sounds like it had that under control. When you walk on, it walks on too, a little way behind, posing at anything that looks at it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq30-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq30-follows",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq30-again",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Get it new sunglasses.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "You look closer. The old sunglasses are cracked right across one lens; no wonder it keeps finding holes. You buy a pair from a stall at the next oasis and hold them out. It looks at them for a long time. Then it takes off the old ones, carefully, folds them, and puts the new ones on. It looks at its reflection. It follows you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "flag",
+        "key": "aq30-new-glasses",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq30-follows",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq30-again",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq30-again",
+   "name": "It Follows",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq30-follows",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "new-glasses",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq30-new-glasses",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The new sunglasses gleam. It keeps tilting its head so they catch the sun at you.",
+     "hide": [
+      2
+     ]
+    },
+    {
+     "id": "helped",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq30-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Before it poses, it checks the ground very carefully, with one foot. Then it poses, and falls in anyway."
+    },
+    {
+     "id": "beaten",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq30-beaten",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It has clearly been practising since you beat it. It still looks terrible. It looks terrible with more confidence."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sandile",
+    "tint": "#3a2a14",
+    "effect": "shake"
+   },
+   "intro": "Halfway across the desert, the sand in front of you heaves again. The Sandile bursts out, sunglasses on, and strikes its pose, the same one, a little more practised. It has followed you all this way to do it. It points at you. It roars a challenge. Then it falls into a hole.",
+   "choices": [
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It climbs out of the hole and attacks at once, before you are ready, which is the best idea it has had so far. It is still terrible. It still keeps going.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Sandile in Sunglasses",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq30-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq30-second",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq30-last-stand",
+         "nodes": 5
+        }
+       ],
+       "lineup": [
+        "sandile"
+       ],
+       "spritePokemon": "sandile",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq30-second",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq30-last-stand",
+         "nodes": 5
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Help it out of the hole.",
+     "success": {
+      "text": "You haul it out again. This time it does not pretend. It hangs from your hands for a moment, looking up at you through the sunglasses, and then it pats your arm, twice, as if thanking a colleague. It follows you on, close enough now to step in your footprints.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq30-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq30-second",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq30-last-stand",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Get it new sunglasses.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "The old lens is cracked right across; you have been meaning to say. You buy a pair at the next oasis. It takes off the old ones, folds them, and puts the new ones on, and stands a little taller. It follows you on, close enough now to step in your footprints.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "flag",
+        "key": "aq30-new-glasses",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq30-second",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq30-last-stand",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq30-last-stand",
+   "name": "The Best Pose",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq30-second",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "twice",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq30-beaten",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have beaten it twice now. It does not care. It has never looked happier."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sandile",
+    "tint": "#3a2a14",
+    "effect": "shake"
+   },
+   "intro": "The edge of the desert. The Sandile is waiting for you on top of a dune, in the best pose yet: one claw up, chin out, sunglasses flashing. It must have been standing like that for hours. It roars its challenge, very carefully, without moving its feet. There are no holes on this dune. It checked.",
+   "choices": [
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It comes down the dune at a run. It is still terrible, but it is terrible on purpose now, and with real style.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Sandile in Sunglasses",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq30-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq30-done",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq30-fourth"
+        }
+       ],
+       "lineup": [
+        "sandile"
+       ],
+       "spritePokemon": "sandile",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq30-done",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq30-fourth"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Help it out of the hole.",
+     "success": {
+      "text": "It steps forward off the top of the dune and slides all the way down the far side on its face into a hollow. You climb down and help it out. Its sunglasses are still on. It is laughing, a deep croaking laugh, and so are you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq30-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq30-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq30-fourth"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq30-fourth",
+   "name": "Properly",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq30-done",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "three",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq30-beaten",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "Three times you have beaten it. It sits down in the sand and thinks about that, sunglasses pushed up on its head. Then it starts to glow. The thing that stands up is a Krokorok, longer and leaner, with a jaw full of real teeth. It puts the sunglasses back on. It does not pose. It does not roar. It only nods to you, once, and waits: a fourth challenge, and this time properly.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Battle it.",
+       "success": {
+        "text": "It does not trip. It does not bite any rocks. It fights properly, hard and clever, and it is good.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "name": "The Krokorok in Sunglasses",
+         "size": 1,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "krokorok"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "friendship": 20
+          },
+          {
+           "kind": "flag",
+           "key": "aq30-joined",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "aq30-krokorok",
+           "amount": 1
+          },
+          {
+           "kind": "moment",
+           "text": "The Sandile in sunglasses lost to you three times, became a Krokorok on the spot, and challenged you a fourth time, properly. Then it came with you.",
+           "importance": 65
+          }
+         ],
+         "lineup": [
+          "krokorok"
+         ],
+         "spritePokemon": "krokorok",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "krokorok"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "friendship": 20
+          },
+          {
+           "kind": "flag",
+           "key": "aq30-joined",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "aq30-krokorok",
+           "amount": 1
+          },
+          {
+           "kind": "moment",
+           "text": "The Sandile in sunglasses lost to you three times, became a Krokorok on the spot, and challenged you a fourth time, properly. Then it came with you.",
+           "importance": 65
+          }
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "new-glasses",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq30-new-glasses",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The sunglasses you bought it are scratched now, from all the holes. It keeps them very clean anyway."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sandile",
+    "tint": "#3a2a14",
+    "effect": "sparkle"
+   },
+   "intro": "It sits down in the sand beside you, sunglasses pushed up on its head, and looks at you without them for the first time. It has followed you right across the desert. It has fallen into every hole in it. It is not going to challenge you again. It would like to come.",
+   "choices": [
+    {
+     "label": "Let it come.",
+     "success": {
+      "text": "You hold out your arm. It puts the sunglasses back on, climbs your arm to your shoulder, and poses there, for the rest of the road, at anyone who looks.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "sandile"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq30-joined",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Sandile in sunglasses challenged you across a whole desert, fell in every hole, and came with you anyway.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it its desert.",
+     "success": {
+      "text": "You shake its claw. It nods, puts the sunglasses back on, and strikes one last pose on the dune as you go. When you look back, it has fallen into a hole. The sunglasses are still on.",
+      "effects": []
+     }
+    }
+   ]
   }
  ]
 }
