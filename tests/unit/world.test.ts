@@ -305,7 +305,11 @@ describe('landmarks and dungeons', () => {
           // too), and the Game Corner opens its games, which are also drawn on their own (SF91).
           // An event that opens itself again ("Read it again.", "What's on?") re-shows the same stop; that is not a room.
           if (ef.kind === 'addEvent' && (ef.eventId === e.id || e.id === 'game-corner') && !content.events.get(ef.eventId)?.room) continue;
-          if (ef.kind === 'addEvent' && ef.eventId !== e.id) opened.add(ef.eventId);
+          // Volume III: `{region}` is filled in play (one Offer per region): every region's room counts as opened.
+          if (ef.kind === 'addEvent' && ef.eventId.includes('{region}')) {
+            const [head, tail] = ef.eventId.split('{region}') as [string, string];
+            for (const id of content.events.keys()) if (id.startsWith(head) && id.endsWith(tail)) opened.add(id);
+          } else if (ef.kind === 'addEvent' && ef.eventId !== e.id) opened.add(ef.eventId);
           if (ef.kind === 'laterEvent') queued.add(ef.eventId);
           // Catalog Overhaul markets: a prize row that needs its own scene opens it (core/market.ts prize).
           if (ef.kind === 'market') for (const row of ef.table ?? []) if (row.event) opened.add(row.event);

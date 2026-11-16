@@ -437,7 +437,20 @@
    "inside": {
     "op": "radio-tower",
     "half": false
-   }
+   },
+   "routes": [
+    {
+     "region": "kanto",
+     "ranks": [
+      "Recruit",
+      "Grunt",
+      "Field Agent",
+      "Section Chief",
+      "Executive",
+      "The Boss's Right Hand"
+     ]
+    }
+   ]
   },
   {
    "id": "aqua",
@@ -609,7 +622,8 @@
    "inside": {
     "op": "submarine-theft",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "magma",
@@ -774,7 +788,8 @@
    "inside": {
     "op": "magma-survey",
     "half": true
-   }
+   },
+   "routes": []
   },
   {
    "id": "galactic",
@@ -942,7 +957,8 @@
    "inside": {
     "op": "spirit-lab",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "plasma",
@@ -1106,7 +1122,8 @@
    "inside": {
     "op": "frigate-build",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "flare",
@@ -1280,7 +1297,8 @@
    "inside": {
     "op": "stone-mining",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "skull",
@@ -1438,7 +1456,8 @@
    "inside": {
     "op": "trial-crash",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "aether",
@@ -1603,7 +1622,8 @@
    "inside": {
     "op": "preservation-lab",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "yell",
@@ -1765,7 +1785,8 @@
    "inside": {
     "op": "route-chant",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "star",
@@ -1924,7 +1945,8 @@
    "inside": {
     "op": "base-blockade",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "marauders",
@@ -2096,7 +2118,8 @@
    "inside": {
     "op": "engine-works",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "choir",
@@ -2275,7 +2298,8 @@
    "inside": {
     "op": "tolling-bells",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "ironvein",
@@ -2446,7 +2470,8 @@
    "inside": {
     "op": "power-buyout",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "cartographers",
@@ -2603,7 +2628,8 @@
    "inside": {
     "op": "map-theft",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "wildfire",
@@ -2773,7 +2799,8 @@
    "inside": {
     "op": "pylon-strike",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "gilt",
@@ -2933,7 +2960,8 @@
    "inside": {
     "op": "betting-ring",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "cipher",

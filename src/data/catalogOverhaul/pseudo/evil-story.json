@@ -649,6 +649,192 @@
    "themeId": "ghost-dark",
    "tint": "#1a2230",
    "mood": "quiet, crates breathing in the dark"
+  },
+  {
+   "id": "ps_rk_tower",
+   "name": "Pokémon Tower, at Night",
+   "entry": "rk-act3",
+   "themeId": "ghost-dark",
+   "tint": "#22142e",
+   "mood": "cold, and quiet on a Thursday",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "rk-tower-graves"
+    ],
+    [
+     "rk-tower-stair"
+    ],
+    [
+     "rk-tower-third"
+    ],
+    [
+     "rk-tower-down"
+    ]
+   ]
+  },
+  {
+   "id": "ps_rk_plan",
+   "name": "Silph Co.: Under New Management",
+   "entry": "rk-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e2230",
+   "mood": "sealed, humming, raining on the roof",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "rk-plan-hold"
+    ],
+    [
+     "rk-plan-gate"
+    ],
+    [
+     "rk-plan-rival"
+    ],
+    [
+     "rk-plan-defender"
+    ],
+    [
+     "rk-plan-roof"
+    ],
+    [
+     "rk-plan-verdict"
+    ]
+   ]
+  },
+  {
+   "id": "ps_rk_turn",
+   "name": "Silph Co.: The Long Ledger, From the Top",
+   "entry": "rk-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e2230",
+   "mood": "floor by floor, downward",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "rk-turn-11"
+    ],
+    [
+     "rk-turn-10"
+    ],
+    [
+     "rk-turn-9"
+    ],
+    [
+     "rk-turn-7"
+    ],
+    [
+     "rk-turn-6"
+    ],
+    [
+     "rk-turn-b"
+    ],
+    [
+     "rk-turn-roof"
+    ],
+    [
+     "rk-turn-door"
+    ]
+   ]
+  },
+  {
+   "id": "ps_rk_police",
+   "name": "Silph Co.: Safekeeping",
+   "entry": "rk-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e2230",
+   "mood": "forty officers on the stairs",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "rk-police-cordon"
+    ],
+    [
+     "rk-police-arrests"
+    ],
+    [
+     "rk-police-roof"
+    ],
+    [
+     "rk-police-door"
+    ]
+   ]
+  },
+  {
+   "id": "ps_rk_own",
+   "name": "Silph Co.: The Fourth Rule",
+   "entry": "rk-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e2230",
+   "mood": "an office that is yours now",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "rk-own-duel"
+    ],
+    [
+     "rk-own-matori"
+    ],
+    [
+     "rk-own-callers"
+    ],
+    [
+     "rk-own-list"
+    ],
+    [
+     "rk-own-rigs"
+    ],
+    [
+     "rk-own-roof"
+    ],
+    [
+     "rk-own-rule"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ledger_freighter",
+   "name": "The Vermilion Freighter",
+   "entry": "ledger-audit-2",
+   "themeId": "ghost-dark",
+   "tint": "#1a2230",
+   "mood": "a clipboard on a wet deck",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "ledger-freighter-deck"
+    ],
+    [
+     "ledger-freighter-hold"
+    ],
+    [
+     "ledger-freighter-crane"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ledger_readout",
+   "name": "Silph Co.: The Read-Out",
+   "entry": "ledger-readout",
+   "themeId": "ghost-dark",
+   "tint": "#1e2230",
+   "mood": "six people and a tea towel",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "ledger-readout-floors"
+    ],
+    [
+     "ledger-readout-top"
+    ]
+   ]
   }
  ]
 }

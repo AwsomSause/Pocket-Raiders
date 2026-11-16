@@ -26,6 +26,7 @@ import { evilConfig, HIDEOUT_AT_LEAGUE } from '../campaign/circuit';
 import { recordChoice } from './choices';
 import { beatTeamLeaders } from '../expansion/cast/dossier';
 import { trackOnClimax, trackOnOperation } from '../expansion/trackRun';
+import { applyInside, clearInside, insideLine, insideMet, insideOn, replacedByInside } from './inside';
 import { freshEvil, type EvilRank, type EvilState, type EvilTeam, type VillainRecord } from './schema';
 
 type EvilCondition = Extract<EventCondition, { kind: 'evil' }>;
@@ -131,6 +132,7 @@ function closeRegionStory(content: Content, run: RunState, s: EvilState): void {
   const team = evilTeam(content, run);
   if (team) for (const op of s.ops) if (op.outcome === 'running') resolveOp(content, run, team, op, 'succeeded');
   if (s.teamId) s.past = [...s.past, { teamId: s.teamId, region: Math.max(0, s.region), end: s.end }];
+  if (s.teamId) clearInside(run, s.teamId);
   Object.assign(s, { teamId: null, beat: 0, nextAt: 0, heat: 0, ops: [], villains: {}, defector: false, end: 'none', region: -1, planFirst: null });
 }
 
@@ -174,6 +176,8 @@ export function evilConditionMet(content: Content, run: RunState, c: EvilConditi
   if (c.heatBelow !== undefined && Object.keys(c).length === 2) return true; // {kind, heatBelow} alone
   if (!s?.teamId) return false;
   if (c.team !== undefined && s.teamId !== c.team) return false;
+  // Volume III: on the inside route the outside story steps aside (core/evil/inside.ts).
+  if (replacedByInside(run, s.teamId, c) || !insideMet(run, s.teamId, c)) return false;
   if (c.beat !== undefined && (s.beat !== c.beat || s.stages < s.nextAt || s.end !== 'none')) return false;
   if (c.after !== undefined && s.beat < c.after) return false;
   if (c.op !== undefined && !s.ops.some((o) => o.id === c.op && o.region === run.regionIndex && o.outcome === 'running')) return false;
@@ -195,6 +199,8 @@ export function evilConditionMet(content: Content, run: RunState, c: EvilConditi
 }
 
 export function evilConditionText(c: EvilCondition): string {
+  if (c.rank) return `Needs Rank ${c.rank} inside the team`;
+  if (c.inside) return 'Only on the inside route';
   if (c.defector) return 'Needs someone on the inside';
   if (c.stopped) return `Needs ${c.stopped} of their operation${c.stopped === 1 ? '' : 's'} stopped`;
   if (c.heatBelow) return 'Only while the team is not hunting you';
@@ -222,7 +228,8 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
     // E2: the real plan comes out (beat 6): the climax is now scheduled, so the region's track rises once.
     if (s.beat === 6) { trackOnClimax(run, run.regionIndex); beginClimax(run, run.regionOrder[run.regionIndex]); }
     // SF13 A7: The Plan shows all four Operations: from here each is a stop on the map until it is stopped or happens.
-    if (s.beat === 6 && s.region >= 0) {
+    // On the inside route the player is running the Operations, not stopping them: the Plan's four stay off the map.
+    if (s.beat === 6 && s.region >= 0 && !insideOn(run, team.id)) {
       for (const def of team.ops) if (!s.ops.some((o) => o.id === def.id && o.region === run.regionIndex)) s.ops.push({ id: def.id, region: run.regionIndex, outcome: 'running' });
       // Part C: a colleague who defected stops their Operation from inside (Magma's Dr. Tuff only halves its effect, when it happens).
       const inside = team.inside && marked(run, team.id, 'defector-colleague') ? s.ops.find((o) => o.id === team.inside!.op && o.region === run.regionIndex && o.outcome === 'running') : undefined;
@@ -263,6 +270,7 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
     });
   }
   if (e.mark) bump(run, `team-${team.id}-${e.mark}`);
+  if (e.standing || e.suspicion || e.rank) words.push(...applyInside(run, team, run.regionOrder[run.regionIndex], e));
   if (e.pen) {
     const node = rescueNode(content, run);
     let back = 0;
@@ -426,6 +434,8 @@ export function evilSummary(content: Content, run: RunState): { title: string; l
   }
   const standing = standingLine(run);
   if (standing) lines.push(standing);
+  const inside = insideLine(run, team, run.regionOrder[run.regionIndex]);
+  if (inside) lines.push(inside);
   for (const rank of ['executive', 'leader'] as const) {
     const rec = s.villains[rank];
     if (rec && rec.met > 0) lines.push(`${team.ranks[rank].name}: met ${rec.met}, you won ${rec.won}.`);

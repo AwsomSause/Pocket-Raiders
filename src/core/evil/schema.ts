@@ -78,6 +78,8 @@ export const EvilTeamSchema = z.object({
   home: z.array(z.string()).default([]),
   /** SF13 Part C: the Operation the colleague stops from inside when they defect (`half`: its lasting effect is only halved). */
   inside: z.object({ op: z.string(), half: z.boolean().default(false) }).optional(),
+  /** Volume III: the inside route's six rank titles, per region (Rocket has one set in Kanto and another in Johto). */
+  routes: z.array(z.object({ region: z.string(), ranks: z.array(z.string().min(1)).length(6) })).default([]),
   /** Story Overhaul Part IV: one of the six original teams. Only Story Runs draw it, and Story Runs draw only these (Classic rolls never move). */
   storyOnly: z.boolean().default(false),
   /** Beta 0.6 Grand Arc: a roaming team (Cipher, Rocket Remnants, Team Snag'em). It is never drawn as a run's team; events field it with `evilTeam` on a trainer battle. */

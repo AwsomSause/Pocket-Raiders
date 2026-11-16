@@ -103,6 +103,13 @@ const LASTING: Record<string, Json> = {
   'laurel-donations': L('Young Roster trainers owe the Circle, and one of them throws a match against you.', [], ['roster-throws']),
 };
 
+// Volume III: the inside route's six rank titles, per region (core/evil/inside.ts).
+const ROUTES: Record<string, { region: string; ranks: string[] }[]> = {
+  rocket: [
+    { region: 'kanto', ranks: ['Recruit', 'Grunt', 'Field Agent', 'Section Chief', 'Executive', `The Boss's Right Hand`] },
+  ],
+};
+
 const COUNTERS: Record<string, string> = {
   normal: 'machamp', fire: 'swampert', water: 'jolteon', electric: 'golem', grass: 'arcanine', ice: 'magmortar', fighting: 'alakazam', poison: 'hippowdon', ground: 'gyarados',
   flying: 'electivire', psychic: 'houndoom', bug: 'talonflame', rock: 'poliwrath', ghost: 'mightyena', dragon: 'mamoswine', dark: 'lucario', steel: 'infernape', fairy: 'scizor',
@@ -116,6 +123,7 @@ for (const story of TEAMS) {
   const op = story.ops[story.col.freeOp - 1];
   if (!op) throw new Error(`${story.id}: colleague's Operation ${story.col.freeOp} missing`);
   team.inside = { op: op.id, half: story.col.half === true };
+  team.routes = ROUTES[story.id] ?? [];
   for (const def of team.ops) {
     // The doc's own name for the Operation (Part D), so the map, the journal and the scene agree.
     const named = story.ops.find((o) => o.id === def.id);
@@ -161,5 +169,16 @@ const chains = TEAMS.map((t) => {
 const pseudoFile = join(import.meta.dirname, '../../../src/data/catalogOverhaul/pseudo/evil-story.json');
 // SF130 The Holding Camp (Team Plasma's pool): the gate opens the Yard, the Yard opens the Handler (drawn from the events' own links).
 chains.push({ id: 'ps_plasma_camp', name: 'The Plasma Holding Camp', entry: 'plasma-substage-gate', themeId: 'ghost-dark', tint: '#1a2230', mood: 'quiet, crates breathing in the dark' } as never);
+// Volume III, Kanto: Act 3's door of four rooms, the four endings (each opened by its own Final Choice answer) and Team
+// Ledger's freighter and Read-Out. The player stands on the room the choice opened.
+const inside = (id: string, name: string, entry: string, layout: string[][], mood: string, tint = '#1e2230'): void =>
+  void chains.push({ id, name, entry, themeId: 'ghost-dark', tint, mood, team: 'rocket', start: 'opened', layout } as never);
+inside('ps_rk_tower', 'Pokémon Tower, at Night', 'rk-act3', [['rk-tower-graves'], ['rk-tower-stair'], ['rk-tower-third'], ['rk-tower-down']], 'cold, and quiet on a Thursday', '#22142e');
+inside('ps_rk_plan', 'Silph Co.: Under New Management', 'rk-final-choice', [['rk-plan-hold'], ['rk-plan-gate'], ['rk-plan-rival'], ['rk-plan-defender'], ['rk-plan-roof'], ['rk-plan-verdict']], 'sealed, humming, raining on the roof');
+inside('ps_rk_turn', 'Silph Co.: The Long Ledger, From the Top', 'rk-final-choice', [['rk-turn-11'], ['rk-turn-10'], ['rk-turn-9'], ['rk-turn-7'], ['rk-turn-6'], ['rk-turn-b'], ['rk-turn-roof'], ['rk-turn-door']], 'floor by floor, downward');
+inside('ps_rk_police', 'Silph Co.: Safekeeping', 'rk-final-choice', [['rk-police-cordon'], ['rk-police-arrests'], ['rk-police-roof'], ['rk-police-door']], 'forty officers on the stairs');
+inside('ps_rk_own', 'Silph Co.: The Fourth Rule', 'rk-final-choice', [['rk-own-duel'], ['rk-own-matori'], ['rk-own-callers'], ['rk-own-list'], ['rk-own-rigs'], ['rk-own-roof'], ['rk-own-rule']], 'an office that is yours now');
+inside('ps_ledger_freighter', 'The Vermilion Freighter', 'ledger-audit-2', [['ledger-freighter-deck'], ['ledger-freighter-hold'], ['ledger-freighter-crane']], 'a clipboard on a wet deck', '#1a2230');
+inside('ps_ledger_readout', 'Silph Co.: The Read-Out', 'ledger-readout', [['ledger-readout-floors'], ['ledger-readout-top']], 'six people and a tea towel');
 writeFileSync(pseudoFile, JSON.stringify({ category: 'evil-story', note: 'Evil Team Hideouts (STORY_FAMILIES_13 A8, STORY_FAMILIES_18 SF131 to SF133) and the Plasma Holding Camp (SF130). Written by tools/events/co/_evil-story-sync.ts.', chains }, null, 1) + '\n');
 console.log(`pseudo/evil-story.json: ${chains.length} Hideouts`);

@@ -1,0 +1,3108 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "evil-rocket-offer-kanto",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#b01030",
+    "effect": "glint"
+   },
+   "intro": "A black car pulls up beside you. The back window comes down the width of a hand. Domino: \"You broke a dig, a card game and four noses. The Boss read the report twice. He doesn't read anything twice.\" Domino: \"He's a businessman. You're an expense. He'd rather you were an asset. The pay's real. The uniform's optional, at your level. Yes or no. I've a manicure.\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "The window goes up. The door opens. Domino: \"Celadon. The Game Corner. Tell the lift you're new; it'll know.\" You're Team Rocket now, on the inside, and nobody outside knows it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Domino: \"Pity.\" The window goes up, and the car slides away into the traffic. Team Rocket's story goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What would I be doing?\"",
+     "success": {
+      "text": "Domino: \"Whatever makes money. You'd be surprised how little of it's dramatic.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "evil-rocket-offer-kanto-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes to Domino. That night, from a phone box, you say it again to a tired man in a brown coat who calls himself Looker. \"So. You will be my eyes inside. Be careful. They count everything, these people.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "early",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rocket-offered",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Domino: \"Oh. You took the bag at Induction Day. Jardine told me. Carry on, then.\"",
+     "hide": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "addChoices": [
+      {
+       "label": "Nod to Domino.",
+       "success": {
+        "text": "The window goes up, and the car slides away.",
+        "effects": []
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "evil-rocket-offer-kanto-2",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#b01030",
+    "effect": "glint"
+   },
+   "intro": "Domino: \"Well? Yes or no.\" She looks at her nails.",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "The window goes up. The door opens. Domino: \"Celadon. The Game Corner. Tell the lift you're new; it'll know.\" You're Team Rocket now, on the inside, and nobody outside knows it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Domino: \"Pity.\" The window goes up, and the car slides away into the traffic. Team Rocket's story goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes to Domino. That night, from a phone box, you say it again to a tired man in a brown coat who calls himself Looker. \"So. You will be my eyes inside. Be careful. They count everything, these people.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-act1",
+   "name": "The Top Bunk",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "beat": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "none"
+   },
+   "intro": "A lift with no buttons. It goes down for longer than the building's tall. Doors; a corridor painted the green of a hospital; a woman with a tablet, who doesn't look up. Matori: \"Agent 000. Provisional. You'll be \"House Card\" on the radio. Sit.\" One chair. One question. Matori: \"What are you running from?\" Whatever you say, she writes it down.",
+   "choices": [
+    {
+     "label": "\"Nothing.\"",
+     "success": {
+      "text": "She writes: \"Says nothing. Means: doesn't know yet.\" Matori: \"Bunk nineteen. Lower. Don't take the top. Uniform's on the bed. It won't fit; they don't. Friday's pay. Questions go to your squad leader. You don't have one yet. So: no questions.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-matori-nothing",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "matori-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act1-bunk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm not. I'm looking.\"",
+     "success": {
+      "text": "She writes: \"Looking. For what, not stated.\" Matori: \"Bunk nineteen. Lower. Don't take the top. Uniform's on the bed. It won't fit; they don't. Friday's pay. No questions.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-matori-looking",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "matori-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act1-bunk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Somebody I couldn't beat.\"",
+     "success": {
+      "text": "She writes: \"A rival. Good. They work harder.\" Somewhere a black envelope is addressed to your rival. Matori: \"Bunk nineteen. Lower. Don't take the top. Friday's pay. No questions.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-matori-rival",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "matori-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act1-bunk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Say nothing.)",
+     "success": {
+      "text": "She waits. You wait longer. She writes: \"Declined. Noted as: careful.\" Matori: \"Bunk nineteen. Lower. Don't take the top. Friday's pay. No questions.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-matori-careful",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "careful"
+       },
+       {
+        "kind": "flag",
+        "key": "matori-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act1-bunk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-act1-bunk",
+   "name": "The Dormitory",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "none"
+   },
+   "intro": "Forty beds. The boiler. A smell of floor polish and instant noodles. A Grunt of about nineteen is folding a uniform into a perfect square. Otis Blackthorn: \"You're the new one. Don't take the top bunk; it's Remy's, and Remy's not coming back, and nobody says so.\" The top bunk's made. A paperback, face down, a third of the way through. Boots under it, side by side. Otis: \"I joined for the dental. I'm not joking. Look.\" His teeth are excellent. Otis: \"Six months ago I couldn't chew. Rocket's got a dentist. What's the League got? A hat. They don't tell you what the crates are. You load the crates. Nobody here's ever done a whole bad thing. Just a twelfth.\"",
+   "choices": [
+    {
+     "label": "\"What's in the crates?\"",
+     "success": {
+      "text": "Otis: \"Stock. That's the word. Don't say another word; say \"stock.\"\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act1-crate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Where did Remy go?\"",
+     "success": {
+      "text": "He stops folding. Otis: \"He asked what was in a crate. Out loud. In the lift. With Butch in it.\" He starts again. Otis: \"His book's about a detective. I've read the back. I've not turned it over. Feels like it'd be turning him over.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act1-crate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Which twelfth is ours?\"",
+     "success": {
+      "text": "Otis: \"Thursdays, we carry. Lift to lorry. That's all. We carry.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act1-crate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who else is down here?\"",
+     "success": {
+      "text": "He points, bed by bed. A girl by the door, writing a letter she won't post. A man of fifty, asleep in his boots. A boy facing the wall. Otis: \"Don't ask him. Matori knows. That's enough people knowing.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act1-crate"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-act1-crate",
+   "name": "Thursday",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "none"
+   },
+   "intro": "Thursday. A trolley, six crates, the lift, the loading bay, a lorry with its engine running, and Sergeant Jardine with a clipboard. Sergeant Jardine: \"Six on the sheet, six on the truck. That's the whole job, and I love it. Don't make it seven. Don't make it five.\" The fourth crate's warm. It shifts its weight when it's lifted, the way a sleeper does. There's a slot in the side, a hand wide.",
+   "choices": [
+    {
+     "label": "Look.",
+     "success": {
+      "text": "A Sandshrew. A grey collar on it with a light. Its eyes are shut tight, not in sleep. It's breathing as if it's been told to. A guard has seen your face at the slot. Otis has seen it too. He says nothing. He looked too, once.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-crate-seen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act1-night"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Don't look.",
+     "success": {
+      "text": "The crate's loaded. Six on the sheet. Jardine ticks it, and whistles.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-fitting"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Otis. This one's alive.\"",
+     "success": {
+      "text": "Otis: \"I know. Fourth one always is. I've carried forty fourth-ones.\" He doesn't look at it. Quieter: Otis: \"I looked, my second week. Don't. You can't un-look.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-fitting"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-act1-night",
+   "name": "Lights Out",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#141a24",
+    "effect": "none"
+   },
+   "intro": "That night, in the bunk room, in the dark. Otis: \"What was it?\"",
+   "choices": [
+    {
+     "label": "\"A Sandshrew.\"",
+     "success": {
+      "text": "A long quiet. Otis: \"...Mine was a Vulpix. Second week. It'd been somebody's. It had a ribbon.\" He turns over. \"Night.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-otis-vulpix",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-fitting"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stock.\"",
+     "success": {
+      "text": "\"Right,\" he says, after a while. \"Stock.\" He doesn't sound as if he believes either of you.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-fitting"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You know what it was.\"",
+     "success": {
+      "text": "He doesn't answer. Much later, when you think he's asleep: \"Yeah. I know.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-fitting"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-fitting",
+   "name": "The Fitting",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "sparkle"
+   },
+   "intro": "The quartermaster has pins in his mouth. He's Mr. Tavish Gladwell, the same who does the Boss's suits. Mr. Gladwell: \"Arms up. They never fit. It's policy. A Grunt in a uniform that fits starts thinking he's somebody. I'll tell you a secret: I take them in, when they've been here a year. A half-inch. They don't notice. They just stand straighter. That's all a year's worth.\" Cap or no cap; gloves; where the R goes. And one thing that isn't regulation.",
+   "choices": [
+    {
+     "label": "A pin of your own.",
+     "success": {
+      "text": "Mr. Gladwell: \"That's not regulation.\" He sews it on. Mr. Gladwell: \"I'll put it down as \"damaged in the field.\"\" By the sixth week, three others in the bunk room have something that isn't regulation.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-fitting-pin",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "A scarf.",
+     "success": {
+      "text": "Mr. Gladwell: \"That's not regulation.\" He tucks it in himself. Mr. Gladwell: \"\"Damaged in the field.\"\" By the sixth week, three others in the bunk room have something that isn't regulation.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-fitting-scarf",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your own boots.",
+     "success": {
+      "text": "Mr. Gladwell: \"Those are not regulation.\" He looks at them a long time, and then at you. Mr. Gladwell: \"\"Damaged in the field.\" Off you go.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-fitting-boots",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-act2",
+   "name": "The Tenth",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "beat": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "none"
+   },
+   "intro": "A promotion, by envelope; a squad of two, by name; six shops, by address. In the motor pool, a black car too big for the job: Otis in the back, pleased, and in the front, with a ledger on her knee, a woman of forty in a cardigan over the uniform. Faye Coldwell: \"I'm your books. Eleven years at Silph Co., accounts receivable, never late. They let me go by letter. Second-class post. The week after, a car came. He sent a car. A real person got out and said my name. I'm not saying any of this is right. I'm saying I know which one sent a car.\" Otis: \"She does the sums. I carry. You're the one who knocks.\" Five shops in Celadon pay without a word. The bakery: \"It's in the tin. Tell him the bread's good this week.\" The bike shop owner pays and doesn't look up. The tailor: \"I pay the tenth and I do his suits. I'd like that noted.\" (Faye: \"It's been noted for six years.\") The tea shop puts a bun in Otis's other hand: \"You're too thin. All of you.\" The pawnbroker: \"A tenth. It's the only honest number in this town.\" The sixth is a florist, Miss Anselma Vickery, with soil on her hands. Miss Vickery: \"It was a bad month. It's always a bad month; I sell flowers. Take the till. Leave me the stock, or there's no next month to collect from.\" The till's light. Otis is looking at a bucket of sunflowers as if he's never seen one close.",
+   "choices": [
+    {
+     "label": "Take the till.",
+     "success": {
+      "text": "It's done. She watches the coins counted. \"Six years I've paid. One short month.\" By the time this region is nearly over, the shop will be shuttered.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-florist-shut",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay it out of my own pocket. (₽1,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "Your own coins go in the envelope. In the car, Faye doesn't look round. Faye: \"You'll go broke being decent on his behalf. I'll not write it. But I saw it.\" A stage later there's a sunflower on your bunk.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1,
+        "rank": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-vickery-paid",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Faye. What does the book say?\"",
+     "success": {
+      "text": "Faye turns back four pages. Then four more. Her finger stops.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-skim-found",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act2-book"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"A tenth of nothing's nothing. We'll come back.\"",
+     "success": {
+      "text": "It's Madame's rule, in Madame's words, and Faye looks up sharply. \"...Who taught you that?\" It's right. The round's short, and it's correct. Somewhere in the count room, Pit Boss Vesper hears of it, approves, and says so to nobody.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-tenth-of-nothing",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-rules-heard",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sunflower",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rocket-vickery-refund",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Miss Vickery has heard what you did. There's a sunflower on your bunk."
+    }
+   ]
+  },
+  {
+   "id": "rk-act2-book",
+   "name": "The Book",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "none"
+   },
+   "intro": "Faye: \"It says she's paid in full since March. Every month. There's a tick. And there's an entry, in another hand, each month after, marking her \"short,\" and a second collection. The second one never reaches the count room.\" Otis: \"So somebody's been—\" Faye: \"Somebody's been taking a tenth of a tenth off a woman who sells flowers. It's Cassidy's round, the second Tuesday. I've known since June. I've said nothing. You're the squad leader. Say something, or don't.\"",
+   "choices": [
+    {
+     "label": "Report it to Domino.",
+     "success": {
+      "text": "Domino listens with her eyes shut. \"Skimming. From the Boss. How stupid, and how useful.\" You're a Field Agent by morning. Cassidy is docked, and she knows exactly who did it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "cassidy-grudge",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell Cassidy we know.",
+     "success": {
+      "text": "You find Cassidy alone by the lockers and tell her what the book says. She goes white. She doesn't argue. By Friday the money is back where it came from, and Cassidy can't quite look at you. She owes you, and she knows it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cassidy-owes",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give Miss Vickery back what was skimmed, from the float.",
+     "success": {
+      "text": "Faye writes it as \"correction of clerical error.\" Miss Vickery counts it twice, and then a third time, and then sits down among her buckets.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-vickery-refund",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing. Yet.",
+     "success": {
+      "text": "Faye closes the ledger without a word, and marks the page with a pressed sunflower petal. It's yours to use, later, when it matters.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-skim-held",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-act3",
+   "name": "Third Floor",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "beat": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#22142e",
+    "effect": "fog"
+   },
+   "intro": "Lavender, after dark. The squad's been lent to Butch. By torchlight, at Pokémon Tower's door, he talks to six Grunts. Butch: \"In, crates, out. The ghosts aren't real. The Marowak's real. The Marowak's a problem. That's why House Card's here.\" A Grunt: \"It's Thursday.\" Butch: \"So?\" The Grunt: \"You don't say its— we don't come here Thursdays.\" Butch: \"You do now.\"",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "The door is heavier than it looks. Inside, it's colder than outside.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-tower-graves"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-tower-graves",
+   "name": "The Graves",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#22142e",
+    "effect": "fog"
+   },
+   "intro": "Rows of small stones. The squad's to lift what's been left at them: collars, bells, a favourite ball. \"Stock,\" Butch says.",
+   "choices": [
+    {
+     "label": "Carry what you're handed.",
+     "success": {
+      "text": "You carry. A bell rings once in the bag, and every Grunt on the floor flinches.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-tower-stair"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put each thing back as Otis lifts it.",
+     "success": {
+      "text": "Otis notices. After the third one, he starts putting them back himself.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-graves-back",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-tower-stair"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-tower-stair",
+   "name": "The Stair",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#160e22",
+    "effect": "fog"
+   },
+   "intro": "Something goes past on the landing: a cold patch and a smell of burnt wire. Every Grunt's flat against the wall. The Black Fog. It doesn't stop. It's looking for a collar to eat, and nobody here is wearing one.",
+   "choices": [
+    {
+     "label": "Keep climbing.",
+     "success": {
+      "text": "It drifts on down the stairwell, and the air warms by a degree. Nobody says anything about it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-tower-third"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-tower-third",
+   "name": "The Third Floor",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "pokemon": "marowak",
+    "tint": "#22142e",
+    "effect": "fog"
+   },
+   "intro": "A Marowak stands between the squad and a small grave, a club held in both hands. She isn't attacking. She's standing. Behind her leg: a Cubone that can't be more than a month old. Its skull doesn't fit yet. Otis: \"...That's its kid. That's— I didn't sign up for a kid.\" Faye: \"Rule three. \"Nobody touches the children.\" It's in the book. It's the oldest line in the book.\" Butch, on the radio: \"The mother's worth four thousand to the lab. The skull alone's worth— somebody deal with it. Agent 000. That's an order.\" The Marowak has looked at you. She's worked out who's in charge. (Whatever you choose, no blow is shown, and the Cubone is never struck.)",
+   "choices": [
+    {
+     "label": "\"Stand down. All of you.\"",
+     "success": {
+      "text": "Otis is behind you before the sentence is finished. Faye closes her ledger. The other three Grunts look at their boots, and then, one by one, step back. Butch reports it. The Marowak watches you all the way to the stairs. She doesn't lower the club. She dips her head, once.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -1,
+        "suspicion": 3
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-tower-spared",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-tower-down"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Take the Cubone and run; leave her.\"",
+     "success": {
+      "text": "It's lifted, quickly, in Otis's jacket. It doesn't cry. The mother follows to the Tower's door, and the lorry as far as the town's edge, and stands in the road. It will be in the Holding Pen by morning. Otis doesn't speak to you for a stage.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-tower-taken",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-tower-down"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle her. Properly. And let her win.\"",
+     "success": {
+      "text": "You send out your lead and fight her the way a good trainer fights, and every turn you can see which move would end it, and every turn you choose another. The squad \"retreats in good order.\" Butch: \"Useless.\" Faye writes it up as equipment failure, and files it under a heading nobody reads.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -1,
+        "suspicion": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-tower-thrown",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-tower-down"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Butch. Rule three.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rocket-rules-heard",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Butch: \"That's for people's kids.\" Faye takes the radio and reads, level: Faye: \"\"Nobody touches the children.\" It doesn't say whose. I've the original. In her hand.\" A long hiss of static. Butch: \"...Leave it. Bring the collars.\" Nothing is taken, and nothing is owed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-tower-rule3",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-tower-down"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-tower-down",
+   "name": "The Way Down",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#22142e",
+    "effect": "none"
+   },
+   "intro": "On the stairs, going down.",
+   "choices": [
+    {
+     "label": "Go down.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "rocket-tower-taken",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "It's asleep against Otis. He's holding it the way people hold something they've decided to feel nothing about.",
+       "effects": [
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "rocket-tower-thrown",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The squad's bruised and laughing, the way people laugh after. A Grunt: \"She had us.\" Another: \"...Did she? I thought House Card had her.\" Nobody answers.",
+       "effects": [
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Otis is carrying nothing. He's put everything back. At the door he stops, takes one collar out of his own pocket, and goes back up alone. He's two minutes. \"Right. Now I've put everything back.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-act4",
+   "name": "The Persian's Plate",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "beat": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.giovanni-rocketboss"
+    ],
+    "pokemon": "persian",
+    "tint": "#1c1c28",
+    "effect": "glint"
+   },
+   "intro": "A card under the bunk-room door, with a time and no place. Jardine's car knows the place: the Viridian Gym, after hours. Sand, raked. One lamp. A man in a good suit at a small table, eating alone, cutting his meat very small, feeding a Persian on the next chair from his own plate. Giovanni: \"Sit. You're wondering why you. Everybody here wants something from me. You've wanted nothing, twice, to my face. It's restful.\" Giovanni: \"This was mine. Honestly mine. Eleven inspections. They sent their hardest man, the last time; he looked for a week. He shook my hand and said, \"Cleanest Gym in Kanto.\" I had him followed home. I wanted to know what an honest opinion cost. It hadn't cost anything. I've never got over that.\" Giovanni: \"I had a son. I have. He's somewhere in this region with red hair and my temper, stealing Pokémon from laboratories because he thinks it's what I'd respect. It isn't. I'd respect him buying the laboratory. I built this so he'd have something. He won't take it. So: Silph. If I own the company that makes the Ball, I own the door every Pokémon in the world goes through. Nobody's hurt. They just pay. A tenth. That's all I've ever wanted. For it to be orderly.\"",
+   "choices": [
+    {
+     "label": "\"And the Rigs?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rk-asked-rigs",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "He puts the fork down. Giovanni: \"A tool. I don't love it. I don't love guns either. I own both.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rk-asked-rigs",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's on the roof?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rk-asked-roof",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The Persian has stopped eating. Giovanni: \"Insurance. I'll never use it. That's what makes it worth having. My mother thinks I'm a fool. She's rung nine times.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rk-asked-roof",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Rule three.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rk-asked-rule3",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "rocket-tower-rule3",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Giovanni: \"Faye read it out over the radio. In my mother's hand. Butch wanted her docked.\" He smiles, slightly. Giovanni: \"I've had her wage raised. Don't tell her why. It'd frighten her.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rk-asked-rule3",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about him.",
+     "success": {
+      "text": "He waits, fork in hand.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act4-him"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "matori",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rocket-matori-nothing",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Giovanni: \"Matori says you don't know what you're running from. I find that's the only kind worth hiring. The others arrive with a grudge, and a grudge is somebody else's leash.\""
+    }
+   ]
+  },
+  {
+   "id": "rk-act4-talk",
+   "name": "The Persian's Plate",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giovanni-rocketboss"
+    ],
+    "pokemon": "persian",
+    "tint": "#1c1c28",
+    "effect": "none"
+   },
+   "intro": "He waits, fork in hand, for the next question.",
+   "choices": [
+    {
+     "label": "\"And the Rigs?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rk-asked-rigs",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "He puts the fork down. Giovanni: \"A tool. I don't love it. I don't love guns either. I own both.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rk-asked-rigs",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's on the roof?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rk-asked-roof",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The Persian has stopped eating. Giovanni: \"Insurance. I'll never use it. That's what makes it worth having. My mother thinks I'm a fool. She's rung nine times.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rk-asked-roof",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Rule three.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rk-asked-rule3",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "rocket-tower-rule3",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Giovanni: \"Faye read it out over the radio. In my mother's hand. Butch wanted her docked.\" He smiles, slightly. Giovanni: \"I've had her wage raised. Don't tell her why. It'd frighten her.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rk-asked-rule3",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about him.",
+     "success": {
+      "text": "He waits, fork in hand.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act4-him"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "crate",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rocket-crate-seen",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "rk-asked-rigs",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Giovanni: \"You looked in a crate. Matori said. Good. I don't trust anyone who's never looked.\""
+    }
+   ]
+  },
+  {
+   "id": "rk-act4-him",
+   "name": "The Persian's Plate",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giovanni-rocketboss"
+    ],
+    "pokemon": "persian",
+    "tint": "#1c1c28",
+    "effect": "none"
+   },
+   "intro": "He cuts another piece for the Persian, and waits.",
+   "choices": [
+    {
+     "label": "\"What do you want from me?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rk-asked-want",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Giovanni: \"Company at the top of a tower. And somebody to tell me, afterward, whether it was worth it. I shan't know. I never do.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rk-asked-want",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act4-him"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Does your son know where you are?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rk-asked-son",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The longest pause of the night. Giovanni: \"...No. Find him, and I'll make you Executive tonight. Don't find him, and I'll think more of you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rk-asked-son",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-find-son",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act4-him"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing more.",
+     "success": {
+      "text": "He nods, as if that were an answer too, and opens a drawer.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act4-drawer"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-act4-drawer",
+   "name": "The Photograph",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giovanni-rocketboss"
+    ],
+    "tint": "#1c1c28",
+    "effect": "none"
+   },
+   "intro": "He opens a drawer. He doesn't take anything out. He looks, and shuts it.",
+   "choices": [
+    {
+     "label": "\"May I?\"",
+     "success": {
+      "text": "He's still for a moment. Then he turns the drawer toward you. A boy of nine, scowling, on a raked sand floor, with a Sneasel on his shoulder that's scowling the same way. On the back, in a woman's hand: \"He won't smile for the camera. I said: neither would you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-boss-photograph",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act4-phone"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Don't ask.)",
+     "success": {
+      "text": "You don't ask. He seems glad of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act4-phone"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-act4-phone",
+   "name": "The Telephone",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giovanni-rocketboss"
+    ],
+    "tint": "#1c1c28",
+    "effect": "none"
+   },
+   "intro": "The telephone rings. He lets it. Giovanni: \"That's her. Thursday.\" It rings on. Giovanni: \"Answer it, if you like. She'll want to know who you are. Don't lie; she always knows.\"",
+   "choices": [
+    {
+     "label": "(Answer it.)",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "standing": 6
+        }
+       ],
+       "text": "A warm, amused, frightening voice: \"Oh, he's got company. Good. He eats too fast alone. Who's this? ...House Card. Matori's told me.\" A pause. \"He's forgotten the rest of my rules. The fourth one went: give it back when they can pay. Say that to him, dear. Not tonight. On the roof.\" The line clicks. Giovanni looks at you a long while. \"Right Hand,\" he says. \"Don't make me regret it.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "rocket-madame-spoke",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rocket-madame-line",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rocket-rules-heard",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "standing": 2,
+         "rank": 6
+        },
+        {
+         "kind": "evil",
+         "mark": "confided"
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "A warm, amused, frightening voice: \"Oh, he's got company. Good. He eats too fast alone. Who's this? ...House Card. Matori's told me. You're the one who keeps choosing the long way round.\" A pause. \"He's forgotten the rest of my rules. The fourth one went: give it back when they can pay. Say that to him, dear. Not tonight. On the roof.\" The line clicks. Giovanni has listened to all of it and says nothing at all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-madame-spoke",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-madame-line",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-rules-heard",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Let it ring.)",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "standing": 6
+        }
+       ],
+       "text": "It rings eleven times and stops. Giovanni: \"She'll ring again.\" He looks at you a long while. \"Right Hand,\" he says. \"Don't make me regret it.\"",
+       "effects": [
+        {
+         "kind": "evil",
+         "standing": 2,
+         "rank": 6
+        },
+        {
+         "kind": "evil",
+         "mark": "confided"
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It rings eleven times and stops. Giovanni: \"She'll ring again. She always does.\" He pushes his plate to the Persian. You're an Executive when you leave, and you've listened to the Boss, which very few people have.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-act5",
+   "name": "Sandwiches",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "beat": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#2a1e3a",
+    "effect": "none"
+   },
+   "intro": "Saffron's sealed under a violet shimmer. The squad's been posted to a stairwell in Silph Co., floor six, and told to wait: concrete stairs, a fire door, three people on a step, eating out of paper. Otis: \"Cheese. They're all cheese. Who makes forty cheese sandwiches for a takeover?\" Faye: \"Catering. Line eleven. I approved it.\" Faye: \"Whatever happens tomorrow, I've put you both down as \"contractors.\" If it goes badly, you were never on the payroll. It's the only thing I can do with a pen.\" Otis: \"If it goes well?\" Faye: \"Then I've cost you a pension. I'd apologise. I won't.\" Otis: \"I've been thinking about the top bunk. If Remy'd asked what was in the crate quietly. To one person. He'd still be reading that book. I never asked. I'm still here. I don't know which of us got it right.\"",
+   "choices": [
+    {
+     "label": "\"He got it right.\"",
+     "success": {
+      "text": "Otis nods slowly, as if you'd confirmed a suspicion.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act5-faye"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You're still here. That counts.\"",
+     "success": {
+      "text": "\"Does it?\" He tears his sandwich in half and gives you the bigger bit.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act5-faye"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask now.\"",
+     "success": {
+      "text": "He looks at the fire door. He looks at Faye. Otis: \"...Faye. What's in the crates?\" Faye: \"Four thousand, one hundred and twelve Pokémon, since the book began. Each with a previous owner. I've the list. I've had it since my first week. I thought if I never said the number, it'd stay a number.\" She's said it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-otis-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act5-faye"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-act5-faye",
+   "name": "Sandwiches",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#2a1e3a",
+    "effect": "none"
+   },
+   "intro": "Below you, the building hums. Somewhere above, a lift's going up without stopping. Faye is folding her sandwich paper into a perfect square.",
+   "choices": [
+    {
+     "label": "\"Why 'contractors'?\"",
+     "success": {
+      "text": "Faye: \"Contractors walk. Staff hang. It's the only clause in the building I wrote myself.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act5-you"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What would you write, if it were up to you?\"",
+     "success": {
+      "text": "Faye: \"\"Returned.\" Four thousand one hundred and twelve times. I've practised the handwriting.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act5-you"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Have you ever met him?\"",
+     "success": {
+      "text": "Faye: \"Once. He held a door for me. I've never decided what to do with that.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-act5-you"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-act5-you",
+   "name": "Sandwiches",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#2a1e3a",
+    "effect": "none"
+   },
+   "intro": "Otis: \"What about you? You never said why you joined.\" Matori's note from your first day is in your head, word for word.",
+   "choices": [
+    {
+     "label": "(The same answer.)",
+     "success": {
+      "text": "You give it again. Otis nods. \"Fair.\" A door, far above. Footsteps coming down. They stop one flight up. Matori, to nobody, over the rail: \"Agent 000. Eleventh floor. Dawn. He'd like you to bring the key.\" A pause. \"I'd bring your squad. I haven't said that.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(A different one.)",
+     "success": {
+      "text": "You tell him something truer. He listens all the way through. A door, far above. Footsteps stop one flight up. Matori, over the rail: \"Agent 000. Eleventh floor. Dawn. He'd like you to bring the key.\" A pause. \"I'd bring your squad. I haven't said that.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask me tomorrow.\"",
+     "success": {
+      "text": "\"Tomorrow, then,\" Otis says. \"I'll hold you to it.\" A door, far above. Footsteps stop one flight up. Matori, over the rail: \"Agent 000. Eleventh floor. Dawn. Bring the key.\" A pause. \"I'd bring your squad. I haven't said that.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-op-protection-round",
+   "name": "Operation: The Protection Round",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "none"
+   },
+   "intro": "The weekly round: six shops in Celadon, a tenth from each. The tailor's the richest, and the rudest. The tea shop's the poorest, and gave Otis a bun.",
+   "choices": [
+    {
+     "label": "Collect from all six.",
+     "success": {
+      "text": "Six envelopes, six ticks. Faye writes them in without comment.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Collect from five; \"lose\" the tea shop's address.",
+     "success": {
+      "text": "Faye: \"One short. I'll write \"premises closed for a family matter.\" Whose family?\" You tell her. Faye: \"...Good choice.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Collect from five; \"lose\" the tailor's address.",
+     "success": {
+      "text": "Faye: \"One short. Whose family?\" You tell her. Faye: \"...Good choice. I'd have picked the tailor. I dislike the tailor.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-op-night-lorry",
+   "name": "Operation: The Night Lorry",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#141a24",
+    "effect": "rain"
+   },
+   "intro": "Six crates, Mt. Moon to Vermilion, overnight. The fourth one's warm.",
+   "choices": [
+    {
+     "label": "Take the main road.",
+     "success": {
+      "text": "Six crates, on time. At Vermilion, Major Surge counts them off his clipboard and signs.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the coast road.",
+     "success": {
+      "text": "It's longer, and it's wet. At a lay-by in the rain, Otis has the tailgate down, and two collars are sparking. Otis: \"They've stopped. The lights. Look at it. It's opened its eyes.\" A Sandshrew. Otis: \"It's looking at me like I'm somebody.\" At Vermilion, Surge scowls at his clipboard. \"Four live, two duds. Namba'll scream.\" The two \"duds\" go on the reject pile, which nobody guards.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-lorry-damp",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-op-card-sharp",
+   "name": "Operation: The Card Sharp",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#3a1e28",
+    "effect": "sparkle"
+   },
+   "intro": "The Game Corner, after midnight. Vesper: \"He's in for forty thousand. He'll stake the deeds on the last hand. Deal him the seven.\" Across the felt, a man who owns a diner is shaking.",
+   "choices": [
+    {
+     "label": "Deal him the seven.",
+     "success": {
+      "text": "He turns it over and sits very still. The deeds slide across the table. Vesper counts.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Deal him the ace.",
+     "success": {
+      "text": "He turns the card. He doesn't cheer. He gets up, very carefully, takes his deeds, and walks out without his coat. Vesper, afterwards, counting, doesn't look up: \"House lost forty thousand tonight. Dealer's error. It's in the book. The other book. He's got a girl of nine.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-card-ace",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-op-understudy",
+   "name": "Operation: The Understudy",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "none"
+   },
+   "intro": "The order: pose as a Silph safety inspector, and pass the eleventh-floor lift as sound. It's been tampered with, for the night.",
+   "choices": [
+    {
+     "label": "Pass it, as ordered.",
+     "success": {
+      "text": "You sign the sheet without opening the panel. Nobody at Silph asks a question of a clipboard.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do the inspection properly.",
+     "success": {
+      "text": "The cable: fine. The brake: filed half through; it would hold a Boss, and it wouldn't hold a full car of staff. The call button rings a Rocket phone. You write it up: \"Brake: FAIL.\" A Silph engineer mends it by lunch, and on the night, the lift works for everyone. A man in a brown coat reads the report over the engineer's shoulder. \"An honest inspector. In that uniform.\" He catches your eye. \"I am tying my shoe.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-lift-fixed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-looker-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-op-stray-order",
+   "name": "Operation: The Stray Order",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "none"
+   },
+   "intro": "Bring in forty strays for the Rigs: Jardine's lorry, and a net.",
+   "choices": [
+    {
+     "label": "Bring in forty.",
+     "success": {
+      "text": "Forty, netted and loaded. Jardine doesn't ask. Namba is pleased.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring in forty, and check each for a collar.",
+     "success": {
+      "text": "Thirty-one have one. Otis: \"That's not a stray. That's \"Biscuit.\" It says \"Biscuit, 14 Maple Lane.\"\" Jardine: \"Not asking.\" Faye: \"Thirty-one delivered in error to their registered addresses. Nine genuine strays.\" She looks at the nine. \"...The dentist wants a cat.\" The nine are homed in the building. The Rigs get none. Namba screams.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-strays-home",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-op-favour",
+   "name": "Operation: The Favour",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "none"
+   },
+   "intro": "A Gym trainer owes the Corner ₽20,000. He's to throw his next match against a challenger Rocket's backing. Jessup Rookwood: \"I'll lose my place. It's all I've got. I only went in for my sister's school fees.\"",
+   "choices": [
+    {
+     "label": "Lean on him.",
+     "success": {
+      "text": "He squares up, shaking.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Jessup Rookwood",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Pay his debt from the Operation's float.",
+     "success": {
+      "text": "Faye: \"Twenty thousand, from operating expenses, to clear a debt owed to ourselves. I'm calling it \"petty cash.\" It's the largest petty cash I've ever written.\" Jessup: \"Why would— you're them.\" Otis: \"We're a twelfth of them.\" He fights his match straight, and wins it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-jessup-free",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-friday-3",
+   "name": "Friday",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "sparkle"
+   },
+   "intro": "Pay day. An envelope with your codename on it, to the coin. A slip: \"First week. Dental from Monday.\" Otis: \"Told you.\"",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You pocket it. It's heavier than money ought to be.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it home.",
+     "success": {
+      "text": "You post it home with no note. Somebody there will wonder.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back where it came from.",
+     "success": {
+      "text": "You return this week's tenth to one of the shops on the round. Nobody audits what a Grunt does with their own pay. Faye knows. Faye knows everything. That night Otis pushes half his noodles across: \"You've no money. Again.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-friday-back",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-friday-4",
+   "name": "Friday",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "sparkle"
+   },
+   "intro": "Pay day. An envelope with your codename on it, to the coin. A tenth, itemised. Each item is a name: \"Vickery's. Nettlebed's.\" You know exactly whose money you're holding.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You pocket it. It's heavier than money ought to be.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it home.",
+     "success": {
+      "text": "You post it home with no note. Somebody there will wonder.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back where it came from.",
+     "success": {
+      "text": "You return this week's tenth to one of the shops on the round. Nobody audits what a Grunt does with their own pay. Faye knows. Faye knows everything. That night Otis pushes half his noodles across: \"You've no money. Again.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-friday-back",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-friday-5",
+   "name": "Friday",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "sparkle"
+   },
+   "intro": "Pay day. An envelope with your codename on it, to the coin. A slip in Matori's hand: \"Bonus, Lavender.\" It's ₽4,000.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You pocket it. It's heavier than money ought to be.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it home.",
+     "success": {
+      "text": "You post it home with no note. Somebody there will wonder.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back where it came from.",
+     "success": {
+      "text": "You return this week's tenth to one of the shops on the round. Nobody audits what a Grunt does with their own pay. Faye knows. Faye knows everything. That night Otis pushes half his noodles across: \"You've no money. Again.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-friday-back",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse the bonus.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rocket-tower-taken",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You hand it back across the desk. Matori writes something down. That night, Otis speaks to you again.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-bonus-refused",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bonus",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rocket-tower-taken",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The ₽4,000 is for Lavender. For the Cubone. You may refuse it."
+    }
+   ]
+  },
+  {
+   "id": "rk-friday-6",
+   "name": "Friday",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "sparkle"
+   },
+   "intro": "Pay day. An envelope with your codename on it, to the coin. A note in Matori's hand: \"You're owed a day's leave. So am I. Don't take yours either.\"",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You pocket it. It's heavier than money ought to be.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it home.",
+     "success": {
+      "text": "You post it home with no note. Somebody there will wonder.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back where it came from.",
+     "success": {
+      "text": "You return this week's tenth to one of the shops on the round. Nobody audits what a Grunt does with their own pay. Faye knows. Faye knows everything. That night Otis pushes half his noodles across: \"You've no money. Again.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-friday-back",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-friday-7",
+   "name": "Friday",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "sparkle"
+   },
+   "intro": "Pay day. An envelope with your codename on it, to the coin. Double. A slip: \"For tomorrow.\" Nobody in the bunk room has opened theirs.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You pocket it. It's heavier than money ought to be.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it home.",
+     "success": {
+      "text": "You post it home with no note. Somebody there will wonder.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back where it came from.",
+     "success": {
+      "text": "You return this week's tenth to one of the shops on the round. Nobody audits what a Grunt does with their own pay. Faye knows. Faye knows everything. That night Otis pushes half his noodles across: \"You've no money. Again.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-friday-back",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-derby",
+   "name": "The Motor Pool Derby",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "sparkle"
+   },
+   "intro": "Sergeant Jardine: \"Once a year! Lorries! Round the back of the Game Corner and through the car park. No prize. No reason. It's the best day.\" You're in a lorry, with Otis navigating badly. Otis: \"Left! No. My left. Your— that was a bollard.\"",
+   "choices": [
+    {
+     "label": "Drive.",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You win, by a bumper. Afterwards, on upturned crates: Sergeant Jardine: \"I never ask, you know. What's in the back. Thirty years. You know why? Because I like driving. If I asked, I'd have to stop. So I've never asked. I'm a happy man.\" His whistle has stopped. Jardine: \"...I was a happy man till about a minute ago. Why'd you make me say it out loud?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "jardine-said",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose, by a bollard. Afterwards, on upturned crates: Sergeant Jardine: \"I never ask, you know. What's in the back. Thirty years. You know why? Because I like driving. If I asked, I'd have to stop. So I've never asked. I'm a happy man.\" His whistle has stopped. Jardine: \"...I was a happy man till about a minute ago. Why'd you make me say it out loud?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "jardine-said",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-second-book",
+   "name": "The Second Book",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 5,
+     "rank": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#1c1c28",
+    "effect": "none"
+   },
+   "intro": "Pit Boss Vesper: \"Rank four gets you the count room. Sit. I'll show you something I show one person a year.\" A second ledger. Small. Black. Every page a date and a line. \"A girl, six, lost her mother at the slots. Found. Ice cream. ₽12.\" \"A boy, nine, crying: his father had staked the boy's Pokémon. Returned to the boy. Father barred. Loss to house: ₽8,000.\" Vesper: \"Rule three. It's the only one I'd keep if I'd to pick. I run a room that takes people's rent off them. I'm not good. But there's a book where I was, on the day, about the one thing. I'd like somebody to know it's there.\"",
+   "choices": [
+    {
+     "label": "\"Why show me?\"",
+     "success": {
+      "text": "Vesper: \"Because one day somebody will ask what this place was, and I'd like them to ask you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vesper-book",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Does the Boss know?\"",
+     "success": {
+      "text": "Vesper: \"He knows there's a second book. He's never asked to see it. That's how I know he's read it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vesper-book",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Add one.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rocket-tower-rule3",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He turns to the last page. He writes: \"A Cubone, a month old. Pokémon Tower. Left with its mother. Loss to house: ₽4,000. Entered by: House Card.\" He blots it. Vesper: \"There. You're in the good book. There's only the two of us.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vesper-book",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-loyalty-test",
+   "name": "The Loyalty Test",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "suspicion": 7,
+     "suspicionBelow": 10,
+     "lacks": "loyalty-test"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket",
+     "boss.teamrocket"
+    ],
+    "tint": "#1c1c28",
+    "effect": "none"
+   },
+   "intro": "The count room, after hours, with the door shut. Domino sits on the desk; Butch stands by the door. Domino: \"House Card. People talk about you. The long way round, every time. Crates that arrive damp. Shops that close for a family matter. I'd like to hear you explain it, before somebody explains it for you.\"",
+   "choices": [
+    {
+     "label": "Hold her eye, and explain nothing.",
+     "chance": 0.6,
+     "success": {
+      "text": "You hold her eye. Neither of you blinks first. Domino: \"...Fine. Clever people are expensive. Don't make me pay for you.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -2
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your eyes slide to the door. Butch smiles. Domino: \"That's what I thought.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give them Cassidy's skim.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rocket-skim-held",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You tell them what Faye's book says about the florist. Domino laughs once, with her eyes shut. Domino: \"A tenth of a tenth. From the Boss. And you've been sitting on it. Now that is loyalty I understand.\" Cassidy is docked by morning, and knows who did it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": -3
+       },
+       {
+        "kind": "flag",
+        "key": "cassidy-grudge",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I do the job my way. It gets done.\"",
+     "success": {
+      "text": "Butch: \"It gets done wet.\" Domino: \"It gets done. For now.\" She lets you go. You can feel them watching you all the way to the lift.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-found-out",
+   "name": "Found Out",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "suspicion": 10,
+     "lacks": "found-out"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket",
+     "boss.teamrocket"
+    ],
+    "tint": "#3a1418",
+    "effect": "glint"
+   },
+   "intro": "The lift stops between floors. When the doors open, Butch and Cassidy are waiting, and behind them half the basement. Butch: \"House Card. Or whatever your name is. The Boss would like a word. So would I.\" You've been found out. There's only one way back outside, and it's through them, with your own party, on worse ground than you'd have chosen.",
+   "choices": [
+    {
+     "label": "Fight your way out.",
+     "success": {
+      "text": "They come at you two at once.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "found-out"
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-found-out",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "Butch and Cassidy",
+       "size": 6,
+       "levelBonus": 2,
+       "format": "doubles",
+       "chain": 1,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "otis",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rocket-otis-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Otis is in the crowd. He catches your eye, and takes one step sideways, out of their line."
+    }
+   ]
+  }
+ ]
+}

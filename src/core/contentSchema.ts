@@ -3032,6 +3032,12 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     trouble: z.boolean().optional(),
     /** SF13 A7: with `op`, the Operation marked first at The Plan has been dealt with (or this is it). Until then the others wait. */
     afterFirst: z.boolean().optional(),
+    /** Volume III (core/evil/inside.ts): on the inside route or not; a rank, Standing or Suspicion at least this; Suspicion below this. */
+    inside: z.boolean().optional(),
+    rank: z.number().int().min(1).max(6).optional(),
+    standing: z.number().int().min(0).max(10).optional(),
+    suspicion: z.number().int().min(0).max(10).optional(),
+    suspicionBelow: z.number().int().min(1).max(10).optional(),
   }),
   /** Beta 0.6 rival questlines: the featured rival's overhaul state (core/rivals/overhaul.ts): a feeling at least this (0 to 10), their Lead in a range (-3 to +3, rival ahead is positive), or a mark they hold. Never true without a rival. */
   z.object({
@@ -3468,6 +3474,10 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     /** SF130: run modifiers that last only while the run is in this region (like an Operation's lasting effect), with the words that say so. */
     mods: z.array(ArchetypeModifierSchema).min(1).max(3).optional(),
     modsText: z.string().min(1).optional(),
+    /** Volume III inside route: Standing and Suspicion change (0 to 10 each), and a rank the player now holds at least. */
+    standing: z.number().int().min(-3).max(3).optional(),
+    suspicion: z.number().int().min(-3).max(4).optional(),
+    rank: z.number().int().min(1).max(6).optional(),
   }),
   /** Run events G (core/trainingEffects.ts): changes the lead's build: Nature, ability slot, weakest stat, or learns a move (of `type`). */
   z.object({ kind: z.literal('train'), what: z.enum(['natureReroll', 'natureNudge', 'abilitySwap', 'weakestStat', 'learnMove', 'evolutionHint', 'masteryShard', 'nap']), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']).optional(), type: TypeNameSchema.optional() }),

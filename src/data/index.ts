@@ -810,6 +810,12 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
       if (f.kind === 'recruit' && !content.archetypes.has(f.trainer)) problems.push(`${where} recruits unknown trainer "${f.trainer}"`);
       if (f.kind === 'join') for (const id of f.species) if (!content.species.has(id)) problems.push(`${where} offers unknown species "${id}"`);
       // A room id may name the region's Evil Team (`evil-{teamId}-hideout-boss`): it must exist for every team that can run a region's story.
+      // Volume III: `{region}` is filled in play (an Offer per region); at least one region's room must exist.
+      if (f.kind === 'addEvent' && f.eventId.includes('{region}')) {
+        const [head, tail] = f.eventId.split('{region}') as [string, string];
+        if (![...content.events.keys()].some((id) => id.startsWith(head) && id.endsWith(tail) && id.length > head.length + tail.length)) problems.push(`${where} opens unknown event "${f.eventId}"`);
+        continue;
+      }
       if (f.kind === 'addEvent') for (const id of f.eventId.includes('{teamId}') ? content.evilTeams.teams.filter((t) => !t.roaming).map((t) => f.eventId.replaceAll('{teamId}', t.id)) : [f.eventId]) if (!content.events.has(id)) problems.push(`${where} opens unknown event "${id}"`);
       if (f.kind === 'addEventFrom') for (const id of f.ids) if (!content.events.has(id)) problems.push(`${where} opens unknown event "${id}"`);
     }
