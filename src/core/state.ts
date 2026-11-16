@@ -245,7 +245,7 @@ export const VolatileSchema = z.object({
   /** Hidden in the air, underground, underwater or vanished (first turn of Fly, Dig, Dive, Phantom Force). */
   semi: SemiSchema.nullable().default(null),
   /** Locked into Thrash or Outrage for `turns` more turns. */
-  locked: z.object({ moveId: z.string(), turns: z.number().int().min(0) }).nullable().default(null),
+  locked: z.object({ moveId: z.string(), turns: z.number().int().min(0), /** Encore Performance: the forced move goes first (+1 priority). */ bonus: z.boolean().optional() }).nullable().default(null),
   /** Full turns it has been in battle (Fake Out works only on the first). */
   turnsOut: z.number().int().min(0).default(0),
   /** Growth paths (Patient, Quiet Strength): last turn it only waited / was not hit. Old saves read false. */

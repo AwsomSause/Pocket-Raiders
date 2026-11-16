@@ -92,5 +92,23 @@
    "attackFrom": "best",
    "champMove": "seen-it"
   }
+ },
+ {
+  "id": "encore-performance",
+  "name": "Encore Performance",
+  "type": "bug",
+  "category": "status",
+  "power": null,
+  "accuracy": null,
+  "pp": 10,
+  "priority": 0,
+  "critStage": 0,
+  "target": "self",
+  "flags": [
+   "sound"
+  ],
+  "effects": {
+   "encorePerformance": true
+  }
  }
 ]
