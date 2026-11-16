@@ -18,6 +18,7 @@ import { NATURE_IDS } from '../natures';
 import { fnv1a } from '../expansion/hash';
 import { crystalOp, golemStart } from './crystals';
 import { tideOf } from '../clock';
+import { lightning } from './ridge';
 
 type Cue = { type: 'spectacle'; kind: 'arena'; side: 'player' | 'enemy'; text: string; uid?: string };
 const cue = (side: 'player' | 'enemy', text: string, uid?: string): Cue => ({ type: 'spectacle', kind: 'arena', side, text, ...(uid ? { uid } : {}) });
@@ -364,6 +365,9 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'crystalMost':
       // gn.32: the Crystal Caverns' bag (core/greenneedle/crystals.ts).
       return crystalOp(content, run, e.op, e.key, e.type, host.picked ? run.party.find((m) => m.uid === host.picked) : undefined);
+    case 'lightning':
+      // gn.35: Thunderstorm Ridge's lightning, once per node.
+      return lightning(content, run, e.n!, host.float());
     case 'markLead': {
       // gn.30: a history mark on the lead (the pink one that ate the island fruit for a day).
       const lead = run.party.find((m) => m.hp > 0) ?? run.party[0];
@@ -454,6 +458,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (gnFlag(run, FOREST.inside) > 0 && gnFlag(run, FOREST.fog) > 0) battle.accuracyMult = 0.9;
   // gn.32: the Crystal Golem takes the type of the colour you carry most.
   if (battle.eventRule?.gn === 'golem') golemStart(run, battle);
+  // gn.35: a friendly follower, drawn by a charged crystal: it walks alongside you, and is easier to catch (ridge.ts ridgeCatch).
+  if (battle.eventRule?.gn === 'ridge' && gnFlag(run, 'ridge-friendly') > 0) battle.storyEffects.push('ridge:friendly');
   // A Weedle duelist: the swarm's Beedrill will not strike first at one of their own.
   if (battle.event?.eventId === 'gn-03-oak' && battle.kind === 'wild' && ['weedle', 'kakuna', 'beedrill'].includes(markedMon(run, 'duelist')?.was ?? '')) {
     battle.storyEffects.push(`${FOE_WAITS}The swarm hangs back. They will not strike first at one of their own.`);
@@ -592,6 +598,10 @@ export function gnShape(content: Content, run: RunState, action: PlayerAction): 
   const mon = battle ? run.party[battle.activeIndex] : undefined;
   if (!battle || !rule || !mon || battle.needsSwitch) return { action, events: [] };
   const foe = battle.enemyTeam[battle.enemyIndex];
+  // gn.35: earthing the overcharged one. Your Ground-type won't strike it: it stands there, because it's needed there.
+  if (rule === 'earthing' && action.kind === 'move' && action.index >= 0 && (content.moves.get(mon.moves[action.index]?.id ?? '')?.category ?? 'status') !== 'status') {
+    return { action: { kind: 'idle' }, events: [cue('player', `${nameOf(content, mon)} doesn't strike. It plants its feet, and stands there. It's needed there.`, mon.uid)] };
+  }
   if (rule === 'samurai' && foe?.speciesId === 'pinsir' && foe.hp > 0 && action.kind === 'move' && guards(content, mon, action.index)) {
     battle.storyEffects.push(`${FOE_WAITS}Pinsir lowers its horns. It will not strike a foe that is not looking at it.`);
   }

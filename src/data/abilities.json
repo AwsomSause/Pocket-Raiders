@@ -1600,6 +1600,11 @@
   "description": "It can't be forced to switch out, and it takes 10% less damage from super-effective hits."
  },
  {
+  "id": "grounded-heart",
+  "name": "Grounded Heart",
+  "description": "Once per battle, when it or its partner would be paralysed, they aren't, and it gains +1 Speed."
+ },
+ {
   "id": "forests-memory",
   "name": "Forest's Memory",
   "description": "The first time each battle that it would be put to sleep, poisoned or paralysed, it isn't."

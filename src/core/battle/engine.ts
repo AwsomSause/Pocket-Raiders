@@ -18,6 +18,7 @@
 
 import { ownTypes } from '../co/typeShift';
 import { golemBlueType, golemColour } from '../greenneedle/crystals';
+import { earthLine, overchargeSelfHurt } from '../greenneedle/ridge';
 import { foresightBegin } from './foresight';
 import { CARE } from '../care/mods';
 import { shadowDamageMultiplier } from '../shadow';
@@ -1203,6 +1204,11 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
       battle.playerVolatile.recharge = true;
       events.push({ type: 'raid', tone: 'info', text: `A panel gives way under ${sp.name}! It loses its footing and its next move.` });
     }
+  }
+  // Greenneedle gn.35: earthing the overcharged one, a line each turn while it discharges into your Ground-type.
+  if (rule.gn === 'earthing' && rule.surviveTurns && !battle.outcome) {
+    const line = earthLine(battle.turn - 1, rule.surviveTurns);
+    if (line) events.push({ type: 'raid', tone: 'info', text: line });
   }
   if (!battle.outcome && rule.surviveTurns && battle.turn > rule.surviveTurns) battle.outcome = 'win';
   if (!battle.outcome && rule.calm && !events.some((e) => e.type === 'damage' && e.side === 'enemy')) {
@@ -4774,6 +4780,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     const freeze = revivalFreeze(user, moveType);
     const secondary = freeze > 0 ? { id: 'frz' as const, chance: Math.max(freeze, fx.status?.id === 'frz' ? fx.status.chance : 0) } : fx.status;
     if (secondary && roll(secondary.chance, secondary.id) && !(canGetStatus(ctx, user, target, secondary.id) && stopgapTakes(ctx, target, secondary.id, move, events))) tryInflictStatus(ctx, user, target, secondary.id, move, events, false);
+    // Greenneedle gn.35: the overcharged one's Electric moves always paralyse (no roll).
+    if (user.side === 'enemy' && moveType === 'electric' && landed > 0 && !target.mon.status && ctx.battle.eventRule?.gn === 'overcharged') tryInflictStatus(ctx, user, target, 'par', move, events, false);
     if (fx.flinchFirstUse && user.vol.firstUseNow && movedFirst) { if (!stopgapTakes(ctx, target, null, move, events)) flinch(ctx, user, target); }
     else if (fx.flinchChance && movedFirst && roll(fx.flinchChance)) { if (!stopgapTakes(ctx, target, null, move, events)) flinch(ctx, user, target); }
     else if (!fx.flinchChance && userAbility === 'stench' && movedFirst && rng.chance(0.1)) flinch(ctx, user, target);
@@ -6641,6 +6649,16 @@ function canGetStatus(ctx: BattleContext, source: Combatant, target: Combatant, 
 /** The target's ability that stops this status, or null. */
 function statusAbilityBlock(ctx: BattleContext, source: Combatant, target: Combatant, status: StatusId): string | null {
   const ability = targetAbility(ctx, source, target);
+  // Greenneedle gn.35: Grounded Heart, once per battle: when an ally (itself, or its partner in a double) would be paralysed, it isn't,
+  // and the Pokémon with Grounded Heart gains +1 Speed.
+  if (status === 'par') {
+    const holder = ability === 'grounded-heart' ? target : allyAbility(ctx, target) === 'grounded-heart' ? allyCombatant(ctx, target) : null;
+    if (holder && !ctx.battle.storyEffects.includes(`grounded-heart:${holder.mon.uid}`)) {
+      ctx.battle.storyEffects.push(`grounded-heart:${holder.mon.uid}`);
+      if (holder.stages.spe < 6) holder.stages.spe += 1;
+      return 'grounded-heart';
+    }
+  }
   if (!ability) return null;
   if (STATUS_IMMUNE[ability]?.includes(status)) return ability;
   // Greenneedle gn.31: Forest's Memory turns away the first sleep, poison or paralysis of each battle (used up when it does).
@@ -7051,6 +7069,12 @@ function applyResidual(ctx: BattleContext, c: Combatant, other: Combatant, event
       c.vol.typeList = ['rock', golemBlueType(content, ctx.party, ctx.battle.turn)];
       events.push({ type: 'raid', tone: 'info', text: `The Golem's crystals shift. It is part ${c.vol.typeList[1]} now.` });
     }
+  }
+  // Greenneedle gn.35: another bolt hits the overcharged one each turn: +1 Sp. Atk, and it loses 1/16 of its HP (it can be outlasted).
+  if (c.side === 'enemy' && c.mon.hp > 0 && ctx.battle.eventRule?.gn === 'overcharged') {
+    if (c.stages.spa < 6) c.stages.spa += 1;
+    const { lost } = takeHp(ctx, c, overchargeSelfHurt(content, c.mon));
+    events.push(say(c.side, 'bleed', `Another bolt finds ${nameOf(ctx, c.mon)}. It flares brighter (+1 Sp. Atk), and it hurts. (-${lost})`, c.mon.uid));
   }
   // Greenneedle gn.31: Old Growth restores 1/16 HP each turn, in any weather.
   if (ability === 'old-growth' && c.mon.hp > 0 && c.mon.hp < max) {

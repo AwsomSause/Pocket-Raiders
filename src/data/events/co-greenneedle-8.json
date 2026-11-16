@@ -1,0 +1,2502 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-35-door",
+   "name": "Thunderstorm Ridge",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "electric"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ridge-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ridge-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "manectric",
+    "tint": "#3b4060",
+    "effect": "rain"
+   },
+   "intro": "A ridge, black against a sky that won't stop flashing. The thunder doesn't roll here. It cracks.\n\nOne peak takes more strikes than the rest. All of them, nearly.",
+   "choices": [
+    {
+     "label": "Climb toward the storm.",
+     "success": {
+      "text": "The air tastes of metal. Your Pokémon's fur lifts, and settles, and lifts.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ridge-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-crystals",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-followers",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-struck",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "cast",
+        "key": "ridge-one",
+        "species": [
+         "manectric",
+         "ampharos",
+         "luxray",
+         "electivire",
+         "zebstrika"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-35-gate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You keep low and walk on. Behind you the same peak is hit, and hit, and hit again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-35-gate",
+   "name": "Thunderstorm Ridge: The Scorched Gate",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mega-grounded",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Ada, leaning out of the cab: \"You again. You know what to do, then.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.lacey",
+     "trainer.youngster_m"
+    ],
+    "pokemon": "electrike",
+    "tint": "#3b4060",
+    "effect": "rain"
+   },
+   "intro": "Two dead trees, split down the middle. The wood inside is black glass.\n\nA pickup truck is parked between them, pointed back down the hill. Storm chasers: Ada and Kip. Not going any farther.\n\nAda: \"We chase them. We don't climb *into* them. There's something up there that's been hit forty times and hasn't come down.\"",
+   "choices": [
+    {
+     "label": "Ask what it is.",
+     "success": {
+      "text": "Kip, quietly, not taking his eyes off the peak: \"Couldn't see. Something with four legs, maybe. It was shaking.\"\n\n\"You don't shake like that from cold. You shake like that from too much.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ridge-kip",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-35-gate"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ridge-kip",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go up.",
+     "success": {
+      "text": "Ada shakes her head, and doesn't argue. Kip turns the radio up so you'll hear the forecast if you come back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lightning",
+        "n": 20
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-35-path"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-35-path",
+   "name": "Thunderstorm Ridge: The Counting Path",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mareep",
+    "tint": "#3b4060",
+    "effect": "rain"
+   },
+   "intro": "A stretch of bare rock with nowhere to hide. Lightning hits it on a rhythm: long, short, short.\n\nLong, short, short. The rock hisses where it lands. You start counting without meaning to.",
+   "choices": [
+    {
+     "label": "Cross on the long gap.",
+     "prompt": {
+      "id": "ridge-gap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Long. You go. Short, short, behind you. You're across, breathing hard, and the rock where you stood is smoking.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lightning",
+        "n": 20
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-35-field"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Too soon. The short one finds you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lightning",
+        "n": 100
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-35-path"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-35-field",
+   "name": "Thunderstorm Ridge: The Crystal Field",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mareep",
+    "tint": "#3b4060",
+    "effect": "rain"
+   },
+   "intro": "Charged crystals, everywhere, blue-white, lying where bolts have hit. They hum when you come close.\n\nMareep graze between them with their wool standing straight up. They don't look bothered. They look lit.\n\nCarrying one would draw Electric-types to you. Friendly ones, and otherwise.",
+   "choices": [
+    {
+     "label": "Take one.",
+     "success": {
+      "text": "It's warm, and it buzzes against your palm like something alive. A Mareep looks up from grazing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-crystals",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-followers",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "lightning",
+        "n": 20
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-35-bridge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take three.",
+     "success": {
+      "text": "Three. They sing to each other in the bag.\n\n*Across the whole ridge, things lift their heads.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-crystals",
+        "n": 3
+       },
+       {
+        "kind": "flag",
+        "key": "ridge-three",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-followers",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "lightning",
+        "n": 20
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-35-bridge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take none.",
+     "success": {
+      "text": "You leave them where the sky put them. The Mareep go back to grazing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-crystals",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-followers",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "lightning",
+        "n": 20
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-35-bridge"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-35-follower",
+   "name": "Thunderstorm Ridge: Something Following",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "friendly",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ridge-friendly",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It isn't hunting you. It walks alongside, sniffing at the crystal in your bag, sparks in its fur. It would come quietly.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "electrike",
+    "tint": "#3b4060",
+    "effect": "rain"
+   },
+   "intro": "It comes out of the rocks, drawn by the crystal's hum. Blue-white light catches in its eyes.",
+   "choices": [
+    {
+     "label": "Turn and face it.",
+     "success": {
+      "text": "It comes closer.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "electric",
+        "flying"
+       ],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 2
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-bridge"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-shelter"
+          }
+         ]
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 2
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-bridge"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-shelter"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 2
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-bridge"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-shelter"
+          }
+         ]
+        }
+       ],
+       "rule": {
+        "gn": "ridge"
+       },
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ridge-local",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Turn and face it.",
+     "success": {
+      "text": "It comes closer.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "electrike",
+        "manectric",
+        "mareep",
+        "flaaffy",
+        "magnemite",
+        "pachirisu",
+        "emolga",
+        "helioptile",
+        "tynamo",
+        "joltik"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 2
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-bridge"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-shelter"
+          }
+         ]
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 2
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-bridge"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-shelter"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-followers",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ridge-followers",
+           "n": 2
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-bridge"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-shelter"
+          }
+         ]
+        }
+       ],
+       "rule": {
+        "gn": "ridge"
+       },
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ridge-local",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Drop a crystal.",
+     "success": {
+      "text": "You roll one away across the rock. It goes after the crystal, and doesn't come back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-crystals",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-crystals",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-crystals",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-followers",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-followers",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-followers",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-back",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-35-bridge"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-back",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-35-shelter"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ridge-crystals",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-35-bridge",
+   "name": "Thunderstorm Ridge: The Iron Bridge",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "followed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ridge-followers",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Something is following the crystal's hum. You can hear it in the rocks behind you, keeping pace.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magnemite",
+    "tint": "#3b4060",
+    "effect": "rain"
+   },
+   "intro": "A metal bridge over a drop you don't look down. It hums. Every few seconds it glows, end to end, and spits.\n\nThen it's dark again. Then it glows.",
+   "choices": [
+    {
+     "label": "Face what's following you.",
+     "success": {
+      "text": "You stop, and turn round, and wait for it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-back",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "roll",
+          "key": "ridge-friendly",
+          "n": 50
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "roll",
+          "key": "ridge-friendly",
+          "n": 33
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "ridge-local",
+        "n": 33
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-35-follower"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ridge-followers",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Cross when it's dark.",
+     "prompt": {
+      "id": "bridge-dark",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Dark. You run. It glows behind your heels as you jump off the far end.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lightning",
+        "n": 20
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-followers",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "ridge-crystals",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-35-shelter",
+          "gn-35-shelter",
+          "gn-35-shelter",
+          "gn-35-hiding"
+         ]
+        }
+       }
+      ]
+     },
+     "failure": {
+      "text": "It glows under your feet. You jump back, but not fast enough.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lightning",
+        "n": 100
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-35-bridge"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ridge-followers",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Send a Ground-type first.",
+     "success": {
+      "text": "Your Ground-type walks out first and stands at the middle. The next glow runs into it, and through it, and nowhere.\n\nFor one crossing, the bridge is just a bridge.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lightning",
+        "n": 20
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-followers",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "ridge-crystals",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-35-shelter",
+          "gn-35-shelter",
+          "gn-35-shelter",
+          "gn-35-hiding"
+         ]
+        }
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ridge-followers",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Drop a crystal.",
+     "success": {
+      "text": "You set one down on the bare rock. It hums to itself, blue-white, alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-crystals",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-crystals",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-crystals",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-followers",
+        "min": 1,
+        "then": [],
+        "text": "*Whatever was behind you stops at it. Sniffs it. Stays with it, for now.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-followers",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-followers",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-followers",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-35-bridge"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ridge-crystals",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-35-shelter",
+   "name": "Thunderstorm Ridge: The Shelter",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "followed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ridge-followers",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Something is following the crystal's hum. You can hear it in the rocks behind you, keeping pace.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "joltik",
+    "tint": "#3b4060",
+    "effect": "rain"
+   },
+   "intro": "A cave out of the rain. A rest, at last. Your Pokémon shake themselves dry.\n\nOn the wall, scratches: tally marks, in fives. Forty of them.\n\n*Something's been counting.*",
+   "choices": [
+    {
+     "label": "Face what's following you.",
+     "success": {
+      "text": "You stop, and turn round, and wait for it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-back",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "roll",
+          "key": "ridge-friendly",
+          "n": 50
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "roll",
+          "key": "ridge-friendly",
+          "n": 33
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "ridge-local",
+        "n": 33
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-35-follower"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ridge-followers",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Count the marks.",
+     "success": {
+      "text": "Forty. Each one deep, and scored hard. The last few are shakier.\n\nNot a person's marks. Claws. Something counted every strike it took, until it couldn't hold still enough to scratch.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ridge-counted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-35-shelter"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ridge-counted",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Rest, then climb.",
+     "success": {
+      "text": "You rest as long as you dare. Outside, every strike bends toward the summit.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "gn",
+        "op": "lightning",
+        "n": 20
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-35-summit"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ridge-followers",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Drop a crystal.",
+     "success": {
+      "text": "You set one down on the bare rock. It hums to itself, blue-white, alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-crystals",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-crystals",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-crystals",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-followers",
+        "min": 1,
+        "then": [],
+        "text": "*Whatever was behind you stops at it. Sniffs it. Stays with it, for now.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-followers",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-followers",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-followers",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-35-shelter"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ridge-crystals",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-35-hiding",
+   "name": "Thunderstorm Ridge: The Shelter",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mega-grounded",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Ada, leaning out of the cab: \"You again. You know what to do, then.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "manectric",
+    "tint": "#3b4060",
+    "effect": "rain"
+   },
+   "intro": "A cave out of the rain. On the wall, forty tally marks, in fives. The newest are still bright.\n\n*It's in here. In the back, as far from the mouth as it can get, hiding from itself.*\n\n*The tally marks are its own. Your three crystals sing, and it flinches, and sparks fall off it like water.*",
+   "choices": [
+    {
+     "label": "Defeat it.",
+     "success": {
+      "text": "It doesn't want this. Every bolt on the ridge does.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@ridge-one"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ridge-end",
+         "n": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ridge-defeated",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-35-glass"
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "gn": "overcharged",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-35-driven"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Earth it.",
+     "success": {
+      "text": "Your Ground-type walks out onto the glass, and plants its feet beside it, and doesn't move.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@ridge-one"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ridge-end",
+         "n": 2
+        },
+        {
+         "kind": "flag",
+         "key": "ridge-earthed",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-35-earthed"
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "gn": "earthing",
+        "leadType": "ground",
+        "noSwitch": true,
+        "surviveTurns": 3,
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-35-driven"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "mega-grounded",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Earth it.",
+     "success": {
+      "text": "Your Ground-type walks out onto the glass, and plants its feet beside it, and doesn't move. You've done this before. So has it, maybe.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@ridge-one"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ridge-end",
+         "n": 2
+        },
+        {
+         "kind": "flag",
+         "key": "ridge-earthed",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-35-earthed"
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "gn": "earthing",
+        "leadType": "ground",
+        "noSwitch": true,
+        "surviveTurns": 2,
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-35-driven"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "mega-grounded",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-35-summit",
+   "name": "Thunderstorm Ridge: The Summit",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mega-grounded",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Ada, leaning out of the cab: \"You again. You know what to do, then.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "manectric",
+    "tint": "#3b4060",
+    "effect": "shake"
+   },
+   "intro": "*It's standing on the highest rock. Every strike on the ridge bends toward it.*\n\n*It's shaking. Sparks fall off it like water off a dog. Where they land, the stone goes to glass.*\n\n*It sees you. It tries to back away. A bolt hits it. It screams, and the scream's a Thunder.*",
+   "choices": [
+    {
+     "label": "Defeat it.",
+     "success": {
+      "text": "It doesn't want this. Every bolt on the ridge does.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@ridge-one"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ridge-end",
+         "n": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ridge-defeated",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-35-glass"
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "gn": "overcharged",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-35-driven"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Earth it.",
+     "success": {
+      "text": "Your Ground-type walks out onto the glass, and plants its feet beside it, and doesn't move.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@ridge-one"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ridge-end",
+         "n": 2
+        },
+        {
+         "kind": "flag",
+         "key": "ridge-earthed",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-35-earthed"
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "gn": "earthing",
+        "leadType": "ground",
+        "noSwitch": true,
+        "surviveTurns": 3,
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-35-driven"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "mega-grounded",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Earth it.",
+     "success": {
+      "text": "Your Ground-type walks out onto the glass, and plants its feet beside it, and doesn't move. You've done this before. So has it, maybe.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@ridge-one"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ridge-end",
+         "n": 2
+        },
+        {
+         "kind": "flag",
+         "key": "ridge-earthed",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-35-earthed"
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "gn": "earthing",
+        "leadType": "ground",
+        "noSwitch": true,
+        "surviveTurns": 2,
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-35-driven"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "mega-grounded",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-35-glass",
+   "name": "Thunderstorm Ridge: Quiet",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "manectric",
+    "tint": "#3b4060",
+    "effect": "rain"
+   },
+   "intro": "It goes down. The sparks stop falling. For the first time in a month, nothing on the ridge is shaking.\n\nIt lies on its side in the glass it made, breathing. When the next bolt comes, it goes somewhere else.\n\nSomething glints in the glass: a capsule, fused in, still warm.",
+   "choices": [
+    {
+     "label": "Take the capsule.",
+     "success": {
+      "text": "It comes free with a crack. Behind you, slowly, it gets up, and limps away down the far side.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "summit-ability-capsule",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ridge-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "ridge-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-35-earthed",
+   "name": "Thunderstorm Ridge: The Clear Circle",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "manectric",
+    "tint": "#3b4060",
+    "effect": "rain"
+   },
+   "intro": "*It looks at your Ground-type. It walks over, slowly, and leans its whole weight against it.*\n\nThe sky over the summit has cleared, in a circle. Stars, in the middle of a storm.\n\nSomething glints in the glass where it stood: a capsule, fused in, still warm.",
+   "choices": [
+    {
+     "label": "Take the capsule, and go down.",
+     "success": {
+      "text": "The capsule comes free with a crack. You start down the mountain.\n\nIt follows you. All the way down. At the bottom, you hold out a Ball, and it steps into it, on its own.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "summit-ability-capsule",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": {
+         "types": [
+          "ground"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "sign-raikou",
+        "amount": 1
+       },
+       {
+        "kind": "clearSky"
+       },
+       {
+        "kind": "moment",
+        "text": "On Thunderstorm Ridge, a Ground-type stood in the lightning for three turns, so something else didn't have to.",
+        "importance": 85
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "@ridge-one"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1,
+        "ability": "grounded-heart"
+       },
+       {
+        "kind": "flag",
+        "key": "ridge-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "ridge-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-35-driven",
+   "name": "Thunderstorm Ridge: Driven Down",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "manectric",
+    "tint": "#3b4060",
+    "effect": "rain"
+   },
+   "intro": "Too much. The storm drives you off the summit, and down, and you don't stop till the trees.\n\nBehind you, the peak takes another strike. And another.",
+   "choices": [
+    {
+     "label": "Go down.",
+     "success": {
+      "text": "You don't look back. You can hear it anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ridge-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "ridge-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-35-forecast",
+   "name": "The Storm Chasers' Forecast",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ridge-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "ridge-at"
+    },
+    {
+     "kind": "flag",
+     "key": "ridge-forecast",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.lacey"
+    ],
+    "tint": "#3b4060",
+    "effect": "none"
+   },
+   "intro": "A pickup truck at the roadside, radio on. Ada's pinned the forecast to the windscreen for anyone passing.\n\n*Clear over the ridge. First time in a month. Don't know why.*",
+   "choices": [
+    {
+     "label": "Read it again.",
+     "success": {
+      "text": "Kip, from the cab, without looking up: \"We drove past it this morning. You can see all the way to the top.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ridge-forecast",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The radio follows you a little way down the road, saying clear, clear, clear.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ridge-forecast",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

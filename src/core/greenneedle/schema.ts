@@ -30,7 +30,7 @@ export const bindGnEffects = (schema: z.ZodType, conditions?: z.ZodType): void =
  *  - `stampStage`: the run flag `key` remembers the stage number now (read with the `gn` conditions `laterStage`, `sameStage`, `notThisStage`).
  *  - `partyHas`: the run flag `key` becomes 1 when a party Pokémon is one of `species`, else 0 (a Clefairy or Clefable sees the secret dance).
  */
-export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem', 'markLast', 'dropMarked', 'lendHeld', 'returnLent', 'partner', 'oldMove', 'castBase', 'nextOp', 'natureLast', 'markLead', 'crystal', 'crystalDrop', 'crystalMost'] as const;
+export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem', 'markLast', 'dropMarked', 'lendHeld', 'returnLent', 'partner', 'oldMove', 'castBase', 'nextOp', 'natureLast', 'markLead', 'crystal', 'crystalDrop', 'crystalMost', 'lightning'] as const;
 export const GnEffectSchema = z.object({
   kind: z.literal('gn'),
   op: z.enum(GN_OPS),
@@ -90,6 +90,8 @@ export const GnEffectSchema = z.object({
   // clampFlag: holds flag `key` between `min` and `max` (the rain's Flame, 0 to 5).
   // markLook: marks (`key`) every party Pokémon wearing anime look `type` (the Squad recruit, before its challenge). setLook: marked ones now wear `type`.
   .refine((e) => (e.op === 'markLook' || e.op === 'setLook' ? !!e.key && !!e.type : true), { message: 'markLook / setLook need `key` (the mark) and `type` (the look)' })
+  // gn.35. lightning: `n` percent that a bolt strikes the lead and paralyses it (core/greenneedle/ridge.ts says what stops it).
+  .refine((e) => (e.op === 'lightning' ? e.n !== undefined && e.n >= 1 && e.n <= 100 : true), { message: 'a lightning needs `n` (1 to 100)' })
   .refine((e) => (e.op === 'clampFlag' ? !!e.key && e.min !== undefined && e.max !== undefined : true), { message: 'a clampFlag needs `key`, `min` and `max`' });
 export type GnEffect = z.infer<typeof GnEffectSchema>;
 
@@ -121,7 +123,7 @@ export type GnCond = z.infer<typeof GnCondSchema>;
  *  - `damian`: Damian himself (gn.05). His last Pokémon is the ace he actually trained: `ace` levels higher, a held item that fits its type,
  *    and two moves that cover its weaknesses.
  */
-export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame', 'hawlucha', 'final', 'lastExchange', 'pipes', 'sludge', 'furnace', 'core', 'savanna', 'herd', 'jungle', 'tsareena', 'slowking', 'forest', 'golem'] as const;
+export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame', 'hawlucha', 'final', 'lastExchange', 'pipes', 'sludge', 'furnace', 'core', 'savanna', 'herd', 'jungle', 'tsareena', 'slowking', 'forest', 'golem', 'ridge', 'overcharged', 'earthing'] as const;
 export const GnRuleSchema = z.enum(GN_RULES);
 export type GnRule = z.infer<typeof GnRuleSchema>;
 

@@ -1914,5 +1914,31 @@
    "Legendary"
   ],
   "tags": []
+ },
+ "gn-35-door": {
+  "gn": "gn.35",
+  "shape": "Door",
+  "earliest": "A7",
+  "home": 16,
+  "window": [
+   14,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A+1; the overcharged one A+2",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "Thunderstorm Ridge",
+   "elsewhere": "Thunderstorm Ridge"
+  },
+  "note": "Badge: a lightning bolt. Six nodes. Lightning each node (20%); charged crystals draw Electric-types; three crystals bring the overcharged one to the Shelter, a node early.",
+  "kinds": [
+   "Pseudo Stage"
+  ],
+  "tags": [
+   "storm|high"
+  ]
  }
 }

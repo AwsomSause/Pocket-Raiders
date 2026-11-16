@@ -19,6 +19,7 @@ import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { gnAfterTurn, gnShape } from './greenneedle';
+import { ridgeCatch } from './greenneedle/ridge';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
 import { revivalFee } from './battle/revivalStatus';
@@ -3094,7 +3095,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     rng: eliteDuelist(run.rules) ? Rng.steady(rng.state) : rng,
     captureRng,
     speciesCaught: run.log.speciesCaught,
-    catchMultiplier: captureMultiplier(archetype) * attributes.catchRate * throwMultiplier(content, run, currentEnemy(run.battle!)) * wildCatchMultiplier(content, run) * mutatorCatch(run) * (run.battle!.eventRule?.catchTimes ?? 1),
+    catchMultiplier: captureMultiplier(archetype) * attributes.catchRate * throwMultiplier(content, run, currentEnemy(run.battle!)) * wildCatchMultiplier(content, run) * mutatorCatch(run) * (run.battle!.eventRule?.catchTimes ?? 1) * ridgeCatch(run, run.battle!),
     healMultiplier: healingMultiplier(archetype) * attributes.healing,
     typeModifiers: typeModifiers(archetype, badgeTypesOf(content, run.badges), content.balance.badgePower),
     perks: blessingPerks(run).length > 0 ? [...archetype.modifiers, ...blessingPerks(run)] : archetype.modifiers,

@@ -189,6 +189,9 @@ export const PROMPTS: readonly PromptDef[] = [
   // Catalog Overhaul markets (SF91, SF92): the Game Corner's skill games.
   { id: 'claw-drag', kind: 'drag', label: 'Steer the claw', hint: 'Drag the claw over the prize and let go.', from: [20, 25], to: [70, 70], windowsPx: W(6, 12, 22), maxMs: 4000 },
   { id: 'shell-tap', kind: 'tap', label: 'Follow the Ball', hint: 'Press the moment her hands stop over the shell with the Ball.', windowsMs: W(180, 300, 480), expireMs: 1000 },
+  // Greenneedle gn.35, Thunderstorm Ridge: the Counting Path (cross in the long gap) and the Iron Bridge (cross while it's dark).
+  { id: 'ridge-gap', kind: 'timing', label: 'Go!', hint: 'Long, short, short. Press as the ring closes: go in the long gap.', landMs: 1400, windowsMs: W(80, 160, 300) },
+  { id: 'bridge-dark', kind: 'timing', label: 'Cross!', hint: 'Press as the ring closes: cross while the bridge is dark.', landMs: 1200, windowsMs: W(80, 160, 300) },
 ];
 
 export const promptById = (id: string): PromptDef => {

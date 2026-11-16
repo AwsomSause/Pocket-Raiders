@@ -2167,7 +2167,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
   const lastAlive = b.kind === 'trainer' && b.rule?.reversed ? run.party.map((p) => p.hp > 0).lastIndexOf(true) : -1;
   const pondLead = b.kind === 'trainer' && b.rule?.pondDuel ? run.party.findIndex((p) => p.pond && p.hp > 0) : -1;
   const marked = b.kind !== 'raid' && b.rule?.leadMark ? run.party.findIndex((p) => p.hp > 0 && p.gn?.some((t) => t === b.rule!.leadMark || t.startsWith(`${b.rule!.leadMark}:`))) : -1;
-  const dueler = pondLead >= 0 ? pondLead : marked >= 0 ? marked : b.kind === 'trainer' && b.rule?.leadType ? run.party.findIndex((p) => p.hp > 0 && getSpecies(content, p.speciesId).types.includes(b.rule!.leadType!)) : -1;
+  const dueler = pondLead >= 0 ? pondLead : marked >= 0 ? marked : (b.kind === 'trainer' || (b.kind === 'wild' && b.rule?.gn === 'earthing')) && b.rule?.leadType ? run.party.findIndex((p) => p.hp > 0 && getSpecies(content, p.speciesId).types.includes(b.rule!.leadType!)) : -1;
   const activeIndex = dueler >= 0 ? dueler : lastAlive >= 0 ? lastAlive : run.party.findIndex((p) => p.hp > 0);
   const base = (b.kind !== 'raid' ? b.level : undefined) ?? (b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level + b.levelBonus : eventLevel(content, run, node, rng, content.coPlacement?.get(event.eventId)?.level ?? 0) + b.levelBonus);
   // Event foes stay under the region's level cap like every ordinary enemy (Balancing Phase 7).

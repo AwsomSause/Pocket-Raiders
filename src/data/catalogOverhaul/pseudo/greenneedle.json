@@ -181,6 +181,15 @@
    "tint": "#2f4a2a",
    "mood": "ancient forest",
    "start": "opened"
+  },
+  {
+   "id": "ps_gn_ridge",
+   "name": "Thunderstorm Ridge",
+   "entry": "gn-35-door",
+   "themeId": "electric-flying",
+   "tint": "#3b4060",
+   "mood": "thunderstorm ridge",
+   "start": "opened"
   }
  ]
 }

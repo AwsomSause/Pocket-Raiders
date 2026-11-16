@@ -401,5 +401,22 @@
         }
       ]
     }
+  },
+  {
+    "id": "summit-ability-capsule",
+    "name": "Summit Ability Capsule",
+    "family": "IV and ability items",
+    "description": "Found in the glass on Thunderstorm Ridge's summit. Gives a Pokémon its hidden ability.",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "use",
+    "icon": "library/abilityvial",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "ability",
+      "mode": "hidden"
+    }
   }
 ]

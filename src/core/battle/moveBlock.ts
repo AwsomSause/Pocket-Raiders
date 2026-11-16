@@ -18,6 +18,8 @@ export function moveBlockReason(content: Content, battle: BattleState, mon: Poke
   if (v.torment && v.lastMove === move.id) return 'Torment: it cannot repeat';
   if (v.taunt > 0 && move.category === 'status') return 'Taunt: no status moves';
   if (battle.eventRule?.noAttacks && move.category !== 'status' && mon.moves.some((m) => m.pp > 0 && content.moves.get(m.id)?.category === 'status')) return 'Pacifist challenge: status moves only';
+  // Greenneedle gn.35: earthing the overcharged one. A damaging move is greyed while there's something else to do.
+  if (battle.eventRule?.gn === 'earthing' && move.category !== 'status' && mon.moves.some((m) => m.pp > 0 && content.moves.get(m.id)?.category === 'status')) return 'It needs you to stand there';
   if (v.throat > 0 && move.flags.includes('sound')) return 'Throat Chop: no sound moves';
   return null;
 }
