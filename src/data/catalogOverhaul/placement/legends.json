@@ -2216,5 +2216,15 @@
   "attaches": "rest",
   "tags": [],
   "where": "MY11: the last rest before the League, last region"
+ },
+ "co-m7-glow": {
+  "shape": "Pool",
+  "earliest": "A4",
+  "where": "A rival episode: takes the stage's rival slot when it is free"
+ },
+ "co-m7-loose": {
+  "shape": "Pool",
+  "earliest": "A5",
+  "where": "Callback: a kept stoneless Mega at meter 5; takes the rival slot"
  }
 }

@@ -38,7 +38,7 @@ Pack questlines, so the status file lists them under `extra` (M1-M6 -> entry eve
 | M4 | co-m4-mirror | Door A7, 14 | pseudo chain `ps_mirror_spider`: rooms 1-3, central room, merge or split | none |
 | M5 | co-m5-tatsugiri | Single A4, 10 | contest or feed, verdict, tie gives a later ride | none |
 | M6 | co-m6-flower | Single A17, 11-13 | fence, reactor, AZ's Flute | none |
-| M7 | not built | | needs the rivals row's rival slot | waits on rivals |
+| M7 | co-m7-glow | 2026-11-15 | a rival episode on the rivals row's rival slot (`slotFree`/`takeSlot`); opinion counts at Trust 4+, else by personality (Hothead = bitter-challenger/champion-chaser keeps, Gentle = protector/idealist seals, others by Trust); Seal gives a Mega Ring (the game's Key Stone), flag `rival-mega-sealed`; Keep = rival Lead +1, flag `rival-mega-kept`; `co-m7-loose` at meter 5 | the stoneless Mega is not shown in the battle itself (the rival's ace does not Mega on screen); the out-of-control fight is a 1-Pokémon rival fight, not a calm bar |
 
 The region Anomaly meter is run flag `mega-meter`; `syncLegendFlags` resets it to 0 when the region changes. Tests: `tests/unit/coLegendsMega.test.ts`.
 

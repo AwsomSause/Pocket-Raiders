@@ -22,6 +22,12 @@ function at(eventId: string, seed: string, setup?: (run: RunState) => void): Run
   return run;
 }
 
+const f = (run: RunState, key: string) => run.story.flags[`ev:${key}`] ?? 0;
+const pick = (run: RunState, eventId: string, choice: number): RunState => {
+  const side = run.stage!.map.nodes[0]!.sides.find((s) => s.kind === 'event' && !s.used && (s as { eventId?: string }).eventId === eventId)!;
+  return chooseEvent(content, run, side.id, choice).run;
+};
+
 describe('Mega Anomalies M1 to M6', () => {
   it('each Anomaly has an entry event, a status line and a placement', () => {
     const extra = (status as { extra?: Record<string, string> }).extra ?? {};
@@ -68,5 +74,38 @@ describe('Mega Anomalies M1 to M6', () => {
     expect(rooms.some((r) => r.next.length === 0)).toBe(true);
     const run = chooseEvent(content, at('co-m4-mirror', 'mirror'), 'x', 0).run;
     expect(run.story.flags['ev:mirror-started']).toBe(1);
+  });
+});
+
+describe('M7 Mega Without a Stone (a rival episode)', () => {
+  const effectsOf = (o: { effects?: unknown[] } | undefined): string => JSON.stringify(o?.effects ?? []);
+  it('needs a met rival and a free rival slot, and every way through the opening takes the slot', () => {
+    const glow = content.events.get('co-m7-glow')!;
+    expect(glow.requires).toContainEqual(expect.objectContaining({ kind: 'rivalQuest', slotFree: true }));
+    expect(glow.requires).toContainEqual({ kind: 'rivalMet', atLeast: 1 });
+    for (const c of glow.choices) expect(effectsOf(c.success), c.label).toContain('"takeSlot":true');
+    for (const c of content.events.get('co-m7-loose')!.choices) expect(effectsOf(c.success), c.label).toContain('"takeSlot":true');
+    expect(content.items.has('mega-ring')).toBe(true);
+    expect((status as { extra: Record<string, string> }).extra.M7).toBe('co-m7-glow');
+    expect((placement as Record<string, unknown>)['co-m7-glow']).toBeDefined();
+  });
+
+  it('your opinion counts only at Trust 4+; under it the rival decides (no rival here: they keep it)', () => {
+    const finding = content.events.get('co-m7-finding')!;
+    expect(finding.choices[0]!.requires).toContainEqual(expect.objectContaining({ kind: 'rivalQuest', feeling: expect.objectContaining({ key: 'trust', atLeast: 4 }) }));
+    expect(finding.choices[1]!.requires).toEqual(finding.choices[0]!.requires);
+    let run = at('co-m7-ace', 'm7');
+    run = pick(run, 'co-m7-ace', 0);
+    run = pick(run, 'co-m7-sample', 0);
+    expect(f(run, 'rival-mega-helped')).toBe(1);
+    run = pick(run, 'co-m7-finding', 2); // Seal and Keep need Trust 4: only "It's your choice" can be taken
+    expect([f(run, 'rival-mega-kept'), f(run, 'rival-mega-done')]).toEqual([1, 1]);
+  });
+
+  it('a kept stoneless Mega runs out of control at meter 5, once', () => {
+    const loose = content.events.get('co-m7-loose')!;
+    expect(loose.requires).toContainEqual(expect.objectContaining({ key: 'rival-mega-kept', atLeast: 1 }));
+    expect(loose.requires).toContainEqual(expect.objectContaining({ key: 'mega-meter', atLeast: 5 }));
+    expect(loose.requires).toContainEqual(expect.objectContaining({ key: 'rival-mega-calmed', atMost: 0 }));
   });
 });
