@@ -52,6 +52,12 @@ describe('New UI list band colour', () => {
     expect(pickerKind('Camp')).toBe('menu');
     // The camp's own Photo Album keeps the hub's band: only the map's Album is a story page.
     expect(areaOf('Photo Album')).toBe('hub');
+    // Rivals and People are story boards, the PC is a party wall, the Field Notebook a run menu.
+    for (const t of ['Rivals', 'People']) { expect(areaOf(t)).toBe('story'); expect(pickerKind(t)).toBe('board'); }
+    expect(areaOf('PC')).toBe('party');
+    expect(pickerKind('PC')).toBe('grid');
+    expect(areaOf('Field Notebook')).toBe('run');
+    expect(pickerKind('Field Notebook')).toBe('menu');
     expect(areaOf('Strange Merchant')).toBe('shop');
     expect(areaOf('Bag')).toBe('shop');
     expect(areaOf('Pokédex')).toBe('party');

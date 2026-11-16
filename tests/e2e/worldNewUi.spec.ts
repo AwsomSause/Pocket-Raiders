@@ -4,7 +4,8 @@ import { view, waitForScene, watch, start, toMap, toCommands, open } from './hel
 // The New UI's places from the last pass: the Pokédex (mock-up pieces "Pokédex: set browser" and "Pokédex: species
 // info": a wall of species pictures with filter tabs, and the species page with its stat bars and evolution line), the
 // Bank's Exchange Counter (the mock-up counter page with a clerk), a Plaza district's menu, Galar's stadium
-// interview (the mock-up talk page over the field) and the stage map's menus (Camp, Album, Story Journal, Legend).
+// interview (the mock-up talk page over the field) and the stage map's menus (Camp, Album, Story Journal, Legend, and
+// on a story run PC, Rivals, People and Notes).
 // One of the New UI spec files (see newUi.spec.ts); the shared steps are in helpers/newUi.ts.
 
 test('New UI: a Pokédex set is a wall of species pictures with filter tabs, and a species opens the mock-up species page (facts, six stat bars, evolution line, a second page of data)', async ({ page }) => {
@@ -425,5 +426,122 @@ test('New UI: the map menus follow the mock-ups: Camp opens on its five-row fron
   await expect(log).toContainText('Interaction log');
   await page.keyboard.press('Shift+L');
   await expect(log).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test('New UI: on a story run the map\'s PC is a wall of slots (Enter moves a Pokémon in or out), Rivals and People are boards with tags, and Notes keeps its notebook band on a tab\'s page', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-storymenus&campaign=orrery-circuit&debug=1');
+  for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Story']) {
+    await page.keyboard.press('Enter');
+    await waitForScene(page, next);
+    await page.waitForTimeout(250);
+  }
+  // The backstory intro plays first: Enter turns its pages and takes the first answers.
+  for (let i = 0; i < 30 && (await page.evaluate(() => (window as any).__pkr.activeScene())) !== 'Map'; i++) {
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(500);
+  }
+  await waitForScene(page, 'Map');
+  // A run with a PC of 30 slots (three in use), a second party Pokémon, two rivals and three people met.
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    const run = pkr.session.run;
+    const person = (stage: string, trust: number) => ({ stage, attrs: { trust, respect: 30 }, memories: [], flags: { met: true }, gates: [], mem: [], scenes: 1, pending: null, last: null });
+    run.story.v2.cast = { ch_vance: person('trusted', 60), ch_pell_orrin: person('friendly', 70), ch_cass_verrin: person('wary', 10) };
+    run.perkEffects = [...(run.perkEffects ?? []), { kind: 'boxCapacity', slots: 30 }];
+    const m = run.party[0];
+    for (let k = 0; k < 3; k++) run.box.push({ ...structuredClone(m), uid: `${m.uid}-b${k}` });
+    run.party.push({ ...structuredClone(m), uid: `${m.uid}-p2` });
+    const traits = { ambition: 50, pride: 50, empathy: 50, adaptability: 50, vindictiveness: 50, resilience: 50 };
+    const rival = (id: string, classId: string, name: string) => ({
+      id, classId, name, archetype: 'proud', style: 'rush', traits, rivalPotential: 20, state: 'recurring', arc: null, away: 0, cooldown: 0, progress: 0,
+      encounters: 2, setbacks: 0, adaptations: [], seen: [], bonds: {}, offscreen: [], origin: { eventId: `e-${id}`, where: { region: 0, stage: 0, level: 1, node: null, battle: 0, turn: null }, path: 'spark' },
+      memory: { lastBattle: { eventId: 'x', result: 'win', hpLeftShare: 0.5, turns: 5, team: ['rattata'] } },
+    });
+    run.story.rivals = [rival('u', 'youngster', 'Joey'), rival('v', 'lass', 'Mira')];
+    pkr.game.scene.getScene('Map').scene.restart({ focus: 0 });
+  });
+  await waitForScene(page, 'Map');
+  const idle = () => expect.poll(() => page.evaluate(() => { const m = (window as any).__pkr.game.scene.getScene('Map'); return !m.busy && !m.picker; }), { timeout: 15_000 }).toBe(true);
+  const openMenu = async (label: string) => {
+    await idle();
+    await page.waitForTimeout(250);
+    await view(page, 'Map').first().locator('.btn', { hasText: label }).first().click();
+    await page.waitForTimeout(400);
+  };
+  const menu = (name: string | RegExp) => page.locator('#rx .stage[data-scene="Map"]', { has: page.locator('.hd', { hasText: name }) }).last();
+  const counts = () => page.evaluate(() => { const run = (window as any).__pkr.session.run; return { party: run.party.length as number, box: run.box.length as number }; });
+
+  // PC: the wall shows the box, 18 slots a page; the bar counts the slots in use.
+  await openMenu('PC');
+  const pc = menu(/^\W*PC$/);
+  const cells = pc.locator('.cell[data-act="pick"]');
+  await expect(cells).toHaveCount(18);
+  await expect(cells.locator('i.an')).toHaveCount(3);
+  await expect(cells.nth(3)).toHaveClass(/off/);
+  await expect(pc.locator('.win').first()).toContainText('27 of 30 slots free.');
+  await expect(pc.locator('.win').nth(1)).toContainText(/3\s*\/\s*30/);
+  await expect(pc.locator('.txt')).toHaveText('Bring this Pokémon into the party.');
+  await page.screenshot({ path: 'test-results/newui-map-pc.png' });
+  // An empty slot asks which party Pokémon goes in; Esc comes back to the wall on that slot.
+  for (let k = 0; k < 4; k++) await page.keyboard.press('ArrowRight');
+  await expect(pc.locator('.win').first()).toContainText('Empty slot');
+  await expect(pc.locator('.txt')).toContainText('Enter sends a party Pokémon to the PC.');
+  await page.keyboard.press('Enter');
+  const send = menu('Send which Pokémon to the PC?');
+  await expect(send.locator('[data-act="pick"]')).toHaveCount(2);
+  await page.keyboard.press('Escape');
+  await expect(send).toHaveCount(0);
+  await expect(pc.locator('.win').first()).toContainText('Empty slot');
+  await page.keyboard.press('Enter');
+  await expect(send.locator('[data-act="pick"]')).toHaveCount(2);
+  await page.keyboard.press('Enter');
+  await expect(send).toHaveCount(0);
+  expect(await counts()).toEqual({ party: 1, box: 4 });
+  // A boxed Pokémon joins the party on Enter.
+  await openMenu('PC');
+  await expect(cells.locator('i.an')).toHaveCount(4);
+  await page.keyboard.press('Enter');
+  await expect(pc).toHaveCount(0);
+  expect(await counts()).toEqual({ party: 2, box: 3 });
+
+  // Rivals: a board on the story band, each rival with its record and a state tag.
+  await openMenu('Rivals');
+  const rivals = menu(/^\W*Rivals$/);
+  const rows = rivals.locator('[data-act="pick"]');
+  await expect(rows).toHaveCount(2);
+  await expect(rows.first()).toContainText('Joey');
+  await expect(rows.first()).toContainText('2 fights');
+  await expect(rows.first().locator('.tg')).toHaveText('Recurring');
+  await page.keyboard.press('Escape');
+  await expect(rivals).toHaveCount(0);
+
+  // People: a board with a bar and the stage as the tag; the role sits under the name.
+  await openMenu('People');
+  const people = menu(/^\W*People$/);
+  const folk = people.locator('[data-act="pick"]');
+  await expect(folk).toHaveCount(3);
+  await expect(folk.first()).toContainText('Vance');
+  await expect(folk.first()).toContainText('Mentor');
+  await expect(folk.first().locator('.tg')).toHaveText('Trusted');
+  await expect(folk.first().locator('.hp').first()).toBeVisible();
+  await page.screenshot({ path: 'test-results/newui-map-people.png' });
+  await page.keyboard.press('Escape');
+  await expect(people).toHaveCount(0);
+
+  // Notes: the notebook's tabs with their counts; a tab's page keeps the notebook's name with the tab as a chip.
+  await openMenu('Notes');
+  const notes = menu('Field Notebook');
+  await expect(notes.locator('.btn[data-act="pick"]').first()).toContainText('Main Story');
+  await expect(notes.locator('.win').first()).toContainText('Main Story');
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(400);
+  await expect(notes.locator('.tg', { hasText: 'Main Story' })).toHaveCount(1);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(400);
+  await expect(notes.locator('.tg', { hasText: 'Main Story' })).toHaveCount(0);
+  await page.keyboard.press('Escape');
+  await expect(notes).toHaveCount(0);
   expect(errors).toEqual([]);
 });

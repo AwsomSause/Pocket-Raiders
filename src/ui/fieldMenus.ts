@@ -29,7 +29,8 @@ import { services } from '../game/services';
 import { itemCard, itemFooter } from '../core/itemPreview';
 import { runHealMultiplier } from '../core/run';
 import { partyPreviews, quickSummaryText } from './itemScreen';
-import { emotionDot, partyRows, Picker, speciesRow, type PickerLike, type PickerRow } from './partyPanel';
+import { emotionDot, partyRow, partyRows, Picker, speciesRow, type PickerLike, type PickerRow } from './partyPanel';
+import { monFile } from './redux/game';
 import { reduxOn } from './redux/stage';
 import { itemVisual } from './sprites';
 import { COLORS, textStyle } from './theme';
@@ -56,6 +57,7 @@ export function openBoxMenu(host: FieldMenuHost): void {
   const content = session.content;
   const capacity = boxCapacity(runPerks(content, run));
   const partyFull = run.party.length >= partyCapacity(content, run);
+  if (reduxOn()) return openBoxWall(host);
   const rows = [
     ...partyRows(content, run.party, () => (run.party.length <= 1 ? 'The party needs one Pokémon.' : run.box.length >= capacity ? 'The PC is full.' : null), () => 'PARTY', () => 'Send this Pokémon to the PC.'),
     ...partyRows(content, run.box, () => (partyFull ? 'Your party is full.' : null), () => 'PC', () => 'Bring this Pokémon into the party.'),
@@ -79,6 +81,59 @@ export function openBoxMenu(host: FieldMenuHost): void {
   host.setPicker(picker);
 }
 
+/**
+ * New UI: the PC as the mock-up's wall of slots. A boxed Pokémon joins the party on Enter; an empty slot asks which
+ * party Pokémon to put there. The Found bar counts the slots in use.
+ */
+function openBoxWall(host: FieldMenuHost, at = 0): void {
+  const { session } = services();
+  const run = session.run!;
+  const content = session.content;
+  const capacity = boxCapacity(runPerks(content, run));
+  const partyFull = run.party.length >= partyCapacity(content, run);
+  const free = Math.max(0, capacity - run.box.length);
+  const slots = `${free} of ${capacity} slots free.`;
+  const rows: PickerRow[] = run.box.map((mon) => {
+    const row = partyRow(content, mon, partyFull ? 'Your party is full.' : null, { hint: 'Bring this Pokémon into the party.' });
+    const name = content.species.get(row.mon!.speciesId)?.name ?? mon.speciesId;
+    return { ...row, cell: { file: monFile(host.scene, row.mon!.speciesId, 'front', row.mon!.shiny), title: name, body: `Lv ${mon.level} · HP ${Math.round(row.mon!.hp * 100)}%. ${slots}` } };
+  });
+  for (let k = 0; k < free; k++) rows.push({ problem: run.party.length <= 1 ? 'The party needs one Pokémon.' : null, hint: 'An empty slot. Enter sends a party Pokémon to the PC.', cell: { file: null, title: 'Empty slot', body: slots, off: true }, draw: () => undefined });
+  const picker: Picker = new Picker(host.scene, {
+    title: 'PC',
+    columns: 2,
+    rowHeight: 78,
+    rows,
+    start: Math.min(at, Math.max(0, rows.length - 1)),
+    onSelect: (i) => {
+      close(host, picker);
+      if (i < run.box.length) {
+        const name = content.species.get(run.box[i]!.speciesId)!.name;
+        session.withdrawFromBox(i);
+        host.changed(`${name} joined the party.`);
+        return;
+      }
+      // An empty slot: pick who goes in.
+      const who: Picker = new Picker(host.scene, {
+        title: 'Send which Pokémon to the PC?',
+        columns: 2,
+        rowHeight: 78,
+        rows: partyRows(content, run.party, () => null, () => undefined, () => 'Send this Pokémon to the PC.'),
+        onSelect: (k) => {
+          const name = content.species.get(run.party[k]!.speciesId)!.name;
+          session.depositToBox(k);
+          close(host, who);
+          host.changed(`${name} was sent to the PC.`);
+        },
+        onBack: () => { close(host, who); openBoxWall(host, i); },
+      });
+      host.setPicker(who);
+    },
+    onBack: () => close(host, picker),
+  });
+  host.setPicker(picker);
+}
+
 /** The rival Notebook: one row per rival met this run, showing only what that rival has recorded about you. */
 export function openRivalNotebook(host: FieldMenuHost): void {
   const { session } = services();
@@ -87,13 +142,15 @@ export function openRivalNotebook(host: FieldMenuHost): void {
     ? entries.map((e) => ({
       problem: null,
       hint: e.lines.join('  '),
+      board: bd(e.title, e.record, e.state ? `${e.state[0]!.toUpperCase()}${e.state.slice(1)}` : ''),
       draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
         box.add(scene.add.text(14, 8, `${e.major ? '★ ' : ''}${e.title} (${e.state})`, textStyle(20, '#f0c028', { fixedWidth: w - 28 })));
         box.add(scene.add.text(14, 36, e.lines.slice(0, 2).join(' '), textStyle(14, '#cfefff', { wordWrap: { width: w - 28 } })));
       },
     }))
     : [{ problem: null, hint: 'Rivals you meet will be written up here.', draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => { box.add(scene.add.text(14, 8, 'No rivals met yet', textStyle(20, '#cfefff', { fixedWidth: w - 28 }))); } }];
-  const picker: Picker = new Picker(host.scene, { glass: true, title: 'Rival Notebook', columns: 1, rowHeight: 76, rows, onSelect: () => undefined, onBack: () => close(host, picker) });
+  // New UI: the mock-up's Rivals board (the name picks the board and its story band).
+  const picker: Picker = new Picker(host.scene, { glass: true, title: reduxOn() ? 'Rivals' : 'Rival Notebook', columns: 1, rowHeight: 76, rows, onSelect: () => undefined, onBack: () => close(host, picker) });
   host.setPicker(picker);
 }
 

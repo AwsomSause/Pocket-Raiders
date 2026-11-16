@@ -24,6 +24,10 @@ describe('relationship view', () => {
     expect(rows[0]!.name).toBe(data.text['ch.ch_vance.name']);
     expect(rows[0]!.bars.find((b) => b.attr === 'trust')!.pips).toBe('■■■□□');
     expect(rows[0]!.memories).toEqual(['Shared umbrella']);
+    // What they are to the story, for the New UI's People board (a bystander has no role line).
+    expect(rows[0]!.role).toBe('Mentor');
+    run.story.v2!.cast.ch_pell_orrin = run.story.v2!.cast.ch_vance!;
+    expect(relationshipRows(data, run).find((r) => r.id === 'ch_pell_orrin')!.role).toBe('');
   });
   it('pulses until the page is opened, and again after a stage change', () => {
     const run = setup();

@@ -10,6 +10,8 @@ export interface RelationshipRow {
   name: string;
   stage: string;
   stageLabel: string;
+  /** What they are to the story ("Mentor", "Rival"); '' for a bystander or a character that is not in the data. */
+  role: string;
   pulse: boolean;
   bars: { attr: Attr; label: string; value: number; pips: string }[];
   memories: string[];
@@ -33,7 +35,7 @@ export function relationshipRows(data: StoryData, run: RunState): RelationshipRo
     const name = (ch && data.text[ch.nameKey]) || cap(id.replace(/^ch_/, ''));
     const seen = run.story.flags[seenKey(id)];
     rows.push({
-      id, name, stage: rec.stage, stageLabel: cap(rec.stage),
+      id, name, stage: rec.stage, stageLabel: cap(rec.stage), role: ch?.role && ch.role !== 'npc' ? cap(ch.role) : '',
       pulse: seen !== stageRank(rec.stage) + 10,
       bars: ATTRS.filter((a) => (rec.attrs[a] ?? 0) > 0).map((a) => ({ attr: a, label: cap(a), value: rec.attrs[a] ?? 0, pips: bar(rec.attrs[a] ?? 0) })),
       memories: [...rec.mem].sort((a, b) => b.node - a.node || b.salience - a.salience).slice(0, MEMORY_SHOWN).map((m) => data.text[`mem.${m.tag}`] ?? cap(m.tag)),

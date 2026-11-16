@@ -42,13 +42,13 @@ export function areaOf(title: string): Area {
   // The Memories pages are story pages; the replays are battles (the mock-up catalogue's own bands).
   if (/^memories/i.test(title)) return /battle replays/i.test(title) ? 'battle' : 'story';
   // The story's own archives (Tales & News) and the Moment Codex wear the story's purple.
-  if (/^(lore|story|remembrance) archive|^character (database|profile)|^moment codex|^album$|^story journal$/i.test(title)) return 'story';
+  if (/^(lore|story|remembrance) archive|^character (database|profile)|^moment codex|^album$|^story journal$|^rivals$|^people$/i.test(title)) return 'story';
   // The Legacy Gallery and the Hall of Fame keep finished runs: the run end's gold band.
   if (/^(legacy gallery|hall of fame)/i.test(title)) return 'end';
   // Seeds, timers and brackets are about a run: teal.
   if (/^(seed board|seed leaderboard|speedrun timer|tournament bracket)/i.test(title)) return 'run';
-  if (/party|pok[eé]mon|pok[eé]dex|team|summary|bond/i.test(title)) return 'party';
+  if (/party|pok[eé]mon|pok[eé]dex|team|summary|bond|^pc$/i.test(title)) return 'party';
   if (/shop|mart|merchant|exchange/i.test(title)) return 'shop';
-  if (/bag|item|camp|map|route|journal|notes/i.test(title)) return 'run';
+  if (/bag|item|camp|map|route|journal|notes|field notebook/i.test(title)) return 'run';
   return 'hub';
 }
