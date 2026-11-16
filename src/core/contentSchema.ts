@@ -1284,6 +1284,8 @@ export const HeldHookSchema = z.discriminatedUnion('hook', [
   z.object({ hook: z.literal('weatherTurns'), weathers: z.array(WeatherSchema).min(1), turns: z.number().int().positive() }),
   /** Extra experience for the holder (Macho Brace). */
   z.object({ hook: z.literal('exp'), multiplier: z.number().positive() }),
+  /** Greenneedle gn.59 (Ferris's Hat): the holder gains experience as if it were `levels` lower, so it grows faster. */
+  z.object({ hook: z.literal('expLevel'), levels: z.number().int().min(1).max(10) }),
   /** Every few levels the holder grows a stat like a vitamin (Power items). */
   z.object({ hook: z.literal('growth'), stat: StatNameSchema, everyLevels: z.number().int().positive() }),
   /** The holder can't evolve (Everstone). */

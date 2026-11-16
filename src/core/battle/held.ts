@@ -939,6 +939,11 @@ export function expMultiplier(content: Content, mon: PokemonInstance): number {
   return hooks(hooksOf({ content }, mon, 'enemy'), 'exp').reduce((m, h) => m * h.hook.multiplier, 1);
 }
 
+/** Ferris's Hat: the holder gains experience as if it were this many levels lower. */
+export function expLevelShift(content: Content, mon: PokemonInstance): number {
+  return hooks(hooksOf({ content }, mon, 'enemy'), 'expLevel').reduce((n, h) => n + h.hook.levels, 0);
+}
+
 /** Extra friendship gains for the holder (Prism Scale). */
 export function friendshipMultiplier(content: Content, mon: PokemonInstance): number {
   return hooks(hooksOf({ content }, mon, 'enemy'), 'friendship').reduce((m, h) => m * (1 + h.hook.percent / 100), 1);

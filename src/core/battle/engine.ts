@@ -21,6 +21,7 @@ import { golemBlueType, golemColour } from '../greenneedle/crystals';
 import { unflinching } from '../greenneedle/daycare';
 import { arenaTurn, arenaVerdict } from '../greenneedle/frontier';
 import { gavelFirst, gavelSpent } from '../greenneedle/auction';
+import { ferrisPredicted } from '../greenneedle/ferris';
 import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
 import { draftTurn } from '../greenneedle/draft';
 import { snorlaxTurn } from '../greenneedle/snorlax';
@@ -284,6 +285,8 @@ export type PlayerAction =
   | { kind: 'item'; itemId: string; targetIndex?: number; skill?: 'miss' | 'ok' | 'good' | 'perfect'; throwSkill?: SkillInput }
   /** A trainer's surrender deal: accept ends the fight (no EXP, more money); refuse keeps fighting and does not use the turn (ideas W1). */
   | { kind: 'deal'; accept: boolean }
+  /** Greenneedle gn.59: your read of the Gym Leader's feet (no turn used). */
+  | { kind: 'predict'; yes: boolean }
   /** Smash the arena (rocks, lava, flood): hurts the foe once per battle and uses the turn (ideas W1). */
   | { kind: 'arena' }
   /** A raid cheer (Raid Battles pack): uses the turn, costs one of three cheers. */
@@ -873,6 +876,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   // Ideas W1: this turn's skill grade (a prompt result is an input, like the move itself); a surrender deal; smashing the arena.
   battle.skill = action.kind === 'move' ? action.skill : action.kind === 'item' ? action.throwSkill : undefined;
   if (action.kind === 'deal') return dealTurn(ctx, action.accept, events);
+  if (action.kind === 'predict') return predictTurn(ctx, action.yes, events);
   if (action.kind === 'arena') {
     const problem = arenaProblem(ctx);
     if (problem) throw new Error(problem);
@@ -4100,7 +4104,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   }
   const foeAbility = targetsEnemy ? targetAbility(ctx, user, target) : null;
   // Greenneedle gn.32: the Golem read as White sees through evasion and can't miss.
-  const noGuard = userAbility === 'no-guard' || abilityIn(ctx, target) === 'no-guard' || userAbility === 'skys-resolve' || abilityIn(ctx, target) === 'skys-resolve' || (user.side === 'enemy' && golemColour(ctx.battle) === 'white');
+  const noGuard = userAbility === 'no-guard' || abilityIn(ctx, target) === 'no-guard' || userAbility === 'skys-resolve' || abilityIn(ctx, target) === 'skys-resolve' || (user.side === 'enemy' && user.mon.speciesId === 'noctowl' && ctx.battle.storyEffects.includes('ferris-eye')) || (user.side === 'enemy' && golemColour(ctx.battle) === 'white');
   // A hidden target can only be hit by the moves that reach it (Earthquake hits Dig), or with No Guard.
   if (targetsEnemy && target.vol.semi && fx.hitsSemi?.semi !== target.vol.semi && !noGuard) {
     events.push({ type: 'avoided', side: target.side });
@@ -5310,6 +5314,8 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
   const cfg = content.balance.trainerAi;
   const mon = enemy.mon;
   if (mon.hp <= 0 || mon.dynamaxed) return false;
+  // Greenneedle gn.59: the Leader's weight shifted last turn, so this turn they switch (a tell the player may have predicted).
+  if (battle.storyEffects.includes('ferris-tell') && ferrisTellSwitch(ctx, events)) return true;
   const lent = enemyLastResort(content, battle);
   if (lent) events.push(...lent);
   const max = calcStats(content, mon).hp;
@@ -5435,6 +5441,19 @@ function trainerBondMoment(ctx: BattleContext, enemy: Combatant, max: number, ev
     }
   }
   return false;
+}
+
+/** gn.59: the arranged switch; a right prediction hits what arrives. */
+function ferrisTellSwitch(ctx: BattleContext, events: BattleEvent[]): boolean {
+  const { battle, content } = ctx;
+  battle.storyEffects = battle.storyEffects.filter((s) => s !== 'ferris-tell' && s !== 'ferris-ask');
+  const spare = battle.enemyTeam.findIndex((m, i) => i !== battle.enemyIndex && m.hp > 0);
+  if (spare < 0) return false;
+  battle.enemySwitches += 1;
+  swapInEnemy(ctx, spare, events);
+  const text = ferrisPredicted(content, battle);
+  if (text) events.push(say('enemy', 'rally', text, battle.enemyTeam[battle.enemyIndex]?.uid));
+  return true;
 }
 
 function swapInEnemy(ctx: BattleContext, index: number, events: BattleEvent[]): void {
@@ -7799,6 +7818,16 @@ function spectacleEndOfTurn(ctx: BattleContext, spec: NonNullable<BattleState['s
 
 
 // ---------- Ideas W1 play rules (battle/w1Play.ts) ----------
+
+/** gn.59: the player answers the Leader's feet (no turn used). */
+function predictTurn(ctx: BattleContext, yes: boolean, events: BattleEvent[]): BattleEvent[] {
+  const { battle } = ctx;
+  const i = battle.storyEffects.indexOf('ferris-ask');
+  if (i < 0) throw new Error('There is nothing to predict');
+  battle.storyEffects.splice(i, 1, yes ? 'ferris-pred:yes' : 'ferris-pred:no');
+  events.push(say('player', 'rally', yes ? 'You call it: they are about to switch. You are ready.' : 'You call it: they will hold their ground. You wait.'));
+  return events;
+}
 
 /** A trainer's deal: refuse (no turn used) or accept (the fight ends as a win with no EXP; the prize money is bigger). */
 function dealTurn(ctx: BattleContext, accept: boolean, events: BattleEvent[]): BattleEvent[] {

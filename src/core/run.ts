@@ -76,7 +76,7 @@ import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBat
 import { createBattle, itemProblem, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
 import { autoCommands, canBeDoubles, makeDoubles, primarySpot, resolveDoublesTurn, startDoubles } from './battle/doubles';
 import { canBeTriples, makeTriples } from './battle/triples';
-import { endBattle as endHeldBattle, expMultiplier, giveBossItems, growthOnLevelUp } from './battle/held';
+import { endBattle as endHeldBattle, expLevelShift, expMultiplier, giveBossItems, growthOnLevelUp } from './battle/held';
 import { gimmickSlots, planBossGimmicks } from './battle/bossGimmicks';
 import { revertTransformations } from './battle/transform';
 import { RARITIES, TYPE_NAMES, type AttributeKey, type Content, type TypeName } from './contentSchema';
@@ -3668,7 +3668,7 @@ function awardExperience(content: Content, run: RunState, events: BattleEvent[])
       // Macho Brace: more EXP for its holder.
       const monSpecies = getSpecies(content, mon.speciesId);
       const perkXp = xpPerk(archetype.modifiers, { types: monSpecies.types, baseSpeed: monSpecies.baseStats.spe, isStarter: run.log.starterUid === mon.uid, isBossBattle: bossBattle, ultraBeast: isUltraBeast(mon.speciesId), isHatched: mon.hatched === true, isDoubles: battle.doubles !== undefined });
-      const full = xpForDefeat(baseExp, defeated.level, mon.level, multiplier * underdog * perkXp * (1 + catchUp / 100) * expMultiplier(content, mon));
+      const full = xpForDefeat(baseExp, defeated.level, Math.max(1, mon.level - expLevelShift(content, mon)), multiplier * underdog * perkXp * (1 + catchUp / 100) * expMultiplier(content, mon));
       const squirt = mon === run.party[0] && (run.itemCounters?.['squirt-exp'] ?? 0) > 0 ? 1 + (perksOf(activePerks(content, run), 'squirt')[0]?.perk.percent ?? 5) / 100 : 1;
       const amount = Math.floor((participants.includes(uid) ? full : Math.floor((full * Math.min(100, share)) / 100)) * squirt * xpPolicyMultiplier(run, uid));
       // W5 EVs: everyone who shares the experience also gets the defeated species' EV yield (core/ivs.ts).
