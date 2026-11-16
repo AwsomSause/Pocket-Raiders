@@ -92,6 +92,11 @@ export class GameOverScene extends Phaser.Scene {
       this.scene.start('Story', { next: 'GameOver' });
       return;
     }
+    // NE100 The Road Home: after the final battle, win or lose, the road walked backwards plays before the results (once).
+    if (session.roadHomeDue()) {
+      this.scene.start('Event', { sideId: session.openRoadHome() });
+      return;
+    }
     const run = session.run;
     const won = run?.victory ?? false;
     // Run-end look (screens redesign): a backdrop, a frame colour and title style; the numbers and flow are unchanged.

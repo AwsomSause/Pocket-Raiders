@@ -25,6 +25,7 @@ import { bidoofPeace } from './greenneedle/bidoof';
 import { aceBows } from './greenneedle/missingAce';
 import { ofAssist, ofGuestLeaves, ofShadow, recordRelease } from './greenneedle/oldfriend';
 import { ferrisBossMark, ferrisCatch, ferrisFree, ferrisFreeEnd } from './greenneedle/ferris';
+import { noteFinalLoss } from './co/roadHome';
 import { followedRest, followedRival, followedRoad, followedShop, followedStage, followedStep, longJourney } from './greenneedle/followed';
 import { ballBattle, ballRest } from './greenneedle/ball';
 import { ridgeCatch } from './greenneedle/ridge';
@@ -3633,6 +3634,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     }
     freeHandedOverRival(run);
     followedRoad(content, run);
+    // NE100: losing the final battle still walks the Road Home at the run end.
+    noteFinalLoss(run, battle, regionEndsAtGym(content, run));
     run.phase = 'over';
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: true, cues, drama };
