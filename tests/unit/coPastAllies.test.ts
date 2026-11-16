@@ -2,7 +2,7 @@
 // and the four drama moments plugged into the rival overhaul (core/drama/rivalHooks.ts).
 import { describe, expect, it } from 'vitest';
 import { EventEffectSchema, EventConditionSchema } from '../../src/core/contentSchema';
-import { applyEffect, conditionMet } from '../../src/core/events';
+import { applyEffect, conditionMet, eligibleEvents } from '../../src/core/events';
 import { fillPastAlliesText, frames, lostItem, pastAllyAce, pastReplay, pastTeam, pedestalItem, ranchSource, rivalEchoes, tagPartnerOf } from '../../src/core/co/pastAllies';
 import { rivalGives } from '../../src/core/co/tradeCard';
 import { grudgeHeld, recordRivalMoment, scoutedMove, scoutedSpecies } from '../../src/core/drama/rivalHooks';
@@ -39,6 +39,17 @@ describe('Past Allies frames (this run only)', () => {
     expect(pastTeam(r, 'rival')).toEqual(['pidgey', 'squirtle']);
     expect(pastAllyAce(r)).toBe('squirtle');
     expect(conditionMet(content, r, cond({ kind: 'pastAlly', has: 'second', atLeast: 2 }))).toBe(true);
+  });
+  it('opens the Hall only from this run: champion-defense after a won big battle, retired-team after a lost one', () => {
+    const r = { ...run(), regionIndex: 3 };
+    const ids = () => eligibleEvents(content, r).map((e) => e.id);
+    expect(ids()).not.toContain('champion-defense');
+    expect(ids()).not.toContain('retired-team');
+    r.story.replays = [replay({ id: 'w' })];
+    expect(ids()).toContain('champion-defense');
+    expect(ids()).not.toContain('retired-team');
+    r.story.replays.push(replay({ id: 'l', outcome: 'lose' }));
+    expect(ids()).toContain('retired-team');
   });
   it('fills its tokens, and plain words when the record is missing', () => {
     const r = run();

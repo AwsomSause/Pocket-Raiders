@@ -506,6 +506,17 @@
       }
      ],
      "notice": "\n\nTheir hand is shaking a little. They have their own fight coming. They came here first anyway."
+    },
+    {
+     "id": "kind",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kindness",
+       "atLeast": 1
+      }
+     ],
+     "notice": "\n\n{rival}: \"For the Shadow one, too. If it eats Berries yet.\""
     }
    ]
   },
@@ -818,6 +829,28 @@
       }
      ],
      "notice": "\n\nThey see you. Their hand goes to the tent zip like they want to hide inside it.\n{rival}: \"Not this time. Not THIS one.\""
+    },
+    {
+     "id": "heat",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-heat",
+       "atLeast": 1
+      }
+     ],
+     "notice": "\n\n{rival}: \"You again. Last time you took one right out from under me.\"\nThey move the blanket so it is between you and the grass."
+    },
+    {
+     "id": "friend",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-friend",
+       "atLeast": 1
+      }
+     ],
+     "notice": "\n\nThey pat the blanket beside them without looking up. There is already a second cup."
     }
    ]
   }

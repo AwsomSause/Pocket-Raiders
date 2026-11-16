@@ -135,6 +135,17 @@
       }
      ],
      "notice": "\n\nOne echo is a door slamming. Just that. It plays three times."
+    },
+    {
+     "id": "again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "echoes-listened",
+       "atLeast": 1
+      }
+     ],
+     "notice": "\n\nYou have been here before this run. You know the next line before it plays.\nIt still lands."
     }
    ]
   },
@@ -472,6 +483,17 @@
       }
      ],
      "notice": "\n\n{rival}: \"You're beating me. I wanted to see what that looks like up close.\"\n{rival}: \"It looks like a person who eats lunch. Huh.\""
+    },
+    {
+     "id": "traded",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-traded",
+       "atLeast": 1
+      }
+     ],
+     "notice": "\n\n{rival}: \"How is it? The one I raised. Does it still sleep on its back?\"\nThey ask like it is nothing. It is not nothing."
     }
    ]
   },
@@ -711,6 +733,28 @@
    },
    "intro": "{rival} stands over the result, breathing hard.\n{rival}: \"{say won||champion-chaser::That's how it's done. Were you watching? You were watching.}\"\n{rival2} is already laughing about something their Pokémon did.",
    "remembers": [
+    {
+     "id": "cheered-main",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "cheered-main",
+       "atLeast": 1
+      }
+     ],
+     "notice": "\n\n{rival} keeps glancing at the stand where you cheered. They heard every word."
+    },
+    {
+     "id": "cheered-second",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "cheered-second",
+       "atLeast": 1
+      }
+     ],
+     "notice": "\n\n{rival2} gives you a small nod. You cheered for them, out loud, in front of {rival}."
+    },
     {
      "id": "second",
      "when": [

@@ -45,6 +45,7 @@ export const EVENTS: Json[] = [
     remembers: [
       { id: 'fond', when: [rq({ feeling: { key: 'friendship', atLeast: 6 } })], notice: note(page('One echo you do not recognise: {rival}, saying your name to someone else.', 'Proudly. When they did not know you could hear.')) },
       { id: 'bitter', when: [rq({ feeling: { key: 'resentment', atLeast: 5 } })], notice: note(page('One echo is a door slamming. Just that. It plays three times.')) },
+      { id: 'again', when: [{ kind: 'flag', key: 'echoes-listened', atLeast: 1 }], notice: note(page('You have been here before this run. You know the next line before it plays.', 'It still lands.')) },
     ],
   },
 
@@ -119,6 +120,7 @@ export const EVENTS: Json[] = [
     remembers: [
       { id: 'ahead', when: [lead(2)], notice: note(page(R('I\'m ahead. I know I\'m ahead. I still wanted to check you were all right.'))) },
       { id: 'behind', when: [lead(undefined, -2)], notice: note(page(R('You\'re beating me. I wanted to see what that looks like up close.'), R('It looks like a person who eats lunch. Huh.'))) },
+      { id: 'traded', when: [{ kind: 'flag', key: 'rival-traded', atLeast: 1 }], notice: note(page(R('How is it? The one I raised. Does it still sleep on its back?'), 'They ask like it is nothing. It is not nothing.')) },
     ],
   },
 
@@ -151,6 +153,8 @@ export const EVENTS: Json[] = [
     scene: { cast: [], tint: '#20202a', effect: 'none' },
     intro: script(page('{rival} stands over the result, breathing hard.', RS('won', { 'champion-chaser': 'That\'s how it\'s done. Were you watching? You were watching.' }), '{rival2} is already laughing about something their Pokémon did.')),
     remembers: [
+      { id: 'cheered-main', when: [{ kind: 'flag', key: 'cheered-main', atLeast: 1 }], notice: note(page('{rival} keeps glancing at the stand where you cheered. They heard every word.')) },
+      { id: 'cheered-second', when: [{ kind: 'flag', key: 'cheered-second', atLeast: 1 }], notice: note(page('{rival2} gives you a small nod. You cheered for them, out loud, in front of {rival}.')) },
       { id: 'second', when: [{ kind: 'flag', key: 'feud-watch-winner', atLeast: 2, atMost: 2 }], intro: script(page('{rival2} stands over the result, breathing hard, and looks over to see if you saw.', '{rival} is very busy with a Poké Ball that does not need polishing.', R('...Good match. Shut up. Good match.'))) },
     ],
     choices: [

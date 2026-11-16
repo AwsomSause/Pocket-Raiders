@@ -101,7 +101,10 @@ export const EVENTS: Json[] = [
       ch('Take it and say thank you.', out(script(page('You take it. You say thank you. They go red and pretend a Pidgey is very interesting.', 'Your team watches the whole thing and says nothing, kindly.')), any('oran-berry', 'sitrus-berry', 'lum-berry'), feel({ friendship: 1, trust: 1 }), fr(5, 'party'), take())),
       ch('Tell them to keep it for their own fight.', out(script(page(R('I have six. I\'m not an idiot.'), 'They give you one anyway. And then a second, for your lead, "because it looked hungry".')), any('oran-berry', 'sitrus-berry', 'lum-berry'), feel({ respect: 1 }), take())),
     ],
-    remembers: [{ id: 'behind', when: [lead(undefined, -1)], notice: note(page('Their hand is shaking a little. They have their own fight coming. They came here first anyway.')) }],
+    remembers: [
+      { id: 'behind', when: [lead(undefined, -1)], notice: note(page('Their hand is shaking a little. They have their own fight coming. They came here first anyway.')) },
+      { id: 'kind', when: [{ kind: 'flag', key: 'kindness', atLeast: 1 }], notice: note(page(R('For the Shadow one, too. If it eats Berries yet.'))) },
+    ],
   },
 
   // The Victory Lap: they won, and won easily. Only a rival who is ahead and holds No Contest or Swept does a lap.
@@ -138,7 +141,11 @@ export const EVENTS: Json[] = [
       ch('Let them have it.', out(script(page('You put your Ball away and sit down on their blanket.', 'When it finally comes out, they catch it. They look over at you, and do not say thank you, and do not have to.')), feel({ friendship: 1, trust: 1 }), fr(4, 'party'), flag('rival-friend', 2), take())),
       ch('"Race you for it."', fight(script(page(R('Fine. Winner takes the grass.'), 'Neither of you notices the Pokémon wander off halfway through the fight.')), rival({ lv: 1, size: 2, win: [{ kind: 'join', species: [], types: [], levelBonus: 0, shinyMultiplier: 1 }, feel({ respect: 1 })], lose: [feel({ admiration: 1 })] }), take())),
     ],
-    remembers: [{ id: 'resent', when: [rq({ feeling: { key: 'resentment', atLeast: 5 } })], notice: note(page('They see you. Their hand goes to the tent zip like they want to hide inside it.', R('Not this time. Not THIS one.'))) }],
+    remembers: [
+      { id: 'resent', when: [rq({ feeling: { key: 'resentment', atLeast: 5 } })], notice: note(page('They see you. Their hand goes to the tent zip like they want to hide inside it.', R('Not this time. Not THIS one.'))) },
+      { id: 'heat', when: [{ kind: 'flag', key: 'rival-heat', atLeast: 1 }], notice: note(page(R('You again. Last time you took one right out from under me.'), 'They move the blanket so it is between you and the grass.')) },
+      { id: 'friend', when: [{ kind: 'flag', key: 'rival-friend', atLeast: 1 }], notice: note(page('They pat the blanket beside them without looking up. There is already a second cup.')) },
+    ],
   },
 ];
 
