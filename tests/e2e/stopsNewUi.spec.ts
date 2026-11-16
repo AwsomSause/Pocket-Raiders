@@ -1,9 +1,10 @@
 import { expect, test } from '@playwright/test';
+import { confirmToMenu } from './battleInput';
 import { addSide, start, toMap, view, waitForScene, watch } from './helpers/newUi';
 
 // The New UI's stops from the last pass (mock-up section 5): the shop's Buy 1 / Buy 5 and its Clerk, the fishing
 // window over the map ("! A bite !"), a Pokémon Moment event with the party Pokémon standing beside the player, and the
-// minigame's "Best" window. One of the New UI spec files (see newUi.spec.ts); the shared steps are in helpers/newUi.ts.
+// minigame's "Best" window; and from the battle section, the target picker's Back button. One of the New UI spec files (see newUi.spec.ts); the shared steps are in helpers/newUi.ts.
 
 test('New UI: the shop is the mock-up shop page (Clerk, Buy 1 and Buy 5; Right lights Buy 5 and Enter buys five), and a fishing stop opens the mock-up "A bite!" window over the map', async ({ page }) => {
   const errors = watch(page);
@@ -92,5 +93,60 @@ test('New UI: a Pokémon Moment shows the party Pokémon beside the player (the 
   await expect(mg).toContainText('Best');
   await expect(mg).toContainText('Silver');
   await page.screenshot({ path: 'test-results/newui-minigame.png' });
+  expect(errors).toEqual([]);
+});
+
+test('New UI: in a triple battle the target picker is the mock-up one: the foes in reach, then Back (it returns to the moves)', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-target');
+  await toMap(page);
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const run = session.run;
+    for (const uid of ['p-t1', 'p-t2']) {
+      const twin = structuredClone(run.party[0]);
+      twin.uid = uid;
+      run.party.push(twin);
+    }
+    const node = run.stage.map.nodes.find((n: any) => n.column === 1);
+    node.kind = 'trainer';
+    node.sides = [];
+    session.chooseNode(node.id);
+    const battle = session.run.battle;
+    while (battle.enemyTeam.length < 3) {
+      const foe = structuredClone(battle.enemyTeam[0]);
+      foe.uid = `e-t${battle.enemyTeam.length}`;
+      battle.enemyTeam.push(foe);
+    }
+    const blank = (index: number) => ({ index, stages: structuredClone(battle.playerStages), vol: structuredClone(battle.playerVolatile) });
+    battle.doubles = { player: blank(-1), enemy: blank(-1), swapped: { player: false, enemy: false }, refill: [], commanding: [], aims: {}, trio: { at: { player: 0, enemy: 0 }, player: [blank(-1), blank(1), blank(2)], enemy: [blank(-1), blank(1), blank(2)] } };
+    battle.participants.push('p-t1', 'p-t2');
+    game.scene.getScene('Map').scene.start('Battle');
+  });
+  await waitForScene(page, 'Battle');
+  await confirmToMenu(page, 40_000);
+  await page.waitForTimeout(400);
+  const tab = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').tabs.current as string | null);
+  if ((await tab()) !== null) {
+    await page.keyboard.press('Escape');
+    await expect.poll(tab).toBeNull();
+  }
+  const hud = view(page, 'Battle');
+  // The first spot is the left one: its one-target move reaches two of the three foes.
+  await hud.locator('[data-act="pick"]', { hasText: 'Fight' }).click();
+  await expect(hud.locator('.btn.mv').first()).toBeVisible();
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Enter');
+  const picks = hud.locator('[data-act="pick"]');
+  await expect(picks.last()).toHaveText('Back');
+  await expect(hud.locator('.txt')).toContainText('on which Pokémon?');
+  const targets = await picks.count();
+  expect(targets).toBeGreaterThanOrEqual(3);
+  await page.screenshot({ path: 'test-results/newui-target.png' });
+  // A click on Back returns to the moves; no turn was played.
+  const turn = await page.evaluate(() => (window as any).__pkr.session.run.battle.turn);
+  await picks.last().click();
+  await expect(hud.locator('.btn.mv').first()).toBeVisible();
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.battle.turn)).toBe(turn);
   expect(errors).toEqual([]);
 });

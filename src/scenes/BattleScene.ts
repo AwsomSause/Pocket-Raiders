@@ -3276,15 +3276,16 @@ export class BattleScene extends Phaser.Scene {
     this.menu = new Menu(this, {
       x: COMMAND_X + 24,
       y: MESSAGE_Y + 26,
-      options: choices.map((c) => ({ label: c.label })),
+      // New UI: the mock-up's target picker ends on a Back button (Esc does the same in both looks).
+      options: [...choices.map((c) => ({ label: c.label })), ...(this.rx ? [{ label: 'Back' }] : [])],
       columns: 1,
       itemWidth: 340,
       itemHeight: 46,
       fontSize: 26,
       color: this.btnText,
-      glass: { paint: this.skin?.pill, tints: choices.map((c) => mixColor(c.tint, 0x000000, 0.3)), motion: this.motion },
-      onFocus: aim,
-      onSelect: (i) => this.submit(action, choices[i]!.target),
+      glass: { paint: this.skin?.pill, tints: [...choices.map((c) => mixColor(c.tint, 0x000000, 0.3)), ...(this.rx ? [0x303848] : [])], motion: this.motion },
+      onFocus: (i) => { if (i < choices.length) aim(i); },
+      onSelect: (i) => (i < choices.length ? this.submit(action, choices[i]!.target) : this.showMoveMenu()),
       onBack: () => this.showMoveMenu(),
     });
   }
