@@ -52,8 +52,10 @@ describe('Regional Crisis', () => {
     run.stage!.current = node.id;
     const side = node.sides.find((s) => s.eventId === id)!;
     const result = chooseEvent(content, run, side.id, 0);
-    expect(crisisLevel(result.run)).toBe(1);
-    expect(crisisAid(result.run)).toBe(1);
+    // Catalog Overhaul (SF1-SF7): the report starts the crisis strand; the meter eases and Aid comes in the strand's own scenes.
+    expect(result.run.story.flags['ev:crisis-strand-open']).toBe(1);
+    expect(crisisLevel(result.run)).toBe(3);
+    expect(crisisAid(result.run)).toBe(0);
   });
 });
 
@@ -62,6 +64,8 @@ describe('Rival Tournament', () => {
     const run = fresh('tour-flow');
     run.money = 2000;
     run.story.rivals.push({ encounters: 2 } as never);
+    expect(eligibleEvents(content, run).map((e) => e.id)).not.toContain('tournament-entry');
+    run.story.flags['ev:circuit-qualified'] = 1; // Catalog Overhaul (SF19): the bracket opens once you qualify on the Circuit
     expect(eligibleEvents(content, run).map((e) => e.id)).toContain('tournament-entry');
     expect(eligibleEvents(content, run).map((e) => e.id)).not.toContain('tournament-quarter');
     expect(tournamentEventId(run)).toBeNull();
@@ -90,7 +94,8 @@ describe('Rival Tournament', () => {
     const quarter = content.events.get('tournament-quarter')!;
     const winEffects = quarter.choices[0]!.success.battle!.win.map((e) => e.kind);
     expect(winEffects).toContain('tournament');
-    expect(content.events.get('tournament-final')!.choices[0]!.success.battle!.win.some((e) => e.kind === 'tournament' && e.round === 9)).toBe(true);
+    // Catalog Overhaul (SF19): the final is a ceremony (its fight is the rival's questline scene), so it closes the bracket in its own effects.
+    expect(content.events.get('tournament-final')!.choices[0]!.success.effects.some((e) => e.kind === 'tournament' && e.round === 9)).toBe(true);
   });
 });
 
@@ -185,7 +190,7 @@ describe('Relics and the Camp Council', () => {
     expect(r.run.story.flags['ev:tree-ember'] ?? 0).toBe(0);
     expect(r.run.story.flags['ev:tree-tide']).toBe(3);
     expect(content.events.get('camp-council')!.stop).toBe('rest');
-    expect(content.events.get('camp-council')!.choices).toHaveLength(4);
+    expect(content.events.get('camp-council')!.choices).toHaveLength(3); // Catalog Overhaul (SF45): Train, Play, Sleep
   });
 });
 

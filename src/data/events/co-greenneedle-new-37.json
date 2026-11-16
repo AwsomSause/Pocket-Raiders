@@ -1,0 +1,327 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-37-nest",
+   "name": "The Second Nest",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "flying",
+    "normal"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "second-nest-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#32452d",
+    "effect": "glint"
+   },
+   "intro": "A Fletchinder is feeding a nest. The chick in it is twice its size, and the wrong shape. It keeps pushing food at a beak that is not its own.\n\n*A Rufflet. Its egg rolled into the wrong tree. On the branches round about, the flock sits, and watches, and doesn't like it.*\n\n*High up, a Braviary circles. It's been circling for days.*",
+   "choices": [
+    {
+     "label": "Drive off the flock.",
+     "success": {
+      "text": "The nearest bird cries out. Then the rest. They have been waiting for someone to hold the line against, and now there is a line.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "fletchinder",
+        "staravia",
+        "pidgeotto",
+        "swellow"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "second-nest-done",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-37-hush"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "second-nest-done",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-37-hush"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Carry the chick to the Braviary.",
+     "success": {
+      "text": "It weighs more than it looks. It stops complaining the moment you lift it, as if it had never been held by something that was not a wing.\n\nThe Braviary lands. Not on a branch. On the ground, in front of you, which a bird like that does for no one.\n\nThe chick goes to it. It does not look back. Behind, on the branch, the Fletchinder watches, and does not make a sound.\n\nThen it flies down and settles by your boots. It has fed and warmed something for days, and now there is nothing to feed. It stays close anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "second-nest-braviary",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "second-nest-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "second-nest-region"
+       },
+       {
+        "kind": "flag",
+        "key": "second-nest-carried",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "fletchinder"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "foster-wing"
+        ]
+       },
+       {
+        "kind": "moment",
+        "text": "You carried a Rufflet to the Braviary that had circled for days. The Fletchinder that raised it came with you.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do nothing, and watch.",
+     "success": {
+      "text": "The flock closes in on the nest. The Fletchinder does not leave it. It spreads its wings in front of the chick and faces its own kind, alone.\n\nIt loses. It was always going to. It does not move aside until it cannot stand.\n\nThe Braviary comes down, then, all at once, as if it had only been waiting to see someone try. The chick goes with it, and looks back.\n\nThe Fletchinder lies where it fell, watching the sky. When you step closer, it does not shy away. There is nowhere else left for it to go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "second-nest-braviary",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "second-nest-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "second-nest-region"
+       },
+       {
+        "kind": "flag",
+        "key": "second-nest-watched",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "fletchinder"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "foster-wing"
+        ]
+       },
+       {
+        "kind": "moment",
+        "text": "You watched a Fletchinder stand against its own flock for a chick that wasn't its own. It came with you after.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-37-hush",
+   "name": "The Nest, Safe",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#32452d",
+    "effect": "glint"
+   },
+   "intro": "The flock scatters over the trees and does not come back. The nest is whole. The chick is asleep with its beak open, full and furious at nothing.\n\nThe Fletchinder settles over it. It does not thank you. It has no spare breath for it.\n\n*High above, the Braviary goes on circling. It has not stopped once.*",
+   "choices": [
+    {
+     "label": "Carry the chick to the Braviary.",
+     "success": {
+      "text": "It weighs more than it looks. It stops complaining the moment you lift it, as if it had never been held by something that was not a wing.\n\nThe Braviary lands. Not on a branch. On the ground, in front of you, which a bird like that does for no one.\n\nThe chick goes to it. It does not look back. Behind, on the branch, the Fletchinder watches, and does not make a sound.\n\nThen it flies down and settles by your boots. It has fed and warmed something for days, and now there is nothing to feed. It stays close anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "second-nest-braviary",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "second-nest-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "second-nest-region"
+       },
+       {
+        "kind": "flag",
+        "key": "second-nest-carried",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "fletchinder"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "foster-wing"
+        ]
+       },
+       {
+        "kind": "moment",
+        "text": "You carried a Rufflet to the Braviary that had circled for days. The Fletchinder that raised it came with you.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them be.",
+     "success": {
+      "text": "You leave the nest where it is. The Fletchinder keeps its place on the branch. Overhead, the circle goes on, wide and patient, and no one comes down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "second-nest-left",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You drove the flock off a Fletchinder's nest. The Braviary was still circling when you left.",
+        "importance": 50
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-37-after",
+   "name": "The Low Branch",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "second-nest-braviary",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "second-nest-region"
+    },
+    {
+     "kind": "flag",
+     "key": "second-nest-after-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#32452d",
+    "effect": "glint"
+   },
+   "intro": "A Braviary is sitting on a low branch. It is much too big for the branch, and it sits like a much smaller bird: head tucked, feet together.\n\nYou know it. You cannot say how. Something in how it holds itself, as if it learned to be a Braviary from someone small.\n\nIt looks at you for a long moment. Then it opens one wing, just a little, the way you do for someone who has to pass.",
+   "choices": [
+    {
+     "label": "Sit a while.",
+     "success": {
+      "text": "You sit under the branch until the light changes. Neither of you says anything. When you leave, it lifts a wing again, small and careful, the way something does that was once told to be quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "second-nest-after-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Braviary sat on a low branch like a much smaller bird. You stayed a while.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You nod to it and go on. Behind you, it stays on its low branch, exactly where it chose to be.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "second-nest-after-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

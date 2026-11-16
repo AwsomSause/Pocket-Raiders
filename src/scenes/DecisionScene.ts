@@ -235,7 +235,7 @@ export class DecisionScene extends Phaser.Scene {
   }
 
   /** A Yes/No box over the screen. */
-  private confirm(text: string, onYes: () => void): void {
+  private confirm(text: string, onYes: (i?: number) => void, labels: readonly string[] = ['Yes', 'No']): void {
     const layer = this.add.container(0, 0).setDepth(120);
     layer.add(this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.6).setOrigin(0).setInteractive());
     layer.add(drawPanel(this, 160, 170, GAME_WIDTH - 320, 200));
@@ -244,17 +244,17 @@ export class DecisionScene extends Phaser.Scene {
     this.confirmMenu = new Menu(this, {
       x: GAME_WIDTH / 2 - 140,
       y: 310,
-      options: [{ label: 'Yes' }, { label: 'No' }],
-      columns: 2,
-      itemWidth: 160,
+      options: labels.map((label) => ({ label })),
+      columns: labels.length === 2 ? 2 : 1,
+      itemWidth: labels.length === 2 ? 160 : 520,
       fontSize: 30,
-      onSelect: (i) => (i === 0 ? onYes() : this.closeConfirm()),
+      onSelect: (i) => (labels.length > 2 || i === 0 ? onYes(i) : this.closeConfirm()),
       onBack: () => this.closeConfirm(),
     });
     this.confirmMenu.container.setDepth(121);
     // Default to "No" for choices that can't be undone.
-    this.confirmMenu.focus(1, false);
-    if (reduxOn()) this.rxConfirm = mountConfirm(this, text, this.confirmMenu);
+    this.confirmMenu.focus(labels.length === 2 ? 1 : 0, false);
+    if (reduxOn()) this.rxConfirm = mountConfirm(this, text, this.confirmMenu, labels);
   }
 
   private closeConfirm(): void {
@@ -824,8 +824,12 @@ export class DecisionScene extends Phaser.Scene {
         else if (past) this.resolve({ kind: 'release' });
         else
           this.confirm(`Release ${species.name}? You'll get ${candyText}. This can't be undone.`, () => {
-            playSfx(this, 'se.ball_release');
-            this.resolve({ kind: 'release' });
+            this.closeConfirm();
+            // Greenneedle gn.58: it is asked once, and remembered; no answer is judged.
+            this.confirm('Why are you letting it go?', (r) => {
+              playSfx(this, 'se.ball_release');
+              this.resolve({ kind: 'release', reason: ((r ?? 3) + 1) as 1 | 2 | 3 | 4 });
+            }, ['"It\'ll be happier here."', '"I\'ve no room."', '"It wasn\'t strong enough."', '(No reason.)']);
           });
       },
     });

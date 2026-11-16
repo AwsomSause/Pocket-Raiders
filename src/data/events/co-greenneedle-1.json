@@ -1,0 +1,5385 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-03-door",
+   "name": "Viridian Forest: The Samurai's Challenge",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "minStage": 1,
+   "types": [
+    "bug",
+    "grass"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "gn-03-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "kanto",
+     "when": [
+      {
+       "kind": "region",
+       "ids": [
+        "kanto"
+       ]
+      }
+     ],
+     "intro": "Viridian Forest. Everyone in Pewter has a story about it, and every story ends the same way: with a man in old armour, sitting very still in a clearing, waiting for somebody worth his time.\n\nThe road goes in under the first branches and the day goes green and quiet behind you. Somewhere ahead a twig snaps, and then, very politely, does not snap again.\n\nIt is six stops deep. You can still turn round here."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f3a22",
+    "effect": "float"
+   },
+   "intro": "The Old Wood. The people at the last crossroads lowered their voices when they named it, the way you do for a neighbour who might be listening.\n\nThe road goes in under the first branches and the day goes green and quiet behind you. Somewhere ahead a twig snaps, and then, very politely, does not snap again.\n\nThey say a man in old armour waits in a clearing in there. It is six stops deep. You can still turn round here.",
+   "choices": [
+    {
+     "label": "Step under the trees.",
+     "success": {
+      "text": "You step in. The light changes on your hands first. Behind you the road is already a bright coin at the end of a tunnel, and getting smaller.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-03-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-forest-in",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "gn-forest-fog",
+        "n": 10
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "gn-forest-trap",
+        "n": 10
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-03-eaves"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "You stand at the tree line a moment longer. The forest does not mind. It has waited for people before, and it will be here.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-03-eaves",
+   "name": "The Eaves",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "remembers": [
+    {
+     "id": "fog",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-forest-fog",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "And there is fog today, lying between the trunks like breath on glass. Nobody will aim well in it: every move, yours and theirs, is a tenth less sure until you leave the forest. Something pale may be drifting in it."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.bug_catcher"
+    ],
+    "tint": "#1f3a22",
+    "effect": "float"
+   },
+   "intro": "The light goes green. It comes down through so many leaves that it has forgotten it was ever sunlight, and it lies on the path in coins that move when the wind does.\n\nA boy with a net taller than he is steps out of the ferns, so pleased to see another person that he forgets to look fierce.\n\n**Bug Catcher Arlo:** \"Mind the man with the sword. He's all right. He's just very serious.\"\n\nThen he remembers he is a trainer, and plants his feet, and tries to look like one.",
+   "choices": [
+    {
+     "label": "Battle Bug Catcher Arlo.",
+     "success": {
+      "text": "**Bug Catcher Arlo:** \"Right! Yes! Battle! I knew that's what this was!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Bug Catcher Arlo",
+       "classId": "bug-catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "duelist",
+         "type": "bug"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-forest-trap",
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "gn-forest-trap",
+           "n": 0
+          },
+          {
+           "kind": "flag",
+           "key": "flight-sighting",
+           "amount": 1
+          },
+          {
+           "kind": "moment",
+           "text": "A net dropped on the party in the forest. Far above the leaves: a balloon with a cat's face.",
+           "importance": 55
+          }
+         ],
+         "text": "A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat's face, drifting away as if it had somewhere better to be."
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-gift"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-03-gift",
+   "name": "The Forest Gift",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "caterpie",
+    "tint": "#1f3a22",
+    "effect": "rattle"
+   },
+   "intro": "The ferns ahead are shaking, and it is not the wind, because the wind has not found its way in here in years.\n\nSomething small is in there, and it is not hiding. It is waiting to be found. The whole forest seems to lean in a little, the way a room does when someone is about to open a present.\n\nThe first Bug-type you catch in this forest will walk beside you to the end of it. The others will notice.",
+   "choices": [
+    {
+     "label": "Part the ferns.",
+     "success": {
+      "text": "You part the ferns. It looks up at you. It does not run. It was always going to be here, and so, it seems, were you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "caterpie",
+        "weedle"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "duelist",
+         "type": "bug"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-oak"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "duelist",
+         "type": "bug"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-oak"
+        }
+       ],
+       "rare": [
+        {
+         "species": [
+          "shedinja"
+         ],
+         "chance": 0.01,
+         "flag": "gn-forest-fog"
+        },
+        {
+         "species": [
+          "pinsir",
+          "scyther",
+          "heracross"
+         ],
+         "chance": 0.1
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-03-oak",
+   "name": "The Split Oak",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "remembers": [
+    {
+     "id": "most",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-03-oak-won",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-rank",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "The Bug Catcher has gone, and the fork is empty. A voice comes down out of the trees, from nowhere you can point to. **A voice:** \"It watches your hands. That's trust.\""
+    },
+    {
+     "id": "some",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-03-oak-won",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-rank",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "The Bug Catcher has gone, and the fork is empty. A voice comes down out of the trees, from nowhere you can point to. **A voice:** \"It's eager. You're careful with it. Too careful?\""
+    },
+    {
+     "id": "none",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-03-oak-won",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-rank",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "The Bug Catcher has gone, and the fork is empty. A voice comes down out of the trees, from nowhere you can point to. **A voice:** \"It walks beside you like luggage.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f3a22",
+    "effect": "flicker"
+   },
+   "intro": "An oak that lightning opened long ago, and that went on growing anyway, in two directions, like an argument nobody won. The path runs straight through the split.\n\nA Bug Catcher's net leans in the fork. Off to one side, away from the path, a thicket is buzzing: a low, crowded sound, like a kettle with opinions.",
+   "choices": [
+    {
+     "label": "Battle the Bug Catcher in the fork.",
+     "success": {
+      "text": "He drops out of the fork and lands badly and pretends he meant to.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Bug Catcher",
+       "classId": "bug-catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "duelist",
+         "type": "bug"
+        },
+        {
+         "kind": "flag",
+         "key": "gn-03-oak-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-oak"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-03-oak-won",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Follow the buzzing off the path.",
+     "chance": 0.4,
+     "success": {
+      "text": "The thicket opens like a door kicked from the inside. Weedle on the low twigs, Kakuna hung in rows like lanterns, and above them the Beedrill, coming down in three waves. Stand through all three and whatever they were guarding is yours.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-03-swarm-tried",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "chain": 3,
+       "species": [
+        "weedle",
+        "kakuna",
+        "beedrill"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "poison-barb",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-oak"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "failure": {
+      "text": "You push through to the buzzing and find only an old nest, grey and papery, humming with nothing but the wind in its empty cells. Whatever lived here moved on. You go back to the path.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-03-swarm-tried",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-03-oak"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-03-swarm-tried",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-big",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Walk on, deeper in.",
+     "success": {
+      "text": "You step through the split in the oak. For one stride there is a tree on either side of you, and both of them are the same tree.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-03-hollow"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-03-oak-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-03-hollow",
+   "name": "The Hollow",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "remembers": [
+    {
+     "id": "weedle",
+     "when": [
+      {
+       "kind": "partyType",
+       "type": "bug",
+       "absent": true
+      }
+     ],
+     "notice": "And in the middle of the path, exactly where you would have to step, sits a Weedle. It is not blocking the way. It is sitting the way someone sits who was told to wait here, and has, for longer than was reasonable.",
+     "addChoices": [
+      {
+       "label": "Crouch, and let the Weedle climb on.",
+       "success": {
+        "text": "You put your hand flat on the moss. It considers the hand. Then it walks up your arm, one careful foot at a time, as if it had been waiting for exactly this arm, and settles against your collar. It was never lost. It was early.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "weedle"
+          ],
+          "types": [],
+          "levelBonus": -1,
+          "shinyMultiplier": 1,
+          "direct": true
+         },
+         {
+          "kind": "gn",
+          "op": "duelist",
+          "type": "bug"
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-03-hollow"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f3a22",
+    "effect": "glint"
+   },
+   "intro": "The path dips into a hollow where the oldest tree in the forest stands, so wide that its own roots have had to climb over each other. The bark smells sweet. Something has been at it.\n\nA Bug Catcher waits on the far side of the dip, tapping his net against his shoe.",
+   "choices": [
+    {
+     "label": "Battle the Bug Catcher across the dip.",
+     "success": {
+      "text": "He has clearly been practising what to say, and forgets all of it, and throws the Ball instead.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Bug Catcher",
+       "classId": "bug-catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "duelist",
+         "type": "bug"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-clearing"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Look inside the sweet-smelling tree.",
+     "chance": 0.3,
+     "success": {
+      "text": "Inside the trunk the dark is golden. Comb, hung in sheets, and a slow shifting of bodies far up where the hollow narrows. A den. They will not come down for a stranger. They might come down for honey, left at the roots, with no hand near it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-03-honey-tried",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn-03-den-found",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-03-hollow"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Inside the trunk there is old comb, long dry, and the ghost of sweetness. Whatever kept house here has gone. You brush the bark dust off your hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-03-honey-tried",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-03-hollow"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-03-honey-tried",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave honey at the roots, and step back.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "honey"
+      }
+     ],
+     "success": {
+      "text": "You set the honey down and walk away from it, which is the hard part. For a long minute nothing. Then a scrape of bark, and something comes down the trunk head first, slowly, watching you the whole way.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "honey"
+       },
+       {
+        "kind": "flag",
+        "key": "gn-03-den-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "combee",
+        "heracross"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "duelist",
+         "type": "bug"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-hollow"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "duelist",
+         "type": "bug"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-hollow"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-03-den-found",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-03-den-done",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-03-clearing",
+   "name": "The Clearing",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "remembers": [
+    {
+     "id": "accept",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-rank",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "He looks at the Bug-type beside you for a long time, and it looks back, and neither of them seems to find the other wanting. **The Samurai:** \"I accept.\"",
+     "addChoices": [
+      {
+       "label": "Step onto the duelling ground.",
+       "success": {
+        "text": "He stands. The stump he leaves behind is worn into the shape of a man who has waited a long time. He does not hurry. Neither, you notice, does your duelist.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-03-duel"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "barely",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-rank",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "He looks at the Bug-type beside you, and then at you, and breathes out through his nose. **The Samurai:** \"It'll do. Barely.\"",
+     "addChoices": [
+      {
+       "label": "Step onto the duelling ground.",
+       "success": {
+        "text": "He stands. The stump he leaves behind is worn into the shape of a man who has waited a long time. Your duelist edges half a step closer to your boot, and then, deliberately, half a step away again.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-03-duel"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "stranger",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-rank",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "He looks at the Bug-type beside you. It looks at the ground. He closes his eyes. **The Samurai:** \"You brought me a stranger.\" He will not duel it. Not until it has fought one battle at your side.",
+     "addChoices": [
+      {
+       "label": "Fight one battle beside it, here, now.",
+       "success": {
+        "text": "The ferns at the edge of the clearing are moving. You look at your duelist. For the first time since the eaves, you ask it for something.",
+        "effects": [],
+        "battle": {
+         "kind": "wild",
+         "species": [],
+         "types": [
+          "bug"
+         ],
+         "levelBonus": -1,
+         "shinyMultiplier": 1,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "samurai-refused",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-03-clearing"
+          }
+         ],
+         "caught": [
+          {
+           "kind": "flag",
+           "key": "samurai-refused",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-03-clearing"
+          }
+         ],
+         "rule": {
+          "leadMark": "duelist"
+         },
+         "pseudo": true
+        }
+       }
+      },
+      {
+       "label": "Bow, and leave the forest.",
+       "success": {
+        "text": "You bow. He does not open his eyes, but he inclines his head, the exact depth you bowed and no deeper. The far side of the forest is brighter than you remembered daylight being.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "samurai-refused",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-forest-in",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "unmark",
+          "key": "duelist"
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.samurai"
+    ],
+    "tint": "#1f3a22",
+    "effect": "glint"
+   },
+   "intro": "A clearing. The first sky you have seen since the eaves. In the middle of it, on a stump, a figure in old armour sits so still that a Metapod has settled on the stump beside him, and hardens, with a small flourish, as if drawing a sword.\n\n**The Samurai:** \"You carry a Bug-type. Good. I've been watching it since the eaves.\"",
+   "choices": [
+    {
+     "label": "Tell him no Bug-type walks with you.",
+     "success": {
+      "text": "He looks at the empty air beside your boot. **The Samurai:** \"Then I was watching the wrong traveller.\" He says it without unkindness. The far side of the forest is brighter than you remembered daylight being.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "samurai-refused",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-forest-in",
+        "n": 0
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Bow, and leave the forest.",
+     "success": {
+      "text": "You bow. He inclines his head, the exact depth you bowed and no deeper. The far side of the forest is brighter than you remembered daylight being.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "samurai-refused",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-forest-in",
+        "n": 0
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-03-duel",
+   "name": "The Duel",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "remembers": [
+    {
+     "id": "won-evolved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-forest-samurai-won",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-evolved",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "It is over. The grass is flat where they circled. Your duelist is breathing hard and standing very straight, in a shape it did not have when you walked in under the eaves.\n\n*He sheathes the sword he never drew.*\n\n**The Samurai:** \"Take this. It's not a gift. You've already got it; I'm only naming it.\"\n\n**The Samurai:** \"It became itself in front of me. I've an egg that deserves that.\"",
+     "addChoices": [
+      {
+       "label": "Take what he names, and the egg.",
+       "success": {
+        "text": "He shows your duelist the cut once, slowly, the way you show something to an equal. Then he puts the egg in your hands with both of his, and holds on a moment longer than he needs to. You leave the forest carrying more than you brought in.",
+        "effects": [
+         {
+          "kind": "teachMove",
+          "move": "samurai-slash",
+          "type": "bug"
+         },
+         {
+          "kind": "egg",
+          "species": [
+           "scyther",
+           "pinsir",
+           "heracross"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "left": 3,
+          "unit": "battle"
+         },
+         {
+          "kind": "flag",
+          "key": "gn-03-done",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-forest-in",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "unmark",
+          "key": "duelist"
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "won",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-forest-samurai-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "It is over. The grass is flat where they circled. Your duelist is breathing hard and standing very straight, and it keeps glancing up at you to check that you saw.\n\n*He sheathes the sword he never drew.*\n\n**The Samurai:** \"Take this. It's not a gift. You've already got it; I'm only naming it.\"",
+     "addChoices": [
+      {
+       "label": "Take what he names.",
+       "success": {
+        "text": "He shows your duelist the cut once, slowly, the way you show something to an equal. It copies him. It gets it wrong. He nods as if it had got it right, and by the edge of the forest, it has.",
+        "effects": [
+         {
+          "kind": "teachMove",
+          "move": "samurai-slash",
+          "type": "bug"
+         },
+         {
+          "kind": "flag",
+          "key": "gn-03-done",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-forest-in",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "unmark",
+          "key": "duelist"
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "farfetchd",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-new-06-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He watches how you stand before he says anything else. **The Samurai:** \"You've duelled before. It shows in the wrists.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.samurai"
+    ],
+    "tint": "#1f3a22",
+    "effect": "glint"
+   },
+   "intro": "One on one. Equal levels. No items. No switching. He has drawn a line in the grass with his heel, and stands behind it, and waits for you to notice there is one on your side too.\n\n**The Samurai:** \"First cut decides most duels. Not this one. Begin.\"",
+   "choices": [
+    {
+     "label": "Begin.",
+     "success": {
+      "text": "Your duelist walks out to the line. It does not look small. Nothing does, standing where it has chosen to stand.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "pinsir"
+       ],
+       "name": "The Samurai",
+       "classId": "veteran",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-forest-samurai-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-03-duel"
+        }
+       ],
+       "pseudo": true,
+       "counter": {
+        "weakTo": "flying",
+        "team": [
+         "scyther"
+        ]
+       },
+       "rule": {
+        "gn": "samurai",
+        "leadMark": "duelist",
+        "leadType": "bug",
+        "matchLead": true,
+        "suddenDeath": true,
+        "noSwitch": true,
+        "noItems": true
+       },
+       "lose": [
+        {
+         "kind": "item",
+         "id": "silver-powder",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "samurai-rematch-owed",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "gn-forest-in",
+         "n": 0
+        },
+        {
+         "kind": "moment",
+         "text": "The Samurai bowed. \"Next forest. I'll be at the far side.\"",
+         "importance": 60
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kanto-forest-samurai-won",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-03-rematch",
+   "name": "The Far Side of the Forest",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 2,
+   "types": [
+    "bug",
+    "grass"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "samurai-rematch-owed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "kanto-forest-samurai-won",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "partyType",
+     "type": "bug"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.samurai"
+    ],
+    "tint": "#1f3a22",
+    "effect": "glint"
+   },
+   "intro": "The trees thin. And there, at the far side, exactly where he said, a figure in old armour is sitting on a fence rail as if rails had been invented for the purpose.\n\nYou remember how it ended last time. *He bowed.* **The Samurai:** \"Next forest. I'll be at the far side.\"\n\nHe gets down. He draws the line in the dirt with his heel. He has been waiting, and he is glad, and he would rather fall on the sword than say so.",
+   "choices": [
+    {
+     "label": "Begin.",
+     "success": {
+      "text": "Same line. Same rules. One on one, equal levels, no items, no switching. Only the two of you are different.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "pinsir"
+       ],
+       "name": "The Samurai",
+       "classId": "veteran",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-forest-samurai-won",
+         "amount": 1
+        },
+        {
+         "kind": "teachMove",
+         "move": "samurai-slash",
+         "type": "bug"
+        },
+        {
+         "kind": "flag",
+         "key": "gn-03-done",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "unmark",
+         "key": "duelist"
+        },
+        {
+         "kind": "moment",
+         "text": "\"Take this. It's not a gift. You've already got it; I'm only naming it.\" The Samurai named the cut: Samurai Slash.",
+         "importance": 65
+        }
+       ],
+       "pseudo": true,
+       "counter": {
+        "weakTo": "flying",
+        "team": [
+         "scyther"
+        ]
+       },
+       "rule": {
+        "gn": "samurai",
+        "leadMark": "duelist",
+        "leadType": "bug",
+        "matchLead": true,
+        "suddenDeath": true,
+        "noSwitch": true,
+        "noItems": true
+       },
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The Samurai bowed again. \"Next forest. I'll be at the far side.\"",
+         "importance": 50
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "**The Samurai:** \"Then next forest.\" He climbs back onto the rail. He would wait a year. You suspect he has.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-03-after",
+   "name": "A Familiar Stance",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Rival",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-forest-samurai-won",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "gn-03-after-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "partyType",
+     "type": "bug"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.samurai"
+    ],
+    "tint": "#1f3a22",
+    "effect": "glint"
+   },
+   "intro": "A figure in old armour by the road, drilling a Bug-type through a cut, over and over. You know the armour. You know the cut.\n\nThen you see the Bug-type. It is the same kind as yours. It opens with the same first move as yours. It even waits on the same foot.\n\n**The Samurai:** \"Don't say anything. I lost. A man who loses and learns nothing has lost twice.\"",
+   "choices": [
+    {
+     "label": "Spar with him.",
+     "success": {
+      "text": "He turns his copy to face your original. For once, he is the one who looks nervous.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Samurai",
+       "classId": "veteran",
+       "mirror": true,
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "gn-03-after-done",
+         "amount": 1
+        },
+        {
+         "kind": "friendship",
+         "amount": 5,
+         "who": "lead"
+        }
+       ],
+       "rule": {
+        "leadType": "bug",
+        "noItems": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Bow, and walk on.",
+     "success": {
+      "text": "You bow. He bows. His Bug-type bows, a half-second late, and yours, without being asked, bows back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-03-after-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-04-door",
+   "name": "Mt. Moon",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Treasure"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "minStage": 1,
+   "types": [
+    "rock",
+    "ground",
+    "fairy"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "gn-04-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "kanto",
+     "when": [
+      {
+       "kind": "region",
+       "ids": [
+        "kanto"
+       ]
+      }
+     ],
+     "intro": "Mt. Moon. The road out of Pewter runs straight at it and then gives up, and a dark mouth opens in the rock where the road should go.\n\nPeople in Pewter say a stone fell out of the sky here, long ago, and the mountain closed round it like a hand round a coin.\n\nSeven stops through, and daylight on the far side. Somewhere in the middle, they say, something dances.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Go in.",
+       "success": {
+        "text": "You duck under the lip of the rock. The air changes: colder, stiller, older. Your footsteps come back to you a half-second late, from somewhere far ahead.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "gn-04-entered",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-moon-kanto",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "stageMod",
+          "key": "gn-moon-phase",
+          "n": 4
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-04-mouth"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2440",
+    "effect": "sparkle"
+   },
+   "intro": "The Moonlit Cave. A mountain with a hole in its roof, and a dark mouth at its foot that breathes out cold air and the smell of wet stone.\n\nTravellers say the moon shines straight down into the middle of it, once a night, and that something down there waits for it.\n\nSeven stops through, and daylight on the far side.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You duck under the lip of the rock. The air changes: colder, stiller, older. Your footsteps come back to you a half-second late, from somewhere far ahead.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-04-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-moon-kanto",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "stageMod",
+        "key": "gn-moon-phase",
+        "n": 4
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-04-mouth"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "The mountain does not call after you. It has been here a long time, and it is not in a hurry.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-04-mouth",
+   "name": "The Mouth",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Treasure"
+   ],
+   "remembers": [
+    {
+     "id": "raid-won",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "team-raid-moon-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the walls, scratched over and half rubbed out, are the marks the raiders left. Someone has chalked a big tick beside each one. **Hiker:** \"That was you, wasn't it. Thank you.\""
+    },
+    {
+     "id": "raid-lost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "team-raid-moon-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the walls are the marks the raiders left, fresh, and nobody has rubbed them out. **Hiker:** \"They've been through. Watch your pockets further in.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2440",
+    "effect": "flicker"
+   },
+   "intro": "A hiker sits on a rock just inside, a lamp at his boots throwing his shadow huge across the roof.\n\n**Hiker:** \"Going through? Good. Nobody should go through alone. Here, follow the lamp a while.\"\n\nHe stands, and the shadows all swing round together, like a flock turning.",
+   "choices": [
+    {
+     "label": "Follow the lamp in.",
+     "success": {
+      "text": "He walks you as far as the first bend, then hands you the lamp and goes back to his rock. **Hiker:** \"Leave it at the camp. Garrick will know whose it is.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-04-tunnels"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-04-tunnels",
+   "name": "The Low Tunnels",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Combat"
+   ],
+   "remembers": [
+    {
+     "id": "kanto",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-moon-kanto",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The roof comes down to meet you. Water ticks somewhere. And then the dark starts moving: a sound like a hundred umbrellas opening at once.\n\nZubat. They don't stop. They have never once in their lives stopped."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "zubat",
+    "tint": "#2a2440",
+    "effect": "flicker"
+   },
+   "intro": "The roof comes down to meet you. Water ticks somewhere. And then the dark starts moving: wings, and then claws on stone, and then something rolling.\n\nWhatever lives down here does not stop. It has never once in its life stopped.",
+   "choices": [
+    {
+     "label": "Push through the Zubat.",
+     "success": {
+      "text": "You put your head down and go. The lamp swings. The dark swings back.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 2,
+       "species": [
+        "zubat",
+        "zubat",
+        "zubat",
+        "geodude",
+        "paras",
+        "clefairy",
+        "sandshrew"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-04-camp"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-04-camp"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-moon-kanto",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Push through the dark.",
+     "success": {
+      "text": "You put your head down and go. The lamp swings. The dark swings back.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 2,
+       "species": [],
+       "types": [
+        "rock",
+        "ground",
+        "fairy"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-04-camp"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-04-camp"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-moon-kanto",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-04-camp",
+   "name": "The Hiker's Camp",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2440",
+    "effect": "none"
+   },
+   "intro": "A fire in a ring of stones, and an old hiker feeding it one stick at a time. He sees the lamp and nods: he knows whose it is.\n\n**Hiker Garrick:** \"Sit. Eat something. You look like the tunnels.\"\n\n**Hiker Garrick:** \"Midnight, by the skylight. Don't clap. I clapped. I've regretted it nine years.\"",
+   "choices": [
+    {
+     "label": "Rest by the fire.",
+     "success": {
+      "text": "You sit. The fire is small and very warm. Your Pokémon pile up against you in the order they trust each other, and somebody starts snoring first, and it isn't you, quite.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-04-dance"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask him why he clapped.",
+     "success": {
+      "text": "**Hiker Garrick:** \"Because it was beautiful. That's the only reason anybody claps.\" He pokes the fire. **Hiker Garrick:** \"They went like smoke. Never came back to that stone. Not for me.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-04-garrick",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-04-camp"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-04-garrick",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-04-dance",
+   "name": "Clefairy Moon Watching",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Treasure"
+   ],
+   "remembers": [
+    {
+     "id": "full",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-moon-phase",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "notice": "The moon tonight is full. It fills the hole in the roof like a lid on a jar. The Clefairy are dancing as if they had been waiting all month."
+    },
+    {
+     "id": "new",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-moon-phase",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "There is almost no moon tonight: a thin rind of it, and the Clefairy dance by starlight, carefully, as if the floor might not be there."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "clefairy",
+    "tint": "#2a2440",
+    "effect": "sparkle"
+   },
+   "intro": "A shaft of moonlight comes down through a hole in the roof and stands on the floor of the cave like a pillar.\n\nAround a stone in the middle of it, a ring of Clefairy are hopping. Round and round, soft-footed, humming something with no tune.\n\nThey haven't seen you.",
+   "choices": [
+    {
+     "label": "Keep to the shadows, and watch.",
+     "success": {
+      "text": "You set the lamp down and turn it low. You find a place in the dark and become part of it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-moon-right",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "partyHas",
+        "key": "gn-moon-clef",
+        "species": [
+         "clefairy",
+         "clefable"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "gn-moon-secret",
+        "n": 25
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-moon-clef",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-moon-secret",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "gn-moon-mistaken",
+        "n": 20
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-04-dance-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to it, and go on.",
+     "success": {
+      "text": "You go round by the wall, slowly, and the humming follows you a long way down the next tunnel.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-04-fossil"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-04-dance-1",
+   "name": "The Dance",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Treasure"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "clefairy",
+    "tint": "#2a2440",
+    "effect": "sparkle"
+   },
+   "intro": "The ring turns. One of them spins too fast and sits down hard and gets up again as if that had been the dance all along.\n\nThey're dancing. What do you do?",
+   "choices": [
+    {
+     "label": "Stay still.",
+     "success": {
+      "text": "You stay still. You barely breathe. The ring comes round past you, so close you could touch the nearest one, and it does not even look. You are a rock now. They dance around rocks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-moon-right",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-04-dance-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You step out and try the hop. They scatter like dropped marbles into every crack in the wall. A long minute. Then, one by one, slowly, they come back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-04-dance-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Clap.",
+     "success": {
+      "text": "You clap. It is beautiful, and that is the only reason anybody claps. They go like smoke. The stone in the middle stands alone in the moonlight. They don't come back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-moon-mistaken",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-moon-secret",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-04-dance-end"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-04-dance-2",
+   "name": "The Shard",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Treasure"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "clefairy",
+    "tint": "#2a2440",
+    "effect": "sparkle"
+   },
+   "intro": "One of them breaks from the ring and pads over to you. It is holding something in both hands.\n\nOne holds out a shard of stone to you. It glows faintly, the colour of the moon on water.",
+   "choices": [
+    {
+     "label": "Stay quiet, and offer a Berry back.",
+     "success": {
+      "text": "You say nothing. You hold out a Berry on your open palm. It looks at the Berry, and at you, and takes it, and leaves the shard in its place. A fair trade. It goes back to the ring humming louder.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-moon-right",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-04-dance-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You take it. It lets go, puzzled, and stands there with its empty hands still held out, as if waiting for the other half of something. Then it goes back to the ring.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-04-dance-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say thank you.",
+     "success": {
+      "text": "\"Thank you,\" you say, and it is the loudest thing that has ever happened in this cave. The sound startles them. The ring stops dead. It takes them a long time to start again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-04-dance-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-04-dance-3",
+   "name": "The Smallest",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Treasure"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "clefairy",
+    "tint": "#2a2440",
+    "effect": "sparkle"
+   },
+   "intro": "Something bumps your ankle. The smallest of them has come round behind you, the long way.\n\nThe smallest hides behind your leg, and looks up.",
+   "choices": [
+    {
+     "label": "Look up, too.",
+     "success": {
+      "text": "You look up.\n\n*The moon is exactly over the hole. The stone in the middle is glowing. The small one's hand finds your sleeve.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-moon-right",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-04-dance-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick it up.",
+     "success": {
+      "text": "You scoop it up. It squeaks, a high, offended sound, and wriggles free, and is back in the ring before its feet touch the floor.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-04-dance-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shoo it back.",
+     "success": {
+      "text": "You nudge it toward the others. It goes, slowly, looking back at you twice.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-04-dance-end"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-04-dance-end",
+   "name": "When the Moon Moves On",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Treasure"
+   ],
+   "remembers": [
+    {
+     "id": "three",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-moon-right",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "intro": "The moonlight slides off the stone and up the wall, and the dance winds down with it. They drift away into the dark in twos and threes.\n\nOne stays. It walks up to you, takes your sleeve the way the small one did, and does not let go.",
+     "addChoices": [
+      {
+       "label": "Let it come with you.",
+       "success": {
+        "text": "It hums the tune with no tune, once, at the stone, as if saying goodbye. Then it turns and follows you, and the light it leaves on the floor behind it is very faintly silver.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "clefairy"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "moves": [
+           "moonblast"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-moon-clefairy",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-mistaken",
+          "min": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-04-dance-mistaken"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-mistaken",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "gn-moon-secret",
+            "min": 1,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "scene",
+              "key": "gn-04-dance-secret"
+             }
+            ]
+           },
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "gn-moon-secret",
+            "min": 0,
+            "max": 0,
+            "then": [
+             {
+              "kind": "addEvent",
+              "eventId": "gn-04-fossil"
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "full",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-moon-right",
+       "atLeast": 2,
+       "atMost": 2
+      },
+      {
+       "kind": "flag",
+       "key": "gn-moon-phase",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "intro": "The full moon slides off the stone and up the wall, and the dance winds down with it. You got one wrong. Under a full moon, it seems, one is forgivable.\n\nOne stays. It walks up to you, takes your sleeve the way the small one did, and does not let go.",
+     "addChoices": [
+      {
+       "label": "Let it come with you.",
+       "success": {
+        "text": "It hums the tune with no tune, once, at the stone, as if saying goodbye. Then it turns and follows you, and the light it leaves on the floor behind it is very faintly silver.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "clefairy"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "moves": [
+           "moonblast"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-moon-clefairy",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-mistaken",
+          "min": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-04-dance-mistaken"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-mistaken",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "gn-moon-secret",
+            "min": 1,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "scene",
+              "key": "gn-04-dance-secret"
+             }
+            ]
+           },
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "gn-moon-secret",
+            "min": 0,
+            "max": 0,
+            "then": [
+             {
+              "kind": "addEvent",
+              "eventId": "gn-04-fossil"
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "two",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-moon-right",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "intro": "The moonlight slides off the stone and up the wall, and the dance winds down with it. They drift away into the dark in twos and threes.\n\nWhere the ring was, someone has left a stone on the floor. Not the glowing one. A smaller one, round and pale, set down carefully, facing you.",
+     "addChoices": [
+      {
+       "label": "Pick up the Moon Stone.",
+       "success": {
+        "text": "It is cold, and heavier than it looks, and it fits your hand as if someone measured. A thank-you, or as near as they could manage.",
+        "effects": [
+         {
+          "kind": "item",
+          "id": "moon-stone",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-moon-clefairy",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-mistaken",
+          "min": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-04-dance-mistaken"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-mistaken",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "gn-moon-secret",
+            "min": 1,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "scene",
+              "key": "gn-04-dance-secret"
+             }
+            ]
+           },
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "gn-moon-secret",
+            "min": 0,
+            "max": 0,
+            "then": [
+             {
+              "kind": "addEvent",
+              "eventId": "gn-04-fossil"
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "clefairy",
+    "tint": "#2a2440",
+    "effect": "sparkle"
+   },
+   "intro": "They scatter. The moonlight slides off the stone and up the wall, and the cave is only a cave again.\n\nOn the floor where the ring was, something small catches the lamp: a Moon Stone shard, dropped in the hurry.",
+   "choices": [
+    {
+     "label": "Pick up the shard.",
+     "success": {
+      "text": "You pick it up. It is still faintly warm. You put it somewhere safe, and you think about Garrick, nine years on, poking a fire.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "moon-shard",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-clefairy",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-moon-mistaken",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-04-dance-mistaken"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-moon-mistaken",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-secret",
+          "min": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-04-dance-secret"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-secret",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "addEvent",
+            "eventId": "gn-04-fossil"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-moon-right",
+       "atLeast": 0,
+       "atMost": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-04-dance-mistaken",
+   "name": "Taken by the Hand",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Treasure"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "clefairy",
+    "tint": "#2a2440",
+    "effect": "hearts"
+   },
+   "intro": "One Clefairy has got muddled. It has taken one of your Pokémon for one of its own, and has it by the hand, and is trying to lead it away into the ring.\n\nYour Pokémon looks back at you over its shoulder. It does not look worried. It looks like it is asking.",
+   "choices": [
+    {
+     "label": "Let it dance one round.",
+     "success": {
+      "text": "One round. Your Pokémon is terrible at it and does not care. When the ring comes back past you, it lets go of the Clefairy's hand and trots over, holding something it was given: a sliver of moon.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "item",
+        "id": "moon-shard",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-moon-secret",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-04-dance-secret"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-moon-secret",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-04-fossil"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call it back.",
+     "success": {
+      "text": "You call it softly. It comes, and the Clefairy lets go, puzzled, and watches it go with its empty hand still out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-moon-secret",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-04-dance-secret"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-moon-secret",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-04-fossil"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-04-dance-secret",
+   "name": "The Full Moon Dance",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Treasure"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "clefable",
+    "tint": "#2a2440",
+    "effect": "sparkle"
+   },
+   "intro": "Your own Clefairy-kind has gone very still. Then it walks out into the light, and the ring opens for it, and closes behind.\n\nThey dance again, and it is not the same dance. Slower. Wider. Something old in it. The stone in the middle burns white, and for a moment the whole cave is full moon.",
+   "choices": [
+    {
+     "label": "Watch until the end.",
+     "success": {
+      "text": "When it is over your Pokémon comes back carrying a second Moon Stone, and one of the old ones walks behind it with an egg held in both arms, and gives it to you, and bows.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "moon-stone",
+        "count": 1
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "cleffa"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-04-fossil"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-04-fossil",
+   "name": "Fossil Recovery",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Trainer",
+    "Treasure"
+   ],
+   "remembers": [
+    {
+     "id": "payroll",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "team-raid-moon-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Dr. Crowe's coat is new. Very new. There is a badge on the lining you are not supposed to see, and he keeps glancing at the tunnel the raiders went down. He is on their payroll now, and he fights like it.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Battle Dr. Crowe.",
+       "success": {
+        "text": "**Dr. Ansel Crowe:** \"Nothing personal. The pay is simply better than the university's.\"",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "team": [
+          "magnemite",
+          "voltorb",
+          "koffing"
+         ],
+         "name": "Dr. Ansel Crowe",
+         "classId": "worker",
+         "size": 3,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "gn",
+           "op": "fossil",
+           "key": "local"
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "team-raid-moon-won",
+           "then": [
+            {
+             "kind": "gn",
+             "op": "fossil",
+             "key": "local"
+            }
+           ],
+           "text": "The other one presses a second fossil into your hands. \"For the raid. We remember who stood in the door.\""
+          },
+          {
+           "kind": "flag",
+           "key": "kanto-moon-fossil",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-04-mine"
+          }
+         ],
+         "pseudo": true
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "grateful",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "team-raid-moon-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "They both stop to look at you. **Dr. Mirabel Larkin:** \"You're the one who ran them off.\" **Dr. Ansel Crowe:** \"We're grateful. We're still not agreeing.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2440",
+    "effect": "none"
+   },
+   "intro": "Two researchers at a folding table, each with a fossil, each pointing at the other's.\n\n**Dr. Ansel Crowe:** \"His is a river pebble with ambitions.\"\n\n**Dr. Mirabel Larkin:** \"Hers was carved last Tuesday. I can smell the chisel.\"\n\n*On the table between them, a third fossil, cracked, pushed to one side.*\n\n**Both:** \"That? Worthless.\"",
+   "choices": [
+    {
+     "label": "Battle Dr. Crowe.",
+     "success": {
+      "text": "**Dr. Ansel Crowe:** \"Fine. If you win, take Larkin's. No, take mine. Whoever loses, the fossil goes.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "magnemite",
+        "voltorb",
+        "koffing"
+       ],
+       "name": "Dr. Ansel Crowe",
+       "classId": "worker",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "fossil",
+         "key": "local"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "team-raid-moon-won",
+         "then": [
+          {
+           "kind": "gn",
+           "op": "fossil",
+           "key": "local"
+          }
+         ],
+         "text": "The other one presses a second fossil into your hands. \"For the raid. We remember who stood in the door.\""
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-moon-fossil",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-04-mine"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Battle Dr. Larkin.",
+     "success": {
+      "text": "**Dr. Mirabel Larkin:** \"Science by combat. My favourite peer review.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "magnemite",
+        "voltorb",
+        "koffing"
+       ],
+       "name": "Dr. Mirabel Larkin",
+       "classId": "aroma-lady",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "fossil",
+         "key": "local"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "team-raid-moon-won",
+         "then": [
+          {
+           "kind": "gn",
+           "op": "fossil",
+           "key": "local"
+          }
+         ],
+         "text": "The other one presses a second fossil into your hands. \"For the raid. We remember who stood in the door.\""
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-moon-fossil",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-04-mine"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Can I have the third one?",
+     "success": {
+      "text": "They stop arguing. They look at the cracked fossil, and at you, and then at each other, and they both laugh at the same moment, which surprises them.\n\n**Dr. Mirabel Larkin:** \"Take it. Nobody's fought over that one in years.\"\n\nYou turn it over in the lamplight. The crack runs through something neither of them ever bothered to look at.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "fossil",
+        "key": "far"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "team-raid-moon-won",
+        "then": [
+         {
+          "kind": "gn",
+          "op": "fossil",
+          "key": "local"
+         }
+        ],
+        "text": "The other one presses a second fossil into your hands. \"For the raid. We remember who stood in the door.\""
+       },
+       {
+        "kind": "flag",
+        "key": "moon-third-fossil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-fossil",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-04-mine"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-04-mine",
+   "name": "The Gem-Stone Mine",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Treasure"
+   ],
+   "remembers": [
+    {
+     "id": "pickaxe",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "noMoveType",
+       "types": [
+        "fighting",
+        "steel",
+        "ground"
+       ]
+      }
+     ],
+     "notice": "None of your Pokémon knows a move that could break rock. A pickaxe hangs on a nail by the sign, with a tin under it: ₽200 A SWING. HONESTY BOX. THE MOUNTAIN IS WATCHING.",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Rent the pickaxe and swing. (₽200)",
+       "requires": [
+        {
+         "kind": "money",
+         "atLeast": 200
+        }
+       ],
+       "success": {
+        "text": "You put the coins in the tin. The pickaxe is heavier than it looks and swings itself, mostly. The ore face cracks along a line you didn't choose.",
+        "effects": [
+         {
+          "kind": "money",
+          "amount": -200
+         },
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "gn-moon-find",
+          "weights": [
+           22,
+           14,
+           14,
+           14,
+           14,
+           12,
+           10
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-find",
+          "min": 1,
+          "max": 1,
+          "then": [
+           {
+            "kind": "item",
+            "id": "moon-stone",
+            "count": 1
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-find",
+          "min": 2,
+          "max": 2,
+          "then": [
+           {
+            "kind": "item",
+            "id": "fire-stone",
+            "count": 1
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-find",
+          "min": 3,
+          "max": 3,
+          "then": [
+           {
+            "kind": "item",
+            "id": "water-stone",
+            "count": 1
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-find",
+          "min": 4,
+          "max": 4,
+          "then": [
+           {
+            "kind": "item",
+            "id": "thunder-stone",
+            "count": 1
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-find",
+          "min": 5,
+          "max": 5,
+          "then": [
+           {
+            "kind": "item",
+            "id": "leaf-stone",
+            "count": 1
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-find",
+          "min": 6,
+          "max": 6,
+          "then": [
+           {
+            "kind": "item",
+            "id": "sun-stone",
+            "count": 1
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-find",
+          "min": 7,
+          "max": 7,
+          "then": [
+           {
+            "kind": "item",
+            "id": "everstone",
+            "count": 1
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "roll",
+          "key": "gn-moon-gem",
+          "n": 10
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-moon-gem",
+          "then": [
+           {
+            "kind": "item",
+            "id": "rare-candy",
+            "count": 1
+           },
+           {
+            "kind": "item",
+            "id": "metal-coat",
+            "count": 1
+           }
+          ],
+          "text": "The rock gives way into a hollow full of colour. A Gem Vein!"
+         },
+         {
+          "kind": "flag",
+          "key": "gn-moon-swings",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-moon-mine",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-04-mine"
+         }
+        ]
+       },
+       "showIf": [
+        {
+         "kind": "flag",
+         "key": "gn-moon-swings",
+         "atLeast": 0,
+         "atMost": 2
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2440",
+    "effect": "glint"
+   },
+   "intro": "A wall of ore, glittering in three kinds: a rough ore face, a seam with metal running through it like a vein, and low down a buried pocket, packed with earth.\n\nA sign: THREE SWINGS PER VISITOR. THE MOUNTAIN IS COUNTING.\n\nEach swing wakes whatever guards that deposit. They are not pleased about it.",
+   "choices": [
+    {
+     "label": "Swing at the ore face. (a Fighting move)",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fighting"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon squares up to the rock and hits it. The rock hits back: something in the wall unfolds.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "rock"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "pick",
+         "key": "gn-moon-find",
+         "weights": [
+          22,
+          14,
+          14,
+          14,
+          14,
+          12,
+          10
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "item",
+           "id": "moon-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "item",
+           "id": "fire-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "item",
+           "id": "water-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "item",
+           "id": "thunder-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "item",
+           "id": "leaf-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "item",
+           "id": "sun-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "item",
+           "id": "everstone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "roll",
+         "key": "gn-moon-gem",
+         "n": 10
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-gem",
+         "then": [
+          {
+           "kind": "item",
+           "id": "rare-candy",
+           "count": 1
+          },
+          {
+           "kind": "item",
+           "id": "metal-coat",
+           "count": 1
+          }
+         ],
+         "text": "The rock gives way into a hollow full of colour. A Gem Vein!"
+        },
+        {
+         "kind": "flag",
+         "key": "gn-moon-swings",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-moon-mine",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-04-mine"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "pick",
+         "key": "gn-moon-find",
+         "weights": [
+          22,
+          14,
+          14,
+          14,
+          14,
+          12,
+          10
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "item",
+           "id": "moon-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "item",
+           "id": "fire-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "item",
+           "id": "water-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "item",
+           "id": "thunder-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "item",
+           "id": "leaf-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "item",
+           "id": "sun-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "item",
+           "id": "everstone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "roll",
+         "key": "gn-moon-gem",
+         "n": 10
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-gem",
+         "then": [
+          {
+           "kind": "item",
+           "id": "rare-candy",
+           "count": 1
+          },
+          {
+           "kind": "item",
+           "id": "metal-coat",
+           "count": 1
+          }
+         ],
+         "text": "The rock gives way into a hollow full of colour. A Gem Vein!"
+        },
+        {
+         "kind": "flag",
+         "key": "gn-moon-swings",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-moon-mine",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-04-mine"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-moon-swings",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Swing at the metal seam. (a Steel move)",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "steel"
+      }
+     ],
+     "success": {
+      "text": "Steel on stone. Sparks. A shape peels itself off the seam and turns to look at you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "rock"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "pick",
+         "key": "gn-moon-find",
+         "weights": [
+          1,
+          1,
+          1
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "item",
+           "id": "hard-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "item",
+           "id": "metal-coat",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "item",
+           "id": "everstone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "roll",
+         "key": "gn-moon-gem",
+         "n": 10
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-gem",
+         "then": [
+          {
+           "kind": "item",
+           "id": "rare-candy",
+           "count": 1
+          },
+          {
+           "kind": "item",
+           "id": "metal-coat",
+           "count": 1
+          }
+         ],
+         "text": "The rock gives way into a hollow full of colour. A Gem Vein!"
+        },
+        {
+         "kind": "flag",
+         "key": "gn-moon-swings",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-moon-mine",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-04-mine"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "pick",
+         "key": "gn-moon-find",
+         "weights": [
+          1,
+          1,
+          1
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "item",
+           "id": "hard-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "item",
+           "id": "metal-coat",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "item",
+           "id": "everstone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "roll",
+         "key": "gn-moon-gem",
+         "n": 10
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-gem",
+         "then": [
+          {
+           "kind": "item",
+           "id": "rare-candy",
+           "count": 1
+          },
+          {
+           "kind": "item",
+           "id": "metal-coat",
+           "count": 1
+          }
+         ],
+         "text": "The rock gives way into a hollow full of colour. A Gem Vein!"
+        },
+        {
+         "kind": "flag",
+         "key": "gn-moon-swings",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-moon-mine",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-04-mine"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-moon-swings",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Dig at the buried pocket. (a Ground move)",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "The earth gives. Something in the earth objects.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "rock"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "pick",
+         "key": "gn-moon-find",
+         "weights": [
+          1,
+          1,
+          1,
+          1
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "item",
+           "id": "fire-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "item",
+           "id": "water-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "item",
+           "id": "thunder-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "item",
+           "id": "leaf-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "roll",
+         "key": "gn-moon-gem",
+         "n": 10
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-gem",
+         "then": [
+          {
+           "kind": "item",
+           "id": "rare-candy",
+           "count": 1
+          },
+          {
+           "kind": "item",
+           "id": "metal-coat",
+           "count": 1
+          }
+         ],
+         "text": "The rock gives way into a hollow full of colour. A Gem Vein!"
+        },
+        {
+         "kind": "flag",
+         "key": "gn-moon-swings",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-moon-mine",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-04-mine"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "pick",
+         "key": "gn-moon-find",
+         "weights": [
+          1,
+          1,
+          1,
+          1
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "item",
+           "id": "fire-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "item",
+           "id": "water-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "item",
+           "id": "thunder-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-find",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "item",
+           "id": "leaf-stone",
+           "count": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "roll",
+         "key": "gn-moon-gem",
+         "n": 10
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-moon-gem",
+         "then": [
+          {
+           "kind": "item",
+           "id": "rare-candy",
+           "count": 1
+          },
+          {
+           "kind": "item",
+           "id": "metal-coat",
+           "count": 1
+          }
+         ],
+         "text": "The rock gives way into a hollow full of colour. A Gem Vein!"
+        },
+        {
+         "kind": "flag",
+         "key": "gn-moon-swings",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-moon-mine",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-04-mine"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-moon-swings",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Walk on to the far side.",
+     "success": {
+      "text": "You shoulder your pack, heavier than it was, and follow the draught toward the daylight.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-04-far"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-04-far",
+   "name": "The Far Side",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2440",
+    "effect": "none"
+   },
+   "intro": "Daylight. It comes round the last bend like a shout, and you have to stand in the mouth a while with your eyes shut, letting it in.\n\nYou sit on a rock at the edge of the light and count what you carried out of the mountain.",
+   "choices": [
+    {
+     "label": "Count it.",
+     "success": {
+      "text": "You lay it out on the rock in the sun.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kanto-moon-clefairy",
+        "then": [],
+        "text": "You saw the Clefairy dance. Nobody can take that out of your bag."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "moon-third-fossil",
+        "then": [],
+        "text": "The cracked fossil nobody wanted."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kanto-moon-fossil",
+        "then": [],
+        "text": "A fossil, wrapped in your spare shirt."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-moon-swings",
+        "then": [],
+        "text": "Ore dust in every seam of the bag, and what the mountain let you keep."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-04-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-04-after",
+   "name": "Two Fossils, One Stall",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-moon-fossil",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "gn-04-after-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2440",
+    "effect": "none"
+   },
+   "intro": "A market stall with one table and two chairs and two researchers, and a sign that has been crossed out and rewritten so many times the price is just a smudge.\n\n**Dr. Ansel Crowe:** \"Fifteen hundred.\"\n\n**Dr. Mirabel Larkin:** \"Five hundred. It's a pebble.\"\n\n**Dr. Ansel Crowe:** \"It's YOUR pebble.\"",
+   "choices": [
+    {
+     "label": "Pay the price in the middle. (₽1000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "You put a thousand on the table. They both open their mouths to object, then both close them, because neither of them can say the other was right. **Dr. Mirabel Larkin:** \"Fine. Fine.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "gn",
+        "op": "fossil",
+        "key": "local"
+       },
+       {
+        "kind": "flag",
+        "key": "gn-04-after-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to it.",
+     "success": {
+      "text": "You leave them to it. Halfway down the street you hear them both laugh, at the same moment, which still surprises them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-04-after-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-barn",
+   "name": "Damian's Unofficial Gym",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "damian-meetings",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "damian-passed"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "closed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rain-damian-beaten",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A barn. Cardboard pillars painted grey. A hand-painted sign: **DAMIAN'S ~~OFFISHAL~~ ~~OFFICAL~~ UNOFFICIAL GYM.**\n\nThe door is shut. There is a note pinned to it, in the same hand as the sign, written smaller.\n\n*\"Closed. Thinking.\"*"
+    },
+    {
+     "id": "came-back",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "damian-lost-once",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**Damian:** \"You came back! Nobody comes back!\" He says it like it is the best news he has had all year. It might be."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.damian"
+    ],
+    "effect": "confetti"
+   },
+   "intro": "A barn. Cardboard pillars painted grey. A hand-painted sign: **DAMIAN'S ~~OFFISHAL~~ ~~OFFICAL~~ UNOFFICIAL GYM.**\n\nInside, the decorations say this week's theme is whatever Damian liked this week.\n\n**Damian:** \"A challenger! Tully! TULLY! Positions!\"\n\n**Tully:** \"Which one's my position?\"\n\n**Damian:** \"The one I showed you! By the hay!\"",
+   "choices": [
+    {
+     "label": "Challenge the Gym.",
+     "success": {
+      "text": "**Damian:** \"YES. Right. Rules: you beat my Gym Trainers, then you face the Leader. That's me. I'm the Leader.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "damian-theme",
+        "weights": [
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "This week is fire: paper flames taped to every pillar, and a bucket of sand by the door, just in case."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "This week is water: blue streamers, a paddling pool in the corner, and a Magikarp drawn on the wall with a crown on."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "This week is \"strong ones\": a punching bag made of a feed sack, and the word STRONG painted on it, twice."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-05-tully"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "rain-damian-beaten",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Ask if it's a real Gym.",
+     "success": {
+      "text": "**Damian:** \"It's got a sign.\" He points at it, in case you missed it. He looks at it himself for a moment, proudly, the way you look at something you made.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-05-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-05-barn"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "rain-damian-beaten",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "gn-05-asked",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Nobody shouts after you. Behind you, faintly, someone asks which one is the attack one.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "damian-passed"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-damian-beaten",
+        "then": [
+         {
+          "kind": "flag",
+          "key": "damian-closed-thinking",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "damian-meetings",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "stampRegion",
+          "key": "damian-region"
+         },
+         {
+          "kind": "gn",
+          "op": "stampRegion",
+          "key": "damian-passed"
+         }
+        ],
+        "text": "Whatever he is thinking about, he is thinking about it hard. You have a feeling you will find out next region."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-tully",
+   "name": "Gym Trainer Tully",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.swimmer"
+    ],
+    "effect": "none"
+   },
+   "intro": "Tully stands by the hay, in his position, in swimming trunks, in a barn. He has two Poké Balls and is holding them like they might go off.\n\n**Tully:** \"Damian says I'm the first line of defence. Is that good? It sounds good.\"",
+   "choices": [
+    {
+     "label": "Battle Tully.",
+     "success": {
+      "text": "**Tully:** \"Okay. Okay! Go, um. Go!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Gym Trainer Tully",
+       "classId": "swimmer",
+       "size": 2,
+       "types": [],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-bex"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "gn": "tully"
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "damian-lost-once",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-lost"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-bex",
+   "name": "Gym Trainer Bex",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.camper"
+    ],
+    "effect": "none"
+   },
+   "intro": "Bex is by the second pillar, the one that leans. Bex has read the instructions on the back of the Poké Ball twice and is starting a third time.\n\n**Bex:** \"Which one's the attack one?\"\n\n**Damian, from the back:** \"TOP LEFT!\"",
+   "choices": [
+    {
+     "label": "Battle Bex.",
+     "success": {
+      "text": "**Bex:** \"Top left. Top left. Okay.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Gym Trainer Bex",
+       "classId": "camper",
+       "size": 2,
+       "types": [],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-damian"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "gn": "bex"
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "damian-lost-once",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-lost"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-damian",
+   "name": "Leader Damian",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.damian"
+    ],
+    "effect": "shake"
+   },
+   "intro": "Damian is waiting at the far end of the barn, on a crate, under a banner that says LEADER. He jumps down. He lands well. He has practised.\n\n**Damian:** \"Three of mine, and then the real one. Ready?\"\n\nHe holds up his last Poké Ball, and for a moment the shouting goes out of his face. **Damian:** \"This one I actually trained.\"",
+   "choices": [
+    {
+     "label": "Battle Damian.",
+     "success": {
+      "text": "**Damian:** \"GYM BATTLE! Real one! Well. Real-ish!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Damian",
+       "classId": "ace-trainer",
+       "size": 4,
+       "types": [
+        "fire"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-won"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "gn": "damian",
+        "ace": 1
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "damian-lost-once",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-lost"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "damian-theme",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Battle Damian.",
+     "success": {
+      "text": "**Damian:** \"GYM BATTLE! Real one! Well. Real-ish!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Damian",
+       "classId": "ace-trainer",
+       "size": 4,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-won"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "gn": "damian",
+        "ace": 1
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "damian-lost-once",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-lost"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "damian-theme",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Battle Damian.",
+     "success": {
+      "text": "**Damian:** \"GYM BATTLE! Real one! Well. Real-ish!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Damian",
+       "classId": "ace-trainer",
+       "size": 4,
+       "types": [
+        "fighting",
+        "rock"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-won"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "gn": "damian",
+        "ace": 1
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "damian-lost-once",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-lost"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "damian-theme",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-05-won",
+   "name": "Ha! HA!",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.damian"
+    ],
+    "effect": "confetti"
+   },
+   "intro": "**Damian:** \"Ha! HA! Good! That's— no, that's good. Here. I made these.\"\n\nHe holds out a bottle cap with a pin glued to the back. It has been painted, carefully, in four colours, and one of them is still a bit wet.",
+   "choices": [
+    {
+     "label": "Take the Bottle-Cap Badge.",
+     "success": {
+      "text": "You pin it on. He watches you do it, and stands up a little straighter, as if you had pinned it on him. Then he presses a disc into your hand: Water Pulse. **Damian:** \"Tully's idea. Don't tell him it was good.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "bottle-cap-badge",
+        "count": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "water-pulse"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-cerulean-damian-won",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "damian-meetings",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "damian-region"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "damian-passed"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-lost",
+   "name": "Not Finished Yet",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.damian"
+    ],
+    "effect": "none"
+   },
+   "intro": "**Damian:** \"Listen. Losing's just winning that hasn't finished yet. You've got to believe in yourself. Even when nobody— even when it's a barn.\"\n\n*He's not looking at you.*",
+   "choices": [
+    {
+     "label": "Go again.",
+     "success": {
+      "text": "**Damian:** \"Yeah? YEAH. Positions! Everyone back to positions!\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "damian-meetings",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-05-barn",
+          "gn-05-hall",
+          "gn-05-gym"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. When you look back, he is still standing in the door, and he lifts a hand, and you lift one back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "damian-passed"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-hall",
+   "name": "Damian's Gym (Rented Hall)",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "damian-meetings",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "damian-region"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "damian-passed"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rain",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rain-saved",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "rain-damian",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "damian-asked-rain",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Before anything else he takes you aside, by the elbow, away from the others. **Damian:** \"The Fire-type. From the rain. Is it... how is it?\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "It's happy.",
+       "success": {
+        "text": "He nods, too many times. **Damian:** \"Good. Good. That's all I— good.\" He goes back to the others, and shouts at them, and it is the happiest shouting you have ever heard.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "damian-asked-rain",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-05-hall"
+         }
+        ]
+       }
+      },
+      {
+       "label": "It doesn't think about you.",
+       "success": {
+        "text": "He takes that. You watch him take it. **Damian:** \"No. Course not. That's right, that's how it should be.\" He says it to the floor.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "damian-asked-rain",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-05-hall"
+         }
+        ]
+       }
+      },
+      {
+       "label": "Come and see it.",
+       "success": {
+        "text": "He looks at you as if you have offered him something he cannot carry. **Damian:** \"Yeah? At the next rest? I won't— I'll just sit. I'll just sit near it.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "damian-asked-rain",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "damian-visit",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-05-hall"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "thinking",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "damian-closed-thinking",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He is quieter than you have heard about. He shakes your hand properly, and holds on, and says only: **Damian:** \"I did some thinking. Let's see if it helped.\""
+    },
+    {
+     "id": "came-back",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "damian-lost-once",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "damian-meetings",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "**Damian:** \"You! You came back! Nobody comes back, and you came back TWICE!\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.damian"
+    ],
+    "effect": "confetti"
+   },
+   "intro": "A rented hall, with a stage at one end and folding chairs stacked along the walls. A banner: **DAMIAN'S GYM.** No crossing out this time. Somebody checked the spelling.\n\nBy the door stands a real Gym Trainer, in a real uniform, who is very clearly being paid and very clearly embarrassed about it.\n\n**Damian:** \"You! Look! A hall! Tully and Bex know the buttons now! ALL the buttons!\"",
+   "choices": [
+    {
+     "label": "Challenge the Gym.",
+     "success": {
+      "text": "**Hired Gym Trainer:** \"I'm just here for the afternoon. Let's get this over with.\" Behind them, Damian is mouthing the words along, proudly.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-05-hall-hired"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Damian waves from the door with both arms until you are out of sight.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "damian-passed"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-hall-hired",
+   "name": "The Hired Gym Trainer",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "effect": "none"
+   },
+   "intro": "The hired trainer does not look at Damian. The hired trainer does not look at anyone. The hired trainer is, however, actually good.",
+   "choices": [
+    {
+     "label": "Battle the hired trainer.",
+     "success": {
+      "text": "**Hired Gym Trainer:** \"For the record, I told my friends I was at the dentist.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hired Gym Trainer",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-hall-friends"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "damian-lost-once",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-lost"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-hall-friends",
+   "name": "Tully and Bex",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.swimmer",
+     "trainer.camper"
+    ],
+    "effect": "none"
+   },
+   "intro": "Tully and Bex, side by side, three Poké Balls each. Tully has a wristband. Bex has a list of the buttons written on one hand.\n\n**Bex:** \"Top left is the attack one. We checked.\"\n\n**Tully:** \"Twice!\"",
+   "choices": [
+    {
+     "label": "Battle Tully and Bex.",
+     "success": {
+      "text": "They throw at the same moment, which they have clearly practised, and are clearly delighted about.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Tully and Bex",
+       "classId": "swimmer",
+       "size": 6,
+       "types": [],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-hall-damian"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "damian-lost-once",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-lost"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-hall-damian",
+   "name": "Leader Damian",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.damian"
+    ],
+    "effect": "shake"
+   },
+   "intro": "Damian on the stage, under a light somebody is holding for him. Four of his, and then the one he trained.\n\n**Damian:** \"I got better. I want you to see. That's all. That's the whole reason.\"",
+   "choices": [
+    {
+     "label": "Battle Damian.",
+     "success": {
+      "text": "**Damian:** \"Same as before. Except BETTER.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Damian",
+       "classId": "ace-trainer",
+       "size": 5,
+       "types": [
+        "fire"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-hall-won"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "gn": "damian",
+        "ace": 1
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "damian-lost-once",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-lost"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "damian-theme",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Battle Damian.",
+     "success": {
+      "text": "**Damian:** \"Same as before. Except BETTER.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Damian",
+       "classId": "ace-trainer",
+       "size": 5,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-hall-won"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "gn": "damian",
+        "ace": 1
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "damian-lost-once",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-lost"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "damian-theme",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Battle Damian.",
+     "success": {
+      "text": "**Damian:** \"Same as before. Except BETTER.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Damian",
+       "classId": "ace-trainer",
+       "size": 5,
+       "types": [
+        "fighting",
+        "rock"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-hall-won"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "gn": "damian",
+        "ace": 1
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "damian-lost-once",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-lost"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "damian-theme",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-05-hall-won",
+   "name": "Better",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.damian"
+    ],
+    "effect": "confetti"
+   },
+   "intro": "**Damian:** \"Ha! Okay. OKAY. You're still better. But it was closer. Wasn't it closer?\"\n\nIt was closer.",
+   "choices": [
+    {
+     "label": "Tell him it was closer.",
+     "success": {
+      "text": "**Damian:** \"I KNEW it.\" He writes something down on the back of his hand. **Damian:** \"Next time. Next time there'll be pillars.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "damian-meetings",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "damian-region"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "damian-passed"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-gym",
+   "name": "Damian's Gym",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "damian-meetings",
+     "atLeast": 2,
+     "atMost": 2
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "damian-region"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "damian-passed"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.damian"
+    ],
+    "effect": "glint"
+   },
+   "intro": "A Gym. A real one, inspected, with a certificate on the wall in a frame. The pillars are stone.\n\n**Damian:** \"It's official. They sent a man with a clipboard. He said the pillars had to be real. So they're real.\"\n\n**Damian:** \"I'm not going to go easy on you. You never went easy on me. That's why there's pillars.\"",
+   "choices": [
+    {
+     "label": "Challenge Damian.",
+     "success": {
+      "text": "He does not shout. He does not need to. He just nods, once, and throws.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Damian",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [
+        "fire"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-gym-won"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "gn": "damian",
+        "ace": 1
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "damian-lost-once",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-lost"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "damian-theme",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Challenge Damian.",
+     "success": {
+      "text": "He does not shout. He does not need to. He just nods, once, and throws.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Damian",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-gym-won"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "gn": "damian",
+        "ace": 1
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "damian-lost-once",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-lost"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "damian-theme",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Challenge Damian.",
+     "success": {
+      "text": "He does not shout. He does not need to. He just nods, once, and throws.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Damian",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [
+        "fighting",
+        "rock"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-gym-won"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "gn": "damian",
+        "ace": 1
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "damian-lost-once",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-05-lost"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "damian-theme",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. He does not wave this time. He nods, the way the real Gym Leaders do, and goes back inside to wait.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "damian-passed"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-gym-won",
+   "name": "A Real Badge",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.damian"
+    ],
+    "effect": "confetti"
+   },
+   "intro": "He looks at his ace for a long time after it goes down. Then he recalls it, and thanks it, quietly, so only it can hear.\n\n**Damian:** \"There. That one's real. It's got a number on the back and everything.\"\n\nHe hands you an egg as well, warm from his coat. **Damian:** \"Its kid. It should go with someone who beat it properly.\"",
+   "choices": [
+    {
+     "label": "Take the badge, and the egg.",
+     "success": {
+      "text": "The badge has a number on the back. He is right. It is real. Beside it, in your bag, the bottle cap rattles, and you find you would not trade one for the other.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "damian-badge",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "egg",
+          "species": [],
+          "types": [
+           "fire"
+          ],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "left": 3,
+          "unit": "battle"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "egg",
+          "species": [],
+          "types": [
+           "water"
+          ],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "left": 3,
+          "unit": "battle"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "damian-theme",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "egg",
+          "species": [],
+          "types": [
+           "fighting",
+           "rock"
+          ],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "left": 3,
+          "unit": "battle"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "damian-meetings",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "damian-region"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "damian-passed"
+       },
+       {
+        "kind": "moment",
+        "text": "Damian's Gym is real now. The pillars are stone. He did not go easy.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-05-visit",
+   "name": "Damian at the Fire",
+   "group": "Greenneedle",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "damian-visit",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "damian-visit-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.damian"
+    ],
+    "effect": "fire"
+   },
+   "intro": "He comes at dusk, as he said. He does not come close. He sits on the far side of the fire, a long way off, hands in his lap.\n\nThe Fire-type looks at him for a long time. Then it gets up, and walks round the fire, and lies down against his boot.\n\nHe doesn't move. He doesn't say anything. He just lets it.",
+   "choices": [
+    {
+     "label": "Leave them be a while.",
+     "success": {
+      "text": "You go and see to something that does not need seeing to. When you come back he has gone, and the Fire-type is asleep, and there is a bottle cap on the ground beside it, painted orange.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "damian-visit-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Damian came to the fire, and it let him.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

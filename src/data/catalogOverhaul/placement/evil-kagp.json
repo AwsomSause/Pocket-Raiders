@@ -1,0 +1,1894 @@
+{
+ "$note": "Catalog Overhaul placement for Evil Teams Volume III, row 10: Kalos (Flare), Alola (Skull, Aether), Galar (Macro Cosmos, Yell), Paldea (Star). From each team's FULL_3 part E. Keyed by event id; stages are in-region. Acts, the Final Choice and third-option climaxes are callbacks the inside engine schedules, and rooms ride their entry, so neither is placed here.",
+ "fl-afford-the-suit": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "L1, Kalos stage 3, the town. Anyone."
+ },
+ "fl-op-fitting": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "N1, Kalos stage 3. Inside. Optional."
+ },
+ "fl-house-red-3": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "M1 The House Red: the stage's last rest, no badge. Inside."
+ },
+ "fl-house-red-4": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "M1 The House Red: the stage's last rest, no badge. Inside."
+ },
+ "fl-house-red-5": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "M1 The House Red: the stage's last rest, no badge. Inside."
+ },
+ "fl-house-red-6": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "M1 The House Red: the stage's last rest, no badge. Inside."
+ },
+ "fl-house-red-7": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "M1 The House Red: the stage's last rest, no badge. Inside."
+ },
+ "fl-soup-plate": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "L2, L5, L9: Kalos stages 3 to 8, the town. Anyone."
+ },
+ "fl-two-chimes": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "L2, L5, L9: Kalos stages 3 to 8, the town. Anyone."
+ },
+ "fl-good-china": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "L2, L5, L9: Kalos stages 3 to 8, the town. Anyone."
+ },
+ "fl-page-nine": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "L4, L7, L8, L10, L12: Kalos stages 3 to 8, a + node. Anyone."
+ },
+ "fl-what-the-glasses-say": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "L4, L7, L8, L10, L12: Kalos stages 3 to 8, a + node. Anyone."
+ },
+ "fl-the-pool": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "L4, L7, L8, L10, L12: Kalos stages 3 to 8, a + node. Anyone."
+ },
+ "fl-better-part": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "L4, L7, L8, L10, L12: Kalos stages 3 to 8, a + node. Anyone."
+ },
+ "fl-other-column": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "L4, L7, L8, L10, L12: Kalos stages 3 to 8, a + node. Anyone."
+ },
+ "fl-op-stone-round": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4
+  ],
+  "sits": "optional",
+  "note": "N2, Kalos stage 4, Step 8. Inside."
+ },
+ "fl-enough-well": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4
+  ],
+  "sits": "side-branch",
+  "note": "L3, Kalos stage 4, Step 8, a side branch. Anyone."
+ },
+ "fl-complaints": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "M2, Kalos stage 4 or 5, a + node. Inside."
+ },
+ "fl-op-power-plant": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5
+  ],
+  "sits": "optional",
+  "note": "N3, Kalos stage 5, Step 10. Inside."
+ },
+ "fl-whats-the-play": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "M3 (inside), L6 (anyone): Kalos stage 5 or 6, the town."
+ },
+ "fl-kitchen-scissors": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "M3 (inside), L6 (anyone): Kalos stage 5 or 6, the town."
+ },
+ "fl-the-brother": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "L11, Kalos stages 5 to 8, the town. Anyone."
+ },
+ "fl-op-holo-caster": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6
+  ],
+  "sits": "optional",
+  "note": "N4, Kalos stage 6, Step 9. Inside."
+ },
+ "ember-stop-1": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6
+  ],
+  "sits": "optional",
+  "note": "Team Ember: Stoppage 1, Kalos stage 6, a door."
+ },
+ "fl-op-guest-list": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6,
+   7
+  ],
+  "sits": "optional",
+  "note": "N5, Kalos stage 6 or 7, Step 12. Inside."
+ },
+ "fl-between-floors": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "M4, Kalos stage 6 or 7, a + node. Inside."
+ },
+ "fl-op-flower-room": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "note": "N6, Kalos stage 7, Step 13, a door. Inside."
+ },
+ "ember-stop-2": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "note": "Team Ember: Stoppage 2, Kalos stage 7, a door."
+ },
+ "ember-stop-3": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "night"
+  ],
+  "note": "Team Ember: Stoppage 3, Kalos stage 7, a + node at Night."
+ },
+ "fl-xerosic-alone": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The officers, alone (VOLUME_3_D): after hours, a + node. Inside."
+ },
+ "fl-malva-alone": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The officers, alone (VOLUME_3_D): after hours, a + node. Inside."
+ },
+ "fl-scientists-alone": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The officers, alone (VOLUME_3_D): after hours, a + node. Inside."
+ },
+ "al-youve-arrived": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "AL1, AL2: Alola stage 3, the town. Anyone."
+ },
+ "al-ten": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "AL1, AL2: Alola stage 3, the town. Anyone."
+ },
+ "sk-op-bus-stop": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "note": "AO1 (Skull), AO4 (Aether): Alola stage 3, Step 9. Inside."
+ },
+ "ae-op-intake": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "note": "AO1 (Skull), AO4 (Aether): Alola stage 3, Step 9. Inside."
+ },
+ "sk-you-ate-3": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "AI1 You Ate?: the stage's last rest, no badge. Inside (Skull)."
+ },
+ "sk-you-ate-4": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "AI1 You Ate?: the stage's last rest, no badge. Inside (Skull)."
+ },
+ "sk-you-ate-5": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "AI1 You Ate?: the stage's last rest, no badge. Inside (Skull)."
+ },
+ "sk-you-ate-6": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "AI1 You Ate?: the stage's last rest, no badge. Inside (Skull)."
+ },
+ "sk-you-ate-7": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "AI1 You Ate?: the stage's last rest, no badge. Inside (Skull)."
+ },
+ "ae-rounds-3": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "AI3 Rounds: the stage's last rest, no badge. Inside (Aether)."
+ },
+ "ae-rounds-4": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "AI3 Rounds: the stage's last rest, no badge. Inside (Aether)."
+ },
+ "ae-rounds-5": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "AI3 Rounds: the stage's last rest, no badge. Inside (Aether)."
+ },
+ "ae-rounds-6": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "AI3 Rounds: the stage's last rest, no badge. Inside (Aether)."
+ },
+ "ae-rounds-7": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "AI3 Rounds: the stage's last rest, no badge. Inside (Aether)."
+ },
+ "al-it-wouldnt": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "AL4, AL8, AL10: Alola stages 3 to 8, the town. Anyone."
+ },
+ "al-get-her-back": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "AL4, AL8, AL10: Alola stages 3 to 8, the town. Anyone."
+ },
+ "al-chosen": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "AL4, AL8, AL10: Alola stages 3 to 8, the town. Anyone."
+ },
+ "al-next": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "AL5, AL7: Alola stages 3 to 8, a + node. Anyone."
+ },
+ "al-the-barge": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "AL5, AL7: Alola stages 3 to 8, a + node. Anyone."
+ },
+ "sk-night-run": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "night"
+  ],
+  "note": "AI2, Alola stage 4 or 5, a + node at Night. Inside (Skull)."
+ },
+ "al-rhymes-plumeria": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "note": "AL3, Alola stages 4 to 10, Step 7. Anyone.",
+  "window": [
+   4,
+   10
+  ]
+ },
+ "al-rhymes-plumeria-2": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "note": "AL3, Alola stages 4 to 10, Step 7. Anyone.",
+  "window": [
+   4,
+   10
+  ]
+ },
+ "sk-op-trial-site": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5
+  ],
+  "sits": "optional",
+  "note": "AO2 (Skull), AO5 (Aether): Alola stage 5, Step 10. Inside."
+ },
+ "ae-op-poster": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5
+  ],
+  "sits": "optional",
+  "note": "AO2 (Skull), AO5 (Aether): Alola stage 5, Step 10. Inside."
+ },
+ "ae-as-they-were": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "AI4 (Aether), AL11 (anyone): Alola stage 5 or 6, a + node."
+ },
+ "al-the-third": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "AI4 (Aether), AL11 (anyone): Alola stage 5 or 6, a + node."
+ },
+ "al-didnt-need-it": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "AL6, AL9 and their follow-ons: Alola stages 5 to 8, the town. Anyone."
+ },
+ "al-guzma-staff": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "AL6, AL9 and their follow-ons: Alola stages 5 to 8, the town. Anyone."
+ },
+ "al-aether-house-post": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "AL6, AL9 and their follow-ons: Alola stages 5 to 8, the town. Anyone."
+ },
+ "al-acerola-letter-wicke": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "AL6, AL9 and their follow-ons: Alola stages 5 to 8, the town. Anyone."
+ },
+ "al-chalk-zia": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "AL6, AL9 and their follow-ons: Alola stages 5 to 8, the town. Anyone."
+ },
+ "al-wednesday-1": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "side-branch",
+  "attaches": "town",
+  "note": "AL12 Wednesday: a Visit, the same Town node three times. Anyone."
+ },
+ "al-wednesday-2": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "side-branch",
+  "attaches": "town",
+  "note": "AL12 Wednesday: a Visit, the same Town node three times. Anyone."
+ },
+ "al-wednesday-3": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "side-branch",
+  "attaches": "town",
+  "note": "AL12 Wednesday: a Visit, the same Town node three times. Anyone."
+ },
+ "sk-op-roof": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6
+  ],
+  "sits": "optional",
+  "note": "AO3, Alola stage 6, Step 9. Inside (Skull)."
+ },
+ "tp-return-1": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6
+  ],
+  "sits": "optional",
+  "note": "Team Tidepool: Return 1, Alola stage 6, a door."
+ },
+ "ae-op-cold-room": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6,
+   7
+  ],
+  "sits": "optional",
+  "note": "AO6, Alola stage 6 or 7, Step 13, a door. Inside (Aether)."
+ },
+ "tp-return-2": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "note": "Team Tidepool: Return 2, Alola stage 7, a door."
+ },
+ "tp-return-3": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "night"
+  ],
+  "note": "Team Tidepool: Return 3, Alola stage 7, a + node at Night."
+ },
+ "sk-plumeria-alone": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The officers, alone (VOLUME_3_D), and the Borrow Book errand: a + node. Inside."
+ },
+ "sk-gladion-alone": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The officers, alone (VOLUME_3_D), and the Borrow Book errand: a + node. Inside."
+ },
+ "ae-faba-alone": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The officers, alone (VOLUME_3_D), and the Borrow Book errand: a + node. Inside."
+ },
+ "ae-wicke-alone": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The officers, alone (VOLUME_3_D), and the Borrow Book errand: a + node. Inside."
+ },
+ "sk-borrow-errand": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The officers, alone (VOLUME_3_D), and the Borrow Book errand: a + node. Inside."
+ },
+ "ga-r-and-b": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "GA1, GA2: Galar stage 3, the town. Anyone."
+ },
+ "ga-whos-the-league": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "GA1, GA2: Galar stage 3, the town. Anyone."
+ },
+ "ga-league-note-rose": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "GA1, GA2: Galar stage 3, the town. Anyone."
+ },
+ "mc-op-sponsorship": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "note": "GO1 (MC), GO4 (Yell): Galar stage 3, Step 9. Inside."
+ },
+ "yl-op-blockade": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "note": "GO1 (MC), GO4 (Yell): Galar stage 3, Step 9. Inside."
+ },
+ "mc-midnight-3": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "GI1 Past Midnight: the stage's last rest, no badge. Inside (MC)."
+ },
+ "mc-midnight-4": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "GI1 Past Midnight: the stage's last rest, no badge. Inside (MC)."
+ },
+ "mc-midnight-5": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "GI1 Past Midnight: the stage's last rest, no badge. Inside (MC)."
+ },
+ "mc-midnight-6": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "GI1 Past Midnight: the stage's last rest, no badge. Inside (MC)."
+ },
+ "mc-midnight-7": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "GI1 Past Midnight: the stage's last rest, no badge. Inside (MC)."
+ },
+ "yl-seat-14-3": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "GI3 Seat Fourteen: the stage's last rest, no badge. Inside (Yell)."
+ },
+ "yl-seat-14-4": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "GI3 Seat Fourteen: the stage's last rest, no badge. Inside (Yell)."
+ },
+ "yl-seat-14-5": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "GI3 Seat Fourteen: the stage's last rest, no badge. Inside (Yell)."
+ },
+ "yl-seat-14-6": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "GI3 Seat Fourteen: the stage's last rest, no badge. Inside (Yell)."
+ },
+ "yl-seat-14-7": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "GI3 Seat Fourteen: the stage's last rest, no badge. Inside (Yell)."
+ },
+ "ga-hook-forty-one": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "GA3, GA4, GA5: Galar stages 3 to 8, the town. Anyone."
+ },
+ "ga-never-on-charity": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "GA3, GA4, GA5: Galar stages 3 to 8, the town. Anyone."
+ },
+ "ga-which-ones-dad": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "GA3, GA4, GA5: Galar stages 3 to 8, the town. Anyone."
+ },
+ "ga-four-lines": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "GA6, GA9: Galar stages 3 to 8, a + node. Anyone."
+ },
+ "ga-forget-who-they-are": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "GA6, GA9: Galar stages 3 to 8, a + node. Anyone."
+ },
+ "mc-op-meter-round": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4
+  ],
+  "sits": "optional",
+  "note": "GO2, Galar stage 4, Step 8. Inside (MC)."
+ },
+ "enc-route9": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4
+  ],
+  "sits": "optional",
+  "note": "Route 9 from outside (for Team Encore): Galar stage 4, Step 9."
+ },
+ "mc-forty-a-day": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "GI2, Galar stage 4 or 5, a + node. Inside (MC)."
+ },
+ "ga-never-not-arrived": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "note": "GA7, Galar stages 4 to 12, Step 7. Anyone.",
+  "window": [
+   4,
+   12
+  ]
+ },
+ "yl-op-chant": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5
+  ],
+  "sits": "optional",
+  "note": "GO5, Galar stage 5, Step 10. Inside (Yell)."
+ },
+ "ga-a-bedsheet": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "GA8, GA10, GA11 and their follow-ons: Galar stages 5 to 8, the town. Anyone."
+ },
+ "ga-a-bedsheet-steward": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "GA8, GA10, GA11 and their follow-ons: Galar stages 5 to 8, the town. Anyone."
+ },
+ "ga-very-nice-site": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "GA8, GA10, GA11 and their follow-ons: Galar stages 5 to 8, the town. Anyone."
+ },
+ "ga-send-him-home": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "GA8, GA10, GA11 and their follow-ons: Galar stages 5 to 8, the town. Anyone."
+ },
+ "ga-ingleby-card-rose": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "GA8, GA10, GA11 and their follow-ons: Galar stages 5 to 8, the town. Anyone."
+ },
+ "ga-other-chip-shop-1": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "side-branch",
+  "attaches": "town",
+  "note": "GA12 The Other Chip Shop: a Visit, three times. Anyone."
+ },
+ "ga-other-chip-shop-2": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "side-branch",
+  "attaches": "town",
+  "note": "GA12 The Other Chip Shop: a Visit, three times. Anyone."
+ },
+ "ga-other-chip-shop-3": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "side-branch",
+  "attaches": "town",
+  "note": "GA12 The Other Chip Shop: a Visit, three times. Anyone."
+ },
+ "mc-op-lanyard": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6
+  ],
+  "sits": "optional",
+  "note": "GO3, Galar stage 6, Step 9. Inside (MC)."
+ },
+ "enc-away-1": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6
+  ],
+  "sits": "optional",
+  "note": "Team Encore: Away Day 1, Galar stage 6, a door."
+ },
+ "yl-op-shutters": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6,
+   7
+  ],
+  "sits": "optional",
+  "tags": [
+   "night"
+  ],
+  "note": "GO6, Galar stage 6 or 7, Step 13, a door (at Night). Inside (Yell)."
+ },
+ "yl-opening-act": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "GI4, Galar stage 6 or 7, the town. Inside (Yell)."
+ },
+ "enc-away-2": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "note": "Team Encore: Away Day 2, Galar stage 7, a door."
+ },
+ "enc-away-3": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "night"
+  ],
+  "note": "Team Encore: Away Day 3, Galar stage 7, a + node at Night."
+ },
+ "mc-oleana-alone": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The officers, alone (VOLUME_3_D): a + node. Inside."
+ },
+ "mc-bede-alone": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The officers, alone (VOLUME_3_D): a + node. Inside."
+ },
+ "yl-marnie-alone": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The officers, alone (VOLUME_3_D): a + node. Inside."
+ },
+ "ps-green-form": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "PS1, the town; until towns exist: Step 5. Window 3 to 8. Anyone.",
+  "window": [
+   3,
+   8
+  ]
+ },
+ "ps-green-form-reply": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "PS1's second reply: the next stage, at any rest."
+ },
+ "ps-forty-desks": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "PS2, the town; until towns exist: Step 6. Anyone."
+ },
+ "st-op-gate": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "note": "PO1 The Gate, Paldea stage 3, Step 9. Inside."
+ },
+ "st-near-3": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "PI1 How Near: the stage's last rest, no badge. Inside."
+ },
+ "st-near-4": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "PI1 How Near: the stage's last rest, no badge. Inside."
+ },
+ "st-near-5": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "PI1 How Near: the stage's last rest, no badge. Inside."
+ },
+ "st-near-6": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "PI1 How Near: the stage's last rest, no badge. Inside."
+ },
+ "st-near-7": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "none",
+  "note": "PI1 How Near: the stage's last rest, no badge. Inside."
+ },
+ "ps-use-your-words": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "PS4, PS6 (tide), PS7: Paldea stages 3 to 8, the town. Anyone."
+ },
+ "ps-the-ferry": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "PS4, PS6 (tide), PS7: Paldea stages 3 to 8, the town. Anyone."
+ },
+ "ps-lightfoot-pot": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "PS4, PS6 (tide), PS7: Paldea stages 3 to 8, the town. Anyone."
+ },
+ "ps-the-shed": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "PS3, PS5: Paldea stages 3 to 8, a + node. Anyone."
+ },
+ "ps-outstanding": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "PS3, PS5: Paldea stages 3 to 8, a + node. Anyone."
+ },
+ "st-op-homework": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4
+  ],
+  "sits": "optional",
+  "note": "PO2 The Homework Run, Paldea stage 4, Step 8. Inside."
+ },
+ "st-gate-outside": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4
+  ],
+  "sits": "optional",
+  "note": "Act 2's gate, from outside (for Team Homeroom): Paldea stage 4, Step 9."
+ },
+ "st-lesson": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "PI2 Your Lesson, Paldea stage 4 or 5, a + node. Inside."
+ },
+ "st-op-flag": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5
+  ],
+  "sits": "optional",
+  "note": "PO3 The Flag, Paldea stage 5, Step 10 (high). Inside."
+ },
+ "st-seventh-star": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "night"
+  ],
+  "note": "PI3 (inside, Rank 3), PS9 (anyone): Paldea stage 5 or 6, a + node at Night."
+ },
+ "ps-the-box": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "night"
+  ],
+  "note": "PI3 (inside, Rank 3), PS9 (anyone): Paldea stage 5 or 6, a + node at Night."
+ },
+ "ps-box-jacq": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "PS9's folder, handed to Mr. Jacq: the Academy, the town."
+ },
+ "ps-wrong-boots": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "PS8, PS12 Under the Door (a Visit, three times): Paldea stages 5 to 8, the town. Anyone."
+ },
+ "ps-door-1": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "PS8, PS12 Under the Door (a Visit, three times): Paldea stages 5 to 8, the town. Anyone."
+ },
+ "ps-door-2": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "PS8, PS12 Under the Door (a Visit, three times): Paldea stages 5 to 8, the town. Anyone."
+ },
+ "ps-door-3": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "PS8, PS12 Under the Door (a Visit, three times): Paldea stages 5 to 8, the town. Anyone."
+ },
+ "ps-radical": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "sits": "optional",
+  "note": "PS10 Radical, Step 8. Window 5 to 12. Anyone.",
+  "window": [
+   5,
+   12
+  ]
+ },
+ "st-op-canteen": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "PO4 The Canteen, Paldea stage 6, the Academy's Town node; until towns exist: Step 9. Inside."
+ },
+ "hr-lunch-1": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6
+  ],
+  "sits": "optional",
+  "note": "Team Homeroom: Lunch 1, Paldea stage 6, a door."
+ },
+ "st-op-truck": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6,
+   7
+  ],
+  "sits": "optional",
+  "note": "PO5 The Truck, Paldea stage 6 or 7, Step 12. Inside."
+ },
+ "st-voice-changer": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "night"
+  ],
+  "note": "PI4 Voice Changer, Paldea stage 6 or 7, a rest at Night. Inside, Rank 5."
+ },
+ "st-op-call": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "note": "PO6 The Call, Paldea stage 7, Step 13, a door. Inside."
+ },
+ "hr-lunch-2": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "note": "Team Homeroom: Lunch 2, Paldea stage 7, a door."
+ },
+ "hr-lunch-3": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Team Homeroom: Lunch 3, Paldea stage 7, a + node."
+ },
+ "hr-lunch-3-helmets": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Team Homeroom: Lunch 3, Paldea stage 7, a + node."
+ },
+ "ps-third-one": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   7,
+   8
+  ],
+  "sits": "optional",
+  "note": "PS11 The Third One, Step 12. Window 10 to 16. Anyone.",
+  "window": [
+   10,
+   16
+  ]
+ },
+ "st-giacomo-alone": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The five bosses, alone (VOLUME_3_D): at their own base, after hours. Inside."
+ },
+ "st-mela-alone": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The five bosses, alone (VOLUME_3_D): at their own base, after hours. Inside."
+ },
+ "st-atticus-alone": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The five bosses, alone (VOLUME_3_D): at their own base, after hours. Inside."
+ },
+ "st-ortega-alone": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The five bosses, alone (VOLUME_3_D): at their own base, after hours. Inside."
+ },
+ "st-eri-alone": {
+  "shape": "Single",
+  "often": "region",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The five bosses, alone (VOLUME_3_D): at their own base, after hours. Inside."
+ }
+}

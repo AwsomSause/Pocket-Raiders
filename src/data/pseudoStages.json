@@ -648,7 +648,7 @@
     {
       "id": "ps_flight_north",
       "name": "Flight North",
-      "entry": "cs-kanto-vermilion-flight",
+      "entry": "cs-kanto-vermilion-flight-n1",
       "themeId": "normal-flying",
       "tint": "#2f5d73",
       "mood": "open sky"
@@ -656,7 +656,7 @@
     {
       "id": "ps_sabrinas_labyrinth",
       "name": "Sabrina's Labyrinth",
-      "entry": "cs-kanto-saffron-labyrinth",
+      "entry": "ev-sabrina-labyrinth",
       "themeId": "psychic-ghost",
       "tint": "#2a1a40",
       "mood": "shadow lanterns"
@@ -664,7 +664,7 @@
     {
       "id": "ps_route_25",
       "name": "Route 25: The Angry Mankey",
-      "entry": "cs-kanto-saffron-r25",
+      "entry": "cs-kanto-saffron-r25-camp",
       "themeId": "normal-fighting",
       "tint": "#4a3220",
       "mood": "rocky trail"
@@ -672,7 +672,7 @@
     {
       "id": "ps_fighting_tournament",
       "name": "The Fighting Tournament",
-      "entry": "cs-kanto-saffron-tournament",
+      "entry": "cs-kanto-saffron-tc",
       "themeId": "fighting-dragon",
       "tint": "#4a2a1a",
       "mood": "arena"

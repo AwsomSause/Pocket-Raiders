@@ -1,0 +1,384 @@
+{
+  "status": "supported",
+  "source": "TEAM_GALACTIC_SINNOH_FULL_3 part D, TEAM_PLASMA_UNOVA_FULL_3 part D, HOENN_TEAMS 7.5 (the Radio). Lines are the docs' own; the Radio's chatter lines are fill-ins.",
+  "squads": [
+    {
+      "team": "galactic",
+      "a": "Greer",
+      "b": "Lior",
+      "standing": {
+        "low": [
+          "Don't ask me things.",
+          "I've run the numbers on you. Inconclusive."
+        ],
+        "mid": [
+          "You're restful. I mean that as high as I can mean anything.",
+          "That shouldn't have worked. I'd like to see your working."
+        ],
+        "high": [
+          "I've four minutes. For you I've got eight.",
+          "If I'm right about the last page, I'd like it noted that I'd rather have been wrong, with you lot."
+        ]
+      },
+      "suspicion": {
+        "mid": [
+          "Things take longer when it's us.",
+          "Eleven minutes. Then a metre. I can see a trend."
+        ],
+        "high": [
+          "Saturn's stopped timing you. Is that good?",
+          "He knows. He's logging it as weather."
+        ]
+      }
+    },
+    {
+      "team": "plasma",
+      "a": "Yara",
+      "b": "Emil",
+      "standing": {
+        "low": [
+          "You're only a Listener. You'll see.",
+          "Next."
+        ],
+        "mid": [
+          "You've a way of looking at the fence.",
+          "You'd have made an orderly. You notice the ears."
+        ],
+        "high": [
+          "If I've got this wrong, I want you to be the one who says.",
+          "I've handed back a lot of patients. I'd hand one to you."
+        ]
+      },
+      "suspicion": {
+        "mid": [
+          "The Sages ask about you. I say you're devout.",
+          "Giallo's had your reports pulled. Rood's got them. Don't ask me which is worse."
+        ],
+        "high": [
+          "I've a dog in my shirt. I can't be the one who vouches.",
+          "They'll ask you to open your hand. Do it. Trust the dog."
+        ]
+      }
+    }
+  ],
+  "lines": [
+    {
+      "team": "galactic",
+      "kind": "rest",
+      "who": "Cadet Io",
+      "text": "*She hums. A table away, somebody taps one finger*",
+      "flags": [
+        "galactic-io-duet"
+      ]
+    },
+    {
+      "team": "galactic",
+      "kind": "rest",
+      "who": "A Grunt",
+      "text": "\"It's different.\" *Nobody answers. Several nod*",
+      "flags": [
+        "galactic-pan"
+      ]
+    },
+    {
+      "team": "galactic",
+      "kind": "rest",
+      "who": "A Grunt, to the salt",
+      "text": "\"I thought it was the warm.\"",
+      "flags": [
+        "galactic-instruments"
+      ]
+    },
+    {
+      "team": "galactic",
+      "kind": "rest",
+      "who": "Saturn",
+      "text": "\"Four hundred and seventy-six.\" *To nobody*",
+      "flags": [
+        "gx-lights-6"
+      ]
+    },
+    {
+      "team": "galactic",
+      "kind": "rest",
+      "who": "Somebody, three bunks down",
+      "text": "\"...How are you, Io?\" Io: \"*Late!* I dreamed I was late!\"",
+      "flags": [
+        "galactic-greer-asked"
+      ]
+    },
+    {
+      "team": "galactic",
+      "kind": "field",
+      "who": "A Grunt",
+      "text": "\"You're going up with him. What's it like? Being required?\"",
+      "flags": [
+        "galactic-cyrus-confided"
+      ]
+    },
+    {
+      "team": "galactic",
+      "kind": "field",
+      "who": "A Grunt",
+      "text": "\"They say Commander Saturn carried one. In his *hands.*\"",
+      "flags": [
+        "galactic-fish"
+      ]
+    },
+    {
+      "team": "galactic",
+      "kind": "field",
+      "who": "A Grunt",
+      "text": "\"Did you write one? I can't remember what I put. Isn't that odd. It was the whole reason.\"",
+      "flags": [
+        "galactic-cards-said"
+      ]
+    },
+    {
+      "team": "galactic",
+      "kind": "field",
+      "who": "A Grunt",
+      "text": "\"Tomorrow there's no more of this.\" *A pause.* \"I've been trying to work out which 'this' he means.\"",
+      "flags": [
+        "galactic-inside-act5"
+      ]
+    },
+    {
+      "team": "galactic",
+      "kind": "field",
+      "who": "The Grunts",
+      "text": "*They don't fight. They step aside, and take the helmet off, and hold it*",
+      "flags": [
+        "galactic-told-all"
+      ]
+    },
+    {
+      "team": "galactic",
+      "kind": "silent",
+      "who": "Cyrus",
+      "text": "\"Yes. Exactly that.\"",
+      "flags": [
+        "galactic-cyrus-confided"
+      ]
+    },
+    {
+      "team": "galactic",
+      "kind": "hum",
+      "who": "Cyrus",
+      "text": "\"...Is that the cadet's? It's got into the building. I've not been able to locate the source.\"",
+      "flags": [
+        "galactic-cyrus-confided",
+        "galactic-io-duet"
+      ]
+    },
+    {
+      "team": "galactic",
+      "kind": "win",
+      "who": "Cyrus",
+      "text": "\"Seen.\"",
+      "flags": [
+        "galactic-cyrus-confided"
+      ]
+    },
+    {
+      "team": "galactic",
+      "kind": "faint",
+      "who": "Cyrus",
+      "text": "\"You mind. I'm observing that you mind. Continue.\"",
+      "flags": [
+        "galactic-cyrus-confided"
+      ]
+    },
+    {
+      "team": "galactic",
+      "kind": "heal",
+      "who": "Cyrus",
+      "text": "\"Four minutes. Take them.\"",
+      "flags": [
+        "galactic-cyrus-confided"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "rest",
+      "who": "A new Knight, to the ceiling",
+      "text": "\"I didn't look back. I did it right. I didn't look.\"",
+      "flags": [
+        "plasma-inside-act1"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "rest",
+      "who": "Yara",
+      "text": "*Something under her tunic sneezes.* \"Hay fever.\"",
+      "flags": [
+        "plasma-inside-act3"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "rest",
+      "who": "A Knight",
+      "text": "\"They say a Listener asked the *crowd's.* In the square. Is that allowed?\" Another: \"It's the *Speech.* It's just the Speech, done.\"",
+      "flags": [
+        "plasma-op-speech-asked"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "rest",
+      "who": "Sage Rood, passing through",
+      "text": "\"We've met. The six of us. First time in two years. Nobody knew what to say. Bronius took minutes.\"",
+      "seen": [
+        "px-table"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "rest",
+      "who": "Everyone",
+      "text": "\"He'll walk the fields. He'll tell us what they said.\"",
+      "flags": [
+        "plasma-inside-act5"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "field",
+      "who": "The Crew, on the Vigil",
+      "text": "\"All right, candles?\"",
+      "flags": [
+        "plasma-inside-act4"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "field",
+      "who": "The Crew, on the Vigil",
+      "text": "\"I've stopped having the egg.\"",
+      "flags": [
+        "plasma-coin-watched"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "field",
+      "who": "The Crew, on the Vigil",
+      "text": "\"Don't *tell* me where it's from. I've got to lift it.\"",
+      "flags": [
+        "plasma-tags-read"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "field",
+      "who": "The Crew, on the Vigil",
+      "text": "\"...Are we still getting paid Friday? Who do I ask?\"",
+      "flags": [
+        "plasma-ending-turn"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "win",
+      "who": "N",
+      "text": "\"Yours said 'again.' I think it likes this part.\"",
+      "flags": [
+        "plasma-n-confided"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "faint",
+      "who": "N",
+      "text": "\"It's all right. It says it's all right. It says tell you.\"",
+      "flags": [
+        "plasma-n-confided"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "heal",
+      "who": "N",
+      "text": "\"It says that one tastes of chalk. It took it anyway.\"",
+      "flags": [
+        "plasma-n-confided"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "silent",
+      "who": "N",
+      "text": "\"I talk too fast. He made me, so there'd be no gaps. You can have a gap. Look: there's one.\"",
+      "flags": [
+        "plasma-n-confided"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "rest",
+      "who": "Ghetsis",
+      "text": "\"It suits you.\"",
+      "flags": [
+        "plasma-seat-sat"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "rest",
+      "who": "Ghetsis",
+      "text": "\"A Sage who stands. How original. I did that for two years; it's hard on the knees.\"",
+      "flags": [
+        "plasma-seat-stood"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "rest",
+      "who": "Ghetsis",
+      "text": "*You ask him something. He answers beautifully.*",
+      "flags": [
+        "plasma-seat-sat",
+        "plasma-inside-act4"
+      ]
+    },
+    {
+      "team": "plasma",
+      "kind": "rest",
+      "who": "Ghetsis",
+      "text": "\"Look moved. It needn't be real. Mine never is, and they weep.\"",
+      "flags": [
+        "plasma-seat-sat",
+        "plasma-inside-act5"
+      ]
+    }
+  ],
+  "radio": {
+    "teams": [
+      "magma",
+      "aqua"
+    ],
+    "chatter": {
+      "magma": [
+        "\"Unit four, readings nominal. Unit four, stop eating on the gauge.\"",
+        "\"Reminder: forms in triplicate. The third copy is for Courtney.\"",
+        "\"Mt. Chimney cable car is ours till six. Look busy.\""
+      ],
+      "aqua": [
+        "\"All hands, the galley's out of eggs. Again.\"",
+        "\"Somebody's left the dinghy at Slateport. It's the blue one. They're all blue.\"",
+        "\"Tide's turning at Lilycove. So's Shelly. Steer clear.\""
+      ]
+    },
+    "refused": "Radio: {op} went ahead without you. Somebody else did it By the Book.",
+    "ops": {
+      "weather-vane": "The Weather Vane",
+      "dive-bell": "The Dive Bell",
+      "ash-round": "The Ash Round",
+      "ferry-dues": "The Ferry Dues",
+      "meteor-shard": "The Meteor Shard",
+      "recruiting": "The Recruiting Drive"
+    }
+  }
+}

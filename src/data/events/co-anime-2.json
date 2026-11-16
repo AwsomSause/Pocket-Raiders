@@ -1,0 +1,4711 @@
+{
+ "catalogOverhaul": "anime",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "an10-formation",
+   "name": "Formation",
+   "group": "Anime-inspired questlines",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [
+    "fighting"
+   ],
+   "remembers": [
+    {
+     "id": "little-league",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "little-league"
+      }
+     ],
+     "notice": "The coach is barely taller than the Falinks. You know her: one of the Little League kids you coached, in a tracksuit three sizes too big. \"Coach! Their real coach is sick, so I'm coach today.\" She stands very straight. She has grown up a lot since that school yard, all at once."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "falinks",
+    "tint": "#3a2a1a",
+    "effect": "shake"
+   },
+   "intro": "A dusty practice ground behind the town's battle hall. Six Falinks stand in a line, nose to tail, helmets shining. The one at the front is bellowing, and there is no mistaking what it means: \"Formation! FORMATION!\" The smallest one, at the very back, trips over its own feet and takes two others down with it. The coach picks them up one at a time, gently, the way you set skittles back up. \"They lost every match this year. Every single one.\" She nods at the little one, who is pretending to look at a cloud. \"He can jump higher than any of them. He's afraid of being in front.\"",
+   "choices": [
+    {
+     "label": "Train them.",
+     "success": {
+      "text": "The coach blinks, then hands you her whistle as if it were heavy. \"Three drills. I never had the heart to run them.\" The leader stamps. The little one at the back stamps a beat late, and looks at his feet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an10-trained",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an10-drill-call"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put the little one in front.",
+     "success": {
+      "text": "Every Falinks turns its head at once. The leader makes a sound like a kettle. The little one tries to hide behind the others, but there are only five of them and he is the sixth. You walk him to the front of the line, one small step at a time. He is shaking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an10-little-front",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an10-little-one-front"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch a match.",
+     "success": {
+      "text": "\"Stay for the evening match, then. You'll see.\" The coach does not say what you will see. She says it like someone who has stopped expecting anyone to look.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an10-watched",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an10-the-match"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an10-drill-call",
+   "name": "Drill One: The Call",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "falinks",
+    "tint": "#3a2a1a",
+    "effect": "shake"
+   },
+   "intro": "The first drill is the oldest one. You call, they answer. One voice, one stamp, six helmets turning together like a door swinging shut. The leader is ready before you open your mouth. The little one at the back is watching your lips, very hard, trying to be on time.",
+   "choices": [
+    {
+     "label": "Call the beat.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You call. They answer. You call faster; they answer faster. On the tenth call the little one lands it exactly with the others, and for one beat there is only one sound on the whole ground. He looks up, astonished, as if he had heard himself for the first time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an10-drill-call-clean",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an10-drill-switch"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It comes back ragged: five stamps and a sixth, late, every time. But it comes back. The leader glares down the line. You put a hand on the little one's helmet. \"Late is still there,\" you tell him. \"We go again tomorrow.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "an10-drill-switch"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an10-drill-switch",
+   "name": "Drill Two: Change the Leader",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "falinks",
+    "tint": "#3a2a1a",
+    "effect": "shake"
+   },
+   "intro": "The second drill is the one they hate. On your clap the front Falinks peels off to the back, and the next one steps up and leads. The leader does not like going to the back. Nobody has asked the little one whether he likes coming forward, because nobody has ever got that far down the line.",
+   "choices": [
+    {
+     "label": "Clap the changes.",
+     "prompt": {
+      "id": "copycat-claps",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Clap: the leader goes to the back, grumbling. Clap: the second leads. Clap, clap, clap. Then it is the little one's turn at the front, and he freezes, and the whole line bumps into him. But he is in front for one whole clap before he scurries back. The coach writes something in her notebook and underlines it twice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an10-drill-switch-clean",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an10-drill-bout"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The changes come out in a heap: two leaders at once, then none. The leader ends up at the front again by habit, and looks relieved about it. But every Falinks has been at the front once now, even if only by accident. That is more than this season managed.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "an10-drill-bout"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an10-drill-bout",
+   "name": "Drill Three: The Bout",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "falinks",
+    "tint": "#3a2a1a",
+    "effect": "shake"
+   },
+   "intro": "The last drill is a practice bout. The squad lines up across the ground from your team, helmets down, and for the first time today the leader is not shouting. He is listening for the little one's stamp at the back. \"Go easy,\" the coach says. Then, after a moment: \"No. Don't.\"",
+   "choices": [
+    {
+     "label": "Spar with the whole line.",
+     "success": {
+      "text": "Six helmets come at you in a wedge, and the wedge holds.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Falinks Squad",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "an10-bout-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an10-formation-improved"
+        }
+       ],
+       "lineup": [
+        "falinks"
+       ],
+       "spritePokemon": "falinks",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "an10-bout-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an10-formation-improved"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let them spar each other.",
+     "success": {
+      "text": "You split the line in two, three and three, and let them go at it. It is chaos, then less chaos. By the end the two halves are calling the changes to each other across the ground, and nobody is falling over.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an10-formation-improved"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an10-formation-improved",
+   "name": "A Better Line",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "falinks",
+    "tint": "#3a2a1a",
+    "effect": "sparkle"
+   },
+   "intro": "The sun goes down over the practice ground. The squad stands in a line that is straight for the first time all year. The second Falinks, the one who changed places quickest in every drill, keeps looking at the road past the town. The coach sees it too. \"That one learned the most. It wants to see how other teams line up.\" She pauses. \"Take it, if it wants. We'll manage with five. We'll manage better than we did with six.\"",
+   "choices": [
+    {
+     "label": "Take Number Two along.",
+     "success": {
+      "text": "Number Two marches over and falls in behind your feet as if you were the front of a line. The coach hands you her whistle for good. \"Blow it before a fight. Whoever goes out first, the rest of them will be right behind.\" Behind you five Falinks stamp once, all together, to say goodbye.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "falinks"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "relic",
+        "id": "formation-whistle",
+        "name": "The Formation Whistle",
+        "effects": [
+         {
+          "kind": "battleStart",
+          "tailwind": true,
+          "turns": 2
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "an10-falinks-joined",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You drilled a losing Falinks squad until their line held.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the squad whole.",
+     "success": {
+      "text": "\"Six is a team,\" you say. Number Two looks at the road a long time, then back at the line, and steps into its place. The coach presses a black belt into your hands, frayed at one end. \"It was mine. I stopped wearing it the year we started losing.\" The squad stamps you out of town.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "black-belt",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an10-squad-whole",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an10-little-one-front",
+   "name": "He Spikes It",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "falinks",
+    "tint": "#3a2a1a",
+    "effect": "confetti"
+   },
+   "intro": "The coach throws a practice ball high over the line. It is too high for the leader. It is too high for any of them. The little one at the front looks up, and something in him forgets to be afraid. He jumps. He jumps higher than the hall roof, it seems, higher than the cloud he was pretending to watch, and he spikes the ball into the dirt so hard it bounces back over the fence. He lands. The other five stare. The old leader stares longest of all.",
+   "choices": [
+    {
+     "label": "Take the old leader along.",
+     "success": {
+      "text": "The squad re-forms with the little one in front. The old leader stands at the back, alone, not sure where to look. The coach sighs. \"He has led so long he never learned to follow. Take him on the road. Teach him the back of a line is not the end of it.\" He falls in behind you, stiffly, and by the edge of town he is stamping in time with your steps. The coach gives you her whistle.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "falinks"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "relic",
+        "id": "formation-whistle",
+        "name": "The Formation Whistle",
+        "effects": [
+         {
+          "kind": "battleStart",
+          "tailwind": true,
+          "turns": 2
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "an10-falinks-joined",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an10-old-leader",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The little Falinks jumped higher than the hall roof, and led.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to find it.",
+     "success": {
+      "text": "You step back. The old leader walks slowly to the back of the line, and stands there. Then he stamps, once, a beat early, for the little one. The little one stamps back. The coach is crying a bit and pretending she isn't. She unties the frayed black belt from her waist and presses it into your hands. \"I stopped wearing it the year we started losing. I think I can stop now for a better reason.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "black-belt",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an10-squad-whole",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an10-the-match",
+   "name": "Nobody Saw",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "falinks",
+    "tint": "#2a2030",
+    "effect": "shake"
+   },
+   "intro": "They lose. Of course they lose: the other team is bigger and quicker, and the leader shouts every move before he makes it. In the last second, with the match already gone, a hit comes in at the leader's blind side. The little one at the back leaps over all five of his squad, takes it on his helmet, and drops back into line before he lands. The buzzer goes. The crowd is looking at the scoreboard. The coach is looking at her shoes. You are the only one who saw.",
+   "choices": [
+    {
+     "label": "Tell the little one.",
+     "success": {
+      "text": "You find him behind the hall, alone, helmet dented. \"I saw,\" you say. \"Over all five of them. I saw it.\" He stares at you. Then he stands up very straight, and when you walk to the road he walks with you, a small helmet at your heel. The coach watches him go and hands you her whistle. \"He was always going to need someone who saw.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "falinks"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 15
+       },
+       {
+        "kind": "relic",
+        "id": "formation-whistle",
+        "name": "The Formation Whistle",
+        "effects": [
+         {
+          "kind": "battleStart",
+          "tailwind": true,
+          "turns": 2
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "an10-falinks-joined",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an10-seen-it",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You were the only one who saw the little Falinks leap over his whole squad.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the coach.",
+     "success": {
+      "text": "She listens with her whole face. \"Over all five?\" She goes straight to the little one and kneels in the dust in front of him, and moves him to the front of the line for tomorrow. He looks at you over her shoulder, and stamps once. She presses her old black belt into your hands. \"For having eyes.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "black-belt",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an10-squad-whole",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an10-seen-it",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-paper-city",
+   "name": "The Paper City",
+   "group": "Anime-inspired questlines",
+   "rarity": "rare",
+   "minStage": 5,
+   "types": [
+    "normal",
+    "electric",
+    "steel"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "flittle",
+    "tint": "#2e2c26",
+    "effect": "float"
+   },
+   "intro": "Past the last streetlight the road turns white. A whole city stands there, folded out of paper: houses with creased roofs, a clock tower with a paper bell, bridges that flex when the wind walks over them. Flittle bob between the chimneys like dropped petals. Low grey clouds are rolling in from the hills. A paper figure in a mayor's sash, its corners gone soft from years of handling, bows to you. \"It rains tonight. Every year we lose a street.\" It looks down at its own folded hands. \"The folder who made us is gone. We don't know how to make more of ourselves.\"",
+   "choices": [
+    {
+     "label": "I'll fold.",
+     "success": {
+      "text": "The mayor unfolds a little, which is how paper gasps. \"You know how?\" You don't, really. It leads you to the oldest street, where the houses lean on each other like tired people, and gives you a stack of clean sheets. \"Lamp Street first. It's always the first to go.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-folding",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-fold-lamp-street"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find the folder.",
+     "success": {
+      "text": "\"She went out along the paper road, years ago, and the road stopped where she stopped.\" The mayor points to a white path running off into real green hills. \"It's two days for us. Paper walks slowly.\" It folds its hands again. \"Please hurry. The clouds don't.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-seeking",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-paper-road"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the rain off.",
+     "success": {
+      "text": "\"Nobody has ever tried that.\" The mayor turns its flat face up to the clouds, which are very low now, and very full. \"We just fold ourselves small and hope it's someone else's street.\" It leads you up the clock tower, to the roof, where the first drops are already darkening the paper.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-sky",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-the-rain"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not tonight.",
+     "success": {
+      "text": "The mayor bows again, very low, the way you bow to someone you will not see again. Behind you, as you go, the first drops fall, and somewhere in the white city a street begins, softly, to fold in on itself.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-fold-lamp-street",
+   "name": "Lamp Street",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "flittle",
+    "tint": "#2e2c26",
+    "effect": "float"
+   },
+   "intro": "Lamp Street is six houses and a lamp post, all soft at the corners. A Flittle family lives in the third house; they watch you through a paper window as you kneel on the cobbles with your first clean sheet. The mayor stands behind you and says nothing, the way you stand behind someone learning to ride.",
+   "choices": [
+    {
+     "label": "Fold the houses square.",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Valley fold, mountain fold, crease it with your thumbnail. Your first house is a little lopsided; your sixth is good. The lamp post goes up last, and when you set it in place the paper bulb glows, faintly, from somewhere inside. The Flittle family come out and touch the new walls with their little feet. \"One,\" the mayor whispers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-street-strong",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-fold-bridge-street"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your corners will not meet. The houses come out leaning, all six of them, like a row of people trying to hear something. But they stand, and they are dry inside, and the Flittle family move back in without a word of complaint. \"One,\" the mayor says anyway.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "an12-fold-bridge-street"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-fold-bridge-street",
+   "name": "Bridge Street",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "flittle",
+    "tint": "#2e2c26",
+    "effect": "float"
+   },
+   "intro": "Bridge Street is not a street so much as a bridge that people live on, a paper arch over a paper stream. It has to bend in the wind without tearing. The first rain is spotting the clouds' edges. The mayor holds the end of your sheet so the wind cannot take it.",
+   "choices": [
+    {
+     "label": "Fold the arch.",
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You find the trick halfway: the bridge must be folded loose, not tight, so it can breathe. When you are done it sways in the wind and does not tear. A Flittle lands on the rail and rides it up and down, delighted, like a child on a swing. \"Two,\" says the mayor, and its voice has a crease in it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-street-strong",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-fold-market-street"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You fold it too tight, and it creaks when the wind goes over. But it holds. It will need a hand next year. \"Two,\" says the mayor, and pats the rail as if it were a nervous animal.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "an12-fold-market-street"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-fold-market-street",
+   "name": "Market Street",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "flittle",
+    "tint": "#2e2c26",
+    "effect": "rain"
+   },
+   "intro": "The rain begins as you reach the market. Stalls of paper fruit, a paper fishmonger, awnings already starting to sag. Paper people are folding themselves small in doorways, the way the mayor said. Your sheets are going soft in your hands. One street left, and the sky is falling on it one drop at a time.",
+   "choices": [
+    {
+     "label": "Fold fast.",
+     "prompt": {
+      "id": "balloon-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You fold the awnings double, the way the bridge taught you, so the water runs off. Stall after stall. Your fingers are numb and full of paper cuts. When you look up, the whole market is dry under its new roofs, and the paper people are coming out of the doorways one by one to look at it. \"Three,\" the mayor says. \"Three streets. In one night.\" It sits down on the kerb, as if its folds had given out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-street-strong",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-the-key"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Two stalls go soft before you can reach them. You save the rest, and the fishmonger, and the awning over the old couple who sell paper bread. The mayor kneels by the two lost stalls and smooths their wet paper flat, carefully, to keep. \"Three streets,\" it says. \"Three. We have never kept three.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "an12-the-key"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-paper-road",
+   "name": "The Paper Road",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rellor",
+    "tint": "#2e2c26",
+    "effect": "none"
+   },
+   "intro": "The paper road runs out of the city and into real hills, white against the green, and gets thinner as it goes. Halfway along you meet a Rellor rolling a ball of old paper scraps uphill, the way a Rellor rolls everything. The scraps are folded: tiny cranes, a tiny house, half a tiny bridge. It is the kind of thing somebody does with their hands when they cannot stop.",
+   "choices": [
+    {
+     "label": "Follow the Rellor.",
+     "success": {
+      "text": "It does not mind being followed. It rolls its paper ball past the end of the paper road, through a gate, up to a cottage with a wet garden and a lit window. It leaves the ball on the step, like a cat with a mouse, and waits.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-road-walked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-the-folder"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-the-folder",
+   "name": "The Folder",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "paper-crane",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "paper-crane-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the mantel is a photograph of a child sitting in a forest of paper trees, with paper cuts on every finger. \"My grandchild,\" she says. \"Folds for something sharp that lives in the woods. Got it from me, the folding.\" She looks at you. \"You've met. I can tell. You hold your hands the same careful way.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/expert_pokemon_breeder"
+    ],
+    "pokemon": "rellor",
+    "tint": "#2e2c26",
+    "effect": "none"
+   },
+   "intro": "An old woman opens the door before you knock. Every surface of her cottage is covered in half-finished things: a crane with one wing, a house with no roof, a whole street that stops in the middle. Her hands are knotted and swollen at the knuckles, and she holds them close to her chest as if they were cold. \"They sent someone. Good.\" She smiles, and it costs her. \"I made them, you know. Every one. Then my hands stopped, and I could not bear to go back and watch them come apart.\"",
+   "choices": [
+    {
+     "label": "Learn from her.",
+     "success": {
+      "text": "She cannot fold, but she can still see a fold before it is made. She sits you at her table and talks you through it, one crease at a time: \"Mountain. No, the other mountain. Thumbnail. There.\" By midnight you have folded a house that would make the mayor weep. \"Go,\" she says. \"Go back and give them my hands.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-taught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-fold-with-her"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask her to come back with you.",
+     "success": {
+      "text": "She is quiet a long time. Then she puts on her coat, very slowly, one sleeve and then the other, and you walk back down the paper road together at paper speed. The Rellor rolls its ball beside her the whole way. When the city sees who is coming, every Flittle in it rises at once.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-taught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an12-folder-came",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-fold-with-her"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-fold-with-her",
+   "name": "Her Hands, Your Hands",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/expert_pokemon_breeder"
+    ],
+    "pokemon": "flittle",
+    "tint": "#2e2c26",
+    "effect": "rain"
+   },
+   "intro": "The rain is starting over the paper city. You kneel on the cobbles of Lamp Street with a stack of clean sheets, and in your head, or beside you, a dry old voice says: \"Mountain. Valley. Loose for the bridge, so it can breathe. Double for the awnings, so the water runs off.\" Three streets, one night. Your hands know more than they did this morning.",
+   "choices": [
+    {
+     "label": "Fold the three streets.",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Lamp Street, square and true. Bridge Street, loose enough to sway. Market Street, double-roofed against the rain. You fold until your fingers bleed a little and then you fold some more. When you stand up, the whole city is dry, and three of its streets are new. The paper people stand in the rain and do not fold themselves small.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-street-strong",
+        "amount": 3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-the-key"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Not every fold comes out the way she said it. Lamp Street leans, and one stall in the market goes soft before you reach it. But Bridge Street sways and holds, and the rest of the market stays dry, and in the end the city is standing. \"Good enough,\" says the dry old voice. \"Better than mine, at the end.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-street-strong",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-the-key"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-the-key",
+   "name": "The Key to the City",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "folder-came",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an12-folder-came",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The old woman sits on a bench in the square with a blanket on her knees, and every paper person in the city comes to stand near her for a moment before going home. The mayor kneels at her feet. She puts one knotted hand on its paper head and leaves it there."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "flittle",
+    "tint": "#2e2c26",
+    "effect": "sparkle"
+   },
+   "intro": "Morning. The rain has gone over the hills. The paper city is wet at the edges and whole in the middle, and the mayor comes to you with something folded very small in its hands. It unfolds it, and unfolds it, and unfolds it, and it is a key, cut from a single sheet with no seams at all. \"It doesn't open anything,\" it says. \"It means you can come in. That's what keys are.\" A Flittle floats down onto your shoulder, carrying its own little paper house like a snail.",
+   "choices": [
+    {
+     "label": "Take the Flittle and the key.",
+     "success": {
+      "text": "The Flittle settles its paper house on your pack and climbs in. It will fold itself a new one, the mayor says, wherever you stop. \"Come back before it rains,\" the mayor says. \"Or come back when it does. Either way.\" The whole city waves you down the white road, flat hands lifting in the wind.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "flittle"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "item",
+        "id": "paper-city-key",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an12-key",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You rebuilt the Paper City's streets before the rain, and it gave you its key.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the Flittle its house.",
+     "success": {
+      "text": "\"It has a street now,\" you say. \"Let it live on it.\" The Flittle bobs, and floats back to its house, and rings its paper doorbell twice for you. The mayor presses the key into your palm and closes your fingers round it, carefully, the way you would fold something you wanted to keep.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "paper-city-key",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an12-key",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-the-rain",
+   "name": "Rain Dance in Reverse",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "flittle",
+    "tint": "#2e2c26",
+    "effect": "rain"
+   },
+   "intro": "From the clock tower roof the whole paper city lies under you, and the clouds lie on top of it. The first drops are already making grey coins on the paper tiles. Down in the streets, the paper people are folding themselves small in doorways. \"Every year,\" the mayor says beside you, \"we stand up here and choose which street to cry for.\" The bell above you is going soft.",
+   "choices": [
+    {
+     "label": "Call the sun.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "sunny-day"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon looks up and calls the sun, the way other Pokémon call rain, but backwards: and the clouds, astonished, open. A hot white hole tears through them right over the city. The rain falls all around, on the hills, on the paper road, and not one drop on the city. It lasts until the clouds give up and go. \"One more year,\" the mayor whispers. \"We have one more year, and nobody had to choose.\" A Flittle lands on your hand. In its feet is a key, folded from a single sheet.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "flittle"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "item",
+        "id": "paper-city-key",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an12-sun-held",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an12-key",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You held the rain off the Paper City with a borrowed sun.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Save the clock tower.",
+     "success": {
+      "text": "Without a sun to call, you do the only thing you can: you hold your coat over the bell, and your team stands round the tower with their backs to the rain. The tower stays dry. Lamp Street does not. In the morning the mayor smooths the wet paper of six little houses flat, to keep. A Flittle whose house was on Lamp Street floats up to you and sits on your hat, and will not leave. The mayor gives you the key, folded from one sheet. \"It means you can come in,\" it says. \"Come back. Bring a sun.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "flittle"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "item",
+        "id": "paper-city-key",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an12-street-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an12-key",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an13-ice-library",
+   "name": "The Ice Library",
+   "group": "Anime-inspired questlines",
+   "rarity": "rare",
+   "minStage": 5,
+   "types": [
+    "ice"
+   ],
+   "remembers": [
+    {
+     "id": "frost-warmed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "frost-warmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Somewhere at the back a steady drip is falling into a bucket. \"The glacier is melting at the east edge,\" the librarian says, very low. \"Since the great frost dragon on the pass woke up warm. I am glad for it. I am frightened for the books.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/snow_worker_f"
+    ],
+    "pokemon": "eiscue",
+    "tint": "#1a2a3a",
+    "effect": "snow"
+   },
+   "intro": "A library carved into a glacier. Shelves of blue ice run back into the dark further than your lamp can reach, and every book on them is frozen in its own clear block, like a leaf in a winter pond. An Eiscue sits at the front desk with a pair of tiny spectacles balanced on its ice face. It looks at you over them. \"Shh.\" A librarian steps out from the stacks in three cardigans and fingerless gloves. \"The books are frozen so the stories stop,\" she whispers. \"If one thaws, it keeps going. Someone in it keeps living.\" She glances at a woman sitting by the stove with a block of ice in her lap. \"She came yesterday. She wants to thaw the book about her husband.\"",
+   "choices": [
+    {
+     "label": "Let her.",
+     "success": {
+      "text": "The librarian looks at you a long moment, then nods, as if you had signed something. She takes the block from the woman's lap with both hands and sets it on the warm edge of the stove. The Eiscue turns round on its chair so it does not have to watch.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ice-thawed-other",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an13-the-thaw"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it frozen first.",
+     "success": {
+      "text": "\"You can, if the light is right.\" The librarian carries the block to the one lamp that burns white instead of yellow, and holds it up. \"Through the ice you can only read the last page. The page where it stopped.\" The woman stands, and comes to look too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ice-read-frozen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an13-through-the-ice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Whose stories are these?",
+     "success": {
+      "text": "The librarian takes off her spectacles and cleans them on a cardigan, slowly, the way people do when they are deciding how much to say. Then she takes your lamp, and walks you into the stacks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ice-own-book",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an13-the-stacks"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave quietly.",
+     "success": {
+      "text": "You back out the way you came. The Eiscue watches you all the way to the door. \"Shh,\" it says, kindly, as if you were the one making the noise. Behind you, the woman by the stove has not moved.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "an13-the-thaw",
+   "name": "The Next Page",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/snow_worker_f"
+    ],
+    "pokemon": "eiscue",
+    "tint": "#1a2a3a",
+    "effect": "none"
+   },
+   "intro": "The ice goes cloudy, then clear, then wet. It runs off the stove in little hissing threads. Inside, the book's cover darkens as the cold goes out of it. The woman sits with her hands folded so tight her knuckles are white. When the last of the block slides away, the librarian dries the cover with her sleeve and puts it in the woman's lap. \"It will keep going now,\" she says. \"It cannot stop again.\" The woman opens it to the next page, and reads. Then she begins to cry. And then she laughs, through it, because it is a happy page: wherever he is, he has planted the garden he always talked about, and the beans are coming up crooked.",
+   "choices": [
+    {
+     "label": "Sit with her.",
+     "success": {
+      "text": "You sit down on the other side of the stove and say nothing. She reads you the page about the beans, twice. She reads you the next one too, where he burns his toast. At the desk, the Eiscue sniffs once, very loudly, and then looks round as if someone else had done it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an13-sat-with-her",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an13-bergmite"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give her the quiet.",
+     "success": {
+      "text": "You step back among the shelves and let her have it. From between two frozen books you hear her turning pages, slowly, then faster. Once she says his name out loud. The librarian, passing, touches your arm. \"That was the right thing,\" she whispers. \"That is nearly always the right thing, here.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an13-bergmite"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an13-through-the-ice",
+   "name": "Where It Stops",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/snow_worker_f"
+    ],
+    "pokemon": "eiscue",
+    "tint": "#1a2a3a",
+    "effect": "glint"
+   },
+   "intro": "You hold the block up to the white lamp. The light goes into the ice and bends, and there, through it, you can read the last page. He is sitting on a porch step in the evening, laughing at something a Pokémon has done, his head thrown right back. The sentence ends in the middle of the laugh. The story stops there. He is happy where it stops. The woman, beside you, has gone very still.",
+   "choices": [
+    {
+     "label": "Tell her what you see.",
+     "success": {
+      "text": "You tell her: the porch, the evening, the laugh. She listens with her eyes shut. \"He always laughed like that. With his whole neck.\" She is quiet a long time. Then she takes the block from you and carries it back to its shelf herself. \"Let him keep laughing,\" she says. \"I would only make him go on to the next thing.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an13-left-frozen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an13-bergmite"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let her look for herself.",
+     "success": {
+      "text": "You hand her the block. She holds it to the white lamp and finds the page, and you watch her find him. She laughs too, a small one, the same shape as his. Then she sets the block back on the shelf, and straightens it, and pats it twice. \"Not yet,\" she tells it. \"Not ever, maybe. You look happy there.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an13-left-frozen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an13-bergmite"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an13-the-stacks",
+   "name": "Everyone Who Didn't Come Back",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/snow_worker_f"
+    ],
+    "pokemon": "eiscue",
+    "tint": "#1a2a3a",
+    "effect": "fog"
+   },
+   "intro": "The aisles go back into the glacier until your lamp is the only warm thing for a mile. \"Everyone who passed through the pass and didn't come back,\" the librarian says. \"Every one of them has a book. The ice writes them.\" She stops at a shelf near the floor. One block there is not quite frozen. It is slush at the edges, still setting, and through it you can read the name on the spine. It is yours. \"That one is still being written,\" she says gently. \"One of them always is.\"",
+   "choices": [
+    {
+     "label": "Read your own page.",
+     "success": {
+      "text": "You kneel and hold the lamp close. The last page is this morning. There is {starter}, and the road, and the cold, and you, walking up to a library in a glacier. There is everything you have done so far on this road, small and exact, in a hand you do not know. The sentence stops at the library door. \"It will not freeze while you are still walking,\" the librarian says. \"It is the walking that keeps it soft.\" You stand up. Your knees are cold. Your chest is not.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an13-read-own",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "In the Ice Library you found your own book, still soft, still being written.",
+        "importance": 60
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an13-bergmite"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it on the shelf.",
+     "success": {
+      "text": "\"I'll read it when it's finished,\" you say. The librarian smiles for the first time. \"That is what everybody says. Hardly anybody means it.\" She lets you lead the way back, and you do not look behind you, and you are proud of that.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an13-bergmite"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an13-bergmite",
+   "name": "A Small Block of Ice",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "own-book",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ice-own-book",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It is the Bergmite that was sitting on your shelf, on top of your own soft book, keeping it cool. It looks at you as if it already knows how the story goes so far, and wants to see the rest."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/snow_worker_f"
+    ],
+    "pokemon": "bergmite",
+    "tint": "#1a2a3a",
+    "effect": "snow"
+   },
+   "intro": "On your way out, something hops off a shelf behind you and lands on the floor with a clink. A Bergmite: a small block of living ice with two bright eyes, the kind that lives in the stacks and mends the cracks in the shelves. It hops after you. It hops after you again. The librarian laughs under her breath. \"It has been reading over people's shoulders for years. I think it wants a story that isn't frozen.\" At the front desk, the Eiscue looks up. \"Shh,\" it says. Then it waves one flipper.",
+   "choices": [
+    {
+     "label": "Let it come.",
+     "success": {
+      "text": "The Bergmite hops into your pack and settles down among your things with a little clink of contentment. The library door closes behind you, and the cold outside is only cold. You can feel the Bergmite, very faintly, turning a page of something in its head.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "bergmite"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "an13-bergmite",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Bergmite from the Ice Library came out to see a story that was not frozen.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it back to its shelves.",
+     "success": {
+      "text": "\"Somebody has to mend the cracks,\" you tell it. It thinks about that, and hops back to its shelf, and settles there on guard. The librarian presses something into your hand on the way out: a shard of the glacier that will not melt. \"For the road,\" she whispers. \"Shh,\" says the Eiscue.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "nevermeltice",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an14-thousand-lanterns",
+   "name": "The Thousand Lanterns",
+   "group": "Anime-inspired questlines",
+   "rarity": "rare",
+   "minStage": 4,
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_f"
+    ],
+    "pokemon": "chinchou",
+    "tint": "#141a30",
+    "effect": "sparkle"
+   },
+   "intro": "A river town, on the one night of the year that matters. A thousand paper lanterns float on the black water, each with a candle inside, drifting down past the bridges in slow gold rows. Chinchou glow up from the shallows to meet them. Everyone in town is on the bank. Almost everyone. On a high rooftop above the river a girl sits hugging her knees, watching. \"I watch every year,\" she says, when she sees you looking up. \"I'm not allowed down.\" She does not sound angry, only very practised. \"My guardian says the town is dangerous. She says the lanterns are for other people.\" She rests her chin on her knees. \"One day I'll float one.\"",
+   "choices": [
+    {
+     "label": "Come down.",
+     "success": {
+      "text": "She stares at you as if you had suggested she fly. Then she looks down at the river, all that gold, and something in her face gives way. \"The roofs go all the way to the water,\" she whispers. \"If you don't take the street, nobody sees you.\" She stands up. Her hand is shaking. She holds it out anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an14-escape-begun",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an14-rooftop-1",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'll float one for you.",
+     "success": {
+      "text": "You buy a lantern from the last stall still open, and the old man there gives you a brush. \"Write who it's for.\" You write her name, the one she called down to you, and set it on the water. It drifts out. Then, against the whole current of the river, against a thousand others, it turns, and drifts back upstream, and bumps gently against the wall below her roof. She leans out over the edge and catches its light on her face. She does not say anything. She does not need to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-floated",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an14-the-guardian",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Who is your guardian?",
+     "success": {
+      "text": "\"She's old,\" the girl says. \"She has a Mismagius. She brushes my hair every night and tells me the world is too big.\" She frowns, as if trying to remember something. \"She's always been old. I've always been this.\" A window opens below her, and someone in grey looks out at you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-guardian",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an14-who-guardian"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an14-rooftop-1",
+   "name": "The First Gap",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an14-escape-begun",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_f"
+    ],
+    "pokemon": "chinchou",
+    "tint": "#141a30",
+    "effect": "none"
+   },
+   "intro": "The first gap between roofs is wider than it looked from the ground. Below, the lane is full of people carrying lanterns down to the water, faces lit gold from underneath. The girl stands at the edge with her toes over nothing. \"I've never jumped anything,\" she says. \"I've never had anywhere to jump to.\"",
+   "choices": [
+    {
+     "label": "Jump together.",
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You count three and go. She lands beside you on the far tiles, and laughs out loud, one bright surprised laugh that a whole lane of people hear and nobody looks up for. \"Again,\" she says. \"Can we do that again?\" There are two more roofs. You can.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an14-roof-1",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an14-rooftop-2",
+        "nodes": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "She slips. You catch her wrist, and for one long second she hangs over the lane, and then she is up beside you, white and breathing hard. \"I'm all right,\" she says. \"I'm all right. I've never been anything but all right. This is better.\" You go slower over the next one.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "an14-rooftop-2",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an14-rooftop-2",
+   "name": "The Searching Lights",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an14-escape-begun",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_f"
+    ],
+    "pokemon": "mismagius",
+    "tint": "#141a30",
+    "effect": "flicker"
+   },
+   "intro": "Halfway to the river, small violet lights begin drifting over the roofs, slow and patient, looking. \"Her Mismagius,\" the girl breathes. \"She knows.\" The lights pass over a chimney, a washing line, the tiles you were standing on a moment ago. They are not angry. They are worried. That is worse.",
+   "choices": [
+    {
+     "label": "Hide in the shadows.",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You pull her down behind a chimney stack and the two of you lie flat while the violet lights drift over. One stops right above you, and hums, and moves on. When it has gone she is shaking, and also grinning. \"Nobody has ever hidden me from her,\" she whispers. \"She has always been the one hiding me.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an14-roof-2",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an14-rooftop-3",
+        "nodes": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A light finds you. It hangs over the two of you a long moment, humming softly, and you are sure it will call out. It does not. It drifts on, slowly, as if it had chosen not to see. The girl watches it go. \"She let us,\" she says, in a small voice. \"Why would she let us?\"",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "an14-rooftop-3",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an14-rooftop-3",
+   "name": "Her Own Lantern",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an14-escape-begun",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_f"
+    ],
+    "pokemon": "chinchou",
+    "tint": "#141a30",
+    "effect": "sparkle"
+   },
+   "intro": "The last roof slopes all the way down to the river wall, and then there is only water and gold. The girl climbs down onto the stones and stands on the bank for the first time in her life. The stall is still open. The old man there takes one look at her face and gives her a lantern and a brush, and does not ask for money.",
+   "choices": [
+    {
+     "label": "Let her float it.",
+     "success": {
+      "text": "She writes her own name on it, slowly, like someone signing for something. She sets it on the water. It drifts out among the thousand others, and keeps going, and does not come back, because it does not need to. She watches it until it is only one light among many. Then she turns to you. \"I have to go back,\" she says. \"She'll be alone. But I floated one.\" She is smiling and crying at once. \"I floated one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-escaped",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "On the night of a thousand lanterns, a girl from a rooftop floated her own.",
+        "importance": 60
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an14-the-guardian",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an14-who-guardian",
+   "name": "The Woman at the Window",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_f"
+    ],
+    "pokemon": "mismagius",
+    "tint": "#141a30",
+    "effect": "flicker"
+   },
+   "intro": "The woman at the window is very old, with hair like frost and a Mismagius floating at her shoulder, its gems glowing faintly violet. She looks at you, and at the girl on the roof, and at the river of lanterns, and her mouth thins. Then the Mismagius drifts close to you and, without being asked, shows you something in its glow: the girl, on this same roof, sixty years ago. The same face. The same knees hugged. The same lanterns. The girl is much older than she looks.",
+   "choices": [
+    {
+     "label": "Say nothing yet.",
+     "success": {
+      "text": "The woman closes the window. Up on the roof, the girl is watching the river and has seen none of it. The Mismagius stays a moment longer, looking at you, as if it were the one asking for help. Then it follows its mistress in. You will be further down the river when you see them again. You are sure of that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an14-saw-sixty-years",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an14-the-guardian",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave to the girl.",
+     "success": {
+      "text": "She waves back, delighted, with her whole arm, the way a much younger child waves. Below her the window closes softly. You walk on along the bank with the lanterns, and the violet light of the Mismagius follows you to the edge of town, and stops there, and watches.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an14-the-guardian",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an14-the-guardian",
+   "name": "The Guardian",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "guardian",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lantern-guardian",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "She knows you. \"You asked about me,\" she says. \"You saw what my Mismagius showed you. Sixty years.\" She does not look away. \"Well. You came this far. Say it to my face.\"",
+     "addChoices": [
+      {
+       "label": "Confront her.",
+       "success": {
+        "text": "\"You're keeping her young,\" you say. \"You're keeping her small so she can never go down to the water.\" The Mismagius goes very still. The old woman closes her eyes. When she opens them, she does not argue.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "an14-confronted",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "an14-the-choice"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "escaped",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lantern-escaped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"You took her across the roofs,\" she says. \"My Mismagius watched you all the way. I told it to let you.\" Her hands are trembling. \"She came home. She came home and slept like a stone, smiling. She has never once slept smiling.\""
+    },
+    {
+     "id": "floated",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lantern-floated",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"You floated a lantern with her name on it,\" she says. \"It came back up the river to her. Do you know what she has done since? She sits with it. She will not let me put it out.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_f"
+    ],
+    "pokemon": "mismagius",
+    "tint": "#1e1430",
+    "effect": "flicker"
+   },
+   "intro": "Further down the river, on another night, in another town, an old woman in grey is waiting for you at a crossroads, with a Mismagius floating at her shoulder like a lamp. She looks smaller out here, away from her house. \"You were at the river,\" she says. \"On lantern night. With my girl.\" The Mismagius drifts between you, its gems glowing violet and unsure.",
+   "choices": [
+    {
+     "label": "Hear her out.",
+     "success": {
+      "text": "She sits down on a milestone, slowly, the way old people sit. \"Let me tell you,\" she says, \"before you decide what I am.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "an14-her-reasons"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "You step round her and walk on. She does not stop you. She only calls after you, quietly, \"She talks about you,\" and then the Mismagius's light goes down the road behind you, back toward home.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an14-walked-away",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an14-lantern-night",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an14-her-reasons",
+   "name": "Sixty Years",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_f"
+    ],
+    "pokemon": "mismagius",
+    "tint": "#1e1430",
+    "effect": "fog"
+   },
+   "intro": "\"I found her on the riverbank on lantern night, sixty years ago. Somebody's lantern had gone out, and somebody's child was sitting beside it, alone.\" The old woman twists her hands together. \"I was afraid the river would take her back. So I asked my Mismagius to keep her as she was. Small. Safe. Home.\" She looks up at you. \"She is much older than she looks. And so am I, and I am tired, and I don't know how to stop.\"",
+   "choices": [
+    {
+     "label": "Confront her.",
+     "success": {
+      "text": "\"You're not keeping her safe,\" you say. \"You're keeping her from the water.\" The old woman flinches, and then nods, slowly, as if you had told her the time. The Mismagius sinks lower in the air.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-guardian",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an14-confronted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an14-the-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it with them.",
+     "success": {
+      "text": "\"It's not mine to decide,\" you say. She looks at you a long time. \"No,\" she says. \"No. It never was mine either.\" She gets up off the milestone and goes home, and the violet light goes with her.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-guardian",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an14-left-be",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an14-lantern-night",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an14-the-choice",
+   "name": "Ask Her",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_f",
+     "trainer.pr/school_kid_f"
+    ],
+    "pokemon": "mismagius",
+    "tint": "#1e1430",
+    "effect": "flicker"
+   },
+   "intro": "The old woman stands up straight. \"Then you choose,\" she says. \"You, who walked in off the road. Let her grow old, like everyone, and leave me one day. Or let her stay with me as she is, safe, for always. Choose, and I will do it.\" The Mismagius waits. In the doorway behind her, you see the girl. She has followed you both, and she has heard every word.",
+   "choices": [
+    {
+     "label": "Ask her.",
+     "success": {
+      "text": "You turn round. \"What do you want?\" you ask the girl. Nobody has ever asked her that. She looks at the old woman, and at you, and at the road going down toward the river. \"I want to float my own lantern,\" she says. \"And next year I want to be taller. And I want you to be there,\" she tells the old woman, \"when I am.\" The old woman makes a sound like a door opening after a long winter. The Mismagius lets go of something it has held for sixty years, and the girl, very slightly, changes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an14-girl-chose",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "You did not choose for the girl on the roof. You asked her.",
+        "importance": 70
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an14-lantern-night",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an14-lantern-night",
+   "name": "Her Lantern",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "lantern-sea",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lantern-sea-visited",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The lantern does not stop at the town. It goes on downriver, out past the last bridge, to the same bay where the Chinchou and Lanturn light the water from below. You have stood on that shore. A Lanturn rises in the shallows and turns to follow it, lighting its way out to sea."
+    },
+    {
+     "id": "girl-chose",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an14-girl-chose",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "She is on the bank this time, with the whole town. She is a finger taller than she was. The old woman stands beside her in grey, holding her coat, and when the girl sets her lantern on the water the old woman holds her other hand."
+    },
+    {
+     "id": "left-be",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an14-left-be",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Up on a roof, back upstream, a small figure is still hugging her knees. But the lantern on the water is hers. Somebody carried it down to the river for her, in grey, slowly."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_f"
+    ],
+    "pokemon": "chinchou",
+    "tint": "#141a30",
+    "effect": "sparkle"
+   },
+   "intro": "Months down the road, another river, another lantern night: the river from her town runs all the way here, and so do its lanterns. You stand on a bank among strangers and watch them come. One lantern is different. It is hers; you know the handwriting on the paper, her name in careful letters. It comes down the current slowly, and behind it, in the black water, a small blue light is following. A Chinchou, swimming after the lantern as if it were the moon.",
+   "choices": [
+    {
+     "label": "Wade in after the Chinchou.",
+     "success": {
+      "text": "You wade in up to your knees. The lantern turns, the way her first one turned for her, and drifts to you. The Chinchou follows it right into your hands. It looks at the lantern, and at you, and its lights blink twice: it has decided you are where the lantern was going. It climbs out with you, dripping and glowing.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "chinchou"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "an14-chinchou",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Chinchou followed her lantern all the way down the river to you.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it follow the lantern.",
+     "success": {
+      "text": "You stay on the bank. The lantern drifts by, and the Chinchou with it, lighting its way, and the two lights go on down the river together and out of sight. You stand there until the cold gets into your boots. It was hers. It got where it was going.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an14-let-it-go",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an15-mushroom-queen",
+   "name": "The Mushroom Queen",
+   "group": "Anime-inspired questlines",
+   "rarity": "rare",
+   "minStage": 4,
+   "types": [
+    "rock",
+    "ground",
+    "grass",
+    "bug"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_m",
+     "trainer.pr/waiter_f"
+    ],
+    "pokemon": "toedscool",
+    "tint": "#1e2418",
+    "effect": "fog"
+   },
+   "intro": "A dungeon, three floors down, where the walls sweat and the air smells of soil. Four adventurers sit round a campfire that went out hours ago, packs open, packs empty. They have the hollow, cheerful look of people who have been hungry long enough to joke about it. At the edge of the dead firelight a Toedscool sways on its long legs, watching them. The biggest adventurer eyes it. \"We could eat the Toedscool.\" Their cook, a small woman with a ladle on her belt, is on her feet at once. \"You CANNOT eat the Toedscool.\" She lowers her voice. \"You can eat what it grows. If it likes you. It's the Queen's.\"",
+   "choices": [
+    {
+     "label": "Ask the Toedscool.",
+     "success": {
+      "text": "You crouch down at the edge of the dark, slowly, until you are the same height as the Toedscool. The adventurers go quiet behind you. The cook whispers, \"Don't look it in the eye. Don't look away, either.\" That is not as helpful as she thinks.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "an15-trust-game"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cook something else.",
+     "success": {
+      "text": "The cook looks at your bag the way a drowning person looks at a rope. \"You have food? Real food?\" She is already relighting the fire. \"I have a pot. I have salt. I have four people who are going to cry if you say no.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "an15-berry-stew"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go to the Queen.",
+     "success": {
+      "text": "The adventurers stare at you. The cook says, very quietly, \"Nobody goes to the Queen.\" The Toedscool turns and walks off down the dark passage on its long legs, stopping every few steps to see if you are following. It seems you are invited.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mush-queen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an15-the-throne"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to it.",
+     "success": {
+      "text": "You wish them luck and go on. Behind you the biggest adventurer says, \"So. The Toedscool,\" and the cook says, \"NO,\" and the Toedscool takes three long steps further into the dark.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "an15-trust-game",
+   "name": "Hold Very Still",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_m",
+     "trainer.pr/waiter_f"
+    ],
+    "pokemon": "toedscool",
+    "tint": "#1e2418",
+    "effect": "fog"
+   },
+   "intro": "The Toedscool comes closer, one long leg at a time. It touches your boot. It touches your knee. Then, with great care, it begins to climb you, as if you were a tree it had decided to try. Its feet are cold and soft. The cook mouths: \"Don't. Move.\"",
+   "choices": [
+    {
+     "label": "Don't move.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You do not move. It reaches your shoulder, then your hat, and settles there, light as a cloud. Something tickles. When it climbs down again your hat brim is ringed with small pale mushrooms, fat and clean and smelling of butter. The cook nearly weeps. \"It likes you. It LIKES you.\" Supper is mushrooms on sticks over a new fire, and the four of them eat as if they had forgotten how.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mush-liked",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an15-deep-floor"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You flinch when it reaches your ear, and it hops off. But it does not go far. It watches you a long time, and then it climbs you again, slower, and this time you hold. Only a few mushrooms come up on your hat brim, but they are enough for five people if nobody is greedy, and nobody is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mush-liked",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an15-deep-floor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an15-berry-stew",
+   "name": "Something Else",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "cooking-circuit",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "cooking-circuit-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The cook stops halfway to the pot and stares at you. \"Wait. You won the Circuit. I saw your picture on the wall.\" She shoves the ladle at you. \"Judge me. Please. I've waited my whole life for a real judge to taste my stew.\"",
+     "addChoices": [
+      {
+       "label": "Judge her cooking.",
+       "success": {
+        "text": "She cooks with what little the party has left and a great deal of nerve, and you taste it with the whole party watching. It is good. It is really good. You tell her exactly why, in detail, as you would on the Circuit. She sits down on the floor and puts her face in her hands. \"I knew it,\" she says. \"I KNEW about the salt.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "mush-cooked",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "an15-judged",
+          "amount": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "heal",
+          "share": 0.3
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "an15-deep-floor"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/waiter_f"
+    ],
+    "pokemon": "toedscool",
+    "tint": "#1e2418",
+    "effect": "fire"
+   },
+   "intro": "The fire takes on the second try. The cook sets a dented pot over it, adds water from her flask, and turns to you with her hand out, palm up, like a surgeon waiting for a tool. Four hungry faces in the firelight. A Toedscool at the edge of it, curious. \"Whatever you've got,\" the cook says. \"I can make anything into stew. I have made boots into stew.\"",
+   "choices": [
+    {
+     "label": "Cook with your Oran Berries.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "Into the pot they go, with salt and a crushed root the cook has been saving. The smell fills the passage. The adventurers eat it scalding, and the biggest one says it is the best thing he has ever eaten, and then says it again. The cook looks at you over the pot with new respect. \"Oran and cave root. I would never have thought of it.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "flag",
+        "key": "mush-cooked",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an15-deep-floor"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cook with your Sitrus Berry.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "sitrus-berry"
+      }
+     ],
+     "success": {
+      "text": "One Sitrus Berry, cut thin, simmered slow. It turns the water gold. The cook tastes it and goes quiet, then gives everybody exactly the same amount to the spoonful, including you, including the Toedscool, who drinks it delicately from a cupped leaf. \"That,\" she says, \"was a kingly berry. You didn't have to.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "sitrus-berry"
+       },
+       {
+        "kind": "flag",
+        "key": "mush-cooked",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an15-deep-floor"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Forage the cave moss.",
+     "success": {
+      "text": "With no berries to spare you go back along the passage on your hands and knees, picking the pale moss the cook says is safe. It takes a long time. The stew is thin and tastes of stone. But it is hot, and it is something, and the cook is impressed you found enough. \"Most people don't know that one,\" she says. \"Most people starve next to it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mush-cooked",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an15-deep-floor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an15-the-throne",
+   "name": "The Mushroom Throne",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "amoonguss",
+    "tint": "#2a1a2a",
+    "effect": "fog"
+   },
+   "intro": "The passage opens into a cavern full of mushrooms taller than you, pale and glowing, arranged in rows like a royal court. At the far end, on a throne of shelf fungus, sits an Amoonguss so old its cap has gone silver at the edges. This is the Queen. She rules this whole floor, the Toedscool tells you with a bow of its long neck. She looks at you, and then up, at the rock ceiling, at a sky she has not seen in a hundred years. She wants a tribute. She wants sunlight.",
+   "choices": [
+    {
+     "label": "Offer sunlight.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "sunny-day"
+      },
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fire",
+        "grass"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon calls the sun, down here, under all that rock, and for a moment the whole cavern is full of hot white noon. Every mushroom in the court turns its cap to it. The old Queen closes her eyes and lifts her face, and her silver edges glow gold. When it fades, she bows to you, slowly, all the way down. The Toedscool says, with a stamp, that you have safe passage: you and anyone with you, through the whole dungeon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an15-safe-passage",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an15-queens-road"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for passage anyway.",
+     "success": {
+      "text": "You have no sun to give. You tell her so, honestly, and bow. The Queen considers you for a long time, and then lets you pass onto her floor, but no further: what lives below her floor is not hers to command. The Toedscool walks beside you as a guide, as far as it is allowed.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an15-deep-floor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an15-deep-floor",
+   "name": "The Deep Floor",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "foongus",
+    "tint": "#1e2418",
+    "effect": "fog"
+   },
+   "intro": "The floor below is darker, and the mushrooms here are not polite. Things that look like Poké Balls lie in the moss and are not Poké Balls. A Shroomish bounces out of a crack and back in again. The adventurers draw together behind you. The Toedscool stands very tall on its long legs and looks at you, as if waiting to see what you will do.",
+   "choices": [
+    {
+     "label": "Fight through.",
+     "success": {
+      "text": "The Poké Balls open their eyes. The moss stands up.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "foongus",
+        "shroomish"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "an15-floor-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an15-camp"
+        }
+       ],
+       "friendly": true,
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "an15-floor-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an15-camp"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let the Toedscool lead.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "mush-liked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "It has grown mushrooms on your hat; it knows you now. It leads you all round the edge of the cavern, stepping where it steps, stopping where it stops. Twice a false Poké Ball blinks at you from the moss and decides you are the Queen's. Nobody is spored. At the far side the cook lets out a breath she has been holding the whole floor.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an15-camp"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an15-queens-road",
+   "name": "The Queen's Road",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_m",
+     "trainer.pr/waiter_f"
+    ],
+    "pokemon": "toedscool",
+    "tint": "#1e2418",
+    "effect": "sparkle"
+   },
+   "intro": "Word has gone ahead of you through the mushrooms, the way word goes through roots. On every floor below, the caps turn as you pass and the false Poké Balls keep their eyes shut. A Shroomish bounces out of a crack, sees you, and bounces respectfully back in. The adventurers walk the whole dungeon in a daze. \"We've been coming down here for a year,\" the cook whispers, \"and nobody has ever just let us walk.\"",
+   "choices": [
+    {
+     "label": "Walk down to the bottom.",
+     "success": {
+      "text": "You walk all the way down. Nothing fights you. At the bottom there is a dry cave with a spring in it and old soot on the ceiling from a hundred other campfires, and the adventurers drop their packs and laugh out loud with relief.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an15-camp"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an15-camp",
+   "name": "The Recipe",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "queen",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an15-safe-passage",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Queen has sent her own Toedscool down with you, to see you safely home. It wears your sunlight still, a faint gold along the edge of its cap."
+    },
+    {
+     "id": "liked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mush-liked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Toedscool keeps climbing back onto your hat, every time you take it off. There are fresh mushrooms on the brim each time."
+    },
+    {
+     "id": "cooked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mush-cooked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The cook keeps asking you questions about your stew while she cooks, and writing the answers on the back of her hand."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_m",
+     "trainer.pr/waiter_f"
+    ],
+    "pokemon": "toedscool",
+    "tint": "#1e2418",
+    "effect": "fire"
+   },
+   "intro": "A real campfire, at last, at the bottom of the dungeon, with real food. The cook makes a mushroom stew with everything the Toedscool grows for her, and it is the best thing anyone has eaten in a year. The four adventurers sit round it with full bellies, telling stories that get less true as the fire burns down. In the morning the cook writes the recipe out for you on a scrap of map. \"You saved our lives,\" she says. \"Also our dinner. Mostly our dinner.\" The Toedscool stands at the edge of the light, swaying, looking at you.",
+   "choices": [
+    {
+     "label": "Take the Toedscool along.",
+     "success": {
+      "text": "It steps over to you on its long legs and stands at your shoulder, as if it had always meant to. The cook laughs. \"The Queen gave you one. Nobody gets given one.\" She packs two portions of the stew into your bag, wrapped in leaves, still warm. The adventurers wave you up the long stairs, better fed than they have been all year.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "toedscool"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "item",
+        "id": "queens-mushroom-stew",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "an15-toedscool",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an15-adventurers-fed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You fed four starving adventurers in the Mushroom Queen's dungeon, and came out with her Toedscool.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take only the recipe.",
+     "success": {
+      "text": "\"It belongs down here,\" you say. The Toedscool sways, and agrees, and goes back up the dark stairs toward its Queen. The cook packs two portions of stew into your bag, wrapped in leaves, and folds the recipe into your hand. The adventurers wave you up the long stairs, better fed than they have been all year.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "queens-mushroom-stew",
+        "count": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an15-adventurers-fed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an16-ember-pilgrim",
+   "name": "The Ember Pilgrim",
+   "group": "Anime-inspired questlines",
+   "rarity": "rare",
+   "minStage": 4,
+   "types": [
+    "fire",
+    "ground"
+   ],
+   "remembers": [
+    {
+     "id": "moltres-ember",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "birds-trial-moltres",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The pilgrim looks at the way you are already holding out your hands, cupped, a little apart, the way you hold something that burns. \"You have done this before,\" the pilgrim says. \"Up a mountain, I think. For a bird.\" The flame leans toward you as if it recognised a cousin."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ruin_maniac"
+    ],
+    "pokemon": "charcadet",
+    "tint": "#2a1a10",
+    "effect": "fire"
+   },
+   "intro": "On the road through the hot country, a pilgrim in grey robes walks toward you very slowly. In both hands the pilgrim carries a lantern of old black iron, and inside it a small flame is burning. It is not a big flame. It is not a bright one. But the pilgrim holds it as if it weighed as much as a house. \"This has not gone out in three hundred years,\" the pilgrim says. \"I carry it to the end of the world. Then someone carries it back.\" The pilgrim's hands are shaking. \"I am very tired. Would you carry it one region?\" Inside the lantern, the little flame flickers toward you.",
+   "choices": [
+    {
+     "label": "Yes.",
+     "success": {
+      "text": "The pilgrim puts the lantern into your hands. It is warm, and heavier than iron, and it is very quiet. \"Keep it lit,\" the pilgrim says. \"Wind, rain, a sneeze: it fears all three. I will walk behind you, slower.\" The pilgrim sits down at the roadside for the first time in a long, long while. The flame settles in your hands as if it had been waiting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pilgrim-carried",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "What if it goes out?",
+     "success": {
+      "text": "The pilgrim smiles, which seems to take a long way to arrive. \"Then we light it again. From something that loves it.\" The pilgrim looks at your Pokémon, one after another, for a long moment, and nods to each of them as if being introduced. The lantern is still held out to you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pilgrim-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an16-ember-pilgrim-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "The pilgrim nods, without a trace of blame, and walks on, slowly, carrying the lantern in both hands. You watch the little flame go down the road until it is a spark, and then not even that. You will meet again. The pilgrim will be slower.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an16-declined",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an16-ember-pilgrim-again",
+   "name": "The Ember Pilgrim",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ruin_maniac"
+    ],
+    "pokemon": "charcadet",
+    "tint": "#2a1a10",
+    "effect": "fire"
+   },
+   "intro": "The pilgrim still holds the lantern out, arms trembling a little now. \"Something that loves it,\" the pilgrim says again, softly, so you will remember. \"That is all a flame ever needs. Will you carry it?\"",
+   "choices": [
+    {
+     "label": "Yes.",
+     "success": {
+      "text": "You take it. It is warm, and heavier than iron. \"Wind, rain, a sneeze,\" the pilgrim says. \"And if it goes out, you know what to do.\" The pilgrim sits down at the roadside, and for the first time in three hundred years the flame is not the pilgrim's to carry.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pilgrim-carried",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Then I will carry it a little further,\" the pilgrim says, and smiles, and goes on down the road, slowly. The flame looks back at you over the pilgrim's shoulder for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an16-declined",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an16-wind",
+   "name": "Wind on the Ridge",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pilgrim-carried",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an16-halfway",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "an16-flame-out",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flagAge",
+     "key": "pilgrim-carried",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "charcadet",
+    "tint": "#2a1a10",
+    "effect": "shake"
+   },
+   "intro": "The road goes over a high bare ridge, and the wind comes with it, hard and hot and full of grit. It gets under your coat. It gets into the lantern. The little flame lies down flat on its wick, and flutters, and you feel it in your hands like a held breath.",
+   "choices": [
+    {
+     "label": "Shield it with your body.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You turn your back to the wind and hunch over the lantern, and walk the whole ridge sideways like a crab. Your neck burns with grit. The flame stands back up, slowly, in the hollow your body makes. On the far side of the ridge your team gathers round you, as if they had all decided at once to be a wall.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an16-check-wind",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A gust gets in under your arm. The flame goes flat, flutters, and goes out. A thread of grey smoke rises from the wick, and the lantern is only iron. You stand there on the ridge with it in your hands, and the wind does not even notice what it has done.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an16-flame-out",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go round by the low road.",
+     "success": {
+      "text": "You turn off the ridge and take the low road through the valley, which is long, and dull, and sheltered the whole way. It costs you a stretch of the route, and the flame never so much as flickers. The pilgrim, far behind, would approve.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an16-check-wind",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an16-rain",
+   "name": "Rain",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pilgrim-carried",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an16-halfway",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "an16-flame-out",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flagAge",
+     "key": "pilgrim-carried",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "charcadet",
+    "tint": "#2a1a10",
+    "effect": "rain"
+   },
+   "intro": "The sky goes the colour of slate, and then the rain comes all at once, warm and heavy, bouncing off the road. The lantern has a lid, but rain finds its way into everything. The flame hisses once, small and frightened. There is an overhang of rock a long way up the road. There is a peddler under a tarpaulin much closer, selling oilcloth.",
+   "choices": [
+    {
+     "label": "Run for the overhang.",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You run with the lantern clutched to your chest, dodging the worst of it, leaping the puddles, your team splashing behind you. Under the overhang you open your coat. The flame is there, small and cross and alive. Everyone sits in a row under the rock and watches the rain, steaming.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an16-check-rain",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Halfway there a gutter of water comes off a rock above you, straight down onto the lantern. There is a hiss, and a smell of wet iron, and when you reach the overhang and open your coat the wick is black. You sit under the rock with the cold lantern in your lap and listen to the rain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an16-flame-out",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy oilcloth from the peddler.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "The peddler wraps the lantern in oilcloth with quick, practised hands, leaving a gap at the top for the flame to breathe. \"Pilgrim's lamp,\" the peddler says. \"Seen one before. My grandmother carried it. Mind it.\" The rain runs off the oilcloth and the flame does not even know it is raining.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "flag",
+        "key": "an16-check-rain",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an16-cold-lantern",
+   "name": "A Cold Lantern",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an16-flame-out",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an16-relit",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "an16-carried-cold",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pilgrim-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You remember what the pilgrim said, before you ever took it: \"Then we light it again. From something that loves it.\" Your Pokémon are watching the cold lantern. One of them is a Fire-type, and it has been watching it longest.",
+     "addChoices": [
+      {
+       "label": "Let your Fire-type relight it.",
+       "pick": {
+        "types": [
+         "fire"
+        ]
+       },
+       "success": {
+        "text": "Your Fire-type comes and sits in front of the lantern, and looks at the black wick a long time. Then it breathes on it, very gently, the way you breathe on cold hands. A spark. Another. The flame catches, and stands up, and it is not quite the colour it was: there is something of your Fire-type in it now. It leans toward your Pokémon when it flickers.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "an16-flame-out",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "an16-relit",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "an16-flame-partly-yours",
+          "amount": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 10,
+          "who": "picked"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "charcadet",
+    "tint": "#2a1a10",
+    "effect": "none"
+   },
+   "intro": "You set up camp and set the lantern in the middle of it, out of habit, before you remember there is nothing in it to keep warm. Three hundred years, and it went out with you. The iron is cold. Your Pokémon sit round it anyway, the way you sit round a fire, as if they could make one by agreeing to.",
+   "choices": [
+    {
+     "label": "Carry it cold.",
+     "success": {
+      "text": "You pick it up in the morning and carry it on, cold and black, exactly as carefully as before. It is lighter without the flame. You do not like how much lighter. The pilgrim will know what to do. You hope the pilgrim will know what to do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an16-carried-cold",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an16-halfway",
+   "name": "The Pilgrim Again",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pilgrim-carried",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an16-declined",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flagAge",
+     "key": "pilgrim-carried",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "cold",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an16-flame-out",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The pilgrim looks at the cold lantern in your hands, and does not flinch, and does not scold. \"Ah,\" is all the pilgrim says. \"It is heavier like that, isn't it.\" There is nothing in it left for a sneeze to blow out.",
+     "hide": [
+      0
+     ]
+    },
+    {
+     "id": "partly-yours",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an16-flame-partly-yours",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The pilgrim looks at the flame a long time. \"It has a new colour in it,\" the pilgrim says. \"Something of yours. Good. It has needed new colours.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ruin_maniac"
+    ],
+    "pokemon": "wooper",
+    "tint": "#2a1a10",
+    "effect": "fire"
+   },
+   "intro": "Halfway through the region, at a ford where the road crosses a stream, the pilgrim catches you up. Slower than ever, robes grey with dust, but smiling. \"Still lit?\" the pilgrim asks, and leans in to look. And that is when a Wooper surfaces in the stream right beside the lantern, blinks at it, and screws up its whole face to sneeze.",
+   "choices": [
+    {
+     "label": "Turn the lantern from the sneeze.",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You swing the lantern away just as the Wooper sneezes, an enormous wet sneeze for something so small. It soaks your sleeve and misses the flame by a hand. The pilgrim laughs so hard the pilgrim has to sit down in the stream. \"Water-types,\" the pilgrim gasps. \"Three hundred years, and it is always the Water-types.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an16-halfway",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Too slow. The Wooper sneezes, an enormous wet sneeze for something so small, straight into the lantern. The flame goes out with a tiny hiss. The Wooper looks horrified. The pilgrim, very gently, pats it on the head. \"Not your fault,\" the pilgrim says. \"It never is. Something that loves it will light it again.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an16-halfway",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an16-flame-out",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the pilgrim carry it a while.",
+     "success": {
+      "text": "You hold it out, and the pilgrim takes it, and carries it across the ford and up the far bank with an old, sure step. That night you all camp together, and the pilgrim tells you where the flame has been: frozen passes, burning towns, a hundred hands. In the morning the pilgrim gives it back to you. \"Your turn again,\" the pilgrim says. \"Not long now.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an16-halfway",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an16-slower",
+   "name": "Slower",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an16-declined",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "pilgrim-carried",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flagAge",
+     "key": "an16-declined",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ruin_maniac"
+    ],
+    "pokemon": "charcadet",
+    "tint": "#2a1a10",
+    "effect": "fire"
+   },
+   "intro": "Halfway through the region, you catch up with the pilgrim. It does not take long. The pilgrim is walking much slower now, one foot and then a rest and then the other, and the lantern hangs low in tired hands. The flame inside is still lit. It flickers toward you again, as if it had not given up. \"Hello,\" the pilgrim says. \"I hoped I would see you. I am slower, as you see.\"",
+   "choices": [
+    {
+     "label": "Carry it now.",
+     "success": {
+      "text": "You take the lantern before the pilgrim can ask. It is warm, and heavier than iron. The pilgrim sits down right there in the road and laughs with relief. \"Wind, rain, a sneeze,\" the pilgrim says. \"Only to the end of the region. I will be behind you.\" The flame stands up a little taller in your hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pilgrim-carried",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an16-halfway",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk with them a while.",
+     "success": {
+      "text": "You do not take the lantern, but you walk beside the pilgrim, matching that slow step, all afternoon. You carry the pilgrim's pack instead. At dusk you share a fire, and the pilgrim lights it from the lantern, carefully, and your Pokémon sleep warmer than they have all region.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an16-walked-with",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Then I will carry it to the end,\" the pilgrim says, without blame, and goes on. Slower. Much slower. The flame looks back at you over the pilgrim's shoulder until the road bends.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an16-declined-twice",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an16-cold-night",
+   "name": "A Cold Night",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pilgrim-carried",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an16-halfway",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an16-flame-out",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flagAge",
+     "key": "an16-halfway",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "charcadet",
+    "tint": "#2a1a10",
+    "effect": "snow"
+   },
+   "intro": "The hot country turns cold at night, the way deserts do. Frost comes down on the tents. The little flame shrinks on its wick until it is the size of a seed, and you understand that it is not the wind it fears tonight: it is running out of the will to burn. Somebody has to sit up with it.",
+   "choices": [
+    {
+     "label": "Trim the wick all night.",
+     "prompt": {
+      "id": "gauge-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You sit up with it and trim the wick, again and again, a hair at a time, feeding it just enough and not too much. It is slow, careful work. Your Pokémon fall asleep against your back one by one. At dawn the flame is still there, the size of a seed, and then the sun comes up and it grows.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an16-check-cold",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You trim it too short, near dawn, when your eyes are closing. The seed of flame shrinks to a point, and to nothing. You sit holding the cold lantern as the sun comes up, and it is very quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an16-flame-out",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sleep late with it in your coat.",
+     "success": {
+      "text": "You take the lantern inside your coat and sleep curled round it, half awake all night. The flame lives. You do not get up until the sun is high, and you lose a good piece of the day's road to it.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an16-check-cold",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an16-crossing",
+   "name": "The Crossing",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pilgrim-carried",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an16-halfway",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an16-flame-out",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flagAge",
+     "key": "an16-halfway",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "charcadet",
+    "tint": "#2a1a10",
+    "effect": "float"
+   },
+   "intro": "The last river of the region is wide and fast and waist-deep, and there is no bridge. On the far bank, a ferryman leans on his pole and waits to be asked. The lantern seems to shrink in your hands at the sound of all that water.",
+   "choices": [
+    {
+     "label": "Hold it high and wade.",
+     "prompt": {
+      "id": "pull-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You lift it over your head and wade in. The current shoves at you; your team strings out in a line, holding on to each other. Your arms ache, then burn, then go past burning. On the far bank you lower the lantern, and the flame is there, untouched, and your Pokémon cheer as if you had won a badge.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an16-check-crossing",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Halfway across your foot slips, and the lantern dips. Only for a moment. Only an inch. It is enough. The river takes the flame away with a hiss, and you climb out on the far bank with a cold lantern and nobody saying anything.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an16-flame-out",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay the ferryman.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "He poles you across without a word, and only speaks on the far bank, looking at the lantern. \"Pilgrim's lamp,\" he says. \"I took it across going the other way, when I was a boy.\" He will not take more than half the fare.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "flag",
+        "key": "an16-check-crossing",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an16-regions-end",
+   "name": "Something That Loves It",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pilgrim-carried",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an16-halfway",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "an16-halfway",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "still-cold",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an16-flame-out",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The lantern in your hands is still cold. The pilgrim takes your hands, lantern and all, and holds them. \"From something that loves it,\" the pilgrim says. \"You carried it cold all this way. Who do you think that is?\" A spark jumps from nowhere you can see. The flame stands up on the wick."
+    },
+    {
+     "id": "partly-yours",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an16-flame-partly-yours",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The flame has your Fire-type's colour in it still. When it rises, it looks round for your Fire-type before it looks at anything else."
+    },
+    {
+     "id": "moltres",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "birds-trial-moltres",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"You have done this twice now,\" the pilgrim says. \"A bird's ember and a pilgrim's. The flames talk, you know. They will be talking about you.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ruin_maniac"
+    ],
+    "pokemon": "charcadet",
+    "tint": "#2a1a10",
+    "effect": "fire"
+   },
+   "intro": "The region's end. A last hill, and below it the next country, and the pilgrim at your side, slow and dusty and smiling. \"This is as far as I asked,\" the pilgrim says. \"Thank you.\" You hold out the lantern. But the flame inside does something it has not done in three hundred years: it stands up, tall, taller than the lantern, and steps out of the iron, and it is a Charcadet, small and bright, with embers for eyes. It looks at the pilgrim. Then it looks at you.",
+   "choices": [
+    {
+     "label": "Hold out your hands.",
+     "success": {
+      "text": "It comes to you. It is warm to hold, and lighter than the lantern ever was. The pilgrim laughs, and picks up the empty lantern, and lights a new small flame in it from the Charcadet's shoulder. \"Someone carries it back,\" the pilgrim says. \"I see it will be both of us.\" At the end of everything, the pilgrim promises, there will be a lantern at the long table, and your Fire-type in its light.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "charcadet"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 15
+       },
+       {
+        "kind": "flag",
+        "key": "an16-charcadet",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-ember-pilgrim",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You carried a three-hundred-year flame for a region, and a Charcadet stepped out of it.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it walk back with the pilgrim.",
+     "success": {
+      "text": "\"Someone carries it back,\" you say. The Charcadet looks at the pilgrim, and at the long road home, and steps back into the lantern with a sigh of sparks. The pilgrim bows to you, all the way down, and gives you a lump of charcoal from the bottom of the lantern, still warm. \"Three hundred years of it,\" the pilgrim says. \"Keep it near your Fire-type.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "charcoal",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-ember-pilgrim",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You carried a three-hundred-year flame for a region, and gave it back.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an17-hundred-year-egg",
+   "name": "The Hundred-Year Egg",
+   "group": "Anime-inspired questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "remembers": [
+    {
+     "id": "paradise",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq44-paradise-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know that shell. White, with little coloured triangles, like the eggs in the hidden paradise where the Togepi live. \"A traveller brought it from somewhere far away and warm,\" the keeper says, \"a hundred years ago.\" The egg rocks on its cushion as you come near. It knows where you have been.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Hold it.",
+       "success": {
+        "text": "You pick it up, and it is warm at once, warm right through, as if it had been waiting a hundred years for someone who smelled of home. It cracks in your hands. A Togepi pushes the top of its shell off with its head and looks up at you, and then round at the shrine, and laughs. The keeper sits down very suddenly on the floor. \"A hundred years,\" the keeper says. \"A hundred years, and it only wanted someone who had been there.\"",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "togepi"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 20
+         },
+         {
+          "kind": "flag",
+          "key": "egg100-held",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "an17-egg-taken",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "an17-hatched",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "The hundred-year egg hatched in your hands, because you had been to the paradise it came from.",
+          "importance": 75
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "kind",
+     "when": [
+      {
+       "kind": "meter",
+       "key": "goodEvil",
+       "side": "positive",
+       "atLeast": 10
+      }
+     ],
+     "notice": "The keeper looks at you longer than at most people. \"Word comes up the road ahead of some travellers,\" the keeper says. \"Kind words, about you.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Hold it.",
+       "success": {
+        "text": "You pick it up the way you would pick up anything that might be frightened. For a moment, nothing. Then, slowly, from the middle outward, the shell grows warm. The keeper stares. \"It has never been warm,\" the keeper whispers. \"Not for anyone. Not in my whole life.\" The keeper folds the cushion round it and puts both into your arms. \"Take it. It has chosen. Bring it back to see me one day.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "egg100-held",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "an17-egg-taken",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "an17-egg-warm",
+          "amount": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_m"
+    ],
+    "tint": "#2a2418",
+    "effect": "glint"
+   },
+   "intro": "A village shrine at the top of a hundred worn steps, with a bell rope and a smell of cedar smoke. On a faded cushion in the middle of the floor sits an egg. White, speckled, perfectly still. The shrine keeper sweeps the floor around it the way you would sweep round a sleeping cat. \"It hatches for someone it trusts,\" the keeper says. \"Nobody has been trusted in a hundred years.\" The broom stops. \"People come and hold it every day. They want it to choose them so badly.\" The keeper looks at the egg. \"It gets colder.\"",
+   "choices": [
+    {
+     "label": "Hold it.",
+     "success": {
+      "text": "You pick it up. It is cold, and smooth, and very light, like a stone from the bottom of a river. You hold it as long as you dare. Nothing happens. Nothing at all. You set it back on the cushion, and the keeper sighs, not unkindly. \"Everybody does that,\" the keeper says. \"Everybody has to.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "egg100-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an17-shrine-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sing to it.",
+     "pick": {
+      "moveFlag": "sound"
+     },
+     "success": {
+      "text": "Your Pokémon steps forward and sings to the egg: not loud, not for anyone else, the kind of song you sing to something that cannot see you. On the cushion, the egg rocks once. Only once. The keeper drops the broom. \"It moved,\" the keeper says. \"It has not moved in a hundred years.\" The keeper lifts the egg, cushion and all, and puts it in your arms, hands shaking. \"Take it. It answered you. Nobody has ever had an answer.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "egg100-sang",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an17-egg-taken",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it be.",
+     "success": {
+      "text": "\"I think everybody wants something from it,\" you say. \"I'll leave it alone.\" The keeper stares at you, broom in hand, as if you had said something in another language. \"Nobody leaves,\" the keeper says. \"Everybody holds it. Everybody tries.\" You bow to the egg, which seems the right thing, and go back down the hundred steps.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "egg100-left",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an17-shrine-again",
+   "name": "Still Cold",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_m"
+    ],
+    "tint": "#2a2418",
+    "effect": "glint"
+   },
+   "intro": "The egg sits on its cushion, exactly as cold as before. The keeper has picked up the broom again, and is sweeping slowly round it, not looking at you, giving you time. Visitors climb the hundred steps behind you, already holding out their hands.",
+   "choices": [
+    {
+     "label": "Sing to it.",
+     "pick": {
+      "moveFlag": "sound"
+     },
+     "success": {
+      "text": "Your Pokémon steps up and sings to it, softly, just for the egg. On the cushion the egg rocks once: once only. The visitors gasp. The keeper drops the broom. \"It answered,\" the keeper whispers, and lifts the egg, cushion and all, into your arms. \"Nobody has ever had an answer. Take it, before it changes its mind.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "egg100-sang",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an17-egg-taken",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it be.",
+     "success": {
+      "text": "You leave it on its cushion, among all those reaching hands, and go back down the hundred steps. Behind you the keeper has stopped sweeping and is watching you go, puzzled, the way you watch someone walk away from a winning ticket.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "egg100-left",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an17-nearest-the-door",
+   "name": "Nearest the Door",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "egg100-left",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an17-egg-taken",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flagAge",
+     "key": "egg100-left",
+     "atLeast": 1,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_m"
+    ],
+    "tint": "#2a2418",
+    "effect": "glint"
+   },
+   "intro": "Your road brings you back past the village, and something makes you climb the hundred steps again. The keeper meets you at the top, broom forgotten. \"It moved,\" the keeper says. \"On its own. The night after you left.\" The egg is still on its cushion. But it has moved, by itself, a hand's width at a time, to the very edge of the cushion. The edge nearest the door. The edge you walked out of.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You kneel and hold out your hands, and do not pick it up: you wait. The egg rocks, and rolls the last inch off the cushion into your palms by itself. It is not warm, not yet. But it is not cold either. \"It chose the one who didn't grab,\" the keeper says, and laughs, and has to wipe their eyes. \"Of course it did. Of course.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an17-egg-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an17-chose-you",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it be.",
+     "success": {
+      "text": "You leave it again. It is the hardest thing you have done all week. The keeper walks you to the top of the steps. \"It will roll off the cushion one day, after somebody,\" the keeper says. \"I hope it is somebody like you.\" The egg watches you go from the very edge of the cushion.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an17-left-twice",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an17-in-the-bag",
+   "name": "Carrying It",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an17-egg-taken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an17-hatched",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flagAge",
+     "key": "an17-egg-taken",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Camp, the night after the shrine. The egg sits in a nest of your spare clothes, beside the fire. Every so often you put a hand on it without meaning to, the way you touch a pocket to make sure something is still there. Your team has noticed. They keep drifting over to look at it, and then pretending they were going somewhere else.",
+   "choices": [
+    {
+     "label": "Carry it against your chest.",
+     "success": {
+      "text": "You sleep with it inside your coat, against your heart, where it is warmest. In the night you feel it, once: a tiny tap from inside, like a knock on a door from the other side of a very long hall. You lie awake a long time after, smiling at nothing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an17-egg-scene",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let {lead} keep it warm.",
+     "success": {
+      "text": "{lead} curls round the egg without being asked, and stays there all night, very still, very proud, not sleeping. In the morning there is a tiny crack-shaped mark on the shell, as if something inside had leaned against it to listen.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an17-egg-scene",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an17-the-hatching",
+   "name": "A Hundred Years",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an17-egg-taken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an17-hatched",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flagAge",
+     "key": "an17-egg-taken",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sang",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "egg100-sang",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "From inside the shell, very faintly, something is humming. It is the song your Pokémon sang at the shrine, all of it, every note, a little out of tune."
+    },
+    {
+     "id": "chose-you",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an17-chose-you",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It is the egg that rolled off its cushion toward the door you walked out of. It has been going somewhere for a hundred years. It seems it was going here."
+    },
+    {
+     "id": "warm",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an17-egg-warm",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It has been warm since the moment you picked it up at the shrine. Tonight it is warmer than you are."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "togepi",
+    "tint": "#2a2418",
+    "effect": "sparkle"
+   },
+   "intro": "In the middle of an ordinary afternoon, on an ordinary road, the egg in your arms goes warm all the way through. Then it cracks. Not all at once: one small crack, and a pause, as if whatever is inside were making sure, after a hundred years, that this is really the place. Your whole team stops walking and gathers round. Nobody breathes. Another crack.",
+   "choices": [
+    {
+     "label": "Hold out your hands.",
+     "success": {
+      "text": "The top of the shell lifts off like a lid. A Togepi blinks up at you, at the sky, at the road and the trees and your Pokémon crowding round, and it laughs: one high, delighted laugh, as if the world were a joke it had been waiting a hundred years to hear the end of. It holds up its arms. You pick it up.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "togepi"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "flag",
+        "key": "an17-hatched",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The egg nobody had been trusted with for a hundred years hatched in your hands.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sing to it again.",
+     "pick": {
+      "moveFlag": "sound"
+     },
+     "success": {
+      "text": "Your Pokémon sings the same song as at the shrine, quietly, and the shell opens in time with it. A Togepi tumbles out into your hands still wet, looks straight at the singer, and joins in, terribly, at the top of its voice. The whole team is laughing. It is the best song anyone has ever sung on this road.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "togepi"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 30
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "an17-hatched",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The hundred-year egg hatched to a song, and sang back.",
+        "importance": 75
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an17-first-steps",
+   "name": "The Edge of Camp",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an17-hatched",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "togepi",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "togepi",
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Every night the Togepi does the same thing. When camp is made, it toddles off to the very edge of it, the edge nearest the road you came in by, and sits there with its back to the fire, looking out. As if it were still on a cushion. As if it were still waiting for someone to come through a door.",
+   "choices": [
+    {
+     "label": "Sit beside it.",
+     "success": {
+      "text": "You go and sit beside it at the edge of the camp, facing the road. It looks up at you, surprised. Then it leans against your leg, and looks at the road a little longer, and then turns round, for the first time, and looks at the fire. After that it sleeps in the middle of camp with everybody else.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "togepi",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "an17-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call it back to the fire.",
+     "success": {
+      "text": "You call it, and it comes, toddling back across the camp on its stubby legs, and climbs into your lap. It still looks at the road over your arm for a while. But each night after, it goes a little less far toward the edge, until one night it does not go at all.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "togepi",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "an17-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an17-the-cushion",
+   "name": "The Empty Cushion",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "an17-first-steps"
+    },
+    {
+     "kind": "partyLine",
+     "species": "togepi",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_m"
+    ],
+    "pokemon": "togepi",
+    "tint": "#2a2418",
+    "effect": "sparkle"
+   },
+   "intro": "You pass a village with a shrine at the top of a hundred worn steps, and the Togepi will not stop pulling at your sleeve until you climb them. The keeper is sweeping round an empty cushion, faded, in the middle of the floor. \"I keep it,\" the keeper says, without turning round. \"People ask why. There is nothing on it now.\" Then the keeper turns round, and sees who is in your arms.",
+   "choices": [
+    {
+     "label": "Let it sit on the cushion.",
+     "success": {
+      "text": "The Togepi climbs onto the cushion and sits right in the middle of it, in the hollow its egg wore there over a hundred years, and laughs. The keeper laughs too, and then cries, and then laughs again. When you go, the cushion is still empty, and the keeper is still sweeping round it. But they are humming.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "togepi",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "an17-cushion",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Togepi sat once more on the cushion where its egg waited a hundred years.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show the keeper how it has grown.",
+     "success": {
+      "text": "You set it down, and it toddles across the floor to the keeper and holds up its arms. The keeper picks it up and turns it over and looks at it from every side, the way you would read a letter you had given up waiting for. \"Look at you,\" the keeper keeps saying. \"Look at you. Look at you.\"",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "togepi",
+        "amount": 5
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an17-cushion",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an18-friend-you-didnt-make",
+   "name": "The Friend You Didn't Make",
+   "group": "Anime-inspired questlines",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [],
+   "remembers": [
+    {
+     "id": "kind-money",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kind-gave-money",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The chest is nearer than you expected, only a few steps beyond the firelight. Somewhere on this road you gave your money away to a stranger who needed it. Something in the chest seems to have heard about that.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Leave a coin of your own.",
+       "requires": [
+        {
+         "kind": "money",
+         "atLeast": 100
+        }
+       ],
+       "success": {
+        "text": "You set one of your own coins on the path, beside theirs, and go back to the fire. You do not look. In the night you hear the lid of the chest creak, very slightly, as if something inside had lifted it an inch to see what you had done.",
+        "effects": [
+         {
+          "kind": "money",
+          "amount": -100
+         },
+         {
+          "kind": "flag",
+          "key": "an18-gave",
+          "amount": 2
+         },
+         {
+          "kind": "flag",
+          "key": "an18-met",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gimmighoul",
+    "tint": "#2a2410",
+    "effect": "glint"
+   },
+   "intro": "You make camp at the rest stop as the light goes. At the very edge of the clearing, where the firelight gives out, there is an old wooden chest with iron corners that was not there when you arrived. Nobody owns it. Nobody is near it. Between the chest and your fire, on the path, a few gold coins lie in the dirt, one after another, as if dropped from a pocket with a hole in it. The lid of the chest is shut. You have the feeling, the way you sometimes do, that it is watching.",
+   "choices": [
+    {
+     "label": "Pick up the coins.",
+     "success": {
+      "text": "You pick them up, one by one, all the way along the path. They are real, and heavy, and warm from somewhere. When you straighten up with the last one, the chest is still there at the edge of the light. You are almost sure it is a little further off than it was.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "gimmighoul-coin",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an18-picked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an18-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You leave them lying where they are and turn back to the fire. Behind you, nothing moves. In the morning the coins are still on the path, exactly where they were, and so is the chest, exactly as far away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an18-left-them",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an18-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a coin of your own.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You take a coin from your own pocket and set it down on the path beside theirs, then go back to the fire. You do not look. In the night you hear the lid of the chest creak, very slightly, as if something inside had lifted it an inch to see what you had done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "an18-gave",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an18-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an18-second-morning",
+   "name": "Coins on the Path",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an18-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "an18-met",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gave",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an18-gave",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "There are two coins on the path this morning where you left one. Yours, and another, set neatly beside it. The chest is a little nearer the fire than it was."
+    },
+    {
+     "id": "picked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an18-picked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The chest is further away this time, right back among the trees, and the coins on the path are fewer and further apart, as if laid out by someone who is no longer sure."
+    },
+    {
+     "id": "left",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an18-left-them",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The chest is exactly as far away as last time. Not nearer. Not further. As if it were waiting to see what you are."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gimmighoul",
+    "tint": "#2a2410",
+    "effect": "glint"
+   },
+   "intro": "The next stage, the next rest stop, the next fire. And at the edge of the light, as if it had walked there in the night on legs nobody saw, the old wooden chest with the iron corners. Coins lie on the path between it and you again, gold in the last of the sun.",
+   "choices": [
+    {
+     "label": "Pick up the coins.",
+     "success": {
+      "text": "You gather them up. They are warm. When you look up, the chest has gone a little further back into the dark, and the lid is shut tight.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "gimmighoul-coin",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an18-picked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an18-second",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You leave them on the path and sit with your back to the chest all evening. In the morning nothing has moved. The coins, the chest, the distance between: all exactly the same.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an18-left-them",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an18-second",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a coin of your own.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You set a coin of your own on the path again and go back to the fire. Later, half asleep, you hear something small and metal walking, tink, tink, tink, across the clearing and back again. In the morning the lid of the chest is open a finger's width.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "an18-gave",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an18-second",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an18-third-morning",
+   "name": "By the Fire",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an18-second",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "an18-second",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "remembers": [
+    {
+     "id": "friend",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an18-gave",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "The chest is right at the edge of your fire tonight, close enough to warm its iron corners. The lid is open a hand's width. In the dark under it, two small eyes are looking at your coins, and then at you.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Leave a coin of your own.",
+       "requires": [
+        {
+         "kind": "money",
+         "atLeast": 100
+        }
+       ],
+       "success": {
+        "text": "You set your coin down, not on the path this time, but by the fire, right in the light. For a long moment nothing happens. Then the lid of the chest opens all the way, and a Gimmighoul climbs out: small, grey, with one gold coin balanced on its head like a hat. It picks up your coin and looks at it, and puts it with its own. Then it comes and sits down by the fire, next to you, and holds its little hands out to the warmth as if it had never been allowed this close to one before.",
+        "effects": [
+         {
+          "kind": "money",
+          "amount": -100
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "gimmighoul"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 20
+         },
+         {
+          "kind": "flag",
+          "key": "an18-friend",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "reunion-guest-gimmighoul",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "You left a coin by the fire three nights running, and a Gimmighoul came out of its chest to sit beside you.",
+          "importance": 70
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "gone",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an18-picked",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "The chest is so far off this time it is only a shape among the trees, and there are only a few coins, thrown down any old how, as if somebody had given up arranging them.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Pick up the coins.",
+       "success": {
+        "text": "You pick them up. When you look for the chest it is gone: not further off, not hidden among the trees, simply gone, and the place where it stood is only grass. You will not see it again on this road. In your hand the coins are cold for the first time.",
+        "effects": [
+         {
+          "kind": "item",
+          "id": "gimmighoul-coin",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "an18-gone",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "same",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an18-left-them",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "The chest is exactly as far away as it has always been. It has kept its distance three nights running, as carefully as you have kept yours."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gimmighoul",
+    "tint": "#2a2410",
+    "effect": "glint"
+   },
+   "intro": "The third stage, the third rest stop, the third fire. You are not surprised any more to see it at the edge of the light: the old chest with the iron corners, waiting. You find you would have been sorry if it had not come. Coins lie on the path between you, gold in the dusk.",
+   "choices": [
+    {
+     "label": "Pick up the coins.",
+     "success": {
+      "text": "You gather them up. The chest draws back into the dark as you do, a little further, and the lid stays shut. By morning it is gone from the clearing, but you think, somehow, not gone from the road.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "gimmighoul-coin",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an18-picked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You leave them where they lie. The chest stays exactly where it is, at the edge of the light, all night. Neither of you comes any closer. In the morning it is gone, and the coins with it, and the clearing is very quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an18-left-them",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a coin of your own.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You leave a coin of your own on the path once more. In the night you hear the lid creak, and small metal footsteps come halfway to the fire, and stop, and go back. It is not ready. Maybe it needed one more night than the road had to give. In the morning there is a coin on your pack that is not yours.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "item",
+        "id": "gimmighoul-coin",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an18-gave",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -33,7 +33,13 @@ export function fillEventText(content: Content, run: Pick<RunState, 'story' | 'p
 }
 
 /** An event id that names the region's team (`evil-{teamId}-hideout-boss`), for `addEvent`. Null when it has a token and no team is active. */
-export function resolveEventId(run: Pick<RunState, 'story'>, id: string): string | null {
+export function resolveEventId(run: Pick<RunState, 'story'> & Partial<Pick<RunState, 'regionOrder' | 'regionIndex'>>, id: string): string | null {
+  // Volume III: `{region}` names the region the run is in (Rocket makes one Offer in Kanto and another in Johto).
+  if (id.includes('{region}')) {
+    const region = run.regionOrder?.[run.regionIndex ?? -1];
+    if (!region) return null;
+    id = id.replaceAll('{region}', region);
+  }
   if (!id.includes('{teamId}')) return id;
   const team = run.story.evil?.teamId;
   return team ? id.replaceAll('{teamId}', team) : null;

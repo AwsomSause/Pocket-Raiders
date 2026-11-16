@@ -1,0 +1,24 @@
+[
+  {
+    "id": "goodra-slime",
+    "giftOnly": true,
+    "name": "Goodra's Slime",
+    "family": "Questline rewards (anime)",
+    "description": "A Goomy's goodbye, very sticky. Physical attackers that hit the holder lose 1/16 of their HP",
+    "rarity": "uncommon",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "sticky-barb",
+    "status": "supported",
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "contactDamage",
+          "fraction": 0.0625
+        }
+      ]
+    }
+  }
+]

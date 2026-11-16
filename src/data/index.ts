@@ -806,10 +806,18 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
     for (const f of effects) {
       if (f.kind === 'item' && !knownItem(f.id)) problems.push(`${where} gives unknown item "${f.id}"`);
       if (f.kind === 'loseItem' && f.id && !knownItem(f.id)) problems.push(`${where} uses unknown item "${f.id}"`);
+      if (f.kind === 'loseItem' && f.from) for (const id of f.from) if (!knownItem(id)) problems.push(`${where} uses unknown item "${id}"`);
       if (f.kind === 'itemFrom') for (const id of f.ids) if (!knownItem(id)) problems.push(`${where} gives unknown item "${id}"`);
       if (f.kind === 'recruit' && !content.archetypes.has(f.trainer)) problems.push(`${where} recruits unknown trainer "${f.trainer}"`);
-      if (f.kind === 'join') for (const id of f.species) if (!content.species.has(id)) problems.push(`${where} offers unknown species "${id}"`);
+      // A `@name` is a Greenneedle story Pokémon, cast during the run (core/greenneedle `cast`).
+      if (f.kind === 'join') for (const id of f.species) if (!id.startsWith('@') && !content.species.has(id)) problems.push(`${where} offers unknown species "${id}"`);
       // A room id may name the region's Evil Team (`evil-{teamId}-hideout-boss`): it must exist for every team that can run a region's story.
+      // Volume III: `{region}` is filled in play (an Offer per region); at least one region's room must exist.
+      if (f.kind === 'addEvent' && f.eventId.includes('{region}')) {
+        const [head, tail] = f.eventId.split('{region}') as [string, string];
+        if (![...content.events.keys()].some((id) => id.startsWith(head) && id.endsWith(tail) && id.length > head.length + tail.length)) problems.push(`${where} opens unknown event "${f.eventId}"`);
+        continue;
+      }
       if (f.kind === 'addEvent') for (const id of f.eventId.includes('{teamId}') ? content.evilTeams.teams.filter((t) => !t.roaming).map((t) => f.eventId.replaceAll('{teamId}', t.id)) : [f.eventId]) if (!content.events.has(id)) problems.push(`${where} opens unknown event "${id}"`);
       if (f.kind === 'addEventFrom') for (const id of f.ids) if (!content.events.has(id)) problems.push(`${where} opens unknown event "${id}"`);
     }
@@ -819,11 +827,14 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
     for (const c of e.choices) {
       for (const o of [c.success, c.failure]) {
         const b = o?.battle;
-        if (b?.kind === 'wild') for (const id of b.species) if (!content.species.has(id)) problems.push(`${where} battles unknown species "${id}"`);
+        if (b?.kind === 'wild') for (const id of b.species) if (!id.startsWith('@') && !content.species.has(id)) problems.push(`${where} battles unknown species "${id}"`);
         if (b?.kind === 'trainer' && b.bossId && !content.bosses.has(b.bossId)) problems.push(`${where} battles unknown boss "${b.bossId}"`);
         if (b?.kind === 'trainer' && b.classId && !content.trainers.has(b.classId)) problems.push(`${where} battles unknown trainer class "${b.classId}"`);
       }
-      for (const r of [...c.requires, ...e.requires]) if (r.kind === 'item' && !knownItem(r.id)) problems.push(`${where} needs unknown item "${r.id}"`);
+      for (const r of [...c.requires, ...e.requires]) {
+        if (r.kind === 'item' && !knownItem(r.id)) problems.push(`${where} needs unknown item "${r.id}"`);
+        if (r.kind === 'itemAny') for (const id of r.ids) if (!knownItem(id)) problems.push(`${where} needs unknown item "${id}"`);
+      }
     }
     if (e.keyItem && !knownItem(e.keyItem)) problems.push(`${where} needs unknown key item "${e.keyItem}"`);
     if (e.scene.pokemon && !content.species.has(e.scene.pokemon)) problems.push(`${where} shows unknown species "${e.scene.pokemon}"`);

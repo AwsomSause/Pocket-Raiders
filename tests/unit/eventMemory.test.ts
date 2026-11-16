@@ -9,6 +9,7 @@ import { chooseEvent, eventView } from '../../src/core/events';
 import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
+import { FOREST } from '../../src/core/greenneedle';
 
 const outcome = (text: string, effects: unknown[] = []) => ({ text, effects });
 const BASE = {
@@ -94,18 +95,28 @@ describe('memory flag registry', () => {
   it('every remembers condition in real content reads a flag some event sets', () => {
     const setKeys = new Set<string>();
     const reads: string[] = [];
+    // A Greenneedle effect (`gn`) also sets run flags (setFlag, roll, pick, stamps, noFaint ...), and its `when` holds more effects.
+    const addSetter = (e: { kind: string; key?: string; op?: string; then?: unknown[] }): void => {
+      if (e.kind === 'flag' && e.key) setKeys.add(e.key);
+      if (e.kind === 'gn') {
+        if (e.key && e.op !== 'when' && e.op !== 'scene' && e.op !== 'itemEach') setKeys.add(e.key);
+        for (const t of (e.then ?? []) as { kind: string }[]) addSetter(t);
+      }
+    };
     for (const ev of content.events.values()) {
       // Setters: outcome effects, a battle's win and lose effects (a friendly fight's loss still applies its own), and choice branches.
       for (const ch of allChoices(ev)) {
         for (const o of [ch.success, ch.failure]) for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle?.lose ?? [])]) {
-          if (e.kind === 'flag') setKeys.add(e.key);
+          addSetter(e);
           // Rival questlines set flags through their own effect (set, pick, roll).
           if (e.kind === 'rivalQuest') for (const k of [e.set?.key, e.pick?.key, e.roll?.key]) if (k) setKeys.add(k);
         }
-        for (const b of ch.branches ?? []) for (const e of b.effects) if (e.kind === 'flag') setKeys.add(e.key);
+        for (const b of ch.branches ?? []) for (const e of b.effects) addSetter(e);
       }
       for (const v of ev.remembers) for (const c of v.when) if (c.kind === 'flag') reads.push(`${ev.id}:${c.key}`);
     }
+    // Set by code, not by an effect: the Viridian Forest counters (core/greenneedle FOREST). Other code-set flags are `rule` entries in the flag files.
+    for (const k of Object.values(FOREST)) setKeys.add(k);
     // Flags the rival questline engine sets after a fight (core/rivals/questlines.ts ENGINE_FLAGS).
     for (const k of ENGINE_FLAGS) setKeys.add(k);
     // Catalog Overhaul flag files name the flags code keeps (`rule`) and the ones another set will write (`hook`, its line waits until then).

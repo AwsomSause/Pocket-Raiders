@@ -1,0 +1,3496 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-56-door",
+   "name": "The Slowpoke Detective Agency",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "slowpoke-at"
+    },
+    {
+     "kind": "flag",
+     "key": "slowpoke-case",
+     "atLeast": 0,
+     "atMost": 2
+    }
+   ],
+   "remembers": [
+    {
+     "id": "repainted",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-case",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "The door has been repainted. The sign now reads: **NO CASE TOO SLOW.** The painter, for once, left room."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "*A door with frosted glass. Painted on it: SLOWPOKE DETECTIVE AGENCY. NO CASE TOO. The painter ran out of door.*\n\nA very small bell. Behind the glass, three shapes that haven't moved since you arrived, and one that very slowly has.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "The bell rings. Somewhere in the room, a very large animal begins, calmly, to notice.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "slowpoke-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-office"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Behind the glass, nobody moves. You have the odd impression you've been very thoroughly examined.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-office",
+   "name": "Detective Agency: The Office",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "both",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "honorary-detective",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "ne89-thief-who-returns-things-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In the corner, in a long coat, with a Slowpoke called Dawdle and a cup of tea: Inspector Quennell. **\"I trained with them. Briefly. I left because I kept solving things on purpose.\"** On the Chief's desk, a returned item sits in a small frame. The Chief has been investigating who gave it back for a year."
+    },
+    {
+     "id": "quennell",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "honorary-detective",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In the corner, in a long coat, with a Slowpoke called Dawdle and a cup of tea: Inspector Quennell. **\"I trained with them. Briefly. I left because I kept solving things on purpose.\"**"
+    },
+    {
+     "id": "returned",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ne89-thief-who-returns-things-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the Chief's desk, a returned item sits in a small frame. The Chief has been investigating who gave it back for a year. It has made no progress, and is delighted."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "A little reception room: a kettle, a clock that's several minutes slow, a desk with a brass nameplate: MISS P. HARTIGAN, SECRETARY AND INTERPRETER.\n\n**Miss Hartigan:** \"A case? Of course. Sit down. They are expecting you. They are always expecting everyone.\"",
+   "choices": [
+    {
+     "label": "Take the case.",
+     "success": {
+      "text": "She slides a file across the desk. The Chief opens one eye, and then, very slowly, the other.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-read",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "slowpoke-case",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-56-case-1",
+          "gn-56-case-2",
+          "gn-56-case-3"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "**Miss Hartigan:** \"Quite. The Chief has a way of saying no. It involves not blinking.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-case-1",
+   "name": "Detective Agency: Case 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "*A door with frosted glass. Painted on it: SLOWPOKE DETECTIVE AGENCY. NO CASE TOO. The painter ran out of door.*\n\nInside, three Slowpoke at three desks. One wears a hat. One holds a pipe with nothing in it. One sleeps, a file open on its face.\n\nThe Chief, in the hat, stares at a clue until it means something. This takes about four minutes. The Pipe points at people, usually the wrong one.\n\nThe Sleeper solves cases in its sleep and tells nobody.\n\n**Miss Prudence Hartigan,** their human secretary, translates. \"They've accepted the case. I can tell because the Chief blinked. It doesn't blink for the ones it turns down.\"\n\nYour client is the town's mayor, near tears. Her ceremonial hat is gone, an hour before the parade. Nobody saw it go.",
+   "choices": [
+    {
+     "label": "Take the case.",
+     "success": {
+      "text": "You open the file. The Sleeper, from its chair, murmurs something that might be a name.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-read",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c1-hub",
+   "name": "Detective Agency: The Case",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "Six clues, scattered round the town. Three are real. Three aren't, and the Slowpoke will prefer the useless three every time.\n\nYou decide what each one means. The agency decides too, separately, and it will be wrong. That is the method.",
+   "choices": [
+    {
+     "label": "Look in The Town Hall.",
+     "success": {
+      "text": "You pick up your notebook, and go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look in The Square.",
+     "success": {
+      "text": "You pick up your notebook, and go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-square"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look in The Clock Tower.",
+     "success": {
+      "text": "You pick up your notebook, and go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-tower"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take what you have to the agency.",
+     "success": {
+      "text": "You climb the stairs back to the frosted door. The Chief is waiting, at the exact angle it was before you left.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-end"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c1-end",
+   "name": "Detective Agency: The Conclusion",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The Chief rises. Miss Hartigan clears her throat and reads from the Chief's expression.\n\n**Miss Hartigan:** \"The mayor stole her own hat, using string, and hid it in a clock, because she was hungry.\"\n\nThe Pipe points at the mayor. The mayor, in the corner, gives a small and dignified sob. The Sleeper turns over.",
+   "choices": [
+    {
+     "label": "Go to the clock.",
+     "success": {
+      "text": "You follow them out, a respectful ten paces behind, because it is the only way not to overtake them.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-truth"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c1-truth",
+   "name": "Detective Agency: The Truth",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "murkrow",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The Slowpoke march to the Clock Tower in a line. They arrest the clock. The clock does not resist.\n\nYou climb the stairs.\n\nIn the gears, on the highest ledge, is a nest lined with foil, and a **Murkrow**, bright-eyed and defiant, sitting on the mayor's ceremonial hat.\n\nThree small eggs lie in the crown of it, warm. The hat is the best nest it has ever had.",
+   "choices": [
+    {
+     "label": "Take the hat.",
+     "success": {
+      "text": "You lift the hat from under the eggs. The Murkrow screams and lunges at you, then thinks better of it.\n\nThe mayor will get her hat, and the Murkrow will get a very long grudge. It follows you out of town, and joins you, scowling.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "murkrow"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "held": "scope-lens"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "murkrow"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 0
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-case",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-case-1",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         }
+        ],
+        "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the hat. Find her another.",
+     "success": {
+      "text": "You leave the hat with the eggs.\n\nThe Murkrow watches you, wary, as you slide a shiny hairpin out of the nest and put it in your pocket. A good trade.\n\nThe mayor gets a new hat, the Murkrow keeps its nest, and you carry the rarest thing in the lining.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-case",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-case-1",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         }
+        ],
+        "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the Murkrow.",
+     "success": {
+      "text": "The Murkrow tilts its head. You explain: a parade, a mayor, one hat. It considers.\n\nThen it pushes the hat off the ledge to you with its beak, and hops onto your shoulder. A bargain, between professionals.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "murkrow"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "held": "scope-lens"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "murkrow"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-case",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-case-1",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         }
+        ],
+        "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c1-hall",
+   "name": "Detective Agency: The Town Hall",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The Town Hall. The mayor's office, door open, window open, a desk with nothing on it but a diary and a hat-shaped gap.",
+   "choices": [
+    {
+     "label": "Look at the windowsill.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-feather"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-1-feather",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Read the diary.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-diary"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-1-diary",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the hall steps.",
+     "success": {
+      "text": "You go back, notebook in hand.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c1-feather",
+   "name": "Detective Agency: feather",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "A grey-black feather on the sill of the open window. Shiny at the edge, like oil on water. Fine scratches in the paint beside it.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "The window opened itself.",
+     "success": {
+      "text": "You look closer. The scratches are small and sharp and rather deliberate. Windows don't scratch, and the mayor owns no boa. **Miss Hartigan:**\n\n\"The agency's reading: The window did it.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-feather",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Something flew in, and out again.",
+     "success": {
+      "text": "The scratches are claws, very small, landing and leaving. Something flew in, took what it came for, and flew out. You almost hear the wings. **Miss Hartigan:**\n\n\"The agency's reading: The window did it.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-feather",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-clues-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The mayor's boa shed it.",
+     "success": {
+      "text": "You look closer. The scratches are small and sharp and rather deliberate. Windows don't scratch, and the mayor owns no boa. **Miss Hartigan:**\n\n\"The agency's reading: The window did it.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-feather",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-hall"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c1-diary",
+   "name": "Detective Agency: diary",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The mayor's diary, open on the desk. One line, underlined twice, the pen nearly through the page: *must find hat.*\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "It's a confession.",
+     "success": {
+      "text": "You turn it over, hold it to the light, check the margins. It stays exactly what it is: a worried note. **Miss Hartigan:**\n\n\"The agency's reading: The Pipe points at the mayor.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-diary",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's a code, and the hat is a person.",
+     "success": {
+      "text": "You turn it over, hold it to the light, check the margins. It stays exactly what it is: a worried note. **Miss Hartigan:**\n\n\"The agency's reading: The Pipe points at the mayor.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-diary",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "She lost a hat and she's worried. That's all.",
+     "success": {
+      "text": "A woman an hour from a parade wrote herself a reminder. It isn't a clue. It's just rather sad. **Miss Hartigan:**\n\n\"The agency's reading: The Pipe points at the mayor.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-diary",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-hall"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c1-square",
+   "name": "Detective Agency: The Square",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The Square, hung with parade bunting and not much else. Everything that was going to happen here is waiting for a hat.",
+   "choices": [
+    {
+     "label": "Look at the bench.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-sandwich"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-1-sandwich",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Look at the muddy patch.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-prints"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-1-prints",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the hall steps.",
+     "success": {
+      "text": "You go back, notebook in hand.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c1-sandwich",
+   "name": "Detective Agency: sandwich",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "Half a sandwich on the bench. Ham and pickle, bitten once and forgotten. A wide ring of crumbs lies around it.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "The thief ate it, and fled.",
+     "success": {
+      "text": "You build a theory on the pickle. It lasts about as long as the sandwich did. **Miss Hartigan:** \"The agency's reading: The culprit was hungry. Therefore: everyone.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-sandwich",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-square"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Someone was hungry. Everyone is.",
+     "success": {
+      "text": "You build a theory on the pickle. It lasts about as long as the sandwich did. **Miss Hartigan:** \"The agency's reading: The culprit was hungry. Therefore: everyone.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-sandwich",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-square"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's a sandwich. It means nothing.",
+     "success": {
+      "text": "It's a sandwich in a square at lunchtime. The detective who ignores it keeps their dignity. **Miss Hartigan:** \"The agency's reading: The culprit was hungry. Therefore: everyone.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-sandwich",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-square"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c1-prints",
+   "name": "Detective Agency: prints",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "Small prints in the mud by the fountain. Three toes forward, one back. They walk in and, oddly, never walk out.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "A child's boots, in the rain.",
+     "success": {
+      "text": "Boots don't have three toes. The prints look back at you, faintly embarrassed. **Miss Hartigan:** \"The agency's reading: It rained.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-prints",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-square"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A bird, landing and leaving.",
+     "success": {
+      "text": "Three toes forward, one back. A bird. It landed, walked, and took off from the fountain rim. That's why the prints stop. **Miss Hartigan:**\n\n\"The agency's reading: It rained.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-prints",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-clues-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-square"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The mayor's slippers.",
+     "success": {
+      "text": "Boots don't have three toes. The prints look back at you, faintly embarrassed. **Miss Hartigan:** \"The agency's reading: It rained.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-prints",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-square"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c1-tower",
+   "name": "Detective Agency: The Clock Tower",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The Clock Tower, tall and shut, ticking a little too slowly. The stairs wind up past the gears into the dark.",
+   "choices": [
+    {
+     "label": "Pick up the receipt.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-receipt"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-1-receipt",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Climb up to the gears.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-nest"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-1-nest",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the hall steps.",
+     "success": {
+      "text": "You go back, notebook in hand.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c1-receipt",
+   "name": "Detective Agency: receipt",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "A receipt for forty metres of string, caught in the gutter at the tower's foot. Dated last Tuesday.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "The string took the hat.",
+     "success": {
+      "text": "You follow the string through half the town. It was a kite. It was a lovely kite. **Miss Hartigan:**\n\n\"The agency's reading: The Chief stares at it for the whole four minutes.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-receipt",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-tower"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The thief bought string. Suspicious.",
+     "success": {
+      "text": "You follow the string through half the town. It was a kite. It was a lovely kite. **Miss Hartigan:**\n\n\"The agency's reading: The Chief stares at it for the whole four minutes.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-receipt",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-tower"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Someone bought string. It's nothing to do with a hat.",
+     "success": {
+      "text": "Hats don't need string. Neither does this case. Somewhere there is a very good kite. **Miss Hartigan:**\n\n\"The agency's reading: The Chief stares at it for the whole four minutes.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-receipt",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-tower"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c1-nest",
+   "name": "Detective Agency: nest",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "High in the clock, among the gears: a nest of twigs and foil, silver spoons, a bottle-top, and something shiny.\n\nOut of reach, and rather proud of itself.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "A clockmaker's workshop.",
+     "success": {
+      "text": "No clockmaker uses foil. Nobody does. It's a nest, and you're looking at it. **Miss Hartigan:** \"The agency's reading: A clock.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-nest",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-tower"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Something here steals shiny things.",
+     "success": {
+      "text": "Foil, spoons, a bottle-top: a collector, nesting high. Whatever took the hat is up here, or was. **Miss Hartigan:** \"The agency's reading: A clock.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-nest",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-clues-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-tower"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A hat rack, oddly.",
+     "success": {
+      "text": "No clockmaker uses foil. Nobody does. It's a nest, and you're looking at it. **Miss Hartigan:** \"The agency's reading: A clock.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-1-nest",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c1-tower"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-case-2",
+   "name": "Detective Agency: Case 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The door again: SLOWPOKE DETECTIVE AGENCY. NO CASE TOO. Inside, three desks, a kettle, and a new cobweb on the Sleeper's hat-stand.\n\n**Miss Hartigan:** \"A shipment. A harbour master. A locked warehouse. It's serious this time.\" She looks at the Slowpoke. \"They haven't noticed.\"\n\nHarbour Master Ansgar Voss twists his cap in his hands. A crate has vanished from a warehouse locked tight, and he signed for it.",
+   "choices": [
+    {
+     "label": "Take the case.",
+     "success": {
+      "text": "You open the file. The Sleeper, from its chair, murmurs something that might be a name.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-read",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c2-hub",
+   "name": "Detective Agency: The Case",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "Six clues, again, three real and three not. The harbour master has asked, twice, whether the Slowpoke are listening.\n\n**Miss Hartigan:** \"The Chief nodded. At the window. I think.\"",
+   "choices": [
+    {
+     "label": "Look in The Warehouse.",
+     "success": {
+      "text": "You pick up your notebook, and go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-warehouse"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look in The Quay.",
+     "success": {
+      "text": "You pick up your notebook, and go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-quay"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look in The Back Street.",
+     "success": {
+      "text": "You pick up your notebook, and go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-street"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take what you have to the agency.",
+     "success": {
+      "text": "You climb the stairs back to the frosted door. The Chief is waiting, at the exact angle it was before you left.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-end"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c2-end",
+   "name": "Detective Agency: The Conclusion",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The Chief rises, slowly. Miss Hartigan reads its expression aloud.\n\n**Miss Hartigan:** \"A seagull joined the circus.\"\n\nThe harbour master sits down on his own crate-shaped gap in the floor. The Pipe points at the poster. The Sleeper is already asleep.",
+   "choices": [
+    {
+     "label": "Go to the circus.",
+     "success": {
+      "text": "You follow them out, a respectful ten paces behind, because it is the only way not to overtake them.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-truth"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c2-truth",
+   "name": "Detective Agency: The Truth",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dratini",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "They set off for the circus to arrest the seagull. On the way, the Sleeper nods off, rolls off the quay, and falls through the drain.\n\nYou follow it down the wet steps.\n\nBelow the docks, on a ledge, sits the crate: the Sleeper on top of it, still asleep, and beside it, coiled round a stack of river stones, a **Dratini**.\n\nIt has been collecting things that smell like home. The crate holds river stones, packed for an aquarium. It looks at you, caught, and very small.",
+   "choices": [
+    {
+     "label": "Take the Dratini.",
+     "success": {
+      "text": "You hold out a hand. The Dratini looks at the stones, at the crate, and at you.\n\nThen it winds round your arm, cold and smooth and certain. It has been very lonely under these docks.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "dratini"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "held": "dragon-fang"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "dratini"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-case",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-case-2",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         }
+        ],
+        "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the Dragon Scale, and leave it be.",
+     "success": {
+      "text": "Behind the stones, polished and cold: a Dragon Scale the Dratini shed. It lets you take it, but watches.\n\nYou leave the crate for the aquarium, and the Dratini lets you leave.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "dragon-scale",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-case",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-case-2",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         }
+        ],
+        "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the Sleeper how it knew.",
+     "success": {
+      "text": "The Sleeper opens one eye. Closes it. A smile, you think, at the corner of its mouth.\n\nThe Dratini has gone shy, but when you offer a hand it comes anyway, curious, and wraps round your wrist.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "dratini"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "held": "dragon-fang"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "dratini"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-case",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-case-2",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         }
+        ],
+        "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c2-warehouse",
+   "name": "Detective Agency: The Warehouse",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The warehouse, locked, bolted, and empty in the place where the crate should be. Dust outlines the crate and nothing else.",
+   "choices": [
+    {
+     "label": "Check the lock.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-lock"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-2-lock",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Look at the harbour master's lunch.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-lunch"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-2-lunch",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the harbour office.",
+     "success": {
+      "text": "You go back, notebook in hand.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c2-lock",
+   "name": "Detective Agency: lock",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The padlock hangs open and undamaged. The hasp is on the inside of the door. Whoever opened it was already in.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "The harbour master forgot to lock it.",
+     "success": {
+      "text": "It's a good lock, and it did its job. You can tell by how it isn't broken. **Miss Hartigan:** \"The agency's reading: A seagull.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-lock",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-warehouse"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Opened from inside. Nobody walked in.",
+     "success": {
+      "text": "The hasp is on the inside. Nobody forced it, nobody entered. It was opened from within. **Miss Hartigan:** \"The agency's reading: A seagull.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-lock",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-clues-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-warehouse"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The lock is old and gave up.",
+     "success": {
+      "text": "It's a good lock, and it did its job. You can tell by how it isn't broken. **Miss Hartigan:** \"The agency's reading: A seagull.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-lock",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-warehouse"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c2-lunch",
+   "name": "Detective Agency: lunch",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "His lunch, forgotten on a crate: a pie, one slice gone. He keeps asking if anyone has seen the pastry fork.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "The thief wanted the pie.",
+     "success": {
+      "text": "A whole theory about the pie, and the pie is still just a pie. **Miss Hartigan:** \"The agency's reading: The Pipe points at the harbour master's lunch.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-lunch",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-warehouse"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The pie is the motive.",
+     "success": {
+      "text": "A whole theory about the pie, and the pie is still just a pie. **Miss Hartigan:** \"The agency's reading: The Pipe points at the harbour master's lunch.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-lunch",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-warehouse"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's his lunch. It isn't a clue.",
+     "success": {
+      "text": "It's a pie. The slice went the usual way. The fork is under the stove. **Miss Hartigan:**\n\n\"The agency's reading: The Pipe points at the harbour master's lunch.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-lunch",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-warehouse"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c2-quay",
+   "name": "Detective Agency: The Quay",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The quay, wet with morning, gulls on every post. Everything smells of tar and fish and rope.",
+   "choices": [
+    {
+     "label": "Pick up the scale.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-scale"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-2-scale",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Look at the seagull.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-gull"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-2-gull",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the harbour office.",
+     "success": {
+      "text": "You go back, notebook in hand.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c2-scale",
+   "name": "Detective Agency: scale",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "A single scale on the warehouse floor, blue-white, the size of a coin, still damp. It catches the light like something living.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "A fish, being taken to market.",
+     "success": {
+      "text": "Sequins don't move when you breathe on them. This one does, very slightly. **Miss Hartigan:** \"The agency's reading: A sequin from the circus.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-scale",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-quay"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Something scaled and wet was in here.",
+     "success": {
+      "text": "Damp scale, not a sequin. Something wet and scaled was inside a locked warehouse. Interesting. **Miss Hartigan:** \"The agency's reading: A sequin from the circus.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-scale",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-clues-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-quay"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A sequin, from the circus.",
+     "success": {
+      "text": "Sequins don't move when you breathe on them. This one does, very slightly. **Miss Hartigan:** \"The agency's reading: A sequin from the circus.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-scale",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-quay"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c2-gull",
+   "name": "Detective Agency: gull",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "A seagull, on the crate-hook, looking guilty. It looks guilty every day. It has looked guilty for years.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "The seagull did it.",
+     "success": {
+      "text": "The gull stares back. You blink first. That proves nothing at all, except about you. **Miss Hartigan:** \"The agency's reading: The seagull is the culprit.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-gull",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-quay"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's staring at you. A confession!",
+     "success": {
+      "text": "The gull stares back. You blink first. That proves nothing at all, except about you. **Miss Hartigan:** \"The agency's reading: The seagull is the culprit.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-gull",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-quay"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's a seagull. They always look like that.",
+     "success": {
+      "text": "It's a seagull. Looking guilty is just what a gull's face does. **Miss Hartigan:** \"The agency's reading: The seagull is the culprit.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-gull",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-quay"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c2-street",
+   "name": "Detective Agency: The Back Street",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "A narrow back street behind the warehouse. Peeling posters, a leaning lamp, one wet cobble in a dry street.",
+   "choices": [
+    {
+     "label": "Look at the drain.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-drain"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-2-drain",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Read the poster.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-poster"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-2-poster",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the harbour office.",
+     "success": {
+      "text": "You go back, notebook in hand.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c2-drain",
+   "name": "Detective Agency: drain",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The drain cover in the corner has shifted a hand's width, as if pushed from below. Its edge is wet, and the wet leads to the water.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "It was moved from below.",
+     "success": {
+      "text": "Pushed from below, and the wet leads back to the harbour. Whatever took the crate came and went by water. **Miss Hartigan:**\n\n\"The agency's reading: The drain is where seagulls go.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-drain",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-clues-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-street"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nobody cleans it, so it moves.",
+     "success": {
+      "text": "A cat can't move an iron cover. You get stuck trying, which tells you everything. **Miss Hartigan:** \"The agency's reading: The drain is where seagulls go.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-drain",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-street"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The harbour cat knocked it.",
+     "success": {
+      "text": "A cat can't move an iron cover. You get stuck trying, which tells you everything. **Miss Hartigan:** \"The agency's reading: The drain is where seagulls go.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-drain",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-street"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c2-poster",
+   "name": "Detective Agency: poster",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "A poster on the wall: *Tonight at the circus: the Seagull Who Sings.* The harbour master has been to see it twice.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "The circus took the crate.",
+     "success": {
+      "text": "You follow the poster's logic as far as it goes. It goes to the circus and stops. **Miss Hartigan:** \"The agency's reading: The circus did it.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-poster",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-street"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The circus is always the answer.",
+     "success": {
+      "text": "You follow the poster's logic as far as it goes. It goes to the circus and stops. **Miss Hartigan:** \"The agency's reading: The circus did it.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-poster",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-street"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's an advert. It has nothing to do with the crate.",
+     "success": {
+      "text": "It's an advert for a seagull who sings. It deserves to be seen. It doesn't deserve to be a clue. **Miss Hartigan:**\n\n\"The agency's reading: The circus did it.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-2-poster",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c2-street"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-case-3",
+   "name": "Detective Agency: Case 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The door: SLOWPOKE DETECTIVE AGENCY. NO CASE TOO. Under it, in fresh paint, the last word is wrapped round the frame: **SLOW.**\n\nInside, the three desks, the Chief with a loaf of bread held in front of it, staring. A woman in a city coat stands behind it, writing.\n\n**Detective Sergeant Rowena Farrow:** \"Two cases. Both solved. Both reports make no sense whatever. I was sent to find out how they do it.\n\nI've been here a week. I still don't know.\"\n\nAnd in the chair before the desk, a child in a too-big coat. Her grandfather went out for bread yesterday and didn't come back.\n\nReal detectives are already looking.",
+   "choices": [
+    {
+     "label": "Take the case. Take it seriously.",
+     "success": {
+      "text": "You open the file. The Sleeper, from its chair, murmurs something that might be a name.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-read",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-farrow-met",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c3-hub",
+   "name": "Detective Agency: The Case",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "It's a missing person this time. There is no room for the joke, and the Slowpoke seem to feel it.\n\nThey have not slept, which for them is remarkable.\n\nSix clues, three real. Take the real ones seriously.",
+   "choices": [
+    {
+     "label": "Look in The Edge of the Wood.",
+     "success": {
+      "text": "You pick up your notebook, and go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-wood"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look in The Cottage.",
+     "success": {
+      "text": "You pick up your notebook, and go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-cottage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look in The Bakery.",
+     "success": {
+      "text": "You pick up your notebook, and go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-bakery"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take what you have to the agency.",
+     "success": {
+      "text": "You climb the stairs back to the frosted door. The Chief is waiting, at the exact angle it was before you left.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-end"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c3-end",
+   "name": "Detective Agency: The Conclusion",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The Chief rises. In front of a woman who has solved real cases, it speaks, through Miss Hartigan, with great dignity.\n\n**Miss Hartigan:** \"The bread took him.\"\n\nFarrow closes her notebook, very slowly, and opens it again. The child doesn't laugh. The Slowpoke are not laughing, either.",
+   "choices": [
+    {
+     "label": "Follow them out.",
+     "success": {
+      "text": "You follow them out, a respectful ten paces behind, because it is the only way not to overtake them.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-truth"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c3-truth",
+   "name": "Detective Agency: The Truth",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "ursaring",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "They set off to interview a bakery. They get lost.\n\nAll three walk into the wood, at Slowpoke speed, in a line, and eleven hours later they walk into a clearing.\n\nAn old man sits with a twisted ankle, whistling three notes, a blanket round his knees.\n\nBeside him, keeping him warm, is a wild **Ursaring**, huge and patient.\n\n**Farrow, writing it down:** \"'Proceeded in the wrong direction until correct.' I can't put that in a report.\"\n\n**The grandfather:** \"It's been bringing me honey. I think it thinks I'm its.\"",
+   "choices": [
+    {
+     "label": "Thank the Ursaring.",
+     "success": {
+      "text": "You thank it, properly, with a bow. It nods once and looks at the old man.\n\nIt follows him home, slowly, and then, at the gate, turns round and follows you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "ursaring"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "held": "quick-claw"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "ursaring"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-honorary",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Found a missing grandfather by walking the wrong way with the Slowpoke Detective Agency.",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-case",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-case-3",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         }
+        ],
+        "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry him home.",
+     "success": {
+      "text": "You take the old man's weight on your shoulder, and the Ursaring takes the other. Between you, you carry him home.\n\nThe Ursaring stays at the gate all night, to see he's fed, and leaves a gift on the step.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-honorary",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Found a missing grandfather by walking the wrong way with the Slowpoke Detective Agency.",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-case",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-case-3",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         }
+        ],
+        "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the Slowpoke how they knew.",
+     "success": {
+      "text": "The Chief looks at you. Four minutes pass. It yawns. Miss Hartigan, arriving late, translates: \"It says it didn't. It says it wasn't sure it should.\"\n\nThe Ursaring, listening, decides to follow you home.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "ursaring"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "held": "quick-claw"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "ursaring"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-honorary",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Found a missing grandfather by walking the wrong way with the Slowpoke Detective Agency.",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-case",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-case-3",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         }
+        ],
+        "text": "The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c3-wood",
+   "name": "Detective Agency: The Edge of the Wood",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The edge of the wood, where the town ends and the trees begin. The old man's path runs into it and doesn't come out.",
+   "choices": [
+    {
+     "label": "Pick up the walking stick.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-stick"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-3-stick",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Look at the prints.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-prints"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-3-prints",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the cottage gate.",
+     "success": {
+      "text": "You go back, notebook in hand.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c3-stick",
+   "name": "Detective Agency: stick",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "A walking stick, leaning on the first tree. Worn at the handle by one hand over forty years, and left carefully, not dropped.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "He dropped it and ran.",
+     "success": {
+      "text": "It lies against the tree in a very tidy way. Nobody drops a stick tidily. **Miss Hartigan:** \"The agency's reading: The stick is a lead.\n\nTo the bakery.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-stick",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-wood"
+       }
+      ]
+     }
+    },
+    {
+     "label": "He leant it there on purpose.",
+     "success": {
+      "text": "Leant, not dropped. He stopped at the wood's edge, put it down gently, and went in. He meant to be found. **Miss Hartigan:**\n\n\"The agency's reading: The stick is a lead. To the bakery.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-stick",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-clues-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-wood"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's somebody else's stick.",
+     "success": {
+      "text": "It lies against the tree in a very tidy way. Nobody drops a stick tidily. **Miss Hartigan:** \"The agency's reading: The stick is a lead.\n\nTo the bakery.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-stick",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-wood"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c3-prints",
+   "name": "Detective Agency: prints",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "Prints in the soft ground: a man's boots, slow and uneven, and beside them, something large, walking slowly in step.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "He was carried off.",
+     "success": {
+      "text": "The prints don't drag. They don't rush. A wheelbarrow doesn't keep step, either. **Miss Hartigan:** \"The agency's reading: The prints belong to the bread.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-prints",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-wood"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Two walkers, one slow, one huge, side by side.",
+     "success": {
+      "text": "Two walkers, side by side, the big one matching the old man's pace. Whatever it is, it isn't dragging him. It's keeping him company. **Miss Hartigan:**\n\n\"The agency's reading: The prints belong to the bread.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-prints",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-clues-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-wood"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A wheelbarrow.",
+     "success": {
+      "text": "The prints don't drag. They don't rush. A wheelbarrow doesn't keep step, either. **Miss Hartigan:** \"The agency's reading: The prints belong to the bread.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-prints",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-wood"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c3-cottage",
+   "name": "Detective Agency: The Cottage",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The cottage, one chair pulled out from the table, one cup still half full. The child sits on the step and doesn't speak.",
+   "choices": [
+    {
+     "label": "Ask about the night.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-whistle"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-3-whistle",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Look at the child's drawing.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-drawing"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-3-drawing",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the cottage gate.",
+     "success": {
+      "text": "You go back, notebook in hand.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c3-whistle",
+   "name": "Detective Agency: whistle",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "\"I heard a whistle,\" the child says. \"Three notes. Up, down, up. Last night. Grandpa does it when he can't sleep.\"\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "A kettle, whistling.",
+     "success": {
+      "text": "Kettles don't whistle three notes. Chimneys don't sound like a man trying to be found. **Miss Hartigan:** \"The agency's reading: The whistle is the bread.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-whistle",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-cottage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's him, calling from somewhere.",
+     "success": {
+      "text": "Three notes, up, down, up, in the dark. He's alive, awake, and calling. Somewhere not very far. **Miss Hartigan:** \"The agency's reading: The whistle is the bread.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-whistle",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slowpoke-clues-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-cottage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The wind in the chimney.",
+     "success": {
+      "text": "Kettles don't whistle three notes. Chimneys don't sound like a man trying to be found. **Miss Hartigan:** \"The agency's reading: The whistle is the bread.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-whistle",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-cottage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c3-drawing",
+   "name": "Detective Agency: drawing",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "A drawing on the table, in wax crayon: a very large Slowpoke, a very small old man, and a sun that is smiling a little too hard.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "It's a confession.",
+     "success": {
+      "text": "The sun smiles. The Slowpoke smile. It is not evidence, only a child asking for help in crayon. **Miss Hartigan:**\n\n\"The agency's reading: The Chief takes it as a confession.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-drawing",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-cottage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's a map to the old man.",
+     "success": {
+      "text": "The sun smiles. The Slowpoke smile. It is not evidence, only a child asking for help in crayon. **Miss Hartigan:**\n\n\"The agency's reading: The Chief takes it as a confession.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-drawing",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-cottage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's a child's drawing. It means she misses him.",
+     "success": {
+      "text": "She drew the people she hopes will find him. You tell her it's a good one. She nods, and looks away. **Miss Hartigan:**\n\n\"The agency's reading: The Chief takes it as a confession.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-drawing",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-cottage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c3-bakery",
+   "name": "Detective Agency: The Bakery",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "The bakery, warm and floury and empty of any answer. The baker shakes his head: he last saw the old man a week ago.",
+   "choices": [
+    {
+     "label": "Look at the loaf.",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-loaf"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-3-loaf",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Ask about the word \"bread\".",
+     "success": {
+      "text": "You crouch to look properly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-bread"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "slowpoke-seen-3-bread",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the cottage gate.",
+     "success": {
+      "text": "You go back, notebook in hand.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c3-loaf",
+   "name": "Detective Agency: loaf",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "A loaf on the counter, set aside, with the old man's name on a paper tag. He never came to collect it.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "The bread took him.",
+     "success": {
+      "text": "You stare at the loaf. The loaf stares back. Neither of you moves for a long moment. **Miss Hartigan:** \"The agency's reading: The bread took him.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-loaf",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-bakery"
+       }
+      ]
+     }
+    },
+    {
+     "label": "He came, then left without it.",
+     "success": {
+      "text": "You stare at the loaf. The loaf stares back. Neither of you moves for a long moment. **Miss Hartigan:** \"The agency's reading: The bread took him.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-loaf",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-bakery"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's his loaf. It's only a loaf.",
+     "success": {
+      "text": "His loaf, set aside. The bakery is where he was going, not where he went. It tells you nothing, kindly. **Miss Hartigan:**\n\n\"The agency's reading: The bread took him.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-loaf",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-bakery"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-56-c3-bread",
+   "name": "Detective Agency: bread",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#6b5a3c",
+    "effect": "none"
+   },
+   "intro": "Everybody keeps saying it: *he went out for bread.* Over and over, until it starts to sound like a clue.\n\n**What does it mean?**",
+   "choices": [
+    {
+     "label": "It's a code word.",
+     "success": {
+      "text": "Say a word enough times and it starts to look like an answer. This one is still a word. **Miss Hartigan:**\n\n\"The agency's reading: The word \"bread\" is the culprit.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-bread",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-bakery"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's what the culprit asked for.",
+     "success": {
+      "text": "Say a word enough times and it starts to look like an answer. This one is still a word. **Miss Hartigan:**\n\n\"The agency's reading: The word \"bread\" is the culprit.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-bread",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-bakery"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's what he said. It's only a word.",
+     "success": {
+      "text": "He went out for bread. People do. It's only what he said, not where he went. **Miss Hartigan:** \"The agency's reading: The word \"bread\" is the culprit.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "slowpoke-seen-3-bread",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-56-c3-bakery"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

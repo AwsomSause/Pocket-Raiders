@@ -209,7 +209,7 @@ describe('permanent choices', () => {
   it('keeps the first answer, and opens or closes follow-ups', () => {
     const run = newRun('choices');
     run.money = 5000;
-    const r = pickChoice(run, 'stranded-trainer', 'Take their Poké Balls').run;
+    const r = pickChoice(run, 'stranded-trainer', 'Take their stuff.').run;
     expect(choiceMade(r, 'stranded-trainer', 'robbed')).toBe(true);
     const opens = (id: string) => content.events.get(id)!.requires.every((c) => conditionMet(content, r, c));
     expect(opens('stranded-trainer-revenge')).toBe(true);
@@ -228,7 +228,8 @@ describe('permanent choices', () => {
   it('a rescued Pokémon can come back to join later', () => {
     const run = newRun('riolu');
     recordChoice(content, run, { id: 'ledge-riolu', pick: 'rescued', text: 'x', weight: 2 });
-    const r = pickChoice(run, 'ledge-riolu-return', 'Welcome it to the team');
+    run.story.flags['ev:riolu-seen-2'] = 1; // Catalog Overhaul (SF52): the Riolu comes back after you have seen it twice
+    const r = pickChoice(run, 'ledge-riolu-return', 'Come with me.');
     expect(r.changes.join(' ')).toMatch(/wants to join you/);
   });
 });

@@ -18,6 +18,7 @@ import { hatchLevelOffset } from './trainerPerks';
 import { runPerks } from './archetypes';
 import { rememberPick } from './variety';
 import { noteMapGrowth } from './overhaul/growth';
+import { shapeHatchling } from './greenneedle/daycare';
 
 // Eggs: found at events or from a Mystery Egg, carried until enough battles (or stages) pass, then hatched.
 // Everything about the Egg (species, shiny, egg moves) is rolled when it is laid, so reloading never changes it.
@@ -142,6 +143,12 @@ export function hatchEgg(content: Content, run: RunState, egg: Egg): PokemonInst
     mon.care = { ...(mon.care ?? CareSchema.parse({})), nickname: named };
     run.story.flags['ev:egg-name'] = 0;
   }
+  // Greenneedle gn.40: the answer that shaped it, a day-care egg's habit, and the village's card.
+  const taught = [...egg.eggMoves];
+  shapeHatchling(content, run, egg, mon, (id) => {
+    taught.push(id);
+    teachEggMove(content, mon, id, taught);
+  });
   mon.hp = maxHp(content, mon);
   return mon;
 }

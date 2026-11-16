@@ -71,18 +71,22 @@ describe('event fight rules (run events B batch 3)', () => {
       expect(run.battle?.eventRule, id).toBeDefined();
       expect(RunStateSchema.parse(JSON.parse(JSON.stringify(run))).battle?.eventRule).toEqual(run.battle?.eventRule);
     }
-    expect(start('sleepwalker-brawl').battle!.enemyTeam.every((m) => m.status?.id === 'slp')).toBe(true);
-    expect(start('bodybuilder-beach').battle).toMatchObject({ playerStages: { atk: 2 }, enemyStages: { atk: 2 } });
+    // Catalog Overhaul SF72 rebuilt these trainers: every rule applies to both sides (core/battle/coRules.ts).
+    expect(start('sleepwalker-brawl').battle!.eventRule).toMatchObject({ entrySleep: true, firstActBoost: true });
+    expect(start('bodybuilder-beach').battle!.eventRule).toMatchObject({ entryStages: { atk: 1 } });
   });
-  it('a slow win pays the slowWin effects', () => {
-    const run = start('pizza-delivery-duel');
-    const money = run.money;
-    eventBattleWon(content, run, run.battle!.event!, 6);
-    expect(run.money - money).toBe(350);
-    const fast = start('pizza-delivery-duel');
-    const m2 = fast.money;
-    eventBattleWon(content, fast, fast.battle!.event!, 5);
-    expect(fast.money - m2).toBe(700);
+  it('a slow win pays the slowWin effects (SF72: Kai-Lin\'s late delivery counts as a loss; Zip pays half)', () => {
+    const won = (id: string, turns: number) => {
+      const run = start(id);
+      const money = run.money;
+      const said = eventBattleWon(content, run, run.battle!.event!, turns);
+      return { paid: run.money - money, said };
+    };
+    expect(won('pizza-delivery-duel', 6).paid).toBe(0);
+    expect(won('pizza-delivery-duel', 5).paid).toBeGreaterThan(0);
+    const slow = won('speedrun-trial', 11).paid;
+    expect(slow).toBeGreaterThan(0);
+    expect(won('speedrun-trial', 10).paid).toBe(slow * 2);
   });
   it('batch 4: every event is in the content, its fights parse, and the exam bans bag items', () => {
     const events = (b4 as { events: { id: string; choices: { success: { battle?: unknown }; failure?: { battle?: unknown } }[] }[] }).events;
@@ -102,8 +106,8 @@ describe('event fight rules (run events B batch 3)', () => {
     b.turn = 3;
     eventRuleEnd(b as never, []);
     expect(b.weather?.id).toBe('hail');
-    expect(start('weather-rival').battle?.weather?.id).toBe('rain');
-    expect(start('underground-duel').battle?.weather?.id).toBe('sand');
+    // SF72 Forecaster Brio: a new weather from the list every turn.
+    expect(start('weather-rival').battle?.eventRule?.weatherRandom).toEqual(['rain', 'sun', 'sand', 'snow']);
   });
   it('batch 6: cursed hat swaps statuses, contrary and pinch hitter ride on the battle', () => {
     const mine = { hp: 10, status: { id: 'brn', turns: 0 } };
@@ -125,8 +129,11 @@ describe('event fight rules (run events B batch 3)', () => {
     expect(b.enemyStages.atk).toBe(0);
     eventRuleEnd(b as never, [{ type: 'faint', side: 'player', uid: 'y', participants: [] }]);
     expect(b.enemyStages.atk).toBe(1);
-    for (const [id, key] of [['fan-club-tournament', 'fanClub'], ['beginners-luck', 'beginnersLuck']] as const) expect(start(id).battle?.eventRule?.[key], id).toBe(true);
-    const run = start('beginners-luck');
+    expect(start('fan-club-tournament').battle?.eventRule?.fanClub).toBe(true);
+    // SF72 rebuilt the Beginner's Luck trainer (more critical hits, a little less damage); the healing rule is tested on its own.
+    expect(start('beginners-luck').battle?.eventRule).toMatchObject({ critMult: 2, damageMult: 0.9 });
+    const run = start('pizza-delivery-duel');
+    run.battle!.eventRule = { beginnersLuck: true } as never;
     const lead = run.party[run.battle!.activeIndex]!;
     lead.hp = 1;
     eventRuleEnd(run.battle!, [], run.party, content);

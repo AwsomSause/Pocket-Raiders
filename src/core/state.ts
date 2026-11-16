@@ -25,6 +25,7 @@ import { freshHyperBattle } from './battle/hyper';
 import { SpectacleBattleSchema } from './battle/spectacle';
 import { TraitsSchema, type Traits } from './expansion/traits';
 import { StoryTraitsSchema, type StoryTraits } from './expansion/storyTraits';
+import type { TwiceToldStore } from './greenneedle/twiceTold';
 import { PondMarkSchema } from './episodes/poliPond';
 import { TimedStageSchema, VariantsSchema, type TimedStage, type Variants } from './expansion/variantLines';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
@@ -103,6 +104,8 @@ export const PokemonInstanceSchema = z.object({
   abilitySlot: z.number().int().min(-1).default(0),
   /** Poli-Pond (Beta 0.7): the Poliwag of the story (or what it grew into) carries its lessons here. Optional, so older saves load as they are. */
   pond: PondMarkSchema.optional(),
+  /** Greenneedle events: story marks this Pokémon carries (`duelist:caterpie` = the forest duelist, caught as a Caterpie). Optional, so older saves load as they are. */
+  gn: z.array(z.string()).optional(),
   /** An ability it was given outright (Squirtle Squad's Contrary); it beats the slot. Optional, so older saves load as they are. */
   fixedAbility: z.string().optional(),
   /** Pidgey's Resolve (Beta 0.7): Mega Evolves with no Mega Stone and takes the ability Sky's Resolve while Mega. Optional, so older saves load as they are. */
@@ -150,6 +153,8 @@ export const PokemonInstanceSchema = z.object({
   teraType: TypeNameSchema.optional(),
   /** Catalog Overhaul (SF93 Heart Crystal): its second type is this one for the rest of the run (core/co/typeShift.ts). */
   shiftType: TypeNameSchema.optional(),
+  /** Greenneedle gn.32: a crystal carried for it, this stage only (Red: own-type moves +10%; Blue: its second type). Taken off on leaving. */
+  crystal: z.object({ red: z.boolean().optional(), blue: TypeNameSchema.optional() }).optional(),
   /** Catalog Overhaul (SF102 Bond Ceremony): it made the vow; it can't be released or traded and its friendship can't fall (core/co/placesRules.ts). */
   vowed: z.boolean().optional(),
   /** Moves that awakened this run (Signature Move Awakening): they hit harder; gone with the run. */
@@ -241,7 +246,7 @@ export const VolatileSchema = z.object({
   /** Hidden in the air, underground, underwater or vanished (first turn of Fly, Dig, Dive, Phantom Force). */
   semi: SemiSchema.nullable().default(null),
   /** Locked into Thrash or Outrage for `turns` more turns. */
-  locked: z.object({ moveId: z.string(), turns: z.number().int().min(0) }).nullable().default(null),
+  locked: z.object({ moveId: z.string(), turns: z.number().int().min(0), /** Encore Performance: the forced move goes first (+1 priority). */ bonus: z.boolean().optional() }).nullable().default(null),
   /** Full turns it has been in battle (Fake Out works only on the first). */
   turnsOut: z.number().int().min(0).default(0),
   /** Growth paths (Patient, Quiet Strength): last turn it only waited / was not hit. Old saves read false. */
@@ -602,6 +607,7 @@ export const freshExtra = () => ({
   variantTimed: [] as TimedStage[],
   traits: {} as Traits,
   storyTraits: {} as StoryTraits,
+  twiceTold: {} as TwiceToldStore,
   /** Lights Out: turns of darkness left (accuracy -10% for both sides). */
   darkTurns: 0,
   /** Payout: its holder knocked out a foe this battle, so the prize money is doubled. */
@@ -838,6 +844,8 @@ export const BattleStateSchema = z.object({
     traits: TraitsSchema,
     /** Beta 0.7 team-wide story traits (core/expansion/storyTraits.ts): uid -> trait. Off unless the run's `storyTraits` setting is on. */
     storyTraits: StoryTraitsSchema,
+    /** gn.new.35 Twice-Told (core/greenneedle/twiceTold.ts): target uid -> the first move used against it and how often. */
+    twiceTold: z.record(z.string(), z.object({ move: z.string(), n: z.number().int() })).default({}),
     darkTurns: z.number().int().min(0).default(0),
     payout: z.boolean().default(false),
     /** Galar big-battle moments already used (evolve-and-survive per Pokémon, the thread, the cheat) and ones pending this hit (galarMoments.ts). */
@@ -1011,6 +1019,9 @@ export const BattleStateSchema = z.object({
   flair: z.object({ crowdTypes: z.array(z.string()).default([]), cheers: z.number().int().min(0).default(0), floodUntil: z.number().int().default(-1), paired: z.boolean().default(false) }).optional(),
   /** Critical hits in a row per Pokémon (uid); the Streak Lens reads it (ideas W1). */
   critStreak: z.record(z.string(), z.number().int().min(0)).optional(),
+  /** Greenneedle gn.new.06: the uid of the first party Pokémon to land a critical hit this battle, and the last damaging move one of them used (the Duelist's answer). */
+  critBy: z.string().optional(),
+  lastHit: z.string().optional(),
   /** Nuzlocke: this wild Pokémon is not the area's first encounter, so it can't be caught (core/nuzlocke.ts). */
   nuzlockeNoCatch: z.boolean().optional(),
   /** Pacifist run: damage never knocks out this wild Pokémon (core/rules.ts). */
@@ -1143,6 +1154,8 @@ export const StageStateSchema = z.object({
   visited: z.array(z.string()),
   /** Fog of war: the map shows every column up to this one (scouting); 0 = only what you can see. */
   scoutedTo: z.number().int().min(0).default(0),
+  /** gn.new.12: while set, the whole map is on show for a few seconds (the Xatu's map); `scoutedTo` drops back to this value when it blurs. */
+  peekFrom: z.number().int().min(0).optional(),
   /** Weather Prophet (S124): extra columns the weather forecast reaches this stage (an event's `foresight` effect). */
   foresight: z.number().int().min(0).default(0),
   /** Fronts that rolled in during the stage (an event's `front` effect); the stage's own come from its seed (core/world.ts). */

@@ -1,0 +1,705 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-04-door",
+   "name": "The Tyrogue Who Wanted All Three",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tyr-on",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tyrogue",
+    "tint": "#b5523a",
+    "effect": "none"
+   },
+   "intro": "*One street, three dojos. A small Tyrogue bows at the first door, and is thrown out. It bows at the second, and is thrown out. The third.*\n\n**Kick master, Sensei Oyelowo:** \"It trains next door! Out!\"\n\n**Punch master, Sensei Brannigan:** \"It trains across the road! Out!\"\n\n**Spin master, Sensei Tachibana:** \"It trains everywhere! Out!\"\n\n*The Tyrogue picks itself up out of the gutter, dusts off its knees, and bows to you instead.*",
+   "choices": [
+    {
+     "label": "Travel with me for the stage.",
+     "success": {
+      "text": "It falls into step beside you like it was always going to. Behind you, three doors slam, then one of them opens again, just a crack.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "tyrJoin",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "tyr-door"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick one, kid.",
+     "success": {
+      "text": "You tell it to choose a school, and it takes the question very seriously. It looks at three doors for a long time. Then it chooses.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "tyrJoin",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "tyr-door"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The Tyrogue watches you go, then turns and bows at the first door again. It is thrown out again. It tries the second.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-04-road-1",
+   "name": "The Tyrogue Who Wanted All Three: Sensei Oyelowo",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tyr-on",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "tyrWith"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "own",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "tyrLead",
+       "key": "kick"
+      }
+     ],
+     "notice": "He is, for once, right, and he cannot stop saying so. He says it to the road, the sky and a passing Pidgey."
+    },
+    {
+     "id": "other-a",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "tyrLead",
+       "key": "punch"
+      }
+     ],
+     "notice": "The count says otherwise. He knows the count says otherwise. He has decided, on principle, not to look at the count."
+    },
+    {
+     "id": "other-b",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "tyrLead",
+       "key": "stand"
+      }
+     ],
+     "notice": "The count says otherwise. He knows the count says otherwise. He has decided, on principle, not to look at the count."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tyrogue",
+    "tint": "#b5523a",
+    "effect": "none"
+   },
+   "intro": "*At the roadside, a figure in a dojo coat is waiting with their arms folded. Sensei Oyelowo, who has been following you for a mile, pretending not to.*\n\n**Sensei Oyelowo:** \"That was a kick. That was MY kick.\"\n\nThe Tyrogue looks from the master to you, and waits to be told what it did.",
+   "choices": [
+    {
+     "label": "Take the lesson.",
+     "success": {
+      "text": "He shows it one low kick, slowly, three times, with his whole face. It copies him exactly, down to the face. He weeps a little.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "low-kick",
+        "mark": "tyrogue-three"
+       },
+       {
+        "kind": "gn",
+        "op": "tyrTally",
+        "key": "kick",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him he's right.",
+     "success": {
+      "text": "He turns to the road, arms wide, and tells it. The Tyrogue looks very pleased, and slightly embarrassed on his behalf.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "tyrTally",
+        "key": "kick",
+        "n": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay out of it.",
+     "success": {
+      "text": "You step back and let them have it out. The master explains his kick to the Tyrogue, and the Tyrogue nods, as if it has heard.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-04-road-2",
+   "name": "The Tyrogue Who Wanted All Three: Sensei Brannigan",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tyr-on",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "tyrWith"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "own",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "tyrLead",
+       "key": "punch"
+      }
+     ],
+     "notice": "He is right, and has the decency to look surprised about it. He stands very straight, and says nothing, which is worse."
+    },
+    {
+     "id": "other-a",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "tyrLead",
+       "key": "kick"
+      }
+     ],
+     "notice": "The count says otherwise, and he has not read it, and he never will. \"I know what I saw,\" he tells the road."
+    },
+    {
+     "id": "other-b",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "tyrLead",
+       "key": "stand"
+      }
+     ],
+     "notice": "The count says otherwise, and he has not read it, and he never will. \"I know what I saw,\" he tells the road."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tyrogue",
+    "tint": "#b5523a",
+    "effect": "none"
+   },
+   "intro": "*At the roadside, a figure in a dojo coat is waiting with their arms folded. Sensei Brannigan, who has been following you for a mile, pretending not to.*\n\n**Sensei Brannigan:** \"He's lying. It punched.\"\n\nThe Tyrogue looks from the master to you, and waits to be told what it did.",
+   "choices": [
+    {
+     "label": "Take the lesson.",
+     "success": {
+      "text": "He throws one punch so fast the air snaps. The Tyrogue blinks, throws one back, and nearly falls over. He claps, once.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "mach-punch",
+        "mark": "tyrogue-three"
+       },
+       {
+        "kind": "gn",
+        "op": "tyrTally",
+        "key": "punch",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him he's right.",
+     "success": {
+      "text": "He folds his arms, nods, and tells the road he never doubted it. He has doubted it for four hours. He tells no one.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "tyrTally",
+        "key": "punch",
+        "n": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay out of it.",
+     "success": {
+      "text": "You take a step back. Brannigan says \"it punched\" three more times, to three different Pokémon, none of whom asked.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-04-road-3",
+   "name": "The Tyrogue Who Wanted All Three: Sensei Tachibana",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tyr-on",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "tyrWith"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "own",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "tyrLead",
+       "key": "stand"
+      }
+     ],
+     "notice": "She is right, and she knows it, and she is already looking at you the way a person looks at a witness."
+    },
+    {
+     "id": "other-a",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "tyrLead",
+       "key": "kick"
+      }
+     ],
+     "notice": "The count says otherwise. She turns a slow half-circle, thinking, and decides that the count is *also* spinning."
+    },
+    {
+     "id": "other-b",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "tyrLead",
+       "key": "punch"
+      }
+     ],
+     "notice": "The count says otherwise. She turns a slow half-circle, thinking, and decides that the count is *also* spinning."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tyrogue",
+    "tint": "#b5523a",
+    "effect": "none"
+   },
+   "intro": "*At the roadside, a figure in a dojo coat is waiting with their arms folded. Sensei Tachibana, who has been following you for a mile, pretending not to.*\n\n**Sensei Tachibana:** \"It didn't fall over. That's mine.\"\n\nThe Tyrogue looks from the master to you, and waits to be told what it did.",
+   "choices": [
+    {
+     "label": "Take the lesson.",
+     "success": {
+      "text": "She spins once on one heel, and sets down again exactly where she began. The Tyrogue tries. It lands a foot to the left, delighted.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "rapid-spin",
+        "mark": "tyrogue-three"
+       },
+       {
+        "kind": "gn",
+        "op": "tyrTally",
+        "key": "stand",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him he's right.",
+     "success": {
+      "text": "She turns a full circle, very slowly, so everyone can see how right she is. A man on a bicycle slows down to watch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "tyrTally",
+        "key": "stand",
+        "n": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay out of it.",
+     "success": {
+      "text": "You let her have the road. She spins quietly in the middle of it, and the Tyrogue spins beside her, a little behind.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-04-end",
+   "name": "The Tyrogue Who Wanted All Three: The Last Crossroads",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tyr-on",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tyrogue",
+    "tint": "#b5523a",
+    "effect": "none"
+   },
+   "intro": "*At the last crossroads, three figures in three different coats are standing a careful distance apart. They have not spoken to each other in a mile.*\n\nThe Tyrogue steps into the road between them. It bows, and it is ready.",
+   "choices": [
+    {
+     "label": "Step forward.",
+     "success": {
+      "text": "You step forward, and the road goes quiet.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "tyrResult"
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "tyr-result",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-new-04-gone",
+          "gn-new-04-kick",
+          "gn-new-04-punch",
+          "gn-new-04-stand",
+          "gn-new-04-even"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-04-gone",
+   "name": "The Tyrogue Who Wanted All Three: Gone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tyrogue",
+    "tint": "#b5523a",
+    "effect": "none"
+   },
+   "intro": "The masters look at you. They look at the empty place beside you. Nobody says anything for a while.\n\n**Oyelowo:** \"It was a good little one.\" **Brannigan:** \"It was.\" **Tachibana:** \"It didn't fall over once.\"\n\nIt is the first thing the three of them have agreed on all year.",
+   "choices": [
+    {
+     "label": "Bow to them.",
+     "success": {
+      "text": "You bow. Three bows come back, together, and nobody ever remembers whose came first.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-04-kick",
+   "name": "The Tyrogue Who Wanted All Three: A Hitmonlee",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "hitmonlee",
+    "tint": "#b5523a",
+    "effect": "none"
+   },
+   "intro": "The Tyrogue bows to all three, and then, with a grace nobody taught it, it shows them what it learned. It glows, and grows, and it is a Hitmonlee.\n\n**Oyelowo** sits down in the road and weeps openly, both hands over his face. A man selling flowers gives him one, without a word.\n\n**Brannigan:** \"Fluke.\" **Tachibana:** \"Obviously a fluke.\" They look at each other, startled, then both look away.\n\nOyelowo, between sobs: \"Nobody tell it to stand on one foot. It *is* standing on one foot.\"",
+   "choices": [
+    {
+     "label": "Congratulate it.",
+     "success": {
+      "text": "It looks at you for a long time. Then it bows once more, lower, and it is yours.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "tyrEvolve",
+        "key": "kick"
+       },
+       {
+        "kind": "teachMove",
+        "move": "high-jump-kick",
+        "mark": "tyrogue-three"
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-04-punch",
+   "name": "The Tyrogue Who Wanted All Three: A Hitmonchan",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "hitmonchan",
+    "tint": "#b5523a",
+    "effect": "none"
+   },
+   "intro": "The Tyrogue bows to all three, and then, with a grace nobody taught it, it shows them what it learned. It glows, and grows, and it is a Hitmonchan.\n\n**Brannigan** says nothing at all. He takes off his belt, folds it very small, and sets it down at the Tyrogue's feet.\n\n**Oyelowo:** \"It *kicked* once.\" **Tachibana:** \"It stood up after.\" They go quiet, and sulk in two different directions.\n\nBrannigan, so quietly: \"I knew. I always knew. I'll never say it again, so don't ask.\"",
+   "choices": [
+    {
+     "label": "Congratulate it.",
+     "success": {
+      "text": "It looks at you for a long time. Then it bows once more, lower, and it is yours.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "tyrEvolve",
+        "key": "punch"
+       },
+       {
+        "kind": "teachMove",
+        "move": "sky-uppercut",
+        "mark": "tyrogue-three"
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-04-stand",
+   "name": "The Tyrogue Who Wanted All Three: A Hitmontop",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "hitmontop",
+    "tint": "#b5523a",
+    "effect": "none"
+   },
+   "intro": "The Tyrogue bows to all three, and then, with a grace nobody taught it, it shows them what it learned. It glows, and grows, and it is a Hitmontop.\n\n**Tachibana** turns a single, slow circle, and ends facing the Tyrogue, and for the first time all year, she doesn't say anything clever.\n\n**Oyelowo:** \"It never fell.\" **Brannigan:** \"That's not a *style*.\" Tachibana turns, very slowly, and they both stop talking.\n\nTachibana, softly: \"It stayed on its feet through all of us. That's the whole art. Well done, little one.\"",
+   "choices": [
+    {
+     "label": "Congratulate it.",
+     "success": {
+      "text": "It looks at you for a long time. Then it bows once more, lower, and it is yours.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "tyrEvolve",
+        "key": "stand"
+       },
+       {
+        "kind": "teachMove",
+        "move": "gyro-ball",
+        "mark": "tyrogue-three"
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-04-even",
+   "name": "The Tyrogue Who Wanted All Three: Three Schools",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tyrogue",
+    "tint": "#b5523a",
+    "effect": "none"
+   },
+   "intro": "The Tyrogue does not glow. It does not grow. It stands there, exactly as it was, and looks at the three masters, who look back.\n\nIt has kicked, and punched, and stood, in equal parts, and it can't say which it is. It doesn't want to say.\n\nAll three masters bow. Slowly. Together. None of them can explain it, and none of them tries.",
+   "choices": [
+    {
+     "label": "Let it stay as it is.",
+     "success": {
+      "text": "The Tyrogue looks relieved. It bows to all three, and then to you, and takes its place at your heel, unchanged.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "three-schools",
+        "mark": "tyrogue-three"
+       },
+       {
+        "kind": "friendship",
+        "amount": 15,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-04-sign",
+   "name": "The Three Dojos",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tyr-on",
+     "atLeast": 2,
+     "atMost": 2
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "tyr-door"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tyrogue",
+    "tint": "#b5523a",
+    "effect": "none"
+   },
+   "intro": "*A street with one big sign over three doors. The three dojos have merged. The sign is wet; someone has just finished repainting it.*\n\n**A passer-by:** \"Third time this week. Every time one of them wins an argument, the sign gets repainted. The paint is never dry.\"",
+   "choices": [
+    {
+     "label": "Read the sign.",
+     "success": {
+      "text": "Underneath the new name, in smaller letters, in three different handwritings: *Ask about the Tyrogue.* A boy at the door tips you for reading it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 150
+       }
+      ]
+     },
+     "showIf": []
+    }
+   ]
+  }
+ ]
+}

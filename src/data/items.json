@@ -2857,5 +2857,31 @@
     "usableOutside": false,
     "target": "enemy",
     "effect": { "kind": "catch", "multiplier": 255, "rule": "weakened" }
+  },
+  {
+    "id": "camp-curry",
+    "name": "Camp Curry",
+    "description": "Very spicy, packed warm by the girl at the lake. Fully restores one Pokémon (HP and status). Map only.",
+    "category": "healing",
+    "iconAssetId": "item.gen5/packaged-curry",
+    "usableInBattle": false,
+    "usableOutside": true,
+    "target": "party",
+    "effect": {
+      "kind": "fullRestore"
+    }
+  },
+  {
+    "id": "queens-mushroom-stew",
+    "name": "Queen's Mushroom Stew",
+    "description": "The Mushroom Queen's recipe. Fully restores one Pokémon (HP and status). Map only.",
+    "category": "healing",
+    "iconAssetId": "item.gen5/mixed-mushrooms",
+    "usableInBattle": false,
+    "usableOutside": true,
+    "target": "party",
+    "effect": {
+      "kind": "fullRestore"
+    }
   }
 ]

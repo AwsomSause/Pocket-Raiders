@@ -7,6 +7,7 @@ import { CastEntrySchema } from './cast/entry';
 import { CanonStateSchema } from './canonSpaces';
 import { TrackStateSchema } from './track';
 import { RescueStateSchema } from '../evil/rescueSchema';
+import { TeamSkyStateSchema } from '../evil/teamSkySchema';
 import { EpilogueStateSchema, GrandArcStateSchema } from '../grandArc/schema';
 import { UltraRunStateSchema } from '../ultra/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
@@ -160,5 +161,7 @@ export const ExpansionRunSchema = z.object({
   epilogue: EpilogueStateSchema.optional(),
   /** Beta 0.7: Pidgey's Resolve, the Rivalry of the Sky (core/sky). */
   sky: SkyStateSchema.optional(),
+  /** Team Sky run by the player (catalog row 9, HOENN_TEAMS parts 6-7; core/evil/teamSky.ts). Optional, no save bump. */
+  teamSky: TeamSkyStateSchema.optional(),
 });
 export type ExpansionRun = z.infer<typeof ExpansionRunSchema>;

@@ -1,0 +1,1559 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-n19-door",
+   "name": "The Snowbound Village",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sv-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "delibird",
+    "tint": "#bcd3e6",
+    "effect": "snow"
+   },
+   "intro": "*The road is gone. An avalanche took the whole bend, and the snow still hisses as it settles.*\n\n*A Delibird drops out of the grey sky and lands in front of you. Its sack is empty. Pinned to it, a note: medicine, by nightfall.*\n\n**Sled driver, Halden Vey:** \"Five crates. Five houses. The Stantler can pull five. Slowly. You decide.\"",
+   "choices": [
+    {
+     "label": "Take the sled.",
+     "success": {
+      "text": "You step onto the runners. The Delibird perches on the front rail and watches you the whole way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sv-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-n19-load"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you, the Delibird stays where it landed, sack open, looking at the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-n19-load",
+   "name": "The Snowbound Village: The Crates",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "delibird",
+    "tint": "#bcd3e6",
+    "effect": "snow"
+   },
+   "intro": "Five crates in the snow, each marked with a house. Halden holds the Stantler's harness and doesn't look at you.\n\nEvery crate you leave is a house that waits. Every crate you take is weight on the ice.\n\n1 crate: the sled is swift; 0 encounters get harder.\n\n2 crates: the sled is quick; 1 encounter get harder.\n\n3 crates: the sled is steady; 2 encounters get harder.\n\n4 crates: the sled is slow; 3 encounters get harder.\n\n5 crates: the sled is crawling; 4 (3 if you brake) encounters get harder.",
+   "choices": [
+    {
+     "label": "Carry 1 crate.",
+     "success": {
+      "text": "One crate, roped down tight. Halden checks every knot twice, and the Stantler leans into the harness.\n\nThe sled glides. The Stantler barely seems to notice the weight.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-crates",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-got",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-heavy",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-lake",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-scouts",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-pack",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-skid",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-n19-lake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry 2 crates.",
+     "success": {
+      "text": "Two crates, roped down tight. Halden checks every knot twice, and the Stantler leans into the harness.\n\nThe sled glides. The Stantler barely seems to notice the weight.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-crates",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-got",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-heavy",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-lake",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-scouts",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-pack",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-skid",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-n19-lake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry 3 crates.",
+     "success": {
+      "text": "Three crates, roped down tight. Halden checks every knot twice, and the Stantler leans into the harness.\n\nThe sled glides. The Stantler barely seems to notice the weight.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-crates",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-got",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-heavy",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-lake",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-scouts",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-pack",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-skid",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-n19-lake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry more.",
+     "success": {
+      "text": "You look at the last two crates a long time.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-n19-load-more"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-n19-load-more",
+   "name": "The Snowbound Village: The Heavy Loads",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "delibird",
+    "tint": "#bcd3e6",
+    "effect": "snow"
+   },
+   "intro": "The last two crates. The Stantler is already breathing hard, and it hasn't started pulling.\n\n4 crates: the sled is slow; 3 encounters get harder.\n\n5 crates: the sled is crawling; 4 (3 if you brake) encounters get harder.",
+   "choices": [
+    {
+     "label": "Carry 4 crates.",
+     "success": {
+      "text": "Four crates, roped down tight. Halden checks every knot twice, and the Stantler leans into the harness.\n\nThe runners groan. The Stantler looks back at you, once, and then forward.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-crates",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-got",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-heavy",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-lake",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-scouts",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-pack",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-skid",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-n19-lake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry 5 crates.",
+     "success": {
+      "text": "Five crates, roped down tight. Halden checks every knot twice, and the Stantler leans into the harness.\n\nThe runners groan. The Stantler looks back at you, once, and then forward.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-crates",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-got",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-heavy",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-lake",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-scouts",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-pack",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-h-skid",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-n19-lake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take fewer.",
+     "success": {
+      "text": "You step back from the heavy crates and look at the lighter loads.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-n19-load"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-n19-lake",
+   "name": "The Snowbound Village: The Frozen Lake",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "seel",
+    "tint": "#bcd3e6",
+    "effect": "snow"
+   },
+   "intro": "The lake is a sheet of grey glass, and it talks. Every runner-stroke makes it ring.\n\nThin ice rings high. Thick ice rings low. Halden shuts his eyes. \"Steer by the sound,\" he says. \"Never by what you see.\"\n\n*Something under the ice rises to listen too.*",
+   "choices": [
+    {
+     "label": "Steer by the sound.",
+     "success": {
+      "text": "The ice rings under you. A wild Pokémon breaks the surface, and the lake goes quiet around it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "seel",
+        "spheal",
+        "cubchoo"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-n19-wood"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-n19-wood"
+        }
+       ],
+       "lose": [],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sv-h-lake",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Steer by the sound.",
+     "success": {
+      "text": "The ice rings under you. A wild Pokémon breaks the surface, and the lake goes quiet around it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "seel",
+        "spheal",
+        "cubchoo"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-n19-wood"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-n19-wood"
+        }
+       ],
+       "lose": [],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sv-h-lake",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-n19-wood",
+   "name": "The Snowbound Village: The Pine Wood",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sneasel",
+    "tint": "#bcd3e6",
+    "effect": "snow"
+   },
+   "intro": "The wood is dark and the branches hang low. Snow drops from them in heavy sheets onto the load.\n\nHalden ducks. The crates don't. Something small and quick has been following the sled since the lake.\n\n*A pair of red eyes. Then another.*",
+   "choices": [
+    {
+     "label": "Meet the scouts.",
+     "success": {
+      "text": "A Sneasel drops from a branch onto the crates. It isn't hunting. It's weighing what you carry.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sneasel"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-n19-pack"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-n19-pack"
+        }
+       ],
+       "lose": [],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sv-h-scouts",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Meet the scouts.",
+     "success": {
+      "text": "A Sneasel drops from a branch onto the crates. It isn't hunting. It's weighing what you carry.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sneasel"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-n19-pack"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-n19-pack"
+        }
+       ],
+       "lose": [],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sv-h-scouts",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-n19-pack",
+   "name": "The Snowbound Village: The Sneasel Pack",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sneasel",
+    "tint": "#bcd3e6",
+    "effect": "snow"
+   },
+   "intro": "The scout whistles. The rest of the pack comes down out of the pines, one at a time, with no hurry at all.\n\n**Halden:** \"They're not after us. They're testing the load. A sled that can't be defended isn't worth the knots.\"",
+   "choices": [
+    {
+     "label": "Defend the load.",
+     "success": {
+      "text": "The pack closes in, and two of them go for the ropes. You hold the crates.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "sneasel"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sv-heavy",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-n19-pass-heavy"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sv-heavy",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-n19-pass-light"
+          }
+         ]
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sv-heavy",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-n19-pass-heavy"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sv-heavy",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-n19-pass-light"
+          }
+         ]
+        }
+       ],
+       "lose": [],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sv-h-pack",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Defend the load.",
+     "success": {
+      "text": "The pack closes in, and two of them go for the ropes. You hold the crates.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "sneasel"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sv-heavy",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-n19-pass-heavy"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sv-heavy",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-n19-pass-light"
+          }
+         ]
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sv-heavy",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-n19-pass-heavy"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sv-heavy",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-n19-pass-light"
+          }
+         ]
+        }
+       ],
+       "lose": [],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sv-h-pack",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-n19-pass-light",
+   "name": "The Snowbound Village: The Pass",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "stantler",
+    "tint": "#bcd3e6",
+    "effect": "snow"
+   },
+   "intro": "The wood opens onto a ridge, and the wind finds you at once. It pushes the sled sideways, then back.\n\nThe load is light. The Stantler digs in and the runners bite. Halden whoops, and the wind takes it away.",
+   "choices": [
+    {
+     "label": "Push through the wind.",
+     "success": {
+      "text": "The wind drops you on the far side of the ridge, breathless, all of you still there.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-n19-descent"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-n19-pass-heavy",
+   "name": "The Snowbound Village: The Pass",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "stantler",
+    "tint": "#bcd3e6",
+    "effect": "snow"
+   },
+   "intro": "The wood opens onto a ridge, and the wind finds you at once. It leans on the heavy sled like a hand.\n\nHalden shouts over it: the top crate is going. \"Rope won't hold it! Something has to hold it!\"",
+   "choices": [
+    {
+     "label": "Have a Pokémon hold the crate.",
+     "success": {
+      "text": "Your lead plants itself on the ridge and takes the crate's whole weight against its chest, braced and shaking.\n\nThe wind howls past. The crate stays. Your lead comes through the pass tired, and proud.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-n19-descent"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trust the ropes.",
+     "success": {
+      "text": "The knots hold for a breath. Then the wind takes the top crate off the sled and out over the edge.\n\nIt falls a long time. Halden says one house's name, quietly. Nobody answers him.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sv-got",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sv-lost",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-n19-descent"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-n19-descent",
+   "name": "The Snowbound Village: The Descent",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "piloswine",
+    "tint": "#bcd3e6",
+    "effect": "snow"
+   },
+   "intro": "Below, the village: forty roofs and chimney smoke, close enough to see. Between you and it, a slope that falls like a staircase.\n\nThe sled tips over the lip and begins to run. Fast. **Halden:** \"Brake! Something heavy in the snow, now! Or hold on!\"",
+   "choices": [
+    {
+     "label": "Brake with a Rock- or Ground-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "rock",
+        "ground"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon digs in at the back. Snow sprays, the runners shriek, and the sled slows exactly as much as it needs to.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-n19-arrive"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Don't brake.",
+     "success": {
+      "text": "You hold on and let it run. The sled hits a drift at the bottom and throws something awake in it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "swinub",
+        "piloswine"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-n19-arrive"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-n19-arrive"
+        }
+       ],
+       "lose": [],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sv-h-skid",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Don't brake.",
+     "success": {
+      "text": "You hold on and let it run. The sled hits a drift at the bottom and throws something awake in it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "swinub",
+        "piloswine"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-n19-arrive"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-n19-arrive"
+        }
+       ],
+       "lose": [],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sv-h-skid",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-n19-arrive",
+   "name": "The Snowbound Village: The Square",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "delibird",
+    "tint": "#dce9f2",
+    "effect": "snow"
+   },
+   "intro": "The sled slides into the square and stops, steaming. The village is already coming out of its doors.",
+   "choices": [
+    {
+     "label": "Hand over the crates.",
+     "success": {
+      "text": "The crates come off one by one, and each is carried into a door you can see opening.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sv-got",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-n19-end-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sv-got",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-n19-end-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sv-got",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-n19-end-3"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sv-got",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-n19-end-4"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sv-got",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-n19-end-5"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-n19-end-1",
+   "name": "The Snowbound Village: Thanks",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "delibird",
+    "tint": "#dce9f2",
+    "effect": "snow"
+   },
+   "intro": "The elder comes across the square in a coat that was patched long before tonight. She counts the crates by touch.\n\n**Village elder:** \"One. That's one house breathing easy. We'll share for the rest. You came. That's the thing.\"\n\nThe village doesn't blame anyone for the crates left behind. Not once.",
+   "choices": [
+    {
+     "label": "Take the village's coats.",
+     "success": {
+      "text": "A child presses something warm into your hands. The elder walks you to the edge of the square.\n\nYou walk back up the road in borrowed warmth, and it stays with you a long time.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "sv-warm-clothes",
+        "name": "Warm Clothes",
+        "effects": [
+         {
+          "kind": "damageTakenMultiplier",
+          "moveType": "ice",
+          "value": 0.9
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "sv-left",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Brought 1 crate down the mountain to a snowbound village",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "sv-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-n19-end-2",
+   "name": "The Snowbound Village: Thanks",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "delibird",
+    "tint": "#dce9f2",
+    "effect": "snow"
+   },
+   "intro": "The elder comes across the square in a coat that was patched long before tonight. She counts the crates by touch.\n\n**Village elder:** \"Two. That's 2 houses breathing easy. We'll share for the rest. You came. That's the thing.\"\n\nThe village doesn't blame anyone for the crates left behind. Not once.",
+   "choices": [
+    {
+     "label": "Take the village's coats.",
+     "success": {
+      "text": "A child presses something warm into your hands. The elder walks you to the edge of the square.\n\nYou walk back up the road in borrowed warmth, and it stays with you a long time.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "sv-warm-clothes",
+        "name": "Warm Clothes",
+        "effects": [
+         {
+          "kind": "damageTakenMultiplier",
+          "moveType": "ice",
+          "value": 0.9
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "sv-left",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "Brought 2 crates down the mountain to a snowbound village",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "sv-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-n19-end-3",
+   "name": "The Snowbound Village: Thanks",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "delibird",
+    "tint": "#dce9f2",
+    "effect": "snow"
+   },
+   "intro": "The elder comes across the square in a coat that was patched long before tonight. She counts the crates by touch.\n\n**Village elder:** \"Three. That's 3 houses breathing easy. We'll share for the rest. You came. That's the thing.\"\n\nThe village doesn't blame anyone for the crates left behind. Not once.",
+   "choices": [
+    {
+     "label": "Take the village's thanks.",
+     "success": {
+      "text": "A child presses something warm into your hands. The elder walks you to the edge of the square.\n\nThe Delibird has decided you are its Trainer, and has not asked.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "sv-warm-clothes",
+        "name": "Warm Clothes",
+        "effects": [
+         {
+          "kind": "damageTakenMultiplier",
+          "moveType": "ice",
+          "value": 0.9
+         }
+        ]
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "delibird"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sv-left",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "moment",
+        "text": "Brought 3 crates down the mountain to a snowbound village",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "sv-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-n19-end-4",
+   "name": "The Snowbound Village: Thanks",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "delibird",
+    "tint": "#dce9f2",
+    "effect": "snow"
+   },
+   "intro": "The elder comes across the square in a coat that was patched long before tonight. She counts the crates by touch.\n\n**Village elder:** \"Four. That's 4 houses breathing easy. We'll share for the rest. You came. That's the thing.\"\n\nThe village doesn't blame anyone for the crates left behind. Not once.",
+   "choices": [
+    {
+     "label": "Take the village's thanks.",
+     "success": {
+      "text": "A child presses something warm into your hands. The elder walks you to the edge of the square.\n\nThe Delibird has decided you are its Trainer, and has not asked.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "sv-warm-clothes",
+        "name": "Warm Clothes",
+        "effects": [
+         {
+          "kind": "damageTakenMultiplier",
+          "moveType": "ice",
+          "value": 0.9
+         }
+        ]
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "delibird"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sv-left",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 4
+       },
+       {
+        "kind": "moment",
+        "text": "Brought 4 crates down the mountain to a snowbound village",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "sv-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-n19-end-5",
+   "name": "The Snowbound Village: Thanks",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "delibird",
+    "tint": "#dce9f2",
+    "effect": "snow"
+   },
+   "intro": "Every door in the square is open. The whole village is out in the snow, in their coats, not saying a word.\n\n**Village elder:** \"Five. Five houses, all of them breathing easy. Nobody to share with, nobody to leave out. You came. That's the thing.\"\n\nThe Delibird flies one slow circle over the square, then drops its sack in your hands. It is full.",
+   "choices": [
+    {
+     "label": "Take the village's thanks.",
+     "success": {
+      "text": "A child presses something warm into your hands. The elder walks you to the edge of the square.\n\nThe Delibird has decided you are its Trainer, and has not asked.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "sv-warm-clothes",
+        "name": "Warm Clothes",
+        "effects": [
+         {
+          "kind": "damageTakenMultiplier",
+          "moveType": "ice",
+          "value": 0.9
+         }
+        ]
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "delibird"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "relic",
+        "id": "sv-herd-bell",
+        "name": "Herd Bell",
+        "effects": [
+         {
+          "kind": "friendshipMultiplier",
+          "value": 1.25
+         }
+        ]
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Brought every crate down the mountain: all five houses",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "sv-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-n19-grown",
+   "name": "The Snowbound Village: A Grown Child",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sv-left",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "flag",
+     "key": "sv-grown",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "delibird",
+    "tint": "#bcd3e6",
+    "effect": "snow"
+   },
+   "intro": "A young adult is waiting at the edge of town, in a coat that has been mended in three different threads.\n\nThey watch you come all the way up the street. Then they walk straight to you, like they had practised it.\n\n**Grown child:** \"You came to our village. Years ago. With the sled. One crate was meant for our house.\"",
+   "choices": [
+    {
+     "label": "Say you remember.",
+     "success": {
+      "text": "You tell them you remember. You tell them you are sorry, for the house, for the winter, for the crate that never came.\n\n**Grown child:** \"We were fine. I mean that. We were fine, and we're well, and I wanted you to know it.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "sv-grown",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A child from a house in the snowbound village found you, grown, and said they were well",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask how the village is.",
+     "success": {
+      "text": "They tell you: the road is rebuilt, the Stantler's grandchildren pull the sled now, and the Delibird that stayed behind has been feeding the square for years.\n\n**Grown child:** \"We're well. All of us. We say so. We say so to anyone who asks.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sv-grown",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The snowbound village was well, and sent word",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

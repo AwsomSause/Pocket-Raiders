@@ -1,0 +1,1185 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-31-shrine",
+   "name": "The Fox at the Shrine",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fox-met",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "fox-declined",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ninetales",
+    "tint": "#c98a4b",
+    "effect": "none"
+   },
+   "intro": "A roadside shrine, older than the road. Nine stone lanterns stand in a row, and only one is lit. Nobody tends the flame.\n\nA Ninetales watches from the roof, nine tails still in the dusk. It has been watching a long time.\n\n**The Ninetales, in your head:** \"I am keeping a promise. I've forgotten whose. Will you carry it a while?\"\n\n*It looks at the eight dark lanterns, and then at you.*",
+   "choices": [
+    {
+     "label": "Carry it.",
+     "success": {
+      "text": "The flame leans toward you, once, the way a candle leans toward an open door.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-met",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "fox-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "fox-lit",
+        "n": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You bow, because it seems right, and walk on. Behind you the lantern stays lit. It has plenty of practice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-declined",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-l1",
+   "name": "The Fox at the Shrine: Water",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fox-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "fox-at"
+    },
+    {
+     "kind": "flag",
+     "key": "fox-l1",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "fox-r1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ninetales",
+    "tint": "#c98a4b",
+    "effect": "none"
+   },
+   "intro": "The first lantern's task is written on the stone in a thin, old hand: *Carry water from the stream to the shrine.*\n\nThe stream is a long walk from the road. A cracked stone bowl waits beside the lantern. It holds almost nothing.\n\n*Nine tails. A very patient wait. It would never say it is thirsty.*",
+   "choices": [
+    {
+     "label": "Do it.",
+     "requires": [],
+     "success": {
+      "text": "You cup what you can, again and again, and carry it up the hill in a leaking bowl. It takes most of an hour.\n\nThe bowl is full when you finish. The Ninetales drinks first, then pours the rest over the stone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-l1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-lit",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "fox-lit",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "item",
+          "id": "fox-charm",
+          "count": 1
+         }
+        ],
+        "text": "A small paper lantern lifts from the fifth stone and floats into your hands. It is warm. **Fox Lantern Charm:** curse and burn do half damage."
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "The Ninetales nods once. It does not seem angry. It seems to have expected it.\n\n*The first lantern stays dark.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-r1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-l2",
+   "name": "The Fox at the Shrine: A Lost Thing",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fox-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "fox-at"
+    },
+    {
+     "kind": "flag",
+     "key": "fox-l2",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "fox-r2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ninetales",
+    "tint": "#c98a4b",
+    "effect": "none"
+   },
+   "intro": "The second lantern's task: *Return a lost thing to its owner.*\n\nIn the grass beside the road there is a child's scarf, red wool, a name stitched inside the hem. It has been rained on.\n\nSomebody is missing this. Somebody has been looking.",
+   "choices": [
+    {
+     "label": "Do it.",
+     "requires": [],
+     "success": {
+      "text": "You ask at the next house, and the next. The third door opens on a boy who stops mid-word and starts to cry.\n\n**The boy:** \"I thought it was gone for good. I looked for days. Thank you. Thank you.\"\n\nThe second lantern lights while you are still walking back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-l2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-lit",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "fox-lit",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "item",
+          "id": "fox-charm",
+          "count": 1
+         }
+        ],
+        "text": "A small paper lantern lifts from the fifth stone and floats into your hands. It is warm. **Fox Lantern Charm:** curse and burn do half damage."
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "The Ninetales nods once. It does not seem angry. It seems to have expected it.\n\n*The second lantern stays dark.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-r2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-l3",
+   "name": "The Fox at the Shrine: A Debt",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fox-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "fox-at"
+    },
+    {
+     "kind": "flag",
+     "key": "fox-l3",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "fox-r3",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ninetales",
+    "tint": "#c98a4b",
+    "effect": "none"
+   },
+   "intro": "The third lantern's task: *Forgive a debt someone owes you.*\n\nA trainer is waiting on the path, a long way short of whatever they came here to do. They owe you six hundred and an apology.\n\n**The trainer:** \"I know what I owe. I haven't got it. I'm sorry. I'll find a way, I will.\"",
+   "choices": [
+    {
+     "label": "Do it.",
+     "requires": [],
+     "success": {
+      "text": "You hold up one hand. **You:** \"Keep it. We're even.\"\n\nThe trainer stares, and then sits down on the path, all at once, like someone cut a string. They are laughing and crying together.\n\n**The trainer:** \"I'll remember you did that. I won't forget.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-l3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-lit",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "fox-lit",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "item",
+          "id": "fox-charm",
+          "count": 1
+         }
+        ],
+        "text": "A small paper lantern lifts from the fifth stone and floats into your hands. It is warm. **Fox Lantern Charm:** curse and burn do half damage."
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "The Ninetales nods once. It does not seem angry. It seems to have expected it.\n\n*The third lantern stays dark.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-r3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-l4",
+   "name": "The Fox at the Shrine: Silence",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fox-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "fox-at"
+    },
+    {
+     "kind": "flag",
+     "key": "fox-l4",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "fox-r4",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ninetales",
+    "tint": "#c98a4b",
+    "effect": "none"
+   },
+   "intro": "The fourth lantern's task: *Keep silent for a step.*\n\nNothing else is written. The stone around the lantern is worn smooth, as if people have run their thumbs over it for centuries, waiting.\n\nIt will be hard. Everything on the road wants an answer.",
+   "choices": [
+    {
+     "label": "Do it.",
+     "requires": [],
+     "success": {
+      "text": "You close your mouth, and you leave it closed. The road goes on, and so do you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-31-quiet-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "The Ninetales nods once. It does not seem angry. It seems to have expected it.\n\n*The fourth lantern stays dark.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-r4",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-quiet-1",
+   "name": "The Fox at the Shrine: Silence",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "ninetales",
+    "tint": "#c98a4b",
+    "effect": "none"
+   },
+   "intro": "Someone you pass says good morning. It is a perfectly ordinary greeting.\n\nThe silence is not a rule you keep. It is a thing you hold, like water in a cupped hand.",
+   "choices": [
+    {
+     "label": "…",
+     "success": {
+      "text": "You nod. You say nothing. The person goes by, a little puzzled, and not unkind.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-31-quiet-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-quiet-2",
+   "name": "The Fox at the Shrine: Silence",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "ninetales",
+    "tint": "#c98a4b",
+    "effect": "none"
+   },
+   "intro": "A bird starts up in the hedge. A cart goes by. The wind moves the grass in long waves.\n\nYou can hear everything. You are not part of it. You are only listening, which is its own kind of company.",
+   "choices": [
+    {
+     "label": "…",
+     "success": {
+      "text": "For a whole step the world has your whole attention, and you ask it for nothing.\n\n*Somewhere behind you, a lantern catches without a spark.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-l4",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-lit",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "fox-lit",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "item",
+          "id": "fox-charm",
+          "count": 1
+         }
+        ],
+        "text": "A small paper lantern lifts from the fifth stone and floats into your hands. It is warm. **Fox Lantern Charm:** curse and burn do half damage."
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-l5",
+   "name": "The Fox at the Shrine: A Game",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fox-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "fox-at"
+    },
+    {
+     "kind": "flag",
+     "key": "fox-l5",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "fox-r5",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ninetales",
+    "tint": "#c98a4b",
+    "effect": "none"
+   },
+   "intro": "The fifth lantern's task: *Lose something on purpose.*\n\nA little girl is playing stones by the road, alone, flipping them off the back of her hand. She looks up at you, hopeful, and defensive.\n\n**The girl:** \"Nobody plays with me anymore. I always win. Will you? Please? Even if you're better.\"",
+   "choices": [
+    {
+     "label": "Do it.",
+     "requires": [],
+     "success": {
+      "text": "You crouch beside her and pick up three stones. She gives you a very serious look.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-31-game"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "The Ninetales nods once. It does not seem angry. It seems to have expected it.\n\n*The fifth lantern stays dark.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-r5",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-game",
+   "name": "The Fox at the Shrine: A Game",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "ninetales",
+    "tint": "#c98a4b",
+    "effect": "none"
+   },
+   "intro": "The stones fly. Your toss is steady. You could clear every one of hers, and she knows it, and she is waiting to see what you do.\n\nIt costs you nothing but a win. It costs you a win.",
+   "choices": [
+    {
+     "label": "Play to win.",
+     "success": {
+      "text": "You win, cleanly. She stares at the stones, then at you, then she picks them up very carefully and goes home without a word.\n\n*The fifth lantern stays dark.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-r5",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let her win.",
+     "success": {
+      "text": "You miss the last stone by a hair, and you are very good at looking surprised.\n\n**The girl:** \"I won! I *won*! Did you see?\" You tell her you did. It is the best loss you ever took.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-l5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-lit",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "fox-lit",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "item",
+          "id": "fox-charm",
+          "count": 1
+         }
+        ],
+        "text": "A small paper lantern lifts from the fifth stone and floats into your hands. It is warm. **Fox Lantern Charm:** curse and burn do half damage."
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-l6",
+   "name": "The Fox at the Shrine: Food",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fox-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "fox-at"
+    },
+    {
+     "kind": "flag",
+     "key": "fox-l6",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "fox-r6",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ninetales",
+    "tint": "#c98a4b",
+    "effect": "none"
+   },
+   "intro": "The sixth lantern's task: *Leave food for something that won't thank you.*\n\nAt the edge of the trees, something is watching you. It is thin, and wary, and has the eyes of a creature that has been chased.\n\nIt will take the food the moment you are gone. It will never look at you with anything but suspicion.",
+   "choices": [
+    {
+     "label": "Do it.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "You put the food down, well back from the trees, and you walk away without looking over your shoulder.\n\nWhen you finally do look, the bowl is empty. There is no thanks, and that is exactly what the lantern wanted.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "flag",
+        "key": "fox-l6",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-lit",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "fox-lit",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "item",
+          "id": "fox-charm",
+          "count": 1
+         }
+        ],
+        "text": "A small paper lantern lifts from the fifth stone and floats into your hands. It is warm. **Fox Lantern Charm:** curse and burn do half damage."
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "The Ninetales nods once. It does not seem angry. It seems to have expected it.\n\n*The sixth lantern stays dark.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-r6",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-l7",
+   "name": "The Fox at the Shrine: A Gift",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fox-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "fox-at"
+    },
+    {
+     "kind": "flag",
+     "key": "fox-l7",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "fox-r7",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ninetales",
+    "tint": "#c98a4b",
+    "effect": "none"
+   },
+   "intro": "The seventh lantern's task: *Give away the item you'd least like to.*\n\nA traveller sits by the road with an empty satchel and a sick Pokémon in her lap. She isn't asking. She is far too proud for that.\n\nYou know exactly which thing in your bag you wouldn't want to part with. So does she, somehow.",
+   "choices": [
+    {
+     "label": "Do it.",
+     "requires": [],
+     "success": {
+      "text": "You open your bag, and your hand goes straight to the one thing you did not want to give up.\n\nThe traveller reads it in your face. **The traveller:** \"You don't have to.\" You press it into her hands anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "giveDearest",
+        "key": "fox-gave"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "fox-gave",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "fox-l7",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "fox-lit",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "fox-lit",
+          "min": 4,
+          "max": 4,
+          "then": [
+           {
+            "kind": "item",
+            "id": "fox-charm",
+            "count": 1
+           }
+          ],
+          "text": "A small paper lantern lifts from the fifth stone and floats into your hands. It is warm. **Fox Lantern Charm:** curse and burn do half damage."
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "fox-gave",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Your bag is empty. There is nothing to give. The lantern stays dark."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "The Ninetales nods once. It does not seem angry. It seems to have expected it.\n\n*The seventh lantern stays dark.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-r7",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-l8",
+   "name": "The Fox at the Shrine: The Night Watch",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fox-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "fox-at"
+    },
+    {
+     "kind": "flag",
+     "key": "fox-l8",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "fox-r8",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ninetales",
+    "tint": "#c98a4b",
+    "effect": "none"
+   },
+   "intro": "The eighth lantern's task: *Stay awake one rest.*\n\nThe camp is warm. Your Pokémon are drifting off, one by one, into the easy sleep of the well fed.\n\nSomebody has to sit up with the dark. It will be you. Your lead will not rest tonight.",
+   "choices": [
+    {
+     "label": "Do it.",
+     "requires": [],
+     "success": {
+      "text": "You put your back against a tree and watch the fire. The others sleep, and heal, and breathe slowly.\n\nYour lead sits up beside you, awake, with its shoulder against yours. Neither of you says a word till the sun comes.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1,
+        "who": "others"
+       },
+       {
+        "kind": "flag",
+        "key": "fox-l8",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-lit",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "fox-lit",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "item",
+          "id": "fox-charm",
+          "count": 1
+         }
+        ],
+        "text": "A small paper lantern lifts from the fifth stone and floats into your hands. It is warm. **Fox Lantern Charm:** curse and burn do half damage."
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "The Ninetales nods once. It does not seem angry. It seems to have expected it.\n\n*The eighth lantern stays dark.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-r8",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-l9",
+   "name": "The Fox at the Shrine: Come Back",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fox-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "fox-at"
+    },
+    {
+     "kind": "flag",
+     "key": "fox-l9",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "fox-r9",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ninetales",
+    "tint": "#c98a4b",
+    "effect": "none"
+   },
+   "intro": "The ninth lantern's task is the shortest of all: *Come back.*\n\nThe shrine is where you left it, and so is the Ninetales. It has been on the roof the whole time, nine tails in the dusk.\n\nIt does not say it is glad. It lowers its head instead.",
+   "choices": [
+    {
+     "label": "Do it.",
+     "requires": [],
+     "success": {
+      "text": "You climb the old steps once more. The Ninetales looks at the lights, one at a time.\n\n*The last lantern takes the flame as if it has been waiting a thousand years for the one thing: that someone returned.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-l9",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-lit",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "fox-lit",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "item",
+          "id": "fox-charm",
+          "count": 1
+         }
+        ],
+        "text": "A small paper lantern lifts from the fifth stone and floats into your hands. It is warm. **Fox Lantern Charm:** curse and burn do half damage."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "fox-lit",
+        "min": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-31-nine"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "fox-lit",
+        "max": 7,
+        "then": [],
+        "text": "Some of the nine stay dark. The Ninetales looks at each of them, and then at you. \"It's a start,\" it says. \"It will do.\""
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "The Ninetales nods once. It does not seem angry. It seems to have expected it.\n\n*The ninth lantern stays dark.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-r9",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-nine",
+   "name": "The Fox at the Shrine: Remembered",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "ninetales",
+    "tint": "#c98a4b",
+    "effect": "none"
+   },
+   "intro": "Nine lanterns burn in a row, and for the first time in a long age the shrine is bright from end to end.\n\n**The Ninetales:** \"I remember. It was made to me. A trainer. 'I'll come back.' ...You are not them.\"\n\n*It looks at the nine lights.*\n\n**The Ninetales:** \"It's kept. I've decided.\"",
+   "choices": [
+    {
+     "label": "Bow.",
+     "success": {
+      "text": "A small kit pads out of the shadow under the roof, orange and soft, and sits down on your foot. It has been raised here, in the quiet.\n\nIt has your scent on it already. It has been waiting for you, even though it never knew you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "vulpix"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "thousand-year-promise"
+       },
+       {
+        "kind": "moment",
+        "text": "The Ninetales at the shrine decided the promise had been kept.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

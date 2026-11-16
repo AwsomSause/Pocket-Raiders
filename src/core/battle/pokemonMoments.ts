@@ -2,6 +2,7 @@
 // run-end revive "Failure Will (NOT) Be Tolerated". The rules live here; the data and rolls live in core/moments.
 // Outcomes never depend on animation: the events below only describe what already happened.
 
+import { cheerPercents } from '../greenneedle/cheer';
 import { calcStats, maxPp } from '../pokemon';
 import { Rng, hashSeed } from '../rng';
 import { currentEnemy, freshStages, freshVolatile, type PokemonInstance } from '../state';
@@ -118,6 +119,10 @@ export function momentStatPcts(ctx: Pick<BattleContext, 'battle'>, c: Pick<Comba
     const [stat, pct] = t.slice(prefix.length).split(':') as ['atk' | 'def' | 'spa' | 'spd' | 'spe', string];
     out[stat] = (out[stat] ?? 0) + Number(pct);
   }
+  // The Cheer Squad (gn.new.30): Plusle's +5% Attack, Minun's +5% Defence, in every battle for the rest of the stage.
+  const cheer = cheerPercents(ctx.battle);
+  if (cheer.atk) out.atk = (out.atk ?? 0) + cheer.atk;
+  if (cheer.def) out.def = (out.def ?? 0) + cheer.def;
   return out;
 }
 

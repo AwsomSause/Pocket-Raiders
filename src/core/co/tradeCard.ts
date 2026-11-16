@@ -210,7 +210,7 @@ export function fitsWant(content: Content, mon: PokemonInstance, want: TradeWant
   return true;
 }
 
-function warnOf(theirs: CardSide, yours: CardSide | null, muchBetter: number): HonestCard['warn'] {
+export function warnOf(theirs: CardSide, yours: CardSide | null, muchBetter: number): HonestCard['warn'] {
   if (!yours) return null;
   if (yours.value > theirs.value) return 'worse';
   if (theirs.value - yours.value >= muchBetter) return 'much-better';

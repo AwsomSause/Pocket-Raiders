@@ -74,6 +74,7 @@
     "co:ledger": "node tools/catalog-overhaul/build-ledger.ts",
     "co:build": "node tools/build-co-events.ts",
     "co:status": "node tools/catalog-overhaul/status.ts",
+    "co:gn": "node tools/catalog-overhaul/gn-data.ts",
     "co:kanto-canon": "node tools/build-canon-spaces.ts && node tools/build-co-events.ts kanto-canon-1 kanto-canon-2 kanto-canon-3 kanto-canon-4 kanto-canon-5 kanto-canon-6 kanto-canon-7 kanto-canon-8 && node tools/build-kanto-canon.ts",
     "data:xe-events": "node tools/build-expansion-events.ts",
     "data:xe-alola-paldea": "node tools/build-xe-alola-paldea.ts",

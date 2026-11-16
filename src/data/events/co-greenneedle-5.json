@@ -1,0 +1,6483 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-21-road",
+   "name": "The Pokémon That Wouldn't Evolve",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wontevolve-1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "littlecup",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "littlecup-cancelled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Your own small one, the one that cancelled its evolution, steps up beside it. It folds its arms the same way.*"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "A trainer is kneeling in the road, holding out a stone in both hands, the way you would offer something to a shrine.\n\nTheir Pokémon has its back turned. Its arms are folded.\n\n**Linus:** \"It's a *good* stone. I saved for it. You'd be twice as strong. You'd be safe.\"\n\n*It doesn't turn round. Its ears are flat against its head.*\n\n**Linus, to you:** \"Tell it. Please. It won't hear it from me.\"",
+   "choices": [
+    {
+     "label": "Your trainer's right. Take it.",
+     "success": {
+      "text": "It turns, slowly, and looks at you as if it had expected better of you. It still doesn't take the stone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "cast",
+        "key": "wontevolve",
+        "species": [
+         "pikachu",
+         "piplup",
+         "torchic",
+         "eevee",
+         "growlithe"
+        ],
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-side",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "wontevolve-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It doesn't want to. Leave it be.",
+     "success": {
+      "text": "Its ears come up. For a moment it just looks at you. Then it points, very deliberately, at your strongest Pokémon.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "cast",
+        "key": "wontevolve",
+        "species": [
+         "pikachu",
+         "piplup",
+         "torchic",
+         "eevee",
+         "growlithe"
+        ],
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-side",
+        "n": 2
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "wontevolve-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-21-challenge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "…",
+     "success": {
+      "text": "Linus sighs, and puts the stone back in a pocket. The Pokémon glances back at you, once, as they go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "cast",
+        "key": "wontevolve",
+        "species": [
+         "pikachu",
+         "piplup",
+         "torchic",
+         "eevee",
+         "growlithe"
+        ],
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-side",
+        "n": 3
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "wontevolve-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-challenge",
+   "name": "The Pokémon That Wouldn't Evolve: The Challenge",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "It wants your strongest Pokémon. One on one. Nobody else.\n\nIt isn't angry. It wants to prove a point, and this is the only language it has for it.",
+   "choices": [
+    {
+     "label": "Accept.",
+     "success": {
+      "text": "It fights like something with a great deal to prove. It's faster than it should be.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "solo",
+        "species": []
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@wontevolve"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "hpCap",
+         "n": 30
+        },
+        {
+         "kind": "flag",
+         "key": "wontevolve-fought",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-bow"
+        },
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        }
+       ],
+       "friendly": true,
+       "rule": {
+        "noCatch": true,
+        "foeStages": {
+         "spe": 1
+        }
+       },
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "wontevolve-fought",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-bow-lost"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-bow",
+   "name": "The Pokémon That Wouldn't Evolve: The Bow",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "It loses. Narrowly. Your Pokémon is breathing hard, down to its last third.\n\n*It gets up. It isn't ashamed. It bows, stiffly, and walks back to Linus.*\n\n**Linus:** \"...See? See, that's what I mean. It nearly—\"\n\nLinus doesn't finish.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Behind you, neither of them says anything. You can feel them not saying it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-bow-lost",
+   "name": "The Pokémon That Wouldn't Evolve: The Bow",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "It wins. It stands over your Pokémon a moment, breathing hard, as if it can't quite believe it either.\n\n*Then it bows, stiffly, and walks back to Linus.*\n\n**Linus:** \"...It nearly— It could have—\" Linus doesn't finish.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Your Pokémon gets back up. It keeps looking back at the small one, with something like respect.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-back",
+   "name": "It Comes Back",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wontevolve-1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wontevolve-2",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "wontevolve-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "eevee",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "eevee-stayed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Your Eevee, the one that never chose, sits down next to it in the road. They look like old friends.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "Something small drops out of a tree onto the road in front of you.\n\n*It's alone. It's got a new scar, and a new way of standing.*\n\n*It shows you a move. Its kind shouldn't be able to make a move look like that.*\n\nIt calls it, in its way, **Proof**: its own type, and harder still against anything fully grown.",
+   "choices": [
+    {
+     "label": "That's incredible.",
+     "success": {
+      "text": "It puffs up to twice its size. Your lead steps forward. They've been watching each other all along.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Does Linus know you're out here?",
+     "success": {
+      "text": "It looks away.\n\nLinus arrives a moment later, out of breath, still holding the stone. Neither of them says anything.\n\nThey leave together. Linus's hand hovers near its head, and doesn't quite touch it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wontevolve-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show me again, on me.",
+     "success": {
+      "text": "It looks at your strongest Pokémon, and grins.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wontevolve-2",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-21-again"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-again",
+   "name": "It Comes Back: Again",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "A second challenge. Same rules. It has been practising.",
+   "choices": [
+    {
+     "label": "Go.",
+     "success": {
+      "text": "It moves first. Then it moves again, before you have finished seeing the first one.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "solo",
+        "species": []
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@wontevolve"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "wontevolve-fought",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-again-held"
+        },
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        }
+       ],
+       "friendly": true,
+       "rule": {
+        "noCatch": true,
+        "foeStages": {
+         "atk": 2,
+         "spe": 2
+        }
+       },
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "wontevolve-fought",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-again-won"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-again-won",
+   "name": "It Comes Back: Again",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "This time it wins. Narrowly.\n\nIt stands there, staring at its own paws, as surprised as anyone. Then it laughs, a small, astonished sound.",
+   "choices": [
+    {
+     "label": "Clap.",
+     "success": {
+      "text": "It bows to you, properly this time, and runs off up the road to find Linus.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-again-held",
+   "name": "It Comes Back: Again",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "You hold on. Only just. Your Pokémon is the one staring at its paws now.\n\nIt isn't upset. It looks at you as if to say: *next time.*",
+   "choices": [
+    {
+     "label": "Clap.",
+     "success": {
+      "text": "It bows to you, properly this time, and runs off up the road to find Linus.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-stone",
+   "name": "The Stone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wontevolve-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wontevolve-3",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "wontevolve-at"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "Linus has it cornered against a wall. The stone is out again. Linus is crying.\n\n**Linus:** \"I can't do this again. I can't watch one go down because it was *small*. I'm sorry. I'm sorry. Hold still.\"\n\n*It isn't running. It's looking at Linus, very steadily.*",
+   "choices": [
+    {
+     "label": "Step in.",
+     "success": {
+      "text": "You step between them. Both of them look at you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "wontevolve-side",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-21-crisis"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "wontevolve-side",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-21-step"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them work it out.",
+     "success": {
+      "text": "You stay where you are. This is theirs.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "wontevolve-side",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-21-crisis"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "wontevolve-side",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-21-wait"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Linus. Who was the other one?",
+     "success": {
+      "text": "**Linus:** \"A Pichu. Years ago. It wouldn't evolve either. I let it choose.\"\n\n\"And then there was a Fearow.\"\n\n*The Pokémon walks forward, and puts its paw on Linus's knee.*\n\nLinus puts the stone away. **Linus:** \"All right. All right. Your way.\"\n\nOne of your own small ones watched every move of Proof today. It has it now.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-end",
+        "n": 2
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "wontevolve-end-at"
+       },
+       {
+        "kind": "teachMove",
+        "move": "proof",
+        "unevolved": true
+       },
+       {
+        "kind": "moment",
+        "text": "Linus finally said who the other one was, and put the stone away.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-step",
+   "name": "The Stone: Between Them",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "It steps out from behind you. It isn't hiding. It's choosing where to stand.\n\nLinus's hands are shaking around the stone.",
+   "choices": [
+    {
+     "label": "Stand beside it.",
+     "success": {
+      "text": "It walks to you. It looks back at Linus.\n\nLinus looks at it for a long time. Then Linus nods.\n\n**Linus:** \"Go on, then. Go and be small and brilliant somewhere I don't have to watch.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "@wontevolve"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "unwavering",
+        "moves": [
+         "proof"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-end",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "wontevolve-end-at"
+       },
+       {
+        "kind": "moment",
+        "text": "It stayed exactly what it was, and walked with you.",
+        "importance": 90
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "wontevolve-fought",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Battle Linus.",
+     "success": {
+      "text": "**Linus:** \"Fine. FINE. If that's what it takes to keep it safe from people like you.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-wait"
+        }
+       ],
+       "name": "Linus Castellane",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-walks"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "wontevolve-side",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Step back.",
+     "success": {
+      "text": "You step aside. It looks at you, then at Linus, and sits down in the road to wait.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-21-wait"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-walks",
+   "name": "The Stone: It Walks",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "Linus's last Pokémon goes down. Linus sits down hard on the road.\n\nIt walks away from Linus without looking back. Not once.\n\nIt stops beside you, and waits, as if it has always been yours.",
+   "choices": [
+    {
+     "label": "Take it with you.",
+     "success": {
+      "text": "Linus doesn't call after it. You don't think Linus can.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "@wontevolve"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "unwavering",
+        "moves": [
+         "proof"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-end",
+        "n": 5
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "wontevolve-end-at"
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-linus-gone",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "It left its trainer for you, and never looked back.",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-wait",
+   "name": "The Stone: Its Own Time",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "Nobody does anything for a long time.\n\nThen Linus puts the stone in its paw, and closes its paw around it, and lets go.\n\n**Linus:** \"When you want to. If you want to. Not before.\"",
+   "choices": [
+    {
+     "label": "Leave them to it.",
+     "success": {
+      "text": "You leave them sitting together against the wall, the stone between them.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-end",
+        "n": 3
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "wontevolve-end-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-crisis",
+   "name": "The Stone: The Crisis",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "Something bursts out of the hedge, wild and frightened, straight at Linus.\n\nLinus throws up both arms. The stone goes flying.",
+   "choices": [
+    {
+     "label": "Get between them.",
+     "success": {
+      "text": "You get between Linus and the wild Pokémon.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-crisis-2"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-crisis-2"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-crisis-2"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-crisis-2",
+   "name": "The Stone: The Crisis",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "Before it's over, a light goes up beside you.\n\nIt has the stone. It took it out of the air itself.\n\nIt's bigger now, standing between Linus and the world. It is not sorry. It doesn't look back at you.\n\n**Linus:** \"Thank you. Thank you. I— thank you.\"",
+   "choices": [
+    {
+     "label": "You're welcome.",
+     "success": {
+      "text": "Linus presses something into your hands and won't hear a word about it.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-end",
+        "n": 4
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "wontevolve-end-at"
+       },
+       {
+        "kind": "moment",
+        "text": "In the end it evolved, to save Linus. It wasn't sorry.",
+        "importance": 75
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-letter",
+   "name": "A Letter from Linus",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wontevolve-end",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "wontevolve-end-at"
+    },
+    {
+     "kind": "flag",
+     "key": "wontevolve-letter",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "A letter catches up with you. Inside is a drawing, done in crayon by someone who is not good at drawing.\n\nIt's bigger in the picture. It's grinning.\n\n**Linus:** \"It said to give you the spare.\"",
+   "choices": [
+    {
+     "label": "Keep the drawing.",
+     "success": {
+      "text": "Folded into the letter is a stone of the same kind.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "castItem",
+        "key": "wontevolve"
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-letter",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-after",
+   "name": "Linus, Again",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wontevolve-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wontevolve-end",
+     "atLeast": 1,
+     "atMost": 4
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "wontevolve-at"
+    },
+    {
+     "kind": "flag",
+     "key": "wontevolve-after",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "A face you know, on a road a long way from the last one. Linus.\n\nThe stone hangs on a string round Linus's neck. Unused.\n\n**Linus:** \"Keeps me honest,\" Linus says, and taps it.",
+   "choices": [
+    {
+     "label": "Say hello.",
+     "success": {
+      "text": "You talk for a while about small things that turned out to be strong.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wontevolve-after",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-door",
+   "name": "The Lonely Cubone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "ground",
+    "ghost"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cubone-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "cubone-gone",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "cubone-walked",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A Cubone, alone in the woods.\n\nIt's sitting with its back to a tree, holding its club across its knees.\n\nIt's been crying. The skull is wet.",
+   "choices": [
+    {
+     "label": "Approach it.",
+     "success": {
+      "text": "It's gone before you're halfway there. It's behind the next tree now, watching you round the bark.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-22-behind"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave something at its feet.",
+     "success": {
+      "text": "You put a Berry down in front of it, and step back. Then another step.\n\n*It looks.* It looks at the Berry, and at you, for a long time.\n\nIt picks it up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "cubone-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-settled",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-fainted",
+        "n": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-tree"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "It watches you go. You can feel it watching all the way to the bend.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-walked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "cubone-walked-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-behind",
+   "name": "The Lonely Cubone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "It's behind the next tree. One eye, round the bark. It hasn't run far.",
+   "choices": [
+    {
+     "label": "Approach it.",
+     "success": {
+      "text": "It runs again, and this time it doesn't stop. You hear it crashing through the undergrowth, a long way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-gone",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave something at its feet.",
+     "success": {
+      "text": "You put a Berry down in front of it, and step back. Then another step.\n\n*It looks.* It looks at the Berry, and at you, for a long time.\n\nIt picks it up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "cubone-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-settled",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-fainted",
+        "n": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-tree"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "It watches you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-walked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "cubone-walked-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-again",
+   "name": "The Lonely Cubone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cubone-walked",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "cubone-walked-at"
+    },
+    {
+     "kind": "flag",
+     "key": "cubone-trusted",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "cubone-gone",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "cubone-again",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "It's there again. A different tree, the same Cubone, the same club across its knees.\n\nIt looks up when it hears you. It doesn't run. Not yet.",
+   "choices": [
+    {
+     "label": "Approach it.",
+     "success": {
+      "text": "It runs. This time you know it won't be back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-again",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-gone",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave something at its feet.",
+     "success": {
+      "text": "You put a Berry down in front of it, and step back. Then another step.\n\n*It looks.* It looks at the Berry, and at you, for a long time.\n\nIt picks it up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-again",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "cubone-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-settled",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-fainted",
+        "n": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-tree"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "It watches you go. And then, the next time you look back, it isn't there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-again",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-gone",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-tree",
+   "name": "The Lonely Cubone: The Tree",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "*It draws in the dirt with the end of its club.*\n\n*A large shape, with a skull like its own. A mound. Then a mark like a question.*\n\n*It looks up at you.*\n\nIt's looking for its mother's grave.",
+   "choices": [
+    {
+     "label": "Help it look.",
+     "success": {
+      "text": "It gets up, wipes the skull with the back of its paw, and falls in beside you. Not close. But beside.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "cubone"
+        ],
+        "types": [],
+        "levelBonus": -1,
+        "shinyMultiplier": 1,
+        "direct": true
+       },
+       {
+        "kind": "gn",
+        "op": "markLast",
+        "key": "cubone-guest",
+        "species": [
+         "cubone"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-stream"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-stream",
+   "name": "The Lonely Cubone: The Stream",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A stream, loud with spring water. Something wild is drinking.\n\nThe Cubone stays at the back, club up, eyes huge.",
+   "choices": [
+    {
+     "label": "Wade in.",
+     "success": {
+      "text": "Something wild turns on you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-stream-2"
+          }
+         ]
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-stream-2"
+          }
+         ]
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-stream-2",
+   "name": "The Lonely Cubone: The Stream",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "Another one, further up. This time the Cubone doesn't hang back quite so far.",
+   "choices": [
+    {
+     "label": "Go on.",
+     "success": {
+      "text": "It swings. It *hits* something. Afterwards it stares at its own club, as if the club did it alone.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-stream-rest"
+          }
+         ]
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-stream-rest"
+          }
+         ]
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-stream-rest",
+   "name": "The Lonely Cubone: The Stream",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "You rest on the bank. It draws.\n\n*The same large shape. And a small one beside it. Stick figures, holding hands.*",
+   "choices": [
+    {
+     "label": "Draw something back.",
+     "success": {
+      "text": "You draw yourself, badly, and your lead, worse.\n\nIt studies your drawing. Then it adds a small skull-headed figure next to you. Then it rubs it out, embarrassed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-settled",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-hollow"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just watch.",
+     "success": {
+      "text": "You watch it draw. It glances up now and then to check you're still there. You are.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-hollow"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit closer.",
+     "success": {
+      "text": "You shift closer. It goes very still, then carries on drawing, a little nearer to your knee.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-close",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-hollow"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-hollow",
+   "name": "The Lonely Cubone: The Hollow",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "remembers": [
+    {
+     "id": "dog",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "dog-sat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*In the corner of its drawing, a second small figure, sitting. Waiting for someone. It doesn't explain.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A fallen tree, hollow and dry inside. Rain starts the moment you're under it.\n\nIt draws by the light coming through the bark.\n\n*The large one, holding something out. A club.*\n\nIt taps the club it's carrying. Twice. Gently.",
+   "choices": [
+    {
+     "label": "Draw something back.",
+     "success": {
+      "text": "You draw yourself, badly, and your lead, worse.\n\nIt studies your drawing. Then it adds a small skull-headed figure next to you. Then it rubs it out, embarrassed.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-settled",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-stones"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just watch.",
+     "success": {
+      "text": "You watch it draw. It glances up now and then to check you're still there. You are.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-stones"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit closer.",
+     "success": {
+      "text": "You shift closer. It goes very still, then carries on drawing, a little nearer to your knee.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-close",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-stones"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-stones",
+   "name": "The Lonely Cubone: The Field of Stones",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A clearing full of mounds. Any of them could be a grave.\n\nGhost-types drift between them. They don't attack. They watch the Cubone.",
+   "choices": [
+    {
+     "label": "Walk among them.",
+     "success": {
+      "text": "A ghost drifts into your path and stays there, looking. It won't raise a hand to you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "ghost"
+       ],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-stones-rest"
+          }
+         ]
+        }
+       ],
+       "rule": {
+        "foeStands": 3
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-stones-rest"
+          }
+         ]
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Go round.",
+     "success": {
+      "text": "You keep to the edge. The ghosts turn to watch you pass, all of them, at once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-22-stones-rest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-stones-rest",
+   "name": "The Lonely Cubone: The Field of Stones",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "It draws on a flat stone, with a chip of chalk.\n\n*The large one, lying down. Lines over it: rain, or something worse. Birds.*\n\nIt stops drawing. It rubs out the birds, hard, until the stone is clean.",
+   "choices": [
+    {
+     "label": "Draw something back.",
+     "success": {
+      "text": "You draw yourself, badly, and your lead, worse.\n\nIt studies your drawing. Then it adds a small skull-headed figure next to you. Then it rubs it out, embarrassed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-settled",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-hill"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just watch.",
+     "success": {
+      "text": "You watch it draw. It glances up now and then to check you're still there. You are.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-hill"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit closer.",
+     "success": {
+      "text": "You shift closer. It goes very still, then carries on drawing, a little nearer to your knee.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-close",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-hill"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-hill",
+   "name": "The Lonely Cubone: The Hill",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mandibuzz",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "*A shadow crosses the hill. Then three.*\n\n*The Cubone's club comes up. It's shaking. It doesn't run.*\n\nKeep it standing. They're coming for it.",
+   "choices": [
+    {
+     "label": "Stand with it.",
+     "success": {
+      "text": "Two Vullaby drop out of the sky. They go for the skull.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "vullaby",
+        "vullaby"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-wave2"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "leadMark": "cubone-guest",
+        "aimMark": "cubone-guest",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "dropMarked",
+         "key": "cubone-guest"
+        },
+        {
+         "kind": "flag",
+         "key": "cubone-fainted",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "cubone-ran-at"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-wave2",
+   "name": "The Lonely Cubone: The Hill",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mandibuzz",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A Mandibuzz, and another Vullaby.\n\nThe Mandibuzz is wearing bones. The Cubone sees them. It makes a sound you have never heard a Pokémon make.",
+   "choices": [
+    {
+     "label": "Hold the line.",
+     "success": {
+      "text": "They dive.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "mandibuzz",
+        "vullaby"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-wave3"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "leadMark": "cubone-guest",
+        "aimMark": "cubone-guest",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "dropMarked",
+         "key": "cubone-guest"
+        },
+        {
+         "kind": "flag",
+         "key": "cubone-fainted",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "cubone-ran-at"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-wave3",
+   "name": "The Lonely Cubone: The Hill",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mandibuzz",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A large Mandibuzz lands on the crest of the hill and folds its wings.\n\n*The Cubone steps in front of your lead.*",
+   "choices": [
+    {
+     "label": "Let it.",
+     "success": {
+      "text": "It doesn't look back at you. It raises the club.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mandibuzz"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-settled",
+         "min": 2,
+         "then": [],
+         "text": "The last hit is the Cubone's. It lands it itself, with everything it has."
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-22-grave"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "leadMark": "cubone-guest",
+        "aimMark": "cubone-guest",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "dropMarked",
+         "key": "cubone-guest"
+        },
+        {
+         "kind": "flag",
+         "key": "cubone-fainted",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "cubone-ran-at"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-ran",
+   "name": "The Lonely Cubone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "The Cubone goes down. When it gets up again, it doesn't look at you.\n\nIt runs, crying, the club dragging in the grass behind it.",
+   "choices": [
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You can't follow it where it's going. Not today.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "dropMarked",
+        "key": "cubone-guest"
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-fainted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "cubone-ran-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-grave",
+   "name": "The Lonely Cubone: The Grave",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "*Behind the hill, one mound, apart from the others. Flat stones have been set round it, by something with hands. Not recently.*\n\n*There's no skull. There's no club. There's no proof.*\n\n*The Cubone looks at you.*",
+   "choices": [
+    {
+     "label": "This is it. This is her.",
+     "success": {
+      "text": "It believes you. It lies down on the mound, and its breathing slows.\n\nIt is comforted. And you know you guessed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-told-yes",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-22-join"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I don't know.",
+     "success": {
+      "text": "It nods, slowly. Then it puts one flat stone on the mound anyway, very carefully, with both paws.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-told-unknown",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-22-join"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Sit down beside it, and say nothing.)",
+     "success": {
+      "text": "It sits too. After a while, it leans against your arm.\n\nAfter a longer while, it puts its club down on the mound. Then it picks it up again, and holds it differently.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-sat",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You sat with the Cubone at the grave, and said nothing, and it was enough.",
+        "importance": 90
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-22-join"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-join",
+   "name": "The Lonely Cubone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "The rain has stopped. It stands at the bottom of the hill, looking at you, then down the road.",
+   "choices": [
+    {
+     "label": "Give it the Thick Club.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "thick-club"
+      }
+     ],
+     "success": {
+      "text": "First it shows you the club it has been carrying all along. It's too big for it. It always was. It was hers.\n\nThen it takes the new one in its other hand. Both, now.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "thick-club"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cubone-sat",
+        "min": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "cubone"
+          ],
+          "types": [],
+          "levelBonus": -1,
+          "shinyMultiplier": 1,
+          "ability": "inherited-strength",
+          "friendship": 30,
+          "mark": "cubone-friend",
+          "held": "thick-club"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cubone-sat",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "cubone"
+          ],
+          "types": [],
+          "levelBonus": -1,
+          "shinyMultiplier": 1,
+          "ability": "inherited-strength",
+          "mark": "cubone-friend",
+          "held": "thick-club"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-joined",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "dropMarked",
+        "key": "cubone-guest"
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come with me?",
+     "success": {
+      "text": "It comes. It walks closer than it did this morning.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cubone-sat",
+        "min": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "cubone"
+          ],
+          "types": [],
+          "levelBonus": -1,
+          "shinyMultiplier": 1,
+          "ability": "inherited-strength",
+          "friendship": 30,
+          "mark": "cubone-friend"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cubone-sat",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "cubone"
+          ],
+          "types": [],
+          "levelBonus": -1,
+          "shinyMultiplier": 1,
+          "ability": "inherited-strength",
+          "mark": "cubone-friend"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-joined",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "dropMarked",
+        "key": "cubone-guest"
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay here, if you like.",
+     "success": {
+      "text": "It sits down by the mound. When you look back from the road, it raises its club. Goodbye, or come back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "cubone"
+       },
+       {
+        "kind": "gn",
+        "op": "dropMarked",
+        "key": "cubone-guest"
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-wary",
+   "name": "The Lonely Cubone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cubone-fainted",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "cubone-ran-at"
+    },
+    {
+     "kind": "flag",
+     "key": "cubone-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "cubone-wary",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A Cubone, alone, under a tree. Your Cubone. It knows you. It shifts away anyway.\n\nIt's more careful now.",
+   "choices": [
+    {
+     "label": "Leave something at its feet.",
+     "success": {
+      "text": "You put a Berry down. It looks at it. It doesn't take it. Not yet.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-22-wary-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "It watches you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-wary",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-gone",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "cubone"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-wary-2",
+   "name": "The Lonely Cubone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "The Berry is still there. So is the Cubone. So are you.",
+   "choices": [
+    {
+     "label": "Leave another.",
+     "success": {
+      "text": "You put a second Berry beside the first.\n\nIt looks for a long time. Then it picks up both.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-wary",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "cubone-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-settled",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-fainted",
+        "n": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-tree"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "It watches you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-wary",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-gone",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "cubone"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-graveyard",
+   "name": "A Graveyard",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cubone-joined",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "hasMark",
+     "key": "cubone-friend"
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "cubone-at"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "cubone-graveyard-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A graveyard by the road. Your Cubone stops at the gate, and doesn't move.",
+   "choices": [
+    {
+     "label": "Wait for it.",
+     "success": {
+      "text": "You wait. It walks among the stones a while, touching some of them. Then it comes back. Waiting cost you nothing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "cubone-graveyard-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "After a moment, it catches you up.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "cubone-graveyard-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-salesman",
+   "name": "The Honest Salesman",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-1",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "karp-bought",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "*A Magikarp on a cushion.* **\"Only ₽500! It's a secret kind!\"**\n\n**You:** \"It's a Magikarp.\"\n\n**Mr. Pettigrew, after a long pause:** \"...It is a Magikarp. It's a good one. It tries very hard. I'm tired of lying about it.\"\n\n*It's level 10, it knows Bounce, and it already likes people. It's worth about ₽200. He says so.*",
+   "choices": [
+    {
+     "label": "Buy it (₽500).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "He's so surprised he throws in a Mystic Water. **Mr. Pettigrew:** \"Nobody ever just... buys it.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magikarp"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "level": 10,
+        "moves": [
+         "bounce"
+        ],
+        "friendship": 30,
+        "mark": "karp-notch"
+       },
+       {
+        "kind": "flag",
+        "key": "karp-bought",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer ₽200.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "**\"Fair. That's fair.\"** He takes it, and looks lighter for it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magikarp"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "level": 10,
+        "moves": [
+         "bounce"
+        ],
+        "friendship": 30,
+        "mark": "karp-notch"
+       },
+       {
+        "kind": "flag",
+        "key": "karp-bought",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "He nods. The Magikarp flops in a way that may be a wave.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-a1",
+   "name": "The Magikarp That Could",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "own",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "karp-bought",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "gn",
+       "test": "hasMark",
+       "key": "karp-notch"
+      }
+     ],
+     "notice": "*Your own Magikarp flops out of its Ball and toward the water. Nobody asked it to.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "A waterfall, far off. You can only just hear it.\n\nA Magikarp in the river jumps at nothing. It barely clears the water. It lands on its side.\n\n**A fisher, on the bank:** \"That one? Been at it all spring. Daft fish.\"",
+   "choices": [
+    {
+     "label": "Go on! You can do it!",
+     "success": {
+      "text": "It jumps again at once. A little higher than the first try.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "karp-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it something.",
+     "success": {
+      "text": "You look for something to give it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "karp-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-23-give"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Race it up the bank.",
+     "prompt": {
+      "id": "bank-race",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You beat it to the top rock by a fin. It doesn't care. It splashes you, delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "karp-at"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It beats you to the top rock. It splashes you, delighted, and does it again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "karp-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "It watches you go. It jumps anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-ignored",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "karp-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-a2",
+   "name": "The Magikarp That Could",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "karp-2",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "karp-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "own",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "karp-bought",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "gn",
+       "test": "hasMark",
+       "key": "karp-notch"
+      }
+     ],
+     "notice": "*Your own Magikarp flops out of its Ball and toward the water. Nobody asked it to.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "The waterfall is closer. A notch in a tail fin flashes as something jumps. *That notch. It's the same one.*\n\nIt reaches the lower rocks. It hangs there a second, gasping, and slides back.\n\nThe fisher is back on the bank, pretending to watch his float.",
+   "choices": [
+    {
+     "label": "Go on! You can do it!",
+     "success": {
+      "text": "It jumps again at once. A little higher than the first try.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it something.",
+     "success": {
+      "text": "You look for something to give it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-2",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-23-give"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Race it up the bank.",
+     "prompt": {
+      "id": "bank-race",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You beat it to the top rock by a fin. It doesn't care. It splashes you, delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-2",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It beats you to the top rock. It splashes you, delighted, and does it again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "It watches you go. It jumps anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-ignored",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-a3",
+   "name": "The Magikarp That Could",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "karp-3",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "karp-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "own",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "karp-bought",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "gn",
+       "test": "hasMark",
+       "key": "karp-notch"
+      }
+     ],
+     "notice": "*Your own Magikarp flops out of its Ball and toward the water. Nobody asked it to.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "You can feel the waterfall now, a cold mist on your face.\n\nHalfway. It gets halfway. And it falls a long way. It lies in the pool, not moving. Then it moves.\n\n**The same fisher:** \"...It got halfway. I've stopped fishing this bit.\"",
+   "choices": [
+    {
+     "label": "Go on! You can do it!",
+     "success": {
+      "text": "It jumps again at once. A little higher than the first try.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it something.",
+     "success": {
+      "text": "You look for something to give it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-23-give"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Race it up the bank.",
+     "prompt": {
+      "id": "bank-race",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You beat it to the top rock by a fin. It doesn't care. It splashes you, delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-3",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It beats you to the top rock. It splashes you, delighted, and does it again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "It watches you go. It jumps anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-ignored",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-a4",
+   "name": "The Magikarp That Could",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-3",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "karp-4",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "karp-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "own",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "karp-bought",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "gn",
+       "test": "hasMark",
+       "key": "karp-notch"
+      }
+     ],
+     "notice": "*Your own Magikarp flops out of its Ball and toward the water. Nobody asked it to.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "The waterfall fills half the sky. The noise is all there is.\n\nIt touches the lip of the falls. It *touches* it. Its fin slips.\n\nThe fisher has brought a friend. Neither of them says anything when it slips.",
+   "choices": [
+    {
+     "label": "Go on! You can do it!",
+     "success": {
+      "text": "It jumps again at once. A little higher than the first try.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-4",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it something.",
+     "success": {
+      "text": "You look for something to give it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-4",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-23-give"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Race it up the bank.",
+     "prompt": {
+      "id": "bank-race",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You beat it to the top rock by a fin. It doesn't care. It splashes you, delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-4",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It beats you to the top rock. It splashes you, delighted, and does it again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-4",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "It watches you go. It jumps anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-ignored",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-4",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-a5",
+   "name": "The Magikarp That Could",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-4",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "karp-5",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "karp-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "own",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "karp-bought",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "gn",
+       "test": "hasMark",
+       "key": "karp-notch"
+      }
+     ],
+     "notice": "*Your own Magikarp flops out of its Ball and toward the water. Nobody asked it to.*"
+    },
+    {
+     "id": "league",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "little-league-losing",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*The children on the bank are your Little League team. One of them is mouthing: \"losing's how you learn.\"*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "The foot of the falls. Spray everywhere. Rainbows in it.\n\nIt makes the jump. It's up. It's at the top. It's still only a Magikarp. It looks down at you, and it can't believe it either.\n\nThe fisher, three children and a dog are on the bank. Nobody says anything. One of the children is holding their breath.",
+   "choices": [
+    {
+     "label": "Go on! You can do it!",
+     "success": {
+      "text": "It jumps again at once. A little higher than the first try.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-5",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it something.",
+     "success": {
+      "text": "You look for something to give it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-5",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-23-give"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Race it up the bank.",
+     "prompt": {
+      "id": "bank-race",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You beat it to the top rock by a fin. It doesn't care. It splashes you, delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-5",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It beats you to the top rock. It splashes you, delighted, and does it again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-5",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "It watches you go. It jumps anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-ignored",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-5",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-give",
+   "name": "The Magikarp That Could",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "It watches your hands. It knows what giving looks like.",
+   "choices": [
+    {
+     "label": "A Berry.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "holdsBerry"
+      }
+     ],
+     "success": {
+      "text": "It eats it on the spot, in one gulp, and jumps again at once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "payBerry"
+       },
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-item-berry",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Something to carry.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "holdsItem"
+      }
+     ],
+     "success": {
+      "text": "It takes it in its mouth, very carefully, and keeps it. It will carry it for the rest of the region.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lendHeld",
+        "key": "karp"
+       },
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-item-held",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nothing after all.",
+     "success": {
+      "text": "It jumps anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-falls",
+   "name": "The Falls",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-5",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "karp-falls",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "karp-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gyarados",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "The falls. The whole bank is there: the fisher, the children, the dog, people you have never seen.\n\nUp at the top, a Magikarp with a notch in its tail fin is looking down.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "Everyone holds their breath.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-falls",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "returnLent",
+        "key": "karp"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "karp-in-party",
+        "if": [
+         {
+          "kind": "gn",
+          "test": "hasMark",
+          "key": "karp-notch"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "karp-in-party",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-23-party"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "karp-in-party",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "karp-encouraged",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-23-rise"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "karp-encouraged",
+          "min": 1,
+          "max": 2,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-23-top"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "karp-encouraged",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "roll",
+            "key": "karp-evolved",
+            "n": 50
+           },
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "karp-evolved",
+            "min": 1,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "scene",
+              "key": "gn-23-hostile"
+             }
+            ]
+           },
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "karp-evolved",
+            "min": 0,
+            "max": 0,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "scene",
+              "key": "gn-23-still"
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-party",
+   "name": "The Falls",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "gyarados",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "It was in your party all along. Your Magikarp, the notched one, the one from the cushion.\n\nIt goes up the falls with everyone on the bank cheering. The water goes white.\n\nIt evolves there, in your own team. Something very long looks down at you, with a notch in its tail.\n\nMr. Pettigrew is on the bank. He is weeping, and he doesn't care who sees.",
+   "choices": [
+    {
+     "label": "Welcome it back.",
+     "success": {
+      "text": "It lowers its great head to your hand.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "magikarp",
+        "to": "gyarados",
+        "mark": "karp-notch",
+        "ability": "impossible-leap"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "karp-raced",
+        "min": 3,
+        "then": [
+         {
+          "kind": "statBoost",
+          "stat": "spe",
+          "percent": 5,
+          "who": {
+           "species": [
+            "gyarados"
+           ]
+          },
+          "until": "run"
+         }
+        ],
+        "text": "It learned to be quick from you: Speed +1, for good."
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 4
+       },
+       {
+        "kind": "flag",
+        "key": "karp-pettigrew-saw",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Magikarp cleared the falls, and Mr. Pettigrew wept on the bank.",
+        "importance": 95
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-rise",
+   "name": "The Falls",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gyarados",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "It clears the falls.\n\n*The water goes white. Something very long comes up out of it, and looks down, and it's got a notch in its tail.*\n\nThe whole bank roars.",
+   "choices": [
+    {
+     "label": "Hold out your hand.",
+     "success": {
+      "text": "It lowers its head to your hand.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "karp-raced",
+        "min": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "gyarados"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "impossible-leap",
+          "boost": {
+           "stat": "spe",
+           "percent": 5
+          },
+          "mark": "karp-notch"
+         }
+        ],
+        "text": "It learned to be quick from you: Speed +1, for good."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "karp-raced",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "gyarados"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "impossible-leap",
+          "mark": "karp-notch"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The notched Magikarp cleared the falls, and chose you.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go free.",
+     "success": {
+      "text": "It roars once, at the sky, and is gone upriver. The children talk about nothing else.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-top",
+   "name": "The Falls",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "It clears the falls. It's a Magikarp at the top.\n\nIt looks at you, and waits to see whether you're coming.",
+   "choices": [
+    {
+     "label": "Climb up to it.",
+     "success": {
+      "text": "You climb the wet rocks to the top. It's still there when you get there.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magikarp"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "mark": "karp-notch"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave.",
+     "success": {
+      "text": "It flops, once. It may be a wave. Then it's gone upriver.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-hostile",
+   "name": "The Falls",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gyarados",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "It evolves anyway, at the top, with nobody watching but you.\n\nIt's hostile. It looks straight at you. It remembers your face.",
+   "choices": [
+    {
+     "label": "Challenge it.",
+     "success": {
+      "text": "It comes down the falls at you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "gyarados"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "gyarados"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "ability": "impossible-leap",
+         "mark": "karp-notch"
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "karp-end",
+         "n": 2
+        }
+       ],
+       "exact": true,
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "karp-end",
+         "n": 2
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "karp-end",
+         "n": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back away.",
+     "success": {
+      "text": "It watches you all the way to the road.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-still",
+   "name": "The Falls",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "It's still jumping. It'll be jumping for a long time yet.\n\nIt doesn't look at you at all.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Behind you, the splash, and the splash, and the splash.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-fisher",
+   "name": "The Fisher's Tale",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-falls",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "karp-at"
+    },
+    {
+     "kind": "flag",
+     "key": "karp-fisher",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "A fisher in a bar, a long way from that river, holding court.\n\n**Fisher:** \"...trained it myself, I did. Every morning. Daft fish, but it listened to me.\"\n\nIt's the fisher. He's telling it wrong.",
+   "choices": [
+    {
+     "label": "Let him tell it.",
+     "success": {
+      "text": "You let him. It's a good story his way too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-fisher",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "That's not how it went.",
+     "success": {
+      "text": "He looks at you for a long moment. **Fisher:** \"...No. No, it isn't.\" He buys you a drink.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-fisher",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-pewter-magikarp",
+   "name": "Magikarp Salesman",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-1",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "karp-bought",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "*A Magikarp on a cushion.* **\"Only ₽500! It's a secret kind!\"**\n\n**You:** \"It's a Magikarp.\"\n\n**Mr. Pettigrew, after a long pause:** \"...It is a Magikarp. It's a good one. It tries very hard. I'm tired of lying about it.\"\n\n*It's level 10, it knows Bounce, and it already likes people. It's worth about ₽200. He says so.*",
+   "choices": [
+    {
+     "label": "Buy it (₽500).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "He's so surprised he throws in a Mystic Water. **Mr. Pettigrew:** \"Nobody ever just... buys it.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magikarp"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "level": 10,
+        "moves": [
+         "bounce"
+        ],
+        "friendship": 30,
+        "mark": "karp-notch"
+       },
+       {
+        "kind": "flag",
+        "key": "karp-bought",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer ₽200.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "**\"Fair. That's fair.\"** He takes it, and looks lighter for it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magikarp"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "level": 10,
+        "moves": [
+         "bounce"
+        ],
+        "friendship": 30,
+        "mark": "karp-notch"
+       },
+       {
+        "kind": "flag",
+        "key": "karp-bought",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "He nods. The Magikarp flops in a way that may be a wave.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.magikarp"
+  },
+  {
+   "id": "gn-24-bench",
+   "name": "The Forgotten Partner",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "oldCatch"
+    },
+    {
+     "kind": "flag",
+     "key": "partner-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#9a7b5f",
+    "effect": "none"
+   },
+   "intro": "*An old trainer on a bench drops their walking stick.*\n\n**Rosabel Verey:** \"...{petname}? No. It can't. {petname}?\"\n\n*Your {partner} has stopped walking.*",
+   "choices": [
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "Rosabel picks up the stick, and doesn't lean on it. Rosabel can't stop looking.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "partner",
+        "key": "old-partner"
+       },
+       {
+        "kind": "flag",
+        "key": "partner-met",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "partner-at"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-story",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "**Rosabel:** \"I got ill. Couldn't keep up. I let it go where there was good grass. I thought that was kind.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-story",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "**Rosabel:** \"We lost. A lot. I said things. I opened the Ball in a field and I walked off, before I could change my mind.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-story",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "**Rosabel:** \"It ran. In a storm. I looked for a month. I've always thought it ran *from* me.\""
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "partner-flinch",
+        "n": 10
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-flinch",
+        "min": 1,
+        "then": [],
+        "text": "*It flinches.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-flinch",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "partner-bond",
+          "min": 4,
+          "then": [],
+          "text": "*It greets Rosabel warmly: a nuzzle, a cry. Then it comes back to your side, and sits.*"
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "partner-bond",
+          "min": 2,
+          "max": 3,
+          "then": [],
+          "text": "*It goes to Rosabel slowly. It lets Rosabel touch its head. It looks back at you.*"
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "partner-bond",
+          "min": 0,
+          "max": 1,
+          "then": [],
+          "text": "*It goes to Rosabel, and stays there a while.*"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-24-choose"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-24-choose",
+   "name": "The Forgotten Partner",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "remembers": [
+    {
+     "id": "third",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "partner-was-ball",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Rosabel isn't the child from the tape. This is somebody from before even that. It has had three trainers.*"
+    },
+    {
+     "id": "home",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "starter-home",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*You have let a Pokémon visit home before. You know how long it takes. It doesn't take long.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#9a7b5f",
+    "effect": "none"
+   },
+   "intro": "Rosabel is looking at it the way you look at the last page of a book.\n\n*If you let it decide, it might not choose you.*",
+   "choices": [
+    {
+     "label": "Let them have some time.",
+     "success": {
+      "text": "They sit on the bench together. You walk on a little way, and come back later.\n\nRosabel is asleep. It is keeping watch.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-time",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "firstCatch"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "starter-home",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "takeNode",
+          "nodes": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-bond",
+        "min": 4,
+        "then": [
+         {
+          "kind": "teachMove",
+          "move": "two-trainers",
+          "mark": "old-partner"
+         }
+        ],
+        "text": "Something the two of them used to do together comes back to it: Two Trainers."
+       },
+       {
+        "kind": "gn",
+        "op": "oldMove",
+        "key": "old-partner"
+       },
+       {
+        "kind": "flag",
+        "key": "partner-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No. Come on.",
+     "success": {
+      "text": "It follows you. It looks back twice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "partner-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Can I ask you something?",
+     "success": {
+      "text": "**Rosabel:** \"Anything. Ask anything.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-asked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-24-ask"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it decide.",
+     "success": {
+      "text": "You step back. You leave it room.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-decided",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-bond",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-24-home"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-bond",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "partner-bond",
+          "min": 4,
+          "then": [
+           {
+            "kind": "teachMove",
+            "move": "two-trainers",
+            "mark": "old-partner"
+           }
+          ],
+          "text": "Something the two of them used to do together comes back to it: Two Trainers."
+         },
+         {
+          "kind": "gn",
+          "op": "oldMove",
+          "key": "old-partner"
+         },
+         {
+          "kind": "flag",
+          "key": "partner-done",
+          "amount": 1
+         }
+        ],
+        "text": "It looks at the bench. It looks at you. It comes back to you, and sits down on your foot."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-24-ask",
+   "name": "The Forgotten Partner: Questions",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#9a7b5f",
+    "effect": "none"
+   },
+   "intro": "Rosabel waits. It waits too, ears turned towards you both.",
+   "choices": [
+    {
+     "label": "How long were you together?",
+     "success": {
+      "text": "**Rosabel:** \"Two years. Good ones.\"\n\n*It turns its head away. Two years was most of its life.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-q1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "partner-asked-all",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "partner-q1",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "partner-q2",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "partner-q3",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-asked-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-24-choose"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-asked-all",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-24-ask"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "partner-q1",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Did you say goodbye?",
+     "success": {
+      "text": "**Rosabel:** \"Of course I did.\"\n\n*It looks at the ground. It doesn't remember a goodbye.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-q2",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "partner-asked-all",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "partner-q1",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "partner-q2",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "partner-q3",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-asked-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-24-choose"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-asked-all",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-24-ask"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "partner-q2",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Did you ever go back?",
+     "success": {
+      "text": "**Rosabel:** \"...Once. It wasn't there.\"\n\n*It lifts its head, sharply. It was there. It waited. It can't have been far.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-q3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "partner-asked-all",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "partner-q1",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "partner-q2",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "partner-q3",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-asked-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-24-choose"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-asked-all",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-24-ask"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "partner-q3",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "We'll come back.",
+     "success": {
+      "text": "Rosabel nods. **Rosabel:** \"I'll be here. I'm always here.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "partner-visits",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "partner-visit-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-24-home",
+   "name": "The Forgotten Partner: Home",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#9a7b5f",
+    "effect": "none"
+   },
+   "intro": "*It looks at you. It looks at the bench.*\n\n*It goes home.*\n\nRosabel lifts a small one out of a basket by the bench.\n\n**Rosabel:** \"It's a good one. It hasn't got a name yet. I was waiting. I didn't know what for.\"",
+   "choices": [
+    {
+     "label": "Take the little one.",
+     "success": {
+      "text": "It settles into your arms as if it knew it would. Behind you, on the bench, two old friends sit very close.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "castBase",
+        "key": "partner-young",
+        "type": "old-partner"
+       },
+       {
+        "kind": "gn",
+        "op": "dropMarked",
+        "key": "old-partner"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "@partner-young"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "partner-went-home",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "partner-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You let your oldest friend choose, and it went home.",
+        "importance": 90
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-24-visit1",
+   "name": "The Bench",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "partner-visits",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "partner-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "partner-visit-at"
+    },
+    {
+     "kind": "gn",
+     "test": "hasMark",
+     "key": "old-partner"
+    },
+    {
+     "kind": "flag",
+     "key": "partner-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#9a7b5f",
+    "effect": "none"
+   },
+   "intro": "The bench again. Rosabel is there.\n\nThey sit at opposite ends of it, not looking at each other. Neither moves away.",
+   "choices": [
+    {
+     "label": "We'll come back.",
+     "success": {
+      "text": "Rosabel nods. **Rosabel:** \"I'll be here. I'm always here.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "partner-visits",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "partner-visit-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it here.",
+     "success": {
+      "text": "You go. It follows, slower than usual.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-24-visit2",
+   "name": "The Bench",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "partner-visits",
+     "atLeast": 2,
+     "atMost": 2
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "partner-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "partner-visit-at"
+    },
+    {
+     "kind": "gn",
+     "test": "hasMark",
+     "key": "old-partner"
+    },
+    {
+     "kind": "flag",
+     "key": "partner-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#9a7b5f",
+    "effect": "none"
+   },
+   "intro": "Rosabel has brought the food it used to like. It remembers the food.\n\nIt eats from Rosabel's hand.",
+   "choices": [
+    {
+     "label": "We'll come back.",
+     "success": {
+      "text": "Rosabel nods. **Rosabel:** \"I'll be here. I'm always here.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "partner-visits",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "partner-visit-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it here.",
+     "success": {
+      "text": "You go. It follows, licking its mouth.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-24-visit3",
+   "name": "The Bench",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "partner-visits",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "partner-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "partner-visit-at"
+    },
+    {
+     "kind": "gn",
+     "test": "hasMark",
+     "key": "old-partner"
+    },
+    {
+     "kind": "flag",
+     "key": "partner-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "a",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "partner-story",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "**Rosabel:** \"I should've kept you.\""
+    },
+    {
+     "id": "b",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "partner-story",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "**Rosabel:** \"I'm sorry I shouted.\""
+    },
+    {
+     "id": "c",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "partner-story",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "notice": "**Rosabel:** \"I never stopped looking.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#9a7b5f",
+    "effect": "none"
+   },
+   "intro": "The third visit. Rosabel says the thing they didn't say then.\n\nIt leans against Rosabel. Then it gets up, and comes to you, and looks back. And it's all right.",
+   "choices": [
+    {
+     "label": "Thank you, Rosabel.",
+     "success": {
+      "text": "Rosabel shows it something it used to know, and it remembers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-peace",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-bond",
+        "min": 4,
+        "then": [
+         {
+          "kind": "teachMove",
+          "move": "two-trainers",
+          "mark": "old-partner"
+         }
+        ],
+        "text": "Something the two of them used to do together comes back to it: Two Trainers."
+       },
+       {
+        "kind": "gn",
+        "op": "oldMove",
+        "key": "old-partner"
+       },
+       {
+        "kind": "flag",
+        "key": "partner-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your oldest friend made peace with the trainer who lost it.",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-heap",
+   "name": "The Unlikely Friendship",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "normal",
+    "poison"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "truce-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "border",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "border-united",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*You settled the border by uniting both sides. Somehow they know. They open their eyes, and they aren't afraid of you.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zangoose",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "*A Zangoose and a Seviper, asleep in a heap. Its tail is across its neck. Its paw is on its coils.*\n\n*Every book says these two fight on sight.*",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "They wake. The Zangoose splits a Berry in two with one claw. It gives the Seviper the bigger half, and then looks as if it regrets it.\n\nThey set off. They squabble over who walks in front. The Seviper wins by being longer.\n\nA branch cracks. Each puts itself between the other and the sound, and they collide.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "truce-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "truce-watched",
+        "amount": 1
+       },
+       {
+        "kind": "nodeBattle",
+        "skip": true
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-25-pack"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Step closer.",
+     "success": {
+      "text": "Two heads come up at once. They look at you, then at each other, and close ranks: the snake in front, the claws behind.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "truce-met",
+        "amount": 1
+       },
+       {
+        "kind": "nodeBattle",
+        "skip": true
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-25-pack"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "border-united",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back away quietly.",
+     "success": {
+      "text": "You back away. Neither of them wakes. You leave them to it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "truce-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-pack",
+   "name": "The Unlikely Friendship: The Pack",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mightyena",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "*A pack comes out of the grass. Mightyena, six, and they've done this before.*\n\nThe Zangoose and the Seviper are already back to back. There's room beside them. Just.",
+   "choices": [
+    {
+     "label": "Fight beside them.",
+     "success": {
+      "text": "The first three come in low. The Zangoose takes the place beside you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "truce-pack-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-25-after"
+        }
+       ],
+       "team": [
+        "mightyena",
+        "mightyena",
+        "mightyena"
+       ],
+       "format": "doubles",
+       "name": "The Pack",
+       "ally": "zangoose",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-25-pack-2"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-pack-2",
+   "name": "The Unlikely Friendship: The Pack",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "seviper",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "Three more. When the Zangoose is hit hard, the Seviper goes straight for whatever did it.\n\nNow the Seviper slides in beside you, and the Zangoose watches its back.",
+   "choices": [
+    {
+     "label": "Hold together.",
+     "success": {
+      "text": "The last of the pack circle, and come in.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "truce-pack-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-25-after"
+        }
+       ],
+       "team": [
+        "mightyena",
+        "mightyena",
+        "mightyena"
+       ],
+       "format": "doubles",
+       "name": "The Pack",
+       "ally": "seviper",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-25-after"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-after",
+   "name": "The Unlikely Friendship",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "zangoose",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "The grass goes still.\n\nThey check each other for injuries before they look at you.",
+   "choices": [
+    {
+     "label": "Come with me.",
+     "success": {
+      "text": "You crouch, and hold out your hand. Both of them look at it. Only one of them can take it first.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-25-which"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Both of you.",
+     "success": {
+      "text": "They try to get into the same Ball, if you let them. They don't fit.\n\nThey take two.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "zangoose"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "truce"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "seviper"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "truce"
+       },
+       {
+        "kind": "flag",
+        "key": "truce-both",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "truce-region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay together. Good luck.",
+     "success": {
+      "text": "They go. The Zangoose looks back, and lifts a paw.\n\nOn the path where they slept: a Berry, split neatly in two.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "truce-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "truce-region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-which",
+   "name": "The Unlikely Friendship",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "zangoose",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "Which one?",
+   "choices": [
+    {
+     "label": "The Zangoose.",
+     "success": {
+      "text": "It comes. It looks back.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "zangoose"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "truce"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "truce-one",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "truce-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "truce-region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Seviper.",
+     "success": {
+      "text": "It comes. It looks back.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "seviper"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "truce"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "truce-one",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "truce-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "truce-region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-sight1",
+   "name": "A Shape on a Ridge",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "truce-one",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "truce-sight",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "truce-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zangoose",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "A shape on a ridge, against the sky.\n\nThe one you recruited stops dead, and stares.",
+   "choices": [
+    {
+     "label": "Keep going.",
+     "success": {
+      "text": "When you look again, the ridge is empty.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "truce-sight",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "truce-sight1-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-sight2",
+   "name": "Closer",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "truce-one",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "truce-sight",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "truce-sight1-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zangoose",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "Closer, this time. At the edge of the trees.\n\nIt's thin. It's been following you.",
+   "choices": [
+    {
+     "label": "Keep going.",
+     "success": {
+      "text": "It keeps its distance. It doesn't stop following.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "truce-sight",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "truce-sight2-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-sight3",
+   "name": "The Edge of the Firelight",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "truce-one",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "truce-sight",
+     "atLeast": 2,
+     "atMost": 2
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "truce-sight2-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zangoose",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "You make camp. It's at the edge of the firelight.\n\nThe one you recruited is sitting up, very straight, not looking at it. Trying very hard not to look at it.",
+   "choices": [
+    {
+     "label": "Come in.",
+     "success": {
+      "text": "It comes in. It lies down beside the other one as if it had never been anywhere else.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "truce-one",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "seviper"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "truce"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "truce-one",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "zangoose"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "truce"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "truce-sight",
+        "n": 3
+       },
+       {
+        "kind": "flag",
+        "key": "truce-reunited",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go home.",
+     "success": {
+      "text": "It doesn't go home. It comes in anyway, and lies down beside the other one, and that's that.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "truce-one",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "seviper"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "truce"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "truce-one",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "zangoose"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "truce"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "truce-sight",
+        "n": 3
+       },
+       {
+        "kind": "flag",
+        "key": "truce-reunited",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-kits",
+   "name": "A Ditch",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "truce-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "truce-region"
+    },
+    {
+     "kind": "flag",
+     "key": "truce-kits",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zangoose",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "In a ditch by the road, a Zangoose kit and a small Seviper are playing.\n\nNobody has told them yet.",
+   "choices": [
+    {
+     "label": "Don't tell them.",
+     "success": {
+      "text": "You walk on quietly, and let them play.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "truce-kits",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

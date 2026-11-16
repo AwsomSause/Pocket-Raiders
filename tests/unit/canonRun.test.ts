@@ -73,7 +73,7 @@ describe('Veridian Forest (Samurai duel)', () => {
   });
   it('Samurai Slash exists as a Bug move with the first-use flinch', () => {
     const m = content.moves.get('samurai-slash')!;
-    expect(m).toMatchObject({ type: 'bug', category: 'physical', power: 70, accuracy: 100, pp: 10 });
+    expect(m).toMatchObject({ type: 'bug', category: 'physical', power: 60, accuracy: 100, pp: 10 }); // Greenneedle gn.03: power 60 (the pack doc)
     expect(m.effects.flinchFirstUse).toBe(true);
   });
   it('the whole chain of rooms opens from the gate (every addEvent target exists)', () => {

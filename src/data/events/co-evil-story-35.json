@@ -1,0 +1,1511 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "al-youve-arrived",
+   "name": "You've Arrived",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/alolan-usum-gentleman",
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#2a2a34",
+    "effect": "rain"
+   },
+   "intro": "Rain. A man of seventy in a blazer, with a clipboard in a plastic bag, being waved through Po Town's gate by a Grunt who doesn't look up. Mr. Sylvester Cavendish: \"I'm expected. Thursdays. I inspect the show home. I was Mr. Norcross's last man on site; nobody's told me to stop.\" Mr. Cavendish: \"Forty villas. I never sold one. Thirty years in property and that's my record: nought. It rained on every viewing. People'd stand in that square under my umbrella and say, 'It's very grey, isn't it,' and I'd say, 'It's unseasonal.' For eleven months.\" Mr. Cavendish: \"Then the young people moved in. I came up to evict them. I'd a letter. The big one with the bat opened the door and said, 'What's your name.' I told him. He said, 'You ate?'\" Mr. Cavendish: \"I've had Thursday supper here six years. It's the only time the place has ever been lived in. I put that in my report. 'Occupancy: full.' Nobody reads it. There's nobody to read it.\"",
+   "choices": [
+    {
+     "label": "\"Why did it rain?\"",
+     "success": {
+      "text": "Mr. Cavendish: \"The wall. There was a path. Old; you'd not have seen it. I said to Mr. Norcross: there's a path. He said, paths don't have title.\" He gives you a brochure: PO TOWN. YOU'VE ARRIVED. On the back, in his hand, a sketch map: where the path was.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-lore-potown",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "potown-path-known",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's in the report?\"",
+     "success": {
+      "text": "He takes it out of the plastic bag and shows you. Six years of Thursdays, one line each. \"Occupancy: full.\" He gives you a brochure: PO TOWN. YOU'VE ARRIVED. On the back, in his hand, a sketch map: where the path was.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-lore-potown",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "potown-path-known",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who owns it now?\"",
+     "success": {
+      "text": "Mr. Cavendish: \"The bank that took Norcross. Then a bank that took that bank. Then, four years ago, a holding company with a white logo. They've never sent anyone. They pay the rates.\" Aether owns Po Town outright. He gives you a brochure: PO TOWN. YOU'VE ARRIVED. On the back, in his hand, a sketch map: where the path was.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "alola-lore-potown",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "potown-path-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-aether-owns-potown",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-ten",
+   "name": "Ten",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "A Pokémon Center that was never opened. Dust sheets. Two Grunts behind the counter in paper hats they've made. Grunt A: \"Yo, welcome to the Pokémon Center! That'll be ten.\" Grunt B: \"We ain't got the machine. Machine never came. We got a couch.\" Grunt A: \"And a book.\" He holds it up. FIRST AID FOR POKÉMON: A HOME GUIDE. It's very thumbed. Grunt A: \"I'm on chapter nine. I can do sprains. I can do a really good sling.\" Grunt B: \"Ten gets you the couch, a sling if you need it, and Kimo here tells you it's gonna be okay. He's good at that part. He practised on us.\" The Honest Trade Card: ₽10. A rest. It heals a quarter. It isn't a real Center. He means it.",
+   "choices": [
+    {
+     "label": "Pay the ten. (₽10)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 10
+      }
+     ],
+     "success": {
+      "text": "The couch. A sling, on whichever of your Pokémon looks sorriest. Kimo: \"It's gonna be okay.\" It's said with such conviction that it is.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -10
+       },
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ten-paid",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Where'd you learn?\"",
+     "success": {
+      "text": "Kimo: \"My Rattata got sick, back home. Center was two villages off. I didn't know what to do. I ain't ever not gonna know what to do again.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Give them a real Potion.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "potion"
+      }
+     ],
+     "success": {
+      "text": "They look at it. Grunt B: \"Yo. Is that— it's full.\" They put it on a shelf, behind glass. They don't use it. It's for emergencies. Someone else's.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "potion"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ten-potion",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-rhymes-plumeria",
+   "name": "Rhymes with Plumeria",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#3a3a44",
+    "effect": "none"
+   },
+   "intro": "A wall. A Grunt with a spray can, not spraying. A notebook open on a bin. Tupp: \"Yo. I'm writin' a tribute. For Big Sis. It's her day. We don't know when her birthday is; she won't say; so we picked one.\" Tupp: \"I got the first line. 'Yo, Big Sis, Plumeria—' and then I been here two hours.\" Rapp, on the kerb, not looking up from a malasada: Rapp: \"Tell them what you've got.\" Tupp: \"'Wisteria.' 'Bacteria.' 'Cafeteria.'\" Zipp: \"Cafeteria!\" Rapp: \"He likes 'bacteria.' I've said no.\" Pick the second line.",
+   "choices": [
+    {
+     "label": "\"—you're the whole cafeteria.\"",
+     "success": {
+      "text": "Tupp: \"'Cause she feeds us! Yo, that's deep.\" Rapp: \"...It's actually not the worst.\" It goes on the wall. Eight feet high, on the Po Town road, for the rest of the run.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "skull-rep",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "alola-x-bars",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-bars-cafeteria",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"—nobody's superior.\"",
+     "success": {
+      "text": "Rapp: \"That scans.\" Tupp: \"What's 'scans.'\" It goes on the wall. Eight feet high, on the Po Town road, for the rest of the run.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "skull-rep",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "alola-x-bars",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-bars-superior",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"—we were lost in the interior.\"",
+     "success": {
+      "text": "Nobody says anything for a second. Zipp, quietly: \"Interior.\" It goes on the wall. Eight feet high, on the Po Town road, for the rest of the run.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "skull-rep",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "alola-x-bars",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-bars-interior",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"—fights off bacteria.\"",
+     "success": {
+      "text": "Rapp: \"No.\" It goes up anyway. Tupp's delighted. It goes on the wall. Eight feet high, on the Po Town road, for the rest of the run.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "skull-rep",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "alola-x-bars",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-bars-bacteria",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-rhymes-plumeria-2",
+   "name": "Rhymes with Plumeria",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "alola-x-bars",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.plumeria"
+    ],
+    "tint": "#3a3a44",
+    "effect": "none"
+   },
+   "intro": "Plumeria, in front of the wall, looking at it, arms folded. Plumeria: \"Who did this.\" A long time. Plumeria: \"...It ain't even my birthday.\"",
+   "choices": [
+    {
+     "label": "(Say nothing.)",
+     "success": {
+      "text": "She doesn't have it painted over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-bars-kept",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-it-wouldnt",
+   "name": "It Wouldn't",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m"
+    ],
+    "pokemon": "fomantis",
+    "tint": "#1a2a1a",
+    "effect": "none"
+   },
+   "intro": "The foot of a jungle path on Akala. A girl of seventeen in a bandana, sitting on the trial gate, which is closed. A Fomantis on her knee. Nohea: \"I ain't vandalisin' it. I'm sittin' on it. There's a difference.\" Nohea: \"I took it two years back. Got to the Totem. And Momi here: she just wouldn't. She looked at that thing, it's six times her size, and she got behind my leg. And everybody's watchin'. And the captain says, 'Send it out.'\" Nohea: \"I said no. She's scared. I ain't sendin' her. He said, 'Then that's a fail.' I said, 'Okay.' I walked down. I been thinkin' ever since: I chose that. That ain't failin'. That's choosin' her over a stamp.\" Nohea: \"Nobody's got a word for that. There's 'pass' and there's 'next.'\"",
+   "choices": [
+    {
+     "label": "\"You were right.\"",
+     "success": {
+      "text": "She looks at you a long time. Nohea: \"...Yeah. I was.\" Something moves in the trees.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-notyet",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-it-wouldnt-wait"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Is she still scared?\"",
+     "success": {
+      "text": "Nohea: \"Nah. She's fought plenty since. She just wasn't ready that day. Nobody asked if she was ready. It's a set date.\" Something moves in the trees.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-notyet",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-it-wouldnt-wait"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What would you call it?\"",
+     "success": {
+      "text": "She thinks. Nohea: \"'Not yet.' That's all it was. 'Not yet.' You'd think there'd be a stamp for that.\" Something moves in the trees.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-notyet",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-it-wouldnt-wait"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-it-wouldnt-wait",
+   "name": "It Wouldn't",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m"
+    ],
+    "pokemon": "lurantis",
+    "tint": "#1a2a1a",
+    "effect": "none"
+   },
+   "intro": "The Totem's in the trees.",
+   "choices": [
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "It comes to the gate. It's enormous. It looks at the Fomantis. The Fomantis looks back. It doesn't hide. Nohea: \"...Huh. It remembers her.\" The Totem lowers its head. It's not a challenge. It's a hello.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-notyet-totem",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go.",
+     "success": {
+      "text": "You leave her on the gate, with Momi on her knee.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-next",
+   "name": "Next",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.kiawe"
+    ],
+    "tint": "#2a3a2a",
+    "effect": "none"
+   },
+   "intro": "A porch on Melemele. A man of thirty with a ledger: a real one, the island challenge's roll. He's running a finger down a column. Captain Kainoa: \"The roll. Everybody who's stood my trial. Date. Result. There's a column for 'returned.' I've been looking at it.\" Captain Kainoa: \"Six years of it. Two hundred and eleven took it. A hundred and sixty passed. Fifty-one didn't.\" Captain Kainoa: \"'Returned': four.\" Captain Kainoa: \"Nobody's barred. I'd take any of them. I'd take them tomorrow. I thought— I assumed if they wanted it, they'd come back. Forty-seven kids didn't want it? That's not right. That can't be right.\"",
+   "choices": [
+    {
+     "label": "\"What do you say, when they fail?\"",
+     "success": {
+      "text": "Captain Kainoa: \"'Next.' It's— there's a queue. It's not unkind. It means the next one's up.\" He hears it. Captain Kainoa: \"...It means the next one's up. And you're not.\" He starts a letter. It isn't sent yet: he's working out how to ask without it being pity.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "alola-captain",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Have you ever asked one to come back?\"",
+     "success": {
+      "text": "Captain Kainoa: \"It's not done. The challenge is the challenger's to take. If I went knocking, it'd be—\" He stops. Captain Kainoa: \"I was going to say 'pity.' Would it be? Or would it just be asking?\" He starts a letter. It isn't sent yet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "alola-captain",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"There's a boy in Po Town who can tell you the date.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "alola-same-job",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Captain Kainoa: \"Ridgeway. Third attempt.\" He finds the line. He doesn't need to look for long. Captain Kainoa: \"I was talking to somebody. The ferry times. I didn't see the end. I said 'next' to a kid on his third try and I didn't see the end.\" He starts a letter. It isn't sent yet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "alola-captain",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-captain-koa",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-didnt-need-it",
+   "name": "The One Who Didn't Need It",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.hala"
+    ],
+    "tint": "#2a2a1a",
+    "effect": "none"
+   },
+   "intro": "A kahuna, on his step in Iki Town, with two wooden practice staffs across his knees. One's worn smooth. One's nearly new. Hala: \"I'd two pupils. Fifteen years back. Best I've had. One laughed when he lost. One went white.\" Hala: \"I'd one place to give. A captaincy. I thought about it a season. I gave it to the one who laughed.\" Hala: \"My reasoning was this. The one who laughs can carry it lightly. The one who goes white: it'll eat him. I was protecting him from it. That's what I told myself.\" Hala: \"I've had fifteen years to see it from his side. I picked the one who didn't need it. And I told the one who needed it most that he'd come second. I've thought, since, that I'd the thing backwards.\"",
+   "choices": [
+    {
+     "label": "\"Did you tell him why?\"",
+     "success": {
+      "text": "Hala: \"No. I said the name of the other boy. In front of the village. That's how it's done.\" He turns the newer staff over. Hala: \"He left this. He didn't come back for it.\" He holds it out to you. Guzma's Staff.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guzma-staff",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"He's got forty kids now.\"",
+     "success": {
+      "text": "Hala: \"I know. I've stood on the Po Town road in the rain and counted the lights. He took in every one the islands dropped. That's a kahuna's work. He's been doing my job in a wet house for six years, without the title, thinking he's a criminal.\" He holds out the newer staff. Guzma's Staff.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guzma-staff",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What would you say to him?\"",
+     "success": {
+      "text": "He doesn't answer for a while. Then he holds out the newer staff. Hala: \"Give him this. He'll know what it says.\" Guzma's Staff.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guzma-staff",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-guzma-staff",
+   "name": "Guzma's Staff",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "guzma-staff",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "guzma-staff-given",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.guzma"
+    ],
+    "tint": "#2a2a34",
+    "effect": "rain"
+   },
+   "intro": "Guzma, on the Po Town steps. He sees what you're carrying. Guzma: \"...Where'd you get that.\"",
+   "choices": [
+    {
+     "label": "\"Hala kept it.\"",
+     "success": {
+      "text": "Guzma: \"He kept it?\" He weighs it. His hands know it. Guzma: \"Fifteen years. He coulda burned it.\" \"He says he had it backwards.\" He doesn't answer. He doesn't put it down, either.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guzma-staff-given",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-the-barge",
+   "name": "The Barge",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_f"
+    ],
+    "tint": "#2a3a40",
+    "effect": "none"
+   },
+   "intro": "A rusted hull at a Hau'oli boatyard. A wheelhouse with the glass out. An old woman in faded white overalls, fishing off the stern. Auntie Mahina: \"This was all of it. The whole Foundation. Him, her, me, a tank, a net. I was the first hire. He paid me in fish for a month till the grant came.\" Auntie Mahina: \"Look at the wall. In there.\" Chalk. Two columns, in a quick slanting hand. IN. HOME. Tally marks. Hundreds. The columns keep pace all the way down. Auntie Mahina: \"He'd mark 'home' himself. He'd not let anyone else. He'd come back from the reef grinning like he'd been given something.\" Auntie Mahina: \"She did the 'in.' She was better at the in. She'd sit up three nights with a thing. She'd the gift for it; he'd tell you so. But she'd go quiet on release days. She'd stand at the rail and not wave.\"",
+   "choices": [
+    {
+     "label": "\"What happened to the sign?\"",
+     "success": {
+      "text": "Auntie Mahina: \"Behind the locker. I'd not let them skip it. I said, it's his writing; you'll not put his writing in a skip.\" She gives you a stick of the chalk.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "aether-sign-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-chalk",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why'd she go quiet?\"",
+     "success": {
+      "text": "Auntie Mahina: \"I asked her once. She said, 'I've just got it right, and now it goes.' He said, 'That's what getting it right is, love.' She laughed. She didn't agree.\" She gives you a stick of the chalk.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "aether-sign-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-chalk",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why are you still here?\"",
+     "success": {
+      "text": "Auntie Mahina: \"Somebody's got to keep the tally. Nobody's marked 'home' in a long while.\" She gives you a stick of the chalk.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "aether-sign-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-chalk",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-chalk-zia",
+   "name": "A Stick of Chalk",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "aether-chalk",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "alola-same-job",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aether-chalk-given",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "Zia, in white gloves, between rounds.",
+   "choices": [
+    {
+     "label": "Give her the chalk.",
+     "success": {
+      "text": "She turns it over. Zia: \"From the barge? His?\" She puts it in her pocket, carefully, as if it might go off.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aether-chalk-given",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You keep it. She doesn't know you've got it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-get-her-back",
+   "name": "When Do I Get Her Back",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_f",
+     "trainer.pr/preschooler_f"
+    ],
+    "pokemon": "rockruff",
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "A Pokémon Center. A white desk in the lobby, with a white banner: AETHER FOUNDATION — WE'LL TAKE IT FROM HERE. A woman with a gentle voice. A girl of eight with a Rockruff in a towel. Curator Pua: \"A thorn, is it? In the pad. Poor thing. We've specialists. She'll have the very best.\" The girl: \"When do I get her back?\" Curator Pua: \"When she's well, dear.\" The girl: \"When's that?\" Curator Pua: \"It's— we don't like to rush them.\" She's got the form half filled in. There's a box: RETURN TO OWNER. There's another: FOUNDATION CARE (ONGOING). Her pen's over the second. It always goes to the second. It's for the best. The girl: \"It's only a thorn.\"",
+   "choices": [
+    {
+     "label": "(Take the thorn out.)",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Tweezers, and a careful hand. The Rockruff licks your wrist. The girl: \"Oh. It was only that.\" Pua, watching: Curator Pua: \"...It was only that.\" She looks at her form. She puts it in the bin, quite gently.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-thorn",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Tweezers. It yelps once, and then it's out. The Rockruff licks your wrist anyway. The girl: \"Oh. It was only that.\" Pua, watching: Curator Pua: \"...It was only that.\" She looks at her form. She puts it in the bin, quite gently.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-thorn",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tick the first box.\"",
+     "success": {
+      "text": "Curator Pua: \"It's— out there they only get hurt again.\" \"It's a thorn.\" She ticks it. Her hand's not used to the motion.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's your release rate?\"",
+     "success": {
+      "text": "Curator Pua: \"Ninety-eight per— no. That's recovery. Release is—\" She doesn't know. She's worked there nine years. Curator Pua: \"I've never been asked. I'll— I'll find out.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pua-asked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-aether-house-post",
+   "name": "The Post at the Aether House",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.acerola"
+    ],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A kitchen on Ula'ula. An eleven-year-old on a stool, stirring something, with a shoebox of envelopes beside the stove. Acerola: \"I write every month. To the Foundation. 'Dear Sirs, the roof.' 'Dear Sirs, the boiler.' 'Dear Sirs, we're nine now, not six.' I keep the copies. I've forty-one.\" Acerola: \"They used to answer. A lady. Nice handwriting; she did little apologies in the margins. Then it stopped. Four years. Not a 'no.' Just: nothing. A 'no' I could do something with.\" One envelope's different. It's come back. RETURN TO SENDER. And, stapled to it, a slip nobody meant to enclose: a remittance stub. \"ULA'ULA: CHILDREN'S FUND. Monthly. Payee: —\" The payee's a jetty. In Po Town.",
+   "choices": [
+    {
+     "label": "\"Who's the nice handwriting?\"",
+     "success": {
+      "text": "Acerola: \"I don't know. A lady at the Foundation. W, she signs. Just W.\" She gives you her forty-second letter, with the stub. Acerola: \"Give it to W. If you find her.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "acerola-letter",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let me carry one.\"",
+     "success": {
+      "text": "She gives you her forty-second letter, with the stub. Acerola: \"Don't read it. It's mostly about the boiler.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "acerola-letter",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"D'you know where the money goes?\"",
+     "success": {
+      "text": "Acerola: \"To children. On Ula'ula. That's what it says.\" She reads the stub. She's eleven; she's quick. Acerola: \"...There's two lots of children on Ula'ula with nobody. They've picked the other one. Why'd they— we don't make any noise.\" She gives you the letter, with the stub.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "acerola-letter",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-acerola-letter-wicke",
+   "name": "Acerola's Forty-Second Letter",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "acerola-letter",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aether-house-found",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.wicke"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "Wicke, at a desk with a pile of forms.",
+   "choices": [
+    {
+     "label": "Give her the letter.",
+     "success": {
+      "text": "She reads it. Wicke: \"I sign this. Every month. I thought— it says children's fund. I thought it was you.\" She turns the stub over. She knows the hand that changed the payee. Wicke: \"Faba.\" A pause. Wicke: \"Oh, Acerola. Forty-one letters. I never saw one.\" She sits down and writes back. Three pages. There are little apologies in the margins. From the next stage, the Aether House is funded. And Wicke starts reading what she signs.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-house-found",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-chosen",
+   "name": "Chosen",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lillie-z"
+    ],
+    "tint": "#4a3a4a",
+    "effect": "none"
+   },
+   "intro": "A clothes shop in Hau'oli. A rail of dresses. A girl in white, holding two hangers, entirely stuck. A bag on the floor beside her, which sneezes. Lillie: \"I'm— could you— I can't tell which I like.\" Lillie: \"Mother chose. Until I was eleven; and after that I just went on wearing what she'd chosen, because I didn't know how to do the other thing. I've never bought a piece of clothing. I've been in here forty minutes. The lady thinks I'm going to steal something.\" Lillie: \"How do you know? Which you like? Is there a feeling? I keep thinking: which would she pick. And then: which would she hate. Neither of those is me.\"",
+   "choices": [
+    {
+     "label": "\"The left one.\"",
+     "success": {
+      "text": "She buys it. She's grateful. It's still somebody else choosing. She knows. Lillie: \"Thank you. Next time I'll— next time.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"The right one.\"",
+     "success": {
+      "text": "She buys it. She's grateful. It's still somebody else choosing. She knows. Lillie: \"Thank you. Next time I'll— next time.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Neither. Try a third.\"",
+     "success": {
+      "text": "She looks along the rail. She takes down something she'd not have dared. It's not white. Lillie: \"...Oh. Oh. Is that it? Is that the feeling?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lillie-chose",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm not going to tell you.\"",
+     "success": {
+      "text": "She's almost cross. Lillie: \"That's not helpful.\" \"No.\" A long time. The bag sneezes again. She puts both back. She walks the whole rail. She comes back with a hat. Lillie: \"I don't know why. I just want it.\" \"That's the feeling.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lillie-chose",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-the-third",
+   "name": "The Third",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "pokemon": "type-null",
+    "tint": "#1a2230",
+    "effect": "fog"
+   },
+   "intro": "A workshop off Aether Paradise's conservation wing. Three stands for three heavy helmets. Two are empty. A technician with a soldering iron and a guilty look. Mr. Nathaniel Ironside: \"I made the masks. Three. For the three of them. They were built to fight what's on the other side of the holes; they went wrong; I was told: 'restrain.' So I made something that'd hold.\" Mr. Ironside: \"The boy took one and ran. Good for him. One's gone to the cold. That leaves—\" Behind a mesh door: something large, in a helmet too heavy for its neck, lying with its head on its forefeet. It's looking at the door. Mr. Ironside: \"It doesn't do anything. It's not angry. The file says 'failed.' I've been feeding it for two years and I can't work out what it's failed at.\"",
+   "choices": [
+    {
+     "label": "\"Take the mask off.\"",
+     "success": {
+      "text": "It's got a catch. Mr. Ironside built it. He knows where.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "al-the-third-mask"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What does it do all day?\"",
+     "success": {
+      "text": "Mr. Ironside: \"Watches the door. I thought: waiting for orders. Then I noticed. It's not the lab door. It's that one.\" A small door, at the back. Child height. Painted over. Mr. Ironside: \"That went to the family floor. The children used to come through. Before.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "al-the-third-mask"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The boy named his.\"",
+     "success": {
+      "text": "Mr. Ironside: \"Did he.\" He looks at the thing in the mesh. Mr. Ironside: \"Two years I've called you 'Three.'\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "al-the-third-mask"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-the-third-mask",
+   "name": "The Third",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "pokemon": "type-null",
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "The mask has a catch. Mr. Ironside knows where.",
+   "choices": [
+    {
+     "label": "Take it off.",
+     "success": {
+      "text": "It's the only one that hasn't had it off. It lifts its head. It's lighter than it expected; it overbalances. It looks at you. It looks at the small door. It goes to the door and sits by it. It's still waiting. It's just more comfortable.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "null-three-free",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Name it.",
+     "success": {
+      "text": "You give it a name. Mr. Ironside writes it on the stand, in capitals, and underlines it.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "null-three-named",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell Lillie.",
+     "success": {
+      "text": "Lillie: \"There's a third? Awake? It used to— there was something behind that door that breathed. I thought I'd imagined it. I used to push biscuits under.\" She goes. She opens the small door from the other side.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "null-three-lillie",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-wednesday-1",
+   "name": "Wednesday",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "potown-path-known",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_f"
+    ],
+    "tint": "#2a2a34",
+    "effect": "rain"
+   },
+   "intro": "Po Town. A stretch of wall like any other. Rain. Lux, with a stick, scratching at the foot of it: Lux: \"There's steps under here. Old ones. Going through.\"",
+   "choices": [
+    {
+     "label": "Dig.",
+     "success": {
+      "text": "A flagstone. Another. They go under the wall and stop.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "potown-wednesday-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-wednesday-2",
+   "name": "Wednesday",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "potown-wednesday-1",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.guzma"
+    ],
+    "tint": "#2a2a34",
+    "effect": "rain"
+   },
+   "intro": "Guzma, with a bat, looking at a wall. Guzma: \"Cavendish says there's a path. Says the guardian used it. Says that's why it rains.\" A pause. Guzma: \"I been lookin' for somethin' it's okay to smash for six years.\"",
+   "choices": [
+    {
+     "label": "Hand him the first swing.",
+     "success": {
+      "text": "He takes the wall down across the width of the path. Nothing else. He's very exact. Forty kids carry the blocks. Plumeria: \"Stack 'em. That's a bench.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "potown-wednesday-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-wednesday-3",
+   "name": "Wednesday",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 5,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "potown-wednesday-2",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#2a2a34",
+    "effect": "rain"
+   },
+   "intro": "A gap in a wall. Wet steps, going through, up toward the mountain. Something's used them. Hoofprints, in the mud, very large.",
+   "choices": [
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "It's a Wednesday. The rain thins. It doesn't stop like a tap; it stops like someone leaving a room. The square's dripping. There's a colour in the sky nobody in Po Town's seen from Po Town. Rapp: \"...What's that noise.\" Tupp: \"What noise.\" Rapp: \"That's the noise. There isn't one.\" She opens a window. On the bench made of wall, something's left a berry the size of a Bulu's head. Nobody saw it put there. On Thursday, Mr. Cavendish stands in a dry square with his umbrella down for the first time in thirty years. Mr. Cavendish: \"'It's unseasonal,' I used to say.\" He writes in his report: \"Weather: fine. Occupancy: full. Recommend: no action.\"",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "potown-wednesday",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

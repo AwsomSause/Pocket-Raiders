@@ -1,0 +1,27 @@
+[
+  {
+    "id": "colony-washer",
+    "giftOnly": true,
+    "name": "Colony Washer",
+    "family": "Questline rewards (anime)",
+    "description": "A Meltan colony’s gift, warm from being held. Steel moves +10%",
+    "rarity": "uncommon",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "metal-coat",
+    "status": "supported",
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "steel"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  }
+]

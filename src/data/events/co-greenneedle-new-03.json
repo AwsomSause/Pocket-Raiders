@@ -1,0 +1,434 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-03-find",
+   "name": "The Ball That Wouldn't Open",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ball-found",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a62",
+    "effect": "none"
+   },
+   "intro": "*An old Poké Ball, half sunk in the mud. The paint is worn to bare metal where small thumbs once held it.*\n\n*A strip of tape runs across the seam, curling at its edges. On it, in a child's careful hand, one word:* sorry.",
+   "choices": [
+    {
+     "label": "Pick it up.",
+     "success": {
+      "text": "*You press the button. Nothing happens. The button doesn't work.*\n\n*Something inside shifts its weight, quietly, away from where your hand is. It isn't hiding from the Ball. It's hiding from whoever opens it.*\n\nYou put it in your bag anyway. It weighs almost nothing, and it is not empty.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ballFind"
+       },
+       {
+        "kind": "moment",
+        "text": "Found an old Poké Ball in the mud that wouldn't open. The tape said sorry.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it in the mud.",
+     "success": {
+      "text": "You leave it where it lies. The tape lifts in the wind for a moment, and settles again. It had waited a long time already.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-03-rest",
+   "name": "The Ball That Wouldn't Open",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a62",
+    "effect": "none"
+   },
+   "intro": "{ball:held}\n\nThe old Ball sits at the bottom of your bag, quiet. You can tell, by the weight, that something in it is awake.",
+   "choices": [
+    {
+     "label": "Talk to it.",
+     "success": {
+      "text": "You tell it about the road. The weather. Who is hurt, and who is only pretending not to be. You don't ask it to answer.\n\n*The Ball is warm.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ballKind"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it by the fire.",
+     "success": {
+      "text": "You set it down in the firelight, close enough to feel it, not close enough to crowd it. You don't watch.\n\n*In the morning it's rolled closer to the hurt one.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ballKind"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold it in the next battle.",
+     "success": {
+      "text": "You close your hand around it, and keep it there. If it wants to see what a fight looks like from the inside of a hand, it can.\n\nIt stays still. It is listening.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ballHold"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it away.",
+     "success": {
+      "text": "You tuck it back down into the bag, deep, where it's quiet. Nothing happens. Nothing was asked of it, and that is its own kind of kindness.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-03-hatch",
+   "name": "The Ball That Wouldn't Open: It Came Out",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a62",
+    "effect": "none"
+   },
+   "intro": "The next rest opens with one more shape asleep among the party, curled up small against the warmest of them.\n\n*Nobody saw it come out. The tape is on the ground, folded in half.*\n\nYou read the word one more time. It does not seem to have been meant for you.",
+   "choices": [
+    {
+     "label": "Let it sleep.",
+     "success": {
+      "text": "You don't wake it. You pull a blanket over the whole pile, and sit watch for a while.\n\nWhen it finally stirs, it looks at you, then at your hand, and doesn't flinch. It stays.",
+      "effects": [
+       {
+        "kind": "join",
+        "recall": false,
+        "species": [
+         "@ball-mon"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "shadow": false,
+        "blissful": false,
+        "hiddenAbility": false,
+        "moves": [],
+        "direct": true,
+        "alpha": false,
+        "starterType": false,
+        "asIs": true,
+        "ability": "trust-earned",
+        "mark": "wouldnt-open"
+       },
+       {
+        "kind": "gn",
+        "op": "ballHatched"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "ball-at"
+       },
+       {
+        "kind": "moment",
+        "text": "Waited for a Ball that wouldn't open, and it opened itself.",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-03-tinker",
+   "name": "The Tinker",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ball-found",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ball-gone",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ball-tinker",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a62",
+    "effect": "none"
+   },
+   "intro": "A tinker's stall, between a kettle and a broken clock. They see the old Ball in your bag before you've said a word.\n\n**Tinker:** \"Seized mechanism. I can crack it for two hundred. It won't like it.\"",
+   "choices": [
+    {
+     "label": "Pay ₽200.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "They set it in a vice, and something small and precise clicks. A crack of light.\n\nThen a streak across the floor, under the stall, out the door. The Tinker holds up the empty shell, and the tape, and says nothing.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "gn",
+        "op": "ballForce"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ball-tinker",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "ball-bolt-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it shut.",
+     "success": {
+      "text": "\"Suit yourself.\" They don't offer again. The Ball is a little warmer when you walk away, or you'd like to think so.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ball-tinker",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-03-again",
+   "name": "The Ball That Wouldn't Open: Bolted",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ball-bolted",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "ball-bolt-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "ball-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a62",
+    "effect": "none"
+   },
+   "intro": "It is standing in the road. You know it before you see its face, because there is still a scrap of tape stuck to one foot.\n\nIt does not run. It has run enough.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It doesn't attack because it hates you. It attacks because nobody has ever shown it what else to do with being afraid.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@ball-mon"
+       ],
+       "types": [],
+       "levelBonus": 16,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ball-met",
+         "n": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Met the Pokémon from the Ball again, after the tinker forced it open.",
+         "importance": 60
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "gn": "ball",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ball-met",
+         "n": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You step off the road and let it pass. It looks back once, from the trees, at the place where the Ball used to be.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ball-met",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-03-after",
+   "name": "The Ball That Wouldn't Open: A Young Trainer",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ball-out",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "ball-at"
+    },
+    {
+     "kind": "flag",
+     "key": "ball-after",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a62",
+    "effect": "none"
+   },
+   "intro": "*A young trainer on the path stops mid-stride. Their eyes go to the Pokémon beside you, and then the colour goes out of their face.*\n\nThey have carried one word around for a very long time. It is trying to come out.",
+   "choices": [
+    {
+     "label": "Let them say it.",
+     "success": {
+      "text": "\"I'm sorry,\" they whisper, to the Pokémon, not to you. \"I'm so sorry. I couldn't— I was too small. I didn't know how.\"\n\nIt looks at them for a long moment. Then it leans against your leg, and stays.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ball-after",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A young trainer said sorry to the Pokémon from the Ball. It stayed with you.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's all right. Don't.",
+     "success": {
+      "text": "You step between them, gently. \"It's all right. You don't have to.\"\n\nThey cry anyway, quietly, with their hands over their mouth. The Pokémon doesn't move from your side.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ball-after",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Told a young trainer it was all right. The Pokémon from the Ball stayed with you.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

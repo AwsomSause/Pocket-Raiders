@@ -1,0 +1,33 @@
+{
+ "category": "anime",
+ "note": "Door chains of tools/events/co/anime-2.ts (entry = the questline first event; rooms linked with addEvent).",
+ "chains": [
+  {
+   "id": "ps_an12_paper_city",
+   "name": "The Paper City",
+   "entry": "an12-paper-city",
+   "themeId": "normal-psychic",
+   "tint": "#2e2c26",
+   "mood": "folded hush",
+   "start": "opened"
+  },
+  {
+   "id": "ps_an13_ice_library",
+   "name": "The Ice Library",
+   "entry": "an13-ice-library",
+   "themeId": "ice-psychic",
+   "tint": "#1a2a3a",
+   "mood": "frozen quiet",
+   "start": "opened"
+  },
+  {
+   "id": "ps_an15_mushroom_queen",
+   "name": "The Mushroom Queen",
+   "entry": "an15-mushroom-queen",
+   "themeId": "grass-poison",
+   "tint": "#1e2418",
+   "mood": "spore hush",
+   "start": "opened"
+  }
+ ]
+}

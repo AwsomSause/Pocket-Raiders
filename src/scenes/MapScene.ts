@@ -24,8 +24,12 @@ import { fieldHintId, licenseName, licenseNote } from '../core/license';
 import { SERVICES } from '../core/services/schema';
 import { stopIsHidden } from '../core/events';
 import { leadChatter } from '../core/leadChatter';
+import { xatuBlur } from '../core/greenneedle/cartographer';
 import { forecast, foggedAt, frontAt, isFogged, sightRange, visibleColumn } from '../core/world';
 import Phaser from 'phaser';
+
+/** gn.new.12: when the Xatu's map first went on show (kept across scene restarts; 0 = not running). */
+const peekClock = { key: '', at: 0 };
 import { pinnedObjective } from '../core/objectives';
 import { rerollRunQuest } from '../core/quests';
 import { regionDim } from '../ui/battleFx/transitions';
@@ -74,6 +78,9 @@ import { openCampMenu } from '../ui/campMenu';
 import { openBagMenu, openBoxMenu, openRivalNotebook, openSaveMenu, openStoryMenu, type FieldMenuHost } from '../ui/fieldMenus';
 import { hasRelationships, openRelationshipsMenu } from '../ui/relationshipsMenu';
 import { hasJournal, openJournalMenu } from '../ui/journalMenu';
+import { hasTeamSky, openSkyMenu } from '../ui/skyMenu';
+import { hasTeamHub, openTeamHub } from '../ui/insideMenu';
+import { barkLine } from '../core/evil/barks';
 import { openRunContentsMenu } from '../ui/runContentsMenu';
 import { onInputAction, type InputAction } from '../ui/input';
 import { Picker, speciesRow, type PickerLike, type PickerRow } from '../ui/partyPanel';
@@ -201,6 +208,8 @@ type Option =
   | { kind: 'story' }
   | { kind: 'relationships' }
   | { kind: 'journal' }
+  | { kind: 'sky' }
+  | { kind: 'teamHub' }
   | { kind: 'contents' }
   | { kind: 'notebook' }
   | { kind: 'bond' }
@@ -876,6 +885,20 @@ export class MapScene extends Phaser.Scene {
     const choiceIds = new Set(choices.map((n) => n.id));
     const mapLayer = this.add.container(0, 0);
     this.mapLayer = mapLayer;
+    // gn.new.12: the Xatu's map is on show for ten seconds (counted across scenes), then it blurs and the fog comes back.
+    if (stage.peekFrom !== undefined) {
+      if (peekClock.key !== `${run.runId}:${stage.index}` || peekClock.at === 0) { peekClock.key = `${run.runId}:${stage.index}`; peekClock.at = Date.now(); }
+      const left = Math.max(0, 10000 - (Date.now() - peekClock.at));
+      this.time.delayedCall(left, () => {
+        const { session: sv } = services();
+        xatuBlur(sv.run!);
+        sv.saveRunNow();
+        peekClock.at = 0;
+        const fade = this.motion === 'off' ? 0 : 900;
+        if (fade) this.tweens.add({ targets: mapLayer, alpha: 0.25, duration: fade, onComplete: () => this.scene.restart({ notice: 'The map blurs, the way a dream does on waking. The Xatu was right about the ten seconds.', focus: this.index }) });
+        else this.scene.restart({ notice: 'The map blurs, the way a dream does on waking. The Xatu was right about the ten seconds.', focus: this.index });
+      });
+    }
     this.nodePos = new Map();
     const colSpacing = league ? Math.min(200, (GAME_WIDTH - MAP_LEFT * 2 - 40) / Math.max(1, stage.map.columns - 1)) : COL_SPACING;
     this.colSpacing = colSpacing;
@@ -1168,7 +1191,7 @@ export class MapScene extends Phaser.Scene {
       buttons.push({ option: { kind: 'side', side }, label: side.kind === 'expedition' && legendOf(side.expeditionId) ? 'Legendary' : SIDE_LABEL[side.kind], color: side.kind === 'expedition' && legendOf(side.expeditionId) ? LEGEND_STYLE.color : side.kind === 'event' && !stopIsHidden(content, run, currentNode!, side) ? stopStyle(content.events.get(side.eventId ?? '')?.stop).color : SIDE_STYLE[side.kind].color });
     }
     if (boxCapacity(runPerks(content, services().session.run!)) > 0) buttons.push({ option: { kind: 'box' }, label: 'PC', color: COLORS.panel });
-    buttons.push({ option: { kind: 'party' }, label: 'Party', color: COLORS.panel }, { option: { kind: 'bag' }, label: 'Bag', color: COLORS.panel }, { option: { kind: 'camp' }, label: 'Camp', color: COLORS.panel }, { option: { kind: 'bond' }, label: 'Bonds', color: COLORS.panel }, { option: { kind: 'scrapbook' }, label: 'Album', color: COLORS.panel }, { option: { kind: 'story' }, label: 'Story', color: COLORS.panel }, ...(services().session.run!.story.rivals.length > 0 ? [{ option: { kind: 'notebook' as const }, label: 'Rivals', color: COLORS.panel }] : []), ...(hasRelationships() ? [{ option: { kind: 'relationships' as const }, label: 'People', color: COLORS.panel }] : []), ...(hasJournal() ? [{ option: { kind: 'journal' as const }, label: 'Notes', color: COLORS.panel }] : []), { option: { kind: 'contents' }, label: 'Run', color: COLORS.panel }, { option: { kind: 'save' }, label: 'Save', color: COLORS.panel });
+    buttons.push({ option: { kind: 'party' }, label: 'Party', color: COLORS.panel }, { option: { kind: 'bag' }, label: 'Bag', color: COLORS.panel }, { option: { kind: 'camp' }, label: 'Camp', color: COLORS.panel }, { option: { kind: 'bond' }, label: 'Bonds', color: COLORS.panel }, { option: { kind: 'scrapbook' }, label: 'Album', color: COLORS.panel }, { option: { kind: 'story' }, label: 'Story', color: COLORS.panel }, ...(services().session.run!.story.rivals.length > 0 ? [{ option: { kind: 'notebook' as const }, label: 'Rivals', color: COLORS.panel }] : []), ...(hasRelationships() ? [{ option: { kind: 'relationships' as const }, label: 'People', color: COLORS.panel }] : []), ...(hasJournal() ? [{ option: { kind: 'journal' as const }, label: 'Notes', color: COLORS.panel }] : []), ...(hasTeamSky() ? [{ option: { kind: 'sky' as const }, label: 'Team Sky', color: COLORS.panel }] : []), ...(hasTeamHub() ? [{ option: { kind: 'teamHub' as const }, label: 'Team', color: COLORS.panel }] : []), { option: { kind: 'contents' }, label: 'Run', color: COLORS.panel }, { option: { kind: 'save' }, label: 'Save', color: COLORS.panel });
     if (wipeStatus(services().session.run!)) buttons.push({ option: { kind: 'endRun' }, label: 'End run', color: 0x6a2a38 });
     // Buttons share the width right of the party: one tall row when they fit, else two short rows.
     const areaX = 40 + slots * step + 4;
@@ -1192,7 +1215,7 @@ export class MapScene extends Phaser.Scene {
     const riding = run.moveMode ? mapActions(content, run).find((a) => a.on) : undefined;
     const working = [riding ? `Riding the ${content.catalog.get(riding.itemId)!.name}` : '', mapItemSummary(content, run)].filter(Boolean).join(' · ');
     this.notice = this.add
-      .text(GAME_WIDTH - 24, 482, data.notice ?? wealthTaxNotice(run) ?? (working ? `Working: ${working}` : newsLine(content, run)), textStyle(15, chrome?.bottom.sub ?? '#f0e0a0', { align: 'right', wordWrap: { width: 300 } }))
+      .text(GAME_WIDTH - 24, 482, data.notice ?? wealthTaxNotice(run) ?? barkLine(content, run, 'rest', `${run.regionIndex}-${run.stage?.index ?? 0}-${run.stage?.current ?? 'start'}`) ?? (working ? `Working: ${working}` : newsLine(content, run)), textStyle(15, chrome?.bottom.sub ?? '#f0e0a0', { align: 'right', wordWrap: { width: 300 } }))
       .setOrigin(1, 0);
     fitBlock(this.notice, 300, 48);
     // New UI: the mock-ups' stage map (journey, web, tile map or cards by theme) when no map style is picked.
@@ -1600,6 +1623,10 @@ export class MapScene extends Phaser.Scene {
         return "What's in this run: your rules, picks, the time and tide, the stage bounty and any events.";
       case 'journal':
         return 'Field Notebook: your route so far, the story arcs you are in and the scenes you have seen.';
+      case 'teamHub':
+        return 'Team Hub: your rank, Standing and Suspicion inside the team, its orders and crew.';
+      case 'sky':
+        return 'Team Sky: Renown, Funds and Heat; hire, promote, dispatch, set the doctrine and build the base.';
       case 'relationships':
         return 'The people you have met in this story: how they feel about you and what they remember.';
       case 'save':
@@ -1736,7 +1763,8 @@ export class MapScene extends Phaser.Scene {
         if (option.side.kind === 'heal') {
           playSfxLazy(this, 'me.heal');
           this.busy = true;
-          this.healFx(() => this.scene.restart({ notice: message, focus: 0 }));
+          const heal = barkLine(session.content, session.run!, 'heal', `${option.side.id}-${session.run!.stage?.visited.length ?? 0}`);
+          this.healFx(() => this.scene.restart({ notice: heal ? `${message} ${heal}` : message, focus: 0 }));
         } else {
           this.busy = true;
           this.scene.start(sceneForRun(session.run!));
@@ -1766,6 +1794,12 @@ export class MapScene extends Phaser.Scene {
         break;
       case 'journal':
         openJournalMenu(this.fieldHost());
+        break;
+      case 'sky':
+        openSkyMenu(this.fieldHost());
+        break;
+      case 'teamHub':
+        openTeamHub(this.fieldHost());
         break;
       case 'contents':
         openRunContentsMenu(this.fieldHost());

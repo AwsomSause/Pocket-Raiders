@@ -157,6 +157,12 @@ describe('node menus: flow', () => {
         expect(() => chooseNode(content, forced, mapChoices(content, forced)[0]!.id)).toThrow(/before moving on/);
       }
     }
+    // A must-see story stop placed on this node (Greenneedle's cold open, gn.new.01) is required on its own: it blocks until visited.
+    const here = findNode(run.stage!.map, run.stage!.current!);
+    for (const e of menu.entries.filter((x) => x.required && x.kind === 'side')) {
+      expect(menuBlocker(run)).toMatch(/before moving on/);
+      here.sides.find((x) => x.id === e.sideId)!.used = true;
+    }
     expect(menuBlocker(run)).toBeNull();
     run = chooseNode(content, run, mapChoices(content, run)[0]!.id);
     expect(run.expansion!.nodeMenus!.menus[menu.nodeId]!.closed).toBe(true);

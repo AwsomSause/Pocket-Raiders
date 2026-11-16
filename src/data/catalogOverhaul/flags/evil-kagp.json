@@ -1,0 +1,9 @@
+{
+ "category": "evil-story",
+ "note": "Evil Teams Volume III, row 10 (Kalos, Alola, Galar, Paldea). Run flags these events read that another row writes. Each stays here only until that row's events are on the branch (then tests/unit/eventMemory.test.ts finds the writer itself).",
+ "external": {
+  "lantern-founded": "row 10b, Hoenn/Sinnoh/Unova (Team Lantern founded, Sinnoh's third option). Rename here and in evil-story-39.ts if that row names it otherwise",
+  "openhand-founded": "row 10b, Hoenn/Sinnoh/Unova (Team Open Hand founded, Unova's third option). Rename here and in evil-story-39.ts if that row names it otherwise",
+  "unova-sealed": "row 10b, Hoenn/Sinnoh/Unova (Unova's sealed ending; Harrow's 'I've read your file' line)"
+ }
+}

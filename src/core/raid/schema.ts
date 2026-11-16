@@ -116,6 +116,10 @@ export const RaidDefSchema = z.object({
   kind: z.enum(['wild', 'regional', 'rival', 'anomaly']).default('wild'),
   approaches: z.array(RaidApproachSchema).max(3).default([]),
   modifiers: RaidModifiersSchema.default({}),
+  /** Greenneedle gn.11: the boss's exact moveset (the Kaiju's Wrap, Acid Armor, Hydro Pump and Tidal Surge) instead of its level-up moves. */
+  moves: z.array(z.string()).min(1).max(4).optional(),
+  /** Greenneedle gn.11: the boss calls this species at each of these HP lines (its shield bars), whatever the badge count. */
+  calls: z.object({ species: z.string().min(1), at: z.array(Fraction).min(1).max(3) }).optional(),
   /** Moves the boss knows beyond the usual four (up to two more). */
   extraMoves: z.array(z.string()).max(2).default([]),
   rewards: RaidRewardSchema,

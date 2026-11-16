@@ -101,7 +101,7 @@
       "id": "kaiju-tentacruel",
       "name": "Kaiju Tentacruel",
       "tier": 2,
-      "blurb": "The harbor pollution has made this Tentacruel huge. Break its three shields; it calls Tentacool at each.",
+      "blurb": "The harbour's Tentacruel has grown huge on what the harbour poured into the bay. Not Dynamaxed: big. Three shield bars; at each it calls Tentacool.",
       "species": [
         "tentacruel"
       ],
@@ -154,10 +154,7 @@
           ]
         }
       },
-      "extraMoves": [
-        "wrap",
-        "acid-armor"
-      ],
+      "extraMoves": [],
       "rewards": {
         "moneyPerLevel": 80,
         "items": [
@@ -182,7 +179,20 @@
         }
       },
       "canon": "cs.kanto.vermilion.kaiju",
-      "capture": 0.2
+      "moves": [
+        "wrap",
+        "acid-armor",
+        "hydro-pump",
+        "tidal-surge"
+      ],
+      "calls": {
+        "species": "tentacool",
+        "at": [
+          0.75,
+          0.5,
+          0.25
+        ]
+      }
     },
     {
       "id": "sleeping-snorlax",

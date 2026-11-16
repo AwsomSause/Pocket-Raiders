@@ -10,6 +10,14 @@ Source: `STORY_FAMILIES_13.md` (the region-by-region Evil Team storyline) and `S
 - **Plasma Holding Camp** is a pseudo-stage (`ps_plasma_camp`: gate, Yard, Handler). Plasma Operations 1 to 3 stay on the weekly Plasma Operation game event (its objectives count them).
 - A choice with `pick.types` now needs a Pokémon of one of those types (`core/events.ts`, "Needs a Bug or Grass-type Pokémon").
 
+## Team Rocket from inside (Volume III)
+- **Engine** (`core/evil/inside.ts`): run flags `team-<id>-standing` / `-suspicion` / `-rank` (0–10, 0–10, 1–6; rank also rises at Standing 2/4/6/8/10), marks `inside`, `inside-man` (+1 to each Suspicion rise), `careful`, `third`, `confided`, `loyalty-test`, `found-out`. All cleared when the region's story closes. Evil conditions gain `inside`, `rank`, `standing`, `suspicion`, `suspicionBelow`, `anyRoute`; effects gain `standing`, `suspicion`, `rank`. Rank titles per region in `evilTeams.json` `routes`.
+- **The swap:** on the inside route the outside beat≥2 steps, Operations and heat events are hidden (`replacedByInside`); the Acts move the beat instead. A team with `third` loses its Hideout (beat 6) to the third option's climax. Scenes for anyone set `anyRoute`.
+- **Kanto** (`evil-story-6/7/8`): the Offer after The Files, Acts 1–5, six Operations, Fridays, the loyalty test (Suspicion 7–9) and being found out (10), the Final Choice on Silph's eleventh floor, four endings as chain maps (`ps_rk_plan/turn/police/own`), Team Ledger (founding, three audits, The Read-Out), R1–R11.
+- **Johto** (`evil-story-9/10/11`): the Offer after Slowpoke Well, Acts 1–5 (Act 3 is the `ps_neo_tower` map), six Operations, Fridays, K2–K4, loyalty test and found out, the Final Choice at Noon, four endings (`ps_neo_plan/turn/lance/own`), Team Static (founding, three broadcasts, Two Frequencies: `ps_static_mary`, `ps_static_air`), J1–J12 and the ring given back.
+- "Take it all" ends the team story as allied and does **not** open Evil Mode (on hold, Kice). Its Evil Mode choices are flags only.
+- Tests: `tests/unit/rocketInside.test.ts`.
+
 ## How to add a team
 1. Add it to `TEAMS` in `tools/events/co/_evil-story-teams.ts` (names, lieutenant, colleague, four Operations with `stated` effects and another way, boss lines) and to `evilTeams.json` (ranks, sprites, species).
 2. Give it a `home` region and its Operations' lasting effects in `_evil-story-sync.ts`, then run `node tools/events/co/_evil-story-sync.ts` and `npm run co:build`.
@@ -25,6 +33,8 @@ Source: `STORY_FAMILIES_13.md` (the region-by-region Evil Team storyline) and `S
 | 224 SF13 ids: 16 teams × steps, 64 Operations, Hideout entry, boss, after, pen | `STORY_FAMILIES_13.md` Parts A to E | 2026-11-15 |
 | SF131 rooms, SF132 keys, SF133 Holding Pen | `STORY_FAMILIES_18.md` lines 106 to 193 | 2026-11-15 |
 | 47 SF130 scenes | `STORY_FAMILIES_18.md` lines 14 to 105; scripted check: every doc id is built and has "Stop them." (the Yard and the Handler are rooms with the doc's own two choices) | 2026-11-15 |
+| Kanto inside: Offer, Acts, Ops, Fridays, tests, Final Choice, 4 endings, Ledger, R1–R11 | `EVIL_TEAMS_VOLUME_3_A.md` Kanto; `TEAM_ROCKET_KANTO_FULL_1..3.md` | 2026-11-16 |
+| Johto inside: Offer, Acts, Ops, Fridays, K2–K4, tests, Noon, 4 endings, Static, J1–J12 | `EVIL_TEAMS_VOLUME_3_A.md` Johto; `TEAM_ROCKET_JOHTO_FULL_1..3.md` (Part E placement, Part F flags) | 2026-11-16 |
 | 6 SF134 ids | `STORY_FAMILIES_18.md` lines 194 to 286 (Fire Week, SF134.6, belongs to the calendar row) | 2026-11-15 |
 
 ## Limits
@@ -33,4 +43,4 @@ Source: `STORY_FAMILIES_13.md` (the region-by-region Evil Team storyline) and `S
 - "Bond" is friendship: +1 Bond is +25, "Bond 3 or more" is friendship 150.
 - The Disguise's "Nice hat" line at the lieutenant's door isn't shown (that room already has three variants).
 - Galactic's Orders: in the region-by-region story all four Operations are already known, so "the Operation is drawn again" becomes heat +1.
-- Team Rocket from inside (Volume III and the Kanto/Johto Full Expansion) is not built yet.
+- Team Rocket from inside, limits: R12 (Entry 4,113) isn't built (needs memory from an earlier run). "Let her win" and thrown fights are told in text. World state, Rigs, Black Fog, Miner's Lamp, the jingle's world-state drop, the Den-shelved Celebi's lost rest day, the closing-time song letting you past Old Rocket, the ring skipping one of Archer's battles from outside, Static's Hire/Promote/Assign/Dispatch screens and its once-a-region true thing are flags or words only. `rocket-son-found` and `butch-named` have no source, so those two choices never open. Epilogues are said in the ending's last text (no Final Reunion). The loyalty test script, Friday pay (₽500), J6's eight phrases, the Marauder's team (two Dark/Rock Pokémon) and Two Frequencies' thresholds (`kind-total` 8+ most, 4–7 even) are my own fill-ins where the docs give none. Tohjo Falls after "Turn" isn't offered. Story Run's director still adopts outside beat events.

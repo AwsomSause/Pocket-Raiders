@@ -40,6 +40,9 @@ import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { tourneyHome, tourneyPage, tourneyRounds } from '../ui/redux/screens/bracket';
 import { eventView as rxEventView } from '../ui/redux/screens/event';
 import type { HonestModel, HonestSide } from '../ui/redux/screens/stops';
+import type { TeamModel } from '../ui/redux/screens/team';
+import { briefingView, finalView, rankUpView, resultView, tableView } from '../ui/redux/screens/evilLooks';
+import { evilLook, rankUpLook, resultLook, type EvilLook } from '../core/evil/screens';
 
 
 const BOTTOM_H = 168;
@@ -79,6 +82,9 @@ export class EventScene extends Phaser.Scene {
   private pickSure: string | null = null;
   /** New UI: the event's trade card is open to read (T), before a choice is made. */
   private rxCard = false;
+  /** New UI, rival scenes after The Borrowed Team: the rival's team page is open. */
+  private rxTeam = false;
+  private toggleTeam: (() => void) | null = null;
   /** New UI, Honest Trade Card page: the cursor is on Trade (0) or Back (1). */
   private pickFocus: 0 | 1 = 0;
   private result: EventResult | null = null;
@@ -88,6 +94,11 @@ export class EventScene extends Phaser.Scene {
   private bracketPanel: Phaser.GameObjects.Container | null = null;
   /** New UI: the mock-up event screen drawn over the canvas (default event style only). */
   private rx: ReduxView | null = null;
+  /** HOENN_TEAMS 7: the team's own look for this event in the New UI (Final Choice, Briefing, Leader's Table), or null. */
+  private rxLook: EvilLook | null = null;
+  /** The Final Choice's hold to confirm (7.7): the choice held, when it started, and how far along (0-1). */
+  private hold: { at: number; t0: number; timer: Phaser.Time.TimerEvent } | null = null;
+  private holdPct = 0;
   private rxClock = '';
   private rxLeft = 0;
 
@@ -110,11 +121,16 @@ export class EventScene extends Phaser.Scene {
     this.rxOutAt = 0;
     this.rxStartClock = null;
     this.rxBracket = null;
+    this.rxLook = null;
+    this.hold = null;
+    this.holdPct = 0;
     this.toggleBracket = null;
     this.toggleCard = null;
     this.picker = null;
     this.pickSure = null;
     this.rxCard = false;
+    this.rxTeam = false;
+    this.toggleTeam = null;
     this.result = null;
     this.leaving = false;
     this.fullLayer = null;
@@ -260,6 +276,16 @@ export class EventScene extends Phaser.Scene {
       // The job offer's chip says what joining is worth, as on the mock-up.
       const groupTag = `${view.event.group} · ${view.event.rarity.charAt(0).toUpperCase()}${view.event.rarity.slice(1)}`;
       const tag = view.event.id === 'stand-with-recruiter' && !standWithOf(run) ? `Reputation +${STAND.joinRep} if you join` : groupTag;
+      const teamPage = (): TeamModel | null => (view.team && this.rxTeam && this.phase === 'choose' ? { rival: view.team.rival, cards: view.team.mons.map((m) => ({ name: m.name, file: monFile(this, m.speciesId, 'icon'), level: m.level, types: m.types, moves: m.moves })) } : null);
+      if (view.team) {
+        this.toggleTeam = (): void => {
+          if (this.phase !== 'choose' || this.rxBracket !== null || this.rxCard) return;
+          this.rxTeam = !this.rxTeam;
+          playSfx(this, 'ui.select', 0.4);
+          this.rx?.refresh();
+        };
+        this.input.keyboard?.on('keydown-R', this.toggleTeam);
+      }
       // A department store floor: the directory, and who each good on the shelf helps (a stone that evolves it, medicine for the hurt).
       const store = storeOf(view.event.id);
       const helps = (live: typeof run): string[][] => view.event.choices.map((ch) => {
@@ -268,6 +294,9 @@ export class EventScene extends Phaser.Scene {
         const heals = fx.some((e) => e.kind === 'heal');
         return live.party.map((m) => (item && itemEvolutionTargets(content, m, item, live.regionOrder[live.regionIndex]).length ? 'Can evolve' : heals && m.hp > 0 && m.hp < maxHp(content, m) ? 'Heals' : ''));
       });
+      const look = (this.rxLook = evilLook(content, run, view.event.id));
+      const fileOf = (id: string) => artOf(this, id);
+      const lookFiles = look?.kind === 'final' ? look.faces.map((f) => fileOf(f.sprite)) : look?.kind === 'table' ? look.seats.map((x) => fileOf(x.sprite)) : [];
       this.rx = mountRedux(this, {
         render: (c) => {
           const r = this.result;
@@ -276,6 +305,20 @@ export class EventScene extends Phaser.Scene {
           if (out && !this.rxOutPages.length) this.rxOutPages = scriptPages(r!.text);
           const pages = out ? (out.step === 'rewards' ? [[{ who: null, text: 'Here is what changed.' }]] : this.rxOutPages) : this.rxPages;
           const at = Math.max(0, Math.min(out ? (out.step === 'rewards' ? 0 : this.rxOutAt) : this.rxAt, pages.length - 1));
+          // HOENN_TEAMS 7: the team's own screens. The choices, rolls and effects are the event's own.
+          const lookChoices = view.choices.map((x) => ({ label: x.label, sub: sub(x), chance: pct(x), locked: x.locked !== null }));
+          if (look && !out && !this.picker && this.rxAt >= this.rxPages.length - 1) {
+            const text = pages[at]!.map((l) => (l.who ? `${l.who}: ${l.text}` : l.text)).join(' ');
+            if (look.kind === 'final') return finalView({ look, choices: lookChoices, index: this.index, hold: this.holdPct, files: lookFiles, title: view.event.name });
+            if (look.kind === 'briefing') return briefingView({ look, choices: lookChoices, index: this.index, text });
+            if (look.kind === 'table') return tableView({ look, choices: lookChoices, index: this.index, files: lookFiles, text });
+          }
+          if (out && r && out.step === 'rewards') {
+            const up = rankUpLook(content, r.run, r.changes);
+            if (up) return rankUpView(up, { leader: fileOf(up.leader), lt: fileOf(up.lt), grunt: fileOf(up.grunt) }, out.next);
+            const form = resultLook(content, view.event.id, this.index, view.choices[this.index]?.label ?? '', r.changes, r.text);
+            if (form) return resultView(form, out.next);
+          }
           const speaker = pageSpeaker(pages[at]!);
           return rxEventView(c, {
             name: view.event.name,
@@ -306,6 +349,8 @@ export class EventScene extends Phaser.Scene {
               const card = joined ? codeNameCard(r.run, content.evilTeams.teams.find((t) => t.id === joined.team)?.name ?? joined.team, content.regions.get(joined.region)?.name ?? joined.region) : null;
               return card ? { name: card.alias, rank: card.rank, facts: card.facts, trainer: bossArt(card.givenBy), badges: r.run.badges.length } : null;
             })(),
+            team: teamPage(),
+            teamHint: !!view.team && this.phase === 'choose' && !out,
             cardHint: eventCard !== null && this.phase === 'choose' && !out,
             bracket: tv && this.rxBracket !== null ? tourneyPage(tv, (sp) => monFile(this, sp), this.rxBracket, 'Saffron Fighting Tournament') : null,
             title: champion ? 'CHAMPION' : null,
@@ -313,20 +358,31 @@ export class EventScene extends Phaser.Scene {
           });
         },
         acts: {
-          pick: (k) => this.confirm(Number(k)),
+          pick: (k) => (this.rxLook?.kind === 'final' ? this.startHold(Number(k)) : this.confirm(Number(k))),
           page: () => this.turnPage(1),
           bracket: () => this.toggleBracket?.(),
           bracketPage: (k) => { this.rxBracket = Number(k); this.rx?.refresh(); },
           next: () => this.advanceOutcome(),
           trade: (k) => { if (!this.picker?.picks[Number(k)]) return; this.pickAt(Number(k)); this.tryTrade(); },
           card: () => this.toggleCard?.(),
+          team: () => this.toggleTeam?.(),
+          back: () => (this.rxTeam ? this.toggleTeam?.() : this.rxCard ? this.toggleCard?.() : this.handlePick('back')),
           // The Honest Trade Card page: Trade, Back, and the arrows that step through the player's fitting Pokémon.
           accept: () => this.tryTrade(),
-          back: () => (this.rxCard ? this.toggleCard?.() : this.handlePick('back')),
           step: (k) => { const pk = this.picker; if (pk) this.pickAt((pk.at + Number(k) + pk.picks.length) % pk.picks.length); },
         },
         overs: { over: (k) => this.focus(Number(k)), tradeOver: (k) => this.pickAt(Number(k)), acc: () => this.pickFocusAt(0), dec: () => this.pickFocusAt(1) },
       });
+      // 7.7: press and hold a corner (or Enter) to choose; letting go cancels.
+      if (this.rxLook?.kind === 'final') {
+        const el = this.rx.el;
+        const down = (e: Event): void => { const t = (e.target as HTMLElement).closest<HTMLElement>('[data-hold]'); if (t && el.contains(t)) this.startHold(Number(t.dataset.hold)); };
+        const up = (): void => this.cancelHold();
+        el.addEventListener('pointerdown', down);
+        window.addEventListener('pointerup', up);
+        this.input.keyboard?.on('keyup', (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') up(); });
+        this.events.once('shutdown', () => window.removeEventListener('pointerup', up));
+      }
     } else this.offerFullText(view.event.intro);
     if (!this.calm) this.ambient(scene.effect, area, layers.fx);
     if (area.w < GAME_WIDTH || area.h < GAME_HEIGHT) layers.fx.setMask(this.make.graphics({}, false).fillRect(area.x, area.y, area.w, area.h).createGeometryMask());
@@ -438,6 +494,10 @@ export class EventScene extends Phaser.Scene {
       this.rx?.refresh();
       return;
     }
+    if (this.rxTeam) {
+      if (action === 'confirm' || action === 'back') this.toggleTeam?.();
+      return;
+    }
     if (this.rxCard) {
       if (action === 'confirm' || action === 'back') this.toggleCard?.();
       return;
@@ -463,7 +523,41 @@ export class EventScene extends Phaser.Scene {
     const n = this.cards.length;
     if (action === 'left' || action === 'up') this.focus((this.index - 1 + n) % n);
     else if (action === 'right' || action === 'down') this.focus((this.index + 1) % n);
-    else if (action === 'confirm') this.confirm();
+    else if (action === 'confirm') {
+      if (this.rxLook?.kind === 'final') this.startHold(this.index);
+      else this.confirm();
+    }
+  }
+
+  /** 7.7: the orb brightens while the choice is held, about two seconds; a locked corner says why at once. */
+  private startHold(i: number): void {
+    if (this.phase !== 'choose' || this.busy || (this.hold && this.hold.at === i)) return;
+    if (this.rx && this.rxAt < this.rxPages.length - 1) return;
+    const card = this.cards[i];
+    if (!card || card.view.locked) return this.confirm(i);
+    this.cancelHold();
+    if (this.index !== i) this.focus(i, false);
+    const t0 = this.time.now;
+    const timer = this.time.addEvent({
+      delay: 50,
+      loop: true,
+      callback: () => {
+        this.holdPct = Math.min(1, (this.time.now - t0) / 2000);
+        this.rx?.refresh();
+        if (this.holdPct < 1) return;
+        this.cancelHold();
+        this.confirm(i);
+      },
+    });
+    this.hold = { at: i, t0, timer };
+  }
+
+  private cancelHold(): void {
+    if (!this.hold) return;
+    this.hold.timer.remove(false);
+    this.hold = null;
+    this.holdPct = 0;
+    this.rx?.refresh();
   }
 
   /** The focused option lifts (each style draws its own focus); the details follow it. */

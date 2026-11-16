@@ -1144,7 +1144,7 @@
     {
      "label": "Wait for the strike.",
      "success": {
-      "text": "You wait well back. The lightning hits the rod with a sound like the sky tearing, and in the flash, for an instant, you see wings of yellow fire. When you can see again, there is a gem at the foot of the rod, still crackling.",
+      "text": "You wait well back. The lightning hits the rod with a sound like the sky tearing, and in the flash, for an instant, you see wings of yellow fire. When you can see again, there is a gem at the foot of the rod, still crackling. A length of the rod has broken off. It hums. You take it.",
       "effects": [
        {
         "kind": "flag",
@@ -1155,6 +1155,11 @@
         "kind": "item",
         "id": "electric-gem",
         "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hilltop-rod",
+        "amount": 1
        }
       ]
      }

@@ -16,7 +16,24 @@
 // after a hit (Static, Rough Skin), at the end of the turn (Speed Boost) and
 // when switching out (Regenerator).
 
+import { ownTypes } from '../co/typeShift';
+import { golemBlueType, golemColour } from '../greenneedle/crystals';
+import { TAILWIND_HEART, unflinching } from '../greenneedle/daycare';
+import { arenaTurn, arenaVerdict } from '../greenneedle/frontier';
+import { gavelFirst, gavelSpent } from '../greenneedle/auction';
+import { agencyArrives, callHelper, fieldOf, helperProblem, reunionTakeHit } from '../greenneedle/reunion';
+import { ferrisPredicted } from '../greenneedle/ferris';
+import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
+import { draftTurn } from '../greenneedle/draft';
+import { snorlaxTurn } from '../greenneedle/snorlax';
+import { bidoofTurn, NO_FLINCH } from '../greenneedle/bidoof';
+import { alleyTurn, fairShare } from '../greenneedle/alley';
+import { callPriority, cheerTurn } from '../greenneedle/cheer';
+import { trustHolds } from '../greenneedle/ball';
+import { champPower, lessonTurn, seenItFirst, seenItSpend, summitSaves } from '../greenneedle/champion';
+import { earthLine, overchargeSelfHurt } from '../greenneedle/ridge';
 import { foresightBegin } from './foresight';
+import { coAccuracyExempt, coBlind, coCritBonus, coCritMult, coDamageMult, coEntry, coForcedOrder, coPinchFoe, coSpeedMult, coStartRules, coTurnEnd } from './coRules';
 import { CARE } from '../care/mods';
 import { shadowDamageMultiplier } from '../shadow';
 import { shadowTurnPlan, shadow2Data } from '../shadow2';
@@ -36,10 +53,11 @@ import type { UltraRuleId } from '../ultra/beasts';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
 import { rallyStages } from './rally';
 import { storyHype, storyNoCrit, storyOldHabits } from '../expansion/storyTraits';
+import { twiceToldPower } from '../greenneedle/twiceTold';
 import { KINDNESS_USES } from '../episodes/poliPond';
 import { HOUSE_WINS_STAGES, LIGHTS_OUT_ACCURACY, LIGHTS_OUT_TURNS, housePending, isHousePair, takeHousePending, traitDoubleEntry, traitDrill, traitFeedHeal, traitFoodKnocked, traitLightsOut, traitOverhears, traitPayout, traitSeatMessage, traitTakesBerry, GRID_TIE_SHARE, traitBloodScent, traitGridTie, traitLingering, traitOnSchedule, traitSubtraction, traitUndertow, traitUpdraft } from '../expansion/traits';
 import { ACCESSORY_TORN_MESSAGE, SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantAccessory, variantAccessoryTorn, variantCheer, variantEndTurnStages, variantGimmickTick, variantGadget, variantIncoming, variantItemMove, variantLosesTurn, variantNeverMisses, variantOnEntry, variantOutgoing, variantPriorityBonus, variantSnagRefuses, variantTagCall } from '../expansion/variantLines';
-import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
+import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, curseDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
 import { deriveRng, type Rng } from '../rng';
 import { turnOneKoSpeedStages, noFlinchTurnOne, foeMissBoostStages, hasFoeMovePreview } from '../trainerPerks';
 import { fnv1a } from '../expansion/hash';
@@ -110,6 +128,7 @@ import { roleEntryBoost } from '../legendary/roles';
 import { rivalStrikeDamage } from '../raid/rivalAlly';
 import { finaleStrikeDamage } from '../rivals/living';
 import { absorbHit, advanceRaid, botMend, botStrike, chargedDamage, cheerProblem, coopOwner, crowdStep, hazardDamage, playerHits, puzzleProgress, raidBot, raidDef, type Cheer, CHEER_TURNS, HEALING_CHEER, raidFieldMultiplier, raidItemProblem, raidRoleMultiplier, supportHeal, reinforcementDue, takeExtraAction } from '../raid/raid';
+import { FACTORY_RULES, factoryTurnEnd } from '../greenneedle/factory';
 import type { RaidPhase } from '../raid/schema';
 import { allyDue, allyLevel, getTotem } from '../totem/totem';
 import { enemyLastResort } from './lastResort';
@@ -272,8 +291,12 @@ export type PlayerAction =
   | { kind: 'item'; itemId: string; targetIndex?: number; skill?: 'miss' | 'ok' | 'good' | 'perfect'; throwSkill?: SkillInput }
   /** A trainer's surrender deal: accept ends the fight (no EXP, more money); refuse keeps fighting and does not use the turn (ideas W1). */
   | { kind: 'deal'; accept: boolean }
+  /** Greenneedle gn.59: your read of the Gym Leader's feet (no turn used). */
+  | { kind: 'predict'; yes: boolean }
   /** Smash the arena (rocks, lava, flood): hurts the foe once per battle and uses the turn (ideas W1). */
   | { kind: 'arena' }
+  /** Greenneedle gn.61: call a helper from the Final Reunion (`slot` 1 to 3). Uses the turn; the helper acts once. */
+  | { kind: 'helper'; slot: number }
   /** A raid cheer (Raid Battles pack): uses the turn, costs one of three cheers. */
   | { kind: 'cheer'; cheer: Cheer }
   /** The Pokémon refused its command and does nothing this turn (only the Bond Engine sends this). */
@@ -521,6 +544,8 @@ export function chooseEnemyMove(enemy: PokemonInstance, rng: Rng, brain?: EnemyB
   const rc = brain?.battle?.rivalCounter;
   const counter = rc && rc.uid === enemy.uid && brain?.target?.uid === rc.target ? usable.find((x) => x.m.id === rc.moveId) : undefined;
   if (counter) return counter.i;
+  // coRules: Blindfold Bout and the Magician: it cannot read your Pokémon yet, so it picks blind.
+  if (brain?.battle && coBlind(brain.battle)) return rng.pick(usable).i;
   if (brain && brain.ai > 0 && rng.chance(brain.ai)) {
     const scored = usable.map((x) => ({ i: x.i, score: moveValue(brain, enemy, x.m.id) }));
     if (brain.battle?.rivalBrain?.tier === 5 && (brain.side ?? 'enemy') === 'enemy') return tier5Choose(enemy, scored, brain);
@@ -686,6 +711,23 @@ function choiceLock(battle: BattleState, mon: PokemonInstance | undefined): stri
   return id && mon!.moves.some((m) => m.id === id && m.pp > 0) ? id : null;
 }
 
+/**
+ * Greenneedle gn.51, the Smuggling Ring's rescued Pokémon. Wary: it can't be trapped or bound. Remembers the Cage: the first time
+ * each battle it would be bound or held in place, it breaks free and gains +1 Speed. True when the hold doesn't take.
+ */
+function cageFree(ctx: BattleContext, c: Combatant, events: BattleEvent[]): boolean {
+  const ability = abilityIn(ctx, c);
+  if (ability === 'wary') return true;
+  if (ability !== 'remembers-the-cage') return false;
+  const tag = `cage-broken:${c.mon.uid}`;
+  if (ctx.battle.storyEffects.includes(tag)) return false;
+  ctx.battle.storyEffects.push(tag);
+  events.push({ type: 'ability', side: c.side, ability: 'remembers-the-cage' });
+  events.push(say(c.side, 'arena', `${nameOf(ctx, c.mon)} has been held before. Not again. It breaks free.`, c.mon.uid));
+  applyStageChange(ctx, c, 'spe', 1, events);
+  return true;
+}
+
 /** Why the player can't switch to this party slot, or null if they can. */
 export function switchProblem(ctx: Pick<BattleContext, 'battle' | 'party'> & Partial<Pick<BattleContext, 'content' | 'teamItems' | 'setStyle'>>, partyIndex: number): string | null {
   const mon = ctx.party[partyIndex];
@@ -696,7 +738,8 @@ export function switchProblem(ctx: Pick<BattleContext, 'battle' | 'party'> & Par
   if (ctx.setStyle && ctx.battle.kind === 'trainer' && !ctx.battle.needsSwitch) return 'Set style: no switching in trainer battles.';
   if (mon.hp <= 0) return 'That Pokémon has fainted.';
   const active = ctx.party[ctx.battle.activeIndex];
-  const shedShell = active && 'content' in ctx ? Held.canAlwaysSwitch(ctx as Pick<BattleContext, 'content' | 'teamItems'>, active, 'player') : false;
+  // Greenneedle gn.51: a Wary Pokémon can always switch out.
+  const shedShell = active && 'content' in ctx ? Held.canAlwaysSwitch(ctx as Pick<BattleContext, 'content' | 'teamItems'>, active, 'player') || (!!ctx.content && abilityOf(ctx.content, active) === 'wary') : false;
   if (!ctx.battle.needsSwitch && !shedShell && (ctx.battle.playerVolatile?.bound ?? 0) > 0) return "Your Pokémon is bound and can't escape!";
   if (!ctx.battle.needsSwitch && forcedMoveId(ctx.battle.playerVolatile)) return 'Your Pokémon is in the middle of a move!';
   if (!ctx.battle.needsSwitch && ctx.battle.extra?.fairyLock === ctx.battle.turn) return "Fairy Lock keeps your Pokémon from switching out!";
@@ -843,8 +886,13 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   // Ideas W1: this turn's skill grade (a prompt result is an input, like the move itself); a surrender deal; smashing the arena.
   battle.skill = action.kind === 'move' ? action.skill : action.kind === 'item' ? action.throwSkill : undefined;
   if (action.kind === 'deal') return dealTurn(ctx, action.accept, events);
+  if (action.kind === 'predict') return predictTurn(ctx, action.yes, events);
   if (action.kind === 'arena') {
     const problem = arenaProblem(ctx);
+    if (problem) throw new Error(problem);
+  }
+  if (action.kind === 'helper') {
+    const problem = helperProblem(battle, action.slot);
     if (problem) throw new Error(problem);
   }
   w1StartOfTurn(ctx, events);
@@ -859,7 +907,9 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     totemCallAlly(ctx, events);
   } else if (battle.raid) raidCallReinforcement(ctx, events);
   else sosCall(ctx, events);
-  const enemy: Combatant = { side: 'enemy', mon: currentEnemy(battle), stages: battle.enemyStages, vol: battle.enemyVolatile, flinched: false, protected: false };
+  const agency = agencyArrives(battle);
+  if (agency) events.push({ type: 'raid', tone: 'info', text: `${agency} arrive, a week late and entirely sure of themselves. The opponent flinches from sheer confusion.` });
+  const enemy: Combatant = { side: 'enemy', mon: currentEnemy(battle), stages: battle.enemyStages, vol: battle.enemyVolatile, flinched: !!agency, protected: false };
   const spec = spectacleStart(ctx, action, events);
   const enemyForced = forcedMoveId(enemy.vol);
   const enemyForcedIndex = enemyForced ? enemy.mon.moves.findIndex((m) => m.id === enemyForced) : -1;
@@ -892,6 +942,8 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     resolveEntries(ctx, events);
   } else if (action.kind === 'cheer') {
     useCheer(ctx, action.cheer, events);
+  } else if (action.kind === 'helper') {
+    useHelper(ctx, action.slot, events);
   } else if (action.kind === 'arena') {
     smashArena(ctx, events);
     if (currentEnemy(battle).hp <= 0) {
@@ -985,7 +1037,8 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     actions.forEach((a0, index) => {
       let a = a0;
       if (anyFainted(playerC, enemy) || a.user.mon.hp <= 0) return;
-      if (a.user.side === 'enemy' && (enemyActed || loseFreeTurn(battle, events) || blissfulCalm(ctx, enemy, events) || foeStands(ctx, enemy, events))) return;
+      if (a.user.side === 'enemy' && (enemyActed || loseFreeTurn(battle, events) || blissfulCalm(ctx, enemy, events) || foeStands(ctx, enemy, events) || gnFoeWaits(ctx, enemy, events))) return;
+      if (a.user.side === 'player' && gnYouWait(ctx, a.user, events)) return;
       // Shadow II: a Veiled Pokémon may hesitate; a Gripped or Fallen one may use a move of its own choosing. Decided (and shown) before the turn.
       if (a.user.side === 'player' && a.user.mon.shadow) {
         const plan = shadowTurnPlan(a.user.mon, battle.turn, turnStartState);
@@ -1002,7 +1055,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
       }
       actWithRage(ctx, a.user, enemy, events, () => executeMove(ctx, a.user, a.target, a.move, a.slot, index === 0, events));
     });
-  } else if (!enemyActed && !loseFreeTurn(battle, events) && !blissfulCalm(ctx, enemy, events) && !foeStands(ctx, enemy, events)) {
+  } else if (!enemyActed && !loseFreeTurn(battle, events) && !blissfulCalm(ctx, enemy, events) && !foeStands(ctx, enemy, events) && !gnFoeWaits(ctx, enemy, events)) {
     actWithRage(ctx, enemy, enemy, events, () => executeMove(ctx, enemy, playerC, enemyMove, enemyMoveIndex, false, events));
   }
   recordFaints(ctx, playerC, enemy, events);
@@ -1030,6 +1083,16 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
       if (abilityIn(ctx, c) === 'speed-boost' && c.stages.spe < 6 && !justIn) {
         events.push({ type: 'ability', side: c.side, ability: 'speed-boost' });
         applyStageChange(ctx, c, 'spe', 1, events);
+      }
+      // Greenneedle gn.49 Heavy Sleeper: 1/8 of its HP back after a turn it didn't use a damaging move.
+      if (abilityIn(ctx, c) === 'heavy-sleeper' && !c.vol.plannedAttack && c.mon.hp > 0 && c.vol.healBlock <= 0) {
+        const max = calcStats(ctx.content, c.mon).hp;
+        const amount = Math.min(max - c.mon.hp, Math.max(1, Math.floor(max / 8)));
+        if (amount > 0) {
+          events.push({ type: 'ability', side: c.side, ability: 'heavy-sleeper' });
+          c.mon.hp += amount;
+          events.push({ type: 'heal', side: c.side, amount, hpAfter: c.mon.hp });
+        }
       }
     }
   }
@@ -1102,6 +1165,17 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   }
   fadeMomentBoosts(ctx, events);
   battle.turn += 1;
+  // Welcome Home's hold lasts through the next turn only.
+  for (const tag of battle.storyEffects.filter((t) => t.startsWith('untrap:') && Number(t.split(':')[2]) < battle.turn)) {
+    const v = tag.split(':')[1] === 'player' ? battle.playerVolatile : battle.enemyVolatile;
+    if (v) v.trapped = false;
+    battle.storyEffects.splice(battle.storyEffects.indexOf(tag), 1);
+  }
+  // Greenneedle gn.58: the shadow of a bird let go costs the foe's aim for one turn only.
+  if (battle.storyEffects.includes('of-shadow') && battle.turn >= 2) {
+    battle.storyEffects.splice(battle.storyEffects.indexOf('of-shadow'), 1);
+    battle.enemyStages.acc = Math.min(6, (battle.enemyStages.acc ?? 0) + 1);
+  }
   eventRuleEnd(battle, events, ctx.party, ctx.content);
   if (raidTimeout && !battle.outcome) battle.outcome = 'lose';
   // A narrative fight that drags on ends as the story loss (the rival cannot be beaten, so it must end).
@@ -1113,9 +1187,27 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
 
 /** Run events B: an event fight's own end rules, checked after each turn (survive N turns; sudden death). */
 export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?: PokemonInstance[], content?: Content): void {
+  // The Cheer Squad (gn.new.30): they cheer from the sideline in every battle for the rest of the stage.
+  if (!battle.outcome) cheerTurn(battle, (text) => events.push({ type: 'raid', tone: 'info', text }));
   const rule = battle.eventRule;
   if (!rule || battle.outcome) return;
   const mine = party?.[battle.activeIndex];
+  // The Fighting Tournament final (gn.16): when both fighters are below a quarter of their HP, the game slows for the last exchange.
+  if (rule.gn === 'final' && content && mine && mine.hp > 0) {
+    const foe = currentEnemy(battle);
+    if (foe.hp > 0 && mine.hp * 4 < maxHp(content, mine) && foe.hp * 4 < maxHp(content, foe)) {
+      battle.storyEffects.push('gn-last-exchange');
+      events.push({ type: 'raid', tone: 'phase', text: 'Both fighters are on their last legs. The hall goes quiet. The game slows.' });
+      battle.outcome = 'win';
+      return;
+    }
+  }
+  // The Angry Bidoof (gn.55): its trainer explains, throughout, that it's a perfectly ordinary Bidoof.
+  if (rule.gn === 'bidoof' && content) bidoofTurn(content, battle, party, events as Parameters<typeof bidoofTurn>[3], (text) => events.push({ type: 'raid', tone: 'info', text }));
+  // The Alley Court (gn.new.22): the player's three calls; and the Fair Share ability.
+  if (rule.gn === 'alley' && content && mine) alleyTurn(content, battle, mine, (text) => events.push({ type: 'raid', tone: 'info', text }));
+  // The Polluted Factory (gn.17): burst pipes, the Molten Sludge, the splitting Magmuk and the burning floor.
+  if (content && rule.gn && FACTORY_RULES.has(rule.gn)) factoryTurnEnd(content, battle, mine, events);
   if (rule.thinLight && content && battle.turn > 0 && battle.turn % 3 === 0) {
     // A glimpse: which side is hashed from the battle and turn (no RNG), and it never knocks anything out.
     const foe = currentEnemy(battle);
@@ -1188,12 +1280,38 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
       events.push({ type: 'raid', tone: 'info', text: `A panel gives way under ${sp.name}! It loses its footing and its next move.` });
     }
   }
+  // Greenneedle gn.35: earthing the overcharged one, a line each turn while it discharges into your Ground-type.
+  if (rule.gn === 'earthing' && rule.surviveTurns && !battle.outcome) {
+    const line = earthLine(battle.turn - 1, rule.surviveTurns);
+    if (line) events.push({ type: 'raid', tone: 'info', text: line });
+  }
+  // Greenneedle gn.49: the Snorlax dozes for three turns (Snore only), then wakes properly.
+  if (rule.gn === 'snorlax' && content && !battle.outcome) snorlaxTurn(content, battle, (text) => events.push({ type: 'raid', tone: 'info', text }));
+  // Greenneedle gn.48, the Pokémon Draft: the cards' lines come true.
+  if (rule.gn === 'draft' && party) draftTurn(battle, party, events, (text) => events.push({ type: 'raid', tone: 'info', text }));
+  // Greenneedle gn.45, the Champion's lesson: the Champion explains each decision; it ends once all three of theirs have been out.
+  if (rule.gn === 'champlesson' && content) {
+    lessonTurn(content, battle, mine, events, (text) => events.push({ type: 'raid', tone: 'info', text }), (m) => maxHp(content, m));
+    if (battle.outcome) return;
+  }
+  // Greenneedle gn.42, the Battle Frontier's Arena: the judges keep a tally each turn, and after the last one they decide.
+  if ((rule.gn === 'arena' || rule.gn === 'brain-arena') && content && party) {
+    arenaTurn(battle, events, (side) => {
+      const m = side === 'player' ? party[battle.activeIndex] : currentEnemy(battle);
+      return m ? maxHp(content, m) : 1;
+    });
+    if (!battle.outcome && rule.surviveTurns && battle.turn > rule.surviveTurns) {
+      const v = arenaVerdict(battle);
+      events.push({ type: 'raid', tone: 'phase', text: v.line });
+      battle.outcome = v.outcome;
+    }
+  }
   if (!battle.outcome && rule.surviveTurns && battle.turn > rule.surviveTurns) battle.outcome = 'win';
   if (!battle.outcome && rule.calm && !events.some((e) => e.type === 'damage' && e.side === 'enemy')) {
     // R16 Wants to Stop: a turn the foe is not hurt fills its meter; full, it sits down (`calm:done` tells the scene how it ended).
     battle.storyEffects.push('calm');
     const n = battle.storyEffects.filter((s) => s === 'calm').length;
-    events.push({ type: 'raid', tone: 'info', text: n >= rule.calm ? 'It sits down. It looks at its trainer. It does not get up.' : `Wants to Stop: ${n} of ${rule.calm}.` });
+    events.push({ type: 'raid', tone: 'info', text: battle.kind === 'wild' ? (n >= rule.calm ? 'The red goes out of its eyes. It lowers its head, and breathes.' : `Calm: ${n} of ${rule.calm}.`) : n >= rule.calm ? 'It sits down. It looks at its trainer. It does not get up.' : `Wants to Stop: ${n} of ${rule.calm}.` });
     if (n >= rule.calm) {
       battle.storyEffects.push('calm:done');
       battle.outcome = 'win';
@@ -1211,6 +1329,7 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
     }
   }
   if (!battle.outcome && rule.weatherCycle) battle.weather = { id: rule.weatherCycle[(battle.turn - 1) % rule.weatherCycle.length]!, turns: 5 };
+  coTurnEnd(battle, events);
 }
 
 /** Encore!: after a turn, critical hits build Hype, a miss or failed move costs some, and full Hype starts the damage boost. */
@@ -1583,6 +1702,46 @@ function validateAction(ctx: BattleContext, action: PlayerAction): void {
 }
 
 /** A raid cheer: Offense / Defense last a few turns; Healing restores some of the active Pokémon's HP and cures its status (level 3 also refills its PP). */
+/** Greenneedle gn.61: a helper's one turn (core/greenneedle/reunion.ts has the list and who they are). */
+function useHelper(ctx: BattleContext, slot: number, events: BattleEvent[]): void {
+  const { battle, content } = ctx;
+  const h = callHelper(battle, slot);
+  if (!h) return;
+  const say1 = (text: string): void => void events.push({ type: 'raid', tone: 'info', text });
+  const foe = currentEnemy(battle);
+  if (h.kind === 'ace') {
+    const hit = Math.min(foe.hp - 1, Math.max(1, Math.floor(maxHp(content, foe) / 4)));
+    say1(`${h.name}!  "One turn. Then it's yours." Their ace uses its best move.`);
+    if (hit > 0) {
+      foe.hp -= hit;
+      events.push({ type: 'damage', side: 'enemy', amount: hit, hpAfter: foe.hp, effectiveness: 1, crit: false });
+    }
+  } else if (h.kind === 'field') {
+    const field = fieldOf(content, h.boss);
+    say1(`${h.name}!  Their Gym's field takes the ground for three turns.`);
+    if (field.weather) {
+      battle.weather = { id: field.weather, turns: 3 };
+      events.push({ type: 'weather', weather: field.weather });
+    } else if (field.terrain) {
+      battle.terrain = { id: field.terrain, turns: 3 };
+      events.push({ type: 'terrain', terrain: field.terrain });
+    }
+  } else if (h.kind === 'guard') {
+    say1(`${h.name}!  They step in front of ${nameOf(ctx, ctx.party[battle.activeIndex]!)}, and will take the next hit.`);
+    battle.storyEffects.push(`helper-guard:${h.name}`);
+  } else {
+    say1(`${h.name}!  They've brought food, and the whole party eats.`);
+    for (const m of ctx.party) {
+      if (m.hp <= 0) continue;
+      const max = maxHp(content, m);
+      const gain = Math.min(max - m.hp, Math.max(1, Math.floor(max / 5)));
+      if (gain <= 0) continue;
+      m.hp += gain;
+      if (m === ctx.party[battle.activeIndex]) events.push({ type: 'heal', side: 'player', amount: gain, hpAfter: m.hp });
+    }
+  }
+}
+
 function useCheer(ctx: BattleContext, cheer: Cheer, events: BattleEvent[]): void {
   const raid = ctx.battle.raid!;
   raid.cheersLeft -= 1;
@@ -1649,6 +1808,7 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
     if (special !== undefined) return special;
     if (ctx.battle.kind !== 'wild') return "You can't catch another trainer's Pokémon!";
     if (ctx.catchBlocked) return ctx.catchBlocked;
+    if (ctx.battle.eventRule?.noCatch) return FACTORY_RULES.has(ctx.battle.eventRule.gn ?? '') ? "It can't be caught. It's barely holding itself together." : ctx.battle.eventRule.gn === 'bidoof' ? "It won't be caught. It wants to be beaten, fair and square." : ctx.battle.eventRule.gn === 'ball' ? "It won't be caught. It was a Ball once, and it remembers." : "It won't be caught. It fights for its Squad.";
     if (ctx.battle.totem) return "A Totem can't be caught mid-fight. Beat it and something rare may follow!";
     if (ctx.battle.raid) {
       // S409 Boss Pokémon Capture: some bosses can be caught once they are worn down (not a called minion).
@@ -1710,6 +1870,31 @@ function ballRuleProblem(ctx: Pick<BattleContext, 'battle'>, rule: Extract<ItemE
 }
 
 /** A Blissful wild Pokémon is calm: it watches you instead of attacking. */
+/** Greenneedle events: a `gn-foe-waits:<line>` token (core/greenneedle) costs the foe its next attack and shows the line. */
+function gnFoeWaits(ctx: BattleContext, enemy: Combatant, events: BattleEvent[]): boolean {
+  const i = ctx.battle.storyEffects.findIndex((e) => e.startsWith('gn-foe-waits:'));
+  if (i < 0) return false;
+  const [token] = ctx.battle.storyEffects.splice(i, 1);
+  if (enemy.mon.hp <= 0) return false;
+  events.push({ type: 'raid', tone: 'info', text: token!.slice('gn-foe-waits:'.length) });
+  return true;
+}
+
+/** Greenneedle events: a `gn-you-wait:<line>` token costs your Pokémon its next move and shows the line (the Lush Jungle's vines). */
+function gnYouWait(ctx: BattleContext, player: Combatant, events: BattleEvent[]): boolean {
+  // gn.32: near the Golem read as Black, your Pokémon may refuse to attack it (20%), the way wild ones flee.
+  if (golemColour(ctx.battle) === 'black' && player.mon.hp > 0 && ctx.rng.float() < 0.2) {
+    events.push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, player.mon.speciesId).name} won't go near it. It backs away.` });
+    return true;
+  }
+  const i = ctx.battle.storyEffects.findIndex((e) => e.startsWith('gn-you-wait:'));
+  if (i < 0) return false;
+  const [token] = ctx.battle.storyEffects.splice(i, 1);
+  if (player.mon.hp <= 0) return false;
+  events.push({ type: 'raid', tone: 'info', text: token!.slice('gn-you-wait:'.length) });
+  return true;
+}
+
 /** Route 25: with the `foeStands` rule the foe holds its ground for the first turns and does not attack. */
 function foeStands(ctx: BattleContext, enemy: Combatant, events: BattleEvent[]): boolean {
   const turns = ctx.battle.eventRule?.foeStands;
@@ -1888,6 +2073,7 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
     if (pivoted) battle.growthMarks.push(`pivotIn:${mon.uid}`);
   }
   battle.activeIndex = partyIndex;
+  const leftStages = battle.playerStages;
   battle.playerStages = battle.secondChance ? reapplyBoost(freshStages()) : freshStages();
   battle.playerVolatile = freshVolatile();
   if (!battle.participants.includes(mon.uid)) battle.participants.push(mon.uid);
@@ -1898,6 +2084,22 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
   // Pokémon moments (Beta 0.6): a "switch-in" moment for the Pokémon that just came out.
   if (ctx.moments) tryEntryMoments(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, 'enter', events);
   if (ctx.moments) applyPendingMoments(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, events);
+  // Tailwind Heart (gn.new.33): the holder arms it on entry; the next ally to switch in gains +1 Speed. Once per battle.
+  if (mon.gn?.includes(TAILWIND_HEART) && !battle.storyEffects.includes('th-used') && !battle.storyEffects.includes('th-armed')) battle.storyEffects.push('th-armed');
+  else if (battle.storyEffects.includes('th-armed') && !battle.storyEffects.includes('th-used') && !mon.gn?.includes(TAILWIND_HEART)) {
+    battle.storyEffects.push('th-used');
+    events.push({ type: 'raid', tone: 'info', text: `Tailwind Heart: the wind picks up behind ${nameOf(ctx, mon)}!` });
+    applyStageChange(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, 'spe', 1, events);
+  }
+  // Greenneedle gn.new.08, Curtain Call: Mime Jr. steps out alive, and whoever steps in copies one stage of its best boost (once a battle).
+  if (outgoing && outgoing.hp > 0 && outgoing.uid !== mon.uid && abilityOf(ctx.content, outgoing) === 'curtain-call' && !battle.storyEffects.includes('curtain-call-used')) {
+    const best = (['atk', 'def', 'spa', 'spd', 'spe'] as const).reduce<'atk' | 'def' | 'spa' | 'spd' | 'spe' | null>((b, k) => (leftStages[k] > 0 && (!b || leftStages[k] > leftStages[b]) ? k : b), null);
+    if (best) {
+      battle.storyEffects.push('curtain-call-used');
+      events.push({ type: 'raid', tone: 'info', text: `Curtain Call: ${nameOf(ctx, outgoing)} bows out, and ${nameOf(ctx, mon)} takes the part!` });
+      applyStageChange(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, best, 1, events);
+    }
+  }
   // Mentor lesson: after a turn-one knockout, the next Pokémon you send in enters faster (once per battle).
   const koSpeed = turnOneKoSpeedStages(ctx.perks);
   if (koSpeed > 0 && battle.lesson?.koTurnOne && !battle.lesson.koSpeedUsed) {
@@ -2142,6 +2344,8 @@ function doublesDamageMultiplier(ctx: BattleContext, user: Combatant, target: Co
   if (user.side !== target.side || user.mon.uid !== target.mon.uid) {
     const theirs = moveIgnoresAbility ? null : allyAbility(ctx, target);
     if (theirs === 'friend-guard') m *= 0.75;
+    // Truce (Greenneedle gn.25): side by side, each takes 25% less from a move that hits both.
+    if (turn.spread && theirs === 'truce' && abilityIn(ctx, target) === 'truce') m *= 0.75;
     if (theirs === 'flower-gift' && sun && !physical) m /= 1.5;
   }
   return m;
@@ -2160,6 +2364,8 @@ function resolveEntries(ctx: BattleContext, events: BattleEvent[]): void {
   const sides = pending.map((side) => (side === 'player' ? { c: player, other: enemy } : { c: enemy, other: player }));
   if (sides.length === 2 && speedOf(ctx, enemy) > speedOf(ctx, player)) sides.reverse();
   for (const { c } of sides) enterExtras(ctx, c, events);
+  // coRules: SF72 entry rules (stages on entry, sleepwalking, the Magician's disguise).
+  for (const { c } of sides) coEntry(ctx.content, battle, c, events);
   for (const { c } of sides) applyHazards(ctx, c, events);
   for (const { c, other } of sides) {
     // Beta 0.6 traits: Seat at the Table sweeps away the foe's boosts; a waiting House Wins bonus lands as the partner comes in.
@@ -2192,7 +2398,19 @@ function resolveEntries(ctx: BattleContext, events: BattleEvent[]): void {
     recordFaints(ctx, player, enemy, events);
     settleFaints(ctx, events);
   }
-  for (const { c, other } of sides) if (c.mon.hp > 0) entryAbility(ctx, c, other, events);
+  for (const { c, other } of sides) {
+    if (c.mon.hp <= 0) continue;
+    entryAbility(ctx, c, other, events);
+    // Greenneedle gn.44: a 1v1 Champion's starred entry ability triggers a second time the first time it comes back in, each battle.
+    if (c.side === 'player' && starEntry(ctx.content, c.mon)) {
+      const tag = `star-in:${c.mon.uid}`;
+      if (!ctx.battle.storyEffects.includes(tag)) ctx.battle.storyEffects.push(tag);
+      else if (!ctx.battle.storyEffects.includes(`star-again:${c.mon.uid}`)) {
+        ctx.battle.storyEffects.push(`star-again:${c.mon.uid}`);
+        entryAbility(ctx, c, other, events);
+      }
+    }
+  }
 }
 
 /** Sets the weather unless a primal weather (Desolate Land, Primordial Sea) is holding it. */
@@ -2335,12 +2553,28 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
   }
   if (!ability) return;
   syncForms(ctx, c, events, false);
+  if (ability === 'truce' && ctx.battle.storyEffects.includes(`truce-due:${c.mon.uid}`)) {
+    ctx.battle.storyEffects.splice(ctx.battle.storyEffects.indexOf(`truce-due:${c.mon.uid}`), 1, `truce-used:${c.mon.uid}`);
+    announce(c, ability, events);
+    applyStageChange(ctx, c, 'atk', 1, events);
+    applyStageChange(ctx, c, 'spe', 1, events);
+  }
   if (ability === 'pack-call') {
     if (ctx.battle.turn <= 1) {
       announce(c, ability, events);
       ctx.battle.extra.packCall = c.side;
     }
     return;
+  }
+  if (ability === 'before-the-fall') {
+    // Before the Fall (gn.new.34, the Warning): once a battle, the foe's single strongest move is named.
+    const tag = `fall-told:${c.side}`;
+    if (!ctx.battle.storyEffects.includes(tag)) {
+      ctx.battle.storyEffects.push(tag);
+      const best = other.mon.moves.map((m) => ctx.content.moves.get(m.id)).filter((m) => !!m).sort((x, y) => (y!.power ?? 0) - (x!.power ?? 0))[0];
+      announce(c, ability, events);
+      if (best) events.push(say(c.side, 'signature', `${getSpecies(ctx.content, c.mon.speciesId).name} knows what is coming: ${best.name}.`, c.mon.uid));
+    }
   }
   if (ability === 'hush') {
     // Hush (catalog overhaul, the Hushed One): the air goes silent. Sound moves fail for three turns on both sides (the Throat Chop block).
@@ -2372,7 +2606,10 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
     }
     return;
   }
-  if (ability === 'illusion') {
+  // Greenneedle gn.57, Many Faces: Illusion on the first entry and one re-form when it switches back in (once per battle).
+  const faces = ability === 'many-faces' ? ctx.battle.storyEffects.filter((t) => t === `many-faces:${c.mon.uid}`).length : 0;
+  if (ability === 'illusion' || (ability === 'many-faces' && faces < 2)) {
+    if (ability === 'many-faces') ctx.battle.storyEffects.push(`many-faces:${c.mon.uid}`);
     const team = c.side === 'player' ? ctx.party : ctx.battle.enemyTeam;
     const alive = team.filter((m) => m.hp > 0 && m.uid !== c.mon.uid && m.speciesId !== c.mon.speciesId);
     const as = alive[alive.length - 1];
@@ -2455,6 +2692,7 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
       applyStageChange(ctx, other, 'atk', 1, events);
       return;
     }
+    if (selfMade(ctx, other, events)) return;
     applyStageChange(ctx, other, 'atk', -1, events, c);
     if (guard === 'rattled') applyStageChange(ctx, other, 'spe', 1, events);
     return;
@@ -2639,12 +2877,15 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
   const quickFeet = ability === 'quick-feet' && c.mon.status !== null;
   let speed = effectiveSpeed(content.ruleset, Math.floor(statsOf(ctx, c).spe * Held.heldStatMultiplier(ctx, c.mon, c.side, 'spe')), c.stages.spe, c.mon.status?.id === 'par' && !quickFeet);
   if (ability && weather && WEATHER_SPEED[ability]?.includes(weather)) speed *= 2;
+  speed *= coSpeedMult(content, ctx.battle, c.mon);
   if (quickFeet) speed = Math.floor(speed * 1.5);
   if (ctx.battle.sideEffects[c.side].tailwind > 0) speed *= 2;
   if (ctx.battle.sideEffects[c.side].swamp > 0) speed = Math.floor(speed / 2);
   if (c.side === 'player') speed = Math.floor(speed * growthSpeedMultiplier(content.balance.overhaulGrowth, c.mon, { firstOfDay: ctx.battle.firstOfDay === true, weather: ctx.battle.weather?.id ?? null, tailwind: ctx.battle.sideEffects.player.tailwind > 0, koed: (ctx.battle.growthMarks ?? []).includes(`ko:${c.mon.uid}`) }));
   if ((ability === 'surge-surfer' || ability === 'grid-surfer') && ctx.battle.terrain?.id === 'electric') speed *= 2;
   if (ability === 'slow-start' && c.vol.turnsOut < 5) speed = Math.floor(speed / 2);
+  // Greenneedle gn.26: a giant moves at three-quarter Speed.
+  if (c.side === 'enemy' && ctx.battle.eventRule?.giant) speed = Math.floor(speed * ctx.content.balance.co.giantSpeed);
   return speed * (c.side === 'player' ? (ctx.attributes?.speed ?? 1) : 1);
 }
 
@@ -2652,7 +2893,7 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
 function priorityOf(ctx: BattleContext, c: Combatant, move: Move): number {
   // §29 enraged after a rival's sacrifice: its next moves go first.
   const rage = ctx.battle.enraged;
-  return basePriority(ctx, c, move) + variantPriorityBonus(ctx.battle.extra.variants, c.mon.uid) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0) + momentPriority(ctx, c) + (c.side === 'player' ? quirkPriority(c.mon, c.vol.turnsOut) : 0);
+  return basePriority(ctx, c, move) + variantPriorityBonus(ctx.battle.extra.variants, c.mon.uid) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0) + momentPriority(ctx, c) + (c.side === 'player' ? callPriority(ctx.battle, c.mon.uid) : 0) + (c.side === 'player' ? quirkPriority(c.mon, c.vol.turnsOut) : 0);
 }
 
 function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
@@ -2664,6 +2905,12 @@ function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
   if (ability === 'three-faces' && c.vol.movesUsed.length === 0) return move.priority + 1;
   if ((ability === 'champions-fury' || ability === 'champions-entrance') && !c.vol.furyUsed && move.category !== 'status') return move.priority + 1;
   if (c.side === 'player' && c.vol.movesUsed.length === 0 && ctx.battle.storyEffects.includes(`kind:${c.mon.uid}`)) return move.priority + 1;
+  // Seen It (Greenneedle gn.45): once per battle, it goes first against a Pokémon that has only just come in.
+  if (seenItFirst(ctx.battle, c.mon, move.effects.champMove, (c.side === 'player' ? ctx.battle.enemyVolatile : ctx.battle.playerVolatile).turnsOut)) return move.priority + 1;
+  // Encore Performance: the move it forces goes first.
+  if (c.vol.locked?.bonus && c.vol.locked.moveId === move.id) return move.priority + 1;
+  // Samurai Slash: the first time it is used in a battle it strikes first (and flinches, see flinchFirstUse).
+  if (move.effects.flinchFirstUse && !c.vol.movesUsed.includes(move.id)) return move.priority + 1;
   if (ability === 'gale-wings' && move.type === 'flying' && c.mon.hp >= calcStats(ctx.content, c.mon).hp) return move.priority + 1;
   if (ability === 'triage' && (move.effects.heal || move.effects.drain)) return move.priority + 3;
   if (ability === 'mycelium-might' && move.category === 'status') return move.priority - 0.5;
@@ -2674,6 +2921,9 @@ function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
 }
 
 function decideOrder(ctx: BattleContext, rng: Rng, player: Combatant, pMove: Move, enemy: Combatant, eMove: Move): Side {
+  // coRules: a rule battle's forced order (Slippery Slope, the dance-off and bike race winner) draws no dice.
+  const forced = coForcedOrder(ctx.battle, player.mon, enemy.mon);
+  if (forced) return forced;
   // Trick Room: slower Pokémon move first within a priority.
   const trickSign = (ctx.battle.field.trickRoom > 0 ? -1 : 1) * (Ultra.reversesOrder(ultraRulesOf(ctx.battle)) ? -1 : 1);
   const quickDraw = (c: Combatant, m: Move): number => (abilityIn(ctx, c) === 'quick-draw' && m.category !== 'status' && rng.chance(0.3) ? 0.2 : 0);
@@ -2748,8 +2998,10 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
     events.push({ type: 'raid', tone: 'info', text: lostTurn });
     return false;
   }
-  if (user.vol.infatuated && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.vol.infatuated = false;
+  if (user.vol.infatuated && (variantBlocksMind(ctx.battle.extra.variants, user.mon.uid) || trustHolds(ctx.party, user))) user.vol.infatuated = false;
   if (user.flinched && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.flinched = false;
+  // Greenneedle gn.46: a handshake before the All-Star final: neither side can be flinched on turn one.
+  if (user.flinched && ctx.battle.turn <= 1 && ctx.battle.storyEffects.includes('allstar-shake')) user.flinched = false;
   // Mentor lesson: in boss and rival battles your Pokémon can't flinch on turn one.
   if (user.flinched && user.side === 'player' && noFlinchTurnOne(ctx.perks, ctx.battle)) user.flinched = false;
   if (user.vol.infatuated) {
@@ -2759,7 +3011,9 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
       return false;
     }
   }
-  if (user.flinched) {
+  // Greenneedle gn.43: the auctioneer's gavel. Its holder's first move in a battle can't be interrupted by flinching or confusion.
+  const gavel = user.side === 'player' && gavelFirst(user.mon);
+  if (user.flinched && !gavel) {
     events.push({ type: 'cant', side: user.side, reason: 'flinch' });
     if (ability === 'steadfast') {
       announce(user, ability, events);
@@ -2773,7 +3027,7 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
       events.push({ type: 'confusionEnd', side: user.side });
     } else {
       events.push({ type: 'confusion', side: user.side });
-      if (rng.chance(confusionHitChance * (user.side === 'player' ? growthChargeHoldMultiplier(content.balance.overhaulGrowth, user.mon, user.vol.charging !== null) : 1))) {
+      if (rng.chance(confusionHitChance * (user.side === 'player' ? growthChargeHoldMultiplier(content.balance.overhaulGrowth, user.mon, user.vol.charging !== null) : 1)) && !gavel) {
         // It hits itself with a typeless 40-power physical attack (no critical hits).
         const stats = calcStats(content, user.mon);
         const damage = calcDamage(content.ruleset, {
@@ -3005,6 +3259,11 @@ function takeHp(
       lost = c.mon.hp - 1;
       lastStand = charm;
     }
+  }
+  // Greenneedle gn.new.31: Thousand-Year Promise. The first time each battle that an ally would faint, it is left at 1 HP.
+  if (hit !== null && c.side === 'player' && lost > 0 && lost >= c.mon.hp && c.mon.hp > 1 && !ctx.battle.storyEffects.includes('promise-used') && ctx.party.some((p) => p.uid !== c.mon.uid && p.hp > 0 && abilityOf(ctx.content, p) === 'thousand-year-promise')) {
+    ctx.battle.storyEffects.push('promise-used');
+    lost = c.mon.hp - 1;
   }
   c.mon.hp -= lost;
   if (c.mon.revivalStatus) revivalNoteHp(ctx, c.mon);
@@ -3453,6 +3712,7 @@ function executeMove(
     }
   }
   events.push({ type: 'move', side: user.side, moveId: move.id });
+  if (user.side === 'player') gavelSpent(user.mon);
   // §29 an enraged Pokémon spends one of its first-strike moves.
   const rage = ctx.battle.enraged;
   if (rage && rage.left > 0 && user.side === 'player' && rage.uid === user.mon.uid) rage.left -= 1;
@@ -3602,7 +3862,8 @@ function powerFromRule(ctx: BattleContext, rule: PowerRule, base: number, user: 
     case 'targetSpeed': return Math.min(150, Math.floor((25 * targetStats.spe) / Math.max(1, userStats.spe)) + 1);
     case 'userHp': return Math.max(1, Math.floor((base * user.mon.hp) / userStats.hp));
     case 'targetHp': return Math.max(1, Math.floor((120 * target.mon.hp) / targetStats.hp));
-    case 'doubleTargetStatus': return target.mon.status ? base * 2 : base;
+    // The Squirtle Squad recruit (gn.08): its Hex treats confusion as a status condition.
+    case 'doubleTargetStatus': return target.mon.status || (user.mon.look?.startsWith('squad') && target.vol.confusion > 0) ? base * 2 : base;
     case 'doubleUserStatus': return user.mon.status ? base * 2 : base;
     case 'doubleTargetPoison': return target.mon.status?.id === 'psn' ? base * 2 : base;
     case 'rainBoost': return weatherNow(ctx) === 'rain' ? Math.floor(base * 1.5) : base;
@@ -3953,7 +4214,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     user.vol.typeShift = move.type;
   }
   const foeAbility = targetsEnemy ? targetAbility(ctx, user, target) : null;
-  const noGuard = userAbility === 'no-guard' || abilityIn(ctx, target) === 'no-guard' || userAbility === 'skys-resolve' || abilityIn(ctx, target) === 'skys-resolve';
+  // Greenneedle gn.32: the Golem read as White sees through evasion and can't miss.
+  const noGuard = userAbility === 'no-guard' || abilityIn(ctx, target) === 'no-guard' || userAbility === 'skys-resolve' || abilityIn(ctx, target) === 'skys-resolve' || (user.side === 'enemy' && user.mon.speciesId === 'noctowl' && ctx.battle.storyEffects.includes('ferris-eye')) || (user.side === 'enemy' && golemColour(ctx.battle) === 'white');
   // A hidden target can only be hit by the moves that reach it (Earthquake hits Dig), or with No Guard.
   if (targetsEnemy && target.vol.semi && fx.hitsSemi?.semi !== target.vol.semi && !noGuard) {
     events.push({ type: 'avoided', side: target.side });
@@ -3981,6 +4243,14 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     announce(target, 'magic-bounce', events);
     applyStatusMove(ctx, target, user, move, events);
     return;
+  }
+  // Greenneedle gn.61: a helper takes one hit meant for the player's Pokémon.
+  if (targetsEnemy && target.side === 'player' && user.side === 'enemy' && move.category !== 'status') {
+    const guard = reunionTakeHit(ctx.battle);
+    if (guard) {
+      events.push({ type: 'raid', tone: 'info', text: `${guard} takes the hit. ${nameOf(ctx, target.mon)} is untouched.` });
+      return;
+    }
   }
   if (targetsEnemy && target.protected && !fx.breaksProtect && !piercesProtect && !move.flags.includes('zmove') && !move.flags.includes('max')) {
     events.push({ type: 'protected', side: target.side });
@@ -4064,14 +4334,19 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (baseAccuracy !== null) {
       if (user.side === 'player' && user.mon.moves.find((m) => m.id === move.id)?.star) accuracy *= 1.05;
       if (user.side === 'player') accuracy *= growthAccuracyMultiplier(ctx.content.balance.overhaulGrowth, user.mon, move.accuracy, move.category, ctx.battle.weather?.id ?? null, move.type, Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0)), { moveId: move.id, growthMove: user.mon.growthMove, scout: target.vol.turnsOut <= 1, lowersSpe: Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0 && c.stat === 'spe')) });
+      // Greenneedle gn.47: a move copied from the Exhibition doesn't quite work yet (10% less accurate).
+      if (ctx.battle.storyEffects.includes(`ex-copied:${user.mon.uid}:${move.id}`)) accuracy *= 0.9;
       if (userAbility === 'compound-eyes') accuracy *= 1.3;
+      // Greenneedle gn.new.36: Guiding Light, a Chinchou that lit a boat's way; it never loses sight of its target.
+      if (userAbility === 'guiding-light') accuracy *= 1.2;
       if (userAbility === 'victory-star') accuracy *= 1.1;
       if (userAbility === 'hustle' && move.category === 'physical') accuracy *= 0.8;
       if (foeAbility && weather && WEATHER_EVASION[foeAbility]?.includes(weather)) accuracy *= 0.8;
       if (foeAbility === 'tangled-feet' && target.vol.confusion > 0) accuracy *= 0.5;
+      if (foeAbility === 'unlooked-for' && target.mon.hp >= maxHp(content, target.mon)) accuracy *= 0.9;
       if (ctx.battle.field.gravity > 0) accuracy *= 5 / 3;
       if (ctx.battle.accuracyMult) accuracy *= ctx.battle.accuracyMult;
-      if (ctx.battle.eventRule?.accuracyMult && (!ctx.battle.eventRule.accuracyTurns || ctx.battle.turn <= ctx.battle.eventRule.accuracyTurns)) accuracy *= ctx.battle.eventRule.accuracyMult;
+      if (ctx.battle.eventRule?.accuracyMult && (!ctx.battle.eventRule.accuracyTurns || ctx.battle.turn <= ctx.battle.eventRule.accuracyTurns)) { if (!coAccuracyExempt(content, ctx.battle, user.mon)) accuracy *= ctx.battle.eventRule.accuracyMult; }
       if (user.side === 'player') accuracy *= quirkAccuracy(user.mon, ctx.period);
       if (target.side === 'player') accuracy /= evasionPerk(ctx.perks, getSpecies(content, target.mon.speciesId).types) * growthEvasionMultiplier(content.balance.overhaulGrowth, target.mon, target.mon.hp / Math.max(1, calcStats(content, target.mon).hp));
       if (foeAbility === 'wonder-skin' && move.category === 'status') accuracy = Math.min(accuracy, 0.5);
@@ -4095,7 +4370,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     return;
   }
   // S7 Blind Strike: the partner lands a missed attack while confused or with lowered accuracy.
-  if (targetsEnemy && rng.float() >= accuracy && !(baseAccuracy !== null && (user.stages.acc < 0 || user.vol.confusion > 0) && tryFeat(ctx, user, 'blind_strike'))) {
+  if (targetsEnemy && rng.float() >= accuracy && !(baseAccuracy !== null && (user.stages.acc < 0 || user.vol.confusion > 0) && tryFeat(ctx, user, 'blind_strike')) && !summitSaves(content, ctx.battle, user.mon, fx.champMove)) {
     events.push({ type: 'miss', side: user.side });
     Held.onMiss(ctx, user, events as Held.HeldEvent[]);
     if (user.side === 'enemy' && target.side === 'player') foeMissLesson(ctx, target, events);
@@ -4163,7 +4438,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   }
   // S7 Unmask the Illusion: the partner's hit ends a foe's Illusion or Disguise (the Disguise soaks nothing).
   if (targetsEnemy && user.side === 'player' && ctx.feat) {
-    const disguised = abilityIn(ctx, target) === 'disguise' && !ctx.battle.extra.brokenFace.includes(target.mon.uid);
+    const disguised = (abilityIn(ctx, target) === 'disguise' || abilityIn(ctx, target) === 'borrowed-face') && !ctx.battle.extra.brokenFace.includes(target.mon.uid);
     if ((target.vol.illusion || disguised) && tryFeat(ctx, user, 'unmask_the_illusion')) {
       if (target.vol.illusion) {
         events.push({ type: 'transform', side: target.side, uid: target.mon.uid, kind: 'illusion', from: target.vol.illusion, to: target.mon.speciesId, itemId: null, broken: true });
@@ -4243,23 +4518,37 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       const physical = fx.attackFrom === 'best' || fx.autoCategory || (fx.teraBlast && ctx.battle.transform.teraTypes[user.mon.uid]) ? userStats.atk >= userStats.spa : move.category === 'physical';
       const hitsDefense = (physical || fx.targetsDefense) !== (ctx.battle.extra.wonderRoom > 0);
       const userStatus = user.mon.status?.id;
-      crit = rng.chance(scaleCrit(Math.min(1, critChance(content.ruleset, move.critStage + Held.critStageBonus(ctx, user) + (userAbility === 'super-luck' ? 1 : 0) + (user.vol.focusEnergy ? 2 : 0) + (user.vol.momentCrit ?? 0)) * (user.side === 'player' ? critChancePerk(ctx.perks) : 1) + (user.side === 'player' ? critChanceBonusPerk(ctx.perks) : 0) + (user.side === 'enemy' && ctx.battle.eventRule?.beginnersLuck ? 0.2 : 0) + focusCrit(content, user.mon) + (user.side === 'player' ? growthCritBonus(content.balance.overhaulGrowth, user.mon) : 0) + (user.side === 'enemy' && classPassiveOf(content, ctx.battle)?.kind === 'crit' ? classPassiveOf(content, ctx.battle)!.amount : 0)), content.balance.critScaling.softCap, content.balance.critScaling.excessFactor));
+      crit = rng.chance(scaleCrit(Math.min(1, critChance(content.ruleset, move.critStage + Held.critStageBonus(ctx, user) + (userAbility === 'super-luck' ? 1 : 0) + (user.vol.focusEnergy ? 2 : 0) + (user.vol.momentCrit ?? 0)) * (user.side === 'player' ? critChancePerk(ctx.perks) : 1) * coCritMult(ctx.battle) + coCritBonus(ctx.battle) + (user.side === 'player' ? critChanceBonusPerk(ctx.perks) : 0) + (user.side === 'enemy' && ctx.battle.eventRule?.beginnersLuck ? 0.2 : 0) + focusCrit(content, user.mon) + (user.side === 'player' ? growthCritBonus(content.balance.overhaulGrowth, user.mon) : 0) + (user.side === 'enemy' && classPassiveOf(content, ctx.battle)?.kind === 'crit' ? classPassiveOf(content, ctx.battle)!.amount : 0)), content.balance.critScaling.softCap, content.balance.critScaling.excessFactor));
       if (fx.alwaysCrit || user.vol.laserFocus) crit = true;
       if (crit && user.side === 'player' && quirkNoCrits(user.mon)) crit = false;
       if (!crit && Ultra.forcesCrit(ultraRulesOf(ctx.battle), target.mon.hp >= maxHp(content, target.mon))) crit = true;
       if (userAbility === 'merciless' && target.mon.status?.id === 'psn') crit = true;
       if (foeAbility === 'battle-armor' || foeAbility === 'shell-armor' || ctx.battle.sideEffects[target.side].luckyChant > 0) crit = false;
       if (storyNoCrit(ctx.battle.extra.storyTraits, user.mon.uid)) crit = false;
+      // Before the Fall: the first critical hit against a side with this ability each battle is an ordinary hit.
+      if (crit && foeAbility === 'before-the-fall' && !ctx.battle.storyEffects.includes(`fall-spent:${target.side}`)) {
+        ctx.battle.storyEffects.push(`fall-spent:${target.side}`);
+        crit = false;
+      }
       if (user.side === 'player' && ctx.battle.noPlayerCrit) crit = false;
       if (crit) user.vol.laserFocus = false;
       (ctx.battle.critStreak ??= {})[user.mon.uid] = crit ? (ctx.battle.critStreak[user.mon.uid] ?? 0) + 1 : 0;
+      if (user.side === 'player') { ctx.battle.lastHit = move.id; if (crit) ctx.battle.critBy ??= user.mon.uid; }
       const randomFactor = rng.int(content.ruleset.randomFactorMin, 100);
       let power = fx.lowHpPower ? lowHpPower(user.mon.hp, userStats.hp) : (move.power ?? 0);
       if (fx.beatUp && beaters.length > 0) power = Math.floor(getSpecies(content, beaters[Math.min(hit, beaters.length - 1)]!.speciesId).baseStats.atk / 10) + 5;
       if (fx.powerRule) power = powerFromRule(ctx, fx.powerRule, power, user, target, userStats, targetStats, movedFirst, hit) ?? power;
+      if (fx.twoTrainers && user.mon.friendship >= content.balance.friendship.max) power = 100;
+      if (fx.champMove) {
+        // Greenneedle gn.45's exclusive moves: The Long Game and With You grow; Seen It is spent when it went first.
+        power = champPower(content, user.mon, fx.champMove, power, user.vol.turnsOut);
+        if (hit === 0) seenItSpend(ctx.battle, user.mon, fx.champMove, target.vol.turnsOut);
+      }
       power = teraPower(ctx.battle, user.mon, { ...move, type: moveType }, power);
       let stab = move.flags.includes('typeless') ? 1 : stabMultiplier(content, ctx.battle, user.mon, moveType);
       if (stab === 1 && user.vol.typeShift === moveType) stab = content.ruleset.stabMultiplier;
+      // Open Road (gn.new.01): the first move it uses after it enters gains same-type bonus, whatever its type.
+      if (stab === 1 && userAbility === 'open-road' && user.vol.firstUseNow && user.vol.movesUsed.length === 1 && !move.flags.includes('typeless')) stab = content.ruleset.stabMultiplier;
       if (fx.doubleBelowHalf && target.mon.hp * 2 <= targetStats.hp) power *= 2;
       if (fx.hitsSemi?.double && target.vol.semi === fx.hitsSemi.semi) power *= 2;
       if (fx.weatherBall && weather) power *= 2;
@@ -4271,6 +4560,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (user.side === 'enemy') {
         powerMult *= storyHype(ctx.battle.extra.storyTraits, user.mon.uid, ctx.battle.enemyIndex, ctx.battle.turn);
         powerMult *= storyOldHabits(ctx.battle.extra.storyTraits, user.mon.uid, target.mon.hp, maxHp(ctx.content, target.mon));
+        powerMult *= twiceToldPower(ctx.battle.extra.twiceTold, target.mon.uid, target.mon.gn, move.id);
       }
       if (userAbility === 'technician' && power <= 60) powerMult *= 1.5;
       const flagBoost = userAbility ? FLAG_BOOST[userAbility] : undefined;
@@ -4283,6 +4573,13 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (userAbility === 'dynamo-down' && moveType === 'electric' && user.vol.dynamoBoost) { powerMult *= 1.5; user.vol.dynamoBoost = false; }
       if (userAbility === 'reckless' && fx.recoil) powerMult *= 1.2;
       if (ctx.battle.eventRule?.typeBoost?.type === moveType) powerMult *= 1 + ctx.battle.eventRule.typeBoost.pct / 100;
+      powerMult *= coDamageMult(ctx.battle);
+      // The Polluted Factory's furnace (gn.17): Water moves go up as steam, at half power (and clear the Molten Sludge: greenneedle/factory.ts).
+      if (ctx.battle.eventRule?.gn === 'furnace' && moveType === 'water') powerMult *= 0.5;
+      // The Lush Jungle (gn.20): the air is humid. Grass moves +10%, Fire moves -10%, for everyone.
+      const humid = ctx.battle.eventRule?.gn === 'jungle' || ctx.battle.eventRule?.gn === 'tsareena';
+      if (humid && moveType === 'grass') powerMult *= 1.1;
+      if (humid && moveType === 'fire') powerMult *= 0.9;
       if (ctx.battle.field.waterSport > 0 && moveType === 'fire') powerMult *= 1 / 3;
       if (ctx.battle.field.mudSport > 0 && moveType === 'electric') powerMult *= 1 / 3;
       if (userAbility && TYPE_BOOST[userAbility] === moveType) powerMult *= 1.5;
@@ -4327,6 +4624,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (foeAbility && RUINS[foeAbility] === (physical ? 'atk' : 'spa')) attackMult *= 0.75;
       // Four Seals (PG11): the target's Ruin ability also lowers one more stat.
       else if (foeAbility && RUINS[foeAbility] && momentRuinExtra(ctx, target) === (physical ? 'atk' : 'spa')) attackMult *= 0.75;
+      // Inherited Strength (Greenneedle gn.22): Attack +1 for each fallen ally, to +2 (as stat stages: 1.5x, then 2x).
+      if (physical && userAbility === 'inherited-strength') attackMult *= (2 + Math.min(2, user.side === 'player' ? ctx.party.filter((m) => m.hp <= 0).length : ctx.battle.enemyTeam.filter((m) => m.hp <= 0).length)) / 2;
       if (userAbility === 'supreme-overlord') {
         const fallen = ctx.party.filter((m) => m.hp <= 0).length;
         attackMult *= 1 + 0.1 * Math.min(5, user.side === 'player' ? fallen : ctx.battle.enemyTeam.filter((m) => m.hp <= 0).length);
@@ -4337,7 +4636,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (!physical && userAbility === 'solar-power' && weather === 'sun') attackMult *= 1.5;
       if (physical && userAbility === 'slow-start' && user.vol.turnsOut < 5) attackMult *= 0.5;
       if (userAbility === 'defeatist' && user.mon.hp * 2 <= userStats.hp) attackMult *= 0.5;
-      if (userAbility && PINCH[userAbility] === moveType && user.mon.hp * 3 <= userStats.hp) attackMult *= 1.5;
+      if (userAbility && PINCH[userAbility] === moveType && user.mon.hp * (user.side === 'player' && starPinch(ctx.content, user.mon) ? 2 : 3) <= userStats.hp) attackMult *= 1.5;
       if (user.vol.flashFire && moveType === 'fire') attackMult *= 1.5;
       if (foeAbility === 'thick-fat' && (moveType === 'fire' || moveType === 'ice')) attackMult *= 0.5;
       if (attackMult !== 1) attack = Math.max(1, pokeRound(attack, attackMult));
@@ -4359,8 +4658,14 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       let final = 1;
       if (target.vol.exposed) final *= 2;
       if (user.side === 'player') final *= resonanceMultiplier(content, ctx.party, moveType);
-      final *= curseMultiplier(content, target.vol.curseTag, moveType);
+      final *= target.side === 'player' ? 1 + (curseMultiplier(content, target.vol.curseTag, moveType) - 1) * curseDamageTakenPerk(ctx.perks) : curseMultiplier(content, target.vol.curseTag, moveType);
       if (effectiveness > 1 && (foeAbility === 'filter' || foeAbility === 'solid-rock' || foeAbility === 'prism-armor')) final *= 0.75;
+      if (effectiveness > 1 && foeAbility === 'deep-roots') final *= 0.9;
+      // Vigil (Greenneedle gn.new.02): out for three full turns, the next hit it takes this battle does 50% less (once a battle).
+      if (foeAbility === 'vigil' && target.vol.turnsOut >= 3 && !ctx.battle.storyEffects.includes(`vigil:${target.mon.uid}`)) final *= 0.5;
+      // Greenneedle gn.32: a carried Red crystal (+10% to its own-type moves); the Golem read as Red (+10% to its attacks).
+      if (user.side === 'player' && user.mon.crystal?.red && ownTypes(content, user.mon).includes(moveType)) final *= 1.1;
+      if (user.side === 'enemy' && golemColour(ctx.battle) === 'red') final *= 1.1;
       if ((foeAbility === 'multiscale' || foeAbility === 'shadow-shield') && target.mon.hp >= targetStats.hp) final *= 0.5;
       if (!crit) {
         const tfx = ctx.battle.sideEffects[target.side];
@@ -4396,6 +4701,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (foeAbility === 'coral-veil' && target.mon.hp >= targetStats.hp) final *= 0.75;
       if (foeAbility === 'gem-orbit' && effectiveness > 1 && target.vol.gems < 4) { target.vol.gems++; final *= 0.5; }
       if (userAbility === 'soul-kindling' && moveType === 'psychic' && target.mon.status?.id === 'brn') final *= 1.3;
+      if (fx.proof && getSpecies(content, target.mon.speciesId).evolutions.length === 0) final *= 1.2;
       const ruleset = crit ? { ...content.ruleset, critMultiplier: Held.critDamage(ctx, user, content.ruleset.critMultiplier) * critDamagePerk(ctx.perks, user.side) } : content.ruleset;
       damage = calcDamage(ruleset, {
         level: user.mon.level,
@@ -4415,7 +4721,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         burned: userStatus === 'brn' && userAbility !== 'guts',
         frostbitten: !!ruleset.frostbite && userStatus === 'frz',
         physical,
-        weather: Held.hasHook(ctx, user.mon, user.side, 'utilityUmbrella') || Held.hasHook(ctx, target.mon, target.side, 'utilityUmbrella') ? 1 : weatherMultiplier(userAbility === 'mega-sol' ? 'sun' : weather, moveType),
+        weather: Held.hasHook(ctx, user.mon, user.side, 'utilityUmbrella') || Held.hasHook(ctx, target.mon, target.side, 'utilityUmbrella') ? 1 : userAbility === 'kept-flame' && weather === 'rain' && moveType === 'fire' ? 1 : weatherMultiplier(userAbility === 'mega-sol' ? 'sun' : weather, moveType),
         final,
       });
       damage = applyTypeModifiers(ctx, user, target, effectiveness, damage, physical, moveType, move);
@@ -4447,13 +4753,22 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     // Sturdy: a hit at full HP leaves it with at least 1 HP.
     const sturdy = foeAbility === 'sturdy' && target.mon.hp >= targetMax && target.mon.hp > 1 && damage >= target.mon.hp;
     if (sturdy) damage = target.mon.hp - 1;
+    // Greenneedle gn.new.07: Second Self survives the first knockout of a battle, and the move that did it is revealed.
+    const second = foeAbility === 'second-self' && user !== target && damage >= target.mon.hp && !ctx.battle.storyEffects.includes(`second-self:${target.mon.uid}`);
+    if (second) {
+      ctx.battle.storyEffects.push(`second-self:${target.mon.uid}`);
+      damage = Math.max(0, target.mon.hp - 1);
+      announce(target, 'second-self', events);
+      events.push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, target.mon.speciesId).name} was already somewhere else. The move was ${move.name}.` });
+    }
 
     // Disguise and Ice Face take one hit for the Pokémon, then the form breaks.
-    if ((foeAbility === 'disguise' || (foeAbility === 'ice-face' && move.category === 'physical')) && !ctx.battle.extra.brokenFace.includes(target.mon.uid) && user !== target) {
+    // Greenneedle gn.37: Borrowed Face is a Disguise that comes back (below).
+    if ((foeAbility === 'disguise' || foeAbility === 'borrowed-face' || (foeAbility === 'ice-face' && move.category === 'physical')) && !ctx.battle.extra.brokenFace.includes(target.mon.uid) && user !== target) {
       ctx.battle.extra.brokenFace.push(target.mon.uid);
       announce(target, foeAbility, events);
       events.push({ type: 'noEffect', side: target.side });
-      if (foeAbility === 'disguise') {
+      if (foeAbility === 'disguise' || foeAbility === 'borrowed-face') {
         swapForm(ctx, target, 'mimikyu-busted', events);
         abilityHurt(ctx, target, Math.max(1, Math.floor(targetMax / 8)), events);
       } else swapForm(ctx, target, 'eiscue-noice', events);
@@ -4669,9 +4984,21 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     events.push({ type: 'statsReset', side: target.side });
   }
   if (target.mon.hp <= 0 && user.mon.hp > 0 && userAbility === 'battle-bond') swapForm(ctx, user, 'greninja-ash', events);
+  // Greenneedle gn.37: Borrowed Face. Once per battle, knocking out a foe puts its broken disguise back.
+  if (target.mon.hp <= 0 && user.mon.hp > 0 && userAbility === 'borrowed-face' && ctx.battle.extra.brokenFace.includes(user.mon.uid) && !ctx.battle.storyEffects.includes(`borrowed-face:${user.mon.uid}`)) {
+    ctx.battle.storyEffects.push(`borrowed-face:${user.mon.uid}`);
+    ctx.battle.extra.brokenFace = ctx.battle.extra.brokenFace.filter((uid) => uid !== user.mon.uid);
+    if (user.mon.speciesId === 'mimikyu-busted') swapForm(ctx, user, 'mimikyu', events);
+    events.push(say(user.side, 'arena', `${nameOf(ctx, user.mon)} straightens its rag. The face on it is back.`, user.mon.uid));
+  }
   if (fx.koBoost && target.mon.hp <= 0 && user.mon.hp > 0) applyStageChange(ctx, user, fx.koBoost.stat, fx.koBoost.stages, events);
   if (landed > 0 && fx.forceSwitch) forceOut(ctx, target, events);
-  if (landed > 0 && fx.trap) target.vol.trapped = true;
+  if (landed > 0 && fx.trap && !target.vol.trapped && !cageFree(ctx, target, events)) target.vol.trapped = true;
+  // Greenneedle gn.37 Welcome Home: the target can't switch out next turn.
+  if (landed > 0 && fx.trapNext && target.mon.hp > 0 && !target.vol.trapped && !cageFree(ctx, target, events)) {
+    target.vol.trapped = true;
+    ctx.battle.storyEffects.push(`untrap:${target.side}:${ctx.battle.turn + 1}`);
+  }
   if (landed > 0 && fx.disrupt) disrupt(ctx, user, target, fx.disrupt, events);
   postHitExtras(ctx, user, target, move, landed, movedFirst, events);
   // Hazard-setting and hazard-clearing attacks (Ceaseless Edge, Stone Axe, Rapid Spin).
@@ -4698,16 +5025,18 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   if (target.mon.hp > 0 && !sheerForce && !shielded) {
     if (fx.randomStatus && roll(fx.randomStatus.chance)) {
       const id = fx.randomStatus.ids[rng.int(0, fx.randomStatus.ids.length - 1)]!;
-      tryInflictStatus(ctx, user, target, id, move, events, false);
+      if (!(canGetStatus(ctx, user, target, id) && stopgapTakes(ctx, target, id, move, events))) tryInflictStatus(ctx, user, target, id, move, events, false);
     }
     // Absolute Zero (PA30): an Ice move always has at least a 30% freeze chance.
     const freeze = revivalFreeze(user, moveType);
     const secondary = freeze > 0 ? { id: 'frz' as const, chance: Math.max(freeze, fx.status?.id === 'frz' ? fx.status.chance : 0) } : fx.status;
-    if (secondary && roll(secondary.chance, secondary.id)) tryInflictStatus(ctx, user, target, secondary.id, move, events, false);
-    if (fx.flinchFirstUse && user.vol.firstUseNow && movedFirst) flinch(ctx, user, target);
-    else if (fx.flinchChance && movedFirst && roll(fx.flinchChance)) flinch(ctx, user, target);
+    if (secondary && roll(secondary.chance, secondary.id) && !(canGetStatus(ctx, user, target, secondary.id) && stopgapTakes(ctx, target, secondary.id, move, events))) tryInflictStatus(ctx, user, target, secondary.id, move, events, false);
+    // Greenneedle gn.35: the overcharged one's Electric moves always paralyse (no roll).
+    if (user.side === 'enemy' && moveType === 'electric' && landed > 0 && !target.mon.status && ctx.battle.eventRule?.gn === 'overcharged') tryInflictStatus(ctx, user, target, 'par', move, events, false);
+    if (fx.flinchFirstUse && user.vol.firstUseNow && movedFirst) { if (!stopgapTakes(ctx, target, null, move, events)) flinch(ctx, user, target); }
+    else if (fx.flinchChance && movedFirst && roll(fx.flinchChance)) { if (!stopgapTakes(ctx, target, null, move, events)) flinch(ctx, user, target); }
     else if (!fx.flinchChance && userAbility === 'stench' && movedFirst && rng.chance(0.1)) flinch(ctx, user, target);
-    if (fx.confuse && roll(fx.confuse.chance, 'confusion')) tryConfuse(ctx, user, target, events, false);
+    if (fx.confuse && roll(fx.confuse.chance, 'confusion') && !stopgapTakes(ctx, target, null, move, events)) tryConfuse(ctx, user, target, events, false);
     // Ring Toss: the target may turn drowsy (Yawn: asleep at the end of the next turn).
     if (fx.drowsy && target.vol.yawn === 0 && !target.mon.status && roll(fx.drowsy.chance, 'slp') && canGetStatus(ctx, user, target, 'slp')) {
       target.vol.yawn = 2;
@@ -4719,7 +5048,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       events.push({ type: 'selfState', side: target.side, state: 'haunted' });
     }
   }
-  if (target.mon.hp > 0 && fx.bind && target.vol.bound === 0) {
+  if (target.mon.hp > 0 && fx.bind && target.vol.bound === 0 && !cageFree(ctx, target, events)) {
     target.vol.bound = rng.int(4, 5) + growthExtraTurn(ctx, user, 'trapper');
     target.vol.boundBy = move.id;
     events.push({ type: 'bound', side: target.side, moveId: move.id });
@@ -4732,6 +5061,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (sheerForce && (change.target === 'enemy' || change.chance < 100)) continue;
     if (shielded && change.target === 'enemy') continue;
     if (!rolls.has(change.chance)) rolls.set(change.chance, roll(change.chance));
+    // Stopgap takes a drop that came with a damaging hit (its chance under 100: an extra effect, not the move's purpose).
+    if (rolls.get(change.chance) && change.target === 'enemy' && change.stages < 0 && change.chance < 100 && stopgapTakes(ctx, target, null, move, events)) continue;
     if (rolls.get(change.chance)) changeStage(ctx, user, recipient, change.stat, change.stages, events);
   }
   // Max Moves set the weather after they hit (Max Flare: sun).
@@ -4828,7 +5159,15 @@ function foeMissLesson(ctx: BattleContext, target: Combatant, events: BattleEven
 
 /** Makes the target flinch, unless Inner Focus stops it or it is Dynamaxed. */
 function flinch(ctx: BattleContext, user: Combatant, target: Combatant): void {
-  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed && !momentNoFlinch(ctx, target) && !revivalNoFlinch(target)) target.flinched = true;
+  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed && !momentNoFlinch(ctx, target) && !trustHolds(ctx.party, target) && !ctx.battle.storyEffects.includes(`${NO_FLINCH}${target.mon.uid}`) && !revivalNoFlinch(target) && !(target.side === 'player' && unflinching(target.mon))) target.flinched = true;
+}
+
+/** Greenneedle gn.38 Self-Made: once per battle, when an opponent's ability would affect it, it isn't. True when it stepped in. */
+function selfMade(ctx: BattleContext, c: Combatant, events: BattleEvent[]): boolean {
+  if (abilityIn(ctx, c) !== 'self-made' || ctx.battle.storyEffects.includes(`self-made:${c.mon.uid}`)) return false;
+  ctx.battle.storyEffects.push(`self-made:${c.mon.uid}`);
+  announce(c, 'self-made', events);
+  return true;
 }
 
 /**
@@ -4881,7 +5220,11 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
   }
   // Dynamo Down: after it takes damage from an attack, its next Electric-type move is stronger.
   if (holder === 'dynamo-down' && target.mon.hp > 0 && move.category !== 'status') target.vol.dynamoBoost = true;
-  if (contact && holder && user.mon.hp > 0) {
+  // Greenneedle gn.38 Self-Made: once per battle, the target's contact ability doesn't touch it.
+  const contactReacts = !!holder && (!!CONTACT_STATUS[holder] || CONTACT_HURT.has(holder) || SPREADS_ON_CONTACT.has(holder) || ['gooey', 'tangling-hair', 'cute-charm', 'effect-spore', 'aftermath', 'plague-bulwark', 'neon-circuit'].includes(holder));
+  if (contact && contactReacts && user.mon.hp > 0 && selfMade(ctx, user, events)) {
+    // It wasn't affected.
+  } else if (contact && holder && user.mon.hp > 0) {
     if (holder === 'clinging-dust') {
       announce(target, holder, events);
       applyStageChange(ctx, user, 'spe', -1, events, target);
@@ -4900,7 +5243,7 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
       tryInflictStatus(ctx, target, user, status, undefined, events, false);
       noteGrowthMark(ctx, target, 'thorn');
     }
-    if (holder === 'cute-charm' && !user.vol.infatuated && rng.chance(0.3) && oppositeGender(ctx.content, target.mon, user.mon) && abilityIn(ctx, user) !== 'oblivious' && !Held.statusBlocked(ctx, user, 'infatuation')) {
+    if (holder === 'cute-charm' && !user.vol.infatuated && rng.chance(0.3) && oppositeGender(ctx.content, target.mon, user.mon) && abilityIn(ctx, user) !== 'oblivious' && !trustHolds(ctx.party, user) && !Held.statusBlocked(ctx, user, 'infatuation')) {
       announce(target, holder, events);
       user.vol.infatuated = true;
       events.push({ type: 'selfState', side: user.side, state: 'infatuated' });
@@ -4960,7 +5303,7 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
     else if (canGetStatus(ctx, target, user, 'par')) tryInflictStatus(ctx, target, user, 'par', undefined, events, false);
     swapForm(ctx, target, 'cramorant', events);
   }
-  if (holder === 'illusion' && target.vol.illusion && move.category !== 'status') {
+  if ((holder === 'illusion' || holder === 'many-faces') && target.vol.illusion && move.category !== 'status') {
     events.push({ type: 'transform', side: target.side, uid: target.mon.uid, kind: 'illusion', from: target.vol.illusion, to: target.mon.speciesId, itemId: null, broken: true });
     target.vol.illusion = null;
   }
@@ -5022,6 +5365,26 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
       user.vol.abilityOverride = holder;
       target.vol.abilityOverride = userAbility;
     }
+    // Impossible Leap (Greenneedle gn.23): it survives a super-effective hit: Attack +1 and Speed +1. Once a battle.
+    if (holder === 'impossible-leap' && target.mon.hp > 0 && move.category !== 'status' && !ctx.battle.storyEffects.includes(`leap:${target.mon.uid}`)
+      && typeEffectiveness(ctx.content.typeChart, moveType, battleTypes(ctx.content, ctx.battle, target.mon)) > 1) {
+      ctx.battle.storyEffects.push(`leap:${target.mon.uid}`);
+      announce(target, holder, events);
+      applyStageChange(ctx, target, 'atk', 1, events);
+      applyStageChange(ctx, target, 'spe', 1, events);
+    }
+    // Vigil (gn.new.02): the halved hit is spent.
+    if (holder === 'vigil' && target.vol.turnsOut >= 3 && move.category !== 'status' && !ctx.battle.storyEffects.includes(`vigil:${target.mon.uid}`)) {
+      ctx.battle.storyEffects.push(`vigil:${target.mon.uid}`);
+      announce(target, holder, events);
+    }
+    // Headache (Greenneedle gn.29): a critical or super-effective hit: Sp. Atk +1, up to +2 a battle.
+    if (holder === 'headache' && target.mon.hp > 0 && move.category !== 'status' && ctx.battle.storyEffects.filter((t) => t === `headache:${target.mon.uid}`).length < 2
+      && (crit || typeEffectiveness(ctx.content.typeChart, moveType, battleTypes(ctx.content, ctx.battle, target.mon)) > 1)) {
+      ctx.battle.storyEffects.push(`headache:${target.mon.uid}`);
+      announce(target, holder, events);
+      applyStageChange(ctx, target, 'spa', 1, events);
+    }
     if (holder === 'anger-point' && crit && target.stages.atk < 6) {
       announce(target, holder, events);
       applyStageChange(ctx, target, 'atk', 12, events);
@@ -5064,6 +5427,11 @@ function forceOut(ctx: BattleContext, target: Combatant, events: BattleEvent[]):
   const { battle, rng } = ctx;
   if (target.mon.hp <= 0 || target.mon.dynamaxed) return;
   if (variantBlocksForcedSwitch(battle.extra.variants, target.mon.uid)) return;
+  // Greenneedle gn.31: Deep Roots can't be forced out.
+  if (abilityIn(ctx, target) === 'deep-roots') {
+    announce(target, 'deep-roots', events);
+    return;
+  }
   if (target.side === 'enemy') {
     if (battle.kind !== 'trainer') return;
     const onField = fieldIndexes(battle, 'enemy');
@@ -5093,6 +5461,8 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
   const cfg = content.balance.trainerAi;
   const mon = enemy.mon;
   if (mon.hp <= 0 || mon.dynamaxed) return false;
+  // Greenneedle gn.59: the Leader's weight shifted last turn, so this turn they switch (a tell the player may have predicted).
+  if (battle.storyEffects.includes('ferris-tell') && ferrisTellSwitch(ctx, events)) return true;
   const lent = enemyLastResort(content, battle);
   if (lent) events.push(...lent);
   const max = calcStats(content, mon).hp;
@@ -5218,6 +5588,19 @@ function trainerBondMoment(ctx: BattleContext, enemy: Combatant, max: number, ev
     }
   }
   return false;
+}
+
+/** gn.59: the arranged switch; a right prediction hits what arrives. */
+function ferrisTellSwitch(ctx: BattleContext, events: BattleEvent[]): boolean {
+  const { battle, content } = ctx;
+  battle.storyEffects = battle.storyEffects.filter((s) => s !== 'ferris-tell' && s !== 'ferris-ask');
+  const spare = battle.enemyTeam.findIndex((m, i) => i !== battle.enemyIndex && m.hp > 0);
+  if (spare < 0) return false;
+  battle.enemySwitches += 1;
+  swapInEnemy(ctx, spare, events);
+  const text = ferrisPredicted(content, battle);
+  if (text) events.push(say('enemy', 'rally', text, battle.enemyTeam[battle.enemyIndex]?.uid));
+  return true;
 }
 
 function swapInEnemy(ctx: BattleContext, index: number, events: BattleEvent[]): void {
@@ -5540,6 +5923,7 @@ function specialMoveType(ctx: BattleContext, user: Combatant, move: Move, _weath
   const fx = move.effects;
   if (fx.terrainPulse) return ctx.battle.terrain ? TERRAIN_TYPE[ctx.battle.terrain.id] : 'normal';
   if (fx.teraBlast) return ctx.battle.transform.teraTypes[user.mon.uid] ?? move.type;
+  if (fx.proof || fx.twoTrainers) return battleTypes(ctx.content, ctx.battle, user.mon)[0] ?? move.type;
   if (fx.formType) {
     const id = user.mon.speciesId;
     switch (fx.formType) {
@@ -5772,7 +6156,7 @@ function applyStateEffects(ctx: BattleContext, user: Combatant, target: Combatan
   }
   if (fx.confuseBoth) {
     for (const c of [user, target]) {
-      if (c.vol.confusion === 0 && c.mon.hp > 0 && abilityIn(ctx, c) !== 'own-tempo' && abilityIn(ctx, c) !== 'hoop-focus' && !momentNoConfuse(ctx, c)) {
+      if (c.vol.confusion === 0 && c.mon.hp > 0 && abilityIn(ctx, c) !== 'own-tempo' && abilityIn(ctx, c) !== 'hoop-focus' && !momentNoConfuse(ctx, c) && !trustHolds(ctx.party, c)) {
         c.vol.confusion = rng.int(2, 5);
         events.push({ type: 'confused', side: c.side });
       }
@@ -5803,6 +6187,7 @@ function applyStateEffects(ctx: BattleContext, user: Combatant, target: Combatan
   }
   if (fx.octolock) {
     if (target.vol.octolock) return false;
+    if (cageFree(ctx, target, events)) return true;
     target.vol.octolock = true;
     target.vol.trapped = true;
     state(target, 'trapped');
@@ -5960,7 +6345,7 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
     return;
   }
   if (fx.attract) {
-    if (target.vol.infatuated || variantBlocksMind(ctx.battle.extra.variants, target.mon.uid) || !oppositeGender(content, user.mon, target.mon) || abilityIn(ctx, target) === 'oblivious' || Held.statusBlocked(ctx, target, 'infatuation')) {
+    if (target.vol.infatuated || variantBlocksMind(ctx.battle.extra.variants, target.mon.uid) || !oppositeGender(content, user.mon, target.mon) || abilityIn(ctx, target) === 'oblivious' || trustHolds(ctx.party, target) || Held.statusBlocked(ctx, target, 'infatuation')) {
       if (abilityIn(ctx, target) === 'oblivious') announce(target, 'oblivious', events);
       return void events.push({ type: 'fail', side: user.side });
     }
@@ -6442,6 +6827,7 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
   }
   if (fx.trap) {
     if (target.vol.trapped) events.push({ type: 'fail', side: user.side });
+    else if (cageFree(ctx, target, events)) return;
     else {
       target.vol.trapped = true;
       events.push({ type: 'selfState', side: target.side, state: 'trapped' });
@@ -6450,6 +6836,13 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
   }
   if (fx.disrupt) {
     disrupt(ctx, user, target, fx.disrupt, events);
+    return;
+  }
+  // Encore Performance (Greenneedle gn.new.21): the user repeats its own last move next turn, with +1 priority. Fails twice in a row.
+  if (fx.encorePerformance) {
+    const before = user.vol.prevMove;
+    if (!before || before === move.id || user.vol.locked || user.vol.charging) events.push({ type: 'fail', side: user.side });
+    else user.vol.locked = { moveId: before, turns: 1, bonus: true };
     return;
   }
   if (fx.cure) {
@@ -6520,7 +6913,7 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
 /** Confuses for 2–5 turns of moves (1–4 of them are checks); Own Tempo prevents it. Returns true if it worked. */
 function tryConfuse(ctx: BattleContext, source: Combatant, target: Combatant, events: BattleEvent[], announceFailure: boolean): boolean {
   const ownTempo = ['own-tempo', 'hoop-focus'].includes(targetAbility(ctx, source, target) ?? '');
-  if (target.vol.confusion > 0 || ownTempo || Held.statusBlocked(ctx, target, 'confusion') || momentNoConfuse(ctx, target)) {
+  if (target.vol.confusion > 0 || ownTempo || Held.statusBlocked(ctx, target, 'confusion') || momentNoConfuse(ctx, target) || trustHolds(ctx.party, target)) {
     if (announceFailure && ownTempo) announce(target, targetAbility(ctx, source, target)!, events);
     if (announceFailure) events.push({ type: 'fail', side: target.side });
     return false;
@@ -6548,8 +6941,23 @@ function canGetStatus(ctx: BattleContext, source: Combatant, target: Combatant, 
 /** The target's ability that stops this status, or null. */
 function statusAbilityBlock(ctx: BattleContext, source: Combatant, target: Combatant, status: StatusId): string | null {
   const ability = targetAbility(ctx, source, target);
+  // Greenneedle gn.35: Grounded Heart, once per battle: when an ally (itself, or its partner in a double) would be paralysed, it isn't,
+  // and the Pokémon with Grounded Heart gains +1 Speed.
+  if (status === 'par') {
+    const holder = ability === 'grounded-heart' ? target : allyAbility(ctx, target) === 'grounded-heart' ? allyCombatant(ctx, target) : null;
+    if (holder && !ctx.battle.storyEffects.includes(`grounded-heart:${holder.mon.uid}`)) {
+      ctx.battle.storyEffects.push(`grounded-heart:${holder.mon.uid}`);
+      if (holder.stages.spe < 6) holder.stages.spe += 1;
+      return 'grounded-heart';
+    }
+  }
   if (!ability) return null;
   if (STATUS_IMMUNE[ability]?.includes(status)) return ability;
+  // Greenneedle gn.31: Forest's Memory turns away the first sleep, poison or paralysis of each battle (used up when it does).
+  if (ability === 'forests-memory' && (status === 'slp' || status === 'psn' || status === 'par') && !ctx.battle.storyEffects.includes(`forests-memory:${target.mon.uid}`)) {
+    ctx.battle.storyEffects.push(`forests-memory:${target.mon.uid}`);
+    return ability;
+  }
   if (ability === 'leaf-guard' && weatherNow(ctx) === 'sun') return ability;
   if (ability === 'shields-down' && target.mon.hp * 2 > calcStats(ctx.content, target.mon).hp) return ability;
   return veilBlock(ctx, source, target, status, ability);
@@ -6572,6 +6980,34 @@ function veilBlock(ctx: BattleContext, source: Combatant, target: Combatant, sta
  * Returns true if the status was applied. `announceFailure` is for status
  * moves. Synchronize passes burn, poison and paralysis back to the source.
  */
+/**
+ * Stopgap (gn.17's Muk): once per battle, when a move's extra effect would land on one of its side, this Pokémon takes it instead:
+ * a status it can carry becomes its own, anything else it shrugs off. No roll: it always steps in while unused.
+ */
+function stopgapTakes(ctx: BattleContext, target: Combatant, status: StatusId | null, move: Move | undefined, events: BattleEvent[]): boolean {
+  // Greenneedle gn.44: a 1v1 Champion's starred guarding ability also blocks one secondary effect per battle.
+  if (target.side === 'player' && target.mon.hp > 0 && starGuard(ctx.content, target.mon) && !ctx.battle.storyEffects.includes(`star-guard:${target.mon.uid}`)) {
+    ctx.battle.storyEffects.push(`star-guard:${target.mon.uid}`);
+    events.push({ type: 'raid', tone: 'info', text: `The star beside ${getSpecies(ctx.content, target.mon.speciesId).name}'s ability glints. The effect doesn't take.` });
+    return true;
+  }
+  const team = target.side === 'player' ? ctx.party : ctx.battle.enemyTeam;
+  const holder = team.find((m) => m !== target.mon && m.hp > 0 && abilityOf(ctx.content, m) === 'stopgap' && !ctx.battle.storyEffects.includes(`stopgap:${m.uid}`));
+  if (!holder) return false;
+  ctx.battle.storyEffects.push(`stopgap:${holder.uid}`);
+  const { ruleset } = ctx.content;
+  const takes = !!status && !holder.status && !isStatusImmune(status, getSpecies(ctx.content, holder.speciesId).types, move);
+  if (takes) {
+    holder.status = { id: status };
+    if (status === 'slp') holder.status.turns = ruleset.sleepTurnsMin;
+    const length = status === 'brn' ? ruleset.burnTurns : status === 'psn' ? ruleset.poisonTurns : 0;
+    if (length > 0) holder.status.left = length;
+  }
+  const name = getSpecies(ctx.content, holder.speciesId).name;
+  events.push({ type: 'raid', tone: 'info', text: takes ? `${name} throws itself in the way and takes it instead!` : `${name} throws itself in the way and shrugs it off!` });
+  return true;
+}
+
 function tryInflictStatus(
   ctx: BattleContext,
   source: Combatant,
@@ -6854,6 +7290,12 @@ export function weatherCut(content: Content, mon: PokemonInstance, weather: Weat
 }
 
 function applyWeather(ctx: BattleContext, sides: Combatant[], events: BattleEvent[], tick = true): void {
+  // Fair Share (gn.new.22): the holder's most hurt party-mate recovers a little.
+  if (tick) {
+    const me = sides.find((c) => c.side === 'player');
+    const helped = me && fairShare(ctx.content, ctx.party, me.mon);
+    if (me && helped) events.push({ type: 'raid', tone: 'info', text: 'Fair Share: a bite of its supper goes to the most hurt in the party.' });
+  }
   const weather = ctx.battle.weather;
   if (!weather) return;
   const negated = weatherNow(ctx) === null;
@@ -6915,6 +7357,32 @@ function applyResidual(ctx: BattleContext, c: Combatant, other: Combatant, event
   const ability = abilityIn(ctx, c);
   if (ability === 'poison-heal' && c.mon.status?.id === 'psn' && c.mon.hp > 0 && c.mon.hp < max) {
     const amount = Math.min(max - c.mon.hp, Math.max(1, Math.floor(max / 8)));
+    announce(c, ability, events);
+    c.mon.hp += amount;
+    events.push({ type: 'heal', side: c.side, amount, hpAfter: c.mon.hp });
+  }
+  // Greenneedle gn.32: the Golem read as Green restores 1/8 HP a turn; read as Blue, it takes a new second type from your team's.
+  if (c.side === 'enemy' && c.mon.hp > 0 && ctx.battle.eventRule?.gn === 'golem') {
+    const colour = golemColour(ctx.battle);
+    if (colour === 'green' && c.mon.hp < max) {
+      const amount = Math.min(max - c.mon.hp, Math.max(1, Math.floor(max / 8)));
+      c.mon.hp += amount;
+      events.push({ type: 'heal', side: c.side, amount, hpAfter: c.mon.hp });
+    }
+    if (colour === 'blue') {
+      c.vol.typeList = ['rock', golemBlueType(content, ctx.party, ctx.battle.turn)];
+      events.push({ type: 'raid', tone: 'info', text: `The Golem's crystals shift. It is part ${c.vol.typeList[1]} now.` });
+    }
+  }
+  // Greenneedle gn.35: another bolt hits the overcharged one each turn: +1 Sp. Atk, and it loses 1/16 of its HP (it can be outlasted).
+  if (c.side === 'enemy' && c.mon.hp > 0 && ctx.battle.eventRule?.gn === 'overcharged') {
+    if (c.stages.spa < 6) c.stages.spa += 1;
+    const { lost } = takeHp(ctx, c, overchargeSelfHurt(content, c.mon));
+    events.push(say(c.side, 'bleed', `Another bolt finds ${nameOf(ctx, c.mon)}. It flares brighter (+1 Sp. Atk), and it hurts. (-${lost})`, c.mon.uid));
+  }
+  // Greenneedle gn.31: Old Growth restores 1/16 HP each turn, in any weather.
+  if (ability === 'old-growth' && c.mon.hp > 0 && c.mon.hp < max) {
+    const amount = Math.min(max - c.mon.hp, Math.max(1, Math.floor(max / 16)));
     announce(c, ability, events);
     c.mon.hp += amount;
     events.push({ type: 'heal', side: c.side, amount, hpAfter: c.mon.hp });
@@ -7009,6 +7477,12 @@ function recordFaints(ctx: BattleContext, player: Combatant, enemy: Combatant, e
     if (events.some((e) => e.type === 'faint' && e.uid === c.mon.uid)) continue;
     const participants = c.side === 'enemy' ? ctx.battle.participants.filter((uid) => ctx.party.some((p) => p.uid === uid && p.hp > 0)) : [];
     ctx.battle.extra.allyFaintedTurn[c.side] = ctx.battle.turn;
+    // Truce (Greenneedle gn.25): when one faints, its partner next to it in the party gets Attack +1 and Speed +1 when it comes in. Once a battle.
+    if (c.side === 'player' && abilityIn(ctx, c) === 'truce') {
+      const i = ctx.party.findIndex((m) => m.uid === c.mon.uid);
+      const mate = [ctx.party[i - 1], ctx.party[i + 1]].find((m) => m && m.hp > 0 && m.fixedAbility === 'truce');
+      if (mate && !ctx.battle.storyEffects.some((t) => t.startsWith('truce'))) ctx.battle.storyEffects.push(`truce-due:${mate.uid}`);
+    }
     for (const o of [player, enemy]) {
       if (o !== c && o.mon.hp > 0 && abilityIn(ctx, o) === 'soul-heart') {
         announce(o, 'soul-heart', events);
@@ -7052,12 +7526,13 @@ function recordFaints(ctx: BattleContext, player: Combatant, enemy: Combatant, e
 function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
   const { battle } = ctx;
   const enemy = currentEnemy(battle);
+  coPinchFoe(ctx.content, battle, enemy, events);
   // Flight North (Beta 0.6 Vermilion): when the lone Bug-type drops under a quarter of its HP, a shiny copy of it arrives and knocks the foe out, once. No random numbers.
   if (battle.eventRule?.shinyRescue && !battle.storyEffects.includes('shiny-rescue') && enemy.hp > 0) {
     const hero = ctx.party[battle.activeIndex];
     if (hero && hero.hp > 0 && hero.hp * 4 < calcStats(ctx.content, hero).hp) {
       battle.storyEffects.push('shiny-rescue');
-      events.push({ type: 'raid', tone: 'phase', text: `A shiny ${nameOf(ctx, hero)} swoops in and knocks out ${getSpecies(ctx.content, enemy.speciesId).name} with one move!`, cameo: { speciesId: hero.speciesId, shiny: true, kind: 'rescue' } });
+      events.push({ type: 'raid', tone: 'phase', text: `A second cry: two rising notes, from above. A shiny ${nameOf(ctx, hero)} comes down out of the sun and goes through ${getSpecies(ctx.content, enemy.speciesId).name} like a thrown stone!`, cameo: { speciesId: hero.speciesId, shiny: true, kind: 'rescue' } });
       enemy.hp = 0;
     }
   }
@@ -7113,7 +7588,8 @@ function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
     active.hp = 1;
     active.status = null;
     for (const foe of battle.enemyTeam) foe.hp = 0;
-    events.push({ type: 'raid', tone: 'phase', text: `${nameOf(ctx, active)} calls out! Every ghost in the Labyrinth answers and swarms the foe!` });
+    events.push({ type: 'raid', tone: 'phase', text: `${nameOf(ctx, active)} goes very still. Then it calls. Not a cry. A name, maybe. Every Ghost-type in the building comes through the walls at once!` });
+    events.push({ type: 'raid', tone: 'phase', text: 'Sabrina: "...It asked them. And they came. Nobody\'s ever come when I asked."' });
     battle.outcome = 'win';
   }
   if (active.hp <= 0) {
@@ -7138,8 +7614,10 @@ export function startBattle(ctx: BattleContext): BattleEvent[] {
   if (lead) quirkEntry(ctx, { side: 'player', mon: lead, stages: ctx.battle.playerStages, vol: ctx.battle.playerVolatile, flinched: false }, events);
   if (ctx.battle.totem) totemAura(ctx, events);
   championsAura(ctx, events);
+  forecastAhead(ctx, events);
   shadowBoonDebt(ctx, events);
   eventStartRules(ctx, events);
+  coStartRules(ctx.battle, events);
   ultraBattleStart(ctx);
   overhaulFieldStart(ctx, events);
   trapBeforeBattle(ctx, events);
@@ -7217,6 +7695,15 @@ function championsAura(ctx: BattleContext, events: BattleEvent[]): void {
   const player: Combatant = { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false };
   events.push({ type: 'raid', tone: 'phase', text: "Champion's Aura! Your Pokémon feels the Champion's resolve!" });
   applyStageChange(ctx, player, best, stages, events);
+}
+
+/** Greenneedle gn.new.15, Forecast Ahead: a party Pokémon with it tells you which weather, if any, the opponent's team can set. */
+function forecastAhead(ctx: BattleContext, events: BattleEvent[]): void {
+  const { battle, content } = ctx;
+  if (!ctx.party.some((m) => m.hp > 0 && abilityOf(content, m) === 'forecast-ahead')) return;
+  const set = [...new Set(battle.enemyTeam.map((m) => WEATHER_SETTERS[abilityOf(content, m) ?? '']).filter((w): w is Weather => !!w))];
+  const word: Record<string, string> = { rain: 'rain', sun: 'harsh sun', sand: 'a sandstorm', snow: 'snow', hail: 'hail' };
+  events.push(say('enemy', 'arena', set.length === 0 ? 'Forecast Ahead: nothing on their side can change the weather.' : `Forecast Ahead: their team can bring ${set.map((w) => word[w] ?? w).join(' or ')}.`));
 }
 
 /** Catalog Overhaul (SF102 Shadow Boon): the debt is collected at the start of a boss battle; the lead's five stats move by the owed stages. */
@@ -7503,6 +7990,16 @@ function spectacleEndOfTurn(ctx: BattleContext, spec: NonNullable<BattleState['s
 
 
 // ---------- Ideas W1 play rules (battle/w1Play.ts) ----------
+
+/** gn.59: the player answers the Leader's feet (no turn used). */
+function predictTurn(ctx: BattleContext, yes: boolean, events: BattleEvent[]): BattleEvent[] {
+  const { battle } = ctx;
+  const i = battle.storyEffects.indexOf('ferris-ask');
+  if (i < 0) throw new Error('There is nothing to predict');
+  battle.storyEffects.splice(i, 1, yes ? 'ferris-pred:yes' : 'ferris-pred:no');
+  events.push(say('player', 'rally', yes ? 'You call it: they are about to switch. You are ready.' : 'You call it: they will hold their ground. You wait.'));
+  return events;
+}
 
 /** A trainer's deal: refuse (no turn used) or accept (the fight ends as a win with no EXP; the prize money is bigger). */
 function dealTurn(ctx: BattleContext, accept: boolean, events: BattleEvent[]): BattleEvent[] {

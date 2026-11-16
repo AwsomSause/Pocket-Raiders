@@ -1,0 +1,517 @@
+// Anime questlines, module 5: AQ1-AQ7 (AQ8 is the Fighting Tournament gn.16, see MERGED). Follows tools/events/co/anime-0.ts (the worked examples) and _animeKit.ts.
+//   Scripts: QUESTLINES_ASH.md lines 10-224. Placement: QUESTLINES_PLACED.md lines 272-344.
+// Build: npm run co:build -- anime-5
+import { anyType, bondUp, ch, ev, fight, flag, flagAgo, flagAt, flagIs, fr, heal, hurt, item, leave, lv, out, room, takeNode, type Json } from '../dsl.ts';
+import { AQ, age, beast, bondLine, duel, evolve, farewell, gain, later, line, moment, monDuel, notYet, seen, stageOf, tagTypes, teach, temp, type Place } from './_animeKit.ts';
+
+export { CATEGORY } from './_animeKit.ts';
+
+export const QUESTLINES: Record<string, string> = {
+  AQ1: 'aq01-wouldnt-go-in-its-ball',
+  AQ2: 'aq02-butterfree-migration',
+  AQ3: 'aq03-flock-leaders-promise',
+  AQ4: 'aq04-keeper-of-the-hidden-village',
+  AQ5: 'aq05-charmander-in-the-rain',
+  AQ6: 'aq06-firefighters',
+  AQ7: 'aq07-krabby-at-the-lab',
+};
+
+/** Questlines the docs settle as another thread's (QUESTLINES_PLACED.md "Overlaps, settled"). */
+export const MERGED: Record<string, string> = { AQ8: 'gn.16 The Fighting Tournament (greenneedle thread)' };
+
+export const PLACEMENT: Record<string, Place> = {
+  'aq01-wouldnt-go-in-its-ball': {
+    shape: 'Companion', earliest: 'A1', home: 'The town of a region\'s Stage 1: a professor\'s lab. Else 3', window: [2, 6], sits: 'optional', attaches: 'town',
+    beats: ['aq01-spearow', 'aq01-pika-center', 'aq01-pika-rain', 'aq01-pika-ball', 'ash-training', 'aq01-shoulder-1', 'aq01-shoulder-2', 'aq01-shoulder-3'],
+    note: 'The doc\'s escalation (the Spearow at the lab window) is in the meeting\'s node, where the Pikachu chooses the player. The doc scripts no small scenes, so three are written from the Companion rule. The turning point, two stages on, is Ash arriving late (catalog id ash-training). The afterstory is one scene in each of the next three regions.',
+  },
+  'aq02-butterfree-migration': {
+    shape: 'Companion', earliest: 'A2', home: 16, window: [14, 18], sits: 'optional', tags: ['water'],
+    beats: ['aq02-pink-butterfree', 'aq02-sunset', 'aq02-caterpie'],
+    note: 'Farewell. The header reads Dusk: a beach. The Butterfree is the kid\'s and the doc gives the player no Pokémon, so the meeting and its escalation (same node) are the whole Companion story; the Caterpie scene is the doc\'s next-region Remembers.',
+  },
+  'aq03-flock-leaders-promise': {
+    shape: 'Stage-Three', earliest: 'A2', home: 6, sits: 'optional', tags: ['forest'], level: 'A+1',
+    beats: ['aq03-refused', 'aq03-night-two', 'aq03-night-three', 'aq03-dawn', 'aq03-pidgey-night-two', 'aq03-pidgey-night-three', 'aq03-asks', 'aq03-visit'],
+    note: 'At Night: three nights, steps 6, 12, 17. The raids are A+0, the Fearow leader A+1. In Kanto it is Pidgeotto\'s Farewell\'s longer form: the Farewell (cs-kanto-route-pidgeotto, Kanto canon) is AQ3\'s Stage 5 beat, and AQ3 remembers it.',
+  },
+  'aq04-keeper-of-the-hidden-village': {
+    shape: 'Companion', earliest: 'A2', home: 8, window: [5, 11], sits: 'optional', tags: ['forest'], level: 'A+1',
+    beats: ['aq04-after-battle', 'aq04-fetch', 'aq04-mend', 'aq04-sit', 'aq04-village-goodbye', 'aq04-on-watch', 'aq04-patient', 'aq04-trusted', 'aq04-poachers', 'aq04-poachers-village', 'aq04-village-safe'],
+    note: 'It is the Hidden Village\'s guard (gn.06) where that is in the run. The meeting and the three tasks share a node. The doc scripts no small scenes, so three are written from the Companion rule. The escalation (poachers) is the turning point, two stages on: with the Bulbasaur in the party, or, if it stayed in the village, as a call back for everyone who helped. Poachers A+1.',
+  },
+  'aq05-charmander-in-the-rain': {
+    shape: 'Companion', earliest: 'A2', home: 7, window: [5, 10], sits: 'optional', level: 'A+1',
+    beats: ['aq05-tail-flame', 'aq05-after-a-loss', 'aq05-too-weak', 'aq05-act-two', 'aq05-earned', 'aq05-valley', 'aq05-comes-back', 'aq05-uninvited'],
+    note: 'Rain. Three acts: Act 1 is the meeting; Act 2 is one region later (the doc\'s "next region"), while the Charmander line is in the party; Act 3 (the valley) follows in Act 2\'s node. The doc scripts no small scenes, so three are written from the Companion rule. The three hard battles are A+1.',
+  },
+  'aq06-firefighters': {
+    shape: 'Single', earliest: 'A4', home: 13, window: [10, 16], sits: 'optional', tags: ['forest', 'hot'],
+    beats: ['aq06-fire-1', 'aq06-fire-2', 'aq06-fire-3', 'aq06-offended', 'aq06-shades'],
+    note: 'Needs the Squirtle Squad (gn.08): where the Squad\'s event is in the run, this is the same squad, reformed (it is not hidden without it). "Help them." spends the next three nodes on fires.',
+  },
+  'aq07-krabby-at-the-lab': {
+    shape: 'Companion', earliest: 'A2', home: 6, window: [4, 9], sits: 'optional', tags: ['water'], level: 'A+1',
+    beats: ['aq07-respect', 'aq07-footage', 'aq07-he-comes'],
+    note: 'Reunion. The Kingler is its trainer\'s and the player never takes it in, so the meeting is the Companion story; its trainer arrives one stage on (after "Wait for its trainer.", or after a lost battle\'s footage). The Kingler fight is A+1.',
+  },
+};
+
+/** Doc choices that are not buttons (questline -> label -> reason). */
+export const NOT_A_BUTTON: Record<string, Record<string, string>> = {};
+
+export const LIMITS: Record<string, string[]> = {
+  AQ7: [
+    'Remembers "had a Pokémon in the PC for a full region this run" (the Kingler looks at the PC terminal) is not built: the game does not record how long a Pokémon has been in the PC.',
+  ],
+  AQ6: [
+    'The placement\'s "needs the Squirtle Squad (gn.08)" is not a gate: the doc\'s own Remembers has a version without it. Remembers "Squirtle Squad was done" reads the Kanto canon event cs-kanto-cerulean-squad-reward (seen), owned by the Kanto canon thread.',
+    '"The leader\'s sunglasses" are the game\'s Cool Shades (the Squad\'s own item), not a new item.',
+  ],
+  AQ5: [
+    'Act 2 "will not obey, naps during battles": the game has no disobedience, so it is told in the scene; "Force it." costs Bond (friendship -20) instead.',
+    '"Earn it." (three hard battles without it): built as three trainers in a row at A+1; the game cannot keep the Charizard out of those fights, so the scene asks you to.',
+    'Remembers "carried and Wait for it": it comes back "at the region\'s end, during the hardest battle, uninvited". Built as a scene two stages after the valley: it lands uninvited, rejoins, and its fire backs the party in the next boss fight (Fire moves +20% until a boss is beaten). A Pokémon cannot join in the middle of a battle.',
+    'Earned Flame: the doc\'s "Fire moves cannot miss against a Pokémon that has beaten one of its allies this battle" is built as a held item: the holder\'s moves are 20% more accurate (the game does not track which foe knocked out an ally).',
+    'Remembers "the trainer from Act 1 in the Final Reunion: it looks at him once and turns away" belongs to the Final Reunion: it reads aq-char-heard and reunion-guest-charizard, set here. Afterstory "it visits the valley in every later run" is not built (nothing crosses runs).',
+  ],
+  AQ4: [
+    'Keeper\'s Vine: the doc\'s "Vine Whip +10% power, heals the user 1/16 if it hits" is built as a held item: Grass moves +10%, and the holder heals 1/16 of its HP each turn (the game has no single-move power or heal-on-hit hook).',
+  ],
+  AQ3: [
+    'In Kanto the Farewell (cs-kanto-route-pidgeotto) is another thread\'s event and is not rebuilt here; AQ3 reads its flag kanto-pidgeotto-ally (set when you let your Pidgeotto go) and the scarred Pidgeot is that bird.',
+    'Afterstory "comes back once, in the last region": the game cannot tell which region is the last, so it comes once, one region or more after the third night.',
+  ],
+  AQ1: [
+    'Remembers "floor and Stand in front": it walks beside you outside its Ball and cannot be put in the PC. The game has no follower or PC lock, so it joins fonder (friendship +40) and the later scenes say it walks outside its Ball.',
+    'The afterstory "seen in every later region" is built as one scene in each of the next three regions.',
+  ],
+};
+
+/** The lab Pikachu: one Pokémon of the Pikachu line (Pikachu or Raichu) in the party. */
+const PIKA = 'pikachu';
+
+const DEFEND = (lead: string): Json => fight(`${lead} The first raid comes an hour after dark: Spearow in front, Fearow behind, all screaming.`, beast({ format: 'doubles', species: ['spearow', 'fearow'], win: [flag('aq03-defend'), flag('aq03-night-1'), later('aq03-night-two', 5)] }, { lose: [flag('aq03-defend'), flag('aq03-night-1'), flag('aq03-raid-1-lost'), later('aq03-night-two', 5)] }));
+const TRAIN = (lead: string): Json => out(`${lead} You pick three Pidgey: the boldest, the fastest, and the smallest, who insisted. All night you throw pine cones at them and they learn to dodge. By the end of it the smallest one dodges a cone and catches it. The Pidgeot watches from the top of the tree, and for the first time it closes its eyes.`, flag('aq03-train'), flag('aq03-night-1'), later('aq03-pidgey-night-two', 5));
+/** Act 2: the Charmander line has become a Charizard, whichever stage it was at. */
+const CHAR_EVOLVES = [evolve('charmander', 'charizard'), evolve('charmeleon', 'charizard')];
+/** A party Pokémon knows a Water-type move. */
+const WATER_MOVE: Json = { kind: 'partyMoveType', type: 'water' };
+const SQUAD_TINT = '#3a1c10';
+
+export const EVENTS: Json[] = [
+  // ---------------- AQ1. The One That Wouldn't Go in Its Ball ----------------
+  ev('aq01-wouldnt-go-in-its-ball', 'The One That Wouldn\'t Go in Its Ball', AQ, { rarity: 'uncommon', minStage: stageOf('A1'), types: tagTypes(), cast: ['trainer.pr/scientist_m'], pokemon: 'pikachu', tint: '#2a2c3a', effect: 'flicker',
+    remembers: [
+      { id: 'two-pikachu', when: [{ kind: 'starter', species: 'pikachu' }], notice: 'Your own Pikachu climbs down from your shoulder. The two of them look at each other across the lab floor, cheeks crackling, and something in the wild one goes very still.',
+        addChoices: [ch('Let the two Pikachu meet.', out('Your Pikachu walks over as if it owns the lab. They touch noses. A small spark jumps between them, the way two people shake hands. The lab Pikachu\'s fur goes flat for the first time all week. It recognises something in your partner: a Pikachu that chose its person. It looks at you again, longer this time.', flag('aq01-lab'), flag('aq01-pika-calmed'), room('aq01-spearow')))] },
+    ] },
+    'A professor\'s lab, early morning. Papers on every surface, and one empty corner nobody goes near. In it sits a Pikachu with its ears flat and its cheeks fizzing. A red and white Ball lies open beside it, and it will not look at the Ball. "This one\'s been here a week," the professor sighs. "It won\'t go in. It bit my assistant." He rubs his own thumb, which is also bandaged. "Someone\'s coming to pick a starter today. A boy. He overslept." The Pikachu looks at you. Then at the Ball. Then away, hard, at the wall.',
+    [
+      ch('Leave the Ball on the table.', out('You set the Ball down on the table, out of its reach, and step back. Nothing happens for a long minute. Then the Pikachu creeps over, sniffs the Ball all round, and sits on it. Firmly. Like a lid. The professor laughs so hard he has to hold the desk. "Well! That\'s the closest it\'s been to one all week."', flag('aq01-lab'), flag('aq-pika-ball'), room('aq01-spearow'))),
+      ch('Pick it up.', out('You reach for it. It does not bite. It does something worse. A Thundershock runs up your arm and makes your hair stand on end, and for a second you can taste copper. The professor laughs until he cries. "That\'s a yes, by the way. That\'s how it says hello to people it likes. It bit the last one."', flag('aq01-lab'), flag('aq-pika-shocked'), room('aq01-spearow'))),
+      ch('Sit on the floor next to it.', out('You sit down on the cold floor, not too close, and look at the same bit of wall it is looking at. You do not reach out. You do not say anything clever. After a minute it shuffles sideways, a little at a time, until its tail is against your knee. It keeps looking at the wall. So do you. The professor tiptoes out to make tea.', flag('aq01-lab'), flag('aq-pika-floor'), room('aq01-spearow'))),
+    ]),
+  ev('aq01-spearow', 'The Spearow at the Window', AQ, { room: true, cast: ['trainer.pr/scientist_m'], pokemon: 'spearow', tint: '#3a2a22', effect: 'shake',
+    remembers: [
+      { id: 'floor', when: [flagIs('aq-pika-floor')], notice: 'The Pikachu is pressed against your legs. It sat beside you on the floor. It has already decided which side of you is safe.',
+        hide: [0],
+        addChoices: [ch('Stand in front of it.', out('You step between it and the glass. The window bursts and the flock hits you all at once, beaks and wings and noise, and you keep your arms out and do not move. Behind you, something small climbs your back, stands on your shoulder, and lets go. It is the biggest Thunderbolt the lab has ever seen. Every light in the building pops. The Spearow scatter, smoking. In the dark, the Pikachu sits down on your shoulder and stays there. It will not be in a Ball. It will be beside you, every step, for as long as you walk.', gain('pikachu', { bond: 40 }), flag('aq01-pika-joined'), flag('aq01-pika-stood'), flag('aq01-pika-walks'), moment('The Pikachu that would not go in its Ball chose you, and walked beside you instead.', 70)))] },
+      { id: 'shocked', when: [flagIs('aq-pika-shocked')], notice: 'Your arm still tingles from its hello. It glances at your hand, then at the window, then back at your hand.' },
+    ] },
+    'A crack at the window. Outside, a boy you do not know is running away, and a Spearow is shaking off the rock he threw at it. It screams. The whole hedge answers. Twenty Spearow come up out of the green at once, furious, and they are not looking for the boy. They are looking for anything small and yellow. The professor goes white. "Not again." The Pikachu stands up, every hair on end, and the lab smells of thunder.',
+    [
+      ch('Stand in front of it.', out('You step between it and the glass. The window bursts and the flock hits you all at once, beaks and wings, and you keep your arms out. Behind you, the Pikachu climbs your back and lets go. It is the biggest Thunderbolt the lab has ever seen. Every bulb in the building pops. The Spearow scatter, smoking. In the dark, a small warm weight settles on your shoulder. It has chosen.', gain('pikachu', { bond: 30 }), flag('aq01-pika-joined'), flag('aq01-pika-stood'), moment('The Pikachu that would not go in its Ball chose you at the lab window.', 65))),
+      ch('Get it inside.', out('You scoop it up and run for the back room. It wriggles like a fish, bites your sleeve, and is gone through your arms and out of the broken window, alone, into all twenty of them. It wins. It is badly hurt doing it. When you carry it in afterwards it lets you, this time, and it watches your face the whole way, as if it is trying to work out why you came back for it.', gain('pikachu', { bond: 10 }), flag('aq01-pika-joined'), flag('aq01-pika-hurt'), moment('The Pikachu fought the whole Spearow flock alone, and then let you carry it home.', 55))),
+      ch('Let it fight.', out('You step aside. It goes out of the window like a thrown stone, and for a long minute the hedge is all sparks and screaming. It wins. Barely. It comes back singed, one ear bent, and it stops on the sill and looks at you as if to ask why you did not help. Then it comes in anyway, and sits by your boot, and that is an answer of a kind.', gain('pikachu', { bond: 15 }), flag('aq01-pika-joined'), flag('aq01-pika-asked-why'), moment('The Pikachu beat the Spearow flock alone, and asked you a question with one look.', 55))),
+    ]),
+  // Small scenes: one each time its Bond rises a step, while it is in the party (the doc scripts none; written from the Companion rule).
+  ev('aq01-pika-center', 'Not Even for the Nurse', AQ, { callback: true, requires: [flagIs('aq01-pika-joined'), line(PIKA, 1), age('aq01-pika-joined', 1)], cast: ['trainer.pr/nursery_aide'], pokemon: 'pikachu', tint: '#3a2a30', effect: 'none',
+    remembers: [{ id: 'sat-on-ball', when: [flagIs('aq-pika-ball')], notice: 'It looks at the tray of Balls the way it once looked at the one on the lab table, as if it might have to sit on all of them.' }] },
+    'A Pokémon Center, and a tired nurse with a tray of Balls for the healing machine. "Its Ball, please." The Pikachu climbs to the top of your head and sits there with its arms folded. The nurse waits. The Pikachu waits. A queue forms. Somebody in the queue starts to laugh.',
+    [
+      ch('Carry it to the machine yourself.', out('You lift it off your head and carry it, in your arms, to the machine. You hold it on the warm plate while the lights run round, and it lets them, because you are holding it. The nurse writes something on a form. "First time I\'ve healed one by hand," she says. "Won\'t be the last, will it?"', bondLine(PIKA, 5), flag('aq01-pika-scene-1'))),
+      ch('Ask the nurse to treat it on the counter.', out('She looks at you, then at the Pikachu, then gets out the old kit from under the counter: the one from before the machines. She treats it with a cloth and a spray and a lot of patience. It sits very still and very proud. When she is done it pats her hand with one paw, the way you would tip someone.', bondLine(PIKA, 5), flag('aq01-pika-scene-1'))),
+    ]),
+  ev('aq01-pika-rain', 'Under the Jacket', AQ, { callback: true, requires: [seen('aq01-pika-center'), line(PIKA, 2)], pokemon: 'pikachu', tint: '#1e2a36', effect: 'rain',
+    remembers: [{ id: 'walks', when: [flagIs('aq01-pika-walks')], notice: 'It has not been inside a Ball since the lab window. It is not going to start for a little rain.' }] },
+    'Rain, sudden and cold, on an open road. A Pikachu hates being wet. Its fur goes spiky and then flat, and its cheeks spit tiny sparks that fizzle out. Its Ball is right there on your belt. It looks at the Ball. It looks at you. Its teeth are chattering.',
+    [
+      ch('Open your jacket.', out('You unzip your jacket and it is inside before you finish, a small wet furnace against your chest. It sneezes. It shocks you, just a little, by accident, and goes rigid as if waiting to be put down. You zip the jacket up to its chin instead. You walk the whole road like that. It falls asleep halfway.', bondLine(PIKA, 5), flag('aq01-pika-scene-2'))),
+      ch('Run for the trees together.', out('You run. It runs beside you, ears flat, and for a minute you are both soaked and both racing and it is, somehow, a game. You reach the trees at the same time. It shakes itself all over you on purpose. Then it sits on your foot to keep its own feet dry, and leans on your leg, and does not move until the rain stops.', bondLine(PIKA, 5), flag('aq01-pika-scene-2'))),
+    ]),
+  ev('aq01-pika-ball', 'The Ball in the Grass', AQ, { callback: true, requires: [seen('aq01-pika-rain'), line(PIKA, 3)], pokemon: 'pikachu', tint: '#2a3a24', effect: 'glint' },
+    'Its Ball falls off your belt on a steep path and rolls into the long grass. You do not notice. The Pikachu does. When you look back, it is standing in the path with the Ball in both arms, holding it out to you like something it found and thought you might want. It has never touched that Ball before.',
+    [
+      ch('Let it keep the Ball.', out('"You hang on to it." It looks at the Ball, then at you, and then carries it the rest of the way, like a lunchbox. That night it sleeps curled round it. It still will not go inside. That was never what the Ball was for, it turns out. It was for being given back.', bondLine(PIKA, 5), flag('aq01-pika-scene-3'), flag('aq01-pika-keeps-ball'))),
+      ch('Put the Ball away for good.', out('You take the Ball and put it at the very bottom of your bag, under everything, where nobody could ever find it in a hurry. The Pikachu watches you do it. Then it climbs onto your shoulder, puts both paws on your head, and stays there for the whole of the next road, like a hat that has made up its mind.', bondLine(PIKA, 5), flag('aq01-pika-scene-3'))),
+    ]),
+  // The turning point: two stages after it chose the player, while it is still in the party. Ash arrives, late (catalog id ash-training).
+  ev('ash-training', 'Ash\'s Training', AQ, { callback: true, minStage: stageOf('A3'), requires: [flagIs('aq01-pika-joined'), age('aq01-pika-joined', 2), line(PIKA)], cast: ['boss.ash'], pokemon: 'bulbasaur', tint: '#2a3a2a', effect: 'sparkle',
+    remembers: [
+      { id: 'walks', when: [flagIs('aq01-pika-walks')], notice: 'He sees the Pikachu riding on your shoulder, no Ball anywhere, and his whole face lights up. "No Ball? That\'s the coolest thing I\'ve ever seen."' },
+      { id: 'shocked', when: [flagIs('aq-pika-shocked')], notice: 'He holds out a hand to the Pikachu. You open your mouth to warn him. Too late. He stands there smoking, grinning. "Ha! It likes me!"' },
+      { id: 'asked-why', when: [flagIs('aq01-pika-asked-why')], notice: 'The Pikachu is watching you, not him. Since the Spearow, it watches to see whether you will step in. Today, you can show it.' },
+    ] },
+    'Someone is running up the road behind you, shouting. A boy about your age, one shoe untied, a pyjama top showing under his jacket, a Bulbasaur trotting after him. "Wait! Wait up!" He stops, hands on his knees. "I overslept. Then I got lost. The professor said the Pikachu went with you, so he gave me this one." He beams at the Bulbasaur. "Honestly? We\'re great." He is Ash. He looks at your Pikachu with pure delight. "Hey! Wanna battle? My partner\'s all fired up!"',
+    [
+      ch('Battle him.', fight('"Yes!" He flips his cap round. The Bulbasaur plants its feet. Your Pikachu is down off your shoulder before you call it.', duel('Ash', { cls: 'rival', size: 2, team: ['bulbasaur', 'caterpie'], win: [bondLine(PIKA, 10), flagAt('aq01-ash-trained'), flag('reunion-guest-ash'), room('aq01-ash-goodbye')] }, { sprite: 'ash', lose: [bondLine(PIKA, 5), flagAt('aq01-ash-trained'), flag('aq01-ash-won'), flag('reunion-guest-ash'), room('aq01-ash-goodbye')] }))),
+      ch('Train together.', out('You train until the sun goes orange. He is terrible at plans and wonderful at not giving up. Your Pikachu and his Bulbasaur go at each other again and again, and every time one of them falls down, the other waits for it to get up. By the end your Pikachu has learned to dodge a vine it could not dodge at noon. Ash is lying flat on the grass, laughing at the sky.', bondLine(PIKA, 5), lv(1, { species: ['pikachu', 'raichu'] }), flagAt('aq01-ash-trained'), flag('aq01-ash-trained-together'), flag('reunion-guest-ash'), room('aq01-ash-goodbye'))),
+      ch('Ask if he minds about the Pikachu.', out('He thinks about it properly, which you did not expect. "I did, for about a minute." He scratches the Bulbasaur under its bulb. "But it picked you. You can\'t make something pick you. And this one picked me." The Bulbasaur leans on his leg. "So I think it all worked out." Then he trains with you anyway, until the light goes.', bondLine(PIKA, 5), flagAt('aq01-ash-trained'), flag('aq01-ash-fine'), flag('reunion-guest-ash'), room('aq01-ash-goodbye'))),
+    ]),
+  ev('aq01-ash-goodbye', 'See You at the End', AQ, { room: true, cast: ['boss.ash'], pokemon: 'pikachu', tint: '#3a3420', effect: 'sparkle' },
+    'Evening. Ash ties his shoe at last. His Bulbasaur is asleep against his bag. Your Pikachu is on your shoulder, cheeks still faintly glowing from the day. "We\'re going the other way," Ash says. "But we\'ll catch up. Everybody does, at the end."',
+    [
+      ch('"See you at the end."', out('He holds out his fist. Your Pikachu, without being asked, bumps it with one tiny paw, and lets off the smallest spark in the world. Ash laughs all the way down the road. You can still hear him at the bend. The Pikachu watches him go and then turns, settles, and faces the way you are walking.', moment('Ash arrived late, got a Bulbasaur, was fine about it, and trained with you until dark.', 70))),
+    ]),
+  // Afterstory: a Pikachu outside its Ball, on someone's shoulder, in each later region.
+  ev('aq01-shoulder-1', 'On Someone\'s Shoulder', AQ, { callback: true, requires: [flagAgo('aq01-ash-trained', 1)], cast: ['trainer.pr/school_kid_m'], pokemon: 'pikachu', tint: '#2a3a2a', effect: 'none' },
+    'A new region, a new road. A small boy comes the other way with a Pikachu riding on his shoulder, no Ball on his belt at all. He stops and stares at you. "Are you the one? Everybody says somebody walks with their Pikachu outside the Ball. So I tried it. It works."',
+    [
+      ch('"It works."', out('He grins and goes on his way, the Pikachu holding onto his ear for balance. You did not know anyone had been watching. Somewhere back down the road, a lab has a broken window and a story about it.', flagAt('aq01-shoulder-1'), fr(2))),
+    ]),
+  ev('aq01-shoulder-2', 'On Someone\'s Shoulder', AQ, { callback: true, requires: [flagAgo('aq01-shoulder-1', 1)], cast: ['trainer.fisherman'], pokemon: 'pikachu', tint: '#1e2a36', effect: 'none' },
+    'Another region. An old man fishing off a pier, and on his shoulder, wearing a tiny knitted hat against the wind, a Pikachu. Its Ball is hanging on a hook on the pier post, being used to hold his bait. "Never would go in," he says, without looking round. "Somebody told me that was allowed now."',
+    [
+      ch('"It is."', out('He nods, as if that settles a long argument. The Pikachu in the knitted hat looks at you and lifts one paw. You lift yours. It is a small, silly, solemn thing, and it makes the whole day better.', flagAt('aq01-shoulder-2'), fr(2))),
+    ]),
+  ev('aq01-shoulder-3', 'On Someone\'s Shoulder', AQ, { callback: true, requires: [flagAgo('aq01-shoulder-2', 1)], cast: ['trainer.pr/ace_trainer_f'], pokemon: 'pikachu', tint: '#3a3420', effect: 'sparkle' },
+    'Far from where it started. A trainer walks out of a Gym, beaten and laughing, a Pikachu on her shoulder and its Ball nowhere to be seen. Two children run behind her with their own Pikachu on their own shoulders. It is a parade. It started at one lab window, and nobody here knows that but you.',
+    [
+      ch('Watch the parade go by.', out('You stand at the side of the road and let it pass: three Pikachu on three shoulders, sparking at each other, cheering. You do not tell anyone how it began. You do not need to. It is enough to know.', flag('aq01-shoulder-3'), fr(3), moment('In every region after the lab, someone walked with a Pikachu on their shoulder.', 50))),
+    ]),
+
+  // ---------------- AQ2. The Butterfree Migration ----------------
+  ev('aq02-butterfree-migration', 'The Butterfree Migration', AQ, { rarity: 'uncommon', minStage: stageOf('A2'), types: tagTypes('water'), cast: ['trainer.pr/school_kid_m'], pokemon: 'butterfree', tint: '#4a2a3a', effect: 'float',
+    remembers: [
+      { id: 'flight-north', when: [seen('cs-kanto-vermilion-flight-goodbye'), anyType('bug')], notice: 'Your own Bug-type comes and sits beside you on the sand. It watches the flock with you, very still. It knows what it is to be the one who flies north, and the one who stays.' },
+    ] },
+    'A beach at sunset, the sea gone the colour of peaches. Above it, a thousand Butterfree, so many that their shadow moves across the sand like weather. They are all flying out over the water. One is not. It sits on the sand beside a boy, wings folded, looking up. "It\'s their season," the boy says. "They all fly over the sea. Every year." He swallows. "It\'s never left me. Not once." The Butterfree looks up. "I don\'t want it to go. But it keeps looking up."',
+    [
+      ch('Let it go.', out('The boy breathes in like someone about to jump into cold water. "Go on, then." The Butterfree lifts off the sand. It does not go straight up. It circles him once, twice, three times, so close its wings brush his hair. Then it rises into the flock and is one of a thousand, and he cannot tell which one, and he keeps waving anyway.', flagAt('aq02-flew'), flag('aq02-let-go'), room('aq02-pink-butterfree'))),
+      ch('Ask it.', out('The boy holds out his arm. "Do you want to go?" The Butterfree climbs onto his shoulder instead and stays there for a long moment, pressed against his ear, as if telling him something only he can hear. Then it lets go and flies. He does not cry until it is gone. Then he does, and that is all right.', flagAt('aq02-flew'), flag('aq02-asked'), room('aq02-pink-butterfree'))),
+      ch('It\'s your choice.', out('He looks at you as if you have handed him something too heavy. Then he gathers the Butterfree up in both arms and holds on. It lets him. It stays. Over the next hour it stops looking up, a little at a time, and its wings are not quite as bright as they were. He does not see that yet. You do.', flag('aq02-kept'), room('aq02-pink-butterfree'))),
+    ]),
+  ev('aq02-pink-butterfree', 'The Pink One', AQ, { room: true, cast: ['trainer.roughneck'], pokemon: 'butterfree', tint: '#4a2a3a', effect: 'net',
+    remembers: [
+      { id: 'kept', when: [flagIs('aq02-kept')], notice: 'On the boy\'s arm, his Butterfree goes rigid, watching the pink one. Its wings open and close, open and close, as if it has forgotten it is not up there.' },
+      { id: 'flew', when: [flagIs('aq02-flew')], notice: 'The boy grabs your sleeve. "That\'s mine! Beside the pink one! It\'s trying to help!"' },
+    ] },
+    'Something is wrong in the flock. Near the front flies a Butterfree that is pink, not white, and behind it, low over the water, comes a hot-air balloon with a net hanging under it like a mouth. Two men lean out of the basket. "The pink one! Get the pink one, it\'s worth ten of the rest!" The net swings. The flock breaks apart around it, screaming in that soft, dry way Butterfree scream.',
+    [
+      ch('Stop the balloon.', fight('You run down the beach to where the basket skims the sand and shout loud enough to make them look. They do. They drop a ladder and come down swinging.', duel('Balloon Poachers', { cls: 'roughneck', size: 2, types: ['flying', 'normal'], win: [flag('aq02-balloon-stopped'), room('aq02-sunset')] }, { lose: [flag('aq02-balloon-stopped'), flag('aq02-balloon-lost'), room('aq02-sunset')] }))),
+      ch('Let the flock deal with it.', out('You hold the boy back. The flock turns, all thousand at once, and comes down on the balloon like a white storm. Sleep Powder. Gust. More Gust. The poachers sag asleep in the basket and the balloon is blown out to sea, net and all, and nobody will see them again for days. But it costs the flock. Butterfree drop to the sand on every side, wings torn, too tired to fly on tonight. The pink one is among them.', flag('aq02-flock-dealt'), room('aq02-sunset'))),
+    ]),
+  ev('aq02-sunset', 'After the Flock', AQ, { room: true, cast: ['trainer.pr/school_kid_m'], pokemon: 'butterfree', tint: '#3a2a40', effect: 'sparkle',
+    remembers: [
+      { id: 'kept', when: [flagIs('aq02-kept')], notice: 'His Butterfree is on his shoulder. It is looking up again. He sees it this time. He does not say anything, but he puts his hand on its back, very gently, the way you would hold a door.' },
+      { id: 'flock-dealt', when: [flagIs('aq02-flock-dealt')], notice: 'All along the beach, tired Butterfree rest on the sand. The boy goes from one to the next with a water bottle, and you go with him, until they can fly.' },
+    ] },
+    'The sun goes down. The last of the flock is a pale smudge on the horizon, then nothing. The boy sits on the sand and hugs his knees. "Thanks for staying." He digs in his pocket and holds out a little paper twist. Inside is a soft, silver dust that shines without any light on it. "It left this on my pillow every morning. I\'ve got jars of it. You have some."',
+    [
+      ch('Sit with him until dark.', out('You sit with him until the stars come out. He tells you its whole life: the Caterpie in the cabbage patch, the cocoon that took a week, the morning it first flew and landed on his face. When you go, he shakes your hand like a grown-up. "Come and see us. At the end of everything. We\'ll be there."', item('silver-powder'), flag('aq02-kid-friend'), flag('reunion-guest-butterfree-kid'), moment('On a beach at sunset, a thousand Butterfree flew over the sea, and a boy you met there became your friend.', 60))),
+    ]),
+  // Remembers: if the kid let it go, in the next region a Caterpie he caught is evolving.
+  ev('aq02-caterpie', 'A New Cocoon', AQ, { callback: true, requires: [flagIs('aq02-kid-friend'), flagAgo('aq02-flew', 1)], cast: ['trainer.pr/school_kid_m'], pokemon: 'caterpie', tint: '#2a3a24', effect: 'sparkle',
+    remembers: [{ id: 'asked', when: [flagIs('aq02-asked')], notice: '"I asked this one too," he says. "Whether it wanted to come with me. It climbed in my hat. That\'s a yes, right?"' }] },
+    'A new region, and a voice you know. "Hey! HEY! It\'s you!" The boy from the beach comes running, with a Caterpie clinging to the front of his shirt. "I caught one. A new one. I didn\'t want to, at first." He stops. The Caterpie on his shirt has begun to glow, a soft white light, right there on the road. "Oh. Oh no. Oh, it\'s happening. Stay. Please stay."',
+    [
+      ch('Stay and watch it evolve.', out('You stay. The light grows, and the Caterpie hardens into a Metapod in the boy\'s two cupped hands, green and still and warm. He laughs and cries at the same time. "It\'ll fly away one day too," he says. "That\'s all right. That\'s what they\'re for. You let them." He has grown up a little since the beach. So, you think, have you.', flag('aq02-caterpie-evolved'), fr(3))),
+      ch('Cheer it on.', out('You cheer, loudly, like it is a race. The boy joins in. Passers-by stop and stare, and then they cheer too, a whole road full of strangers cheering a Caterpie. It becomes a Metapod to applause. The boy holds it up like a trophy. "One day," he says, "I\'m going to let this one go too. And I\'m going to be happy about it."', flag('aq02-caterpie-evolved'), fr(3))),
+    ]),
+
+  // ---------------- AQ3. The Flock Leader's Promise ----------------
+  ev('aq03-flock-leaders-promise', 'The Flock Leader\'s Promise', AQ, { rarity: 'uncommon', minStage: stageOf('A2'), types: tagTypes('forest'), cast: ['trainer.pr/ranger_f'], pokemon: 'pidgeot', tint: '#141c2a', effect: 'fog',
+    remembers: [
+      { id: 'kanto-pidgeotto', when: [flagIs('kanto-pidgeotto-ally')], notice: 'The scarred Pidgeot turns its head and looks straight at you. You know that look. You let a Pidgeotto go, once, on a road not far from here. It has grown. It remembers you.' },
+    ] },
+    'A forest at night, and every branch is full of Pidgey, wide awake, packed wing to wing. Nobody sleeps here any more. Every night a Fearow flock comes through and takes what it can. On the highest branch sits a Pidgeot, scarred across the chest, feathers ragged, eyes open. A ranger lowers her torch. "That\'s the flock\'s leader," she says. "It won\'t leave again. It\'s wearing itself out." The Pidgeot speaks, and somehow you understand it. "I left once. I promised I\'d come back. I came back too late for some of them."',
+    [
+      ch('Help it defend the forest.', DEFEND('The Pidgeot looks at you for a long moment, then dips its head: once. It is not a thank-you. It is a place in the line.')),
+      ch('Take it with you.', out('You hold out your arm to it. The Pidgeot does not even look at the arm. It turns back to the dark beyond the trees. "No," it says, in the way it says things. "Not again. Never again." The ranger shakes her head at you, kindly. "It won\'t. Not while they need it."', flag('aq03-asked-to-come'), room('aq03-refused'))),
+      ch('Train the Pidgey.', TRAIN('"It can\'t guard them forever," you tell the ranger. "They have to guard themselves." The Pidgeot hears. It does not stop you.')),
+    ]),
+  ev('aq03-refused', 'It Will Not Leave', AQ, { room: true, cast: ['trainer.pr/ranger_f'], pokemon: 'pidgeot', tint: '#141c2a', effect: 'fog' },
+    'The Pidgeot stays on its branch, facing the dark. Below it, a hundred small Pidgey huddle and watch you to see what you will do now. The ranger hands you a spare torch. "It said no to you. It didn\'t say no to help."',
+    [
+      ch('Help it defend the forest.', DEFEND('You take up the torch. The Pidgeot sees it, and moves along its branch to make room.')),
+      ch('Train the Pidgey.', TRAIN('If it will not leave them, they will have to be strong enough that it could. You roll up your sleeves.')),
+      ch('Walk on.', leave('You leave the forest the way you came. Behind you, all night, there is screaming in the trees, and one big bird that does not sleep.')),
+    ]),
+  ev('aq03-night-two', 'The Second Night', AQ, { room: true, requires: [flagIs('aq03-defend')], cast: ['trainer.pr/ranger_f'], pokemon: 'fearow', tint: '#141c2a', effect: 'fog' },
+    'The second night. The Fearow have counted their losses and come back with more. You hear them before you see them: wings like canvas tearing, coming in low over the treetops. The Pidgeot drops off its perch to meet them. It is slower than last night. Its left wing is not quite right.',
+    [
+      ch('Hold the line with it.', fight('You step out beside it, and the raid breaks around the two of you like water round a stone.', beast({ format: 'doubles', species: ['fearow', 'spearow'], win: [flag('aq03-night-2'), later('aq03-night-three', 5)] }, { lose: [flag('aq03-night-2'), flag('aq03-raid-2-lost'), later('aq03-night-three', 5)] }))),
+    ]),
+  ev('aq03-night-three', 'The Third Night', AQ, { room: true, requires: [flagIs('aq03-defend')], cast: ['trainer.pr/ranger_f'], pokemon: 'fearow', tint: '#101420', effect: 'shake',
+    remembers: [
+      { id: 'pidgeys-resolve', when: [seen('sky.opening')], notice: 'You know this Fearow. It was a Spearow once, on a road, fighting a Pidgey over a branch for no reason either of them would say. It sees you, and it knows you too.' },
+    ] },
+    'The third night, and no stars. The Fearow leader comes alone this time, which is worse. It is huge, and old, and it lands on the Pidgeot\'s own branch, and the branch bends. The two birds look at each other. They have done this before, many times, over many years. The Pidgeot is shaking. It does not move back.',
+    [
+      ch('Drive off the Fearow leader.', fight('You step out under the branch and whistle. The Fearow leader looks down at you, then drops off the branch and comes.', monDuel('The Fearow Leader', 'fearow', 1, { win: [flag('aq03-fearow-driven'), room('aq03-dawn')], lose: [flag('aq03-fearow-driven'), flag('aq03-fearow-fight-lost'), room('aq03-dawn')] }))),
+    ]),
+  ev('aq03-pidgey-night-two', 'The Second Night', AQ, { room: true, requires: [flagIs('aq03-train')], cast: ['trainer.pr/ranger_f'], pokemon: 'pidgey', tint: '#141c2a', effect: 'fog' },
+    'The second night. Your three Pidgey are waiting on the low branch, in a row, chests out, as if they have been there since dawn. They probably have. Then the sound comes: wings like canvas tearing, low over the treetops. The Fearow have counted their losses and come back to test the forest.',
+    [
+      ch('Drill the three Pidgey.', out('The raid comes, smaller tonight: testing. The three Pidgey go up to meet it before you can say anything. The boldest takes a Spearow head-on. The fastest leads two in circles until they crash into each other. The smallest hides, then comes out of nowhere with a Gust that knocks one clean off a branch. The raiders go. The Pidgeot has not left its perch. It did not need to.', flag('aq03-night-2'), flag('aq03-pidgey-drilled'), later('aq03-pidgey-night-three', 5)), { prompt: { id: 'dodge-tap', needs: 'ok' }, fail: out('The raid comes, smaller tonight: testing. The three Pidgey go up too soon and too far apart, and the Pidgeot has to come down off its perch to pull them out of it. Nobody is taken. They are shaken, and so are you. "Tomorrow," the ranger says. "They\'ll get it tomorrow."', flag('aq03-night-2'), flag('aq03-pidgey-shaky'), later('aq03-pidgey-night-three', 5)) }),
+    ]),
+  ev('aq03-pidgey-night-three', 'The Third Night', AQ, { room: true, requires: [flagIs('aq03-train')], cast: ['trainer.pr/ranger_f'], pokemon: 'fearow', tint: '#101420', effect: 'shake',
+    remembers: [
+      { id: 'pidgeys-resolve', when: [seen('sky.opening')], notice: 'You know this Fearow. It was a Spearow once, on a road, fighting a Pidgey over a branch for no reason either of them would say. It sees you, and it knows you too.' },
+    ] },
+    'The third night, and no stars. The Fearow leader comes alone, huge and old, and lands on the Pidgeot\'s own branch. The branch bends. But the three Pidgey are in the air before it has folded its wings, and the whole flock is behind them: a hundred small birds, not hiding. The Pidgeot watches from below. It does not move. It does not have to.',
+    [
+      ch('Fight it with the flock behind you.', fight('A hundred Pidgey scream at once. The Fearow leader has never heard that sound from this forest.', monDuel('The Fearow Leader', 'fearow', 1, { win: [flag('aq03-fearow-driven'), room('aq03-asks')], lose: [flag('aq03-fearow-driven'), flag('aq03-fearow-fight-lost'), room('aq03-asks')] }), temp('The flock at your back', [{ kind: 'damageTakenMultiplier', value: 0.85 }], 1))),
+    ]),
+  ev('aq03-dawn', 'Dawn in the Trees', AQ, { room: true, cast: ['trainer.pr/ranger_f'], pokemon: 'pidgeot', tint: '#3a3420', effect: 'sparkle',
+    remembers: [{ id: 'lost-fight', when: [flagIs('aq03-fearow-fight-lost')], notice: 'You went down under the Fearow\'s wings. It was the Pidgeot that came down off its branch, scarred and slow, and finished it: the last time it will ever have to.' }] },
+    'Dawn comes up grey, then gold. The Fearow leader is a dot going away over the hills, and it does not look back. All through the forest, the Pidgey are falling asleep where they sit, in heaps, for the first time in a long time. The Pidgeot lands on the branch over your head. It looks very tired, and very old, and very glad.',
+    [
+      ch('Say goodbye.', out('It bows its whole body to you, the way the flock bows to it. "I kept it," it says. "This time I kept it." The ranger sees you to the edge of the trees. When you look back, the Pidgeot is asleep on its branch, at last, with its head under its wing.', heal(1), fr(3), flagAt('aq03-done'), moment('Three nights in a forest of Pidgey, and an old Pidgeot kept its promise.', 60))),
+    ]),
+  ev('aq03-asks', 'The Leader Asks', AQ, { room: true, cast: ['trainer.pr/ranger_f'], pokemon: 'pidgeot', tint: '#3a3420', effect: 'sparkle',
+    remembers: [{ id: 'shaky', when: [flagIs('aq03-pidgey-shaky')], notice: 'The smallest Pidgey has a torn feather from the second night. It does not care. It is standing on the Pidgeot\'s head.' }] },
+    'Dawn. The Fearow leader is gone over the hills. Your three Pidgey sit on the low branch, puffed up, too proud to sleep. The Pidgeot lands in front of you. For the first time it is not facing the dark. It is facing you. "They don\'t need me," it says. It does not sound sad. It sounds like someone setting down something heavy. "I would like to see what is past the trees. With you, if you\'ll have me."',
+    [
+      ch('Take it with you.', out('It climbs onto your arm. It is heavy, and its claws are careful. The three Pidgey take the top branch, all of them at once, and the whole flock settles round them. The Pidgeot looks back only once. Then it turns its face to the road.', gain('pidgeot', { bond: 20 }), flag('aq03-pidgeot-joined'), flagAt('aq03-done'), moment('The flock learned to guard itself, and its old leader came with you.', 70))),
+      ch('Tell it to rest here.', out('"You\'ve flown enough." It thinks about that for a long moment, and then it lets out a long breath and folds its wings. It does not go back to the high branch. It sleeps in the middle of the flock, warm, surrounded. Your three Pidgey take the watch.', fr(3), flagAt('aq03-done'), flag('aq03-pidgeot-rests'), moment('Three nights in a forest of Pidgey, and an old Pidgeot finally slept.', 60))),
+    ]),
+  // Afterstory: a Pidgeot comes back once, in a later region, to visit.
+  ev('aq03-visit', 'A Visitor From the Forest', AQ, { callback: true, requires: [flagAgo('aq03-done', 1)], pokemon: 'pidgeot', tint: '#2a3a4a', effect: 'float',
+    remembers: [{ id: 'joined', when: [flagIs('aq03-pidgeot-joined')], notice: 'This is not your Pidgeot. It is one of the three: the smallest, the one that insisted, grown huge. It lands in front of its old leader and bows.' }] },
+    'A shadow crosses the road, comes round again, and lands. A Pidgeot, big and glossy, with no scars at all. It has flown a long way. It walks up to you as if it has every right to, and taps your bag with its beak, the way you would knock on a door.',
+    [
+      ch('Let it rest a while.', out('It stays an afternoon. It eats from your hand. It tells you, in its way, that the forest is loud now, and full, and nobody is afraid at night. Then it goes, the way they all go, straight up and then away, toward home.', fr(3), flag('aq03-visited'), moment('A Pidgeot flew a whole region to tell you the forest was safe.', 50))),
+    ]),
+
+  // ---------------- AQ4. The Keeper of the Hidden Village ----------------
+  ev('aq04-keeper-of-the-hidden-village', 'The Keeper of the Hidden Village', AQ, { rarity: 'uncommon', minStage: stageOf('A2'), types: tagTypes('forest'), cast: ['trainer.pr/camper_f'], pokemon: 'bulbasaur', tint: '#1c2a1c', effect: 'none',
+    remembers: [
+      { id: 'sibling', when: [flagIs('kanto-hidden-bulbasaur')], notice: 'You know that bulb, that frown. The Bulbasaur that chose you in the gorge village had exactly this face. The girl sees you staring. "Ah. You\'ve met the little one. This is its big sister."' },
+    ] },
+    'A hidden village, if you can call six houses and a garden a village. Every bed in the garden has a Pokémon in it: an Oddish with a torn leaf, a Rattata with a bandaged tail, an old Pidgeotto that cannot fly. In the gate stands a Bulbasaur, feet planted. A girl comes out wiping her hands. "It\'s my guard. It looks after the sick ones." She does not call it off. "It doesn\'t trust trainers." Two vines snap out of its bulb and crack against the ground beside your ankles: a warning, the first and last.',
+    [
+      ch('Battle it.', fight('It does not wait for you to choose a Pokémon. It comes straight down the path, vines first.', monDuel('The Village Bulbasaur', 'bulbasaur', 1, { win: [flag('aq04-battled'), room('aq04-after-battle')], lose: [flag('aq04-battled'), flag('aq04-battle-lost'), room('aq04-after-battle')] }))),
+      ch('Help the sick Pokémon.', out('You put your bag down outside the gate and show the Bulbasaur your empty hands. "I\'m not here for it. What do they need?" The girl blinks, then hands you a bucket. The Bulbasaur lets you past. It follows two steps behind you, every step, and it watches.', flag('aq04-helping'), room('aq04-fetch'))),
+      ch('Leave.', leave('You step back from the gate. The vines draw in. The Bulbasaur does not follow you, not even with its eyes. It has already gone back to watching the garden.')),
+    ]),
+  ev('aq04-after-battle', 'It Still Stays', AQ, { room: true, cast: ['trainer.pr/camper_f'], pokemon: 'bulbasaur', tint: '#1c2a1c', effect: 'none',
+    remembers: [{ id: 'lost', when: [flagIs('aq04-battle-lost')], notice: 'It won. It stands over your fallen Pokémon, and then it does something you do not expect: it nudges a vine under your lead and helps it up.' }] },
+    'The fight is over. The Bulbasaur is breathing hard, scraped, still standing in the gate. It looks at you differently now: the way you look at someone who fought fair. But it does not move out of the way. The girl folds her arms. "It respects you. That\'s new. It\'s still staying."',
+    [
+      ch('Help the sick Pokémon.', out('You put your Poké Balls away and ask the girl what needs doing. The Bulbasaur hears that. Its vines go slack. It steps aside, just enough, and then falls in behind you, close, watching every single thing you do.', flag('aq04-helping'), room('aq04-fetch'))),
+      ch('Leave.', leave('You nod to it, one fighter to another, and go. It watches you all the way to the trees. It does not follow.')),
+    ]),
+  ev('aq04-fetch', 'Fetch', AQ, { room: true, cast: ['trainer.pr/camper_f'], pokemon: 'bulbasaur', tint: '#1c2a1c', effect: 'none' },
+    'The first task: water. The spring is at the bottom of a steep path and the bucket leaks. The sick Pokémon need fresh water every hour, and the girl has been doing it alone. The Bulbasaur sits at the top of the path and watches you go down.',
+    [
+      ch('Carry it up yourself.', out('Down, fill, up. Down, fill, up. The bucket leaks on your boots every time. On the sixth trip your arms are shaking, and a vine slides round the handle beside your hand and takes half the weight. You do not look at it. It does not look at you. You carry the seventh bucket together.', flag('aq04-task-1'), room('aq04-mend'))),
+      ch('Send a Water-type up and down with you.', out('Your Water-type fills the troughs straight from the spring, and the Oddish in the nearest bed drinks and drinks and lifts its leaves for the first time all day. The Bulbasaur watches your Water-type work. Then it goes and sits beside it, very slightly, the way you sit near a new colleague.', flag('aq04-task-1'), room('aq04-mend')), { requires: [anyType('water')] }),
+    ]),
+  ev('aq04-mend', 'Mend', AQ, { room: true, cast: ['trainer.pr/camper_f'], pokemon: 'rattata', tint: '#1c2a1c', effect: 'none' },
+    'The second task: the Rattata\'s bandage has slipped, and the leg under it is swollen. It bites anyone who comes near. It bit the girl this morning. The Bulbasaur moves closer to you, not to stop you. To see.',
+    [
+      ch('Hold it still and rebind the leg.', out('It bites you. Of course it bites you. You keep your hands where they are and talk to it, slow and boring, about nothing, until it lets go and lets you work. The new bandage is neat. The Bulbasaur puts its face very close to the bandage, sniffs, and then looks up at you for a long time.', flag('aq04-task-2'), room('aq04-sit'))),
+      ch('Give it a Berry first.', out('You hold out a Berry and wait. It eats it, suspicious, and then a second one, less suspicious. By the third it lets you rebind the leg without a single bite. The girl says "Huh" in the voice of somebody who has been bitten twice today. The Bulbasaur makes a small, approving sound.', flag('aq04-task-2'), room('aq04-sit'))),
+    ]),
+  ev('aq04-sit', 'Sit With', AQ, { room: true, cast: ['trainer.pr/camper_f'], pokemon: 'pidgeotto', tint: '#141c2a', effect: 'none' },
+    'The third task is the hardest, the girl says, and the simplest. The old Pidgeotto in the last bed has stopped eating. It is not hurt. It is old, and tired, and alone, and it has stopped expecting anything. "Just sit with it," she says. "That\'s all. Most people can\'t."',
+    [
+      ch('Sit with it until it sleeps.', out('You sit. Evening comes. You do not do anything clever. At some point the old bird leans against your arm, and at some point after that it eats a little from your hand, and then it sleeps. When you look up, the Bulbasaur is lying on your other side, pressed against you, eyes closed. It has decided something.', flag('aq04-task-3'), flagAt('aq04-helped'), room('aq04-village-goodbye'))),
+    ]),
+  ev('aq04-village-goodbye', 'It Needs to See the World', AQ, { room: true, cast: ['trainer.pr/camper_f'], pokemon: 'bulbasaur', tint: '#2a3a24', effect: 'sparkle',
+    remembers: [
+      { id: 'battled-then-helped', when: [flagIs('aq04-battled')], notice: 'The girl walks you to the gate. The Bulbasaur comes too. She stops. "You fought it, and then you came in and carried water. It\'s never seen anyone do both." She swallows. "It needs to see the world. Will you take it?"',
+        addChoices: [ch('Take it with you.', out('She kneels and ties a length of green vine round its neck, knotted the village way. "Its own. It grew it." The Bulbasaur looks back at the garden for a long moment, at every bed. Then it walks out of the gate beside you, and it does not look back again. Behind you, the girl is laughing and crying and waving with both arms.', gain('bulbasaur', { bond: 20 }), item('keepers-vine'), flagAt('aq04-taken'), moment('A Hidden Village\'s guard left its garden to see the world, beside you.', 65)))] },
+    ] },
+    'Morning. The garden is quiet, the troughs are full, and the old Pidgeotto is eating on its own. The girl walks you to the gate. The Bulbasaur sits in the gate, where it was when you came, and watches you go. "Thank you," the girl says. "It watched all of it. It won\'t forget."',
+    [
+      ch('Say goodbye to the village.', out('You wave from the trees. The girl waves back. The Bulbasaur does not wave, being a Bulbasaur, but one vine lifts, a little, and stays up until you are out of sight.', fr(3), flag('aq04-goodbye'))),
+    ]),
+  // Small scenes: one each time its Bond rises a step, while it is in the party (the doc scripts none; written from the Companion rule).
+  ev('aq04-on-watch', 'On Watch', AQ, { callback: true, requires: [flagIs('aq04-taken'), line('bulbasaur', 1), age('aq04-taken', 1)], pokemon: 'bulbasaur', tint: '#141c2a', effect: 'none' },
+    'Camp, late. Everyone is asleep but the Bulbasaur. It has put itself between the fire and the dark, vines half out, the way it stood in the village gate. It has made your camp a garden, and everyone in it a patient.',
+    [
+      ch('Take the first watch with it.', out('You sit down beside it. It glances at you, as if to say this is its job. You stay anyway. Around midnight its vines draw in. Near one o\'clock its head drops onto your knee. You keep the watch for both of you, and it lets you.', bondLine('bulbasaur', 5), flag('aq04-scene-1'))),
+      ch('Tell it everyone is safe.', out('"Nobody\'s sick here. You can sleep." It looks round at the camp: at every Pokémon, one by one, checking. Then, slowly, it lies down in the middle of them instead of at the edge. It is asleep in a minute. It was more tired than it let anyone see.', bondLine('bulbasaur', 5), flag('aq04-scene-1'))),
+    ]),
+  ev('aq04-patient', 'A Patient on the Road', AQ, { callback: true, requires: [seen('aq04-on-watch'), line('bulbasaur', 2)], pokemon: 'bulbasaur', tint: '#2a3a24', effect: 'none' },
+    'A Weedle lies at the side of the road with a bent horn, too weak to crawl. The Bulbasaur stops dead. Then it plants itself over the Weedle and will not move, and it looks at you: the exact look the girl gave you when she handed you the bucket.',
+    [
+      ch('Carry the Weedle to a Center.', out('You carry it. The Bulbasaur walks beside you with one vine resting on the Weedle the whole way, keeping it steady. At the Center it waits outside the treatment room like family. When the Weedle comes out mended, the Bulbasaur sniffs the horn, and nods, and only then lets you leave.', bondLine('bulbasaur', 5), flag('aq04-scene-2'))),
+      ch('Treat it here, together.', out('You kneel at the roadside with your kit. You hold; the Bulbasaur holds; you splint the horn with a twig and a strip of bandage. It is not neat. It works. The Weedle crawls off into the grass, and the Bulbasaur watches it go with the face of somebody who has done this a hundred times and still minds.', bondLine('bulbasaur', 5), flag('aq04-scene-2'))),
+    ]),
+  ev('aq04-trusted', 'A Trainer It Trusts', AQ, { callback: true, requires: [seen('aq04-patient'), line('bulbasaur', 3)], cast: ['trainer.pr/youngster_f'], pokemon: 'bulbasaur', tint: '#2a3a24', effect: 'hearts' },
+    'A young trainer at a Pokémon Center crouches down in front of the Bulbasaur. "Can I pet it?" The Bulbasaur does not trust trainers. Everybody knows that. You wait for the vines. They do not come. It looks at the girl, and then it looks up at you.',
+    [
+      ch('Let it decide.', out('You say nothing. It decides. It steps forward and lets the girl scratch it between the eyes, and it closes its eyes while she does it. When she has gone it comes back and leans on your leg, heavily, the way you would after doing something brave.', bondLine('bulbasaur', 5), flag('aq04-scene-3'))),
+      ch('Tell her how it guards the sick.', out('You tell her about the garden. The girl listens with her mouth open. "It\'s a doctor?" The Bulbasaur sits up very straight. It lets her pat it, once, carefully, like a doctor would allow it. All the way down the next road it walks a little taller.', bondLine('bulbasaur', 5), flag('aq04-scene-3'))),
+    ]),
+  // The escalation: the village is found, two stages on. With the Bulbasaur in the party (it pauses while the Bulbasaur is away) ...
+  ev('aq04-poachers', 'The Village Is Found', AQ, { callback: true, minStage: stageOf('A4'), requires: [flagIs('aq04-taken'), age('aq04-taken', 2), line('bulbasaur')], types: tagTypes('forest'), cast: ['trainer.roughneck'], pokemon: 'bulbasaur', tint: '#2a1c1c', effect: 'shake' },
+    'The Bulbasaur stops in the road and turns round. Its vines are out. A Pidgey lands on your shoulder with a scrap of paper on its leg, and you know the handwriting: the girl. "They found us. Men with cages. They want the sick ones; sick ones don\'t run. Please." The Bulbasaur is already walking back the way you came.',
+    [
+      ch('Defend the village.', fight('You run. The Bulbasaur runs faster. You come over the last rise and there are two men in the garden gate with cages, and one of them is reaching for the old Pidgeotto.', duel('Village Poachers', { cls: 'roughneck', size: 3, types: ['poison', 'dark'], lv: 1, win: [flag('aq04-defended'), bondLine('bulbasaur', 10), room('aq04-village-safe')] }, { lose: [flag('aq04-defended'), flag('aq04-defence-lost'), bondLine('bulbasaur', 5), room('aq04-village-safe')] }))),
+      ch('Move the village.', out('You get there first. Not to fight. To pack. All night you carry beds and buckets and patients up a hidden valley the girl knows, further from any path. The Bulbasaur goes last, wiping out the tracks with its vines. At dawn the poachers find six empty houses and a garden full of nothing. It takes everything you have. Two whole nodes of road.', takeNode(2), flag('aq04-moved'), bondLine('bulbasaur', 10), room('aq04-village-safe'))),
+    ]),
+  // ... or, if it stayed in the village, a message reaches whoever helped there.
+  ev('aq04-poachers-village', 'The Village Is Found', AQ, { callback: true, minStage: stageOf('A4'), requires: [flagIs('aq04-task-3'), notYet('aq04-taken'), age('aq04-helped', 2)], types: tagTypes('forest'), cast: ['trainer.roughneck'], pokemon: 'bulbasaur', tint: '#2a1c1c', effect: 'shake' },
+    'A Pidgey lands on your shoulder with a scrap of paper on its leg, and you know the handwriting: the girl from the hidden village. "They found us. Men with cages. They want the sick ones. It\'s holding the gate alone. Please." You can picture it exactly: four small feet planted, vines out, not giving an inch.',
+    [
+      ch('Defend the village.', fight('You come over the last rise and the Bulbasaur is in the gate, scraped and bleeding, still holding it. It sees you. It does not look surprised.', duel('Village Poachers', { cls: 'roughneck', size: 3, types: ['poison', 'dark'], lv: 1, win: [flag('aq04-defended'), room('aq04-village-safe')] }, { lose: [flag('aq04-defended'), flag('aq04-defence-lost'), room('aq04-village-safe')] }))),
+      ch('Move the village.', out('You get there first, and you do not fight. You pack. All night, beds and buckets and patients go up a hidden valley the girl knows. The Bulbasaur goes last, wiping out the tracks with its vines. At dawn the poachers find six empty houses. It takes everything you have. Two whole nodes of road.', takeNode(2), flag('aq04-moved'), room('aq04-village-safe'))),
+    ]),
+  ev('aq04-village-safe', 'The Garden, Safe', AQ, { room: true, cast: ['trainer.pr/camper_f'], pokemon: 'bulbasaur', tint: '#2a3a24', effect: 'sparkle',
+    remembers: [
+      { id: 'moved', when: [flagIs('aq04-moved')], notice: 'The new garden is smaller, and steeper, and has a view of the sky the old one never had. The old Pidgeotto has been put by the window. It looks out all day.' },
+      { id: 'lost', when: [flagIs('aq04-defence-lost')], notice: 'They beat you. And then the whole garden got out of bed: an Oddish with a torn leaf, a Rattata on three legs, an old Pidgeotto that cannot fly. The poachers ran from that.' },
+    ] },
+    'It is over. The cages are empty and broken. The girl sits on the garden step with her face in her hands, and then she looks up and she is laughing. "You came back," she says. "Nobody ever comes back." The Bulbasaur goes from bed to bed, checking every patient, one by one.',
+    [
+      ch('Stay till everyone is settled.', out('You stay till the last patient is asleep. The girl gives you a jar of the garden\'s own seeds, and a meal, and a place by the fire. The Bulbasaur finishes its rounds and comes and lies down against your boot, as it did on the first night, when it decided.', item('miracle-seed'), heal(1), flag('aq04-village-saved'), moment('The hidden village was found, and you came back for it.', 65))),
+    ]),
+
+  // ---------------- AQ5. The Charmander in the Rain ----------------
+  ev('aq05-charmander-in-the-rain', 'The Charmander in the Rain', AQ, { rarity: 'uncommon', minStage: stageOf('A2'), types: tagTypes(), cast: ['trainer.pr/ace_trainer_m'], pokemon: 'charmander', tint: '#1e2430', effect: 'rain' },
+    'Rain, hard and cold, the kind that gets inside your collar. On a flat rock by the road sits a Charmander, curled round its own tail. The flame on the tip is so small it is almost blue. It is not sheltering. It is waiting. Its trainer told it to stay on this rock. He said he would come back. It will not leave the rock. A trainer hurries past under an umbrella and does not slow down. "That one? He dumped it. Said it was too weak." He is gone before you can answer.',
+    [
+      ch('Carry it to shelter.', out('You pick it up. It tries to fight you, and it is too weak to fight anything, and that is the worst part. You run. You hold it inside your coat with the flame against your chest, and you feel it flicker, and flicker, and you run faster. At the Pokémon Center the nurse takes one look and does not ask questions. In the morning its flame is bright and orange, and it is looking for you.', gain('charmander', { bond: 20 }), flag('aq-char-carried'), flagAt('aq05-met'), moment('You carried a Charmander out of the rain with its flame against your chest.', 60))),
+      ch('Wait with it.', out('You sit on the wet rock beside it. You do not touch it. You wait, because it is waiting, and it seems wrong to leave it alone with that. The rain does not stop. Its flame gets smaller. When it is no bigger than a match you decide, and you pick it up, and it lets you. Its tail is nearly out when you reach the Center. Nearly.', gain('charmander', { bond: 10 }), flag('aq-char-waited'), flagAt('aq05-met'))),
+      ch('Find the trainer.', out('He is in the Center, warm and dry, laughing with friends. You tell him where his Charmander is. He laughs harder. "Still on the rock? It\'s even dumber than I thought." Behind you, the door is open. The Charmander followed you in, dripping. It heard. It turns round and walks out into the rain, and when you go after it, it lets you pick it up. It does not look back at him.', gain('charmander', { bond: 5 }), flag('aq-char-heard'), flagAt('aq05-met'))),
+    ]),
+  // Small scenes: one each time its Bond rises a step, while it is in the party (the doc scripts none; written from the Companion rule).
+  ev('aq05-tail-flame', 'The Tail Flame', AQ, { callback: true, requires: [flagIs('aq05-met'), line('charmander', 1), age('aq05-met', 1)], pokemon: 'charmander', tint: '#1e2430', effect: 'rain' },
+    'A drizzle starts on the road. The Charmander stops dead and curls its tail under its body, the way it did on the rock. It is shaking. It is not cold. It is remembering.',
+    [
+      ch('Hold your hand over its flame.', out('You cup your hand over the tip of its tail like a little roof. The rain runs off your knuckles. It looks up at your hand for a long time. Then it uncurls, slowly, and walks on, and lets you keep your hand there, the whole wet road.', bondLine('charmander', 5), flag('aq05-scene-1'))),
+      ch('Build it a fire.', out('You stop, there and then, and build a fire under a tree out of whatever is dry. It sits so close to the fire its feet steam. You sit beside it. By the time the rain stops it has fallen asleep with its tail in your lap.', bondLine('charmander', 5), flag('aq05-scene-1'))),
+    ]),
+  ev('aq05-after-a-loss', 'After a Loss', AQ, { callback: true, requires: [seen('aq05-tail-flame'), line('charmander', 2)], pokemon: 'charmander', tint: '#2a1c1c', effect: 'none',
+    remembers: [{ id: 'heard', when: [flagIs('aq-char-heard')], notice: 'You know what it is hearing. A laugh, in a warm room. "Too weak."' }] },
+    'It loses a battle. Not badly. It just loses. Afterwards it will not come to you. It sits with its back to you at the edge of the camp, flame low, waiting to be left on a rock.',
+    [
+      ch('Tell it you\'re not leaving.', out('You go and sit behind it and say it plainly. "You lost. I\'m still here. I\'m going to be here the next time, too." It does not turn round. But its flame comes up, a little, and a little more, until it lights the grass.', bondLine('charmander', 5), flag('aq05-scene-2'))),
+      ch('Sit in silence beside it.', out('You sit beside it and say nothing at all. After a long time, it leans. It is a very small lean. It is all it has. In the morning it is the first one up, and it is standing beside your bag, ready to go.', bondLine('charmander', 5), flag('aq05-scene-2'))),
+    ]),
+  ev('aq05-too-weak', 'Too Weak', AQ, { callback: true, requires: [seen('aq05-after-a-loss'), line('charmander', 3)], cast: ['trainer.pr/ace_trainer_m'], pokemon: 'charmander', tint: '#3a2418', effect: 'fire' },
+    'A trainer on the road glances at it and laughs, not unkindly. "A Charmander? Bit weak, isn\'t it?" The word lands. Your Charmander goes very still. Then its flame goes up, high and white, higher than you have ever seen it, and it does not look at you. It looks at him.',
+    [
+      ch('Tell him he\'s wrong.', out('"It isn\'t." That is all you say. The trainer shrugs and goes. Your Charmander looks at you, and the flame stays high, and it walks beside you closer than before. Somebody said the word, and you said the other one. It heard both.', bondLine('charmander', 5), flag('aq05-scene-3'))),
+      ch('Let it show him.', out('It walks up to him, and breathes one jet of fire into the sky, straight up, so hot the rain turns to steam above the whole road. The trainer\'s mouth falls open. The Charmander walks back to you, very calm, as if nothing has happened. Its tail is blazing.', bondLine('charmander', 5), flag('aq05-scene-3'))),
+    ]),
+  // Act 2, the next region: it has become a Charizard, and it will not obey.
+  ev('aq05-act-two', 'The Charizard Who Will Not Obey', AQ, { callback: true, requires: [flagIs('aq05-met'), flagAgo('aq05-met', 1), line('charmander')], pokemon: 'charizard', tint: '#3a1c14', effect: 'fire',
+    remembers: [
+      { id: 'carried', when: [flagIs('aq-char-carried')], notice: 'Somewhere in there is the Charmander you ran through the rain with, inside your coat. It does not seem to remember. Or it remembers, and it is angry that it needed you.' },
+      { id: 'heard', when: [flagIs('aq-char-heard')], notice: 'It heard a man call it too weak, once. Now it is the strongest thing on the road, and it is still trying to prove it to someone who is not here.' },
+    ] },
+    'A new region, and overnight it changed. Where your small fire-lizard slept there is a Charizard: huge, orange, wings folded like a tent. It has not obeyed you since. In battle it lies down and naps while your other Pokémon fight. When you call it, it opens one eye. It looks at you as if to ask what, exactly, you have ever done to deserve it.',
+    [
+      ch('Earn it.', fight('You set its Ball aside. "Watch." Three trainers on the next stretch of road, one after another, and you take them without it. It watches from a rock, with both eyes open.', duel('Three Hard Trainers', { cls: 'ace-trainer', size: 2, chain: 3, lv: 1, win: [...CHAR_EVOLVES, flag('aq05-earned'), room('aq05-earned')] }, { lose: [...CHAR_EVOLVES, flag('aq05-earned'), flag('aq05-earn-lost'), room('aq05-earned')] }))),
+      ch('Force it.', out('You stand in front of it and order it up, in the voice you never use. It gets up. It fights. It wins. It does every single thing you say, from then on, exactly and coldly, and it never once looks at you while it does it. It is obeying. It is not with you.', ...CHAR_EVOLVES, bondLine('charmander', -20), flag('aq05-forced'))),
+      ch('Let it go to the valley.', out('There is a valley a day from here where wild Charizard live, and fight, and get strong. You have heard of it. So, you can tell, has it. "Go on, then," you say. It looks at you, really looks, for the first time since it changed. Then it takes off, and you follow on foot.', ...CHAR_EVOLVES, farewell('Your Charizard', ['charizard']), flagAt('aq05-valley-gone'), room('aq05-valley'))),
+    ]),
+  ev('aq05-earned', 'Earned', AQ, { room: true, pokemon: 'charizard', tint: '#3a2418', effect: 'fire',
+    remembers: [{ id: 'lost', when: [flagIs('aq05-earn-lost')], notice: 'You lost the third one. You did it anyway, without it, all three, and you did not once look back at the rock to ask for help. It saw that.' }] },
+    'The last trainer leaves. You are scraped, and tired, and your team is in pieces. The Charizard gets down off its rock. It walks over to you. It lowers its great head until its eye is level with yours, and the flame on its tail burns very steady.',
+    [
+      ch('Hold out your hand.', out('It touches its snout to your palm. It is very hot. In the next battle it does not nap. It stands in front of your whole team with its wings open, and it does not need to be told. When it fights now, its fire goes exactly where it means it to. You have earned that. So has it.', item('earned-flame'), bondLine('charmander', 15), flag('reunion-guest-charizard'), moment('The Charizard who would not obey watched you fight without it, and chose you.', 70))),
+    ]),
+  // Act 3: the valley.
+  ev('aq05-valley', 'The Valley of Charizard', AQ, { room: true, cast: ['trainer.dragon_tamer'], pokemon: 'charizard', tint: '#3a1c14', effect: 'fire' },
+    'A valley full of fire. Charizard on every ledge, fighting, falling, getting up. Yours lands on a ledge with three others and is knocked off it in a second. It gets up. It is knocked off again. It gets up. A keeper in a scorched coat stands beside you, watching too. "It came here for itself," she says. "Not for you." Your Charizard is knocked off the ledge a third time. It gets up.',
+    [
+      ch('Leave it here.', out('You watch until dark. It never once looks round for you. That is how you know it is the right place. You leave, and you do not look round either, until the top of the valley. When you do, there it is, on the highest ledge at last, blazing.', flag('aq05-left-in-valley'), moment('You left your Charizard in the valley, to become strong for itself.', 60))),
+      ch('Wait for it.', out('You find a rock at the edge of the valley and you sit down on it. The keeper looks at the rock, and at you, and almost smiles. "That\'s a long wait." "I know." You do not say that someone once sat on a rock and waited for a person who never came. You do not have to. You are going to come.', flagAt('aq05-waiting'))),
+    ]),
+  // If you wait: it comes back on its own.
+  ev('aq05-comes-back', 'It Comes Back', AQ, { callback: true, requires: [flagIs('aq05-waiting'), notYet('aq-char-carried'), age('aq05-waiting', 1)], pokemon: 'charizard', tint: '#3a2418', effect: 'fire' },
+    'A shadow on the road, coming down out of the sun. Your Charizard lands in front of you so hard the ground jumps. It is scarred now. It is bigger. It looks at you for a long time, and then it does something it has never done: it bows its head.',
+    [
+      ch('Welcome it back.', out('You put your hand on its neck. It is very hot and very steady. It does not nap in the next battle, or the one after. It does not need to be told. It came back for you, in its own time, which is the only way it was ever going to come.', gain('charizard', { bond: 40 }), item('earned-flame'), flag('aq05-returned'), flag('reunion-guest-charizard'), moment('Your Charizard went to the valley for itself, and came back for you.', 75))),
+    ]),
+  ev('aq05-uninvited', 'Uninvited', AQ, { callback: true, requires: [flagIs('aq05-waiting'), flagIs('aq-char-carried'), age('aq05-waiting', 2)], pokemon: 'charizard', tint: '#3a1c14', effect: 'fire' },
+    'The hardest fight of the region is ahead, and you know it, and so does your team. You are checking your bag for the third time when the sky goes orange. A Charizard drops out of the clouds and lands in front of you, scarred and huge, and plants itself between you and the road. Nobody called it. It is not asking.',
+    [
+      ch('Let it stand with you.', out('You do not say anything. Neither does it. It came the way you once came for it: through the rain, without being asked, because it would not leave you alone with it. Its tail is blazing. Whatever is ahead, it will be there first.', gain('charizard', { bond: 50 }), item('earned-flame'), { kind: 'tempEffect', label: 'Your Charizard came back', effects: [{ kind: 'typeDamageMultiplier', type: 'fire', value: 1.2 }], until: 'boss' }, flag('aq05-returned'), flag('aq05-uninvited'), flag('reunion-guest-charizard'), moment('Your Charizard came back uninvited, for the hardest fight of the region, the way you once came for it.', 80))),
+    ]),
+
+  // ---------------- AQ6. The Firefighters ----------------
+  ev('aq06-firefighters', 'The Firefighters', AQ, { rarity: 'uncommon', minStage: stageOf('A4'), types: tagTypes('forest', 'hot'), cast: ['trainer.worker_m'], pokemon: 'squirtle', tint: SQUAD_TINT, effect: 'fire',
+    remembers: [
+      { id: 'same-squad', when: [seen('cs-kanto-cerulean-squad-reward')], notice: 'The one in the middle stops spraying and stares at you. Then it salutes, very seriously, with the hose still running. You know these shades. It is the same squad, the one that dropped a bucket on your head. Reformed.' },
+    ] },
+    'Smoke over the trees, and in front of the smoke, five Squirtle in pointed sunglasses. They are putting out a forest fire. Very badly. One is spraying the wrong tree. One is spraying another Squirtle. The one in the middle salutes you with a hose. "We used to cause trouble. Now we fix it. Mostly." A firefighter leans on her shovel, black to the elbows. "They\'ve been here three days. They won\'t stop. I can\'t make them stop."',
+    [
+      ch('Help them.', out('You roll up your sleeves. The leader looks you up and down, decides you will do, and points at the worst of the smoke. "Three fronts," the firefighter says. "We hold all three, we save the forest." The next three stretches of road are fire.', flag('aq06-help'), later('aq06-fire-1', 1))),
+      ch('Get the firefighters to train them.', out('You walk the firefighter over to the Squad. "They won\'t stop. So don\'t stop them. Teach them." She looks at the five Squirtle for a long time. Then she blows a whistle. It takes the rest of the day: drills, hose work, how to stand, where to aim. By sundown they are not five pranksters. They are a line. They put out the last of the fire in a row, like they always knew how.', takeNode(), flag('aq06-train'), flag('aq06-brigade'), room('aq06-shades'))),
+      ch('Lead them.', out('You step in and start giving orders. "You two, the left side. You, stop spraying him." The Squad stops. All five turn and look at their leader. Their leader takes off its sunglasses, slowly, and looks at you over the top of them. It is very offended.', flag('aq06-lead'), room('aq06-offended'))),
+    ]),
+  ev('aq06-fire-1', 'The First Front', AQ, { room: true, requires: [flagIs('aq06-help')], cast: ['trainer.worker_m'], pokemon: 'squirtle', tint: SQUAD_TINT, effect: 'fire' },
+    'The first front: a line of burning hedges, crackling toward a farm. Two Squirtle are already there, spraying in two different directions. The leader shouts something that is probably an order. The heat hits your face like an oven door.',
+    [
+      ch('Use a Water move.', out('Your Water-type steps up beside the Squad and lets go, a long steady jet, straight along the hedge. The two Squirtle see where it is aiming and copy it. Three streams in one line. The hedge hisses and goes black. The leader nods, once. It is taking notes.', bondUp(1, { types: ['water'] }), flag('aq06-fire-1'), later('aq06-fire-2', 1)), { requires: [WATER_MOVE] }),
+      ch('Form a bucket line with the Squad.', out('You grab a bucket. The Squad, after a moment, gets in line behind you, and the buckets go up the line, and the water goes on the fire. Slowly, then quickly. Your arms ache. The hedge goes out. The smallest Squirtle is soaked from head to tail and very proud of it.', flag('aq06-fire-1'), later('aq06-fire-2', 1)), { prompt: { id: 'whack-tap', needs: 'ok' }, fail: out('The line breaks twice. A bucket goes over. The hedge burns down to the farm fence before the water catches up, and you are scorched and sooty and coughing. But it stops at the fence. That is enough.', hurt(0.1), flag('aq06-fire-1'), later('aq06-fire-2', 1)) }),
+    ]),
+  ev('aq06-fire-2', 'The Second Front', AQ, { room: true, requires: [flagIs('aq06-fire-1')], cast: ['trainer.worker_m'], pokemon: 'slugma', tint: SQUAD_TINT, effect: 'fire' },
+    'The second front is not burning on its own. Something in the middle of it is keeping it burning: a family of Slugma, terrified, glowing white-hot, crawling the wrong way through the dry grass and setting it alight wherever they go. The Squad hangs back. The smallest one is shaking.',
+    [
+      ch('Drive the Slugma out of the grass.', fight('You step in between the Slugma and the trees. They turn on you, molten and frightened.', beast({ format: 'doubles', species: ['slugma'], win: [flag('aq06-fire-2'), later('aq06-fire-3', 1)] }, { lose: [flag('aq06-fire-2'), flag('aq06-fire-2-lost'), later('aq06-fire-3', 1)] }))),
+      ch('Use a Water move to cool the path.', out('Your Water-type soaks a path through the grass, a cool dark lane from the Slugma to the rocks. They feel it. They follow it, sizzling, out of the dry grass and onto bare stone, where they can glow all they like. Behind them the Squad drowns the last of the sparks.', bondUp(1, { types: ['water'] }), flag('aq06-fire-2'), later('aq06-fire-3', 1)), { requires: [WATER_MOVE] }),
+    ]),
+  ev('aq06-fire-3', 'The Third Front', AQ, { room: true, requires: [flagIs('aq06-fire-2')], cast: ['trainer.worker_m'], pokemon: 'squirtle', tint: '#3a1408', effect: 'fire' },
+    'The last front is the big one: the fire has reached the old trees, and the old trees are tall. The firefighter is out of water. The Squad is out of breath. The leader looks up at a wall of flame twice as tall as a house, and then at you, and for the first time it takes off its sunglasses and puts them in its shell for safekeeping.',
+    [
+      ch('Everyone, together, now.', out('The Squad lines up beside your Water-types, all of them, in a row. The leader counts. On three, every one of them fires at once: one great rope of water, all the way up. The wall comes down hissing, and the old trees stand in the steam, black and alive. In the quiet afterwards, the leader shows your Water-type how the Squad aims, low and steady. It learns.', teach('water-pulse', { type: 'water' }), flag('aq06-fire-3'), flag('aq06-forest-saved'), room('aq06-shades'))),
+    ]),
+  ev('aq06-offended', 'The Leader Is Offended', AQ, { room: true, cast: ['trainer.worker_m'], pokemon: 'squirtle', tint: SQUAD_TINT, effect: 'fire' },
+    'The leader puts its sunglasses back on, very deliberately. It turns its back on you. It gives its own order, and the Squad sprays the wrong tree with great confidence. The fire is still spreading. The firefighter looks at you. "It\'ll never forgive you. Or it\'ll never forget you. Hard to tell with that one."',
+    [
+      ch('Give the orders anyway.', out('You keep going. Calm, clear, one order at a time. One by one the Squad starts to listen. The fire turns. The fire stops. In the steam afterwards the leader walks up to you, and you brace yourself. It holds out a flipper. It is shaking yours. It is grateful, and it is furious about it, and both are true.', flag('aq06-led'), room('aq06-shades'))),
+      ch('Tell the leader your plan and let it lead.', out('You crouch down and tell it, quietly, where you would aim and why. It listens with its arms folded. Then it turns round and gives every one of your orders as its own, loudly, and the Squad obeys at once. The fire goes out. The leader does not thank you. But it gives you a long, slow nod from behind its shades, and you know.', flag('aq06-led'), flag('aq06-leader-led'), room('aq06-shades'))),
+    ]),
+  ev('aq06-shades', 'The Leader\'s Sunglasses', AQ, { room: true, cast: ['trainer.worker_m'], pokemon: 'squirtle', tint: '#2b4a63', effect: 'sparkle',
+    remembers: [
+      { id: 'brigade', when: [flagIs('aq06-brigade')], notice: 'The firefighter has painted a sign and nailed it to the station door: SQUIRTLE SQUAD, TOWN FIRE BRIGADE. The Squad stands under it in a row and refuses to move until somebody takes a picture.' },
+      { id: 'led', when: [flagIs('aq06-led')], notice: 'The leader has not quite forgiven you for giving orders to its Squad. It has decided to be grateful anyway. It is clearly very hard work.' },
+    ] },
+    'Evening. The forest is safe, black at the edges and green in the middle. The Squad lines up in front of you. The leader steps forward, takes off its pointed sunglasses, and holds them out to you with both flippers. Then one of the smaller Squirtle steps out of the line, and stands beside the shades, and waits.',
+    [
+      ch('Take the shades and the Squirtle.', out('You put on the sunglasses. They are far too small. The whole Squad cheers. The little Squirtle slides on a spare pair of its own and walks over to your side, and salutes the Squad, and the Squad salutes back. "Look after it," says the firefighter. "It\'s the best of them. Don\'t tell the leader I said that."', item('cool-shades'), { ...gain('squirtle', { bond: 15 }), look: 'squad-lesser' }, flag('aq06-squirtle-joined'), moment('You fought a forest fire beside the Squirtle Squad, and wore the leader\'s sunglasses.', 60))),
+      ch('Take the shades. The Squirtle stays with its squad.', out('You crouch down to the little one. "They need you here." It thinks about that, very seriously, and then salutes and steps back into the line. The shades are yours. The Squad stands in a row and watches you go, and somewhere behind you a hose goes off by accident, and the firefighter shouts.', item('cool-shades'), fr(3), flag('aq06-squirtle-stayed'), moment('You fought a forest fire beside the Squirtle Squad, and wore the leader\'s sunglasses.', 60))),
+    ]),
+
+  // ---------------- AQ7. The Krabby at the Lab ----------------
+  ev('aq07-krabby-at-the-lab', 'The Krabby at the Lab', AQ, { rarity: 'uncommon', minStage: stageOf('A2'), types: tagTypes('water'), cast: ['trainer.pr/scientist_f'], pokemon: 'kingler', tint: '#1c2a3a', effect: 'none' },
+    'A professor\'s ranch: fields, fences, a pond full of Pokémon that belong to people who are somewhere else. By the pond sits a Kingler, huge, its great claw resting on the grass. It is facing the gate. It is very still. "Its trainer sent it here when his team was full," the professor says. "Years ago. He visits once a year, on his birthday." She looks at the Kingler. "It evolved without him. He doesn\'t know yet." The gate creaks. The Kingler clacks its claw, once, and turns. It is the wind.',
+    [
+      ch('Battle it.', fight('You step out in front of it. The Kingler looks at you, then at the gate, then back at you, and raises its claw. It wants someone to see what it can do.', monDuel('The Ranch Kingler', 'kingler', 1, { win: [flag('aq-kingler-battled'), room('aq07-respect')], lose: [flag('aq-kingler-battled'), flag('aq07-kingler-won'), room('aq07-footage')] }))),
+      ch('Wait for its trainer.', out('You ask the professor if you can stay. She looks at you oddly, then gives you a chair by the gate. You sit with the Kingler. You both face the road. A whole stage of road goes by on the other side of that gate, and you wait, and so does it. It does not mind the company.', flagAt('aq-kingler-reunion'), flag('aq07-he-is-coming'))),
+      ch('Take it for a walk.', out('You open the pen and the Kingler follows you out, sideways, slow. You go round the pond, along the fence, up the long field. At the far edge of the ranch, where the path goes on to the road, it stops. It will not take one more step. It looks back at the gate. If he comes, it has to be here. You walk it home.', flag('aq-kingler-walked'), fr(3))),
+    ]),
+  ev('aq07-respect', 'Someone Saw', AQ, { room: true, cast: ['trainer.pr/scientist_f'], pokemon: 'kingler', tint: '#1c2a3a', effect: 'glint' },
+    'It is over. The Kingler sits back on the grass, scuffed and breathing hard, and it looks satisfied in a way you have not seen it look. It fought well and fast, and somebody watched. The professor is smiling. "It\'s been waiting years to do that for someone."',
+    [
+      ch('Bow to it.', out('You bow. The Kingler clacks its claw, slowly, three times. Then it goes to the edge of the pond, digs in the mud with its great claw, and comes back with something shining: a pearl as big as your thumb, the kind Kingler keep. It sets it down in front of you, and goes back to watching the gate.', item('big-pearl'), flag('aq07-respected'), moment('A Kingler that waits for its trainer fought you, to show somebody what it could do.', 55))),
+    ]),
+  ev('aq07-footage', 'The Footage', AQ, { room: true, cast: ['trainer.pr/scientist_f'], pokemon: 'kingler', tint: '#1c2a3a', effect: 'none' },
+    'The Kingler won. It won easily. It stands over your Pokémon with its claw up, and then looks round at the gate, as if expecting applause. The professor lowers the camera she was holding. "I filmed that," she says. "I\'m sending it to him. He needs to see what it\'s become."',
+    [
+      ch('Let her send it.', out('She sends it that night. The answer comes before breakfast: one line, all capitals, mostly exclamation marks. "He\'s coming," the professor says. "Early. He\'s never come early." The Kingler does not know yet. It is still facing the gate. But it is facing it a little more hopefully.', flagAt('aq07-footage'), flag('aq07-he-is-coming'))),
+    ]),
+  ev('aq07-he-comes', 'He Comes Through the Gate', AQ, { callback: true, requires: [flagIs('aq07-he-is-coming'), age('aq07-he-is-coming', 1)], cast: ['trainer.pr/backpacker_m'], pokemon: 'kingler', tint: '#2a3a4a', effect: 'sparkle',
+    remembers: [
+      { id: 'waited', when: [flagIs('aq-kingler-reunion')], notice: 'When he finally stands up, he does not let go of the claw. "I\'m taking you with me," he says. "I should have, years ago." Then he turns to you and holds out his hands. In them is a small Krabby. "From its clutch. It would want you to have one."',
+        addChoices: [ch('Take the Krabby.', out('The Krabby is cold and wet and blows bubbles at you. The Kingler watches it go into your arms, and clacks its claw once, gently: approval. Then it turns and follows its trainer out of the gate, sideways and slow, and it does not look back at the pond even once. It does not need to now.', gain('krabby', { bond: 15 }), flag('aq07-krabby'), flag('reunion-guest-kingler'), moment('A Kingler that waited years by a gate went home with its trainer, and you saw it.', 70)))] },
+      { id: 'footage', when: [flagIs('aq07-footage')], notice: 'He saw the footage. He watched it, the professor says, eleven times. He came a stage early, the first time he has ever come early.' },
+    ] },
+    'The gate creaks. The Kingler clacks once and turns, ready for it to be the wind. It is not the wind. A young man stands in the gateway with a backpack, out of breath, staring. The last time he saw it, it was a Krabby he could hold in one hand. He walks across the field. He sits down on the grass in front of it, and he does not say anything at all. Neither does the Kingler. It puts its great claw down beside him, very gently, like a hand.',
+    [
+      ch('Leave them be.', out('You go and stand by the gate, where you can not hear them, and look at the road for a while. When you look back, they are both still sitting there, the man and the Kingler, facing the same way. The professor wipes her eyes with her sleeve. "He won\'t be coming once a year any more," she says. "It\'ll be travelling with him."', fr(3), flag('reunion-guest-kingler'), moment('A Kingler that waited years by a gate saw its trainer come through it.', 65))),
+    ]),
+];
+
+export const CHECKED: Record<string, string> = { AQ1: '2026-11-15', AQ2: '2026-11-15', AQ3: '2026-11-15', AQ4: '2026-11-15', AQ5: '2026-11-15', AQ6: '2026-11-15', AQ7: '2026-11-15' };
+
+export const REMOVE: string[] = [];

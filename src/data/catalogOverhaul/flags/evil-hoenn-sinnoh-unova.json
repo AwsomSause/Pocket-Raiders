@@ -1,0 +1,9 @@
+{
+  "category": "evil-hoenn-sinnoh-unova",
+  "note": "Run flags that code keeps for row 9 (Team Sky's management in core/evil/teamSky.ts), read by the Sky's Choice.",
+  "flags": [
+    { "key": "sky-loyal-line", "rule": "core/evil/teamSky.ts syncFlags: grunts at Loyalty 8 or more, not captured (HOENN_TEAMS 6.6, who stands in Ending S-Three)" },
+    { "key": "sky-roster", "rule": "core/evil/teamSky.ts syncFlags: Team Sky's roster size" },
+    { "key": "sky-renown-total", "rule": "core/evil/teamSky.ts syncFlags: Renown earned by missions plus the story's sky-renown" }
+  ]
+}

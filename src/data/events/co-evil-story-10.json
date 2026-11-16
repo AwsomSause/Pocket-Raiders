@@ -1,0 +1,3003 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "neo-final-choice",
+   "name": "Noon",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/archer",
+     "boss.teamrocket"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "glint"
+   },
+   "intro": "Studio one. A glass booth. A clock with a red second hand: eleven fifty-eight. A desk; a microphone on a spring arm; a script, one page, typed, corrected, corrected back. The last line: \"Giovanni. Team Rocket calls you home.\" Through the glass: Archer, with his hands behind his back. Ariana at the door. Petrel, with no wig on, which nobody's seen before. Proton, looking at the floor. Behind them, the whole of the Return that would fit in a corridor: Mika at the front, with a folded paper; Mr. Sallow, with his cap in his hand; Tobi. On the roof, over all their heads: a man in an iron mask, and a black ball, and air that's the wrong season. The second hand. Archer, through the talkback, very gently: \"When the light's red. Just as it's written. Or— as you find you can.\" The light's red. Every radio in Johto is on. The Final Choice is what you say into it.",
+   "choices": [
+    {
+     "label": "\"Giovanni. Team Rocket calls you home.\"",
+     "success": {
+      "text": "You read it as written, on every band in Johto. The Tower hums. In the corridor a hundred and fifty people are holding their breath, and one of them is fourteen.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-final-plan",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-plan-hold"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"This is the Radio Tower. Here's where the Director is. Here's where the mast is. Here's the hideout.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "ariana-door",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You, on every band: \"The real Director's in the basement store room. The mast's on a barge at the Lake of Rage. The hideout's under the souvenir shop in Mahogany; push the Gyarados's eye.\" Through the glass, nobody moves. For a whole second, nobody at all. Then Ariana shuts the studio door, from the outside, and stands in front of it. Ariana: \"Nobody goes in till they've finished. I said I'd back whoever held the microphone.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "neo-final-turn",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "neo-ariana-held",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "neo-turn-air-1"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You, on every band: \"The real Director's in the basement store room. The mast's on a barge at the Lake of Rage. The hideout's under the souvenir shop in Mahogany; push the Gyarados's eye.\" Through the glass, nobody moves. For a whole second, nobody at all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-final-turn",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-turn-air-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Lance. The roof. Now.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-lance-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "For four seconds, nothing. Then every window on the south side of the studio goes dark at once, because something very large has landed outside it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-final-lance",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-lance-windows"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"He isn't coming. I'm here.\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "rank": 5,
+       "has": "confided"
+      }
+     ],
+     "success": {
+      "text": "Through the glass: a hundred and fifty faces. Mika's dropped her paper. Archer has his eyes shut, and his shoulders have come down, for the first time in three years. Archer, on the talkback, off the air, barely a voice: \"...Thank you. I couldn't have said it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-final-own",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-own-duel"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "mika",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "neo-mika-archer",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Mika, at the front of the corridor, isn't looking at the clock. She's looking at Archer."
+    },
+    {
+     "id": "rule4",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "neo-rule4",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Somebody has chalked the fourth rule on the corridor wall, under the three: \"Give it back when they can pay.\""
+    }
+   ]
+  },
+  {
+   "id": "neo-plan-hold",
+   "name": "Phase 1: Hold the Line",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "Goldenrod's police and the Tower's guards come up the stairs, and Gym trainers who \"heard the broadcast and came to end it.\" You post the squad. Mika is at your elbow, waiting to be told where.",
+   "choices": [
+    {
+     "label": "Mr. Sallow and Old Rocket in the lobby; Tobi in the studio; you on the stairs.",
+     "success": {
+      "text": "In the lobby, Old Rocket don't fight. They stand in a row with their caps off and sing the closing-time song, and the police stop: nobody's ever been sung at. Tobi has wired the Broadcast Keys so each needs one turn, not two. Mika is behind the glass, safe, and she sees everything. The stairs are yours.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 1,
+       "name": "Goldenrod Police",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "neo-plan-keys"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "The same, and send Mika to Mahogany \"to make the chair room ready.\"",
+     "success": {
+      "text": "She goes, pleased to be trusted, and she's out of the Tower before the first officer reaches the lobby. Old Rocket sing; the police stop; Tobi's at the keys. The stairs are yours.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-mika-sent",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "chain": 1,
+       "name": "Goldenrod Police",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "neo-plan-keys"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Keep the squad with you on the stairs.",
+     "success": {
+      "text": "The lobby and the studio come up the stairs to meet you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "Goldenrod Police",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "neo-plan-keys"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-plan-keys",
+   "name": "Phase 2: The Broadcast Keys",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/archer"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "Three keys. The Tower hums louder with each one seated.",
+   "choices": [
+    {
+     "label": "Seat them.",
+     "success": {
+      "text": "Archer, on the PA: \"One. He could hear me through a tin can.\" The hum climbs. Archer: \"Two. Boss, if the line's bad, I'll say it again.\" It climbs. Archer: \"Three. Then I'll stop asking.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-plan-rival"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-plan-rival",
+   "name": "Phase 3: The Rival",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "Your rival bursts out of the stairwell. \"You read it. I heard you read it. I was in a tea shop. Everyone stopped stirring.\"",
+   "choices": [
+    {
+     "label": "\"It's one day of hope for two hundred people.\"",
+     "success": {
+      "text": "\"Then it can be one day without you in it.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Your rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "neo-plan-defender"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "\"Go and get Mary out. Third floor.\"",
+     "success": {
+      "text": "No battle. Your rival looks at you for one long second, and goes. It's this ending's one mercy.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "neo-rival-mary",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-plan-defender"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Listen for an answer with me.\"",
+     "success": {
+      "text": "The two of you stand by the big speaker. The carrier hiss. A minute. \"...There's nothing.\" \"Not yet.\" Your rival doesn't fight. They stay.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        }
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-plan-defender"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-plan-defender",
+   "name": "Phase 4: The Defender",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.whitney"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "Goldenrod's Gym Leader leads the last of them up the stair. Whitney: \"Pull the plug, Rocket. People are listening.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "At half her ace's health the Tower goes to Dead Air, and she doesn't flinch.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Whitney",
+       "bossId": "whitney",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "neo-plan-roof"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pills",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "neo-director-pills",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Whitney: \"The old man in the basement says one of you's all right. Is it you? It had better be you.\""
+    }
+   ]
+  },
+  {
+   "id": "neo-plan-roof",
+   "name": "Phase 5: The Roof",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/archer"
+    ],
+    "pokemon": "celebi",
+    "tint": "#141824",
+    "effect": "glint"
+   },
+   "intro": "Noon's been and gone. Nothing's come back on any band. The dish; the man in the iron mask on the rail; the black ball. Archer, on the stair, hoarse: \"Nothing. Not even static.\" He looks up. Archer: \"It doesn't matter. I made other arrangements. Standby: if I go through, hold the roof for ten minutes. If I don't come back—\" He doesn't finish. The man in the iron mask: \"And here's my favourite part of every job. The part where I explain that it's mine now.\" Celebi is in the Ball, in three Thorn Rings. You aren't freeing it. You're deciding whether Archer gets his door.",
+   "choices": [
+    {
+     "label": "Open it for him.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-letter-held",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You fight the man in the iron mask for the Ball.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The man in the iron mask",
+       "size": 2,
+       "types": [
+        "dark",
+        "rock"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "neo-plan-door"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Open it for him. (He has his letter.)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-letter-held",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You fight the man in the iron mask for the Ball, and win it, and hold it out. Archer looks at the door for a long moment. Archer: \"I've had my answer. Four lines, three years late. I don't need to stand in a doorway to hear it again.\" He doesn't go through.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-archer-answered",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "celebi-free",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "The man in the iron mask",
+       "size": 2,
+       "types": [
+        "dark",
+        "rock"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "neo-plan-verdict"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Break the Ball.",
+     "success": {
+      "text": "The three rings, one by one, and the Ball splits. Celebi is free. Archer watches his door close. He sits down on the cable drum. Archer: \"...Thank you. I think. I'd have stood in that doorway for ever. I can see that now. It's not a kindness I'd have done myself.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-archer-closed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "celebi-free",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-plan-verdict"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Archer. The boy took the coat.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-heir-coat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Archer turns. The Heir is on the stair, in white trim, furious about it. The Heir: \"It's a nice coat. That's the worst part. Don't make it mean anything.\" Archer puts the Dark Ball down on the rail himself. Archer: \"I don't need the door. I've somebody to make the room ready for.\" The man in the iron mask takes his fee and goes, laughing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-archer-coat",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-plan-verdict"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-plan-door",
+   "name": "Phase 5: The Door",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/archer"
+    ],
+    "tint": "#141824",
+    "effect": "rain"
+   },
+   "intro": "The Ball is Archer's. The roof is three years ago for as long as it takes him to step, and he's gone. You hold the roof alone, ten turns, against the police. At the tenth he's back, standing exactly where he was. His coat's wet. Archer: \"I stood in the door. The lobby. That night. There was a child on the steps.\"",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "Archer: \"I couldn't. They were so certain. They'd a Pokémon that kept looking up at them to see if they were all right. I thought: if I stop this one, I've to be the kind of man who stops that. And he wasn't worth it. I stood in the door of the building, and I worked out, three years late, that he wasn't worth it.\" Archer: \"So I stepped aside. I've just watched you go up the stairs. It's the best thing I've ever done, and nobody was there.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-archer-door",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-plan-verdict"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Was it me? On the steps?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "team-rocket-beaten",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He looks at you properly. Archer: \"It was you. Smaller.\" Then the rest of it, the certain child and the Pokémon looking up, and the man in the door who stepped aside. Archer: \"It's the best thing I've ever done, and nobody was there.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-archer-door",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-plan-verdict"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-plan-verdict",
+   "name": "The Verdict",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/archer"
+    ],
+    "tint": "#141824",
+    "effect": "none"
+   },
+   "intro": "The roof. The dish is quiet.",
+   "choices": [
+    {
+     "label": "Take the coat.",
+     "success": {
+      "text": "Archer holds out a white-trimmed coat. Archer: \"You held. I knew you would. The Boss will hear of this.\" A pause; it's the old line, and he hears himself. Archer: \"...I've heard of it. That'll have to do. Executive. Welcome to what's left of the family.\" Johto is listening. The Return holds the airwaves, and what they carry is up to Archer, a man who's just found out he was wrong. It plays music. It reads the weather, correctly. Once a day, at noon, a voice says: \"Team Rocket. Standing by.\" Nobody knows what for any more; it's become a time signal. You wear a white-trimmed coat. Mika believes he heard. Tobi tends the mast, badly, for ever. Mr. Sallow goes home; he's taken the hint. Sabela dusts the chair. The Director reads what he's given. Mary is on air, under guard. The Yateses sell candy bars to Rocket. Archer is wrong, and knows it, and reads the weather. Ariana is passed over again. Petrel is the Director, for good; it's the saddest one. Proton does the tails. The Heir hears his father was called, and wasn't there. The Marauder is paid in full. Kurt never speaks to you again. Somewhere, a phone rings once, and nobody speaks.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "johto-listening",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Read the weather. Correctly.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-mary-spoke",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Archer: \"...Correctly. Yes. We can do that much.\" Archer: \"You held. I knew you would. The Boss will hear of this.\" A pause; it's the old line, and he hears himself. Archer: \"...I've heard of it. That'll have to do. Executive. Welcome to what's left of the family.\" Johto is listening. The Return holds the airwaves, and what they carry is up to Archer, a man who's just found out he was wrong. It plays music. It reads the weather, correctly. Once a day, at noon, a voice says: \"Team Rocket. Standing by.\" Nobody knows what for any more; it's become a time signal. You wear a white-trimmed coat. Mika believes he heard. Tobi tends the mast, badly, for ever. Mr. Sallow goes home; he's taken the hint. Sabela dusts the chair. The Director reads what he's given. Mary is on air, under guard. The Yateses sell candy bars to Rocket. Archer is wrong, and knows it, and reads the weather. Ariana is passed over again. Petrel is the Director, for good; it's the saddest one. Proton does the tails. The Heir hears his father was called, and wasn't there. The Marauder is paid in full. Kurt never speaks to you again. Somewhere, a phone rings once, and nobody speaks.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "johto-listening",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-turn-air-1",
+   "name": "On Air",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/archer",
+     "boss.teamrocket"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "You keep talking. Each line sends somebody.",
+   "choices": [
+    {
+     "label": "\"Mary's on the third floor. She's all right.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "neo-mary-spoke",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Her listeners were already in the lobby: forty people with flasks, since she spoke in the rehearsal.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "neo-turn-mary",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "neo-turn-air-2"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Her listeners hear it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-turn-mary",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-turn-air-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The Director needs his pills. Small, white, twice a day.\"",
+     "success": {
+      "text": "A chemist from four streets off is running before you've finished.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-turn-chemist",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-turn-air-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"There's a man on the roof with a black ball. It's Celebi.\"",
+     "success": {
+      "text": "In Azalea, Kurt is on his feet before the sentence ends. Somewhere over Blackthorn, so is a man in a cape.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-kurt-heard",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-turn-air-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-turn-air-2",
+   "name": "On Air",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "The light's still red.",
+   "choices": [
+    {
+     "label": "\"Old Rocket: home you go.\"",
+     "success": {
+      "text": "Mr. Sallow, in the corridor, puts his cap on. Twelve people file out. They've been told, in the right words, at last.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-turn-home",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-turn-studio"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Mika. It was Archer with the tray.\"",
+     "success": {
+      "text": "She unfolds her paper. She looks through the glass at the wrong man, and then at the right one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-turn-mika",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-turn-studio"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"That's all. Thank you for listening.\"",
+     "success": {
+      "text": "You switch the light off yourself.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-turn-studio"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-turn-studio",
+   "name": "Studio One",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/archer"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "Archer is at the glass. He doesn't come in. Archer: \"You've told them where the chair is.\" That's what he heard, out of all of it. He goes up, not down. To the roof.",
+   "choices": [
+    {
+     "label": "Go down.",
+     "success": {
+      "text": "The corridor.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-turn-corridor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-turn-corridor",
+   "name": "The Corridor",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "New blood, who don't know what to do. Tobi stands on a chair. Tobi: \"Who here's actually seen him? Hands up.\" None. Tobi: \"Who's seen Archer bring the tea round?\" All. Tobi: \"Then who are you waiting for?\" Half of them sit down on the floor.",
+   "choices": [
+    {
+     "label": "Step past them.",
+     "success": {
+      "text": "No battle.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-turn-third"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-turn-third",
+   "name": "The Third Floor",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "Mary's guard, at studio three.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "He's been told to hold the door, and he holds it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Mary's guard",
+       "size": 3,
+       "levelBonus": 1,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "neo-turn-library"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Knock.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-mary-spoke",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Mary has opened the door herself, with her listeners on the other side of it. The guard sits down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-turn-library"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "listener",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "neo-listener-promise",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You tell Mary: \"There's a girl of seven who's written you nine letters.\" Mary: \"...That's who they're from. They're pinned over my desk. They were the only post that wasn't orders.\""
+    }
+   ]
+  },
+  {
+   "id": "neo-turn-library",
+   "name": "The Record Library",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/petrel"
+    ],
+    "pokemon": "ditto",
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "Petrel, with no wig. Petrel: \"I could stop you. I could be anybody. I could be you; I've been practising.\" A pause. Petrel: \"I'd rather find out who's left if I don't.\" He holds out the cassette, and the Understudy, his Ditto, which turns into nothing in particular and looks relieved.",
+   "choices": [
+    {
+     "label": "Take the cassette, and the Ditto.",
+     "success": {
+      "text": "The Understudy settles in your arms as a small grey lump, and stays one.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "ditto"
+        ],
+        "types": []
+       },
+       {
+        "kind": "flag",
+        "key": "neo-understudy",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-turn-lobby"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the cassette. \"Keep him.\"",
+     "success": {
+      "text": "Petrel: \"...He's never been anyone's but mine. Fair enough.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-turn-lobby"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-turn-lobby",
+   "name": "The Lobby",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/proton"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "Proton. Proton: \"I knew. The pills. The mast. Mary. I've known for a week. I didn't say.\" Proton: \"I was the one who did the tails. So they wouldn't have to. I've been waiting three years for somebody to do the thing I couldn't. Stop it. I'd done too much to be the one who stopped it.\" Proton: \"A battle. I need to have lost. Don't go easy; I'll know.\"",
+   "choices": [
+    {
+     "label": "Battle. Properly.",
+     "success": {
+      "text": "He fights properly. Proton, beaten: \"...There. That's the first thing in three years that's been somebody else's fault. Thank you.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Proton",
+       "bossId": "proton",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "neo-turn-basement"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "mercy",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "proton-mercy",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He's got a Slowpoke's hair on his sleeve. It's what makes the battle a relief and not a punishment."
+    },
+    {
+     "id": "vendor",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "neo-tails-fed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Proton: \"The vendor's feeding them. I've sent him money. He doesn't know it's from me.\""
+    }
+   ]
+  },
+  {
+   "id": "neo-turn-basement",
+   "name": "The Basement",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "The Director, doing the crossword. The Director: \"Seven across. \"A change of heart, in the theatre.\" Eleven letters.\"",
+   "choices": [
+    {
+     "label": "\"Understudy.\"",
+     "success": {
+      "text": "The Director: \"Good. You may let me out.\" You do. Then up, all the way, to the roof.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-director-free",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-turn-roof"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pills",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "neo-director-pills",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He's taken his pills. He looks ten years younger than the man you met in the rehearsal."
+    }
+   ]
+  },
+  {
+   "id": "neo-turn-roof",
+   "name": "The Roof",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/archer"
+    ],
+    "pokemon": "celebi",
+    "tint": "#141824",
+    "effect": "glint"
+   },
+   "intro": "The man in the iron mask; the Dark Ball; Celebi in three Thorn Rings; twelve turns. Archer is by the dish.",
+   "choices": [
+    {
+     "label": "Break the rings.",
+     "success": {
+      "text": "Ring by ring.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The man in the iron mask",
+       "size": 2,
+       "types": [
+        "dark",
+        "rock"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "neo-turn-after"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "kurt",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "neo-kurt-heard",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Kurt is there by the second ring, out of breath, with the name. He says it."
+    },
+    {
+     "id": "coat",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "neo-heir-coat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Archer has seen the Heir on the stair. For two turns he steps between the man in the iron mask and you."
+    },
+    {
+     "id": "rule4",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "neo-rule4",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Old Rocket are on the roof stair. They don't fight. They block the man in the iron mask's flying machine with a tea trolley."
+    }
+   ]
+  },
+  {
+   "id": "neo-turn-after",
+   "name": "When the Ball Splits",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/archer"
+    ],
+    "pokemon": "celebi",
+    "tint": "#141824",
+    "effect": "none"
+   },
+   "intro": "Celebi. It looks at Archer. It looks at you. Then the roof is three years ago, for exactly as long as it takes to blink. Archer: \"It showed me. The door. I could have gone.\" He's looking at his hands. Archer: \"I'd have stood there for the rest of my life. Wouldn't I.\" Later the chair turns up in a police inventory, tagged. You may ask for it, and say where it goes.",
+   "choices": [
+    {
+     "label": "To Archer.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "neo-heir-coat",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "It goes to Archer. He's seen once more, at a bus stop, with somebody, carrying their bag. The Return is finished. The Tower is back on the air: The Morning After, with the correct weather. Mika goes home with Tobi's family; he has a sister her age. Mika goes home with Tobi's family, goes to school, and tells them she \"worked in broadcasting.\" Tobi keeps Slowpoke at the Well. Mr. Sallow went home when he was told. Sabela is asked what should be done with the chair. The Director is free, with his pills: \"Understudy.\" Mary does The Morning After, with the correct weather. The Yateses sell candy bars. Ariana stood at the door till you'd finished. Petrel goes without the wig, and finds out. Proton: \"The first thing in three years that's been somebody else's fault.\" The Marauder loses the Ball and laughs anyway. Kurt says the name. At Tohjo Falls, a man switches off a radio.",
+       "effects": [
+        {
+         "kind": "evil",
+         "beat": true
+        },
+        {
+         "kind": "evil",
+         "end": "defeated"
+        },
+        {
+         "kind": "flag",
+         "key": "neo-ending-turn",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rocket-return-cut",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "celebi-free",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "neo-chair-archer",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It goes to Archer. He's seen once more, at a bus stop, without the coat. The Return is finished. The Tower is back on the air: The Morning After, with the correct weather. Mika goes home with Tobi's family; he has a sister her age. Mika goes home with Tobi's family, goes to school, and tells them she \"worked in broadcasting.\" Tobi keeps Slowpoke at the Well. Mr. Sallow went home when he was told. Sabela is asked what should be done with the chair. The Director is free, with his pills: \"Understudy.\" Mary does The Morning After, with the correct weather. The Yateses sell candy bars. Ariana stood at the door till you'd finished. Petrel goes without the wig, and finds out. Proton: \"The first thing in three years that's been somebody else's fault.\" The Marauder loses the Ball and laughs anyway. Kurt says the name. At Tohjo Falls, a man switches off a radio.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-return-cut",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "celebi-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-chair-archer",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "To the Heir.",
+     "success": {
+      "text": "It goes to the Heir, who says he doesn't want it, and keeps it. The Return is finished. The Tower is back on the air: The Morning After, with the correct weather. Mika goes home with Tobi's family; he has a sister her age. Mika goes home with Tobi's family, goes to school, and tells them she \"worked in broadcasting.\" Tobi keeps Slowpoke at the Well. Mr. Sallow went home when he was told. Sabela is asked what should be done with the chair. The Director is free, with his pills: \"Understudy.\" Mary does The Morning After, with the correct weather. The Yateses sell candy bars. Ariana stood at the door till you'd finished. Petrel goes without the wig, and finds out. Proton: \"The first thing in three years that's been somebody else's fault.\" The Marauder loses the Ball and laughs anyway. Kurt says the name. At Tohjo Falls, a man switches off a radio.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-return-cut",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "celebi-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-chair-heir",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "To Sabela, who's dusted it for three years.",
+     "success": {
+      "text": "Sabela takes it home on a handcart, with the duster on the seat. The Return is finished. The Tower is back on the air: The Morning After, with the correct weather. Mika goes home with Tobi's family; he has a sister her age. Mika goes home with Tobi's family, goes to school, and tells them she \"worked in broadcasting.\" Tobi keeps Slowpoke at the Well. Mr. Sallow went home when he was told. Sabela is asked what should be done with the chair. The Director is free, with his pills: \"Understudy.\" Mary does The Morning After, with the correct weather. The Yateses sell candy bars. Ariana stood at the door till you'd finished. Petrel goes without the wig, and finds out. Proton: \"The first thing in three years that's been somebody else's fault.\" The Marauder loses the Ball and laughs anyway. Kurt says the name. At Tohjo Falls, a man switches off a radio.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-return-cut",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "celebi-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-chair-sabela",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "To the Yateses, who'd like something to sit on behind the counter.",
+     "success": {
+      "text": "It goes behind the counter of the souvenir shop. Mr. Yates does the crossword in it. The Return is finished. The Tower is back on the air: The Morning After, with the correct weather. Mika goes home with Tobi's family; he has a sister her age. Mika goes home with Tobi's family, goes to school, and tells them she \"worked in broadcasting.\" Tobi keeps Slowpoke at the Well. Mr. Sallow went home when he was told. Sabela is asked what should be done with the chair. The Director is free, with his pills: \"Understudy.\" Mary does The Morning After, with the correct weather. The Yateses sell candy bars. Ariana stood at the door till you'd finished. Petrel goes without the wig, and finds out. Proton: \"The first thing in three years that's been somebody else's fault.\" The Marauder loses the Ball and laughs anyway. Kurt says the name. At Tohjo Falls, a man switches off a radio.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-return-cut",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "celebi-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-chair-yates",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-lance-windows",
+   "name": "Phase 1: The Windows",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lance"
+    ],
+    "pokemon": "dragonite",
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "A Dragonite at every floor. The Tower's guards put their hands up without being asked. It's over before you're out of the booth.",
+   "choices": [
+    {
+     "label": "Come out of the booth.",
+     "success": {
+      "text": "Lance is in the corridor.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-lance-order"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-lance-order",
+   "name": "Phase 2: The Order",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lance",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "Lance, to a hundred and fifty Grunts: \"Hyper Beam.\" It's aimed at the wall. The wall's gone. Lance: \"That was a courtesy. Leave by it.\"",
+   "choices": [
+    {
+     "label": "\"They're kids. Half of them are kids.\"",
+     "success": {
+      "text": "He stops. He looks at the corridor properly: at the uniforms that don't fit, at a girl with a folded paper. Lance: \"...How old is that one.\" \"Fourteen.\" Lance: \"And I have just fired a Hyper Beam through a wall beside her.\" He's quiet. Lance: \"The Dragon's Den takes apprentices. Any who want a roof and a discipline. Any. I'll not have it said I only know how to remove.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-den-apprentices",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-lance-roof"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "They go out by the wall, into a city that's just heard where they live.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-lance-roof"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tell them where to go, not just to go.\"",
+     "success": {
+      "text": "Lance: \"...Home. Wherever that is. The Pokémon Center will take any who've nowhere.\" It's not the Den. It's something.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-lance-roof"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-lance-roof",
+   "name": "Phase 3: The Roof",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lance"
+    ],
+    "pokemon": "celebi",
+    "tint": "#141824",
+    "effect": "glint"
+   },
+   "intro": "The man in the iron mask; the Ball. Lance: \"A Dark Ball. I've read of them. One doesn't negotiate.\" The man in the iron mask: \"A cape! He's sent a man in a cape!\"",
+   "choices": [
+    {
+     "label": "Together.",
+     "success": {
+      "text": "Lance's Dragonite beside yours.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "The man in the iron mask",
+       "ally": "dragonite",
+       "size": 2,
+       "types": [
+        "dark",
+        "rock"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "neo-lance-ball"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-lance-ball",
+   "name": "The Ball",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lance",
+     "trainer.pr/archer"
+    ],
+    "pokemon": "celebi",
+    "tint": "#141824",
+    "effect": "none"
+   },
+   "intro": "The Dark Ball is on the ground. If it goes to the Den it is kept, unopened, on a shelf, in a clan that means well, and Ilex Forest loses a day at every rest for the rest of the region.",
+   "choices": [
+    {
+     "label": "Break it.",
+     "success": {
+      "text": "Celebi is free. Johto is safe. The Dragon clan \"keep order,\" out of Blackthorn. There are Dragonite over the towns in the evening. People are grateful. People look up rather often. Nobody voted for it; nobody quite minds. Lance would be the first to say it isn't how things should be done, and he's still doing it at the end of the run. You have the Dragon's favour: once, in a later region, a Dragonite will come when it's needed. Mika is at the Den, top of her year; she hates it; she's good at it. Tobi is vouched for by the Director, who vouches. Mr. Sallow goes home. Sabela is sent home, and takes the duster. Mary is on air. The Yateses sell candy bars. Archer has a house in Blackthorn with a garden and no telephone, and Ariana is running it within a month. Petrel is removed as himself, and nobody recognises him. Proton keeps a Slowpoke in the garden and doesn't touch its tail. The Heir watches from the Magnet Train station. The Marauder was removed by a man in a cape, and is furious. Kurt says the name. Nobody looks for Giovanni.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ending-lance",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "johto-order",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dragon-favour",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "celebi-free",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Lance. Let Archer see what's in it first.\"",
+     "success": {
+      "text": "Lance allows it; he's courteous. Three years ago, for a blink. Archer: \"...Thank you. I didn't expect that from you.\" Lance: \"Nor did I.\" Then it breaks, and Celebi is free. Johto is safe. The Dragon clan \"keep order,\" out of Blackthorn. There are Dragonite over the towns in the evening. People are grateful. People look up rather often. Nobody voted for it; nobody quite minds. Lance would be the first to say it isn't how things should be done, and he's still doing it at the end of the run. You have the Dragon's favour: once, in a later region, a Dragonite will come when it's needed. Mika is at the Den, top of her year; she hates it; she's good at it. Tobi is vouched for by the Director, who vouches. Mr. Sallow goes home. Sabela is sent home, and takes the duster. Mary is on air. The Yateses sell candy bars. Archer has a house in Blackthorn with a garden and no telephone, and Ariana is running it within a month. Petrel is removed as himself, and nobody recognises him. Proton keeps a Slowpoke in the garden and doesn't touch its tail. The Heir watches from the Magnet Train station. The Marauder was removed by a man in a cape, and is furious. Kurt says the name. Nobody looks for Giovanni.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ending-lance",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "johto-order",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dragon-favour",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "celebi-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-archer-saw",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it to the Den, for safekeeping.",
+     "success": {
+      "text": "It's kept, on a shelf, in Blackthorn. Johto is safe. The Dragon clan \"keep order,\" out of Blackthorn. There are Dragonite over the towns in the evening. People are grateful. People look up rather often. Nobody voted for it; nobody quite minds. Lance would be the first to say it isn't how things should be done, and he's still doing it at the end of the run. You have the Dragon's favour: once, in a later region, a Dragonite will come when it's needed. Mika is at the Den, top of her year; she hates it; she's good at it. Tobi is vouched for by the Director, who vouches. Mr. Sallow goes home. Sabela is sent home, and takes the duster. Mary is on air. The Yateses sell candy bars. Archer has a house in Blackthorn with a garden and no telephone, and Ariana is running it within a month. Petrel is removed as himself, and nobody recognises him. Proton keeps a Slowpoke in the garden and doesn't touch its tail. The Heir watches from the Magnet Train station. The Marauder was removed by a man in a cape, and is furious. Kurt says the name. Nobody looks for Giovanni.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ending-lance",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "johto-order",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dragon-favour",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "celebi-shelved",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-own-duel",
+   "name": "The Duel",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/archer"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "It's customary. Archer, in the studio, with the microphone on. Archer: \"I'll not hand it over. You'll take it, so they can hear it taken. They've had three years of being told. They should hear something.\" Archer, at Open Mic: \"This is what it sounds like when we don't quit.\"",
+   "choices": [
+    {
+     "label": "Battle, on air.",
+     "success": {
+      "text": "As his Houndoom falls: Archer: \"And this is what it sounds like when we do. Properly. To someone.\" Archer: \"Last call. I've always hated the phrase.\" He takes off the coat. He folds it. He holds it out. Archer: \"He gave me this. I'm giving it to you. That's how a thing's kept.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-own-coat",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "neo-own-lost"
+        }
+       ],
+       "name": "Archer",
+       "bossId": "archer",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "neo-own-chair"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-own-chair",
+   "name": "The Chair",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "intro": "Mahogany. The chair room. Sabela, with the key on its ribbon, and the duster. Sabela: \"Three years, every morning. It's as he left it.\" The chair. The mark on the arm.",
+   "choices": [
+    {
+     "label": "Sit.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "neo-mark-touched",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "It's a chair. That's the discovery. Sabela lets out a breath she's held since a Tuesday in a car park. Sabela: \"You never did have any respect.\" She's smiling.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "neo-own-sat",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "neo-own-hour"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It's a chair. That's the discovery. Sabela lets out a breath she's held since a Tuesday in a car park.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-own-sat",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-own-hour"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it. Bring another.",
+     "success": {
+      "text": "The Boss's chair stays, dusted, empty. Yours is beside it: a kitchen chair, from the Yateses' shop. The Return has two chairs, and uses the plain one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-own-two-chairs",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-own-hour"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Sabela. You sit.\"",
+     "success": {
+      "text": "She won't. Then she does. Her feet don't reach. Sabela: \"...It's comfortable. I'd have thought it'd be— I don't know what I thought.\" She's the base's first officer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-own-sabela",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-own-hour"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it to the boy.",
+     "success": {
+      "text": "The Heir, at the door: \"I don't want his chair.\" \"It's not his. It was on a handcart in the rain for four days. It's Archer's.\" He sits on the arm. The one with the mark.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-own-heir",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-own-hour"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-own-hour",
+   "name": "The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ariana",
+     "trainer.pr/petrel"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "Four at the door. Ariana: \"I've run this firm in everything but name for three years. I'm not asking for the name. I'm asking to be asked.\" Petrel: \"Who d'you want me to be?\"",
+   "choices": [
+    {
+     "label": "\"Ariana: what would you do first?\" \"Petrel: nobody. Find out who that is.\"",
+     "success": {
+      "text": "Ariana: \"Stop selling tails. Today. It's bad business and it's worse than that.\" Petrel is frightened. He's delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-own-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-own-hour-2"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gate",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "petrel-gate",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"Who d'you want me to be?\" has a new answer now. Petrel: \"The one from the gate.\""
+    },
+    {
+     "id": "list",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ariana-list",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Ariana has the list from the shoebox in her hand. Item one: find honest income."
+    }
+   ]
+  },
+  {
+   "id": "neo-own-hour-2",
+   "name": "The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/proton",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "Proton: \"I'll resign.\" Behind him, Mika: Mika: \"It's \"Boss\" now. Isn't it. I've a speech.\"",
+   "choices": [
+    {
+     "label": "\"No, Proton. You'll be the one who says 'stop.' You know what it looks like. That's the job now.\"",
+     "success": {
+      "text": "He nods, once. Mika has only got two words of her speech left. Mika: \"...Thank you.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-own-signal"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-own-signal",
+   "name": "The Four Decisions: The Signal",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "The mast on the barge at the Lake of Rage, still humming.",
+   "choices": [
+    {
+     "label": "Dismantle it.",
+     "success": {
+      "text": "Tobi takes it apart, properly this time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-own-signal-off",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-own-tails"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the Tower, honestly.",
+     "success": {
+      "text": "The Tower stays yours, and says only what's so.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-own-signal-tower",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-own-tails"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the pulse.",
+     "success": {
+      "text": "The Lake of Rage keeps going red. Nobody says anything to you about it, which is worse.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-own-signal-pulse",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-own-tails"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-own-tails",
+   "name": "The Four Decisions: The Tails",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ariana"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "Ariana's ledger, open at the tails.",
+   "choices": [
+    {
+     "label": "Stop.",
+     "success": {
+      "text": "Ariana closes the ledger. \"Today, then.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-own-tails-stop",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-own-celebi"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Shed tails only.\" (They do drop, in season.)",
+     "success": {
+      "text": "The Well keepers grumble, and agree.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-own-tails-shed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-own-celebi"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry on.",
+     "success": {
+      "text": "Proton looks at you, and says \"stop,\" as is now his job. You carry on anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-own-tails-on",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-own-celebi"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-own-celebi",
+   "name": "The Four Decisions: Celebi",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.kurt"
+    ],
+    "pokemon": "celebi",
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "The Dark Ball, on a cushion, in the chair room.",
+   "choices": [
+    {
+     "label": "Break the Ball.",
+     "success": {
+      "text": "Celebi is free.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "celebi-free",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-own-call"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it to Kurt, to open in his own time.",
+     "success": {
+      "text": "Kurt takes it in both hands, and doesn't say thank you, and comes back the next day to say it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "celebi-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-own-kurt",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-own-call"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-own-call",
+   "name": "The Four Decisions: The Call",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "Noon tomorrow, the Tower will say \"Team Rocket. Standing by.\" as it has for three years.",
+   "choices": [
+    {
+     "label": "End it.",
+     "success": {
+      "text": "Noon comes, and the Tower plays music. Johto is yours: a team that holds a radio tower and a souvenir shop. Mika: \"It's 'Boss' now.\" She has two words left. Tobi is first officer, \"the one who breaks it.\" Mr. Sallow stays, if the fourth rule is on the wall. The Director runs your station and reads what's true: that was his price. Mary is your Voice. The Yateses sell candy bars, and are asked their opinion, weekly. Archer would be your Patron, if asked: \"Tell me whose room.\" Ariana was asked, and stopped the tails that day. Petrel is nobody, and finding out who that is. Proton is the one who says \"stop.\" The Heir sits on the arm of the chair. The Marauder goes unpaid: the ring's redeemed instead. Kurt has the Ball, to open in his own time. Giovanni hears there's a new chair, and says nothing; which, from him, is approval.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-own-call-ended",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Change it.",
+     "success": {
+      "text": "You write what it says now. It's read at noon, every day: the team's motto. Johto is yours: a team that holds a radio tower and a souvenir shop. Mika: \"It's 'Boss' now.\" She has two words left. Tobi is first officer, \"the one who breaks it.\" Mr. Sallow stays, if the fourth rule is on the wall. The Director runs your station and reads what's true: that was his price. Mary is your Voice. The Yateses sell candy bars, and are asked their opinion, weekly. Archer would be your Patron, if asked: \"Tell me whose room.\" Ariana was asked, and stopped the tails that day. Petrel is nobody, and finding out who that is. Proton is the one who says \"stop.\" The Heir sits on the arm of the chair. The Marauder goes unpaid: the ring's redeemed instead. Kurt has the Ball, to open in his own time. Giovanni hears there's a new chair, and says nothing; which, from him, is approval.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-own-call-changed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-own-lost",
+   "name": "The Verdict",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/archer"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "Your lead is down. Archer switches the microphone off. Archer: \"Not today. Executive, then.\"",
+   "choices": [
+    {
+     "label": "Take the coat he gives you.",
+     "success": {
+      "text": "He holds out a white-trimmed coat, not his. Archer: \"You held. I knew you would. The Boss will hear of this.\" A pause; it's the old line, and he hears himself. Archer: \"...I've heard of it. That'll have to do. Executive. Welcome to what's left of the family.\" Johto is listening. The Return holds the airwaves, and what they carry is up to Archer, a man who's just found out he was wrong. It plays music. It reads the weather, correctly. Once a day, at noon, a voice says: \"Team Rocket. Standing by.\" Nobody knows what for any more; it's become a time signal. You wear a white-trimmed coat. Mika believes he heard. Tobi tends the mast, badly, for ever. Mr. Sallow goes home; he's taken the hint. Sabela dusts the chair. The Director reads what he's given. Mary is on air, under guard. The Yateses sell candy bars to Rocket. Archer is wrong, and knows it, and reads the weather. Ariana is passed over again. Petrel is the Director, for good; it's the saddest one. Proton does the tails. The Heir hears his father was called, and wasn't there. The Marauder is paid in full. Kurt never speaks to you again. Somewhere, a phone rings once, and nobody speaks.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "johto-listening",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "static-founding",
+   "name": "Team Static",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 3,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "neo-offer-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "neo-lance-met",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "rocket-return-lance-ally",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "rocket-return-director-known",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1e2a2e",
+    "effect": "sparkle"
+   },
+   "intro": "A houseboat on the canal at Goldenrod, with a washing line that's actually an aerial. A man of seventy in a cardigan, and a camp stove. The Director: \"I let myself out. Forty years in that building; I know which door they haven't found. They've a fellow in my office wearing my face. He's got my walk wrong. I shuffle. He strides.\" The Director: \"I've forty years of knowing how to run a station, and a tower I can't go back to. You've a way of turning up where things are happening. Let's be a nuisance.\"",
+   "choices": [
+    {
+     "label": "\"What sort of nuisance?\"",
+     "success": {
+      "text": "The Director: \"The true sort. Out loud, where everyone can hear.\" He paints it on the hull that week: \"Say what's true, out loud, where everyone can hear.\" The call sign is a kettle whistling. Within the week there's a crew: the Director (voice: \"I won't broadcast a thing I haven't checked twice.\"), Buena from the password show (heart: \"There's always cake.\"), Tobi Northcott, demoted for mercy, who walked (hands: \"I won't make it look broken. I'll break it.\"), and the Yateses from the souvenir shop (eyes: \"We don't ask.\"). They've been listening through the floor for three years. They know everything.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "static-founded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"With what?\"",
+     "success": {
+      "text": "He lifts a tarpaulin. A transmitter the size of a suitcase, older than you. The Director: \"My first. 1961. It reaches about as far as you can shout. We'll need to shout from a great many places.\" Within the week there's a crew, and a kettle for a call sign.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "static-founded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who's listening?\"",
+     "success": {
+      "text": "The Director: \"Nobody, yet. That's the beauty of it. Everyone who listens will have chosen to.\" The Yateses come aboard with a tray. Tobi comes with a soldering iron. Buena brings cake.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "static-founded",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "static-broadcast-1",
+   "name": "Broadcast 1: This Is Mary",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 4,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1e2a2e",
+    "effect": "sparkle"
+   },
+   "intro": "The Black Hour. Midnight. Mary's reading Rocket's coded orders under guard. Static is going to jam it, from a van in the Tower's own car park, and put her through on the pirate band instead. The Director, in the van, with headphones: \"She's saying \"the kettle's on at the usual place.\" That's Olivine. I've had the code since week two; it's the shipping forecast with the sea areas swapped. Amateurs.\"",
+   "choices": [
+    {
+     "label": "Get the suitcase to the roof of the car park.",
+     "success": {
+      "text": "It's heavier than it looks.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "static-mary-roof"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "static-mary-roof",
+   "name": "The Car Park Roof",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1e2a2e",
+    "effect": "sparkle"
+   },
+   "intro": "The top level of the car park, in the rain, with a suitcase and a hundred feet of cable. Tobi is turning a dial very slowly.",
+   "choices": [
+    {
+     "label": "Hold it while Tobi finds the frequency.",
+     "success": {
+      "text": "A Signal Technician has found you first, with a Noctowl.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Signal Technician",
+       "size": 3,
+       "types": [
+        "flying",
+        "electric"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "static-mary-switch"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "static-mary-switch",
+   "name": "The Switch",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1e2a2e",
+    "effect": "sparkle"
+   },
+   "intro": "Tobi has it. Tobi: \"There. Your hand. You do it.\"",
+   "choices": [
+    {
+     "label": "Throw the switch.",
+     "success": {
+      "text": "Every radio in Johto: a whistle, like a kettle. Mary, who can hear it in her headphones, and knows what it is: \"...This is Mary. Not the one you've been hearing. The real one. I'm on the third floor of the Radio Tower. The weather's been wrong for a month, and I'm sorry. Here's what the forecasts meant.\" She reads the code, decoded, for four minutes. Then the guard's hand is on her shoulder, and she's still talking. By morning there's a queue at the Tower's front desk, of people who'd like to speak to Mary, please, and aren't leaving. She walks out through them, and comes to the houseboat. Mary: \"I won't read a script I didn't write. Never again.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "static-broadcast-1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "static-mary",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "listener",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "neo-listener-promise",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Afterwards you tell Mary: \"There's a girl of seven who's written you nine letters.\" Mary: \"...That's who they're from. They're pinned over my desk. They were the only post that wasn't orders.\""
+    }
+   ]
+  },
+  {
+   "id": "static-broadcast-2",
+   "name": "Broadcast 2: The Price of a Tail",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "static-broadcast-1",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.kurt"
+    ],
+    "pokemon": "slowpoke",
+    "tint": "#1e2a2e",
+    "effect": "sparkle"
+   },
+   "intro": "The Slowpoke Well itself. Kurt, with a bad back, carrying the aerial. Kurt: \"I've shouted at them for a month. I've a voice that carries to my own front gate. Give me that thing.\"",
+   "choices": [
+    {
+     "label": "Give him the microphone.",
+     "success": {
+      "text": "Kurt, on air, to the whole of Johto: \"A million. That's what they're charging. D'you know what it costs the Slowpoke? Ask it. Here.\" He holds the microphone to Old Yawn. It yawns. It's the longest, saddest, most reasonable sound anyone's heard on a wireless. Buena, afterwards: \"Password for today is \"TAIL.\" Say it back. It's worth a prize. The prize is: don't buy one.\" It rains on Azalea. No shop in Johto will stock them now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "static-broadcast-2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tails-unsold",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "static-broadcast-3",
+   "name": "Broadcast 3: Not Known at This Address",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "static-broadcast-1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#1e2a2e",
+    "effect": "sparkle"
+   },
+   "intro": "The hardest one. It's addressed to Archer. The Yateses, who have been listening through the floor: \"He pawned his mother's ring in the spring. He doesn't know we know. He brings the tea tray back every single night. We'd like to say something to him. We don't know how.\" You write it: three lines, from five.",
+   "choices": [
+    {
+     "label": "\"Mr. Archer. This is the shop upstairs.\" / \"We know about the watch, and the flat, and the ring.\"",
+     "success": {
+      "text": "Two lines down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "static-line-shop",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "static-line-ring",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "static-letter-close"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Mr. Archer. This is the shop upstairs.\" / \"He isn't coming. You've known a year. So have we.\"",
+     "success": {
+      "text": "Two lines down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "static-line-shop",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "static-line-coming",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "static-letter-close"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"We know about the watch, and the flat, and the ring.\" / \"He isn't coming. You've known a year. So have we.\"",
+     "success": {
+      "text": "Two lines down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "static-line-ring",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "static-line-coming",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "static-letter-close"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "static-letter-close",
+   "name": "Not Known at This Address",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#1e2a2e",
+    "effect": "sparkle"
+   },
+   "intro": "And the last line.",
+   "choices": [
+    {
+     "label": "\"You fed a hundred and fifty people every Friday for three years. You did. Not him.\"",
+     "success": {
+      "text": "It goes out at midnight, on the pirate band, to one listener. In the chair room, a radio's on. Nobody ever finds out what he did when he heard it. In the morning the tea tray's come back, as always. There's a note on it: \"Thank you. Noon. I have to see it through. — A.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "static-line-fed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "static-broadcast-3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "static-archer-heard",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The chair's only a chair. Come up and have a candy bar.\"",
+     "success": {
+      "text": "It goes out at midnight, on the pirate band, to one listener. In the chair room, a radio's on. Nobody ever finds out what he did when he heard it. In the morning the tea tray's come back, as always. There's a note on it: \"Thank you. Noon. I have to see it through. — A.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "static-line-chair",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "static-broadcast-3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "static-archer-heard",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "static-two-frequencies",
+   "name": "Two Frequencies",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "beat": 6,
+     "has": "third",
+     "inside": false
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "sparkle"
+   },
+   "intro": "Noon. The Tower broadcasts the Call. The houseboat broadcasts everything else. On the same frequency. Archer's voice, from the Tower: \"Giovanni. Team Rocket calls you home.\" Mary's, from a canal: \"This is Radio Static. Here's the news. It's true; we checked it twice.\" The map of Johto, with two rings spreading over it. Town by town, each radio picks one. A town with a kindness in it tunes to the kettle. A town you walked through tunes to the Tower.",
+   "choices": [
+    {
+     "label": "Listen.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "atLeast": 8,
+         "atMost": 99
+        }
+       ],
+       "text": "Most of Johto is on Static. In the Tower, the Grunts have the pirate band on, in the corridor, turned up. Archer is speaking to an empty frequency. He stops, mid-sentence. He listens. He hears Mr. Sallow, on the houseboat, singing the closing-time song, with the words explained.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "static-air-most",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "static-air-roof"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "atLeast": 4,
+         "atMost": 7
+        }
+       ],
+       "text": "It's even. The two signals cross; for a minute every radio in Johto is playing both. Then Old Yawn yawns into the microphone, and it rains, and Static's the one that carries.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "static-air-even",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "static-air-roof"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "The Call goes out whole. Nothing answers. Static reads that out too: \"Twelve-oh-four. No reply.\" It's the truth. That's the job.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "static-air-tower",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "static-air-roof"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "static-air-roof",
+   "name": "The Roof",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "celebi",
+    "tint": "#141824",
+    "effect": "sparkle"
+   },
+   "intro": "Not a raid. The Director, Mary, Kurt, Tobi, the Yateses with a tray. And the man in the iron mask. The man in the iron mask: \"What's this? A tea party?\" Mrs. Yates: \"Would you like a candy bar, dear? You look as though nobody's offered you anything in years that you hadn't to take.\" He doesn't know what to do with it.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "At the third ring, Kurt says the name.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The man in the iron mask",
+       "size": 2,
+       "types": [
+        "dark",
+        "rock"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "static-air-after"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "static-air-after",
+   "name": "Off the Air",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/archer"
+    ],
+    "pokemon": "celebi",
+    "tint": "#141824",
+    "effect": "sparkle"
+   },
+   "intro": "Celebi is free. The roof is quiet, apart from a kettle somebody has brought up on the camp stove.",
+   "choices": [
+    {
+     "label": "Go down.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "static-archer-heard",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Archer is on the stair. Archer: \"I heard you. Last night. On the little band. I'd have had the door, and I'd have stood in it for ever, and you sent me a tea tray.\" He's laughing. It's not a sound he's used. Archer: \"Come down. All of you. I'll put the kettle on. I've only ever been any good at making a room ready.\" The Return isn't beaten. It's gone off the air. The Tower is Mary's. The pirate band stays up, because the Director doesn't trust a station with only one voice on it. Mika reads the children's hour, and checks it twice. Tobi is the engineer. Mr. Sallow sings the closing-time song on air, and explains it. Sabela keeps the houseboat spotless. The Director is station manager, at seventy. Mary is the Voice. The Yateses have a wireless on the counter; it's always on. Archer works the souvenir shop's till, and he's very good with it; the coat hangs on the back of the door. Ariana sends Static the Return's books, anonymously; everyone knows. Petrel does voices on the children's hour, and all of them are his own. Proton is the first caller to the phone-in, doesn't give his name, and says sorry. The Heir listens every night and never writes in. The Marauder is offered a candy bar. Kurt: \"Give me that thing.\" Giovanni hears a kettle on the wireless, and listens to the end.",
+       "effects": [
+        {
+         "kind": "evil",
+         "beat": true
+        },
+        {
+         "kind": "evil",
+         "end": "exposed"
+        },
+        {
+         "kind": "flag",
+         "key": "celebi-free",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "neo-ending-static",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Archer isn't on the stair. You find him later, in the chair room, with the radio off, and he lets you make the tea. The Return isn't beaten. It's gone off the air. The Tower is Mary's. The pirate band stays up, because the Director doesn't trust a station with only one voice on it. Mika reads the children's hour, and checks it twice. Tobi is the engineer. Mr. Sallow sings the closing-time song on air, and explains it. Sabela keeps the houseboat spotless. The Director is station manager, at seventy. Mary is the Voice. The Yateses have a wireless on the counter; it's always on. Archer works the souvenir shop's till, and he's very good with it; the coat hangs on the back of the door. Ariana sends Static the Return's books, anonymously; everyone knows. Petrel does voices on the children's hour, and all of them are his own. Proton is the first caller to the phone-in, doesn't give his name, and says sorry. The Heir listens every night and never writes in. The Marauder is offered a candy bar. Kurt: \"Give me that thing.\" Giovanni hears a kettle on the wireless, and listens to the end.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "celebi-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ending-static",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
