@@ -280,8 +280,8 @@
       "effect": {
         "kind": "calm"
       },
-      "status": "limited",
-      "limits": "Single battles only. Communion works (the Calm keeps your own boosts); the Rite, the Song (end a wild battle in peace with full rewards), is not built."
+      "status": "supported",
+      "limits": "Single battles only (the Calm and the Song). Rite, the Song: armed from the run menu, your next wild battle ends in peace with full rewards."
     },
     {
       "id": "latias",
@@ -298,7 +298,7 @@
         "kind": "sight"
       },
       "status": "limited",
-      "limits": "Shown on the map before you pick the node (gym and event battles are not shown). The Rite (share sight with a rival for a stage) is not built."
+      "limits": "Shown on the map before you pick the node (event battles are not shown). Rite, Shared Sight: for the rest of the stage every battle ahead shows its whole team, and the Gym Leader's team. The rival's map sharing is not built."
     },
     {
       "id": "heatran",
@@ -320,7 +320,7 @@
         }
       ],
       "status": "limited",
-      "limits": "Single battles. Communion (extra ore and no hazard harm in volcano and cave stages) and the Rite (erupt) are not built."
+      "limits": "Single battles. Rite, erupt: your next boss battle starts with your side's hazards, the weather and the terrain cleared. Communion (extra ore, no hazard harm in volcano and cave stages) is not built."
     },
     {
       "id": "thundurus",
@@ -385,7 +385,7 @@
         }
       ],
       "status": "limited",
-      "limits": "Single battles. The Rite (fertile ground: a stage gains a shop and a Berry grove) is not built."
+      "limits": "Single battles. Rite, fertile ground: where you stand a shop opens and you get three Sitrus Berries (not tied to barren or ruined stages)."
     },
     {
       "id": "reshiram",
@@ -407,7 +407,7 @@
         }
       ],
       "status": "limited",
-      "limits": "Lying speakers are not marked. Communion shows the foe's first move, not its whole move list. The Rite (make someone show their real plan) is not built."
+      "limits": "Lying speakers are not marked. Communion shows the foe's first move, not its whole move list. Rite, the real plan: your rival's plan (type and ace) and the Gym Leader's team for the stage."
     },
     {
       "id": "zekrom",

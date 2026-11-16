@@ -9,6 +9,7 @@ import type { Perks } from '../archetypes';
 import { isBossClass } from '../trainerPerks';
 import { hashSeed, Rng } from '../rng';
 import { maxHp } from '../pokemon';
+import { giveItem } from '../events';
 import { grantRewinds, jsonCopy, rewindStage, stageRewindReady } from '../rewind';
 import type { RunState } from '../state';
 
@@ -154,8 +155,10 @@ export function blessingPerks(run: RunState): Perks {
     const pct = inCommunionForm(run) ? data.balance.zekrom.communionVowStatPercent : data.balance.zekrom.vowStatPercent;
     for (const stat of ['atk', 'def', 'spa', 'spd', 'spe'] as const) extra.push({ kind: 'statMultiplier', stat, value: 1 + pct / 100 });
   }
-  // Thundurus's Rite waits for the next trainer battle.
+  // An armed Rite waits for its battle: Thundurus's the next trainer battle, Lugia's the next wild one, Heatran's the next boss.
   if (state.riteArmed && def.effect.kind === 'bolt') extra.push({ kind: 'foeLeadParalysed' });
+  if (state.riteArmed && def.effect.kind === 'calm') extra.push({ kind: 'peacefulWild' });
+  if (state.riteArmed && def.id === 'heatran') extra.push({ kind: 'eruptArena' });
   const own = inCommunionForm(run) && def.communionPerks ? def.communionPerks : def.perks;
   if (own.length === 0) return extra;
   if (def.firstBattleOfStage && run.stage && state.stagesDone.includes(`${run.regionIndex}:${run.stage.index}`)) return extra;
@@ -181,6 +184,11 @@ export function blessingRite(run: RunState): { label: string; hint: string; read
   if (def.effect.kind === 'healMostHurt') return { label: 'Rite of Healing', hint: 'Restore the whole party fully, once this run.', ready: !state.riteUsed };
   if (def.effect.kind === 'rewinds') return { label: 'Rite of Time', hint: 'Go back to the start of this stage. Levels, moves and species are kept; items and events of the stage are not. Once this run, from the map.', ready: !state.riteUsed && run.phase === 'map' && stageRewindReady(run) };
   if (def.effect.kind === 'bolt') return { label: 'A Bolt on Request', hint: state.riteArmed ? 'Armed: the lead of your next trainer battle starts paralysed.' : 'The lead of your next trainer battle starts paralysed (not a boss\'s last Pokémon, not an Electric-type). Once this run.', ready: !state.riteUsed };
+  if (def.effect.kind === 'calm') return { label: 'The Song', hint: state.riteArmed ? 'Armed: your next wild battle ends in peace, with full rewards.' : 'Your next wild battle (single) ends in peace before anyone moves, with full rewards. Once this run.', ready: !state.riteUsed };
+  if (def.id === 'heatran') return { label: 'Erupt', hint: state.riteArmed ? 'Armed: your next boss battle starts with the arena burned clean.' : 'Your next boss battle starts with every hazard on your side, the weather and the terrain burned away. Once this run.', ready: !state.riteUsed };
+  if (def.effect.kind === 'sight') return { label: 'Shared Sight', hint: 'For the rest of this stage, see every battle ahead (the whole team) and the Gym Leader\'s team. Once this run, from the map.', ready: !state.riteUsed && run.phase === 'map' && !!run.stage };
+  if (def.id === 'landorus') return { label: 'Fertile Ground', hint: 'Where you stand, a shop opens and a Berry grove gives three Sitrus Berries. Once this run, from the map.', ready: !state.riteUsed && run.phase === 'map' && run.stage?.current != null };
+  if (def.effect.kind === 'insight') return { label: 'The Real Plan', hint: 'Your rival\'s plan is shown, and for the rest of this stage the Gym Leader\'s team. Once this run, from the map.', ready: !state.riteUsed && run.phase === 'map' && !!run.stage };
   if (def.effect.kind === 'vow') return { label: 'The Vow Holds', hint: state.riteUsed ? 'Used: the vow held once when it would have broken.' : 'Once, when your vow would break, it holds instead. It works by itself.', ready: false };
   return null;
 }
@@ -197,10 +205,37 @@ export function useBlessingRite(content: Content, run: RunState): { run: RunStat
     back.expansion = { ...back.expansion, blessing: { ...jsonCopy(run.expansion!.blessing!), riteUsed: true } };
     return { run: back, message: 'Dialga turns the hourglass: the stage begins again.' };
   }
-  if (kind === 'bolt') {
-    run.expansion!.blessing!.riteUsed = true;
-    run.expansion!.blessing!.riteArmed = true;
-    return { run, message: 'Thundurus laughs somewhere above the clouds. The next trainer you meet will feel it first.' };
+  const def = effectBlessing(run)!;
+  const state = run.expansion!.blessing!;
+  if (kind === 'bolt' || kind === 'calm' || def.id === 'heatran') {
+    state.riteUsed = true;
+    state.riteArmed = true;
+    const message = kind === 'bolt' ? 'Thundurus laughs somewhere above the clouds. The next trainer you meet will feel it first.'
+      : kind === 'calm' ? 'Lugia\'s song waits under the sea. The next wild Pokémon you meet will hear it.'
+      : 'Deep below, the mountain gathers itself. The next boss\'s arena will burn clean.';
+    return { run, message };
+  }
+  const stageKey = `${run.regionIndex ?? 0}:${run.stage!.kind}:${run.stage!.index}`;
+  if (kind === 'sight') {
+    state.riteUsed = true;
+    run.itemCounters = { ...run.itemCounters, [`rift-preview:${stageKey}`]: 1, [`gym-preview:${stageKey}`]: 1 };
+    return { run, message: 'Latias folds the light around you: every battle on this stage is in plain sight.' };
+  }
+  if (def.id === 'landorus') {
+    state.riteUsed = true;
+    const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+    here.sides.push({ id: `event-stop-${here.sides.length + 1}-${here.id}`, kind: 'shop', used: false });
+    giveItem(content, run, 'sitrus-berry', 3, new Rng(hashSeed(`${run.seed}::blessing-grove`)));
+    return { run, message: 'Rain falls on dry earth. Where you stand, a market springs up, and a Berry grove gives you three Sitrus Berries.' };
+  }
+  if (kind === 'insight') {
+    state.riteUsed = true;
+    run.itemCounters = { ...run.itemCounters, [`gym-preview:${stageKey}`]: 1 };
+    const rival = run.story.rivals.find((r) => run.expansion?.rival?.[r.id]?.role === 'main') ?? run.story.rivals.find((r) => r.state !== 'retired');
+    const plan = rival ? ` ${rival.name} will not tell you, but the white fire does: ${rival.identity ? `their team is being rebuilt around ${rival.identity.type}-types` : `they fight in the ${rival.style} style`}${rival.ace ? `, and everything rests on ${content.species.get(rival.ace)?.name ?? rival.ace}` : ''}.` : '';
+    const line = `Reshiram's fire shows the truth. The Gym Leader's team is plain to see.${plan}`;
+    run.journal = [...(run.journal ?? []), line];
+    return { run, message: line };
   }
   for (const m of run.party) { m.hp = maxHp(content, m); m.status = null; }
   run.expansion!.blessing!.riteUsed = true;
@@ -305,10 +340,11 @@ export function blessingAfterBattle(content: Content, run: RunState): string[] {
   if (!runBlessing(run) || !state) return [];
   const touched: string[] = [];
   syncCommunion(run);
-  // Thundurus's Rite is spent by the trainer battle it waited for.
-  if (state.riteArmed && run.battle?.kind === 'trainer') state.riteArmed = false;
   const def = effectBlessing(run);
   if (!def) return touched;
+  // An armed Rite is spent by the battle it waited for.
+  const fx = run.battle?.storyEffects ?? [];
+  if (state.riteArmed && ((def.effect.kind === 'bolt' && run.battle?.kind === 'trainer') || (def.effect.kind === 'calm' && fx.includes('song-of-peace')) || (def.id === 'heatran' && fx.includes('erupt')))) state.riteArmed = false;
   if (def.firstBattleOfStage && run.stage) {
     const key = `${run.regionIndex}:${run.stage.index}`;
     if (!state.stagesDone.includes(key)) state.stagesDone = [...state.stagesDone, key];

@@ -7,6 +7,8 @@ import { LEGEND_KEYS } from '../../src/core/legends/keys';
 import { addSign } from '../../src/core/legends/signs';
 import { beginBattle, chooseStarter, createRun, mapPreviews, takeTurn } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
+import { CURRENT_VERSIONS, MIGRATIONS, SaveManager } from '../../src/save/saveManager';
+import { MemoryStorageProvider } from '../../src/save/storage';
 import { content, toBattle } from './helpers';
 
 const EIGHT = ['lugia', 'latias', 'heatran', 'thundurus', 'landorus', 'reshiram', 'zekrom', 'kyurem'];
@@ -213,3 +215,67 @@ describe('Legendary keys for the new blessings', () => {
   });
 });
 
+
+describe('the Rites built for the eight', () => {
+  it("Lugia's Song: armed once, the next wild battle ends in peace on turn one and is won; then it is spent", () => {
+    const run = commune(withBlessing('lugia'));
+    expect(blessingRite(run)!.label).toBe('The Song');
+    useBlessingRite(content, run);
+    expect(blessingRite(run)!.ready).toBe(false);
+    let b = beginBattle(content, toBattle(run)).run;
+    expect(b.battle!.kind).toBe('wild'); // the first battle of this seed is a wild single
+    const turn = takeTurn(content, b, { kind: 'move', index: 0 });
+    b = turn.run;
+    expect(b.expansion!.blessing!.riteArmed).toBe(false);
+    expect(turn.events.some((e) => e.type === 'raid' && /long note/.test((e as { text: string }).text))).toBe(true);
+  });
+  it("Heatran's erupt clears a boss arena; Latias's and Reshiram's Rites open the previews; Landorus's opens a shop and gives berries", () => {
+    const h = commune(withBlessing('heatran'));
+    useBlessingRite(content, h);
+    expect(blessingPerks(h)).toContainEqual({ kind: 'eruptArena' });
+
+    const l = commune(withBlessing('latias'));
+    useBlessingRite(content, l);
+    const key = `${l.regionIndex}:${l.stage!.kind}:${l.stage!.index}`;
+    expect(l.itemCounters?.[`rift-preview:${key}`]).toBe(1);
+    expect(l.itemCounters?.[`gym-preview:${key}`]).toBe(1);
+
+    const r = commune(withBlessing('reshiram'));
+    const msg = useBlessingRite(content, r)!.message;
+    expect(msg).toMatch(/Gym Leader/);
+    expect(r.expansion!.blessing!.riteUsed).toBe(true);
+
+    const land = commune(withBlessing('landorus'));
+    const node = land.stage!.map.nodes[0]!;
+    land.stage!.current = node.id;
+    const before = node.sides.length;
+    expect(blessingRite(land)!.ready).toBe(true);
+    useBlessingRite(content, land);
+    expect(node.sides.length).toBe(before + 1);
+    expect(node.sides.at(-1)!.kind).toBe('shop');
+    expect(blessingRite(land)!.ready).toBe(false);
+  });
+  it('a Rite is never ready before Communion', () => {
+    for (const id of ['lugia', 'latias', 'heatran', 'landorus', 'reshiram', 'thundurus']) expect(blessingRite(withBlessing(id)), id).toBeNull();
+  });
+});
+
+describe('run save v45', () => {
+  it('is the current run version; v44 runs load untouched and the new blessing fields round-trip', () => {
+    expect(CURRENT_VERSIONS.run).toBe(45);
+    const r = withBlessing('zekrom');
+    expect(MIGRATIONS.run[44]!(r)).toBe(r);
+    const storage = new MemoryStorageProvider();
+    storage.set('pkr.run', JSON.stringify({ format: 'pkmn-roguelike', record: 'run', schemaVersion: 44, savedAt: '', data: r }));
+    const loaded = new SaveManager(storage, content).loadRun();
+    expect(loaded.status).toBe('ok');
+    if (loaded.status !== 'ok') return;
+    expect(loaded.migratedFrom).toBe(44);
+    swearVow(r, 'no-one-behind');
+    Object.assign(r.expansion!.blessing!, { calmStages: ['0:1'], riteArmed: true, vowBroken: false, copy: 'regidrago' });
+    new SaveManager(storage, content).saveRun(r);
+    const back = new SaveManager(storage, content).loadRun();
+    expect(back.status).toBe('ok');
+    if (back.status === 'ok') expect(back.data.expansion!.blessing).toMatchObject({ vow: 'no-one-behind', calmStages: ['0:1'], riteArmed: true, copy: 'regidrago' });
+  });
+});

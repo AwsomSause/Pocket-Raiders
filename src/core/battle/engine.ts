@@ -787,6 +787,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     revengeMoment(ctx, events);
     return events;
   }
+  if (songOfPeace(ctx, events)) return events;
 
   battle.playerVolatile ??= freshVolatile();
   battle.enemyVolatile ??= freshVolatile();
@@ -7971,6 +7972,7 @@ export function startBattle(ctx: BattleContext): BattleEvent[] {
   ultraBattleStart(ctx);
   overhaulFieldStart(ctx, events);
   trapBeforeBattle(ctx, events);
+  eruptArena(ctx, events);
   foeMovePreview(ctx);
   const passive = classPassiveOf(ctx.content, ctx.battle);
   if (passive) events.push(say('enemy', 'arena', passiveLine(ctx.battle.trainer!.name, passive)));
@@ -8054,6 +8056,34 @@ function forecastAhead(ctx: BattleContext, events: BattleEvent[]): void {
   const set = [...new Set(battle.enemyTeam.map((m) => WEATHER_SETTERS[abilityOf(content, m) ?? '']).filter((w): w is Weather => !!w))];
   const word: Record<string, string> = { rain: 'rain', sun: 'harsh sun', sand: 'a sandstorm', snow: 'snow', hail: 'hail' };
   events.push(say('enemy', 'arena', set.length === 0 ? 'Forecast Ahead: nothing on their side can change the weather.' : `Forecast Ahead: their team can bring ${set.map((w) => word[w] ?? w).join(' or ')}.`));
+}
+
+/** Lugia's Rite, the Song: a wild battle ends in peace before anyone moves; every wild Pokémon counts as beaten (full rewards). No random numbers. */
+function songOfPeace(ctx: BattleContext, events: BattleEvent[]): boolean {
+  const { battle } = ctx;
+  if (battle.kind !== 'wild' || battle.outcome || !(ctx.perks ?? []).some((p) => p.kind === 'peacefulWild')) return false;
+  battle.storyEffects.push('song-of-peace');
+  events.push({ type: 'raid', tone: 'phase', text: 'A long note rises from under the sea. The wild Pokémon listen, lower their heads, and the fight is over.' });
+  const participants = ctx.party.filter((m) => m.hp > 0 && battle.participants.includes(m.uid)).map((m) => m.uid);
+  for (const foe of battle.enemyTeam) {
+    if (foe.hp <= 0) continue;
+    foe.hp = 0;
+    events.push({ type: 'faint', side: 'enemy', uid: foe.uid, participants });
+  }
+  battle.outcome = 'win';
+  return true;
+}
+
+/** Heatran's Rite, erupt: a boss battle's arena is wiped clean at the start (your side's hazards, the weather, the terrain). */
+function eruptArena(ctx: BattleContext, events: BattleEvent[]): void {
+  const { battle } = ctx;
+  if (!isBossClass(battle.trainer?.classId) || !(ctx.perks ?? []).some((p) => p.kind === 'eruptArena')) return;
+  battle.storyEffects.push('erupt');
+  const side = battle.sideEffects.player;
+  side.spikes = 0; side.toxicSpikes = 0; side.stealthRock = false; side.stickyWeb = false;
+  battle.weather = null;
+  battle.terrain = null;
+  events.push({ type: 'raid', tone: 'phase', text: 'The mountain erupts beneath the arena: every trap, every storm, every trick of the ground is burned away.' });
 }
 
 /**

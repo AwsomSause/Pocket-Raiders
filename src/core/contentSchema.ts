@@ -1000,6 +1000,10 @@ export const ArchetypeModifierSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('foeLeadStages'), stats: z.array(z.enum(['atk', 'def', 'spa', 'spd', 'spe'])).min(1), value: z.number().int().min(-2).max(2) }),
   /** Thundurus's Rite: the opposing lead of the next trainer battle starts paralysed (not a boss's last Pokémon, not an Electric-type). */
   z.object({ kind: z.literal('foeLeadParalysed') }),
+  /** Lugia's Rite, the Song: the next wild battle ends in peace on its first turn, with full rewards. */
+  z.object({ kind: z.literal('peacefulWild') }),
+  /** Heatran's Rite, erupt: the next boss battle starts with every hazard, weather and terrain cleared from the arena. */
+  z.object({ kind: z.literal('eruptArena') }),
   /** The next battle you lose without ending the run gives `value`× experience (1.5 = +50%); used up after one loss. */
   z.object({ kind: z.literal('lostBattleXp'), value: z.number().positive() }),
 ]);
