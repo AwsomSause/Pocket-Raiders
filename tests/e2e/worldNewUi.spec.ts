@@ -1,9 +1,10 @@
 import { expect, test } from '@playwright/test';
-import { view, watch, start, open } from './helpers/newUi';
+import { view, waitForScene, watch, start, toMap, open } from './helpers/newUi';
 
-// The New UI's hub pages from the last pass: the Pokédex (mock-up pieces "Pokédex: set browser" and "Pokédex: species
-// info": a wall of species pictures with filter tabs, and the species page with its stat bars and evolution line) and
-// the Bank's Exchange Counter (the mock-up counter page with a clerk).
+// The New UI's places from the last pass: the Pokédex (mock-up pieces "Pokédex: set browser" and "Pokédex: species
+// info": a wall of species pictures with filter tabs, and the species page with its stat bars and evolution line), the
+// Bank's Exchange Counter (the mock-up counter page with a clerk) and a Plaza district's menu.
+// One of the New UI spec files (see newUi.spec.ts); the shared steps are in helpers/newUi.ts.
 
 test('New UI: a Pokédex set is a wall of species pictures with filter tabs, and a species opens the mock-up species page (facts, six stat bars, evolution line, a second page of data)', async ({ page }) => {
   const errors = watch(page);
@@ -207,5 +208,67 @@ test('New UI: the Bank\'s Exchange Counter is the mock-up counter page: two offe
   await page.keyboard.press('Escape');
   await expect(top().locator('.hd')).toContainText('Bank');
   await expect(top()).toContainText('70 credits');
+  expect(errors).toEqual([]);
+});
+
+test('New UI: a Plaza district opens the mock-up district menu: each place with what is on offer at the right, its card, and Esc goes back to the square', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=plaza-e2e');
+  await toMap(page);
+  // Every node in the middle column carries the plaza stop; stand on one with plenty of money.
+  const sideId = await page.evaluate(() => {
+    const run = (window as any).__pkr.session.run;
+    const middle = Math.ceil(run.stage.map.columns / 2);
+    const nodes = run.stage.map.nodes.filter((n: any) => n.column === middle);
+    run.stage.current = nodes[0].id;
+    run.money = 50000;
+    (window as any).__pkr.game.scene.getScene('Map').scene.restart({ focus: 0 });
+    return (nodes[0].sides.find((s: any) => s.kind === 'plaza')?.id ?? null) as string | null;
+  });
+  expect(sideId).not.toBeNull();
+  await waitForScene(page, 'Map');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 15_000 }).toBe(false);
+  await page.evaluate((id) => (window as any).__pkr.game.scene.getScene('Map').openPlaza(id), sideId);
+  await waitForScene(page, 'Plaza');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Plaza').ready), { timeout: 15_000 }).toBe(true);
+  await page.waitForTimeout(500);
+
+  // The square: one button per district and Leave.
+  const square = view(page, 'Plaza').first();
+  await expect(square).toBeVisible();
+  const names = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Plaza').layout.districts.map((d: any) => d.name as string));
+  expect(names).toHaveLength(6);
+  for (const n of [...names, 'Leave']) await expect(square.locator('[data-act="pick"]', { hasText: n }).first()).toBeVisible();
+
+  // The first district's menu.
+  await page.keyboard.press('Enter');
+  const menu = view(page, 'Plaza').last();
+  await expect(menu.locator('.hd')).toContainText(names[0]!);
+  await expect(page.locator('#rx .tg', { hasText: '₽50000' })).toBeVisible();
+  const sections = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Plaza').layout.districts[0].sections.map((s: any) => ({ title: s.title as string, count: s.count as number })));
+  expect(sections.length).toBeGreaterThan(1);
+  const rows = menu.locator('.btn[data-act="pick"]');
+  await expect(rows).toHaveCount(sections.length);
+  for (const [i, s] of sections.entries()) {
+    // The name alone on the left, the count as the row's note; not "Name (10)".
+    await expect(rows.nth(i)).toContainText(s.title);
+    await expect(rows.nth(i)).toContainText(`${s.count} on offer`);
+    await expect(rows.nth(i)).not.toContainText('(');
+  }
+  await expect(rows.nth(0)).toHaveClass(/on/);
+  await expect(menu.locator('.win').first()).toContainText(sections[0]!.title);
+  await expect(menu.locator('.txt')).toContainText(`${names[0]}: ${sections[0]!.title}, ${sections[0]!.count} on offer.`);
+  await page.screenshot({ path: 'test-results/newui-plaza-district.png' });
+  // Down moves the cursor and the card follows.
+  await page.waitForTimeout(250);
+  await page.keyboard.press('ArrowDown');
+  await expect(rows.nth(1)).toHaveClass(/on/);
+  await expect(menu.locator('.win').first()).toContainText(sections[1]!.title);
+
+  // Esc closes the menu; the square is still there and the run is still in the Plaza.
+  await page.keyboard.press('Escape');
+  await expect.poll(() => page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Plaza').picker))).toBe(false);
+  await expect(view(page, 'Plaza')).toHaveCount(1);
+  expect(await page.evaluate(() => (window as any).__pkr.activeScene())).toBe('Plaza');
   expect(errors).toEqual([]);
 });

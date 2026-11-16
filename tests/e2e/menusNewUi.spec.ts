@@ -2,7 +2,8 @@ import { expect, test } from '@playwright/test';
 import { scene, view, waitForScene, watch, start, toMap, toCommands } from './helpers/newUi';
 
 // The New UI (Settings > UI style: New, the default for players): run formats, Memories, the pause menu, the debug window and the Beta 0.6 battle pieces.
-// The New UI specs are split over several files so the browser-test shards can share them; the shared steps are in
+// The New UI specs are split over several files (newUi, battleNewUi, menusNewUi, runNewUi, storyNewUi, worldNewUi) whose
+// names are spread over the alphabet, so the browser-test shards each get one of them; the shared steps are in
 // helpers/newUi.ts. The older specs run with the Old UI, so both styles stay covered.
 
 test('New UI: the Blackout shows a card per anchor and the Seal; keys move over the standing ones and a click starts the sealed fight', async ({ page }) => {

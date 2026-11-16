@@ -14,4 +14,4 @@
 
 **Checked against the mock-ups and left as they are:** the Memories pages (Run Journal, Hall of Memories, Memory Lane, Fallen Trainers, Battle Replays, Heirlooms), Trainer Select, Run Setup, Modifiers, Seed & Codes, Starter Select, Campaign Briefing.
 
-**Tests:** the New UI browser spec is split into five files (no test changed) and CI runs 8 browser shards (was 6): after batch 2 two shards ran out of their 30 minutes while every test was passing.
+**Tests:** the New UI browser spec is split into six files with names spread over the alphabet (`newUi`, `battleNewUi`, `menusNewUi`, `runNewUi`, `storyNewUi`, `worldNewUi`; no test changed) and CI runs 8 browser shards (was 6): after batch 2 two shards ran out of their 30 minutes while every test was passing, and four New UI files side by side in one shard timed out.

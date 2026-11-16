@@ -1,8 +1,9 @@
 import { expect, test } from '@playwright/test';
 import { view, waitForScene, watch, start, toMap, addSide, open } from './helpers/newUi';
 
-// The New UI (Settings > UI style: New, the default for players): the last-pass pages: node event menu, Department Store, Tools, code entry, Preparation Desk, Honest Trade Card.
-// The New UI specs are split over several files so the browser-test shards can share them; the shared steps are in
+// The New UI (Settings > UI style: New, the default for players): the run's last-pass pages: node event menu, Department Store, Tools, code entry, Preparation Desk, Honest Trade Card.
+// The New UI specs are split over several files (newUi, battleNewUi, menusNewUi, runNewUi, storyNewUi, worldNewUi) whose
+// names are spread over the alphabet, so the browser-test shards each get one of them; the shared steps are in
 // helpers/newUi.ts. The older specs run with the Old UI, so both styles stay covered.
 
 test('New UI: the node event menu is a row of cards over the map; the cursor, a click beside it, Esc and a pick all work, and the old canvas menu is not drawn', async ({ page }) => {

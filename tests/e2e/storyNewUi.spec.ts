@@ -2,7 +2,8 @@ import { expect, test } from '@playwright/test';
 import { scene, view, waitForScene, watch, start, toMap, open } from './helpers/newUi';
 
 // The New UI (Settings > UI style: New, the default for players): the map pop-ups, the opening screens, and the story and format pages.
-// The New UI specs are split over several files so the browser-test shards can share them; the shared steps are in
+// The New UI specs are split over several files (newUi, battleNewUi, menusNewUi, runNewUi, storyNewUi, worldNewUi) whose
+// names are spread over the alphabet, so the browser-test shards each get one of them; the shared steps are in
 // helpers/newUi.ts. The older specs run with the Old UI, so both styles stay covered.
 
 test('New UI: the map\'s Rival Report, Notebook, Dossier and Field Notes open as the mock-up pages; keys and clicks steer them', async ({ page }) => {

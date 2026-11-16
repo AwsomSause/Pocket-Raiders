@@ -1,7 +1,7 @@
 import { expect, type Page } from '@playwright/test';
 import { confirmToMenu } from '../battleInput';
 
-// Shared steps for the New UI browser specs (newUi*.spec.ts). The New UI is an HTML layer over the canvas, so these
+// Shared steps for the New UI browser specs (newUi.spec.ts and the *NewUi.spec.ts files). The New UI is an HTML layer over the canvas, so these
 // specs drive the game by clicking that layer and open the game with `?ui=new` (an automated browser gets Old otherwise).
 
 export const scene = (page: Page) => page.evaluate(() => (window as any).__pkr?.activeScene() ?? null);
