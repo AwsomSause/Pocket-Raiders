@@ -2853,6 +2853,8 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
   }
   if (user.vol.infatuated && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.vol.infatuated = false;
   if (user.flinched && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.flinched = false;
+  // Greenneedle gn.46: a handshake before the All-Star final: neither side can be flinched on turn one.
+  if (user.flinched && ctx.battle.turn <= 1 && ctx.battle.storyEffects.includes('allstar-shake')) user.flinched = false;
   // Mentor lesson: in boss and rival battles your Pokémon can't flinch on turn one.
   if (user.flinched && user.side === 'player' && noFlinchTurnOne(ctx.perks, ctx.battle)) user.flinched = false;
   if (user.vol.infatuated) {

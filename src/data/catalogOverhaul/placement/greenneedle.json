@@ -182,6 +182,31 @@
   ],
   "tags": []
  },
+ "gn-46-door": {
+  "gn": "gn.46",
+  "shape": "Hub",
+  "earliest": "A12",
+  "home": 16,
+  "window": [
+   14,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "A+1; the final A+2",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The All-Star Tournament",
+   "elsewhere": "The All-Star Tournament"
+  },
+  "note": "Badge: three stars. Once per run, late; needs seven named trainers met this run. Until towns exist it sits on step 16. Entrants are drawn from the trainers fought this run (core/greenneedle/allstar.ts); the strongest rival is always in the final.",
+  "kinds": [
+   "Tournament Episode",
+   "Reunion Episode"
+  ],
+  "tags": []
+ },
  "gn-45-field": {
   "gn": "gn.45",
   "shape": "Single",

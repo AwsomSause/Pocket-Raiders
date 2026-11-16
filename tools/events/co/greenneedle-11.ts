@@ -1,6 +1,6 @@
 // Greenneedle, part 11: gn.44 The 1v1 Championship (doc GREENNEEDLE_REWORKED_PLACED_10.md).
 // Build: npm run co:build -- greenneedle-11   then   npm run co:gn
-import { $, ch, fight, heal, out, trainer, type Json } from '../dsl.ts';
+import { $, any, ch, fight, heal, out, trainer, wild, type Json } from '../dsl.ts';
 import { bond, chIf, gev, gn, is, moment, not, notThisRegion, rm, say, scene, setTo, stampRegion, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
@@ -153,7 +153,99 @@ const gn45: Json[] = [
   ), [ch('Leave.', out('You look back once. They\'re talking to your team\'s Poké Balls, very quietly, the way you\'d talk to someone sleeping.'))]),
 ];
 
-export const EVENTS: Json[] = [...gn44, ...gn45];
+// =====================================================================================================================
+// gn.46  THE ALL-STAR TOURNAMENT  (a bracket of eight at a Town or Hub node; until towns exist, step 16, optional, window 14–18;
+// once per run, from A12, after meeting seven named trainers). Trainers met this run, with upgraded teams and a line about the last
+// meeting (core/greenneedle/allstar.ts). Quarter-final: one beaten easily, changed the most. Semi-final: one you lost to, unchanged.
+// Final: the strongest rival, their real team. A Rare item for each round won; the trophy and a rare visitor for the champion.
+// =====================================================================================================================
+const STAR_TINT = '#5b3f1f';
+const stars = (o: Json = {}): Json => ({ tint: STAR_TINT, tags: ['Combat', 'Trainer', 'Story'], effect: 'none', ...o });
+const RARE_ITEMS = ['life-orb', 'choice-band', 'choice-specs', 'choice-scarf', 'leftovers', 'focus-sash', 'assault-vest', 'expert-belt'];
+const allstarOut: Json[] = [scene('gn-46-out')];
+
+const gn46: Json[] = [
+  gev('gn-46-door', 'The All-Star Tournament', stars({ stop: 'event', rarity: 'rare', requires: [gnc('allstarReady'), not('allstar-entered')] }), say(
+    '*A poster on every wall in town: THE ALL-STAR TOURNAMENT. Under it, eight names. You know seven of them. The eighth is yours.*',
+    'Someone has drawn a little star next to your name, in pen. Then another. Then a third.',
+  ), [
+    ch('Go in.', out('The hall is full. Every face in the stands is one you\'ve met somewhere on the road.', setTo('allstar-entered', 1), gn('allstarDraw'), scene('gn-46-board'))),
+    ch('Walk on.', out('You walk on. Behind you, someone reads your name off the poster out loud, sounding disappointed.')),
+  ]),
+  rm('gn-46-board', 'The All-Star Tournament: The Bracket', stars({ tags: ['Story'] }), say(
+    'The bracket, chalked on a board taller than you: {allstar-bracket}, and you. Your rival is on the far side. Of course they are.',
+    'Quarter-final first: {allstar:qf}. The crowd is everyone you\'ve met who isn\'t on the board. The ones you helped are at the front, shouting.',
+    'The ones you walked past are here too, further back. They came anyway.',
+  ), [
+    ch('Walk among them.', out('A kid you once helped grabs your sleeve. "{allstar:qf} has a new one. A {cast:allstar-new-qf}. Saw it this morning. Be careful."', scene('gn-46-qf'))),
+    ch('Go to the ring.', out('You go straight to the ring. The noise follows you down the aisle like weather.', scene('gn-46-qf'))),
+  ]),
+  rm('gn-46-qf', 'The All-Star Tournament: Quarter-Final', stars({ remembers: [
+    { id: 'damian', when: [is('allstar-damian')], notice: '**Damian:** "ALL-STAR. They said *All-Star.* I\'ve got it on a sash. Tully made the sash."' },
+    { id: 'samurai', when: [is('allstar-samurai')], notice: '**The Samurai:** "You named my defeat. I\'ve come to rename it."' },
+  ] }), say(
+    'The quarter-final. {allstar:qf} is waiting in the ring, and you almost don\'t recognise them. They\'ve changed the most.',
+    '**{allstar:qf}:** "{allstar-line:qf}"',
+  ), [
+    ch('Battle.', fight('The bell. Their first Pokémon is one you\'ve never seen them with.', { ...trainer('All-Star', { cls: 'ace-trainer', size: 6, lv: 1, friendly: true, rule: { gn: 'allstar-qf' },
+      win: [any(...RARE_ITEMS), setTo('allstar-round', 1), scene('gn-46-crowd-1')], lose: allstarOut }) })),
+  ]),
+  rm('gn-46-crowd-1', 'The All-Star Tournament: Between Rounds', stars({ tags: ['Recovery', 'Story'] }), say(
+    'Between rounds. The crowd spills into the aisles. People you met for five minutes, months ago, want to shake your hand.',
+    'Someone at the back is holding something out to you, and won\'t stop holding it out until you come over.',
+  ), [
+    ch('Walk among them.', out('A traveller you once shared a fire with presses a held item into your palm. "For the next one. You\'ll need it more than me."', any('quick-claw', 'scope-lens', 'muscle-band', 'wise-glasses', 'shell-bell'), scene('gn-46-sf'))),
+    ch('Go to the ring.', out('You wave, and go. They wave back, still holding it out, smiling.', scene('gn-46-sf'))),
+  ]),
+  rm('gn-46-sf', 'The All-Star Tournament: Semi-Final', stars({ remembers: [
+    { id: 'unbeaten', when: [gnc('allstarUnbeaten')], notice: '**{allstar:sf}:** "They couldn\'t find anyone who\'d beaten you. So they sent me. I\'m the one who came closest. I\'d like that recorded."' },
+    { id: 'damian', when: [is('allstar-damian')], notice: '**Damian:** "ALL-STAR. They said *All-Star.* I\'ve got it on a sash. Tully made the sash."' },
+    { id: 'samurai', when: [is('allstar-samurai')], notice: '**The Samurai:** "You named my defeat. I\'ve come to rename it."' },
+  ] }), say(
+    'The semi-final. {allstar:sf}. They haven\'t changed at all, and they don\'t think they need to. Looking at them, you\'re not sure they\'re wrong.',
+    '**{allstar:sf}:** "{allstar-line:sf}"',
+  ), [
+    ch('Battle.', fight('Same team. Same stance. Same look in their eye, like they know something you don\'t.', { ...trainer('All-Star', { cls: 'ace-trainer', size: 6, lv: 1, friendly: true, rule: { gn: 'allstar-sf' },
+      win: [any(...RARE_ITEMS), setTo('allstar-round', 2), setTo('allstar-respect', 1), moment('Beat the All-Star semi-finalist, who shook your hand and promised to come to the Final Reunion.', 60), scene('gn-46-crowd-2')], lose: allstarOut }) })),
+  ]),
+  rm('gn-46-crowd-2', 'The All-Star Tournament: Before the Final', stars({ tags: ['Recovery', 'Story'] }), say(
+    '{allstar:sf} finds you in the corridor. They don\'t say anything. They just nod, the way you nod at someone you\'ll see again.',
+    'Out in the stands, a grandmother you once helped across a river is waving a Berry over her head like a flag.',
+  ), [
+    ch('Walk among them.', out('She folds your fingers round it. "Eat it before, not during. Before. I know about these things."', any('sitrus-berry', 'lum-berry'), scene('gn-46-final'))),
+    ch('Go to the ring.', out('You blow her a kiss from the aisle. She pretends to catch it, and puts it in her pocket.', scene('gn-46-final'))),
+  ]),
+  rm('gn-46-final', 'The All-Star Tournament: The Final', stars({ remembers: [
+    { id: 'threw', when: [is('x-rival-threw-match')], notice: '**{allstar-rival}:** "You threw one for me, once. I never thanked you. I\'m not going to thank you now, either. I\'m going to win."' },
+    { id: 'stone', when: [is('rival-memorial-waited')], notice: '**{allstar-rival}:** "You waited with me, on the hill. At the stone. I keep thinking about that. Don\'t let it make you go easy."' },
+    { id: 'ahead', when: [gnc('rivalAhead')], notice: '**{allstar-rival}:** "I\'m ahead, you know. Badges, wins, all of it. I\'ve kept count. This is the one that counts, though."' },
+  ] }), say(
+    'The final. {allstar-rival}, on the far side of the ring, exactly where the bracket said they\'d be.',
+    '**{allstar-rival}:** "Everyone you\'ve ever fought is in those stands. And it\'s still us two at the end. It\'s *always* us two."',
+  ), [
+    chIf([gnc('rivalTrustMax')], 'Shake.', fight('You shake. Their grip is warm, and it holds a second longer than it needs to. Both teams stand a little taller.', { ...trainer('Rival', { rival: true, size: 6, lv: 2, friendly: true, rule: { gn: 'allstar-final' }, win: [gn('allstarChampion'), moment('Won the All-Star Tournament. Every name you met is on the trophy. Yours is last.', 85), scene('gn-46-champion')], lose: [scene('gn-46-runner-up')] }) }, setTo('allstar-shake', 1))),
+    chIf([gnc('rivalTrustMax')], 'After.', fight('"After," you say. They grin, and put their hand away. "After, then. Promise."', { ...trainer('Rival', { rival: true, size: 6, lv: 2, friendly: true, rule: { gn: 'allstar-final' }, win: [gn('allstarChampion'), moment('Won the All-Star Tournament. Every name you met is on the trophy. Yours is last.', 85), scene('gn-46-champion')], lose: [scene('gn-46-runner-up')] }) })),
+    chIf([gnc('rivalTrustBelow')], 'Battle.', fight('The bell. The whole hall goes silent at once, the way a room does when it knows.', { ...trainer('Rival', { rival: true, size: 6, lv: 2, friendly: true, rule: { gn: 'allstar-final' }, win: [gn('allstarChampion'), moment('Won the All-Star Tournament. Every name you met is on the trophy. Yours is last.', 85), scene('gn-46-champion')], lose: [scene('gn-46-runner-up')] }) })),
+  ]),
+  rm('gn-46-champion', 'The All-Star Tournament: Champion', stars({ tags: ['Story'] }), say(
+    'They hand you the trophy. Every entrant\'s name is engraved on it: {allstar-bracket}. Yours is last. There was only just room.',
+    'Later, when the hall is empty and the chairs are stacked, you come back for your coat.',
+    'Something is sitting on the trophy. It came to watch. It looks at you as though it has already decided.',
+  ), [
+    ch('Go to it.', fight('It doesn\'t run. It hops down off the trophy, and waits for you to be ready.', { ...wild({ species: ['@allstar-rare'], lv: 1 }), rule: { catchTimes: 4 } })),
+    ch('Leave it be.', out('You take the trophy and leave it there, watching you go. At the door you look back. It\'s still watching.')),
+  ]),
+  rm('gn-46-runner-up', 'The All-Star Tournament: Runner-Up', stars({ tags: ['Story'] }), say(
+    '{allstar-rival} holds the trophy up, and the hall roars. Then they look for you in the crowd, and they don\'t stop looking until they find you.',
+    '**{allstar-rival}:** "Us two. Always. Next time it\'s yours."',
+  ), [ch('Leave.', out('You keep what you won. On the way out, a dozen people you\'ve met tell you it was close. Some of them mean it.'))]),
+  rm('gn-46-out', 'The All-Star Tournament: Out', stars({ tags: ['Story'] }), say(
+    'Out. The crowd claps anyway, the people at the front loudest of all.',
+    'You keep what you won. You watch the rest from the stands, with people you\'d forgotten you\'d met.',
+  ), [ch('Leave.', out('On the way out, someone shouts your name from the back. You never find out who.'))]),
+];
+
+export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46];
 export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
@@ -162,6 +254,12 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'All scaled to the Pokémon the player enters (same level; the champion one higher)', often: 'region', badge: 'own',
     dressing: { kanto: 'The 1v1 Championship', elsewhere: 'The 1v1 Championship' },
     note: 'Badge: a single star. Once per region. Gideon Tolland and Señora Dolores Vantongeren are always rounds 3 and 6, and remember the last entrant within the run (no memory across runs). Until towns exist it sits on step 15.',
+  },
+  'gn-46-door': {
+    gn: 'gn.46', shape: 'Hub', earliest: 'A12', home: 16, window: [14, 18], sits: 'optional', attaches: 'town', tags: ['Tournament Episode', 'Reunion Episode'],
+    level: 'A+1; the final A+2', often: 'run', badge: 'own',
+    dressing: { kanto: 'The All-Star Tournament', elsewhere: 'The All-Star Tournament' },
+    note: 'Badge: three stars. Once per run, late; needs seven named trainers met this run. Until towns exist it sits on step 16. Entrants are drawn from the trainers fought this run (core/greenneedle/allstar.ts); the strongest rival is always in the final.',
   },
   'gn-45-field': {
     gn: 'gn.45', shape: 'Single', earliest: 'A10', home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', tags: ['Companion Story'],

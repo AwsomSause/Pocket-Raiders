@@ -275,3 +275,144 @@ describe('gn.45 The Champion\'s Training Session', () => {
     expect(lessonAfterstory(content, run)).toBe('');
   });
 });
+
+// ---------- gn.46 The All-Star Tournament ----------
+import { allstarRecord, allstarTurn, answerTo, logOf, RARE } from '../../src/core/greenneedle/allstar';
+import { FOE_WAITS } from '../../src/core/greenneedle';
+import { featuredRival } from '../../src/core/rivals/living';
+
+/** A foe too strong to beat (level 100, same uid). */
+const makeStrong = (foe: { speciesId: string; uid: string }) => createPokemon(content, foe.speciesId, 100, foe.uid);
+/** A finished trainer fight, recorded the way finishBattle records it. */
+function met(run: RunState, name: string, team: string[], outcome: 'win' | 'lose', o: { left?: number; moved?: boolean; cls?: string; leaderId?: string } = {}): void {
+  const party = run.party;
+  run.party = party.map((m, i) => ({ ...m, hp: i < (o.left ?? party.length) ? Math.max(1, m.hp) : 0 }));
+  run.battle = { kind: 'trainer', outcome, activeIndex: 0, enemyTeam: team.map((s, i) => createPokemon(content, s, 20, `${name}-${i}`)), storyEffects: [], trainer: { classId: o.cls ?? 'youngster', name, leaderId: o.leaderId ?? null } } as unknown as RunState['battle'];
+  allstarTurn(run.battle, o.moved === false ? [] : [{ type: 'move', side: 'enemy' }]);
+  allstarRecord(run);
+  run.battle = null;
+  run.party = party;
+}
+/** Seven trainers met: Joey (lost to), Ann (one left), Damian, and four ordinary wins (Sam a sweep). */
+function seven(run: RunState, lostTo = true): void {
+  run.party = [...run.party, createPokemon(content, 'pidgey', 20, 'p2'), createPokemon(content, 'rattata', 20, 'p3')];
+  met(run, 'Youngster Joey', ['rattata', 'pidgey'], lostTo ? 'lose' : 'win', { left: 2 });
+  met(run, 'Lass Ann', ['oddish'], 'win', { left: 1 });
+  met(run, 'Damian', ['magikarp'], 'win', { left: 3 });
+  met(run, 'Bug Catcher Sam', ['caterpie', 'weedle'], 'win', { left: 3, moved: false });
+  for (const n of ['Hiker Bo', 'Camper Ty', 'Picnicker Lu']) met(run, n, ['geodude'], 'win', { left: 2 });
+}
+
+describe('gn.46 The All-Star Tournament', () => {
+  it('every trainer fight is logged: the result, a sweep, how many were left; bosses are not', () => {
+    const run = gnRun('t46-log');
+    seven(run);
+    met(run, 'Brock', ['onix'], 'win', { leaderId: 'brock', cls: 'gym-leader' });
+    const log = logOf(run);
+    expect(log).toHaveLength(7);
+    expect(log.find((m) => m.n === 'Youngster Joey')).toMatchObject({ r: 'l', lost: 1 });
+    expect(log.find((m) => m.n === 'Bug Catcher Sam')).toMatchObject({ r: 'w', sw: 1 });
+    expect(log.find((m) => m.n === 'Lass Ann')).toMatchObject({ left: 1, sw: 0 });
+    // Beat them later: still remembered as having beaten you once.
+    met(run, 'Youngster Joey', ['raticate'], 'win', { left: 3 });
+    expect(logOf(run).find((m) => m.n === 'Youngster Joey')).toMatchObject({ r: 'w', lost: 1, t: ['raticate'] });
+  });
+
+  it('needs seven trainers met; the bracket: semi-final one you lost to, quarter-final the easiest win, the rival on the far side', () => {
+    const run = gnRun('t46-door');
+    seven(run);
+    met(run, 'Youngster Joey', ['rattata'], 'lose', { left: 0 });
+    open(run, 'gn-46-door');
+    const r = choose(run, 'gn-46-door', 'Go in.');
+    expect(opened(r.run, 'gn-46-board')).toBe(true);
+    const board = scene(r.run, 'gn-46-board').intro;
+    for (const n of ['Lass Ann', 'Damian', 'Hiker Bo']) expect(board).toContain(n);
+    expect(board).toContain('Quarter-final first: Bug Catcher Sam.');
+    expect(scene(r.run, 'gn-46-qf').intro).toContain('"I didn\'t get a move in. I\'ve counted.');
+    expect(scene(r.run, 'gn-46-sf').intro).toContain('Youngster Joey');
+    expect(scene(r.run, 'gn-46-sf').intro).toContain('you were my best day all year.');
+    const fresh = gnRun('t46-few');
+    open(fresh, 'gn-46-door');
+    expect(JSON.stringify(content.events.get('gn-46-door')!.requires)).toContain('allstarReady');
+  });
+
+  it('nobody has beaten you: the semi-finalist is the one who came closest, and says so', () => {
+    const run = gnRun('t46-unbeaten');
+    seven(run, false);
+    open(run, 'gn-46-door');
+    const r = choose(run, 'gn-46-door', 'Go in.').run;
+    const sf = scene(r, 'gn-46-sf').intro;
+    expect(sf).toContain('Lass Ann');
+    expect(sf).toContain('I\'m the one who came closest. I\'d like that recorded.');
+    expect(sf).toContain('One Pokémon. You had *one* left.');
+  });
+
+  it('the quarter-finalist changed most: evolved, plus one that answers your finisher; the semi-finalist unchanged; a Rare item each', () => {
+    let run = gnRun('t46-teams');
+    seven(run);
+    open(run, 'gn-46-door');
+    run = choose(run, 'gn-46-door', 'Go in.').run;
+    const fin = logOf(run).find((m) => m.n === 'Bug Catcher Sam')!.fin;
+    const walk = choose(run, 'gn-46-board', 'Walk among them.');
+    expect(walk.text).toContain(content.species.get(answerTo(content, fin)!)!.name);
+    const qf = choose(walk.run, 'gn-46-qf', 'Battle.');
+    expect(qf.run.battle!.trainer!.name).toBe('Bug Catcher Sam');
+    expect(qf.run.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(['metapod', 'kakuna', answerTo(content, fin)]);
+    const owned = (r: RunState): number => Object.values(r.inventory).reduce((a, n) => a + n, 0) + r.party.reduce((a, m) => a + Object.values(m.held ?? {}).reduce((x, n) => x + n, 0), 0);
+    const items = owned(qf.run);
+    run = win(qf.run);
+    expect(opened(run, 'gn-46-crowd-1')).toBe(true);
+    expect(owned(run)).toBeGreaterThan(items);
+    run = choose(run, 'gn-46-crowd-1', 'Go to the ring.').run;
+    const sf = choose(run, 'gn-46-sf', 'Battle.');
+    expect(sf.run.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(['rattata', 'pidgey']);
+    for (const foe of sf.run.battle!.enemyTeam) Object.assign(foe, makeStrong(foe));
+    const out = lose(sf.run);
+    expect(opened(out, 'gn-46-out')).toBe(true);
+    expect(out.phase).toBe('map');
+  });
+
+  it('Damian is in, and he has a sash', () => {
+    const run = gnRun('t46-damian');
+    run.party = [...run.party, createPokemon(content, 'pidgey', 20, 'p2')];
+    for (const n of ['Youngster Joey', 'Lass Ann', 'Hiker Bo', 'Camper Ty', 'Picnicker Lu', 'Bug Catcher Sam']) met(run, n, ['geodude'], 'win', { left: 2 });
+    met(run, 'Damian', ['magikarp'], 'lose', { left: 0 });
+    open(run, 'gn-46-door');
+    const r = choose(run, 'gn-46-door', 'Go in.').run;
+    expect(scene(r, 'gn-46-sf').intro).toContain('I\'ve got it on a sash. Tully made the sash.');
+  });
+
+  it('the final: shake hands only at the rival\'s highest Trust (no flinching on turn one); swapped teams, and one hesitates', () => {
+    const run = gnRun('t46-final');
+    expect(scene(run, 'gn-46-final').labels).toEqual(['Battle.']);
+    const rivals = run.story.rivals;
+    run.story.rivals = [{ id: 'r-test', name: 'Blue', state: 'active', rivalPotential: 1 } as unknown as (typeof rivals)[number]];
+    const rid = featuredRival(run)!.id;
+    const before = run.expansion;
+    run.expansion = { ...run.expansion, rival: { [rid]: { feelings: { trust: 10 } } } } as unknown as RunState['expansion'];
+    expect(scene(run, 'gn-46-final').labels).toEqual(['Shake.', 'After.']);
+    run.expansion = before;
+    run.story.rivals = rivals;
+    setFlag(run, 'allstar-shake', 1);
+    setFlag(run, 'x-rival-swapped-teams', 1);
+    open(run, 'gn-46-final');
+    const r = choose(run, 'gn-46-final', 'Battle.');
+    expect(r.run.battle).toBeTruthy();
+    expect(r.run.battle!.storyEffects).toContain('allstar-shake');
+    expect(r.run.battle!.storyEffects.some((s) => s.startsWith(FOE_WAITS) && s.includes('It wore your colours once.'))).toBe(true);
+  });
+
+  it('champion: a rare visitor on the trophy, from the region\'s rarest pool, easy to catch', () => {
+    const run = gnRun('t46-champ');
+    open(run, 'gn-46-final');
+    let r = choose(run, 'gn-46-final', 'Battle.').run;
+    expect(r.battle).toBeTruthy();
+    r = win(r);
+    expect(flagOf(r, 'allstar-champion')).toBe(1);
+    const rare = castOf(r, 'allstar-rare')!;
+    expect(RARE[region(r)]).toContain(rare);
+    const go = choose(r, 'gn-46-champion', 'Go to it.');
+    expect(go.run.battle!.enemyTeam[0]!.speciesId).toBe(rare);
+    expect(go.run.battle!.eventRule?.catchTimes).toBe(4);
+  });
+});

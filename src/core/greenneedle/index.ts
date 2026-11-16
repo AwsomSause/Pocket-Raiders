@@ -25,6 +25,7 @@ import { museumArrive } from './museum';
 import { daycareLeave, daycareReturn, eggShape, parentAndChild } from './daycare';
 import { eggMoveOptions, familyId } from '../mastery';
 import { pairBondLevel } from '../bond';
+import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
 import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
 import { CHAMPION_NAME, onevoneChampion, onevoneEnd, onevoneEnter, onevoneStart, entrantOf } from './onevone';
 import { GAVEL, auctionArrive, auctionOpen, auctionReturn, auctionRound, lotToken } from './auction';
@@ -55,6 +56,8 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   text = text.replace(/\{lot:([1-6]):([a-z]+)\}/g, (_, n: string, part: string) => lotToken(run, Number(n), part));
   text = text.replace(/\{money:([a-z0-9-]+)\}/g, (_, k: string) => `₽${gnFlag(run, k).toLocaleString('en-GB')}`);
   // gn.44: the reigning 1v1 champion, a different trainer each region.
+  // gn.46: the All-Star bracket.
+  if (text.includes('{allstar')) text = allstarTokens(run, text);
   // gn.45: the region's Champion, off duty (cast when the lesson starts).
   if (text.includes('{lesson-champion}')) text = text.replaceAll('{lesson-champion}', content.bosses.get(castOf(run, 'lesson-champion') ?? lessonChampion(content, run, run.regionOrder[run.regionIndex] ?? 'kanto'))?.name ?? 'The Champion');
   text = text.replaceAll('{onevone-champion}', CHAMPION_NAME[run.regionOrder[run.regionIndex] ?? 'kanto'] ?? CHAMPION_NAME.kanto!);
@@ -179,6 +182,10 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'entrantChampion') return !!entrantOf(run)?.champion;
   if (c.test === 'entrantCameBack') return !!entrantOf(run)?.gn?.includes('came-back');
   // gn.45: a rival is well ahead of you (Lead +2 or more).
+  if (c.test === 'allstarReady') return allstarReady(run);
+  if (c.test === 'allstarUnbeaten') return allstarUnbeaten(run);
+  if (c.test === 'rivalTrustMax') return rivalTrustMax(run);
+  if (c.test === 'rivalTrustBelow') return !rivalTrustMax(run);
   if (c.test === 'rivalAhead') return run.story.rivals.some((r) => (r.world?.lead ?? 0) >= 2);
   if (c.test === 'eggMoveKnown') return run.party.some((m) => { const egg = new Set(eggMoveOptions(content, familyId(content, m.speciesId)).map((o) => o.id)); return m.moves.some((mv) => egg.has(mv.id)); });
   if (c.test === 'natureIs') return run.party.some((m) => m.nature === c.key);
@@ -525,6 +532,10 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return onevoneEnd(run, e.n ?? 0);
     case 'onevoneChampion':
       return onevoneChampion(content, run);
+    case 'allstarDraw':
+      return allstarDraw(content, run);
+    case 'allstarChampion':
+      return allstarChampion(content, run, host.region);
     case 'lessonArrive':
       return lessonArrive(content, run, host.region);
     case 'lessonEnd':
@@ -644,6 +655,12 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (rule === 'onevone' && battle.eventRule?.slot) onevoneStart(content, run, battle, battle.eventRule.slot, makeFull(content));
   // gn.45: the region's Champion, with their own team.
   if (rule === 'champlesson' || rule === 'champexam') lessonStart(content, run, battle, makeFull(content));
+  // gn.46: the All-Star bracket. Their teams, upgraded; the final: shaking hands, and a Pokémon that remembers wearing your colours.
+  if (rule === 'allstar-qf' || rule === 'allstar-sf') allstarStart(content, run, battle, rule === 'allstar-qf' ? 'qf' : 'sf', makeFull(content));
+  if (rule === 'allstar-final') {
+    if (gnFlag(run, 'allstar-shake') > 0) battle.storyEffects.push('allstar-shake');
+    if (gnFlag(run, 'x-rival-swapped-teams') > 0 || gnFlag(run, 'rival-colours-kept') > 0) battle.storyEffects.push(`${FOE_WAITS}One of their Pokémon looks across at you, not at your Pokémon. It wore your colours once. It hesitates.`);
+  }
   // gn.32: the Crystal Golem takes the type of the colour you carry most.
   if (battle.eventRule?.gn === 'golem') golemStart(run, battle);
   // gn.35: a friendly follower, drawn by a charged crystal: it walks alongside you, and is easier to catch (ridge.ts ridgeCatch).

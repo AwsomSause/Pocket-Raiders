@@ -518,6 +518,22 @@
   {
    "key": "lesson-why",
    "rule": "core/greenneedle/champion.ts (gn.45)"
+  },
+  {
+   "key": "allstar-round",
+   "rule": "core/greenneedle/allstar.ts (gn.46)"
+  },
+  {
+   "key": "allstar-damian",
+   "rule": "core/greenneedle/allstar.ts (gn.46)"
+  },
+  {
+   "key": "allstar-samurai",
+   "rule": "core/greenneedle/allstar.ts (gn.46)"
+  },
+  {
+   "key": "allstar-champion",
+   "rule": "core/greenneedle/allstar.ts (gn.46)"
   }
  ]
 }

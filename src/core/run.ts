@@ -23,6 +23,7 @@ import { ridgeCatch } from './greenneedle/ridge';
 import { unflinchingStart } from './greenneedle/daycare';
 import { gavelStart } from './greenneedle/auction';
 import { lessonAfterstory } from './greenneedle/champion';
+import { allstarRecord, allstarTurn } from './greenneedle/allstar';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
 import { revivalFee } from './battle/revivalStatus';
@@ -3298,6 +3299,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   events.push(...(pondAfterTurn(content, run) as typeof events));
   // Greenneedle events: stories that count fights (the forest duelist) take their count once the fight is won.
   events.push(...(gnAfterTurn(content, run) as typeof events));
+  allstarTurn(run.battle, engineEvents);
   // A one-on-one duel (new events, NE23): when the duellist goes down, the fight is over.
   if (battle.eventRule?.oneOnOne && !battle.outcome && (run.party[battle.activeIndex]?.hp ?? 0) <= 0) battle.outcome = 'lose';
   noteCalm(run);
@@ -3736,6 +3738,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   }
   // Catalog Overhaul (new events): the run's first Z-Move is remembered (NE8's old man in the crowd waits for it).
   if (battle.transform?.used.player.includes('zmove') && !run.story.flags['ev:z-move-used']) run.story.flags['ev:z-move-used'] = 1;
+  // Greenneedle gn.46: every trainer met this run, and how it went (the All-Star Tournament draws from it).
+  allstarRecord(run);
   // Nuzlocke: the fallen are lost for good.
   buryFallen(content, run, battleCause(content, battle));
   const archetype = runArchetype(content, run);

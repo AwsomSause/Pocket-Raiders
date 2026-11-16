@@ -1435,6 +1435,729 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-46-door",
+   "name": "The All-Star Tournament",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "allstarReady"
+    },
+    {
+     "kind": "flag",
+     "key": "allstar-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5b3f1f",
+    "effect": "none"
+   },
+   "intro": "*A poster on every wall in town: THE ALL-STAR TOURNAMENT. Under it, eight names. You know seven of them. The eighth is yours.*\n\nSomeone has drawn a little star next to your name, in pen. Then another. Then a third.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "The hall is full. Every face in the stands is one you've met somewhere on the road.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "allstar-entered",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "allstarDraw"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-46-board"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you, someone reads your name off the poster out loud, sounding disappointed.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-46-board",
+   "name": "The All-Star Tournament: The Bracket",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3f1f",
+    "effect": "none"
+   },
+   "intro": "The bracket, chalked on a board taller than you: {allstar-bracket}, and you. Your rival is on the far side. Of course they are.\n\nQuarter-final first: {allstar:qf}. The crowd is everyone you've met who isn't on the board. The ones you helped are at the front, shouting.\n\nThe ones you walked past are here too, further back. They came anyway.",
+   "choices": [
+    {
+     "label": "Walk among them.",
+     "success": {
+      "text": "A kid you once helped grabs your sleeve. \"{allstar:qf} has a new one. A {cast:allstar-new-qf}. Saw it this morning. Be careful.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-46-qf"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go to the ring.",
+     "success": {
+      "text": "You go straight to the ring. The noise follows you down the aisle like weather.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-46-qf"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-46-qf",
+   "name": "The All-Star Tournament: Quarter-Final",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "damian",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "allstar-damian",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**Damian:** \"ALL-STAR. They said *All-Star.* I've got it on a sash. Tully made the sash.\""
+    },
+    {
+     "id": "samurai",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "allstar-samurai",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**The Samurai:** \"You named my defeat. I've come to rename it.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3f1f",
+    "effect": "none"
+   },
+   "intro": "The quarter-final. {allstar:qf} is waiting in the ring, and you almost don't recognise them. They've changed the most.\n\n**{allstar:qf}:** \"{allstar-line:qf}\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The bell. Their first Pokémon is one you've never seen them with.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-46-out"
+        }
+       ],
+       "rule": {
+        "gn": "allstar-qf"
+       },
+       "name": "All-Star",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "life-orb",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf",
+          "leftovers",
+          "focus-sash",
+          "assault-vest",
+          "expert-belt"
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "allstar-round",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-46-crowd-1"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-46-crowd-1",
+   "name": "The All-Star Tournament: Between Rounds",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3f1f",
+    "effect": "none"
+   },
+   "intro": "Between rounds. The crowd spills into the aisles. People you met for five minutes, months ago, want to shake your hand.\n\nSomeone at the back is holding something out to you, and won't stop holding it out until you come over.",
+   "choices": [
+    {
+     "label": "Walk among them.",
+     "success": {
+      "text": "A traveller you once shared a fire with presses a held item into your palm. \"For the next one. You'll need it more than me.\"",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "quick-claw",
+         "scope-lens",
+         "muscle-band",
+         "wise-glasses",
+         "shell-bell"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-46-sf"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go to the ring.",
+     "success": {
+      "text": "You wave, and go. They wave back, still holding it out, smiling.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-46-sf"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-46-sf",
+   "name": "The All-Star Tournament: Semi-Final",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unbeaten",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "allstarUnbeaten"
+      }
+     ],
+     "notice": "**{allstar:sf}:** \"They couldn't find anyone who'd beaten you. So they sent me. I'm the one who came closest. I'd like that recorded.\""
+    },
+    {
+     "id": "damian",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "allstar-damian",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**Damian:** \"ALL-STAR. They said *All-Star.* I've got it on a sash. Tully made the sash.\""
+    },
+    {
+     "id": "samurai",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "allstar-samurai",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**The Samurai:** \"You named my defeat. I've come to rename it.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3f1f",
+    "effect": "none"
+   },
+   "intro": "The semi-final. {allstar:sf}. They haven't changed at all, and they don't think they need to. Looking at them, you're not sure they're wrong.\n\n**{allstar:sf}:** \"{allstar-line:sf}\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Same team. Same stance. Same look in their eye, like they know something you don't.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-46-out"
+        }
+       ],
+       "rule": {
+        "gn": "allstar-sf"
+       },
+       "name": "All-Star",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "life-orb",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf",
+          "leftovers",
+          "focus-sash",
+          "assault-vest",
+          "expert-belt"
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "allstar-round",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "allstar-respect",
+         "n": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Beat the All-Star semi-finalist, who shook your hand and promised to come to the Final Reunion.",
+         "importance": 60
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-46-crowd-2"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-46-crowd-2",
+   "name": "The All-Star Tournament: Before the Final",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3f1f",
+    "effect": "none"
+   },
+   "intro": "{allstar:sf} finds you in the corridor. They don't say anything. They just nod, the way you nod at someone you'll see again.\n\nOut in the stands, a grandmother you once helped across a river is waving a Berry over her head like a flag.",
+   "choices": [
+    {
+     "label": "Walk among them.",
+     "success": {
+      "text": "She folds your fingers round it. \"Eat it before, not during. Before. I know about these things.\"",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-46-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go to the ring.",
+     "success": {
+      "text": "You blow her a kiss from the aisle. She pretends to catch it, and puts it in her pocket.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-46-final"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-46-final",
+   "name": "The All-Star Tournament: The Final",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "threw",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "x-rival-threw-match",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**{allstar-rival}:** \"You threw one for me, once. I never thanked you. I'm not going to thank you now, either. I'm going to win.\""
+    },
+    {
+     "id": "stone",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-memorial-waited",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**{allstar-rival}:** \"You waited with me, on the hill. At the stone. I keep thinking about that. Don't let it make you go easy.\""
+    },
+    {
+     "id": "ahead",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "rivalAhead"
+      }
+     ],
+     "notice": "**{allstar-rival}:** \"I'm ahead, you know. Badges, wins, all of it. I've kept count. This is the one that counts, though.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3f1f",
+    "effect": "none"
+   },
+   "intro": "The final. {allstar-rival}, on the far side of the ring, exactly where the bracket said they'd be.\n\n**{allstar-rival}:** \"Everyone you've ever fought is in those stands. And it's still us two at the end. It's *always* us two.\"",
+   "choices": [
+    {
+     "label": "Shake.",
+     "success": {
+      "text": "You shake. Their grip is warm, and it holds a second longer than it needs to. Both teams stand a little taller.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "allstar-shake",
+        "n": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-46-runner-up"
+        }
+       ],
+       "rule": {
+        "gn": "allstar-final"
+       },
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "allstarChampion"
+        },
+        {
+         "kind": "moment",
+         "text": "Won the All-Star Tournament. Every name you met is on the trophy. Yours is last.",
+         "importance": 85
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-46-champion"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "rivalTrustMax"
+      }
+     ]
+    },
+    {
+     "label": "After.",
+     "success": {
+      "text": "\"After,\" you say. They grin, and put their hand away. \"After, then. Promise.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-46-runner-up"
+        }
+       ],
+       "rule": {
+        "gn": "allstar-final"
+       },
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "allstarChampion"
+        },
+        {
+         "kind": "moment",
+         "text": "Won the All-Star Tournament. Every name you met is on the trophy. Yours is last.",
+         "importance": 85
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-46-champion"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "rivalTrustMax"
+      }
+     ]
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The bell. The whole hall goes silent at once, the way a room does when it knows.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-46-runner-up"
+        }
+       ],
+       "rule": {
+        "gn": "allstar-final"
+       },
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "allstarChampion"
+        },
+        {
+         "kind": "moment",
+         "text": "Won the All-Star Tournament. Every name you met is on the trophy. Yours is last.",
+         "importance": 85
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-46-champion"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "rivalTrustBelow"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-46-champion",
+   "name": "The All-Star Tournament: Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3f1f",
+    "effect": "none"
+   },
+   "intro": "They hand you the trophy. Every entrant's name is engraved on it: {allstar-bracket}. Yours is last. There was only just room.\n\nLater, when the hall is empty and the chairs are stacked, you come back for your coat.\n\nSomething is sitting on the trophy. It came to watch. It looks at you as though it has already decided.",
+   "choices": [
+    {
+     "label": "Go to it.",
+     "success": {
+      "text": "It doesn't run. It hops down off the trophy, and waits for you to be ready.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@allstar-rare"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [],
+       "rule": {
+        "catchTimes": 4
+       }
+      }
+     }
+    },
+    {
+     "label": "Leave it be.",
+     "success": {
+      "text": "You take the trophy and leave it there, watching you go. At the door you look back. It's still watching.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-46-runner-up",
+   "name": "The All-Star Tournament: Runner-Up",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3f1f",
+    "effect": "none"
+   },
+   "intro": "{allstar-rival} holds the trophy up, and the hall roars. Then they look for you in the crowd, and they don't stop looking until they find you.\n\n**{allstar-rival}:** \"Us two. Always. Next time it's yours.\"",
+   "choices": [
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You keep what you won. On the way out, a dozen people you've met tell you it was close. Some of them mean it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-46-out",
+   "name": "The All-Star Tournament: Out",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3f1f",
+    "effect": "none"
+   },
+   "intro": "Out. The crowd claps anyway, the people at the front loudest of all.\n\nYou keep what you won. You watch the rest from the stands, with people you'd forgotten you'd met.",
+   "choices": [
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "On the way out, someone shouts your name from the back. You never find out who.",
+      "effects": []
+     }
+    }
+   ]
   }
  ]
 }
