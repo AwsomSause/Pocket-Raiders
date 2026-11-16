@@ -2759,5 +2759,76 @@
    "Mystery Episode"
   ],
   "tags": []
+ },
+ "gn-32-pool": {
+  "gn": "gn.new.32",
+  "shape": "Region-long",
+  "earliest": "A9",
+  "home": 7,
+  "window": [
+   5,
+   10
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "stages": [
+   2
+  ],
+  "level": "The battle path: Raikou at A+2",
+  "often": "run",
+  "badge": "own",
+  "beats": [
+   {
+    "beat": "Sighting 1: drinking at a pool (needs high; fallback step 12)",
+    "event": "gn-32-pool",
+    "stage": "S2",
+    "home": 7,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Sighting 2: watching a town from a ridge (fallback step 17)",
+    "event": "gn-32-ridge",
+    "stage": "S4",
+    "home": 12,
+    "window": [
+     10,
+     15
+    ]
+   },
+   {
+    "beat": "Sighting 3: standing over a Pichu (fallback step 12)",
+    "event": "gn-32-pichu",
+    "stage": "S6",
+    "home": 7,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "The fourth meeting: Balls only = fair fight (step 17); waited = the night walk (step 10, near a + node); mixed = the nod",
+    "event": "gn-32-meet-night",
+    "stage": "S7 or S8",
+    "home": 10,
+    "window": [
+     8,
+     13
+    ]
+   }
+  ],
+  "dressing": {
+   "kanto": "The Storm Chaser",
+   "elsewhere": "The Storm Chaser"
+  },
+  "note": "Badge: a bolt. Once per run (the doc says per save; no memory across runs). Raikou is the battle path (fair, A+2, catchable; it runs if it is losing); the patient path gives the Thundermark (held: Electric moves +20%, Speed +10%). A sheltered Pichu is met later as a Pikachu with Lightning Rod (gn-32-pikachu).",
+  "kinds": [
+   "Legendary"
+  ],
+  "tags": [
+   "storm"
+  ]
  }
 }

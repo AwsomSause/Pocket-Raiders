@@ -418,5 +418,35 @@
       "kind": "ability",
       "mode": "hidden"
     }
+  },
+  {
+    "id": "thundermark",
+    "name": "Thundermark",
+    "family": "Held items",
+    "description": "A paw print burned into a scrap of bark by something walking through your camp at night. The holder's Electric moves hit 20% harder, and its Speed is 10% higher.",
+    "rarity": "epic",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "library/commonstone",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "electric"
+          ],
+          "percent": 20
+        },
+        {
+          "hook": "stat",
+          "stat": "spe",
+          "multiplier": 1.1
+        }
+      ]
+    }
   }
 ]
