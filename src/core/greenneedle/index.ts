@@ -30,6 +30,7 @@ import { draftAldhelm, draftBattleStart, draftEnd, draftFriend, draftLetter, dra
 import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
 import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorStart, defectorTokens, defectorTrust, guestOf } from './defector';
 import { taEnd, taLot, taRare, taStart } from './teamauction';
+import { stAssign, stEnd, stStart, strandingTokens } from './stranding';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { duelDue, duelEnd, duelEnter, duelName, duelWorthy, duelistStart, worthyStart } from './duelist';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
@@ -81,6 +82,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{defector:')) text = defectorTokens(content, run, text);
   // gn.51: the Smuggling Ring.
   if (text.includes('{smuggle:')) text = smuggleTokens(content, run, text);
+  if (text.includes('{stranding:')) text = strandingTokens(content, run, text);
   if (text.includes('{siege:')) text = siegeTokens(content, run, text);
   if (text.includes('{karp:')) text = karpTokens(run, text);
   if (text.includes('{lt:')) text = ltTokens(run, text);
@@ -692,6 +694,12 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'lsAddress':
       lsAddress(run);
       return '';
+    case 'stStart':
+      return stStart(run);
+    case 'stAssign':
+      return stAssign(content, run, e.n ?? 0);
+    case 'stEnd':
+      return stEnd(run);
     case 'bidoofJoin':
       return bidoofJoin(content, run, host);
     case 'leftTake':

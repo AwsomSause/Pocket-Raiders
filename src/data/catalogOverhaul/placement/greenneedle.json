@@ -4436,5 +4436,60 @@
    "Miniature Episode"
   ],
   "tags": []
+ },
+ "gn-new-17-beach": {
+  "gn": "gn.new.17",
+  "shape": "World Event",
+  "earliest": "A5",
+  "home": 10,
+  "window": [
+   10,
+   15
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "stages": [
+   3,
+   4,
+   5,
+   6
+  ],
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Stranding",
+   "elsewhere": "The Stranding"
+  },
+  "note": "Badge: a wave. Eight turns (seven if the factory was left running); six tasks, one per Pokémon a turn (core/greenneedle/stranding.ts). Four or more kept up and the tide lifts it; fewer and a second Wailord calls; nobody dies. A Wailmer joins; the next ferry in the region skips one more step (events.ts skipAhead).",
+  "kinds": [
+   "World Event"
+  ],
+  "tags": [
+   "water"
+  ]
+ },
+ "gn-new-17-festival": {
+  "gn": "gn.new.17",
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 8,
+  "window": [
+   1,
+   20
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "dressing": {
+   "kanto": "The Stranding: The Festival",
+   "elsewhere": "The Stranding: The Festival"
+  },
+  "note": "Afterstory: a festival in a later region of this run (no cross-run memory), with the Pokémon that calmed it on the banner.",
+  "kinds": [
+   "World Event"
+  ],
+  "tags": []
  }
 }

@@ -2082,7 +2082,10 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (e.nodes || e.half) {
         // Walk the paths: the nodes exactly `steps` moves on, stopping at the last nodes before the gym.
         const gate = Math.min(...landings.map((n) => n.column));
-        const steps = e.half ? Math.max(1, Math.floor((gate - here.column) / 2)) : e.nodes!;
+        // gn.new.17 Gratitude: the Wailord's town speeds the next crossing in this region by one step, once.
+        const thanks = run.story.flags['ev:stranding-gratitude'] === run.regionIndex + 1 ? 1 : 0;
+        if (thanks) delete run.story.flags['ev:stranding-gratitude'];
+        const steps = (e.half ? Math.max(1, Math.floor((gate - here.column) / 2)) : e.nodes!) + thanks;
         let ring = [here];
         for (let i = 0; i < steps; i += 1) {
           const next = stage.map.nodes.filter((n) => !gyms.has(n.id) && ring.some((r) => r.next.includes(n.id)));
