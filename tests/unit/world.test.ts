@@ -270,10 +270,21 @@ describe('follow-up scenes', () => {
 
 describe('landmarks and dungeons', () => {
   it('a landmark opens its rooms one after another beside the same node', () => {
-    let run = atEvent(newRun(), 'lighthouse-entrance');
-    run = chooseEvent(content, run, 'test-event', 0).run;
+    // The pack's landmarks are pseudo-stage Doors now (Catalog Overhaul; a chain room walks into the Door's map), so the room
+    // mechanism is checked on a test landmark that opens a plain room.
+    const def = structuredClone(content.events.get('lighthouse-entrance')!);
+    def.stop = LANDMARK_STOP;
+    def.id = 'test-landmark';
+    def.pseudo = false;
+    def.choices[0]!.requires = [];
+    def.choices[0]!.branches = [];
+    delete def.choices[0]!.success.battle;
+    def.choices[0]!.success.effects = [{ kind: 'addEvent', eventId: 'fb-last-train-carriage' }];
+    const withRoom = { ...content, events: new Map(content.events).set(def.id, def) };
+    let run = atEvent(newRun(), def.id);
+    run = chooseEvent(withRoom, run, 'test-event', 0).run;
     const here = findNode(run.stage!.map, run.stage!.current!);
-    expect(here.sides.some((s) => s.eventId === 'lighthouse-1' && !s.used)).toBe(true);
+    expect(here.sides.some((s) => s.eventId === 'fb-last-train-carriage' && !s.used)).toBe(true);
   });
 
   it('rooms are never drawn on their own', () => {

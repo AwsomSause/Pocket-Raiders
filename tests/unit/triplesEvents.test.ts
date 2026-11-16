@@ -85,10 +85,9 @@ describe('The Whispering Grove: Wake them', () => {
     }
     expect(run.phase === 'battle' ? run.battle?.outcome : 'done').toBeTruthy();
   });
-  it('"Push on" is still one wild Pokémon, rolled as before', () => {
-    const a = battleOf(on, atEvent('grove-push', 'whispering-grove-1'), 0);
-    expect(a.battle!.enemyTeam).toHaveLength(1);
-    expect(spotCount(a.battle!)).toBe(1);
+  it('the other answers of the rebuilt circle (Sit and listen, Sing back; STORY_FAMILIES_6 SF39) start no battle', () => {
+    expect(battleOf(on, atEvent('grove-calm', 'whispering-grove-1'), 0).battle).toBeFalsy();
+    expect(on.events.get('whispering-grove-1')!.choices[2]!.success.battle).toBeUndefined();
   });
   it('the extra wild Pokémon come from their own generator: the first foe is the one the fight would have without a format', () => {
     const def = structuredClone(on.events.get('whispering-grove-1')!);

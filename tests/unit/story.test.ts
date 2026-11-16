@@ -79,7 +79,7 @@ describe('story foundation: random streams', () => {
     'STORY2/0': 'b24a1a0604f703b8', // STORY2, 5, 6 re-pinned after #1098 (Starter Sets removal); cause not isolated, see PR
     'STORY4/0': '927fbd65e715ebbc',
     'STORY5/0': '93fa407c6ffa3882',
-    'STORY6/0': '445823286623fbbc', // re-pinned in the Lavender canon PR: new Flashlight (wild-preview key item) joins the item draws; earlier: new Silver Powder (Bug type booster) joins trainer held-item draws; proven by removing it (pin returns)
+    'STORY6/0': '52bec6a1b353832a', // re-pinned in the families-b Catalog Overhaul PR: its rebuilt road events and the Never-Melt Ice catalog item change the event and item draws; earlier, the Lavender canon PR: new Flashlight (wild-preview key item) joins the item draws; earlier: new Silver Powder (Bug type booster) joins trainer held-item draws; proven by removing it (pin returns)
     'STORY7/0': '2db6e08d823e4f4c',
     'STORY8/0': '2fa3b04267e0313a',
   };
