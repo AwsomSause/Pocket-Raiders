@@ -33,6 +33,7 @@ import { listenedPass, listenedTurn, listenedWin } from './greenneedle/listened'
 import { duelAfterstory, duelistMark } from './greenneedle/duelist';
 import { tyrogueTurn } from './greenneedle/tyrogue';
 import { mirrorRecord } from './greenneedle/mirror';
+import { eeveeHealed, eeveeTurn } from './greenneedle/eevee';
 import { draftRecord } from './greenneedle/draft';
 import { exRipple } from './greenneedle/exhibition';
 import { snorlaxForgives, snorlaxGym, snorlaxRest } from './greenneedle/snorlax';
@@ -2713,6 +2714,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const before = run.party.map((m) => m.hp);
     healParty(content, run);
     coHealStop(content, run, before);
+    eeveeHealed(content, run, before);
     // Kalos step 3 (Members First): the Center gives back only part of each Pokémon's HP.
     const share = trackHealShare(content, run);
     if (share < 1) run.party.forEach((m, i) => { m.hp = Math.min(m.hp, Math.max(before[i] ?? 0, Math.ceil(maxHp(content, m) * share))); });
@@ -3359,6 +3361,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   events.push(...(gnAfterTurn(content, run) as typeof events));
   allstarTurn(run.battle, engineEvents);
   tyrogueTurn(run, engineEvents);
+  // Greenneedle gn.new.01: what the player does in a fight (Fire moves, quick wins, night, water) decides what the Eevee becomes.
+  eeveeTurn(content, run, engineEvents);
   // A one-on-one duel (new events, NE23): when the duellist goes down, the fight is over.
   if (battle.eventRule?.oneOnOne && !battle.outcome && (run.party[battle.activeIndex]?.hp ?? 0) <= 0) battle.outcome = 'lose';
   noteCalm(run);

@@ -4,7 +4,6 @@
  "external": {
   "abandoned-mon": "gn.new.03 The Ball That Wouldn't Open",
   "littlecup-cancelled": "gn.new.27",
-  "eevee-stayed": "gn.new.01",
   "dog-sat": "gn.new.02",
   "little-league-losing": "SF134.2 Little League",
   "starter-home": "a starter's visit home (gn.new)",
@@ -823,6 +822,26 @@
   {
    "key": "night-shift-sneasel",
    "rule": "tools/events/co/greenneedle-new-24.ts (gn.new.24 The Night Shift: the Sneasel stayed; read by gn.40)"
+  },
+  {
+   "key": "eevee-on",
+   "rule": "core/greenneedle/eevee.ts (gn.new.01 The Eevee Who Couldn't Choose)"
+  },
+  {
+   "key": "eevee-done",
+   "rule": "core/greenneedle/eevee.ts (gn.new.01 The Eevee Who Couldn't Choose)"
+  },
+  {
+   "key": "eevee-form",
+   "rule": "core/greenneedle/eevee.ts (gn.new.01 The Eevee Who Couldn't Choose)"
+  },
+  {
+   "key": "eevee-stayed",
+   "rule": "core/greenneedle/eevee.ts (gn.new.01 The Eevee Who Couldn't Choose)"
+  },
+  {
+   "key": "eevee-fainted",
+   "rule": "core/greenneedle/eevee.ts (gn.new.01 The Eevee Who Couldn't Choose)"
   }
  ]
 }

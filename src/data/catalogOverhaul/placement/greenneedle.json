@@ -5428,5 +5428,1060 @@
    "Region Story"
   ],
   "tags": []
+ },
+ "gn-new-01-open": {
+  "gn": "gn.new.01",
+  "shape": "Region",
+  "earliest": "A1",
+  "sits": "must-see",
+  "attaches": "before",
+  "level": "no battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.01",
+  "beat": 1,
+  "beats": [
+   {
+    "beat": "Cold open",
+    "event": "gn-new-01-open",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     1
+    ]
+   },
+   {
+    "beat": "Beat 1: Fisherman",
+    "event": "gn-new-01-b1",
+    "stage": "S1",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 2: Street magician",
+    "event": "gn-new-01-b2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 3: Electrician",
+    "event": "gn-new-01-b3",
+    "stage": "S3",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 4: Night-shift nurse",
+    "event": "gn-new-01-b4",
+    "stage": "S4",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 5: Gardener",
+    "event": "gn-new-01-b5",
+    "stage": "S5",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 6: Mountain guide",
+    "event": "gn-new-01-b6",
+    "stage": "S6",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 7: Ribbon-maker",
+    "event": "gn-new-01-b7",
+    "stage": "S7",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Ending",
+    "event": "gn-new-01-end",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     19,
+     19
+    ]
+   }
+  ],
+  "note": "Badge: a small brown paw. Once a run (the doc says once per save; no memory across runs). Best in a run's first or second region.",
+  "kinds": [
+   "Region-Wide Story",
+   "Companion Story"
+  ],
+  "tags": [],
+  "home": 1,
+  "window": [
+   1,
+   1
+  ],
+  "stages": [
+   1
+  ]
+ },
+ "gn-new-01-b1": {
+  "gn": "gn.new.01",
+  "shape": "Region",
+  "earliest": "A1",
+  "sits": "must-see",
+  "attaches": "after",
+  "level": "no battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.01",
+  "beat": 2,
+  "stages": [
+   1
+  ],
+  "beats": [
+   {
+    "beat": "Cold open",
+    "event": "gn-new-01-open",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     1
+    ]
+   },
+   {
+    "beat": "Beat 1: Fisherman",
+    "event": "gn-new-01-b1",
+    "stage": "S1",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 2: Street magician",
+    "event": "gn-new-01-b2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 3: Electrician",
+    "event": "gn-new-01-b3",
+    "stage": "S3",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 4: Night-shift nurse",
+    "event": "gn-new-01-b4",
+    "stage": "S4",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 5: Gardener",
+    "event": "gn-new-01-b5",
+    "stage": "S5",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 6: Mountain guide",
+    "event": "gn-new-01-b6",
+    "stage": "S6",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 7: Ribbon-maker",
+    "event": "gn-new-01-b7",
+    "stage": "S7",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Ending",
+    "event": "gn-new-01-end",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     19,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Companion Story"
+  ],
+  "tags": [],
+  "home": 15,
+  "window": [
+   15,
+   19
+  ]
+ },
+ "gn-new-01-b2": {
+  "gn": "gn.new.01",
+  "shape": "Region",
+  "earliest": "A1",
+  "sits": "optional",
+  "attaches": "after",
+  "level": "no battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.01",
+  "beat": 3,
+  "stages": [
+   2
+  ],
+  "beats": [
+   {
+    "beat": "Cold open",
+    "event": "gn-new-01-open",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     1
+    ]
+   },
+   {
+    "beat": "Beat 1: Fisherman",
+    "event": "gn-new-01-b1",
+    "stage": "S1",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 2: Street magician",
+    "event": "gn-new-01-b2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 3: Electrician",
+    "event": "gn-new-01-b3",
+    "stage": "S3",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 4: Night-shift nurse",
+    "event": "gn-new-01-b4",
+    "stage": "S4",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 5: Gardener",
+    "event": "gn-new-01-b5",
+    "stage": "S5",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 6: Mountain guide",
+    "event": "gn-new-01-b6",
+    "stage": "S6",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 7: Ribbon-maker",
+    "event": "gn-new-01-b7",
+    "stage": "S7",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Ending",
+    "event": "gn-new-01-end",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     19,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Companion Story"
+  ],
+  "tags": [],
+  "home": 5,
+  "window": [
+   5,
+   10
+  ]
+ },
+ "gn-new-01-b3": {
+  "gn": "gn.new.01",
+  "shape": "Region",
+  "earliest": "A1",
+  "sits": "optional",
+  "attaches": "after",
+  "level": "no battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.01",
+  "beat": 4,
+  "stages": [
+   3
+  ],
+  "beats": [
+   {
+    "beat": "Cold open",
+    "event": "gn-new-01-open",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     1
+    ]
+   },
+   {
+    "beat": "Beat 1: Fisherman",
+    "event": "gn-new-01-b1",
+    "stage": "S1",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 2: Street magician",
+    "event": "gn-new-01-b2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 3: Electrician",
+    "event": "gn-new-01-b3",
+    "stage": "S3",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 4: Night-shift nurse",
+    "event": "gn-new-01-b4",
+    "stage": "S4",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 5: Gardener",
+    "event": "gn-new-01-b5",
+    "stage": "S5",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 6: Mountain guide",
+    "event": "gn-new-01-b6",
+    "stage": "S6",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 7: Ribbon-maker",
+    "event": "gn-new-01-b7",
+    "stage": "S7",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Ending",
+    "event": "gn-new-01-end",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     19,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Companion Story"
+  ],
+  "tags": [],
+  "home": 5,
+  "window": [
+   5,
+   10
+  ]
+ },
+ "gn-new-01-b4": {
+  "gn": "gn.new.01",
+  "shape": "Region",
+  "earliest": "A1",
+  "sits": "optional",
+  "attaches": "after",
+  "level": "no battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.01",
+  "beat": 5,
+  "stages": [
+   4
+  ],
+  "beats": [
+   {
+    "beat": "Cold open",
+    "event": "gn-new-01-open",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     1
+    ]
+   },
+   {
+    "beat": "Beat 1: Fisherman",
+    "event": "gn-new-01-b1",
+    "stage": "S1",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 2: Street magician",
+    "event": "gn-new-01-b2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 3: Electrician",
+    "event": "gn-new-01-b3",
+    "stage": "S3",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 4: Night-shift nurse",
+    "event": "gn-new-01-b4",
+    "stage": "S4",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 5: Gardener",
+    "event": "gn-new-01-b5",
+    "stage": "S5",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 6: Mountain guide",
+    "event": "gn-new-01-b6",
+    "stage": "S6",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 7: Ribbon-maker",
+    "event": "gn-new-01-b7",
+    "stage": "S7",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Ending",
+    "event": "gn-new-01-end",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     19,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Companion Story"
+  ],
+  "tags": [],
+  "home": 15,
+  "window": [
+   15,
+   19
+  ]
+ },
+ "gn-new-01-b5": {
+  "gn": "gn.new.01",
+  "shape": "Region",
+  "earliest": "A1",
+  "sits": "optional",
+  "attaches": "after",
+  "level": "no battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.01",
+  "beat": 6,
+  "stages": [
+   5
+  ],
+  "beats": [
+   {
+    "beat": "Cold open",
+    "event": "gn-new-01-open",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     1
+    ]
+   },
+   {
+    "beat": "Beat 1: Fisherman",
+    "event": "gn-new-01-b1",
+    "stage": "S1",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 2: Street magician",
+    "event": "gn-new-01-b2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 3: Electrician",
+    "event": "gn-new-01-b3",
+    "stage": "S3",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 4: Night-shift nurse",
+    "event": "gn-new-01-b4",
+    "stage": "S4",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 5: Gardener",
+    "event": "gn-new-01-b5",
+    "stage": "S5",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 6: Mountain guide",
+    "event": "gn-new-01-b6",
+    "stage": "S6",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 7: Ribbon-maker",
+    "event": "gn-new-01-b7",
+    "stage": "S7",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Ending",
+    "event": "gn-new-01-end",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     19,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Companion Story"
+  ],
+  "tags": [],
+  "home": 5,
+  "window": [
+   5,
+   10
+  ]
+ },
+ "gn-new-01-b6": {
+  "gn": "gn.new.01",
+  "shape": "Region",
+  "earliest": "A1",
+  "sits": "optional",
+  "attaches": "after",
+  "level": "no battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.01",
+  "beat": 7,
+  "stages": [
+   6
+  ],
+  "beats": [
+   {
+    "beat": "Cold open",
+    "event": "gn-new-01-open",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     1
+    ]
+   },
+   {
+    "beat": "Beat 1: Fisherman",
+    "event": "gn-new-01-b1",
+    "stage": "S1",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 2: Street magician",
+    "event": "gn-new-01-b2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 3: Electrician",
+    "event": "gn-new-01-b3",
+    "stage": "S3",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 4: Night-shift nurse",
+    "event": "gn-new-01-b4",
+    "stage": "S4",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 5: Gardener",
+    "event": "gn-new-01-b5",
+    "stage": "S5",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 6: Mountain guide",
+    "event": "gn-new-01-b6",
+    "stage": "S6",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 7: Ribbon-maker",
+    "event": "gn-new-01-b7",
+    "stage": "S7",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Ending",
+    "event": "gn-new-01-end",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     19,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Companion Story"
+  ],
+  "tags": [],
+  "home": 15,
+  "window": [
+   15,
+   19
+  ]
+ },
+ "gn-new-01-b7": {
+  "gn": "gn.new.01",
+  "shape": "Region",
+  "earliest": "A1",
+  "sits": "optional",
+  "attaches": "after",
+  "level": "no battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.01",
+  "beat": 8,
+  "stages": [
+   7
+  ],
+  "beats": [
+   {
+    "beat": "Cold open",
+    "event": "gn-new-01-open",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     1
+    ]
+   },
+   {
+    "beat": "Beat 1: Fisherman",
+    "event": "gn-new-01-b1",
+    "stage": "S1",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 2: Street magician",
+    "event": "gn-new-01-b2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 3: Electrician",
+    "event": "gn-new-01-b3",
+    "stage": "S3",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 4: Night-shift nurse",
+    "event": "gn-new-01-b4",
+    "stage": "S4",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 5: Gardener",
+    "event": "gn-new-01-b5",
+    "stage": "S5",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 6: Mountain guide",
+    "event": "gn-new-01-b6",
+    "stage": "S6",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 7: Ribbon-maker",
+    "event": "gn-new-01-b7",
+    "stage": "S7",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Ending",
+    "event": "gn-new-01-end",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     19,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Companion Story"
+  ],
+  "tags": [],
+  "home": 5,
+  "window": [
+   5,
+   10
+  ]
+ },
+ "gn-new-01-end": {
+  "gn": "gn.new.01",
+  "shape": "Region",
+  "earliest": "A1",
+  "sits": "must-see",
+  "attaches": "before",
+  "level": "no battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.01",
+  "beat": 9,
+  "beats": [
+   {
+    "beat": "Cold open",
+    "event": "gn-new-01-open",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     1
+    ]
+   },
+   {
+    "beat": "Beat 1: Fisherman",
+    "event": "gn-new-01-b1",
+    "stage": "S1",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 2: Street magician",
+    "event": "gn-new-01-b2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 3: Electrician",
+    "event": "gn-new-01-b3",
+    "stage": "S3",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 4: Night-shift nurse",
+    "event": "gn-new-01-b4",
+    "stage": "S4",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 5: Gardener",
+    "event": "gn-new-01-b5",
+    "stage": "S5",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Beat 6: Mountain guide",
+    "event": "gn-new-01-b6",
+    "stage": "S6",
+    "home": 15,
+    "window": [
+     15,
+     19
+    ]
+   },
+   {
+    "beat": "Beat 7: Ribbon-maker",
+    "event": "gn-new-01-b7",
+    "stage": "S7",
+    "home": 5,
+    "window": [
+     5,
+     10
+    ]
+   },
+   {
+    "beat": "Ending",
+    "event": "gn-new-01-end",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     19,
+     19
+    ]
+   }
+  ],
+  "note": "S8 step 19, at a + node if one is near.",
+  "kinds": [
+   "Region-Wide Story",
+   "Companion Story"
+  ],
+  "tags": [],
+  "home": 19,
+  "window": [
+   19,
+   19
+  ],
+  "stages": [
+   8
+  ]
  }
 }

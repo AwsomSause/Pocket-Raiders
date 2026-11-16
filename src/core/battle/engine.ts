@@ -4459,6 +4459,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       power = teraPower(ctx.battle, user.mon, { ...move, type: moveType }, power);
       let stab = move.flags.includes('typeless') ? 1 : stabMultiplier(content, ctx.battle, user.mon, moveType);
       if (stab === 1 && user.vol.typeShift === moveType) stab = content.ruleset.stabMultiplier;
+      // Open Road (gn.new.01): the first move it uses after it enters gains same-type bonus, whatever its type.
+      if (stab === 1 && userAbility === 'open-road' && user.vol.firstUseNow && user.vol.movesUsed.length === 1 && !move.flags.includes('typeless')) stab = content.ruleset.stabMultiplier;
       if (fx.doubleBelowHalf && target.mon.hp * 2 <= targetStats.hp) power *= 2;
       if (fx.hitsSemi?.double && target.vol.semi === fx.hitsSemi.semi) power *= 2;
       if (fx.weatherBall && weather) power *= 2;
