@@ -1688,5 +1688,10 @@
   "id": "kindness",
   "name": "Kindness",
   "description": "When its bearer steps out of a fight, the Pokémon that comes in moves first with its first move. Twice per battle."
+ },
+ {
+  "id": "fair-share",
+  "name": "Fair Share",
+  "description": "At the end of each turn, while it is above half HP, its most hurt party-mate recovers 1/16 of its max HP."
  }
 ]

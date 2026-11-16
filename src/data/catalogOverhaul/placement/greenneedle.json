@@ -2759,5 +2759,64 @@
    "Mystery Episode"
   ],
   "tags": []
+ },
+ "gn-new-22-court": {
+  "gn": "gn.new.22",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "level": "A-1",
+  "often": "run",
+  "badge": "own",
+  "note": "Fallback: step 5 of the next stage. A Meowth drops a coin and leads the player to a rooftop. The challenge is one fight with three calls chosen in the court.",
+  "kinds": [
+   "Miniature Episode",
+   "Companion Story"
+  ],
+  "tags": [
+   "city"
+  ]
+ },
+ "gn-new-22-coin-5": {
+  "gn": "gn.new.22",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 5,
+  "window": [
+   4,
+   6
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "level": "no battle",
+  "often": "region",
+  "badge": "none",
+  "note": "Afterstory: coins on windowsills at Steps 5 and 15 for the rest of the region.",
+  "kinds": [],
+  "tags": []
+ },
+ "gn-new-22-coin-15": {
+  "gn": "gn.new.22",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 15,
+  "window": [
+   14,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "level": "no battle",
+  "often": "region",
+  "badge": "none",
+  "note": "Afterstory: coins on windowsills at Steps 5 and 15 for the rest of the region.",
+  "kinds": [],
+  "tags": []
  }
 }
