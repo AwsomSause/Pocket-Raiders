@@ -32,7 +32,7 @@ import { finalizeRun, recordRunStarted } from '../core/profile';
 import { activeScene, finishScene, type StoryScene } from '../core/story2/module';
 import { finishRivalScene, rivalStoryScene } from '../core/story2/rivalStory';
 import { fieldTrialDue, finishFieldTrial } from '../core/story2/fieldTrial';
-import { awardLiveAchievements, claimTrainer, setActiveTitle, type RunEndSummary } from '../core/progress';
+import { awardLiveAchievements, claimTrainer, ownsTrainer, setActiveTitle, type RunEndSummary } from '../core/progress';
 import { setCardFrame, setCryTheme, setMenuArena } from '../core/wardrobe';
 import { buyNote } from '../core/researchNotes';
 import { makeRandomSeed } from '../core/rng';
@@ -275,7 +275,9 @@ export class GameSession {
    * `prep` carries the Preparation Desk's choices (and its campaign) and is remembered for next time.
    */
   newRun(requestedArchetypeId: string, seed: string = makeRandomSeed(), campaignId?: string, prep?: RunPrep, rules?: RulesChoice, starterOverride?: string[]): RunState {
-    const archetypeId = this.content.archetypes.has(requestedArchetypeId) ? playerTrainerFor(requestedArchetypeId) : requestedArchetypeId;
+    // Any trainer the player owns can lead a run; an unowned id (old saves, shared codes) becomes one of the five starters.
+    const requested = this.content.archetypes.get(requestedArchetypeId);
+    const archetypeId = requested && !ownsTrainer(this.profile, requested) ? playerTrainerFor(requestedArchetypeId) : requestedArchetypeId;
     // A saved preset can name a loan or Vault item the profile no longer has.
     if (prep) prep = { ...prep, loan: prep.loan && !loanProblem(this.content, this.profile), vaultItem: prep.vaultItem && this.profile.vault.includes(prep.vaultItem) ? prep.vaultItem : null, mentorId: availableMentors(this.profile).some((m) => m.id === prep!.mentorId) ? prep.mentorId : null };
     // Story Run: the prologue's identity, and the backstory and Starter line picked in Beats 7-8 or the Short Intake (used once).

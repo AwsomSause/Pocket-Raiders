@@ -16,6 +16,7 @@ The long "Done" list (about 140 bullets) and the older known-limits notes moved 
 - **Beta 0.7** is not started and its scope is Kice's call: Node Event Menus and/or the rest of INSTRUMENTALITY (milestones 3.0 and 3.0+1.0). Everything planned or deferred: `docs/HANDOFF.md` section 8.
 - Plan: `docs/plans/left-out-plan.md` (everything asked for but not built, in priority order; each item updates its row there). Waiting on Kice: regional forms mechanic, time of day, online co-op; branch protection on `main` (Settings > Branches, require `check`).
 - Trainers.md perks: all 220 trainers built (limits in `docs/plans/trainers-coverage.md`).
+- Trainer unlock routes: every trainer pickable once owned; bosses join when beaten, npc trainers via events, challenges auto-join (no Bank Credit claim): `docs/status/trainer-unlock-routes.md`.
 - Starter sets / quests / mastery / events plan: fully built (see Done).
 - M8.75 still open: D Bank tiers/licenses/challenges, E Pokédex extras, G levels to 500 + custom regions, H later hub systems. M8.5: regional forms as a mechanic (if wanted). M9: built.
 - M10 visuals (Visual Bible V1-V5): next = level-up/reward reveal transitions, per-region palettes, perf pass.

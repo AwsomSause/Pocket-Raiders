@@ -4162,6 +4162,9 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       count(run, role);
       recordBossDefeat(content, run, battle);
       beatBoss(run, battle.trainer?.leaderId);
+      // Streamlined trainer unlocks: a Gym Leader, Elite Four member or Champion you beat joins your roster when the run ends.
+      const beaten = battle.trainer?.leaderId ? content.archetypes.get(battle.trainer.leaderId) : undefined;
+      if (beaten?.unlockRoute === 'battle') run.itemCounters = { ...run.itemCounters, [`recruit:${beaten.id}`]: 1 };
       onFrontRunnerBattle(content, run, battle, 'win');
       const lead = run.party[battle.activeIndex];
       for (const type of lead ? getSpecies(content, lead.speciesId).types : []) count(run, `bossWinsLead.${type}`);
