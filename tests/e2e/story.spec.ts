@@ -48,9 +48,12 @@ test('the map shows the lead Pokémon comment and the companion event applies on
   await waitForScene(page, 'Event');
   await page.waitForTimeout(1200);
   await page.screenshot({ path: 'test-results/story-companion-event.png' });
+  // Catalog batch 5: the traveler now walks one stage with you (two intro pages, then the choice).
+  await page.keyboard.press('Enter'); // second intro page
+  await page.waitForTimeout(800);
   await page.keyboard.press('Enter'); // Welcome them aboard
   await page.waitForTimeout(1500);
-  expect(await page.evaluate(() => (window as any).__pkr.session.run.story.flags['ev:companion'])).toBe(1);
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.story.flags['ev:companion-recruited'])).toBe(1);
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Map');
   expect(errors).toEqual([]);
