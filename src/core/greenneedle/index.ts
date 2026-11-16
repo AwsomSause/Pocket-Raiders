@@ -20,6 +20,7 @@ import { crystalOp, golemStart } from './crystals';
 import { tideOf } from '../clock';
 import { lightning } from './ridge';
 import { labCast, labForm } from './lab';
+import { marketArrive, marketBuy, marketOffer, marketUndercut } from './market';
 
 type Cue = { type: 'spectacle'; kind: 'arena'; side: 'player' | 'enemy'; text: string; uid?: string };
 const cue = (side: 'player' | 'enemy', text: string, uid?: string): Cue => ({ type: 'spectacle', kind: 'arena', side, text, ...(uid ? { uid } : {}) });
@@ -378,6 +379,21 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return '';
     case 'labForm':
       return labForm(content, run, e.key ?? '', host.region);
+    case 'marketArrive':
+      return marketArrive(content, run, host.region, host.float());
+    case 'marketBuy': {
+      const paid = marketBuy(run, e.key!, e.n!);
+      if (!paid) return 'You count it out twice. You\'re short.';
+      return [paid.line, ...(e.then ?? []).map((x) => host.apply(x))].filter(Boolean).join(' · ');
+    }
+    case 'marketOffer': {
+      const r = marketOffer(run, e.key!, e.n!, e.min!);
+      // Refused (or short): back to the lot (`type`), still on the counter.
+      if (r.price === null) return [r.line, e.type ? host.apply({ kind: 'gn', op: 'scene', key: e.type }) : ''].filter(Boolean).join(' · ');
+      return [r.line, ...(e.then ?? []).map((x) => host.apply(x))].filter(Boolean).join(' · ');
+    }
+    case 'marketUndercut':
+      return marketUndercut(run, e.key!, e.n!);
     case 'markLead': {
       // gn.30: a history mark on the lead (the pink one that ate the island fruit for a day).
       const lead = run.party.find((m) => m.hp > 0) ?? run.party[0];

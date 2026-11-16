@@ -2018,5 +2018,29 @@
    "Mystery"
   ],
   "tags": []
+ },
+ "gn-39-door": {
+  "gn": "gn.39",
+  "shape": "Hub",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "No battles, except the rare-encounter stall (A+0)",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Travelling Pokémon Market",
+   "elsewhere": "The Travelling Pokémon Market"
+  },
+  "note": "Badge: a striped awning. Once per region, in every region, with the same vendors and new stock. Until towns exist it sits on step 10. Vendors remember within the run (no memory across runs).",
+  "kinds": [
+   "Hub Destination"
+  ],
+  "tags": []
  }
 }

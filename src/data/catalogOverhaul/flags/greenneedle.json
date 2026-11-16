@@ -39,6 +39,174 @@
   {
    "key": "partner-story",
    "rule": "core/greenneedle gn op `partner` (gn.24: the story by the partner's nature)"
+  },
+  {
+   "key": "market-visits",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-stock",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-story",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-rivals-run",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-rivals-this",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-rivals-caught",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-rivals-played",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-carmela-bought",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-carmela-out",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-carmela-banned",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-carmela-low",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-carmela-lowballed",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-tanager-bought",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-tanager-out",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-tanager-banned",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-tanager-low",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-tanager-lowballed",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-dace-bought",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-dace-out",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-dace-banned",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-dace-low",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-dace-lowballed",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-ivo-bought",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-ivo-out",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-ivo-banned",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-ivo-low",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-ivo-lowballed",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-nan-bought",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-nan-out",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-nan-banned",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-nan-low",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-nan-lowballed",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-hooded-bought",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-hooded-out",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-hooded-banned",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-hooded-low",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-hooded-lowballed",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-josune-bought",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-josune-out",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-josune-banned",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-josune-low",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-josune-lowballed",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
   }
  ]
 }
