@@ -23,6 +23,7 @@ import { bidoofPeace } from './greenneedle/bidoof';
 import { aceBows } from './greenneedle/missingAce';
 import { ofAssist, ofGuestLeaves, recordRelease } from './greenneedle/oldfriend';
 import { ferrisBossMark, ferrisCatch, ferrisFree, ferrisFreeEnd } from './greenneedle/ferris';
+import { followedRest, followedRival, followedRoad, followedShop, followedStage, followedStep, longJourney } from './greenneedle/followed';
 import { ridgeCatch } from './greenneedle/ridge';
 import { noteLeft } from './greenneedle/left';
 import { unflinchingStart } from './greenneedle/daycare';
@@ -778,6 +779,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   ultraStageTick(content, run, run.regionIndex * campaign.stagesPerRegion + index + 1, false);
   startStageEffects(run);
   coStageStart(run);
+  followedStage(content, run);
   clearRecentPurchases(run);
   applyWealthTax(content, run);
   hatchEggs(content, run);
@@ -997,7 +999,7 @@ function enterNextRegion(content: Content, run: RunState): void {
   run.regionIndex += 1;
   run.log.charmUsedInRegion = false;
   snorlaxForgives(run);
-  for (const m of [...run.party, ...run.box]) farFromHome(run, m);
+  for (const m of [...run.party, ...run.box]) { farFromHome(run, m); longJourney(run, m); }
   endRegionTempEffects(run);
   endRegionStatBoosts(content, [...run.party, ...run.box]);
   shiftPartyLevels(content, run, regionLevelOffset(runArchetype(content, run).modifiers));
@@ -1106,6 +1108,7 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   tickChainTimers(run.story.flags);
   stepClock(content, run);
   coStep(content, run);
+  followedStep(content, run);
   // Bridge Mail adds a stop beside the node the player reaches.
   addBridgeStops(content, run, nodeId);
   // Roaming Legendaries move on as you do.
@@ -2736,6 +2739,8 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const welcomeLine = standingWelcome(run, content.balance.itemCaps.revivesPerBattle);
     // Greenneedle gn.new.20: the ranch's second channel sends a Fresh Milk to every rest this region.
     const milkLine = ranchRest(content, run);
+    // Greenneedle gn.60: what the camp notices, and the Pokémon that follows you walks into the light.
+    const followedLine = followedRest(content, run, before);
     partyLifeCamp(run);
     const comboLine = [partyLifeCombos(content, run), ...assignGrowthPaths(content, run.party, run.story.histories)].filter(Boolean).join(' ');
     runSide.used = true;
@@ -2755,7 +2760,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const camp = campQuirkLine(run.party, campMoment(content, run), campKey, nameOf) ?? quirkReaction(run.party, 'rest_node', campKey, nameOf) ?? partyNarration(run.party, 'rest_node', campKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
     // Pokémon moments (Beta 0.6): a party member's rest moment can add a line.
     const momentLine = restMoments(content, run).join(' ');
-    return { run, message: `Your Pokémon were fully healed!${momentLine ? ` ${momentLine}` : ''}${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${welcomeLine ? ` ${welcomeLine}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}${snorlaxLine ? ` ${snorlaxLine}` : ''}${afraidLine ? ` ${afraidLine}` : ''}${siegeLine ? ` ${siegeLine}` : ''}${milkLine ? ` ${milkLine}` : ''}` };
+    return { run, message: `Your Pokémon were fully healed!${momentLine ? ` ${momentLine}` : ''}${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${welcomeLine ? ` ${welcomeLine}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}${snorlaxLine ? ` ${snorlaxLine}` : ''}${afraidLine ? ` ${afraidLine}` : ''}${followedLine ? ` ${followedLine}` : ''}${siegeLine ? ` ${siegeLine}` : ''}${milkLine ? ` ${milkLine}` : ''}` };
   }
   run.phase = 'shop';
   noteMapGrowth(content, run, run.party[0]?.uid, 'shopVisit');
@@ -2781,7 +2786,8 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     count(run, 'moneyEarned', voucher.refund);
     return { run, message: `Welcome to the shop! You already have a ${entry.name}, so the voucher was worth ₽${voucher.refund}.` };
   }
-  return { run, message: 'Welcome to the shop!' };
+  const shopNotice = followedShop(content, run);
+  return { run, message: `Welcome to the shop!${shopNotice ? ` ${shopNotice}` : ''}` };
 }
 
 /** The lines Pokémon moments add when a caught Pokémon joins the party (a legendary heals the team, Ditto rolls a talent). */
@@ -3203,12 +3209,14 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   kantoSweetAir(content, run);
   // Greenneedle gn.55: after the Angry Bidoof's bow, no wild Bidoof or Bibarel attacks first.
   bidoofPeace(run, FOE_WAITS);
+  const rivalNotice = followedRival(content, run);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   if (afterstory) events.push({ type: 'raid', tone: 'info', text: afterstory });
   if (ripple) events.push({ type: 'raid', tone: 'info', text: ripple });
   if (friendHelp) events.push({ type: 'raid', tone: 'info', text: friendHelp });
   if (gymDoor) events.push({ type: 'raid', tone: 'info', text: gymDoor });
   if (pinned) events.push({ type: 'raid', tone: 'info', text: pinned });
+  if (rivalNotice) events.push({ type: 'raid', tone: 'info', text: rivalNotice });
   run.rng.battle = rng.state;
   noteBattle(content, run);
   wildBehaviorEffect(content, run, events);
@@ -3603,6 +3611,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
       return { run, events, end: null, defeated: false, cues, drama, secondChance: { lines: sc.lines, partner: sc.companion.name, silhouette: sc.companion.silhouette } };
     }
     freeHandedOverRival(run);
+    followedRoad(content, run);
     run.phase = 'over';
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: true, cues, drama };

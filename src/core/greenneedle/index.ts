@@ -51,6 +51,7 @@ import { cheerJoin } from './cheer';
 import { mirrorReady, mirrorStart } from './mirror';
 import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, oldfriendTokens, releases } from './oldfriend';
 import { ferrisArrive, ferrisBest, ferrisHand, ferrisShape, ferrisStart, ferrisTurn } from './ferris';
+import { followedJoin } from './followed';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { paradeAll, paradeEgg, paradeEggReady, paradeForget, paradeMemory, paradeNickname, paradeSecret, paradeSwap, paradeWake } from './parade';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
@@ -827,6 +828,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'eeveeEnd':
       eeveeEnd(content, run);
       return '';
+    case 'followedJoin':
+      return followedJoin(content, run, host);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':

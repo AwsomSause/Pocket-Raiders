@@ -858,6 +858,26 @@
   {
    "key": "borrow-bonus",
    "rule": "core/greenneedle/borrowed.ts (gn.new.29 The Borrowed Team)"
+  },
+  {
+   "key": "followed-species",
+   "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
+  },
+  {
+   "key": "followed-regions",
+   "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
+  },
+  {
+   "key": "followed-revealed",
+   "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
+  },
+  {
+   "key": "followed-kind-act",
+   "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
+  },
+  {
+   "key": "followed-at-road",
+   "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
   }
  ]
 }
