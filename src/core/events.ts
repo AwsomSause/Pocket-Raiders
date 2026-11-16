@@ -10,7 +10,7 @@
 // changes no other roll, and choosing again after a reload gives the same result.
 
 import { applySinglesEffect, singlesEffectWords } from './events/coSingles';
-import { applyCoEffect, coConditionMet, coConditionText, coEffectWords, fillCoText, restoreMachine } from './events/coToolkit';
+import { applyCoEffect, coConditionMet, coConditionText, coEffectWords, coFoeNote, coFoeTypes, coRegionPick, fillCoText, restoreMachine } from './events/coToolkit';
 import { flagAge, lineHolds, lineMember, queueLaterEvent, stampFlagStage } from './events/questline';
 import { modifierEventWeight } from './runModifiers';
 import { sendAway, stopWeightOf, upgradeItem } from './co/placesRules';
@@ -18,6 +18,8 @@ import { bringBack } from './co/placesAway';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { rememberPick, rememberedPick } from './co/pickMemory';
 import { PSEUDO, enterPseudoStage, leavePseudoStage, routeChainEvent } from './dungeon/pseudo';
+import { dropOneHeld, dungeonNext, dungeonStart } from './events/coDungeon';
+import { blessedSpecies, roamFound } from './events/coLegends';
 import { addMark, overhaulOf, type FeelingKey } from './rivals/overhaul';
 import { friendName, friendTeam, pseudoRivalBeat } from './rivals/live';
 import { repAtLeast } from './rivals/reputation';
@@ -29,7 +31,7 @@ import { eventChanceScale, triplesOnly } from './rules';
 import { getArchetype, runPerks } from './archetypes';
 import { ATTRIBUTE_LABELS, addRunAttribute, effectiveAttributes, runAttributeEffects } from './attributes';
 import { createBattle } from './battle/engine';
-import type { Content, EventBattle, EventBattleFormat, EventChoice, EventCondition, EventDef, EventEffect, EventOutcome, TradeWant, TypeName } from './contentSchema';
+import { EventEffectSchema, type Content, type EventBattle, type EventBattleFormat, type EventChoice, type EventCondition, type EventDef, type EventEffect, type EventOutcome, type TradeWant, type TypeName } from './contentSchema';
 import { curveLevel, enemyLevel, evolvedFormAt, levelScale, rollShiny, withPartyStrength } from './encounters';
 import { changeFriendship } from './friendship';
 import { atLeast, promptById, type Grade, type PromptResult } from './interaction/prompt';
@@ -284,7 +286,14 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return at > 0 && ago >= (c.regionsAgo ?? 0) && ago <= (c.regionsAgoMost ?? 99);
     }
     case 'record':
-      return coConditionMet(run, c);
+    case 'barterHas':
+    case 'bagHas':
+    case 'keptGoods':
+    case 'eggOf':
+    case 'gymHere':
+    case 'blessed':
+    case 'partyHpBelow':
+      return coConditionMet(content, run, c);
     case 'partyBlissful':
       return run.party.some((m) => m.blissful);
     case 'partyAlpha':
@@ -553,6 +562,13 @@ export function conditionText(content: Content, c: EventCondition): string {
     case 'flag':
       return 'Needs something you did earlier';
     case 'record':
+    case 'barterHas':
+    case 'bagHas':
+    case 'keptGoods':
+    case 'eggOf':
+    case 'gymHere':
+    case 'blessed':
+    case 'partyHpBelow':
       return coConditionText(c);
     case 'partyBlissful':
       return 'Needs a Blissful Pokémon in your party';
@@ -1323,7 +1339,22 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'rulePrize':
     case 'pickTest':
     case 'timeMachine':
+    case 'barter':
+    case 'spendBag':
+    case 'notePicked':
+    case 'rejoin':
+    case 'copyHeld':
+    case 'helped':
+    case 'returnEgg':
+    case 'boxBond':
+    case 'gymTypeItem':
+    case 'sign':
+    case 'offer':
       return coEffectWords(e);
+    case 'roamChase':
+      return 'you follow the trail';
+    case 'joinBlessed':
+      return 'a Legendary joins';
     case 'coAdvice':
     case 'coFog':
     case 'coEpitaph':
@@ -1332,6 +1363,10 @@ export function effectWords(content: Content, e: EventEffect): string {
       return singlesEffectWords(e);
     case 'friendshipLine':
       return `${content.species.get(e.species)?.name ?? e.species}: friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
+    case 'dungeon':
+      return e.action === 'start' ? 'into the dungeon' : 'on to the next room';
+    case 'regionJoin':
+      return e.shadow ? 'a Shadow Pokémon of legend' : 'a Pokémon of legend joins';
     case 'cast':
       return 'a new file in your Dossier';
     case 'grandArcRom':
@@ -1823,11 +1858,44 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
       for (const line of checkFlagKeys(content, run)) recordChoice(content, run, { id: `shadow-key-${e.key}`, pick: 'yes', text: line, weight: 2 });
       return '';
+    case 'dungeon': {
+      if (e.action === 'start') { dungeonStart(run, e.scarf); return ''; }
+      const r = dungeonNext(run, e.from ?? '');
+      if (r.out) {
+        const lost = dropOneHeld(run);
+        leavePseudoStage(run);
+        return `out of luck: pushed back up the stairs${lost ? `, and the ${content.items.get(lost)?.name ?? content.catalog.get(lost)?.name ?? lost} is lost` : ''}`;
+      }
+      return r.next ? applyEffect(content, run, EventEffectSchema.parse({ kind: 'addEvent', eventId: r.next }), rng, tradeUid) : '';
+    }
+    case 'roamChase':
+      return roamFound(run, e.species) ? applyEffect(content, run, EventEffectSchema.parse({ kind: 'addEvent', eventId: e.found }), rng, tradeUid) : 'the trail goes cold';
+    case 'joinBlessed': {
+      const legend = blessedSpecies(run);
+      return legend ? applyEffect(content, run, EventEffectSchema.parse({ kind: 'join', species: [legend], levelBonus: e.levelBonus }), rng, tradeUid) : '';
+    }
+    case 'regionJoin':
+      return applyEffect(content, run, EventEffectSchema.parse({ kind: 'join', species: [coRegionPick(run, e.table, currentRegion(content, run).id)], shadow: e.shadow, levelBonus: e.levelBonus }), rng, tradeUid);
     case 'ruleRead':
     case 'rulePrize':
     case 'pickTest':
     case 'timeMachine':
-      return applyCoEffect(content, run, e, tradeUid);
+    case 'barter':
+    case 'spendBag':
+    case 'notePicked':
+    case 'rejoin':
+    case 'copyHeld':
+    case 'helped':
+    case 'returnEgg':
+    case 'boxBond':
+    case 'gymTypeItem':
+    case 'sign':
+    case 'offer':
+      return applyCoEffect(content, run, e, tradeUid, (id) => giveItem(content, run, id, 1, rng), (speciesId, level, shiny) => {
+        const mon = newMon(content, run, speciesId, level, 'p');
+        mon.shiny = shiny;
+        return mon;
+      });
     case 'coAdvice':
     case 'coFog':
     case 'coEpitaph':
@@ -2079,7 +2147,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     return;
   }
   if (b.kind === 'wild') {
-    const speciesId = (b.recall ? oldFoe(run) : null) ?? pickSpecies(content, run, b.species, b.types, rng);
+    const speciesId = (b.recall ? oldFoe(run) : null) ?? (b.blessed ? blessedSpecies(run) : null) ?? pickSpecies(content, run, b.species, b.types, rng);
     const level = Math.min(cap, Math.max(1, base));
     const enemy = newMon(content, run, b.alpha ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'e');
     enemy.shiny = rollShiny(content, rng, runAttributeEffects(content, run).shinyChance * b.shinyMultiplier);
@@ -2154,11 +2222,18 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     }) : ghost.length > 0 ? ghost.map((m) => newMon(content, run, m.speciesId, Math.min(cap, Math.max(1, Math.min(m.level, base + 6))), 'e')) : Array.from({ length: b.size }, (_, i) => {
       const level = Math.min(cap, Math.max(1, base + (i === b.size - 1 ? 1 : 0)));
       const lane = b.lineup?.[i];
-      const speciesId = boss ? boss.signature[i % boss.signature.length]! : lane && content.species.has(lane) ? lane : b.rule?.bstMatch && b.species?.length ? nearestBst(content, b.species, run.party[activeIndex]!) : pickSpecies(content, run, b.species ?? [], mentorFoe ? mentorFoe.leans : b.types, rng);
+      const speciesId = boss ? boss.signature[i % boss.signature.length]! : lane && content.species.has(lane) ? lane : b.rule?.bstMatch && b.species?.length ? nearestBst(content, b.species, run.party[activeIndex]!) : pickSpecies(content, run, b.species ?? [], mentorFoe ? mentorFoe.leans : (b.kind === 'trainer' && b.coFoe?.against ? coFoeTypes(content, run, b.coFoe.against) : null) ?? b.types, rng);
       return newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
     });
     // Catalog Overhaul (people): the first foe knows the scripted moves (replacing its last ones).
     if (b.kind === 'trainer' && team[0]) for (const [n, id] of (b.foeMoves ?? []).entries()) if (content.moves.has(id) && !team[0].moves.some((m) => m.id === id)) team[0].moves[Math.max(0, team[0].moves.length - 1 - n)] = { id, pp: content.moves.get(id)!.pp };
+    // Catalog Overhaul SF61: the Pokémon you gave away fights as the Admin's last.
+    const given = b.kind === 'trainer' && b.coFoe?.note ? coFoeNote(run, b.coFoe.note) : null;
+    if (given && content.species.has(given.speciesId)) {
+      const mon = newMon(content, run, given.speciesId, Math.min(cap, Math.max(1, base + 2)), 'e');
+      mon.moves = given.moves.map((s) => ({ id: s.id, pp: content.moves.get(s.id)?.pp ?? s.pp }));
+      team.push(mon);
+    }
     // Beta 0.7: only a listed story boss (`seventh`) fields a 7th foe; every other team is cut to 6.
     if (team.length > MAX_FOES && !(b.kind === 'trainer' && b.seventh)) team.length = MAX_FOES;
     else if (team.length > MAX_FOES_LISTED) team.length = MAX_FOES_LISTED;

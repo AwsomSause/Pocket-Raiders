@@ -209,7 +209,7 @@ describe('permanent choices', () => {
   it('keeps the first answer, and opens or closes follow-ups', () => {
     const run = newRun('choices');
     run.money = 5000;
-    const r = pickChoice(run, 'stranded-trainer', 'Take their Poké Balls').run;
+    const r = pickChoice(run, 'stranded-trainer', 'Take their stuff.').run;
     expect(choiceMade(r, 'stranded-trainer', 'robbed')).toBe(true);
     const opens = (id: string) => content.events.get(id)!.requires.every((c) => conditionMet(content, r, c));
     expect(opens('stranded-trainer-revenge')).toBe(true);

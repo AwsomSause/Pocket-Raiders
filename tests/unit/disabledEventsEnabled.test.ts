@@ -49,11 +49,13 @@ describe('the nine formerly disabled events', () => {
     applyEffect(content, run, { kind: 'calmDisturbance' }, new Rng(hashSeed('c')));
     expect(conditionMet(content, run, { kind: 'disturbance' })).toBe(false);
   });
-  it('the trainer reunion needs the earlier challenge to have been played', () => {
+  it('Hargrove (Catalog Overhaul SF70): the reunion comes first, and the unexpected challenge waits for it', () => {
     const run = newRun();
-    const e = content.events.get('ev-trainer-reunion')!;
-    expect(e.requires.every((c) => conditionMet(content, run, c))).toBe(false);
-    run.itemCounters = { ...run.itemCounters, 'event-seen:ev-unexpected-challenge': 1 };
-    expect(e.requires.every((c) => conditionMet(content, run, c))).toBe(true);
+    const reunion = content.events.get('ev-trainer-reunion')!;
+    const challenge = content.events.get('ev-unexpected-challenge')!;
+    expect(reunion.requires.every((c) => conditionMet(content, run, c))).toBe(true);
+    expect(challenge.requires.every((c) => conditionMet(content, run, c))).toBe(false);
+    run.story.flags['ev:hargrove-met'] = 1;
+    expect(reunion.requires.every((c) => conditionMet(content, run, c))).toBe(false);
   });
 });

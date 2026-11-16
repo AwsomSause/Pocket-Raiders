@@ -1,0 +1,1875 @@
+{
+ "catalogOverhaul": "families-c",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "r116-frozen-statue-garden",
+   "name": "The Statue Garden",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "types": [
+    "ice"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "froslass",
+    "tint": "#1c2a3a",
+    "effect": "snow"
+   },
+   "intro": "A garden of ice statues, each a Pokémon caught in a different pose. Some of them are breathing. A Froslass glides between them, adjusting a pose here, a tilt there. Froslass (a cold whisper): \"My collection. Beautiful, aren't they. They hold still forever.\"",
+   "choices": [
+    {
+     "label": "Thaw them.",
+     "pick": {
+      "types": [
+       "fire"
+      ]
+     },
+     "success": {
+      "text": "Your Fire-type breathes on the nearest statue. The ice weeps. The Froslass turns, and the air goes white. Hold on for three turns.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "froslass"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "garden-thawed"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "garden-held"
+        }
+       ],
+       "rule": {
+        "surviveTurns": 3
+       }
+      }
+     }
+    },
+    {
+     "label": "Battle the Froslass.",
+     "success": {
+      "text": "\"You would break my garden?\" The Froslass rises, and every statue seems to watch.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "froslass"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "garden-after"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "garden-held"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask why.",
+     "success": {
+      "text": "The Froslass stops. For a long time it says nothing. Froslass: \"Everyone leaves.\" It touches the cheek of an ice Eevee. \"Not these.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "garden-why"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "garden-thawed",
+   "name": "The Statue Garden",
+   "group": "Wild Scenes",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "froslass",
+    "tint": "#1c2a3a",
+    "effect": "snow"
+   },
+   "intro": "Three turns, and the first statue cracks. Then the next, and the next. The Froslass shrieks and flees into the frost. One by one the thawed Pokémon shake off the cold and run for the trees.",
+   "choices": [
+    {
+     "label": "Watch them go.",
+     "success": {
+      "text": "All but one. It stays at your feet, shivering, and looks up at you like you are the first warm thing it has seen in years.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "eevee",
+         "vulpix",
+         "snorunt",
+         "swinub",
+         "sneasel",
+         "spheal"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "newest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "garden-after",
+   "name": "The Statue Garden",
+   "group": "Wild Scenes",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "froslass",
+    "tint": "#1c2a3a",
+    "effect": "snow"
+   },
+   "intro": "The Froslass flees into the frost. The garden is quiet. The statues stay frozen. Some of them are still breathing.",
+   "choices": [
+    {
+     "label": "Thaw them now.",
+     "pick": {
+      "types": [
+       "fire"
+      ]
+     },
+     "success": {
+      "text": "With no one to stop you, your Fire-type works down the rows. The thawed Pokémon run for the trees. One stays.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "eevee",
+         "vulpix",
+         "snorunt",
+         "swinub",
+         "sneasel",
+         "spheal"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "newest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You leave them as they are. Behind you, something in the ice is still breathing.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "garden-held",
+   "name": "The Statue Garden",
+   "group": "Wild Scenes",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "froslass",
+    "tint": "#1c2a3a",
+    "effect": "snow"
+   },
+   "intro": "The cold drives you back to the gate. The Froslass straightens the statue you touched, very gently, and does not look at you.",
+   "choices": [
+    {
+     "label": "Go.",
+     "success": {
+      "text": "You go. Your team is shivering, but whole.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "garden-why",
+   "name": "The Statue Garden",
+   "group": "Wild Scenes",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "froslass",
+    "tint": "#1c2a3a",
+    "effect": "snow"
+   },
+   "intro": "Froslass: \"They came to see me once. All of them. Then they went home.\" It looks at you. \"You will go home too.\"",
+   "choices": [
+    {
+     "label": "Stay a while.",
+     "success": {
+      "text": "You sit down in the snow. You stay. The light moves across the garden. When you finally stand, the Froslass lifts one hand and the ice lets go, all at once. Every statue breathes, and runs. The Froslass stays, and asks, very quietly, if it can come too.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "froslass"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 20,
+        "who": "newest"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thaw them.",
+     "pick": {
+      "types": [
+       "fire"
+      ]
+     },
+     "success": {
+      "text": "\"So you are like the rest.\" Your Fire-type breathes on the nearest statue. Hold on for three turns.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "froslass"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "garden-thawed"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "garden-held"
+        }
+       ],
+       "rule": {
+        "surviveTurns": 3
+       }
+      }
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You leave. The Froslass watches you all the way to the gate, and then turns back to its collection.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r133-lapras-ferry",
+   "name": "The Lapras Who Waited",
+   "group": "Wild Scenes",
+   "stop": "detour",
+   "rarity": "rare",
+   "types": [
+    "water",
+    "ice"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.youngster"
+    ],
+    "pokemon": "lapras",
+    "tint": "#102838",
+    "effect": "rain"
+   },
+   "intro": "A Lapras at the shore, singing softly. It looks at your Berry pouch, then at the water. A fisher's boy, Theo: \"It's been there a month. Every pod that passes, it sings. None stop.\" Theo: \"It's small for a Lapras. I think it's a baby.\"",
+   "choices": [
+    {
+     "label": "Feed it.",
+     "requires": [
+      {
+       "kind": "bagHas",
+       "ids": [],
+       "count": 1,
+       "suffix": "-berry",
+       "label": "a Berry"
+      }
+     ],
+     "success": {
+      "text": "It eats from your hand, slowly, like it forgot how. Then it nuzzles you, hard enough to knock you a step back, and sings one soft note just for you.",
+      "effects": [
+       {
+        "kind": "spendBag",
+        "ids": [],
+        "count": 1,
+        "suffix": "-berry"
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ride it out to look for the pod.",
+     "success": {
+      "text": "You climb onto its shell. It is warm. It looks back at you once, and swims out into the grey.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lapras-sea-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask Theo what else he knows.",
+     "success": {
+      "text": "Theo lowers his voice. Theo: \"Some men with nets came through. Before it showed up.\" He looks out at the water. \"I don't think it got lost.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lapras-poachers",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "r133-lapras-ferry"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "warned",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lapras-poachers",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Theo's warning sits in your head. You count the nets on every boat you pass.",
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "lapras-sea-1",
+   "name": "Open Water",
+   "group": "Wild Scenes",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lapras",
+    "tint": "#102838",
+    "effect": "rain"
+   },
+   "intro": "The shore is gone behind you. Only water, rain, and the Lapras singing every few strokes, listening for an answer that doesn't come.",
+   "choices": [
+    {
+     "label": "Sing with it.",
+     "success": {
+      "text": "You hum along, badly. The Lapras turns its head and makes a sound that is almost a laugh. It swims faster.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lapras-sea-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep watch.",
+     "success": {
+      "text": "You watch the horizon. Far off, a shape. Then another. Then a boat.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lapras-sea-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lapras-sea-2",
+   "name": "The Nets",
+   "group": "Wild Scenes",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "pokemon": "lapras",
+    "tint": "#102838",
+    "effect": "rain"
+   },
+   "intro": "A boat across the water, nets over the side. Men on deck. One of them points at your Lapras and grins. Poacher: \"There's the one that got away.\"",
+   "choices": [
+    {
+     "label": "Fight them off.",
+     "success": {
+      "text": "The Lapras trembles under you. You put your hand on its shell. \"Not this time.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "lapras-pod"
+        }
+       ],
+       "name": "Poachers",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "lapras-pod"
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "warned",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lapras-poachers",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Theo warned you. You see the nets before they see you.",
+     "addChoices": [
+      {
+       "label": "Cut their nets first.",
+       "success": {
+        "text": "You slip alongside in the rain and saw through the nets while they argue on deck. When they turn, there is nothing left to throw. You are already gone.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "lapras-pod"
+         },
+         {
+          "kind": "flag",
+          "key": "rep",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "lapras-pod",
+   "name": "The Pod",
+   "group": "Wild Scenes",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lapras",
+    "tint": "#102838",
+    "effect": "rain"
+   },
+   "intro": "Beyond the boat, the sea is full of singing. A pod of Lapras, huge and slow, turning toward the little one. It stops beside you and doesn't move. It looks at them. Then it looks at you.",
+   "choices": [
+    {
+     "label": "Let it go to them.",
+     "success": {
+      "text": "It swims to the pod. They close around it. Just before they dive, it turns and sings one long note back to you. Then it is gone. Something floats up where it was: a Mystic Water.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask it to stay.",
+     "success": {
+      "text": "It stays. It swims beside you all the way back, and it does not sing. It will be sad for a long time. That is the price, and it is paying it for you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "lapras"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": -40,
+        "who": "newest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it choose.",
+     "success": {
+      "text": "It swims to the pod. Then back to you. Then to the pod. It goes. At the edge of the pod it turns and sings, and you understand: it will come to the shore again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lapras-chose",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "hospice",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hospice-stayed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The old Lapras at the hospice was this one's grandmother. When the pod sings, it sings for her too.",
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "lapras-shore",
+   "name": "A Song at the Shore",
+   "group": "Wild Scenes",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lapras-chose",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "lapras",
+    "tint": "#102838",
+    "effect": "rain"
+   },
+   "intro": "A shore, far from the first one. A song you know, out on the water. The little Lapras, a little bigger now, swims up to the rocks and puts its chin on your boots.",
+   "choices": [
+    {
+     "label": "Sit with it a while.",
+     "success": {
+      "text": "You sit with it until the tide turns. Your team naps in the sound of it. When it swims off, it sings the whole way out.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "lapras-chose",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "lapras-chose-at",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "lapras-chose",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "lapras-shore"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r140-scarecrow-cornfield",
+   "name": "The Scarecrow",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "ghost",
+    "grass"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "trevenant",
+    "tint": "#2a2410",
+    "effect": "shake"
+   },
+   "intro": "A tall scarecrow in a cornfield turns its head to look at you. It isn't stuffed with straw. It's a Ghost: a Trevenant in an old coat. The Scarecrow: \"Harvest. Someone has to bring in the harvest.\" The Scarecrow: \"He died in spring. He'd want the corn in.\"",
+   "choices": [
+    {
+     "label": "Bring in the harvest (two nodes).",
+     "success": {
+      "text": "Two long days of work. Your team carries, cuts, and stacks. At sunset the corn is in. The Scarecrow stands in the empty field and finally rests. It leaves you a seed, and the corn.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "pumpkaboo"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "item",
+        "id": "cheri-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "rawst-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "aspear-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "persim-berry",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It doesn't want to fight. It fights anyway. When it's over it flees into the corn, and by morning the whole field has rotted.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "trevenant"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Who was he?",
+     "success": {
+      "text": "The Scarecrow: \"Old Amos. Planted me when I was a stump.\" It looks at the corn. \"He talked to me every morning. Nobody talks to me now.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "scarecrow-amos"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "wynne",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "farmer-end",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Amos was Abner's brother. Wynne comes up the lane with a basket on her arm. Wynne: \"Uncle Amos would want it in. I'll help.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Harvest with Wynne (a node).",
+       "success": {
+        "text": "With Wynne beside you it goes twice as fast. She tells you stories about Amos the whole time. When the corn is in, the Scarecrow puts one hand on her head, and rests.",
+        "effects": [
+         {
+          "kind": "takeNode",
+          "nodes": 1
+         },
+         {
+          "kind": "egg",
+          "species": [
+           "pumpkaboo"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "left": 3,
+          "unit": "battle"
+         },
+         {
+          "kind": "item",
+          "id": "cheri-berry",
+          "count": 1
+         },
+         {
+          "kind": "item",
+          "id": "pecha-berry",
+          "count": 1
+         },
+         {
+          "kind": "item",
+          "id": "rawst-berry",
+          "count": 1
+         },
+         {
+          "kind": "item",
+          "id": "aspear-berry",
+          "count": 1
+         },
+         {
+          "kind": "item",
+          "id": "persim-berry",
+          "count": 1
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "scarecrow-amos",
+   "name": "The Scarecrow",
+   "group": "Wild Scenes",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "trevenant",
+    "tint": "#2a2410",
+    "effect": "shake"
+   },
+   "intro": "The Scarecrow waits. The corn moves in the wind.",
+   "choices": [
+    {
+     "label": "Bring in the harvest (two nodes).",
+     "success": {
+      "text": "You talk to it every morning while you work. On the second evening the corn is in. The Scarecrow rests, and it is smiling, you think.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "pumpkaboo"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "item",
+        "id": "cheri-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "rawst-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "aspear-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "persim-berry",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it its field.",
+     "success": {
+      "text": "You leave it standing in the corn. It watches you go, the way it watched Amos go.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "wynne",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "farmer-end",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Amos was Abner's brother. Wynne comes up the lane with a basket on her arm. Wynne: \"Uncle Amos would want it in. I'll help.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Harvest with Wynne (a node).",
+       "success": {
+        "text": "With Wynne beside you it goes twice as fast. She tells you stories about Amos the whole time. When the corn is in, the Scarecrow puts one hand on her head, and rests.",
+        "effects": [
+         {
+          "kind": "takeNode",
+          "nodes": 1
+         },
+         {
+          "kind": "egg",
+          "species": [
+           "pumpkaboo"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "left": 3,
+          "unit": "battle"
+         },
+         {
+          "kind": "item",
+          "id": "cheri-berry",
+          "count": 1
+         },
+         {
+          "kind": "item",
+          "id": "pecha-berry",
+          "count": 1
+         },
+         {
+          "kind": "item",
+          "id": "rawst-berry",
+          "count": 1
+         },
+         {
+          "kind": "item",
+          "id": "aspear-berry",
+          "count": 1
+         },
+         {
+          "kind": "item",
+          "id": "persim-berry",
+          "count": 1
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "r141-starlit-cave-loomians",
+   "name": "Starlit Cave",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "types": [
+    "rock",
+    "fairy"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "minior",
+    "tint": "#14182a",
+    "effect": "glint"
+   },
+   "intro": "Glowing shapes bob through a cave like stars, leading deep into the dark. They're Minior, still in their shells, slowly drifting. At the cave's heart: a colony, and a crater ceiling open to the sky.",
+   "choices": [
+    {
+     "label": "Follow them.",
+     "success": {
+      "text": "You follow them into the colony. One drifts too low, crashes, and cracks its shell. For a second it lies still. Then it flies out, bright as a real star, and circles your head before it rises out of the crater.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catch one.",
+     "success": {
+      "text": "One drifts into your hands like it wanted to. Its shell is warm.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "minior"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look up.",
+     "success": {
+      "text": "Through the crater, the stars. One of them moves the wrong way. It stops. It looks back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-deoxys",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "deoxys",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "promise-deoxys",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The colony hums. Three tones, over and over. The same three tones as the crater signal.",
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "r169-hoothoot-clock-tower",
+   "name": "The Clock Tower",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "types": [
+    "flying",
+    "normal"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.lady"
+    ],
+    "pokemon": "hoothoot",
+    "tint": "#14182a",
+    "effect": "glint"
+   },
+   "intro": "A clock tower in a field. A Hoothoot on every ledge. A great bell. The hands are almost at twelve. Keeper, Rosalie: \"At twelve the bell rings and time skips. Just a little. Nobody believes me.\" Every Hoothoot turns its head at once.",
+   "choices": [
+    {
+     "label": "Wait for twelve.",
+     "success": {
+      "text": "The hands meet. The bell rings, once, enormous. Everything skips. You are a little further down the road than you were, and the world did not notice.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "flag",
+        "key": "sign-dialga",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ring it early.",
+     "success": {
+      "text": "You pull the rope. The bell rings wrong, too soon. The clouds over the whole stage stop, and thin, and are gone. Rosalie: \"Well. That's new.\"",
+      "effects": [
+       {
+        "kind": "clearSky"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stop the clock.",
+     "success": {
+      "text": "You catch the big hand. Every Hoothoot screams. Rosalie goes white. Nothing happens. Then everything happens, and you are a step back down the road. Rosalie: \"That's why we don't.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "back": true
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "dialga",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-dialga",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The bell hums at you before it rings. It knows whose blessing you carry.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Wait for twelve.",
+       "success": {
+        "text": "The hands meet. The bell rings, once, enormous. Everything skips. You are a little further down the road than you were, and the world did not notice.",
+        "effects": [
+         {
+          "kind": "skipAhead"
+         },
+         {
+          "kind": "flag",
+          "key": "sign-dialga",
+          "amount": 2
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "trash-to-treasure",
+   "name": "The Trubbish Nobody Wanted",
+   "group": "PokeRogue-style encounters",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "trubbish",
+    "tint": "#202818",
+    "effect": "fog"
+   },
+   "intro": "A huge heap of junk. Something shiny pokes out of it: a Nugget. Something smelly guards it: a Trubbish on top of the heap, puffing itself up. It thinks the heap is its home.",
+   "choices": [
+    {
+     "label": "Battle it for the Nugget.",
+     "success": {
+      "text": "It puffs up as big as it can. It is not very big. When it's over you take the Nugget, and behind you the Trubbish sobs on its heap.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "trubbish"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "nugget",
+         "count": 1
+        }
+       ],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Clean the heap (two nodes).",
+     "success": {
+      "text": "Two days of sorting. The heap becomes a tidy pile, then a neat little house of crates. The Trubbish watches the whole time. When you leave, it follows you, and drops the Nugget at your feet like a gift.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "trubbish"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "boxBond",
+        "key": "trubbish"
+       },
+       {
+        "kind": "item",
+        "id": "nugget",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it on its heap. It watches you go, still puffed up, just in case.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-trainer-reunion",
+   "name": "I Remember You",
+   "group": "Trainer, Relationship",
+   "rarity": "uncommon",
+   "tags": [
+    "Trainer",
+    "Relationship"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "hargrove-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.marshal"
+    ],
+    "tint": "#2e1a1a",
+    "effect": "none"
+   },
+   "intro": "A crossroads. An old trainer with an eyepatch stands in the middle of it, arms folded, a Golem asleep at his feet. Hargrove: \"I remember you. I never forget a trainer worth remembering.\" He squints. \"I remember your face from somewhere. I'll work it out.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"Good.\" The Golem wakes up all at once.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "hargrove-met",
+         "amount": 1,
+         "stamp": "region"
+        }
+       ],
+       "team": [
+        "golem",
+        "machoke",
+        "onix",
+        "graveler"
+       ],
+       "name": "Hargrove",
+       "classId": "veteran",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hargrove-met",
+         "amount": 1,
+         "stamp": "region"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "From where?",
+     "success": {
+      "text": "Hargrove looks at your {starter} for a long time. Hargrove: \"It's that one. I knew it small.\" He nods, satisfied, and walks off before you can ask what he means.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hargrove-met",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Hargrove: \"Then I'll be at the next crossroads.\" He doesn't move. He doesn't need to.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "ev-trainer-reunion"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-unexpected-challenge",
+   "name": "I've Been Watching",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "tags": [
+    "Combat",
+    "Trainer"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.marshal"
+    ],
+    "tint": "#2e1a1a",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "hargrove-met",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "hargrove-watched",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "Hargrove steps out of the grass. Hargrove: \"I've been watching your team. You lean on the same one too much. Battle me.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Every one of his Pokémon is built to beat {most}.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "hargrove-watched",
+         "amount": 1
+        }
+       ],
+       "name": "Hargrove",
+       "classId": "veteran",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hargrove-watched",
+         "amount": 1
+        }
+       ],
+       "coFoe": {
+        "against": "most"
+       }
+      }
+     }
+    },
+    {
+     "label": "Who do I lean on?",
+     "success": {
+      "text": "Hargrove: \"{most}.\" He says it without looking. He is right. \"It's a good one. It's also tired.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hargrove-watched",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lead with someone else.",
+     "pick": {},
+     "success": {
+      "text": "You put another Pokémon in front. Hargrove raises one eyebrow.",
+      "effects": [
+       {
+        "kind": "leadPicked"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "hargrove-watched",
+         "amount": 1
+        }
+       ],
+       "name": "Hargrove",
+       "classId": "veteran",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hargrove-watched",
+         "amount": 1
+        },
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "picked"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "veteran-challenge",
+   "name": "Show Me",
+   "group": "Trainers and challenges",
+   "rarity": "rare",
+   "minStage": 4,
+   "scene": {
+    "cast": [
+     "trainer.marshal"
+    ],
+    "tint": "#2e1a1a",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "hargrove-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "hargrove-shown",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "Late in the region, Hargrove is waiting at the top of a hill, the Golem beside him. Hargrove: \"Show me what you've learned.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"All of it,\" Hargrove says. \"Don't hold back for an old man.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "hargrove-shown",
+         "amount": 1
+        }
+       ],
+       "team": [
+        "golem",
+        "machamp",
+        "steelix",
+        "rhydon",
+        "skarmory"
+       ],
+       "name": "Hargrove",
+       "classId": "veteran",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "item",
+         "id": "hard-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hargrove-beaten",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "flag",
+         "key": "hargrove-shown",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Teach me first.",
+     "success": {
+      "text": "Hargrove sits on a rock. Hargrove: \"The Leader ahead leans on {gymType}. Everyone brings the obvious answer. Bring two of it, and a third that can take a hit.\" He stands. \"That's the lesson.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hargrove-shown",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "veterans-vengeance",
+   "name": "Vengeance",
+   "group": "Trainer Challenges",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.marshal"
+    ],
+    "tint": "#2e1a1a",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "hargrove-beaten",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "hargrove-avenged",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "Hargrove, scarred now, harder. The Golem has a new crack across its shell. Hargrove: \"I remember a fight that fell short. Mine. I've trained since.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "His strongest team. He has not slept much.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "hargrove-avenged",
+         "amount": 1
+        }
+       ],
+       "team": [
+        "golem",
+        "machamp",
+        "steelix",
+        "rhyperior",
+        "skarmory",
+        "tyranitar"
+       ],
+       "name": "Hargrove",
+       "classId": "veteran",
+       "size": 6,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hargrove-avenged",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Was it worth it?",
+     "success": {
+      "text": "Hargrove: \"Ask me after.\" Then he sends out the Golem.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "hargrove-avenged",
+         "amount": 1
+        }
+       ],
+       "team": [
+        "golem",
+        "machamp",
+        "steelix",
+        "rhyperior",
+        "skarmory",
+        "tyranitar"
+       ],
+       "name": "Hargrove",
+       "classId": "veteran",
+       "size": 6,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hargrove-avenged",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "hargrove-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let's call it even.",
+     "success": {
+      "text": "Hargrove: \"Not yet.\" The Golem steps forward.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "hargrove-avenged",
+         "amount": 1
+        }
+       ],
+       "team": [
+        "golem",
+        "machamp",
+        "steelix",
+        "rhyperior",
+        "skarmory",
+        "tyranitar"
+       ],
+       "name": "Hargrove",
+       "classId": "veteran",
+       "size": 6,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hargrove-avenged",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "hargrove-now"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "hargrove-after",
+   "name": "Vengeance",
+   "group": "Trainer Challenges",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.marshal"
+    ],
+    "tint": "#2e1a1a",
+    "effect": "none"
+   },
+   "intro": "Hargrove sits down heavily on a rock. The Golem leans against him.",
+   "choices": [
+    {
+     "label": "So? Was it worth it?",
+     "success": {
+      "text": "Hargrove: \"Yes.\" He laughs, once, like it surprised him. \"Lost again. Still yes.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "hargrove-now",
+   "name": "Vengeance",
+   "group": "Trainer Challenges",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.marshal"
+    ],
+    "tint": "#2e1a1a",
+    "effect": "none"
+   },
+   "intro": "Hargrove puts out his hand. It is shaking a little.",
+   "choices": [
+    {
+     "label": "Shake it.",
+     "success": {
+      "text": "Hargrove: \"Now.\" He grips your hand hard. \"Now we're even.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gym-janitor-challenge",
+   "name": "The Janitor",
+   "group": "Trainer Challenges",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2518",
+    "effect": "none"
+   },
+   "intro": "A Gym's floor is filthy. An old janitor leans on his mop. Janitor: \"Sweep it for me and the leader's apprentice'll give you a fair fight.\" While you sweep, you see the scuff marks: thousands of them. Janitor: \"Every challenger leaves one. That one's mine.\" Janitor: \"I was the Leader here. Forty years ago.\"",
+   "choices": [
+    {
+     "label": "Battle me.",
+     "success": {
+      "text": "He puts the mop down. Three old Pokémon, past their prime, and very, very clever.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [],
+       "name": "The Janitor",
+       "classId": "veteran",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gymTypeItem",
+         "prefix": "old-badge"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Why the mop?",
+     "success": {
+      "text": "Janitor: \"I like to know who's been here.\" He looks across the floor, at every mark. \"All of them. Every one.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Which mark was yours?",
+     "success": {
+      "text": "He points. It is the deepest one on the floor, worn smooth by forty years of feet. He stands looking at it for a while.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "whistles",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "evil-gilt-op-referee-bribes"
+      }
+     ],
+     "notice": "Janitor (lower): \"The referee's bought. I hear him on the phone at night. Prove it, and I'll owe you.\"",
+     "addChoices": [
+      {
+       "label": "Prove the referee is bought.",
+       "success": {
+        "text": "You find the referee in the back with an envelope. He calls his \"friends\".",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [],
+         "name": "Bought Referee",
+         "classId": "worker",
+         "size": 3,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "gymTypeItem",
+           "prefix": "old-badge"
+          },
+          {
+           "kind": "flag",
+           "key": "reported-crime",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "rep",
+           "amount": 1
+          }
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "mine",
+     "when": [
+      {
+       "kind": "gymHere"
+      }
+     ],
+     "notice": "He takes you by the arm to a fresh mark near the Leader's line. Janitor: \"That one's yours. I watched you make it.\"",
+     "addChoices": []
+    }
+   ]
+  }
+ ]
+}

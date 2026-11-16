@@ -4,11 +4,15 @@
 // Guide: docs/status/co-families-c.md.
 
 import data from '../../data/catalogOverhaul/familiesC.json';
-import type { Content, EventCondition, EventEffect } from '../contentSchema';
+import { TYPE_NAMES, type Content, type EventCondition, type EventEffect, type TypeName } from '../contentSchema';
+import { typeEffectiveness } from '../battle/damage';
 import { getSpecies, maxHp } from '../pokemon';
 import { hashSeed, Rng } from '../rng';
+import type { BattleEvent } from '../battle/engine';
+import { bagCount, barter, boxBond, hereGymType, oathSpeedStart, rangerRescue, hasEgg, returnEgg, barterGive, barterHas, barterStock, copyHeld, helpedReturn, noteHelped, notePicked, noted, rejoin, sideBattleBegin, spendFromBag, takeSoon } from './coHelpers';
 import { MOMENT_GROUPS } from '../moments/pokemonMoments';
 import type { PokemonInstance, RunState } from '../state';
+import { blessedMet, giveSign, offerItem, roamPercent } from './coLegends';
 
 const RULES: { multiplier: { veryBad: number; bad: number; even: number; favours: number }; words: Record<string, string> } = data.rules;
 type Run = RunState;
@@ -19,11 +23,13 @@ const uses = (mon: PokemonInstance): number => Object.values(mon.moveCounts ?? {
 
 // ---------- the record (SF83 The Watchers) ----------
 
+/** The player kept stolen or found goods: any `honest-kept-*` flag. */
+export const keptGoods = (run: Pick<Run, 'story'>): boolean => Object.keys(run.story.flags).some((k) => k.startsWith('ev:honest-kept') && Number(run.story.flags[k] ?? 0) > 0);
+
 /** Pack Reputation: `rep` counts up, `rep-lost` counts down; kindness is `kind-total`; a kept find is any `honest-kept-*` flag. */
 export function recordOf(run: Pick<Run, 'story'>): 'high' | 'middle' | 'low' {
   const rep = num(run, 'rep') - num(run, 'rep-lost');
-  const kept = Object.keys(run.story.flags).some((k) => k.startsWith('ev:honest-kept') && Number(run.story.flags[k] ?? 0) > 0);
-  if (rep <= -2 || kept) return 'low';
+  if (rep <= -2 || keptGoods(run)) return 'low';
   if (rep >= 3 || num(run, 'kind-total') >= 5) return 'high';
   return 'middle';
 }
@@ -44,7 +50,7 @@ export function impostorTarget(run: Pick<Run, 'party' | 'seed' | 'regionIndex' |
   return run.party[new Rng(hashSeed(`${run.seed}::co-impostor::${run.regionIndex}::${run.stage?.index ?? 0}`)).int(0, run.party.length - 1)];
 }
 
-/** Fills {lead} {starter} {most} {least} {impostorType} {nextRegion} {finalRegion} {lowestBond} and {flag:<key>} (a run flag's number, 0 when unset) in an event's text. Unknown tokens are left alone (other families fill their own). */
+/** Fills {lead} {starter} {most} {least} {impostorType} {nextRegion} {finalRegion} {lowestBond}, {flag:<key>} (a run flag's number, 0 when unset), {give:<tier>} and {stock:<tier>} (Nix's board) and {note:<key>} (a Pokémon given away) in an event's text. Unknown tokens are left alone (other families fill their own). */
 export function fillCoText(content: Content, run: Run, text: string): string {
   if (!text.includes('{')) return text;
   const lead = run.party.find((m) => m.hp > 0) ?? run.party[0];
@@ -66,12 +72,19 @@ export function fillCoText(content: Content, run: Run, text: string): string {
       const types: readonly string[] = (run.stage && content.themes.get(run.stage.themeId)?.types) || [];
       return types.includes('fire') ? 'an old oven' : types.includes('ice') ? 'a broken fridge' : types.includes('flying') ? 'an electric fan' : types.includes('grass') ? 'a lawnmower' : 'a washing machine';
     },
+    gymType: () => { const t = hereGymType(content, run, false); return t ? t[0]!.toUpperCase() + t.slice(1) : 'something'; },
     // New events (NE41): the run's last region.
     finalRegion: () => content.regions.get(run.regionOrder[run.regionOrder.length - 1] ?? '')?.name ?? 'the League',
   };
-  return text.replace(/\{(lead|starter|most|least|impostorType|nextRegion|finalRegion|lowestBond|rotomAppliance)\}/g, (_, k: string) => table[k]!())
+  const item = (id: string | null) => (id ? content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? id : 'nothing of that kind');
+  return text
+    .replace(/\{(lead|starter|most|least|impostorType|nextRegion|finalRegion|lowestBond|gymType|rotomAppliance)\}/g, (_, k: string) => table[k]!())
     // Pokémon Moments (PA11): the first party Pokémon from a moment group, by name (the lead when none is in the party).
-    .replace(/\{group:([a-z0-9-]+)\}/g, (_, g: string) => nameOf(content, run.party.find((m) => MOMENT_GROUPS[g]?.includes(m.speciesId)) ?? lead)).replace(/\{flag:([a-z][a-z0-9-]*)\}/g, (_, k: string) => String(num(run, k)));
+    .replace(/\{group:([a-z0-9-]+)\}/g, (_, g: string) => nameOf(content, run.party.find((m) => MOMENT_GROUPS[g]?.includes(m.speciesId)) ?? lead))
+    .replace(/\{roam:([a-z][a-z0-9-]*)\}/g, (_, k: string) => `${roamPercent(run, k)}%`)
+    .replace(/\{flag:([a-z][a-z0-9-]*)\}/g, (_, k: string) => String(num(run, k)))
+    .replace(/\{(give|stock):(common|uncommon|rare)\}/g, (_, k: string, t: 'common') => item(k === 'give' ? barterGive(content, run, t) : barterStock(run, t)))
+    .replace(/\{note:([a-z][a-z0-9-]*)\}/g, (_, k: string) => { const m = noted(run, k); return m ? m.care?.nickname || (content.species.get(m.speciesId)?.name ?? m.speciesId) : 'your Pokémon'; });
 }
 
 // ---------- SF72 rule battles: "How bad is it for me?" ----------
@@ -150,36 +163,101 @@ export function restoreMachine(content: Content, run: Run): boolean {
   return true;
 }
 
+// ---------- foe teams (SF56.3 tuned against your lead, SF70.2 Hargrove targets your most-used, SF61 the Admin has your Pokémon) ----------
+
+/** Types that hit this Pokémon super-effectively (lead: the first able to fight; most: the most-used this run). Null when none. */
+export function coFoeTypes(content: Content, run: Run, against: 'lead' | 'most'): TypeName[] | null {
+  const mon = against === 'most' ? mostUsed(run) : run.party.find((m) => m.hp > 0);
+  if (!mon) return null;
+  const types = getSpecies(content, mon.speciesId).types as TypeName[];
+  const hits = TYPE_NAMES.filter((t) => typeEffectiveness(content.typeChart, t, types) > 1);
+  return hits.length > 0 ? hits : null;
+}
+/** The Pokémon given away under `key` (SF61), for a foe team. */
+export const coFoeNote = (run: Run, key: string): PokemonInstance | null => noted(run, key);
+
+/** SF61: a species from the region's list (`regionJoin[table]` in familiesC.json, `default` for other regions), the same all stage long. */
+export function coRegionPick(run: Pick<Run, 'seed' | 'regionIndex' | 'stage'>, table: string, regionId: string): string {
+  const tables = data.regionJoin as Record<string, Record<string, string[]>>;
+  const list = tables[table]?.[regionId] ?? tables[table]?.default ?? [];
+  return list[new Rng(hashSeed(`${run.seed}::co-region-join::${table}::${run.regionIndex}::${run.stage?.index ?? 0}`)).int(0, Math.max(0, list.length - 1))] ?? 'ditto';
+}
+
 // ---------- conditions and effects ----------
 
-export type CoCondition = Extract<EventCondition, { kind: 'record' }>;
-export const coConditionMet = (run: Run, c: CoCondition): boolean => recordOf(run) === c.is;
-export const coConditionText = (c: CoCondition): string => (c.is === 'low' ? 'Only if the road thinks badly of you' : c.is === 'high' ? 'Needs a good name on this road' : 'Needs an ordinary name on this road');
+export type CoCondition = Extract<EventCondition, { kind: 'record' | 'barterHas' | 'bagHas' | 'keptGoods' | 'eggOf' | 'gymHere' | 'blessed' | 'partyHpBelow' }>;
+export function coConditionMet(content: Content, run: Run, c: CoCondition): boolean {
+  switch (c.kind) {
+    case 'record': return recordOf(run) === c.is;
+    case 'keptGoods': return keptGoods(run);
+    case 'eggOf': return hasEgg(run, c.species);
+    case 'gymHere': return hereGymType(content, run, true) !== null;
+    case 'blessed': return blessedMet(run, c.has, c.species, c.atLeast);
+    case 'partyHpBelow': { const max = run.party.reduce((s, m) => s + maxHp(content, m), 0); return max > 0 && run.party.reduce((s, m) => s + Math.max(0, m.hp), 0) < max * c.share; }
+    case 'barterHas': return barterHas(content, run, c.tier, c.berry);
+    case 'bagHas': return bagCount(run, c.ids, c.suffix) >= c.count;
+  }
+}
+export function coConditionText(c: CoCondition): string {
+  switch (c.kind) {
+    case 'record': return c.is === 'low' ? 'Only if the road thinks badly of you' : c.is === 'high' ? 'Needs a good name on this road' : 'Needs an ordinary name on this road';
+    case 'keptGoods': return 'Only if you kept something that was not yours';
+    case 'eggOf': return 'Needs the Egg';
+    case 'gymHere': return 'Only after a Gym in this region';
+    case 'blessed': return !c.has ? 'Only without a Legendary Blessing' : c.species ? `Needs ${c.species}'s Blessing${c.atLeast ? ` and Influence ${c.atLeast}` : ''}` : `Needs a Legendary Blessing${c.atLeast ? ` and Influence ${c.atLeast}` : ''}`;
+    case 'partyHpBelow': return `Only when your party is below ${Math.round(c.share * 100)}% HP`;
+    case 'barterHas': return `Needs a${c.tier === 'uncommon' ? 'n Uncommon' : c.tier === 'rare' ? ' Rare' : ' Common'} item to trade${c.berry ? ', and a Berry' : ''}`;
+    case 'bagHas': return `Needs ${c.label ?? (c.suffix === '-berry' ? 'a Berry' : 'the right item')}${c.count > 1 ? ` (${c.count})` : ''}`;
+  }
+}
 
-export type CoEffect = Extract<EventEffect, { kind: 'ruleRead' | 'rulePrize' | 'pickTest' | 'timeMachine' }>;
+export type CoEffect = Extract<EventEffect, { kind: 'ruleRead' | 'rulePrize' | 'pickTest' | 'timeMachine' | 'barter' | 'spendBag' | 'notePicked' | 'rejoin' | 'copyHeld' | 'helped' | 'returnEgg' | 'boxBond' | 'gymTypeItem' | 'sign' | 'offer' }>;
 export function coEffectWords(e: CoEffect): string {
   switch (e.kind) {
+    case 'barter': return e.give ? 'a fair trade' : 'a free trade';
+    case 'spendBag': return e.suffix === '-berry' ? 'a Berry' : 'items from your bag';
+    case 'notePicked': return e.take ? 'a Pokémon leaves you' : '';
+    case 'rejoin': return 'a Pokémon comes home';
+    case 'copyHeld': return 'a held item';
+    case 'helped': return '';
+    case 'returnEgg': return e.hatch ? 'the Egg hatches' : 'you give the Egg back';
     case 'ruleRead': return e.store ? '' : 'the game reads your team';
     case 'rulePrize': return `prize money (₽${e.amount} × the rule's multiplier)`;
     case 'pickTest': return '';
     case 'timeMachine': return `your lead steps into the ${e.era}`;
+    case 'boxBond': return '';
+    case 'gymTypeItem': return 'an old badge';
+    case 'sign': return 'a Sign';
+    case 'offer': return 'you leave an item in the bowl';
   }
 }
 
-/** Applies one of this file's effects. `pickedUid` is the party Pokémon the player pointed at (a `pick` choice). Returns the change in words. */
-export function applyCoEffect(content: Content, run: Run, e: CoEffect, pickedUid?: string): string {
+/** Applies one of this file's effects. `pickedUid` is the party Pokémon the player pointed at (a `pick` choice); `gift` gives an item the usual way (events.ts giveItem). Returns the change in words. */
+export function applyCoEffect(content: Content, run: Run, e: CoEffect, pickedUid: string | undefined, gift: (id: string) => string, hatchMon?: (speciesId: string, level: number, shiny: boolean) => PokemonInstance): string {
   switch (e.kind) {
+    case 'boxBond': boxBond(run, e.key); return '';
+    case 'sign': return giveSign(run, e.species, e.amount) ? `a Sign of ${content.species.get(e.species)?.name ?? e.species}: its attention on you grows` : '';
+    case 'offer': { const id = offerItem(content, run, e.tier); return id ? `you leave the ${content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? id}` : 'you have nothing of that kind'; }
+    case 'gymTypeItem': { const t = hereGymType(content, run, false); return t ? gift(`${e.prefix}-${t}`) : ''; }
+    case 'returnEgg': return hatchMon ? returnEgg(content, run, e.species, e.hatch, hatchMon) : '';
+    case 'barter': return barter(content, run, e.give, e.get, e.berry, gift);
+    case 'spendBag': return spendFromBag(content, run, e.ids, e.suffix, e.count);
+    case 'notePicked': return notePicked(content, run, e.key, pickedUid, e.take);
+    case 'rejoin': return rejoin(content, run, e.key);
+    case 'copyHeld': return copyHeld(content, run, e.who, gift);
+    case 'helped': noteHelped(run, e.species, e.rare); return '';
     case 'ruleRead': {
       const mult = ruleMultiplier(content, run, e.bad, e.good);
       put(run, e.key, mult * 100);
       return e.store ? '' : `${RULES.words[String(mult)]} (₽${Math.round(e.prize * mult)})`;
     }
     case 'rulePrize': {
-      const mult = (num(run, e.key) || 100) / 100;
+      const early = e.earlyKo && num(run, 'co-early-ko') > 0 ? data.ruleBattles.earlyKoBonus : 1;
+      const mult = ((num(run, e.key) || 100) / 100) * early;
       const amount = Math.round(e.amount * mult);
       run.money += amount;
       put(run, e.key, 0);
-      return `+₽${amount}${mult !== 1 ? ` (prize ×${mult})` : ''}`;
+      return `+₽${amount}${mult !== 1 ? ` (prize ×${mult})` : ''}${early > 1 ? ', with the fast-knockout bonus' : ''}`;
     }
     case 'pickTest': {
       const picked = run.party.find((m) => m.uid === pickedUid);
@@ -216,10 +294,29 @@ export function coBattleBegin(content: Content, run: Run): void {
   if (mon && mon.hp > 1) mon.hp = Math.max(1, mon.hp - Math.ceil(maxHp(content, mon) * IDOL.hpShare));
 }
 
+/** The battle has started (after entry abilities). SF62's Ditto, SF58.4's angry valley, and SF63's helped Pokémon arriving at the worst moment. */
+export function coBattleStarted(content: Content, run: Run): BattleEvent[] {
+  return [...sideBattleBegin(content, run), ...helpedReturn(content, run), ...oathSpeedStart(run)];
+}
+
+/** The battle is over (the battle state is about to go). Roofer Jax: a knockout in the opening turns pays the bonus. */
+export function coBattleEnd(content: Content, run: Run, battle: NonNullable<Run['battle']>): void {
+  put(run, 'co-early-ko', battle.storyEffects.includes('co-early-ko') ? 1 : 0);
+  put(run, 'co-calm-done', battle.storyEffects.includes('calm:done') ? 1 : 0); // A1: a Noble calmed (not beaten) shows in the room after
+  rangerRescue(content, run, battle.outcome === 'lose');
+}
+
 /** A healing stop was used (`before` = HP before it). SF74, Curse 5: it heals 25% less. SF85: a second rest in one stage breaks the Oath of Speed. */
 export function coHealStop(content: Content, run: Run, before: readonly number[]): void {
   put(run, 'oath-rests', num(run, 'oath-rests') + 1);
   if (num(run, 'oath-speed') > 0 && num(run, 'oath-rests') >= 2) put(run, 'oath-broken', 1);
+  // SF76.8: the festival seedling is watered at every rest and fruits after a few.
+  if (num(run, 'berry-seedling') > 0 && num(run, 'berry-grown') === 0) {
+    put(run, 'berry-seedling-rests', num(run, 'berry-seedling-rests') + 1);
+    if (num(run, 'berry-seedling-rests') >= data.festival.seedlingRests) put(run, 'berry-grown', 1);
+  }
+  // SF84: the Elder asks whether a fainted Pokémon was ever left unhealed at a rest.
+  if (run.party.some((m) => m.hp <= 0)) put(run, 'left-fainted', 1);
   if (idolCurse(run) < IDOL.restCurse) return;
   run.party.forEach((m, i) => {
     const was = before[i] ?? 0;
@@ -240,6 +337,8 @@ export function coWildKo(run: Run): void {
 /** One step on the map. The Time Machine's safety net, and FE2: the kept Sealed Letter glows the first time the whole party is under 25% HP. Returns an event id to open beside this node, or null. */
 export function coNodeEnter(content: Content, run: Run): string | null {
   restoreMachine(content, run);
+  const soon = takeSoon(run);
+  if (soon) return soon;
   if (num(run, 'letter-kept') > 0 && num(run, 'letter-glow') === 0 && run.party.length > 0) {
     const hp = run.party.reduce((s, m) => s + Math.max(0, m.hp), 0);
     const max = run.party.reduce((s, m) => s + maxHp(content, m), 0);

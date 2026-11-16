@@ -141,16 +141,17 @@ describe('Berry Garden stop and Berry Festival', () => {
     expect(fest.mapEvents.length).toBeGreaterThanOrEqual(8);
   });
 
-  it('the research tent seedling plants a mutated lansat berry, and does nothing when the garden is full', () => {
+  it('the research tent seedling (Catalog Overhaul SF76.8) is carried, watered at each rest, and fruits after four', async () => {
+    const { coHealStop } = await import('../../src/core/events/coToolkit');
     const run = newRun();
     const ev = content.events.get('berry-fest-research')!;
-    const effect = ev.choices[0]!.success.effects.find((e) => e.kind === 'seedling')!;
-    const rng = new Rng(hashSeed('seedling'));
-    expect(applyEffect(content, run, effect, rng)).toContain('seedling');
-    expect(run.garden[0]).toMatchObject({ berryId: 'lansat-berry', mutated: true, left: 1 });
-    for (let i = 0; i < BERRIES.maxPlots; i++) applyEffect(content, run, effect, rng);
-    expect(run.garden).toHaveLength(BERRIES.maxPlots);
-    expect(applyEffect(content, run, effect, rng)).toBe('');
+    const grow = ev.choices[0]!.success.effects.find((e) => e.kind === 'flag')!;
+    applyEffect(content, run, grow, new Rng(hashSeed('seedling')));
+    expect(run.story.flags['ev:berry-seedling']).toBe(1);
+    for (let i = 0; i < 3; i++) coHealStop(content, run, run.party.map((m) => m.hp));
+    expect(run.story.flags['ev:berry-grown'] ?? 0).toBe(0);
+    coHealStop(content, run, run.party.map((m) => m.hp));
+    expect(run.story.flags['ev:berry-grown']).toBe(1);
   });
 });
 

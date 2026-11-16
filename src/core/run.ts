@@ -133,7 +133,8 @@ import { timeOfDay } from './arenaStyle';
 import { recordAftermath } from './overhaul/aftermath';
 import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
 import { tickChainTimers } from './overhaul/chains';
-import { coBattleBegin, coFled, coHealStop, coNodeEnter, coStageStart, coWildKo } from './events/coToolkit';
+import { boxedNoEvolve, noteBoxed } from './events/coHelpers';
+import { coBattleBegin, coBattleEnd, coBattleStarted, coFled, coHealStop, coNodeEnter, coStageStart, coWildKo } from './events/coToolkit';
 import { kantoSweetAir } from './expansion/canonKantoRules';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { endLastResort } from './battle/lastResort';
@@ -3130,6 +3131,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   coBattleBegin(content, run);
   kantoSweetAir(content, run);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
+  events.push(...coBattleStarted(content, run));
   run.rng.battle = rng.state;
   noteBattle(content, run);
   wildBehaviorEffect(content, run, events);
@@ -3890,7 +3892,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   }
 
   const evolutions: BattleEndResult['evolutions'] = [];
-  for (const mon of noEvolution(run.rules) ? [] : run.party) {
+  for (const mon of noEvolution(run.rules) ? [] : run.party.filter((m) => !boxedNoEvolve(run, m))) {
     // Fenwick's lesson: held back from an evolution it was ready for, it grows a little stronger instead.
     noteDeclinedEvolution(content, runPerks(content, run), mon, run.regionOrder[run.regionIndex], evolutionLevelOffset(runArchetype(content, run).modifiers), bondEvolves(content, run, mon));
     for (const evo of evolveFully(content, mon, run.regionOrder[run.regionIndex], evolutionLevelOffset(runArchetype(content, run).modifiers), bondEvolves(content, run, mon))) {
@@ -4057,6 +4059,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (run.log.starterUid && run.party.some((m) => m.uid === run.log.starterUid)) count(run, 'regionsClearedWithStarter');
     if (run.regionIndex + 1 >= run.regionOrder.length && !extendEndless(run)) run.victory = true;
   }
+  coBattleEnd(content, run, battle);
   run.battle = null;
   delete run.recorder;
   if ((run.itemCounters?.['squirt-exp'] ?? 0) > 0) run.itemCounters = { ...run.itemCounters, 'squirt-exp': 0 };
@@ -4589,6 +4592,7 @@ export function depositToBox(content: Content, current: RunState, partyIndex: nu
   if (current.party.length <= 1) throw new Error('The party needs at least one Pokémon');
   if (current.box.length >= boxCapacity(runPerks(content, current))) throw new Error('The PC is full');
   const run = structuredClone(current);
+  noteBoxed(run, run.party[partyIndex]!);
   run.box.push(run.party.splice(partyIndex, 1)[0]!);
   return run;
 }

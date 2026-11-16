@@ -35,6 +35,7 @@ import { claimKeepsake, grantKeepsake, keepsakeName, keepsakeValid, nextKeepsake
 import { MEMORIES } from '../memories/schema';
 import { getService, SERVICES, type ServiceDef } from './schema';
 import { highestOpenTier } from '../raid/raid';
+import { boxedNoEvolve } from '../events/coHelpers';
 
 export interface ServiceOption {
   id: string;
@@ -521,7 +522,7 @@ export function useService(content: Content, current: RunState, sideId: string, 
     case 'class': {
       const result = addLevels(content, mon!, C.schoolLevels, runLevelCap(content, run));
       changeFriendship(content, mon!, content.balance.friendship.perLevel * result.levelsGained);
-      const evolved = evolveFully(content, mon!, run.regionOrder[run.regionIndex], 0);
+      const evolved = boxedNoEvolve(run, mon!) ? [] : evolveFully(content, mon!, run.regionOrder[run.regionIndex], 0);
       for (const evo of evolved) count(run, 'evolutions');
       message = `${monName(content, mon!)} reached level ${result.newLevel}.${evolved.length ? ` It evolved into ${evolved.map((e) => getSpecies(content, e.to).name).join(', then ')}!` : ''}${result.skippedMoves.length ? ' It had no room for some new moves.' : ''}`;
       break;
