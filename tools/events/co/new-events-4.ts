@@ -935,7 +935,8 @@ const NE100: Json[] = [
   P(
     'The road you came by, walked the other way. Everything is smaller than it was.',
     'Each region goes by in a line. The bridge that sings. The pond shaped like a foot. A shed by the road with a sign on it. People you helped stand at the places where you met them, and wave.',
-    'Then a gate, and a lane, and your house. There is a light on.',
+    // {followed:step}: Greenneedle gn.60, the Pokémon that followed and never walked in is on the step (empty otherwise).
+    'Then a gate, and a lane, and your house. There is a light on.{followed:step}',
   ), [
     ch('Again.', out(P(
       'You stand at the door a long moment, with the light on your face. Then you turn round and look back down the road.',

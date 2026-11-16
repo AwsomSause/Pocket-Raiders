@@ -182,7 +182,10 @@ export function reunionArrive(content: Content, run: RunState): string {
   // Last of all, and late: the one that walked into the woods.
   const woods = left.find(([, fate]) => fate === 'woods');
   if (woods) {
-    att.push({ id: 'left-woods', name: `The ${leftName(woods[0])} from the woods`, group: 'released', kind: 'guard', score: GROUP_BASE.released, good: true, far: false, line: `*The ${leftName(woods[0])} that walked into the woods arrives last, when the lanterns are already lit. It does not come over. It sits where it can see you, and that is the whole of it.*` });
+    // gn.60: the one that followed you home and the one that walked into the woods know each other. They have been on the same road.
+    const follower = [...run.party, ...run.box].find((m) => m.gn?.includes('followed-home'));
+    const know = follower ? ` *${follower.care?.nickname || leftName(follower.speciesId)} gets up, and goes over, and sits down beside it. The two know each other. They have been on the same road.*` : '';
+    att.push({ id: 'left-woods', name: `The ${leftName(woods[0])} from the woods`, group: 'released', kind: 'guard', score: GROUP_BASE.released, good: true, far: false, line: `*The ${leftName(woods[0])} that walked into the woods arrives last, when the lanterns are already lit. It does not come over. It sits where it can see you, and that is the whole of it.*${know}` });
     put(run, 'reunion-count', att.length);
     put(run, 'reunion-att-left-woods', 2);
   }

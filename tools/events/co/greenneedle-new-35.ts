@@ -51,7 +51,8 @@ const stageEvent = (n: number): Json => {
     stop: 'event', rarity: 'rare', callback: true, forced: true, requires: REQ_NEXT(n), remembers: memory(), cast: [], effect: 'sparkle',
   }), say(
     'An old woman at the rest, with a ring of children. A different ring; the same her.',
-    `"Last time I told you the trainer would **${PRED[n - 2]}**," she says. "Well? Did they?"`,
+    // gn.60: in one telling (the third), her story has a seventh in the trainer's team. She doesn't explain. Empty unless something is following.
+    `"Last time I told you the trainer would **${PRED[n - 2]}**," she says. "Well? Did they?"${n === 3 ? '{followed:seventh}' : ''}`,
   ), report(n, next));
 };
 

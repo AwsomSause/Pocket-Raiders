@@ -321,7 +321,7 @@
     "tint": "#6b5a3a",
     "effect": "sparkle"
    },
-   "intro": "An old woman at the rest, with a ring of children. A different ring; the same her.\n\n\"Last time I told you the trainer would **catch something blue**,\" she says. \"Well? Did they?\"",
+   "intro": "An old woman at the rest, with a ring of children. A different ring; the same her.\n\n\"Last time I told you the trainer would **catch something blue**,\" she says. \"Well? Did they?\"{followed:seventh}",
    "choices": [
     {
      "label": "It happened, just so.",

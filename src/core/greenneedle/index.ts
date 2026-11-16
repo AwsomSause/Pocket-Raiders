@@ -52,7 +52,7 @@ import { cheerJoin } from './cheer';
 import { mirrorReady, mirrorStart } from './mirror';
 import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, ofSpecial, oldfriendTokens, releases, specialDue } from './oldfriend';
 import { ferrisArrive, ferrisBest, ferrisHand, ferrisShape, ferrisStart, ferrisTurn } from './ferris';
-import { followedJoin } from './followed';
+import { followedJoin, followedTokens } from './followed';
 import { ballFind, ballForce, ballHatched, ballHold, ballKind, ballTokens } from './ball';
 import { reunionArrive, reunionFar, reunionTokens, reunionWalk } from './reunion';
 import { giveDearest } from './fox';
@@ -103,6 +103,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{borrow:')) text = borrowTokens(content, run, text);
   if (text.includes('{reunion:')) text = reunionTokens(run, text);
   if (text.includes('{imp:')) text = impTokens(content, run, text);
+  if (text.includes('{followed:')) text = followedTokens(run, text);
   // gn.50: the defector.
   if (text.includes('{defector:')) text = defectorTokens(content, run, text);
   // gn.51: the Smuggling Ring.
