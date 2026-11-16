@@ -763,6 +763,10 @@
   {
    "key": "bibarel-dam-broken",
    "rule": "tools/events/co/greenneedle-new-20.ts (gn.new.20: the dam is broken)"
+  },
+  {
+   "key": "cheer-rival-used",
+   "rule": "core/greenneedle/cheer.ts (gn.new.30: the one left on the road cheers for the rival once)"
   }
  ]
 }

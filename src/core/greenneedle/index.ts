@@ -44,6 +44,7 @@ import { shedNinjask, shedRest } from './shedinja';
 import { lsAddress, lsDeal, lsTake, lsTicket } from './laststop';
 import { tyrEven, tyrEvolve, tyrLead, tyrResult, tyrTally, tyrogueJoin, tyrogueMon } from './tyrogue';
 import { muralJoin, muralPick } from './mural';
+import { cheerJoin } from './cheer';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -745,6 +746,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return '';
     case 'muralJoin':
       return muralJoin(content, run, host);
+    case 'cheerJoin':
+      return cheerJoin(content, run, e.n ?? 3, host);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':

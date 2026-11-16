@@ -26,6 +26,7 @@ import { draftTurn } from '../greenneedle/draft';
 import { snorlaxTurn } from '../greenneedle/snorlax';
 import { bidoofTurn, NO_FLINCH } from '../greenneedle/bidoof';
 import { alleyTurn, fairShare } from '../greenneedle/alley';
+import { callPriority, cheerTurn } from '../greenneedle/cheer';
 import { champPower, lessonTurn, seenItFirst, seenItSpend, summitSaves } from '../greenneedle/champion';
 import { earthLine, overchargeSelfHurt } from '../greenneedle/ridge';
 import { foresightBegin } from './foresight';
@@ -1162,6 +1163,8 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
 
 /** Run events B: an event fight's own end rules, checked after each turn (survive N turns; sudden death). */
 export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?: PokemonInstance[], content?: Content): void {
+  // The Cheer Squad (gn.new.30): they cheer from the sideline in every battle for the rest of the stage.
+  if (!battle.outcome) cheerTurn(battle, (text) => events.push({ type: 'raid', tone: 'info', text }));
   const rule = battle.eventRule;
   if (!rule || battle.outcome) return;
   const mine = party?.[battle.activeIndex];
@@ -2812,7 +2815,7 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
 function priorityOf(ctx: BattleContext, c: Combatant, move: Move): number {
   // §29 enraged after a rival's sacrifice: its next moves go first.
   const rage = ctx.battle.enraged;
-  return basePriority(ctx, c, move) + variantPriorityBonus(ctx.battle.extra.variants, c.mon.uid) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0) + momentPriority(ctx, c) + (c.side === 'player' ? quirkPriority(c.mon, c.vol.turnsOut) : 0);
+  return basePriority(ctx, c, move) + variantPriorityBonus(ctx.battle.extra.variants, c.mon.uid) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0) + momentPriority(ctx, c) + (c.side === 'player' ? callPriority(ctx.battle, c.mon.uid) : 0) + (c.side === 'player' ? quirkPriority(c.mon, c.vol.turnsOut) : 0);
 }
 
 function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {

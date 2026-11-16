@@ -3,6 +3,8 @@
 // really happened and never decides an outcome itself (Hyper moments are
 // decided by the battle engine; this file only tells their story).
 
+import { cheerBattleStart } from '../greenneedle/cheer';
+import { stageNumber } from '../events';
 import { evolveMoments, noteCocoon } from '../moments/runMoments';
 import { spendRivalSpoils } from '../nodeMenu/special';
 import { endRivalBrain } from '../rivals/brainSetup';
@@ -88,6 +90,7 @@ export function recordBattleStarted(content: Content, run: RunState): void {
   run.story.majorCuesThisBattle = 0;
   // Story S7d: the partner's signature moves join it for this battle.
   grantSignatureMoves(content, run);
+  cheerBattleStart(run, battle, stageNumber(content, run));
   const lead = run.party[battle.activeIndex]!;
   noteFought(run, lead.uid);
   emit(content, run, 'battleStarted', {
