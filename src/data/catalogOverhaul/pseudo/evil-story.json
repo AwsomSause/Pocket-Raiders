@@ -1204,6 +1204,333 @@
      "ember-laundry-gala"
     ]
    ]
+  },
+  {
+   "id": "ps_sk_cold",
+   "name": "Preserved",
+   "entry": "sk-act3",
+   "themeId": "ghost-dark",
+   "tint": "#1a2230",
+   "mood": "B2, from below: a drain, rows of cases, a case your height.",
+   "team": "skull",
+   "start": "opened",
+   "layout": [
+    [
+     "sk-cold-drain"
+    ],
+    [
+     "sk-cold-rows"
+    ],
+    [
+     "sk-cold-case"
+    ],
+    [
+     "sk-cold-last"
+    ],
+    [
+     "sk-cold-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ae_cold",
+   "name": "Preserved",
+   "entry": "ae-act3",
+   "themeId": "ghost-dark",
+   "tint": "#1a2230",
+   "mood": "B2, from above: rows of cases, and something tall at the back.",
+   "team": "aether",
+   "start": "opened",
+   "layout": [
+    [
+     "ae-cold-rows"
+    ],
+    [
+     "ae-cold-tall"
+    ],
+    [
+     "ae-cold-case"
+    ],
+    [
+     "ae-cold-last"
+    ],
+    [
+     "ae-cold-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_sk_plan",
+   "name": "Where Nothing Leaves",
+   "entry": "sk-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#10101c",
+   "mood": "The upper deck, and through: a sea with no water in it, and a hundred pale bells.",
+   "team": "skull",
+   "start": "opened",
+   "layout": [
+    [
+     "al-plan-hau"
+    ],
+    [
+     "al-plan-rival"
+    ],
+    [
+     "al-plan-nanu"
+    ],
+    [
+     "al-plan-pylons"
+    ],
+    [
+     "al-plan-through-ae",
+     "al-plan-through-sk"
+    ],
+    [
+     "al-plan-stay"
+    ]
+   ]
+  },
+  {
+   "id": "ps_sk_turn",
+   "name": "Come Home, All of You",
+   "entry": "sk-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2e",
+   "mood": "Between Lusamine and the gate.",
+   "team": "skull",
+   "start": "opened",
+   "layout": [
+    [
+     "al-turn-between"
+    ],
+    [
+     "al-turn-fight"
+    ],
+    [
+     "al-turn-lillie"
+    ]
+   ]
+  },
+  {
+   "id": "ps_sk_both",
+   "name": "Both Halves",
+   "entry": "sk-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2e",
+   "mood": "A deck, a dock, forty kids, two hundred staff, and a gate, open.",
+   "team": "skull",
+   "start": "opened",
+   "layout": [
+    [
+     "al-both-deck"
+    ],
+    [
+     "al-both-guzma"
+    ],
+    [
+     "al-both-lusamine"
+    ],
+    [
+     "al-both-sign"
+    ],
+    [
+     "al-both-cold"
+    ],
+    [
+     "al-both-gate"
+    ],
+    [
+     "al-both-forty"
+    ],
+    [
+     "al-both-ladle"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ae_plan",
+   "name": "Where Nothing Leaves",
+   "entry": "ae-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#10101c",
+   "mood": "The upper deck, and through: a sea with no water in it, and a hundred pale bells.",
+   "team": "aether",
+   "start": "opened",
+   "layout": [
+    [
+     "al-plan-hau"
+    ],
+    [
+     "al-plan-rival"
+    ],
+    [
+     "al-plan-nanu"
+    ],
+    [
+     "al-plan-pylons"
+    ],
+    [
+     "al-plan-through-ae",
+     "al-plan-through-sk"
+    ],
+    [
+     "al-plan-stay"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ae_turn",
+   "name": "Come Home, All of You",
+   "entry": "ae-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2e",
+   "mood": "Between Lusamine and the gate.",
+   "team": "aether",
+   "start": "opened",
+   "layout": [
+    [
+     "al-turn-between"
+    ],
+    [
+     "al-turn-fight"
+    ],
+    [
+     "al-turn-lillie"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ae_both",
+   "name": "Both Halves",
+   "entry": "ae-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2e",
+   "mood": "A deck, a dock, forty kids, two hundred staff, and a gate, open.",
+   "team": "aether",
+   "start": "opened",
+   "layout": [
+    [
+     "al-both-deck"
+    ],
+    [
+     "al-both-guzma"
+    ],
+    [
+     "al-both-lusamine"
+    ],
+    [
+     "al-both-sign"
+    ],
+    [
+     "al-both-cold"
+    ],
+    [
+     "al-both-gate"
+    ],
+    [
+     "al-both-forty"
+    ],
+    [
+     "al-both-ladle"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ae_case",
+   "name": "Case by Case",
+   "entry": "ae-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a2230",
+   "mood": "A key across the deck, sixty cases, a lift that holds four.",
+   "team": "aether",
+   "start": "opened",
+   "layout": [
+    [
+     "al-case-key"
+    ],
+    [
+     "al-case-pua"
+    ],
+    [
+     "al-case-carry"
+    ],
+    [
+     "al-case-tale"
+    ],
+    [
+     "al-case-gate"
+    ]
+   ]
+  },
+  {
+   "id": "ps_sk_placed",
+   "name": "Placed",
+   "entry": "sk-placed-warn-2",
+   "themeId": "ghost-dark",
+   "tint": "#3a3428",
+   "mood": "A list of forty names, a white boat, and a ledger.",
+   "team": "skull",
+   "start": "opened",
+   "layout": [
+    [
+     "al-placed-list"
+    ],
+    [
+     "al-placed-plumeria"
+    ],
+    [
+     "al-placed-ledger"
+    ],
+    [
+     "al-placed-gate"
+    ]
+   ]
+  },
+  {
+   "id": "ps_tp_entries",
+   "name": "Three Open Entries",
+   "entry": "tp-return-1",
+   "themeId": "ghost-dark",
+   "tint": "#1e3a40",
+   "mood": "The Borrow Book: three not brought back.",
+   "start": "opened",
+   "layout": [
+    [
+     "tp-r1-rockruff"
+    ],
+    [
+     "tp-r1-cutiefly"
+    ],
+    [
+     "tp-r1-mudbray"
+    ]
+   ]
+  },
+  {
+   "id": "ps_tp_still",
+   "name": "Still Here",
+   "entry": "tp-still-here",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2e",
+   "mood": "The upper deck, the gate, and a lot of stairs.",
+   "start": "opened",
+   "layout": [
+    [
+     "tp-still-two"
+    ],
+    [
+     "tp-still-corsola"
+    ],
+    [
+     "tp-still-pelago"
+    ],
+    [
+     "tp-still-close"
+    ],
+    [
+     "tp-still-faba"
+    ]
+   ]
   }
  ]
 }

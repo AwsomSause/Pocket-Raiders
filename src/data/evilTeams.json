@@ -1480,7 +1480,19 @@
     "op": "trial-crash",
     "half": false
    },
-   "routes": []
+   "routes": [
+    {
+     "region": "alola",
+     "ranks": [
+      "Numbskull",
+      "Grunt",
+      "Big Sib",
+      "Enforcer",
+      "Admin",
+      "Guzma's Second"
+     ]
+    }
+   ]
   },
   {
    "id": "aether",
@@ -1646,7 +1658,19 @@
     "op": "preservation-lab",
     "half": false
    },
-   "routes": []
+   "routes": [
+    {
+     "region": "alola",
+     "ranks": [
+      "Volunteer",
+      "Employee",
+      "Researcher",
+      "Branch Deputy",
+      "Branch Chief",
+      "The President's Favourite"
+     ]
+    }
+   ]
   },
   {
    "id": "yell",

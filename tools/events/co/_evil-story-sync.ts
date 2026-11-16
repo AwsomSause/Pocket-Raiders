@@ -110,6 +110,8 @@ const ROUTES: Record<string, { region: string; ranks: string[] }[]> = {
     { region: 'johto', ranks: ['Hopeful', 'Grunt', 'Operative', 'Cell Leader', 'Executive (the fifth)', 'The Voice'] },
   ],
   flare: [{ region: 'kalos', ranks: ['Subscriber', 'Member', 'Stylist', 'Patron', 'Chosen', 'The Last Guest'] }],
+  skull: [{ region: 'alola', ranks: ['Numbskull', 'Grunt', 'Big Sib', 'Enforcer', 'Admin', `Guzma's Second`] }],
+  aether: [{ region: 'alola', ranks: ['Volunteer', 'Employee', 'Researcher', 'Branch Deputy', 'Branch Chief', `The President's Favourite`] }],
 };
 
 const COUNTERS: Record<string, string> = {
@@ -200,5 +202,24 @@ flare('ps_fl_turn', 'Geosenge: No Refunds', 'fl-final-choice', [['fl-turn-key'],
 flare('ps_fl_az', 'Geosenge: Back', 'fl-final-choice', [['fl-az-door'], ['fl-az-four'], ['fl-az-four-2'], ['fl-az-back'], ['fl-az-hour']], 'a very tall man, stooping');
 flare('ps_fl_own', 'Geosenge: A Bigger Well', 'fl-final-choice', [['fl-own-console'], ['fl-own-malva'], ['fl-own-clapping', 'fl-own-lost'], ['fl-own-list'], ['fl-own-fees'], ['fl-own-flower'], ['fl-own-staff'], ['fl-own-yarborough']], 'a coat, and a better question');
 flare('ps_ember_laundry', `Thursday's Laundry`, 'ember-stop-1', [['ember-laundry-1'], ['ember-laundry-2'], ['ember-laundry-gala']], 'steam, starch and four hundred red suits', '#2a2420');
+
+// Volume III, Alola (evil-story-33/34): the cold room for each side, then the five endings and Team Tidepool's walks. An ending
+// both sides share is one chain per side (the entry is that side's Final Choice); the region's own team's chain wins.
+const alola = (id: string, team: string, name: string, entry: string, layout: string[][], mood: string, tint = '#1a1a2e'): void =>
+  void chains.push({ id, name, entry, themeId: 'ghost-dark', tint, mood, team, start: 'opened', layout } as never);
+alola('ps_sk_cold', 'skull', 'Preserved', 'sk-act3', [['sk-cold-drain'], ['sk-cold-rows'], ['sk-cold-case'], ['sk-cold-last'], ['sk-cold-after']], 'B2, from below: a drain, rows of cases, a case your height.', '#1a2230');
+alola('ps_ae_cold', 'aether', 'Preserved', 'ae-act3', [['ae-cold-rows'], ['ae-cold-tall'], ['ae-cold-case'], ['ae-cold-last'], ['ae-cold-after']], 'B2, from above: rows of cases, and something tall at the back.', '#1a2230');
+const PLAN = [['al-plan-hau'], ['al-plan-rival'], ['al-plan-nanu'], ['al-plan-pylons'], ['al-plan-through-ae', 'al-plan-through-sk'], ['al-plan-stay']];
+const TURN = [['al-turn-between'], ['al-turn-fight'], ['al-turn-lillie']];
+const BOTH = [['al-both-deck'], ['al-both-guzma'], ['al-both-lusamine'], ['al-both-sign'], ['al-both-cold'], ['al-both-gate'], ['al-both-forty'], ['al-both-ladle']];
+for (const [p, team] of [['sk', 'skull'], ['ae', 'aether']] as const) {
+  alola(`ps_${p}_plan`, team, 'Where Nothing Leaves', `${p}-final-choice`, PLAN, 'The upper deck, and through: a sea with no water in it, and a hundred pale bells.', '#10101c');
+  alola(`ps_${p}_turn`, team, 'Come Home, All of You', `${p}-final-choice`, TURN, 'Between Lusamine and the gate.');
+  alola(`ps_${p}_both`, team, 'Both Halves', `${p}-final-choice`, BOTH, 'A deck, a dock, forty kids, two hundred staff, and a gate, open.');
+}
+alola('ps_ae_case', 'aether', 'Case by Case', 'ae-final-choice', [['al-case-key'], ['al-case-pua'], ['al-case-carry'], ['al-case-tale'], ['al-case-gate']], 'A key across the deck, sixty cases, a lift that holds four.', '#1a2230');
+alola('ps_sk_placed', 'skull', 'Placed', 'sk-placed-warn-2', [['al-placed-list'], ['al-placed-plumeria'], ['al-placed-ledger'], ['al-placed-gate']], 'A list of forty names, a white boat, and a ledger.', '#3a3428');
+alola('ps_tp_entries', undefined as never, 'Three Open Entries', 'tp-return-1', [['tp-r1-rockruff'], ['tp-r1-cutiefly'], ['tp-r1-mudbray']], 'The Borrow Book: three not brought back.', '#1e3a40');
+alola('ps_tp_still', undefined as never, 'Still Here', 'tp-still-here', [['tp-still-two'], ['tp-still-corsola'], ['tp-still-pelago'], ['tp-still-close'], ['tp-still-faba']], 'The upper deck, the gate, and a lot of stairs.');
 writeFileSync(pseudoFile, JSON.stringify({ category: 'evil-story', note: 'Evil Team Hideouts (STORY_FAMILIES_13 A8, STORY_FAMILIES_18 SF131 to SF133) and the Plasma Holding Camp (SF130). Written by tools/events/co/_evil-story-sync.ts.', chains }, null, 1) + '\n');
 console.log(`pseudo/evil-story.json: ${chains.length} Hideouts`);
