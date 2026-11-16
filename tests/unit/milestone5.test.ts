@@ -10,7 +10,7 @@ import { createBattle, resolveTurn, type BattleContext } from '../../src/core/ba
 import { applyItemToPokemon, getItem } from '../../src/core/items';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { createProfile, finalizeRun } from '../../src/core/profile';
-import { awardAchievements, claimProblem, claimTrainer, requirementProgress, runPayout, trainerStatus } from '../../src/core/progress';
+import { awardAchievements, claimTrainer, requirementProgress, runPayout, trainerStatus } from '../../src/core/progress';
 import { hashSeed, Rng } from '../../src/core/rng';
 import {
   buyItem,
@@ -159,17 +159,13 @@ describe('the Bank and achievements at the end of a run', () => {
 });
 
 describe('trainer unlocks', () => {
-  it('a trainer is locked, then claimable once its requirement is met, then costs its Bank Credits', () => {
+  it('a trainer is locked, then joins on its own once its requirement is met (no Bank Credit claim)', () => {
     const brock = getArchetype(content, 'brock');
     let profile = createProfile(content, 'p');
     expect(trainerStatus(profile, brock)).toBe('locked');
-    expect(() => claimTrainer(content, profile, 'brock')).toThrow(/Not yet/);
+    expect(brock.unlockCost).toBe(0);
+    expect(brock.unlockRoute).toBe('battle');
     profile = profileWith({ regionsClearedNoCharm: 1 });
-    expect(trainerStatus(profile, brock)).toBe('claimable');
-    expect(claimProblem(profile, brock)).toMatch(/Bank Credits/);
-    profile.bankCredits = brock.unlockCost + 5;
-    profile = claimTrainer(content, profile, 'brock');
-    expect(profile.bankCredits).toBe(5);
     expect(trainerStatus(profile, brock)).toBe('unlocked');
     expect(() => claimTrainer(content, profile, 'brock')).toThrow(/already/);
   });
