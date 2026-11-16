@@ -2759,5 +2759,49 @@
    "Mystery Episode"
   ],
   "tags": []
+ },
+ "gn-new-10-lake": {
+  "gn": "gn.new.10",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 8,
+  "window": [
+   6,
+   10
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "level": "The reflections are the player's own team as it was in the lost (or nearly lost) battle",
+  "often": "run",
+  "badge": "own",
+  "note": "Badge: a ripple. A side branch at step 8 that needs water; the doc's fallback is step 13, optional (the placer widens the window). Needs a fight lost, or all but one Pokémon lost, this run: run.ts finishBattle keeps the latest such team. Once per run. Win: a Reflection Glass (the doc's \"Reflection Shard\" is cut with the Shards).",
+  "kinds": [
+   "Miniature Episode"
+  ],
+  "tags": [
+   "water"
+  ]
+ },
+ "gn-new-10-late": {
+  "gn": "gn.new.10",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 8,
+  "window": [
+   2,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: if a reflection watched from the bank, twice more this run at water nodes one is a half second late.",
+  "kinds": [
+   "Miniature Episode"
+  ],
+  "tags": [
+   "water"
+  ]
  }
 }

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "reflection-glass",
+    "name": "Reflection Glass",
+    "family": "Charms",
+    "description": "A pane of lake-glass that shows your team as it was. New team members get +15% EXP until they reach your lead's level",
+    "rarity": "rare",
+    "stacksOn": "team",
+    "max": 1,
+    "how": "passive",
+    "icon": "library/mirrorsprig",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "passive",
+      "passive": "catchUpExp",
+      "percent": 15
+    }
+  }
+]

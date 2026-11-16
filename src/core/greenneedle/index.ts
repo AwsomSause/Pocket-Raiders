@@ -32,6 +32,7 @@ import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
+import { mirrorReady, mirrorStart } from './mirror';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -199,6 +200,8 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'leadInitiative') return leadInitiative(run);
   // gn.44: the 1v1 entrant is the Fighting Tournament's champion (gn.16); it is a Pokémon that came back (gn mark `came-back`).
   if (c.test === 'entrantChampion') return !!entrantOf(run)?.champion;
+  // gn.new.10: a lost (or nearly lost) battle is remembered as a team.
+  if (c.test === 'mirrorReady') return mirrorReady(run);
   if (c.test === 'entrantCameBack') return !!entrantOf(run)?.gn?.includes('came-back');
   // gn.45: a rival is well ahead of you (Lead +2 or more).
   if (c.test === 'allstarReady') return allstarReady(run);
@@ -786,6 +789,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   // gn.54: the serious man's six Magikarp (seven, once he's been beaten).
   // gn.55: the Angry Bidoof, tripled.
   if (rule === 'bidoof') bidoofStart(content, run, battle);
+  // gn.new.10: the Mirror Lake's reflections, the team from the battle the player would rather forget.
+  if (rule === 'mirror') mirrorStart(content, run, battle, makeFull(content));
   if (rule === 'quillfeather') quillfeatherStart(content, run, battle, makeFull(content));
   if (rule === 'draft') draftBattleStart(content, run, battle, battle.eventRule?.slot, makeFull(content));
   if (rule === 'allstar-final') {
