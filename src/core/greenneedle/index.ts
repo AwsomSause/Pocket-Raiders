@@ -32,6 +32,7 @@ import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorR
 import { rivalBeatenOnce } from './missingAce';
 import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { stAssign, stEnd, stStart, strandingTokens } from './stranding';
+import { insideTeam, prDo, prEnd, prEnter, prFree, prNext, prStart, prStep, prStranger, prCaught, prWardenStart, prisonTokens } from './prison';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { duelDue, duelEnd, duelEnter, duelName, duelWorthy, duelistStart, worthyStart } from './duelist';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
@@ -89,6 +90,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{smuggle:')) text = smuggleTokens(content, run, text);
   if (text.includes('{stranding:')) text = strandingTokens(content, run, text);
   if (text.includes('{siege:')) text = siegeTokens(content, run, text);
+  if (text.includes('{prison:')) text = prisonTokens(content, run, text);
   if (text.includes('{karp:')) text = karpTokens(run, text);
   if (text.includes('{lt:')) text = ltTokens(run, text);
   // gn.47: the Exhibition.
@@ -245,6 +247,9 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   // gn.49: a flute to play (or the Exploud you healed roars for you: that counts as music).
   if (c.test === 'fluteReady') return fluteReady(run, run.regionOrder[run.regionIndex] ?? '') || gnFlag(run, 'exploud-healed') > 0;
   if (c.test === 'foodReady') return foodReady(run);
+  // gn.62: the player is inside a team (the inside route's run flag `team-<id>-inside`, set by core/evil/inside.ts when it exists).
+  if (c.test === 'insideTeam') return insideTeam(run);
+  if (c.test === 'notInsideTeam') return !insideTeam(run);
   if (c.test === 'defectorGuest') return !!guestOf(run);
   // gn.51: rests of patience enough for it to climb in by itself.
   if (c.test === 'rehabDone') return gnFlag(run, 'smuggle-rehab') >= restsNeeded(run);
@@ -672,6 +677,19 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return taRare(run, e.n ?? 1, host.stage, host);
     case 'taEnd':
       return taEnd(run, host);
+    // gn.62 The Pokémon Prison (prison.ts).
+    case 'prison':
+      switch (e.key) {
+        case 'start': return prStart(content, run);
+        case 'enter': return prEnter(run, e.n ?? 1);
+        case 'go': case 'wait': return prStep(run, e.key);
+        case 'caught': return prCaught(run);
+        case 'free': return prFree(run, e.n ?? 1);
+        case 'stranger': return prStranger(run, e.n ?? 1, e.min ?? 2);
+        case 'next': return prNext(content, run);
+        case 'end': return prEnd(content, run, e.n ?? 1);
+        default: return prDo(run, e.key!, host);
+      }
     case 'sgStart':
       return sgStart(content, run);
     case 'sgAssign':
@@ -893,6 +911,7 @@ export function gnBattleStart(content: Content, run: RunState): void {
   // gn.49: the Sleeping Snorlax, double HP and half asleep.
   if (rule === 'snorlax') snorlaxStart(content, battle);
   // gn.53: the siege's commander, as strong as the clock let them be.
+  if (rule === 'prison-warden') prWardenStart(run, battle, FOE_WAITS);
   if (rule === 'siege-commander') sgCommanderStart(run, battle, FOE_WAITS);
   // gn.54: the serious man's six Magikarp (seven, once he's been beaten).
   // gn.55: the Angry Bidoof, tripled.

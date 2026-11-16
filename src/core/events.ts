@@ -9,6 +9,7 @@
 // one seeded by the stop. No existing stream is touched, so adding events
 // changes no other roll, and choosing again after a reload gives the same result.
 
+import { prisonOnLoss } from './greenneedle/prison';
 import { applyGnEffect, gnBattleStart, gnConditionMet, gnTokens, resolveCast } from './greenneedle';
 import { applySinglesEffect, singlesEffectWords } from './events/coSingles';
 import { applyCoEffect, coConditionMet, coConditionText, coEffectWords, fillCoText, restoreMachine } from './events/coToolkit';
@@ -2532,9 +2533,12 @@ export function eventBattleLost(content: Content, run: RunState, event: EventBat
   restoreMachine(content, run);
   const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
-  if (!battle || !battle.lose?.length) return [];
+  if (!battle) return [];
   const rng = new Rng(hashSeed(`${run.seed}::event-lose::${stageKey(run)}::${event.sideId}`));
-  return battle.lose.map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
+  const lines = (battle.lose ?? []).map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
+  // gn.62: a loss to a team's lieutenant or boss can end in the Pokémon Prison.
+  prisonOnLoss(content, run, (battle as { evil?: string }).evil);
+  return lines;
 }
 
 /** Beta 0.6 B9: the two Evolution Encounter effects. Nothing is rolled: the first fitting party Pokémon is the one (Risky Evolutions stay off, so nothing here ever has a flaw). */

@@ -767,6 +767,30 @@
   {
    "key": "cheer-rival-used",
    "rule": "core/greenneedle/cheer.ts (gn.new.30: the one left on the road cheers for the rival once)"
+  },
+  {
+   "key": "smuggle-joined",
+   "rule": "core/greenneedle/smuggling.ts (gn.51: the smuggled one climbed in)"
+  },
+  {
+   "key": "pr-loc",
+   "rule": "core/greenneedle/prison.ts (gn.62: the wing the player is in)"
+  },
+  {
+   "key": "pr-out",
+   "rule": "core/greenneedle/prison.ts (gn.62: the clock ran out)"
+  },
+  {
+   "key": "prison-strangers-open",
+   "rule": "core/greenneedle/prison.ts (gn.62: strangers' Pokémon opened)"
+  },
+  {
+   "key": "prison-signal",
+   "rule": "core/greenneedle/prison.ts (gn.62: strangers told to wait for the signal)"
+  },
+  {
+   "key": "prison-left",
+   "rule": "core/greenneedle/prison.ts (gn.62: Pokémon left behind)"
   }
  ]
 }
