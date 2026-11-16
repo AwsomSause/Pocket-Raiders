@@ -19,7 +19,9 @@ const BlessingDefSchema = z.object({
   id: z.string().min(1), name: z.string().min(1), legendary: z.string().min(1), speciesId: z.string().min(1),
   tier: z.enum(BLESSING_TIERS), item: z.string().min(1), objectText: z.string().min(1), passage: z.string().min(1),
   headline: z.string().min(1), summary: z.string().min(1),
-  effect: z.object({ kind: z.enum(['none', 'healMostHurt', 'shopDiscount', 'sacredAsh', 'perks', 'rewinds']) }),
+  effect: z.object({ kind: z.enum(['none', 'healMostHurt', 'shopDiscount', 'sacredAsh', 'perks', 'rewinds', 'reverseSide']) }),
+  /** false: never rolled at run start; only an event offers it (`takeBlessing`), so adding it moves no seed's roll. */
+  pool: z.boolean().default(true),
   /** Battle perks (the same rules trainers use) that this blessing adds. */
   perks: z.array(ArchetypeModifierSchema).default([]),
   /** The perks apply only to the first battle of each stage. */
@@ -30,7 +32,7 @@ export type BlessingDef = z.infer<typeof BlessingDefSchema>;
 
 const FileSchema = z.object({
   tiers: z.record(z.enum(BLESSING_TIERS), z.object({ chance: z.number().positive(), influence: z.number().int().min(0) })),
-  balance: z.object({ lele: z.object({ healPercent: z.number(), communionPartyPercent: z.number() }), fezandipiti: z.object({ discountPercent: z.number(), communionDiscountPercent: z.number() }) }),
+  balance: z.object({ lele: z.object({ healPercent: z.number(), communionPartyPercent: z.number() }), fezandipiti: z.object({ discountPercent: z.number(), communionDiscountPercent: z.number() }), renegade: z.object({ ghostEncounterWeight: z.number().positive() }) }),
   blessings: z.array(BlessingDefSchema).min(1),
 });
 const data = FileSchema.parse(raw);
@@ -47,7 +49,7 @@ const playable = (b: BlessingDef): boolean => b.status !== 'disabled';
  * that has one, then upward, so a run always gets one while the roster is still growing. Pure: same seed, same answer.
  */
 export function rollBlessing(seed: string): BlessingState | null {
-  const pool = BLESSINGS.filter(playable);
+  const pool = BLESSINGS.filter((b) => playable(b) && b.pool);
   if (pool.length === 0) return null;
   const tierRng = new Rng(hashSeed(`${seed}::blessing-tier`));
   const total = BLESSING_TIERS.reduce((s, t) => s + data.tiers[t]!.chance, 0);
@@ -71,6 +73,27 @@ export function assignBlessing(run: RunState): void {
   if (b) run.expansion = { ...run.expansion, blessing: b };
   // Dialga's blessing is the Rewinds system, switched on for this run.
   if (b && getBlessing(b.id)?.effect.kind === 'rewinds') grantRewinds(run, 'blessing');
+}
+
+/**
+ * A blessing offered mid-run (The Rift Whisper offers Giratina's): it takes the place of the run's blessing. Only when the run has one
+ * (Blessings on); returns false otherwise. A blessing given up leaves nothing behind: Dialga's rewinds go with it. The Renegade's Price
+ * (Ghost-types a step more common) joins the run's perks. Mutates `run`.
+ */
+export function takeBlessing(run: RunState, id: string): boolean {
+  const def = getBlessing(id);
+  const old = run.expansion?.blessing;
+  if (!def || !playable(def) || !old || old.id === id) return false;
+  const oldDef = getBlessing(old.id);
+  if (oldDef?.effect.kind === 'rewinds' && run.expansion?.rewind?.source === 'blessing') {
+    const { rewind: _gone, ...rest } = run.expansion;
+    run.expansion = rest;
+  }
+  // The read-only mirror flags of the old blessing go quiet (syncLegendFlags sets the new ones).
+  for (const k of Object.keys(run.story.flags)) if (k.startsWith('ev:blessing-')) delete run.story.flags[k];
+  run.expansion = { ...run.expansion, blessing: { id: def.id, tier: def.tier, influence: data.tiers[def.tier]!.influence, seen: true, ashRegions: [], communion: false, riteUsed: false, stagesDone: [] } };
+  if (def.effect.kind === 'reverseSide') run.perkEffects = [...(run.perkEffects ?? []), { kind: 'typeEncounterWeight', type: 'ghost', value: data.balance.renegade.ghostEncounterWeight }];
+  return true;
 }
 
 /** The run's blessing definition, or undefined (setting off, old save, or disabled entry). */

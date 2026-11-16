@@ -76,7 +76,8 @@ import { activePerks, hasPerk, perkItem, perksOf, spendUse, stageKey } from './m
 import { scavengerBonus } from './bank';
 import { ALPHA_MARK_HP, addLevels, calcStats, maxHp, maxPp } from './pokemon';
 import { startCalm } from './battle/calm';
-import { legendFlag } from './legends/signs';
+import { legendFlag, syncLegendFlags } from './legends/signs';
+import { takeBlessing } from './blessings';
 import { count, countShiny, discover } from './progress';
 import { FLAGS as POND_FLAGS, freshMark, pondMon, recordLesson, setPondFlag } from './episodes/poliPond';
 import { eggStatus, eggTier, layEgg, warmEggs } from './eggs';
@@ -1396,6 +1397,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'you step into a place with a map of its own';
     case 'leavePseudo':
       return 'you walk back out';
+    case 'takeBlessing':
+      return 'a new blessing takes the place of your own';
     case 'front':
       return `a ${e.weather} front is coming`;
     case 'clearSky':
@@ -2124,6 +2127,10 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'leavePseudo':
       leavePseudoStage(run);
+      return effectWords(content, e);
+    case 'takeBlessing':
+      if (!takeBlessing(run, e.id)) return '';
+      syncLegendFlags(run);
       return effectWords(content, e);
     case 'addEventFrom': {
       const eventId = rng.pick(e.ids);

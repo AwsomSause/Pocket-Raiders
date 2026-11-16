@@ -95,6 +95,7 @@ import { BAG_POCKETS, itemPocket, POCKET_NAMES } from '../core/bag';
 import { itemCard, itemFooter } from '../core/itemPreview';
 import { battleOpening, runHealMultiplier } from '../core/run';
 import { rewindTurnsAvailable } from '../core/rewind';
+import { reverseSideProblem } from '../core/legends/reverseSide';
 import { partyPreviews, quickSummaryText } from '../ui/itemScreen';
 import { animationStrength, animationTimeScale, animSettingsFrom } from '../core/accessibility';
 import { transformAnimId } from '../core/presentation/transformAnims';
@@ -3760,6 +3761,9 @@ export class BattleScene extends Phaser.Scene {
     const rewindMax = this.duo ? 0 : rewindTurnsAvailable(content, this.run);
     const rewindAt = rewindMax > 0 ? options.length : -1;
     if (rewindAt >= 0) options.push({ label: 'Rewind' });
+    // Catalog Overhaul (legends row B): The Renegade's Reverse Side, once per stage, out of a battle that is not a boss's.
+    const reverseAt = (!this.duo || this.cmdSpot === 0) && reverseSideProblem(this.run) === null ? options.length : -1;
+    if (reverseAt >= 0) options.push({ label: 'Reverse Side' });
     // A combined style (Wii channel grid) puts the moves in place of Fight: picking one opens the move menu and uses it.
     const combined = this.skin?.layout.combined && !this.duo ? this.combinedMoves() : [];
     const k = combined.length;
@@ -3799,6 +3803,7 @@ export class BattleScene extends Phaser.Scene {
         else if (i === shiftAt) this.submit({ kind: 'shift' });
         else if (i === scanAt) void this.scanFoe();
         else if (i === rewindAt) this.showRewindMenu(rewindMax);
+        else if (i === reverseAt) void this.stepToReverseSide();
         else if (i === lastResortAt) {
           void this.playLastResort();
         } else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
@@ -3867,6 +3872,17 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** The three raid cheers: Offense, Defense, Healing (each costs one of three cheers and the turn). */
+  /** The Renegade's Reverse Side: the battle ends with nothing won or lost, and the map shows the node's other side. */
+  private async stepToReverseSide(): Promise<void> {
+    this.menu?.destroy();
+    this.menu = null;
+    const message = services().session.reverseSide();
+    if (!message) return this.showRootMenu();
+    await this.say(message);
+    await exitWipe(this, this.motion, this.wipeMask());
+    this.scene.start(sceneForRun(services().session.run!));
+  }
+
   /** L3 Rewinds: pick how many turns to go back (the state comes back exactly; the turns then play out afresh). */
   private showRewindMenu(most: number): void {
     this.clearMenus();

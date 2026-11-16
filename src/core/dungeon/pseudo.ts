@@ -31,6 +31,12 @@ export const PseudoRecordSchema = z.object({
   trainerClass: z.string(),
   boss: z.object({ classId: z.string(), name: z.string(), size: z.number().int().min(1).max(6) }).optional(),
   intro: z.string(),
+  /** The species of its `rare` rooms (the world's Legendaries: Giratina, Darkrai, Koraidon, Rayquaza and Deoxys). Without it, the wild list. */
+  rare: z.array(z.string()).min(1).optional(),
+  /** Extra choices added to one room (raw event choices, checked by the content schema): the Faller 3 Ultra Space door in the Celestial Expanse. */
+  extras: z.array(z.object({ node: Id, choice: z.record(z.string(), z.unknown()) })).default([]),
+  /** Choice-memory variants for the gate (core/eventMemory.ts): a Guidance of Giratina run, The Renegade's blessing. */
+  remembers: z.array(z.record(z.string(), z.unknown())).default([]),
 });
 export type PseudoRecord = z.infer<typeof PseudoRecordSchema>;
 /** A pseudo-stage made from an existing chain of story events (Flight North, Sabrina's Labyrinth, Route 25, the Fighting Tournament): the map is drawn from the events' own links, so none of their text, fights or rules change. */
@@ -52,7 +58,7 @@ const extraChainFiles = Object.values(import.meta.glob<unknown>('../../data/cata
 export const PSEUDO_CHAINS: readonly PseudoChain[] = [...PSEUDO.chains, ...extraChainFiles.flatMap((f) => PseudoExtraFileSchema.parse(f).chains)];
 
 const asDungeon = (r: PseudoRecord): DungeonDef => ({
-  id: r.id, name: r.name, kind: 'themed', tier: r.tier, theme: r.mood, types: [], wild: r.wild, nodes: r.nodes,
+  id: r.id, name: r.name, kind: 'themed', tier: r.tier, theme: r.mood, types: [], wild: r.wild, ...(r.rare ? { rare: r.rare } : {}), nodes: r.nodes,
   supply: { item: DUNGEONS.config.potion[String(r.tier)]!, count: 1 }, reward: r.reward, ...(r.boss ? { boss: r.boss } : {}), intro: r.intro,
 });
 
@@ -79,13 +85,18 @@ export function pseudoEvents(records: readonly PseudoRecord[] = PSEUDO.records):
     const def = roomDef(r);
     const gate = {
       id: gateId(r), name: r.name, group: 'Pseudo Stages', stop: 'delve', rarity: 'rare', tags: ['Dungeon', 'Exploration'], minStage: 1, room: true,
-      types: [], requires: [], scene: { cast: [], effect: 'none', tint: r.tint }, intro: `${r.intro} (${r.mood}.) Ends: ${r.exit}.`,
+      types: [], requires: [], scene: { cast: [], effect: 'none', tint: r.tint }, intro: `${r.intro} (${r.mood}.) Ends: ${r.exit}.`, ...(r.remembers.length ? { remembers: r.remembers } : {}),
       choices: [
         { label: `Enter ${r.name}`, success: { text: 'You step in.', effects: [{ kind: 'enterPseudo', id: r.id }] } },
         { label: 'Leave', success: { text: 'You turn back. Nothing here is forced.', effects: [] } },
       ],
     };
-    return [gate, ...r.nodes.map((_, i) => room(def, i))];
+    const rooms = r.nodes.map((n, i) => {
+      const raw = room(def, i);
+      const extra = r.extras.filter((x) => x.node === n.id).map((x) => x.choice);
+      return extra.length ? { ...raw, choices: [...(raw.choices as unknown[]), ...extra] } : raw;
+    });
+    return [gate, ...rooms];
   });
 }
 

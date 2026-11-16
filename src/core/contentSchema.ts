@@ -3518,6 +3518,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('enterPseudo'), id: z.string().min(1) }),
   /** Pseudo-stage: the way out. Back to the parent stage (a no-op outside a pseudo-stage). */
   z.object({ kind: z.literal('leavePseudo') }),
+  /** Legendary Blessings: a blessing offered mid-run takes the place of the run's (The Rift Whisper offers Giratina's). Nothing when Blessings are off. */
+  z.object({ kind: z.literal('takeBlessing'), id: z.string().min(1) }),
   z.object({ kind: z.literal('addEventFrom'), ids: z.array(z.string().min(1)).min(1) }),
   /** Exploration: a front of this weather rolls in over the columns ahead (it hits the routes it covers). */
   z.object({ kind: z.literal('front'), weather: WeatherSchema, columns: z.number().int().min(1).max(8).default(3) }),
