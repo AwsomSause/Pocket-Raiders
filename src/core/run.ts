@@ -25,6 +25,7 @@ import { unflinchingStart } from './greenneedle/daycare';
 import { gavelStart } from './greenneedle/auction';
 import { lessonAfterstory } from './greenneedle/champion';
 import { allstarRecord, allstarTurn } from './greenneedle/allstar';
+import { tyrogueTurn } from './greenneedle/tyrogue';
 import { draftRecord } from './greenneedle/draft';
 import { exRipple } from './greenneedle/exhibition';
 import { snorlaxForgives, snorlaxGym, snorlaxRest } from './greenneedle/snorlax';
@@ -3330,6 +3331,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // Greenneedle events: stories that count fights (the forest duelist) take their count once the fight is won.
   events.push(...(gnAfterTurn(content, run) as typeof events));
   allstarTurn(run.battle, engineEvents);
+  tyrogueTurn(run, engineEvents);
   // A one-on-one duel (new events, NE23): when the duellist goes down, the fight is over.
   if (battle.eventRule?.oneOnOne && !battle.outcome && (run.party[battle.activeIndex]?.hp ?? 0) <= 0) battle.outcome = 'lose';
   noteCalm(run);

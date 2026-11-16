@@ -645,6 +645,38 @@
   {
    "key": "kc-star",
    "rule": "core/greenneedle/karpcon.ts (gn.54 The Magikarp Convention)"
+  },
+  {
+   "key": "tyr-on",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
+  },
+  {
+   "key": "tyr-kick",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
+  },
+  {
+   "key": "tyr-punch",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
+  },
+  {
+   "key": "tyr-stand",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
+  },
+  {
+   "key": "tyr-picked",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
+  },
+  {
+   "key": "tyr-result",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
+  },
+  {
+   "key": "tyr-region",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
+  },
+  {
+   "key": "tyr-stage",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
   }
  ]
 }
