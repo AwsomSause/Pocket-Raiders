@@ -25,7 +25,8 @@
   "ball-waited": "gn.new.03 The Ball That Wouldn't Open (waited it out)",
   "ranch-dug": "gn.new.20 The Bibarel Dam: dug a channel (read by gn.new.38 Long Table)",
   "ranch-moved": "gn.new.20 The Bibarel Dam: moved the colony (read by gn.new.38 Long Table)",
-  "well-lifted": "gn.new.16 The Thing in the Well: lifted the Feebas out (read by gn.new.38 Long Table)"
+  "well-lifted": "gn.new.16 The Thing in the Well: lifted the Feebas out (read by gn.new.38 Long Table)",
+  "lantern-boat-floated": "gn.new.36 (the Lantern Sea boat)"
  },
  "flags": [
   {
@@ -791,6 +792,34 @@
   {
    "key": "prison-left",
    "rule": "core/greenneedle/prison.ts (gn.62: Pokémon left behind)"
+  },
+  {
+   "key": "of-why",
+   "rule": "core/greenneedle/oldfriend.ts (gn.58 Old Friend Returns)"
+  },
+  {
+   "key": "of-trainer",
+   "rule": "core/greenneedle/oldfriend.ts (gn.58 Old Friend Returns)"
+  },
+  {
+   "key": "of-fond",
+   "rule": "core/greenneedle/oldfriend.ts (gn.58 Old Friend Returns)"
+  },
+  {
+   "key": "of-free",
+   "rule": "core/greenneedle/oldfriend.ts (gn.58 Old Friend Returns)"
+  },
+  {
+   "key": "of-help",
+   "rule": "core/greenneedle/oldfriend.ts (gn.58 Old Friend Returns)"
+  },
+  {
+   "key": "of-many",
+   "rule": "core/greenneedle/oldfriend.ts (gn.58 Old Friend Returns)"
+  },
+  {
+   "key": "of-told",
+   "rule": "core/greenneedle/oldfriend.ts (gn.58 Old Friend Returns)"
   }
  ]
 }

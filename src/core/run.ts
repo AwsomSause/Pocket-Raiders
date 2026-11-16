@@ -21,6 +21,7 @@ import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { FOE_WAITS, gnAfterTurn, gnShape } from './greenneedle';
 import { bidoofPeace } from './greenneedle/bidoof';
 import { aceBows } from './greenneedle/missingAce';
+import { ofAssist, ofGuestLeaves, recordRelease } from './greenneedle/oldfriend';
 import { ridgeCatch } from './greenneedle/ridge';
 import { noteLeft } from './greenneedle/left';
 import { unflinchingStart } from './greenneedle/daycare';
@@ -746,6 +747,7 @@ function forceFirstRivalColumn(content: Content, run: RunState, index: number, m
 
 /** Starts a stage (mutates `run`): picks a fresh theme and gym leader, generates the map, and shows it. */
 function enterStage(content: Content, run: RunState, index: number): void {
+  ofGuestLeaves(content, run);
   // Swap Day (NE39) never outlasts its stage.
   if (swapRunning(run)) endSwap(content, run, partyCapacity(content, run));
   settleSky(content, run);
@@ -1052,6 +1054,8 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   const stage = run.stage!;
   // Swap Day (NE39): the Gym, the Elite Four and the Champion are never fought with the rival's team.
   if (['gym', 'elite', 'champion'].includes(findNode(stage.map, nodeId).kind) && swapRunning(run)) endSwap(content, run, partyCapacity(content, run));
+  // Greenneedle gn.58: a friend walking with you for the stage stops at the Gym door.
+  if (findNode(stage.map, nodeId).kind === 'gym') ofGuestLeaves(content, run);
   // The Orrery Circuit's Gym Fork: entering a gym asks for a door (or a pass) first; the move happens when the node is chosen again.
   if (findNode(stage.map, nodeId).kind === 'gym') {
     const fork = forkDecision(content, run, run.regionIndex, stage.index);
@@ -3190,12 +3194,15 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   const gymDoor = snorlaxGym(run, stageNumber(content, run));
   // Greenneedle gn.new.15: the Weather Station's hand-written forecast, pinned up at step 1 of each later stage.
   const pinned = pinLine(content, run);
+  // Greenneedle gn.58: a friend let go for its own good steps in for one turn.
+  const friendHelp = ofAssist(content, run, run.battle!);
   kantoSweetAir(content, run);
   // Greenneedle gn.55: after the Angry Bidoof's bow, no wild Bidoof or Bibarel attacks first.
   bidoofPeace(run, FOE_WAITS);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   if (afterstory) events.push({ type: 'raid', tone: 'info', text: afterstory });
   if (ripple) events.push({ type: 'raid', tone: 'info', text: ripple });
+  if (friendHelp) events.push({ type: 'raid', tone: 'info', text: friendHelp });
   if (gymDoor) events.push({ type: 'raid', tone: 'info', text: gymDoor });
   if (pinned) events.push({ type: 'raid', tone: 'info', text: pinned });
   run.rng.battle = rng.state;
@@ -4365,7 +4372,7 @@ export type DecisionChoice =
   | { kind: 'skipMove' }
   | { kind: 'addToParty' }
   | { kind: 'replace'; partyIndex: number }
-  | { kind: 'release' }
+  | { kind: 'release'; reason?: 1 | 2 | 3 | 4 }
   | { kind: 'sendToBox' }
   | { kind: 'signature'; optionIndex: number }
   | { kind: 'mutator'; optionIndex: number }
@@ -4468,6 +4475,8 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       message = `${name} was released. You got ${candies} cand${candies === 1 ? 'y' : 'ies'}. ${markDecided(run, caught, false)}`.trim();
       recordReleased(content, run, caught);
       noteLeft(run, caught);
+      // Greenneedle gn.58: who, where and why; the friend turns up again two or more stages on.
+      recordRelease(content, run, caught, choice.reason, stageNumber(content, run));
     } else {
       throw new Error('Choose what to do with the caught Pokémon');
     }

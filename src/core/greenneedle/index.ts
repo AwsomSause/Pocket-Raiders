@@ -48,6 +48,7 @@ import { tyrEven, tyrEvolve, tyrLead, tyrResult, tyrTally, tyrogueJoin, tyrogueM
 import { muralJoin, muralPick } from './mural';
 import { cheerJoin } from './cheer';
 import { mirrorReady, mirrorStart } from './mirror';
+import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, oldfriendTokens, releases } from './oldfriend';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -78,6 +79,8 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
     const id = castOf(run, name) ?? '';
     return content.species.get(id)?.name ?? content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? content.bosses.get(id)?.name ?? content.moves.get(id)?.name ?? 'that one';
   });
+  // gn.58: the returning friend.
+  if (text.includes('{oldfriend:')) text = oldfriendTokens(content, run, text);
   // gn.43: the auction catalogue ({lot:<n>:prov}, {lot:<n>:photo}) and a sum of money ({money:<key>}).
   text = text.replace(/\{lot:([1-6]):([a-z]+)\}/g, (_, n: string, part: string) => lotToken(run, Number(n), part));
   text = text.replaceAll('{duelist}', duelName(content, run));
@@ -235,6 +238,9 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   // gn.new.10: a lost (or nearly lost) battle is remembered as a team.
   if (c.test === 'mirrorReady') return mirrorReady(run);
   if (c.test === 'entrantCameBack') return !!entrantOf(run)?.gn?.includes('came-back');
+  // gn.58: a released Pokémon is due to turn up; a great many were let go.
+  if (c.test === 'ofDue') return dueFriend(content, run, stage) >= 0;
+  if (c.test === 'ofMany') return releases(run).length >= MANY;
   // gn.45: a rival is well ahead of you (Lead +2 or more).
   if (c.test === 'allstarReady') return allstarReady(run);
   if (c.test === 'allstarUnbeaten') return allstarUnbeaten(run);
@@ -775,6 +781,15 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'leftFreeze':
       leftFreeze(run);
       return '';
+    // gn.58 Old Friend Returns (oldfriend.ts).
+    case 'ofPick':
+      return ofPick(content, run, host.stage, host.float);
+    case 'ofJoin':
+      return ofJoin(content, run, host);
+    case 'ofGuest':
+      return ofGuest(content, run, host);
+    case 'ofReplacer':
+      return ofReplacer(content, run);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
