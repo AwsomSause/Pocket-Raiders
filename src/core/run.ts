@@ -28,6 +28,7 @@ import { draftRecord } from './greenneedle/draft';
 import { exRipple } from './greenneedle/exhibition';
 import { snorlaxForgives, snorlaxGym, snorlaxRest } from './greenneedle/snorlax';
 import { farFromHome, smuggleRest } from './greenneedle/smuggling';
+import { CENTER_SHUT, SHOP_SHUT, sgCenterLine, sgCenterShut, sgHealShare, sgPriceFactor, sgRest } from './greenneedle/citysiege';
 import { taRoomsAfraid } from './greenneedle/teamauction';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
@@ -2687,6 +2688,9 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   const runSide = findNode(run.stage!.map, stage.current).sides.find((s) => s.id === sideId)!;
   if (side.kind === 'heal' && noHealStops(run.rules)) return { run: current, message: 'Your No Rest contract forbids healing stops.' };
   if (side.kind === 'heal' && healStopShut(content, run, sideId)) return { run: current, message: 'The Pokémon Center is shut for the night: the Ledger says so. Try again in the morning.' };
+  // Greenneedle gn.53: the stage after a siege. A fallen Market leaves no Center; an occupied city keeps its shutters down.
+  if (side.kind === 'heal' && sgCenterShut(run, stageNumber(content, run))) return { run: current, message: CENTER_SHUT };
+  if (side.kind === 'shop' && sgPriceFactor(run, stageNumber(content, run)) === null) return { run: current, message: SHOP_SHUT };
   if (side.kind === 'heal') {
     const before = run.party.map((m) => m.hp);
     healParty(content, run);
@@ -2697,6 +2701,11 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     // Sinnoh's Brownout: the Pokémon Center only restores part of each Pokémon's HP.
     const centerHeal = trackEffects(content, run).centerHeal;
     if (centerHeal < 1) for (const mon of run.party) mon.hp = Math.max(1, Math.min(mon.hp, Math.floor(maxHp(content, mon) * centerHeal)));
+    // gn.53: a city in repair heals half.
+    const siegeShare = sgHealShare(run, stageNumber(content, run));
+    if (siegeShare < 1) run.party.forEach((m, i) => { m.hp = Math.min(m.hp, Math.max(before[i] ?? 0, Math.ceil(maxHp(content, m) * siegeShare))); });
+    const siegeLine = sgCenterLine(run, stageNumber(content, run));
+    sgRest(content, run);
     careRest(run, content);
     const snorlaxLine = snorlaxRest(run, stageNumber(content, run));
     // Greenneedle gn.52: the auction's rare Pokémon is afraid of rooms for a stage: it waits outside the Center.
@@ -2722,7 +2731,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const camp = campQuirkLine(run.party, campMoment(content, run), campKey, nameOf) ?? quirkReaction(run.party, 'rest_node', campKey, nameOf) ?? partyNarration(run.party, 'rest_node', campKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
     // Pokémon moments (Beta 0.6): a party member's rest moment can add a line.
     const momentLine = restMoments(content, run).join(' ');
-    return { run, message: `Your Pokémon were fully healed!${momentLine ? ` ${momentLine}` : ''}${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}${snorlaxLine ? ` ${snorlaxLine}` : ''}${afraidLine ? ` ${afraidLine}` : ''}` };
+    return { run, message: `Your Pokémon were fully healed!${momentLine ? ` ${momentLine}` : ''}${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}${snorlaxLine ? ` ${snorlaxLine}` : ''}${afraidLine ? ` ${afraidLine}` : ''}${siegeLine ? ` ${siegeLine}` : ''}` };
   }
   run.phase = 'shop';
   noteMapGrowth(content, run, run.party[0]?.uid, 'shopVisit');
@@ -2841,7 +2850,7 @@ export function shopPrice(content: Content, run: RunState, entry: Content['shop'
   // Coupons lower the price; a full Point Card makes it free.
   const markup = isBlackMarket(content, run, entry) ? marketMarkup(content, run)! : 1;
   const deal = currentShopType(run) === 'pokenet' ? pokenetDeal(content, run, shopStock(content, run), shopSaleItem(content, run)) : null;
-  return Math.round(entry.price * markup * buildPriceFactor(content, run.party, entry.item) * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story) * dynamicPriceFactor(content, run, entry.item) * trackShopFactor(content, run) * blessingShopFactor(run) * shopDealFactor(content, run, entry.item));
+  return Math.round(entry.price * markup * buildPriceFactor(content, run.party, entry.item) * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story) * dynamicPriceFactor(content, run, entry.item) * trackShopFactor(content, run) * blessingShopFactor(run) * shopDealFactor(content, run, entry.item) * (sgPriceFactor(run, stageNumber(content, run)) ?? 1));
 }
 
 /** Tobias's lesson: this shop's one deal item and its price factor, or null without the lesson (core/mentorWorld.ts). */

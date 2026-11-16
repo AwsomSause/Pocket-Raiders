@@ -607,6 +607,50 @@
   ],
   "tags": []
  },
+ "gn-53-alarm": {
+  "gn": "gn.53",
+  "shape": "World Event",
+  "earliest": "A5",
+  "home": 12,
+  "window": [
+   10,
+   14
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "level": "Grunts A+0; district captains A+1; the commander A+2",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Sealed City",
+   "elsewhere": "The Region Under Siege"
+  },
+  "note": "Badge: a burning tower. Only at the evil team's climax, or the stage before. Eight turns in rooms; the result shapes the next stage's shops and Center (run.ts). The rescued Pokémon waits at the next rest (gn-53-waiting); gn-53-plaque is the afterstory in a later region.",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-53-plaque": {
+  "gn": "gn.53",
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 6,
+  "window": [
+   2,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: the plaque with the names of the allies who held (a later region of the same run).",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
  "gn-45-field": {
   "gn": "gn.45",
   "shape": "Single",

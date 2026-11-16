@@ -608,6 +608,30 @@
   {
    "key": "defector",
    "rule": "core/greenneedle/defector.ts (gn.50 The Evil Team's Betrayal)"
+  },
+  {
+   "key": "sg-reinforced",
+   "rule": "core/greenneedle/citysiege.ts (gn.53 The Region Under Siege)"
+  },
+  {
+   "key": "sg-rangers",
+   "rule": "core/greenneedle/citysiege.ts (gn.53 The Region Under Siege)"
+  },
+  {
+   "key": "sg-result",
+   "rule": "core/greenneedle/citysiege.ts (gn.53 The Region Under Siege)"
+  },
+  {
+   "key": "sg-fell",
+   "rule": "core/greenneedle/citysiege.ts (gn.53 The Region Under Siege)"
+  },
+  {
+   "key": "sg-turn",
+   "rule": "core/greenneedle/citysiege.ts (gn.53 The Region Under Siege)"
+  },
+  {
+   "key": "sg-pokemon",
+   "rule": "core/greenneedle/citysiege.ts (gn.53 The Region Under Siege)"
   }
  ]
 }

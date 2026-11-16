@@ -29,6 +29,7 @@ import { draftAldhelm, draftBattleStart, draftEnd, draftFriend, draftLetter, dra
 import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
 import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorStart, defectorTokens, defectorTrust, guestOf } from './defector';
 import { taEnd, taLot, taRare, taStart } from './teamauction';
+import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -68,6 +69,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{defector:')) text = defectorTokens(content, run, text);
   // gn.51: the Smuggling Ring.
   if (text.includes('{smuggle:')) text = smuggleTokens(content, run, text);
+  if (text.includes('{siege:')) text = siegeTokens(content, run, text);
   // gn.47: the Exhibition.
   if (text.includes('{ex:')) text = exTokens(content, run, text);
   // gn.46: the All-Star bracket.
@@ -209,6 +211,8 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'defectorGuest') return !!guestOf(run);
   // gn.51: rests of patience enough for it to climb in by itself.
   if (c.test === 'rehabDone') return gnFlag(run, 'smuggle-rehab') >= restsNeeded(run);
+  if (c.test === 'sgWaiting') return waiting(run) >= 0;
+  if (c.test === 'sgOrdered') return waiting(run) < 0;
   if (c.test === 'rehabWaiting') return gnFlag(run, 'smuggle-rehab') > 0 && gnFlag(run, 'smuggle-rehab') < restsNeeded(run);
   if (c.test === 'rivalAhead') return run.story.rivals.some((r) => (r.world?.lead ?? 0) >= 2);
   if (c.test === 'eggMoveKnown') return run.party.some((m) => { const egg = new Set(eggMoveOptions(content, familyId(content, m.speciesId)).map((o) => o.id)); return m.moves.some((mv) => egg.has(mv.id)); });
@@ -604,6 +608,24 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return taRare(run, e.n ?? 1, host.stage, host);
     case 'taEnd':
       return taEnd(run, host);
+    case 'sgStart':
+      return sgStart(content, run);
+    case 'sgAssign':
+      return sgAssign(run, e.n ?? 0);
+    case 'sgAct':
+      return sgAct(run, e.key as DistrictId, e.n ?? 3);
+    case 'sgRescue':
+      return sgRescue(run, e.key as DistrictId, host.float);
+    case 'sgHomes':
+      return sgHomes(run, e.n ?? 1);
+    case 'sgHalf':
+      return sgHalf(run, e.n ?? 1);
+    case 'sgWhole':
+      return sgWhole(run);
+    case 'sgEnd':
+      return sgEnd(content, run, e.n ?? 0, host.stage);
+    case 'sgJoin':
+      return sgJoin(run, host);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
@@ -745,6 +767,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   defectorClimax(content, run, battle, makeFull(content));
   // gn.49: the Sleeping Snorlax, double HP and half asleep.
   if (rule === 'snorlax') snorlaxStart(content, battle);
+  // gn.53: the siege's commander, as strong as the clock let them be.
+  if (rule === 'siege-commander') sgCommanderStart(run, battle, FOE_WAITS);
   if (rule === 'draft') draftBattleStart(content, run, battle, battle.eventRule?.slot, makeFull(content));
   if (rule === 'allstar-final') {
     if (gnFlag(run, 'allstar-shake') > 0) battle.storyEffects.push('allstar-shake');

@@ -938,7 +938,134 @@ const gn52: Json[] = [
   ), [ch('Walk on.', out('You walk on, smiling.', setTo('ta-sale', 1)))]),
 ];
 
-export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46, ...gn47, ...gn48, ...gn49, KANTO_SNORLAX, ...gn50, ...gn51, ...gn52];
+
+// ---------- gn.53 The Region Under Siege (doc 11, lines 371–470) ----------
+const siege = (o: Json = {}): Json => ({ tags: ['Evil Team', 'Story'], effect: 'none', ...o });
+/** After an action, the clock moves on: turns 2–5 and 7 back to the city, 6 the runner, 8 the commander. */
+const nextTurn: Json[] = [
+  when('sg-turn', { min: 2, max: 5 }, [scene('gn-53-turn')]),
+  when('sg-turn', { min: 6, max: 6 }, [scene('gn-53-runner')]),
+  when('sg-turn', { min: 7, max: 7 }, [scene('gn-53-turn')]),
+  when('sg-turn', { min: 8, max: 8 }, [scene('gn-53-commander')]),
+];
+const act = (d: string, n: number): Json[] => [gn('sgAct', { key: d, n }), ...nextTurn];
+/** A district's three actions: a fight (Grunts at A+0 early, the district's captain at A+1 from turn 4), a rescue, a repair. */
+function district(d: string, name: string, intro: string, rescue: Json): Json {
+  return rm(`gn-53-${d}`, `The Region Under Siege: ${name}`, siege(), intro, [
+    chIf([is('sg-turn', 1, 3)], 'Fight.', fight(`Grunts in ${name}, behind a barricade of whatever was nearest. They didn\'t expect anyone to come back.`, {
+      ...foe('grunt', `${name}\'s Grunts`, 2, { lv: 0, win: act(d, 1) }), friendly: true, lose: act(d, 2) })),
+    chIf([is('sg-turn', 4, 7)], 'Fight.', fight(`${name}\'s captain, in a commandeered doorway, with a radio and a better team than the Grunts had.`, {
+      ...foe('specialist', `${name}\'s Captain`, 3, { lv: 1, win: act(d, 1) }), friendly: true, lose: act(d, 2) })),
+    rescue,
+    ch('Repair.', out('A party Pokémon puts its shoulder to the barricade. It holds. This district can stand a turn without you.', ...act(d, 4))),
+  ]);
+}
+const gn53: Json[] = [
+  gev('gn-53-alarm', 'The Region Under Siege', siege({ stop: 'event', rarity: 'rare', requires: [{ kind: 'evil', after: 5 }, notThisRegion('sg-at')], remembers: [
+    { id: 'feared', when: [is('rep-lost')], notice: 'Some of those you call don\'t come. Of the ones who do, a few won\'t meet your eye. They\'ll fight. Just not for you.' },
+  ] }), say(
+    '*Smoke over the city. A siren, on and on. The evil team\'s banners on the Hall.*',
+    'Four districts: the Market, the Homes, the Gate, the Hall. One of you. A clock of eight turns.',
+    'You can\'t be everywhere. You\'ll have to choose. Everyone you\'ve helped this run is already on their way.',
+  ), [
+    ch('Answer the alarm.', out('You run toward the smoke. Behind you, footsteps: people you know, coming too.',
+      gn('sgStart'), stampRegion('sg-at'), stampStage('sg-stage'), scene('gn-53-muster'))),
+  ]),
+  rm('gn-53-muster', 'The Region Under Siege: The Square', siege(), say(
+    'The square, under the smoke. Who came: {siege:allies}.',
+    '{siege:bars}',
+  ), [
+    chIf([{ kind: 'gn', test: 'sgWaiting' }], 'Give orders.', out('Someone\'s waiting for you to tell them where to stand.', scene('gn-53-orders'))),
+    chIf([{ kind: 'gn', test: 'sgOrdered' }], 'Into the city.', out('Everyone\'s where they need to be. Now you.', scene('gn-53-turn'))),
+  ]),
+  rm('gn-53-orders', 'The Region Under Siege: Orders', siege(), say(
+    '{siege:ally} waits for orders. Their hands are steady. Their Pokémon aren\'t.',
+    'A district held by allies alone loses ground slowly. A district with nobody loses it fast.',
+  ), [
+    ch('The Market.', out('They nod, and run for the Market.', gn('sgAssign', { n: 0 }), scene('gn-53-muster'))),
+    ch('The Homes.', out('They nod, and run for the Homes.', gn('sgAssign', { n: 1 }), scene('gn-53-muster'))),
+    ch('The Gate.', out('They nod, and run for the Gate.', gn('sgAssign', { n: 2 }), scene('gn-53-muster'))),
+    ch('The Hall.', out('They nod, and run for the Hall.', gn('sgAssign', { n: 3 }), scene('gn-53-muster'))),
+  ]),
+  rm('gn-53-turn', 'The Region Under Siege: The City', siege({ remembers: [
+    { id: 'gate', when: [is('sg-reinforced')], notice: 'Lorries came through the Gate. There are more of them now.' },
+    { id: 'rangers', when: [is('sg-rangers')], notice: 'The Rangers\' jeeps are in the streets. Somebody\'s shouting your name, and it isn\'t a warning.' },
+  ] }), say(
+    'Turn {siege:turn} of 8. Each turn: one district, one thing.',
+    '{siege:bars}',
+  ), [
+    ch('The Market.', out('The Market: shops, and the Pokémon Center. If it falls, the city loses both.', scene('gn-53-market'))),
+    ch('The Homes.', out('The Homes: streets, and a school. People who\'ll be in later scenes, or won\'t.', scene('gn-53-homes'))),
+    ch('The Gate.', out('The Gate: the only road in. Hold it, and their reinforcements don\'t come.', scene('gn-53-gate'))),
+    ch('The Hall.', out('The Hall: the mayor, and the radio mast. Hold it, and the city can call for help.', scene('gn-53-hall'))),
+  ]),
+  district('market', 'the Market', say(
+    'Stalls on their sides. The Center\'s doors chained from the outside. Behind them, someone\'s knocking.',
+    'The shopkeeper who gave you a discount, once. Trapped under the awning of her own shop.',
+  ), chIf([not('sg-civ-market')], 'Rescue.', out('You lift the awning. She crawls out, coughing, and grips your hand far too hard. "I knew it\'d be you."', gn('sgRescue', { key: 'market' }), ...nextTurn))),
+  district('homes', 'the Homes', say(
+    'Washing still on the lines. Doors left open. A dog barking in a yard, and nobody calling it in.',
+    'The child you helped, earlier this region, crouched behind a bin. They\'re holding very still.',
+  ), chIf([not('sg-civ-homes')], 'Rescue.', out('You crouch down. "It\'s me." They come out, and hold on to your sleeve, and don\'t let go for three streets.', gn('sgRescue', { key: 'homes' }), ...nextTurn))),
+  district('gate', 'the Gate', say(
+    'The gatehouse, the barrier, a queue of abandoned cars. The team\'s lorries park here.',
+    'Under a car, a Pokémon, wedged in tight. It was somebody\'s. It isn\'t sure whose any more.',
+  ), chIf([not('sg-pokemon')], 'Rescue.', out('You lie flat on the road, and reach, and wait. It comes out, slowly. It looks at you as if it\'s going to remember you.', gn('sgRescue', { key: 'gate' }), ...nextTurn))),
+  district('hall', 'the Hall', say(
+    'The mayor\'s office, a radio mast, a staircase full of smoke.',
+    '{rival}\'s mum, of all people, in the records room. She came to pay a parking fine.',
+  ), chIf([not('sg-civ-hall')], 'Rescue.', out('You get her down the back stairs. "You\'re the one my child won\'t stop talking about," she says. "Hm. Taller."', gn('sgRescue', { key: 'hall' }), ...nextTurn))),
+  rm('gn-53-runner', 'The Region Under Siege: The Runner', siege(), say(
+    '*Turn 6. A runner, out of breath, grabbing your arm.*',
+    '"The school\'s cut off! And the hospital! We can\'t— which? *Which?*"',
+  ), [
+    ch('The school.', out('You run for the school. Behind you, the hospital\'s windows go dark one by one. You don\'t look back.', gn('sgHomes', { n: 1 }), ...act('homes', 3))),
+    ch('The hospital.', out('You run for the hospital. Behind you, a school bell rings and rings, and stops. You don\'t look back.', gn('sgHomes', { n: 2 }), ...act('homes', 3))),
+    ch('Split my team: three each.', fight('Half your team goes with you to the school. They fight like they know the other half is fighting too.', {
+      ...foe('specialist', 'The School\'s Guards', 3, { lv: 1, win: [gn('sgHomes', { n: 1 }), scene('gn-53-hospital')] }), friendly: true, lose: [scene('gn-53-hospital')] },
+      gn('sgHalf', { n: 1 }))),
+  ]),
+  rm('gn-53-hospital', 'The Region Under Siege: The Hospital', siege(), say(
+    'Across the road, the hospital. The rest of your team is already there, without you. They waited.',
+  ), [
+    ch('Go to them.', fight('The other half, and you. They fight like they know the first half did.', {
+      ...foe('specialist', 'The Hospital\'s Guards', 3, { lv: 1, win: [gn('sgHomes', { n: 2 }), gn('sgWhole'), ...act('homes', 3)] }), friendly: true, lose: [gn('sgWhole'), ...act('homes', 3)] },
+      gn('sgHalf', { n: 2 }))),
+  ]),
+  rm('gn-53-commander', 'The Region Under Siege: The Commander', siege({ remembers: [
+    { id: 'never', when: [not('sg-reinforced')], notice: 'No lorries ever came. The commander\'s Pokémon are tired. So is the commander.' },
+  ] }), say(
+    '*The Hall\'s steps. Smoke. A figure with a radio, giving orders in a level voice.*',
+    'They lower the radio when they see you. "So you\'re the one."',
+  ), [
+    ch('Fight.', fight('"Everyone, hold." The commander steps down to meet you. Behind them, the city waits to see who wins.', {
+      ...foe('executive', 'The Commander', 6, { lv: 2, win: [gn('sgEnd', { n: 1 }), scene('gn-53-after')] }), rule: { gn: 'siege-commander' }, friendly: true, lose: [gn('sgEnd', { n: 0 }), scene('gn-53-after')] })),
+  ]),
+  rm('gn-53-after', 'The Region Under Siege: After', siege({ remembers: [
+    { id: 'celebration', when: [exactly('sg-result', 1)], notice: 'The banners come down. Bells, from somewhere. The city\'s in celebration, and everyone knows your name.' },
+    { id: 'repair', when: [exactly('sg-result', 2)], notice: 'The city stands. Tents where shops were. People are tired and kind, and some things are missing.' },
+    { id: 'occupation', when: [exactly('sg-result', 3)], notice: 'The banners stay up. Patrols on every corner. You\'ll have to pass through quietly.' },
+  ] }), say(
+    'The smoke thins. Districts held: {siege:held} of 4.',
+  ), [
+    ch('Walk on.', out('You walk on through the city you fought for. It\'s still here. So are you.', rivalTrust(1), moment('Defended a city under siege, district by district, for eight turns.', 70))),
+  ]),
+  rm('gn-53-waiting', 'The Region Under Siege: Waiting', siege({ tags: ['Pokémon'] }), say(
+    'At the rest, by the door: the {cast:sg-pokemon} from under the car. It followed you. It\'s been waiting.',
+    'It looks at your Poké Ball, and then at you. It\'s asking.',
+  ), [
+    ch('Let it come.', out('You open the Ball. It goes in on its own, and the Ball doesn\'t even shake.', gn('sgJoin'))),
+    ch('Send it home.', out('You point it toward the city. It goes, slowly, looking back twice. Somebody there will know whose it is.', setTo('sg-pokemon', 4))),
+  ]),
+  gev('gn-53-plaque', 'The Region Under Siege: The Plaque', siege({ stop: 'event', rarity: 'rare', requires: [is('sg-result'), notThisRegion('sg-at'), not('sg-plaque')], remembers: [
+    { id: 'fell', when: [is('sg-fell')], notice: 'Beside it, a second plaque, shorter. Just a date, and the names of the districts that fell.' },
+  ] }), say(
+    'A city you defended, another region back, in the news on a café\'s radio. They\'ve put up a plaque.',
+    'The names on it: {siege:plaque}.',
+  ), [ch('Listen to the end.', out('You listen to the end. Your name isn\'t on it. You don\'t mind. You know whose should be.', setTo('sg-plaque', 1)))]),
+];
+
+export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46, ...gn47, ...gn48, ...gn49, KANTO_SNORLAX, ...gn50, ...gn51, ...gn52, ...gn53];
 export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
@@ -1016,6 +1143,13 @@ export const PLACEMENT: Record<string, Placement> = {
   },
   'gn-52-later': { gn: 'gn.52', shape: 'Single', earliest: 'A9', home: 8, window: [2, 16], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Only when both auction traps were avoided.' },
   'gn-52-sale': { gn: 'gn.52', shape: 'Single', earliest: 'A9', home: 6, window: [2, 12], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: "Motivated seller." (a later region of the same run).' },
+  'gn-53-alarm': {
+    gn: 'gn.53', shape: 'World Event', earliest: 'A5', home: 12, window: [10, 14], sits: 'must-see', attaches: 'instead', tags: ['Evil Team'],
+    level: 'Grunts A+0; district captains A+1; the commander A+2', often: 'region', badge: 'own',
+    dressing: { kanto: 'The Sealed City', elsewhere: 'The Region Under Siege' },
+    note: 'Badge: a burning tower. Only at the evil team\'s climax, or the stage before. Eight turns in rooms; the result shapes the next stage\'s shops and Center (run.ts). The rescued Pokémon waits at the next rest (gn-53-waiting); gn-53-plaque is the afterstory in a later region.',
+  },
+  'gn-53-plaque': { gn: 'gn.53', shape: 'Single', earliest: 'A6', home: 6, window: [2, 12], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: the plaque with the names of the allies who held (a later region of the same run).' },
   'gn-45-field': {
     gn: 'gn.45', shape: 'Single', earliest: 'A10', home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', tags: ['Companion Story'],
     level: 'The lesson A−1 (three Pokémon); the exam A+2 (six)', often: 'run', badge: 'own',

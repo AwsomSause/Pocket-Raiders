@@ -8910,6 +8910,2830 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-53-alarm",
+   "name": "The Region Under Siege",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 5
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "sg-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "feared",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rep-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Some of those you call don't come. Of the ones who do, a few won't meet your eye. They'll fight. Just not for you."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "*Smoke over the city. A siren, on and on. The evil team's banners on the Hall.*\n\nFour districts: the Market, the Homes, the Gate, the Hall. One of you. A clock of eight turns.\n\nYou can't be everywhere. You'll have to choose. Everyone you've helped this run is already on their way.",
+   "choices": [
+    {
+     "label": "Answer the alarm.",
+     "success": {
+      "text": "You run toward the smoke. Behind you, footsteps: people you know, coming too.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgStart"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "sg-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sg-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-53-muster"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-53-muster",
+   "name": "The Region Under Siege: The Square",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The square, under the smoke. Who came: {siege:allies}.\n\n{siege:bars}",
+   "choices": [
+    {
+     "label": "Give orders.",
+     "success": {
+      "text": "Someone's waiting for you to tell them where to stand.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-53-orders"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "sgWaiting"
+      }
+     ]
+    },
+    {
+     "label": "Into the city.",
+     "success": {
+      "text": "Everyone's where they need to be. Now you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-53-turn"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "sgOrdered"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-53-orders",
+   "name": "The Region Under Siege: Orders",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "{siege:ally} waits for orders. Their hands are steady. Their Pokémon aren't.\n\nA district held by allies alone loses ground slowly. A district with nobody loses it fast.",
+   "choices": [
+    {
+     "label": "The Market.",
+     "success": {
+      "text": "They nod, and run for the Market.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgAssign",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-53-muster"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Homes.",
+     "success": {
+      "text": "They nod, and run for the Homes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgAssign",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-53-muster"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Gate.",
+     "success": {
+      "text": "They nod, and run for the Gate.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgAssign",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-53-muster"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hall.",
+     "success": {
+      "text": "They nod, and run for the Hall.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgAssign",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-53-muster"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-53-turn",
+   "name": "The Region Under Siege: The City",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "gate",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sg-reinforced",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Lorries came through the Gate. There are more of them now."
+    },
+    {
+     "id": "rangers",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sg-rangers",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Rangers' jeeps are in the streets. Somebody's shouting your name, and it isn't a warning."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Turn {siege:turn} of 8. Each turn: one district, one thing.\n\n{siege:bars}",
+   "choices": [
+    {
+     "label": "The Market.",
+     "success": {
+      "text": "The Market: shops, and the Pokémon Center. If it falls, the city loses both.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-53-market"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Homes.",
+     "success": {
+      "text": "The Homes: streets, and a school. People who'll be in later scenes, or won't.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-53-homes"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Gate.",
+     "success": {
+      "text": "The Gate: the only road in. Hold it, and their reinforcements don't come.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-53-gate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hall.",
+     "success": {
+      "text": "The Hall: the mayor, and the radio mast. Hold it, and the city can call for help.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-53-hall"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-53-market",
+   "name": "The Region Under Siege: the Market",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Stalls on their sides. The Center's doors chained from the outside. Behind them, someone's knocking.\n\nThe shopkeeper who gave you a discount, once. Trapped under the awning of her own shop.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "Grunts in the Market, behind a barricade of whatever was nearest. They didn't expect anyone to come back.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "the Market's Grunts",
+       "size": 2,
+       "levelBonus": 0,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "market",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "market",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sg-turn",
+       "atLeast": 1,
+       "atMost": 3
+      }
+     ]
+    },
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "the Market's captain, in a commandeered doorway, with a radio and a better team than the Grunts had.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "specialist",
+       "name": "the Market's Captain",
+       "size": 3,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "market",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "market",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sg-turn",
+       "atLeast": 4,
+       "atMost": 7
+      }
+     ]
+    },
+    {
+     "label": "Rescue.",
+     "success": {
+      "text": "You lift the awning. She crawls out, coughing, and grips your hand far too hard. \"I knew it'd be you.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgRescue",
+        "key": "market"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 2,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-runner"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-commander"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sg-civ-market",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Repair.",
+     "success": {
+      "text": "A party Pokémon puts its shoulder to the barricade. It holds. This district can stand a turn without you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgAct",
+        "key": "market",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 2,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-runner"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-commander"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-53-homes",
+   "name": "The Region Under Siege: the Homes",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Washing still on the lines. Doors left open. A dog barking in a yard, and nobody calling it in.\n\nThe child you helped, earlier this region, crouched behind a bin. They're holding very still.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "Grunts in the Homes, behind a barricade of whatever was nearest. They didn't expect anyone to come back.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "the Homes's Grunts",
+       "size": 2,
+       "levelBonus": 0,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "homes",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "homes",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sg-turn",
+       "atLeast": 1,
+       "atMost": 3
+      }
+     ]
+    },
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "the Homes's captain, in a commandeered doorway, with a radio and a better team than the Grunts had.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "specialist",
+       "name": "the Homes's Captain",
+       "size": 3,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "homes",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "homes",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sg-turn",
+       "atLeast": 4,
+       "atMost": 7
+      }
+     ]
+    },
+    {
+     "label": "Rescue.",
+     "success": {
+      "text": "You crouch down. \"It's me.\" They come out, and hold on to your sleeve, and don't let go for three streets.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgRescue",
+        "key": "homes"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 2,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-runner"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-commander"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sg-civ-homes",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Repair.",
+     "success": {
+      "text": "A party Pokémon puts its shoulder to the barricade. It holds. This district can stand a turn without you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgAct",
+        "key": "homes",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 2,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-runner"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-commander"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-53-gate",
+   "name": "The Region Under Siege: the Gate",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The gatehouse, the barrier, a queue of abandoned cars. The team's lorries park here.\n\nUnder a car, a Pokémon, wedged in tight. It was somebody's. It isn't sure whose any more.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "Grunts in the Gate, behind a barricade of whatever was nearest. They didn't expect anyone to come back.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "the Gate's Grunts",
+       "size": 2,
+       "levelBonus": 0,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "gate",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "gate",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sg-turn",
+       "atLeast": 1,
+       "atMost": 3
+      }
+     ]
+    },
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "the Gate's captain, in a commandeered doorway, with a radio and a better team than the Grunts had.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "specialist",
+       "name": "the Gate's Captain",
+       "size": 3,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "gate",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "gate",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sg-turn",
+       "atLeast": 4,
+       "atMost": 7
+      }
+     ]
+    },
+    {
+     "label": "Rescue.",
+     "success": {
+      "text": "You lie flat on the road, and reach, and wait. It comes out, slowly. It looks at you as if it's going to remember you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgRescue",
+        "key": "gate"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 2,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-runner"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-commander"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sg-pokemon",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Repair.",
+     "success": {
+      "text": "A party Pokémon puts its shoulder to the barricade. It holds. This district can stand a turn without you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgAct",
+        "key": "gate",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 2,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-runner"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-commander"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-53-hall",
+   "name": "The Region Under Siege: the Hall",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The mayor's office, a radio mast, a staircase full of smoke.\n\n{rival}'s mum, of all people, in the records room. She came to pay a parking fine.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "Grunts in the Hall, behind a barricade of whatever was nearest. They didn't expect anyone to come back.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "the Hall's Grunts",
+       "size": 2,
+       "levelBonus": 0,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "hall",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "hall",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sg-turn",
+       "atLeast": 1,
+       "atMost": 3
+      }
+     ]
+    },
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "the Hall's captain, in a commandeered doorway, with a radio and a better team than the Grunts had.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "specialist",
+       "name": "the Hall's Captain",
+       "size": 3,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "hall",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "hall",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sg-turn",
+       "atLeast": 4,
+       "atMost": 7
+      }
+     ]
+    },
+    {
+     "label": "Rescue.",
+     "success": {
+      "text": "You get her down the back stairs. \"You're the one my child won't stop talking about,\" she says. \"Hm. Taller.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgRescue",
+        "key": "hall"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 2,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-runner"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-commander"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sg-civ-hall",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Repair.",
+     "success": {
+      "text": "A party Pokémon puts its shoulder to the barricade. It holds. This district can stand a turn without you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgAct",
+        "key": "hall",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 2,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-runner"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-commander"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-53-runner",
+   "name": "The Region Under Siege: The Runner",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "*Turn 6. A runner, out of breath, grabbing your arm.*\n\n\"The school's cut off! And the hospital! We can't— which? *Which?*\"",
+   "choices": [
+    {
+     "label": "The school.",
+     "success": {
+      "text": "You run for the school. Behind you, the hospital's windows go dark one by one. You don't look back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgHomes",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "sgAct",
+        "key": "homes",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 2,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-runner"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-commander"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "The hospital.",
+     "success": {
+      "text": "You run for the hospital. Behind you, a school bell rings and rings, and stops. You don't look back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgHomes",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "sgAct",
+        "key": "homes",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 2,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-runner"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-turn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sg-turn",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-53-commander"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Split my team: three each.",
+     "success": {
+      "text": "Half your team goes with you to the school. They fight like they know the other half is fighting too.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgHalf",
+        "n": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "specialist",
+       "name": "The School's Guards",
+       "size": 3,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "sgHomes",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-53-hospital"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-53-hospital"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-53-hospital",
+   "name": "The Region Under Siege: The Hospital",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Across the road, the hospital. The rest of your team is already there, without you. They waited.",
+   "choices": [
+    {
+     "label": "Go to them.",
+     "success": {
+      "text": "The other half, and you. They fight like they know the first half did.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgHalf",
+        "n": 2
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "specialist",
+       "name": "The Hospital's Guards",
+       "size": 3,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "sgHomes",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "sgWhole"
+        },
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "homes",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "sgWhole"
+        },
+        {
+         "kind": "gn",
+         "op": "sgAct",
+         "key": "homes",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 2,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-runner"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-turn"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "sg-turn",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-53-commander"
+          }
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-53-commander",
+   "name": "The Region Under Siege: The Commander",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "never",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sg-reinforced",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "No lorries ever came. The commander's Pokémon are tired. So is the commander."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "*The Hall's steps. Smoke. A figure with a radio, giving orders in a level voice.*\n\nThey lower the radio when they see you. \"So you're the one.\"",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "\"Everyone, hold.\" The commander steps down to meet you. Behind them, the city waits to see who wins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "The Commander",
+       "size": 6,
+       "levelBonus": 2,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "sgEnd",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-53-after"
+        }
+       ],
+       "rule": {
+        "gn": "siege-commander"
+       },
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "sgEnd",
+         "n": 0
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-53-after"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-53-after",
+   "name": "The Region Under Siege: After",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "celebration",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sg-result",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "The banners come down. Bells, from somewhere. The city's in celebration, and everyone knows your name."
+    },
+    {
+     "id": "repair",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sg-result",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "The city stands. Tents where shops were. People are tired and kind, and some things are missing."
+    },
+    {
+     "id": "occupation",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sg-result",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "notice": "The banners stay up. Patrols on every corner. You'll have to pass through quietly."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The smoke thins. Districts held: {siege:held} of 4.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on through the city you fought for. It's still here. So are you.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        }
+       },
+       {
+        "kind": "moment",
+        "text": "Defended a city under siege, district by district, for eight turns.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-53-waiting",
+   "name": "The Region Under Siege: Waiting",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "At the rest, by the door: the {cast:sg-pokemon} from under the car. It followed you. It's been waiting.\n\nIt looks at your Poké Ball, and then at you. It's asking.",
+   "choices": [
+    {
+     "label": "Let it come.",
+     "success": {
+      "text": "You open the Ball. It goes in on its own, and the Ball doesn't even shake.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "sgJoin"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it home.",
+     "success": {
+      "text": "You point it toward the city. It goes, slowly, looking back twice. Somebody there will know whose it is.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sg-pokemon",
+        "n": 4
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-53-plaque",
+   "name": "The Region Under Siege: The Plaque",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sg-result",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "sg-at"
+    },
+    {
+     "kind": "flag",
+     "key": "sg-plaque",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "fell",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sg-fell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Beside it, a second plaque, shorter. Just a date, and the names of the districts that fell."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A city you defended, another region back, in the news on a café's radio. They've put up a plaque.\n\nThe names on it: {siege:plaque}.",
+   "choices": [
+    {
+     "label": "Listen to the end.",
+     "success": {
+      "text": "You listen to the end. Your name isn't on it. You don't mind. You know whose should be.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sg-plaque",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

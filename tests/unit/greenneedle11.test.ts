@@ -1230,3 +1230,205 @@ describe('gn.52 The Evil Team\'s Pokémon Auction', () => {
     expect(scene(b, 'gn-52-sale').intro).toContain('Motivated seller.');
   });
 });
+
+// ---- gn.53 The Region Under Siege ----
+import { alliesOf, bar, sgAct, sgCommanderStart, sgEnd, sgPriceFactor, sgStart, TURNS } from '../../src/core/greenneedle/citysiege';
+import { shopPrice, visitSide } from '../../src/core/run';
+
+const city = (seed: string, prep?: (run: RunState) => void): RunState => {
+  const run = betrayalRun(seed, 5);
+  prep?.(run);
+  open(run, 'gn-53-alarm');
+  return run;
+};
+/** Answers the alarm and sends everyone waiting to `to` (0 Market, 1 Homes, 2 Gate, 3 Hall). */
+const muster = (run: RunState, to = 'The Gate.'): RunState => {
+  let r = choose(run, 'gn-53-alarm', 'Answer the alarm.').run;
+  for (let i = 0; i < 12 && scene(r, 'gn-53-muster').labels.includes('Give orders.'); i += 1) {
+    r = choose(r, 'gn-53-muster', 'Give orders.').run;
+    r = choose(r, 'gn-53-orders', to).run;
+  }
+  return choose(r, 'gn-53-muster', 'Into the city.').run;
+};
+/** One turn: a district, one action (a fight is won). */
+const go = (run: RunState, where: string, action: string): RunState => {
+  const d = choose(run, 'gn-53-turn', `The ${where}.`).run;
+  const r = choose(d, `gn-53-${where.toLowerCase()}`, action);
+  return r.battle ? win(r.run) : r.run;
+};
+const sideHere = (run: RunState, kind: 'heal' | 'shop'): string => {
+  const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+  const id = `test-${kind}-${node.sides.length}`;
+  node.sides.push({ id, kind, used: false } as (typeof node.sides)[number]);
+  return id;
+};
+
+describe('gn.53 The Region Under Siege', () => {
+  it('the alarm calls who the run has earned: the rival at Trust 2, friends from finished events, the defector\'s fourteen; the player gives orders', () => {
+    const run = city('t53-call', (r) => {
+      setFlag(r, 'damian-visit-done');
+      setFlag(r, 'squad-done');
+      setFlag(r, 'defector-files', 2);
+      setFlag(r, 'defector-at', r.regionIndex + 1);
+    });
+    const r = choose(run, 'gn-53-alarm', 'Answer the alarm.').run;
+    const names = alliesOf(r).map((a) => a.n);
+    expect(names).toEqual(expect.arrayContaining(['Damian', 'The Squirtle Squad', 'The fourteen ex-Grunts']));
+    expect(names).not.toContain('The Samurai');
+    expect(scene(r, 'gn-53-muster').labels).toEqual(['Give orders.']);
+    expect(scene(r, 'gn-53-orders').labels).toEqual(['The Market.', 'The Homes.', 'The Gate.', 'The Hall.']);
+    const done = muster(run, 'The Hall.');
+    expect(alliesOf(done).filter((a) => names.includes(a.n) && a.d === '')).toHaveLength(0);
+    expect(scene(done, 'gn-53-turn').intro).toContain('Turn 1 of 8');
+    expect(scene(done, 'gn-53-turn').intro).toContain('held by Damian');
+  });
+
+  it('Fear (Reputation brought to 0): fewer come, and they pick their own districts', () => {
+    const r = city('t53-fear', (x) => {
+      for (const k of ['damian-visit-done', 'squad-done', 'kanto-forest-samurai-won', 'frontier-symbols']) setFlag(x, k);
+      setFlag(x, 'rep-lost', 2);
+    });
+    const after = choose(r, 'gn-53-alarm', 'Answer the alarm.').run;
+    expect(alliesOf(after).length).toBeLessThan(4);
+    expect(alliesOf(after).every((a) => a.d !== '')).toBe(true);
+    expect(scene(after, 'gn-53-muster').labels).toEqual(['Into the city.']);
+  });
+
+  it('each turn one district, one thing: a fight raises its bar; a district with nobody loses ground fast, one with allies slowly', () => {
+    const run = muster(city('t53-bars', (r) => setFlag(r, 'damian-visit-done')), 'The Hall.');
+    expect(scene(run, 'gn-53-market').labels).toEqual(['Fight.', 'Rescue.', 'Repair.']);
+    const r = go(run, 'Market', 'Fight.');
+    expect(bar(r, 'market')).toBe(6);
+    expect(bar(r, 'homes')).toBe(3);
+    expect(bar(r, 'gate')).toBe(3);
+    expect(flagOf(r, 'sg-turn')).toBe(2);
+    // The Hall (Damian, strength 1) loses ground every other turn: not on turn 1.
+    expect(bar(r, 'hall')).toBe(4);
+    const r2 = go(r, 'Market', 'Repair.');
+    expect(bar(r2, 'hall')).toBe(3);
+    // From turn 4, the district's captain (A+1) instead of the Grunts.
+    const late = structuredClone(r2);
+    setFlag(late, 'sg-turn', 4);
+    open(late, 'gn-53-gate');
+    expect(choose(late, 'gn-53-gate', 'Fight.').battle).toBe(true);
+    const fights = content.events.get('gn-53-gate')!.choices.slice(0, 2).map((c) => (c.success as unknown as { battle: { evil: string; levelBonus: number } }).battle);
+    expect(fights.map((b) => [b.evil, b.levelBonus])).toEqual([['grunt', 0], ['specialist', 1]]);
+  });
+
+  it('reinforcements at turns 5 and 7 unless the Gate\'s held; the Rangers at 7 if the Hall is; the runner at 6', () => {
+    let run = muster(city('t53-clock'));
+    for (let t = 1; t <= 4; t += 1) run = go(run, 'Hall', t === 1 ? 'Rescue.' : 'Fight.');
+    expect(flagOf(run, 'sg-reinforced')).toBe(1);
+    run = go(run, 'Hall', 'Fight.');
+    expect(opened(run, 'gn-53-runner')).toBe(true);
+    expect(scene(run, 'gn-53-runner').labels).toEqual(['The school.', 'The hospital.', 'Split my team: three each.']);
+    const r = choose(run, 'gn-53-runner', 'The school.');
+    expect(flagOf(r.run, 'sg-school')).toBe(1);
+    expect(flagOf(r.run, 'sg-hospital')).toBe(0);
+    expect(flagOf(r.run, 'sg-reinforced')).toBe(2);
+    expect(flagOf(r.run, 'sg-rangers')).toBe(1);
+    expect(said(r)).toContain('The Rangers arrive');
+    // Holding the Gate keeps them out.
+    const gate = structuredClone(run);
+    setFlag(gate, 'sg-turn', 4);
+    setFlag(gate, 'sg-reinforced', 0);
+    setFlag(gate, 'sg-bar-gate', 6);
+    sgAct(gate, 'market', 1);
+    expect(flagOf(gate, 'sg-reinforced')).toBe(0);
+  });
+
+  it('split the team: two battles, half the party each; both reached when both are won, and the team comes back whole', () => {
+    const run = city('t53-split');
+    run.party = [0, 1, 2, 3].map((i) => createPokemon(content, 'pikachu', 60, `split-${i}`));
+    let r = muster(run);
+    setFlag(r, 'sg-turn', 6);
+    open(r, 'gn-53-runner');
+    const first = choose(r, 'gn-53-runner', 'Split my team: three each.').run;
+    expect(first.party.map((m) => m.uid)).toEqual(['split-0', 'split-1']);
+    r = win(first);
+    const second = choose(r, 'gn-53-hospital', 'Go to them.').run;
+    expect(second.party.map((m) => m.uid)).toEqual(['split-2', 'split-3']);
+    r = win(second);
+    expect(r.party.map((m) => m.uid)).toEqual(['split-0', 'split-1', 'split-2', 'split-3']);
+    expect(flagOf(r, 'sg-school')).toBe(1);
+    expect(flagOf(r, 'sg-hospital')).toBe(1);
+    expect(flagOf(r, 'sg-turn')).toBe(7);
+  });
+
+  it('the commander: four tired Pokémon if no reinforcements came, six if they came twice; Hall allies hold one turn each', () => {
+    const run = muster(city('t53-cmd', (r) => setFlag(r, 'damian-visit-done')), 'The Hall.');
+    const team = () => [0, 1, 2, 3, 4, 5].map((i) => createPokemon(content, 'machop', 50, `c-${i}`));
+    const battle = { enemyTeam: team(), storyEffects: [] as string[] } as unknown as NonNullable<RunState['battle']>;
+    sgCommanderStart(run, battle, FOE_WAITS);
+    expect(battle.enemyTeam).toHaveLength(4);
+    expect(battle.enemyTeam[0]!.hp).toBeLessThan(maxHp(content, battle.enemyTeam[0]!));
+    expect(battle.storyEffects.join(' ')).toContain('Damian steps in from the Hall');
+    setFlag(run, 'sg-reinforced', 2);
+    const full = { enemyTeam: team(), storyEffects: [] as string[] } as unknown as NonNullable<RunState['battle']>;
+    sgCommanderStart(run, full, FOE_WAITS);
+    expect(full.enemyTeam).toHaveLength(6);
+    setFlag(run, 'sg-turn', 8);
+    open(run, 'gn-53-commander');
+    expect(choose(run, 'gn-53-commander', 'Fight.').run.battle?.eventRule).toMatchObject({ gn: 'siege-commander' });
+  });
+
+  it('the result shapes the next stage: celebration (half-price), repair (half heals), occupation (no shops); a fallen Market leaves no Center', () => {
+    const base = muster(city('t53-end'));
+    const stage = stageNumber(content, base);
+    const at = (held: number, beaten: number): RunState => {
+      const r = structuredClone(base);
+      ['market', 'homes', 'gate', 'hall'].forEach((d, i) => setFlag(r, `sg-bar-${d}`, i < held ? 4 : 0));
+      sgEnd(content, r, beaten, stage);
+      r.stage!.index += 1;
+      return r;
+    };
+    const party = (r: RunState): RunState => {
+      r.party.forEach((m) => { m.hp = 1; });
+      return r;
+    };
+    const joy = at(4, 1);
+    expect(flagOf(joy, 'sg-result')).toBe(1);
+    const entry = content.shop.find((e) => e.price > 0)!;
+    const normal = structuredClone(base);
+    normal.stage!.index += 1;
+    expect(shopPrice(content, joy, entry)).toBe(Math.round(shopPrice(content, normal, entry) * 0.5));
+    const fixing = party(at(2, 1));
+    expect(flagOf(fixing, 'sg-result')).toBe(2);
+    const healed = visitSide(content, fixing, sideHere(fixing, 'heal'));
+    expect(healed.message).toContain('in a tent');
+    expect(healed.run.party[0]!.hp).toBe(Math.ceil(maxHp(content, healed.run.party[0]!) * 0.5));
+    const lost = at(4, 0);
+    expect(flagOf(lost, 'sg-result')).toBe(3);
+    expect(sgPriceFactor(lost, stageNumber(content, lost))).toBeNull();
+    expect(visitSide(content, lost, sideHere(lost, 'shop')).message).toContain('bread roll');
+    const noMarket = at(2, 1);
+    setFlag(noMarket, 'sg-lost-market');
+    expect(visitSide(content, noMarket, sideHere(noMarket, 'heal')).message).toContain('GONE TO THE NEXT TOWN');
+    // Only the stage after: later stages are back to normal.
+    joy.stage!.index += 1;
+    expect(sgPriceFactor(joy, stageNumber(content, joy))).toBe(1);
+  });
+
+  it('a civilian not reached is missing later; the Gate\'s Pokémon waits at the next rest and may ask to join; the plaque names who held', () => {
+    let run = muster(city('t53-after', (r) => setFlag(r, 'damian-visit-done')), 'The Gate.');
+    run = go(run, 'Gate', 'Rescue.');
+    expect(flagOf(run, 'sg-pokemon')).toBe(1);
+    expect(scene(run, 'gn-53-gate').labels).toEqual(['Fight.', 'Repair.']);
+    setFlag(run, 'sg-turn', 8);
+    open(run, 'gn-53-commander');
+    run = win(choose(run, 'gn-53-commander', 'Fight.').run);
+    expect(flagOf(run, 'sg-turn')).toBe(TURNS + 1);
+    expect(flagOf(run, 'siege-missing-homes')).toBe(1);
+    expect(opened(run, 'gn-53-after')).toBe(true);
+    run = choose(run, 'gn-53-after', 'Walk on.').run;
+    const healed = visitSide(content, run, sideHere(run, 'heal')).run;
+    expect(opened(healed, 'gn-53-waiting')).toBe(true);
+    const before = healed.party.length + healed.box.length;
+    const joined = choose(healed, 'gn-53-waiting', 'Let it come.').run;
+    expect(joined.party.length + joined.box.length).toBe(before + 1);
+    expect([...joined.party, ...joined.box].some((m) => m.gn?.includes('siege-rescued'))).toBe(true);
+    joined.regionIndex += 1;
+    open(joined, 'gn-53-plaque');
+    expect(scene(joined, 'gn-53-plaque').intro).toContain('Damian');
+  });
+});
