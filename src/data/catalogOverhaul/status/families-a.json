@@ -52,7 +52,26 @@
   "habitat-nest": "2026-11-15",
   "ghost-town-gate": "2026-11-15",
   "ghost-town-market": "2026-11-15",
-  "ghost-town-hall": "2026-11-15"
+  "ghost-town-hall": "2026-11-15",
+  "ranked-ladder-1": "2026-11-16",
+  "battle-tower-floor": "2026-11-16",
+  "ranked-ladder-2": "2026-11-16",
+  "fan-club-tournament": "2026-11-16",
+  "ranked-ladder-3": "2026-11-16",
+  "ev-trainer-tournament": "2026-11-16",
+  "story-tour-registration": "2026-11-16",
+  "story-tour-opening": "2026-11-16",
+  "story-tour-semi": "2026-11-16",
+  "story-tour-final": "2026-11-16",
+  "champion-cup": "2026-11-16",
+  "tournament-entry": "2026-11-16",
+  "tournament-quarter": "2026-11-16",
+  "tournament-semi": "2026-11-16",
+  "tournament-final": "2026-11-16",
+  "contest-hall": "2026-11-16",
+  "beauty-pageant": "2026-11-16",
+  "contest-judges-challenge": "2026-11-16",
+  "contest-pass-hall": "2026-11-16"
  },
  "merged": {
   "world-disaster-flood": "crisis-report-flood",
@@ -127,6 +146,16 @@
   "scene:habitat-culprit": "habitat-culprit",
   "scene:habitat-rebuild": "habitat-rebuild",
   "scene:vale-dam": "vale-dam",
-  "scene:vale-again": "vale-again"
+  "scene:vale-again": "vale-again",
+  "scene:circuit-pell": "circuit-pell",
+  "scene:tower-upper": "tower-upper",
+  "scene:tower-top": "tower-top",
+  "scene:frontier-final": "frontier-final",
+  "scene:grand-festival": "grand-festival",
+  "scene:festival-appeal": "festival-appeal",
+  "scene:festival-double": "festival-double",
+  "scene:festival-final": "festival-final",
+  "scene:festival-won": "festival-won",
+  "scene:festival-lost": "festival-lost"
  }
 }

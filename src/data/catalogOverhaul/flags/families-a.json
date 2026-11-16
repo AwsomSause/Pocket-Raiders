@@ -194,6 +194,13 @@
    "readBy": [],
    "note": "Tib's story (SF2): read by the Final Reunion, the All-Star Tournament and the Evil Team's last raid (SF2 Afterstory)."
   },
+  "aq22-ribbon": {
+   "setBy": [],
+   "readBy": [
+    "grand-festival"
+   ],
+   "note": "Set by AQ22 The Aipom Who Wanted Contests (anime/Ash row) when the Aipom wins its ribbon; until then the festival notice stays hidden."
+  },
   "az-flute": {
    "setBy": [],
    "readBy": [
@@ -229,6 +236,224 @@
     "vale-dam"
    ],
    "note": "Read-only state flag from legends (LEGENDS_PIECES section 3): that Legendary's blessing is the run's."
+  },
+  "circuit-bronze": {
+   "setBy": [
+    "ranked-ladder-1"
+   ],
+   "readBy": [],
+   "note": "SF13 Circuit record flags (which rung match, how it was played). Kept in the run log for the update notes and later scenes; the Circuit's own climb is the R1 board (circuit-rung)."
+  },
+  "circuit-entered": {
+   "setBy": [],
+   "readBy": [
+    "battle-tower-floor",
+    "champion-cup",
+    "ev-trainer-tournament",
+    "fan-club-tournament",
+    "ranked-ladder-1",
+    "ranked-ladder-2",
+    "ranked-ladder-3",
+    "story-tour-registration"
+   ],
+   "note": "Set by the rivals row's R1 sign-up (rivals-1.ts, rq-circuit-sign / rq-circuit-late). The Circuit rung events need it."
+  },
+  "circuit-fan": {
+   "setBy": [
+    "fan-club-tournament"
+   ],
+   "readBy": [],
+   "note": "SF13 Circuit record flags (which rung match, how it was played). Kept in the run log for the update notes and later scenes; the Circuit's own climb is the R1 board (circuit-rung)."
+  },
+  "circuit-fan-crowd": {
+   "setBy": [
+    "fan-club-tournament"
+   ],
+   "readBy": [],
+   "note": "SF13 Circuit record flags (which rung match, how it was played). Kept in the run log for the update notes and later scenes; the Circuit's own climb is the R1 board (circuit-rung)."
+  },
+  "circuit-frontier": {
+   "setBy": [
+    "frontier-final"
+   ],
+   "readBy": [],
+   "note": "SF13 Circuit record flags (which rung match, how it was played). Kept in the run log for the update notes and later scenes; the Circuit's own climb is the R1 board (circuit-rung)."
+  },
+  "circuit-gold": {
+   "setBy": [
+    "ranked-ladder-3"
+   ],
+   "readBy": [],
+   "note": "SF13 Circuit record flags (which rung match, how it was played). Kept in the run log for the update notes and later scenes; the Circuit's own climb is the R1 board (circuit-rung)."
+  },
+  "circuit-gold-rival": {
+   "setBy": [
+    "ranked-ladder-3"
+   ],
+   "readBy": [],
+   "note": "SF13 Circuit record flags (which rung match, how it was played). Kept in the run log for the update notes and later scenes; the Circuit's own climb is the R1 board (circuit-rung)."
+  },
+  "circuit-pass": {
+   "setBy": [
+    "tower-top"
+   ],
+   "readBy": [],
+   "note": "SF13 Circuit record flags (which rung match, how it was played). Kept in the run log for the update notes and later scenes; the Circuit's own climb is the R1 board (circuit-rung)."
+  },
+  "circuit-pell": {
+   "setBy": [
+    "ranked-ladder-1"
+   ],
+   "readBy": [
+    "ranked-ladder-2"
+   ]
+  },
+  "circuit-pell-beat-you": {
+   "setBy": [
+    "ranked-ladder-1"
+   ],
+   "readBy": [],
+   "note": "SF13 Circuit record flags (which rung match, how it was played). Kept in the run log for the update notes and later scenes; the Circuit's own climb is the R1 board (circuit-rung)."
+  },
+  "circuit-pell-calm": {
+   "setBy": [
+    "circuit-pell"
+   ],
+   "readBy": [],
+   "note": "SF13 Circuit record flags (which rung match, how it was played). Kept in the run log for the update notes and later scenes; the Circuit's own climb is the R1 board (circuit-rung)."
+  },
+  "circuit-qualified": {
+   "setBy": [
+    "champion-cup"
+   ],
+   "readBy": [
+    "champion-cup",
+    "tournament-entry"
+   ]
+  },
+  "circuit-scouted": {
+   "setBy": [
+    "ev-trainer-tournament"
+   ],
+   "readBy": [],
+   "note": "SF13 Circuit record flags (which rung match, how it was played). Kept in the run log for the update notes and later scenes; the Circuit's own climb is the R1 board (circuit-rung)."
+  },
+  "circuit-silver": {
+   "setBy": [
+    "ranked-ladder-2"
+   ],
+   "readBy": [],
+   "note": "SF13 Circuit record flags (which rung match, how it was played). Kept in the run log for the update notes and later scenes; the Circuit's own climb is the R1 board (circuit-rung)."
+  },
+  "circuit-tower-asked": {
+   "setBy": [
+    "battle-tower-floor"
+   ],
+   "readBy": [],
+   "note": "SF13 Circuit record flags (which rung match, how it was played). Kept in the run log for the update notes and later scenes; the Circuit's own climb is the R1 board (circuit-rung)."
+  },
+  "circuit-tower3": {
+   "setBy": [
+    "battle-tower-floor",
+    "tower-top",
+    "tower-upper"
+   ],
+   "readBy": [
+    "battle-tower-floor"
+   ]
+  },
+  "circuit-tower7": {
+   "setBy": [
+    "tower-top"
+   ],
+   "readBy": [],
+   "note": "SF13 Circuit record flags (which rung match, how it was played). Kept in the run log for the update notes and later scenes; the Circuit's own climb is the R1 board (circuit-rung)."
+  },
+  "contest-cat-beauty": {
+   "setBy": [
+    "contest-hall"
+   ],
+   "readBy": [],
+   "note": "SF14 Contest record flags (category, which contest was played). contest-ribbons opens the Grand Festival."
+  },
+  "contest-cat-cool": {
+   "setBy": [
+    "contest-hall"
+   ],
+   "readBy": [],
+   "note": "SF14 Contest record flags (category, which contest was played). contest-ribbons opens the Grand Festival."
+  },
+  "contest-cat-cute": {
+   "setBy": [
+    "contest-hall"
+   ],
+   "readBy": [],
+   "note": "SF14 Contest record flags (category, which contest was played). contest-ribbons opens the Grand Festival."
+  },
+  "contest-organiser-hurt": {
+   "setBy": [
+    "beauty-pageant"
+   ],
+   "readBy": [
+    "contest-pass-hall",
+    "grand-festival"
+   ]
+  },
+  "contest-pageant": {
+   "setBy": [
+    "beauty-pageant"
+   ],
+   "readBy": [],
+   "note": "SF14 Contest record flags (category, which contest was played). contest-ribbons opens the Grand Festival."
+  },
+  "contest-partner": {
+   "setBy": [
+    "contest-hall"
+   ],
+   "readBy": [
+    "beauty-pageant"
+   ]
+  },
+  "contest-ribbons": {
+   "setBy": [
+    "beauty-pageant",
+    "contest-hall",
+    "contest-judges-challenge",
+    "contest-pass-hall"
+   ],
+   "readBy": [
+    "grand-festival"
+   ]
+  },
+  "contest-sorry": {
+   "setBy": [
+    "contest-pass-hall"
+   ],
+   "readBy": [
+    "contest-pass-hall",
+    "grand-festival"
+   ]
+  },
+  "contest-styled": {
+   "setBy": [
+    "contest-judges-challenge"
+   ],
+   "readBy": [],
+   "note": "SF14 Contest record flags (category, which contest was played). contest-ribbons opens the Grand Festival."
+  },
+  "contest-super": {
+   "setBy": [
+    "contest-pass-hall"
+   ],
+   "readBy": [],
+   "note": "SF14 Contest record flags (category, which contest was played). contest-ribbons opens the Grand Festival."
+  },
+  "contest-tips": {
+   "setBy": [
+    "contest-judges-challenge"
+   ],
+   "readBy": [],
+   "note": "SF14 Contest record flags (category, which contest was played). contest-ribbons opens the Grand Festival."
   },
   "crisis-ally-asked": {
    "setBy": [
@@ -1040,6 +1265,100 @@
     "elders-last-wish-3"
    ]
   },
+  "exhibit-bowed": {
+   "setBy": [
+    "story-tour-opening"
+   ],
+   "readBy": [],
+   "note": "SF13.7-13.10 Exhibition Bracket record flags (ps_fa_exhibition). Kept for the run log."
+  },
+  "exhibit-crowd": {
+   "setBy": [
+    "story-tour-semi"
+   ],
+   "readBy": [],
+   "note": "SF13.7-13.10 Exhibition Bracket record flags (ps_fa_exhibition). Kept for the run log."
+  },
+  "exhibit-dark-fought": {
+   "setBy": [
+    "story-tour-semi"
+   ],
+   "readBy": [],
+   "note": "SF13.7-13.10 Exhibition Bracket record flags (ps_fa_exhibition). Kept for the run log."
+  },
+  "exhibit-final": {
+   "setBy": [
+    "story-tour-final"
+   ],
+   "readBy": [],
+   "note": "SF13.7-13.10 Exhibition Bracket record flags (ps_fa_exhibition). Kept for the run log."
+  },
+  "exhibit-found": {
+   "setBy": [
+    "story-tour-semi"
+   ],
+   "readBy": [
+    "story-tour-semi"
+   ]
+  },
+  "exhibit-in": {
+   "setBy": [
+    "story-tour-registration"
+   ],
+   "readBy": [],
+   "note": "SF13.7-13.10 Exhibition Bracket record flags (ps_fa_exhibition). Kept for the run log."
+  },
+  "exhibit-out": {
+   "setBy": [
+    "story-tour-opening",
+    "story-tour-semi"
+   ],
+   "readBy": [],
+   "note": "SF13.7-13.10 Exhibition Bracket record flags (ps_fa_exhibition). Kept for the run log."
+  },
+  "exhibit-r8": {
+   "setBy": [
+    "story-tour-opening"
+   ],
+   "readBy": [],
+   "note": "SF13.7-13.10 Exhibition Bracket record flags (ps_fa_exhibition). Kept for the run log."
+  },
+  "exhibit-semi": {
+   "setBy": [
+    "story-tour-semi"
+   ],
+   "readBy": [],
+   "note": "SF13.7-13.10 Exhibition Bracket record flags (ps_fa_exhibition). Kept for the run log."
+  },
+  "exhibit-trophy": {
+   "setBy": [
+    "story-tour-final"
+   ],
+   "readBy": [],
+   "note": "SF13.7-13.10 Exhibition Bracket record flags (ps_fa_exhibition). Kept for the run log."
+  },
+  "exhibit-waited": {
+   "setBy": [
+    "story-tour-semi"
+   ],
+   "readBy": [],
+   "note": "SF13.7-13.10 Exhibition Bracket record flags (ps_fa_exhibition). Kept for the run log."
+  },
+  "exhibit-wires": {
+   "setBy": [
+    "story-tour-registration"
+   ],
+   "readBy": [
+    "story-tour-semi"
+   ]
+  },
+  "fan-sash": {
+   "setBy": [
+    "fan-club-tournament"
+   ],
+   "readBy": [],
+   "note": "SF13.4 Fan Club sash (cosmetic): kept in the run log."
+  },
   "farmer-asked": {
    "setBy": [
     "farmers-quest-1"
@@ -1176,12 +1495,76 @@
    "readBy": [],
    "note": "Abner's story (SF3): read by the Final Reunion, where Wynne comes alone."
   },
+  "festival-done": {
+   "setBy": [
+    "festival-lost",
+    "festival-won"
+   ],
+   "readBy": [
+    "grand-festival"
+   ]
+  },
+  "festival-fun": {
+   "setBy": [
+    "grand-festival"
+   ],
+   "readBy": [
+    "festival-final"
+   ]
+  },
+  "festival-pressure": {
+   "setBy": [
+    "grand-festival"
+   ],
+   "readBy": [
+    "festival-appeal",
+    "festival-final"
+   ]
+  },
+  "festival-score": {
+   "setBy": [
+    "festival-appeal",
+    "festival-double"
+   ],
+   "readBy": [],
+   "note": "SF14.5 Grand Festival record flags (how it went)."
+  },
+  "festival-second": {
+   "setBy": [
+    "festival-lost"
+   ],
+   "readBy": [],
+   "note": "SF14.5 Grand Festival record flags (how it went)."
+  },
+  "festival-steady": {
+   "setBy": [
+    "grand-festival"
+   ],
+   "readBy": [
+    "festival-appeal",
+    "festival-double"
+   ]
+  },
+  "festival-won": {
+   "setBy": [
+    "festival-won"
+   ],
+   "readBy": [],
+   "note": "SF14.5 Grand Festival record flags (how it went)."
+  },
   "freed-caged": {
    "setBy": [],
    "readBy": [
     "pen-pal-letter"
    ],
    "note": "Set by other families (MEMORY_AND_FORMAT 2.2: any cage opened)."
+  },
+  "frontier-symbol": {
+   "setBy": [
+    "frontier-final"
+   ],
+   "readBy": [],
+   "note": "SF13.6 Frontier Symbol (cosmetic): kept in the run log."
   },
   "frost-warmed": {
    "setBy": [],
@@ -1190,6 +1573,13 @@
     "crisis-blizzard-lost"
    ],
    "note": "Set by Alpha A3, the Baxcalibur kept warm (legends)."
+  },
+  "gl7-pell-helped": {
+   "setBy": [],
+   "readBy": [
+    "ranked-ladder-1"
+   ],
+   "note": "Set by GL7 The Stolen Badge (past champions and leaders questlines) when the player helps Pell; until that row sets it, the Pell notice in ranked-ladder-1 stays hidden."
   },
   "habitat-built": {
    "setBy": [
@@ -1934,6 +2324,46 @@
     "ranger-trust-3"
    ]
   },
+  "rcircuit-asked": {
+   "setBy": [
+    "tournament-entry"
+   ],
+   "readBy": [],
+   "note": "SF13.12-13.15 Rival Circuit record flags; the bracket itself runs on the tournament round tracker."
+  },
+  "rcircuit-final": {
+   "setBy": [
+    "tournament-final"
+   ],
+   "readBy": [],
+   "note": "SF13.12-13.15 Rival Circuit record flags; the bracket itself runs on the tournament round tracker."
+  },
+  "rcircuit-in": {
+   "setBy": [
+    "tournament-entry"
+   ],
+   "readBy": [],
+   "note": "SF13.12-13.15 Rival Circuit record flags; the bracket itself runs on the tournament round tracker."
+  },
+  "rcircuit-semi": {
+   "setBy": [
+    "tournament-semi"
+   ],
+   "readBy": [],
+   "note": "SF13.12-13.15 Rival Circuit record flags; the bracket itself runs on the tournament round tracker."
+  },
+  "rep": {
+   "setBy": [
+    "fan-club-tournament",
+    "festival-won",
+    "story-tour-final",
+    "story-tour-opening",
+    "story-tour-semi",
+    "tournament-quarter"
+   ],
+   "readBy": [],
+   "note": "Reputation (shared with the rivals row, which sets and reads it the same way)."
+  },
   "reported-crime": {
    "setBy": [
     "habitat-culprit"
@@ -2021,12 +2451,26 @@
    "readBy": [],
    "note": "Pack flag rival.name_known (MEMORY_AND_FORMAT 2.3): read by the final rival battle line."
   },
+  "roster-axel-done": {
+   "setBy": [],
+   "readBy": [
+    "fan-club-tournament"
+   ],
+   "note": "Set by the people row's Road Roster kits (people-roster-*.ts, rosterKit) when a roster trainer's arc is done."
+  },
   "roster-finn-done": {
    "setBy": [],
    "readBy": [
     "surf-rescue"
    ],
    "note": "Set by Swimmer Finn's third meeting (people, ROAD_ROSTER)."
+  },
+  "roster-selene-done": {
+   "setBy": [],
+   "readBy": [
+    "tournament-semi"
+   ],
+   "note": "Set by the people row's Road Roster kits (people-roster-*.ts, rosterKit) when a roster trainer's arc is done."
   },
   "sanct-carried": {
    "setBy": [

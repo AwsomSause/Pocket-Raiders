@@ -177,4 +177,9 @@ describe('families-a chain pseudo-stages', () => {
     const ids = chainRooms(content, chainById('ps_fa_spire')!).map((r) => r.event);
     for (const id of ['ranger-spire-1', 'ranger-spire-2', 'ranger-spire-rest', 'ranger-spire-top', 'ranger-spire-view']) expect(ids).toContain(id);
   });
+  it('the Exhibition Bracket is three rooms after registration (SF13.7-13.10)', async () => {
+    const { chainRooms, chainById } = await import('../../src/core/dungeon/pseudo');
+    const ids = chainRooms(content, chainById('ps_fa_exhibition')!).map((r) => r.event);
+    for (const id of ['story-tour-opening', 'story-tour-semi', 'story-tour-final']) expect(ids).toContain(id);
+  });
 });

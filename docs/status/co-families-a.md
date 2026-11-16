@@ -57,7 +57,7 @@ Every row was re-read against its doc section after building (date = the re-read
 | `galar-kubfu-disciple` | STORY_FAMILIES_4 SF27.1 The Cub | pending |
 | `galar-kubfu-tower` | STORY_FAMILIES_4 SF27.2 The Two Towers | pending |
 | `world-disaster-blizzard` | STORY_FAMILIES_1 SF1.5 The Fifth Strand: Wildfire / Quake / Blizzard | built, re-read 2026-11-15 |
-| `world-disaster-flood` | STORY_FAMILIES_1 SF1.2 Report: The Flood | merged into `crisis-report-flood`, re-read 2026-11-15 |
+| `world-disaster-flood` | STORY_FAMILIES_1 SF1.2 Report: The Flood | merged into `crisis-report-flood`, re-read 2026-11-16 |
 | `world-disaster-quake` | STORY_FAMILIES_1 SF1.5 The Fifth Strand: Wildfire / Quake / Blizzard | built, re-read 2026-11-15 |
 | `world-egg-delivery` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |
 | `wx-ancient-lava-tube` | STORY_FAMILIES_7 The rule | pending |
@@ -151,8 +151,8 @@ Every row was re-read against its doc section after building (date = the re-read
 | `stray-kitten` | STORY_FAMILIES_7 SF47.5 The Stray ( | pending |
 | `stuck-pokemon` | STORY_FAMILIES_7 SF47.6 Stuck in the Fence ( | pending |
 | `blessing-trial` | STORY_FAMILIES_2 STORY FAMILIES, PART 2 | built, re-read 2026-11-15 |
-| `blissful-awakening` | STORY_FAMILIES_2 SF9 The Blissful Sanctuary | merged into `legendary-blessing`, re-read 2026-11-15 |
-| `blissful-encounter` | STORY_FAMILIES_2 SF9 The Blissful Sanctuary | merged into `hurt-wanderer`, re-read 2026-11-15 |
+| `blissful-awakening` | STORY_FAMILIES_2 SF9 The Blissful Sanctuary | merged into `legendary-blessing`, re-read 2026-11-16 |
+| `blissful-encounter` | STORY_FAMILIES_2 SF9 The Blissful Sanctuary | merged into `hurt-wanderer`, re-read 2026-11-16 |
 | `companion-meet` | STORY_FAMILIES_2 STORY FAMILIES, PART 2 | built, re-read 2026-11-15 |
 | `companion-one` | STORY_FAMILIES_2 STORY FAMILIES, PART 2 | built, re-read 2026-11-15 |
 | `companion-three` | STORY_FAMILIES_2 STORY FAMILIES, PART 2 | built, re-read 2026-11-15 |
@@ -170,32 +170,32 @@ Every row was re-read against its doc section after building (date = the re-read
 | `mudslide-rescue` | STORY_FAMILIES_1 STORY FAMILIES, PART 1 | built, re-read 2026-11-15 |
 | `r137-ghostly-fog-bank` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |
 | `sanctuary-attack` | STORY_FAMILIES_2 STORY FAMILIES, PART 2 | built, re-read 2026-11-15 |
-| `sanctuary-found` | STORY_FAMILIES_2 SF9 The Blissful Sanctuary | merged into `wanderer-arrives`, re-read 2026-11-15 |
-| `sanctuary-guardian` | STORY_FAMILIES_2 SF9 The Blissful Sanctuary | merged into `blessing-trial`, re-read 2026-11-15 |
+| `sanctuary-found` | STORY_FAMILIES_2 SF9 The Blissful Sanctuary | merged into `wanderer-arrives`, re-read 2026-11-16 |
+| `sanctuary-guardian` | STORY_FAMILIES_2 SF9 The Blissful Sanctuary | merged into `blessing-trial`, re-read 2026-11-16 |
 | `wanderer-arrives` | STORY_FAMILIES_2 STORY FAMILIES, PART 2 | built, re-read 2026-11-15 |
 | `mr-spirit-cache` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |
 | `mr-spirit-guide` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |
-| `mr-vanished-village` | STORY_FAMILIES_2 STORY FAMILIES, PART 2 | merged into `ghost-town-gate`, re-read 2026-11-15 |
-| `battle-tower-floor` | STORY_FAMILIES_3 The rungs | pending |
-| `beauty-pageant` | STORY_FAMILIES_3 SF14.2 Your Lead Is Entered! | pending |
-| `champion-cup` | STORY_FAMILIES_3 The rungs | pending |
+| `mr-vanished-village` | STORY_FAMILIES_2 STORY FAMILIES, PART 2 | merged into `ghost-town-gate`, re-read 2026-11-16 |
+| `battle-tower-floor` | STORY_FAMILIES_3 The rungs | built, re-read 2026-11-16 |
+| `beauty-pageant` | STORY_FAMILIES_3 SF14.2 Your Lead Is Entered! | built, re-read 2026-11-16 |
+| `champion-cup` | STORY_FAMILIES_3 The rungs | built, re-read 2026-11-16 |
 | `chefs-cook-off-battle` | STORY_FAMILIES_4 SF22.5 Beat Me and Eat | pending |
-| `contest-hall` | STORY_FAMILIES_3 SF14.1 Beauty, Cool or Cute? | pending |
-| `contest-judges-challenge` | STORY_FAMILIES_3 SF14.3 Style, Not Just Strength | pending |
-| `ev-trainer-tournament` | STORY_FAMILIES_3 The rungs | pending |
-| `fan-club-tournament` | STORY_FAMILIES_3 The rungs | pending |
-| `ranked-ladder-1` | STORY_FAMILIES_3 The rungs | pending |
-| `ranked-ladder-2` | STORY_FAMILIES_3 The rungs | pending |
-| `ranked-ladder-3` | STORY_FAMILIES_3 The rungs | pending |
-| `story-tour-final` | STORY_FAMILIES_3 SF13.10 Of Course It's You | pending |
-| `story-tour-opening` | STORY_FAMILIES_3 SF13.8 Round of Eight | pending |
-| `story-tour-registration` | STORY_FAMILIES_3 SF13.7 The Exhibition Bracket: Registration | pending |
-| `story-tour-semi` | STORY_FAMILIES_3 SF13.9 The Lights Die | pending |
-| `tournament-entry` | STORY_FAMILIES_3 SF13.12 The Rival Circuit | pending |
-| `tournament-final` | STORY_FAMILIES_3 SF13.15 The Final | pending |
-| `tournament-quarter` | STORY_FAMILIES_3 SF13.13 Quarterfinal | pending |
-| `tournament-semi` | STORY_FAMILIES_3 SF13.14 Semifinal | pending |
-| `contest-pass-hall` | STORY_FAMILIES_3 SF14.4 The Super Contest | pending |
+| `contest-hall` | STORY_FAMILIES_3 SF14.1 Beauty, Cool or Cute? | built, re-read 2026-11-16 |
+| `contest-judges-challenge` | STORY_FAMILIES_3 SF14.3 Style, Not Just Strength | built, re-read 2026-11-16 |
+| `ev-trainer-tournament` | STORY_FAMILIES_3 The rungs | built, re-read 2026-11-16 |
+| `fan-club-tournament` | STORY_FAMILIES_3 The rungs | built, re-read 2026-11-16 |
+| `ranked-ladder-1` | STORY_FAMILIES_3 The rungs | built, re-read 2026-11-16 |
+| `ranked-ladder-2` | STORY_FAMILIES_3 The rungs | built, re-read 2026-11-16 |
+| `ranked-ladder-3` | STORY_FAMILIES_3 The rungs | built, re-read 2026-11-16 |
+| `story-tour-final` | STORY_FAMILIES_3 SF13.10 Of Course It's You | built, re-read 2026-11-16 |
+| `story-tour-opening` | STORY_FAMILIES_3 SF13.8 Round of Eight | built, re-read 2026-11-16 |
+| `story-tour-registration` | STORY_FAMILIES_3 SF13.7 The Exhibition Bracket: Registration | built, re-read 2026-11-16 |
+| `story-tour-semi` | STORY_FAMILIES_3 SF13.9 The Lights Die | built, re-read 2026-11-16 |
+| `tournament-entry` | STORY_FAMILIES_3 SF13.12 The Rival Circuit | built, re-read 2026-11-16 |
+| `tournament-final` | STORY_FAMILIES_3 SF13.15 The Final | built, re-read 2026-11-16 |
+| `tournament-quarter` | STORY_FAMILIES_3 SF13.13 Quarterfinal | built, re-read 2026-11-16 |
+| `tournament-semi` | STORY_FAMILIES_3 SF13.14 Semifinal | built, re-read 2026-11-16 |
+| `contest-pass-hall` | STORY_FAMILIES_3 SF14.4 The Super Contest | built, re-read 2026-11-16 |
 | `wm-1` | STORY_FAMILIES_1 SF5.2 The Squeaky Cart | built, re-read 2026-11-15 |
 | `wm-2` | STORY_FAMILIES_1 SF5.2 The Squeaky Cart | built, re-read 2026-11-15 |
 | `wm-3` | STORY_FAMILIES_1 SF5.4 The Rare Box | built, re-read 2026-11-15 |
@@ -239,7 +239,7 @@ Every row was re-read against its doc section after building (date = the re-read
 | `starter-tide-pool` | STORY_FAMILIES_4 SF21.5 The Tide Pool | pending |
 | `rk-hidden-quest` | STORY_FAMILIES_4 SF20.1 A Secret Errand | pending |
 | `rk-hidden-quest-payoff` | STORY_FAMILIES_4 SF20.2 Kept Your Eyes Open | pending |
-| `rk-third-wheel` | STORY_FAMILIES_2 STORY FAMILIES, PART 2 | merged into `companion-meet`, re-read 2026-11-15 |
+| `rk-third-wheel` | STORY_FAMILIES_2 STORY FAMILIES, PART 2 | merged into `companion-meet`, re-read 2026-11-16 |
 | `charity-drive` | STORY_FAMILIES_7 SF43.12 The Orphanage Stall ( | pending |
 | `charity-favor` | STORY_FAMILIES_7 SF43.14 The Favour Returned ( | pending |
 | `cooking-draft` | STORY_FAMILIES_4 SF22.6 The Draft | pending |

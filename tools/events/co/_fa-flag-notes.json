@@ -33,5 +33,17 @@
  "zygarde-cells": "Zygarde Cells found this run (SF11 Zygarde Cell rule): read by legends L11 Life and Destruction (its third legend needs Cells).",
  "reported-crime": "Shared registry flag (families-c, FAMILIES_C_PIECES section 5).",
  "vale-freed": "Hollow Vale freed (SF12): read by GL9's old man Harrow (people), who names the flood.",
- "vale-*": "Hollow Vale (SF12): what the player saw and chose, kept for the run's chronicle."
+ "vale-*": "Hollow Vale (SF12): what the player saw and chose, kept for the run's chronicle.",
+ "circuit-*": "SF13 Circuit record flags (which rung match, how it was played). Kept in the run log for the update notes and later scenes; the Circuit's own climb is the R1 board (circuit-rung).",
+ "circuit-entered": "Set by the rivals row's R1 sign-up (rivals-1.ts, rq-circuit-sign / rq-circuit-late). The Circuit rung events need it.",
+ "exhibit-*": "SF13.7-13.10 Exhibition Bracket record flags (ps_fa_exhibition). Kept for the run log.",
+ "rcircuit-*": "SF13.12-13.15 Rival Circuit record flags; the bracket itself runs on the tournament round tracker.",
+ "contest-*": "SF14 Contest record flags (category, which contest was played). contest-ribbons opens the Grand Festival.",
+ "festival-*": "SF14.5 Grand Festival record flags (how it went).",
+ "fan-sash": "SF13.4 Fan Club sash (cosmetic): kept in the run log.",
+ "frontier-symbol": "SF13.6 Frontier Symbol (cosmetic): kept in the run log.",
+ "rep": "Reputation (shared with the rivals row, which sets and reads it the same way).",
+ "gl7-pell-helped": "Set by GL7 The Stolen Badge (past champions and leaders questlines) when the player helps Pell; until that row sets it, the Pell notice in ranked-ladder-1 stays hidden.",
+ "aq22-ribbon": "Set by AQ22 The Aipom Who Wanted Contests (anime/Ash row) when the Aipom wins its ribbon; until then the festival notice stays hidden.",
+ "roster-*-done": "Set by the people row's Road Roster kits (people-roster-*.ts, rosterKit) when a roster trainer's arc is done."
 }
