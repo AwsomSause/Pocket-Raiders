@@ -145,6 +145,15 @@
    "tint": "#5f7f6a",
    "mood": "giant island",
    "start": "opened"
+  },
+  {
+   "id": "ps_gn_forest",
+   "name": "The Forgotten Forest",
+   "entry": "gn-31-door",
+   "themeId": "grass-bug",
+   "tint": "#2f4a2a",
+   "mood": "ancient forest",
+   "start": "opened"
   }
  ]
 }

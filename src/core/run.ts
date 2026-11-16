@@ -4105,6 +4105,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   // gn.16: the tournament final paused for the last exchange (the win effects read this flag).
   if (battle.event && battle.eventRule?.gn === 'final') run.story.flags['ev:tc-last-exchange'] = battle.storyEffects.includes('gn-last-exchange') ? 1 : 0;
   // The Lush Jungle (gn.20): a knockout on either side, the player's or the wild one's, and the canopy village pulls its ladder up.
+  // The Forgotten Forest (gn.31): a wild Pokémon knocked out (not caught, calmed or fled from). Nothing in the game says so.
+  if (battle.event && battle.eventRule?.gn === 'forest' && battle.enemyTeam.some((m) => m.hp <= 0)) run.story.flags['ev:forest-harmed'] = 1;
   if (battle.event && battle.eventRule?.gn === 'jungle') {
     const down = (battle.storyEffects.find((x) => x.startsWith('gn-jungle-down:')) ?? 'gn-jungle-down:').slice('gn-jungle-down:'.length).split(',');
     if (battle.enemyTeam.some((m) => m.hp <= 0) || run.party.some((m) => m.hp <= 0 && !down.includes(m.uid))) run.story.flags['ev:jungle-harmed'] = 1;

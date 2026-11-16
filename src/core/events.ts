@@ -1692,7 +1692,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
       const starter = e.starterType ? (run.party.find((m) => m.uid === run.log.starterUid) ?? run.party[0]) : undefined;
       const types = starter ? [getSpecies(content, starter.speciesId).types[0]!] : e.types;
-      const speciesId = (e.recall ? oldFoe(run) : null) ?? pickSpecies(content, run, e.species, types, rng, 'reward');
+      const speciesId = (e.recall ? oldFoe(run) : null) ?? pickSpecies(content, run, e.species, types, rng, 'reward', e.rarer);
       // No event lifts the party's level cap (Balancing Phase 7).
       const level = e.level ?? Math.max(1, Math.min(runLevelCap(content, run), Math.round((eventLevel(content, run, node, rng) + e.levelBonus) * (e.levelShare ?? 1))));
       const mon = newMon(content, run, e.level || e.asIs || e.alpha ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'p');
@@ -2112,7 +2112,7 @@ type EventBattleRef = NonNullable<NonNullable<RunState['battle']>['event']>;
  * list (or a Bell's favoured legendary) is an authored exception and only logged; otherwise the pool
  * is gated by availability at the stage's curve level and each draw is validated like a wild one.
  */
-function pickSpecies(content: Content, run: RunState, species: string[], types: TypeName[], rng: Rng, source: EncounterSource = 'event'): string {
+function pickSpecies(content: Content, run: RunState, species: string[], types: TypeName[], rng: Rng, source: EncounterSource = 'event', rarer = false): string {
   const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current);
   const gate = node ? curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage!.index, node.column)) : 1;
   // Greenneedle: `@name` is a story Pokémon cast earlier in the run (gn op `cast`).
@@ -2125,7 +2125,9 @@ function pickSpecies(content: Content, run: RunState, species: string[], types: 
     return authored;
   }
   const theme = getTheme(content, run.stage!.themeId);
-  const pool = typesPool(content, types.length > 0 ? types : theme.types, run.regionOrder[run.regionIndex], gate).map((p) => ({ item: p.speciesId, weight: p.weight }));
+  const all = typesPool(content, types.length > 0 ? types : theme.types, run.regionOrder[run.regionIndex], gate).map((p) => ({ item: p.speciesId, weight: p.weight }));
+  // Greenneedle gn.31: the rarer half (the lower weights; ties keep the pool's order).
+  const pool = rarer && all.length > 1 ? [...all].sort((a, b) => a.weight - b.weight).slice(0, Math.ceil(all.length / 2)) : all;
   return directSpecies(content, { source, level: gate, cap: levelCap(content, run.regionIndex), draw: () => rng.weighted(pool) }).speciesId;
 }
 

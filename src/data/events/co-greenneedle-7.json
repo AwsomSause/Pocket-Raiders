@@ -1,0 +1,1261 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-31-door",
+   "name": "The Forgotten Forest",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "grass"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "forest-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "forest-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "oddish",
+    "tint": "#2f4a2a",
+    "effect": "none"
+   },
+   "intro": "A gap between two trees. It wasn't there on the way in. You're sure of it.\n\nThe light through it is older, somehow. Greener. Nothing on the far side has ever been cut.",
+   "choices": [
+    {
+     "label": "Step through the gap.",
+     "success": {
+      "text": "The air changes. It smells of moss and rain that fell a hundred years ago.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "forest-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "forest-harmed",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "forest-slabs",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "forest-beside",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "safari-quiet",
+          "atLeast": 7,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "jungle-village",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "forest-beside",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "forest-planted",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "garden-planted",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "pink-stone-planted",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "forest-planted",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-31-gap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "When you look back, it's only two trees, close together, the way they always were.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-gap",
+   "name": "The Forgotten Forest: The Gap",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "oddish",
+    "tint": "#2f4a2a",
+    "effect": "none"
+   },
+   "intro": "Two trees lean apart. In here the light is older.\n\nNobody's cut anything here, or caught anything, or lit a fire. Not for centuries.\n\n*Your lead stops, and sniffs, and steps very carefully. Birds you don't know are singing.*",
+   "choices": [
+    {
+     "label": "Follow your lead in.",
+     "success": {
+      "text": "It goes slowly. So do you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-31-street"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-street",
+   "name": "The Forgotten Forest: The Hollow Street",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "silent",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-harmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's very quiet. The birdsong stopped a while ago, and hasn't come back.*"
+    },
+    {
+     "id": "beside",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-beside",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Two Oddish and a Sewaddle fall in beside you, as if you'd been expected.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "pumpkaboo",
+    "tint": "#2f4a2a",
+    "effect": "none"
+   },
+   "intro": "A row of trees with rooms in them. A doorway in each trunk, a shelf, a hearth gone cold.\n\nSomebody small lived here. Not people.\n\nWild Pokémon sit in the doorways, watching you pass. They aren't afraid. They've never needed to be.",
+   "choices": [
+    {
+     "label": "Look inside one.",
+     "success": {
+      "text": "A shelf of acorns. A bed of moss, pressed flat by something that slept here a long time.\n\nA small carved figure: something with wings and a leaf. It's been dusted. Recently.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "forest-looked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-31-street"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "forest-looked",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The doorways watch you to the end of the row.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-31-stones"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-stones",
+   "name": "The Forgotten Forest: The Carved Stones",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "silent",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-harmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's very quiet. The birdsong stopped a while ago, and hasn't come back.*"
+    },
+    {
+     "id": "beside",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-beside",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Two Oddish and a Sewaddle fall in beside you, as if you'd been expected.*"
+    },
+    {
+     "id": "all-read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-slabs",
+       "atLeast": 4,
+       "atMost": 99
+      }
+     ],
+     "notice": "*You've read all four. The last one stays with you.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bronzor",
+    "tint": "#2f4a2a",
+    "effect": "none"
+   },
+   "intro": "Ruins, half swallowed by roots. Four stone slabs stand in a row, carved deep and worn soft.\n\nThey show migrations that don't happen any more.",
+   "choices": [
+    {
+     "label": "Read the next slab.",
+     "success": {
+      "text": "You brush the moss from the next slab, and read it with your fingers as much as your eyes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "forest-slabs",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "The first slab: many Pokémon, of every kind, walking in a line toward a great tree. Some carry their young on their backs."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "forest-slabs",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "The second slab: the tree, with a small winged shape in its branches. The sun is behind it, carved as a ring of points."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "forest-slabs",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "The third slab: people, at the forest's edge, with their hands up, palms out. Not coming in. Just letting the forest see them."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "forest-slabs",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "The fourth slab: the tree alone. The line of Pokémon is gone. A single tall figure with one eye stands in front of it."
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "forest-slab-3",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "forest-slabs",
+          "atLeast": 2,
+          "atMost": 2
+         },
+         {
+          "kind": "flag",
+          "key": "village-kept-secret",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "forest-slab-3",
+        "min": 1,
+        "then": [],
+        "text": "*You've seen that gesture before: carved on the post outside the Hidden Village.*"
+       },
+       {
+        "kind": "flag",
+        "key": "forest-slabs",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-31-stones"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "forest-slabs",
+       "atLeast": 0,
+       "atMost": 3
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Moss closes over the carvings behind you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-31-colony"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-colony",
+   "name": "The Forgotten Forest: The Colony Roads",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "silent",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-harmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's very quiet. The birdsong stopped a while ago, and hasn't come back.*"
+    },
+    {
+     "id": "beside",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-beside",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Two Oddish and a Sewaddle fall in beside you, as if you'd been expected.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sewaddle",
+    "tint": "#2f4a2a",
+    "effect": "none"
+   },
+   "intro": "A Bug colony's paths cross yours, worn deep into the roots by more feet than you can count. They have right of way.\n\n*A line of Sewaddle, each carrying a leaf, goes by. It goes by for a very long time.*",
+   "choices": [
+    {
+     "label": "Wait for the line to pass.",
+     "success": {
+      "text": "You wait. The last Sewaddle looks up as it passes, and seems to nod.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-31-clearing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Step through it.",
+     "success": {
+      "text": "The line breaks around you. Three of them turn.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 3,
+       "species": [
+        "sewaddle",
+        "swadloon",
+        "leavanny"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-31-clearing"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-31-clearing"
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "gn": "forest"
+       },
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-31-clearing"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-clearing",
+   "name": "The Forgotten Forest: A Clearing",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "silent",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-harmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's very quiet. The birdsong stopped a while ago, and hasn't come back.*"
+    },
+    {
+     "id": "beside",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-beside",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Two Oddish and a Sewaddle fall in beside you, as if you'd been expected.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "shroomish",
+    "tint": "#2f4a2a",
+    "effect": "none"
+   },
+   "intro": "A clearing the map didn't show. Grass. A ring of mushrooms.\n\nThe quiet is different here. Like a room somebody has only just left.",
+   "choices": [
+    {
+     "label": "Cross the clearing.",
+     "success": {
+      "text": "You go softly, round the ring and not through it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "forest-celebi",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "forest-koko",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "forest-celebi",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "forest-sighting-celebi",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "telling-celebi",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "In the Forgotten Forest, something green went round a trunk, and came back a moment before it left.",
+          "importance": 85
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "forest-harmed",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "flag",
+            "key": "forest-shiny-celebi",
+            "amount": 1
+           }
+          ],
+          "text": "*It wasn't green. It was pink. It looked at you as if it already knew you.*"
+         }
+        ],
+        "text": "*Something green goes round a trunk. It comes back round the other side, a moment before it left.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "forest-koko",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "forest-sighting-koko",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "sign-tapu-koko",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "In the Forgotten Forest, a shell of yellow opened, and looked at you, and was gone.",
+          "importance": 85
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "forest-harmed",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "flag",
+            "key": "forest-shiny-koko",
+            "amount": 1
+           }
+          ],
+          "text": "*Its colours were wrong: darker, richer. The rare kind. The air still hums where it was.*"
+         }
+        ],
+        "text": "*A crack of yellow between the trees. Two halves of a shell close, and open, and it's looking at you, and it's gone.*"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "forest-sighting-none",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "forest-celebi",
+          "atLeast": 0,
+          "atMost": 0
+         },
+         {
+          "kind": "flag",
+          "key": "forest-koko",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "forest-sighting-none",
+        "min": 1,
+        "then": [],
+        "text": "*The mushrooms have been stepped over, recently, by something light.*"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "forest-knows",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "forest-slabs",
+          "atLeast": 4,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "village-kept-secret",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "forest-knows",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-31-tree"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-tree",
+   "name": "The Forgotten Forest: The Sacred Tree",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "village",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-harmed",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "village-kept-secret",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It looks at your hands, then at your face. It knows the gesture before you make it.*"
+    },
+    {
+     "id": "silent",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-harmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's very quiet. The birdsong stopped a while ago, and hasn't come back.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "trevenant",
+    "tint": "#2f4a2a",
+    "effect": "none"
+   },
+   "intro": "A tree so old it's mostly hollow, and still in leaf.\n\n*In front of it, something that looks like another tree, until its one eye opens.*\n\nAn ancient Trevenant. It doesn't speak. It looks at your hands.",
+   "choices": [
+    {
+     "label": "Stand still, and let it look.",
+     "success": {
+      "text": "It looks for a long time. Longer than you've been alive, maybe.\n\nThen it moves aside, slowly, the way old trees move. Birds land on it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "forest-trevenant",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "forest-trevenant-passed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-31-nest"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "forest-harmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Put my hands up, palms out.",
+     "success": {
+      "text": "It considers. The forest holds its breath.\n\nThen it lets you come as far as the roots, and no farther.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "forest-trevenant",
+        "n": 2
+       },
+       {
+        "kind": "flag",
+        "key": "forest-trevenant-roots",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-31-roots"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "forest-harmed",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "forest-knows",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It doesn't make a sound. The ground does.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "trevenant"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "miracle-seed",
+         "count": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "forest-trevenant",
+         "n": 3
+        },
+        {
+         "kind": "flag",
+         "key": "forest-trevenant-fought",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "forest-silent"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "forest-harmed",
+         "min": 1,
+         "then": [],
+         "text": "The birdsong doesn't come back. Not here, and not anywhere else in this region."
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "forest-harmless",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "forest-harmed",
+           "atLeast": 0,
+           "atMost": 0
+          }
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "forest-done",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ],
+       "exact": true,
+       "foeMoves": [
+        "forests-curse",
+        "wood-hammer",
+        "horn-leech",
+        "will-o-wisp"
+       ],
+       "rule": {
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "forest-trevenant",
+         "n": 3
+        },
+        {
+         "kind": "flag",
+         "key": "forest-trevenant-fought",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "forest-harmless",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "forest-harmed",
+           "atLeast": 0,
+           "atMost": 0
+          }
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "forest-done",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "forest-harmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-31-nest",
+   "name": "The Forgotten Forest: Inside the Tree",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "planted",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-planted",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Among the old leaves of the nest: the leaves of the Berry you planted. You'd know them anywhere.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "trevenant",
+    "tint": "#2f4a2a",
+    "effect": "none"
+   },
+   "intro": "Inside the tree: a nest, very old, lined with leaves that are still green.\n\n*In it, something asleep. It has been asleep a very long time.*",
+   "choices": [
+    {
+     "label": "Wake it gently.",
+     "success": {
+      "text": "It opens its eyes, and looks at you, and decides.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "forest-gift",
+        "weights": [
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "forest-gift",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [],
+          "types": [
+           "grass"
+          ],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "rarer": true,
+          "ability": "old-growth",
+          "marks": [
+           "ancient, from the Forgotten Forest"
+          ]
+         }
+        ],
+        "text": "Old Growth: it mends a little every turn, in any weather."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "forest-gift",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [],
+          "types": [
+           "grass"
+          ],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "rarer": true,
+          "ability": "deep-roots",
+          "marks": [
+           "ancient, from the Forgotten Forest"
+          ]
+         }
+        ],
+        "text": "Deep Roots: nothing can make it leave a fight, and it shrugs off the worst hits."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "forest-gift",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [],
+          "types": [
+           "grass"
+          ],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "rarer": true,
+          "ability": "forests-memory",
+          "marks": [
+           "ancient, from the Forgotten Forest"
+          ]
+         }
+        ],
+        "text": "Forest's Memory: the first sleep, poison or paralysis of each battle doesn't take."
+       },
+       {
+        "kind": "moment",
+        "text": "Something old woke up in the Forgotten Forest, and came with you.",
+        "importance": 90
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "forest-harmless",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "forest-harmed",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "forest-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-roots",
+   "name": "The Forgotten Forest: The Roots",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "planted",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-planted",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Among the old leaves of the nest: the leaves of the Berry you planted. You'd know them anywhere.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "trevenant",
+    "tint": "#2f4a2a",
+    "effect": "none"
+   },
+   "intro": "At the roots, the Trevenant stops you with one branch.\n\nBelow it, in a hollow, something stirs, and climbs out to you, blinking.",
+   "choices": [
+    {
+     "label": "Kneel down to it.",
+     "success": {
+      "text": "The Trevenant watches you both. It doesn't move until you're gone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "forest-gift",
+        "weights": [
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "forest-gift",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [],
+          "types": [
+           "grass"
+          ],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "rarer": true,
+          "ability": "old-growth",
+          "marks": [
+           "ancient, from the Forgotten Forest"
+          ]
+         }
+        ],
+        "text": "Old Growth: it mends a little every turn, in any weather."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "forest-gift",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [],
+          "types": [
+           "grass"
+          ],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "rarer": true,
+          "ability": "deep-roots",
+          "marks": [
+           "ancient, from the Forgotten Forest"
+          ]
+         }
+        ],
+        "text": "Deep Roots: nothing can make it leave a fight, and it shrugs off the worst hits."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "forest-gift",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [],
+          "types": [
+           "grass"
+          ],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "rarer": true,
+          "ability": "forests-memory",
+          "marks": [
+           "ancient, from the Forgotten Forest"
+          ]
+         }
+        ],
+        "text": "Forest's Memory: the first sleep, poison or paralysis of each battle doesn't take."
+       },
+       {
+        "kind": "moment",
+        "text": "Something old woke up in the Forgotten Forest, and came with you.",
+        "importance": 90
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "forest-harmless",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "forest-harmed",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "forest-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

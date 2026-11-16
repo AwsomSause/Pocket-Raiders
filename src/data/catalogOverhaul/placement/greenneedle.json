@@ -1809,5 +1809,32 @@
    "Hub Destination"
   ],
   "tags": []
+ },
+ "gn-31-door": {
+  "gn": "gn.31",
+  "shape": "Door",
+  "earliest": "A8",
+  "home": 12,
+  "window": [
+   10,
+   15
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A+0; the Trevenant A+2",
+  "often": "run",
+  "badge": "?",
+  "dressing": {
+   "kanto": "A gap in Viridian Forest",
+   "elsewhere": "A gap between two trees"
+  },
+  "note": "Badge: a \"?\". Six nodes. A side branch from step 12: a gap between two trees that wasn't there on the way in.",
+  "kinds": [
+   "Pseudo Stage",
+   "Legendary"
+  ],
+  "tags": [
+   "forest"
+  ]
  }
 }

@@ -4418,6 +4418,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (user.side === 'player') final *= resonanceMultiplier(content, ctx.party, moveType);
       final *= curseMultiplier(content, target.vol.curseTag, moveType);
       if (effectiveness > 1 && (foeAbility === 'filter' || foeAbility === 'solid-rock' || foeAbility === 'prism-armor')) final *= 0.75;
+      if (effectiveness > 1 && foeAbility === 'deep-roots') final *= 0.9;
       if ((foeAbility === 'multiscale' || foeAbility === 'shadow-shield') && target.mon.hp >= targetStats.hp) final *= 0.5;
       if (!crit) {
         const tfx = ctx.battle.sideEffects[target.side];
@@ -5139,6 +5140,11 @@ function forceOut(ctx: BattleContext, target: Combatant, events: BattleEvent[]):
   const { battle, rng } = ctx;
   if (target.mon.hp <= 0 || target.mon.dynamaxed) return;
   if (variantBlocksForcedSwitch(battle.extra.variants, target.mon.uid)) return;
+  // Greenneedle gn.31: Deep Roots can't be forced out.
+  if (abilityIn(ctx, target) === 'deep-roots') {
+    announce(target, 'deep-roots', events);
+    return;
+  }
   if (target.side === 'enemy') {
     if (battle.kind !== 'trainer') return;
     const onField = fieldIndexes(battle, 'enemy');
@@ -6626,6 +6632,11 @@ function statusAbilityBlock(ctx: BattleContext, source: Combatant, target: Comba
   const ability = targetAbility(ctx, source, target);
   if (!ability) return null;
   if (STATUS_IMMUNE[ability]?.includes(status)) return ability;
+  // Greenneedle gn.31: Forest's Memory turns away the first sleep, poison or paralysis of each battle (used up when it does).
+  if (ability === 'forests-memory' && (status === 'slp' || status === 'psn' || status === 'par') && !ctx.battle.storyEffects.includes(`forests-memory:${target.mon.uid}`)) {
+    ctx.battle.storyEffects.push(`forests-memory:${target.mon.uid}`);
+    return ability;
+  }
   if (ability === 'leaf-guard' && weatherNow(ctx) === 'sun') return ability;
   if (ability === 'shields-down' && target.mon.hp * 2 > calcStats(ctx.content, target.mon).hp) return ability;
   return veilBlock(ctx, source, target, status, ability);
@@ -7013,6 +7024,13 @@ function applyResidual(ctx: BattleContext, c: Combatant, other: Combatant, event
   const ability = abilityIn(ctx, c);
   if (ability === 'poison-heal' && c.mon.status?.id === 'psn' && c.mon.hp > 0 && c.mon.hp < max) {
     const amount = Math.min(max - c.mon.hp, Math.max(1, Math.floor(max / 8)));
+    announce(c, ability, events);
+    c.mon.hp += amount;
+    events.push({ type: 'heal', side: c.side, amount, hpAfter: c.mon.hp });
+  }
+  // Greenneedle gn.31: Old Growth restores 1/16 HP each turn, in any weather.
+  if (ability === 'old-growth' && c.mon.hp > 0 && c.mon.hp < max) {
+    const amount = Math.min(max - c.mon.hp, Math.max(1, Math.floor(max / 16)));
     announce(c, ability, events);
     c.mon.hp += amount;
     events.push({ type: 'heal', side: c.side, amount, hpAfter: c.mon.hp });

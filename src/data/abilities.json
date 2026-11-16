@@ -1590,6 +1590,21 @@
   "description": "When a critical hit or a super-effective move hits it, its Sp. Atk rises by one stage. Up to twice a battle."
  },
  {
+  "id": "old-growth",
+  "name": "Old Growth",
+  "description": "It restores 1/16 of its max HP at the end of each turn, in any weather."
+ },
+ {
+  "id": "deep-roots",
+  "name": "Deep Roots",
+  "description": "It can't be forced to switch out, and it takes 10% less damage from super-effective hits."
+ },
+ {
+  "id": "forests-memory",
+  "name": "Forest's Memory",
+  "description": "The first time each battle that it would be put to sleep, poisoned or paralysed, it isn't."
+ },
+ {
   "id": "truce",
   "name": "Truce",
   "description": "Paired: works while its partner with Truce is next to it in the party. In a double battle, each takes 25% less damage from moves that hit both. In a single battle, when one faints, the other gains Attack +1 and Speed +1 when it comes in. Once per battle."
