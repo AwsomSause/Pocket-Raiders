@@ -17,6 +17,7 @@
 // Costar, Receiver, Power of Alchemy, Commander, Dancer, Symbiosis; the
 // damage and status ones are in engine.ts). Uses only the battle stream.
 
+import { callNote } from '../greenneedle/cheer';
 import targetsJson from '../../data/moveTargets.json';
 import type { BoostStat, Move } from '../contentSchema';
 import { abilityOf, calcStats, getSpecies } from '../pokemon';
@@ -845,6 +846,8 @@ function runPlanned(ctx: BattleContext, field: Field, turn: TurnState, p: Planne
   // Dancer: other dancers copy a dance move that worked.
   const used = events.slice(mark).some((e) => e.type === 'move' && e.side === user.side && e.moveId === move.id);
   if (used && DANCES.has(move.id)) dancers(ctx, field, turn, user, move, events);
+  // Call and Response (gn.new.30): a status move from one of the pair gives the other +1 priority next turn.
+  if (used && user.side === 'player') callNote(ctx.battle, user.mon, field.alive('player').find((c) => c !== user)?.mon, move.category === 'status');
   symbiosis(ctx, field, heldBefore, events);
   field.on(user, events);
 }

@@ -31,6 +31,10 @@
  },
  "flags": [
   {
+   "key": "cheer-rival-used",
+   "rule": "core/greenneedle/cheer.ts (gn.new.30: the one left on the road cheers for the rival once)"
+  },
+  {
    "key": "safari-photo-best",
    "rule": "core/greenneedle/safariEnd.ts (gn.18 Safari Land)"
   },
