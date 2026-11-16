@@ -2759,5 +2759,67 @@
    "Mystery Episode"
   ],
   "tags": []
+ },
+ "gn-new-28-bridge": {
+  "gn": "gn.new.28",
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 13,
+  "window": [
+   10,
+   17
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "level": "A+0, A+0, A+1",
+  "often": "run",
+  "badge": "own",
+  "note": "Badge: a bridge. Side branch of step 13, at night; fallback step 17, optional. Three fights or one break-out. Once per run. Rope-a-Dope is built as Counter (no such move).",
+  "kinds": [
+   "Companion Story"
+  ],
+  "tags": [
+   "city"
+  ]
+ },
+ "gn-new-28-recruiter": {
+  "gn": "gn.new.28",
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 8,
+  "window": [
+   2,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "A+1",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: only after the cages were opened, a later stage of the same run.",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-new-28-dojo": {
+  "gn": "gn.new.28",
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 8,
+  "window": [
+   2,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: only after the cages were opened, a later stage of the same run (the doc: a later region).",
+  "kinds": [
+   "Companion Story"
+  ],
+  "tags": []
  }
 }
