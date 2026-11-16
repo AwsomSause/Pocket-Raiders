@@ -136,7 +136,9 @@ describe('Champion defense', () => {
     expect(eligibleEvents(content, { ...none, regionIndex: 3 }).map((e) => e.id)).not.toContain('champion-defense');
     const won = make(content, { runId: 'cd-1', seed: 'cd-1', archetypeId: 'red', runHistory: [rec(false, 'rattata'), rec(true, 'pikachu'), rec(true, 'charmander')] });
     expect(championTeam(won.story)).toEqual([{ speciesId: 'pikachu', level: 60 }]);
-    expect(eligibleEvents(content, { ...won, regionIndex: 3 }).map((e) => e.id)).toContain('champion-defense');
+    // Catalog batch 5: the Hall reads THIS run's frames only (run memory rule); an earlier run's win no longer opens it.
+    // The same-run version is covered in coPastAllies.test.ts.
+    expect(eligibleEvents(content, { ...won, regionIndex: 3 }).map((e) => e.id)).not.toContain('champion-defense');
   });
 });
 
@@ -150,7 +152,8 @@ describe('Retired team', () => {
     expect(eligibleEvents(content, { ...none, regionIndex: 3 }).map((e) => e.id)).not.toContain('retired-team');
     const lost = make(content, { runId: 'rt-1', seed: 'rt-1', archetypeId: 'red', runHistory: [rec(false, 'rattata'), rec(true, 'pikachu'), rec(false, 'charmander')] });
     expect(retiredTeam(lost.story)).toEqual([{ speciesId: 'rattata', level: 40 }]);
-    expect(eligibleEvents(content, { ...lost, regionIndex: 3 }).map((e) => e.id)).toContain('retired-team');
+    // Catalog batch 5: same-run only; the team that fell is this run's lost big battle (coPastAllies.test.ts).
+    expect(eligibleEvents(content, { ...lost, regionIndex: 3 }).map((e) => e.id)).not.toContain('retired-team');
   });
 });
 

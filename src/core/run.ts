@@ -146,9 +146,10 @@ import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
 import { spendTakenNode } from './co/takeNode';
 import { partnerOwed, quietWildWeight, spendPartner } from './co/neRules';
+import { clearTagPartner, tagPartnerOf, tagPartnerRegion } from './co/pastAllies';
 import { quirkBadgeBond } from './co/quirks';
 import { attachBlocker, holdNodeBattle, releaseNodeBattle, takeNodeLevelShift } from './co/attach';
-import { addEventStops, placeEarnedCoBeats, stageNumber, BETRAYAL_FLAG, continueEventChain, eventBattleCaught, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
+import { addEventStops, boostStat, placeEarnedCoBeats, stageNumber, BETRAYAL_FLAG, continueEventChain, eventBattleCaught, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -2530,6 +2531,8 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       if (doublesOnly(run.rules) || new Rng(hashSeed(`${run.seed}::doubles::${run.regionIndex}::${stage.index}::${node.id}`)).chance(doublesCfg.chance)) makeDoubles(run.battle, run.party);
     }
     // Catalog Overhaul new events (tagPartner): a copy of your lead fights beside you in an ordinary trainer battle.
+    // PA5: a partner who stays "for the rest of the region" goes home when the region changes.
+    if (tagPartnerRegion(run) > 0 && tagPartnerRegion(run) !== run.regionIndex + 1) clearTagPartner(run);
     if (ordinary && !run.battle.doubles && team.length >= 2 && partnerOwed(run) > 0) joinTagPartner(content, run);
     if (trainingIndex >= 0) run.battle.drama.evolvable.push(team[trainingIndex]!.uid);
     if (rivalBack) {
@@ -4918,12 +4921,16 @@ function joinTagPartner(content: Content, run: RunState): void {
   const battle = run.battle!;
   const lead = run.party[battle.activeIndex];
   if (!lead) return;
-  const copy = newMon(content, run, lead.speciesId, lead.level, 'p');
-  copy.moves = lead.moves.map((m) => ({ id: m.id, pp: content.moves.get(m.id)?.pp ?? m.pp }));
+  // PAST ALLIES (PA5): a named partner brings their own Pokémon (at your lead's level) instead of a copy of your lead.
+  const named = tagPartnerOf(run);
+  const copy = newMon(content, run, named && content.species.has(named.species) ? named.species : lead.speciesId, lead.level, 'p');
+  if (!named) copy.moves = lead.moves.map((m) => ({ id: m.id, pp: content.moves.get(m.id)?.pp ?? m.pp }));
+  if (named?.boost) boostStat(content, copy, named.boost as 'atk' | 'def' | 'spa' | 'spd' | 'spe', 5, false);
   run.party.push(copy);
   makeDoubles(battle, run.party);
   battle.doubles!.player.index = run.party.length - 1;
   battle.participants = [lead.uid, copy.uid];
   battle.loaner = copy.uid;
   spendPartner(run);
+  if (named && partnerOwed(run) === 0) clearTagPartner(run, false);
 }

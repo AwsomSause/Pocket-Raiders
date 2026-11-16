@@ -13,6 +13,8 @@ import { LATER as LATER_PREFIX } from '../events/questline';
 import { MOMENT_MON_FLAG } from '../co/who';
 import type { Rival } from '../story/schema';
 import { rivalBond, type Bond } from './bond';
+import { bankPool, grudgeHeld, recOf, recordRivalMoment, scoutedMove, scoutedSpecies } from './rivalHooks';
+import type { BankContext } from '../rivals/bank';
 import type { BattleClass, DramaEvent } from './index';
 import { DRAMA, DRAMA_LIBRARY, pickIndex, type DeclarationStyle, type DialogueCategory, type DramaEventDef, type Tier, type Voice } from './schema';
 
@@ -162,7 +164,12 @@ export const CHECKS: Record<string, Check> = {
     const recalled = out?.type === 'switchOut' ? c.battle.enemyTeam.find((m) => m.uid === out.uid) : undefined;
     return i >= 0 && !c.events.some((e) => e.type === 'faint' && e.side === 'enemy') ? { at: i, vars: { who: recalled ? (c.content.species.get(recalled.speciesId)?.name ?? 'Pokémon') : c.enemyName } } : null;
   },
-  unfinishedGrudge: (c) => (c.rival && c.rival.encounters > 0 && c.rival.memory.lastBattle.result === 'win' && c.bond.strain >= 10 ? aceOut(c) : null),
+  unfinishedGrudge: (c) => {
+    if (!c.rival || c.rival.encounters === 0 || c.rival.memory.lastBattle.result !== 'win') return null;
+    // Batch 5: a rival the overhaul tracks holds the grudge by its axes and Marks; others by the old strain.
+    const rec = recOf(c.run, c.rival);
+    return (rec ? grudgeHeld(rec) : c.bond.strain >= 10) ? aceOut(c) : null;
+  },
   mercyMoment: (c) => {
     if (c.bond.affection < 40 || c.bond.strain >= 60) return null;
     const foe = c.foeMon;
@@ -218,14 +225,24 @@ export const CHECKS: Record<string, Check> = {
   pokemonRecognition: (c) => {
     const last = c.rival?.memory.lastBattle;
     const foes = last?.foes ?? [];
-    if (!c.rival || !last || !last.team.includes(c.enemy.speciesId) || !c.foeMon || !foes.includes(c.foeMon.uid)) return null;
+    if (!c.rival || !last || !last.team.includes(c.enemy.speciesId) || !c.foeMon) return null;
+    // Batch 5: the overhaul's scouting ledger knows your species from this run; otherwise the very Pokémon must have fought it.
+    const rec = recOf(c.run, c.rival);
+    if (!foes.includes(c.foeMon.uid) && !(rec && scoutedSpecies(rec, c.foeMon.speciesId))) return null;
     // At the start of the battle, or when that very Pokémon comes in.
     if (!c.prior) return { at: -1 };
     const send = c.drama.find((e) => e.kind === 'enemySwitch');
     return send ? { at: send.at } : null;
   },
   rivalInterruption: (c) => (c.witness ? { at: -1 } : null),
-  rematchReversal: (c) => (!c.prior && c.rival && c.rival.adaptations.length > 0 ? { at: -1 } : null),
+  rematchReversal: (c) => {
+    if (c.prior || !c.rival) return null;
+    // Batch 5: the overhaul's scouting ledger names the move of yours it planned around.
+    const rec = recOf(c.run, c.rival);
+    const move = rec ? scoutedMove(c.content, rec, c.run.party[c.battle.activeIndex]) : null;
+    if (move) return { at: -1, vars: { foeMove: move } };
+    return c.rival.adaptations.length > 0 ? { at: -1 } : null;
+  },
   unexpectedRespect: (c) => {
     const ace = c.battle.enemyTeam[c.battle.enemyTeam.length - 1]?.uid;
     const f = c.drama.find((e) => e.kind === 'enemyFaint' && e.data.uid === ace);
@@ -241,6 +258,16 @@ export const CHECKS: Record<string, Check> = {
     return { at: f.at, vars: { foeMove } };
   },
 };
+
+/** Batch 5: the four rival moments also speak from the rival's own dialogue bank (the witness's, for an interruption). */
+const MOMENT_BANK: Record<string, BankContext> = { unfinishedGrudge: 'lost', rematchReversal: 'lost', pokemonRecognition: 'event', rivalInterruption: 'interrupt' };
+function momentPool(c: PlanCtx, id: string, lines: string[], vars: Record<string, string> | undefined): string[] {
+  const ctx = MOMENT_BANK[id];
+  if (!ctx) return lines;
+  const who = id === 'rivalInterruption' ? c.witness : c.rival;
+  const own = id === 'rematchReversal' && vars?.foeMove ? [...lines, 'I watched your {foeMove} last time. I have an answer for it now.'] : lines;
+  return bankPool(recOf(c.run, who), ctx, own, `${c.key}|${id}`);
+}
 
 /** Library events that are eligible this turn (state, class, voice, cooldown and a hashed rarity roll all agree). */
 export function libraryCandidates(c: PlanCtx): Candidate[] {
@@ -262,7 +289,7 @@ export function libraryCandidates(c: PlanCtx): Candidate[] {
       ev: { id: `${c.key}:t${c.turn}:e${hit.at}:${def.id}`, kind: 'enemyMove', turn: c.turn, at: hit.at, data: {} },
       category: 'event',
       tier: def.severity,
-      pool: def.lines,
+      pool: momentPool(c, def.id, def.lines, hit.vars),
       def,
       vars: hit.vars,
       cue: { event: def.id },
@@ -290,6 +317,7 @@ export function noteHeatedMoment(run: RunState, id: string): boolean {
 export function recordLibraryEvent(c: PlanCtx, cand: Candidate): void {
   const def = cand.def!;
   if (def.id === 'rivalInterruption' && c.witness) witnessEffects(c);
+  recordRivalMoment(c.run, def.id, c.rival, c.witness);
   const flags = c.run.story.flags;
   c.battle.drama.seen.push(`ev:${def.id}`);
   flags[flagCd(def.id)] = battleNo(c.run);
