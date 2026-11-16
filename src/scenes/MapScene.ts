@@ -65,7 +65,7 @@ import { storyRegionTrack } from '../core/presentation/storyMusic';
 import { isStoryCampaign } from '../core/campaign/circuit';
 import { badgeIconId } from '../assets/storyIcons';
 import { storyIcon } from '../ui/storyIcon';
-import { notify } from '../ui/overlays';
+import { notify, setLogKeyTaken } from '../ui/overlays';
 import { mapTrack, storyRegionMusic } from '../core/presentation/battleMusic';
 import { openBondMenu } from '../ui/bondMenu';
 import { openPartyScene, openScrapbook } from '../ui/partyLifeUi';
@@ -1302,6 +1302,9 @@ export class MapScene extends Phaser.Scene {
 
     // Ideas W4: Legend (L) explains every icon on the map.
     this.input.keyboard?.on('keydown-L', () => this.toggleLegend());
+    // New UI: on the map L is the Legend alone (the interaction log's window would lie over it); Shift+L opens the log.
+    setLogKeyTaken(() => reduxOn() && this.scene.isActive() && (Boolean(this.legend) || (!this.busy && !this.picker)));
+    this.events.once('shutdown', () => setLogKeyTaken(null));
     const legendTag = this.add.text(GAME_WIDTH - 24, 402, 'L: map legend', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('legend-tag');
     legendTag.on('pointerdown', () => this.toggleLegend());
     // Beta 0.6 R7: R opens the Rival Report pop-up (only once a rival has been met).
