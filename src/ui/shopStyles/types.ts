@@ -30,12 +30,16 @@ export interface ShopHooks {
   focus(i: number): void;
   /** Pointer pick: buys row i (or opens Sell at rows.length). */
   pick(i: number): void;
+  /** New UI: buys `count` of row i at once (the shop page's "Buy 5"). */
+  pickMany?(i: number, count: number): void;
 }
 
 export interface ShopHandles {
   /** Moves focus for an arrow key; returns the new index (rows.length = Sell). */
   move(action: InputAction, from: number): number;
   focus(i: number): void;
+  /** New UI: how many Enter buys of the focused row (1, or 5 when "Buy 5" is lit). */
+  count?(): number;
   /** Redraws prices/money/owned after a buy, then plays the bought effect on row `bought`. */
   refresh(view: ShopView, bought: number | null, message: string | null): void;
   /** Kecleon's reaction to a haggle (won or lost) over row i. */

@@ -14,6 +14,7 @@ import { stopArtFor } from '../ui/stopArt';
 import Phaser from 'phaser';
 import { clockLabel, periodOf, PERIOD_LOOK, seasonOf, specialDateToday } from '../core/clock';
 import { eventView, tradeCard as eventTradeCard, type ChoiceView, type EventResult, type TradePick } from '../core/events';
+import { partyStarOf } from '../core/moments/pokemonMoments';
 import type { CardSide, HonestCard } from '../core/co/tradeCard';
 import { promptById, type Grade } from '../core/interaction/prompt';
 import { runInteractionPrompt } from '../ui/interactionPrompt';
@@ -194,7 +195,10 @@ export class EventScene extends Phaser.Scene {
     if (reduxOn() && eventStyleOf(session.settings.eventStyle) === 'diorama') {
       const pct = (c: ChoiceView): string => (c.chance === null ? '' : `${Math.round(c.chance * 100)}%`);
       const sub = (c: ChoiceView): string => c.locked ?? [c.cost, c.preview ?? c.risk].filter(Boolean).join(' · ');
-      const cast = artOf(this, ctx.castIds[0]);
+      const youArt = artOf(this, content.archetypes.get(run.archetypeId)?.spriteAssetId);
+      // A Pokémon Moment (an event about a party Pokémon) that names no art: that Pokémon stands with the player, as on the mock-up's moment page.
+      const partyStar = !champion && !ctx.species && !ctx.castIds.length ? partyStarOf(view.event.requires, run.party) : null;
+      const cast = partyStar ? youArt : artOf(this, ctx.castIds[0]);
       // The person speaking stands in the picture when the event's cast has them (matched by name).
       const castOf = (who: string | null): typeof cast => {
         const key = who?.toLowerCase().split(/\s+/).filter((w) => w.length > 2).pop();
@@ -203,7 +207,7 @@ export class EventScene extends Phaser.Scene {
       };
       this.rxPages = scriptPages(view.event.intro);
       this.rxAt = ctx.introSeen ? this.rxPages.length - 1 : 0;
-      const star = champion ? monFile(this, champion) : ctx.species ? monFile(this, ctx.species.id) : null;
+      const star = champion ? monFile(this, champion) : ctx.species ? monFile(this, ctx.species.id) : partyStar ? monFile(this, partyStar, 'front', run.party.find((m) => m.speciesId === partyStar)?.shiny ?? false) : null;
       const rounds = tv ? tourneyRounds(tv) : null;
       // A swap shows both sides before the player commits: the Pokémon that goes, and the one that comes back when the trade says so.
       const tradeCard = (p: TradePick | undefined): { give: { name: string; file: string | null }; get: { name: string; file: string | null } | null } | null => {
@@ -221,7 +225,6 @@ export class EventScene extends Phaser.Scene {
         moves: x.moves.map((id) => content.moves.get(id)?.name ?? id), quirk: x.quirk ? { name: x.quirk.name, line: x.quirk.line } : null, marks: x.marks.map(cap1),
         held: x.held ? content.items.get(x.held)?.name ?? x.held : null, evolvesTo: x.evolvesTo ? content.species.get(x.evolvesTo)?.name ?? x.evolvesTo : null, value: x.value, shiny: x.shiny,
       });
-      const youArt = artOf(this, content.archetypes.get(run.archetypeId)?.spriteAssetId);
       const honestOf = (card: HonestCard, at: number, count: number, readOnly: boolean, asking: boolean): HonestModel => ({
         title: 'Trade', you: youArt, trader: card.trader ?? 'Trader', traderArt: castOf(card.trader), wants: card.wants, gift: card.gift,
         give: card.yours ? cardSide(card.yours) : null, get: cardSide(card.theirs), warn: card.warn, why: card.why, asking, at, count, focus: this.pickFocus, readOnly,

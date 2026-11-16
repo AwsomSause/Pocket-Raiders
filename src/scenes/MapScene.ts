@@ -2177,9 +2177,12 @@ export class MapScene extends Phaser.Scene {
     const { session } = services();
     const content = session.content;
     const offer = fishingOffer(content, session.run!, sideId);
+    // New UI: the mock-up's fishing window over the map ("! A bite !"), the bites listed in it.
+    const rxOn = reduxOn();
     const picker: Picker = new Picker(this, {
       glass: true,
-      title: 'Something is biting! Which one?',
+      title: rxOn ? 'Which one do you reel in?' : 'Something is biting! Which one?',
+      ...(rxOn ? { dock: true, window: { top: 160, center: true, lead: '! A bite !' } } : {}),
       columns: 1,
       rowHeight: 64,
       rows: offer.map((o) => {
@@ -2188,6 +2191,7 @@ export class MapScene extends Phaser.Scene {
         return {
           ...row,
           hint: `${row.hint}  ·  Lv${o.level}`,
+          ...(rxOn ? { menu: { label: species.name, note: `Lv${o.level}`, detail: `${row.hint}  ·  Lv${o.level}`, sprite: monFile(this, o.speciesId, 'front') } } : {}),
           draw: (scene, box, w, h) => {
             row.draw(scene, box, w, h);
             box.add(scene.add.text(w - 16, h / 2, `Lv${o.level}`, textStyle(22)).setOrigin(1, 0.5));

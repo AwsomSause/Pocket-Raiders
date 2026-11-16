@@ -86,7 +86,7 @@ export interface PickerConfig {
   /** Battle: draw the list only inside the bottom bar (no full-screen panel), so the arena, sprites and HP boxes stay visible. */
   dock?: boolean;
   /** New UI battle look: with `dock`, the list shows as the mock-ups' small window over the field (at `top`) and the canvas dock is left out of the picture. */
-  window?: { top?: number };
+  window?: { top?: number; center?: boolean; lead?: string };
   /** Screens redesign: the screen this list belongs to; it draws in that screen's picked look (original look when none). */
   screen?: ScreenId;
   /** A redesigned look (screens redesign): the backdrop, frame and row colours. Leave out for the original look. */
@@ -293,6 +293,8 @@ export class Picker implements PickerLike {
         menu: (i) => config.rows[i]?.menu,
         cell: (i) => config.rows[i]?.cell,
         top: win?.top,
+        center: win?.center,
+        lead: win?.lead,
         tabs: config.tabs,
         canBack: Boolean(config.onBack),
         backLabel: config.backLabel,

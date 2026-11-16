@@ -44,6 +44,9 @@ export interface PickerBridge {
   pageCols?: number;
   /** The battle window's top edge, when it is not the usual one. */
   top?: number;
+  /** The small window sits in the middle of the screen (a map stop's quick choice), and `lead` heads it. */
+  center?: boolean;
+  lead?: string;
   /** The quick-summary text while it is open (I), else null. */
   summary: () => string | null;
   pick: (i: number) => void;
@@ -111,10 +114,11 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
     const over = sum === null ? '' : '<div class="shade" style="z-index:8"></div>' + W(`<div style="white-space:pre-wrap;line-height:22px;font-size:16px">${esc(sum)}</div><div class="sm acc">Press I, Enter or Esc to go back to the list</div>`, 'position:absolute;left:120px;right:120px;top:40px;bottom:50px;display:flex;flex-direction:column;gap:10px;padding:16px 20px;overflow:hidden;z-index:9', '', act('back'));
     const t = windowTitle(p.title);
     return battleListView(c, {
-      ...t, tabs: p.tabs ? { labels: p.tabs.labels, index: p.tabs.index } : null, n: p.rows, index: p.index(), top: p.top, back: p.canBack,
+      ...t, tabs: p.tabs ? { labels: p.tabs.labels, index: p.tabs.index } : null, n: p.rows, index: p.index(), top: p.top, back: p.canBack, center: p.center, lead: p.lead,
       row: (i) => {
-        const r = scrapeRow(scene, p.box(i)), m = p.mon?.(i), file = m ? monFile(scene, m.speciesId, 'front', m.shiny) : null;
-        return { label: r.label, art: file ? { file, atlas: true } : m ? null : r.art, hp: m ? m.hp : null, tag: m ? m.mark : r.tag, off: p.problem(i) !== null };
+        const r = scrapeRow(scene, p.box(i)), m = p.mon?.(i), file = m ? monFile(scene, m.speciesId, 'front', m.shiny) : null, said = p.menu?.(i);
+        const art = file ? { file, atlas: true } : said?.sprite ? { file: said.sprite, atlas: true } : m ? null : r.art;
+        return { label: said?.label ?? r.label, art, hp: m ? m.hp : null, tag: m ? m.mark : said?.note ?? r.tag, off: p.problem(i) !== null };
       },
     }) + over;
   }

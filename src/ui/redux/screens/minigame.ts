@@ -11,6 +11,8 @@ export interface GameModel {
   title: string;
   /** "Score 12", "Round 2/5"... shown as the mock-ups' label / value windows. */
   hud: string[];
+  /** The run's best medal in this minigame ("Gold", or "None yet"): the mock-up's third window, "Best". Left out when null. */
+  best?: string | null;
   prompt: string;
   /** The outcome's medal ("gold", "silver", "bronze", "none"), or null while playing. */
   medal: string | null;
@@ -29,13 +31,18 @@ function stat(t: string): readonly [string, string] {
   return cut ? [cut[1]!, cut[2]!] : [t, ''];
 }
 
+/** The New minigame screen's "Best" window: the run's best medal in this game. */
+export function bestMedalWord(medal: string | undefined): string {
+  return !medal || medal === 'none' ? 'None yet' : `${medal[0]!.toUpperCase()}${medal.slice(1)}`;
+}
+
 export function gameView(_c: ReduxCtx, d: GameModel): string {
   const cols = Math.max(1, Math.min(d.cols, d.cells.length || 1)), rows = Math.ceil(d.cells.length / cols);
   // The field gives up height to a tall grid of choices, down to a strip that still holds the prompt.
   const rowH = Math.max(22, Math.min(46, Math.floor((230 - (rows - 1) * 8) / rows)));
   const gridH = rows * rowH + (rows - 1) * 8;
   const fieldH = 540 - 66 - gridH - 12 - 122;
-  const hud = d.hud.filter(Boolean).map(stat);
+  const hud = [...d.hud.filter(Boolean).map(stat), ...(d.best ? [['Best', d.best] as const] : [])];
   const stats = `<div class="abs row" style="left:24px;right:24px;top:66px;gap:${hud.length > 4 ? 8 : 16}px">${hud.map(([a, b]) => W(`<span class="sm grow" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis${hud.length > 4 ? ';font-size:12px' : ''}">${esc(a)}</span>${b ? `<b${hud.length > 4 ? ' style="font-size:14px"' : ''}>${esc(b)}</b>` : ''}`, `flex:1;display:flex;gap:6px;padding:7px ${hud.length > 4 ? 8 : 12}px;min-width:0`)).join('')}</div>`;
   const k = fieldH > 220 ? 2.4 : fieldH > 150 ? 1.6 : 1;
   const crowd = d.party.slice(0, 3).map((f, i, a) => foot(((i + 1) * 912) / (a.length + 1), fieldH - 20, mon(f, k, '', true))).join('');
