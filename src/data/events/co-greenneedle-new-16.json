@@ -1,0 +1,464 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-16-well",
+   "name": "The Thing in the Well",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "well-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "feebas",
+    "tint": "#5d7f78",
+    "effect": "fog"
+   },
+   "intro": "A village has stopped using its well. Nobody goes near it. The rope runs over the wheel, and the bucket comes up by itself.\n\nIt is full of small pebbles, carefully stacked, each one set on the next with care.\n\n**Villager, Old Tabor:** \"It's been doing that a month. We draw from the river now. Two miles.\"\n\n*The pebbles are sorted by colour.*",
+   "choices": [
+    {
+     "label": "Lower a light.",
+     "success": {
+      "text": "You tie a lantern to the bucket and let it down. Far below, two wide eyes catch the glow, and hold it. Then a splash, and the dark again. The bucket comes up empty, and wet, and very carefully set down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-16-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lower a Pokémon.",
+     "success": {
+      "text": "Your Pokémon rides the bucket down and comes back up dry, and puzzled, with a pebble balanced on its head. It does not dare move. Whatever is down there has been very gentle.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-16-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lower myself.",
+     "success": {
+      "text": "You tie off the rope, and the villagers hold their breath. Down you go, the stones sliding past, the circle of sky growing small.\n\nAt the bottom there is no water. There is a Feebas, brown and ragged, pressed against the far wall, staring at the bucket. It has been waiting a month for someone to come down.\n\nIt does not run. It has nowhere to run to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "well-seen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-16-choose"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lower a gift.",
+     "success": {
+      "text": "You think about what could be given to something that stacks pebbles. A gift, and then see what comes back.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-16-gift"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-16-again",
+   "name": "The Well, Again",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "well-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "feebas",
+    "tint": "#5d7f78",
+    "effect": "fog"
+   },
+   "intro": "The bucket hangs still. The rope creaks a little in the wheel, and then does not.\n\nOld Tabor watches from a safe distance, hands under his arms.",
+   "choices": [
+    {
+     "label": "Lower a light.",
+     "success": {
+      "text": "You tie a lantern to the bucket and let it down. Far below, two wide eyes catch the glow, and hold it. Then a splash, and the dark again. The bucket comes up empty, and wet, and very carefully set down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-16-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lower a Pokémon.",
+     "success": {
+      "text": "Your Pokémon rides the bucket down and comes back up dry, and puzzled, with a pebble balanced on its head. It does not dare move. Whatever is down there has been very gentle.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-16-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lower myself.",
+     "success": {
+      "text": "You tie off the rope, and the villagers hold their breath. Down you go, the stones sliding past, the circle of sky growing small.\n\nAt the bottom there is no water. There is a Feebas, brown and ragged, pressed against the far wall, staring at the bucket. It has been waiting a month for someone to come down.\n\nIt does not run. It has nowhere to run to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "well-seen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-16-choose"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lower a gift.",
+     "success": {
+      "text": "You think about what could be given to something that stacks pebbles. A gift, and then see what comes back.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-16-gift"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-16-gift",
+   "name": "A Gift for the Well",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "well-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "feebas",
+    "tint": "#5d7f78",
+    "effect": "fog"
+   },
+   "intro": "You decide to start small. Something kind, and easy to lose.\n\n*The rope waits in your hand.*",
+   "choices": [
+    {
+     "label": "Lower a Berry.",
+     "success": {
+      "text": "**Old Tabor:** \"A Berry. For the well. Aye, I've a few.\" He finds one in his coat and hands it over as if giving up a friend. You lower it, and let go of the rope. When the bucket comes up, the Berry is gone. In its place, wet and shining and polished by someone with all the time in the world: a Pearl.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pearl",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "well-gift",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-16-gift2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-16-gift2",
+   "name": "A Better Gift",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "well-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "feebas",
+    "tint": "#5d7f78",
+    "effect": "fog"
+   },
+   "intro": "It gave you more than you sent. You are not sure it knows the rate. You are not sure there is one.\n\nThe bucket waits. The next gift is the Pearl.",
+   "choices": [
+    {
+     "label": "Lower the Pearl.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "pearl"
+      }
+     ],
+     "success": {
+      "text": "The Pearl goes down in the bucket. When it comes back, the Pearl is gone, and there is a Heart Scale in its place, pink and perfect, the colour of the inside of a shell.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "pearl"
+       },
+       {
+        "kind": "item",
+        "id": "heart-scale",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "well-gift",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-16-gift3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-16-gift3",
+   "name": "The Last Gift",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "well-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "feebas",
+    "tint": "#5d7f78",
+    "effect": "fog"
+   },
+   "intro": "It keeps giving back more. Each time, the pebbles on the rim are set a little closer to the middle, as if it is learning how.\n\nOne more. Down in the dark, something is holding very still.",
+   "choices": [
+    {
+     "label": "Lower the Heart Scale.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "heart-scale"
+      }
+     ],
+     "success": {
+      "text": "The Heart Scale goes down. Long, long after, the bucket comes up. There is a Prism Scale in it, bright as the first light on water. Something very small, and very far down, is waiting to see what you do.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "heart-scale"
+       },
+       {
+        "kind": "item",
+        "id": "prism-scale",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "well-gift",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-16-choose"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-16-choose",
+   "name": "What Lives in the Well",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "well-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "feebas",
+    "tint": "#5d7f78",
+    "effect": "fog"
+   },
+   "intro": "It is a Feebas. It has been alone down there with its stones, in the dark, in a dry well, for a month.\n\nOut in the daylight, Old Tabor and the others are waiting. Nobody has said what is down there. Nobody has asked.",
+   "choices": [
+    {
+     "label": "Lift it out.",
+     "success": {
+      "text": "You bring it up in the bucket, wet cloth over the top. It presses small and trembling against your chest. The villagers crowd round, and you open your coat a little, only a little.\n\nIt hides inside, behind your arm. For the first time in a month, it is warm.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "feebas"
+        ],
+        "types": [],
+        "levelBonus": -1,
+        "shinyMultiplier": 1,
+        "asIs": true,
+        "ability": "unlooked-for",
+        "mark": "well-feebas"
+       },
+       {
+        "kind": "flag",
+        "key": "well-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "well-lifted",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Feebas lived in a dry well, stacking pebbles by colour. It chose to hide in your coat.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the village.",
+     "success": {
+      "text": "You tell them. A Feebas, in the well, stacking pebbles. Half the village goes quiet, ashamed, thinking of the buckets they cut loose. The other half simply does not believe it.\n\n**Old Tabor:** \"A fish. A month of river water, for a fish.\"\n\nHe says it twice, and the second time he does not mean it any more. The Feebas, in your arms, looks at the ground. You take it with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "feebas"
+        ],
+        "types": [],
+        "levelBonus": -1,
+        "shinyMultiplier": 1,
+        "asIs": true,
+        "ability": "unlooked-for",
+        "mark": "well-feebas"
+       },
+       {
+        "kind": "flag",
+        "key": "well-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "well-told",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You told a village there was a Feebas in their well. Half were ashamed. Half did not believe you.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it its bucket.",
+     "success": {
+      "text": "You do not lift it out. You tie the rope off and step back. The bucket goes down, and comes up once more, slowly.\n\nThere is one pebble in it. The best one. Smooth, and warm, and set in the middle like a seed. You take it, and leave the well to the thing that lives in it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oval-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "well-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "well-left",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You left a Feebas its well, and it left you its best pebble.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

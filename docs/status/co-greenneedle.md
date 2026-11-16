@@ -266,3 +266,9 @@ Branch `claude/project-thread-uehq47`, draft PR #1314 into `ui-mockups`.
 - New (gn.new.25): ops `muralPick`, `muralJoin`; flags `mural-at`, `mural-step`, `mural-panels`, `mural-subject`, `mural-end`, `mural-walls`.
 - gn.new.10: the doc's "Reflection Shard" is cut with the Shards (Nov 13); the win gives a Reflection Glass instead (gift-only charm, new-team-member EXP +15%, itemCatalog/greenneedle-new-10.json). The doc's fallback (step 13, optional) is the same lake under its own id, `gn-new-10-lake-b`, with the same rooms; both need `mirror-seen` unset, so it is once a run. The remembered team is the party's species, levels and moves at the end of the latest lost or nearly-lost fight; reflections are at full HP.
 - New (gn.new.10): core/greenneedle/mirror.ts (`mirrorRecord` called from run.ts finishBattle; test `mirrorReady`; rule `mirror`).
+
+## gn.new.16 The Thing in the Well (own thread)
+| gn.new.16 The Thing in the Well | done, tests in tests/unit/gn-new-16.test.ts (must-see single at step 5, fallback to the window's end at 15, A2, once a run; light and Pokémon only look and the well stays open; yourself or three gifts (Berry, Pearl, Heart Scale; Old Tabor hands over the first Berry) open the choice; Lift it out or Tell the village: the Feebas joins with the new ability Unlooked-For (opponents' accuracy −10% at full HP); Leave it: the best pebble (Oval Stone) and no Feebas; flags well-seen, well-gift, well-lifted/well-told/well-left, well-done for the Final Reunion's afterstory) | yes |
+
+Limits (gn.new.16): the expanded note's "if it evolves the villagers come to look" is not built (no evolution hook). The doc says the reward is the Feebas in every ending; Leave it gives the pebble only, since leaving it is the point of that choice.
+New (gn.new.16): ability Unlooked-For (abilities.json, SUPPORTED list, one accuracy line in the engine).
