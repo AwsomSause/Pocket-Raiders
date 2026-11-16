@@ -71,6 +71,12 @@
         "amount": 1
        },
        {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "dog-open",
+        "n": 1
+       },
+       {
         "kind": "flag",
         "key": "dog-seen",
         "amount": 1
@@ -92,6 +98,12 @@
         "kind": "flag",
         "key": "dog-led",
         "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "dog-open",
+        "n": 1
        },
        {
         "kind": "flag",
@@ -467,6 +479,88 @@
       {
        "kind": "flag",
        "key": "dog-clinic",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Do it once more.",
+     "success": {
+      "text": "You go back to the platform, and you do what you did the first time. It knows. Its ears come up.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "dog-fed",
+        "min": 1,
+        "then": [],
+        "text": "You set the bowl down. It eats, eyes on the track. Then it stops, halfway, and looks up at you. Not at the rails. At you."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "dog-led",
+        "min": 1,
+        "then": [],
+        "text": "You offer the lead. It follows you one node, then two. At the third it stops, turns, and looks back once. It does not run."
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "growlithe"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "vigil",
+        "mark": "dog-vigil"
+       },
+       {
+        "kind": "flag",
+        "key": "dog-chose-player",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dog-done",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "A Growlithe stopped waiting for the train, and chose you.",
+        "importance": 85
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "dog-open",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "dog-clinic",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "dog-station-sat",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "dog-asking",
        "atLeast": 0,
        "atMost": 0
       }

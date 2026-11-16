@@ -5,7 +5,7 @@
 // (read by gn.37's tea). The ending's Growlithe has the new ability Vigil (engine.ts: after three full turns on the field the
 // next hit does 50% less, once a battle). The clerk is met again in the next region (step 5 town).
 import { ch, flag, item, join, out, type Json } from '../dsl.ts';
-import { bond, chIf, gev, is, moment, not, regionChanged, say, sameStage, setTo, stampStage, laterStage, type Placement } from './_gn.ts';
+import { bond, chIf, gev, is, moment, not, regionChanged, say, when, sameStage, setTo, stampStage, laterStage, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -28,12 +28,12 @@ export const EVENTS: Json[] = [
     ch('Feed it.', out(say(
       'You open your pack. It eats, politely, with its eyes never leaving the track.',
       'It finishes. It does not thank you. It does not need to. It is busy, and it has been busy for years.',
-    ), flag('dog-fed'), flag('dog-seen'), stampStage('dog-at'))),
+    ), flag('dog-fed'), setTo('dog-open', 1), flag('dog-seen'), stampStage('dog-at'))),
     ch('Try to lead it away.', out(say(
       'You tug the lead gently, and it comes. One whole node, patient, close at your heel.',
       'Then it stops. It looks back along the road once. And it runs, flat out, all the way home to the platform.',
       'You find it there when you catch up, sitting down, as if it had never left.',
-    ), flag('dog-led'), flag('dog-seen'), stampStage('dog-at'))),
+    ), flag('dog-led'), setTo('dog-open', 1), flag('dog-seen'), stampStage('dog-at'))),
     ch('Ask around town.', out(say(
       '**Halloran:** "Ask who you like. Everyone here has a piece of it. None of them have the whole thing."',
       'You go and find the porter, the landlady, and the clinic. Three people, each holding one corner of one story.',
@@ -101,6 +101,11 @@ export const EVENTS: Json[] = [
       'The Growlithe gets up. It walks to you, and looks back at the tracks once, a long look.',
       'Then it turns and settles against your leg, and this time it is you it is waiting with.',
     ), { ...join({ species: ['growlithe'] }), ability: 'vigil', mark: 'dog-vigil' }, flag('dog-chose-player'), flag('dog-done'), bond(1), moment('Sat one more time. A Growlithe stopped waiting for the train, and chose you.', 90))),
+    chIf([is('dog-open'), not('dog-clinic'), not(SAT), not('dog-asking')], 'Do it once more.', out(say(
+      'You go back to the platform, and you do what you did the first time. It knows. Its ears come up.',
+    ), when('dog-fed', { min: 1 }, [], 'You set the bowl down. It eats, eyes on the track. Then it stops, halfway, and looks up at you. Not at the rails. At you.'),
+    when('dog-led', { min: 1 }, [], 'You offer the lead. It follows you one node, then two. At the third it stops, turns, and looks back once. It does not run.'),
+    { ...join({ species: ['growlithe'] }), ability: 'vigil', mark: 'dog-vigil' }, flag('dog-chose-player'), flag('dog-done'), bond(1), moment('A Growlithe stopped waiting for the train, and chose you.', 85))),
   ]),
 
   gev('gn-new-02-holiday', 'The Clerk, on Holiday', dog({ stop: 'event', rarity: 'uncommon', callback: true, minStage: 2, requires: [is('dog-done'), regionChanged('dog-at'), not('dog-holiday')] }), say(

@@ -36,11 +36,22 @@ describe('gn.new.02 The Dog at the Station', () => {
   it('feed it and lead it away remember their own flag and do not open the last visit', () => {
     const fed = choose(at('dog-fed', 'gn-new-02-platform'), 'gn-new-02-platform', 'Feed it.');
     expect(flagOf(fed.run, 'dog-fed')).toBe(1);
-    expect(flagOf(fed.run, 'dog-open')).toBe(0);
+    expect(flagOf(fed.run, 'dog-open')).toBe(1);
     const led = choose(at('dog-led', 'gn-new-02-platform'), 'gn-new-02-platform', 'Try to lead it away.');
     expect(said(led)).toMatch(/runs, flat out|runs/);
     expect(flagOf(led.run, 'dog-led')).toBe(1);
     expect(flagOf(led.run, 'dog-station-sat')).toBe(0);
+  });
+
+  it('fed or led only: the last visit gives each its own ending and a Growlithe with Vigil', () => {
+    for (const [flagKey, label] of [['dog-fed', 'Do it once more.'], ['dog-led', 'Do it once more.']] as const) {
+      const run = at(`dog-end-${flagKey}`, 'gn-new-02-last', { 'dog-open': 1, [flagKey]: 1 });
+      expect(scene(run, 'gn-new-02-last').labels).toEqual([label]);
+      const r = choose(run, 'gn-new-02-last', label);
+      const mon = [...r.run.party, ...r.run.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].find((m) => m.speciesId === 'growlithe');
+      expect(mon?.fixedAbility).toBe('vigil');
+      expect(flagOf(r.run, 'dog-done')).toBe(1);
+    }
   });
 
   it('ask around: the three errands open', () => {

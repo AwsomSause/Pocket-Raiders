@@ -68,7 +68,7 @@ Branch `claude/project-thread-uehq47`, draft PR #1314 into `ui-mockups`.
 | gn.new.03–38 | not started | |
 
 ## Limits (documented)
-- gn.new.02: the doc's single platform scene is one pick, so "Feed it." and "Try to lead it away." end it with no ending (only "Sit with it." and "Ask around town." open the last visit). If "Ask around town." was picked but the clinic errand skipped, the last visit never appears (the errands are optional). "Once per save" is once per run. The Fire Stone is given by the nurse and the Notebook line is a Moment.
+- gn.new.02: the doc gives "Feed it." and "Try to lead it away." no ending, so each opens the last visit with its own choice ("Do it once more.", worded for what was done), written to match "Sit one more time.": the Growlithe joins with Vigil. If "Ask around town." was picked but the clinic errand skipped, the last visit never appears (the errands are optional). "Once per save" is once per run. The Fire Stone is given by the nurse and the Notebook line is a Moment.
 - gn.06 "a later run finds a signpost": cross-run memory is not allowed (Kice 2026-11-14), so a later bridge in the same run shows the sign and the village stall instead.
 
 - gn.07 "permanent night": shown by the stage's dark tint; the rule that matters (rain: Fire halved, Water boosted) is on every fight. The Barn's "Ask [Fire-type] to sit with it." reads "Ask your Fire-type to sit with it." (labels can't hold a name).
