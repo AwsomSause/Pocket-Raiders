@@ -5170,7 +5170,7 @@
    "tags": [
     "Story"
    ],
-   "disabled": true,
+   "room": true,
    "stop": "event",
    "types": [],
    "minStage": 1,

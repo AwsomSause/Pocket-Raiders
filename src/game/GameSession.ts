@@ -6,6 +6,7 @@
 //   - on entering a map node, using a side stop, or buying at a shop
 //   - when the run ends (profile first, then the run record is cleared)
 
+import { openRoadHome, roadHomeDue } from '../core/co/roadHome';
 import { applyEvilEffect, evilTeam } from '../core/evil/teams';
 import { skyAct, type SkyAction } from '../core/evil/teamSky';
 import * as NodeMenu from '../core/nodeMenu/flow';
@@ -442,8 +443,20 @@ export class GameSession {
   chooseEvent(sideId: string, choiceIndex: number, tradeUid?: string, promptGrade?: Grade): EventResult {
     const result = chooseEvent(this.content, this.requireRun(), sideId, choiceIndex, tradeUid, promptGrade);
     this.run = result.run;
-    this.persistRun();
+    if (this.run.phase !== 'over') this.persistRun(); // a finished run's save is already cleared (NE100 The Road Home plays after it)
     return result;
+  }
+
+  /** NE100 The Road Home: true when the run end should open it first (the run ended at its final battle). Reads state only. */
+  roadHomeDue(): boolean {
+    return this.run ? roadHomeDue(this.content, this.run) : false;
+  }
+
+  /** NE100: puts The Road Home on the node the run ended on and returns its stop's id. Not saved: the finished run's save is gone. */
+  openRoadHome(): string {
+    const { run, sideId } = openRoadHome(this.requireRun());
+    this.run = run;
+    return sideId;
   }
 
   /** Starts the fight with a Totem. */

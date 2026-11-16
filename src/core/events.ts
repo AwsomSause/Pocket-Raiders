@@ -22,6 +22,7 @@ import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priori
 import { rememberPick, rememberedPick } from './co/pickMemory';
 import { compassReveal } from './co/compass';
 import { passedBy } from './co/mirror';
+import { isRoadHomeSide } from './co/roadHome';
 import { PSEUDO, enterPseudoStage, leavePseudoStage, routeChainEvent } from './dungeon/pseudo';
 import { dropOneHeld, dungeonNext, dungeonStart } from './events/coDungeon';
 import { blessedSpecies, roamFound } from './events/coLegends';
@@ -1154,7 +1155,8 @@ export interface EventResult {
 /** Makes a choice at an event stop. The stop is used up; a battle outcome starts the battle. */
 /** `promptGrade`: how the player did in the choice's skill prompt (missing = miss). The grade is the only input, so a reload gives the same result. */
 export function chooseEvent(content: Content, current: RunState, sideId: string, choiceIndex: number, tradeUid?: string, promptGrade?: Grade): EventResult {
-  if (current.phase !== 'map') throw new Error(`Action needs phase "map" but run is in "${current.phase}"`);
+  // NE100 The Road Home is played at the run end, after the run is over.
+  if (current.phase !== 'map' && !(current.phase === 'over' && isRoadHomeSide(current, sideId))) throw new Error(`Action needs phase "map" but run is in "${current.phase}"`);
   const { node, side } = findSide(current, sideId);
   if (side.used) throw new Error('This event is over');
   const event = content.events.get(side.eventId!)!;

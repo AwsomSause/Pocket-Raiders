@@ -34,6 +34,8 @@ async function prepare(page: Page, kind: 'service' | 'plaza', style: string, n: 
       const node = run.stage.map.nodes.find((x: any) => x.column === 1);
       run.stage.current = node.id;
       if (!run.stage.visited.includes(node.id)) run.stage.visited.push(node.id);
+      // Only the stop under test: a placed story event on this node (an Eevee one, with the Eevee in this party) would hold the map.
+      node.sides = node.sides.filter((s: any) => s.kind !== 'event');
       const id = `e2e-${kind}-${n}`;
       node.sides.push(kind === 'service' ? { id, kind: 'service', serviceId: 'trade', used: false } : { id, kind: 'plaza', used: false });
       return id;

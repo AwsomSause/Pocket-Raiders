@@ -929,9 +929,8 @@ const NE100: Json[] = [
   ne(100, 'road-home', 'The Road Home', GROUP.fest, {
     place: { earliest: 'A1', sits: 'must-see', attaches: 'after', note: 'After the final battle, win or lose. Not on the map: it is the map, walked backwards. Every node where somebody was helped has them standing on it.' },
     tags: ['Story'], rarity: 'rare', effect: 'none', tint: '#2a2418',
-    // Disabled until the run end can open a scene after the final battle (win or lose): that screen belongs to the New UI run end.
-    // The scene is written in full so turning it on is one line. See docs/status/co-new-events.md.
-    disabled: true,
+    // Never drawn or placed on a map: the run end opens it after the final battle, win or lose (src/core/co/roadHome.ts).
+    room: true,
   },
   P(
     'The road you came by, walked the other way. Everything is smaller than it was.',
