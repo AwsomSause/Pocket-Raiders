@@ -33,6 +33,7 @@ import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHo
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
 import { alleyStart } from './alley';
+import { leftFates, leftHas, leftTake, leftTokens } from './left';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -78,6 +79,8 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{ex:')) text = exTokens(content, run, text);
   // gn.46: the All-Star bracket.
   if (text.includes('{allstar')) text = allstarTokens(run, text);
+  // gn.new.13: the lost team's Balls.
+  if (text.includes('{left:')) text = leftTokens(content, run, text);
   // gn.45: the region's Champion, off duty (cast when the lesson starts).
   if (text.includes('{lesson-champion}')) text = text.replaceAll('{lesson-champion}', content.bosses.get(castOf(run, 'lesson-champion') ?? lessonChampion(content, run, run.regionOrder[run.regionIndex] ?? 'kanto'))?.name ?? 'The Champion');
   text = text.replaceAll('{onevone-champion}', CHAMPION_NAME[run.regionOrder[run.regionIndex] ?? 'kanto'] ?? CHAMPION_NAME.kanto!);
@@ -200,6 +203,8 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'leadInitiative') return leadInitiative(run);
   // gn.44: the 1v1 entrant is the Fighting Tournament's champion (gn.16); it is a Pokémon that came back (gn mark `came-back`).
   if (c.test === 'entrantChampion') return !!entrantOf(run)?.champion;
+  // gn.new.13: the lost team's n-th Ball (`n`) is still shut.
+  if (c.test === 'leftHas') return leftHas(run, c.n ?? 1);
   if (c.test === 'entrantCameBack') return !!entrantOf(run)?.gn?.includes('came-back');
   // gn.45: a rival is well ahead of you (Lead +2 or more).
   if (c.test === 'allstarReady') return allstarReady(run);
@@ -641,6 +646,10 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return kcEvolve(run);
     case 'bidoofJoin':
       return bidoofJoin(content, run, host);
+    case 'leftTake':
+      return leftTake(content, run, e.n ?? 1, host);
+    case 'leftFates':
+      return leftFates(run);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':

@@ -29,6 +29,10 @@
  },
  "flags": [
   {
+   "key": "left-took",
+   "rule": "core/greenneedle/left.ts (gn.new.13 The Ones You Left: the number of the Ball taken)"
+  },
+  {
    "key": "safari-photo-best",
    "rule": "core/greenneedle/safariEnd.ts (gn.18 Safari Land)"
   },
