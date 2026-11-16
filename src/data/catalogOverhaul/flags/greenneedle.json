@@ -17,12 +17,26 @@
   "understudy-went-on": "gn.new.08 The Understudy",
   "pink-stone-planted": "the Pink Fruit stone (no stone to plant yet in gn.30; read by gn.31)",
   "aqua-flooded": "Evil Team row: helped Aqua flood something, or carried out the plan in Hoenn (read by gn.33's high-water marks)",
-  "dog-station-sat": "gn.new.02 The Dog at the Station (read by gn.37's tea)"
+  "dog-station-sat": "gn.new.02 The Dog at the Station (read by gn.37's tea)",
+  "hoenn-took-all": "Evil Team row: chose \"Take it all\" in Hoenn (read by gn.38's researchers)",
+  "called-it-for-us": "Evil Team row: chose \"Call it for us\" (read by gn.38's researchers)"
  },
  "flags": [
-  { "key": "safari-photo-best", "rule": "core/greenneedle/safariEnd.ts (gn.18 Safari Land)" },
-  { "key": "partner-was-ball", "rule": "core/greenneedle gn op `partner` (gn.24)" },
-  { "key": "pidgey-backed-spearow", "rule": "core/sky/spectate.ts (gn.02 Sky finale)" },
-  { "key": "partner-story", "rule": "core/greenneedle gn op `partner` (gn.24: the story by the partner's nature)" }
+  {
+   "key": "safari-photo-best",
+   "rule": "core/greenneedle/safariEnd.ts (gn.18 Safari Land)"
+  },
+  {
+   "key": "partner-was-ball",
+   "rule": "core/greenneedle gn op `partner` (gn.24)"
+  },
+  {
+   "key": "pidgey-backed-spearow",
+   "rule": "core/sky/spectate.ts (gn.02 Sky finale)"
+  },
+  {
+   "key": "partner-story",
+   "rule": "core/greenneedle gn op `partner` (gn.24: the story by the partner's nature)"
+  }
  ]
 }

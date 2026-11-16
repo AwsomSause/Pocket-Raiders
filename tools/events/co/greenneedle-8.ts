@@ -1,4 +1,4 @@
-// Greenneedle, part 8: gn.35 Thunderstorm Ridge, gn.36 The Great Desert, gn.37 The Haunted Mansion (doc GREENNEEDLE_REWORKED_PLACED_8.md).
+// Greenneedle, part 8: gn.35 Thunderstorm Ridge, gn.36 The Great Desert, gn.37 The Haunted Mansion, gn.38 The Overgrown Laboratory (doc GREENNEEDLE_REWORKED_PLACED_8.md).
 // Build: npm run co:build -- greenneedle-8   then   npm run co:gn
 import { any, anyType, ch, fight, flag, heal, item, join, out, takeNode, wild, type Json } from '../dsl.ts';
 import { anyFlag } from './_ne.ts';
@@ -593,7 +593,141 @@ const gn37: Json[] = [
   ]),
 ];
 
-export const EVENTS: Json[] = [...gn35, ...gn36, ...gn37];
+// =====================================================================================================================
+// gn.38  THE OVERGROWN LABORATORY  (a side branch at step 13, then a Pseudo Stage of five nodes; A9; once a run).
+// Project Lodestar: a Pokémon made to be strong, and nobody told it what for. A note on the wall at each node, less sure each time.
+// The greenhouse's escaped ones have abilities they shouldn't (battle rule `lab`). Five endings; its form reflects the player
+// (core/greenneedle/lab.ts: Belonging, Specification, Self-Made).
+// =====================================================================================================================
+const LAB_TINT = '#355a3a';
+const vines = (o: Json = {}): Json => ({ tint: LAB_TINT, tags: ['Pokémon', 'Mystery', 'Exploration'], effect: 'fog', ...o });
+const wing = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, vines(o), intro, choices);
+const NOTES: string[] = [
+  '"Project Lodestar. Objective: the strongest Pokémon ever made. Timeline: eighteen months. — Dr. T. Marchetti-Ibe, Director."',
+  '"Month 9. Subject is strong. Subject is also sad. Is \'sad\' in the specification? Asked. Told not to ask."',
+  '"Month 14. It asked us what it was for. We don\'t have a slide for that."',
+  '"Month 17. Funding withdrawn. They want it \'disposed of.\' Nobody here will. We\'ve all found reasons to be elsewhere tomorrow."',
+  'A different hand, shaky: "I locked the door from the outside so they couldn\'t. I meant to come back. I am so sorry. — P."',
+];
+/** The node's note, read once (counted in `lab-notes-read`). */
+const note = (n: number, self: string): Json => chIf([not(`lab-note-${n}`)], 'Read the note on the wall.', out(`*${NOTES[n - 1]}*`, setTo(`lab-note-${n}`, 1), flag('lab-notes-read'), scene(self)));
+/** The greenhouse's escaped ones: not hostile unless cornered. */
+const ESCAPED: [string, string, string][] = [
+  ['bellossom', 'A Bellossom, dancing in a patch of sunlight that isn\'t coming from the sky. The air round it is dry and hot. Drought.', 'gn-38-escaped-2'],
+  ['raticate', 'A Raticate, gnawing through a steel pipe like it\'s a carrot. It\'s not trying. Huge Power.', 'gn-38-escaped-3'],
+  ['pidgeotto', 'A Pidgeotto, hanging in the air under the glass roof, perfectly still. It isn\'t flapping. It doesn\'t need to.', 'gn-38-control'],
+];
+const escaped = (i: number): Json => {
+  const [sp, intro, after] = ESCAPED[i]!;
+  const go = i === 2 ? [next(after)] : [scene(after)];
+  const fightIt = (catchable: boolean): Json => inside({
+    ...wild({ species: [sp], lv: 1, win: [flag('lab-escaped-battled'), ...go] }), exact: true,
+    caught: [flag('lab-escaped-caught'), ...go], lose: [flag('lab-escaped-battled'), ...go], rule: { gn: 'lab', ...(catchable ? {} : { noCatch: true }) },
+  });
+  return wing(`gn-38-escaped-${i + 1}`, 'The Overgrown Laboratory: The Greenhouse', { pokemon: sp }, intro, [
+    ch('Battle.', fight('You corner it. It doesn\'t like that.', fightIt(false))),
+    ch('Leave it alone.', out('You go round it, slowly. It watches you all the way, and lets you.', flag('lab-escaped-left'), ...go)),
+    ch('Catch it.', fight('It doesn\'t want a Ball. It doesn\'t know what one is.', fightIt(true))),
+  ]);
+};
+const SUBJECT: Json = { ...join({ species: ['@lab-subject'], lv: 1 }), mark: 'lab-subject', direct: true, asIs: true };
+const LAB_DONE: Json[] = [flag('lab-done'), stampStage('lab-at'), leavePseudo()];
+const HEARD = anyFlag('delta-greenhouse', 'ditto-free');
+
+const gn38: Json[] = [
+  gev('gn-38-door', 'A Leaf Through a Window', vines({ stop: 'event', rarity: 'rare', types: ['grass'], pokemon: 'bellossom', requires: [not('lab-done'), not('lab-entered')] }), say(
+    'Off the path, a building that was white once. Ivy through the vents. A tree growing up through the roof.',
+    'A sign on the fence, under the moss: PROJECT LODESTAR. AUTHORISED STAFF ONLY.',
+  ), [
+    ch('Go in.', out('The doors aren\'t locked. The lock\'s been grown over.', flag('lab-entered'), gn('labCast'), next('gn-38-reception'))),
+    ch('Walk on.', out('A leaf taps on a window as you pass, like someone knocking.')),
+  ]),
+  // ---- Node 1. Reception ----
+  wing('gn-38-reception', 'The Overgrown Laboratory: Reception', { pokemon: 'oddish' }, say(
+    'A desk. A visitor book: the last entry\'s twelve years old. Mushrooms on the keyboard. Vines across the ceiling like wiring.',
+    'The lift shaft has a tree in it.',
+  ), [note(1, 'gn-38-reception'), ch('Go further in.', out('Through the double doors, past a coffee cup with something growing in it.', next('gn-38-cells')))]),
+  // ---- Node 2. The Cells ----
+  wing('gn-38-cells', 'The Overgrown Laboratory: The Cells', { pokemon: 'bellossom' }, say(
+    'Empty containment cells, a row of them. The doors are bent outward. From inside.',
+    'Scratch marks on the walls, at a child\'s height.',
+  ), [note(2, 'gn-38-cells'), ch('Go on.', out('You don\'t touch the scratches. You don\'t want to know how deep they go.', next('gn-38-greenhouse')))]),
+  // ---- Node 3. The Greenhouse ----
+  wing('gn-38-greenhouse', 'The Overgrown Laboratory: The Greenhouse', { pokemon: 'bellossom' }, say(
+    'A greenhouse, glass roof cracked, everything gone wild. The escaped ones live here now.',
+    'They have abilities they shouldn\'t. They aren\'t hostile unless cornered.',
+  ), [note(3, 'gn-38-greenhouse'), ch('Go through.', out('Something moves in the leaves.', scene('gn-38-escaped-1')))]),
+  escaped(0), escaped(1), escaped(2),
+  // ---- Node 4. The Control Room ----
+  wing('gn-38-control', 'The Overgrown Laboratory: The Control Room', { pokemon: 'porygon' }, say(
+    'Dead screens. One is still on: a camera feed of the last room.',
+    'Something\'s sitting in it, facing the door.',
+  ), [note(4, 'gn-38-control'), ch('Go to the last room.', out('The corridor has a skylight. The light at the end of it is green.', next('gn-38-last')))]),
+  // ---- Node 5. The Last Room ----
+  wing('gn-38-last', 'The Overgrown Laboratory: The Last Room', {
+    pokemon: 'dragonite', effect: 'none',
+    remembers: [
+      { id: 'asleep', when: [is('annex-tank-off')], notice: '*Against its side, asleep, something small that used to glow. The one from the Annex. It found its way here.*' },
+      { id: 'heard', when: [HEARD], notice: '*It looks at you as if it already knows what you\'ll say. It\'s heard that somewhere.*' },
+    ],
+  }, say(
+    '*A round room. Skylight, broken; a tree\'s come down through it and kept growing.*',
+    '*Under the tree, something that was made. It\'s had twelve years to grow, with nobody to tell it how.*',
+    '*It stands up when you come in. It\'s been waiting to stand up.*',
+    '*It picks up a rock, and crushes it, and looks at you. It lifts the fallen tree, and puts it down gently so the nest in it isn\'t shaken, and looks at you.*',
+    '*It holds out both hands, empty.* What is it supposed to do now?',
+  ), [
+    ch('Whatever you want.', out('It tilts its head. Nobody has ever said that to it.', gn('check', { key: 'lab-heard', if: [HEARD] }),
+      when('lab-heard', { min: 1 }, [], '*It answers at once: it straightens, and nods, as if it\'s been waiting for someone to say exactly that.*'), setTo('lab-answer', 1), scene('gn-38-researchers'))),
+    ch('Come with me.', out('It looks at the door. It\'s never been through it the right way.', setTo('lab-answer', 2), scene('gn-38-researchers'))),
+    ch('Stay here. I\'ll stay with you a while.', out('You sit down under the tree. After a while, so does it.', setTo('lab-answer', 3), scene('gn-38-researchers'))),
+    ch('I don\'t know.', out('It nods, slowly. That, at least, is honest.', setTo('lab-answer', 4), scene('gn-38-researchers'))),
+  ]),
+  wing('gn-38-researchers', 'The Overgrown Laboratory: Footsteps', {
+    pokemon: 'dragonite', cast: ['trainer.scientist'],
+    remembers: [{ id: 'recognised', when: [anyFlag('hoenn-took-all', 'called-it-for-us')], notice: 'Marchetti-Ibe looks at you, and smiles. "You understand. You know what it is to have something like this and not *use* it."' }],
+  }, say(
+    'Footsteps. Two people in the doorway.',
+    'Dr. Teodor Marchetti-Ibe: "It\'s alive. Twelve years and it\'s *alive.* Do you know what that means for the data? We can finish. We can finally—"',
+    'Dr. Pernille Oyelaran-Shaw: "Teodor. Stop. Look at it. *Look* at it."',
+    'Dr. Oyelaran-Shaw, to it: "I locked the door. That was me. I\'m sorry. I\'ve been sorry every day."',
+    '*One wants to finish the work. One wants to apologise.*',
+  ), [
+    ch('Step in.', out('They both turn to you. So does it.', scene('gn-38-endings'))),
+    ch('Stay, and do nothing yet.', out(say(
+      'You sit down under the tree. A node passes. Then another. It sits too. It watches the nest.',
+      'The researchers stop arguing, after a while. Then they stop talking.',
+      '*At last it stands, and it\'s different.*',
+    ), takeNode(2), setTo('lab-end', 5), flag('lab-end-stayed'), SUBJECT, gn('labForm', { key: 'self-made' }), ...LAB_DONE)),
+  ]),
+  wing('gn-38-endings', 'The Overgrown Laboratory: What Now', { pokemon: 'dragonite', cast: ['trainer.scientist'] }, 'Everyone in the room is waiting for you to say something.', [
+    ch('Help it leave.', out(say(
+      'You stand between it and the door until it\'s through. Marchetti-Ibe shouts. Oyelaran-Shaw holds the door.',
+      'Outside, in the light, it changes. It becomes something that belongs here, as if it had always lived in this region.',
+    ), setTo('lab-end', 1), flag('lab-end-leave'), SUBJECT, gn('labForm', { key: 'belonging' }), ...LAB_DONE)),
+    ch('Help Dr. Marchetti-Ibe.', out(say(
+      'The work\'s completed, in a month, off-screen. It\'s stronger. It\'s told what it\'s for: battling.',
+      'It arrives in a crate with your name on it. Made, polished, and it knows it.',
+    ), setTo('lab-end', 2), flag('lab-end-finish'), SUBJECT, gn('labForm', { key: 'specification' }), ...LAB_DONE)),
+    ch('Help Dr. Oyelaran-Shaw.', out(say(
+      'She sits on the floor. She tells it everything: who ordered it, who refused, what its name was going to be. Lodestar. It listens to all of it.',
+      'It keeps its shape, and gains a name. When she leaves, it goes with her.',
+      'She gives you her old key card. "It opens one door. I never used it for the right one."',
+    ), setTo('lab-end', 3), flag('lab-end-apologise'), item('card-key'),
+      when('lab-escaped-left', { min: 1 }, [], '*At the gate, the greenhouse ones you left alone come out of the leaves to see you off.*'), ...LAB_DONE)),
+    ch('Shut the facility down.', out(say(
+      'Power off. Every door opens at once. The escaped ones in the greenhouse go out through the walls, into the green.',
+      'It watches them go. Then it follows the last one out, without looking back.',
+    ), setTo('lab-end', 4), flag('lab-end-shutdown'), stampStage('lab-free-at'), ...LAB_DONE)),
+  ]),
+  // ---- Afterstory: shut down, it's met later, wild, and doing well ----
+  gev('gn-38-wild', 'Something You Know', vines({ stop: 'event', rarity: 'uncommon', callback: true, effect: 'none', requires: [is('lab-end', 4, 4), laterStage('lab-free-at'), not('lab-wild-seen')] }), say(
+    'On a hillside, among wild Pokémon, one you know. It\'s bigger. It\'s with others of its own kind, or near enough.',
+    'It sees you. It lifts a rock, and puts it down gently, and goes back to what it was doing.',
+  ), [ch('Let it be.', out('It\'s doing well. That\'s all you wanted to know.', flag('lab-wild-seen')))]),
+];
+
+export const EVENTS: Json[] = [...gn35, ...gn36, ...gn37, ...gn38];
 
 export const REMOVE: string[] = [];
 
@@ -613,9 +747,15 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'A+0; the owner A+1', often: 'run', badge: 'own', dressing: { kanto: 'The Haunted Mansion', elsewhere: 'The Haunted Mansion' },
     note: 'Badge: a lit window. A side branch: four floors. SF118\'s rooms are on these floors. "Once per save" is once per run (no memory across runs).',
   },
+  'gn-38-door': {
+    gn: 'gn.38', shape: 'Door', earliest: 'A9', home: 13, window: [11, 16], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage', 'Mystery'],
+    level: 'A+1', often: 'run', badge: 'own', dressing: { kanto: 'The Overgrown Laboratory', elsewhere: 'The Overgrown Laboratory' },
+    note: 'Badge: a leaf growing through a window. A side branch: five nodes. SF124\'s Annex scenes are its front rooms (built by the places row). "Once per save" is once per run.',
+  },
 };
 
 export const CHAINS: Json[] = [
+  { id: 'ps_gn_lab', name: 'The Overgrown Laboratory', entry: 'gn-38-door', themeId: 'grass-steel', tint: LAB_TINT, mood: 'overgrown lab', start: 'opened' },
   { id: 'ps_gn_mansion', name: 'The Haunted Mansion', entry: 'gn-37-door', themeId: 'normal-ghost', tint: MANSION_TINT, mood: 'haunted house', start: 'opened' },
   { id: 'ps_gn_desert', name: 'The Great Desert', entry: 'gn-36-door', themeId: 'fire-ground', tint: DESERT_TINT, mood: 'desert', start: 'opened' },
   { id: 'ps_gn_ridge', name: 'Thunderstorm Ridge', entry: 'gn-35-door', themeId: 'electric-flying', tint: RIDGE_TINT, mood: 'thunderstorm ridge', start: 'opened' },

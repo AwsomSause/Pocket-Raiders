@@ -183,6 +183,15 @@
    "start": "opened"
   },
   {
+   "id": "ps_gn_lab",
+   "name": "The Overgrown Laboratory",
+   "entry": "gn-38-door",
+   "themeId": "grass-steel",
+   "tint": "#355a3a",
+   "mood": "overgrown lab",
+   "start": "opened"
+  },
+  {
    "id": "ps_gn_mansion",
    "name": "The Haunted Mansion",
    "entry": "gn-37-door",

@@ -73,6 +73,13 @@ export function calcStats(content: Content, mon: PokemonInstance): StatBlock {
     const boost = ((mon.statBoosts?.[stat] ?? 0) + (mon.eventBoosts?.[stat] ?? 0) + (mon.evoDeclineBoost ?? 0) + (stat === 'hp' ? (mon.perkHp ?? 0) + (mon.alpha ? ALPHA_MARK_HP : 0) : 0)) / 100;
     stats[stat] = Math.floor(raw * (1 + perStack * stacks + boost) * (content.balance.careEffects ? careMultiplier(mon.care, stat) : 1));
   }
+  // Greenneedle gn.38 Specification: made, polished. Its highest stat 20% higher, its lowest 10% lower (ties: HP, Atk, Def, SpA, SpD, Spe order).
+  if (mon.fixedAbility === 'specification') {
+    const hi = STAT_NAMES.reduce((a, b) => (stats[b] > stats[a] ? b : a));
+    const lo = STAT_NAMES.reduce((a, b) => (stats[b] < stats[a] ? b : a));
+    stats[hi] = Math.floor(stats[hi] * 1.2);
+    if (lo !== hi) stats[lo] = Math.max(1, Math.floor(stats[lo] * 0.9));
+  }
   // A held item that raises max HP (the Giant's Mark).
   const heldHp = heldHpPercent(content, mon);
   if (heldHp) stats.hp = Math.floor(stats.hp * (1 + heldHp / 100));

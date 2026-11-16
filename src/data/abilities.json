@@ -1600,6 +1600,21 @@
   "description": "It can't be forced to switch out, and it takes 10% less damage from super-effective hits."
  },
  {
+  "id": "belonging",
+  "name": "Belonging",
+  "description": "Out of battle: +10% to every stat in the region it took its form in, and +5% everywhere else."
+ },
+ {
+  "id": "specification",
+  "name": "Specification",
+  "description": "Its highest stat is 20% higher; its lowest is 10% lower."
+ },
+ {
+  "id": "self-made",
+  "name": "Self-Made",
+  "description": "Once per battle, when an opponent's ability would affect it (Intimidate, or a contact ability), it isn't."
+ },
+ {
   "id": "borrowed-face",
   "name": "Borrowed Face",
   "description": "A Disguise that takes the first hit. Once per battle, when it knocks out a foe, its disguise is restored."

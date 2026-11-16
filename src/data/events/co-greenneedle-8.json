@@ -9743,6 +9743,1287 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-38-door",
+   "name": "A Leaf Through a Window",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "grass"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lab-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "lab-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "bellossom",
+    "tint": "#355a3a",
+    "effect": "fog"
+   },
+   "intro": "Off the path, a building that was white once. Ivy through the vents. A tree growing up through the roof.\n\nA sign on the fence, under the moss: PROJECT LODESTAR. AUTHORISED STAFF ONLY.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "The doors aren't locked. The lock's been grown over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lab-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "labCast"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-38-reception"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "A leaf taps on a window as you pass, like someone knocking.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-38-reception",
+   "name": "The Overgrown Laboratory: Reception",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "oddish",
+    "tint": "#355a3a",
+    "effect": "fog"
+   },
+   "intro": "A desk. A visitor book: the last entry's twelve years old. Mushrooms on the keyboard. Vines across the ceiling like wiring.\n\nThe lift shaft has a tree in it.",
+   "choices": [
+    {
+     "label": "Read the note on the wall.",
+     "success": {
+      "text": "*\"Project Lodestar. Objective: the strongest Pokémon ever made. Timeline: eighteen months. — Dr. T. Marchetti-Ibe, Director.\"*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-note-1",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lab-notes-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-38-reception"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "lab-note-1",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go further in.",
+     "success": {
+      "text": "Through the double doors, past a coffee cup with something growing in it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-38-cells"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-38-cells",
+   "name": "The Overgrown Laboratory: The Cells",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bellossom",
+    "tint": "#355a3a",
+    "effect": "fog"
+   },
+   "intro": "Empty containment cells, a row of them. The doors are bent outward. From inside.\n\nScratch marks on the walls, at a child's height.",
+   "choices": [
+    {
+     "label": "Read the note on the wall.",
+     "success": {
+      "text": "*\"Month 9. Subject is strong. Subject is also sad. Is 'sad' in the specification? Asked. Told not to ask.\"*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-note-2",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lab-notes-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-38-cells"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "lab-note-2",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go on.",
+     "success": {
+      "text": "You don't touch the scratches. You don't want to know how deep they go.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-38-greenhouse"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-38-greenhouse",
+   "name": "The Overgrown Laboratory: The Greenhouse",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bellossom",
+    "tint": "#355a3a",
+    "effect": "fog"
+   },
+   "intro": "A greenhouse, glass roof cracked, everything gone wild. The escaped ones live here now.\n\nThey have abilities they shouldn't. They aren't hostile unless cornered.",
+   "choices": [
+    {
+     "label": "Read the note on the wall.",
+     "success": {
+      "text": "*\"Month 14. It asked us what it was for. We don't have a slide for that.\"*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-note-3",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lab-notes-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-38-greenhouse"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "lab-note-3",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go through.",
+     "success": {
+      "text": "Something moves in the leaves.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-38-escaped-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-38-escaped-1",
+   "name": "The Overgrown Laboratory: The Greenhouse",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bellossom",
+    "tint": "#355a3a",
+    "effect": "fog"
+   },
+   "intro": "A Bellossom, dancing in a patch of sunlight that isn't coming from the sky. The air round it is dry and hot. Drought.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "You corner it. It doesn't like that.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "bellossom"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-38-escaped-2"
+        }
+       ],
+       "exact": true,
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-caught",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-38-escaped-2"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-38-escaped-2"
+        }
+       ],
+       "rule": {
+        "gn": "lab",
+        "noCatch": true
+       },
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Leave it alone.",
+     "success": {
+      "text": "You go round it, slowly. It watches you all the way, and lets you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lab-escaped-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-38-escaped-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "It doesn't want a Ball. It doesn't know what one is.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "bellossom"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-38-escaped-2"
+        }
+       ],
+       "exact": true,
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-caught",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-38-escaped-2"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-38-escaped-2"
+        }
+       ],
+       "rule": {
+        "gn": "lab"
+       },
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-38-escaped-2",
+   "name": "The Overgrown Laboratory: The Greenhouse",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "raticate",
+    "tint": "#355a3a",
+    "effect": "fog"
+   },
+   "intro": "A Raticate, gnawing through a steel pipe like it's a carrot. It's not trying. Huge Power.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "You corner it. It doesn't like that.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "raticate"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-38-escaped-3"
+        }
+       ],
+       "exact": true,
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-caught",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-38-escaped-3"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-38-escaped-3"
+        }
+       ],
+       "rule": {
+        "gn": "lab",
+        "noCatch": true
+       },
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Leave it alone.",
+     "success": {
+      "text": "You go round it, slowly. It watches you all the way, and lets you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lab-escaped-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-38-escaped-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "It doesn't want a Ball. It doesn't know what one is.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "raticate"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-38-escaped-3"
+        }
+       ],
+       "exact": true,
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-caught",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-38-escaped-3"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-38-escaped-3"
+        }
+       ],
+       "rule": {
+        "gn": "lab"
+       },
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-38-escaped-3",
+   "name": "The Overgrown Laboratory: The Greenhouse",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgeotto",
+    "tint": "#355a3a",
+    "effect": "fog"
+   },
+   "intro": "A Pidgeotto, hanging in the air under the glass roof, perfectly still. It isn't flapping. It doesn't need to.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "You corner it. It doesn't like that.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "pidgeotto"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-battled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-38-control"
+        }
+       ],
+       "exact": true,
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-caught",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-38-control"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-battled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-38-control"
+        }
+       ],
+       "rule": {
+        "gn": "lab",
+        "noCatch": true
+       },
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Leave it alone.",
+     "success": {
+      "text": "You go round it, slowly. It watches you all the way, and lets you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lab-escaped-left",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-38-control"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "It doesn't want a Ball. It doesn't know what one is.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "pidgeotto"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-battled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-38-control"
+        }
+       ],
+       "exact": true,
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-caught",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-38-control"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "lab-escaped-battled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-38-control"
+        }
+       ],
+       "rule": {
+        "gn": "lab"
+       },
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-38-control",
+   "name": "The Overgrown Laboratory: The Control Room",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "porygon",
+    "tint": "#355a3a",
+    "effect": "fog"
+   },
+   "intro": "Dead screens. One is still on: a camera feed of the last room.\n\nSomething's sitting in it, facing the door.",
+   "choices": [
+    {
+     "label": "Read the note on the wall.",
+     "success": {
+      "text": "*\"Month 17. Funding withdrawn. They want it 'disposed of.' Nobody here will. We've all found reasons to be elsewhere tomorrow.\"*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-note-4",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lab-notes-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-38-control"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "lab-note-4",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go to the last room.",
+     "success": {
+      "text": "The corridor has a skylight. The light at the end of it is green.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-38-last"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-38-last",
+   "name": "The Overgrown Laboratory: The Last Room",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "remembers": [
+    {
+     "id": "asleep",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "annex-tank-off",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Against its side, asleep, something small that used to glow. The one from the Annex. It found its way here.*"
+    },
+    {
+     "id": "heard",
+     "when": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "delta-greenhouse",
+        "ditto-free"
+       ]
+      }
+     ],
+     "notice": "*It looks at you as if it already knows what you'll say. It's heard that somewhere.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#355a3a",
+    "effect": "none"
+   },
+   "intro": "*A round room. Skylight, broken; a tree's come down through it and kept growing.*\n\n*Under the tree, something that was made. It's had twelve years to grow, with nobody to tell it how.*\n\n*It stands up when you come in. It's been waiting to stand up.*\n\n*It picks up a rock, and crushes it, and looks at you. It lifts the fallen tree, and puts it down gently so the nest in it isn't shaken, and looks at you.*\n\n*It holds out both hands, empty.* What is it supposed to do now?",
+   "choices": [
+    {
+     "label": "Whatever you want.",
+     "success": {
+      "text": "It tilts its head. Nobody has ever said that to it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "lab-heard",
+        "if": [
+         {
+          "kind": "anyFlag",
+          "keys": [
+           "delta-greenhouse",
+           "ditto-free"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-heard",
+        "min": 1,
+        "then": [],
+        "text": "*It answers at once: it straightens, and nods, as if it's been waiting for someone to say exactly that.*"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-answer",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-38-researchers"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come with me.",
+     "success": {
+      "text": "It looks at the door. It's never been through it the right way.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-answer",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-38-researchers"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay here. I'll stay with you a while.",
+     "success": {
+      "text": "You sit down under the tree. After a while, so does it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-answer",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-38-researchers"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I don't know.",
+     "success": {
+      "text": "It nods, slowly. That, at least, is honest.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-answer",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-38-researchers"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-38-researchers",
+   "name": "The Overgrown Laboratory: Footsteps",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "remembers": [
+    {
+     "id": "recognised",
+     "when": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "hoenn-took-all",
+        "called-it-for-us"
+       ]
+      }
+     ],
+     "notice": "Marchetti-Ibe looks at you, and smiles. \"You understand. You know what it is to have something like this and not *use* it.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.scientist"
+    ],
+    "pokemon": "dragonite",
+    "tint": "#355a3a",
+    "effect": "fog"
+   },
+   "intro": "Footsteps. Two people in the doorway.\n\nDr. Teodor Marchetti-Ibe: \"It's alive. Twelve years and it's *alive.* Do you know what that means for the data? We can finish. We can finally—\"\n\nDr. Pernille Oyelaran-Shaw: \"Teodor. Stop. Look at it. *Look* at it.\"\n\nDr. Oyelaran-Shaw, to it: \"I locked the door. That was me. I'm sorry. I've been sorry every day.\"\n\n*One wants to finish the work. One wants to apologise.*",
+   "choices": [
+    {
+     "label": "Step in.",
+     "success": {
+      "text": "They both turn to you. So does it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-38-endings"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay, and do nothing yet.",
+     "success": {
+      "text": "You sit down under the tree. A node passes. Then another. It sits too. It watches the nest.\n\nThe researchers stop arguing, after a while. Then they stop talking.\n\n*At last it stands, and it's different.*",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-end",
+        "n": 5
+       },
+       {
+        "kind": "flag",
+        "key": "lab-end-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "@lab-subject"
+        ],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1,
+        "mark": "lab-subject",
+        "direct": true,
+        "asIs": true
+       },
+       {
+        "kind": "gn",
+        "op": "labForm",
+        "key": "self-made"
+       },
+       {
+        "kind": "flag",
+        "key": "lab-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "lab-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-38-endings",
+   "name": "The Overgrown Laboratory: What Now",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.scientist"
+    ],
+    "pokemon": "dragonite",
+    "tint": "#355a3a",
+    "effect": "fog"
+   },
+   "intro": "Everyone in the room is waiting for you to say something.",
+   "choices": [
+    {
+     "label": "Help it leave.",
+     "success": {
+      "text": "You stand between it and the door until it's through. Marchetti-Ibe shouts. Oyelaran-Shaw holds the door.\n\nOutside, in the light, it changes. It becomes something that belongs here, as if it had always lived in this region.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-end",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lab-end-leave",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "@lab-subject"
+        ],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1,
+        "mark": "lab-subject",
+        "direct": true,
+        "asIs": true
+       },
+       {
+        "kind": "gn",
+        "op": "labForm",
+        "key": "belonging"
+       },
+       {
+        "kind": "flag",
+        "key": "lab-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "lab-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help Dr. Marchetti-Ibe.",
+     "success": {
+      "text": "The work's completed, in a month, off-screen. It's stronger. It's told what it's for: battling.\n\nIt arrives in a crate with your name on it. Made, polished, and it knows it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-end",
+        "n": 2
+       },
+       {
+        "kind": "flag",
+        "key": "lab-end-finish",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "@lab-subject"
+        ],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1,
+        "mark": "lab-subject",
+        "direct": true,
+        "asIs": true
+       },
+       {
+        "kind": "gn",
+        "op": "labForm",
+        "key": "specification"
+       },
+       {
+        "kind": "flag",
+        "key": "lab-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "lab-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help Dr. Oyelaran-Shaw.",
+     "success": {
+      "text": "She sits on the floor. She tells it everything: who ordered it, who refused, what its name was going to be. Lodestar. It listens to all of it.\n\nIt keeps its shape, and gains a name. When she leaves, it goes with her.\n\nShe gives you her old key card. \"It opens one door. I never used it for the right one.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-end",
+        "n": 3
+       },
+       {
+        "kind": "flag",
+        "key": "lab-end-apologise",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "card-key",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-escaped-left",
+        "min": 1,
+        "then": [],
+        "text": "*At the gate, the greenhouse ones you left alone come out of the leaves to see you off.*"
+       },
+       {
+        "kind": "flag",
+        "key": "lab-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "lab-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shut the facility down.",
+     "success": {
+      "text": "Power off. Every door opens at once. The escaped ones in the greenhouse go out through the walls, into the green.\n\nIt watches them go. Then it follows the last one out, without looking back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-end",
+        "n": 4
+       },
+       {
+        "kind": "flag",
+        "key": "lab-end-shutdown",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "lab-free-at"
+       },
+       {
+        "kind": "flag",
+        "key": "lab-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "lab-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-38-wild",
+   "name": "Something You Know",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lab-end",
+     "atLeast": 4,
+     "atMost": 4
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "lab-free-at"
+    },
+    {
+     "kind": "flag",
+     "key": "lab-wild-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#355a3a",
+    "effect": "none"
+   },
+   "intro": "On a hillside, among wild Pokémon, one you know. It's bigger. It's with others of its own kind, or near enough.\n\nIt sees you. It lifts a rock, and puts it down gently, and goes back to what it was doing.",
+   "choices": [
+    {
+     "label": "Let it be.",
+     "success": {
+      "text": "It's doing well. That's all you wanted to know.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lab-wild-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

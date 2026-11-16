@@ -70,7 +70,7 @@ const LAB: Json[] = [
     choices: [
       ch('Calm it.', out('You kneel, and talk, and hold out a hand. It is too frightened to come close, but it stops backing away. That is something.', fr(2), flag('lab-calmed'))),
       ch('Battle.', fightW('It lashes out, glowing brighter.', ['magnemite', 'voltorb', 'grimer'], 2, [rp(2)])),
-      ch('Turn off the tank.', out('You find the valve and turn it until it squeals. The leak stops. The glow goes out of the Pokémon like a breath going out of it, and it lies down where it stands and falls asleep, perfectly ordinary. When it wakes, it is fine. It looks at you, and follows you out.', join({ species: ['magnemite', 'voltorb', 'grimer'] }), ...kind(2), moment('You shut off the leaking tank in the old lab, and the glowing Pokémon was ordinary again.', 60))),
+      ch('Turn off the tank.', out('You find the valve and turn it until it squeals. The leak stops. The glow goes out of the Pokémon like a breath going out of it, and it lies down where it stands and falls asleep, perfectly ordinary. When it wakes, it is fine. It looks at you, and follows you out.', join({ species: ['magnemite', 'voltorb', 'grimer'] }), ...kind(2), moment('You shut off the leaking tank in the old lab, and the glowing Pokémon was ordinary again.', 60), flag('annex-tank-off'))),
     ],
   }),
 ];

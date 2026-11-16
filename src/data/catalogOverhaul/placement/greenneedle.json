@@ -1993,5 +1993,30 @@
   "tags": [
    "eerie|night"
   ]
+ },
+ "gn-38-door": {
+  "gn": "gn.38",
+  "shape": "Door",
+  "earliest": "A9",
+  "home": 13,
+  "window": [
+   11,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A+1",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Overgrown Laboratory",
+   "elsewhere": "The Overgrown Laboratory"
+  },
+  "note": "Badge: a leaf growing through a window. A side branch: five nodes. SF124's Annex scenes are its front rooms (built by the places row). \"Once per save\" is once per run.",
+  "kinds": [
+   "Pseudo Stage",
+   "Mystery"
+  ],
+  "tags": []
  }
 }

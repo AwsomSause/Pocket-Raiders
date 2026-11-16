@@ -460,6 +460,11 @@
         "kind": "moment",
         "text": "You shut off the leaking tank in the old lab, and the glowing Pokémon was ordinary again.",
         "importance": 60
+       },
+       {
+        "kind": "flag",
+        "key": "annex-tank-off",
+        "amount": 1
        }
       ]
      }

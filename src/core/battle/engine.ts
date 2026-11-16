@@ -2517,6 +2517,7 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
       applyStageChange(ctx, other, 'atk', 1, events);
       return;
     }
+    if (selfMade(ctx, other, events)) return;
     applyStageChange(ctx, other, 'atk', -1, events, c);
     if (guard === 'rattled') applyStageChange(ctx, other, 'spe', 1, events);
     return;
@@ -4930,6 +4931,14 @@ function flinch(ctx: BattleContext, user: Combatant, target: Combatant): void {
   if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed && !momentNoFlinch(ctx, target) && !revivalNoFlinch(target)) target.flinched = true;
 }
 
+/** Greenneedle gn.38 Self-Made: once per battle, when an opponent's ability would affect it, it isn't. True when it stepped in. */
+function selfMade(ctx: BattleContext, c: Combatant, events: BattleEvent[]): boolean {
+  if (abilityIn(ctx, c) !== 'self-made' || ctx.battle.storyEffects.includes(`self-made:${c.mon.uid}`)) return false;
+  ctx.battle.storyEffects.push(`self-made:${c.mon.uid}`);
+  announce(c, 'self-made', events);
+  return true;
+}
+
 /**
  * Abilities that react to a hit: the target's contact abilities (Static,
  * Rough Skin, Aftermath), the attacker's Poison Touch, the target's stat
@@ -4980,7 +4989,11 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
   }
   // Dynamo Down: after it takes damage from an attack, its next Electric-type move is stronger.
   if (holder === 'dynamo-down' && target.mon.hp > 0 && move.category !== 'status') target.vol.dynamoBoost = true;
-  if (contact && holder && user.mon.hp > 0) {
+  // Greenneedle gn.38 Self-Made: once per battle, the target's contact ability doesn't touch it.
+  const contactReacts = !!holder && (!!CONTACT_STATUS[holder] || CONTACT_HURT.has(holder) || SPREADS_ON_CONTACT.has(holder) || ['gooey', 'tangling-hair', 'cute-charm', 'effect-spore', 'aftermath', 'plague-bulwark', 'neon-circuit'].includes(holder));
+  if (contact && contactReacts && user.mon.hp > 0 && selfMade(ctx, user, events)) {
+    // It wasn't affected.
+  } else if (contact && holder && user.mon.hp > 0) {
     if (holder === 'clinging-dust') {
       announce(target, holder, events);
       applyStageChange(ctx, user, 'spe', -1, events, target);

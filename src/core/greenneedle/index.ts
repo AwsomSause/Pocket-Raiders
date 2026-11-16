@@ -19,6 +19,7 @@ import { fnv1a } from '../expansion/hash';
 import { crystalOp, golemStart } from './crystals';
 import { tideOf } from '../clock';
 import { lightning } from './ridge';
+import { labCast, labForm } from './lab';
 
 type Cue = { type: 'spectacle'; kind: 'arena'; side: 'player' | 'enemy'; text: string; uid?: string };
 const cue = (side: 'player' | 'enemy', text: string, uid?: string): Cue => ({ type: 'spectacle', kind: 'arena', side, text, ...(uid ? { uid } : {}) });
@@ -371,6 +372,12 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'lightning':
       // gn.35: Thunderstorm Ridge's lightning, once per node.
       return lightning(content, run, e.n!, host.float());
+    case 'labCast':
+      // gn.38: the subject, from this region's pseudo-legendary line.
+      labCast(content, run, host.region);
+      return '';
+    case 'labForm':
+      return labForm(content, run, e.key ?? '', host.region);
     case 'markLead': {
       // gn.30: a history mark on the lead (the pink one that ate the island fruit for a day).
       const lead = run.party.find((m) => m.hp > 0) ?? run.party[0];
@@ -506,6 +513,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
     const level = battle.enemyTeam[0].level;
     for (const sp of ['gastly', 'shuppet', 'banette']) if (gnFlag(run, `mansion-fought-${sp}`) > 0 && content.species.has(sp)) battle.enemyTeam.push(createPokemon(content, sp, level, `e-mansion-${sp}`));
   }
+  // The Overgrown Laboratory (gn.38): the escaped ones have abilities they shouldn't.
+  if (rule === 'lab') for (const foe of battle.enemyTeam) if (LAB_ESCAPED[foe.speciesId]) foe.fixedAbility = LAB_ESCAPED[foe.speciesId];
   // The Lush Jungle's Tsareena (gn.20): Trop Kick, High Jump Kick, U-turn.
   if (rule === 'tsareena' && battle.enemyTeam[0]) setMoves(content, battle.enemyTeam[0], ['trop-kick', 'high-jump-kick', 'u-turn']);
   // The Lush Jungle (gn.20): who was already down when the fight began (only a knockout in this fight pulls the ladder up, run.ts).
@@ -523,6 +532,9 @@ export function gnBattleStart(content: Content, run: RunState): void {
     if (lead && gnFlag(run, 'tc-you-choose') > 0 && lead.friendship >= BOND_THREE) battle.storyEffects.push(`kind:${lead.uid}`);
   }
 }
+
+/** gn.38's greenhouse: a Bellossom with Drought, a Raticate with Huge Power, a Pidgeotto that doesn't need to flap (Levitate). */
+const LAB_ESCAPED: Record<string, string> = { bellossom: 'drought', raticate: 'huge-power', pidgeotto: 'levitate' };
 
 /** The Magmuk's moves (doc gn.17), and the weak ones it is left with in its core. */
 const MAGMUK_MOVES = ['earth-power', 'flamethrower', 'gunk-shot', 'sludge-wave'];
