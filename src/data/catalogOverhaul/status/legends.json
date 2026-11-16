@@ -35,13 +35,36 @@
   "island-trial-fairy": "2026-11-15",
   "z-sigil-ruin": "2026-11-15",
   "z-sigil-pool": "2026-11-15",
-  "z-form-trial": "2026-11-15"
+  "z-form-trial": "2026-11-15",
+  "mr-rival-echoes": "2026-11-16",
+  "face-rival-honors": "2026-11-16",
+  "old-rival-old-friend": "2026-11-16",
+  "cheer-rival-match": "2026-11-16",
+  "cameo-ally-assist": "2026-11-16",
+  "ng-plus-old-friends": "2026-11-16",
+  "champion-defense": "2026-11-16",
+  "retired-team": "2026-11-16",
+  "rivals-friend": "2026-11-16",
+  "archive-gauntlet-entry": "2026-11-16",
+  "lost-and-found-desk": "2026-11-16",
+  "companion-recruit": "2026-11-16",
+  "rk-anniversary-archive": "2026-11-16",
+  "rk-coin-vault": "2026-11-16",
+  "rk-hall-of-records": "2026-11-16",
+  "rk-legacy-pedestal": "2026-11-16",
+  "rk-memory-lane": "2026-11-16",
+  "cameo-veteran-garchomp": "2026-11-16",
+  "cameo-veteran-lucario": "2026-11-16",
+  "legacy-ranch": "2026-11-16"
  },
  "merged": {
   "form-clue-fur": "delta-clue-scales",
   "form-clue-tracks": "delta-clue-nest",
   "form-clue-sketch": "delta-clue-song",
-  "form-research-battle": "delta-research-battle"
+  "form-research-battle": "delta-research-battle",
+  "face-rival-shopping": "rival-buyout",
+  "kieran-rivalry": "rq-kieran-1",
+  "ghost-trainer-reunion": "gn-new-13-door"
  },
  "rule": {
   "delta-research-week": "Calendar week (gameEvents.json) that raises Delta clue odds; the clues it boosts are the rebuilt delta-clue-* events (co-legends-3.json)",
@@ -308,7 +331,11 @@
   "swords-of-justice-week": "Legend weeks raise the starting Influence of the matching blessings by 1, or add a Telling for the matching My",
   "tao-trio-week": "Legend weeks raise the starting Influence of the matching blessings by 1, or add a Telling for the matching My",
   "mythical-mirage-week": "Legend weeks raise the starting Influence of the matching blessings by 1, or add a Telling for the matching My",
-  "eternatus-vigil": "Legend weeks raise the starting Influence of the matching blessings by 1, or add a Telling for the matching My"
+  "eternatus-vigil": "Legend weeks raise the starting Influence of the matching blessings by 1, or add a Telling for the matching My",
+  "rivalInterruption": "Rival drama moment plugged into the rival overhaul: scouting ledger, Marks, axes and dialogue bank (core/drama/rivalHooks.ts)",
+  "unfinishedGrudge": "Rival drama moment plugged into the rival overhaul: scouting ledger, Marks, axes and dialogue bank (core/drama/rivalHooks.ts)",
+  "rematchReversal": "Rival drama moment plugged into the rival overhaul: scouting ledger, Marks, axes and dialogue bank (core/drama/rivalHooks.ts)",
+  "pokemonRecognition": "Rival drama moment plugged into the rival overhaul: scouting ledger, Marks, axes and dialogue bank (core/drama/rivalHooks.ts)"
  },
  "scrapped": [],
  "extra": {

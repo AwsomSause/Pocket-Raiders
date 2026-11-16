@@ -106,8 +106,31 @@ function drawRng(run: RunState, id: string): Rng {
   return new Rng(hashSeed(`${run.seed}::honest-trade::${id}:${run.encountersCompleted}`));
 }
 
+/**
+ * Batch 5 (old-rival-old-friend): the main rival's side of an honest trade between two raised Pokémon. The rival keeps their ace and
+ * offers the newest other Pokémon they fielded against you this run, with the moves it had that day. Nature by hash (no gameplay roll).
+ */
+export function rivalGives(content: Content, run: RunState): HonestGives | null {
+  const live = run.story.rivals.filter((r) => r.state !== 'retired');
+  const rival = live.find((r) => run.expansion?.rival?.[r.id]?.role === 'main') ?? [...live].sort((a, b) => b.encounters - a.encounters || a.id.localeCompare(b.id))[0];
+  const last = rival?.memory.lastBattle;
+  if (!rival || !last || last.team.length < 2) return null;
+  const i = last.team.length - 2;
+  const species = last.team[i]!;
+  if (!content.species.has(species)) return null;
+  const nature = new Rng(hashSeed(`${run.seed}::rival-trade::${rival.id}::${species}`)).pick([...NATURE_IDS]);
+  return {
+    species, levelOffset: 0, nature, moves: (last.moves?.[i] ?? []).slice(0, 4), hidden: false, marks: [`raised by ${rival.name}`],
+    why: 'Not my best. My second-best. That is the honest part.', ot: rival.name, shiny: false,
+  };
+}
+
 /** What the trader offers (a fixed `gives`, or the seeded pool draw). Null when the pool is unknown. */
 export function honestOffer(content: Content, run: RunState, e: HonestTrade): Offer | null {
+  if (e.rival) {
+    const gives = rivalGives(content, run);
+    return gives ? { gives, trader: gives.ot, wants: e.wants ?? null } : null;
+  }
   if (e.gives) return { gives: e.gives, trader: e.gives.ot, wants: e.wants ?? null };
   const pool = e.pool ? allTradePools().get(e.pool) : undefined;
   if (!pool) return null;

@@ -1,0 +1,753 @@
+{
+ "catalogOverhaul": "legends",
+ "override": true,
+ "remove": [
+  "face-rival-shopping",
+  "kieran-rivalry"
+ ],
+ "events": [
+  {
+   "id": "mr-rival-echoes",
+   "name": "The Echo Chamber of Rivals",
+   "group": "Rival questline",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "pastAlly",
+     "has": "echoes",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1e2030",
+    "effect": "float"
+   },
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "intro": "A round stone chamber with no roof. You do not remember walking in.\nYour footsteps come back to you a heartbeat late. Then other sounds come back too.\n\nVoices. Real ones. Things your rivals said to you on this road, word for word.\n\"{pa:echo3}\"\n\"{pa:echo2}\"\n\nThe newest one hangs in the air longer than the rest.\n\"{pa:echo1}\"\nSome of it is kinder than you remember. Some of it is exactly as sharp.",
+   "choices": [
+    {
+     "label": "Listen to every echo.",
+     "success": {
+      "text": "You sit on the cold floor and let them play. Every taunt. Every grudging compliment. Every \"next time\".\nHeard all at once, they sound different.\n\nUnderneath the bragging there is a lot of worry. Most of it is about you.\nYour team listens too. They have heard all of this before. They remember who said it.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1,
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "echoes-listened",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Heard my rival's words again in the Echo Chamber.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shout back.",
+     "success": {
+      "text": "You shout your own answer into the chamber. It comes back twice as loud.\nThe old lines go quiet under it, one by one.\n\nIt feels good. Then it feels like the end of an argument nobody else heard.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "rivalry": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say what you never said to them.",
+     "success": {
+      "text": "You say it to the empty room. \"Thank you for pushing.\"\nIt does not echo. The chamber keeps that one.\n\nSomewhere down the road, you feel sure, {rival} sneezes and scowls about it.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1,
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "fond",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "feeling": {
+        "key": "friendship",
+        "atLeast": 6
+       }
+      }
+     ],
+     "notice": "\n\nOne echo you do not recognise: {rival}, saying your name to someone else.\nProudly. When they did not know you could hear."
+    },
+    {
+     "id": "bitter",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "feeling": {
+        "key": "resentment",
+        "atLeast": 5
+       }
+      }
+     ],
+     "notice": "\n\nOne echo is a door slamming. Just that. It plays three times."
+    }
+   ]
+  },
+  {
+   "id": "face-rival-honors",
+   "name": "Rival Honors Day",
+   "group": "Rival questline",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3a2e",
+    "effect": "confetti"
+   },
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "intro": "A ceremony for the region's young talent. Bunting, folding chairs, a brass band that knows three songs.\nOn the judges' panel, arms crossed, sits {rival}.\n\nThey look weirdly nervous. They keep straightening a name card that says JUDGE.\n{rival}: \"{say event||champion-chaser::They asked me because I'm winning. Obviously.||bitter-challenger::I didn't ask to sit here. Don't read anything into it.||enthusiast::They gave me a BELL. If you do something cool I get to ring the BELL.||idealist::I'm going to be fair. Even to you. Especially to you.||strategist::I have a scoring sheet. Eleven categories. You will not enjoy it.||protector::Just do your best, all right? Nobody here wants you to fail.||prodigy::Technique, presentation, timing. I will notice everything.||underdog::I don't know why they picked me. I really don't.}\"",
+   "choices": [
+    {
+     "label": "Give your best demonstration.",
+     "success": {
+      "text": "{lead} takes the floor. The band stops pretending to play.\nIt is the best thing you have done together all week, and you both know it halfway through.\n\n{rival} holds up a 9. Looks at it. Changes it to an 8.\n{rival}: \"So you don't get a big head.\"\nThe audience boos them, cheerfully. They go red to the ears.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1,
+         "admiration": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "research",
+        "amount": 50
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bow to the judge.",
+     "success": {
+      "text": "You bow to the panel, low and slow and entirely serious.\n{rival} does not know where to put their hands.\n\n{rival}: \"...Stop that. People are looking.\"\nThey are smiling when they say it. They are trying very hard not to.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1,
+         "trust": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tease the judge.",
+     "success": {
+      "text": "\"Is the judge qualified?\" you ask, loudly. The crowd laughs.\n{rival} rings the little brass bell on the table. Hard. Several times.\n\n{rival}: \"{say lost||bitter-challenger::Write that down. I'm writing that down.}\"\nYou get a 6. You deserved a 6.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "rivalry": 1,
+         "friendship": -1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "ahead",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "lead": {
+        "atLeast": 2
+       }
+      }
+     ],
+     "notice": "\n\nThe program lists the judges with their records. {rival}'s is longer than yours this year.\nThey saw you read it. They pretend they did not."
+    },
+    {
+     "id": "behind",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "lead": {
+        "atMost": -1
+       }
+      }
+     ],
+     "notice": "\n\nSomeone in the crowd whispers: \"Isn't that the one who keeps losing to them?\"\n{rival}'s jaw tightens. They score the next contestant very fairly. Too fairly."
+    }
+   ]
+  },
+  {
+   "id": "old-rival-old-friend",
+   "name": "An Old Face on the Road",
+   "group": "Rival questline",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 2
+    },
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    },
+    {
+     "kind": "rivalQuest",
+     "feeling": {
+      "key": "respect",
+      "atLeast": 3
+     }
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2038",
+    "effect": "glint"
+   },
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "intro": "{rival} is sitting on a fence by the road. They have been waiting a while. There is a sandwich wrapper beside them, folded very small.\n\n{rival}: \"Not a battle today.\"\n{rival}: \"I want to see how far you've come. Properly. Not in the middle of a fight.\"\n\n{rival}: \"{say event||protector::You look tired. Good tired, I think. I hope.||bitter-challenger::Don't look so surprised. I can sit still. Sometimes.||idealist::We have been fighting so long I forgot to ask how you are.}\"",
+   "choices": [
+    {
+     "label": "Train together.",
+     "success": {
+      "text": "You spend the afternoon running drills side by side. Neither of you keeps score. Both of you notice the other not keeping score.\n\n{rival}: \"Your {lead} is faster than last time.\"\n{rival}: \"Don't tell it I said that.\"",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1,
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "A friendly match.",
+     "success": {
+      "text": "{rival}: \"Friendly. That means I am only trying ninety per cent.\"\nThey are lying. It is a hundred and ten.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 900
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nugget",
+          "big-pearl",
+          "pearl"
+         ]
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "respect": 1
+         },
+         "lead": 0
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "admiration": 1
+         },
+         "lead": 0
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Trade partners for good.",
+     "requires": [
+      {
+       "kind": "rivalQuest",
+       "feeling": {
+        "key": "trust",
+        "atLeast": 4
+       }
+      }
+     ],
+     "success": {
+      "text": "{rival} looks at you for a long moment. Then at their own team.\n{rival}: \"You mean it. A real trade. Raised for raised.\"\n\nThey hold out a Poké Ball with a scuff on it you have seen across a battlefield more than once.\n{rival}: \"Look after them. They hate the rain.\"",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "old-rival-old-friend",
+        "rival": true
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2,
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-traded",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You nod and keep walking. They nod back.\nSome days that is enough. You both know it is not one of those days.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": -1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "ahead",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "lead": {
+        "atLeast": 2
+       }
+      }
+     ],
+     "notice": "\n\n{rival}: \"I'm ahead. I know I'm ahead. I still wanted to check you were all right.\""
+    },
+    {
+     "id": "behind",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "lead": {
+        "atMost": -2
+       }
+      }
+     ],
+     "notice": "\n\n{rival}: \"You're beating me. I wanted to see what that looks like up close.\"\n{rival}: \"It looks like a person who eats lunch. Huh.\""
+    }
+   ]
+  },
+  {
+   "id": "cheer-rival-match",
+   "name": "A Rival Match to Cheer",
+   "group": "Rival questline",
+   "stop": "contest",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#20202a",
+    "effect": "confetti"
+   },
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "second": true
+    },
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "intro": "A friendly match in the square. {rival} on one side, {rival2} on the other.\nThe crowd is split down the middle, and loud about it.\n\nBoth of them spot you on the fence at the same moment.\n{rival2}: \"Oh, good. A tiebreaker.\"\n{rival}: \"Don't you dare.\"\n\nYou have a voice. Everyone here has noticed.",
+   "choices": [
+    {
+     "label": "Cheer for {rival}.",
+     "success": {
+      "text": "You shout their name. {rival} grins without looking round. {rival2} hears it too, and squares their shoulders.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r11-cheer",
+         "value": 1
+        }
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1,
+         "admiration": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "who": "second",
+        "feelings": {
+         "rivalry": 1
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "cheered-main",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "quest": {
+        "watch": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cheer-rival-match-after"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cheer-rival-match-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Cheer for {rival2}.",
+     "success": {
+      "text": "You shout their name. {rival2} stands a little straighter. {rival} glances over once, sharp, and then fights harder.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r11-cheer",
+         "value": 2
+        }
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "rivalry": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "who": "second",
+        "feelings": {
+         "friendship": 1,
+         "admiration": 1
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "cheered-second",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "quest": {
+        "watch": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cheer-rival-match-after"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cheer-rival-match-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Cheer for both.",
+     "success": {
+      "text": "You cheer every good move, whoever makes it. Both of them look at you like you are mad. Both of them play better.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r11-cheer",
+         "value": 0
+        }
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "who": "second",
+        "feelings": {
+         "respect": 1
+        }
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "quest": {
+        "watch": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cheer-rival-match-after"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cheer-rival-match-after"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "cheer-rival-match-after",
+   "name": "A Rival Match to Cheer: After",
+   "group": "Rival questline",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "rarity": "uncommon",
+   "stop": "event",
+   "minStage": 1,
+   "types": [],
+   "scene": {
+    "cast": [],
+    "tint": "#20202a",
+    "effect": "none"
+   },
+   "intro": "{rival} stands over the result, breathing hard.\n{rival}: \"{say won||champion-chaser::That's how it's done. Were you watching? You were watching.}\"\n{rival2} is already laughing about something their Pokémon did.",
+   "remembers": [
+    {
+     "id": "second",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "feud-watch-winner",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "intro": "{rival2} stands over the result, breathing hard, and looks over to see if you saw.\n{rival} is very busy with a Poké Ball that does not need polishing.\n{rival}: \"...Good match. Shut up. Good match.\""
+    }
+   ],
+   "choices": [
+    {
+     "label": "Climb down off the fence.",
+     "success": {
+      "text": "Nothing is settled between them. Something has moved, though. You both felt it.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "who": "second",
+        "feelings": {
+         "respect": 1
+        }
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

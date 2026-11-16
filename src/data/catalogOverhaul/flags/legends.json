@@ -1273,6 +1273,86 @@
   {
    "key": "chi-yu-beaten",
    "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "echoes-listened",
+   "about": "mr-rival-echoes (listened to every echo); pack Remembers flag, kept for the Final Reunion"
+  },
+  {
+   "key": "cameo-used",
+   "about": "cameo-ally-assist -> its own once-per-run gate"
+  },
+  {
+   "key": "arlen-met",
+   "about": "cameo-veteran-garchomp / -lucario (PA5) -> the two veterans are one Arlen, met once a run"
+  },
+  {
+   "key": "arlen-fought",
+   "about": "PA5 Fight (pack flag arlen.fought), kept for the Final Reunion"
+  },
+  {
+   "key": "arlen-told",
+   "about": "PA5 Tell me (pack flag arlen.told) -> opens the Whose Fault room"
+  },
+  {
+   "key": "arlen-mine",
+   "about": "PA5 \"It was mine.\" (region stamp) -> cameo-veteran-*-joins next region"
+  },
+  {
+   "key": "cameo-veteran-garchomp-joined",
+   "about": "cameo-veteran-garchomp-joins -> once"
+  },
+  {
+   "key": "cameo-veteran-lucario-joined",
+   "about": "cameo-veteran-lucario-joins -> once"
+  },
+  {
+   "key": "archive-visited",
+   "about": "archive-gauntlet-entry (PA7) -> its own Remembers (the empty frame for this run)"
+  },
+  {
+   "key": "companion-recruited",
+   "about": "companion-recruit -> once a run"
+  },
+  {
+   "key": "rk-archive-note",
+   "about": "rk-anniversary-archive note -> rk-hall-of-records Remembers"
+  },
+  {
+   "key": "pedestal-left",
+   "about": "rk-legacy-pedestal (region stamp) -> rk-legacy-pedestal-thanks next region"
+  },
+  {
+   "key": "ranch-taken",
+   "about": "legacy-ranch (pack flag ranch.taken)"
+  },
+  {
+   "key": "ranch-asked",
+   "about": "legacy-ranch Which one? (pack flag ranch.asked) -> the photo room"
+  },
+  {
+   "key": "ranch-kept",
+   "about": "legacy-ranch Keep it here (region stamp, pack ranch.kept) -> legacy-ranch-waiting next region"
+  },
+  {
+   "key": "ranch-done",
+   "about": "legacy-ranch -> once a run"
+  },
+  {
+   "key": "ranch-collected",
+   "about": "legacy-ranch-waiting -> once"
+  },
+  {
+   "key": "cheered-main",
+   "about": "cheer-rival-match (you cheered for the main rival)"
+  },
+  {
+   "key": "cheered-second",
+   "about": "cheer-rival-match (you cheered for the second rival)"
+  },
+  {
+   "key": "rival-traded",
+   "about": "old-rival-old-friend honest trade with the rival"
   }
  ],
  "external": {
