@@ -3,7 +3,7 @@ import { confirmUntil } from './battleInput';
 import { scene, view, waitForScene, watch, start, toMap, toCommands } from './helpers/newUi';
 
 // The New UI (Settings > UI style: New, the default for players): the battle (boxes, windows, versus and cutscene cards, Exp), tooltips, notices and the phone layout.
-// The New UI specs are split over several files (newUi, battleNewUi, menusNewUi, runNewUi, storyNewUi, worldNewUi) whose
+// The New UI specs are split over several files (newUi, battleNewUi, fieldNewUi, menusNewUi, runNewUi, storyNewUi, worldNewUi) whose
 // names are spread over the alphabet, so the browser-test shards each get one of them; the shared steps are in
 // helpers/newUi.ts. The older specs run with the Old UI, so both styles stay covered.
 
