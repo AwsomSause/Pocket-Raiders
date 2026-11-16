@@ -53,6 +53,7 @@ import { bossRoleForClass } from '../core/encounters';
 import { findNode } from '../core/map';
 import { bossInfo, currentRegion, type BossInfo } from '../core/regions';
 import { isFinalBoss, type RunEvent, type TurnResult } from '../core/run';
+import { secondShotNotice, type ShotNotice } from '../core/arc/climaxExtended';
 import { battleContent, noBattleItems, tagPilot } from '../core/rules';
 import { isHardcore, nuzlockeCatchProblem } from '../core/nuzlocke';
 import type { PresentationCue } from '../core/story/queue';
@@ -351,6 +352,8 @@ export class BattleScene extends Phaser.Scene {
   private rxLevel: BattleLevel | null = null;
   private rxLevels = new Map<string, number>();
   private rxEvolve: BattleEvolve | null = null;
+  /** New UI: a notice box over the field that waits for an input (the Second Shot). */
+  private rxNotice: ShotNotice | null = null;
   /** New UI: the Item window's open pocket. */
   private rxPocket = 0;
   private playerBox!: InfoBox;
@@ -505,6 +508,7 @@ export class BattleScene extends Phaser.Scene {
     // S256: emote stickers (Settings > Sticker reactions).
     if (services().session.settings.stickers) addStickerRow(this, () => TRAINER_POS, this.motion);
     this.menu = null;
+    this.rxNotice = null;
     this.picker = null;
     this.rxCall = null;
     this.rxShadow = null;
@@ -1681,6 +1685,7 @@ export class BattleScene extends Phaser.Scene {
       render: (c) => (this.rxData ? battleView(c, this.rxData) : ''),
       acts: {
         pick: (i) => { if (!this.picker && !this.infoPanel && !this.autoRunning) this.menu?.press(Number(i)); },
+        confirm: () => { if (this.rxNotice) this.advance?.(); },
         tab: (i) => this.tabs.press(Number(i)),
         auto: () => this.toggleAuto(),
         info: () => { if (this.infoPanel) this.closePanel(); },
@@ -1774,6 +1779,7 @@ export class BattleScene extends Phaser.Scene {
       card,
       log: this.historyView ? { tabs: LOG_TABS.map((t) => t.label), index: LOG_TABS.findIndex((t) => t.id === this.logTab), lines: filterLog(this.history, this.logTab).slice(-12) } : null,
       fx: this.rxFx(!!menu, list),
+      notice: this.rxNotice,
     };
     const sig = JSON.stringify(data);
     if (sig === this.rxSig) return;
@@ -2034,6 +2040,24 @@ export class BattleScene extends Phaser.Scene {
       // While the text is still being typed, the first press shows the rest of it.
       this.time.delayedCall(120, () => (this.advance = () => (this.finishTyping() ? undefined : done())));
     });
+  }
+
+  /** A notice that waits for an input: the mock-ups' confirm box over the field in the New look, two text lines in the Old one. */
+  private async tellNotice(n: ShotNotice): Promise<void> {
+    if (!this.rx) {
+      await this.say(`${n.title}.`);
+      await this.say(n.body);
+      return;
+    }
+    this.rxNotice = n;
+    await new Promise<void>((resolve) => {
+      // Ignore the key press that closed the last message.
+      this.time.delayedCall(250, () => (this.advance = () => {
+        this.advance = null;
+        resolve();
+      }));
+    });
+    this.rxNotice = null;
   }
 
   /** A damage number that floats up from the Pokémon that was hit (Settings > Damage numbers). */
@@ -4252,6 +4276,9 @@ export class BattleScene extends Phaser.Scene {
     if (this.role === 'rival' && (result.narrativeDefeat || result.wiped || result.defeated)) await this.fx.flourish('enemy', 'rival.win', ENEMY_POS);
     if (result.storyLoss) {
       await this.say('You lost this one, but the story goes on. Your team is patched up.');
+      // Extended Cut: a lost climax battle spends the Second Shot; the player is told what that means before the screen leaves.
+      const shot = secondShotNotice(before, result.run);
+      if (shot) await this.tellNotice(shot);
       await exitWipe(this, this.motion, this.wipeMask());
       this.scene.start(sceneForRun(result.run));
       return;

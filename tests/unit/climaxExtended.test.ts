@@ -1,6 +1,6 @@
 // Beta 0.6 E5: the Extended Cut director, the one climax-cut reader, and Second Shot.
 import { describe, expect, it } from 'vitest';
-import { beginClimax, climaxBoard, climaxCutOf, climaxLost, climaxPhases, finishStep, nextStep } from '../../src/core/arc/climaxExtended';
+import { beginClimax, climaxBoard, climaxCutOf, climaxLost, climaxPhases, finishStep, nextStep, secondShotNotice } from '../../src/core/arc/climaxExtended';
 import { assistModeOf } from '../../src/core/rivals/live';
 import { friendAssist } from '../../src/core/rivals/friend';
 import { xflagHolds } from '../../src/core/events';
@@ -215,5 +215,53 @@ describe('the phase list the player reads (climaxBoard)', () => {
     expect(b.rows[0]!.state).toBe('now');
     expect(b.shots).toBe(0);
     expect(b.rows[0]!.pct).toBe(0);
+  });
+});
+
+describe('what a lost climax battle tells the player (secondShotNotice)', () => {
+  it('the first loss is the Second Shot: a retry, with a warning about the next loss', () => {
+    const r = mk('extended');
+    beginClimax(r, 'kanto');
+    const before = structuredClone(r);
+    expect(climaxLost(r)).toBe('retry');
+    const n = secondShotNotice(before, r)!;
+    expect(n.title).toBe('Second Shot');
+    expect(n.button).toBe('Try again');
+    expect(n.body).toContain('last save point');
+    expect(n.body).toContain('One more loss ends the climax');
+  });
+  it('the second loss ends the climax, and says the run goes on', () => {
+    const r = mk('extended');
+    beginClimax(r, 'kanto');
+    climaxLost(r);
+    const before = structuredClone(r);
+    expect(climaxLost(r)).toBe('worst');
+    const n = secondShotNotice(before, r)!;
+    expect(n.title).toBe('The climax is lost');
+    expect(n.button).toBe('Go on');
+    expect(n.body).toContain('the run goes on');
+  });
+  it('says nothing when no shot was spent: a win, a Standard run, a battle before the climax', () => {
+    const r = mk('extended');
+    beginClimax(r, 'kanto');
+    expect(secondShotNotice(structuredClone(r), r)).toBeNull();
+    const plain = mk('standard');
+    expect(secondShotNotice(structuredClone(plain), plain)).toBeNull();
+    const early = mk('extended');
+    expect(secondShotNotice(structuredClone(early), early)).toBeNull();
+    expect(secondShotNotice(mk(), mk())).toBeNull();
+  });
+  it('reads only, and a damaged director never crashes it', () => {
+    const r = mk('extended');
+    beginClimax(r, 'kanto');
+    const before = structuredClone(r);
+    climaxLost(r);
+    const snap = JSON.stringify(r);
+    secondShotNotice(before, r);
+    expect(JSON.stringify(r)).toBe(snap);
+    (r.expansion!.cut as Record<string, unknown>).director = { shots: 'x' };
+    expect(secondShotNotice(before, r)).toBeNull();
+    (r.expansion!.cut as Record<string, unknown>).director = null;
+    expect(secondShotNotice(before, r)).toBeNull();
   });
 });

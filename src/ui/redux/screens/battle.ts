@@ -5,6 +5,7 @@
 import { act, esc, facts, foot, hpb, img, mini, mon, TX, TYPE_COLORS, ty, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { type Art, pic, scrollStart } from '../templates';
+import { confirmBox } from './saves';
 
 export interface BattleBox {
   name: string;
@@ -67,6 +68,8 @@ export interface BattleModel {
   log?: { tabs: readonly string[]; index: number; lines: readonly string[] } | null;
   /** The Beta 0.6 pieces over the field; each shows only while its rule is in play. */
   fx?: BattleFx | null;
+  /** A notice over the field that waits for an input (the Extended Cut's Second Shot): the mock-ups' confirm box with one button. */
+  notice?: { title: string; body: string; button: string } | null;
 }
 
 export interface BattleFx {
@@ -300,7 +303,7 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
   const dark = f.shadow ? `<div class="abs win" style="left:20px;bottom:${Math.max(150, top + 8) + (d.gim?.length && v !== 2 && v !== 3 ? 42 : 0)}px;width:480px;padding:7px 12px;background:#1c0a2c;color:#f0e0ff;font-size:15px;z-index:3${still}"><b>${esc(f.shadow.head)}</b>${f.shadow.plan ? `<br>${esc(f.shadow.plan)}` : ''}</div>` : '';
   const pieces = level ? '' : budget + rally + rule + variant + trait + dark;
   // The run header gives its corner to the budget and the variant hint while they show.
-  return shade + level + head + body + tabs + gim + marks + (rows.length || level || budget || variant ? '' : header) + (rows.length || level ? '' : momentum) + status + note + pin + pieces + panels + tip + (d.panels?.length || d.log || level ? '' : card) + log + (level ? '' : exp);
+  return shade + level + head + body + tabs + gim + marks + (rows.length || level || budget || variant ? '' : header) + (rows.length || level ? '' : momentum) + status + note + pin + pieces + panels + tip + (d.panels?.length || d.log || level ? '' : card) + log + (level ? '' : exp) + (d.notice ? confirmBox({ title: d.notice.title, body: d.notice.body, options: [d.notice.button], index: 0 }) : '');
 }
 
 export interface BattleListRow {

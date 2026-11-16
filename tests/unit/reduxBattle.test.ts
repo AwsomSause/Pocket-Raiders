@@ -452,3 +452,24 @@ describe('New UI battle: the Beta 0.6 pieces over the field', () => {
     for (const bit of ['<b>r</b>', '<i>n</i>', '<u>t</u>', '<p>a</p>', '<s>b</s>', '<em>h</em>', '<q>p</q>']) expect(html).not.toContain(bit);
   });
 });
+
+describe('New UI battle: a notice that waits for an input (the Second Shot)', () => {
+  const notice = { title: 'Second Shot', body: 'You go back to the last save point.', button: 'Try again' };
+  it('is the confirm box over the field: a shade, the title, the words and one lit button', () => {
+    for (const layout of [0, 1, 2, 3]) {
+      const html = battleView(ctx(layout), model({ notice, menu: null, text: 'The match is over.' }));
+      expect(html).toContain('class="shade"');
+      expect(html).toContain('>Second Shot<');
+      expect(html).toContain('You go back to the last save point.');
+      expect(html.split('data-act="confirm"').length - 1).toBe(1);
+      expect(html).toContain('class="btn on"');
+      expect(html).toContain('Try again');
+    }
+  });
+  it('is not there without a notice, and its text is never HTML', () => {
+    expect(battleView(ctx(0), model())).not.toContain('data-act="confirm"');
+    expect(battleView(ctx(0), model({ notice: null }))).toBe(battleView(ctx(0), model()));
+    const html = battleView(ctx(0), model({ notice: { title: '<b>t</b>', body: '<i>b</i>', button: '<u>k</u>' } }));
+    for (const bit of ['<b>t</b>', '<i>b</i>', '<u>k</u>']) expect(html).not.toContain(bit);
+  });
+});

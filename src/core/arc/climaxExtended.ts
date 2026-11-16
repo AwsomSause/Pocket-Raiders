@@ -96,6 +96,21 @@ export function climaxBoard(run: Pick<RunState, 'expansion'>): ClimaxBoard | nul
   return { region, rows, shots: Math.max(0, Number(dir.shots) || 0), tries: SECOND_SHOT_TRIES };
 }
 
+export interface ShotNotice { title: string; body: string; button: string }
+
+/**
+ * What a lost climax battle means, for the screen to tell the player: the run before the loss and after it. Null when
+ * the loss spent no shot (a Standard Cut run, or a battle outside the climax). Reads only.
+ */
+export function secondShotNotice(before: Pick<RunState, 'expansion'>, after: Pick<RunState, 'expansion'>): ShotNotice | null {
+  if (climaxCutOf(after) !== 'extended') return null;
+  const shots = (run: Pick<RunState, 'expansion'>): number => Math.max(0, Number(((run.expansion?.cut as Record<string, unknown> | undefined)?.director as Partial<Dir> | undefined)?.shots) || 0);
+  const now = shots(after);
+  if (now <= shots(before)) return null;
+  if (now >= SECOND_SHOT_TRIES) return { title: 'The climax is lost', body: 'That was the Second Shot. The climax ends here with its worst ending, and the run goes on.', button: 'Go on' };
+  return { title: 'Second Shot', body: 'You lost, but the climax is not over. You go back to the last save point with your team patched up. One more loss ends the climax.', button: 'Try again' };
+}
+
 /** The climax begins: forgets the last climax's formats and starts at phase 0. Standard-cut runs do nothing. */
 /** Regions whose Extended Cut is wired. Formats with no content for a region skip themselves (`canStart`). */
 export const EXTENDED_REGIONS: readonly string[] = ['kanto', 'alola', 'paldea', 'kalos', 'galar', 'sinnoh', 'hoenn', 'johto', 'unova'];

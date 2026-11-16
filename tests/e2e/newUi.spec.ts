@@ -2209,3 +2209,43 @@ test('New UI: a Celadon Department Store floor is the mock-up store page: floor 
   await expect(rows).toHaveCount(3);
   expect(errors).toEqual([]);
 });
+
+test('New UI: losing an Extended Cut climax battle shows the Second Shot box over the battle; it waits for an input, then the climax goes on', async ({ page }) => {
+  test.setTimeout(120_000);
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-shot');
+  await toMap(page);
+  // The Kanto Extended Cut stands at its first battle phase (The Climb); the map launches the fight at once.
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    const run = pkr.session.run;
+    run.story.evil = { ...(run.story.evil ?? {}), teamId: pkr.session.content.evilTeams.teams[0].id };
+    run.expansion = { ...(run.expansion ?? {}), cut: { climaxCut: 'extended', region: 'kanto', director: { idx: 3, shots: 0 } } };
+    pkr.game.scene.getScene('Map').scene.restart({ focus: 0 });
+  });
+  await waitForScene(page, 'Battle', 30_000);
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.battle?.event?.eventId)).toBe('format:climax');
+  // One Pokémon on its last HP that only knows Splash: it falls. Keep choosing the move until the fight is lost.
+  await page.evaluate(() => {
+    const run = (window as any).__pkr.session.run;
+    // (Death-Block keeps its own wipe rule, so it is off: a climax loss is then a story loss, which the Second Shot counts.)
+    run.rules.deathBlock = false;
+    run.party.forEach((m: any, k: number) => { m.hp = k === 0 ? 1 : 0; m.moves = [{ ...m.moves[0], id: 'splash', pp: 40 }]; });
+  });
+  const field = view(page, 'Battle');
+  const box = field.locator('.win', { hasText: 'Second Shot' });
+  for (let k = 0; k < 160 && !(await box.count()); k++) { await page.keyboard.press('Enter'); await page.waitForTimeout(250); }
+  await expect(box).toBeVisible();
+  await expect(box).toContainText('You lost, but the climax is not over.');
+  await expect(box.locator('[data-act="confirm"]')).toHaveText('Try again');
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.expansion.cut.director.shots)).toBe(1);
+  await page.screenshot({ path: 'test-results/newui-second-shot.png' });
+  // It stays until an input: nothing moves on by itself.
+  await page.waitForTimeout(1500);
+  await expect(box).toBeVisible();
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.isActive('Battle'))).toBe(true);
+  await box.locator('[data-act="confirm"]').click();
+  // The run goes on: the climax starts its next fight (or page), never the game-over screen.
+  await expect.poll(async () => page.evaluate(() => { const pkr = (window as any).__pkr; return pkr.session.run.phase !== 'over' && !pkr.game.scene.isActive('GameOver') && pkr.session.run.party.some((m: any) => m.hp > 0); }), { timeout: 20_000 }).toBe(true);
+  expect(errors).toEqual([]);
+});
