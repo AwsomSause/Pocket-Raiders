@@ -1154,6 +1154,8 @@ export const StageStateSchema = z.object({
   visited: z.array(z.string()),
   /** Fog of war: the map shows every column up to this one (scouting); 0 = only what you can see. */
   scoutedTo: z.number().int().min(0).default(0),
+  /** gn.new.12: while set, the whole map is on show for a few seconds (the Xatu's map); `scoutedTo` drops back to this value when it blurs. */
+  peekFrom: z.number().int().min(0).optional(),
   /** Weather Prophet (S124): extra columns the weather forecast reaches this stage (an event's `foresight` effect). */
   foresight: z.number().int().min(0).default(0),
   /** Fronts that rolled in during the stage (an event's `front` effect); the stage's own come from its seed (core/world.ts). */

@@ -25,7 +25,7 @@ export const EVENTS: Json[] = [
     )),
     ch('Look, and refuse to listen.', out(
       'You look at the map. Every lane, every step. You put your hands over your ears, and the Xatu watches you do it. After ten slow seconds the lines blur, and the paper is only paper. The Xatu goes back to the sun.',
-      setTo('xatu-met', 1), scout(20),
+      setTo('xatu-met', 1), gn('xatuPeek'),
     )),
     ch('Leave.', out('You leave the maps under their stones. Behind you, the Xatu turns to watch you go, all the way round.')),
   ]),

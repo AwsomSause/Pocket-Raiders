@@ -88,8 +88,8 @@
         "n": 1
        },
        {
-        "kind": "scout",
-        "columns": 20
+        "kind": "gn",
+        "op": "xatuPeek"
        }
       ]
      }

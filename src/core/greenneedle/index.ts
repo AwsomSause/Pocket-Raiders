@@ -58,7 +58,7 @@ import { reunionArrive, reunionFar, reunionTokens } from './reunion';
 import { giveDearest } from './fox';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { paradeAll, paradeEgg, paradeEggReady, paradeForget, paradeMemory, paradeNickname, paradeSecret, paradeSwap, paradeWake } from './parade';
-import { finalRest, xatuDraw, xatuTokens, xatuTrue } from './cartographer';
+import { finalRest, xatuBlur, xatuDraw, xatuPeek, xatuTokens, xatuTrue } from './cartographer';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
 import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
@@ -693,6 +693,11 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'paradeWake':
       return paradeWake(content, run, host.float());
     // gn.new.12: the Xatu's image (drawn from the stop's seeded roll); `xatuRedraw`: the second draw after Communion.
+    case 'xatuPeek':
+      return xatuPeek(content, run);
+    case 'xatuBlur':
+      xatuBlur(run);
+      return '';
     case 'xatuDraw':
     case 'xatuRedraw':
       return xatuDraw(content, run, host.float, e.op === 'xatuRedraw');
