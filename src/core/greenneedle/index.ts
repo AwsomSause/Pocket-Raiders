@@ -172,13 +172,18 @@ export const JUNGLE_DOWN = 'gn-jungle-down:';
 
 export const FOREST = { inside: 'gn-forest-in', battles: 'gn-forest-battles', fought: 'gn-forest-fought', rank: 'gn-forest-rank', evolved: 'gn-forest-evolved', fog: 'gn-forest-fog', duelist: 'gn-forest-duelist', big: 'gn-forest-big' } as const;
 
-/** The newest conscious party Pokémon of the type becomes the forest's duelist (once; later calls do nothing). */
+/** Mark on every Pokémon the player owned on walking into the forest: only a Bug-type caught inside can be the duelist. */
+export const PRE_FOREST = 'pre-forest';
+
+/** The first conscious party Pokémon of the type that was caught in the forest becomes its duelist (once; later calls do nothing). */
 export function markDuelist(content: Content, run: RunState, type: string): string {
   if (markedMon(run, 'duelist')) return '';
-  const fits = run.party.filter((m) => m.hp > 0 && (content.species.get(m.speciesId)?.types as string[] | undefined)?.includes(type));
-  const mon = fits[fits.length - 1];
+  const fits = run.party.filter((m) => m.hp > 0 && !m.gn?.includes(PRE_FOREST) && (content.species.get(m.speciesId)?.types as string[] | undefined)?.includes(type));
+  const mon = fits[0];
   if (!mon) return '';
   mon.gn = [...(mon.gn ?? []), `duelist:${mon.speciesId}`];
+  // A Caterpie duelist: the forest's other Caterpie crowd round it (wild Caterpie may be walked through).
+  setGnFlag(run, 'gn-forest-caterpie', mon.speciesId === 'caterpie' ? 1 : 0);
   for (const k of [FOREST.battles, FOREST.fought, FOREST.rank, FOREST.evolved]) setGnFlag(run, k, 0);
   setGnFlag(run, FOREST.duelist, 1);
   setGnFlag(run, FOREST.big, ['pinsir', 'scyther', 'heracross'].includes(mon.speciesId) ? 1 : 0);

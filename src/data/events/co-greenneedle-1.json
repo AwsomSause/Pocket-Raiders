@@ -67,14 +67,13 @@
        },
        {
         "kind": "gn",
-        "op": "roll",
-        "key": "gn-forest-fog",
-        "n": 10
+        "op": "markParty",
+        "key": "pre-forest"
        },
        {
         "kind": "gn",
         "op": "roll",
-        "key": "gn-forest-trap",
+        "key": "gn-forest-fog",
         "n": 10
        },
        {
@@ -143,32 +142,47 @@
        "win": [
         {
          "kind": "gn",
-         "op": "duelist",
-         "type": "bug"
-        },
-        {
-         "kind": "gn",
          "op": "when",
-         "key": "gn-forest-trap",
+         "key": "gn-forest-trapped",
+         "min": 0,
+         "max": 0,
          "then": [
           {
            "kind": "gn",
-           "op": "setFlag",
+           "op": "roll",
            "key": "gn-forest-trap",
-           "n": 0
+           "n": 10
           },
           {
-           "kind": "flag",
-           "key": "flight-sighting",
-           "amount": 1
-          },
-          {
-           "kind": "moment",
-           "text": "A net dropped on the party in the forest. Far above the leaves: a balloon with a cat's face.",
-           "importance": 55
+           "kind": "gn",
+           "op": "when",
+           "key": "gn-forest-trap",
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "gn-forest-trap",
+             "n": 0
+            },
+            {
+             "kind": "flag",
+             "key": "gn-forest-trapped",
+             "amount": 1
+            },
+            {
+             "kind": "flag",
+             "key": "flight-sighting",
+             "amount": 1
+            },
+            {
+             "kind": "moment",
+             "text": "A net dropped on the party in the forest. Far above the leaves: a balloon with a cat's face.",
+             "importance": 55
+            }
+           ],
+           "text": "A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat's face, drifting away as if it had somewhere better to be."
           }
-         ],
-         "text": "A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat's face, drifting away as if it had somewhere better to be."
+         ]
         },
         {
          "kind": "addEvent",
@@ -220,6 +234,50 @@
          "type": "bug"
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-forest-trapped",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "roll",
+           "key": "gn-forest-trap",
+           "n": 10
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "gn-forest-trap",
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "gn-forest-trap",
+             "n": 0
+            },
+            {
+             "kind": "flag",
+             "key": "gn-forest-trapped",
+             "amount": 1
+            },
+            {
+             "kind": "flag",
+             "key": "flight-sighting",
+             "amount": 1
+            },
+            {
+             "kind": "moment",
+             "text": "A net dropped on the party in the forest. Far above the leaves: a balloon with a cat's face.",
+             "importance": 55
+            }
+           ],
+           "text": "A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat's face, drifting away as if it had somewhere better to be."
+          }
+         ]
+        },
+        {
          "kind": "addEvent",
          "eventId": "gn-03-oak"
         }
@@ -229,6 +287,50 @@
          "kind": "gn",
          "op": "duelist",
          "type": "bug"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-forest-trapped",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "roll",
+           "key": "gn-forest-trap",
+           "n": 10
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "gn-forest-trap",
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "gn-forest-trap",
+             "n": 0
+            },
+            {
+             "kind": "flag",
+             "key": "gn-forest-trapped",
+             "amount": 1
+            },
+            {
+             "kind": "flag",
+             "key": "flight-sighting",
+             "amount": 1
+            },
+            {
+             "kind": "moment",
+             "text": "A net dropped on the party in the forest. Far above the leaves: a balloon with a cat's face.",
+             "importance": 55
+            }
+           ],
+           "text": "A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat's face, drifting away as if it had somewhere better to be."
+          }
+         ]
         },
         {
          "kind": "addEvent",
@@ -375,6 +477,50 @@
          "amount": 1
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-forest-trapped",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "roll",
+           "key": "gn-forest-trap",
+           "n": 10
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "gn-forest-trap",
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "gn-forest-trap",
+             "n": 0
+            },
+            {
+             "kind": "flag",
+             "key": "gn-forest-trapped",
+             "amount": 1
+            },
+            {
+             "kind": "flag",
+             "key": "flight-sighting",
+             "amount": 1
+            },
+            {
+             "kind": "moment",
+             "text": "A net dropped on the party in the forest. Far above the leaves: a balloon with a cat's face.",
+             "importance": 55
+            }
+           ],
+           "text": "A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat's face, drifting away as if it had somewhere better to be."
+          }
+         ]
+        },
+        {
          "kind": "addEvent",
          "eventId": "gn-03-oak"
         }
@@ -425,6 +571,15 @@
          "eventId": "gn-03-oak"
         }
        ],
+       "rare": [
+        {
+         "species": [
+          "shedinja"
+         ],
+         "chance": 0.01,
+         "flag": "gn-forest-fog"
+        }
+       ],
        "pseudo": true
       }
      },
@@ -463,6 +618,28 @@
       "text": "You step through the split in the oak. For one stride there is a tree on either side of you, and both of them are the same tree.",
       "effects": [
        {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-forest-duelist",
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-forest-big",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-03-cat",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       },
+       {
         "kind": "addEvent",
         "eventId": "gn-03-hollow"
        }
@@ -493,9 +670,10 @@
      "id": "weedle",
      "when": [
       {
-       "kind": "partyType",
-       "type": "bug",
-       "absent": true
+       "kind": "flag",
+       "key": "gn-forest-duelist",
+       "atLeast": 0,
+       "atMost": 0
       }
      ],
      "notice": "And in the middle of the path, exactly where you would have to step, sits a Weedle. It is not blocking the way. It is sitting the way someone sits who was told to wait here, and has, for longer than was reasonable.",
@@ -526,6 +704,190 @@
           "eventId": "gn-03-hollow"
          }
         ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "crowd",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-03-cat",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-caterpie",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Wild Caterpie are coming down the trunks and out of the ferns, a dozen of them, and they are not coming for you. They crowd round your Caterpie, feelers going, as if it had brought news from town. They will let you both through without a fight, if you would rather.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Battle the wild Caterpie on the path.",
+       "success": {
+        "text": "It rears up as tall as it goes, which is not very. It means it, though.",
+        "effects": [],
+        "battle": {
+         "kind": "wild",
+         "species": [
+          "caterpie"
+         ],
+         "types": [],
+         "levelBonus": -1,
+         "shinyMultiplier": 1,
+         "win": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "gn-03-cat",
+           "n": 0
+          },
+          {
+           "kind": "gn",
+           "op": "duelist",
+           "type": "bug"
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-03-hollow"
+          }
+         ],
+         "caught": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "gn-03-cat",
+           "n": 0
+          },
+          {
+           "kind": "gn",
+           "op": "duelist",
+           "type": "bug"
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-03-hollow"
+          }
+         ],
+         "rare": [
+          {
+           "species": [
+            "shedinja"
+           ],
+           "chance": 0.01,
+           "flag": "gn-forest-fog"
+          }
+         ],
+         "pseudo": true
+        }
+       }
+      },
+      {
+       "label": "Let them crowd round it, and walk on through.",
+       "success": {
+        "text": "Your Caterpie goes down the dip in the middle of a slow green parade. They touch feelers with it, one after another, and then they part, and the path is clear. Yours looks back at them twice.",
+        "effects": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-03-cat",
+          "n": 0
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-03-hollow"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "caterpie",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-03-cat",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-forest-caterpie",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "A wild Caterpie has planted itself in the dip, between you and the Bug Catcher, and reared up as tall as it goes. It does not know what to make of the Bug-type beside you, and it is not moving until it does.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Battle the wild Caterpie on the path.",
+       "success": {
+        "text": "It rears up as tall as it goes, which is not very. It means it, though.",
+        "effects": [],
+        "battle": {
+         "kind": "wild",
+         "species": [
+          "caterpie"
+         ],
+         "types": [],
+         "levelBonus": -1,
+         "shinyMultiplier": 1,
+         "win": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "gn-03-cat",
+           "n": 0
+          },
+          {
+           "kind": "gn",
+           "op": "duelist",
+           "type": "bug"
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-03-hollow"
+          }
+         ],
+         "caught": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "gn-03-cat",
+           "n": 0
+          },
+          {
+           "kind": "gn",
+           "op": "duelist",
+           "type": "bug"
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-03-hollow"
+          }
+         ],
+         "rare": [
+          {
+           "species": [
+            "shedinja"
+           ],
+           "chance": 0.01,
+           "flag": "gn-forest-fog"
+          }
+         ],
+         "pseudo": true
+        }
        }
       }
      ]
@@ -560,13 +922,65 @@
          "type": "bug"
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-forest-trapped",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "roll",
+           "key": "gn-forest-trap",
+           "n": 10
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "gn-forest-trap",
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "gn-forest-trap",
+             "n": 0
+            },
+            {
+             "kind": "flag",
+             "key": "gn-forest-trapped",
+             "amount": 1
+            },
+            {
+             "kind": "flag",
+             "key": "flight-sighting",
+             "amount": 1
+            },
+            {
+             "kind": "moment",
+             "text": "A net dropped on the party in the forest. Far above the leaves: a balloon with a cat's face.",
+             "importance": 55
+            }
+           ],
+           "text": "A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat's face, drifting away as if it had somewhere better to be."
+          }
+         ]
+        },
+        {
          "kind": "addEvent",
          "eventId": "gn-03-clearing"
         }
        ],
        "pseudo": true
       }
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-03-cat",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
     },
     {
      "label": "Look inside the sweet-smelling tree.",
@@ -663,6 +1077,15 @@
         {
          "kind": "addEvent",
          "eventId": "gn-03-hollow"
+        }
+       ],
+       "rare": [
+        {
+         "species": [
+          "shedinja"
+         ],
+         "chance": 0.01,
+         "flag": "gn-forest-fog"
         }
        ],
        "pseudo": true
@@ -815,6 +1238,15 @@
          "rule": {
           "leadMark": "duelist"
          },
+         "rare": [
+          {
+           "species": [
+            "shedinja"
+           ],
+           "chance": 0.01,
+           "flag": "gn-forest-fog"
+          }
+         ],
          "pseudo": true
         }
        }
@@ -839,6 +1271,11 @@
           "kind": "gn",
           "op": "unmark",
           "key": "duelist"
+         },
+         {
+          "kind": "gn",
+          "op": "unmark",
+          "key": "pre-forest"
          },
          {
           "kind": "leavePseudo"
@@ -876,6 +1313,16 @@
         "n": 0
        },
        {
+        "kind": "gn",
+        "op": "unmark",
+        "key": "duelist"
+       },
+       {
+        "kind": "gn",
+        "op": "unmark",
+        "key": "pre-forest"
+       },
+       {
         "kind": "leavePseudo"
        }
       ]
@@ -904,6 +1351,16 @@
         "op": "setFlag",
         "key": "gn-forest-in",
         "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "unmark",
+        "key": "duelist"
+       },
+       {
+        "kind": "gn",
+        "op": "unmark",
+        "key": "pre-forest"
        },
        {
         "kind": "leavePseudo"
@@ -989,6 +1446,11 @@
           "key": "duelist"
          },
          {
+          "kind": "gn",
+          "op": "unmark",
+          "key": "pre-forest"
+         },
+         {
           "kind": "leavePseudo"
          }
         ]
@@ -1033,6 +1495,11 @@
           "kind": "gn",
           "op": "unmark",
           "key": "duelist"
+         },
+         {
+          "kind": "gn",
+          "op": "unmark",
+          "key": "pre-forest"
          },
          {
           "kind": "leavePseudo"
@@ -1125,6 +1592,11 @@
          "n": 0
         },
         {
+         "kind": "gn",
+         "op": "unmark",
+         "key": "pre-forest"
+        },
+        {
          "kind": "moment",
          "text": "The Samurai bowed. \"Next forest. I'll be at the far side.\"",
          "importance": 60
@@ -1176,6 +1648,14 @@
     {
      "kind": "partyType",
      "type": "bug"
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "grass",
+      "bug",
+      "fairy"
+     ]
     }
    ],
    "scene": {
@@ -1212,6 +1692,27 @@
          "kind": "teachMove",
          "move": "samurai-slash",
          "type": "bug"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-forest-evolved",
+         "then": [
+          {
+           "kind": "egg",
+           "species": [
+            "scyther",
+            "pinsir",
+            "heracross"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "left": 3,
+           "unit": "battle"
+          }
+         ],
+         "text": "**The Samurai:** \"It became itself in front of me. I've an egg that deserves that.\""
         },
         {
          "kind": "flag",

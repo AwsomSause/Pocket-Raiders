@@ -22,6 +22,29 @@ const SAMURAI_DUEL = (win: Json[], lose: Json[]): Json => ({
   lose,
 });
 
+/** The Hunters' Trap: 10% at any node, once a forest (rolled as each node's fight ends). A sighting for Flight North. */
+const TRAP: Json = when('gn-forest-trapped', { min: 0, max: 0 }, [
+  roll('gn-forest-trap', 10),
+  when('gn-forest-trap', {}, [setTo('gn-forest-trap', 0), flag('gn-forest-trapped'), flag('flight-sighting'), moment('A net dropped on the party in the forest. Far above the leaves: a balloon with a cat\'s face.', 55)],
+    'A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat\'s face, drifting away as if it had somewhere better to be.'),
+]);
+/** The Fog: where it lies, a Shedinja can appear (1%) in any wild meeting of the forest. */
+const SHEDINJA: Json = { species: ['shedinja'], chance: 0.01, flag: 'gn-forest-fog' };
+/** The forest is left: nobody is the duelist any more, and the marks from the door come off. */
+const LEAVE_FOREST: Json[] = [setTo('gn-forest-in', 0), gn('unmark', { key: 'duelist' }), gn('unmark', { key: 'pre-forest' }), leavePseudo()];
+const SAMURAI_EGG: Json = egg({ species: ['scyther', 'pinsir', 'heracross'], left: 3, unit: 'battle' });
+
+const CAT_FIGHT: Json =
+    ch('Battle the wild Caterpie on the path.', fight(
+      'It rears up as tall as it goes, which is not very. It means it, though.',
+      inside({ ...eitherWay(wild({ species: ['caterpie'], lv: -1, win: [setTo('gn-03-cat', 0), gn('duelist', { type: 'bug' }), room('gn-03-hollow')] })), rare: [SHEDINJA] }),
+    ));
+const CAT_WALK: Json =
+    ch('Let them crowd round it, and walk on through.', out(
+      'Your Caterpie goes down the dip in the middle of a slow green parade. They touch feelers with it, one after another, and then they part, and the path is clear. Yours looks back at them twice.',
+      setTo('gn-03-cat', 0), room('gn-03-hollow'),
+    ));
+
 const gn03: Json[] = [
   gev('gn-03-door', "Viridian Forest: The Samurai's Challenge", forest({
     stop: 'event', rarity: 'rare', forced: true, minStage: 1, types: ['bug', 'grass'], effect: 'float', requires: [not('gn-03-entered')],
@@ -40,7 +63,7 @@ const gn03: Json[] = [
   ), [
     ch('Step under the trees.', out(
       'You step in. The light changes on your hands first. Behind you the road is already a bright coin at the end of a tunnel, and getting smaller.',
-      flag('gn-03-entered'), setTo('gn-forest-in', 1), roll('gn-forest-fog', 10), roll('gn-forest-trap', 10), room('gn-03-eaves'),
+      flag('gn-03-entered'), setTo('gn-forest-in', 1), gn('markParty', { key: 'pre-forest' }), roll('gn-forest-fog', 10), room('gn-03-eaves'),
     )),
     ch('Not today.', leave('You stand at the tree line a moment longer. The forest does not mind. It has waited for people before, and it will be here.')),
   ]),
@@ -61,9 +84,7 @@ const gn03: Json[] = [
     ch('Battle Bug Catcher Arlo.', fight(
       '**Bug Catcher Arlo:** "Right! Yes! Battle! I knew that\'s what this was!"',
       BUG_CATCHER('Bug Catcher Arlo', [
-        gn('duelist', { type: 'bug' }),
-        when('gn-forest-trap', {}, [setTo('gn-forest-trap', 0), flag('flight-sighting'), moment('A net dropped on the party in the forest. Far above the leaves: a balloon with a cat\'s face.', 55)],
-          'A net drops out of the branches onto your whole party! By the time you have fought free of it, there is only a shape far above the leaves: a balloon, with a cat\'s face, drifting away as if it had somewhere better to be.'),
+        TRAP,
         room('gn-03-gift'),
       ]),
     )),
@@ -78,8 +99,8 @@ const gn03: Json[] = [
     ch('Part the ferns.', fight(
       'You part the ferns. It looks up at you. It does not run. It was always going to be here, and so, it seems, were you.',
       inside({
-        ...eitherWay(wild({ species: ['caterpie', 'weedle'], lv: -1, win: [gn('duelist', { type: 'bug' }), room('gn-03-oak')] })),
-        rare: [{ species: ['shedinja'], chance: 0.01, flag: 'gn-forest-fog' }, { species: ['pinsir', 'scyther', 'heracross'], chance: 0.1 }],
+        ...eitherWay(wild({ species: ['caterpie', 'weedle'], lv: -1, win: [gn('duelist', { type: 'bug' }), TRAP, room('gn-03-oak')] })),
+        rare: [SHEDINJA, { species: ['pinsir', 'scyther', 'heracross'], chance: 0.1 }],
       }),
     )),
   ]),
@@ -98,24 +119,29 @@ const gn03: Json[] = [
   ), [
     chIf([not('gn-03-oak-won')], 'Battle the Bug Catcher in the fork.', fight(
       'He drops out of the fork and lands badly and pretends he meant to.',
-      BUG_CATCHER('Bug Catcher', [gn('duelist', { type: 'bug' }), flag('gn-03-oak-won'), room('gn-03-oak')]),
+      BUG_CATCHER('Bug Catcher', [gn('duelist', { type: 'bug' }), flag('gn-03-oak-won'), TRAP, room('gn-03-oak')]),
     )),
     chIf([not('gn-03-swarm-tried'), not('gn-forest-big')], 'Follow the buzzing off the path.', fight(
       'The thicket opens like a door kicked from the inside. Weedle on the low twigs, Kakuna hung in rows like lanterns, and above them the Beedrill, coming down in three waves. Stand through all three and whatever they were guarding is yours.',
-      inside(wild({ species: ['weedle', 'kakuna', 'beedrill'], lv: -1, chain: 3, win: [item('poison-barb'), room('gn-03-oak')] })),
+      inside({ ...wild({ species: ['weedle', 'kakuna', 'beedrill'], lv: -1, chain: 3, win: [item('poison-barb'), room('gn-03-oak')] }), rare: [SHEDINJA] }),
       flag('gn-03-swarm-tried'),
     ), {
       chance: 0.4,
       fail: out('You push through to the buzzing and find only an old nest, grey and papery, humming with nothing but the wind in its empty cells. Whatever lived here moved on. You go back to the path.', flag('gn-03-swarm-tried'), room('gn-03-oak')),
     }),
-    chIf([is('gn-03-oak-won')], 'Walk on, deeper in.', out('You step through the split in the oak. For one stride there is a tree on either side of you, and both of them are the same tree.', room('gn-03-hollow'))),
+    chIf([is('gn-03-oak-won')], 'Walk on, deeper in.', out(
+      'You step through the split in the oak. For one stride there is a tree on either side of you, and both of them are the same tree.',
+      // The forest reacts to the duelist: wild Caterpie sit on the Hollow's path, unless it is a Pinsir, Scyther or Heracross (they keep their distance).
+      when('gn-forest-duelist', {}, [when('gn-forest-big', { min: 0, max: 0 }, [setTo('gn-03-cat', 1)])]),
+      room('gn-03-hollow'),
+    )),
   ]),
 
   // ---- node 4: The Hollow (side path: the Honey Tree, 30%; a Weedle waits if no Bug-type has been caught) ----
   rm('gn-03-hollow', 'The Hollow', forest({
     effect: 'glint',
     remembers: [{
-      id: 'weedle', when: [{ kind: 'partyType', type: 'bug', absent: true }],
+      id: 'weedle', when: [not('gn-forest-duelist')],
       notice: 'And in the middle of the path, exactly where you would have to step, sits a Weedle. It is not blocking the way. It is sitting the way someone sits who was told to wait here, and has, for longer than was reasonable.',
       addChoices: [
         ch('Crouch, and let the Weedle climb on.', out(
@@ -123,14 +149,22 @@ const gn03: Json[] = [
           { ...join({ species: ['weedle'], lv: -1 }), direct: true }, gn('duelist', { type: 'bug' }), room('gn-03-hollow'),
         )),
       ],
+    }, {
+      id: 'crowd', when: [is('gn-03-cat'), is('gn-forest-caterpie')],
+      notice: 'Wild Caterpie are coming down the trunks and out of the ferns, a dozen of them, and they are not coming for you. They crowd round your Caterpie, feelers going, as if it had brought news from town. They will let you both through without a fight, if you would rather.',
+      hide: [0], addChoices: [CAT_FIGHT, CAT_WALK],
+    }, {
+      id: 'caterpie', when: [is('gn-03-cat'), not('gn-forest-caterpie')],
+      notice: 'A wild Caterpie has planted itself in the dip, between you and the Bug Catcher, and reared up as tall as it goes. It does not know what to make of the Bug-type beside you, and it is not moving until it does.',
+      hide: [0], addChoices: [CAT_FIGHT],
     }],
   }), say(
     'The path dips into a hollow where the oldest tree in the forest stands, so wide that its own roots have had to climb over each other. The bark smells sweet. Something has been at it.',
     'A Bug Catcher waits on the far side of the dip, tapping his net against his shoe.',
   ), [
-    ch('Battle the Bug Catcher across the dip.', fight(
+    chIf([not('gn-03-cat')], 'Battle the Bug Catcher across the dip.', fight(
       'He has clearly been practising what to say, and forgets all of it, and throws the Ball instead.',
-      BUG_CATCHER('Bug Catcher', [gn('duelist', { type: 'bug' }), room('gn-03-clearing')]),
+      BUG_CATCHER('Bug Catcher', [gn('duelist', { type: 'bug' }), TRAP, room('gn-03-clearing')]),
     )),
     chIf([not('gn-03-honey-tried')], 'Look inside the sweet-smelling tree.', out(
       'Inside the trunk the dark is golden. Comb, hung in sheets, and a slow shifting of bodies far up where the hollow narrows. A den. They will not come down for a stranger. They might come down for honey, left at the roots, with no hand near it.',
@@ -141,7 +175,7 @@ const gn03: Json[] = [
     }),
     chIf([is('gn-03-den-found'), not('gn-03-den-done')], 'Leave honey at the roots, and step back.', fight(
       'You set the honey down and walk away from it, which is the hard part. For a long minute nothing. Then a scrape of bark, and something comes down the trunk head first, slowly, watching you the whole way.',
-      inside(eitherWay(wild({ species: ['combee', 'heracross'], win: [gn('duelist', { type: 'bug' }), room('gn-03-hollow')] }))),
+      inside({ ...eitherWay(wild({ species: ['combee', 'heracross'], win: [gn('duelist', { type: 'bug' }), room('gn-03-hollow')] })), rare: [SHEDINJA] }),
       { kind: 'loseItem', id: 'honey' }, flag('gn-03-den-done'),
     ), { requires: [has('honey')] }),
   ]),
@@ -166,11 +200,11 @@ const gn03: Json[] = [
         addChoices: [
           ch('Fight one battle beside it, here, now.', fight(
             'The ferns at the edge of the clearing are moving. You look at your duelist. For the first time since the eaves, you ask it for something.',
-            inside({ ...eitherWay(wild({ types: ['bug'], lv: -1, win: [flag('samurai-refused'), room('gn-03-clearing')] })), rule: { leadMark: 'duelist' } }),
+            inside({ ...eitherWay(wild({ types: ['bug'], lv: -1, win: [flag('samurai-refused'), room('gn-03-clearing')] })), rule: { leadMark: 'duelist' }, rare: [SHEDINJA] }),
           )),
           ch('Bow, and leave the forest.', out(
             'You bow. He does not open his eyes, but he inclines his head, the exact depth you bowed and no deeper. The far side of the forest is brighter than you remembered daylight being.',
-            flag('samurai-refused'), setTo('gn-forest-in', 0), gn('unmark', { key: 'duelist' }), leavePseudo(),
+            flag('samurai-refused'), ...LEAVE_FOREST,
           )),
         ],
       },
@@ -182,11 +216,11 @@ const gn03: Json[] = [
     // Base scene: nobody walks beside the player (no Bug-type was caught and the Weedle was left on the path).
     chIf([not('gn-forest-duelist')], 'Tell him no Bug-type walks with you.', out(
       'He looks at the empty air beside your boot. **The Samurai:** "Then I was watching the wrong traveller." He says it without unkindness. The far side of the forest is brighter than you remembered daylight being.',
-      flag('samurai-refused'), setTo('gn-forest-in', 0), leavePseudo(),
+      flag('samurai-refused'), ...LEAVE_FOREST,
     )),
     chIf([not('gn-forest-duelist')], 'Bow, and leave the forest.', out(
       'You bow. He inclines his head, the exact depth you bowed and no deeper. The far side of the forest is brighter than you remembered daylight being.',
-      flag('samurai-refused'), setTo('gn-forest-in', 0), leavePseudo(),
+      flag('samurai-refused'), ...LEAVE_FOREST,
     )),
   ]),
 
@@ -204,7 +238,7 @@ const gn03: Json[] = [
         ),
         addChoices: [ch('Take what he names, and the egg.', out(
           'He shows your duelist the cut once, slowly, the way you show something to an equal. Then he puts the egg in your hands with both of his, and holds on a moment longer than he needs to. You leave the forest carrying more than you brought in.',
-          teach('samurai-slash', { type: 'bug' }), egg({ species: ['scyther', 'pinsir', 'heracross'], left: 3, unit: 'battle' }), flag('gn-03-done'), setTo('gn-forest-in', 0), gn('unmark', { key: 'duelist' }), leavePseudo(),
+          teach('samurai-slash', { type: 'bug' }), SAMURAI_EGG, flag('gn-03-done'), ...LEAVE_FOREST,
         ))],
       },
       {
@@ -216,7 +250,7 @@ const gn03: Json[] = [
         ),
         addChoices: [ch('Take what he names.', out(
           'He shows your duelist the cut once, slowly, the way you show something to an equal. It copies him. It gets it wrong. He nods as if it had got it right, and by the edge of the forest, it has.',
-          teach('samurai-slash', { type: 'bug' }), flag('gn-03-done'), setTo('gn-forest-in', 0), gn('unmark', { key: 'duelist' }), leavePseudo(),
+          teach('samurai-slash', { type: 'bug' }), flag('gn-03-done'), ...LEAVE_FOREST,
         ))],
       },
       {
@@ -232,7 +266,7 @@ const gn03: Json[] = [
       'Your duelist walks out to the line. It does not look small. Nothing does, standing where it has chosen to stand.',
       SAMURAI_DUEL(
         [flag('kanto-forest-samurai-won'), room('gn-03-duel')],
-        [item('silver-powder'), flag('samurai-rematch-owed'), setTo('gn-forest-in', 0), moment('The Samurai bowed. "Next forest. I\'ll be at the far side."', 60)],
+        [item('silver-powder'), flag('samurai-rematch-owed'), setTo('gn-forest-in', 0), gn('unmark', { key: 'pre-forest' }), moment('The Samurai bowed. "Next forest. I\'ll be at the far side."', 60)],
       ),
     )),
   ]),
@@ -240,7 +274,8 @@ const gn03: Json[] = [
   // ---- the rematch he owes: at the far side of the next forest ----
   gev('gn-03-rematch', 'The Far Side of the Forest', forest({
     stop: 'event', rarity: 'rare', callback: true, minStage: 2, types: ['bug', 'grass'], cast: ['trainer.samurai'], effect: 'glint',
-    requires: [is('samurai-rematch-owed'), not('kanto-forest-samurai-won'), { kind: 'partyType', type: 'bug' }],
+    // "He waits at the exit of the next forest stage": a stage of Grass, Bug or Fairy ground (the placer's forest tag), near its end.
+    requires: [is('samurai-rematch-owed'), not('kanto-forest-samurai-won'), { kind: 'partyType', type: 'bug' }, { kind: 'stageTypes', types: ['grass', 'bug', 'fairy'] }],
   }), say(
     'The trees thin. And there, at the far side, exactly where he said, a figure in old armour is sitting on a fence rail as if rails had been invented for the purpose.',
     'You remember how it ended last time. *He bowed.* **The Samurai:** "Next forest. I\'ll be at the far side."',
@@ -249,7 +284,11 @@ const gn03: Json[] = [
     ch('Begin.', fight(
       'Same line. Same rules. One on one, equal levels, no items, no switching. Only the two of you are different.',
       SAMURAI_DUEL(
-        [flag('kanto-forest-samurai-won'), teach('samurai-slash', { type: 'bug' }), flag('gn-03-done'), gn('unmark', { key: 'duelist' }), moment('"Take this. It\'s not a gift. You\'ve already got it; I\'m only naming it." The Samurai named the cut: Samurai Slash.', 65)],
+        [
+          flag('kanto-forest-samurai-won'), teach('samurai-slash', { type: 'bug' }),
+          when('gn-forest-evolved', {}, [SAMURAI_EGG], '**The Samurai:** "It became itself in front of me. I\'ve an egg that deserves that."'),
+          flag('gn-03-done'), gn('unmark', { key: 'duelist' }), moment('"Take this. It\'s not a gift. You\'ve already got it; I\'m only naming it." The Samurai named the cut: Samurai Slash.', 65),
+        ],
         [moment('The Samurai bowed again. "Next forest. I\'ll be at the far side."', 50)],
       ),
     )),

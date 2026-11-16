@@ -35,6 +35,15 @@ describe('gn.03 Viridian Forest', () => {
     // The voice from the trees speaks from what was counted (the duelist sat out: "luggage").
     expect(scene(run, 'gn-03-oak').intro).toMatch(/A voice/);
     run = choose(run, 'gn-03-oak', 'Walk on, deeper in.').run;
+    // The forest reacts to the duelist: a wild Caterpie sits on the path, and only a Caterpie duelist may walk through.
+    expect(flagOf(run, 'gn-03-cat')).toBe(1);
+    expect(scene(run, 'gn-03-hollow').labels).not.toContain('Battle the Bug Catcher across the dip.');
+    const walk = scene(run, 'gn-03-hollow').labels.includes('Let them crowd round it, and walk on through.');
+    expect(walk).toBe(duelist!.speciesId === 'caterpie');
+    run = walk ? choose(run, 'gn-03-hollow', 'Let them crowd round it, and walk on through.').run : win(choose(run, 'gn-03-hollow', 'Battle the wild Caterpie on the path.').run);
+    setFlag(run, 'gn-forest-battles', 3);
+    setFlag(run, 'gn-forest-fought', 0);
+    setFlag(run, 'gn-forest-rank', 0);
     run = win(choose(run, 'gn-03-hollow', 'Battle the Bug Catcher across the dip.').run);
     expect(openSide(run)?.eventId).toBe('gn-03-clearing');
     expect(RunStateSchema.safeParse(run).success).toBe(true);
@@ -83,21 +92,114 @@ describe('gn.03 Viridian Forest', () => {
     expect(flagOf(lost, 'samurai-rematch-owed')).toBe(1);
     expect(content.events.get('gn-03-rematch')!.requires.length).toBeGreaterThan(0);
   });
-  it('the door rolls fog and the hunters\' trap once, and never appears again after it was entered', () => {
+  it('the door rolls the fog once, and never appears again after it was entered', () => {
     let fog = 0;
-    let trap = 0;
     for (let i = 0; i < 200; i++) {
       let run = gnRun(`gn03-roll-${i}`);
       open(run, 'gn-03-door');
       run = choose(run, 'gn-03-door', 'Step under the trees.').run;
       fog += flagOf(run, 'gn-forest-fog');
-      trap += flagOf(run, 'gn-forest-trap');
       if (i === 0) expect(flagOf(run, 'gn-03-entered')).toBe(1);
     }
     expect(fog).toBeGreaterThan(5);
     expect(fog).toBeLessThan(45);
-    expect(trap).toBeGreaterThan(5);
-    expect(trap).toBeLessThan(45);
+  });
+  it('a Bug-type brought into the forest is never the duelist; the first one caught inside is', () => {
+    let run = gnRun('gnfix03-a');
+    run.party[0]!.speciesId = 'weedle';
+    open(run, 'gn-03-door');
+    run = choose(run, 'gn-03-door', 'Step under the trees.').run;
+    expect(run.party[0]!.gn).toContain('pre-forest');
+    run = win(choose(run, 'gn-03-eaves', 'Battle Bug Catcher Arlo.').run);
+    // The fight at the eaves is over and a Bug-type is in the party: still nobody walks beside the player.
+    expect(flagOf(run, 'gn-forest-duelist')).toBe(0);
+    expect(run.party.some((m) => m.gn?.some((t) => t.startsWith('duelist')))).toBe(false);
+    // Beating the gift (not catching it) leaves no duelist either: at the Hollow the Weedle is waiting, though a Bug-type is in the party.
+    run = win(choose(run, 'gn-03-gift', 'Part the ferns.').run);
+    run.party = run.party.filter((m) => m.gn?.includes('pre-forest'));
+    expect(flagOf(run, 'gn-forest-duelist')).toBe(0);
+    run = win(choose(run, 'gn-03-oak', 'Battle the Bug Catcher in the fork.').run);
+    run = choose(run, 'gn-03-oak', 'Walk on, deeper in.').run;
+    expect(flagOf(run, 'gn-03-cat')).toBe(0);
+    expect(scene(run, 'gn-03-hollow').labels).toContain('Crouch, and let the Weedle climb on.');
+    run = choose(run, 'gn-03-hollow', 'Crouch, and let the Weedle climb on.').run;
+    const duelist = run.party.find((m) => m.gn?.some((t) => t.startsWith('duelist')));
+    expect(duelist).toBeTruthy();
+    expect(duelist).not.toBe(run.party[0]);
+    expect(duelist!.gn).not.toContain('pre-forest');
+    expect(scene(run, 'gn-03-hollow').labels).not.toContain('Crouch, and let the Weedle climb on.');
+  });
+  it('the forest reacts: Caterpie crowd round a Caterpie duelist (the wild fight can be skipped); a Pinsir keeps them away', () => {
+    const at = (species: string) => {
+      let run = gnRun(`gnfix03-${species}`);
+      open(run, 'gn-03-door');
+      run = choose(run, 'gn-03-door', 'Step under the trees.').run;
+      run = win(choose(run, 'gn-03-eaves', 'Battle Bug Catcher Arlo.').run);
+      run = win(choose(run, 'gn-03-gift', 'Part the ferns.').run, { catchIt: true });
+      const caught = run.party[run.party.length - 1]!;
+      // The catch is retold as the species under test before anyone is marked (the mark is made when the next fight ends).
+      for (const m of run.party) if (m.gn) m.gn = m.gn.filter((t) => !t.startsWith('duelist'));
+      setFlag(run, 'gn-forest-duelist', 0);
+      caught.speciesId = species;
+      run = win(choose(run, 'gn-03-oak', 'Battle the Bug Catcher in the fork.').run);
+      return choose(run, 'gn-03-oak', 'Walk on, deeper in.').run;
+    };
+    const cat = at('caterpie');
+    expect(flagOf(cat, 'gn-forest-caterpie')).toBe(1);
+    expect(scene(cat, 'gn-03-hollow').intro).toMatch(/crowd round your Caterpie/);
+    expect(scene(cat, 'gn-03-hollow').labels).toEqual(expect.arrayContaining(['Battle the wild Caterpie on the path.', 'Let them crowd round it, and walk on through.']));
+    const through = choose(cat, 'gn-03-hollow', 'Let them crowd round it, and walk on through.');
+    expect(through.battle).toBe(false);
+    expect(scene(through.run, 'gn-03-hollow').labels).toContain('Battle the Bug Catcher across the dip.');
+    const weedle = at('weedle');
+    expect(flagOf(weedle, 'gn-forest-caterpie')).toBe(0);
+    expect(scene(weedle, 'gn-03-hollow').labels).toContain('Battle the wild Caterpie on the path.');
+    expect(scene(weedle, 'gn-03-hollow').labels).not.toContain('Let them crowd round it, and walk on through.');
+    const fought = choose(weedle, 'gn-03-hollow', 'Battle the wild Caterpie on the path.').run;
+    expect(fought.battle!.enemyTeam[0]!.speciesId).toBe('caterpie');
+    const pinsir = at('pinsir');
+    expect(flagOf(pinsir, 'gn-03-cat')).toBe(0);
+    expect(scene(pinsir, 'gn-03-hollow').labels).toContain('Battle the Bug Catcher across the dip.');
+  });
+  it("the hunters' trap is rolled at every node's fight, springs once at most, and leaves a sighting", () => {
+    let sprung = 0;
+    for (let i = 0; i < 60; i++) {
+      let run = gnRun(`gnfix03-trap-${i}`);
+      open(run, 'gn-03-door');
+      run = choose(run, 'gn-03-door', 'Step under the trees.').run;
+      run = win(choose(run, 'gn-03-eaves', 'Battle Bug Catcher Arlo.').run);
+      run = win(choose(run, 'gn-03-gift', 'Part the ferns.').run);
+      run = win(choose(run, 'gn-03-oak', 'Battle the Bug Catcher in the fork.').run);
+      expect(flagOf(run, 'gn-forest-trapped')).toBeLessThanOrEqual(1);
+      expect(flagOf(run, 'flight-sighting')).toBe(flagOf(run, 'gn-forest-trapped'));
+      sprung += flagOf(run, 'gn-forest-trapped');
+    }
+    // Three nodes at 10% each: about 27% of forests by the Split Oak (more than the old single roll at the door could give after one node).
+    expect(sprung).toBeGreaterThan(5);
+    expect(sprung).toBeLessThan(32);
+  });
+  it('the rematch waits in a forest stage only, and a duelist that evolved in the forest still earns the egg there', () => {
+    const rematch = content.events.get('gn-03-rematch')!;
+    expect(rematch.requires).toContainEqual({ kind: 'stageTypes', types: ['grass', 'bug', 'fairy'] });
+    let run = gnRun('gnfix03-rematch');
+    run.party[0]!.speciesId = 'scyther';
+    run.party[0]!.gn = ['duelist:scyther'];
+    setFlag(run, 'samurai-rematch-owed', 1);
+    setFlag(run, 'gn-forest-evolved', 1);
+    const eggs = run.eggs?.length ?? 0;
+    open(run, 'gn-03-rematch');
+    run = win(choose(run, 'gn-03-rematch', 'Begin.').run);
+    expect(flagOf(run, 'kanto-forest-samurai-won')).toBe(1);
+    expect(run.eggs?.length ?? 0).toBe(eggs + 1);
+    // Not evolved: the move, no egg.
+    let plain = gnRun('gnfix03-rematch');
+    plain.party[0]!.speciesId = 'scyther';
+    plain.party[0]!.gn = ['duelist:scyther'];
+    setFlag(plain, 'samurai-rematch-owed', 1);
+    open(plain, 'gn-03-rematch');
+    plain = win(choose(plain, 'gn-03-rematch', 'Begin.').run);
+    expect(plain.eggs?.length ?? 0).toBe(eggs);
+    expect(plain.party[0]!.moves.some((m) => m.id === 'samurai-slash')).toBe(true);
   });
 });
 
