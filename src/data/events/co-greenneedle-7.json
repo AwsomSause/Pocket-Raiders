@@ -236,7 +236,104 @@
     {
      "label": "Walk on.",
      "success": {
-      "text": "The doorways watch you to the end of the row.",
+      "text": "The doorways watch you to the end of the row. At the last one, something steps down into your path.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-31-wild-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-wild-1",
+   "name": "The Forgotten Forest: In Your Path",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "silent",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-harmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's very quiet. The birdsong stopped a while ago, and hasn't come back.*"
+    },
+    {
+     "id": "beside",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-beside",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Two Oddish and a Sewaddle fall in beside you, as if you'd been expected.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "oddish",
+    "tint": "#2f4a2a",
+    "effect": "none"
+   },
+   "intro": "One of them has come down out of its doorway, and stands in the path. A rare one. You've only seen its kind in books.\n\nIt isn't shy. It's never needed to be.",
+   "choices": [
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It doesn't run. Nothing here has ever needed to.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "grass"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-31-stones"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-31-stones"
+        }
+       ],
+       "rule": {
+        "gn": "forest"
+       },
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-31-stones"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Let it look, and walk round it.",
+     "success": {
+      "text": "It sniffs your boots, and lets you by. It watches you go.",
       "effects": [
        {
         "kind": "addEvent",
@@ -346,30 +443,12 @@
        },
        {
         "kind": "gn",
-        "op": "check",
-        "key": "forest-slab-3",
-        "if": [
-         {
-          "kind": "flag",
-          "key": "forest-slabs",
-          "atLeast": 2,
-          "atMost": 2
-         },
-         {
-          "kind": "flag",
-          "key": "village-kept-secret",
-          "atLeast": 1,
-          "atMost": 99
-         }
-        ]
-       },
-       {
-        "kind": "gn",
         "op": "when",
-        "key": "forest-slab-3",
-        "min": 1,
+        "key": "forest-slabs",
+        "min": 2,
+        "max": 2,
         "then": [],
-        "text": "*You've seen that gesture before: carved on the post outside the Hidden Village.*"
+        "text": "*It's the same gesture that's carved on the post outside the Hidden Village.*"
        },
        {
         "kind": "flag",
@@ -395,7 +474,105 @@
     {
      "label": "Walk on.",
      "success": {
-      "text": "Moss closes over the carvings behind you.",
+      "text": "Moss closes over the carvings behind you. Past the last slab, something is asleep in the path.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-31-wild-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-wild-2",
+   "name": "The Forgotten Forest: Asleep in the Path",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "silent",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-harmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's very quiet. The birdsong stopped a while ago, and hasn't come back.*"
+    },
+    {
+     "id": "beside",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-beside",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Two Oddish and a Sewaddle fall in beside you, as if you'd been expected.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sewaddle",
+    "tint": "#2f4a2a",
+    "effect": "none"
+   },
+   "intro": "Something small is asleep in a patch of sun, right where the path goes. It opens one eye. It doesn't get up.\n\nNothing has ever made it get up.",
+   "choices": [
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It doesn't run. Nothing here has ever needed to.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "bug",
+        "grass"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-31-colony"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-31-colony"
+        }
+       ],
+       "rule": {
+        "gn": "forest"
+       },
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-31-colony"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Step round it, quietly.",
+     "success": {
+      "text": "You go round, through the ferns. It shuts its eye again.",
       "effects": [
        {
         "kind": "addEvent",
@@ -890,6 +1067,11 @@
          "amount": 1
         },
         {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "forest-at"
+        },
+        {
          "kind": "leavePseudo"
         }
        ],
@@ -932,6 +1114,11 @@
          "kind": "flag",
          "key": "forest-done",
          "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "forest-at"
         },
         {
          "kind": "leavePseudo"
@@ -1097,6 +1284,11 @@
         "amount": 1
        },
        {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "forest-at"
+       },
+       {
         "kind": "leavePseudo"
        }
       ]
@@ -1250,7 +1442,83 @@
         "amount": 1
        },
        {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "forest-at"
+       },
+       {
         "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-31-quiet",
+   "name": "No Birdsong",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "forest-silent",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "forest-silent"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "forest-at"
+    },
+    {
+     "kind": "flag",
+     "key": "forest-quiet-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2f4a2a",
+    "effect": "none"
+   },
+   "intro": "A stand of trees by the road. You stop, without knowing why. Then you know why.\n\n*No birdsong. Not here either. It hasn't come back anywhere in this region, since the forest.*",
+   "choices": [
+    {
+     "label": "Listen a while.",
+     "success": {
+      "text": "You listen. Wind, and leaves, and nothing else. Your Pokémon stay close.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "forest-quiet-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Your own footsteps are the loudest thing on the road.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "forest-quiet-seen",
+        "amount": 1
        }
       ]
      }
@@ -1569,6 +1837,14 @@
          "key": "gn-32-gallery"
         }
        ],
+       "local": {
+        "types": [
+         "rock",
+         "ice",
+         "steel"
+        ],
+        "chance": 0.3333333333333333
+       },
        "lose": [
         {
          "kind": "itemFrom",
@@ -1680,6 +1956,14 @@
          "key": "gn-32-warm"
         }
        ],
+       "local": {
+        "types": [
+         "rock",
+         "ice",
+         "steel"
+        ],
+        "chance": 0.3333333333333333
+       },
        "lose": [
         {
          "kind": "flag",
@@ -2809,6 +3093,14 @@
          "key": "gn-32-blue"
         }
        ],
+       "local": {
+        "types": [
+         "rock",
+         "ice",
+         "steel"
+        ],
+        "chance": 0.3333333333333333
+       },
        "lose": [
         {
          "kind": "flag",
@@ -3141,6 +3433,36 @@
      ]
     },
     {
+     "label": "Use the Green crystal on one of mine.",
+     "pick": {
+      "types": []
+     },
+     "success": {
+      "text": "You take the Green crystal out of the bag, and hold it out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystal",
+        "key": "green",
+        "type": "use"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-deep"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-green",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
      "label": "Leave it.",
      "success": {
       "text": "You leave it where it is. The hum doesn't change.",
@@ -3162,6 +3484,54 @@
     "Pokémon",
     "Exploration",
     "Dungeon"
+   ],
+   "remembers": [
+    {
+     "id": "path",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "crystal-white",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "crystal-path-2",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*The White crystal lights a seam in the passage wall. It isn't a seam. It's a way through.*",
+     "addChoices": [
+      {
+       "label": "Follow the hidden path.",
+       "success": {
+        "text": "A crawl, a turn, and a pocket in the rock where something was put down a long time ago, and never fetched.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "crystal-path-2",
+          "amount": 1
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "rare-candy",
+           "star-piece",
+           "pp-up"
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-passage"
+         }
+        ]
+       }
+      }
+     ]
+    }
    ],
    "room": true,
    "scene": {
@@ -3317,6 +3687,14 @@
          "eventId": "gn-32-heart"
         }
        ],
+       "local": {
+        "types": [
+         "rock",
+         "ice",
+         "steel"
+        ],
+        "chance": 0.3333333333333333
+       },
        "lose": [
         {
          "kind": "addEvent",
@@ -3470,6 +3848,36 @@
        }
       ]
      }
+    },
+    {
+     "label": "Use the Green crystal on one of mine.",
+     "pick": {
+      "types": []
+     },
+     "success": {
+      "text": "You take the Green crystal out of the bag, and hold it out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystal",
+        "key": "green",
+        "type": "use"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-heart"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-green",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
     }
    ]
   },
@@ -5298,7 +5706,7 @@
     "tint": "#6f8fb8",
     "effect": "sparkle"
    },
-   "intro": "Where it folded, the wall moves once more. A Carbink climbs out of it, and looks at you, and follows.\n\nIn your hand: one small shard of each colour you gave. They hum, faintly, when you turn toward places nobody's found.",
+   "intro": "Where it folded, the wall moves once more. A Carbink climbs out of it, and looks at you, and follows.\n\nWhere it set your crystals into itself, the rock still shows their colours, faintly. They hum once, and go quiet.",
    "choices": [
     {
      "label": "Let it come.",
@@ -5561,53 +5969,8 @@
     {
      "label": "Dive.",
      "success": {
-      "text": "The tide is in. You go down with your Water-type, past the tops of the towers, into the streets.",
+      "text": "The tide is in. You take a breath, and go down, past the tops of the towers, into the streets.",
       "effects": [
-       {
-        "kind": "flag",
-        "key": "sunken-entered",
-        "amount": 1
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "sunken-districts",
-        "n": 0
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "sunken-returned",
-        "n": 0
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "gn-33-stairs"
-       }
-      ]
-     },
-     "showIf": [
-      {
-       "kind": "gn",
-       "test": "highTide"
-      },
-      {
-       "kind": "partyTypes",
-       "types": [
-        "water"
-       ]
-      }
-     ]
-    },
-    {
-     "label": "Wait for low tide.",
-     "success": {
-      "text": "You sit on the rocks and wait. The sea goes out slowly. The causeway comes up stone by stone.",
-      "effects": [
-       {
-        "kind": "takeNode",
-        "nodes": 1
-       },
        {
         "kind": "flag",
         "key": "sunken-entered",
@@ -6397,8 +6760,22 @@
        },
        {
         "kind": "gn",
+        "op": "check",
+        "key": "sunken-new-line",
+        "if": [
+         {
+          "kind": "anyFlag",
+          "keys": [
+           "aqua-flooded",
+           "hoenn-final-plan"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
         "op": "when",
-        "key": "aqua-flooded",
+        "key": "sunken-new-line",
         "min": 1,
         "then": [],
         "text": "At the very top, one new line. Very recent. Cut by nobody."
@@ -7816,6 +8193,111 @@
         "text": "Seven dots, somewhere ahead, waiting to light.",
         "effects": [
          {
+          "kind": "gn",
+          "op": "when",
+          "key": "cavern-guessed",
+          "min": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "pick",
+            "key": "cavern-last",
+            "weights": [
+             1,
+             1,
+             1
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "cavern-last",
+          "min": 1,
+          "max": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "cast",
+            "key": "cavern-regi",
+            "species": [
+             "regirock"
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "cavern-last",
+          "min": 2,
+          "max": 2,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "cast",
+            "key": "cavern-regi",
+            "species": [
+             "regice"
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "cavern-last",
+          "min": 3,
+          "max": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "cast",
+            "key": "cavern-regi",
+            "species": [
+             "registeel"
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "unown-word",
+          "min": 1,
+          "max": 1,
+          "then": [],
+          "text": "Ahead, on the walls, all the way round, the Unown spell the word you gave them: HERE."
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "unown-word",
+          "min": 2,
+          "max": 2,
+          "then": [],
+          "text": "Ahead, on the walls, all the way round, the Unown spell the word you gave them: WAIT."
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "unown-word",
+          "min": 3,
+          "max": 3,
+          "then": [],
+          "text": "Ahead, on the walls, all the way round, the Unown spell the word you gave them: STILL."
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "unown-word",
+          "min": 4,
+          "max": 4,
+          "then": [],
+          "text": "Ahead, on the walls, all the way round, the Unown spell the word you gave them: WE KEPT IT."
+         },
+         {
           "kind": "addEvent",
           "eventId": "gn-34-end"
          }
@@ -7825,28 +8307,168 @@
      ]
     },
     {
-     "id": "thief",
+     "id": "moved-1",
      "when": [
       {
        "kind": "flag",
-       "key": "sunken-relicanth-fought",
+       "key": "cavern-solved",
        "atLeast": 1,
-       "atMost": 99
+       "atMost": 1
       }
      ],
-     "notice": "*Every word on the walls is the same one, the whole way down. THIEF.*"
+     "notice": "*The Unown on the lintels have rearranged. The doors go somewhere else now. You read them again before you step.*",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Through the door marked HANDS.",
+       "success": {
+        "text": "A chamber with a carving of two hands.",
+        "effects": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-34-hands"
+         }
+        ]
+       },
+       "showIf": [
+        {
+         "kind": "flag",
+         "key": "cavern-word-3",
+         "atLeast": 0,
+         "atMost": 0
+        }
+       ]
+      },
+      {
+       "label": "Through the door marked SCALE.",
+       "success": {
+        "text": "A chamber with a carving of a balance.",
+        "effects": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-34-scale"
+         }
+        ]
+       },
+       "showIf": [
+        {
+         "kind": "flag",
+         "key": "cavern-word-1",
+         "atLeast": 0,
+         "atMost": 0
+        }
+       ]
+      },
+      {
+       "label": "Through the door marked LINE.",
+       "success": {
+        "text": "A chamber with a carving of a doorway.",
+        "effects": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-34-line"
+         }
+        ]
+       },
+       "showIf": [
+        {
+         "kind": "flag",
+         "key": "cavern-word-2",
+         "atLeast": 0,
+         "atMost": 0
+        }
+       ]
+      }
+     ]
     },
     {
-     "id": "faded",
+     "id": "moved-2",
      "when": [
       {
        "kind": "flag",
-       "key": "cavern-unown-beaten",
-       "atLeast": 3,
-       "atMost": 99
+       "key": "cavern-solved",
+       "atLeast": 2,
+       "atMost": 2
       }
      ],
-     "notice": "*So many letters are gone from the walls now. What's left is hard to read.*"
+     "notice": "*The Unown on the lintels have rearranged again. The doors go somewhere else now. You read them again before you step.*",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Through the door marked LINE.",
+       "success": {
+        "text": "A chamber with a carving of a doorway.",
+        "effects": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-34-line"
+         }
+        ]
+       },
+       "showIf": [
+        {
+         "kind": "flag",
+         "key": "cavern-word-2",
+         "atLeast": 0,
+         "atMost": 0
+        }
+       ]
+      },
+      {
+       "label": "Through the door marked HANDS.",
+       "success": {
+        "text": "A chamber with a carving of two hands.",
+        "effects": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-34-hands"
+         }
+        ]
+       },
+       "showIf": [
+        {
+         "kind": "flag",
+         "key": "cavern-word-3",
+         "atLeast": 0,
+         "atMost": 0
+        }
+       ]
+      },
+      {
+       "label": "Through the door marked SCALE.",
+       "success": {
+        "text": "A chamber with a carving of a balance.",
+        "effects": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-34-scale"
+         }
+        ]
+       },
+       "showIf": [
+        {
+         "kind": "flag",
+         "key": "cavern-word-1",
+         "atLeast": 0,
+         "atMost": 0
+        }
+       ]
+      }
+     ]
     }
    ],
    "room": true,
@@ -7934,6 +8556,24 @@
    ],
    "remembers": [
     {
+     "id": "clue",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunken-weight",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "cavern-unown-beaten",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ],
+     "notice": "*Small, on the wall, the Unown have spelled it once already: TRADE. The scale-weight, stamped with a fish. You held it.*"
+    },
+    {
      "id": "thief",
      "when": [
       {
@@ -7965,84 +8605,17 @@
     "tint": "#5a4f6e",
     "effect": "flicker"
    },
-   "intro": "A carving of a balance, with a fish on one side and nothing on the other. Below it, a row of empty niches.\n\nLoose Unown drift in the air. You can lead them, one at a time, to the niches.",
+   "intro": "A carving of a balance, with a fish on one side and nothing on the other. Below it, a row of five empty niches.\n\nLoose Unown drift in the air. You can lead them, one at a time, to the niches.",
    "choices": [
     {
-     "label": "Spell TRADE.",
+     "label": "Lead the Unown to the niches.",
      "success": {
-      "text": "The scale-weight, stamped with a fish. T, R, A, D, E. The niches glow, one by one.",
+      "text": "You hold out a hand. One drifts down to it, curious.",
       "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "cavern-word-1",
-        "n": 1
-       },
-       {
-        "kind": "flag",
-        "key": "cavern-solved",
-        "amount": 1
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-34-lintel"
-       }
-      ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "sunken-weight",
-       "atLeast": 1,
-       "atMost": 99
-      },
-      {
-       "kind": "flag",
-       "key": "cavern-unown-beaten",
-       "atLeast": 0,
-       "atMost": 2
-      }
-     ]
-    },
-    {
-     "label": "Spell FISH.",
-     "success": {
-      "text": "The letters line up in the niches, then one drifts back out. Not that.",
-      "effects": [
-       {
-        "kind": "flag",
-        "key": "cavern-tries",
-        "amount": 1
-       }
-      ]
-     }
-    },
-    {
-     "label": "Try letters until a word fits.",
-     "success": {
-      "text": "It takes a long time. Letters in, letters out. Then: TRADE. The chamber opens.",
-      "effects": [
-       {
-        "kind": "flag",
-        "key": "cavern-guessed",
-        "amount": 1
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "cavern-word-1",
-        "n": 1
-       },
-       {
-        "kind": "flag",
-        "key": "cavern-solved",
-        "amount": 1
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-34-lintel"
+        "key": "gn-34-scale-1"
        }
       ]
      }
@@ -8089,6 +8662,486 @@
        ],
        "pseudo": true
       }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-scale-1",
+   "name": "Caverns-o-Mighty: The Scale",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: _ _ _ _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "A.",
+     "success": {
+      "text": "The A settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "T.",
+     "success": {
+      "text": "The T settles into its niche, and stays. T _ _ _ _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "G.",
+     "success": {
+      "text": "The G settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "M.",
+     "success": {
+      "text": "The M settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-scale-2",
+   "name": "Caverns-o-Mighty: The Scale",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: T _ _ _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "B.",
+     "success": {
+      "text": "The B settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "H.",
+     "success": {
+      "text": "The H settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "R.",
+     "success": {
+      "text": "The R settles into its niche, and stays. T R _ _ _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "N.",
+     "success": {
+      "text": "The N settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-scale-3",
+   "name": "Caverns-o-Mighty: The Scale",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: T R _ _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "N.",
+     "success": {
+      "text": "The N settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "T.",
+     "success": {
+      "text": "The T settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Z.",
+     "success": {
+      "text": "The Z settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A.",
+     "success": {
+      "text": "The A settles into its niche, and stays. T R A _ _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-scale-4",
+   "name": "Caverns-o-Mighty: The Scale",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: T R A _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "D.",
+     "success": {
+      "text": "The D settles into its niche, and stays. T R A D _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "T.",
+     "success": {
+      "text": "The T settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Z.",
+     "success": {
+      "text": "The Z settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "F.",
+     "success": {
+      "text": "The F settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-scale-5",
+   "name": "Caverns-o-Mighty: The Scale",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: T R A D _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "X.",
+     "success": {
+      "text": "The X settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "E.",
+     "success": {
+      "text": "The E settles. T R A D E. The niches glow, one by one.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cavern-word-1",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cavern-solved",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "cavern-read-1",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "sunken-weight",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "cavern-unown-beaten",
+          "atLeast": 0,
+          "atMost": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cavern-read-1",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "cavern-guessed",
+          "amount": 1
+         }
+        ],
+        "text": "The chamber opens. You couldn't say why that word and not another."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-lintel"
+       }
+      ]
+     }
+    },
+    {
+     "label": "D.",
+     "success": {
+      "text": "The D settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "J.",
+     "success": {
+      "text": "The J settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-scale-5"
+       }
+      ]
      }
     }
    ]
@@ -8104,6 +9157,24 @@
    ],
    "remembers": [
     {
+     "id": "clue",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunken-marks",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "cavern-unown-beaten",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ],
+     "notice": "*Small, on the wall, the Unown have spelled it once already: RISING. The high-water marks, a hand's width in a lifetime. You read them.*"
+    },
+    {
      "id": "thief",
      "when": [
       {
@@ -8135,84 +9206,17 @@
     "tint": "#5a4f6e",
     "effect": "flicker"
    },
-   "intro": "A carving of a doorway, with lines beside it, each one higher than the last. A row of empty niches.",
+   "intro": "A carving of a doorway, with lines beside it, each one higher than the last. A row of six empty niches.",
    "choices": [
     {
-     "label": "Spell RISING.",
+     "label": "Lead the Unown to the niches.",
      "success": {
-      "text": "The high-water marks, a hand's width in a lifetime. R, I, S, I, N, G.",
+      "text": "You hold out a hand. One drifts down to it, curious.",
       "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "cavern-word-2",
-        "n": 1
-       },
-       {
-        "kind": "flag",
-        "key": "cavern-solved",
-        "amount": 1
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-34-lintel"
-       }
-      ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "sunken-marks",
-       "atLeast": 1,
-       "atMost": 99
-      },
-      {
-       "kind": "flag",
-       "key": "cavern-unown-beaten",
-       "atLeast": 0,
-       "atMost": 2
-      }
-     ]
-    },
-    {
-     "label": "Spell DOOR.",
-     "success": {
-      "text": "The letters line up in the niches, then one drifts back out. Not that.",
-      "effects": [
-       {
-        "kind": "flag",
-        "key": "cavern-tries",
-        "amount": 1
-       }
-      ]
-     }
-    },
-    {
-     "label": "Try letters until a word fits.",
-     "success": {
-      "text": "It takes a long time. Letters in, letters out. Then: RISING. The chamber opens.",
-      "effects": [
-       {
-        "kind": "flag",
-        "key": "cavern-guessed",
-        "amount": 1
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "cavern-word-2",
-        "n": 1
-       },
-       {
-        "kind": "flag",
-        "key": "cavern-solved",
-        "amount": 1
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-34-lintel"
+        "key": "gn-34-line-1"
        }
       ]
      }
@@ -8264,6 +9268,573 @@
    ]
   },
   {
+   "id": "gn-34-line-1",
+   "name": "Caverns-o-Mighty: The Line",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: _ _ _ _ _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "Y.",
+     "success": {
+      "text": "The Y settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "E.",
+     "success": {
+      "text": "The E settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "R.",
+     "success": {
+      "text": "The R settles into its niche, and stays. R _ _ _ _ _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "K.",
+     "success": {
+      "text": "The K settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-line-2",
+   "name": "Caverns-o-Mighty: The Line",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: R _ _ _ _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "S.",
+     "success": {
+      "text": "The S settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Y.",
+     "success": {
+      "text": "The Y settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "E.",
+     "success": {
+      "text": "The E settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I.",
+     "success": {
+      "text": "The I settles into its niche, and stays. R I _ _ _ _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-line-3",
+   "name": "Caverns-o-Mighty: The Line",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: R I _ _ _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "S.",
+     "success": {
+      "text": "The S settles into its niche, and stays. R I S _ _ _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "F.",
+     "success": {
+      "text": "The F settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "L.",
+     "success": {
+      "text": "The L settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "R.",
+     "success": {
+      "text": "The R settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-line-4",
+   "name": "Caverns-o-Mighty: The Line",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: R I S _ _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "Y.",
+     "success": {
+      "text": "The Y settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I.",
+     "success": {
+      "text": "The I settles into its niche, and stays. R I S I _ _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "E.",
+     "success": {
+      "text": "The E settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "K.",
+     "success": {
+      "text": "The K settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-line-5",
+   "name": "Caverns-o-Mighty: The Line",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: R I S I _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "G.",
+     "success": {
+      "text": "The G settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "M.",
+     "success": {
+      "text": "The M settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "N.",
+     "success": {
+      "text": "The N settles into its niche, and stays. R I S I N _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "S.",
+     "success": {
+      "text": "The S settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-line-6",
+   "name": "Caverns-o-Mighty: The Line",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: R I S I N _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "C.",
+     "success": {
+      "text": "The C settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I.",
+     "success": {
+      "text": "The I settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "O.",
+     "success": {
+      "text": "The O settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-line-6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "G.",
+     "success": {
+      "text": "The G settles. R I S I N G. The niches glow, one by one.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cavern-word-2",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cavern-solved",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "cavern-read-2",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "sunken-marks",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "cavern-unown-beaten",
+          "atLeast": 0,
+          "atMost": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cavern-read-2",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "cavern-guessed",
+          "amount": 1
+         }
+        ],
+        "text": "The chamber opens. You couldn't say why that word and not another."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-lintel"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
    "id": "gn-34-hands",
    "name": "Caverns-o-Mighty: The Hands",
    "group": "Greenneedle",
@@ -8273,6 +9844,24 @@
     "Mystery"
    ],
    "remembers": [
+    {
+     "id": "clue",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunken-mural",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "cavern-unown-beaten",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ],
+     "notice": "*Small, on the wall, three words, one under another: KEPT. LEFT. GIVEN. The last figure in the mural, putting something down. Which it was is yours to say.*"
+    },
     {
      "id": "thief",
      "when": [
@@ -8305,26 +9894,400 @@
     "tint": "#5a4f6e",
     "effect": "flicker"
    },
-   "intro": "A carving of two hands, open, something small between them. A row of empty niches.\n\nThe last figure in the mural, looking back, putting something down.",
+   "intro": "A carving of two hands, open, something small between them. A row of empty niches: more than you need, or just enough.\n\nThe last figure in the mural, looking back, putting something down.",
    "choices": [
     {
-     "label": "Spell KEPT.",
+     "label": "Lead the Unown to the niches.",
      "success": {
-      "text": "K, E, P, T. It kept. It's still keeping.",
+      "text": "You hold out a hand. One drifts down to it, curious.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-hands-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight the Unown.",
+     "success": {
+      "text": "They come off the wall like leaves in a wind.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "unown"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cavern-unown-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-34-hands"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-34-hands"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-34-hands"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-hands-1",
+   "name": "Caverns-o-Mighty: The Hands",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: _ _ _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "K.",
+     "success": {
+      "text": "The K settles into its niche, and stays. K _ _ _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-kept-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "S.",
+     "success": {
+      "text": "The S settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-hands-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "L.",
+     "success": {
+      "text": "The L settles into its niche, and stays. L _ _ _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-left-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "G.",
+     "success": {
+      "text": "The G settles into its niche, and stays. A fifth niche opens beside the fourth. G _ _ _ _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-given-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-kept-2",
+   "name": "Caverns-o-Mighty: The Hands",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: K _ _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "O.",
+     "success": {
+      "text": "The O settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-kept-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "E.",
+     "success": {
+      "text": "The E settles into its niche, and stays. K E _ _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-kept-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "U.",
+     "success": {
+      "text": "The U settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-kept-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A.",
+     "success": {
+      "text": "The A settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-kept-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-kept-3",
+   "name": "Caverns-o-Mighty: The Hands",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: K E _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "C.",
+     "success": {
+      "text": "The C settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-kept-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I.",
+     "success": {
+      "text": "The I settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-kept-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "P.",
+     "success": {
+      "text": "The P settles into its niche, and stays. K E P _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-kept-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "O.",
+     "success": {
+      "text": "The O settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-kept-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-kept-4",
+   "name": "Caverns-o-Mighty: The Hands",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: K E P _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "J.",
+     "success": {
+      "text": "The J settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-kept-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "P.",
+     "success": {
+      "text": "The P settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-kept-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "V.",
+     "success": {
+      "text": "The V settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-kept-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "T.",
+     "success": {
+      "text": "The T settles. K E P T. The niches glow, one by one.",
       "effects": [
        {
         "kind": "gn",
         "op": "setFlag",
         "key": "cavern-last",
         "n": 1
-       },
-       {
-        "kind": "gn",
-        "op": "cast",
-        "key": "cavern-regi",
-        "species": [
-         "regirock"
-        ]
        },
        {
         "kind": "gn",
@@ -8339,24 +10302,298 @@
        },
        {
         "kind": "gn",
+        "op": "check",
+        "key": "cavern-read-3",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "sunken-mural",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "cavern-unown-beaten",
+          "atLeast": 0,
+          "atMost": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cavern-read-3",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "cavern-guessed",
+          "amount": 1
+         }
+        ],
+        "text": "The chamber opens. You couldn't say why that word and not another."
+       },
+       {
+        "kind": "gn",
         "op": "scene",
         "key": "gn-34-lintel"
        }
       ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "sunken-mural",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-left-2",
+   "name": "Caverns-o-Mighty: The Hands",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: L _ _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "O.",
+     "success": {
+      "text": "The O settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-left-2"
+       }
+      ]
+     }
     },
     {
-     "label": "Spell LEFT.",
+     "label": "E.",
      "success": {
-      "text": "L, E, F, T. What's left when everyone's gone.",
+      "text": "The E settles into its niche, and stays. L E _ _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-left-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "U.",
+     "success": {
+      "text": "The U settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-left-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A.",
+     "success": {
+      "text": "The A settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-left-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-left-3",
+   "name": "Caverns-o-Mighty: The Hands",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: L E _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "S.",
+     "success": {
+      "text": "The S settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-left-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Y.",
+     "success": {
+      "text": "The Y settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-left-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "F.",
+     "success": {
+      "text": "The F settles into its niche, and stays. L E F _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-left-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "E.",
+     "success": {
+      "text": "The E settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-left-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-left-4",
+   "name": "Caverns-o-Mighty: The Hands",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: L E F _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "J.",
+     "success": {
+      "text": "The J settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-left-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "P.",
+     "success": {
+      "text": "The P settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-left-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "V.",
+     "success": {
+      "text": "The V settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-left-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "T.",
+     "success": {
+      "text": "The T settles. L E F T. The niches glow, one by one.",
       "effects": [
        {
         "kind": "gn",
@@ -8366,14 +10603,6 @@
        },
        {
         "kind": "gn",
-        "op": "cast",
-        "key": "cavern-regi",
-        "species": [
-         "regice"
-        ]
-       },
-       {
-        "kind": "gn",
         "op": "setFlag",
         "key": "cavern-word-3",
         "n": 1
@@ -8385,24 +10614,349 @@
        },
        {
         "kind": "gn",
+        "op": "check",
+        "key": "cavern-read-3",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "sunken-mural",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "cavern-unown-beaten",
+          "atLeast": 0,
+          "atMost": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cavern-read-3",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "cavern-guessed",
+          "amount": 1
+         }
+        ],
+        "text": "The chamber opens. You couldn't say why that word and not another."
+       },
+       {
+        "kind": "gn",
         "op": "scene",
         "key": "gn-34-lintel"
        }
       ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "sunken-mural",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-given-2",
+   "name": "Caverns-o-Mighty: The Hands",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: G _ _ _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "S.",
+     "success": {
+      "text": "The S settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-given-2"
+       }
+      ]
+     }
     },
     {
-     "label": "Spell GIVEN.",
+     "label": "Y.",
      "success": {
-      "text": "G, I, V, E, N. Made, and handed over.",
+      "text": "The Y settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-given-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I.",
+     "success": {
+      "text": "The I settles into its niche, and stays. G I _ _ _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-given-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "E.",
+     "success": {
+      "text": "The E settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-given-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-given-3",
+   "name": "Caverns-o-Mighty: The Hands",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: G I _ _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "I.",
+     "success": {
+      "text": "The I settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-given-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "O.",
+     "success": {
+      "text": "The O settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-given-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "U.",
+     "success": {
+      "text": "The U settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-given-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "V.",
+     "success": {
+      "text": "The V settles into its niche, and stays. G I V _ _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-given-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-given-4",
+   "name": "Caverns-o-Mighty: The Hands",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: G I V _ _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "E.",
+     "success": {
+      "text": "The E settles into its niche, and stays. G I V E _",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-given-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "U.",
+     "success": {
+      "text": "The U settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-given-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A.",
+     "success": {
+      "text": "The A settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-given-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "G.",
+     "success": {
+      "text": "The G settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-given-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-34-given-5",
+   "name": "Caverns-o-Mighty: The Hands",
+   "group": "Greenneedle",
+   "tags": [
+    "Legendary",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "unown",
+    "tint": "#5a4f6e",
+    "effect": "flicker"
+   },
+   "intro": "The niches: G I V E _\n\nLoose Unown drift overhead. You can lead one down.",
+   "choices": [
+    {
+     "label": "G.",
+     "success": {
+      "text": "The G settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-given-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "N.",
+     "success": {
+      "text": "The N settles. G I V E N. The niches glow, one by one.",
       "effects": [
        {
         "kind": "gn",
@@ -8412,14 +10966,6 @@
        },
        {
         "kind": "gn",
-        "op": "cast",
-        "key": "cavern-regi",
-        "species": [
-         "registeel"
-        ]
-       },
-       {
-        "kind": "gn",
         "op": "setFlag",
         "key": "cavern-word-3",
         "n": 1
@@ -8431,117 +10977,81 @@
        },
        {
         "kind": "gn",
+        "op": "check",
+        "key": "cavern-read-3",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "sunken-mural",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "cavern-unown-beaten",
+          "atLeast": 0,
+          "atMost": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cavern-read-3",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "cavern-guessed",
+          "amount": 1
+         }
+        ],
+        "text": "The chamber opens. You couldn't say why that word and not another."
+       },
+       {
+        "kind": "gn",
         "op": "scene",
         "key": "gn-34-lintel"
        }
       ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "sunken-mural",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ]
+     }
     },
     {
-     "label": "Try letters until a word fits.",
+     "label": "M.",
      "success": {
-      "text": "Letters in, letters out, until the niches glow. You couldn't say which word it was.",
+      "text": "The M settles into the niche, turns once, and drifts back out. Not that.",
       "effects": [
        {
         "kind": "flag",
-        "key": "cavern-guessed",
-        "amount": 1
-       },
-       {
-        "kind": "gn",
-        "op": "pick",
-        "key": "cavern-last",
-        "weights": [
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "cavern-last",
-        "min": 1,
-        "max": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "cast",
-          "key": "cavern-regi",
-          "species": [
-           "regirock"
-          ]
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "cavern-last",
-        "min": 2,
-        "max": 2,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "cast",
-          "key": "cavern-regi",
-          "species": [
-           "regice"
-          ]
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "cavern-last",
-        "min": 3,
-        "max": 3,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "cast",
-          "key": "cavern-regi",
-          "species": [
-           "registeel"
-          ]
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "cavern-word-3",
-        "n": 1
-       },
-       {
-        "kind": "flag",
-        "key": "cavern-solved",
+        "key": "cavern-tries",
         "amount": 1
        },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-34-lintel"
+        "key": "gn-34-given-5"
        }
       ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "sunken-mural",
-       "atLeast": 0,
-       "atMost": 0
-      }
-     ]
+     }
+    },
+    {
+     "label": "S.",
+     "success": {
+      "text": "The S settles into the niche, turns once, and drifts back out. Not that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cavern-tries",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-34-given-5"
+       }
+      ]
+     }
     }
    ]
   },
@@ -8676,10 +11186,100 @@
      }
     },
     {
-     "label": "Throw a Ball.",
+     "label": "Throw a Ball. (About 1 in 100.)",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "poke-ball",
+        "great-ball",
+        "ultra-ball",
+        "premier-ball",
+        "net-ball",
+        "dive-ball",
+        "nest-ball",
+        "repeat-ball",
+        "timer-ball",
+        "quick-ball",
+        "dusk-ball",
+        "luxury-ball",
+        "heal-ball"
+       ]
+      }
+     ],
+     "chance": 0.01,
      "success": {
+      "text": "It doesn't bounce off. It closes. It shakes once, twice, three times, and stays shut. Seven dots go dark, one after another.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "from": [
+         "poke-ball",
+         "great-ball",
+         "ultra-ball",
+         "premier-ball",
+         "net-ball",
+         "dive-ball",
+         "nest-ball",
+         "repeat-ball",
+         "timer-ball",
+         "quick-ball",
+         "dusk-ball",
+         "luxury-ball",
+         "heal-ball"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "cavern-ball",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cavern-regi-caught",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "@cavern-regi"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cavern-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "failure": {
       "text": "It bounces off. At full strength, there was almost no chance: about one in a hundred. You could see that.",
       "effects": [
+       {
+        "kind": "loseItem",
+        "from": [
+         "poke-ball",
+         "great-ball",
+         "ultra-ball",
+         "premier-ball",
+         "net-ball",
+         "dive-ball",
+         "nest-ball",
+         "repeat-ball",
+         "timer-ball",
+         "quick-ball",
+         "dusk-ball",
+         "luxury-ball",
+         "heal-ball"
+        ]
+       },
        {
         "kind": "flag",
         "key": "cavern-ball",

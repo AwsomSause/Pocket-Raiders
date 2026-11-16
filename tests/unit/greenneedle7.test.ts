@@ -6,6 +6,7 @@ import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { takeTurn } from '../../src/core/run';
 import { chooseEvent } from '../../src/core/events';
 import { leavePseudoStage } from '../../src/core/dungeon/pseudo';
+import { foggedAt } from '../../src/core/world';
 import { ownTypes } from '../../src/core/co/typeShift';
 import { battleTypes } from '../../src/core/battle/transform';
 import { tideOf } from '../../src/core/clock';
@@ -15,6 +16,7 @@ import { choose, flagOf, gnRun, open, openSide, scene, setFlag, win } from './he
 
 const said = (r: { text: string; changes: string[] }): string => [r.text, ...r.changes].join(' ');
 const ANCIENT = ['old-growth', 'deep-roots', 'forests-memory'];
+const getTypes = (id: string): readonly string[] => content.species.get(id)!.types;
 /** Knocks out the wild Pokémon in front of you (one Tackle at 1 HP), then fights the rest of the line. */
 const knockOut = (run: RunState): RunState => {
   const b = structuredClone(run);
@@ -32,13 +34,14 @@ describe('gn.31 The Forgotten Forest', () => {
     open(run, 'gn-31-door');
     let r = choose(run, 'gn-31-door', 'Step through the gap.').run;
     r = choose(r, 'gn-31-gap', 'Follow your lead in.').run;
-    return choose(r, 'gn-31-street', 'Walk on.').run;
+    // The wild one in the path is walked round (fleeing is fine).
+    return choose(choose(r, 'gn-31-street', 'Walk on.').run, 'gn-31-wild-1', 'Let it look, and walk round it.').run;
   };
   /** From the carved stones to the Sacred Tree: read `slabs` of them, then wait for the colony or step through it. */
   const toTree = (run0: RunState, slabs: number, through: boolean): RunState => {
     let run = run0;
     for (let i = 0; i < slabs; i++) run = choose(run, 'gn-31-stones', 'Read the next slab.').run;
-    run = choose(run, 'gn-31-stones', 'Walk on.').run;
+    run = choose(choose(run, 'gn-31-stones', 'Walk on.').run, 'gn-31-wild-2', 'Step round it, quietly.').run;
     run = through ? knockOut(choose(run, 'gn-31-colony', 'Step through it.').run) : choose(run, 'gn-31-colony', 'Wait for the line to pass.').run;
     return choose(run, 'gn-31-clearing', 'Cross the clearing.').run;
   };
@@ -46,7 +49,7 @@ describe('gn.31 The Forgotten Forest', () => {
     [...run.party, ...run.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].find((m) => m.marks?.includes('ancient, from the Forgotten Forest'));
 
   it('a door at step 12 needing a forest (A8, once a run), badge "?"', () => {
-    expect(content.coPlacement!.get('gn-31-door')).toMatchObject({ home: 12, window: [10, 15], sits: 'optional', attaches: 'instead', earliest: 8, tags: ['forest'] });
+    expect(content.coPlacement!.get('gn-31-door')).toMatchObject({ home: 12, window: [10, 15], sits: 'side-branch', attaches: 'instead', earliest: 8, tags: ['forest'] });
     const run = gnRun('t31-door');
     open(run, 'gn-31-door');
     expect(scene(run, 'gn-31-door').labels).toEqual(['Step through the gap.', 'Walk on.']);
@@ -60,7 +63,7 @@ describe('gn.31 The Forgotten Forest', () => {
     expect(scene(r, 'gn-31-street').labels).toEqual(['Look inside one.', 'Walk on.']);
     const look = choose(r, 'gn-31-street', 'Look inside one.');
     expect(look.text).toMatch(/It's been dusted\. Recently\./);
-    r = choose(look.run, 'gn-31-street', 'Walk on.').run;
+    r = choose(choose(look.run, 'gn-31-street', 'Walk on.').run, 'gn-31-wild-1', 'Let it look, and walk round it.').run;
     expect(scene(r, 'gn-31-stones').labels).toEqual(['Read the next slab.', 'Walk on.']);
     const texts: string[] = [];
     for (let i = 0; i < 4; i++) {
@@ -73,8 +76,8 @@ describe('gn.31 The Forgotten Forest', () => {
     expect(scene(r, 'gn-31-stones').labels).toEqual(['Walk on.']);
   });
 
-  it('slab 3 is the Hidden Village\'s gesture, if you kept its secret', () => {
-    let run = inForest('t31-slab3', (r) => setFlag(r, 'village-kept-secret'));
+  it('slab 3 is the Hidden Village\'s gesture, for everyone', () => {
+    let run = inForest('t31-slab3');
     for (let i = 0; i < 2; i++) {
       const read = said(choose(run, 'gn-31-stones', 'Read the next slab.'));
       expect(read).not.toMatch(/Hidden Village/);
@@ -153,9 +156,61 @@ describe('gn.31 The Forgotten Forest', () => {
     expect(shinyClean).toBeGreaterThan(0);
   });
 
+  it('wild Pokémon are met on the way: a knockout counts, walking round or catching doesn\'t; nothing says so', () => {
+    const start = (seed: string): RunState => {
+      const run = gnRun(seed);
+      open(run, 'gn-31-door');
+      return choose(choose(choose(run, 'gn-31-door', 'Step through the gap.').run, 'gn-31-gap', 'Follow your lead in.').run, 'gn-31-street', 'Walk on.').run;
+    };
+    const met = start('t31-wild');
+    expect(scene(met, 'gn-31-wild-1').labels).toEqual(['Battle it.', 'Let it look, and walk round it.']);
+    const fight = choose(met, 'gn-31-wild-1', 'Battle it.').run;
+    expect(fight.battle!.eventRule?.gn).toBe('forest');
+    expect(getTypes(fight.battle!.enemyTeam[0]!.speciesId)).toContain('grass');
+    const harmed = knockOut(fight);
+    expect(flagOf(harmed, 'forest-harmed')).toBe(1);
+    expect(openSide(harmed)!.eventId).toBe('gn-31-stones');
+    expect(scene(harmed, 'gn-31-stones').intro).toMatch(/birdsong stopped/);
+    // Boundary: caught, not knocked out.
+    const caught = win(choose(start('t31-wild-c'), 'gn-31-wild-1', 'Battle it.').run, { catchIt: true });
+    expect(flagOf(caught, 'forest-harmed')).toBe(0);
+    // Walked round.
+    const round = choose(start('t31-wild-r'), 'gn-31-wild-1', 'Let it look, and walk round it.').run;
+    expect(flagOf(round, 'forest-harmed')).toBe(0);
+    expect(openSide(round)!.eventId).toBe('gn-31-stones');
+    // The second one, past the stones.
+    const second = choose(round, 'gn-31-stones', 'Walk on.').run;
+    expect(scene(second, 'gn-31-wild-2').labels).toEqual(['Battle it.', 'Step round it, quietly.']);
+  });
+
+  it('the map has six nodes, and the clearing is blank until you walk into it', () => {
+    const run = inForest('t31-map');
+    expect(run.stage!.pseudo?.id).toBe('ps_gn_forest');
+    expect(run.stage!.map.columns).toBe(6);
+    const clearing = run.stage!.map.nodes.find((n) => n.roomEvent === 'gn-31-clearing')!;
+    const tree = run.stage!.map.nodes.find((n) => n.roomEvent === 'gn-31-tree')!;
+    expect(foggedAt(run.stage!, 99, clearing)).toBe(true);
+    expect(foggedAt(run.stage!, 99, tree)).toBe(false);
+    const there = choose(choose(choose(run, 'gn-31-stones', 'Walk on.').run, 'gn-31-wild-2', 'Step round it, quietly.').run, 'gn-31-colony', 'Wait for the line to pass.').run;
+    expect(there.stage!.current).toBe(clearing.id);
+    expect(foggedAt(there.stage!, 99, clearing)).toBe(false);
+  });
+
+  it('beat the Trevenant: the birdsong stays gone for the rest of the region (a quiet stand of trees, a later stage)', () => {
+    const quiet = content.events.get('gn-31-quiet')!;
+    expect(quiet.callback).toBe(true);
+    expect(JSON.stringify(quiet.requires)).toMatch(/forest-silent/);
+    expect(JSON.stringify(quiet.requires)).toMatch(/thisRegion/);
+    expect(JSON.stringify(quiet.requires)).toMatch(/laterStage/);
+    const tree = toTree(inForest('t31-quiet'), 0, true);
+    const done = win(choose(tree, 'gn-31-tree', 'Battle.').run);
+    expect(flagOf(done, 'forest-silent')).toBeGreaterThan(0);
+    expect(flagOf(done, 'forest-at')).toBeGreaterThan(0);
+  });
+
   it('catching the colony harms nothing', () => {
     let run = inForest('t31-catch');
-    run = choose(run, 'gn-31-stones', 'Walk on.').run;
+    run = choose(choose(run, 'gn-31-stones', 'Walk on.').run, 'gn-31-wild-2', 'Step round it, quietly.').run;
     run = win(choose(run, 'gn-31-colony', 'Step through it.').run, { catchIt: true });
     expect(flagOf(run, 'forest-harmed')).toBe(0);
     expect(openSide(run)!.eventId).toBe('gn-31-clearing');
@@ -377,6 +432,68 @@ describe('gn.32 The Crystal Caverns', () => {
   });
 });
 
+describe('gn.32 The Crystal Caverns: fixes against the doc', () => {
+  const at = (seed: string, room: string, flags: Record<string, number>): RunState => {
+    const run = gnRun(seed);
+    for (const [k, n] of Object.entries(flags)) setFlag(run, k, n);
+    open(run, room);
+    return run;
+  };
+  const pick = (run: RunState, eventId: string, label: string, uid: string): ReturnType<typeof chooseEvent> => {
+    const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+    const side = here.sides.find((x) => x.kind === 'event' && !x.used && x.eventId === eventId)!;
+    return chooseEvent(content, run, side.id, scene(run, eventId).labels.indexOf(label), uid);
+  };
+
+  it('a Green crystal you carried can be used on a Pokémon later: it evolves for good and the crystal leaves the bag', () => {
+    const run = at('t32-green-later', 'gn-32-deep', { 'crystal-green': 1, 'crystal-bag': 1 });
+    run.party.push(createPokemon(content, 'roggenrola', 12, 'p-rog'));
+    expect(scene(run, 'gn-32-deep').labels).toContain('Use the Green crystal on one of mine.');
+    const used = pick(run, 'gn-32-deep', 'Use the Green crystal on one of mine.', 'p-rog');
+    expect(used.run.party.find((m) => m.uid === 'p-rog')!.speciesId).toBe('boldore');
+    expect(flagOf(used.run, 'crystal-green')).toBe(0);
+    expect(flagOf(used.run, 'crystal-bag')).toBe(0);
+    expect(flagOf(used.run, 'crystal-green-used')).toBe(1);
+    expect(scene(used.run, 'gn-32-deep').labels).not.toContain('Use the Green crystal on one of mine.');
+    // Failure: one that can't evolve keeps the crystal in the bag.
+    const stuck = at('t32-green-stuck', 'gn-32-heart', { 'crystal-green': 1, 'crystal-bag': 1 });
+    const last = ['gigalith', 'aggron', 'probopass', 'tauros'].find((id) => content.species.get(id)!.evolutions.length === 0)!;
+    stuck.party.push(createPokemon(content, last, 40, 'p-sab'));
+    const kept = pick(stuck, 'gn-32-heart', 'Use the Green crystal on one of mine.', 'p-sab');
+    expect(flagOf(kept.run, 'crystal-green')).toBe(1);
+    expect(said(kept)).toMatch(/goes back in the bag/);
+    // No Green carried: no such choice.
+    expect(scene(at('t32-green-none', 'gn-32-deep', {}), 'gn-32-deep').labels).not.toContain('Use the Green crystal on one of mine.');
+  });
+
+  it('the White crystal shows more than one hidden path: a second one in the Passage', () => {
+    const run = at('t32-white-2', 'gn-32-passage', { 'crystal-white': 1, 'crystal-bag': 1 });
+    expect(scene(run, 'gn-32-passage').labels).toEqual(['Stand your ground.', 'Follow the hidden path.']);
+    const found = choose(run, 'gn-32-passage', 'Follow the hidden path.').run;
+    expect(flagOf(found, 'crystal-path-2')).toBe(1);
+    expect(scene(found, 'gn-32-passage').labels).toEqual(['Stand your ground.']);
+    expect(scene(at('t32-white-0', 'gn-32-passage', {}), 'gn-32-passage').labels).toEqual(['Stand your ground.']);
+  });
+
+  it('the pool is the nine named ones "and this region\'s own": some cave fights bring a Rock-, Ice- or Steel-type of the region', () => {
+    const NAMED = ['roggenrola', 'aron', 'nosepass', 'boldore', 'lairon', 'aggron', 'gigalith', 'probopass'];
+    let local: string | undefined;
+    for (let i = 0; i < 40 && !local; i++) {
+      const run = at(`t32-local-${i}`, 'gn-32-gallery', {});
+      const foe = choose(run, 'gn-32-gallery', 'Swing at the ore.').run.battle!.enemyTeam[0]!.speciesId;
+      if (!NAMED.includes(foe)) local = foe;
+    }
+    expect(local).toBeTruthy();
+    expect(getTypes(local!).some((t) => ['rock', 'ice', 'steel'].includes(t))).toBe(true);
+  });
+
+  it('given the crystals: no shard is promised (the shards are cut)', () => {
+    const given = content.events.get('gn-32-given')!;
+    expect(given.intro).not.toMatch(/shard/);
+    expect(given.intro).toMatch(/A Carbink climbs out of it/);
+  });
+});
+
 describe('the kept cavern crystals (gn.32)', () => {
   it('each is a gift-only held item at half the Golem\'s strength', () => {
     for (const id of ['cavern-red-crystal', 'cavern-blue-crystal', 'cavern-green-crystal', 'cavern-white-crystal', 'cavern-black-crystal']) {
@@ -403,8 +520,8 @@ describe('gn.33 The Sunken City', () => {
     run.party.push(createPokemon(content, 'psyduck', 20, 'p-swim'));
   };
 
-  it('a door at step 12 needing water (A9): a causeway at low tide, a dive at high (with a Water-type), or wait', () => {
-    expect(content.coPlacement!.get('gn-33-door')).toMatchObject({ home: 12, window: [10, 15], sits: 'optional', attaches: 'instead', earliest: 9, tags: ['water'] });
+  it('a door at step 12 needing water (A9): a causeway at low tide, a dive at high; no third way in', () => {
+    expect(content.coPlacement!.get('gn-33-door')).toMatchObject({ home: 12, window: [10, 15], sits: 'side-branch', attaches: 'instead', earliest: 9, tags: ['water'] });
     const low = gnRun('t33-low');
     tide(low, 'low');
     open(low, 'gn-33-door');
@@ -412,9 +529,9 @@ describe('gn.33 The Sunken City', () => {
     const high = gnRun('t33-high');
     tide(high, 'high');
     open(high, 'gn-33-door');
-    expect(scene(high, 'gn-33-door').labels).toEqual(['Wait for low tide.', 'Walk on.']);
+    expect(scene(high, 'gn-33-door').labels).toEqual(['Dive.', 'Walk on.']);
     water(high);
-    expect(scene(high, 'gn-33-door').labels).toEqual(['Dive.', 'Wait for low tide.', 'Walk on.']);
+    expect(scene(high, 'gn-33-door').labels).toEqual(['Dive.', 'Walk on.']);
     expect(openSide(choose(high, 'gn-33-door', 'Dive.').run)!.eventId).toBe('gn-33-stairs');
   });
 
@@ -505,6 +622,11 @@ describe('gn.33 The Sunken City', () => {
     setFlag(marks.run, 'sunken-boat');
     open(marks.run, 'gn-33-sill');
     expect(said(choose(marks.run, 'gn-33-sill', 'Set the boat on the water outside the window.'))).toMatch(/Something below lights its way/);
+    // The plan carried out in Hoenn (the Seafloor Cavern's flag) leaves the same line; with neither, no line.
+    const hoenn = entered('t33-remember-h', (r) => setFlag(r, 'hoenn-final-plan'));
+    expect(said(choose(choose(hoenn, 'gn-33-stairs', 'The Houses.').run, 'gn-33-houses', 'Read the marks.'))).toMatch(/Cut by nobody/);
+    const none = entered('t33-remember-n');
+    expect(said(choose(choose(none, 'gn-33-stairs', 'The Houses.').run, 'gn-33-houses', 'Read the marks.'))).not.toMatch(/Cut by nobody/);
   });
 
   it('afterstory: a potter in a later stage sells clay boats', () => {
@@ -528,10 +650,19 @@ describe('gn.34 Caverns-o-Mighty', () => {
   /** Through the corridor and all three chambers with the words read in the Sunken City; the last word picks the Regi. */
   const solved = (seed: string, last: 'KEPT' | 'LEFT' | 'GIVEN', setup: (run: RunState) => void = SAW): RunState => {
     let run = choose(below(seed, setup), 'gn-34-corridor', 'Walk on.').run;
-    run = choose(choose(run, 'gn-34-lintel', 'Through the door marked SCALE.').run, 'gn-34-scale', 'Spell TRADE.').run;
-    run = choose(choose(run, 'gn-34-lintel', 'Through the door marked LINE.').run, 'gn-34-line', 'Spell RISING.').run;
-    run = choose(choose(run, 'gn-34-lintel', 'Through the door marked HANDS.').run, 'gn-34-hands', `Spell ${last}.`).run;
+    run = chamber(run, 'SCALE', 'gn-34-scale', 'TRADE');
+    run = chamber(run, 'LINE', 'gn-34-line', 'RISING');
+    run = hands(run, last);
     return choose(run, 'gn-34-lintel', 'Through the door marked END.').run;
+  };
+  /** Leads the Unown to the niches, one letter at a time (niche `from` on). */
+  const letters = (run0: RunState, id: string, word: string, from = 0): RunState => word.split('').slice(from).reduce((run, c, k) => choose(run, `${id}-${from + k + 1}`, `${c}.`).run, run0);
+  const chamber = (run: RunState, door: string, id: string, word: string): RunState =>
+    letters(choose(choose(run, 'gn-34-lintel', `Through the door marked ${door}.`).run, id, 'Lead the Unown to the niches.').run, id, word);
+  const hands = (run0: RunState, last: 'KEPT' | 'LEFT' | 'GIVEN'): RunState => {
+    let run = choose(choose(run0, 'gn-34-lintel', 'Through the door marked HANDS.').run, 'gn-34-hands', 'Lead the Unown to the niches.').run;
+    run = choose(run, 'gn-34-hands-1', `${last[0]}.`).run;
+    return letters(run, `gn-34-${last.toLowerCase()}`, last, 1);
   };
 
   it('the stage after the Sunken City, must-see while the tablet is carried; the ground opens (no badge)', () => {
@@ -557,18 +688,67 @@ describe('gn.34 Caverns-o-Mighty', () => {
     }
   });
 
-  it('never saw the carvings: only guessing, and the game remembers it was a guess', () => {
-    let run = choose(below('t34-guess', () => {}), 'gn-34-corridor', 'Walk on.').run;
+  it('the word is played: Unown led to the niches one at a time; a wrong letter drifts back out', () => {
+    let run = choose(below('t34-play', SAW), 'gn-34-corridor', 'Walk on.').run;
     run = choose(run, 'gn-34-lintel', 'Through the door marked SCALE.').run;
-    expect(scene(run, 'gn-34-scale').labels).toEqual(['Spell FISH.', 'Try letters until a word fits.', 'Fight the Unown.']);
-    run = choose(run, 'gn-34-scale', 'Try letters until a word fits.').run;
+    expect(scene(run, 'gn-34-scale').labels).toEqual(['Lead the Unown to the niches.', 'Fight the Unown.']);
+    // Read in the Sunken City: the walls say the word again.
+    expect(scene(run, 'gn-34-scale').intro).toMatch(/TRADE/);
+    run = choose(run, 'gn-34-scale', 'Lead the Unown to the niches.').run;
+    const first = scene(run, 'gn-34-scale-1');
+    expect(first.intro).toMatch(/_ _ _ _ _/);
+    expect(first.labels).toHaveLength(4);
+    expect(first.labels).toContain('T.');
+    const wrong = choose(run, 'gn-34-scale-1', first.labels.find((l) => l !== 'T.')!);
+    expect(said(wrong)).toMatch(/drifts back out/);
+    expect(flagOf(wrong.run, 'cavern-tries')).toBe(1);
+    expect(openSide(wrong.run)!.eventId).toBe('gn-34-scale-1');
+    run = choose(wrong.run, 'gn-34-scale-1', 'T.').run;
+    expect(scene(run, 'gn-34-scale-2').intro).toMatch(/T _ _ _ _/);
+    run = letters(run, 'gn-34-scale', 'TRADE', 1);
+    expect(flagOf(run, 'cavern-word-1')).toBe(1);
+    expect(flagOf(run, 'cavern-guessed')).toBe(0);
+    // The Unown rearrange on the lintels: the doors are in another order now, and still say where they go.
+    expect(scene(run, 'gn-34-lintel').intro).toMatch(/rearranged/);
+    expect(scene(run, 'gn-34-lintel').labels).toEqual(['Through the door marked HANDS.', 'Through the door marked LINE.']);
+  });
+
+  it('never saw the carvings: no word on the wall, and the game remembers it was a guess; a guess in any chamber gives a random Regi', () => {
+    let run = choose(below('t34-guess', (r) => { setFlag(r, 'sunken-marks'); setFlag(r, 'sunken-mural'); }), 'gn-34-corridor', 'Walk on.').run;
+    run = choose(run, 'gn-34-lintel', 'Through the door marked SCALE.').run;
+    expect(scene(run, 'gn-34-scale').intro).not.toMatch(/TRADE/);
+    run = letters(choose(run, 'gn-34-scale', 'Lead the Unown to the niches.').run, 'gn-34-scale', 'TRADE');
     expect(flagOf(run, 'cavern-guessed')).toBe(1);
-    run = choose(choose(run, 'gn-34-lintel', 'Through the door marked HANDS.').run, 'gn-34-hands', 'Try letters until a word fits.').run;
-    expect([1, 2, 3]).toContain(flagOf(run, 'cavern-last'));
-    run = choose(choose(run, 'gn-34-lintel', 'Through the door marked LINE.').run, 'gn-34-line', 'Try letters until a word fits.').run;
+    // The other two are read, and the last word is KEPT: the guess in chamber 1 still makes it a random one of the three.
+    run = hands(chamber(run, 'LINE', 'gn-34-line', 'RISING'), 'KEPT');
+    expect(flagOf(run, 'cavern-guessed')).toBe(1);
     const end = choose(run, 'gn-34-lintel', 'Through the door marked END.').run;
+    expect([1, 2, 3]).toContain(flagOf(end, 'cavern-last'));
     expect(scene(end, 'gn-34-end').intro).toMatch(/one you didn't choose/);
-    expect(choose(end, 'gn-34-end', 'Battle.').run.battle!.enemyTeam[0]!.speciesId).toBe(['regirock', 'regice', 'registeel'][flagOf(run, 'cavern-last') - 1]);
+    expect(choose(end, 'gn-34-end', 'Battle.').run.battle!.enemyTeam[0]!.speciesId).toBe(['regirock', 'regice', 'registeel'][flagOf(end, 'cavern-last') - 1]);
+    // Over many seeds a guesser who spelled KEPT does not always get Regirock.
+    const seen = new Set<number>();
+    for (let i = 0; i < 12 && seen.size < 2; i++) {
+      const g = solved(`t34-guess-${i}`, 'KEPT', (r) => { SAW(r); setFlag(r, 'cavern-guessed'); });
+      seen.add(flagOf(g, 'cavern-last'));
+    }
+    expect(seen.size).toBeGreaterThan(1);
+  });
+
+  it('fought too many Unown: the walls can\'t be read, so even a word you saw is a guess', () => {
+    let run = choose(below('t34-faded', (r) => { SAW(r); setFlag(r, 'cavern-unown-beaten', 3); }), 'gn-34-corridor', 'Walk on.').run;
+    run = choose(run, 'gn-34-lintel', 'Through the door marked SCALE.').run;
+    expect(scene(run, 'gn-34-scale').intro).not.toMatch(/TRADE/);
+    run = letters(choose(run, 'gn-34-scale', 'Lead the Unown to the niches.').run, 'gn-34-scale', 'TRADE');
+    expect(flagOf(run, 'cavern-guessed')).toBe(1);
+  });
+
+  it('spoke to the Unown: the end chamber\'s walls spell the word you gave them', () => {
+    let run = choose(choose(below('t34-word', SAW), 'gn-34-corridor', 'Spell something back.').run, 'gn-34-spell', 'WAIT.').run;
+    run = hands(chamber(chamber(run, 'SCALE', 'gn-34-scale', 'TRADE'), 'LINE', 'gn-34-line', 'RISING'), 'LEFT');
+    const end = choose(run, 'gn-34-lintel', 'Through the door marked END.');
+    expect(said(end)).toMatch(/the word you gave them: WAIT\./);
+    expect(scene(end.run, 'gn-34-end').intro).toMatch(/the word you gave them/);
   });
 
   it('hold out the tablet: it takes it, and fights at -1 to every stat (full strength after a guess)', () => {
@@ -581,7 +761,21 @@ describe('gn.34 Caverns-o-Mighty', () => {
 
   it('a Ball at full HP: almost no chance, and it says so; beaten: a Plate of its type and the tablet, cracked', () => {
     const run = solved('t34-ball', 'GIVEN');
-    expect(said(choose(run, 'gn-34-end', 'Throw a Ball.'))).toMatch(/one in a hundred/);
+    // The Ball is really thrown: one in a hundred, a Ball spent either way, and none to throw without one.
+    const BALL = 'Throw a Ball. (About 1 in 100.)';
+    const throwIt = content.events.get('gn-34-end')!.choices.find((c) => c.label === BALL)!;
+    expect(throwIt.chance).toBe(0.01);
+    expect(JSON.stringify(throwIt.success.effects)).toMatch(/"kind":"join"/);
+    expect(JSON.stringify(throwIt.requires)).toMatch(/poke-ball/);
+    for (const id of Object.keys(run.inventory)) if (id.endsWith('-ball')) delete run.inventory[id];
+    expect(() => choose(run, 'gn-34-end', BALL)).toThrow();
+    run.inventory['poke-ball'] = 2;
+    const thrown = choose(run, 'gn-34-end', BALL);
+    if (!thrown.success) {
+      expect(said(thrown)).toMatch(/one in a hundred/);
+      expect(openSide(thrown.run)!.eventId).toBe('gn-34-end');
+    }
+    expect(thrown.run.inventory['poke-ball']).toBe(1);
     const after = choose(win(choose(run, 'gn-34-end', 'Battle.').run), 'gn-34-defeated', 'Take them.').run;
     expect(JSON.stringify(after)).toMatch(/iron-plate/);
     expect(flagOf(after, 'cavern-tablet-cracked')).toBe(1);

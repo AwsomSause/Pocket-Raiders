@@ -146,7 +146,7 @@ const ZENITH = ev('sky-zenith-pillar', 'The Zenith', 'Evil Teams', { requires: [
 const climax = ev('sky-climax', `The Sky's Choice`, 'Evil Teams', { callback: true, requires: [...hoenn({ beat: 6, has: 'third', inside: false })], cast: [M.LEADER, A.LEADER, ZINNIA], tint: '#3a2a48', effect: 'rain' },
   `The Seafloor Cavern. Both leaders. Both legends, waking. And a green-scarfed line between them. ${say('Maxie', `You. The referee.`)} ${say('Archie', `The kite club! You've got some nerve!`)} ${say('Zinnia, behind you, quietly', `Here it is. This is the bit in the story.`)} The sky above the cavern roof has gone the colour of a bruise. Something up there is listening.`, [
     ch('Call it for everyone.', on(`You don't use an orb. You ask.`, 'sky-everyone'), { requires: [flagIs('sky-promise-zinnia')] }),
-    ch('Call it for us.', on(`You raise a hand, and it comes, and it isn't asking.`, 'sky-ours'), { requires: [anyOf('sky-admin-tempted', 'sky-creed-above')] }),
+    ch('Call it for us.', on(`You raise a hand, and it comes, and it isn't asking.`, 'sky-ours', flag('called-it-for-us')), { requires: [anyOf('sky-admin-tempted', 'sky-creed-above')] }),
     ch('Stand between them.', on(`You walk out onto the rock between two waking legends, with the whole team behind, and no orb, and no dragon.`, 'sky-between')),
     ch('Make them talk.', on(`"Lilycove. Both of you. Say it."`, 'sky-talk'), { requires: [anyOf('sky-warned-both', 'hoenn-lt-doubt')] }),
   ]);

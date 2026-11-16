@@ -95,6 +95,8 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   // gn.43: the auction catalogue ({lot:<n>:prov}, {lot:<n>:photo}) and a sum of money ({money:<key>}).
   text = text.replace(/\{lot:([1-6]):([a-z]+)\}/g, (_, n: string, part: string) => lotToken(run, Number(n), part));
   text = text.replaceAll('{duelist}', duelName(content, run));
+  // gn.36: a count that is always on screen ({flag:desert-water}).
+  text = text.replace(/\{flag:([a-z0-9-]+)\}/g, (_, k: string) => String(gnFlag(run, k)));
   text = text.replace(/\{money:([a-z0-9-]+)\}/g, (_, k: string) => `₽${gnFlag(run, k).toLocaleString('en-GB')}`);
   // gn.44: the reigning 1v1 champion, a different trainer each region.
   // gn.48: the Draft's table.
@@ -554,6 +556,13 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'lightning':
       // gn.35: Thunderstorm Ridge's lightning, once per node.
       return lightning(content, run, e.n!, host.float());
+    case 'mapShow':
+      // gn.36: a room the pseudo-stage's map kept blank is drawn (a Flying-type sent up, Goggles, Desert Guide).
+      if (run.stage?.pseudo && run.stage.hidden) {
+        const shown = run.stage.map.nodes.find((n) => n.roomEvent === e.key);
+        if (shown) run.stage.hidden = run.stage.hidden.filter((id) => id !== shown.id);
+      }
+      return '';
     case 'labCast':
       // gn.38: the subject, from this region's pseudo-legendary line.
       labCast(content, run, host.region);

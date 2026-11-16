@@ -180,7 +180,30 @@
    "themeId": "grass-bug",
    "tint": "#2f4a2a",
    "mood": "ancient forest",
-   "start": "opened"
+   "start": "opened",
+   "layout": [
+    [
+     "gn-31-gap"
+    ],
+    [
+     "gn-31-street"
+    ],
+    [
+     "gn-31-stones"
+    ],
+    [
+     "gn-31-colony"
+    ],
+    [
+     "gn-31-clearing"
+    ],
+    [
+     "gn-31-tree"
+    ]
+   ],
+   "hidden": [
+    "gn-31-clearing"
+   ]
   },
   {
    "id": "ps_gn_lab",
@@ -189,7 +212,24 @@
    "themeId": "grass-steel",
    "tint": "#355a3a",
    "mood": "overgrown lab",
-   "start": "opened"
+   "start": "opened",
+   "layout": [
+    [
+     "gn-38-reception"
+    ],
+    [
+     "gn-38-cells"
+    ],
+    [
+     "gn-38-greenhouse"
+    ],
+    [
+     "gn-38-control"
+    ],
+    [
+     "gn-38-last"
+    ]
+   ]
   },
   {
    "id": "ps_gn_mansion",
@@ -202,12 +242,15 @@
   },
   {
    "id": "ps_gn_desert",
-   "name": "The Great Desert",
+   "name": "The Endless Desert",
    "entry": "gn-36-door",
    "themeId": "fire-ground",
    "tint": "#c79a52",
    "mood": "desert",
-   "start": "opened"
+   "start": "opened",
+   "hidden": [
+    "gn-36-oasis-2"
+   ]
   },
   {
    "id": "ps_gn_ridge",

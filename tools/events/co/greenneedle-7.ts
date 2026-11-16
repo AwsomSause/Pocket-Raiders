@@ -1,6 +1,7 @@
 // Greenneedle, part 7: gn.31 The Forgotten Forest (doc GREENNEEDLE_REWORKED_PLACED_7.md).
 // Build: npm run co:build -- greenneedle-7   then   npm run co:gn
-import { anyType, ch, fight, flag, item, join, out, takeNode, wild, type Json } from '../dsl.ts';
+import { anyType, ch, fight, flag, hasAny, item, join, loseOne, out, takeNode, wild, type Json } from '../dsl.ts';
+import { anyFlag } from './_ne.ts';
 import { chIf, exactly, gev, gn, inside, is, laterStage, leavePseudo, moment, not, pick, rm, roll, say, scene, setTo, stampRegion, stampStage, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
@@ -33,8 +34,7 @@ const SLABS: string[] = [
 /** The slabs are read in order, one at a time (an event has at most four choices). */
 const READ: Json = chIf([is('forest-slabs', 0, 3)], 'Read the next slab.', out('You brush the moss from the next slab, and read it with your fingers as much as your eyes.',
   ...SLABS.map((text, n) => when('forest-slabs', { min: n, max: n }, [], text)),
-  gn('check', { key: 'forest-slab-3', if: [exactly('forest-slabs', 2), is('village-kept-secret')] }),
-  when('forest-slab-3', { min: 1 }, [], '*You\'ve seen that gesture before: carved on the post outside the Hidden Village.*'),
+  when('forest-slabs', { min: 2, max: 2 }, [], '*It\'s the same gesture that\'s carved on the post outside the Hidden Village.*'),
   flag('forest-slabs'), scene('gn-31-stones')));
 
 /** The clearing's two secrets roll separately, 5% each. Shiny only if nothing was knocked out here. Nothing says so. */
@@ -55,7 +55,12 @@ const SECRETS: Json[] = [
   when('forest-sighting-none', { min: 1 }, [], '*The mushrooms have been stepped over, recently, by something light.*'),
 ];
 
-const DONE: Json[] = [gn('check', { key: 'forest-harmless', if: [not(HARMED)] }), flag('forest-done'), leavePseudo()];
+const DONE: Json[] = [gn('check', { key: 'forest-harmless', if: [not(HARMED)] }), flag('forest-done'), stampStage('forest-at'), leavePseudo()];
+/** The forest's wild Pokémon are met on the way (A+0). Knocking one out is the only thing that counts; catching, calming or walking round is fine. */
+const forestWild = (id: string, name: string, pokemon: string, types: string[], intro: string, round: string, roundText: string, to: string): Json => node(id, name, { pokemon, remembers: [SILENT, BESIDE] }, intro, [
+  ch('Battle it.', fight('It doesn\'t run. Nothing here has ever needed to.', inside({ ...wild({ types, lv: 0, win: [next(to)] }), caught: [next(to)], rule: { gn: 'forest' }, lose: [next(to)] }))),
+  ch(round, out(roundText, next(to))),
+]);
 /** An ancient Grass-type, from the rarer half of this region's Grass pool, with an ability its kind never has. */
 const ABILITIES: [string, string][] = [
   ['old-growth', 'Old Growth: it mends a little every turn, in any weather.'],
@@ -104,13 +109,21 @@ const gn31: Json[] = [
       'A shelf of acorns. A bed of moss, pressed flat by something that slept here a long time.',
       'A small carved figure: something with wings and a leaf. It\'s been dusted. Recently.',
     ), flag('forest-looked'), scene('gn-31-street'))),
-    ch('Walk on.', out('The doorways watch you to the end of the row.', next('gn-31-stones'))),
+    ch('Walk on.', out('The doorways watch you to the end of the row. At the last one, something steps down into your path.', scene('gn-31-wild-1'))),
   ]),
+  forestWild('gn-31-wild-1', 'The Forgotten Forest: In Your Path', 'oddish', ['grass'], say(
+    'One of them has come down out of its doorway, and stands in the path. A rare one. You\'ve only seen its kind in books.',
+    'It isn\'t shy. It\'s never needed to be.',
+  ), 'Let it look, and walk round it.', 'It sniffs your boots, and lets you by. It watches you go.', 'gn-31-stones'),
   // ---- Node 3. The Carved Stones ----
   node('gn-31-stones', 'The Forgotten Forest: The Carved Stones', { pokemon: 'bronzor', remembers: [SILENT, BESIDE, { id: 'all-read', when: [is('forest-slabs', 4)], notice: '*You\'ve read all four. The last one stays with you.*' }] }, say(
     'Ruins, half swallowed by roots. Four stone slabs stand in a row, carved deep and worn soft.',
     'They show migrations that don\'t happen any more.',
-  ), [READ, ch('Walk on.', out('Moss closes over the carvings behind you.', next('gn-31-colony')))]),
+  ), [READ, ch('Walk on.', out('Moss closes over the carvings behind you. Past the last slab, something is asleep in the path.', scene('gn-31-wild-2')))]),
+  forestWild('gn-31-wild-2', 'The Forgotten Forest: Asleep in the Path', 'sewaddle', ['bug', 'grass'], say(
+    'Something small is asleep in a patch of sun, right where the path goes. It opens one eye. It doesn\'t get up.',
+    'Nothing has ever made it get up.',
+  ), 'Step round it, quietly.', 'You go round, through the ferns. It shuts its eye again.', 'gn-31-colony'),
   // ---- Node 4. The Colony Roads ----
   node('gn-31-colony', 'The Forgotten Forest: The Colony Roads', { pokemon: 'sewaddle', remembers: [SILENT, BESIDE] }, say(
     'A Bug colony\'s paths cross yours, worn deep into the roots by more feet than you can count. They have right of way.',
@@ -152,6 +165,14 @@ const gn31: Json[] = [
     'At the roots, the Trevenant stops you with one branch.',
     'Below it, in a hollow, something stirs, and climbs out to you, blinking.',
   ), [ch('Kneel down to it.', out('The Trevenant watches you both. It doesn\'t move until you\'re gone.', ...ANCIENT, ...DONE))]),
+  // ---- The Trevenant was fought and beaten: the birdsong doesn't come back for the rest of the region ----
+  gev('gn-31-quiet', 'No Birdsong', wood({ stop: 'event', rarity: 'uncommon', callback: true, requires: [is('forest-silent'), { kind: 'gn', test: 'thisRegion', key: 'forest-silent' }, laterStage('forest-at'), not('forest-quiet-seen')] }), say(
+    'A stand of trees by the road. You stop, without knowing why. Then you know why.',
+    '*No birdsong. Not here either. It hasn\'t come back anywhere in this region, since the forest.*',
+  ), [
+    ch('Listen a while.', out('You listen. Wind, and leaves, and nothing else. Your Pokémon stay close.', flag('forest-quiet-seen'))),
+    ch('Walk on.', out('You walk on. Your own footsteps are the loudest thing on the road.', flag('forest-quiet-seen'))),
+  ]),
 ];
 
 // =====================================================================================================================
@@ -170,9 +191,13 @@ const ROOM = [is('crystal-bag', 0, 5)];
 const take = (colour: string, o: Json = {}): Json[] => [gn('crystal', { key: colour, ...o }), ...FIRST_HUM];
 const onPick = { pick: { types: [] } };
 const cw = (id: string): Json => ({ kind: 'addEvent', eventId: id });
+/** A Green crystal you chose to carry can still be used on a Pokémon later (it's used up; the evolution's for good). */
+const useGreen = (self: string): Json => chIf([is('crystal-green')], 'Use the Green crystal on one of mine.', out('You take the Green crystal out of the bag, and hold it out.', gn('crystal', { key: 'green', type: 'use' }), scene(self)), onPick);
 /** A cave fight: anything you meet in here is a wild one (A+1). */
 /** `exact` only for one named foe: with a pool, it would always take the first. */
-const caveFight = (species: string[], win: Json[], lose: Json[] = win): Json => inside({ ...wild({ species, lv: 1, win }), caught: win, ...(species.length === 1 ? { exact: true } : {}), lose });
+/** "...and this region's own": one time in three, a Rock-, Ice- or Steel-type of this region comes instead (its own roll). */
+const LOCAL = { local: { types: ['rock', 'ice', 'steel'], chance: 1 / 3 } };
+const caveFight = (species: string[], win: Json[], lose: Json[] = win): Json => inside({ ...wild({ species, lv: 1, win }), caught: win, ...(species.length === 1 ? { exact: true } : LOCAL), lose });
 /** The light-beam puzzle at the Hall of Beams: three mirrors (red, blue, green) turned into the beam or out of it; white opens the door. */
 const BEAM = ['nothing: the beam goes straight past', 'red', 'blue', 'violet', 'green', 'yellow', 'teal', 'white'];
 const mirror = (key: 'r' | 'b' | 'g', label: string): Json => ch(label, out('The turntable grinds round. The beam swings with it.',
@@ -206,7 +231,7 @@ const GIVE_OUT: Json = out(say(
   'You hold them out. It takes them, one at a time, very carefully, with something that isn\'t a hand.',
   'It sets them into itself. It folds back into the wall. The humming stops.',
 ), setTo('crystal-golem', 2), flag('crystal-golem-given'),
-  // The shards are cosmetic key items: cut with the Keepsakes (Kice, Nov 13). The text keeps them; the flags remember the colours.
+  // The shards are cosmetic key items: cut with the Keepsakes (Kice, Nov 13). The flags remember the colours given; the text doesn't promise a shard.
   ...['red', 'blue', 'green', 'white', 'black'].map((c) => when(`crystal-${c}`, { min: 1 }, [flag(`crystal-shard-${c}`)])),
   scene('gn-32-given'));
 const CRYSTAL_DONE: Json[] = [flag('crystal-done'), leavePseudo()];
@@ -298,10 +323,15 @@ const gn32: Json[] = [
     'On a plinth, alone, a Black crystal. It\'s cold even from here. The hum is louder, and lower.',
   ), [
     chIf(ROOM, 'Take it.', out('Your fingers ache with the cold. Below you, the hum gets louder.', ...take('black'), cw('gn-32-passage'))),
+    useGreen('gn-32-deep'),
     ch('Leave it.', out('You leave it where it is. The hum doesn\'t change.', cw('gn-32-passage'))),
   ]),
   // A wild one in the passage: with the Black crystal carried, it may flee (40%), fight (40%) or follow (20%).
-  hall('gn-32-passage', 'The Crystal Caverns: The Passage', { pokemon: 'sableye' }, 'Something comes up the passage toward you, drawn by the hum.', [
+  hall('gn-32-passage', 'The Crystal Caverns: The Passage', {
+    pokemon: 'sableye',
+    // White shows hidden paths (plural): the second one is here.
+    remembers: [{ id: 'path', when: [is('crystal-white'), not('crystal-path-2')], notice: '*The White crystal lights a seam in the passage wall. It isn\'t a seam. It\'s a way through.*', addChoices: [ch('Follow the hidden path.', out('A crawl, a turn, and a pocket in the rock where something was put down a long time ago, and never fetched.', flag('crystal-path-2'), { kind: 'itemFrom', ids: ['rare-candy', 'star-piece', 'pp-up'] }, scene('gn-32-passage')))] }],
+  }, 'Something comes up the passage toward you, drawn by the hum.', [
     ch('Stand your ground.', out('Its eyes catch the light.', setTo('crystal-black-roll', 2), when('crystal-black', { min: 1 }, [pick('crystal-black-roll', 40, 40, 20)]),
       when('crystal-black-roll', { min: 1, max: 1 }, [cw('gn-32-heart')], 'It sees what you\'re carrying, and runs.'),
       when('crystal-black-roll', { min: 2, max: 2 }, [scene('gn-32-passage-fight')]),
@@ -314,7 +344,7 @@ const gn32: Json[] = [
   hall('gn-32-heart', 'The Crystal Caverns: The Heart', { pokemon: 'gigalith', effect: 'shake', remembers: [{ id: 'follower', when: [is('crystal-follower')], notice: '*Behind you, the one that followed sits down to watch.*' }] }, say(
     'The far wall isn\'t a wall. It unfolds.',
     '*A Gigalith, twice the size it should be, grown through with crystal of every colour. It turns toward your bag.*',
-  ), [ch('Stand your ground.', out('It reads your bag the way you\'d read a face.', ...GENTLE, ...READ_BAG, scene('gn-32-phase-1')))]),
+  ), [ch('Stand your ground.', out('It reads your bag the way you\'d read a face.', ...GENTLE, ...READ_BAG, scene('gn-32-phase-1'))), useGreen('gn-32-heart')]),
   phaseRoom(1, 'It leans down toward your bag, and the crystals in it light up.'),
   ...[1, 2].map((n) => hall(`gn-32-between-${n}`, 'The Heart: Between', { pokemon: 'gigalith' }, say(
     '*It\'s looking at the bag again. It isn\'t angry. It\'s hungry, or it\'s lonely; with a rock, it\'s hard to tell.*',
@@ -335,7 +365,7 @@ const gn32: Json[] = [
   hall('gn-32-keep-2', 'The Heart: One Crystal', { pokemon: 'gigalith' }, 'One crystal stays lit, if you choose it.', [keepIt('white'), keepIt('black'), ch('None of them.', out('You let them go dark.', cw('gn-32-follower-check')))]),
   hall('gn-32-given', 'The Heart: The Wall', { pokemon: 'carbink' }, say(
     'Where it folded, the wall moves once more. A Carbink climbs out of it, and looks at you, and follows.',
-    'In your hand: one small shard of each colour you gave. They hum, faintly, when you turn toward places nobody\'s found.',
+    'Where it set your crystals into itself, the rock still shows their colours, faintly. They hum once, and go quiet.',
   ), [ch('Let it come.', out('It walks at your heel all the way to the light.', { ...join({ species: ['carbink'] }), marks: ['came out of the wall in the Crystal Caverns'] }, cw('gn-32-follower-check')))]),
   hall('gn-32-folded', 'The Heart: The Wall', { pokemon: 'gigalith' }, 'It doesn\'t follow you. It folds back into the wall, and the humming goes on without you.', [
     ch('Find the way out.', out('The light leads you out.', setTo('crystal-golem', 3), cw('gn-32-follower-check'))),
@@ -383,8 +413,7 @@ const gn33: Json[] = [
     'The fishermen don\'t go near it. "It isn\'t haunted," one says. "It\'s just *somebody\'s.*"',
   ), [
     chIf([LOW_TIDE], 'Walk the causeway.', out('At low tide the old causeway is out of the water, stone by stone. You walk out to the towers.', flag('sunken-entered'), setTo('sunken-districts', 0), setTo('sunken-returned', 0), cw('gn-33-stairs'))),
-    chIf([HIGH_TIDE, anyType('water')], 'Dive.', out('The tide is in. You go down with your Water-type, past the tops of the towers, into the streets.', flag('sunken-entered'), setTo('sunken-districts', 0), setTo('sunken-returned', 0), cw('gn-33-stairs'))),
-    chIf([HIGH_TIDE], 'Wait for low tide.', out('You sit on the rocks and wait. The sea goes out slowly. The causeway comes up stone by stone.', takeNode(1), flag('sunken-entered'), setTo('sunken-districts', 0), setTo('sunken-returned', 0), cw('gn-33-stairs'))),
+    chIf([HIGH_TIDE], 'Dive.', out('The tide is in. You take a breath, and go down, past the tops of the towers, into the streets.', flag('sunken-entered'), setTo('sunken-districts', 0), setTo('sunken-returned', 0), cw('gn-33-stairs'))),
     ch('Walk on.', out('The towers go under as the tide turns.')),
   ]),
   // ---- The flooded stairs, where the three districts meet ----
@@ -427,7 +456,8 @@ const gn33: Json[] = [
       'High-water marks, carved and dated, each a little higher. The lowest are at the ankle.',
       'They go up slowly: a hand\'s width in a lifetime.',
     ), setTo('sunken-marks', 1), when('sunken-drain-h', { min: 1 }, [setTo('sunken-marks-top', 1)], 'With the street drained you can read them to the top: over the lintel. The last date is very neat.'),
-      when('aqua-flooded', { min: 1 }, [], 'At the very top, one new line. Very recent. Cut by nobody.'), scene('gn-33-houses'))),
+      gn('check', { key: 'sunken-new-line', if: [anyFlag('aqua-flooded', 'hoenn-final-plan')] }),
+      when('sunken-new-line', { min: 1 }, [], 'At the very top, one new line. Very recent. Cut by nobody.'), scene('gn-33-houses'))),
     ch('Turn the Houses\' bronze wheel.', out('It turns. Water moves somewhere behind the walls.', scene('gn-33-wheel-h'))),
     ch('Go to the windowsill.', out('The clay boat, pointing out to sea.', scene('gn-33-sill'))),
     STAIRS(),
@@ -539,10 +569,37 @@ const FADED = { id: 'faded', when: [is('cavern-unown-beaten', 3)], notice: '*So 
 const unownFight = (back: string): Json => ch('Fight the Unown.', fight('They come off the wall like leaves in a wind.', inside({
   ...wild({ species: ['unown'], lv: 1, win: [flag('cavern-unown-beaten'), scene(back)] }), caught: [scene(back)], exact: true, lose: [scene(back)],
 })));
-const SOLVED = (n: number): Json[] => [setTo(`cavern-word-${n}`, 1), flag('cavern-solved'), scene('gn-34-lintel')];
-/** A wrong letter drifts back out. */
-const wrong = (label: string): Json => ch(label, out('The letters line up in the niches, then one drifts back out. Not that.', flag('cavern-tries')));
-const guess = (n: number, word: string): Json => ch('Try letters until a word fits.', out(`It takes a long time. Letters in, letters out. Then: ${word}. The chamber opens.`, flag('cavern-guessed'), ...SOLVED(n)));
+/** A chamber opens. It was a guess unless the Sunken City's carving for it was seen, and the walls can still be read. */
+const SOLVED = (n: number, clue: string): Json[] => [
+  setTo(`cavern-word-${n}`, 1), flag('cavern-solved'),
+  gn('check', { key: `cavern-read-${n}`, if: [is(clue), is('cavern-unown-beaten', 0, 2)] }),
+  when(`cavern-read-${n}`, { min: 0, max: 0 }, [flag('cavern-guessed')], 'The chamber opens. You couldn\'t say why that word and not another.'),
+  scene('gn-34-lintel'),
+];
+/** The answer was in the Sunken City: the walls here say it again, while there are letters enough left to read. */
+const CLUE = (clue: string, notice: string): Json => ({ id: 'clue', when: [is(clue), is('cavern-unown-beaten', 0, 2)], notice });
+// How a word's spelled: loose Unown are led, one at a time, to a row of niches. A wrong letter drifts back out.
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const niches = (word: string, n: number): string => word.split('').map((c, i) => (i < n ? c : '_')).join(' ');
+/** The four loose Unown offered for niche `i`: the right letter and three others, the right one's place moving niche by niche. */
+const loose = (word: string, i: number, others: string[] = []): string[] => {
+  const right = word[i]!;
+  const at = ALPHABET.indexOf(right);
+  const decoys = [...others, ...[7, 13, 19].map((k) => ALPHABET[(at + k + i * 3) % 26]!)].filter((c, n, all) => c !== right && all.indexOf(c) === n).slice(0, 3);
+  decoys.splice((i + word.length) % 4, 0, right);
+  return decoys;
+};
+const drifts = (c: string, self: string): Json => ch(`${c}.`, out(`The ${c} settles into the niche, turns once, and drifts back out. Not that.`, flag('cavern-tries'), scene(self)));
+/** The rooms that spell `word` from niche `from` on (ids `<id>-<niche>`); `done` runs when the last letter settles. */
+const spell = (id: string, name: string, word: string, done: Json[], from = 0): Json[] => word.split('').slice(from).map((_, k) => {
+  const i = from + k;
+  const self = `${id}-${i + 1}`;
+  const last = i === word.length - 1;
+  return chamber(self, name, {}, `The niches: ${niches(word, i)}\n\nLoose Unown drift overhead. You can lead one down.`, loose(word, i).map((c) => (c === word[i]
+    ? ch(`${c}.`, out(last ? `The ${c} settles. ${niches(word, word.length)}. The niches glow, one by one.` : `The ${c} settles into its niche, and stays. ${niches(word, i + 1)}`, ...(last ? done : [scene(`${id}-${i + 2}`)])))
+    : drifts(c, self))));
+});
+const BALLS = ['poke-ball', 'great-ball', 'ultra-ball', 'premier-ball', 'net-ball', 'dive-ball', 'nest-ball', 'repeat-ball', 'timer-ball', 'quick-ball', 'dusk-ball', 'luxury-ball', 'heal-ball'];
 const REGI = (key: string): Json[] => [gn('cast', { key: 'cavern-regi', species: [key] })];
 const CAVERN_DONE: Json[] = [flag('cavern-done'), leavePseudo()];
 const regiFight = (calmed: boolean): Json => inside({
@@ -550,6 +607,11 @@ const regiFight = (calmed: boolean): Json => inside({
   caught: [flag('cavern-regi-caught'), ...CAVERN_DONE], exact: true, lose: [...CAVERN_DONE],
   ...(calmed ? { rule: { foeStages: { atk: -1, def: -1, spa: -1, spd: -1, spe: -1 } } } : {}),
 });
+const DOOR = {
+  scale: chIf([not('cavern-word-1')], 'Through the door marked SCALE.', out('A chamber with a carving of a balance.', scene('gn-34-scale'))),
+  line: chIf([not('cavern-word-2')], 'Through the door marked LINE.', out('A chamber with a carving of a doorway.', scene('gn-34-line'))),
+  hands: chIf([not('cavern-word-3')], 'Through the door marked HANDS.', out('A chamber with a carving of two hands.', scene('gn-34-hands'))),
+};
 const RARE_OF: [string, number, string][] = [['regirock', 1, 'stone-plate'], ['regice', 2, 'icicle-plate'], ['registeel', 3, 'iron-plate']];
 
 const gn34: Json[] = [
@@ -575,42 +637,54 @@ const gn34: Json[] = [
   ]),
   // ---- The lintels: three Unown on each door say where it goes, before you step through ----
   chamber('gn-34-lintel', 'Caverns-o-Mighty: The Doors', {
-    remembers: [{ id: 'done', when: [is('cavern-word-1'), is('cavern-word-2'), is('cavern-word-3')], notice: 'The three Unown on the last lintel rearrange themselves. Now they spell END.', addChoices: [ch('Through the door marked END.', out('Seven dots, somewhere ahead, waiting to light.', cw('gn-34-end')))] }, THIEF, FADED],
+    remembers: [{ id: 'done', when: [is('cavern-word-1'), is('cavern-word-2'), is('cavern-word-3')], notice: 'The three Unown on the last lintel rearrange themselves. Now they spell END.', addChoices: [ch('Through the door marked END.', out('Seven dots, somewhere ahead, waiting to light.',
+      // A player who guessed (in any chamber) gets a random one of the three, whatever the last word was.
+      when('cavern-guessed', { min: 1 }, [pick('cavern-last', 1, 1, 1)]),
+      ...RARE_OF.map(([sp, n]) => when('cavern-last', { min: n, max: n }, REGI(sp))),
+      // `unown.spoke`: in the end chamber, the walls spell the word the player gave them.
+      ...['HERE', 'WAIT', 'STILL', 'WE KEPT IT'].map((w, i) => when('unown-word', { min: i + 1, max: i + 1 }, [], `Ahead, on the walls, all the way round, the Unown spell the word you gave them: ${w}.`)),
+      cw('gn-34-end')))] },
+      // The Unown rearrange on the lintels after each chamber: the same doorway goes somewhere else. The player reads where before stepping through.
+      { id: 'moved-1', when: [exactly('cavern-solved', 1)], notice: '*The Unown on the lintels have rearranged. The doors go somewhere else now. You read them again before you step.*', hide: [0, 1, 2], addChoices: [DOOR.hands, DOOR.scale, DOOR.line] },
+      { id: 'moved-2', when: [exactly('cavern-solved', 2)], notice: '*The Unown on the lintels have rearranged again. The doors go somewhere else now. You read them again before you step.*', hide: [0, 1, 2], addChoices: [DOOR.line, DOOR.hands, DOOR.scale] }],
   }, 'Doors, and over each one, three Unown on the lintel. When they rearrange, the door goes somewhere else. You can read where before you step through.', [
-    chIf([not('cavern-word-1')], 'Through the door marked SCALE.', out('A chamber with a carving of a balance.', scene('gn-34-scale'))),
-    chIf([not('cavern-word-2')], 'Through the door marked LINE.', out('A chamber with a carving of a doorway.', scene('gn-34-line'))),
-    chIf([not('cavern-word-3')], 'Through the door marked HANDS.', out('A chamber with a carving of two hands.', scene('gn-34-hands'))),
+    DOOR.scale, DOOR.line, DOOR.hands,
   ]),
   // ---- 1. The Scale ----
-  chamber('gn-34-scale', 'Caverns-o-Mighty: The Scale', { remembers: [THIEF, FADED] }, say(
-    'A carving of a balance, with a fish on one side and nothing on the other. Below it, a row of empty niches.',
+  chamber('gn-34-scale', 'Caverns-o-Mighty: The Scale', { remembers: [CLUE('sunken-weight', '*Small, on the wall, the Unown have spelled it once already: TRADE. The scale-weight, stamped with a fish. You held it.*'), THIEF, FADED] }, say(
+    'A carving of a balance, with a fish on one side and nothing on the other. Below it, a row of five empty niches.',
     'Loose Unown drift in the air. You can lead them, one at a time, to the niches.',
   ), [
-    chIf([is('sunken-weight'), is('cavern-unown-beaten', 0, 2)], 'Spell TRADE.', out('The scale-weight, stamped with a fish. T, R, A, D, E. The niches glow, one by one.', ...SOLVED(1))),
-    wrong('Spell FISH.'),
-    guess(1, 'TRADE'),
+    ch('Lead the Unown to the niches.', out('You hold out a hand. One drifts down to it, curious.', scene('gn-34-scale-1'))),
     unownFight('gn-34-scale'),
   ]),
+  ...spell('gn-34-scale', 'Caverns-o-Mighty: The Scale', 'TRADE', SOLVED(1, 'sunken-weight')),
   // ---- 2. The Line ----
-  chamber('gn-34-line', 'Caverns-o-Mighty: The Line', { remembers: [THIEF, FADED] }, say(
-    'A carving of a doorway, with lines beside it, each one higher than the last. A row of empty niches.',
+  chamber('gn-34-line', 'Caverns-o-Mighty: The Line', { remembers: [CLUE('sunken-marks', '*Small, on the wall, the Unown have spelled it once already: RISING. The high-water marks, a hand\'s width in a lifetime. You read them.*'), THIEF, FADED] }, say(
+    'A carving of a doorway, with lines beside it, each one higher than the last. A row of six empty niches.',
   ), [
-    chIf([is('sunken-marks'), is('cavern-unown-beaten', 0, 2)], 'Spell RISING.', out('The high-water marks, a hand\'s width in a lifetime. R, I, S, I, N, G.', ...SOLVED(2))),
-    wrong('Spell DOOR.'),
-    guess(2, 'RISING'),
+    ch('Lead the Unown to the niches.', out('You hold out a hand. One drifts down to it, curious.', scene('gn-34-line-1'))),
     unownFight('gn-34-line'),
   ]),
+  ...spell('gn-34-line', 'Caverns-o-Mighty: The Line', 'RISING', SOLVED(2, 'sunken-marks')),
   // ---- 3. The Hands: your own choice of three ----
-  chamber('gn-34-hands', 'Caverns-o-Mighty: The Hands', { remembers: [THIEF, FADED] }, say(
-    'A carving of two hands, open, something small between them. A row of empty niches.',
+  chamber('gn-34-hands', 'Caverns-o-Mighty: The Hands', { remembers: [CLUE('sunken-mural', '*Small, on the wall, three words, one under another: KEPT. LEFT. GIVEN. The last figure in the mural, putting something down. Which it was is yours to say.*'), THIEF, FADED] }, say(
+    'A carving of two hands, open, something small between them. A row of empty niches: more than you need, or just enough.',
     'The last figure in the mural, looking back, putting something down.',
   ), [
-    chIf([is('sunken-mural')], 'Spell KEPT.', out('K, E, P, T. It kept. It\'s still keeping.', setTo('cavern-last', 1), ...REGI('regirock'), ...SOLVED(3))),
-    chIf([is('sunken-mural')], 'Spell LEFT.', out('L, E, F, T. What\'s left when everyone\'s gone.', setTo('cavern-last', 2), ...REGI('regice'), ...SOLVED(3))),
-    chIf([is('sunken-mural')], 'Spell GIVEN.', out('G, I, V, E, N. Made, and handed over.', setTo('cavern-last', 3), ...REGI('registeel'), ...SOLVED(3))),
-    chIf([not('sunken-mural')], 'Try letters until a word fits.', out('Letters in, letters out, until the niches glow. You couldn\'t say which word it was.', flag('cavern-guessed'),
-      pick('cavern-last', 1, 1, 1), ...RARE_OF.map(([sp, n]) => when('cavern-last', { min: n, max: n }, REGI(sp))), ...SOLVED(3))),
+    ch('Lead the Unown to the niches.', out('You hold out a hand. One drifts down to it, curious.', scene('gn-34-hands-1'))),
+    unownFight('gn-34-hands'),
   ]),
+  // The first letter picks the word: K, L or G.
+  chamber('gn-34-hands-1', 'Caverns-o-Mighty: The Hands', {}, 'The niches: _ _ _ _\n\nLoose Unown drift overhead. You can lead one down.', [
+    ch('K.', out('The K settles into its niche, and stays. K _ _ _', scene('gn-34-kept-2'))),
+    drifts('S', 'gn-34-hands-1'),
+    ch('L.', out('The L settles into its niche, and stays. L _ _ _', scene('gn-34-left-2'))),
+    ch('G.', out('The G settles into its niche, and stays. A fifth niche opens beside the fourth. G _ _ _ _', scene('gn-34-given-2'))),
+  ]),
+  ...spell('gn-34-kept', 'Caverns-o-Mighty: The Hands', 'KEPT', [setTo('cavern-last', 1), ...SOLVED(3, 'sunken-mural')], 1),
+  ...spell('gn-34-left', 'Caverns-o-Mighty: The Hands', 'LEFT', [setTo('cavern-last', 2), ...SOLVED(3, 'sunken-mural')], 1),
+  ...spell('gn-34-given', 'Caverns-o-Mighty: The Hands', 'GIVEN', [setTo('cavern-last', 3), ...SOLVED(3, 'sunken-mural')], 1),
   // ---- The end ----
   chamber('gn-34-end', 'Caverns-o-Mighty: The End', {
     pokemon: 'regirock',
@@ -625,7 +699,12 @@ const gn34: Json[] = [
   ), [
     ch('Hold out the tablet.', out('It takes it. It sets it into its own chest, where there\'s a space the right size.', setTo('cavern-tablet-given', 1), scene('gn-34-regi'))),
     ch('Battle.', fight('The dots flare.', regiFight(false))),
-    ch('Throw a Ball.', out('It bounces off. At full strength, there was almost no chance: about one in a hundred. You could see that.', flag('cavern-ball'), scene('gn-34-end'))),
+    // "At full HP: almost no chance, and it's shown": one in a hundred, and the Ball is spent either way.
+    ch('Throw a Ball. (About 1 in 100.)', out('It doesn\'t bounce off. It closes. It shakes once, twice, three times, and stays shut. Seven dots go dark, one after another.',
+      loseOne(...BALLS), flag('cavern-ball'), flag('cavern-regi-caught'), join({ species: ['@cavern-regi'], lv: 2 }), ...CAVERN_DONE), {
+      requires: [hasAny(...BALLS)], chance: 0.01,
+      fail: out('It bounces off. At full strength, there was almost no chance: about one in a hundred. You could see that.', loseOne(...BALLS), flag('cavern-ball'), scene('gn-34-end')),
+    }),
   ]),
   chamber('gn-34-regi', 'Caverns-o-Mighty: It Has What It Waited For', { pokemon: 'regirock' }, 'It has what it was waiting for. It stands a little lower now, the way you do after a long day.', [
     chIf([not('cavern-guessed')], 'Battle.', fight('It fights, but its heart isn\'t in it.', regiFight(true))),
@@ -645,7 +724,7 @@ export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
   'gn-31-door': {
-    gn: 'gn.31', shape: 'Door', earliest: 'A8', home: 12, window: [10, 15], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage', 'Legendary'], needs: ['forest'],
+    gn: 'gn.31', shape: 'Door', earliest: 'A8', home: 12, window: [10, 15], sits: 'side-branch', attaches: 'instead', tags: ['Pseudo Stage', 'Legendary'], needs: ['forest'],
     level: 'A+0; the Trevenant A+2', often: 'run', badge: '?', dressing: { kanto: 'A gap in Viridian Forest', elsewhere: 'A gap between two trees' },
     note: 'Badge: a "?". Six nodes. A side branch from step 12: a gap between two trees that wasn\'t there on the way in.',
   },
@@ -655,7 +734,7 @@ export const PLACEMENT: Record<string, Placement> = {
     note: 'Badge: a crystal. Six nodes. The Crystal Hollow (SF93) is its front chamber: singing into it opens the Hall of Beams\' door.',
   },
   'gn-33-door': {
-    gn: 'gn.33', shape: 'Door', earliest: 'A9', home: 12, window: [10, 15], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage', 'Mystery'], needs: ['water'],
+    gn: 'gn.33', shape: 'Door', earliest: 'A9', home: 12, window: [10, 15], sits: 'side-branch', attaches: 'instead', tags: ['Pseudo Stage', 'Mystery'], needs: ['water'],
     level: 'A+1; the Relicanth A+2', often: 'run', badge: 'own', dressing: { kanto: 'Off the Seafoam coast: the Sunken City', elsewhere: 'The Sunken City' },
     note: 'Badge: a drowned tower. Three districts in any order, then the archive. A causeway at low tide, a dive at high. "Once per save" is once per run (no memory across runs).',
   },
@@ -670,5 +749,7 @@ export const CHAINS: Json[] = [
   { id: 'ps_gn_unown', name: 'Caverns-o-Mighty', entry: 'gn-34-door', themeId: 'psychic-ghost', tint: UNOWN_TINT, mood: 'unown caverns', start: 'opened' },
   { id: 'ps_gn_sunken', name: 'The Sunken City', entry: 'gn-33-door', themeId: 'water-ghost', tint: SUNK_TINT, mood: 'sunken city', start: 'opened' },
   { id: 'ps_gn_crystal', name: 'The Crystal Caverns', entry: 'gn-32-door', themeId: 'rock-fairy', tint: CRYSTAL_TINT, mood: 'crystal cave', start: 'opened' },
-  { id: 'ps_gn_forest', name: 'The Forgotten Forest', entry: 'gn-31-door', themeId: 'grass-bug', tint: FOREST_TINT, mood: 'ancient forest', start: 'opened' },
+  // The six nodes by column (the wild ones met on the way are scenes of their node). The clearing is one of the map's blank spaces: walking into it draws it.
+  { id: 'ps_gn_forest', name: 'The Forgotten Forest', entry: 'gn-31-door', themeId: 'grass-bug', tint: FOREST_TINT, mood: 'ancient forest', start: 'opened',
+    layout: [['gn-31-gap'], ['gn-31-street'], ['gn-31-stones'], ['gn-31-colony'], ['gn-31-clearing'], ['gn-31-tree']], hidden: ['gn-31-clearing'] },
 ];
