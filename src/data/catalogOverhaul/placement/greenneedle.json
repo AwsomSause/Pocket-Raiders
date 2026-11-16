@@ -6622,5 +6622,89 @@
    "Story"
   ],
   "tags": []
+ },
+ "gn-new-03-find": {
+  "gn": "gn.new.03",
+  "shape": "Region-long",
+  "earliest": "A1",
+  "home": 3,
+  "window": [
+   2,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "stages": [
+   1,
+   2
+  ],
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Badge: a taped Ball. Found once a run, at step 3 of stage 1 or 2 (step 7 is the fallback, the end of the window). From then on its scene opens at every rest (run.ts ballRest) until it comes out (five kindnesses). Hatched, it sets ball-waited and abandoned-mon.",
+  "kinds": [
+   "Interrupting Episode"
+  ],
+  "tags": []
+ },
+ "gn-new-03-tinker": {
+  "gn": "gn.new.03",
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 4,
+  "window": [
+   1,
+   10
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "A town's tinker, once, while the Ball is still in the bag. ₽200 forces it open: it bolts.",
+  "kinds": [
+   "Interrupting Episode"
+  ],
+  "tags": []
+ },
+ "gn-new-03-again": {
+  "gn": "gn.new.03",
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 8,
+  "window": [
+   2,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "A+16, cannot be caught",
+  "often": "run",
+  "badge": "own",
+  "note": "A later stage after the tinker forced it: the Pokémon, wild, at A+16. It can't be caught.",
+  "kinds": [
+   "Interrupting Episode"
+  ],
+  "tags": []
+ },
+ "gn-new-03-after": {
+  "gn": "gn.new.03",
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: the next region, step 5. A young trainer goes white; the Pokémon stays whichever is picked.",
+  "kinds": [
+   "Interrupting Episode"
+  ],
+  "tags": []
  }
 }

@@ -2,7 +2,6 @@
  "category": "greenneedle",
  "note": "Catalog row 15 (Greenneedle). `external`: flags a Greenneedle event reads that another set (or a Greenneedle event not built yet) will write; remove each as its writer lands. `flags` with `rule`: flags code writes, not an event effect.",
  "external": {
-  "abandoned-mon": "gn.new.03 The Ball That Wouldn't Open",
   "littlecup-cancelled": "gn.new.27",
   "dog-sat": "gn.new.02",
   "little-league-losing": "SF134.2 Little League",
@@ -19,7 +18,6 @@
   "lantern-boat": "gn.new.36 The Lantern Sea (read by gn.33)",
   "sunken-bell": "SF41.1 The Sunken City, the ovc-sunken-bell chain (overhaul/event_chains.json; read by gn.33)",
   "museum-relics-returned": "SF129 \"Return to the Museum\" (the museum's relics returned; read by gn.41)",
-  "ball-waited": "gn.new.03 The Ball That Wouldn't Open (waited it out)",
   "ranch-dug": "gn.new.20 The Bibarel Dam: dug a channel (read by gn.new.38 Long Table)",
   "ranch-moved": "gn.new.20 The Bibarel Dam: moved the colony (read by gn.new.38 Long Table)",
   "well-lifted": "gn.new.16 The Thing in the Well: lifted the Feebas out (read by gn.new.38 Long Table)",
@@ -886,6 +884,14 @@
   {
    "key": "xatu-changed",
    "rule": "core/greenneedle/cartographer.ts (gn.new.12: the second draw after Communion)"
+  },
+  {
+   "key": "abandoned-mon",
+   "rule": "core/greenneedle/ball.ts (gn.new.03: the Pokémon that came out of the Ball)"
+  },
+  {
+   "key": "ball-waited",
+   "rule": "core/greenneedle/ball.ts (gn.new.03: you waited it out; gn.51 needs one rest fewer)"
   }
  ]
 }

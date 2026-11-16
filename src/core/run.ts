@@ -24,6 +24,7 @@ import { aceBows } from './greenneedle/missingAce';
 import { ofAssist, ofGuestLeaves, recordRelease } from './greenneedle/oldfriend';
 import { ferrisBossMark, ferrisCatch, ferrisFree, ferrisFreeEnd } from './greenneedle/ferris';
 import { followedRest, followedRival, followedRoad, followedShop, followedStage, followedStep, longJourney } from './greenneedle/followed';
+import { ballBattle, ballRest } from './greenneedle/ball';
 import { ridgeCatch } from './greenneedle/ridge';
 import { noteLeft } from './greenneedle/left';
 import { unflinchingStart } from './greenneedle/daycare';
@@ -2742,6 +2743,8 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const milkLine = ranchRest(content, run);
     // Greenneedle gn.60: what the camp notices, and the Pokémon that follows you walks into the light.
     const followedLine = followedRest(content, run, before);
+    // Greenneedle gn.new.03: the Ball that wouldn't open has a scene at every rest.
+    ballRest(content, run);
     partyLifeCamp(run);
     const comboLine = [partyLifeCombos(content, run), ...assignGrowthPaths(content, run.party, run.story.histories)].filter(Boolean).join(' ');
     runSide.used = true;
@@ -3829,6 +3832,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (duelistMark(content, run, stageNumber(content, run))) placeEarnedCoBeats(content, run);
   // Greenneedle gn.48: what each drafted Pokémon did this battle, kept on it for the win's Bond.
   draftRecord(run);
+  // Greenneedle gn.new.03: the Ball held through this battle answers.
+  ballBattle(run);
   // Nuzlocke: the fallen are lost for good.
   buryFallen(content, run, battleCause(content, battle));
   const archetype = runArchetype(content, run);

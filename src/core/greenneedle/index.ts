@@ -52,6 +52,7 @@ import { mirrorReady, mirrorStart } from './mirror';
 import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, oldfriendTokens, releases } from './oldfriend';
 import { ferrisArrive, ferrisBest, ferrisHand, ferrisShape, ferrisStart, ferrisTurn } from './ferris';
 import { followedJoin } from './followed';
+import { ballFind, ballForce, ballHatched, ballHold, ballKind, ballTokens } from './ball';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { paradeAll, paradeEgg, paradeEggReady, paradeForget, paradeMemory, paradeNickname, paradeSecret, paradeSwap, paradeWake } from './parade';
 import { finalRest, xatuDraw, xatuTokens, xatuTrue } from './cartographer';
@@ -105,6 +106,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{prison:')) text = prisonTokens(content, run, text);
   if (text.includes('{karp:')) text = karpTokens(run, text);
   if (text.includes('{lt:')) text = ltTokens(run, text);
+  if (text.includes('{ball:')) text = ballTokens(run, text);
   // gn.47: the Exhibition.
   if (text.includes('{ex:')) text = exTokens(content, run, text);
   // gn.46: the All-Star bracket.
@@ -840,6 +842,16 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return '';
     case 'followedJoin':
       return followedJoin(content, run, host);
+    case 'ballFind':
+      return ballFind(content, run, host.float);
+    case 'ballKind':
+      return ballKind(run);
+    case 'ballHold':
+      return ballHold(run);
+    case 'ballHatched':
+      return ballHatched(run);
+    case 'ballForce':
+      return ballForce(run);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
