@@ -296,6 +296,11 @@ export function ruleEvolution(content: Content, run: RunState): BattleEvent[] {
     const result = evolve(content, mon, to);
     if (side === 'player') discover(run, to, true);
     out.push({ type: 'evolved', side, uid: mon.uid, from: result.from, to, hpAfter: mon.hp });
+    // gn.16: the commentary box, the first time either fighter evolves in the final.
+    if ((battle.eventRule.gn === 'final' || battle.eventRule.gn === 'lastExchange') && !battle.storyEffects.includes('tc-evo-called')) {
+      battle.storyEffects.push('tc-evo-called');
+      out.push({ type: 'raid', tone: 'info', text: 'Brannock: "It\'s— Cordelia, it\'s EVOLVING! In the RING! Is that ALLOWED?"' }, { type: 'raid', tone: 'info', text: 'Fane: "Nobody\'s ever been brave enough to tell one it isn\'t."' });
+    }
   }
   return out;
 }

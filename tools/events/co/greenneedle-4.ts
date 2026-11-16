@@ -24,6 +24,8 @@ const room16 = (id: string, name: string, o: Json, intro: string, choices: Json[
 const crowd = (n = 1): Json[] => [flag('tournament-crowd', n), cap('tournament-crowd', 5)];
 /** Won from behind (the fighter at half HP or less): the crowd rises. */
 const FROM_BEHIND: Json[] = [gn('check', { key: 'tc-behind', if: [{ kind: 'gn', test: 'hurtLead' }] }), when('tc-behind', { min: 1 }, crowd(), 'It won from behind! The crowd is on its feet.')];
+/** A hit landed on the first turn of the bout (core/greenneedle/tournament.ts notes it): the crowd rises. */
+const FIRST_HIT: Json[] = [when('tc-first-hit', { min: 1 }, [...crowd(), setTo('tc-first-hit', 0)], 'First turn, first hit: it landed one before the bell had stopped ringing. The crowd roars.')];
 /** Footwork: +1 Speed at the start of each match. */
 const FOOTWORK: Json = when('tournament-montage-footwork', { min: 1 }, [gn('leadBoost', { type: 'spe', n: 1 })]);
 /** Out in rounds 1 to 4: the team comes back, the prizes so far are kept. */
@@ -36,13 +38,13 @@ const CHAMPION: Json[] = [
 ];
 /** One round: a one-on-one bout, the foe scaled exactly to your fighter (level and stat total). */
 const bout = (name: string, species: string, rule: Json, win: Json[], o: Json = {}): Json =>
-  ({ ...trainer(name, { size: 1, types: ['fighting'], friendly: true, rule: { matchLead: true, bstMatch: true, noItems: true, ...rule }, win: [...FROM_BEHIND, heal(0.4), ...win], lose: OUT }), species: [species], levelBonus: -1, ...o });
+  ({ ...trainer(name, { size: 1, types: ['fighting'], friendly: true, rule: { matchLead: true, bstMatch: true, noItems: true, ...rule }, win: [...FROM_BEHIND, ...FIRST_HIT, heal(0.4), ...win], lose: OUT }), species: [species], levelBonus: -1, ...o });
 /** The montage: Power, Guard and Footwork, each once, for the rest of the bracket. */
 const TRAIN = (next: string): Json[] => [
   { ...ch('Power', out('It hits a sandbag until the bag gives up. Then it hits the floor where the bag was.', setTo('tournament-montage-power', 1),
     { kind: 'tempEffect', label: 'Training: Power', effects: [{ kind: 'statMultiplier', stat: 'atk', value: 1.1 }, { kind: 'statMultiplier', stat: 'spa', value: 1.1 }], battles: 5, until: 'battle' }, room(next))), showIf: [not('tournament-montage-power')] },
   { ...ch('Guard', out('You throw Berries at it. It learns to block them. It eats the ones it blocks, and looks at you for more.', setTo('tournament-montage-guard', 1),
-    { kind: 'tempEffect', label: 'Training: Guard', effects: [{ kind: 'statMultiplier', stat: 'def', value: 1.1 }, { kind: 'statMultiplier', stat: 'spd', value: 1.1 }], battles: 5, until: 'battle' }, room(next))), showIf: [not('tournament-montage-guard')] },
+    { kind: 'tempEffect', label: 'Training: Guard', effects: [{ kind: 'damageTakenMultiplier', value: 0.9 }], battles: 5, until: 'battle' }, room(next))), showIf: [not('tournament-montage-guard')] },
   { ...ch('Footwork', out('It chases its own shadow round a ring until it catches it. It doesn\'t know what to do then.', setTo('tournament-montage-footwork', 1), room(next))), showIf: [not('tournament-montage-footwork')] },
 ];
 const REST = (next: string): Json => ch('Rest.', out('It sits with its back against yours. Nobody says anything. It\'s the right call.', bond(1), room(next)));
@@ -71,7 +73,8 @@ const gn16: Json[] = [
     COMMENTARY_OPEN,
     'Round one: a **Machop**, with its twin coaching from the rail. The twin shouts every move a second before it happens.',
     '**Fane:** "You can read them like a menu, Hector."',
-  ), [ch('Step into the ring.', fight('You can read them. Your Mankey can hear them. It\'s a step ahead all match.', bout('Machop', 'machop', { myStages: { spe: 1 } }, [item('muscle-band'), room('gn-16-c1')]), FOOTWORK))]),
+  ), [ch('Step into the ring.', fight('You can read them. Your Mankey can hear them. It\'s a step ahead all match.', // The twin shouts the move before it happens: the Machop's opening move is shown before you pick yours (rule `twin`), and your fighter is a step ahead all match.
+    bout('Machop', 'machop', { gn: 'twin', myStages: { spe: 1 } }, [item('muscle-band'), room('gn-16-c1')]), FOOTWORK))]),
   room16('gn-16-c1', 'Tournament: The Corridor', ring(1, { pokemon: 'machop' }), say(
     'In the corridor, the Machop\'s twin is crying. The beaten one is comforting it, an arm round its shoulders.',
   ), [
@@ -114,20 +117,21 @@ const gn16: Json[] = [
     'The final. The rival is a Mankey or a Primeape, like yours, with its own reasons for being here.',
     '**Brannock:** "Two wild ones from the same road, Cordelia! You couldn\'t WRITE this!"',
   ), [ch('Step into the ring.', fight('The bell goes.', { ...trainer('Pax', { size: 1, types: ['fighting'], mirror: true, friendly: true, rule: { gn: 'final', evolveMid: true, noItems: true }, win: [
+    ...FIRST_HIT,
     when('tc-last-exchange', { min: 1 }, [room('gn-16-last')]),
     when('tc-last-exchange', { min: 0, max: 0 }, CHAMPION),
-  ], lose: FINAL_LOSS }), levelBonus: -1 }, FOOTWORK, setTo('tc-last-exchange', 0),
+  ], lose: FINAL_LOSS }), levelBonus: -1 }, FOOTWORK, setTo('tc-last-exchange', 0), setTo('tc-call', 0),
   when('tournament-bowed', { min: 1 }, [], 'In the front row, the Throh is bowing at every hit.'),
   when('tournament-crowd', { min: 5 }, [], 'The hall chants your Mankey\'s name. Its first move will go first.')))]),
   room16('gn-16-last', 'Tournament: The Last Exchange', ring(5, { pokemon: 'primeape' }), say(
-    'If either hasn\'t evolved, it did, in the heat of the match.',
-    '**Brannock:** "It\'s— Cordelia, it\'s EVOLVING! In the RING! Is that ALLOWED?"',
-    '**Fane:** "Nobody\'s ever been brave enough to tell one it isn\'t."',
     'Both are below a quarter. The hall holds its breath. The game slows.',
+    'Your fighter does not look at the rival. It looks at you.',
   ), [
-    ch('Now!', fight('You shout. It goes.', lastBout())),
-    ch('Wait for it.', fight('You hold it back, one beat, two. Then you let it go.', lastBout())),
-    ch('You choose.', fight('You say nothing. It looks back at you, once, and decides.', lastBout(), setTo('tc-you-choose', 1))),
+    ch('Now!', fight('You shout. It goes at once: its first move lands before the rival\'s.', lastBout(), setTo('tc-call', 1))),
+    ch('Wait for it.', fight('You hold it back, one beat, two. The rival comes to it. It will strike second, and much harder.', lastBout(), setTo('tc-call', 2))),
+    ch('You choose.', fight('You say nothing. It looks back at you, once, and decides.', lastBout(), setTo('tc-call', 3), setTo('tc-you-choose', 1),
+      gn('check', { key: 'tc-trusts', if: [{ kind: 'friendship', atLeast: 85 }] }),
+      when('tc-trusts', { min: 0, max: 0 }, [], 'It looks back at you, and waits. It does not know you well enough yet to be left to it. You call the moves.'))),
   ]),
   room16('gn-16-bell', 'Tournament: After the Bell', ring(6, { pokemon: 'primeape' }), say(
     'The title is yours: "Champion," before its name, in every battle from now on. Dynamic Punch. The belt.',

@@ -144,7 +144,7 @@ export type GnCond = z.infer<typeof GnCondSchema>;
  *    Arena Brains keep their building's rule.
  *  - `onevone` (gn.44, with `slot`): the 1v1 Championship's drawn opponent for that round, at the entrant's level (core/greenneedle/onevone.ts).
  */
-export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame', 'hawlucha', 'final', 'lastExchange', 'pipes', 'sludge', 'furnace', 'core', 'savanna', 'herd', 'jungle', 'tsareena', 'slowking', 'forest', 'golem', 'ridge', 'overcharged', 'earthing', 'desert', 'mansion', 'lab', 'palace', 'arena', 'brain-tower', 'brain-factory', 'brain-arena', 'brain-pike', 'brain-dome', 'brain-palace', 'brain-pyramid', 'onevone', 'champlesson', 'champexam', 'allstar-qf', 'allstar-sf', 'allstar-final', 'exhibition', 'draft', 'snorlax', 'defector', 'siege-commander', 'quillfeather', 'bidoof', 'alley', 'impersonator', 'duelist', 'mirror', 'prison-warden', 'ferris', 'borrowed', 'ball', 'littlecup'] as const;
+export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame', 'hawlucha', 'twin', 'final', 'lastExchange', 'pipes', 'sludge', 'furnace', 'core', 'savanna', 'herd', 'jungle', 'tsareena', 'slowking', 'forest', 'golem', 'ridge', 'overcharged', 'earthing', 'desert', 'mansion', 'lab', 'palace', 'arena', 'brain-tower', 'brain-factory', 'brain-arena', 'brain-pike', 'brain-dome', 'brain-palace', 'brain-pyramid', 'onevone', 'champlesson', 'champexam', 'allstar-qf', 'allstar-sf', 'allstar-final', 'exhibition', 'draft', 'snorlax', 'defector', 'siege-commander', 'quillfeather', 'bidoof', 'alley', 'impersonator', 'duelist', 'mirror', 'prison-warden', 'ferris', 'borrowed', 'ball', 'littlecup'] as const;
 export const GnRuleSchema = z.enum(GN_RULES);
 export type GnRule = z.infer<typeof GnRuleSchema>;
 

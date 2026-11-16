@@ -237,6 +237,7 @@
         "matchLead": true,
         "bstMatch": true,
         "noItems": true,
+        "gn": "twin",
         "myStages": {
          "spe": 1
         }
@@ -278,6 +279,32 @@
           }
          ],
          "text": "It won from behind! The crowd is on its feet."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-first-hit",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "tc-first-hit",
+           "n": 0
+          }
+         ],
+         "text": "First turn, first hit: it landed one before the bell had stopped ringing. The crowd roars."
         },
         {
          "kind": "heal",
@@ -425,14 +452,8 @@
         "label": "Training: Guard",
         "effects": [
          {
-          "kind": "statMultiplier",
-          "stat": "def",
-          "value": 1.1
-         },
-         {
-          "kind": "statMultiplier",
-          "stat": "spd",
-          "value": 1.1
+          "kind": "damageTakenMultiplier",
+          "value": 0.9
          }
         ],
         "battles": 5,
@@ -599,6 +620,32 @@
          "text": "It won from behind! The crowd is on its feet."
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-first-hit",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "tc-first-hit",
+           "n": 0
+          }
+         ],
+         "text": "First turn, first hit: it landed one before the bell had stopped ringing. The crowd roars."
+        },
+        {
          "kind": "heal",
          "share": 0.4
         },
@@ -701,6 +748,32 @@
          "text": "It won from behind! The crowd is on its feet."
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-first-hit",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "tc-first-hit",
+           "n": 0
+          }
+         ],
+         "text": "First turn, first hit: it landed one before the bell had stopped ringing. The crowd roars."
+        },
+        {
          "kind": "heal",
          "share": 0.4
         },
@@ -801,14 +874,8 @@
         "label": "Training: Guard",
         "effects": [
          {
-          "kind": "statMultiplier",
-          "stat": "def",
-          "value": 1.1
-         },
-         {
-          "kind": "statMultiplier",
-          "stat": "spd",
-          "value": 1.1
+          "kind": "damageTakenMultiplier",
+          "value": 0.9
          }
         ],
         "battles": 5,
@@ -960,6 +1027,32 @@
          "text": "It won from behind! The crowd is on its feet."
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-first-hit",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "tc-first-hit",
+           "n": 0
+          }
+         ],
+         "text": "First turn, first hit: it landed one before the bell had stopped ringing. The crowd roars."
+        },
+        {
          "kind": "heal",
          "share": 0.4
         },
@@ -1060,14 +1153,8 @@
         "label": "Training: Guard",
         "effects": [
          {
-          "kind": "statMultiplier",
-          "stat": "def",
-          "value": 1.1
-         },
-         {
-          "kind": "statMultiplier",
-          "stat": "spd",
-          "value": 1.1
+          "kind": "damageTakenMultiplier",
+          "value": 0.9
          }
         ],
         "battles": 5,
@@ -1239,6 +1326,32 @@
          "text": "It won from behind! The crowd is on its feet."
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-first-hit",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "tc-first-hit",
+           "n": 0
+          }
+         ],
+         "text": "First turn, first hit: it landed one before the bell had stopped ringing. The crowd roars."
+        },
+        {
          "kind": "heal",
          "share": 0.4
         },
@@ -1356,14 +1469,8 @@
         "label": "Training: Guard",
         "effects": [
          {
-          "kind": "statMultiplier",
-          "stat": "def",
-          "value": 1.1
-         },
-         {
-          "kind": "statMultiplier",
-          "stat": "spd",
-          "value": 1.1
+          "kind": "damageTakenMultiplier",
+          "value": 0.9
          }
         ],
         "battles": 5,
@@ -1458,6 +1565,12 @@
        },
        {
         "kind": "gn",
+        "op": "setFlag",
+        "key": "tc-call",
+        "n": 0
+       },
+       {
+        "kind": "gn",
         "op": "when",
         "key": "tournament-bowed",
         "min": 1,
@@ -1505,6 +1618,32 @@
        ],
        "levelBonus": -1,
        "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-first-hit",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "tc-first-hit",
+           "n": 0
+          }
+         ],
+         "text": "First turn, first hit: it landed one before the bell had stopped ringing. The crowd roars."
+        },
         {
          "kind": "gn",
          "op": "when",
@@ -1576,13 +1715,20 @@
     "effect": "none",
     "tourney": 5
    },
-   "intro": "If either hasn't evolved, it did, in the heat of the match.\n\n**Brannock:** \"It's— Cordelia, it's EVOLVING! In the RING! Is that ALLOWED?\"\n\n**Fane:** \"Nobody's ever been brave enough to tell one it isn't.\"\n\nBoth are below a quarter. The hall holds its breath. The game slows.",
+   "intro": "Both are below a quarter. The hall holds its breath. The game slows.\n\nYour fighter does not look at the rival. It looks at you.",
    "choices": [
     {
      "label": "Now!",
      "success": {
-      "text": "You shout. It goes.",
-      "effects": [],
+      "text": "You shout. It goes at once: its first move lands before the rival's.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tc-call",
+        "n": 1
+       }
+      ],
       "battle": {
        "kind": "trainer",
        "friendly": true,
@@ -1649,8 +1795,15 @@
     {
      "label": "Wait for it.",
      "success": {
-      "text": "You hold it back, one beat, two. Then you let it go.",
-      "effects": [],
+      "text": "You hold it back, one beat, two. The rival comes to it. It will strike second, and much harder.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tc-call",
+        "n": 2
+       }
+      ],
       "battle": {
        "kind": "trainer",
        "friendly": true,
@@ -1722,8 +1875,34 @@
        {
         "kind": "gn",
         "op": "setFlag",
+        "key": "tc-call",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
         "key": "tc-you-choose",
         "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "tc-trusts",
+        "if": [
+         {
+          "kind": "friendship",
+          "atLeast": 85
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "tc-trusts",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "It looks back at you, and waits. It does not know you well enough yet to be left to it. You call the moves."
        }
       ],
       "battle": {

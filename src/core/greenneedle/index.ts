@@ -14,6 +14,7 @@ import { typeEffectiveness } from '../battle/damage';
 import type { TypeName } from '../contentSchema';
 import { SLUDGE_TURNS } from './factory';
 import { aceEggSpecies, rememberAce } from './damian';
+import { tourneyAfterTurn, tourneyShape, tourneyStart } from './tournament';
 import { MOON_RAID_LOST, MOON_RAID_WON, moonRaid } from './moon';
 import { bondLevel, firstCatch } from '../co/who';
 import { NATURE_IDS } from '../natures';
@@ -1147,8 +1148,9 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (battle.eventRule?.gn === 'lastExchange') {
     const foe = battle.enemyTeam[0];
     if (foe) foe.hp = Math.max(1, Math.floor(maxHp(content, foe) * 0.2));
-    if (lead && gnFlag(run, 'tc-you-choose') > 0 && lead.friendship >= BOND_THREE) battle.storyEffects.push(`kind:${lead.uid}`);
   }
+  // gn.16: the ring's own counts (first-turn hit, most-used move) and the last exchange's three calls.
+  tourneyStart(content, run, battle, lead, BOND_THREE);
 }
 
 /** gn.38's greenhouse: a Bellossom with Drought, a Raticate with Huge Power, a Pidgeotto that doesn't need to flap (Levitate). */
@@ -1242,8 +1244,16 @@ function gnShapeRule(content: Content, run: RunState, action: PlayerAction): { a
   const battle = run.battle;
   const rule = battle?.eventRule?.gn;
   const mon = battle ? run.party[battle.activeIndex] : undefined;
-  if (!battle || !rule || !mon || battle.needsSwitch) return { action, events: [] };
+  if (!battle || !rule || !mon || battle.needsSwitch) {
+    // gn.16 (bouts without a rule of their own still count the moves used).
+    if (battle && mon && !battle.needsSwitch && action.kind === 'move') tourneyShape(content, run, battle, mon, action.index, BOND_THREE);
+    return { action, events: [] };
+  }
   const foe = battle.enemyTeam[battle.enemyIndex];
+  if (action.kind === 'move') {
+    const t = tourneyShape(content, run, battle, mon, action.index, BOND_THREE);
+    if (t.index !== action.index) return { action: { ...action, index: t.index }, events: t.line ? [cue('player', t.line, mon.uid)] : [] };
+  }
   // gn.35: earthing the overcharged one. Your Ground-type won't strike it: it stands there, because it's needed there.
   if (rule === 'earthing' && action.kind === 'move' && action.index >= 0 && (content.moves.get(mon.moves[action.index]?.id ?? '')?.category ?? 'status') !== 'status') {
     return { action: { kind: 'idle' }, events: [cue('player', `${nameOf(content, mon)} doesn't strike. It plants its feet, and stands there. It's needed there.`, mon.uid)] };
@@ -1279,6 +1289,7 @@ function countForest(content: Content, run: RunState, battle: BattleState): void
 export function gnAfterTurn(content: Content, run: RunState): Cue[] {
   const battle = run.battle;
   const seen = ferrisTurn(content, run);
+  if (battle) tourneyAfterTurn(run, battle);
   if (!battle || (battle.outcome !== 'win' && battle.outcome !== 'caught') || battle.storyEffects.includes('gn-counted')) return seen;
   battle.storyEffects.push('gn-counted');
   countForest(content, run, battle);
