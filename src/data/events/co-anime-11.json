@@ -1,0 +1,3593 @@
+{
+ "catalogOverhaul": "anime",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "aq46-the-hungry-baby",
+   "name": "The Hungry Baby",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "remembers": [
+    {
+     "id": "snorlax-caught",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-snorlax-caught",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The little one in the basket goes very still and sniffs at your belt. It met your Snorlax once, asleep in the melon fields, and climbed all the way up it. It sits up as tall as a Munchlax can. It has decided what it wants to be."
+    },
+    {
+     "id": "snorlax-led",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-snorlax-led",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"Wait,\" May says. \"The Snorlax by the river. That was you?\" The little one was there. It slept against that great warm side all afternoon. It has wanted to be that big ever since."
+    },
+    {
+     "id": "snorlax-woke",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-snorlax-woke",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "At the melon festival they threw for that Snorlax, the little one rode on its stomach for the whole parade. May says it has been trying to be that round ever since, and it is getting there."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.may-rs"
+    ],
+    "pokemon": "munchlax",
+    "tint": "#3a2430",
+    "effect": "confetti"
+   },
+   "intro": "A Contest Hall, between rounds. Coloured lights, a hum of nerves, and a long snack table with nothing on it but crumbs and one licked plate. Under the tablecloth, something round is breathing slowly. A girl in a red bandana lifts the cloth and sighs from the bottom of her heart. \"It was meant to be in the next round. It ate the judges' lunch.\" The Munchlax looks up at her, perfectly happy. It burps. A whole Berry rolls out across the floor. Its nose has already found your bag. At May's feet sits a basket with a smaller Munchlax in it, watching the big one the way a little brother watches a hero. \"That one's from home,\" May says. \"Mum asked me to find it a trainer. One with a big bag.\"",
+   "choices": [
+    {
+     "label": "Enter it anyway.",
+     "success": {
+      "text": "May looks at you, at the Munchlax, at the clock. \"Why not. It can't get worse.\" On stage it waddles to the centre, sits down, and wags one finger to and fro. Metronome. The hall holds its breath. Out of nowhere comes a perfect move: a shower of gold sparks that spell nothing and mean everything. The judges, still hungry, give it full marks. May takes the ribbon in both hands, laughing so hard she cannot bow. \"By accident! It won by ACCIDENT!\" Afterwards she pushes the basket into your arms. \"You brought us luck. Take the little one. It already wags its finger at dinner.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq46-ribbon-won",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "May's Munchlax won a Contest ribbon by accident, with one wag of a finger.",
+        "importance": 50
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "munchlax"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "metronome"
+        ],
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq46-munchlax-given",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hide the snacks.",
+     "success": {
+      "text": "The judges need a new lunch, so you and May hide the trays: behind a curtain, under a hat, inside a tuba. The Munchlax finds the curtain first. Then the hat. Then the tuba, which makes a noise nobody in the hall will forget. It finds the Oran Berry in your bag too, straight through the zip, and eats it with great politeness. May gives up and sits on the floor. \"It always finds them. It always will.\" The little one in the basket has watched every step. May lifts it out and gives it to you. \"Guard your bag. It's learning.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "flag",
+        "key": "aq46-snacks-found",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "munchlax"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "pickup"
+       },
+       {
+        "kind": "flag",
+        "key": "aq46-munchlax-given",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Feed it till it sleeps.",
+     "success": {
+      "text": "You pool every snack you have and May raids the hall kitchen. The Munchlax eats all of it, slowly, with deep contentment, and falls asleep on the stage steps with a Berry still in its paw. It snores through the whole round. May's name is called. May does not go. When the results go up without her she laughs until she cries, sitting beside it with one hand on its round, rising stomach. \"Worth it. Look at that face.\" Then she lifts the basket into your arms. \"This one hasn't eaten in an hour. Brace yourself.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq46-fed-to-sleep",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "munchlax"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "flag",
+        "key": "aq46-munchlax-given",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq47-the-proud-penguin",
+   "name": "The Proud Penguin",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "water",
+    "ice"
+   ],
+   "remembers": [
+    {
+     "id": "met-the-trainer",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "evo-pokemon-that-wouldnt-evolve"
+      }
+     ],
+     "notice": "Dawn looks at you again. \"Wait. You met the trainer whose Pokémon wouldn't evolve, didn't you? They came through here. They said you stood up for them.\" She lets out a long breath. \"So you're on our side too. Good. Then I'll say it: I agree with you.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.dawn"
+    ],
+    "pokemon": "piplup",
+    "tint": "#1c2e44",
+    "effect": "snow"
+   },
+   "intro": "A harbour on a cold morning, ice in the ropes and gulls complaining. A girl in a white beanie is losing an argument with a Piplup. It will not be picked up. It will not go in its Ball: when she holds it out, it turns its back on it. A trainer walking past says, \"Still a Piplup? Mine evolved weeks ago,\" and the Piplup puffs up to twice its size. The girl sighs. \"It doesn't want to change. I don't want it to either. Everyone says we're wrong.\" The Piplup climbs her coat, stands on her head, and folds its flippers, chest out, like the figurehead of a very small ship.",
+   "choices": [
+    {
+     "label": "You're not wrong.",
+     "success": {
+      "text": "Dawn's shoulders come down from round her ears. \"Really?\" \"Really.\" She laughs, the shaky kind that has been waiting a long time. On her head the Piplup unfolds its flippers, looks down at you from its great height, and bows: a deep, formal bow that nearly tips it off. Dawn catches it without looking. They have done this before.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq47-not-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq47-one-more-piplup"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle with it.",
+     "success": {
+      "text": "An old sailor on the jetty has been listening. \"A Piplup with that much chest? Let's see it.\" His Empoleon rises out of the water like a cathedral. Dawn's Piplup slides off her head and marches to your side without being asked.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Old Salt Halloran",
+       "classId": "fisherman",
+       "ally": "piplup",
+       "size": 2,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq47-battled",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq47-battle-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq47-one-more-piplup"
+        }
+       ],
+       "friendly": true,
+       "lineup": [
+        "empoleon",
+        "pelipper"
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq47-battled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq47-one-more-piplup"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it decide.",
+     "success": {
+      "text": "You stand on tiptoe so you are level with the Piplup on Dawn's head, and you ask it: change, or stay? It thinks about it properly, eyes shut, beak up. Then it taps its own chest twice with one flipper. Stay. This is me. Dawn reaches up and, for the first time all morning, it lets her lift it down into her arms. \"Then that's settled,\" she says, to the whole harbour.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq47-it-decided",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq47-one-more-piplup"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq47-one-more-piplup",
+   "name": "One More Who Won't",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "won",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq47-battle-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Empoleon went down, but the last hit was yours, not the Piplup's. It nearly had it alone. It is still glaring at the water where the Empoleon sank, and the old sailor is laughing and saluting it."
+    },
+    {
+     "id": "lost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq47-battled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Empoleon won, in the end. But the Piplup got up after every hit, and the last time it got up the Empoleon took a step back. \"Nearly,\" the old sailor says, and salutes it. \"Very nearly.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.dawn"
+    ],
+    "pokemon": "piplup",
+    "tint": "#1c2e44",
+    "effect": "snow"
+   },
+   "intro": "Dawn opens her bag. Inside, wrapped in a scarf, is a second Piplup: smaller, crosser, with one feather that will not lie flat. \"The professor's lab had one more. It turned down three trainers. It won't go in a Ball either.\" She holds it out with both hands. \"It's been watching you. It doesn't watch people.\" The small Piplup looks at you. It does not bow. It waits to see if you will.",
+   "choices": [
+    {
+     "label": "Take it, as it is.",
+     "success": {
+      "text": "You bow first. It considers this for a long second, then bows back, exactly as deep and not a feather deeper. Dawn ties a smooth grey stone to the scarf round its neck. \"An Everstone. Not to stop it. So it knows nobody's waiting for it to be something else.\" The Piplup walks to your side on its own two feet and stands there, chest out.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "piplup"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "item",
+        "id": "everstone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq47-piplup-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "It should stay with Dawn.",
+     "success": {
+      "text": "Dawn nods, not unhappy. \"Then it has two of us who won't make it change.\" Both Piplup watch you go, from the top of her head, side by side, like two small ships in harbour.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq47-wont-go-in",
+   "name": "It Won't Go In",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq47-piplup-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "piplup",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq47-piplup-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "piplup",
+    "tint": "#1c2e44",
+    "effect": "none"
+   },
+   "intro": "Camp, and it is cold. Everyone else has gone back in their Balls for the night. The Piplup stands beside its Ball and looks at it the way you look at a door you have already said no to. It is shivering. It will not say so.",
+   "choices": [
+    {
+     "label": "Let it sleep outside.",
+     "success": {
+      "text": "You build the fire up and leave it be. Near midnight you wake: it has come in close, not touching you, a flipper's width away, near enough to share the warm. It is asleep standing up. It looks very pleased with itself.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "piplup",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq47-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put your scarf over it.",
+     "success": {
+      "text": "You drape your scarf over it without a word. It pecks the scarf once, to make clear this is its own decision, and then sinks into it until only the beak shows. In the morning it carries the scarf all day and will not give it back.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "piplup",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq47-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq47-not-a-toy",
+   "name": "Not a Toy",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq47-wont-go-in"
+    },
+    {
+     "kind": "partyLine",
+     "species": "piplup",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "piplup",
+    "tint": "#24304a",
+    "effect": "none"
+   },
+   "intro": "In a town square a small boy spots the Piplup and runs at it with both arms out. \"Penguin! Can I carry it?\" The Piplup swells up, flippers wide, every feather on end. It is about to peck a child, and it knows it, and it is going to anyway.",
+   "choices": [
+    {
+     "label": "Let it walk on its own.",
+     "success": {
+      "text": "\"It likes to walk,\" you tell the boy. \"Walk with it.\" He does, very seriously, matching its steps across the square. The Piplup deflates, one feather at a time. At the far side it lets him pat its head, once, quickly, like a toll.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "piplup",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq47-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask it first.",
+     "success": {
+      "text": "You kneel. \"He wants to carry you. Up to you.\" The Piplup stares at you as if nobody has ever asked it anything. Then it looks at the boy, and holds up one flipper: no. But it lets him hold the flipper. They stand there, holding flippers, both very proud.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "piplup",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq47-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq47-the-stone",
+   "name": "The Stone Round Its Neck",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq47-not-a-toy"
+    },
+    {
+     "kind": "partyLine",
+     "species": "piplup",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "piplup",
+    "tint": "#2a3448",
+    "effect": "glint"
+   },
+   "intro": "A trainer at a Pokémon Center looks at the grey stone on the Piplup's scarf and snorts. \"Take that rock off it and it'll be an Empoleon by Friday. Then it'll be strong.\" The Piplup goes quiet. Later you find it polishing the Everstone with its flipper, slowly, round and round, not looking at you.",
+   "choices": [
+    {
+     "label": "\"You're strong now.\"",
+     "success": {
+      "text": "It stops polishing. It looks at you for a long time, the way it looked at Dawn's Ball on the harbour: deciding. Then it ties the scarf tighter, all by itself, and goes to sleep with the stone held against its chest.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "piplup",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq47-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's your stone. You choose.\"",
+     "success": {
+      "text": "You leave it there with the stone. In the morning the scarf is knotted on, twice, in the clumsiest knot you have ever seen. It has decided. It will keep deciding, every morning, and every morning it will be the same answer.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "piplup",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq47-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq47-standing-tall",
+   "name": "Standing Tall",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq47-piplup-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq47-piplup-met",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "piplup",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "water",
+    "ice"
+   ],
+   "remembers": [
+    {
+     "id": "decided",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq47-it-decided",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Dawn's Piplup decided to stay itself, that morning on the harbour. Yours was watching from her bag. It has the same look now: eyes shut, beak up, choosing."
+    },
+    {
+     "id": "nearly",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq47-battled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It is the same Empoleon from the harbour, with the same old sailor. He remembers you. \"Nearly, last time,\" he says. \"Let's see about nearly.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.dawn"
+    ],
+    "pokemon": "empoleon",
+    "tint": "#16263c",
+    "effect": "snow"
+   },
+   "intro": "An ice floe at the harbour mouth, and a crowd. An Empoleon stands on it, huge and gleaming, while trainers queue to be beaten. Dawn is at the front with her Piplup on her head. \"Everyone keeps telling me what it'll be one day.\" Your Piplup walks past her, past the queue, out onto the ice, and stops in front of the Empoleon. It does not puff up. It does not need to. The crowd starts laughing, and then, one by one, stops.",
+   "choices": [
+    {
+     "label": "Fight beside it.",
+     "success": {
+      "text": "You step out onto the ice. The Piplup does not look round. It knows you are there.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Harbour Empoleon",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "friendshipLine",
+         "species": "piplup",
+         "amount": 10
+        },
+        {
+         "kind": "flag",
+         "key": "aq47-stood-tall",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq47-unwavering"
+        }
+       ],
+       "lineup": [
+        "empoleon"
+       ],
+       "spritePokemon": "empoleon",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "friendshipLine",
+         "species": "piplup",
+         "amount": 5
+        },
+        {
+         "kind": "flag",
+         "key": "aq47-stood-tall",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq47-ice-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq47-unwavering"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it stand alone.",
+     "success": {
+      "text": "You stay at the edge. The Empoleon looks down at the Piplup. The Piplup looks up and does not move one feather. A long minute. Then the Empoleon, slowly, lowers its great head until their beaks are level, and bows. The crowd goes silent. Dawn is crying and pretending she is not.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "piplup",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq47-stood-tall",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq47-stood-alone",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq47-unwavering"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq47-unwavering",
+   "name": "Unwavering",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.dawn"
+    ],
+    "pokemon": "piplup",
+    "tint": "#24304a",
+    "effect": "sparkle"
+   },
+   "intro": "Back on the jetty, Dawn sets her Piplup down beside yours. They are exactly the same height. They have no intention of being anything else. \"Nobody says we're wrong any more,\" Dawn says. \"Or they do, and we don't hear it.\" Both Piplup turn to you, and wait.",
+   "choices": [
+    {
+     "label": "Bow to them both.",
+     "success": {
+      "text": "You bow. Two Piplup bow back, perfectly in time, perfectly proud, and one of them falls over. It is not yours. Yours helps it up, and then stands on your boot for the rest of the morning, a small blue weight that has decided, every day, to be exactly what it is.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "piplup",
+        "amount": 5
+       },
+       {
+        "kind": "moment",
+        "text": "A Piplup that would not change stood on the ice in front of an Empoleon, and stayed exactly itself.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq48-the-axew-and-the-excadrill",
+   "name": "The Axew and the Excadrill",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 5,
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "remembers": [
+    {
+     "id": "dragon-in-party",
+     "when": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "dragon"
+       ]
+      }
+     ],
+     "notice": "The Excadrill catches sight of your Dragon-type and turns its whole body round to face the rock wall. It will not look at it. Not yet. Iris winces. \"Sorry. It's not you. It's every Dragon there is.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.iris-gen5bw2"
+    ],
+    "pokemon": "excadrill",
+    "tint": "#2e2418",
+    "effect": "rattle"
+   },
+   "intro": "At the mouth of a cave there is a hole, and in the hole there is an Excadrill. It dug the hole itself, exactly its own size, and it sits in it with its back to the world and its claws folded into a sulky point. A girl with a great cloud of purple hair sits on a rock beside it, chin in her hands. \"It lost to a Dragon and blamed me. It's been sulking for a year.\" Her Axew has not given up. It dances. It brings an apple. It pats the Excadrill's steel head with one tiny claw. The Excadrill flicks it away without looking, and the Axew rolls over three times, and gets up, and comes back.",
+   "choices": [
+    {
+     "label": "Help Excadrill face a Dragon.",
+     "success": {
+      "text": "A Dragon Tamer has been training in the cave all week, and his Dragonite fills the tunnel like weather. The Excadrill sees it and goes rigid. Then Iris says its name, very quietly, and it climbs out of the hole and stands beside you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Dragon Tamer Wyndham",
+       "classId": "dragon-tamer",
+       "ally": "excadrill",
+       "size": 2,
+       "types": [
+        "dragon"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq48-faced-dragon",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq48-the-egg"
+        }
+       ],
+       "friendly": true,
+       "lineup": [
+        "dragonite",
+        "dragonair"
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq48-faced-dragon",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq48-dragon-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq48-the-egg"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Train the Axew.",
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You and Iris set up a target: a pile of stones in the cave mouth. The Axew plants its feet, screws up its face and breathes out a blast of blue fire far too big for it. Dragon Rage. It knocks the stones flat and knocks the Axew flat on its back. In the hole, the Excadrill has turned round. It is looking. It climbs out, walks over, and sets the Axew back on its feet with one careful claw.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq48-axew-trained",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq48-the-egg"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It misses. It misses all afternoon: the ceiling, the floor, Iris's hair, very nearly. By dusk your arms ache from resetting stones. Then, with the light going, it breathes out one perfect blast of blue fire, Dragon Rage, and the stones go flying. In the hole, the Excadrill has turned round. It climbs out and taps the Axew's head, once, as if it had never been away.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq48-axew-trained",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq48-the-egg"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle both.",
+     "success": {
+      "text": "\"Both of them? Together?\" Iris looks at the hole. \"It won't.\" The Axew trots out to face you anyway, alone and tiny. For a long moment nothing happens. Then the ground shakes, and the Excadrill bursts up out of its hole and lands in front of the Axew, claws out, between it and you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Iris",
+       "classId": "dragon-tamer",
+       "size": 2,
+       "types": [
+        "ground",
+        "dragon"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq48-battled-both",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq48-the-egg"
+        }
+       ],
+       "friendly": true,
+       "sprite": "iris",
+       "lineup": [
+        "excadrill",
+        "axew"
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq48-battled-both",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq48-the-egg"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq48-the-egg",
+   "name": "Listening Again",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "faced-dragon",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq48-faced-dragon",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Dragonite flew off down the tunnel, and the Excadrill was still standing in the dust, claws up, shaking. It had won. It turned round and looked at Iris for the first time in a year."
+    },
+    {
+     "id": "trained",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq48-axew-trained",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Excadrill keeps walking round the Axew, looking at it from every side, as if it cannot work out where that much fire came from in something that small."
+    },
+    {
+     "id": "both",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq48-battled-both",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "All through the fight the Excadrill kept itself between you and the Axew. When it was over, it did not go back to its hole. It sat down next to Iris instead."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.iris-gen5bw2"
+    ],
+    "pokemon": "excadrill",
+    "tint": "#2e2418",
+    "effect": "sparkle"
+   },
+   "intro": "The Excadrill is out of its hole. When Iris says its name, it turns its head and listens, and Iris has to sit down on a rock for a minute with her hand over her mouth. \"A year,\" she says. \"A whole year.\" Then she digs in her bag and holds out an Egg, warm and faintly scaled. \"From my village. It's an Axew. It'll get knocked over a lot. It'll get up every time. Will you take it?\"",
+   "choices": [
+    {
+     "label": "Take the Egg.",
+     "success": {
+      "text": "It is heavier than it looks, and it is very warm. Iris's Axew pats the shell with one tiny claw, the way it patted the Excadrill: a welcome, and a warning. \"Watch out for it,\" Iris says. \"And let it watch out for you.\"",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "axew"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "aq48-egg-taken",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it with Iris.",
+     "success": {
+      "text": "Iris nods and tucks the Egg back in her bag. \"Then it'll hatch in the village, where it can see the dragons.\" Behind her the Excadrill and the Axew are sharing the apple. The Excadrill is letting the Axew have most of it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq48-first-tusks",
+   "name": "First Tusks",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq48-egg-taken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "axew",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq48-egg-taken",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "axew",
+    "tint": "#2e2418",
+    "effect": "none"
+   },
+   "intro": "Camp. The Axew has found a rock and is chewing it, hard, to sharpen its tusks the way it has seen bigger dragons do. It is not working. Its tusks ache. It sits with the rock in its lap, trying very hard not to cry, and failing.",
+   "choices": [
+    {
+     "label": "Find it a softer stone.",
+     "success": {
+      "text": "You hunt along the stream until you find one smooth and soft as soap. It gnaws, tries, gnaws again, and slowly the stone takes the shape of its bite. It falls asleep with the stone still in its mouth, like a baby with a spoon.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "axew",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq48-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with it until it stops hurting.",
+     "success": {
+      "text": "You sit down with it. It leans on your leg, still sniffing. Neither of you can make its tusks grow faster. You stay anyway, until the fire is low and it is breathing slow, and it has decided that hurting is something you do with someone.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "axew",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq48-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq48-knocked-over",
+   "name": "Knocked Over",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq48-first-tusks"
+    },
+    {
+     "kind": "partyLine",
+     "species": "axew",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "axew",
+    "tint": "#2e2418",
+    "effect": "none"
+   },
+   "intro": "After a bad battle {lead} sits apart from the others, its back turned, sulking. The Axew trots over to cheer it up: a dance, a pat, a berry held up in both claws. {lead} flicks it away without looking. The Axew rolls over, gets up, and comes back.",
+   "choices": [
+    {
+     "label": "Pick the Axew up.",
+     "success": {
+      "text": "You scoop it up before it can be knocked over again. It wriggles: it was not finished. You set it down a little closer, and this time {lead} does not flick it away. It just lets the Axew lean on it, the way Iris's Excadrill once let hers.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "axew",
+        "amount": 5
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "aq48-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it try again.",
+     "success": {
+      "text": "It tries again. And again. On the fifth go {lead} turns round, finally, and the Axew is standing there holding out a squashed berry with a face full of hope. {lead} eats the berry. The sulk is over. The Axew struts round the camp for an hour.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "axew",
+        "amount": 5
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "aq48-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq48-on-guard",
+   "name": "On Guard",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq48-knocked-over"
+    },
+    {
+     "kind": "partyLine",
+     "species": "axew",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "axew",
+    "tint": "#24201a",
+    "effect": "none"
+   },
+   "intro": "You wake in the night. The Axew is standing at the edge of the firelight, facing the dark mouth of a cave, its little tusks lifted. Something big is moving in there. The Axew is shaking from head to tail. It does not step back.",
+   "choices": [
+    {
+     "label": "Stand behind it.",
+     "success": {
+      "text": "You get up and stand behind it, not in front. Whatever is in the cave breathes once, huge and slow, and moves away deeper into the rock. The Axew stays on guard until dawn. Then it turns round and falls asleep on your feet.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "axew",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq48-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call it back to bed.",
+     "success": {
+      "text": "It looks round at you, torn, and then it comes, because you called. It sleeps facing the cave, one eye open. In the morning it brings you a stone from the cave mouth, as if to prove it went that far.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "axew",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq48-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq48-the-dragonite",
+   "name": "Get Up Again",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 7,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq48-egg-taken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq48-egg-taken",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "axew",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "remembers": [
+    {
+     "id": "faced-dragon",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq48-faced-dragon",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Iris's Excadrill once stood in front of a Dragonite with you, shaking, and won. It is here now. It nudges your Axew forward, gently, with the flat of its claw."
+    },
+    {
+     "id": "trained",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq48-axew-trained",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Iris's Axew is here too. It plants its feet beside yours, breathes in, and shows it: blue fire, Dragon Rage, the way you all practised in the cave mouth."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.iris-gen5bw2"
+    ],
+    "pokemon": "dragonite",
+    "tint": "#241c14",
+    "effect": "rattle"
+   },
+   "intro": "A narrow pass through the mountain, and a Dragonite asleep across it, as big as the pass. Iris is there with her Excadrill, out of breath; she has been following its tracks for days. \"It's gentle, mostly. It just won't let anything small go by.\" Your Axew steps out in front of you. It is shaking. It does not step back. The Dragonite opens one eye.",
+   "choices": [
+    {
+     "label": "Face it together.",
+     "success": {
+      "text": "The Dragonite unfolds itself and the pass goes dark. Your Axew roars, the small high roar of something that has decided.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "dragonite"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "formChange",
+         "from": "axew",
+         "to": "fraxure"
+        },
+        {
+         "kind": "friendshipLine",
+         "species": "axew",
+         "amount": 10
+        },
+        {
+         "kind": "flag",
+         "key": "aq48-turned",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq48-tusks-like-blades"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "friendshipLine",
+         "species": "axew",
+         "amount": 5
+        },
+        {
+         "kind": "flag",
+         "key": "aq48-turned",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq48-dragonite-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq48-tusks-like-blades"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it do what Iris's Axew did.",
+     "success": {
+      "text": "You stand back. The Axew plants its feet, screws up its face, and breathes out blue fire far too big for it. Dragon Rage. It knocks itself flat. It gets up. The Dragonite looks at it for a long time, then lifts its great head out of the way and lets it pass, and you with it.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "dragon-rage",
+        "species": "axew"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "axew",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq48-turned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq48-dragon-rage",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq48-tusks-like-blades"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq48-tusks-like-blades",
+   "name": "Tusks Like Blades",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.iris-gen5bw2"
+    ],
+    "pokemon": "excadrill",
+    "tint": "#2e2418",
+    "effect": "sparkle"
+   },
+   "intro": "On the far side of the pass Iris sits down in the sun, her Excadrill beside her, listening to every word she says. \"It got knocked over,\" she says, watching your Axew. \"It got up. That's all a dragon is, you know. Something that gets up.\" The Excadrill rumbles, low, in agreement.",
+   "choices": [
+    {
+     "label": "Thank them both.",
+     "success": {
+      "text": "Iris laughs and waves it off. Her Excadrill does not wave. It walks over to your Axew, looks down at it for a long moment, and taps its head once with one steel claw: the way it used to flick hers away, turned into something else. Your Axew stands there afterwards, very still, very tall.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "axew",
+        "amount": 5
+       },
+       {
+        "kind": "moment",
+        "text": "An Axew that kept getting knocked over stood in front of a Dragonite, and did not step back.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq49-the-showcase",
+   "name": "The Showcase",
+   "group": "Pokémon-anime questlines",
+   "rarity": "rare",
+   "minStage": 4,
+   "types": [
+    "normal",
+    "electric",
+    "steel",
+    "fairy"
+   ],
+   "scene": {
+    "cast": [
+     "boss.serena"
+    ],
+    "pokemon": "braixen",
+    "tint": "#3a1c30",
+    "effect": "sparkle"
+   },
+   "intro": "Backstage at a Pokémon Showcase. Ribbons, mirrors, a smell of hairspray and nerves. A girl in a red hat is re-tying the same bow for the fourth time. \"It's terrified. So am I.\" Her Braixen holds its stick in both hands, like something that might get away. Last time it dropped it: in the spin, in front of everyone. It rolled off the stage, and somebody in the front row handed it back. \"It wasn't the dropping. It was that I stopped. I just stood there.\" She pulls the bow tight. \"It looked at me to see what we do now, and I didn't know. It's forgiven me. I haven't.\" Her Sylveon has wound a ribbon round her wrist, and is holding on.",
+   "choices": [
+    {
+     "label": "Perform with them.",
+     "pick": {},
+     "success": {
+      "text": "Serena stares at you. \"With us? On stage?\" The Braixen looks at the Pokémon you chose, and something in its grip loosens, just a little. Somebody hands you a ribbon. Somebody else pushes you towards the light. \"Three rounds,\" Serena whispers. \"Theme, Free, Finale. Don't look at the judges. They're only people.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "aq49-performing",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-theme"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Coach them.",
+     "success": {
+      "text": "\"From the wings?\" Serena nods hard, too many times. \"Yes. Please. Tell me what to do. Tell me before each round, and I'll do it.\" She squeezes your hand, then goes out into the light with her Braixen and her Sylveon, and you take your place in the dark at the side of the stage.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq49-coaching",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-coach-theme"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cheer.",
+     "success": {
+      "text": "\"You'll be out there? Where I can see you?\" You promise. She makes you say which row. \"Third row. Third row.\" She says it to the Braixen as well, and the Braixen nods, very seriously, and holds its stick a little less tightly. You go and find your seat.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq49-cheering",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-third-row"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq49-theme",
+   "name": "Round One: Theme",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.serena"
+    ],
+    "pokemon": "braixen",
+    "tint": "#3a1c30",
+    "effect": "sparkle"
+   },
+   "intro": "The lights come up so bright the hall vanishes behind them. The Theme round: a walk, a turn, a pose, all in time with the music. Serena takes a breath you can hear from where you stand. The Braixen is beside her. Your Pokémon is beside you. The music starts.",
+   "choices": [
+    {
+     "label": "A walk, a turn, a pose.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Four in step, then four in a turn, then still. It lands. Somebody in the dark claps before they mean to. Serena does not look at the judges. She looks at the Braixen, and the Braixen looks back, and for a moment they both forget to be afraid.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-free"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You are a beat late on the turn and your Pokémon is a beat early on the pose, and it comes out a sort of shuffle. Nobody minds. Nothing much can go wrong in a Theme round, and nothing much does. Serena grins at you sideways. \"Warm-up,\" she mouths.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-free"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq49-free",
+   "name": "Round Two: Free",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.serena"
+    ],
+    "pokemon": "braixen",
+    "tint": "#3a1c30",
+    "effect": "spin"
+   },
+   "intro": "The Free round. The music swells for the spin, and the stick goes up, flaming, turning over and over against the lights. On the second beat, it slips. You knew it might. Everyone knew. It hits the boards and rolls. The hall goes quiet, the terrible quiet of a whole room deciding not to look. The Braixen has stopped. It is looking at Serena, to see what they do now. Your Pokémon is nearer.",
+   "choices": [
+    {
+     "label": "Pick it up and throw it.",
+     "prompt": {
+      "id": "throw-ring",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Your Pokémon scoops up the stick without breaking step. It does not hand it back. It throws it: high, spinning, to Serena, as if that was always the next move. She catches it. She does not stop. She laughs, out loud, on stage, in front of everyone, and spins.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq49-good-throw",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-finale"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your Pokémon scoops up the stick and throws it, a little wild, a little wide. Serena does not wait for it to come to her. She runs, leaps, catches it at full stretch, and lands laughing, out loud, on stage, in front of everyone, and spins.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-finale"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq49-finale",
+   "name": "Round Three: Finale",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.serena"
+    ],
+    "pokemon": "braixen",
+    "tint": "#3a1c30",
+    "effect": "confetti"
+   },
+   "intro": "The Finale is whatever is made of that. Nobody planned it. The Braixen throws the stick to your Pokémon on purpose now, and your Pokémon throws it back, and Serena's Sylveon catches the ribbons as they fall, and the music has to hurry to keep up. Serena is still laughing. One more beat. One more pass.",
+   "choices": [
+    {
+     "label": "Finish it together.",
+     "prompt": {
+      "id": "copycat-claps",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "The stick goes up one last time and comes down in three hands at once. The hall stands. The judges stand. Serena drops to her knees on the boards with her arms round the Braixen and her face in its fur. They win. The drop was the best thing in the act. \"We dropped it,\" she keeps saying. \"We dropped it and it was the best bit.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "showcase-shared",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-serenas-egg"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You miss a beat at the very end and nobody on earth could care. The stick comes down, the music stops, and the hall is on its feet. They win. The drop was the best thing in the act. Serena is on her knees with her arms round the Braixen. \"We dropped it,\" she keeps saying. \"We dropped it and it was the best bit.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "showcase-shared",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-serenas-egg"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq49-coach-theme",
+   "name": "From the Wings: Theme",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.serena"
+    ],
+    "pokemon": "braixen",
+    "tint": "#2a1828",
+    "effect": "none"
+   },
+   "intro": "From the wings you can see everything: the lights, the judges, Serena's knuckles white on her ribbon. She looks across at you before the Theme round, waiting. You get one thing to say. She will do exactly what you tell her.",
+   "choices": [
+    {
+     "label": "\"Look at each other, not them.\"",
+     "success": {
+      "text": "She turns her back on the judges and looks at the Braixen. The Braixen looks at her. The walk, the turn, the pose: none of it is perfect, and all of it is together. When she comes off she is breathing fast and her eyes are bright. \"That helped. That really helped.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq49-good-advice",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-coach-free"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Smile at the judges.\"",
+     "success": {
+      "text": "She smiles at the judges. It is a very brave smile, and it is aimed the wrong way: she misses the Braixen's turn and they bump. It is not a disaster. It is not together, either. She comes off with the smile still on, like something she forgot to take off.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-coach-free"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Don't think about the stick.\"",
+     "success": {
+      "text": "Now she can think of nothing else, and nor can the Braixen. They get through the Theme round staring at the stick between them as if it might bite. She comes off pale. \"I thought about the stick,\" she says. \"The whole time.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-coach-free"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq49-coach-free",
+   "name": "From the Wings: Free",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.serena"
+    ],
+    "pokemon": "braixen",
+    "tint": "#2a1828",
+    "effect": "none"
+   },
+   "intro": "The Free round is next: the spin, and the stick going up. Serena looks across at you again. Her face says it plainly. This is where it went wrong last time. This is where she stopped. One more thing to say.",
+   "choices": [
+    {
+     "label": "\"If it drops, keep going. Make it the act.\"",
+     "success": {
+      "text": "It drops. Of course it drops. She keeps going. It isn't elegant. She picks it up mid-step, nearly falls over, and carries on, pink to the ears, and the Braixen spins round her as if that was always the shape of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq49-good-advice",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-coach-finale"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Hold it tighter this time.\"",
+     "success": {
+      "text": "The Braixen holds it so tightly the spin goes stiff and short, and on the second beat it slips anyway. She stops: one second, two, the whole old nightmare. Then the Braixen picks the stick up itself and pushes it into her hand, and she keeps going.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-coach-finale"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Whatever you do, don't drop it.\"",
+     "success": {
+      "text": "It drops. She freezes, exactly as she did last time, for one long second with the whole hall watching. Then her eyes find you in the wings. She picks it up, and she does not stop again.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-coach-finale"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq49-coach-finale",
+   "name": "From the Wings: Finale",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.serena"
+    ],
+    "pokemon": "braixen",
+    "tint": "#2a1828",
+    "effect": "none"
+   },
+   "intro": "The Finale. They are behind on points and everyone in the hall knows it: there is no way back to a win from here. Serena knows it too. She looks across at you one last time, and she is not asking how to win.",
+   "choices": [
+    {
+     "label": "\"Finish for yourselves.\"",
+     "success": {
+      "text": "She nods once and turns to the Braixen, and they dance the Finale for nobody but each other. It is clumsy and it is joyful and it ends. They lose. They finish: the first time they ever have. Serena comes off breathless and shining. \"We were dreadful! Did you see? We were dreadful all the way to the end!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq49-good-advice",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "showcase-finished",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-serenas-egg"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Win it back.\"",
+     "success": {
+      "text": "They try. They try far too hard: bigger spins, faster steps, the stick up twice as high. Half of it goes wrong. But they reach the end on their feet. They lose. They finish: the first time they ever have. \"We were dreadful,\" Serena gasps, coming off, and then she starts to laugh. \"All the way to the end!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "showcase-finished",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-serenas-egg"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Bow, and come off.\"",
+     "success": {
+      "text": "She stares at you. Then she shakes her head, turns back to the light, and finishes anyway. They lose. They finish: the first time they ever have. She comes off breathless. \"I wasn't stopping. Not this time. Not even for you.\" She is grinning. \"We were dreadful all the way to the end!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "showcase-finished",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-serenas-egg"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq49-third-row",
+   "name": "The Third Row",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.serena"
+    ],
+    "pokemon": "braixen",
+    "tint": "#3a1c30",
+    "effect": "spin"
+   },
+   "intro": "You are in the third row. The Theme round goes by in a blur of light. Then the Free round: the music swells, the stick goes up, flaming, turning against the lights. It wobbles. It is coming down wrong. On stage the Braixen's eyes go wide. You have one breath to do something.",
+   "choices": [
+    {
+     "label": "Shout her name!",
+     "success": {
+      "text": "\"SERENA!\" Half the hall turns to look at you. Serena does not. She hears it and she does not stop, and that is all it takes. The Braixen catches the stick on one finger, balanced, wobbling, and holds it. They win, barely. Afterwards the Braixen looks out into the dark, straight at the third row.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "showcase-cheered",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-serenas-egg"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shout the Braixen's name!",
+     "success": {
+      "text": "\"BRAIXEN!\" It hears you. Its ears go up and its eyes come off the stick, onto the third row, and then back, steadier. It catches the stick on one finger, balanced, wobbling, and holds it. They win, barely. Afterwards it looks out into the dark, straight at you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "showcase-cheered",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-serenas-egg"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold up both hands: catch it!",
+     "success": {
+      "text": "You stand up and hold both hands high, open, the way you would to catch something. On stage the Braixen sees you, does the same, and the stick drops neatly onto one finger, balanced, wobbling. It holds. They win, barely. Afterwards the Braixen looks out into the third row and holds up both hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "showcase-cheered",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq49-serenas-egg"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq49-serenas-egg",
+   "name": "From the Same Litter",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "all-good-advice",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq49-good-advice",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"Every word you said from the wings,\" Serena says. \"I used every one. I could hear you even when I couldn't.\""
+    },
+    {
+     "id": "shared",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "showcase-shared",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your Pokémon has the Braixen's stick and will not give it back. The Braixen does not seem to mind. They have a whole routine now."
+    },
+    {
+     "id": "cheered",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "showcase-cheered",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Braixen comes and finds you first, before Serena, and holds up the stick on one finger, as if to show you it is still there."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.serena"
+    ],
+    "pokemon": "braixen",
+    "tint": "#3a1c30",
+    "effect": "hearts"
+   },
+   "intro": "Backstage again. The mirrors, the hairspray, the ribbons all over the floor. Serena has her hat off and her hair everywhere. She does not re-tie the bow. Instead she presses an Egg into your hands, warm, faintly orange. \"It's from the same litter as her. It'll drop things. They all do.\" She closes your fingers round it. \"Let it.\"",
+   "choices": [
+    {
+     "label": "Take the Egg.",
+     "success": {
+      "text": "You hold it carefully. It is warm all the way through, the way a stick of fire is warm. Serena watches you hold it, and nods, and for the first time today she does not look afraid of anything. \"Next time there's a stage,\" she says, \"come and find us. We'll throw you something.\"",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "fennekin"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "aq49-fennekin-egg",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-serena",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Serena's Braixen dropped its stick on a Showcase stage, and the act went on.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let Serena keep it.",
+     "success": {
+      "text": "She tucks the Egg back into her bag, against her Sylveon, who curls round it. \"Then it'll hatch backstage somewhere, and drop its first stick on a real stage.\" She grins. \"Come and watch. Third row.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "reunion-guest-serena",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Serena's Braixen dropped its stick on a Showcase stage, and the act went on.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq49-the-stick",
+   "name": "The Stick",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq49-fennekin-egg",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "fennekin",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "fennekin",
+    "tint": "#3a2418",
+    "effect": "none"
+   },
+   "intro": "On a quiet stretch of road the Fennekin finds a stick. It is the perfect stick: straight, light, exactly its size. It carries it proudly for a mile, tail high. Then it trips on nothing, and drops it. It stops dead, and looks up at you, to see what you do now.",
+   "choices": [
+    {
+     "label": "Again!",
+     "success": {
+      "text": "\"Again!\" It blinks. Then it picks the stick up, flings it up as high as a Fennekin can fling anything, and misses it completely on the way down. \"Again!\" It tries again. And again. By the end of the road it has caught it twice, and dropped it forty times, and never once stopped.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "fennekin",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq49-stick-again",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick it up and throw it back.",
+     "success": {
+      "text": "You pick the stick up and toss it to it, gently, high, as if that was always the next move. The Fennekin catches it in its teeth, staggers, and does not drop it. It carries it the rest of the day with its ears up, and every so often it drops it on purpose, so you can do that again.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "fennekin",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq49-stick-thrown",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq50-the-inventors-pokemon",
+   "name": "The Inventor's Pokémon",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [
+    "normal",
+    "electric",
+    "steel"
+   ],
+   "scene": {
+    "cast": [
+     "boss.clemont"
+    ],
+    "pokemon": "dedenne",
+    "tint": "#2a2a14",
+    "effect": "flicker"
+   },
+   "intro": "A bang from a garage at the end of the street. Smoke rolls out of the door in a neat grey ring. Inside, a machine the size of a wardrobe is ticking, sparking and smelling of burnt bread, and through a little round window in its side a Dedenne is looking out at you, whiskers flat, stuck. A young man in a blue jumpsuit and enormous round glasses waves the smoke away. \"It was supposed to make toast!\" He pushes his glasses up his nose. \"The future is now. Slightly on fire.\" Behind him a Luxray lies on a workbench, staring at the machine without blinking. Its eyes glow faintly. It can see straight through steel. Three wires hang out of a panel by the hatch: red, blue and yellow.",
+   "choices": [
+    {
+     "label": "Free the Dedenne.",
+     "success": {
+      "text": "You kneel by the panel. Up close the machine is warm and humming, and the Dedenne presses its paws to the glass. \"One of those wires opens the hatch,\" Clemont says, hovering. \"The other two do... something. I didn't label them. I was going to label them.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq50-freeing",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq50-three-wires"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fix the machine.",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You and Clemont open the side panel together and stare into a nest of gears. There is a pattern in it, if you look long enough: one cog turning the wrong way, one spring in back to front. You set them right. The machine shudders, dings, and makes toast. Then it makes pancakes. Then a boiled egg, a pot of tea, a polished pair of glasses and a freshly ironed jumpsuit. Last of all the hatch opens, and the Dedenne walks out holding a slice of toast. Everybody eats. \"It works,\" Clemont whispers. \"It works too well. I love it.\"",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "aq50-machine-fixed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq50-from-the-gym"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You set one cog right and another wrong, and the machine notices. It hums, then whines, then explodes, gently, in a great puff of crumbs and soot. When the smoke clears everyone in the garage is black from head to foot, and the hatch has blown open. The Dedenne sails out across the room and lands in Clemont's arms. He looks down at it through two clean circles where his glasses were. \"Science,\" he says faintly.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "flag",
+        "key": "aq50-machine-exploded",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq50-from-the-gym"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask Luxray.",
+     "success": {
+      "text": "You look at the Luxray. The Luxray looks at you, sighs through its nose, and gets down off the workbench. It walks to the panel, studies the three wires with those glowing eyes, and puts one large paw on the yellow. You pull it. The hatch springs open and the Dedenne flies out into Clemont's arms. \"Luxray!\" Clemont cries. \"You could have said!\" The Luxray goes back to its bench. It did say. It has been saying it all morning.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq50-asked-luxray",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq50-from-the-gym"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq50-three-wires",
+   "name": "Three Wires",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.clemont"
+    ],
+    "pokemon": "dedenne",
+    "tint": "#2a2a14",
+    "effect": "flicker"
+   },
+   "intro": "Red, blue, yellow. One of them opens the hatch. The other two will not be good. Inside the machine the Dedenne's whiskers are crackling with little sparks, and every time a spark jumps, it jumps toward the yellow wire. On the bench, the Luxray has opened one eye, and it is looking at the yellow wire too.",
+   "choices": [
+    {
+     "label": "Pull the red wire.",
+     "success": {
+      "text": "The machine fires a slice of toast across the garage like a cannonball. Then another. Then twenty. A crust catches {lead} full in the face, and a spark comes with it. Through the storm of toast the Luxray walks calmly to the panel and pulls the yellow wire with its teeth. The hatch opens. The Dedenne climbs out and pats {lead} on the nose, apologising for the machine.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "flag",
+        "key": "aq50-wrong-wire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq50-from-the-gym"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the blue wire.",
+     "success": {
+      "text": "A fat blue spark jumps out of the panel and lands on {lead}, who did nothing to deserve it. The machine starts playing a march. The Luxray gets up, crosses the garage, and pulls the yellow wire with its teeth, and the hatch swings open. The Dedenne climbs out, shakes itself, and sits on {lead}'s head to say sorry.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "flag",
+        "key": "aq50-wrong-wire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq50-from-the-gym"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the yellow wire.",
+     "success": {
+      "text": "Click. The hatch swings open with a polite little ding, and the Dedenne tumbles out into your hands, warm and fizzing and covered in crumbs. Clemont throws both arms in the air. \"The yellow! I KNEW it was the yellow! I would have guessed the yellow!\" On the bench, the Luxray closes its eye. Good.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "aq50-right-wire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq50-from-the-gym"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq50-from-the-gym",
+   "name": "A Dedenne From the Gym",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "fixed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq50-machine-fixed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The machine is still making things in the corner: a sandwich, a sock, a small paper crown. Clemont puts the crown on the little Dedenne. It does not take it off."
+    },
+    {
+     "id": "luxray",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq50-asked-luxray",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Luxray has come down off its bench to look at you. It looks at the little Dedenne, and at you, and then gives one slow blink. It approves."
+    },
+    {
+     "id": "wrong-wire",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq50-wrong-wire",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The little Dedenne goes straight to {lead} and starts gently combing the singed fur flat with its paws, as if it is the one who has to make up for the machine."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.clemont"
+    ],
+    "pokemon": "dedenne",
+    "tint": "#24281a",
+    "effect": "sparkle"
+   },
+   "intro": "Clemont sits on an upturned bucket with the rescued Dedenne asleep on his head and soot on his nose, perfectly happy. \"That one's my sister's. She'd never have forgiven me.\" He points up at the garage rafters. A dozen little faces look down from the wiring. \"The Gym's full of them. They live in the cables, they eat the power. One of them has followed you round the garage since you came in.\" It has. It is sitting on your shoe.",
+   "choices": [
+    {
+     "label": "Take the little Dedenne.",
+     "success": {
+      "text": "It climbs from your shoe to your shoulder and settles in your collar, whiskers fizzing against your neck. Clemont beams. \"Tell people it came from my Gym! Tell them the inventor sent it!\" From the rafters a dozen Dedenne watch it go, and from the bench the Luxray watches too, and the machine in the corner makes one more slice of toast, for the road.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "dedenne"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq50-dedenne-given",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it in the Gym's wires.",
+     "success": {
+      "text": "It climbs back up into the rafters with the others, a little reluctantly. Clemont waves you off from the garage door with toast in his hand. \"Come back when I've fixed the future!\" Behind him something goes bang.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "lillie-nebby",
+   "name": "Snowy",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "boss.lillie-z"
+    ],
+    "pokemon": "vulpix-alola",
+    "tint": "#1e2a3a",
+    "effect": "snow"
+   },
+   "minStage": 3,
+   "types": [
+    "ice"
+   ],
+   "remembers": [
+    {
+     "id": "nebby-trust",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "nebby-trust",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "She looks up and knows you. \"You stood in front of the people chasing Nebby and me.\" She takes a breath, and for once her hands do not go back to her lap. They stay, an inch above the shell. She is braver than she was."
+    },
+    {
+     "id": "nebby-chose",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "nebby-chose",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "She knows you. \"Nebby went to you, that day. All on its own. I was so jealous.\" She almost laughs. \"It taught me something. Being chosen is brave too.\" She is braver than she was. Her hands stay an inch above the shell."
+    }
+   ],
+   "intro": "Snow on the path, falling slowly. A girl in a white hat and a white dress sits very straight on a bench, holding a basket in her arms. She is afraid to touch Pokémon, any Pokémon, and has been for as long as she can remember. In the basket, on a folded scarf, is an Egg: white as frost, and so cold the air above it smokes. She has carried it a long way, and she has never once touched it. Her hands go out to it. Hover. Go back to her lap. \"I can't touch it. I want to. I can't.\" She looks down at her gloves. \"The professor says it hatches when it feels someone warm. It's supposed to be me.\" The Egg gives one small tap from inside, as if it is waiting too.",
+   "choices": [
+    {
+     "label": "Hold it with her.",
+     "success": {
+      "text": "You sit beside her. She pulls off one glove herself, and her hand is shaking. You put yours underneath it, and together, very slowly, you lower both onto the shell. It is so cold it stings. She flinches. She does not let go. Under her palm something taps, then cracks, and a small white Vulpix pushes its way out, sneezes a little flurry of snow, and looks straight up at her. Lillie is crying. \"I'm touching her,\" she whispers. \"Look. I'm touching her.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq51-hatched",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq51-held-together",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hatch it for her.",
+     "success": {
+      "text": "She passes you the basket as if it were burning. You hold the Egg inside your coat, against your chest, for a long time, while she watches every breath you take. Then it cracks in your arms, and a small white Vulpix blinks up at you first. It sniffs. It turns. It climbs out of your arms, across the bench, and curls up on the scarf in her lap, right beside her hands. She does not touch it. But she does not move away. \"She came to me,\" Lillie says, astonished. \"She came to me.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq51-hatched",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq51-hatched-for-her",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give her time.",
+     "success": {
+      "text": "You sit beside her and say nothing. The snow comes down. Her hands go out, and hover, and go back, three times, four. The Egg taps, patient. In the end she tucks the scarf round it, very carefully, without touching it. \"Not today.\" She looks at you, and her chin is up. \"But I will. I promise. One day you'll see me hold her.\" You believe her.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq51-gave-time",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-lillie",
+        "amount": 1
+       },
+       {
+        "kind": "relic",
+        "id": "lillies-friendship",
+        "name": "Lillie's Friendship",
+        "effects": [
+         {
+          "kind": "friendshipMultiplier",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "moment",
+        "text": "Lillie could not touch her Egg yet. She promised that one day you would see her hold it.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq51-the-scarf",
+   "name": "The Scarf",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq51-hatched",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq51-hatched",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lillie-z"
+    ],
+    "pokemon": "vulpix-alola",
+    "tint": "#1e2a3a",
+    "effect": "snow"
+   },
+   "intro": "Lillie catches you up on the road, a little out of breath, with the Vulpix trotting at her heels in the snow. It is a long road. The Vulpix is very small. It is falling further and further behind, and Lillie keeps stopping and holding out her hands and taking them back. \"She's tired,\" she says. \"I know she's tired.\"",
+   "choices": [
+    {
+     "label": "Carry it to her.",
+     "success": {
+      "text": "You lift the Vulpix out of the snow and put it in the scarf Lillie holds out like a sling, so that she can carry it without her hands touching fur. She carries it the rest of the way, very carefully, talking to it all the time. At the next rest your own Pokémon crowd round the scarf to look.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "aq51-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait with her.",
+     "success": {
+      "text": "You stop. She kneels down in the snow and holds the scarf open, and waits. The Vulpix looks at it, and at her, and climbs in by itself. Lillie lifts it. Her face is very pink and very proud. \"She chose to,\" she says. \"She chose.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "aq51-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq51-fingertip",
+   "name": "One Fingertip",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq51-the-scarf"
+    },
+    {
+     "kind": "flag",
+     "key": "aq51-scene-1",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lillie-z"
+    ],
+    "pokemon": "vulpix-alola",
+    "tint": "#18202e",
+    "effect": "none"
+   },
+   "intro": "Camp, late. The Vulpix has fallen asleep curled against Lillie's shoe, its tail over its nose. Lillie is not asleep. She is looking at it. Slowly, she reaches out one fingertip, and stops a breath away from the white fur. She stays like that, not breathing.",
+   "choices": [
+    {
+     "label": "Say nothing. Wait.",
+     "success": {
+      "text": "You wait with her. The fire ticks. After a long, long time her fingertip comes down, and touches the very tip of one white ear, and stays there for the space of a heartbeat. Then she takes it back and holds that hand in the other one, as if it had done something enormous. It had.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq51-fingertip",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq51-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"She's warm. Like you.\"",
+     "success": {
+      "text": "\"Is she?\" Lillie whispers. Her fingertip comes down, just the tip of it, on the white fur. \"She is. She's warm.\" She does not take it back for a while. The Vulpix, asleep, presses its head up into the touch, and Lillie makes a small sound that is nearly a laugh and nearly not.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq51-fingertip",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq51-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq51-blizzard",
+   "name": "In the Blizzard",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq51-hatched",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq51-hatched",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "types": [
+    "ice"
+   ],
+   "remembers": [
+    {
+     "id": "held-together",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq51-held-together",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "She held this Egg once with your hand under hers. You are too far away now to do that. She knows it. She is already running."
+    },
+    {
+     "id": "hatched-for-her",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq51-hatched-for-her",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It hatched in your arms. For one second, out on the ice, the Vulpix looks for you. Then it looks for her."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lillie-z"
+    ],
+    "pokemon": "vulpix-alola",
+    "tint": "#141c28",
+    "effect": "snow"
+   },
+   "intro": "The snow comes sideways out of nowhere, and the world goes white. When it clears a little, the Vulpix is gone. Lillie is calling its name, her voice thin in the wind. Then you see it: out on a frozen ledge, chasing snowflakes, and three Sneasel slinking round the rocks toward it, claws out. The Vulpix has seen them. It is too small to run. \"No,\" Lillie says. \"No, no, no.\"",
+   "choices": [
+    {
+     "label": "Fight them off.",
+     "success": {
+      "text": "You run for the ledge. The Sneasel turn to meet you, grinning. Behind you, you hear Lillie running too.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "sneasel"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq51-sneasel-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq51-her-name"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq51-sneasel-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq51-her-name"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let her go to it.",
+     "success": {
+      "text": "You stay where you are, and she does not even see you not moving. She is already past you, out onto the ice, slipping, falling, getting up. She drops to her knees in front of the Vulpix with her arms wide, and the three Sneasel look at a girl who will not move for anything, and decide this is not worth it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq51-she-went",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq51-her-name"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq51-her-name",
+   "name": "Her Name Is Snowy",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lillie-z"
+    ],
+    "pokemon": "vulpix-alola",
+    "tint": "#2a3448",
+    "effect": "sparkle"
+   },
+   "intro": "Lillie is kneeling in the snow, and she is holding the Vulpix. Not in a scarf. Not in a basket. In her own two bare hands, pressed against her coat, its small cold nose tucked under her chin. She did not think about it. She just picked her up. She looks at her hands as if they belong to someone else. \"I'm holding her.\" Then, quietly, to the Vulpix: \"Snowy. Your name is Snowy.\"",
+   "choices": [
+    {
+     "label": "\"Snowy.\"",
+     "success": {
+      "text": "Snowy sneezes a flurry of snow straight into Lillie's face, and Lillie laughs, really laughs, louder than you have ever heard her. She does not put Snowy down all the way back to camp. When you part on the road, she takes your hand, without thinking, and squeezes it. \"Thank you. For waiting with me. For all of it.\" You have a friend now. You both know it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq51-lillie-friend",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-lillie",
+        "amount": 1
+       },
+       {
+        "kind": "relic",
+        "id": "lillies-friendship",
+        "name": "Lillie's Friendship",
+        "effects": [
+         {
+          "kind": "friendshipMultiplier",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "moment",
+        "text": "Lillie picked up her Vulpix with her own two hands, and named her Snowy.",
+        "importance": 75
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq52-the-turtle-who-exploded",
+   "name": "The Turtle Who Exploded",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [
+    "fire",
+    "ground"
+   ],
+   "remembers": [
+    {
+     "id": "took-the-trial",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "island-trial-fire"
+      }
+     ],
+     "notice": "Kiawe stops halfway through wiping his hands, and looks at you properly. \"The caldera. You took my Trial.\" A slow grin. \"I ran that Trial, and I remember how you fought. The dance will come easy to you.\""
+    },
+    {
+     "id": "started-the-trial",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trial-fire-started",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Kiawe looks at the Z-Ring on your wrist, then at you. \"You started my Fire Trial. I'm the Captain who ran it. I remember you.\" He nods at the field. \"Then you know what heat is. Good.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.kiawe"
+    ],
+    "pokemon": "turtonator",
+    "tint": "#3a1a10",
+    "effect": "fire"
+   },
+   "intro": "A farm on the side of a volcano. Black earth in long terraces, steam rising from cracks between the rows, and the smell of baked soil and sweet potatoes. A Charizard is pulling a plough down a field, slow and straight, wings folded. At the end of the row, in the sun, a Turtonator lies flat on its stomach, fast asleep, its spiked shell glinting. A young man with a towel round his neck and dirt to the elbows leans on a fence. \"It's on its break. It takes long breaks. Its Shell Trap is worth the wait.\" He wipes his forehead. \"Help with the harvest, and I'll teach you a dance. A Z-Move dance.\"",
+   "choices": [
+    {
+     "label": "Harvest.",
+     "success": {
+      "text": "It takes the rest of the day. You dig sweet potatoes out of earth so warm it steams in your hands, and carry baskets up the terraces, and your Pokémon pull carts beside the Charizard, which sets the pace and does not slow down for anyone. The Turtonator sleeps through all of it. At sunset Kiawe's family sets a long table in the yard, and his grandfather and his little sister pile every plate twice. Everybody eats until nobody can move. \"Now,\" Kiawe says, standing up. \"The dance. I keep my word.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "aq52-harvested",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq52-the-dance"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle Turtonator.",
+     "success": {
+      "text": "Kiawe raises an eyebrow, then whistles. The Turtonator opens one eye, sighs smoke, and gets up. \"Go on,\" Kiawe says. \"Hit the shell. Everybody does, once.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kiawe's Turtonator",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq52-shell-trap",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq52-the-dance"
+        }
+       ],
+       "lineup": [
+        "turtonator"
+       ],
+       "spritePokemon": "turtonator",
+       "friendly": true,
+       "foeMoves": [
+        "shell-trap"
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq52-shell-trap",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq52-shell-trap-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq52-the-dance"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Learn the dance.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "\"The dance first? Before the harvest?\" Kiawe looks at the fields, then at you, and laughs. \"Fine. The fields will still be here.\" He plants his feet in the black earth. Arms crossed, then flung up and out like a fire catching, a stamp, a turn, a blaze. You copy him, beat for beat, until the ground is warm under your feet and your arms remember it on their own. He stops, nods, and puts a red crystal in your hand, warm as a coal. \"Firium Z. You earned it. Now come and dig.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "firium-z",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq52-danced",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Arms crossed, flung up, a stamp, a turn, a blaze. You get the stamp. You get the turn. You get the blaze wrong eleven times, and Kiawe makes you do it all again from the start, every time, until the sun is low and the Charizard has finished the field without you. On the twelfth go, it is right. He grins and drops a red crystal into your hand, warm as a coal. \"Firium Z. Slow, but you got there. That's how fire works.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "item",
+        "id": "firium-z",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq52-danced",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq52-the-dance",
+   "name": "The Dance",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "shell-trap",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq52-shell-trap",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your Pokémon are still smoking gently from the Shell Trap. The Turtonator has gone back to sleep, satisfied. \"Now you know,\" Kiawe says. \"Never hit the shell. Everybody does, once.\""
+    },
+    {
+     "id": "harvested",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq52-harvested",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You are too full to move, and Kiawe makes you move anyway. His little sister sits on the fence to watch, and laughs at you, and then at him."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.kiawe"
+    ],
+    "pokemon": "charizard",
+    "tint": "#3a1a10",
+    "effect": "fire"
+   },
+   "intro": "Kiawe stands in the black earth with his feet planted, the volcano smoking behind him. \"Watch. Then copy.\" Arms crossed in front of his face. Then flung up and out, like a fire catching. A stamp. A turn. A blaze. Every move has a weight to it, as if he is throwing something heavy and hot. \"It isn't a dance for showing off. It's a promise to your Pokémon. You give it everything, and it gives you everything back.\"",
+   "choices": [
+    {
+     "label": "Learn the dance.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Beat for beat, you copy him, until the ground is warm under your feet and your arms remember it on their own. At the last blaze, your Pokémon roar together without being told. Kiawe nods once and drops a red crystal into your hand, warm as a coal. \"Firium Z. Use it for something that matters.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "firium-z",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq52-danced",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You get the stamp. You get the turn. You get the blaze wrong eleven times, and he makes you start from the top every time, until the stars are out over the volcano. On the twelfth go it is right, and your Pokémon roar together. He drops a red crystal into your hand. \"Firium Z. Slow, but you got there. That's how fire works.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "item",
+        "id": "firium-z",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq52-danced",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank him, and go.",
+     "success": {
+      "text": "\"No dance?\" Kiawe shrugs, not offended. \"The offer stands. The volcano isn't going anywhere.\" Behind him, the Turtonator rolls over in the sun, and something in its shell goes click.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq53-the-sulking-rabbit",
+   "name": "The Sulking Rabbit",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [
+    "normal",
+    "electric",
+    "steel"
+   ],
+   "remembers": [
+    {
+     "id": "owl-turned",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq16-owl-turned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Goh stares at your Noctowl. \"Wait. That one used to hide, didn't it? I can tell. And now it doesn't.\" He swallows. \"It changed when it evolved, and you didn't lose it. How?\"",
+     "addChoices": [
+      {
+       "label": "Tell him about the owl.",
+       "success": {
+        "text": "You tell him about the gold Hoothoot that hid from every lamp, and the night it flew into all of them at once. You tell him it did not stop being itself when it changed. It just stopped being afraid of being looked at. Goh listens with his whole face. Then he goes and sits next to the Raboot, not too close, and says nothing at all, and the Raboot pushes its hood back half an inch to look at him.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "aq53-owl-advice",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "aq53-the-egg"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "raboot",
+    "tint": "#2a1e1a",
+    "effect": "none"
+   },
+   "intro": "A city park, and a football pitch with nobody on it. On the bench sits a Raboot with its hood pulled down over its eyes and its arms folded, refusing everything. It will not battle. A boy in a cap, Goh, holds out a Poké Ball to it. It turns its head away. He holds out a berry. It turns its head the other way. \"It evolved and now it hates everything.\" He sits down hard on the grass. \"Especially me.\" The Raboot slides off the bench, finds a stone, and kicks it at you: neat, hard, perfectly aimed, right at your shin. It is a very good kick. Behind the bench, on the fence, a poster of a famous footballer is peeling in the rain.",
+   "choices": [
+    {
+     "label": "Give it space.",
+     "success": {
+      "text": "You sit down at the far end of the bench and do not look at it. Goh opens his mouth, and you shake your head, and he shuts it again. The Raboot sulks. It sulks for an hour, and when you finally get up and go, it is still sulking, a small furious shape under a hood. \"It's going to be like this forever,\" Goh says. You do not think so. You think it needs a while longer than an hour.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq53-gave-space",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Kick a stone back.",
+     "prompt": {
+      "id": "whack-tap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You trap the stone with your foot and flick it back. The Raboot's ears come up under the hood. It traps it, flicks it up, knee, knee, heel, and sends it back to you in the air. You head it, badly. It catches it on one foot and holds it there, balanced, while it looks at you. Back and forth, a hundred times, more. It is very good. It is so much better than you. And somewhere around the fiftieth kick, under the hood, it starts to smile.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq53-keepy-uppy",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq53-the-egg"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You try to flick it back and miss the stone completely. The Raboot snorts. Then it hops down, traps the stone, and keeps it up alone: knee, knee, heel, head, round its back and up again, showing you how. You clap. It does it again, faster, glancing at you to see if you are still watching. You are. Under the hood, it starts to smile.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq53-keepy-uppy",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq53-the-egg"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what's wrong.",
+     "success": {
+      "text": "You crouch down in front of it and ask. Not Goh: it. The Raboot stares at you from under the hood for a long time. Then it lifts one paw and points, past you, at the peeling poster on the fence: a footballer in mid-kick, with a whole stadium on its feet behind him. Goh looks at the poster. Then at his phone, full of Pokémon he has caught. Then at the Raboot. \"Oh,\" he says quietly. \"You wanted me to notice you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq53-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq53-the-egg"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq53-on-its-own",
+   "name": "On Its Own",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq53-gave-space",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq53-gave-space",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "raboot",
+    "tint": "#2a1e1a",
+    "effect": "none"
+   },
+   "intro": "Footsteps behind you on the road, and a voice: \"Wait up!\" It is Goh, out of breath, and a long way behind him, kicking a pebble along the road, hood still up, is the Raboot. It is not in its Ball. Nobody is making it come. It is following, on its own. \"It sulked for days,\" Goh says. \"Then this morning it was just... there. Walking behind me.\"",
+   "choices": [
+    {
+     "label": "Wave to the Raboot.",
+     "success": {
+      "text": "You wave. The Raboot looks at you from under its hood, and very deliberately does not wave back. Then it kicks the pebble, hard and neat, so that it skids to a stop exactly at your feet. A hello. Goh laughs out loud, for the first time since you met him.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq53-followed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq53-the-egg"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq53-the-egg",
+   "name": "Something Small and Fast",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "raboot",
+    "tint": "#2a201a",
+    "effect": "sparkle"
+   },
+   "intro": "Goh digs in his bag and comes out with an Egg, warm and wriggling, with a faint red flame-pattern on the shell. \"Professor gave me this to look after. It's a Scorbunny, like mine was.\" He turns it over in his hands. \"I want it to go to someone who'll notice it. From the very start. Every trick.\" He looks at the Raboot, then at you. \"Will you?\"",
+   "choices": [
+    {
+     "label": "Take the Egg.",
+     "success": {
+      "text": "It kicks inside the shell the moment you hold it, hard, as if it is already practising. Goh grins. \"Yeah. That's a Scorbunny.\" The Raboot comes over and looks at the Egg for a long moment from under its hood. Then it pushes the hood back, all the way, so the Egg can see its face.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "scorbunny"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "aq53-egg-taken",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it with Goh.",
+     "success": {
+      "text": "Goh nods and puts the Egg back in his bag, carefully, next to the Raboot's spare berry. \"I'll notice it, then. Both of them.\" The Raboot kicks a stone into the bag after the Egg, gently. A welcome, maybe.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq53-warm-up",
+   "name": "Warm-Up",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq53-egg-taken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "scorbunny",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq53-egg-taken",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "scorbunny",
+    "tint": "#2a201a",
+    "effect": "none"
+   },
+   "intro": "Morning, cold. The Scorbunny will not sit still. It runs circles round the camp to warm its feet until the pads glow, then kicks everything it can find: pine cones, pebbles, your boot, the kettle. Every time it kicks something it looks round to see if you saw.",
+   "choices": [
+    {
+     "label": "Race it.",
+     "success": {
+      "text": "You get up and race it round the camp. It wins, easily, by miles, and then runs back to win again. By the fifth lap it is laughing, a squeaky breathless sound, and its feet are glowing like coals.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "scorbunny",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq53-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch every kick.",
+     "success": {
+      "text": "You put down your breakfast and watch. Pine cone: you nod. Pebble: you nod. Kettle: you wince, and nod. It notices you noticing, and the kicks get bigger and bolder and more ridiculous, all for you.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "scorbunny",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq53-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq53-watch-me",
+   "name": "Watch Me",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq53-warm-up"
+    },
+    {
+     "kind": "partyLine",
+     "species": "scorbunny",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "scorbunny",
+    "tint": "#2a201a",
+    "effect": "none"
+   },
+   "intro": "The Scorbunny has learned a trick: a stone flicked up, caught on its knee, sent spinning over its head and back down onto its foot. It does it perfectly. You were looking the other way. When you turn round, it is standing with the stone on its foot, ears flat, very still.",
+   "choices": [
+    {
+     "label": "Ask it to do it again.",
+     "success": {
+      "text": "\"Again? I missed it.\" The ears come up. It does it again, even better, and this time it watches your face the whole way through instead of the stone, and nearly drops it, and doesn't. You clap. It does it six more times.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "scorbunny",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq53-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say sorry, and sit down to watch.",
+     "success": {
+      "text": "You say sorry and sit down where you can see it properly, and you do not look away. It waits, making sure. Then it does the trick, and a new one after it that it has not even practised. It wobbles. It lands it. It looks at you as if you did it together.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "scorbunny",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq53-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq53-the-poster",
+   "name": "The Poster",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq53-watch-me"
+    },
+    {
+     "kind": "partyLine",
+     "species": "scorbunny",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "scorbunny",
+    "tint": "#2a1e1a",
+    "effect": "glint"
+   },
+   "intro": "In a town, the Scorbunny stops in front of a poster on a wall: a famous Cinderace, mid-kick, with a stadium on its feet behind it. It stands there a long time, looking up. Then it looks down at its own feet, which are small, and not very famous.",
+   "choices": [
+    {
+     "label": "Lift it up to see.",
+     "success": {
+      "text": "You lift it up so it is face to face with the Cinderace. It studies the poster seriously, every line of the kick. Then it twists in your hands and copies the pose exactly, in the air, and looks round at you to check.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "scorbunny",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq53-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You'll be on one, one day.\"",
+     "success": {
+      "text": "It looks at you sideways, as if you might be laughing at it. You are not. It looks at the poster once more, then at you, and then it walks on with its chest out, kicking a stone ahead of it all the way down the street, as if there were a stadium watching. There is. It is you.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "scorbunny",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq53-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq53-under-the-hood",
+   "name": "Under the Hood",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq53-egg-taken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq53-egg-taken",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "scorbunny",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "normal",
+    "electric",
+    "steel"
+   ],
+   "remembers": [
+    {
+     "id": "keepy-uppy",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq53-keepy-uppy",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You remember a park, and Goh's Raboot, and a stone kicked back and forth a hundred times. Yours has never seen that. But it has the same look under the hood."
+    },
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq53-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You remember Goh's Raboot pointing at a poster on a fence, because nobody had asked it. You know what this is."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "raboot",
+    "tint": "#221a18",
+    "effect": "none"
+   },
+   "intro": "In the night it evolved. In the morning there is a Raboot sitting by the cold fire with a hood of fur pulled down over its eyes and its arms folded. It will not eat. It will not battle. When you say its name it does not look up. Then it gets up, finds a stone, and kicks it at your shin: neat, hard, perfectly aimed. You have seen this before. You were not the one being kicked at, then.",
+   "choices": [
+    {
+     "label": "Give it space.",
+     "success": {
+      "text": "You leave it be. It sulks all day, trailing far behind, kicking stones into the ditch. You do not look back, though it costs you. At evening, when you sit by the fire, it comes and sits down beside you, not touching, hood up. After a long while it leans. Just slightly. Just enough.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "scorbunny",
+        "to": "raboot"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "scorbunny",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq53-turned",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq53-noticed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Kick a stone back.",
+     "success": {
+      "text": "You trap the stone and flick it back. Its ears come up under the hood. Knee, knee, heel, and back to you in the air; you head it, badly; it catches it on one foot and holds it. Back and forth until the sun is high. Somewhere in the middle of it the hood falls back on its own, and it is grinning.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "scorbunny",
+        "to": "raboot"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "scorbunny",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq53-turned",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq53-noticed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what's wrong.",
+     "success": {
+      "text": "You crouch down in front of it and ask. It stares at you from under the hood. Then it points, not at a poster, but at you: at your eyes. Watch me, it means. I changed, and I need you to still see me. You nod. You see it. It pushes the hood back with one paw.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "scorbunny",
+        "to": "raboot"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "scorbunny",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq53-turned",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq53-noticed"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq53-noticed",
+   "name": "Noticed",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "raboot",
+    "tint": "#2a201a",
+    "effect": "sparkle"
+   },
+   "intro": "On the road out of town there is an empty football pitch. The Raboot stops at the edge of it. It looks at the grass, and at you, and at a stone lying in the centre circle. It is asking.",
+   "choices": [
+    {
+     "label": "Watch it play.",
+     "success": {
+      "text": "You sit on the touchline. It plays the whole pitch alone: dribbles, turns, a long curling kick into an empty goal, and after every one it looks round to make sure you are still watching. You are. You always will be. When it is done it walks back to you with its hood down and its head up, and you understand that it was never sulking about evolving. It was afraid you would stop looking.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "A Raboot that sulked under its hood played a whole pitch alone, and you watched every kick.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

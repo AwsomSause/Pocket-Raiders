@@ -1,0 +1,3610 @@
+{
+ "catalogOverhaul": "anime",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "aq09-muk-that-hugs",
+   "name": "The Muk That Hugs",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [],
+   "remembers": [
+    {
+     "id": "max-bond",
+     "when": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 5,
+       "who": "any"
+      }
+     ],
+     "notice": "The Muk looks along your line of Pokémon and stops at {most}. Something passes between them. {most} has been loved for a long time, and it knows what a hug is worth.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let it hug you.",
+       "success": {
+        "text": "It goes straight past you. It stops in front of {most}, opens its arms, and waits. {most} looks back at you once. Then it steps in and lets itself be held, smell and all, for a long, long moment, and it does not flinch. Nobody faints. When they part, the Muk is shining, and it follows {most} down the road like a little brother who has finally been let into the game.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "top"
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "muk"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 20
+         },
+         {
+          "kind": "flag",
+          "key": "aq-muk-hugged",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "factory",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-factory-cleared",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know that smell. It is the factory you shut down: the green fog, the grimy pipes. When you tell the nurse, she takes the peg off her nose. \"It came from there? Then it never had a chance.\" She sits down on the step beside it, close enough to touch."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/nursery_aide"
+    ],
+    "pokemon": "muk",
+    "tint": "#2a2238",
+    "effect": "none"
+   },
+   "intro": "A Pokémon Center, and a sign taped to its door in big red letters: NO MUK. A Muk is sitting outside it, on the step, in a small puddle of itself. It is very still, the way someone sits when they have been told to wait and nobody has come back. The nurse comes out with a peg on her nose. \"It hugs everyone. It means well. Three people fainted.\" She looks at it, and her voice goes soft. \"Its trainer left it here. She couldn't get a job, smelling like that.\" The Muk sees you. Its whole body lifts. It opens its arms.",
+   "choices": [
+    {
+     "label": "Let it hug you.",
+     "success": {
+      "text": "You step in. It is warm, and wet, and it smells like a drain that has given up, and it holds on as if you might be the last person in the world. Your eyes stream. Your head swims. {lead} rushes in to pull you free and gets hugged too, and comes out green and wobbling. The Muk is overjoyed. It will not leave your side. When you walk on, it slides along behind you, humming to itself.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison",
+        "who": "lead"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "muk"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "flag",
+        "key": "aq-muk-hugged",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bathe it first.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Water-type gives it everything: a spray, a soak, a long rinse in the Center's fountain. The fountain turns brown. The Muk comes out gleaming and smelling exactly the same. It looks at the Water-type that worked so hard for it, and before anybody can stop it, it hugs that one instead. Your Water-type, to its great credit, hugs it back. The Muk follows you both down the road, delighted to be clean, which it is not.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "muk"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find it someone.",
+     "success": {
+      "text": "You ask at every door for two whole nodes of road. People are kind about it, from a distance. They close their windows kindly. Then, at the far end of town, a manhole cover lifts, and a man in waders climbs out and asks what all the fuss is about.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq09-sewage-worker"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq09-sewage-worker",
+   "name": "Somebody Who Can't Smell",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "muk",
+    "tint": "#2a2238",
+    "effect": "none"
+   },
+   "intro": "He is Mr. Osgood Prall, and he has worked the sewers for thirty years. \"Lost my sense of smell the first week. Best thing that ever happened to me.\" He looks past you at the Muk, and his face goes very quiet. \"Is that one... does it hug?\" He swallows. \"Nobody's hugged me since my mum.\"",
+   "choices": [
+    {
+     "label": "Introduce them.",
+     "success": {
+      "text": "The Muk does not need introducing. It goes to him like water going downhill and wraps him up, all of him, and he stands in the middle of the street with his eyes shut, holding on. When he can speak again, he presses something into your hand: a lump of Black Sludge, wrapped in a clean handkerchief. \"For your Poison-types. And thank you. You don't know what you've done.\" You think you might. When you pass the Center on your way out, the NO MUK sign has gone.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "black-sludge",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-muk-homed",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq10-thirty-tauros",
+   "name": "The Thirty Tauros",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 4,
+   "types": [
+    "normal"
+   ],
+   "remembers": [
+    {
+     "id": "grandcalf",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "cs-kanto-fuchsia-safari"
+      },
+      {
+       "kind": "partySpecies",
+       "species": "tauros"
+      }
+     ],
+     "notice": "Your Tauros has gone very still. Then it is over the fence before you can call it, running flat out for the ring. The rancher stares after it. \"That one's from the Safari Zone. Look at the shoulders. That's the old one's grandcalf.\" The ring opens, and lets it in."
+    },
+    {
+     "id": "guardian",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq37-guardian-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have seen this before, with the old guardian. You tell the rancher what the herd is doing. They are not guarding it. They are keeping it company, so it does not have to go alone. He puts his hat back on, slowly, and nods."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/breeder_m"
+    ],
+    "pokemon": "tauros",
+    "tint": "#3a2c1a",
+    "effect": "none"
+   },
+   "intro": "A ranch at the end of a long fence. Thirty Tauros, and not one of them is grazing. They stand in a ring in the far field, shoulder to shoulder, tails still. The rancher leans on the gate. \"A trainer caught all thirty in one day, in the Safari Zone. Brought them here. Comes to visit, sometimes.\" He takes his hat off and turns it in his hands. \"The oldest one is dying. The others won't leave it to eat.\" In the middle of the ring an old Tauros lies in the grass, grey at the muzzle, breathing slow.",
+   "choices": [
+    {
+     "label": "Sit with the herd.",
+     "success": {
+      "text": "You climb the fence and walk out across the field. Thirty heads turn toward you. Nobody charges. A gap opens in the ring, just wide enough, and you sit down in it, in the cool grass, with the old one's slow breath in front of you. The herd lets you stay. The sun goes down. Nobody moves all night, and neither do you.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-tauros-sat",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq10-dawn"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call a doctor.",
+     "success": {
+      "text": "It takes two nodes to bring her out and back. The doctor kneels in the grass beside the old one for a long time, with the herd breathing all round her. \"There's nothing to fix,\" she says at last. \"It's just old. It's done everything a Tauros does.\" She gives it something for the pain. Its breathing eases. It goes in the night, easy, with its head on the grass. In the morning the herd is grazing, and the rancher is cutting a notch into the far post.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "aq-tauros-doctor",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them be.",
+     "success": {
+      "text": "You leave them their field. It dies in the night. You hear it from the road: thirty voices at once, low, and then nothing at all. In the morning, when you look back from the hill, the herd is grazing.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq10-dawn",
+   "name": "Dawn in the Ring",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/breeder_m"
+    ],
+    "pokemon": "tauros",
+    "tint": "#4a3a24",
+    "effect": "none"
+   },
+   "intro": "Near dawn, the old Tauros lifts its head one last time and looks round the ring at all of them, one by one. Then it lays its head down. The herd stands a while longer. As the light comes, they break the circle and go to graze, slowly, one by one. The youngest does not go. It walks out of the circle, across the wet grass, and stands beside you. The rancher is at the fence. He has seen this. \"It chose,\" he says quietly.",
+   "choices": [
+    {
+     "label": "Take it with you.",
+     "success": {
+      "text": "\"Go on,\" the rancher says. \"They do that, sometimes. Pick somebody.\" The young Tauros stamps once, and falls in at your side. On your way out you pass the far post. The rancher is cutting a notch into it: the first of thirty, he says, though he hopes he never gets to the last.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "tauros"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "moment",
+        "text": "You sat all night in the ring of thirty Tauros while the oldest died, and the youngest chose you.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it back to its herd.",
+     "success": {
+      "text": "You put your hand on its neck and turn it, gently, toward the others. It looks at you a long time. Then it goes, and the herd makes room for it. The rancher is cutting a notch into the far post. \"Thirty notches, one day,\" he says. \"That's a lot of goodbyes.\" You think the herd will be all right. They know how to do it now.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq11-baby-lapras",
+   "name": "The Baby Lapras",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 4,
+   "types": [
+    "water",
+    "ice"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "lapras",
+    "tint": "#1a2c3e",
+    "effect": "none"
+   },
+   "intro": "A grey beach under a grey sky. Something small is crying at the water's edge: one high, thin note, over and over. It is a baby Lapras, no bigger than a rowing boat, all alone. When you step closer it backs into the surf, shaking, and the note goes higher. An old fisherman is mending a net on the rocks. \"Some kids were cruel to it. Threw stones, for fun. It doesn't trust anyone now.\" He points his needle out to sea. \"Its pod went that way. Three islands ago.\"",
+   "choices": [
+    {
+     "label": "Take it to its pod.",
+     "success": {
+      "text": "You wade in up to your knees and wait. It takes a long time. Then it comes, an inch at a time, and lays its head against your hand as if it is not sure hands can be like this. The fisherman nods slowly. \"Three islands. Let it carry you. It needs to be some use to somebody, after what they did.\" It sings once, short and clear, at the open sea.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "lapras"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq11-lapras-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq11-to-pod",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Raise it.",
+     "success": {
+      "text": "You sit on the sand, and it watches you from the waves until the tide brings it in. When it finally touches your hand, you tell it that it can come with you, and stay. It comes. It is gentle, and good, and it carries your bag in the shallows. Only at night it sings at the sea, the same short call, and listens for an answer that does not come.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "lapras"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq11-lapras-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq11-raised",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it with the fisherman.",
+     "success": {
+      "text": "The fisherman sets down his net. \"I've a boat, and nobody to fill it but me.\" He wades out, very slowly, and talks to it in a low voice for a long time, about nothing: the tide, the gulls, his knees. When you look back from the headland, the little Lapras is in the shallows beside his boat. It is not crying. It is happy.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq11-first-island",
+   "name": "The First Island",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq11-lapras-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "lapras",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq11-lapras-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "raised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq11-raised",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You were not taking it anywhere. It took you here. It wanted to look."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "lapras",
+    "tint": "#1a2c3e",
+    "effect": "none"
+   },
+   "intro": "The first island: a rock, a bent tree and a great many gulls. The Lapras carries you there on its back, though it is barely big enough, paddling hard and very proud of itself. On the beach it lifts its head and sings its short call, as loud as it can. The gulls answer. Nothing else does.",
+   "choices": [
+    {
+     "label": "Sing back.",
+     "success": {
+      "text": "You are not much of a singer. You sing anyway: the same short call, as near as you can get it. It turns and stares at you. Then it sings again, and you answer again, and the two of you go on like that until the light goes, two voices over an empty sea.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "lapras",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq11-island-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it rest on the sand.",
+     "success": {
+      "text": "It is worn out, though it would never say so. You sit with it on the warm sand while it sleeps, with one flipper over your foot to make sure you do not leave. In its sleep it sings, very quietly.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "lapras",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq11-island-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq11-second-island",
+   "name": "The Second Island",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq11-first-island"
+    },
+    {
+     "kind": "partyLine",
+     "species": "lapras",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "lapras",
+    "tint": "#1e3446",
+    "effect": "none"
+   },
+   "intro": "It is bigger now. It carries you to the second island without a breath of strain. There is a fishing village here, and a pier, and on the pier a row of children. The Lapras stops dead in the water. It remembers children. It starts to back away, shaking, and one of the children holds out a fish.",
+   "choices": [
+    {
+     "label": "Stand between it and the pier.",
+     "success": {
+      "text": "You slide off its back into the water and stand in front of it, up to your chest in the cold sea, until the children have gone home. It presses its head against your back the whole time. It is not shaking any more. It is only waiting, because you are there.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "lapras",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq11-island-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the children come, slowly.",
+     "success": {
+      "text": "You hold its neck and talk to it, low and steady, and the child with the fish comes down the steps one at a time. \"Hello,\" she says. \"I'm sorry somebody was mean.\" It takes the fish. It takes it very carefully, so it does not touch her fingers. Then it sings at her, and all the children cheer.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "lapras",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq11-island-2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq11-children",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq11-third-night",
+   "name": "Something Answers",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq11-second-island"
+    },
+    {
+     "kind": "partyLine",
+     "species": "lapras",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "lapras",
+    "tint": "#14243a",
+    "effect": "sparkle"
+   },
+   "intro": "Night, out at sea, with the stars thick and low. The Lapras sings its short call into the dark, as it does every night. And this time, far away, so faint you could be imagining it, something answers. It goes still under you. It sings again. The answer comes again: a long, low note, the voice of something very big. It has grown so much since the beach. You feel it grow a little more, right there, listening.",
+   "choices": [
+    {
+     "label": "Follow the song.",
+     "success": {
+      "text": "It swims toward the sound all night, steady and sure, carrying you without a word. By dawn the answer has stopped. But it knows the way now. It has heard it.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "lapras",
+        "amount": 5
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": {
+         "species": [
+          "lapras"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "aq11-heard-pod",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold on, and let it listen.",
+     "success": {
+      "text": "It does not swim. It floats there till morning, listening, singing back once in a while, very softly, as if afraid of being too loud. You lie on its back and watch the stars. It is not lonely tonight.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "lapras",
+        "amount": 5
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": {
+         "species": [
+          "lapras"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "aq11-heard-pod",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq11-the-pod",
+   "name": "The Third Island",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq11-lapras-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq11-lapras-met",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "lapras",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "water"
+   ],
+   "remembers": [
+    {
+     "id": "mother",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "r133-lapras-ferry"
+      }
+     ],
+     "notice": "At the front of the pod is a Lapras you know: the one that waited at the shore and carried you across the water. It is calling, over and over, and your Lapras is calling back. It is its mother."
+    },
+    {
+     "id": "raised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq11-raised",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You never promised to bring it here. It brought you. It has been lonely for this sound since the beach."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "pokemon": "lapras",
+    "tint": "#1a2c3e",
+    "effect": "rain"
+   },
+   "intro": "The third island. The pod is here: a dozen great grey backs in the bay, singing all together. Your Lapras answers louder than you have ever heard it. Then you see the boats. Two of them, low and fast, with a net strung between, closing on the pod from the seaward side. Poachers. One of them stands up in the bow and points straight at your Lapras. \"Get the little one too. Little ones fetch more.\"",
+   "choices": [
+    {
+     "label": "Stop the poachers.",
+     "success": {
+      "text": "You turn your Lapras toward the boats. It goes without being asked.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Poachers",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [
+        "water",
+        "dark"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq11-poachers-stopped",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq11-pod-leader"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq11-poachers-fled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq11-pod-leader"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Sing the warning with it.",
+     "success": {
+      "text": "You both sing: your Lapras with everything it has, you with your hands round your mouth. The pod hears. Twelve grey backs go under at once, deep, and the net closes on empty water. The poachers curse and turn for the open sea.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq11-warned",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq11-pod-leader"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq11-pod-leader",
+   "name": "The Pod",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq11-to-pod",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "aq11-poachers-stopped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The boats are gone. The pod comes up all round you, and the biggest of them, old and scarred along one side, swims slowly up to your Lapras and touches its nose to its nose. It is the pod leader. It looks at the little one for a long time, and then at you, and then back. It is asking it to stay. Your Lapras looks at the pod. It looks at you."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "lapras",
+    "tint": "#1e3446",
+    "effect": "sparkle"
+   },
+   "intro": "When the sea is quiet again, the pod surfaces, far out in the bay. They sing all together, and your Lapras sings back. It swims out to the edge of the pod and stops there, between them and you, looking from one to the other. It has grown so much since the beach. It is still not sure where it belongs.",
+   "choices": [
+    {
+     "label": "Go with your pod.",
+     "success": {
+      "text": "You tell it, and your voice does not work properly. It comes back to you first. It lays its head against your hand, the way it did on the beach, for a long time. Then it turns and swims out to them, and the pod closes round it, and they sing. You can hear the song long after you lose sight of them. It will not forget who carried whom.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "Lapras goes home to its pod",
+         "species": [
+          "lapras"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "aq11-lapras-home",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You carried a baby Lapras across three islands to its pod, and let it go home.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay with me.",
+     "success": {
+      "text": "It hears you. It looks at its pod one more time, a long look, and sings to them once: not goodbye, more like I know where you are now. Then it turns and comes back, and you climb on, and it carries you away from the island, steady and sure, the biggest it has ever been.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "lapras",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq11-lapras-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You carried a baby Lapras to its pod, and it chose to stay with you.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq11-lapras-surfaces",
+   "name": "A Grey Back in the Water",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq11-lapras-home",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq11-lapras-home",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "lapras",
+    "tint": "#1a2c3e",
+    "effect": "float"
+   },
+   "intro": "A wide stretch of water, and no bridge, and no boat. You are standing at the edge working out how long the long way round will take when the water bulges, and a great grey back rises out of it, and a head you know turns toward you. It is bigger. It is very pleased with itself. It lowers its neck so you can climb on.",
+   "choices": [
+    {
+     "label": "Climb on.",
+     "success": {
+      "text": "It carries you across, steady and sure, singing the whole way, and from somewhere far out its pod sings back. On the far side it waits until you are safe on the shore. Then it goes under, and you do not see it again this run. You do not need to. You know where it is.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "flag",
+        "key": "aq11-carried",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq12-snorlax-and-the-melons",
+   "name": "The Snorlax and the Melons",
+   "group": "Pokémon-anime questlines",
+   "rarity": "common",
+   "minStage": 2,
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "remembers": [
+    {
+     "id": "old-friend",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sleeping-snorlax-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In its sleep, the Snorlax sniffs, and sniffs again, and rolls toward you. It knows your bag. You have been near a friend of its, the other great sleeper, and something of that one is still on you. It is following the smell before it is properly awake.",
+     "addChoices": [
+      {
+       "label": "Let it follow your bag.",
+       "success": {
+        "text": "You walk away from the field, slowly, and the Snorlax gets up and follows your bag, nose first, eyes still mostly shut. It follows it out of the fields, down the lane and into the cool shade by the river, where it lies down beside you and goes back to sleep with its head on your pack. When it wakes, it is yours. The mayor pays up, weeping with relief.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "snorlax"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 15
+         },
+         {
+          "kind": "flag",
+          "key": "aq-snorlax-led",
+          "amount": 1
+         },
+         {
+          "kind": "money",
+          "amount": 400
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_m",
+     "trainer.worker_m"
+    ],
+    "pokemon": "snorlax",
+    "tint": "#2a3a1c",
+    "effect": "none"
+   },
+   "intro": "A little town with its bunting already up for a festival. The melon fields are empty: only stalks, rinds and a great deal of flattened earth. In the very last field a Snorlax is asleep on its back, with half a melon rind over its face like a hat. The mayor wrings his sash. \"It ate the melons. Every melon. We had a festival planned!\" A farmer beside him, quietly: \"It ate the scarecrow.\" The mayor turns to you. \"We'll pay anyone who moves it. Anyone!\"",
+   "choices": [
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "It does not get up for you. It opens one eye, considers you, and closes it again. This is going to take a while.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "snorlax"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "snorlax"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq-snorlax-caught",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 400
+        }
+       ],
+       "friendly": true,
+       "foeMoves": [
+        "rest",
+        "sleep-talk"
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "aq12-still-there"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Feed it something it likes more.",
+     "success": {
+      "text": "The farmer fetches a basket from the orchard: three kinds of Berry, the last the town has. \"The melons were sweet with a sharp edge to them,\" he says. \"Like a Sitrus, nearly.\" In its sleep, the Snorlax's nose twitches toward the basket.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq12-three-berries"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wake it with music.",
+     "success": {
+      "text": "The mayor says the festival band would have done it, if there were a festival, or a band. Whatever wakes it will have to come from you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq12-music"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq12-still-there",
+   "name": "Still There",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_m"
+    ],
+    "pokemon": "snorlax",
+    "tint": "#2a3a1c",
+    "effect": "none"
+   },
+   "intro": "Your Pokémon are worn out. The Snorlax is not. It has slept through most of the battle, waking only to eat a Berry nobody saw it pick, and now it rolls over and snores. The mayor sits down on a melon rind. \"Anything else?\" he asks. \"Anything at all?\"",
+   "choices": [
+    {
+     "label": "Feed it something it likes more.",
+     "success": {
+      "text": "The farmer brings the last basket of the orchard. \"Sweet with a sharp edge,\" he says. \"Like a Sitrus, nearly.\" The Snorlax sniffs in its sleep.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq12-three-berries"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wake it with music.",
+     "success": {
+      "text": "If it will not be moved, perhaps it can be woken.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq12-music"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it sleeping.",
+     "success": {
+      "text": "You leave the town with its bunting and its empty fields, and a Snorlax asleep in the last of them. Behind you, the mayor is still sitting on the melon rind.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq12-three-berries",
+   "name": "Three Berries",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "snorlax",
+    "tint": "#2a3a1c",
+    "effect": "none"
+   },
+   "intro": "Three Berries in the basket: a blue Oran, a pink Pecha and a round yellow Sitrus. You hold each one under the Snorlax's nose in turn. Its nostrils flare. Somewhere deep inside it, a stomach rumbles like distant thunder.",
+   "choices": [
+    {
+     "label": "The Oran Berry.",
+     "success": {
+      "text": "It eats the Oran in its sleep, stalk and all, and goes on sleeping. The great stomach rumbles again: not that one. One nostril turns, very slightly, toward the basket.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq12-last-berry"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Pecha Berry.",
+     "success": {
+      "text": "It eats the Pecha in its sleep, licks its lips, and goes on sleeping. Too sweet, perhaps. One nostril turns, very slightly, toward the basket.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq12-last-berry"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Sitrus Berry.",
+     "success": {
+      "text": "Its eyes open. It sits up, very slowly, the way a hill would sit up if it could. You walk backwards out of the field holding the Sitrus out in front of you, and it follows, down the lane, the whole town trailing behind at a safe distance. At the river it lies down in the cool mud, eats the Berry and falls asleep again, out of the fields at last. When it wakes, it wakes looking for you. The mayor pays you, and shakes your hand for a full minute.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "snorlax"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq-snorlax-led",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 400
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq12-last-berry",
+   "name": "One More Berry",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "snorlax",
+    "tint": "#2a3a1c",
+    "effect": "none"
+   },
+   "intro": "The Snorlax is still asleep, still in the field, but it is not as asleep as it was. One huge nostril has turned toward the basket, toward the round yellow one, and it is quivering.",
+   "choices": [
+    {
+     "label": "The Sitrus Berry.",
+     "success": {
+      "text": "Its eyes open. It sits up, very slowly, the way a hill would sit up if it could. You walk backwards out of the field holding the Sitrus out in front of you, and it follows, down the lane, the whole town trailing behind at a safe distance. At the river it lies down in the cool mud, eats the Berry and falls asleep again, out of the fields at last. When it wakes, it wakes looking for you. The mayor pays you, and shakes your hand for a full minute.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "snorlax"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq-snorlax-led",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 400
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it sleeping.",
+     "success": {
+      "text": "You put the basket down beside it and walk on. Behind you, a long, contented crunch.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq12-music",
+   "name": "Music in the Melon Field",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_m"
+    ],
+    "pokemon": "snorlax",
+    "tint": "#2a3a1c",
+    "effect": "none"
+   },
+   "intro": "The mayor brings out the festival drum, then remembers there is nobody to play it. Whatever wakes it will have to come from you: a Poké Flute, if you carry one, or a Pokémon that can Sing. The Snorlax snores on, with the rind still over its face.",
+   "choices": [
+    {
+     "label": "Play the Poké Flute.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "poke-flute"
+      }
+     ],
+     "success": {
+      "text": "The first notes go out over the empty field. The Snorlax opens its eyes. It sits up. It looks around at the flattened stalks, the rinds, the bunting nobody will need, and its great face falls. It is not sorry the way people are sorry. It is sad the way a child is sad when the party is over and nobody told them. It gets up and lumbers off toward the hills, slowly, without looking back. The mayor watches it go for a long time. \"Well,\" he says. \"Pays the same.\" He pays you. He does not look happy about any of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-snorlax-woke",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 400
+       }
+      ]
+     }
+    },
+    {
+     "label": "Have it sung awake.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "sing"
+      }
+     ],
+     "success": {
+      "text": "Your singer starts soft and gets louder. The Snorlax opens its eyes. It sits up. It looks around at the flattened stalks, the rinds, the bunting nobody will need, and its great face falls. It is not sorry the way people are sorry. It is sad the way a child is sad when the party is over and nobody told them. It gets up and lumbers off toward the hills, slowly, without looking back. The mayor watches it go for a long time. \"Well,\" he says. \"Pays the same.\" He pays you. He does not look happy about any of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-snorlax-woke",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 400
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it sleeping.",
+     "success": {
+      "text": "You have nothing that would wake it. You leave it to its dreams, which are almost certainly about melons.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq12-festival",
+   "name": "The Festival of the Snorlax",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq-snorlax-woke",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq-snorlax-woke",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_m"
+    ],
+    "pokemon": "snorlax",
+    "tint": "#3a3a1c",
+    "effect": "confetti"
+   },
+   "intro": "Word finds you on the road. The melon town has planted a new field up on the hill, fenced with nothing at all, and it is not for selling. It is for the Snorlax. They held the festival after all, in its honour. When you get there, the Snorlax is in the middle of everything, wearing a garland of melon flowers, eating the first melon of the new crop very, very slowly, so that it will last.",
+   "choices": [
+    {
+     "label": "Join the festival.",
+     "success": {
+      "text": "You eat, and dance badly, and your Pokémon eat more than is polite. When it is all over the mayor finds you and gives you the festival prize: a Leftovers, wrapped in a melon leaf. \"It was going to be a melon,\" he admits. \"But it seemed wrong, somehow.\" On the hill, the Snorlax is asleep in its own field, smiling.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "leftovers",
+        "count": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq13-ghost-who-made-her-laugh",
+   "name": "The Ghost Who Made Her Laugh",
+   "group": "Pokémon-anime questlines",
+   "rarity": "rare",
+   "minStage": 4,
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq13-gym-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.sabrina-lgpe"
+    ],
+    "pokemon": "haunter",
+    "tint": "#2a1a3a",
+    "effect": "none"
+   },
+   "intro": "A Gym, off duty, and so quiet you can hear the lights hum. No cheering, no echo, no footsteps. The Leader sits alone on the arena steps, perfectly still, a bent spoon in her fingers. A Gym trainer whispers to you: \"She hasn't smiled since she was a child. Not once.\" Then a cold breath on the back of your neck. A Haunter is floating behind you, grinning. Its words arrive as a feeling more than a sound: I'll make her laugh. Watch me. It makes faces at her for an hour: stretched ones, inside-out ones, faces no face should make. Nothing.",
+   "choices": [
+    {
+     "label": "Help it.",
+     "success": {
+      "text": "The Haunter spins round, delighted, and shakes your hand with a hand that is not quite there. It has a plan, it tells you, in that feeling that is almost words: a routine. Three bits. It needs practice, and an audience that will not run away screaming. Your Pokémon, apparently. It drifts out of the Gym after you, already rehearsing, and the Leader watches it go without a flicker.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "haunter"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-haunter-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-gym-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell her a joke yourself.",
+     "success": {
+      "text": "You walk down to the steps and tell her the best joke you know. Silence. It goes on so long you can hear the lights hum again. Then a horrible wheezing cackle behind you: the Haunter, laughing at you, rolling in the air and holding its sides. And the Leader's mouth moves. Only one corner. Only for a moment. The Haunter stops dead in the air. It saw.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq13-gym-seen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq13-nearly"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask her why.",
+     "success": {
+      "text": "You sit two steps below her and ask. She does not look at you. \"I gave my laugh to my powers when I was small,\" she says. \"That was the price, and I paid it. I want it back.\" She turns the bent spoon over in her fingers. Behind you, the Haunter has gone very quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-haunter-why",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-gym-seen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq13-her-why"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq13-tower-haunter",
+   "name": "The Haunter From the Tower",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "cs-kanto-lavender-tower-prank"
+    },
+    {
+     "kind": "flag",
+     "key": "aq13-gym-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "scene": {
+    "cast": [
+     "boss.sabrina-lgpe"
+    ],
+    "pokemon": "haunter",
+    "tint": "#2a1a3a",
+    "effect": "none"
+   },
+   "intro": "The Haunter from the tower is back. It is wearing your hat, and it will not give it back, but it takes your sleeve and pulls. It pulls you all the way to a Gym, off duty, so quiet you can hear the lights hum. The Leader sits alone on the arena steps, perfectly still, a bent spoon in her fingers. A Gym trainer whispers: \"She hasn't smiled since she was a child. Not once.\" The Haunter grins at you: I'll make her laugh. Watch me. It makes faces at her for an hour, stretched ones, inside-out ones. Nothing.",
+   "choices": [
+    {
+     "label": "Help it.",
+     "success": {
+      "text": "The Haunter spins round, delighted, and shakes your hand with a hand that is not quite there. It has a plan, it tells you, in that feeling that is almost words: a routine. Three bits. It needs practice, and an audience that will not run away screaming. Your Pokémon, apparently. It drifts out of the Gym after you, already rehearsing, and the Leader watches it go without a flicker.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "haunter"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-haunter-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-gym-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell her a joke yourself.",
+     "success": {
+      "text": "You walk down to the steps and tell her the best joke you know. Silence. It goes on so long you can hear the lights hum again. Then a horrible wheezing cackle behind you: the Haunter, laughing at you, rolling in the air and holding its sides. And the Leader's mouth moves. Only one corner. Only for a moment. The Haunter stops dead in the air. It saw.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq13-gym-seen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq13-nearly"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask her why.",
+     "success": {
+      "text": "You sit two steps below her and ask. She does not look at you. \"I gave my laugh to my powers when I was small,\" she says. \"That was the price, and I paid it. I want it back.\" She turns the bent spoon over in her fingers. Behind you, the Haunter has gone very quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-haunter-why",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-gym-seen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq13-her-why"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq13-nearly",
+   "name": "Nearly",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.sabrina-lgpe"
+    ],
+    "pokemon": "haunter",
+    "tint": "#2a1a3a",
+    "effect": "none"
+   },
+   "intro": "The Haunter floats in front of you, upside down, staring at nothing. It is thinking. You can feel it thinking, like a draught under a door. She nearly laughed. At you. At it, laughing at you. Slowly, its grin comes back, wider than before.",
+   "choices": [
+    {
+     "label": "Help it.",
+     "success": {
+      "text": "The Haunter spins round, delighted, and shakes your hand with a hand that is not quite there. It has a plan, it tells you, in that feeling that is almost words: a routine. Three bits. It needs practice, and an audience that will not run away screaming. Your Pokémon, apparently. It drifts out of the Gym after you, already rehearsing, and the Leader watches it go without a flicker.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "haunter"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-haunter-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-gym-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask her why.",
+     "success": {
+      "text": "You sit two steps below her and ask. She does not look at you. \"I gave my laugh to my powers when I was small,\" she says. \"That was the price, and I paid it. I want it back.\" She turns the bent spoon over in her fingers. Behind you, the Haunter has gone very quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-haunter-why",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-gym-seen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq13-her-why"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to it.",
+     "success": {
+      "text": "You leave the Haunter making faces in the silent Gym. As the door closes behind you, you think you hear, very faintly, someone breathe out through her nose.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq13-her-why",
+   "name": "The Price",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.sabrina-lgpe"
+    ],
+    "pokemon": "haunter",
+    "tint": "#2a1a3a",
+    "effect": "none"
+   },
+   "intro": "The Leader goes back to her stillness. The Haunter drifts up beside her, closer than before, and for once it does not pull a face. It only looks at her, the way you look at a locked door you have decided to open.",
+   "choices": [
+    {
+     "label": "Help it.",
+     "success": {
+      "text": "The Haunter spins round, delighted, and shakes your hand with a hand that is not quite there. It has a plan, it tells you, in that feeling that is almost words: a routine. Three bits. It needs practice, and an audience that will not run away screaming. Your Pokémon, apparently. It drifts out of the Gym after you, already rehearsing, and the Leader watches it go without a flicker.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "haunter"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-haunter-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-gym-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to it.",
+     "success": {
+      "text": "You leave them there, the still woman and the ghost who will not stop looking at her. Some doors take a long time.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq13-pratfall",
+   "name": "The Pratfall",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq13-haunter-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "gastly",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq13-haunter-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "haunter",
+    "tint": "#2a1a3a",
+    "effect": "none"
+   },
+   "intro": "Camp. The routine's first bit is a pratfall. The trouble is that the Haunter is a ghost. It hurls itself at the ground with total commitment and sinks gently through it, and rises back up looking betrayed. It tries again. It sinks again. Your Pokémon watch in a polite and terrible silence.",
+   "choices": [
+    {
+     "label": "Show it how to fall.",
+     "success": {
+      "text": "You trip over your own bag, on purpose, arms everywhere, and land flat on your back. {lead} snorts. The Haunter studies you like a textbook. Its next fall is solid: it makes itself heavy, just for one second, and hits the dirt with a wonderful thump. It lies there, glowing with pride.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gastly",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Laugh anyway.",
+     "success": {
+      "text": "You laugh. Not because it is funny, but because it tried so hard. The Haunter knows the difference. It does it again, and again, sinking through the ground each time with a new face, until the laugh is a real one.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gastly",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq13-vanishing",
+   "name": "The Disappearing Trick",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq13-pratfall"
+    },
+    {
+     "kind": "partyLine",
+     "species": "gastly",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "haunter",
+    "tint": "#2a1a3a",
+    "effect": "flicker"
+   },
+   "intro": "The second bit is a disappearing trick. The Haunter vanishes, beautifully, and reappears right behind {lead}, who screams and throws a bucket straight through it. That was not the plan. The plan was wonder. It sits on a rock afterwards, sulking, only half there.",
+   "choices": [
+    {
+     "label": "Tell it the scream was the best part.",
+     "success": {
+      "text": "It thinks about that for a long time. Then it vanishes again and reappears behind you, and when you jump, it is so pleased it glows. Wonder, it decides, is overrated.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gastly",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Practise the timing with it.",
+     "success": {
+      "text": "You count it in, over and over, until the vanishing is a thing of beauty. Then you add one wobble at the end, a bow that goes wrong and turns into a tumble. {lead} laughs out loud. The Haunter freezes, then bows again, wobbling on purpose.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gastly",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq13-tickle",
+   "name": "The Third Bit",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq13-vanishing"
+    },
+    {
+     "kind": "partyLine",
+     "species": "gastly",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "haunter",
+    "tint": "#2a1a3a",
+    "effect": "none"
+   },
+   "intro": "The third bit came by accident. The Haunter was reaching for the last Berry and brushed {lead}'s side, and {lead} folded up laughing, helpless, kicking at the grass. The Haunter stared at its own hand. Then it looked at you. It does not need to say it. That is the one. That is the third bit.",
+   "choices": [
+    {
+     "label": "Let it practise on you.",
+     "success": {
+      "text": "It is merciless. You laugh until you cry, until you are lying in the grass begging, and it floats over you with the face of a scientist who has found the answer at last.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gastly",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warn it to be gentle with her.",
+     "success": {
+      "text": "You tell it: she has not laughed in years. It might hurt, a little, the first time, like a stiff door. The Haunter goes quiet, and nods, and spends the evening practising the softest tickle in the world on a leaf.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gastly",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-scene-3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-gentle",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq13-the-laugh",
+   "name": "The Laugh",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq13-haunter-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq13-haunter-met",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "gastly",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "remembers": [
+    {
+     "id": "why",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-haunter-why",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know what she gave away to be what she is. So does the Haunter. It is not doing this for a laugh any more. It is doing it to give something back.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Help it.",
+       "success": {
+        "text": "You nod. It floats down beside her and reaches out with the softest touch in the world. She jerks. She makes a sound like a door that has not opened in years. Then she laughs, helpless and too loud, and then she is crying, both at once, and she does not hide either. When she can breathe she holds out her hand to the Haunter. \"Stay,\" she says. \"Please. It is so quiet here.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "aq-haunter-laugh",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "aq13-stay"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "labyrinth",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-sabrina-labyrinth-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "She sees you, and something moves in her face. \"You. You walked out of my labyrinth. Nobody walks out.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Help it.",
+       "success": {
+        "text": "You nod. The Haunter does not even need the second bit. The pratfall lands, a thump that shakes the lights, and on the very first try she laughs: short, startled, real, at the ghost and at you, the one who walked out of her illusion. Then she cannot stop. The Gym trainers come running to see. The Haunter is laughing too, and spinning, and glowing.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "aq-haunter-laugh",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "aq13-stay"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "tower",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "cs-kanto-lavender-tower-prank"
+      }
+     ],
+     "notice": "It is still wearing the hat it stole from you in the tower. It has decided the hat is lucky."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.sabrina-lgpe"
+    ],
+    "pokemon": "haunter",
+    "tint": "#2a1a3a",
+    "effect": "none"
+   },
+   "intro": "The silent Gym again. The Leader is on her steps with her bent spoon. The Haunter floats out to the middle of the arena, alone, and bows. The first bit: the pratfall, a thump that shakes the lights. Nothing. The second bit: it vanishes, and it is behind her, and she does not even turn round. Nothing. It looks back at you across the empty arena. You can feel it asking.",
+   "choices": [
+    {
+     "label": "Help it.",
+     "success": {
+      "text": "You nod. It floats down beside her, slow, and reaches out with the softest touch in the world. She jerks. She makes a sound like a door that has not opened in years. And then she laughs: a real laugh, helpless, too loud, bouncing off every wall of that silent Gym. The Gym trainers come running. The Haunter is laughing too, and spinning, and glowing. When she can breathe, she looks at it, and her eyes are wet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-haunter-laugh",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq13-stay"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq13-stay",
+   "name": "Loud",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.sabrina-lgpe"
+    ],
+    "pokemon": "haunter",
+    "tint": "#3a2a4a",
+    "effect": "confetti"
+   },
+   "intro": "The Gym is loud now. The trainers are laughing because she is laughing, and nobody is quite sure what at. The Leader wipes her eyes and looks at the Haunter at your shoulder. The Haunter looks at her, and at you, and back again. It wants to stay. It is not sure it is allowed.",
+   "choices": [
+    {
+     "label": "Let it stay with her.",
+     "success": {
+      "text": "It hugs you, cold as a cellar and very tight, and floats to her side. She gives you a Gastly from the Gym, a small giggling one that has been bored out of its mind for years, and then the spoon she has been holding all this time. \"I bent it the day I stopped laughing,\" she says. \"I don't need it now.\" Behind you, as you go, the Gym is the loudest place in town.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "Haunter stays with the Leader",
+         "species": [
+          "haunter",
+          "gengar"
+         ]
+        }
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "gastly"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "item",
+        "id": "twistedspoon",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-haunter-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Haunter made a Gym Leader laugh for the first time since she was a child, and stayed to keep her laughing.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask it to come with you.",
+     "success": {
+      "text": "It looks at her for a long time. Then it comes back to your shoulder. She understands. \"Come back and make me laugh,\" she says, and she gives you the bent spoon anyway. \"I don't need it now.\" The Gym stays loud behind you all the way down the street.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gastly",
+        "amount": 10
+       },
+       {
+        "kind": "item",
+        "id": "twistedspoon",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq13-haunter-kept",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Haunter made a Gym Leader laugh for the first time since she was a child.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq14-sap-thief",
+   "name": "The Sap Thief",
+   "group": "Pokémon-anime questlines",
+   "rarity": "common",
+   "minStage": 2,
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_f"
+    ],
+    "pokemon": "heracross",
+    "tint": "#1e2e16",
+    "effect": "none"
+   },
+   "intro": "Morning, at the edge of a wood. A Bulbasaur is sitting very still with its eyes screwed shut, while a Heracross drinks from the bulb on its back with long, loud slurps. Its trainer, a girl with a scraped knee, stands by wringing her hands. \"It does this every morning. My Bulbasaur won't fight it. It's too polite.\" The Heracross finishes, wipes its horn, bows deeply to the Bulbasaur and walks off into the trees. The Bulbasaur opens one eye. It looks exhausted.",
+   "choices": [
+    {
+     "label": "Separate them.",
+     "success": {
+      "text": "Next morning you are waiting by the Bulbasaur. The Heracross arrives, sees you in its way, and lowers its horn. It is strong, and it is not used to being told no.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Heracross",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "aq14-sulking"
+        }
+       ],
+       "lineup": [
+        "heracross"
+       ],
+       "spritePokemon": "heracross",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "aq14-sulking"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Find it a sap tree.",
+     "success": {
+      "text": "You set off into the wood with the Heracross trudging behind you and the girl calling directions from the path. It takes three nodes. The first tree is dry as paper. The second has been split by lightning. The third is old and thick and running with golden sap, and it is crawling with Bugs.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 3
+       },
+       {
+        "kind": "flag",
+        "key": "aq-heracross-tree",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq14-colony-tree"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them sort it out.",
+     "success": {
+      "text": "You sit down on a log and wait. Next morning the Heracross comes for breakfast as usual. The Bulbasaur sits as usual. The Heracross leans in. And the Bulbasaur, very politely, says no: one Vine Whip, right across the horn. Everybody freezes. Then the Heracross sits down hard, rubbing its horn, and starts to laugh, a clicking beetle laugh. The Bulbasaur laughs too. By the afternoon they are sharing a puddle, and the girl is crying with relief.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-heracross-friends",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq14-sulking",
+   "name": "Sulking",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_f"
+    ],
+    "pokemon": "heracross",
+    "tint": "#1e2e16",
+    "effect": "none"
+   },
+   "intro": "Win or lose, the battle is over, and the Heracross is sulking. It sits under a tree with its back to everybody, horn drooping, and makes a point of not looking at the Bulbasaur. It will drink somewhere else, it says, with every line of its body. The Bulbasaur looks almost sorry for it.",
+   "choices": [
+    {
+     "label": "Leave it to sulk.",
+     "success": {
+      "text": "You walk on. The Bulbasaur's bulb is safe. When you glance back, the Heracross is still under its tree, and the Bulbasaur has edged a little closer to it, just in case.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq14-colony-tree",
+   "name": "The Colony's Tree",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "samurai",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "cs-kanto-pewter-forest-n6"
+      }
+     ],
+     "notice": "A voice from the trees: \"So that's where you got to!\" It is the Samurai from Viridian Forest, helmet under his arm. He knows you; you fought him. \"This tree is mine. My family's, since before the forest had a name. That Heracross used to drink here every morning, before it went wandering.\" He waves the Bugs back.",
+     "addChoices": [
+      {
+       "label": "Thank the Samurai.",
+       "success": {
+        "text": "\"Drink, then, old friend,\" the Samurai says, and the Bugs part for it. The Heracross drinks until it is round. Then it comes and stands in front of you and bows, the same deep bow it gave the Bulbasaur every morning, and this time it does not walk off into the trees. \"It has chosen,\" the Samurai says. \"Look after it.\" Ever since that sap, leaves and vines have done it nothing but good.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "heracross"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "sap-sipper",
+          "friendship": 10
+         },
+         {
+          "kind": "flag",
+          "key": "aq14-heracross-joined",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "heracross",
+    "tint": "#2a2a10",
+    "effect": "none"
+   },
+   "intro": "A Bug colony owns this tree. Beedrill hum on the high branches. A Pinsir sits at the roots like a gate. A Scyther paces in front of the trunk, blades out, on guard. They watch the Heracross. The Heracross watches the sap. Its stomach makes a long, sad sound.",
+   "choices": [
+    {
+     "label": "Fight for a share.",
+     "success": {
+      "text": "The Scyther steps forward. The Pinsir closes its horns. The colony will share with nobody who has not earned it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "pinsir",
+        "scyther",
+        "beedrill"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "aq14-the-sap"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "aq14-turned-away"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Offer the colony your Honey.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "honey"
+      }
+     ],
+     "success": {
+      "text": "You set the Honey down at the roots. The Beedrill come down to it first, then the Pinsir, then even the Scyther, carefully. While they eat, the Heracross drinks until it is round. Then it comes and stands in front of you and bows, the same deep bow it gave the Bulbasaur every morning, and this time it does not walk off into the trees. Ever since that sap, leaves and vines have done it nothing but good.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "honey"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "heracross"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "sap-sipper",
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq14-heracross-joined",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq14-the-sap",
+   "name": "The Sap",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "heracross",
+    "tint": "#2a2a10",
+    "effect": "sparkle"
+   },
+   "intro": "The colony draws back, buzzing, and makes room at the trunk. The Heracross does not wait to be asked twice. The sap runs gold in the evening light, and it drinks and drinks.",
+   "choices": [
+    {
+     "label": "Let it drink its fill.",
+     "success": {
+      "text": "It drinks until it is round. Then it comes and stands in front of you and bows, the same deep bow it gave the Bulbasaur every morning, and this time it does not walk off into the trees. Ever since that sap, leaves and vines have done it nothing but good.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "heracross"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "sap-sipper",
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq14-heracross-joined",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq14-turned-away",
+   "name": "Turned Away",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "heracross",
+    "tint": "#2a2a10",
+    "effect": "none"
+   },
+   "intro": "The colony has won. The Scyther stands in front of the trunk again, and nobody is getting past it today. The Heracross looks up at the gold running down the bark, once. Then it turns round and trudges back toward the edge of the wood, toward a Bulbasaur that is too polite to say no.",
+   "choices": [
+    {
+     "label": "Walk it back.",
+     "success": {
+      "text": "You walk it back together. The Bulbasaur sees it coming and shuts its eyes, very politely. Maybe some mornings are just like that.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq15-jealous-one",
+   "name": "The Jealous One",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_m"
+    ],
+    "pokemon": "bayleef",
+    "tint": "#20321a",
+    "effect": "none"
+   },
+   "intro": "A clearing, and a young trainer on a stump with his Pokémon around him. Or trying to be. Every time one of them comes near him, a Bayleef charges in and knocks it flying. \"It used to be so sweet,\" he says, rubbing his eyes. \"Then it evolved. Now it thinks it's too big to cuddle, and it's too jealous not to try.\" The Bayleef headbutts his Pikachu clean off his knee. Then it stands there, looking at what it did, and the leaf on its head droops. It looks so guilty it is hard to watch.",
+   "choices": [
+    {
+     "label": "Spend time with just the Bayleef.",
+     "success": {
+      "text": "\"Just it?\" He looks at the others. \"I can't. They need me too.\" He looks at the Bayleef, which is pretending not to listen. \"But you could. It isn't jealous of you. Not yet.\" He hands you its Ball as if it were made of glass. \"A stage, one on one. Then bring it to my ranch. It's on your road.\" The Bayleef watches him the whole way out of the clearing.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "bayleef"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq15-bayleef-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-bayleef-time",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Make them share.",
+     "success": {
+      "text": "\"A battle,\" you tell him. \"Your Bayleef and your Pikachu, side by side, against mine. They win together or not at all.\" He looks doubtful. The Bayleef looks furious. The Pikachu looks resigned.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "bayleef",
+        "pikachu"
+       ],
+       "format": "doubles",
+       "name": "Camper Linden",
+       "classId": "camper",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq-bayleef-share",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq15-tag-team"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq-bayleef-share",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq15-tag-team"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it go to a ranch.",
+     "success": {
+      "text": "He goes very quiet. Then he nods, because he has thought it himself, at night. At his family's ranch the Bayleef has a whole hill to itself and nobody to be jealous of, and it is happy, rolling in the clover, leaf up. He is not. He stands at the fence a long time with his Pikachu on his shoulder. Before you go, he gives you a Chikorita from the ranch's little ones. \"Somebody should get cuddled,\" he says, and does not look at you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "chikorita"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq15-ranch",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq15-tag-team",
+   "name": "Tag Team",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_m"
+    ],
+    "pokemon": "bayleef",
+    "tint": "#20321a",
+    "effect": "none"
+   },
+   "intro": "It was a mess at first. The Bayleef shoved the Pikachu out of the way of an attack and took it full in the face; the Pikachu shocked the Bayleef by accident. Then, somewhere in the middle, the Bayleef lowered its head and let the Pikachu run up its neck and leap from it, and after that they were a team. Win or lose, the trainer comes off the field with the Pikachu on one shoulder and the Bayleef's head on the other, and he is laughing.",
+   "choices": [
+    {
+     "label": "Take the Chikorita he offers.",
+     "success": {
+      "text": "\"From my ranch,\" he says, pressing a Ball into your hands. \"It's the littlest. It reminds me of somebody.\" The Bayleef watches the Chikorita go, and for once it does not mind at all.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "chikorita"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq15-too-close",
+   "name": "Too Close",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq15-bayleef-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "chikorita",
+     "bond": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "bayleef",
+    "tint": "#20321a",
+    "effect": "none"
+   },
+   "intro": "Camp. {lead} comes to sit beside you, the way it always does. The Bayleef is there first, with a shove that sends {lead} rolling into the ferns. Then it freezes, and looks at you, to see how angry you are going to be.",
+   "choices": [
+    {
+     "label": "Make room for both.",
+     "success": {
+      "text": "You shuffle over and pat the ground on both sides. It takes a while. {lead} comes back warily. The Bayleef stiffens, and does not shove. By the time the fire is low, they are both leaning on you, one on each side, pretending not to notice each other.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "chikorita",
+        "amount": 5
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "aq15-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit apart with the Bayleef.",
+     "success": {
+      "text": "You take it a little way off, under a tree, just the two of you. It is so surprised that it forgets to be jealous. It puts its head in your lap, carefully, as if it might be told off for it, and sighs the whole of its breath out.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "chikorita",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq15-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq15-waiting-its-turn",
+   "name": "Waiting Its Turn",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq15-too-close"
+    },
+    {
+     "kind": "partyLine",
+     "species": "chikorita",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "bayleef",
+    "tint": "#20321a",
+    "effect": "none"
+   },
+   "intro": "Feeding time. You go down the line with the bowls. The Bayleef stands at the end of it, shaking with the effort of staying where it is. It does not charge. It does not shove. It waits, and its leaf is trembling.",
+   "choices": [
+    {
+     "label": "Feed it first.",
+     "success": {
+      "text": "You stop, go straight to the end of the line, and put the first bowl down in front of it. It stares at the bowl, then at you. It does not eat straight away. It waits until everyone else has a bowl too.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "chikorita",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq15-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Feed it last, and make a fuss of it.",
+     "success": {
+      "text": "It gets its bowl last, and with it every scratch behind the leaf you have, and a great deal of telling it how good it was. It eats with its eyes half shut, the happiest thing at camp.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "chikorita",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq15-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq15-too-big",
+   "name": "Too Big to Cuddle",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq15-waiting-its-turn"
+    },
+    {
+     "kind": "partyLine",
+     "species": "chikorita",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "bayleef",
+    "tint": "#1a2a16",
+    "effect": "none"
+   },
+   "intro": "Late at night it comes to where you are lying and tries to curl up in your lap, the way it must have done when it was a Chikorita. It does not fit. Not even nearly. It tries anyway, folding its long neck this way and that, and then it stops, and stands there, ashamed of being so big.",
+   "choices": [
+    {
+     "label": "Let it try.",
+     "success": {
+      "text": "You sit up and open your arms, and it climbs in, all of it, too heavy, legs everywhere, and you both fall over. It does not get up. It lies on top of you with its leaf in your face, purring like something much smaller.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "chikorita",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq15-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lie down beside it.",
+     "success": {
+      "text": "You lie down next to it instead, in the grass, close. It is the right size for that. It puts its head on your chest and keeps it there until morning.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "chikorita",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq15-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq15-the-ranch",
+   "name": "Home to the Ranch",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq15-bayleef-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq15-bayleef-met",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "chikorita",
+     "bond": 0
+    },
+    {
+     "kind": "flag",
+     "key": "aq15-home",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_m"
+    ],
+    "pokemon": "bayleef",
+    "tint": "#20321a",
+    "effect": "hearts"
+   },
+   "intro": "The ranch, on your road, as he promised. The trainer is waiting at the gate with his Pikachu on his shoulder. The Bayleef stops. You wait for the charge. It does not come. It walks up to him, slowly, and lowers its head, and lets the Pikachu climb down onto it and sit between its leaves. The trainer makes the sound people make at weddings. \"What did you do?\" Nothing, really. You gave it time, and it watched how your team was treated.",
+   "choices": [
+    {
+     "label": "Take it home.",
+     "success": {
+      "text": "You give him its Ball. He holds it like something that might break, and then he does not need it, because the Bayleef has its head on his shoulder and the Pikachu between its leaves. \"Pick one,\" he says, nodding at the paddock behind him, full of small green leaves bobbing in the grass. \"Any of them. It's the least I can do.\" One Chikorita marches straight up to you and sits on your foot. That settles it.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "Bayleef goes home to its trainer",
+         "species": [
+          "bayleef",
+          "meganium"
+         ]
+        }
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "chikorita"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq15-home",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You walked a jealous Bayleef home, calm, to a trainer who had nearly given up on it.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask him to let it stay with you.",
+     "success": {
+      "text": "He looks at the Bayleef for a long time. It looks back at him, and at the Pikachu, and then at you. \"It chose already,\" he says at last, quietly. \"Didn't it.\" He scratches it under the chin, the way he must have when it was small. \"Go on, then. Visit.\" He does not offer you anything else, and you do not ask.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "chikorita",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq15-home",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq15-bayleef-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A jealous Bayleef learned to share, and chose to stay with you.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq15-the-ranch-early",
+   "name": "Home to the Ranch",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq15-bayleef-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq15-bayleef-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "chikorita",
+     "bond": 0
+    },
+    {
+     "kind": "bondLevel",
+     "atLeast": 1,
+     "who": "starter"
+    },
+    {
+     "kind": "flag",
+     "key": "aq15-home",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_m"
+    ],
+    "pokemon": "bayleef",
+    "tint": "#20321a",
+    "effect": "hearts"
+   },
+   "intro": "It has been watching {starter} all this while: how you talk to it, how it has never once been left behind. It learned faster than anybody thought it could. The ranch is on your road, and the trainer is at the gate with his Pikachu. The Bayleef walks up to him, slowly, lowers its head, and lets the Pikachu climb down and sit between its leaves. \"What did you do?\" he whispers. Nothing, really. You let it see.",
+   "choices": [
+    {
+     "label": "Take it home.",
+     "success": {
+      "text": "You give him its Ball. He holds it like something that might break, and then he does not need it, because the Bayleef has its head on his shoulder and the Pikachu between its leaves. \"Pick one,\" he says, nodding at the paddock behind him, full of small green leaves bobbing in the grass. \"Any of them. It's the least I can do.\" One Chikorita marches straight up to you and sits on your foot. That settles it.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "Bayleef goes home to its trainer",
+         "species": [
+          "bayleef",
+          "meganium"
+         ]
+        }
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "chikorita"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq15-home",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You walked a jealous Bayleef home, calm, to a trainer who had nearly given up on it.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask him to let it stay with you.",
+     "success": {
+      "text": "He looks at the Bayleef for a long time. It looks back at him, and at the Pikachu, and then at you. \"It chose already,\" he says at last, quietly. \"Didn't it.\" He scratches it under the chin, the way he must have when it was small. \"Go on, then. Visit.\" He does not offer you anything else, and you do not ask.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "chikorita",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq15-home",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq15-bayleef-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A jealous Bayleef learned to share, and chose to stay with you.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq17-herds-little-one",
+   "name": "The Herd's Little One",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/breeder_f"
+    ],
+    "pokemon": "phanpy",
+    "tint": "#2a2a1a",
+    "effect": "none"
+   },
+   "intro": "A breeder's camp on a riverbank. A Phanpy sits in the shallows, filling its trunk and letting go, delighted every single time. Half an eggshell is still on the bank. The breeder, Mrs. Petronella Oduya, sits on a crate with her sleeves rolled up. \"It hatched here this morning. The egg came down the river on a raft of reeds; I fished it out. It's never met another Phanpy. It thinks it's whatever I am.\" It sprays her. She lets it. Downriver the ground starts to tremble: a Donphan herd, forty strong, migrating, rolling through the far ford without a glance. The Phanpy has stopped playing. Its ears are right out.",
+   "choices": [
+    {
+     "label": "Let it meet them.",
+     "success": {
+      "text": "It runs at them as fast as its legs go. It is knocked flat by the very first one, by accident. A cow Donphan stops, turns it right way up with her trunk and looks it over, nose to tail, as if checking it for damage. It walks with them as far as the bend. Then it comes back, at a run, covered in dust and enormously pleased with itself, and climbs into your bag. Mrs. Oduya laughs till she has to hold the crate. \"It's met its family. And then it picked you.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "phanpy"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq17-phanpy-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq17-met-herd",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You crouch at the water's edge. It sprays you. You let it. Mrs. Oduya nods, as if you have passed something. \"Yours, then.\" It is happy, so happy, all the way up the bank. Only, when the last of the herd goes round the bend, it stops, and watches the empty ford until the dust has settled.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "phanpy"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq17-phanpy-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq17-kept",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Raise it to lead them.",
+     "success": {
+      "text": "\"Lead them?\" Mrs. Oduya looks at the herd, then at the little thing in the river with its ears out. \"That herd's been going the same wrong way for years. Maybe it needs somebody who doesn't know the way.\" She lifts it out of the water with both hands and gives it to you. \"They come back through a region from now, on their way home. Have it ready.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "phanpy"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq17-phanpy-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq17-raised",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq17-herd-passes",
+   "name": "A Herd Passes",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq17-kept",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq17-kept",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "phanpy",
+     "bond": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "phanpy",
+    "tint": "#2a2a1a",
+    "effect": "shake"
+   },
+   "intro": "The ground trembles under the road. A herd is passing somewhere beyond the trees: Donphan, by the sound of it. Your Phanpy stops dead in the middle of the path. Its ears go right out. It watches the place where the sound is until long after the sound has gone.",
+   "choices": [
+    {
+     "label": "Wait with it.",
+     "success": {
+      "text": "You sit down in the road beside it. It does not look at you. But when the dust has settled it leans on your leg for a moment, heavy and warm, and then it is ready to go on.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "phanpy",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq17-watched",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq17-sideways",
+   "name": "Sideways",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq17-phanpy-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "phanpy",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq17-phanpy-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "phanpy",
+    "tint": "#2a2a1a",
+    "effect": "none"
+   },
+   "intro": "Camp. The Phanpy has seen a Donphan roll, once, and it has decided. It tucks its head, it gathers itself, it launches, and it goes sideways, straight into the tent. The tent comes down. From somewhere inside comes a small, muffled, triumphant toot.",
+   "choices": [
+    {
+     "label": "Dig it out.",
+     "success": {
+      "text": "You find it under the groundsheet, upside down and beaming. It wants to go again. It goes again. The tent comes down again. You put it up four times that night and do not mind once.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "phanpy",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq17-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move the tent somewhere else.",
+     "success": {
+      "text": "You pitch the tent behind a big rock. It rolls into the rock instead, sits there seeing stars, and then tries again, aiming very carefully at the rock.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "phanpy",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq17-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq17-cant-stop",
+   "name": "It Can't Stop",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq17-sideways"
+    },
+    {
+     "kind": "partyLine",
+     "species": "phanpy",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "phanpy",
+    "tint": "#2a2a1a",
+    "effect": "shake"
+   },
+   "intro": "It can roll now. It cannot stop. It comes down the slope toward camp like a grey boulder with ears, faster and faster, and {lead} sees it coming and plants its feet and stands right in the way. It is bowled clean over. The two of them end up in a heap at the bottom, and the Phanpy looks very worried indeed.",
+   "choices": [
+    {
+     "label": "Help them both up.",
+     "success": {
+      "text": "{lead} gets up, shakes itself off, and nudges the Phanpy as if to say: again. The worry on the little face turns to pure adoration. They roll together until dark.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "phanpy",
+        "amount": 5
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "aq17-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Teach it to stop.",
+     "success": {
+      "text": "You show it: ears out, legs out, dig the trunk in. It ploughs a long furrow through the camp and stops one inch from the fire, and looks up at you, very proud, with its trunk full of dirt.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "phanpy",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq17-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq17-spring",
+   "name": "A Pool at Every Camp",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq17-cant-stop"
+    },
+    {
+     "kind": "partyLine",
+     "species": "phanpy",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "phanpy",
+    "tint": "#1e2e2a",
+    "effect": "sparkle"
+   },
+   "intro": "It has found something out. It puts its trunk to the dry ground at camp, and snuffles, and digs, and water comes up: a little spring, cold and clear. It makes a pool. It sits in it. It does the same at the next camp, and the one after. It has never once asked if anybody else would like a bath.",
+   "choices": [
+    {
+     "label": "Get in too.",
+     "success": {
+      "text": "You put your feet in, and then your whole team piles in around you, and the Phanpy sits in the middle of everyone, spraying them all in turn, the happiest it has ever been.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "phanpy",
+        "amount": 5
+       },
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "flag",
+        "key": "aq17-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it have its pool.",
+     "success": {
+      "text": "You leave it the pool and sit on the bank. It looks up at you now and then, to check you are watching. You are. That is all it wanted.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "phanpy",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq17-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq17-lead-them",
+   "name": "Raise It to Lead Them",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq17-raised",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aq17-raised",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "partyLine",
+     "species": "phanpy",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "donphan",
+    "tint": "#3a3020",
+    "effect": "shake"
+   },
+   "intro": "A region later, and the same herd, on its way back. Your Phanpy is a Donphan now, or very nearly. The herd's leader is old and scarred, and for three seasons it has led them the wrong way round a dry riverbed, because that is the way it knows. The herd is thin. Your Donphan walks out in front of it, puts its trunk to the dry bed and digs. Water comes up. The old one looks at the water. It looks at the upstart. Slowly, it lowers its tusks.",
+   "choices": [
+    {
+     "label": "Let it answer.",
+     "success": {
+      "text": "It isn't cruel. It's a question, asked properly, one on one. The herd makes a ring.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "phanpy",
+        "to": "donphan"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Herd's Leader",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq17-leader-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq17-the-water-way"
+        }
+       ],
+       "lineup": [
+        "donphan"
+       ],
+       "spritePokemon": "donphan",
+       "friendly": true,
+       "rule": {
+        "leadType": "ground",
+        "noSwitch": true
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq17-leader-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq17-the-old-ones-trunk"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq17-the-water-way",
+   "name": "The Water Way",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "donphan",
+    "tint": "#3a3020",
+    "effect": "sparkle"
+   },
+   "intro": "The old one bows. It steps to the side, and when the herd moves off it walks at your Donphan's shoulder, not in front. Forty heads turn to your Donphan, waiting. Your Donphan turns, and looks at you.",
+   "choices": [
+    {
+     "label": "Let it lead them.",
+     "success": {
+      "text": "You put your hand on its trunk, the way Mrs. Oduya did on the riverbank. It leans into it for a long moment. Then it walks to the front of the herd, and the old one falls in at its shoulder, and forty Donphan follow the water away down the valley. It looks back only once. It does not need to look back more.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "Donphan leads the herd",
+         "species": [
+          "phanpy",
+          "donphan"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "aq17-leads",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-donphan-herd",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Phanpy who hatched on a raft of reeds found water in a dry riverbed, and led its herd home.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come with me. They'll follow the water now.",
+     "success": {
+      "text": "It looks at the herd, at the old one, at the water running bright in the riverbed. They will follow it now; they know the way. It turns and comes back to you, and the old leader trumpets once, and the whole herd answers. You walk on with the ground still shaking under your feet.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "phanpy",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq17-stays",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-donphan-herd",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Donphan found water for its herd, showed them the way, and came back to you.",
+        "importance": 75
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq17-the-old-ones-trunk",
+   "name": "The Old One's Trunk",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "donphan",
+    "tint": "#3a3020",
+    "effect": "none"
+   },
+   "intro": "Your Donphan goes down. When it gets up, the old leader is standing over it. It puts its trunk on the youngster's head, gently, the way the cow put the little one right way up at the ford, long ago. Then it turns the herd, all forty of them, toward the water your Donphan found. It follows the water anyway. The herd drinks.",
+   "choices": [
+    {
+     "label": "Go to your Donphan.",
+     "success": {
+      "text": "It is sitting in the new water, sore and very wet, watching the herd drink. When you sit down beside it, it sprays you, the way it sprayed Mrs. Oduya on the first morning. You let it.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "phanpy",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-donphan-herd",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Donphan lost to the old leader, but the herd follows the water it found.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq17-at-the-ford",
+   "name": "At the Ford",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq17-leads",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq17-leads",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "donphan",
+    "tint": "#2a2a1a",
+    "effect": "none"
+   },
+   "intro": "A ford, and on the far bank a Donphan herd, drinking. At the front of it stands one you know. It sees you. It lifts its trunk and trumpets, and the whole herd trumpets with it, so loud the water shivers. When they have gone, something is left on the near bank, where you are sure to find it: the tip of a tusk, worn smooth, set on a flat stone.",
+   "choices": [
+    {
+     "label": "Take the tusk.",
+     "success": {
+      "text": "It is warm from the sun. It is heavy. You hold it and look at the far bank for a long time. Then you put it in your bag, carefully, the way it once climbed into your bag, covered in dust.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "donphan-leaders-tusk",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

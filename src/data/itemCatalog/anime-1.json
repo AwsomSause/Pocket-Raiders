@@ -1,0 +1,26 @@
+[
+  {
+    "id": "morelull-glow",
+    "giftOnly": true,
+    "name": "Morelull's Glow",
+    "family": "Questline rewards (anime)",
+    "description": "The spore doctor's Morelull glows when something is wrong. Every hidden \"?\" stop shows what it is",
+    "rarity": "rare",
+    "stacksOn": "player",
+    "max": 1,
+    "how": "passive",
+    "icon": "balmmushroom",
+    "status": "supported",
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "run"
+      },
+      "perks": [
+        {
+          "perk": "revealEvents"
+        }
+      ]
+    }
+  }
+]

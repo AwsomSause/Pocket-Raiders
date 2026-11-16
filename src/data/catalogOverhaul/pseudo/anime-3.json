@@ -1,0 +1,7 @@
+{
+ "category": "anime",
+ "note": "Door chains of tools/events/co/anime-3.ts (entry = the questline first event; rooms linked with addEvent).",
+ "chains": [
+  { "id": "ps_an23_descent", "name": "The Descent", "entry": "an23-the-descent", "themeId": "poison-ground", "tint": "#16120e", "mood": "deep dark", "start": "opened" }
+ ]
+}

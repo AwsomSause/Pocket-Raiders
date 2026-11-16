@@ -1,0 +1,1693 @@
+{
+ "an01-bathhouse": {
+  "shape": "Door",
+  "earliest": "A4",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "tags": [
+   "water"
+  ],
+  "beats": [
+   "an01-apron",
+   "an01-bridge-gone",
+   "an01-the-food",
+   "an01-tub",
+   "an01-tea",
+   "an01-lost-name",
+   "an01-dawn"
+  ],
+  "note": "The header reads Dusk. Door: chain pseudo-stage ps_an01_bathhouse (src/data/catalogOverhaul/pseudo/anime-1.json); the three entry choices open the three first rooms, which all lead to the three shifts and dawn."
+ },
+ "an02-spore-doctor": {
+  "shape": "Stage-Three",
+  "earliest": "A3",
+  "home": 6,
+  "tags": [
+   "forest"
+  ],
+  "beats": [
+   "an02-far-road",
+   "an02-last-road"
+  ],
+  "note": "Steps 6, 12, 17. \"Move it.\" adds the cave three nodes on; the far road comes five nodes after the village either way."
+ },
+ "an03-book-of-names": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "home": "each region's Stage 3",
+  "tags": [
+   "eerie"
+  ],
+  "beats": [
+   "an03-second-name",
+   "an03-third-name",
+   "an03-fourth-name",
+   "an03-everyone"
+  ],
+  "note": "A + node at Night. One spirit per region after the Shuppet (flagAt / flagAgo); Spiritomb comes on a later stage once three names are back."
+ },
+ "an04-witchs-courier": {
+  "shape": "Region",
+  "earliest": "A2",
+  "home": "stages 2, 5, 8",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "beats": [
+   "an04-the-tower",
+   "an04-the-storm"
+  ],
+  "note": "Stages 2, 5, 8, at the Town node. The three deliveries are rooms one node apart after the meeting."
+ },
+ "an05-walking-house": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 10,
+  "window": [
+   7,
+   13
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "beats": [
+   "an05-aboard"
+  ],
+  "note": "Single: two nodes. It walks across the node, before the battle; it is seen on the horizon from Step 5. Node 2 (aboard) is the same node after Ride (the house has walked) or the next node after the dial."
+ },
+ "an06-long-lived-traveller": {
+  "shape": "Region",
+  "earliest": "A6",
+  "home": 10,
+  "beats": [
+   "an06-second-thing",
+   "an06-third-thing",
+   "an06-fourth-thing"
+  ],
+  "note": "Four meetings on a region's Stages 2, 4, 6, 8, at Step 10. The first of the route's four places is a room one node after the grave; the dog's grave is a room after the fourth."
+ },
+ "an07-letter-writer": {
+  "shape": "Stage-Three",
+  "earliest": "A3",
+  "home": "town",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "beats": [
+   "an07-replies",
+   "an07-her-own"
+  ],
+  "note": "The town; then steps 12 and 17 (five nodes apart). Your letter and her three clients are rooms off the desk, in any order, in the town."
+ },
+ "an08-soul-in-armour": {
+  "shape": "Region",
+  "earliest": "A6",
+  "home": "stages 2, 5, 8",
+  "beats": [
+   "an08-second-fake",
+   "an08-third-fake"
+  ],
+  "note": "Stage 2: the meeting, and the first rumour three nodes on. Stage 5: the second rumour. Stage 8: the third rumour, then the real stone."
+ },
+ "an09-rusted-anchor": {
+  "shape": "Stage-Three",
+  "earliest": "A4",
+  "home": 6,
+  "window": [
+   4,
+   8
+  ],
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "level": "A+1",
+  "beats": [
+   "an09-three-islands",
+   "an09-the-storm"
+  ],
+  "note": "Steps 6, 12, 17. The islands fight is A+0, the storm A+1."
+ },
+ "an10-formation": {
+  "shape": "Tournament",
+  "earliest": "A3",
+  "home": 12,
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "fighting"
+  ],
+  "note": "The Town node; else Step 12. Fighting stages. The drills, the match and the little one's turn are rooms in the same node."
+ },
+ "an11-camp-at-the-lake": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": "a + node",
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "water"
+  ]
+ },
+ "an12-paper-city": {
+  "shape": "Door",
+  "earliest": "A5",
+  "home": 13,
+  "window": [
+   11,
+   15
+  ],
+  "sits": "optional",
+  "tags": [
+   "city"
+  ],
+  "note": "Door: the rooms are the chain pseudo-stage ps_an12_paper_city (src/data/catalogOverhaul/pseudo/anime-2.json). \"Find the folder\" is two rooms (the doc's two nodes)."
+ },
+ "an13-ice-library": {
+  "shape": "Door",
+  "earliest": "A5",
+  "home": 13,
+  "window": [
+   11,
+   15
+  ],
+  "sits": "optional",
+  "tags": [
+   "snow"
+  ],
+  "note": "Door: the rooms are the chain pseudo-stage ps_an13_ice_library (src/data/catalogOverhaul/pseudo/anime-2.json)."
+ },
+ "an14-thousand-lanterns": {
+  "shape": "Stage-Three",
+  "earliest": "A4",
+  "home": 6,
+  "window": [
+   4,
+   8
+  ],
+  "sits": "optional",
+  "tags": [
+   "night"
+  ],
+  "beats": [
+   "an14-the-guardian",
+   "an14-lantern-night"
+  ],
+  "note": "Steps 6, 12, 17. Night; the header reads Festival. \"Come down.\" walks three nodes of rooftops (rooms one node apart) before the second beat."
+ },
+ "an15-mushroom-queen": {
+  "shape": "Door",
+  "earliest": "A4",
+  "home": 12,
+  "window": [
+   10,
+   14
+  ],
+  "sits": "optional",
+  "tags": [
+   "cave",
+   "forest"
+  ],
+  "note": "Door: the rooms are the chain pseudo-stage ps_an15_mushroom_queen (src/data/catalogOverhaul/pseudo/anime-2.json). The deep-floor fight is A+0."
+ },
+ "an16-ember-pilgrim": {
+  "shape": "Region",
+  "earliest": "A4",
+  "home": "Stages 2, 5, 8",
+  "sits": "optional",
+  "tags": [
+   "hot"
+  ],
+  "beats": [
+   "an16-halfway",
+   "an16-regions-end"
+  ],
+  "note": "The meeting at a region's Stage 2; the pilgrim again three stages on (Stage 5); the region's end three more on (Stage 8). One lantern check on each stage between (an16-wind, an16-rain, an16-cold-night, an16-crossing); an16-cold-lantern the stage after it goes out; an16-slower (Stage 5) if the player said no."
+ },
+ "an17-hundred-year-egg": {
+  "shape": "Companion",
+  "earliest": "A2",
+  "home": "The Town node: a village shrine",
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [],
+  "beats": [
+   "an17-in-the-bag",
+   "an17-the-hatching",
+   "an17-first-steps",
+   "an17-the-cushion"
+  ],
+  "note": "Companion (an egg). \"Leave it be.\" comes back a stage later (an17-nearest-the-door). The hatching is the turning point, two stages after the egg is taken (Step 13, must-see). After it, small scenes come as Togepi's Bond rises."
+ },
+ "an18-friend-you-didnt-make": {
+  "shape": "Trial",
+  "earliest": "A3",
+  "home": "S, S+1, S+2",
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [],
+  "beats": [
+   "an18-second-morning",
+   "an18-third-morning"
+  ],
+  "note": "Hidden. A chest at the edge of the + node (rest), three stages running."
+ },
+ "an19-body-swap": {
+  "shape": "Stage-Three",
+  "earliest": "A5",
+  "home": 6,
+  "window": [
+   4,
+   8
+  ],
+  "sits": "optional",
+  "tags": [
+   "eerie"
+  ],
+  "beats": [
+   "an19-second-morning-met",
+   "an19-second-morning-notes",
+   "an19-swap-back",
+   "an19-swap-back-notes",
+   "an19-crater-at-dusk"
+  ],
+  "note": "Steps 6 (the swap), 12 and 17 (the swap back). Steps 12 and 17 are one of two rooms each, by the first choice. \"Meet them\" adds the crater meeting one region on, at Dusk."
+ },
+ "an20-quiet-psychic": {
+  "shape": "Stage-Three",
+  "earliest": "A4",
+  "home": "town",
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "beats": [
+   "an20-tryout",
+   "an20-his-mother"
+  ],
+  "note": "The town (a cafe); then Steps 12 and 17. \"Show me\" opens the evil-team scene in the same node."
+ },
+ "an21-bounty-crew": {
+  "shape": "Stage-Three",
+  "earliest": "A6",
+  "home": 6,
+  "window": [
+   4,
+   8
+  ],
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "beats": [
+   "an21-the-chase",
+   "an21-dinner",
+   "an21-the-catch",
+   "an21-payday",
+   "an21-by-accident"
+  ],
+  "note": "Steps 6, 12 (three nodes of chase: 12, 13, 14) and 17 (payday). \"No\" instead gives one scene a stage later."
+ },
+ "an22-forest-god": {
+  "shape": "Stage-Three",
+  "earliest": "A8",
+  "home": 6,
+  "window": [
+   4,
+   8
+  ],
+  "sits": "optional",
+  "tags": [
+   "forest"
+  ],
+  "beats": [
+   "an22-cold-town",
+   "an22-dead-wood",
+   "an22-the-god",
+   "an22-the-border"
+  ],
+  "note": "A heavy decision. Steps 6, 12 (one of three rooms, by the first choice) and 17 (the border)."
+ },
+ "an23-the-descent": {
+  "shape": "Door",
+  "earliest": "A9",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "optional",
+  "tags": [
+   "cave"
+  ],
+  "beats": [
+   "an23-the-letter",
+   "an23-at-night",
+   "an23-floor-1",
+   "an23-floor-2",
+   "an23-floor-3",
+   "an23-the-bottom",
+   "an23-climb-4",
+   "an23-climb-3",
+   "an23-climb-2",
+   "an23-climb-1",
+   "an23-daylight"
+  ],
+  "note": "Chain pseudo-stage ps_an23_descent (src/data/catalogOverhaul/pseudo/anime-3.json): four floors down (no cost), four climbs up (15% HP each, half with a Ground- or Poison-type at Bond 3), then daylight."
+ },
+ "an24-sword-of-the-insect": {
+  "shape": "Stage-Three",
+  "earliest": "A5",
+  "home": 6,
+  "window": [
+   4,
+   8
+  ],
+  "sits": "optional",
+  "tags": [
+   "bug"
+  ],
+  "beats": [
+   "an24-not-knowing",
+   "an24-who-she-is",
+   "an24-second-night",
+   "an24-third-night",
+   "an24-dawn"
+  ],
+  "note": "Bug stages; Night. Three nights: Steps 6, 12 and 17. The scientist fight is at Step 17."
+ },
+ "an25-fake-family": {
+  "shape": "Stage-Three",
+  "earliest": "A5",
+  "home": "town",
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "beats": [
+   "an25-interview",
+   "an25-interview-mama",
+   "an25-interview-daughter",
+   "an25-what-papa-found"
+  ],
+  "note": "The town (a school entrance); then Step 12 (the interview, three rooms in one node) and Step 17."
+ },
+ "an26-the-stand": {
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 13,
+  "window": [
+   10,
+   16
+  ],
+  "sits": "optional",
+  "tags": [
+   "eerie"
+  ],
+  "level": "A+1"
+ },
+ "an27-magical-bakery": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "town",
+  "window": [
+   4,
+   10
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "city",
+   "fairy"
+  ],
+  "note": "The town; else Step 7 (window 4-10). City and Fairy stages."
+ },
+ "an28-three-day-visas": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "home": "Each region's Stage 4; Steps 9, 10, 11",
+  "sits": "optional",
+  "attaches": "instead",
+  "beats": [
+   "an28-votes-day-two",
+   "an28-votes-day-three",
+   "an28-the-vote",
+   "an28-quiet-day-one",
+   "an28-quiet-day-two",
+   "an28-quiet-day-three",
+   "an28-forget-day-one",
+   "an28-forget-day-two",
+   "an28-forget-day-three",
+   "an28-the-gate",
+   "an28-ride-1",
+   "an28-ride-2",
+   "an28-ride-3",
+   "an28-ride-4",
+   "an28-ride-5",
+   "an28-ride-6"
+  ],
+  "note": "One town per region over three regions; in each, Day one, Day two, Day three are Steps 9, 10, 11 of the region's Stage 4, instead of the node battle. Tags: any. The ride callbacks (an28-ride-N) come once in each later region."
+ },
+ "an29-spirit-bus-stop": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "a + node",
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "forest"
+  ],
+  "beats": [
+   "an29-letter"
+  ],
+  "note": "In Rain, at dusk. The father's letter (afterstory) comes a stage later."
+ },
+ "an30-rock-band": {
+  "shape": "Stage-Three",
+  "earliest": "A3",
+  "home": "The town; 12; 17 (the gig)",
+  "sits": "optional",
+  "tags": [
+   "city"
+  ],
+  "beats": [
+   "an30-rehearsal",
+   "an30-curtain-rehearsal",
+   "an30-the-gig",
+   "an30-the-gig-curtain"
+  ],
+  "note": "Steps: the town, 12, 17. The rehearsal and the gig follow the meeting's choice: on stage (or coached) or behind the curtain."
+ },
+ "an31-cards-in-the-book": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "home": "One Hidden node per stage, Steps 5-15",
+  "sits": "optional",
+  "beats": [
+   "an31-the-book-read",
+   "an31-loose-letter",
+   "an31-the-word",
+   "an31-the-word-spelled"
+  ],
+  "note": "Run-Long: one card per stage. Tags: any. The loose letter comes back every stage (again) until all 28 are caught; it belongs on a Hidden node, Steps 5-15."
+ },
+ "an32-starting-from-stone": {
+  "shape": "Region",
+  "earliest": "A6",
+  "home": "Stages 2, 5, 8",
+  "sits": "optional",
+  "tags": [
+   "cave"
+  ],
+  "beats": [
+   "an32-salt-cave",
+   "an32-the-coal",
+   "an32-the-glow",
+   "an32-the-glow-again",
+   "an32-the-cure",
+   "an32-the-cure-again"
+  ],
+  "note": "Stage 2: the town of statues and the salt (same node). Stage 5: the coal. Stage 8: the glow and the cure. The glow and cure come in two forms: the Rolycoly asked, or mined."
+ },
+ "an33-fish-legs": {
+  "shape": "Stage-Three",
+  "earliest": "A3",
+  "home": 6,
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "beats": [
+   "an33-empty-bucket",
+   "an33-high-water",
+   "an33-the-leader",
+   "an33-a-bigger-bucket"
+  ],
+  "note": "Steps 6, 12, 17. The middle beat follows the first choice: the empty bucket (back), the high water (stay) or the school's leader (ask)."
+ },
+ "an34-the-walls": {
+  "shape": "Stage-Three",
+  "earliest": "A9",
+  "home": "The town; then 12 and 17",
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "city",
+   "cave"
+  ],
+  "beats": [
+   "an34-midnight",
+   "an34-the-truth",
+   "an34-a-reason",
+   "an34-last-stone"
+  ],
+  "note": "At the Town node: one stone has moved each morning. The middle beat follows the first choice (watch, outside, ask); the last beat is the same for all."
+ },
+ "an35-cook-of-the-dungeon": {
+  "shape": "Door",
+  "earliest": "A3",
+  "home": "The second node of a Door",
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "cave"
+  ],
+  "beats": [
+   "an35-dungeon-stair",
+   "an35-flooded-camp",
+   "an35-flooded-floor",
+   "an35-the-stew",
+   "an35-far-shore",
+   "an35-the-ride"
+  ],
+  "note": "The doc places it inside any Pseudo Stage as its rest node (the second node of a Door, at a + node); built as its own Door chain ps_an35_dungeon whose second room is the camp. Asking Dondozo skips the flooded floor (one room fewer)."
+ },
+ "an36-prince-and-shadow": {
+  "shape": "Stage-Three",
+  "earliest": "A5",
+  "home": 6,
+  "sits": "optional",
+  "tags": [
+   "eerie"
+  ],
+  "beats": [
+   "an36-first-fight",
+   "an36-kitchens"
+  ],
+  "note": "Steps 6, 12, 17."
+ },
+ "aq01-wouldnt-go-in-its-ball": {
+  "shape": "Companion",
+  "earliest": "A1",
+  "home": "The town of a region's Stage 1: a professor's lab. Else 3",
+  "window": [
+   2,
+   6
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "beats": [
+   "aq01-spearow",
+   "aq01-pika-center",
+   "aq01-pika-rain",
+   "aq01-pika-ball",
+   "ash-training",
+   "aq01-shoulder-1",
+   "aq01-shoulder-2",
+   "aq01-shoulder-3"
+  ],
+  "note": "The doc's escalation (the Spearow at the lab window) is in the meeting's node, where the Pikachu chooses the player. The doc scripts no small scenes, so three are written from the Companion rule. The turning point, two stages on, is Ash arriving late (catalog id ash-training). The afterstory is one scene in each of the next three regions."
+ },
+ "aq02-butterfree-migration": {
+  "shape": "Companion",
+  "earliest": "A2",
+  "home": 16,
+  "window": [
+   14,
+   18
+  ],
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "beats": [
+   "aq02-pink-butterfree",
+   "aq02-sunset",
+   "aq02-caterpie"
+  ],
+  "note": "Farewell. The header reads Dusk: a beach. The Butterfree is the kid's and the doc gives the player no Pokémon, so the meeting and its escalation (same node) are the whole Companion story; the Caterpie scene is the doc's next-region Remembers."
+ },
+ "aq03-flock-leaders-promise": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 6,
+  "sits": "optional",
+  "tags": [
+   "forest"
+  ],
+  "level": "A+1",
+  "beats": [
+   "aq03-refused",
+   "aq03-night-two",
+   "aq03-night-three",
+   "aq03-dawn",
+   "aq03-pidgey-night-two",
+   "aq03-pidgey-night-three",
+   "aq03-asks",
+   "aq03-visit"
+  ],
+  "note": "At Night: three nights, steps 6, 12, 17. The raids are A+0, the Fearow leader A+1. In Kanto it is Pidgeotto's Farewell's longer form: the Farewell (cs-kanto-route-pidgeotto, Kanto canon) is AQ3's Stage 5 beat, and AQ3 remembers it."
+ },
+ "aq04-keeper-of-the-hidden-village": {
+  "shape": "Companion",
+  "earliest": "A2",
+  "home": 8,
+  "window": [
+   5,
+   11
+  ],
+  "sits": "optional",
+  "tags": [
+   "forest"
+  ],
+  "level": "A+1",
+  "beats": [
+   "aq04-after-battle",
+   "aq04-fetch",
+   "aq04-mend",
+   "aq04-sit",
+   "aq04-village-goodbye",
+   "aq04-on-watch",
+   "aq04-patient",
+   "aq04-trusted",
+   "aq04-poachers",
+   "aq04-poachers-village",
+   "aq04-village-safe"
+  ],
+  "note": "It is the Hidden Village's guard (gn.06) where that is in the run. The meeting and the three tasks share a node. The doc scripts no small scenes, so three are written from the Companion rule. The escalation (poachers) is the turning point, two stages on: with the Bulbasaur in the party, or, if it stayed in the village, as a call back for everyone who helped. Poachers A+1."
+ },
+ "aq05-charmander-in-the-rain": {
+  "shape": "Companion",
+  "earliest": "A2",
+  "home": 7,
+  "window": [
+   5,
+   10
+  ],
+  "sits": "optional",
+  "level": "A+1",
+  "beats": [
+   "aq05-tail-flame",
+   "aq05-after-a-loss",
+   "aq05-too-weak",
+   "aq05-act-two",
+   "aq05-earned",
+   "aq05-valley",
+   "aq05-comes-back",
+   "aq05-uninvited"
+  ],
+  "note": "Rain. Three acts: Act 1 is the meeting; Act 2 is one region later (the doc's \"next region\"), while the Charmander line is in the party; Act 3 (the valley) follows in Act 2's node. The doc scripts no small scenes, so three are written from the Companion rule. The three hard battles are A+1."
+ },
+ "aq06-firefighters": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 13,
+  "window": [
+   10,
+   16
+  ],
+  "sits": "optional",
+  "tags": [
+   "forest",
+   "hot"
+  ],
+  "beats": [
+   "aq06-fire-1",
+   "aq06-fire-2",
+   "aq06-fire-3",
+   "aq06-offended",
+   "aq06-shades"
+  ],
+  "note": "Needs the Squirtle Squad (gn.08): where the Squad's event is in the run, this is the same squad, reformed (it is not hidden without it). \"Help them.\" spends the next three nodes on fires."
+ },
+ "aq07-krabby-at-the-lab": {
+  "shape": "Companion",
+  "earliest": "A2",
+  "home": 6,
+  "window": [
+   4,
+   9
+  ],
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "level": "A+1",
+  "beats": [
+   "aq07-respect",
+   "aq07-footage",
+   "aq07-he-comes"
+  ],
+  "note": "Reunion. The Kingler is its trainer's and the player never takes it in, so the meeting is the Companion story; its trainer arrives one stage on (after \"Wait for its trainer.\", or after a lost battle's footage). The Kingler fight is A+1."
+ },
+ "aq09-muk-that-hugs": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": "a + node",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Single: two nodes. It is outside the Pokémon Center; \"Find it someone.\" takes the next two nodes."
+ },
+ "aq10-thirty-tauros": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 11,
+  "window": [
+   8,
+   14
+  ],
+  "sits": "optional",
+  "tags": [
+   "normal"
+  ],
+  "note": "Normal-type stages. A ranch."
+ },
+ "aq11-baby-lapras": {
+  "shape": "Companion",
+  "earliest": "A4",
+  "home": 10,
+  "window": [
+   7,
+   13
+  ],
+  "sits": "optional",
+  "tags": [
+   "water",
+   "snow"
+  ],
+  "beats": [
+   "aq11-first-island",
+   "aq11-second-island",
+   "aq11-third-night",
+   "aq11-the-pod",
+   "aq11-lapras-surfaces"
+  ],
+  "note": "A beach. The three islands are the small scenes; the third island (its pod, and poachers) is the turning point two stages on, on a water stage."
+ },
+ "aq12-snorlax-and-the-melons": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 8,
+  "window": [
+   5,
+   11
+  ],
+  "sits": "optional",
+  "tags": [
+   "forest"
+  ],
+  "beats": [
+   "aq12-festival"
+  ],
+  "note": "A melon town. The festival in its honour is a follow-up one stage after \"Wake it with music.\""
+ },
+ "aq13-ghost-who-made-her-laugh": {
+  "shape": "Companion",
+  "earliest": "A4",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "eerie"
+  ],
+  "beats": [
+   "aq13-pratfall",
+   "aq13-vanishing",
+   "aq13-tickle",
+   "aq13-the-laugh"
+  ],
+  "note": "The town: a silent Gym, off duty; else Step 12. In Kanto, Haunter's Prank (cs-kanto-lavender-tower-prank) is the meeting: aq13-tower-haunter follows it to the Gym. The turning point (the laugh) is two stages on."
+ },
+ "aq14-sap-thief": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 7,
+  "window": [
+   4,
+   10
+  ],
+  "sits": "optional",
+  "tags": [
+   "forest"
+  ],
+  "note": "Single: three small scenes. \"Find it a sap tree.\" takes the next three nodes."
+ },
+ "aq15-jealous-one": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "home": 8,
+  "window": [
+   5,
+   11
+  ],
+  "sits": "optional",
+  "tags": [
+   "forest"
+  ],
+  "beats": [
+   "aq15-too-close",
+   "aq15-waiting-its-turn",
+   "aq15-too-big",
+   "aq15-the-ranch",
+   "aq15-the-ranch-early"
+  ],
+  "note": "The turning point (the trainer's ranch) is two stages on; one stage on (aq15-the-ranch-early) when your starter is in the party."
+ },
+ "aq16-shiny-owl": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "home": 11,
+  "window": [
+   8,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "tags": [
+   "forest"
+  ],
+  "level": "A+1",
+  "beats": [
+   "aq16-owl-watch",
+   "aq16-owl-hat",
+   "aq16-owl-sun",
+   "aq16-owl-lamps"
+  ],
+  "note": "Night. Hunters A+0, the turning point A+1, two stages on at Step 13."
+ },
+ "aq17-herds-little-one": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "home": "a + node",
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "level": "A+2",
+  "beats": [
+   "aq17-sideways",
+   "aq17-cant-stop",
+   "aq17-spring",
+   "aq17-herd-passes",
+   "aq17-lead-them",
+   "aq17-at-the-ford"
+  ],
+  "note": "A breeder's camp on a water stage. The turning point (\"Raise it to lead them\") is a region later, at Stage 5, Step 13; the herd's leader is A+2, one on one."
+ },
+ "aq18-carried-home": {
+  "shape": "Companion",
+  "earliest": "A5",
+  "home": "a + node",
+  "sits": "optional",
+  "tags": [
+   "cave",
+   "high"
+  ],
+  "beats": [
+   "aq18-climb-1",
+   "aq18-climb-2",
+   "aq18-climb-3",
+   "aq18-the-top",
+   "aq18-tyranitar-comes"
+  ],
+  "note": "An egg at a + node. The turning point is a door: the climb, one scene on each of the next four nodes. The Tyranitar comes once, a region or more later."
+ },
+ "aq19-lost-its-power": {
+  "shape": "Companion",
+  "earliest": "A4",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "tags": [
+   "forest"
+  ],
+  "level": "A+1",
+  "beats": [
+   "aq19-the-walk",
+   "aq19-twig-back",
+   "aq19-still-looks",
+   "aq19-sapling",
+   "aq19-treecko-twig",
+   "aq19-treecko-rock",
+   "aq19-grovyle-leaf"
+  ],
+  "note": "It starts with somebody else's Sceptile. The meadow fight is A+1. \"Let it be\" comes back on a later stage of the same region."
+ },
+ "aq20-proud-crab": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 6,
+  "window": [
+   4,
+   9
+  ],
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "beats": [
+   "aq20-drill-footwork",
+   "aq20-drill-brace",
+   "aq20-drill-crabhammer",
+   "aq20-crab-gloats",
+   "aq20-crab-asks"
+  ],
+  "note": "Laughed and lost: it gloats two nodes on and asks to come on the next stage."
+ },
+ "aq21-ice-wouldnt-break": {
+  "shape": "Companion",
+  "earliest": "A4",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "tags": [
+   "snow"
+  ],
+  "beats": [
+   "aq21-drill-head",
+   "aq21-drill-post",
+   "aq21-drill-spar",
+   "aq21-proud"
+  ],
+  "note": "The short script has the meeting only: no small scenes or turning point are written, so none are built."
+ },
+ "aq22-aipom-contests": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "home": 7,
+  "window": [
+   4,
+   10
+  ],
+  "sits": "optional",
+  "tags": [
+   "forest"
+  ],
+  "beats": [
+   "aq22-ribbon"
+  ],
+  "note": "Companion story, trade: the Aipom comes to you through an honest trade. The short script has no small scenes or turning point."
+ },
+ "aq23-abandoned-chimchar": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "home": 8,
+  "window": [
+   5,
+   11
+  ],
+  "sits": "optional",
+  "beats": [
+   "aq23-blaze",
+   "aq23-finale",
+   "aq23-after",
+   "aq23-controlled",
+   "aq23-seen-happy"
+  ],
+  "note": "Tags: any. Companion story, rival: the finale (Paul, two stages after the meeting) uses the rival slot (RIVALS_PLACED.md): one rival beat per stage, steps 3-18. The Blaze scene is a stage after the meeting."
+ },
+ "aq24-gible-couldnt-aim": {
+  "shape": "Stage-Three",
+  "earliest": "A4",
+  "home": 6,
+  "sits": "optional",
+  "tags": [
+   "cave"
+  ],
+  "level": "A+0",
+  "beats": [
+   "aq24-the-pond",
+   "aq24-the-road",
+   "aq24-saw-it"
+  ],
+  "note": "Steps 6, 12, 17: it misses three times. The step-17 fight is A+0."
+ },
+ "aq25-gliscor-stayed": {
+  "shape": "Companion",
+  "earliest": "A5",
+  "home": 10,
+  "window": [
+   7,
+   13
+  ],
+  "sits": "optional",
+  "tags": [
+   "high"
+  ],
+  "beats": [
+   "aq25-wont-look",
+   "aq25-three-metres",
+   "aq25-the-wind",
+   "aq25-over-the-tent",
+   "aq25-a-reason",
+   "aq25-stay-to-train"
+  ],
+  "note": "Farewell story. Turning point two stages on (Step 13), farewell four stages on (Step 17); the player always chooses."
+ },
+ "aq26-scalchop": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "water"
+  ],
+  "level": "A-1",
+  "beats": [
+   "aq26-river-shell",
+   "aq26-river-cap",
+   "aq26-river-basculin"
+  ],
+  "note": "Met at a + node if one is near (a Pokémon Center). \"Search the river\" takes the next three nodes on the path, one scene each. The Basculin is A-1."
+ },
+ "aq27-snivy-left": {
+  "shape": "Companion",
+  "earliest": "A2",
+  "home": 6,
+  "window": [
+   4,
+   9
+  ],
+  "sits": "optional",
+  "tags": [
+   "forest"
+  ],
+  "level": "A+1",
+  "beats": [
+   "aq27-above-everyone",
+   "aq27-an-understanding",
+   "aq27-one-branch-lower",
+   "aq27-the-book",
+   "aq27-it-decides",
+   "aq27-badly"
+  ],
+  "note": "Its test is A+1, one on one. Turning point two stages on (Step 13): the old trainer, A+0."
+ },
+ "aq28-tepig-waited": {
+  "shape": "Companion",
+  "earliest": "A2",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ],
+  "sits": "optional",
+  "beats": [
+   "aq28-too-fast",
+   "aq28-another-post",
+   "aq28-sneeze",
+   "aq28-in-front-of-him",
+   "aq28-walk-away"
+  ],
+  "note": "Any stage. It is tied to a post. Turning point two stages on (Step 13): its old trainer's new Pokémon."
+ },
+ "aq29-seamstress": {
+  "shape": "Companion",
+  "earliest": "A2",
+  "home": 7,
+  "window": [
+   4,
+   10
+  ],
+  "sits": "optional",
+  "tags": [
+   "forest"
+  ],
+  "beats": [
+   "aq29-sewaddle-asks",
+   "aq29-a-patch",
+   "aq29-measuring",
+   "aq29-cold-night",
+   "aq29-a-coat"
+  ],
+  "note": "The companion is the Leavanny's Sewaddle, met two nodes on after \"Help it sew.\" Turning point two stages after it joins."
+ },
+ "aq30-sunglasses": {
+  "shape": "Stage-Three",
+  "earliest": "A3",
+  "home": 6,
+  "sits": "optional",
+  "tags": [
+   "hot"
+  ],
+  "beats": [
+   "aq30-again",
+   "aq30-last-stand",
+   "aq30-fourth"
+  ],
+  "note": "Steps 6, 12, 17: it follows. Its fights are A+0; the fourth, as a Krokorok, A+1."
+ },
+ "aq31-bond-phenomenon": {
+  "shape": "Companion",
+  "earliest": "A6",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "beats": [
+   "aq31-after-the-bout",
+   "aq31-froakie-follows",
+   "aq31-froakie-test",
+   "aq31-as-one",
+   "aq31-the-roots"
+  ],
+  "note": "Farewell. \"Ask\" ends its test a stage later; \"Ignore\" has it turn up two nodes on. The Bond Phenomenon plays once its Bond reaches maximum with a Greninja in the party; the roots farewell four stages after the meeting, Step 17."
+ },
+ "aq32-bird-learned-fire": {
+  "shape": "Companion",
+  "earliest": "A2",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ],
+  "sits": "optional",
+  "tags": [
+   "hot"
+  ],
+  "beats": [
+   "aq32-lights-the-fire",
+   "aq32-no-brakes",
+   "aq32-in-the-rain",
+   "aq32-the-ledge"
+  ],
+  "note": "Small scenes at rests as its Bond rises. Turning point two stages on, Step 13."
+ },
+ "aq33-luchador": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "high",
+   "forest"
+  ],
+  "beats": [
+   "aq33-luchador-again",
+   "aq33-after-the-match"
+  ]
+ },
+ "aq34-goomy-went-home": {
+  "shape": "Companion",
+  "earliest": "A5",
+  "home": 10,
+  "window": [
+   7,
+   13
+  ],
+  "sits": "optional",
+  "tags": [
+   "hot"
+  ],
+  "beats": [
+   "aq34-on-the-way",
+   "aq34-the-wetland",
+   "aq34-the-protector"
+  ],
+  "note": "Farewell. Met in a desert; its home is a water node four nodes on (the way there opens 2 nodes on, the wetland 2 more)."
+ },
+ "aq35-egg-in-the-cave": {
+  "shape": "Companion",
+  "earliest": "A4",
+  "home": 11,
+  "window": [
+   8,
+   14
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "cave"
+  ],
+  "beats": [
+   "aq35-it-attacks",
+   "aq35-second-chance",
+   "aq35-after-food",
+   "aq35-after-doctor",
+   "aq35-hatching"
+  ],
+  "note": "The doctor costs two nodes."
+ },
+ "aq36-sleeps-in-the-bag": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 4,
+  "window": [
+   2,
+   7
+  ],
+  "sits": "optional",
+  "tags": [
+   "forest"
+  ],
+  "beats": [
+   "aq36-back-in-the-bag"
+  ],
+  "note": "Then it is simply in the bag."
+ },
+ "aq37-old-guardian": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "home": "the town; else 8",
+  "window": [
+   5,
+   11
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "beats": [
+   "aq37-waiting",
+   "aq37-ready"
+  ],
+  "note": "The town; else 8 (5-11). The escalation a stage after the meeting; the Litten comes when it is ready, a stage after that. Its finished path sets aq37-guardian-done (read by AQ10)."
+ },
+ "aq38-dusk-wolf": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "home": 16,
+  "window": [
+   14,
+   18
+  ],
+  "sits": "optional",
+  "tags": [
+   "cave",
+   "high"
+  ],
+  "beats": [
+   "aq38-the-sunset",
+   "aq38-sunset-hill",
+   "aq38-wolf-greeting",
+   "aq38-wolf-evenings",
+   "aq38-wolf-colour",
+   "aq38-wolf-evening",
+   "aq38-wolf-evening-day",
+   "aq38-wolf-evening-night",
+   "aq38-letter",
+   "aq38-letter-again"
+  ],
+  "note": "The header reads Dusk. Turning point: the sunset, at a + node at Dusk (evening) on any later stage, unless it was watched at the meeting. Small scenes at rests. One letter scene in each of the next two regions."
+ },
+ "aq39-nut-who-ate-everything": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "a + node",
+  "sits": "optional",
+  "tags": [
+   "city"
+  ],
+  "note": "The first scene of MY20 The Hinge-Eater (the legends thread builds MY20 and MY21). Needs: the Bicycle for the bike version; otherwise it is the bag's buckles."
+ },
+ "aq40-aura-egg": {
+  "shape": "Companion",
+  "earliest": "A5",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "tags": [],
+  "level": "A+1",
+  "beats": [
+   "aq40-hatch-fear",
+   "aq40-hatch-helped",
+   "aq40-cart-again",
+   "aq40-after-a-loss",
+   "aq40-after-a-kindness",
+   "aq40-it-looks-back",
+   "aq40-cliff-path",
+   "aq40-glowing-paws",
+   "aq40-daylight"
+  ],
+  "note": "An egg on a hunter's cart, any tag. The hunter A+1. Turning point two stages on (Step 13); it evolves later, in daylight, at Bond 4."
+ },
+ "aq41-ghost-left-behind": {
+  "shape": "Companion",
+  "earliest": "A4",
+  "home": 14,
+  "window": [
+   11,
+   17
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "tags": [
+   "eerie"
+  ],
+  "beats": [
+   "aq41-dented-chair",
+   "aq41-the-door",
+   "aq41-neighbour",
+   "aq41-the-home",
+   "aq41-homecoming",
+   "aq41-sundays",
+   "aq41-tent",
+   "aq41-coat",
+   "aq41-cup",
+   "aq41-sunday-tea"
+  ],
+  "note": "The town: an empty house. Until towns exist: Step 14. \"Find the trainer\" takes two nodes. Turning point (the Sunday visit) two stages after it joins."
+ },
+ "aq42-dragonite-stopped-delivering": {
+  "shape": "Companion",
+  "earliest": "A8",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "sits": "optional",
+  "tags": [],
+  "beats": [
+   "aq42-top-letter",
+   "aq42-lighthouse",
+   "aq42-post-office-family",
+   "aq42-sorting",
+   "aq42-crossroads",
+   "aq42-folded-leaf",
+   "aq42-first-letter"
+  ],
+  "note": "The town: a post office. Else Step 12, any tag. \"Deliver the letters\" takes three nodes. Turning point two stages after the Dratini joins."
+ },
+ "brock-cooking": {
+  "shape": "Companion",
+  "earliest": "A6",
+  "home": 11,
+  "window": [
+   8,
+   14
+  ],
+  "sits": "optional",
+  "tags": [
+   "cave"
+  ],
+  "beats": [
+   "aq43-curled-up",
+   "aq43-old-mine",
+   "aq43-steel",
+   "aq43-came-out",
+   "aq43-brocks-table",
+   "aq43-pebbles",
+   "aq43-spark",
+   "aq43-in-front",
+   "aq43-fire-again"
+  ],
+  "note": "Catalog id brock-cooking (Brock's Cooking) is this questline's first event. The Metal Coat quest is two nodes on. Turning point two stages after the Geodude joins."
+ },
+ "aq44-togepi-paradise": {
+  "shape": "Door",
+  "earliest": "A5",
+  "home": 13,
+  "window": [
+   11,
+   15
+  ],
+  "sits": "side-branch",
+  "tags": [],
+  "beats": [
+   "aq44-togepi-leads",
+   "aq44-paradise",
+   "aq44-let-go",
+   "aq44-another-guardian",
+   "aq44-it-chooses",
+   "aq44-the-egg"
+  ],
+  "note": "A side-branch door, any tag. A Togepi in the party leads the way to it (second entry aq44-togepi-leads, its own chain row). Chain rows in src/data/catalogOverhaul/pseudo/anime-10.json."
+ },
+ "aq45-the-headache": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 8,
+  "window": [
+   5,
+   11
+  ],
+  "sits": "optional",
+  "tags": [
+   "water"
+  ]
+ },
+ "aq46-the-hungry-baby": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "the town: a Contest Hall; else a + node",
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [],
+  "note": "Tags: any."
+ },
+ "aq47-the-proud-penguin": {
+  "shape": "Companion",
+  "earliest": "A2",
+  "home": 6,
+  "window": [
+   4,
+   9
+  ],
+  "sits": "optional",
+  "tags": [
+   "water",
+   "snow"
+  ],
+  "beats": [
+   "aq47-wont-go-in",
+   "aq47-not-a-toy",
+   "aq47-the-stone",
+   "aq47-standing-tall"
+  ],
+  "note": "The doc gives only the meeting; the small scenes and the turning point follow the Companion rule. The turning point is two stages after the gift Piplup joins."
+ },
+ "aq48-the-axew-and-the-excadrill": {
+  "shape": "Companion",
+  "earliest": "A5",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "tags": [
+   "cave"
+  ],
+  "level": "A+1",
+  "beats": [
+   "aq48-first-tusks",
+   "aq48-knocked-over",
+   "aq48-on-guard",
+   "aq48-the-dragonite"
+  ],
+  "note": "The doc gives only the meeting; the small scenes (once the Egg hatches) and the turning point follow the Companion rule. The turning point Dragonite is A+1, two stages after the Egg."
+ },
+ "aq49-the-showcase": {
+  "shape": "Tournament",
+  "earliest": "A4",
+  "home": "the Town node; until towns exist, Step 12",
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "city",
+   "fairy"
+  ],
+  "beats": [
+   "aq49-the-stick"
+  ],
+  "note": "Three rounds on one node (rooms). Tags city; Fairy stages. The Fennekin's own scene comes at Bond 2."
+ },
+ "aq50-the-inventors-pokemon": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   7,
+   13
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "city",
+   "electric"
+  ],
+  "note": "In the town where the run has one (a garage); else Step 10. Tags city; Electric stages."
+ },
+ "lillie-nebby": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "home": "a + node: an egg",
+  "sits": "optional",
+  "tags": [
+   "snow"
+  ],
+  "beats": [
+   "aq51-the-scarf",
+   "aq51-fingertip",
+   "aq51-blizzard"
+  ],
+  "note": "Catalog id lillie-nebby is this questline's meeting. The Vulpix is Lillie's, so the small scenes come one stage after it hatches and the turning point two stages after (not by its Bond in your party). \"Give her time\" ends at the meeting."
+ },
+ "aq52-the-turtle-who-exploded": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "tags": [
+   "hot"
+  ]
+ },
+ "aq53-the-sulking-rabbit": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "home": 7,
+  "window": [
+   4,
+   10
+  ],
+  "sits": "optional",
+  "tags": [
+   "city"
+  ],
+  "beats": [
+   "aq53-on-its-own",
+   "aq53-warm-up",
+   "aq53-watch-me",
+   "aq53-the-poster",
+   "aq53-under-the-hood"
+  ],
+  "note": "The doc gives only the meeting; the small scenes (once the Egg hatches) and the turning point follow the Companion rule. \"Give it space\" brings Goh and his Raboot back one stage later (aq53-on-its-own), and the Egg comes then."
+ },
+ "aq54-eevee-chose-night": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 6,
+  "sits": "optional",
+  "tags": [],
+  "level": "A+1",
+  "beats": [
+   "aq54-gary-notes",
+   "aq54-eevee-dawn",
+   "aq54-eevee-noon",
+   "aq54-eevee-dusk",
+   "aq54-the-finding",
+   "aq54-lab-eevee",
+   "aq54-eevee-chooses"
+  ],
+  "note": "rival slot (RIVALS_PLACED.md): one rival beat per stage, steps 3-18. It starts at Dusk. Steps 6, 12, 17: the meeting (the six-on-six is A+1); the research watches three nodes on and the finding at 12; the lab Eevee (12 or 17) or the kept Eevee choosing (17). The doc's A+1 and A+2 for steps 12 and 17 have no fight to apply to."
+ },
+ "aq55-rival-who-changed": {
+  "shape": "Region",
+  "earliest": "A6",
+  "home": "Stage 2",
+  "sits": "optional",
+  "tags": [],
+  "level": "A+1",
+  "beats": [
+   "aq55-after"
+  ],
+  "note": "rival slot (RIVALS_PLACED.md): one rival beat per stage, steps 3-18. The doc scripts one meeting at a cold crossroads and its After (same node); it is built for Stage 2, and the three-on-three is A+1. Stages 5 and 8 (A+2) have no scene in the doc."
+ },
+ "aq56-mega-ace": {
+  "shape": "Trial",
+  "earliest": "A9",
+  "home": "S",
+  "sits": "optional",
+  "tags": [],
+  "level": "A+2",
+  "beats": [
+   "aq56-listens",
+   "aq56-stops-listening",
+   "aq56-the-truth",
+   "aq56-mine-together"
+  ],
+  "note": "rival slot (RIVALS_PLACED.md): one rival beat per stage, steps 3-18. S: the ridge and the one-on-one against Mega Charizard X (A+2); S+1: the truth; S+2: at the mine beside Alain (A+2), only after \"Use it against them.\""
+ },
+ "aq57-took-off-its-mask": {
+  "shape": "Trial",
+  "earliest": "A8",
+  "home": "S",
+  "sits": "optional",
+  "tags": [],
+  "level": "A+1",
+  "beats": [
+   "aq57-the-crack",
+   "aq57-not-yet",
+   "aq57-the-mask"
+  ],
+  "note": "rival slot (RIVALS_PLACED.md): one rival beat per stage, steps 3-18. Night. S: the ruined lab and the fight (A+1); S+1: the mask. The doc has no S+2 scene (A+2): \"That's your job\" ends in a Chronicle line."
+ },
+ "aq58-ones-they-let-go": {
+  "shape": "Stage-Three",
+  "earliest": "A5",
+  "home": 6,
+  "sits": "optional",
+  "tags": [],
+  "beats": [
+   "aq58-alone-at-the-nest",
+   "aq58-second-wave",
+   "aq58-third-wave",
+   "aq58-after-the-poachers",
+   "aq58-empty-nest"
+  ],
+  "note": "rival slot (RIVALS_PLACED.md): one rival beat per stage, steps 3-18. Needs Trio reputation +10 (flag trio-rep at 10). No level offset. \"Help.\": the first wave at 6, the second at 12, the third at 17, then the After. \"Arrest them.\" and \"Leave them be.\" end at 6."
+ },
+ "aq59-meowth-learned-to-talk": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 11,
+  "window": [
+   8,
+   15
+  ],
+  "sits": "optional",
+  "tags": [],
+  "beats": [
+   "aq59-gotta-go",
+   "aq59-tag-partner",
+   "aq59-empty-alley"
+  ],
+  "note": "Night, an alley. In Kanto this is The Old Street (another thread's event); AQ59 is for every other region. The tag-partner fight comes back at a later stage after AQ58 \"Help.\"; the empty alley replaces the meeting after AQ58 \"Arrest them.\""
+ },
+ "aq60-sparky": {
+  "shape": "Stage-Three",
+  "earliest": "A3",
+  "home": "Town",
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [],
+  "level": "A+0",
+  "beats": [
+   "aq60-stories",
+   "aq60-after",
+   "aq60-training-speed",
+   "aq60-training-move"
+  ],
+  "note": "rival slot (RIVALS_PLACED.md): one rival beat per stage, steps 3-18. It starts at the Town node, after any tournament there; then steps 12 and 17. The battle with Ritchie's full team is A+0; \"Train together.\" puts a spar with Sparky at 12 (A+1) and the lesson at 17."
+ }
+}
