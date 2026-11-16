@@ -1,0 +1,666 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-28-bridge",
+   "name": "The Ring Under the Bridge",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ring-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3446",
+    "effect": "none"
+   },
+   "intro": "*Shouting under a road bridge. Lamplight on wet concrete, a ring chalked on the ground, and a crowd that doesn't look at you.*\n\nA Scrafty with one eye swollen shut is being sent out again. It doesn't look at the crowd either. It looks at the floor, as if the floor was where it lived.\n\n**Bookmaker, Mr. Lazenby:** \"Fresh blood! Three fights, good money. A word of advice: the second one, you'll want to be tired.\"\n\n*Behind the ring, cages. The fighters in them aren't volunteers.*",
+   "choices": [
+    {
+     "label": "Enter.",
+     "success": {
+      "text": "Lazenby takes your name and doesn't write it down. \"Lovely. First one's a warm-up. Don't get used to it.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-28-first"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit in the crowd.",
+     "success": {
+      "text": "You find a crate near the back and sit. Nobody asks you to move. Somebody, you notice, is asking about you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-28-crowd"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go round the back.",
+     "success": {
+      "text": "The noise swallows your footsteps. Behind the bridge the cages are stacked three high, and every one of them has been looked at by someone who didn't care.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-28-back"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-28-first",
+   "name": "The Ring Under the Bridge: The First",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3446",
+    "effect": "none"
+   },
+   "intro": "The first one is a bruiser in a fighting-club vest who wants it over quickly. So do you. The crowd wants neither.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "The bell is a pan hit with a spoon. It will do.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "ring-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-28-out"
+        }
+       ],
+       "name": "Pit Fighter",
+       "classId": "blackbelt",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-28-second"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-28-second",
+   "name": "The Ring Under the Bridge: The Second",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3446",
+    "effect": "none"
+   },
+   "intro": "Between rounds Lazenby pats your shoulder, too hard, and watches your team the way a butcher watches a calf.\n\n**Lazenby:** \"Second one. You're tired, I can see. You'll want to be. The odds, you understand, are very good for the house when a gentleman is tired.\"\n\nHe says *gentleman* like a price.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "The second is bigger than the first, and has been told to take its time.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "ring-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-28-out"
+        }
+       ],
+       "name": "Pit Fighter",
+       "classId": "blackbelt",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-28-third"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Go down in the second.",
+     "success": {
+      "text": "You let the second one land. Then another. You go down on one knee and stay there, and the count is very slow. The crowd roars. Somewhere to your left a Scrafty with one eye shut watches you do it, and doesn't blink.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ring-threw",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-lied",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-28-thrown"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-28-thrown",
+   "name": "The Ring Under the Bridge: Good Money",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3446",
+    "effect": "none"
+   },
+   "intro": "**Lazenby:** \"Beautiful. Nobody saw a thing. That's the best compliment I know.\" He counts the notes into your hand himself.\n\nThe Scrafty watches the money change hands. Then it looks at your Pokémon, a long look, and turns away.",
+   "choices": [
+    {
+     "label": "Take the money.",
+     "success": {
+      "text": "You take it. It is good money. It sits in your pocket like a stone.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "moment",
+        "text": "Threw a fight under the bridge, for money",
+        "importance": 40
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-28-third",
+   "name": "The Ring Under the Bridge: The Third",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3446",
+    "effect": "none"
+   },
+   "intro": "The third is the Scrafty. It was always going to be. Its trainer, if that is the word, stands behind it with a rope and doesn't pull.\n\n**Lazenby:** \"The house champion! Four hundred wins. Not one of them its idea.\"\n\nIt looks at you and for a second the one good eye is entirely clear.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "It takes your first hit on purpose. Then it shows you why.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "ring-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-28-out"
+        }
+       ],
+       "team": [
+        "scrafty"
+       ],
+       "name": "Pit Scrafty",
+       "classId": "blackbelt",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-28-paid"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-28-paid",
+   "name": "The Ring Under the Bridge: Pay Day",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Treasure"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3446",
+    "effect": "none"
+   },
+   "intro": "Lazenby opens the cash box and stares into it. It is not a large box, and it is not full. Behind you, someone laughs, and stops.\n\n**Lazenby:** \"The ring can't pay. Three wins, you see, nobody plans for three wins.\" He wipes his mouth. \"Take the Scrafty. It's finished anyway.\"\n\nThe Scrafty hears this. It doesn't move. Then it limps to you, and stands very close, and its hand finds your sleeve.",
+   "choices": [
+    {
+     "label": "Take the Scrafty.",
+     "success": {
+      "text": "It leans against your leg the whole way up the bank, as if it had been braced against something for years. By the top of the bank it has learned to stand without bracing. It teaches itself, on the spot, to take a hit and give it back.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "scrafty"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "direct": true
+       },
+       {
+        "kind": "teachMove",
+        "move": "counter",
+        "species": "scrafty"
+       },
+       {
+        "kind": "flag",
+        "key": "ring-won-clean",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bridge-ring-stopped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ring-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Beat the ring under the bridge three times, and left with its champion",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-28-out",
+   "name": "The Ring Under the Bridge: Shown Out",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3446",
+    "effect": "none"
+   },
+   "intro": "Two men take you by the elbows, not roughly. It is almost courteous. You are put out on the grass above the bridge.\n\n**Lazenby:** \"Come again! Better odds with a rest.\"\n\nUnder your feet, through the road, you can still hear the crowd.",
+   "choices": [
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "The Scrafty is back in the ring before you reach the road. You don't look back, because you know what you would see.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ring-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-28-crowd",
+   "name": "The Ring Under the Bridge: The Crowd",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3446",
+    "effect": "none"
+   },
+   "intro": "A bout goes by. Another. You watch the crowd more than the ring, and one man more than the crowd: the one not shouting. He sits above it all on a stack of crates, counting, and nobody counts with him.\n\nThe man has a face you won't forget, a sandy moustache and a signet ring on the wrong hand. Lazenby calls him *sir*.\n\n**The man, to nobody:** \"Another one for the pen, then. Mind the shipment.\"",
+   "choices": [
+    {
+     "label": "Memorise the face.",
+     "success": {
+      "text": "You commit it to memory: the moustache, the ring, the way he watches the fighters the way a man watches a meter. You will see it again. You are almost sure of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ring-knows-owner",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ring-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-28-back",
+   "name": "The Ring Under the Bridge: The Cages",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3446",
+    "effect": "none"
+   },
+   "intro": "Fighters in the cages: a Machoke too tired to stand, a Hitmontop slowly rubbing a wound, a Primeape facing the wall. Nobody looks at you.\n\nThe locks are the cheap kind. The main bout is starting, and the crowd is loud enough to cover a gunshot.",
+   "choices": [
+    {
+     "label": "Open the cages.",
+     "success": {
+      "text": "One lock. Another. The Machoke reaches the third one before you do and bends the bars apart with a grunt. The main bout reaches its roar, and the roar turns into something else. Chaos: crates over, lamps out, Lazenby shouting, the crowd running the wrong way. You run the other.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-28-chase"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You can't. You know you can't. You walk back round the bridge with your hands empty and your stomach heavy.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-28-chase",
+   "name": "The Ring Under the Bridge: The Chase",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3446",
+    "effect": "none"
+   },
+   "intro": "A chase across Step 14. Boots behind you, hooves and paws ahead, every fighter free and running in a different direction, as fast as they can.\n\nThe Scrafty is among them. It runs beside you for a hundred metres, then stops at the edge of the field, looks back, and bows to you. Not to the ring. To you.",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "It stays at the field's edge until the last of them is out of sight. Then it turns, and walks to you, and doesn't leave.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "scrafty"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "direct": true
+       },
+       {
+        "kind": "teachMove",
+        "move": "counter",
+        "species": "scrafty"
+       },
+       {
+        "kind": "flag",
+        "key": "ring-freed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "freed-caged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bridge-ring-stopped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ring-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "ring-freed-at"
+       },
+       {
+        "kind": "moment",
+        "text": "Opened every cage under the bridge",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-28-recruiter",
+   "name": "The Man From Under the Bridge",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "stop": "event",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ring-freed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "ring-freed-at"
+    },
+    {
+     "kind": "flag",
+     "key": "ring-recruiter-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3446",
+    "effect": "none"
+   },
+   "intro": "A sandy moustache. A signet ring on the wrong hand. You knew the face before he spoke.\n\n**The recruiter:** \"The bridge. The cages. Three hundred I lost, because of you. They gave me a job to make it up. Recruiting. Isn't that funny.\"\n\nHe doesn't laugh. He sends out a Pokémon.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "He fights like a man being paid to, and not very much.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "ring-recruiter-met",
+         "amount": 1
+        }
+       ],
+       "name": "Recruiter Lazenby",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ring-recruiter-met",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Met the owner of the ring again, in an evil team's coat",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-28-dojo",
+   "name": "The Dojo Counter",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "stop": "event",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ring-freed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "ring-freed-at"
+    },
+    {
+     "kind": "flag",
+     "key": "ring-dojo-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3446",
+    "effect": "none"
+   },
+   "intro": "A small dojo in a side street. Children in white, lined up on the mat, hitting one another very gently.\n\nBehind the counter stands a Machoke, with a whistle. It is teaching them how to block.\n\nIt sees you. It stops, mid-word. It puts down the whistle, bows, and waits.",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "The children are told to bow too. They do, in a row, all of them a little confused. The Machoke does not stop looking at you until the lesson starts again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ring-dojo-met",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Found a freed fighter teaching children to block",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
