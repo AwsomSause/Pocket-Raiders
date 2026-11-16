@@ -78,9 +78,21 @@ export function setTextPrefs(scale: number, dyslexiaFamily: string | null, small
   readingFont = dyslexiaFamily;
 }
 
+let lookFont: { family: string; weight: number; scale: number } | null = null;
+/**
+ * New look: a screen that is still drawn on the canvas (it has no page in the mock-ups) writes its text in the chosen
+ * skin's font, the mock-ups' own, instead of the old game fonts. Set by `ui/redux/canvasFont.ts` while such a screen is
+ * up; null everywhere else, so canvas styles a player picked keep their own lettering. Presentation only.
+ */
+export function setLookFont(font: { family: string; weight: number; scale: number } | null): void {
+  lookFont = font;
+}
+export const lookFontWeight = (): number | null => (lookFont && !readingFont ? lookFont.weight : null);
+
 export function pixelFont(requested: number): { family: string; size: number; grid: number } {
   const size = Math.max(requested * fontScale, boostSmall ? BOLD_FROM : 0);
   if (readingFont) return { family: readingFont, size: Math.max(12, Math.round(size * 0.9)), grid: 1 };
+  if (lookFont) return { family: `"${lookFont.family}", ${FONT_FAMILY}`, size: Math.max(13, Math.round(size * 0.9 * lookFont.scale)), grid: 1 };
   if (size < BOLD_FROM) return { family: FONT_FAMILY, size: 16, grid: 1 };
   const snapped = Math.max(16, Math.round((size * 0.75) / 8) * 8);
   return { family: BOLD_FONT_FAMILY, size: snapped, grid: snapped / 8 };
@@ -109,7 +121,8 @@ export function textStyle(size: number, color: string = COLORS.text, extra: Phas
   const font = pixelFont(size);
   const offset = font.grid;
   const shadow = extra.stroke ? undefined : { offsetX: offset, offsetY: offset, color: shadowFor(color), fill: true, blur: 0 };
-  return { fontFamily: font.family, fontSize: `${font.size}px`, color, ...(shadow ? { shadow } : {}), ...extra };
+  const weight = lookFontWeight();
+  return { fontFamily: font.family, fontSize: `${font.size}px`, color, ...(weight && weight !== 400 ? { fontStyle: String(weight) } : {}), ...(shadow ? { shadow } : {}), ...extra };
 }
 
 export const STATUS_LABELS: Record<string, { label: string; color: number }> = {

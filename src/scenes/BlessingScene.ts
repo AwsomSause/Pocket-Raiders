@@ -10,6 +10,7 @@ import { services } from '../game/services';
 import { playCry } from '../ui/audio';
 import { onInputAction } from '../ui/input';
 import { loadAssets } from '../ui/lazyAssets';
+import { useLookFont } from '../ui/redux/canvasFont';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 
 const TIER_LABEL = { lesser: 'LESSER', greater: 'GREATER', divine: 'DIVINE', primordial: 'PRIMORDIAL', origin: 'ORIGIN' } as const;
@@ -25,6 +26,7 @@ export class BlessingScene extends Phaser.Scene {
   }
 
   create(): void {
+    useLookFont(this);
     const { session } = services();
     const run = session.run!;
     const state = run.expansion?.blessing;

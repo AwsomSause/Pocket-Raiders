@@ -60,6 +60,7 @@ import { chooseHubPokemon, hubPokemon, hubPokemonChoices, placeById } from '../c
 import { pokemonHeightM } from '../core/heights';
 import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
 import { askText, type AskOptions } from '../ui/redux/ask';
+import { useLookFont } from '../ui/redux/canvasFont';
 import { runCardView } from '../ui/redux/screens/over';
 import { playerPortrait } from '../ui/redux/templates';
 import { dockView, type DockFigure } from '../ui/redux/screens/hub';
@@ -357,6 +358,8 @@ export class HubScene extends Phaser.Scene {
     this.lobby = null;
     this.minimap = null;
     this.indicators = null;
+    // Hub Town on foot is drawn on the canvas: in the New look its text uses the skin's font.
+    if (!lobbyHub() && !dockHub()) useLookFont(this);
     if (lobbyHub()) {
       const current = session.savedRun.status === 'ok' ? session.savedRun.data : null;
       this.lobby = new ArenaLobby(this, {
