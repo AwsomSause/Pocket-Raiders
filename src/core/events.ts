@@ -107,6 +107,7 @@ import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon, partyCapacity, startRaidBattle } from './run';
+import { allstarDeclined } from './greenneedle/allstar';
 import { prepareSpectate } from './sky/spectate';
 import { applySky, shapeSkyFoe, skyCondition, skyConditionText } from './sky/story';
 import { NATURE_IDS } from './natures';
@@ -1203,6 +1204,8 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   const base = success ? choice.success : choice.failure!;
   const branch = success ? choice.branches.find((b) => b.when.every((c) => conditionMet(content, run, c))) : undefined;
   const outcome = branch ? { ...base, text: branch.text, effects: branch.effects } : base;
+  // Greenneedle gn.46: a named trainer's offered battle, walked past, is remembered for the All-Star Tournament.
+  allstarDeclined(run, event.choices, outcome);
   const outcomeText = questText(content, run, event.id, gnTokens(content, current, fillCoText(content, current, fillEventText(content, current, outcome.text))));
   // The Event Director remembers important choices (and whether you took a risk).
   const risky = chance !== null || choice.prompt !== undefined;

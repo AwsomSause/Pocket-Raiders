@@ -26,6 +26,20 @@
      "atMost": 0
     }
    ],
+   "remembers": [
+    {
+     "id": "trophy",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "allstar-champion",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In the middle of the table, as a centrepiece: the All-Star trophy, every name on it and yours last. Somebody's put flowers in it."
+    }
+   ],
    "scene": {
     "cast": [],
     "tint": "#5a4a2e",

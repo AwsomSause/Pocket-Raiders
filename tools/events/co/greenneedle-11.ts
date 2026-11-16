@@ -19,22 +19,24 @@ const met = (): Json => is('onevone-met');
 
 interface Round { name: string; cls: string; intro: string; text: string; remembers?: Json[] }
 const ROUNDS: Round[] = [
-  { name: 'Newcomer Pip', cls: 'youngster', intro: say('Round one. A newcomer, shaking so hard their Poké Ball rattles. Their first tournament.', '"I read the rules four times," they tell you. "I still don\'t know where to stand."', 'Their one: {cast:onevone-foe-1}.'), text: 'You show them where to stand. Then you go to yours.' },
-  { name: 'Road Trainer Halvard', cls: 'hiker', intro: say('Round two. A trainer off the road, boots still muddy.', '"We\'ve met. On the road, a while back. You won. I\'ve thought about it since." They say it like a fact, not a grudge.', 'Their one: {cast:onevone-foe-2}.'), text: '"Different this time," they say. "I hope."' },
+  { name: 'Newcomer', cls: 'youngster', intro: say('Round one. A newcomer, {onevone:who:1}, shaking so hard their Poké Ball rattles. Their first tournament.', '"I read the rules four times," they tell you. "I still don\'t know where to stand."', 'Their one: {cast:onevone-foe-1}.'), text: 'You show them where to stand. Then you go to yours.' },
+  { name: 'Road Trainer', cls: 'hiker', intro: say('Round two. {onevone:who:2}, a trainer off the road, boots still muddy.', 'Their one: {cast:onevone-foe-2}.'), text: '"Different this time," they say. "I hope."', remembers: [
+    { id: 'met', when: [is('onevone-road-met')], notice: '**{onevone:who:2}:** "We\'ve met. On the road, a while back. You won. I\'ve thought about it since." They say it like a fact, not a grudge.' },
+  ] },
   { name: 'Gideon Tolland', cls: 'worker', intro: say('Round three. A dock worker in a knitted hat, grinning, with a {cast:onevone-foe-3} beside him.', '**Gideon:** "Gideon. Don\'t mind me, I\'m scenery. Fourth round\'s my ceiling. I\'ve made my peace."'), text: 'He shakes your hand, then your Pokémon\'s, very seriously.', remembers: [
     { id: 'belts', when: [gnc('entrantChampion')], notice: 'Your entrant wears the Fighting Tournament\'s belt. Gideon sees it, takes off his hat, and bows.' },
     { id: 'same', when: [met(), is('onevone-same')], notice: '**Gideon:** "The {cast:onevone-entrant} again! Good. I\'ve had a year to think about that {cast:onevone-entrant}. I\'ve thought of nothing. Let\'s see."' },
     { id: 'different', when: [met()], notice: '**Gideon:** "New one this year? Smart. I was going to be *so* ready for the other."' },
   ] },
-  { name: 'Specialist Ingrid', cls: 'ace-trainer', intro: say('Round four. A specialist, and the draw isn\'t kind: their {cast:onevone-foe-4} is exactly what your entrant doesn\'t want to see.', 'They look almost apologetic about it. Almost.'), text: 'Your entrant looks at their Pokémon, then at you. You nod. It goes in anyway.' },
-  { name: 'Specialist Tobiah', cls: 'ace-trainer', intro: say('Round five. A specialist whose type your entrant beats, on paper. Their {cast:onevone-foe-5}.', '"I know," they say, before you can. "I\'ve planned for it. You\'ll see."'), text: 'They have planned for it. You can see it in how they stand.' },
+  { name: 'Specialist', cls: 'ace-trainer', intro: say('Round four. {onevone:who:4}, a specialist, and the draw isn\'t kind: their {cast:onevone-foe-4} is exactly what your entrant doesn\'t want to see.', 'They look almost apologetic about it. Almost.'), text: 'Your entrant looks at their Pokémon, then at you. You nod. It goes in anyway.' },
+  { name: 'Specialist', cls: 'ace-trainer', intro: say('Round five. {onevone:who:5}, a specialist whose type your entrant beats, on paper. Their {cast:onevone-foe-5}.', '"I know," they say, before you can. "I\'ve planned for it. You\'ll see."'), text: 'They have planned for it. You can see it in how they stand.' },
   { name: 'Señora Dolores Vantongeren', cls: 'veteran', intro: say('Round six. A woman of eighty, very upright, with a {cast:onevone-foe-6} that has been with her for fifty years. She has won this four times.', '**Dolores:** "Sit up straight. Not you. That one. Good. It listens. That\'s half of it."'), text: 'Her Xatu doesn\'t move until she does. She doesn\'t move until she\'s ready.', remembers: [
     { id: 'back', when: [gnc('entrantCameBack')], notice: 'Dolores looks at your entrant for a long time. "That one\'s been somewhere. Hasn\'t it."' },
     { id: 'same', when: [met(), is('onevone-same')], notice: '**Dolores:** "The same one. You came back with the same one. *Good.* Most of them swap, the minute it loses. You don\'t swap a friend."' },
     { id: 'different', when: [met()], notice: '**Dolores:** "A different one. Hm. And what did the last one think about that?"' },
   ] },
-  { name: 'Finalist Corwin', cls: 'ace-trainer', intro: say('Round seven. Last year\'s finalist, with a {cast:onevone-foe-7}. He isn\'t looking at you at all. He\'s looking past you, at the champion\'s chair.', '"Nothing personal," he says. "You\'re in my way, that\'s all."'), text: 'He bows to the chair before he bows to you.' },
-  { name: 'The Reigning Champion', cls: 'ace-trainer', intro: say('The final. The reigning champion, {onevone-champion}, comes down from the chair, with one Pokémon, a {cast:onevone-foe-8}, a little stronger than yours. It holds something that fits it.', '"Eight," she says. "You\'ve earned the eighth. Not many do."'), text: 'The hall goes quiet. One Pokémon each. It was always going to come to this.', remembers: [
+  { name: 'Finalist', cls: 'ace-trainer', intro: say('Round seven. Last year\'s finalist, {onevone:who:7}, with a {cast:onevone-foe-7}. They aren\'t looking at you at all. They\'re looking past you, at the champion\'s chair.', '"Nothing personal," they say. "You\'re in my way, that\'s all."'), text: 'They bow to the chair before they bow to you.' },
+  { name: 'The Reigning Champion', cls: 'ace-trainer', intro: say('The final. The reigning champion, {onevone-champion}, comes down from the chair, with one Pokémon, a {cast:onevone-foe-8}, a little stronger than yours. It holds something that fits it.', '"Eight," they say. "You\'ve earned the eighth. Not many do."'), text: 'The hall goes quiet. One Pokémon each. It was always going to come to this.', remembers: [
     { id: 'again', when: [met(), is('onevone-same')], notice: '**The champion:** "They said you\'d bring it again. Dolores said. She said you\'re the kind that does."' },
   ] },
 ];
@@ -116,10 +118,14 @@ const gn45: Json[] = [
   ), [
     ch('Battle.', fight('The Champion\'s Pokémon walks out like it\'s done this a thousand times. It has.', { ...trainer('The Champion', { cls: 'ace-trainer', size: 3, lv: -1, friendly: true, rule: { gn: 'champlesson' }, win: afterLesson, lose: afterLesson }) })),
   ]),
-  rm('gn-45-montage', 'The Champion\'s Training Session: This One', field({ tags: ['Story', 'Recovery'] }), say(
+  rm('gn-45-montage', 'The Champion\'s Training Session: This One', field({ tags: ['Story', 'Recovery'], remembers: [
+    // The Champion's line is true for the reason this one was picked (lesson-why: 1 liked and unused, 2 fainted most, 3 the newest).
+    { id: 'liked', when: [exactly('lesson-why', 1)], notice: '**{lesson-champion}:** "You like it. You don\'t use it. It knows both things."' },
+    { id: 'fallen', when: [exactly('lesson-why', 2)], notice: '**{lesson-champion}:** "It keeps going down. You keep sending it out. It knows both things."' },
+    { id: 'newest', when: [exactly('lesson-why', 3)], notice: '**{lesson-champion}:** "It\'s new. You haven\'t made up your mind about it. It has, about you."' },
+  ] }), say(
     'The Champion walks along your team, slowly, looking at each of them. They stop.',
     '**{lesson-champion}:** "This one." It\'s your {cast:lesson-pupil}. Not your strongest. Not even close.',
-    '"You like it. You don\'t use it. It knows both things."',
     '**Morning.** It does a move, badly. The Champion says nothing, and waits.',
     '**Noon.** It does the move again. The Champion moves its foot an inch with the toe of their boot.',
     '**Dusk.** It does the move. The Champion\'s own ace, watching from the grass, opens one eye.',
@@ -195,7 +201,7 @@ const gn46: Json[] = [
     'Between rounds. The crowd spills into the aisles. People you met for five minutes, months ago, want to shake your hand.',
     'Someone at the back is holding something out to you, and won\'t stop holding it out until you come over.',
   ), [
-    ch('Walk among them.', out('A traveller you once shared a fire with presses a held item into your palm. "For the next one. You\'ll need it more than me."', any('quick-claw', 'scope-lens', 'muscle-band', 'wise-glasses', 'shell-bell'), scene('gn-46-sf'))),
+    ch('Walk among them.', out('A traveller you once shared a fire with presses a held item into your palm. "For the next one. You\'ll need it more than me. They\'ve a new one, you know. A {cast:allstar-new-sf}."', any('quick-claw', 'scope-lens', 'muscle-band', 'wise-glasses', 'shell-bell'), scene('gn-46-sf'))),
     ch('Go to the ring.', out('You wave, and go. They wave back, still holding it out, smiling.', scene('gn-46-sf'))),
   ]),
   rm('gn-46-sf', 'The All-Star Tournament: Semi-Final', stars({ remembers: [
@@ -206,7 +212,7 @@ const gn46: Json[] = [
     'The semi-final. {allstar:sf}. They haven\'t changed at all, and they don\'t think they need to. Looking at them, you\'re not sure they\'re wrong.',
     '**{allstar:sf}:** "{allstar-line:sf}"',
   ), [
-    ch('Battle.', fight('Same team. Same stance. Same look in their eye, like they know something you don\'t.', { ...trainer('All-Star', { cls: 'ace-trainer', size: 6, lv: 1, friendly: true, rule: { gn: 'allstar-sf' },
+    ch('Battle.', fight('Same stance. Same look in their eye, like they know something you don\'t. The team behind them has grown up, all the same.', { ...trainer('All-Star', { cls: 'ace-trainer', size: 6, lv: 1, friendly: true, rule: { gn: 'allstar-sf' },
       win: [any(...RARE_ITEMS), setTo('allstar-round', 2), setTo('allstar-respect', 1), moment('Beat the All-Star semi-finalist, who shook your hand and promised to come to the Final Reunion.', 60), scene('gn-46-crowd-2')], lose: allstarOut }) })),
   ]),
   rm('gn-46-crowd-2', 'The All-Star Tournament: Before the Final', stars({ tags: ['Recovery', 'Story'] }), say(
@@ -222,7 +228,7 @@ const gn46: Json[] = [
     { id: 'ahead', when: [gnc('rivalAhead')], notice: '**{allstar-rival}:** "I\'m ahead, you know. Badges, wins, all of it. I\'ve kept count. This is the one that counts, though."' },
   ] }), say(
     'The final. {allstar-rival}, on the far side of the ring, exactly where the bracket said they\'d be.',
-    '**{allstar-rival}:** "Everyone you\'ve ever fought is in those stands. And it\'s still us two at the end. It\'s *always* us two."',
+    '**{allstar-rival}:** {allstar-open}',
   ), [
     chIf([gnc('rivalTrustMax')], 'Shake.', fight('You shake. Their grip is warm, and it holds a second longer than it needs to. Both teams stand a little taller.', { ...trainer('Rival', { rival: true, size: 6, lv: 2, friendly: true, rule: { gn: 'allstar-final' }, win: [gn('allstarChampion'), moment('Won the All-Star Tournament. Every name you met is on the trophy. Yours is last.', 85), scene('gn-46-champion')], lose: [scene('gn-46-runner-up')] }) }, setTo('allstar-shake', 1))),
     chIf([gnc('rivalTrustMax')], 'After.', fight('"After," you say. They grin, and put their hand away. "After, then. Promise."', { ...trainer('Rival', { rival: true, size: 6, lv: 2, friendly: true, rule: { gn: 'allstar-final' }, win: [gn('allstarChampion'), moment('Won the All-Star Tournament. Every name you met is on the trophy. Yours is last.', 85), scene('gn-46-champion')], lose: [scene('gn-46-runner-up')] }) })),

@@ -64,7 +64,7 @@ import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens
 import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
 import { rememberedPick } from '../co/pickMemory';
 import { lcBring, lcEligible, lcEnd, lcEvolver, lcMany, lcStart, lcStartBattle, lcStay, lcWithdraw } from './littlecup';
-import { CHAMPION_NAME, onevoneChampion, onevoneEnd, onevoneEnter, onevoneStart, entrantOf } from './onevone';
+import { CHAMPION_NAME, onevoneChampion, onevoneEnd, onevoneEnter, onevoneStart, entrantOf, opponentsOf } from './onevone';
 import { eeveeEnd, eeveeStart } from './eevee';
 import { GAVEL, auctionArrive, auctionOpen, auctionReturn, auctionRound, lotToken } from './auction';
 import { aceHere, bagBack, bagLeave, bench, brainRecord, brainStart, bring, frontierClear, leadInitiative, palaceShape, rent, swapIn, unbench } from './frontier';
@@ -122,6 +122,8 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   // gn.45: the region's Champion, off duty (cast when the lesson starts).
   if (text.includes('{lesson-champion}')) text = text.replaceAll('{lesson-champion}', content.bosses.get(castOf(run, 'lesson-champion') ?? lessonChampion(content, run, run.regionOrder[run.regionIndex] ?? 'kanto'))?.name ?? 'The Champion');
   text = text.replaceAll('{onevone-champion}', CHAMPION_NAME[run.regionOrder[run.regionIndex] ?? 'kanto'] ?? CHAMPION_NAME.kanto!);
+  // gn.44: who the drawn opponent of round <n> is this time.
+  if (text.includes('{onevone:who:')) text = text.replace(/\{onevone:who:([1-8])\}/g, (_, n: string) => opponentsOf(run)[Number(n) - 1]?.n ?? 'a trainer');
   // gn.44: what the next 1v1 opponent holds ({held:<n>}).
   text = text.replace(/\{held:([1-8])\}/g, (_, n: string) => {
     const id = castOf(run, `onevone-held-${n}`);

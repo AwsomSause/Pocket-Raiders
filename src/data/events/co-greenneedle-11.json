@@ -133,7 +133,7 @@
     "tint": "#4a3d6b",
     "effect": "none"
    },
-   "intro": "Round one. A newcomer, shaking so hard their Poké Ball rattles. Their first tournament.\n\n\"I read the rules four times,\" they tell you. \"I still don't know where to stand.\"\n\nTheir one: {cast:onevone-foe-1}.",
+   "intro": "Round one. A newcomer, {onevone:who:1}, shaking so hard their Poké Ball rattles. Their first tournament.\n\n\"I read the rules four times,\" they tell you. \"I still don't know where to stand.\"\n\nTheir one: {cast:onevone-foe-1}.",
    "choices": [
     {
      "label": "Battle.",
@@ -163,7 +163,7 @@
         "gn": "onevone",
         "slot": 1
        },
-       "name": "Newcomer Pip",
+       "name": "Newcomer",
        "classId": "youngster",
        "size": 1,
        "types": [],
@@ -197,14 +197,27 @@
     "Trainer",
     "Story"
    ],
-   "remembers": [],
+   "remembers": [
+    {
+     "id": "met",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "onevone-road-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**{onevone:who:2}:** \"We've met. On the road, a while back. You won. I've thought about it since.\" They say it like a fact, not a grudge."
+    }
+   ],
    "room": true,
    "scene": {
     "cast": [],
     "tint": "#4a3d6b",
     "effect": "none"
    },
-   "intro": "Round two. A trainer off the road, boots still muddy.\n\n\"We've met. On the road, a while back. You won. I've thought about it since.\" They say it like a fact, not a grudge.\n\nTheir one: {cast:onevone-foe-2}.",
+   "intro": "Round two. {onevone:who:2}, a trainer off the road, boots still muddy.\n\nTheir one: {cast:onevone-foe-2}.",
    "choices": [
     {
      "label": "Battle.",
@@ -234,7 +247,7 @@
         "gn": "onevone",
         "slot": 2
        },
-       "name": "Road Trainer Halvard",
+       "name": "Road Trainer",
        "classId": "hiker",
        "size": 1,
        "types": [],
@@ -387,7 +400,7 @@
     "tint": "#4a3d6b",
     "effect": "none"
    },
-   "intro": "Round four. A specialist, and the draw isn't kind: their {cast:onevone-foe-4} is exactly what your entrant doesn't want to see.\n\nThey look almost apologetic about it. Almost.",
+   "intro": "Round four. {onevone:who:4}, a specialist, and the draw isn't kind: their {cast:onevone-foe-4} is exactly what your entrant doesn't want to see.\n\nThey look almost apologetic about it. Almost.",
    "choices": [
     {
      "label": "Battle.",
@@ -417,7 +430,7 @@
         "gn": "onevone",
         "slot": 4
        },
-       "name": "Specialist Ingrid",
+       "name": "Specialist",
        "classId": "ace-trainer",
        "size": 1,
        "types": [],
@@ -458,7 +471,7 @@
     "tint": "#4a3d6b",
     "effect": "none"
    },
-   "intro": "Round five. A specialist whose type your entrant beats, on paper. Their {cast:onevone-foe-5}.\n\n\"I know,\" they say, before you can. \"I've planned for it. You'll see.\"",
+   "intro": "Round five. {onevone:who:5}, a specialist whose type your entrant beats, on paper. Their {cast:onevone-foe-5}.\n\n\"I know,\" they say, before you can. \"I've planned for it. You'll see.\"",
    "choices": [
     {
      "label": "Battle.",
@@ -488,7 +501,7 @@
         "gn": "onevone",
         "slot": 5
        },
-       "name": "Specialist Tobiah",
+       "name": "Specialist",
        "classId": "ace-trainer",
        "size": 1,
        "types": [],
@@ -641,12 +654,12 @@
     "tint": "#4a3d6b",
     "effect": "none"
    },
-   "intro": "Round seven. Last year's finalist, with a {cast:onevone-foe-7}. He isn't looking at you at all. He's looking past you, at the champion's chair.\n\n\"Nothing personal,\" he says. \"You're in my way, that's all.\"",
+   "intro": "Round seven. Last year's finalist, {onevone:who:7}, with a {cast:onevone-foe-7}. They aren't looking at you at all. They're looking past you, at the champion's chair.\n\n\"Nothing personal,\" they say. \"You're in my way, that's all.\"",
    "choices": [
     {
      "label": "Battle.",
      "success": {
-      "text": "He bows to the chair before he bows to you.",
+      "text": "They bow to the chair before they bow to you.",
       "effects": [],
       "battle": {
        "kind": "trainer",
@@ -671,7 +684,7 @@
         "gn": "onevone",
         "slot": 7
        },
-       "name": "Finalist Corwin",
+       "name": "Finalist",
        "classId": "ace-trainer",
        "size": 1,
        "types": [],
@@ -731,7 +744,7 @@
     "tint": "#4a3d6b",
     "effect": "none"
    },
-   "intro": "The final. The reigning champion, {onevone-champion}, comes down from the chair, with one Pokémon, a {cast:onevone-foe-8}, a little stronger than yours. It holds something that fits it.\n\n\"Eight,\" she says. \"You've earned the eighth. Not many do.\"",
+   "intro": "The final. The reigning champion, {onevone-champion}, comes down from the chair, with one Pokémon, a {cast:onevone-foe-8}, a little stronger than yours. It holds something that fits it.\n\n\"Eight,\" they say. \"You've earned the eighth. Not many do.\"",
    "choices": [
     {
      "label": "Battle.",
@@ -1245,13 +1258,51 @@
     "Story",
     "Recovery"
    ],
+   "remembers": [
+    {
+     "id": "liked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lesson-why",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "**{lesson-champion}:** \"You like it. You don't use it. It knows both things.\""
+    },
+    {
+     "id": "fallen",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lesson-why",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "**{lesson-champion}:** \"It keeps going down. You keep sending it out. It knows both things.\""
+    },
+    {
+     "id": "newest",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lesson-why",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "notice": "**{lesson-champion}:** \"It's new. You haven't made up your mind about it. It has, about you.\""
+    }
+   ],
    "room": true,
    "scene": {
     "cast": [],
     "tint": "#3f5a3a",
     "effect": "none"
    },
-   "intro": "The Champion walks along your team, slowly, looking at each of them. They stop.\n\n**{lesson-champion}:** \"This one.\" It's your {cast:lesson-pupil}. Not your strongest. Not even close.\n\n\"You like it. You don't use it. It knows both things.\"\n\n**Morning.** It does a move, badly. The Champion says nothing, and waits.\n\n**Noon.** It does the move again. The Champion moves its foot an inch with the toe of their boot.\n\n**Dusk.** It does the move. The Champion's own ace, watching from the grass, opens one eye.",
+   "intro": "The Champion walks along your team, slowly, looking at each of them. They stop.\n\n**{lesson-champion}:** \"This one.\" It's your {cast:lesson-pupil}. Not your strongest. Not even close.\n\n**Morning.** It does a move, badly. The Champion says nothing, and waits.\n\n**Noon.** It does the move again. The Champion moves its foot an inch with the toe of their boot.\n\n**Dusk.** It does the move. The Champion's own ace, watching from the grass, opens one eye.",
    "choices": [
     {
      "label": "Take it back.",
@@ -1657,7 +1708,7 @@
     {
      "label": "Walk among them.",
      "success": {
-      "text": "A traveller you once shared a fire with presses a held item into your palm. \"For the next one. You'll need it more than me.\"",
+      "text": "A traveller you once shared a fire with presses a held item into your palm. \"For the next one. You'll need it more than me. They've a new one, you know. A {cast:allstar-new-sf}.\"",
       "effects": [
        {
         "kind": "itemFrom",
@@ -1748,7 +1799,7 @@
     {
      "label": "Battle.",
      "success": {
-      "text": "Same team. Same stance. Same look in their eye, like they know something you don't.",
+      "text": "Same stance. Same look in their eye, like they know something you don't. The team behind them has grown up, all the same.",
       "effects": [],
       "battle": {
        "kind": "trainer",
@@ -1912,7 +1963,7 @@
     "tint": "#5b3f1f",
     "effect": "none"
    },
-   "intro": "The final. {allstar-rival}, on the far side of the ring, exactly where the bracket said they'd be.\n\n**{allstar-rival}:** \"Everyone you've ever fought is in those stands. And it's still us two at the end. It's *always* us two.\"",
+   "intro": "The final. {allstar-rival}, on the far side of the ring, exactly where the bracket said they'd be.\n\n**{allstar-rival}:** {allstar-open}",
    "choices": [
     {
      "label": "Shake.",

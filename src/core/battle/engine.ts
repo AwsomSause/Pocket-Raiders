@@ -30,7 +30,7 @@ import { bidoofTurn, NO_FLINCH } from '../greenneedle/bidoof';
 import { alleyTurn, fairShare } from '../greenneedle/alley';
 import { callPriority, cheerTurn } from '../greenneedle/cheer';
 import { trustHolds } from '../greenneedle/ball';
-import { champPower, lessonTurn, seenItFirst, seenItSpend, summitSaves } from '../greenneedle/champion';
+import { champPower, lessonOpens, lessonTurn, seenItFirst, seenItSpend, summitSaves } from '../greenneedle/champion';
 import { earthLine, overchargeSelfHurt } from '../greenneedle/ridge';
 import { foresightBegin } from './foresight';
 import { coAccuracyExempt, coBlind, coCritBonus, coCritMult, coDamageMult, coEntry, coForcedOrder, coPinchFoe, coSpeedMult, coStartRules, coTurnEnd } from './coRules';
@@ -918,7 +918,9 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   const enemyChoiceIndex = enemyChoice ? enemy.mon.moves.findIndex((m) => m.id === enemyChoice) : -1;
   const foresightMove = foresightBegin(battle, action.kind === 'move' && action.index >= 0 ? ctx.party[battle.activeIndex]?.moves[action.index]?.id ?? null : null, events);
   // Mentor lesson Foe Move Preview: the move shown before the player chose is the foe's turn-one move.
-  const previewIndex = previewedEnemyMove(battle, enemy.mon);
+  // Greenneedle gn.45: the Champion who taught a move opens with it against the Pokémon they taught it to, the first turn it is out.
+  const taughtIndex = battle.storyEffects.some((x) => x.startsWith('lesson-open:')) ? lessonOpens(content, battle, enemy.mon, ctx.party[battle.activeIndex]) : -1;
+  const previewIndex = taughtIndex >= 0 ? taughtIndex : previewedEnemyMove(battle, enemy.mon);
   let enemyMoveIndex =
     enemyForcedIndex >= 0 ? enemyForcedIndex : enemyChoiceIndex >= 0 ? enemyChoiceIndex : ctx.enemyPick !== undefined && ctx.enemyPick >= 0 && ctx.enemyPick < enemy.mon.moves.length ? ctx.enemyPick : previewIndex >= 0 ? previewIndex : chooseEnemyMove(enemy.mon, rng, { content, ai: foresightMove ? 1 : battle.ai, target: ctx.party[battle.activeIndex]!, stages: battle.enemyStages, battle, party: ctx.party, ...(foresightMove ? { foresight: foresightMove } : {}) });
   ctx.enemyPick = undefined;
@@ -1292,7 +1294,7 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
   if (rule.gn === 'draft' && party) draftTurn(battle, party, events, (text) => events.push({ type: 'raid', tone: 'info', text }));
   // Greenneedle gn.45, the Champion's lesson: the Champion explains each decision; it ends once all three of theirs have been out.
   if (rule.gn === 'champlesson' && content) {
-    lessonTurn(content, battle, mine, events, (text) => events.push({ type: 'raid', tone: 'info', text }), (m) => maxHp(content, m));
+    lessonTurn(content, battle, mine, events, (text, at) => (at === undefined ? events.push({ type: 'raid', tone: 'info', text }) : events.splice(at, 0, { type: 'raid', tone: 'info', text })), (m) => maxHp(content, m));
     if (battle.outcome) return;
   }
   // Greenneedle gn.42, the Battle Frontier's Arena: the judges keep a tally each turn, and after the last one they decide.

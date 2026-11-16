@@ -277,7 +277,7 @@ describe('gn.45 The Champion\'s Training Session', () => {
 });
 
 // ---------- gn.46 The All-Star Tournament ----------
-import { allstarRecord, allstarTurn, answerTo, logOf, RARE } from '../../src/core/greenneedle/allstar';
+import { allstarRecord, allstarTurn, answerTo, logOf, regionRarest } from '../../src/core/greenneedle/allstar';
 import { FOE_WAITS } from '../../src/core/greenneedle';
 import { featuredRival } from '../../src/core/rivals/living';
 
@@ -347,7 +347,7 @@ describe('gn.46 The All-Star Tournament', () => {
     expect(sf).toContain('One Pokémon. You had *one* left.');
   });
 
-  it('the quarter-finalist changed most: evolved, plus one that answers your finisher; the semi-finalist unchanged; a Rare item each', () => {
+  it('the quarter-finalist changed most: evolved, plus one that answers your finisher; the semi-finalist the same; a Rare item each', () => {
     let run = gnRun('t46-teams');
     seven(run);
     open(run, 'gn-46-door');
@@ -365,7 +365,9 @@ describe('gn.46 The All-Star Tournament', () => {
     expect(owned(run)).toBeGreaterThan(items);
     run = choose(run, 'gn-46-crowd-1', 'Go to the ring.').run;
     const sf = choose(run, 'gn-46-sf', 'Battle.');
-    expect(sf.run.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(['rattata', 'pidgey']);
+    // The doc's "upgraded teams": the semi-finalist's team is evolved too, with one new Pokémon that answers how you beat them.
+    expect(sf.run.battle!.enemyTeam.map((m) => m.speciesId).slice(0, 2)).toEqual(['raticate', 'pidgeotto']);
+    expect(sf.run.battle!.enemyTeam).toHaveLength(3);
     for (const foe of sf.run.battle!.enemyTeam) Object.assign(foe, makeStrong(foe));
     const out = lose(sf.run);
     expect(opened(out, 'gn-46-out')).toBe(true);
@@ -410,7 +412,7 @@ describe('gn.46 The All-Star Tournament', () => {
     r = win(r);
     expect(flagOf(r, 'allstar-champion')).toBe(1);
     const rare = castOf(r, 'allstar-rare')!;
-    expect(RARE[region(r)]).toContain(rare);
+    expect(regionRarest(content, region(r))).toContain(rare);
     const go = choose(r, 'gn-46-champion', 'Go to it.');
     expect(go.run.battle!.enemyTeam[0]!.speciesId).toBe(rare);
     expect(go.run.battle!.eventRule?.catchTimes).toBe(4);
