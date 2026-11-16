@@ -90,4 +90,15 @@ describe('gn.new.36 The Lantern Sea', () => {
     open(run, 'gn-new-36-sea');
     expect(scene(run, 'gn-new-36-sea').intro).toContain('At night');
   });
+
+  it('Day of the Dead opens the way, by day: the same hub, once a region', () => {
+    const run = gnRun('l-dotd');
+    setFlag(run, 'lantern-sea-open');
+    open(run, 'gn-new-36-dotd');
+    expect(scene(run, 'gn-new-36-dotd').labels).toEqual(['Go down to the shore.', 'Walk on.']);
+    const r = choose(run, 'gn-new-36-dotd', 'Go down to the shore.').run;
+    expect(opened(r, 'gn-new-36-hub')).toBe(true);
+    expect(flagOf(r, 'lantern-sea-open')).toBe(0);
+    expect(flagOf(r, 'ls-visits')).toBe(1);
+  });
 });

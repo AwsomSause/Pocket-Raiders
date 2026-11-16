@@ -80,6 +80,75 @@
    ]
   },
   {
+   "id": "gn-new-36-dotd",
+   "name": "The Lantern Sea: The Way Is Open",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lantern-sea-open",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "ls-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "lanturn",
+    "tint": "#2f5f8f",
+    "effect": "none"
+   },
+   "intro": "You followed the marigolds, and the smell of candle smoke, and the sound of people speaking quietly. The road bends down to a bay.\n\n*Chinchou and Lanturn, hundreds, in the shallows, lit from below. On the shore, paper boats, each with a candle.*\n\n**Boat-maker, Aunt Brigid:** \"One for each who didn't come home. Yours is free. Everyone's first one's free.\"",
+   "choices": [
+    {
+     "label": "Go down to the shore.",
+     "success": {
+      "text": "You go down to the water. The light moves under your feet, slowly, like breathing. Nobody here is in a hurry.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lsArrive"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "ls-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lantern-sea-open",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-hub"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you the bay goes on glowing, for anyone who wants it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
    "id": "gn-new-36-hub",
    "name": "The Lantern Sea: The Shore",
    "group": "Greenneedle",

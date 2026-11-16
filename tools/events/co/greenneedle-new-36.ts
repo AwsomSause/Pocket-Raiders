@@ -22,6 +22,15 @@ const EVENTS: Json[] = [
     ch('Go down to the shore.', out('You go down to the water. The light moves under your feet, slowly, like breathing. Nobody here is in a hurry.', gn('lsArrive'), stampRegion('ls-at'), toHub)),
     ch('Walk on.', out('You walk on. Behind you the bay goes on glowing, for anyone who wants it.')),
   ]),
+  // Day of the Dead (SF158, singles-12) sets `lantern-sea-open`: the way to the Lantern Sea is open, by day or night, on the next stop that can hold it.
+  gev('gn-new-36-dotd', 'The Lantern Sea: The Way Is Open', sea({ stop: 'event', rarity: 'rare', callback: true, requires: [is('lantern-sea-open'), notThisRegion('ls-at')] }), say(
+    'You followed the marigolds, and the smell of candle smoke, and the sound of people speaking quietly. The road bends down to a bay.',
+    '*Chinchou and Lanturn, hundreds, in the shallows, lit from below. On the shore, paper boats, each with a candle.*',
+    '**Boat-maker, Aunt Brigid:** "One for each who didn\'t come home. Yours is free. Everyone\'s first one\'s free."',
+  ), [
+    ch('Go down to the shore.', out('You go down to the water. The light moves under your feet, slowly, like breathing. Nobody here is in a hurry.', gn('lsArrive'), stampRegion('ls-at'), setTo('lantern-sea-open', 0), toHub)),
+    ch('Walk on.', out('You walk on. Behind you the bay goes on glowing, for anyone who wants it.')),
+  ]),
   rm('gn-new-36-hub', 'The Lantern Sea: The Shore', sea(), say(
     'The shore, lit from underneath. People move along it quietly, in twos and threes, speaking low.',
     'The boat-makers sit at a long trestle with the paper, the brushes and the candles. A diver stands knee-deep in the shallows, dripping and content. A child searches the reeds.',
@@ -94,6 +103,6 @@ export const PLACEMENT: Record<string, Placement> = {
   'gn-new-36-sea': {
     gn: 'gn.new.36', shape: 'Hub', earliest: 'A8', home: 15, window: [13, 19], sits: 'must-see', attaches: 'town', tags: ['Community Episode'], needs: ['water'], needsAll: ['night'],
     level: 'No battles', often: 'region', badge: 'own',
-    note: 'Badge: a paper boat. At night on a water stage (the doc\'s fallback step 19 is the end of the window). Day of the Dead (SF158) opens it too. Once per region; every later visit has one more boat than the town can account for. Floating a boat sets lantern-boat (read by gn.33 and the gn-07 window).',
+    note: 'Badge: a paper boat. At night on a water stage (the doc\'s fallback step 19 is the end of the window). Day of the Dead (SF158) opens it too, by day or night, through gn-new-36-dotd (an afterstory-style callback on the flag `lantern-sea-open`). Once per region; every later visit has one more boat than the town can account for. Floating a boat sets lantern-boat (read by gn.33 and the gn-07 window).',
   },
 };
