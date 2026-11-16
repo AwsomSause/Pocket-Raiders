@@ -4392,5 +4392,49 @@
   "tags": [
    "night"
   ]
+ },
+ "gn-new-33-door": {
+  "gn": "gn.new.33",
+  "shape": "Door",
+  "earliest": "A10",
+  "home": 15,
+  "window": [
+   12,
+   18
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "level": "A+0 wild Flying-types",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Old Courier",
+   "elsewhere": "The Old Courier"
+  },
+  "note": "Pseudo stage of three legs of flight, at the post office; fallback step 5 of the next stage. Once per run. Badge: a mailbag. The egg hatches a Dratini with Extreme Speed and Tailwind Heart (daycare.ts egg shape).",
+  "kinds": [
+   "Pseudo Stage"
+  ],
+  "tags": []
+ },
+ "gn-new-33-roof": {
+  "gn": "gn.new.33",
+  "shape": "Single",
+  "earliest": "A11",
+  "home": 8,
+  "window": [
+   2,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: a retired Dragonite on a post office roof; a parcel for you, a step early (a later stage of the same run).",
+  "kinds": [
+   "Miniature Episode"
+  ],
+  "tags": []
  }
 }

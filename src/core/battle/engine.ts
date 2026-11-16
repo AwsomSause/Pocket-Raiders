@@ -18,7 +18,7 @@
 
 import { ownTypes } from '../co/typeShift';
 import { golemBlueType, golemColour } from '../greenneedle/crystals';
-import { unflinching } from '../greenneedle/daycare';
+import { TAILWIND_HEART, unflinching } from '../greenneedle/daycare';
 import { arenaTurn, arenaVerdict } from '../greenneedle/frontier';
 import { gavelFirst, gavelSpent } from '../greenneedle/auction';
 import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
@@ -2015,6 +2015,13 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
   // Pokémon moments (Beta 0.6): a "switch-in" moment for the Pokémon that just came out.
   if (ctx.moments) tryEntryMoments(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, 'enter', events);
   if (ctx.moments) applyPendingMoments(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, events);
+  // Tailwind Heart (gn.new.33): the holder arms it on entry; the next ally to switch in gains +1 Speed. Once per battle.
+  if (mon.gn?.includes(TAILWIND_HEART) && !battle.storyEffects.includes('th-used') && !battle.storyEffects.includes('th-armed')) battle.storyEffects.push('th-armed');
+  else if (battle.storyEffects.includes('th-armed') && !battle.storyEffects.includes('th-used') && !mon.gn?.includes(TAILWIND_HEART)) {
+    battle.storyEffects.push('th-used');
+    events.push({ type: 'raid', tone: 'info', text: `Tailwind Heart: the wind picks up behind ${nameOf(ctx, mon)}!` });
+    applyStageChange(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, 'spe', 1, events);
+  }
   // Mentor lesson: after a turn-one knockout, the next Pokémon you send in enters faster (once per battle).
   const koSpeed = turnOneKoSpeedStages(ctx.perks);
   if (koSpeed > 0 && battle.lesson?.koTurnOne && !battle.lesson.koSpeedUsed) {
