@@ -4343,5 +4343,54 @@
   ],
   "note": "Duel 1 when the stage of the critical hit had no step left ahead: the next stage, same steps.",
   "tags": []
+ },
+ "gn-new-09-door": {
+  "gn": "gn.new.09",
+  "shape": "Pseudo Stage",
+  "earliest": "A6",
+  "home": 13,
+  "window": [
+   11,
+   15
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "level": "A+0 (no battle)",
+  "often": "run",
+  "badge": "None",
+  "dressing": {
+   "kanto": "The Last Stop",
+   "elsewhere": "The Last Stop"
+  },
+  "note": "Three carriages. The platform is not on the stage map until the player is standing on it. Fallback: step 8, side branch, a node added if no three-node column exists. Night only.",
+  "kinds": [
+   "Pseudo Stage",
+   "Exploration"
+  ],
+  "tags": [
+   "night"
+  ]
+ },
+ "gn-new-09-return": {
+  "gn": "gn.new.09",
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 13,
+  "window": [
+   11,
+   15
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "level": "None",
+  "often": "run",
+  "badge": "None",
+  "note": "Afterstory: on the stage that matches the date on the ticket (5 stages after boarding), the platform is back.",
+  "kinds": [
+   "Exploration"
+  ],
+  "tags": [
+   "night"
+  ]
  }
 }
