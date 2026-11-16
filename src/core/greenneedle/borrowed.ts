@@ -12,7 +12,7 @@ import type { Content } from '../contentSchema';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import { featuredRival, rivalFightTeam } from '../rivals/living';
 import { overhaulOf } from '../rivals/overhaul';
-import { maxHp } from '../pokemon';
+import { createPokemon, maxHp } from '../pokemon';
 import { fnv1a } from '../expansion/hash';
 
 type Make = (speciesId: string, level: number, uid: string) => PokemonInstance;
@@ -67,13 +67,18 @@ const nameOf = (content: Content, sp: string | undefined): string => (sp ? conte
 export function borrowStart(content: Content, run: RunState, make: Make): string {
   const rival = featuredRival(run);
   const level = Math.max(1, Math.round(run.party.reduce((a, m) => a + m.level, 0) / Math.max(1, run.party.length)));
+  const last = rival?.memory?.lastBattle;
   const team = (rival ? rivalFightTeam(content, rival) : []).slice(0, 6);
-  const ids = (team.length ? team : FALLBACK.filter((id) => content.species.has(id))).slice(0, Math.max(3, Math.min(6, run.party.length)));
+  const known = team.length > 0 && last?.team.length === team.length;
+  const ids = (team.length ? team : FALLBACK.filter((id) => content.species.has(id))).slice(0, team.length ? 6 : Math.max(3, Math.min(6, run.party.length)));
   for (const m of run.party) m.gn = [...(m.gn ?? []), BORROW_BENCH];
   run.box = [...run.box, ...run.party];
   const mine = run.party.map((m) => m.speciesId);
   run.party = ids.map((id, i) => {
-    const mon = make(id, level, `p${run.nextUid + i}`);
+    // Their real level and moveset from the last meeting (their habits), when it is on record.
+    const mon = make(id, known ? Math.max(1, last?.levels?.[i] ?? level) : level, `p${run.nextUid + i}`);
+    const real = known ? (last?.moves?.[i] ?? []).filter((m) => content.moves.has(m)) : [];
+    if (real.length) mon.moves = real.map((m) => ({ id: m, pp: content.moves.get(m)!.pp }));
     mon.gn = [BORROWED];
     return mon;
   });
@@ -156,4 +161,23 @@ export function borrowTokens(content: Content, run: RunState, text: string): str
     if (part === 'theirs') return nameOf(content, castOf('borrow-rival-ling'));
     return '';
   });
+}
+
+/** One of the rival's Pokémon as the team viewer shows it. */
+export interface TeamViewMon { speciesId: string; name: string; level: number; types: string[]; moves: string[] }
+export interface TeamView { rival: string; mons: TeamViewMon[] }
+
+/** The rival's team as you saw it from behind their hat: species, level, moves (their last meeting's, kept up to date). Null until you have borrowed it. */
+export function borrowTeamView(content: Content, run: RunState): TeamView | null {
+  if (f(run, 'borrow-knows') <= 0) return null;
+  const rival = featuredRival(run);
+  const last = rival?.memory?.lastBattle;
+  if (!rival || !last?.team.length) return null;
+  const mons = last.team.filter((id) => content.species.has(id)).map((id, i) => {
+    const sp = content.species.get(id)!;
+    const fallback = createPokemon(content, id, last.levels?.[i] ?? 20, 'view').moves.map((m) => m.id);
+    const ids = (last.moves?.[i]?.length ? last.moves[i]! : fallback).filter((m) => content.moves.has(m));
+    return { speciesId: id, name: sp.name, level: last.levels?.[i] ?? 0, types: [...sp.types], moves: ids.map((m) => content.moves.get(m)!.name) };
+  });
+  return mons.length ? { rival: rival.name, mons } : null;
 }

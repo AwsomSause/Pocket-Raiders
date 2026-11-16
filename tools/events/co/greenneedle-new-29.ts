@@ -38,7 +38,7 @@ const fightRoom = rm('gn-new-29-fight', 'The Borrowed Team: The Match', ring(), 
 
 const after = rm('gn-new-29-after', 'The Borrowed Team: Hats Off', ring({ remembers: AFTER_REMEMBERS }), say(
   'The hats come off. Each Pokémon goes home, slowly, and not in a straight line.',
-  'A {borrow:theirs} lingers at your knee a moment longer than it needs to. Across the ring, your {borrow:mine} has stopped beside {borrow:name} and will not be moved.',
+  'One of theirs, {borrow:theirs}, lingers at your knee a moment longer than it needs to. Across the ring, your {borrow:mine} has stopped beside {borrow:name} and will not be moved.',
   '**{borrow:name}:** {borrow:after}',
   '*You know their team now: every move, every habit. They know yours. Neither of you says so.*',
 ), [

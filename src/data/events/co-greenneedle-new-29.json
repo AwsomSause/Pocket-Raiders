@@ -180,7 +180,7 @@
     "tint": "#46506a",
     "effect": "none"
    },
-   "intro": "The hats come off. Each Pokémon goes home, slowly, and not in a straight line.\n\nA {borrow:theirs} lingers at your knee a moment longer than it needs to. Across the ring, your {borrow:mine} has stopped beside {borrow:name} and will not be moved.\n\n**{borrow:name}:** {borrow:after}\n\n*You know their team now: every move, every habit. They know yours. Neither of you says so.*",
+   "intro": "The hats come off. Each Pokémon goes home, slowly, and not in a straight line.\n\nOne of theirs, {borrow:theirs}, lingers at your knee a moment longer than it needs to. Across the ring, your {borrow:mine} has stopped beside {borrow:name} and will not be moved.\n\n**{borrow:name}:** {borrow:after}\n\n*You know their team now: every move, every habit. They know yours. Neither of you says so.*",
    "choices": [
     {
      "label": "Hand back the hats.",

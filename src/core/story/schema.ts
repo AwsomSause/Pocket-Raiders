@@ -379,6 +379,9 @@ export const RivalSchema = z.object({
       turns: z.number().int().min(0),
       /** Its team that day, for later counter-adaptation. */
       team: z.array(z.string()).max(6),
+      /** The team's real levels and movesets that day, in the same order as `team` (gn.new.29 lends them to you). Older saves have none. */
+      levels: z.array(z.number().int().min(1)).max(6).optional(),
+      moves: z.array(z.array(z.string()).max(4)).max(6).optional(),
       /** Uids of your Pokémon that fought it that day (so its Pokémon can recognise them). */
       foes: z.array(z.string()).optional(),
     }),

@@ -122,6 +122,7 @@ import { celebrateToday, milestoneToday, periodOf, PERIOD_LABEL, restUntilMornin
 import { BERRIES } from './berries';
 import { choiceAt, effectiveEvent, visibleChoices } from './eventMemory';
 import { beginRivalBrain } from './rivals/brainSetup';
+import { borrowTeamView, type TeamView } from './greenneedle/borrowed';
 import { applyQuestEffect, beginBorrow, beginFeudWatch, interleave, mainRival, secondRival, planRivalTeam, starterRivalryStages, shapeRivalMons, questConditionMet, questText, rivalAllySpecies, rivalStanding, RIVAL_QUEST_GROUP } from './rivals/questlines';
 import { getTheme, typesPool } from './themes';
 import { fitsStage, nodesAhead, planCoStage, positioned, SAME_STAGE, stageTags, type CoEntry } from './co/placement';
@@ -1026,6 +1027,8 @@ export interface EventView {
   choices: ChoiceView[];
   /** Shown beside the event text when set (the New UI draws it; see `src/ui/redux/screens/event.ts`). */
   standing?: EventStanding | null;
+  /** gn.new.29: the rival's team and moves, once you have borrowed it, on a rival's scene (the New UI's team page; R). */
+  team?: TeamView | null;
 }
 
 function findSide(run: RunState, sideId: string): { node: MapNode; side: SideStop } {
@@ -1111,7 +1114,8 @@ export function eventView(content: Content, run: RunState, sideId: string): Even
     return { label: fillMentorText(run, fillCoText(content, run, c.label)), locked: missing, kind: choiceKind(c, chance), tradePicks: tradePicksOf(content, run, c), chance, attribute: c.check ?? null, attributeValue: c.check ? effectiveAttributes(content, run)[c.check] : null, preview, ...choiceRisk(content, c) };
   });
   const standing = base.group === RIVAL_QUEST_GROUP ? rivalStanding(content, run) : null;
-  return { event: { ...event, intro: fillMentorText(run, fillCoText(content, run, event.intro)) }, choices, ...(standing ? { standing } : {}) };
+  const team = base.group === RIVAL_QUEST_GROUP || base.id.startsWith('gn-new-29-') ? borrowTeamView(content, run) : null;
+  return { event: { ...event, intro: fillMentorText(run, fillCoText(content, run, event.intro)) }, choices, ...(standing ? { standing } : {}), ...(team ? { team } : {}) };
 }
 
 export interface EventResult {
