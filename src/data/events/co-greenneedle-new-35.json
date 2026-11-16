@@ -11,7 +11,7 @@
     "Story",
     "Relationship"
    ],
-   "stop": "rest",
+   "stop": "event",
    "rarity": "rare",
    "forced": true,
    "minStage": 1,
@@ -80,7 +80,7 @@
     "Story",
     "Relationship"
    ],
-   "stop": "rest",
+   "stop": "event",
    "rarity": "rare",
    "callback": true,
    "forced": true,
@@ -249,7 +249,7 @@
     "Story",
     "Relationship"
    ],
-   "stop": "rest",
+   "stop": "event",
    "rarity": "rare",
    "callback": true,
    "forced": true,
@@ -418,7 +418,7 @@
     "Story",
     "Relationship"
    ],
-   "stop": "rest",
+   "stop": "event",
    "rarity": "rare",
    "callback": true,
    "forced": true,
@@ -587,7 +587,7 @@
     "Story",
     "Relationship"
    ],
-   "stop": "rest",
+   "stop": "event",
    "rarity": "rare",
    "callback": true,
    "forced": true,
@@ -756,7 +756,7 @@
     "Story",
     "Relationship"
    ],
-   "stop": "rest",
+   "stop": "event",
    "rarity": "rare",
    "callback": true,
    "forced": true,
@@ -925,7 +925,7 @@
     "Story",
     "Relationship"
    ],
-   "stop": "rest",
+   "stop": "event",
    "rarity": "rare",
    "callback": true,
    "forced": true,
@@ -1094,7 +1094,7 @@
     "Story",
     "Relationship"
    ],
-   "stop": "rest",
+   "stop": "event",
    "rarity": "rare",
    "callback": true,
    "forced": true,
@@ -1797,7 +1797,7 @@
     "Story",
     "Relationship"
    ],
-   "stop": "rest",
+   "stop": "event",
    "rarity": "rare",
    "callback": true,
    "requires": [

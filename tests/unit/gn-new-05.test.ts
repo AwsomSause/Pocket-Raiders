@@ -56,6 +56,8 @@ describe('gn.new.05 The Egg That Listened', () => {
   it('hears *far* for people walked past, and *soft* when there is nothing to go on', () => {
     const run = given('gnnew05-d');
     const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+    // Only the two stops under test (a placed story scene may also sit on the first node).
+    here.sides = here.sides.filter((s) => s.kind !== 'event');
     here.sides.push({ id: 'x-1', kind: 'event', used: false, eventId: 'someone' });
     here.sides.push({ id: 'x-2', kind: 'event', used: true, eventId: 'spoken-to' });
     listenedPass(run, here.sides);

@@ -48,7 +48,7 @@ const stageEvent = (n: number): Json => {
     '*The road goes on. Nobody has said anything yet that can be checked.*',
   );
   return gev(`gn-new-35-s${n}`, 'The Storyteller\'s Road', road({
-    stop: 'rest', rarity: 'rare', callback: true, forced: true, requires: REQ_NEXT(n), remembers: memory(), cast: [], effect: 'sparkle',
+    stop: 'event', rarity: 'rare', callback: true, forced: true, requires: REQ_NEXT(n), remembers: memory(), cast: [], effect: 'sparkle',
   }), say(
     'An old woman at the rest, with a ring of children. A different ring; the same her.',
     `"Last time I told you the trainer would **${PRED[n - 2]}**," she says. "Well? Did they?"`,
@@ -57,7 +57,7 @@ const stageEvent = (n: number): Json => {
 
 export const EVENTS: Json[] = [
   // ---- S1: the opening (Step 10, a rest) ----
-  gev('gn-new-35-s1', 'The Storyteller\'s Road', road({ stop: 'rest', rarity: 'rare', forced: true, minStage: 1, effect: 'sparkle' }), say(
+  gev('gn-new-35-s1', 'The Storyteller\'s Road', road({ stop: 'event', rarity: 'rare', forced: true, minStage: 1, effect: 'sparkle' }), say(
     'An old woman at a rest is telling a story to the children. It\'s about a trainer. The trainer has your starter.',
     '**The Storyteller:** "...and at the fork, the trainer went left, because they\'d heard crying."',
     '*The fork is ahead, at Step 11. Nobody\'s crying yet.*',
@@ -69,7 +69,7 @@ export const EVENTS: Json[] = [
 
   // ---- S8, Step 19: the ending ----
   gev('gn-new-35-end', 'The Storyteller\'s Road: The Last Telling', road({
-    stop: 'rest', rarity: 'rare', callback: true, forced: true, requires: REQ_NEXT(8), remembers: memory(), effect: 'sparkle',
+    stop: 'event', rarity: 'rare', callback: true, forced: true, requires: REQ_NEXT(8), remembers: memory(), effect: 'sparkle',
   }), say(
     'The Storyteller is at the last rest of the region, with every child she has ever told a story to, it seems. They are of every age.',
     `"Last time I told you the trainer would **${PRED[6]}**," she says. "Well? Did they?"`,
@@ -131,7 +131,7 @@ export const EVENTS: Json[] = [
 
   // ---- the afterstory: next region, a different old woman tells the player's story, wrongly ----
   gev('gn-new-35-after', 'A Different Old Woman', road({
-    stop: 'rest', rarity: 'rare', callback: true, requires: [is('sr-told'), regionChanged('sr-region'), not('sr-after')], effect: 'sparkle',
+    stop: 'event', rarity: 'rare', callback: true, requires: [is('sr-told'), regionChanged('sr-region'), not('sr-after')], effect: 'sparkle',
     remembers: [
       { id: 'won', when: [is('sr-won')], notice: '*The children are asking for "the one where the Slowking stood up." Someone has put the Slowking in a different story. She hasn\'t noticed.*' },
       { id: 'lost', when: [is('sr-asked'), not('sr-won')], notice: '*She tells the one about the grandmother\'s grandmother. She has the lies the wrong way round.*' },

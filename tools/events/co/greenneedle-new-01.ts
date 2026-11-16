@@ -110,7 +110,7 @@ const BEATS = [
   { beat: 'Ending', event: 'gn-new-01-end', stage: 'S8', home: 19, window: [19, 19] as [number, number] },
 ];
 export const PLACEMENT: Record<string, Placement> = {
-  'gn-new-01-open': { ...BASE, beat: 1, attaches: 'before', beats: BEATS, note: 'Badge: a small brown paw. Once a run (the doc says once per save; no memory across runs). Best in a run\'s first or second region.' },
+  'gn-new-01-open': { ...BASE, beat: 1, attaches: 'after', beats: BEATS, note: 'Badge: a small brown paw. After the run\'s first encounter, so the first battle still starts. Once a run (the doc says once per save; no memory across runs). Best in a run\'s first or second region.' },
   ...Object.fromEntries(ADMIRERS.map((a, i) => [`gn-new-01-b${i + 1}`, { ...BASE, beat: i + 2, stages: [stageNo(a.stage)], beats: BEATS, ...(i === 0 ? { sits: 'must-see' as const } : { sits: 'optional' as const }) }])),
   'gn-new-01-end': { ...BASE, beat: 9, attaches: 'before', beats: BEATS, note: 'S8 step 19, at a + node if one is near.' },
 };

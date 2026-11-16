@@ -228,15 +228,6 @@
    "start": "opened"
   },
   {
-   "id": "ps_gn_courier",
-   "name": "The Old Courier",
-   "entry": "gn-new-33-door",
-   "themeId": "normal-flying",
-   "tint": "#6b5a3a",
-   "mood": "high wind",
-   "start": "opened"
-  },
-  {
    "id": "ps_gn_station",
    "name": "The Weather Station",
    "entry": "gn-new-15-door",
@@ -252,6 +243,15 @@
    "themeId": "normal-ice",
    "tint": "#bcd3e6",
    "mood": "snow village",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_courier",
+   "name": "The Old Courier",
+   "entry": "gn-new-33-door",
+   "themeId": "normal-flying",
+   "tint": "#6b5a3a",
+   "mood": "high wind",
    "start": "opened"
   }
  ]

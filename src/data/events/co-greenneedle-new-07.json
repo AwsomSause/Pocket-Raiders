@@ -64,7 +64,7 @@
     "Pokémon",
     "Story"
    ],
-   "stop": "rest",
+   "stop": "event",
    "rarity": "rare",
    "callback": true,
    "minStage": 2,

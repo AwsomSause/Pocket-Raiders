@@ -587,6 +587,9 @@ describe("gn.09 Bill's Lighthouse", () => {
     expect(boxCapacity(runPerks(content, run))).toBe(0);
     run.passives = { ...run.passives, 'bills-pc': 1 };
     expect(boxCapacity(runPerks(content, run))).toBeGreaterThan(0);
+    // Only stops away from the player (a placed story scene may also sit on the node the player stands on).
+    const standing = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+    standing.sides = standing.sides.filter((s) => s.kind !== 'event');
     const sides = run.stage!.map.nodes.flatMap((n) => n.sides.map((side) => ({ node: n, side })));
     sides.forEach(({ side }) => { side.hidden = true; });
     const far = sides.filter(({ node }) => node.id !== run.stage!.current);

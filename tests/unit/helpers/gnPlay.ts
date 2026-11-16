@@ -27,10 +27,10 @@ export function open(run: RunState, eventId: string): string {
   return id;
 }
 
-/** The unused event stop on the current node (the room the story just opened). */
+/** The unused event stop on the current node that was added last (the room the story just opened, not a scene placed at stage start). */
 export function openSide(run: RunState): { id: string; eventId: string } | undefined {
   const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current);
-  const side = here?.sides.find((s) => s.kind === 'event' && !s.used && s.eventId);
+  const side = [...(here?.sides ?? [])].reverse().find((s) => s.kind === 'event' && !s.used && s.eventId);
   return side ? { id: side.id, eventId: side.eventId! } : undefined;
 }
 

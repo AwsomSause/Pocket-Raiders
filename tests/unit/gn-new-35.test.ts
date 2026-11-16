@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { RunStateSchema } from '../../src/core/state';
 import { twiceToldPower } from '../../src/core/greenneedle/twiceTold';
 import { content } from './helpers';
-import { choose, flagOf, gnRun, open, openSide, scene, setFlag } from './helpers/gnPlay';
+import { choose, flagOf, gnRun, open, scene, setFlag } from './helpers/gnPlay';
 
 describe('gn.new.35 The Storyteller\'s Road', () => {
   it('opens at S1 with the fork line and begins the story', () => {
@@ -41,7 +41,7 @@ describe('gn.new.35 The Storyteller\'s Road', () => {
     setFlag(run, 'sr-n', 7);
     open(run, 'gn-new-35-end');
     run = choose(run, 'gn-new-35-end', 'Say nothing.').run;
-    expect(openSide(run)?.eventId).toBe('gn-new-35-who');
+    expect(run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.sides.some((x) => x.kind === 'event' && !x.used && x.eventId === 'gn-new-35-who')).toBe(true);
     expect(scene(run, 'gn-new-35-who').labels).toEqual(['Who are you?', 'Let me tell one.']);
     const who = choose(run, 'gn-new-35-who', 'Who are you?');
     expect(who.text).toContain('Two of those are lies');

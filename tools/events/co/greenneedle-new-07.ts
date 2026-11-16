@@ -23,7 +23,7 @@ export const EVENTS: Json[] = [
   ), [
     ch('Let it follow.', out('It floats a little behind you, close enough that you can hear nothing at all. You walk on, and it comes, and neither of you says why.', setTo('shed-begun', 1), setTo('shed-rests', 0), stampStage('shed-stage'))),
   ]),
-  gev('gn-n07-rest', 'The Shedinja Question: The Rest', shed({ stop: 'rest', rarity: 'rare', callback: true, minStage: 2, requires: RESTING, remembers: [
+  gev('gn-n07-rest', 'The Shedinja Question: The Rest', shed({ stop: 'event', rarity: 'rare', callback: true, minStage: 2, requires: RESTING, remembers: [
     { id: 'again', when: [is('shed-rests')], notice: '*It is waiting at the edge of the light, exactly where it hovered last time. It hasn\'t forgotten the question.*' },
   ] }), say(
     'The fire is low. The shell drifts in from the dark, and hovers in front of one of the party. And holds still.',
