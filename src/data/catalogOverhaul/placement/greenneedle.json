@@ -4863,10 +4863,10 @@
    7,
    9
   ],
-  "sits": "optional",
+  "sits": "must-see",
   "attaches": "after",
   "beat": 2,
-  "note": "One master at the roadside (Sensei Oyelowo), any lane.",
+  "note": "One master at the roadside (Sensei Oyelowo), any lane: on every node of the step.",
   "kinds": [
    "Pokémon"
   ],
@@ -4885,10 +4885,10 @@
    11,
    13
   ],
-  "sits": "optional",
+  "sits": "must-see",
   "attaches": "after",
   "beat": 3,
-  "note": "One master at the roadside (Sensei Brannigan), any lane.",
+  "note": "One master at the roadside (Sensei Brannigan), any lane: on every node of the step.",
   "kinds": [
    "Pokémon"
   ],
@@ -4907,10 +4907,10 @@
    15,
    17
   ],
-  "sits": "optional",
+  "sits": "must-see",
   "attaches": "after",
   "beat": 4,
-  "note": "One master at the roadside (Sensei Tachibana), any lane.",
+  "note": "One master at the roadside (Sensei Tachibana), any lane: on every node of the step.",
   "kinds": [
    "Pokémon"
   ],

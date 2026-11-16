@@ -11,6 +11,7 @@
 import type { Content } from '../contentSchema';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import { fnv1a } from '../expansion/hash';
+import { WORTHY, worthyStat } from './worthy';
 import { BRING, bench, unbench } from './frontier';
 
 const f = (run: Pick<RunState, 'story'>, k: string): number => Number(run.story.flags[`ev:${k}`] ?? 0);
@@ -25,7 +26,7 @@ const castOf = (run: Pick<RunState, 'story'>, name: string): string | undefined 
   Object.keys(run.story.flags).find((k) => k.startsWith(`ev:cast-${name}:`))?.slice(`ev:cast-${name}:`.length);
 
 export const CHOSEN = 'duel-chosen';
-export const WORTHY = 'Worthy Opponent';
+export { WORTHY } from './worthy';
 /** The first stage (absolute) a series may start in ("A2"). */
 const EARLIEST = 2;
 const DUELS = 5;
@@ -154,12 +155,12 @@ export function duelistStart(content: Content, run: RunState, battle: BattleStat
   battle.storyEffects.push(`${waits}${BOW}${wins > 0 ? `${PRACTISED}${said.length ? ` (${said.join('; ')}.)` : ''}` : ''}`);
 }
 
-/** A foe at its level or higher: the chosen one's Worthy Opponent starts the fight with +1 Speed. */
-export function worthyStart(run: RunState, battle: BattleState): void {
+/** Worthy Opponent at the start of a battle: the lead enters against a foe at full HP, so its highest stat starts one stage up. */
+export function worthyStart(content: Content, run: RunState, battle: BattleState): void {
   const lead = run.party[battle.activeIndex] ?? run.party.find((m) => m.hp > 0);
   const foe = battle.enemyTeam[battle.enemyIndex];
-  if (!lead || !foe || !lead.marks?.includes(WORTHY) || foe.level < lead.level) return;
-  battle.playerStages.spe = Math.min(6, battle.playerStages.spe + 1);
+  const stat = lead && foe ? worthyStat(content, lead, foe) : null;
+  if (stat) battle.playerStages[stat] = Math.min(6, battle.playerStages[stat] + 1);
 }
 
 /** The first Champion fight after the Duelist went: a Sirfetch'd in the crowd, with a worn leek. It nods once. */

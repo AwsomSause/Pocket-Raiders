@@ -167,14 +167,14 @@
    "name": "Last Stop",
    "type": "ghost",
    "category": "special",
-   "power": 85,
+   "power": 60,
    "accuracy": 100,
    "pp": 10,
    "priority": 0,
    "critStage": 0,
    "target": "enemy",
    "flags": [],
-   "effects": {}
+   "effects": {"switchOutOnKo": true}
   }
  ]
 }

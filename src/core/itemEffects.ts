@@ -109,6 +109,8 @@ function hookText(hook: HeldHook, copies: number): HookText {
       return { text: "Its moves don't make contact, so Rocky Helmet and friends don't trigger." };
     case 'heavyDutyBoots':
       return { text: "Entry hazards (Spikes, Stealth Rock...) don't hurt it." };
+    case 'herdBell':
+      return { text: 'When the holder leaves the field, allies switching in take no entry-hazard damage until the end of the next turn.' };
     case 'utilityUmbrella':
       return { text: "Weather doesn't help, weaken or hurt it or its moves." };
     case 'terrainExtender':

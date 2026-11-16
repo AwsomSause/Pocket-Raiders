@@ -261,8 +261,10 @@ export const MoveSchema = z.object({
       disrupt: z.enum(['disable', 'encore', 'torment', 'taunt', 'healBlock', 'spite', 'throatChop']).optional(),
       /** Uses another move: a random one (Metronome), the target's last (Mirror Move), or the last one used by anyone (Copycat). */
       callMove: z.enum(['metronome', 'mirrorMove', 'copycat']).optional(),
-      /** Which stat the attack uses: the target's Attack (Foul Play), the user's Defense (Body Press), or the higher of Atk and Sp. Atk (Photon Geyser). */
-      attackFrom: z.enum(['targetAtk', 'def', 'spd', 'best']).optional(),
+      /** Which stat the attack uses: the target's Attack (Foul Play), the user's Defense (Body Press), the higher of Atk and Sp. Atk (Photon Geyser), or whichever of the user's Attack, Defense or Speed is highest right now (`highest`, Greenneedle's Three Schools). */
+      attackFrom: z.enum(['targetAtk', 'def', 'spd', 'best', 'highest']).optional(),
+      /** Greenneedle gn.new.09 (Last Stop): if it knocks out its target, the user switches out for free. */
+      switchOutOnKo: z.literal(true).optional(),
       /** Only works on a sleeping target (Dream Eater). */
       requiresSleepingTarget: z.literal(true).optional(),
       /** Fails unless the target chose an attack and the user moved first (Sucker Punch, Thunderclap). */
@@ -1274,6 +1276,8 @@ export const HeldHookSchema = z.discriminatedUnion('hook', [
   z.object({ hook: z.literal('protectivePads') }),
   /** Entry hazards don't hurt it (Heavy-Duty Boots). */
   z.object({ hook: z.literal('heavyDutyBoots') }),
+  /** Greenneedle gn.new.19 (Herd Bell): allies switching in take no entry-hazard damage the turn after the holder leaves. */
+  z.object({ hook: z.literal('herdBell') }),
   /** Weather doesn't boost, weaken or hurt it or its moves (Utility Umbrella). */
   z.object({ hook: z.literal('utilityUmbrella') }),
   /** Its ability can't be ignored, swapped, copied or suppressed by opponents (Ability Shield). */

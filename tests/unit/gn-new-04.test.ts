@@ -12,8 +12,8 @@ const joined = (seed: string, label: string): RunState => {
 };
 const opened = (run: RunState, id: string): boolean => !!run.stage!.map.nodes.find((n) => n.id === run.stage!.current)?.sides.some((x) => x.kind === 'event' && !x.used && x.eventId === id);
 /** One player turn of battle, as the engine would report it. */
-const turn = (run: RunState, events: { type: string; side?: string; moveId?: string }[]): void => {
-  run.battle = { activeIndex: run.party.findIndex((m) => m.speciesId === 'tyrogue') } as RunState['battle'];
+const turn = (run: RunState, events: { type: string; side?: string; moveId?: string }[], outcome: 'win' | 'lose' | null = null): void => {
+  run.battle = { activeIndex: run.party.findIndex((m) => m.speciesId === 'tyrogue'), outcome } as RunState['battle'];
   tyrogueTurn(run, events);
 };
 
@@ -35,30 +35,28 @@ describe('gn.new.04 The Tyrogue Who Wanted All Three', () => {
     expect(leadOf(picked)).toBe(flagOf(picked, 'tyr-picked') - 1);
   });
 
-  it('counts kicks, punches and turns survived while it fights', () => {
+  it('counts kicks, punches and turns survived while it fights; the count joins the tally when the battle is won', () => {
     const run = joined('t04-e', 'Travel with me for the stage.');
     turn(run, [{ type: 'move', side: 'player', moveId: 'low-kick' }, { type: 'move', side: 'player', moveId: 'mach-punch' }]);
-    expect([flagOf(run, 'tyr-kick'), flagOf(run, 'tyr-punch'), flagOf(run, 'tyr-stand')]).toEqual([1, 1, 0]);
     turn(run, [{ type: 'move', side: 'enemy', moveId: 'tackle' }, { type: 'damage', side: 'player' }]);
-    turn(run, [{ type: 'move', side: 'player', moveId: 'rapid-spin' }]);
-    expect(flagOf(run, 'tyr-stand')).toBe(2);
+    expect([flagOf(run, 'tyr-kick'), flagOf(run, 'tyr-punch'), flagOf(run, 'tyr-stand')]).toEqual([0, 0, 0]);
+    turn(run, [{ type: 'move', side: 'player', moveId: 'rapid-spin' }], 'win');
+    expect([flagOf(run, 'tyr-kick'), flagOf(run, 'tyr-punch'), flagOf(run, 'tyr-stand')]).toEqual([1, 1, 2]);
     // The foe's hits and a fainted Tyrogue count for nothing.
     run.party.find((m) => m.speciesId === 'tyrogue')!.hp = 0;
-    turn(run, [{ type: 'move', side: 'player', moveId: 'low-kick' }]);
+    turn(run, [{ type: 'move', side: 'player', moveId: 'low-kick' }], 'win');
     expect(flagOf(run, 'tyr-kick')).toBe(1);
   });
 
-  it('the masters at the roadside need the Tyrogue with you, and the lesson teaches a move', () => {
-    let run = joined('t04-f', 'Travel with me for the stage.');
+  it('the masters at the roadside need the Tyrogue with you, and only speak', () => {
+    const run = joined('t04-f', 'Travel with me for the stage.');
     open(run, 'gn-new-04-road-1');
     expect(scene(run, 'gn-new-04-road-1').intro).toContain('"That was a kick. That was MY kick."');
     setFlag(run, 'tyr-kick', 3);
     expect(scene(run, 'gn-new-04-road-1').intro).toContain('right, and he cannot stop saying so');
-    run = choose(run, 'gn-new-04-road-1', 'Take the lesson.').run;
-    expect(tyrogueMon(run)!.moves.some((m) => m.id === 'low-kick')).toBe(true);
-    expect(flagOf(run, 'tyr-kick')).toBe(4);
-    run = choose((open(run, 'gn-new-04-road-2'), run), 'gn-new-04-road-2', 'Tell him he\'s right.').run;
-    expect(flagOf(run, 'tyr-punch')).toBe(2);
+    expect(scene(run, 'gn-new-04-road-1').labels).toEqual(['Leave them to it.']);
+    const after = choose(run, 'gn-new-04-road-1', 'Leave them to it.').run;
+    expect(flagOf(after, 'tyr-kick')).toBe(3);
   });
 
   it.each([['tyr-kick', 'hitmonlee', 'high-jump-kick'], ['tyr-punch', 'hitmonchan', 'sky-uppercut'], ['tyr-stand', 'hitmontop', 'gyro-ball']])('a clear lead in %s: it becomes %s with a tutor move', (flag, form, move) => {

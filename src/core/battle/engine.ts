@@ -19,6 +19,7 @@
 import { ownTypes } from '../co/typeShift';
 import { golemBlueType, golemColour } from '../greenneedle/crystals';
 import { TAILWIND_HEART, unflinching } from '../greenneedle/daycare';
+import { worthyStat } from '../greenneedle/worthy';
 import { arenaTurn, arenaVerdict } from '../greenneedle/frontier';
 import { gavelFirst, gavelSpent } from '../greenneedle/auction';
 import { agencyArrives, callHelper, fieldOf, helperProblem, reunionTakeHit } from '../greenneedle/reunion';
@@ -2092,6 +2093,17 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
     battle.storyEffects.push('th-used');
     events.push({ type: 'raid', tone: 'info', text: `Tailwind Heart: the wind picks up behind ${nameOf(ctx, mon)}!` });
     applyStageChange(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, 'spe', 1, events);
+  }
+  // Greenneedle gn.new.19, Herd Bell: its holder leaves the field, and the bell rings for the allies who step in (this turn and the next).
+  if (outgoing && outgoing.uid !== mon.uid && Held.hasHook(ctx, outgoing, 'player', 'herdBell')) battle.storyEffects = [...battle.storyEffects.filter((e) => !e.startsWith(HERD_BELL)), `${HERD_BELL}${battle.turn}`];
+  // Greenneedle gn.new.06, Worthy Opponent: +1 to its highest stat on entry when the foe's active Pokémon is at full HP.
+  {
+    const foe = battle.enemyTeam[battle.enemyIndex];
+    const stat = foe ? worthyStat(ctx.content, mon, foe) : null;
+    if (stat) {
+      events.push({ type: 'raid', tone: 'info', text: `Worthy Opponent: ${nameOf(ctx, mon)} squares up to a fresh foe!` });
+      applyStageChange(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, stat, 1, events);
+    }
   }
   // Greenneedle gn.new.08, Curtain Call: Mime Jr. steps out alive, and whoever steps in copies one stage of its best boost (once a battle).
   if (outgoing && outgoing.hp > 0 && outgoing.uid !== mon.uid && abilityOf(ctx.content, outgoing) === 'curtain-call' && !battle.storyEffects.includes('curtain-call-used')) {
@@ -4645,7 +4657,9 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (foeAbility === 'dry-skin' && moveType === 'fire') powerMult *= 1.25;
       if (powerMult !== 1) power = Math.max(1, pokeRound(power, powerMult));
       // Abilities that change the attacking stat.
-      const baseAttack = fx.beatUp && beaters.length > 0 ? calcStats(content, beaters[Math.min(hit, beaters.length - 1)]!).atk : edgeSpa ? userStats.spa : fx.attackFrom === 'targetAtk' ? targetStats.atk : fx.attackFrom === 'def' ? userStats.def : fx.attackFrom === 'spd' ? userStats.spd : physical ? userStats.atk : userStats.spa;
+      // Three Schools (gn.new.04): whichever of the user's Attack, Defense or Speed is highest right now (stat stages counted) does the damage.
+      const school = fx.attackFrom === 'highest' ? highestSchool(userStats, user.stages) : null;
+      const baseAttack = fx.beatUp && beaters.length > 0 ? calcStats(content, beaters[Math.min(hit, beaters.length - 1)]!).atk : edgeSpa ? userStats.spa : school ? userStats[school] : fx.attackFrom === 'targetAtk' ? targetStats.atk : fx.attackFrom === 'def' ? userStats.def : fx.attackFrom === 'spd' ? userStats.spd : physical ? userStats.atk : userStats.spa;
       let attack = Math.floor(baseAttack * Held.heldStatMultiplier(ctx, user.mon, user.side, physical ? 'atk' : 'spa'));
       let attackMult = attackBoost;
       if (physical && (userAbility === 'huge-power' || userAbility === 'pure-power')) attackMult *= 2;
@@ -4746,7 +4760,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         power,
         attack,
         defense,
-        attackStage: foeAbility === 'unaware' ? 0 : physical && !edgeSpa ? user.stages.atk : user.stages.spa,
+        attackStage: foeAbility === 'unaware' ? 0 : school ? user.stages[school] : physical && !edgeSpa ? user.stages.atk : user.stages.spa,
         defenseStage: fx.ignoreStages || userAbility === 'unaware' ? 0 : defenseStage,
         stab: stab > 1,
         // Adaptability: 2× instead of 1.5× (2.25× instead of 2× when Terastallized into its own type).
@@ -5018,6 +5032,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     user.stages.spd = Math.max(-6, user.stages.spd - n);
   }
   if (landed > 0 && fx.switchOut) user.vol.pivot = { baton: fx.switchOut === 'baton' };
+  // Last Stop (gn.new.09): it knocked its target out, so the user may switch out for free.
+  if (landed > 0 && fx.switchOutOnKo && target.mon.hp <= 0 && user.mon.hp > 0) user.vol.pivot = { baton: false };
   if (landed > 0 && fx.resetStages) {
     for (const c of fx.resetStages === 'both' ? [user, target] : [target]) for (const k of Object.keys(c.stages) as BoostStat[]) c.stages[k] = 0;
     events.push({ type: 'statsReset', side: target.side });
@@ -5058,7 +5074,19 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
 
   // Extra effects only land if the target is still standing. Serene Grace doubles their chances; Shield Dust blocks them.
   const chanceMult = (userAbility === 'serene-grace' ? 2 : 1) * (ctx.battle.sideEffects[user.side].rainbow > 0 ? 2 : 1);
-  const shielded = foeAbility === 'shield-dust' || Held.hasHook(ctx, target.mon, target.side, 'covertCloak');
+  // Debug (gn.new.14): once a battle, the second time the same move hits it, that move's secondary effect fails.
+  let debugged = false;
+  if (foeAbility === 'debug' && landed > 0 && user.side !== target.side) {
+    const seen = `debug-hit:${target.mon.uid}:${move.id}`;
+    const used = `debug:${target.mon.uid}`;
+    if (!ctx.battle.storyEffects.includes(seen)) ctx.battle.storyEffects.push(seen);
+    else if (!ctx.battle.storyEffects.includes(used)) {
+      ctx.battle.storyEffects.push(used);
+      debugged = true;
+      announce(target, 'debug', events);
+    }
+  }
+  const shielded = debugged || foeAbility === 'shield-dust' || Held.hasHook(ctx, target.mon, target.side, 'covertCloak');
   const userTypes = getSpecies(ctx.content, user.mon.speciesId).types;
   const roll = (percent: number, statusId?: string) => rng.chance(Math.min(100, percent * chanceMult * (user.side === 'player' ? statusChancePerk(ctx.perks, userTypes, statusId) : 1) + (user.side === 'player' ? growthStatusChance(ctx.content.balance.overhaulGrowth, user.mon, statusId) : 0)) / 100);
   if (target.mon.hp > 0 && !sheerForce && !shielded) {
@@ -6188,6 +6216,8 @@ function endTurnField(ctx: BattleContext, events: BattleEvent[]): void {
 }
 
 const HAZARDS = ['spikes', 'toxicSpikes', 'stealthRock', 'stickyWeb'] as const;
+/** `herd-bell:<turn>` in the battle's story effects: the turn the Herd Bell's holder last left the field. */
+const HERD_BELL = 'herd-bell:';
 const SIDE_TURNS: Partial<Record<SideMove, number>> = { reflect: 5, lightScreen: 5, auroraVeil: 5, tailwind: 4, safeguard: 5, mist: 5, luckyChant: 5, seaOfFire: 4, rainbow: 4, swamp: 4 };
 const otherSide = (side: Side): Side => (side === 'player' ? 'enemy' : 'player');
 
@@ -6579,11 +6609,23 @@ function content_maxPp(ctx: BattleContext, slot: { id: string; pp: number; ppUps
 }
 
 /** A Pokémon coming in meets the hazards its side has: Stealth Rock, Spikes, Toxic Spikes, Sticky Web. */
+/** Three Schools: Attack, Defense or Speed, whichever is highest once its stat stages are counted (ties go to the earlier one). */
+export function highestSchool(stats: { atk: number; def: number; spe: number }, stages: { atk: number; def: number; spe: number }): 'atk' | 'def' | 'spe' {
+  const now = (k: 'atk' | 'def' | 'spe'): number => stats[k] * (stages[k] >= 0 ? (2 + stages[k]) / 2 : 2 / (2 - stages[k]));
+  return (['atk', 'def', 'spe'] as const).reduce((best, k) => (now(k) > now(best) ? k : best), 'atk' as 'atk' | 'def' | 'spe');
+}
+
 function applyHazards(ctx: BattleContext, c: Combatant, events: BattleEvent[]): void {
   const fx = ctx.battle.sideEffects[c.side];
   if (c.mon.hp <= 0 || !(fx.spikes || fx.toxicSpikes || fx.stealthRock || fx.stickyWeb)) return;
   // S7 Old Tactics (Ex-Criminal): the partner steps around the hazards once.
   if (tryFeat(ctx, c, 'old_tactics')) return;
+  // Herd Bell (gn.new.19): the holder left this turn or the last one, and the bell is still ringing: no hazard touches the ally stepping in.
+  const bell = c.side === 'player' ? ctx.battle.storyEffects.find((e) => e.startsWith(HERD_BELL)) : undefined;
+  if (bell && ctx.battle.turn - Number(bell.slice(HERD_BELL.length)) <= 1) {
+    events.push({ type: 'raid', tone: 'info', text: `Herd Bell: ${nameOf(ctx, c.mon)} follows the bell in, past the hazards.` });
+    return;
+  }
   const grounded = isGrounded(ctx, c);
   // Tidy counts hazards it dodges: Heavy-Duty Boots, or in the air with no Stealth Rock down.
   if (Held.hasHook(ctx, c.mon, c.side, 'heavyDutyBoots') || (!grounded && !fx.stealthRock)) { noteGrowthMark(ctx, c, 'avoid'); if (Held.hasHook(ctx, c.mon, c.side, 'heavyDutyBoots')) return; }
@@ -7660,6 +7702,8 @@ function applyWeather(ctx: BattleContext, sides: Combatant[], events: BattleEven
       const ability = abilityIn(ctx, c);
       if (ability && WEATHER_DAMAGE_IMMUNE[ability]?.includes(weather.id)) continue;
       if (Held.hooksOf(ctx, c.mon, c.side).some(({ hook }) => (hook.hook === 'weatherImmune' && hook.weathers.includes(weather.id)) || hook.hook === 'utilityUmbrella')) continue;
+      // Warm Clothes (gn.new.19): the party ignores hail and snow damage for the rest of the region the village is in.
+      if (c.side === 'player' && (weather.id === 'hail' || weather.id === 'snow') && ctx.battle.storyEffects.includes('warm-clothes')) continue;
       const chip = Math.max(1, Math.floor((calcStats(ctx.content, c.mon).hp / 16) * (1 - weatherCut(ctx.content, c.mon, weather.id)) * (c.side === 'player' ? growthWeatherChipMultiplier(ctx.content.balance.overhaulGrowth, c.mon) : 1)));
       c.mon.weatherEndured = { ...c.mon.weatherEndured, [weather.id]: (c.mon.weatherEndured?.[weather.id] ?? 0) + 1 };
       const { lost, lastStand } = takeHp(ctx, c, chip);

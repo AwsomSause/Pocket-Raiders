@@ -1054,7 +1054,9 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (rule === 'impersonator') impersonatorStart(run, battle);
   // gn.new.06: the Duelist, and the chosen one's Worthy Opponent.
   if (rule === 'duelist') duelistStart(content, run, battle, FOE_WAITS, makeFull(content));
-  worthyStart(run, battle);
+  worthyStart(content, run, battle);
+  // gn.new.19: Warm Clothes, for the rest of the region the Snowbound Village is in.
+  if (gnFlag(run, 'sv-warm-region') === run.regionIndex + 1 && !battle.storyEffects.includes('warm-clothes')) battle.storyEffects.push('warm-clothes');
   // gn.new.10: the Mirror Lake's reflections, the team from the battle the player would rather forget.
   if (rule === 'mirror') mirrorStart(content, run, battle, makeFull(content));
   // gn.59: Old Ferris's five: no items, no switching.
