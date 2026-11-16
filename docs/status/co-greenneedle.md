@@ -67,6 +67,7 @@ Branch `claude/project-thread-uehq47`, draft PR #1314 into `ui-mockups`.
 | gn.new.01 | not started | |
 | gn.new.02 The Dog at the Station | done, 12 tests pass (chain: the platform at S(n) step 5, must-see, needs a city; Mr. Halloran's script, the doc's four choices; the porter at S(n) step 8, the landlady at S(n+1) step 7, the clinic at S(n+2) step 12, all optional and only after "Ask around town."; the last visit at step 19, must-see: the letter or the Growlithe reunites them (Fire Stone, a Notebook line), or "Sit one more time." if only ever sat gives a Growlithe with the new ability Vigil; the clerk on holiday at a step 5 town in the next region; flag `dog-station-sat` set by sitting, removed from `external`) | yes |
 | gn.new.03–38 | not started | |
+| gn.56 The Slowpoke Detective Agency | done, 6 tests pass (tools/events/co/greenneedle-56.ts, pure DSL, no new core code; a Town stop, until towns exist step 5, window 3-8, A3, once a region, three cases over three regions; each case is a hub, three places with two clues each (three real, three useless), a reading of three for every clue (the agency's own reading always shown and always wrong), the conclusion and the truth; clues read right of the three real set the tier: 3 = a held item and "You'd be wasted here", 0 = one of them (+1 Bond); Murkrow / Dratini / Ursaring at A+0; Farrow met in case 3 with the Honorary Slowpoke Detective badge; Quennell and the NE89 returned item in the office, the door repainted NO CASE TOO SLOW before case 3) | yes |
 
 ## Limits (documented)
 - gn.new.02: the doc gives "Feed it." and "Try to lead it away." no ending, so each opens the last visit with its own choice ("Do it once more.", worded for what was done), written to match "Sit one more time.": the Growlithe joins with Vigil. If "Ask around town." was picked but the clinic errand skipped, the last visit never appears (the errands are optional). "Once per save" is once per run. The Fire Stone is given by the nurse and the Notebook line is a Moment.
@@ -165,6 +166,8 @@ Branch `claude/project-thread-uehq47`, draft PR #1314 into `ui-mockups`.
 - An event raid whose boss is caught now pays its `win` effects (it used to pay nothing).
 - Older tests updated: retired Cerulean canon rooms (bridge, village, squad, rain) dropped from canonCerulean.test.ts; world/eventMemory walk `gn` effects; placed stops sit outside the drawn quota; plain-stage tests use `withoutDoors`; test autoplay plays a chain room when it is the only way on.
 - Placement data: the placer reads `tags` as stage needs, so the doc's category labels now go to `kinds`, `needs` become `tags` ("cave|high" = either; `core/co/placement.ts` tagHolds), and the key event's own beat gives its step and stage. Before this no Greenneedle event was ever placed.
+
+- gn.56: flags `slowpoke-case` (cases done, 0-3), `slowpoke-case-1..3`, `slowpoke-read` (this case, 0-3), `slowpoke-clues-read` (all cases), `slowpoke-farrow-met`, `slowpoke-honorary`. Limits: PS13 (Wait for It) is the moments system's, nothing here adds a Slowpoke to the party; the doc gives no choices for case 2, so its three (the Dratini, the Dragon Scale, ask the Sleeper) are mine.
 
 ## Still to do
 - Files 2–13 of the pack (gn.06–62; reconcile gn.13–16), then the 38 new events.
