@@ -29,6 +29,7 @@ import { allstarRecord, allstarTurn } from './greenneedle/allstar';
 import { listenedPass, listenedTurn, listenedWin } from './greenneedle/listened';
 import { duelAfterstory, duelistMark } from './greenneedle/duelist';
 import { tyrogueTurn } from './greenneedle/tyrogue';
+import { mirrorRecord } from './greenneedle/mirror';
 import { draftRecord } from './greenneedle/draft';
 import { exRipple } from './greenneedle/exhibition';
 import { snorlaxForgives, snorlaxGym, snorlaxRest } from './greenneedle/snorlax';
@@ -3478,6 +3479,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome === 'lose') notePlayerLoss(content, run, battle, run.party[0]);
   // Greenneedle gn.46: a trainer who beat you is remembered too.
   if (battle.outcome === 'lose') allstarRecord(run);
+  // Greenneedle gn.new.10: a lost or nearly lost fight is remembered as a team (the Mirror Lake).
+  mirrorRecord(run, battle);
   if (battle.outcome === 'lose' && battle.expedition && run.expedition) {
     buryFallen(content, run, battleCause(content, battle));
     run.expedition.battleResult = 'lose';

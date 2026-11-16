@@ -1,0 +1,439 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-10-lake",
+   "name": "The Mirror Lake",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery"
+   ],
+   "types": [
+    "water"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "mirrorReady"
+    },
+    {
+     "kind": "flag",
+     "key": "mirror-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5f7f96",
+    "effect": "none"
+   },
+   "intro": "*A lake so still it looks painted. You lean over the edge, and your reflection leans over to meet you. It is a half second late.*\n\nYou wave. The reflection waves back, after you have stopped. Then it does not stop waving.\n\n*The water shivers. Shapes climb out of it, dripping nothing: the team from the fight you would rather forget.*",
+   "choices": [
+    {
+     "label": "Fight them.",
+     "success": {
+      "text": "Your own team stands on the shore, exactly as it stood that day. They have the same moves. They know how you play.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mirror-seen",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mirror-fought",
+        "n": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-10-under"
+        }
+       ],
+       "rule": {
+        "gn": "mirror"
+       },
+       "name": "The Reflections",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-10-bow"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Skip stones instead.",
+     "success": {
+      "text": "You pick up a flat stone and send it skipping. The ripples run out and break them up, one by one, until only one is left. It sits on the bank, and watches you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mirror-seen",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mirror-watcher",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mirror-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You step back from the edge. Nothing follows you. Behind you, the water settles, and goes on being painted.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mirror-seen",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-10-lake-b",
+   "name": "The Mirror Lake",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery"
+   ],
+   "types": [
+    "water"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "mirrorReady"
+    },
+    {
+     "kind": "flag",
+     "key": "mirror-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5f7f96",
+    "effect": "none"
+   },
+   "intro": "*A lake so still it looks painted. You lean over the edge, and your reflection leans over to meet you. It is a half second late.*\n\nYou wave. The reflection waves back, after you have stopped. Then it does not stop waving.\n\n*The water shivers. Shapes climb out of it, dripping nothing: the team from the fight you would rather forget.*",
+   "choices": [
+    {
+     "label": "Fight them.",
+     "success": {
+      "text": "Your own team stands on the shore, exactly as it stood that day. They have the same moves. They know how you play.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mirror-seen",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mirror-fought",
+        "n": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-10-under"
+        }
+       ],
+       "rule": {
+        "gn": "mirror"
+       },
+       "name": "The Reflections",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-10-bow"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Skip stones instead.",
+     "success": {
+      "text": "You pick up a flat stone and send it skipping. The ripples run out and break them up, one by one, until only one is left. It sits on the bank, and watches you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mirror-seen",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mirror-watcher",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mirror-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You step back from the edge. Nothing follows you. Behind you, the water settles, and goes on being painted.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mirror-seen",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-10-bow",
+   "name": "The Mirror Lake: The Bow",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery"
+   ],
+   "types": [
+    "water"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5f7f96",
+    "effect": "none"
+   },
+   "intro": "The last reflection falls. They look at you for a moment, and at your team. Nobody says anything.\n\nThen they bow, all of them, together, the way you wish you had that day.\n\n*They turn and walk back into the water, and the water closes over them without a ripple.*",
+   "choices": [
+    {
+     "label": "Watch them go.",
+     "success": {
+      "text": "Where they went in, something is floating on the surface, bright as a coin. You lift it out. It is a small pane of glass, still cold, and it shows your team as it was. Nothing is taken.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "reflection-glass",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Beat my own team at the Mirror Lake.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-10-under",
+   "name": "The Mirror Lake: Back In",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery"
+   ],
+   "types": [
+    "water"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5f7f96",
+    "effect": "none"
+   },
+   "intro": "They stand over your team for a long moment, and do not press it. They look almost sorry.\n\nThen they turn, and walk back into the lake, the way they came. They go in anyway.\n\n*Nothing is taken. Your team gets up, a little dazed, to a lake gone perfectly still again.*",
+   "choices": [
+    {
+     "label": "Watch them go.",
+     "success": {
+      "text": "The water closes over the last of them. Your own face looks up from it, a half second late, and for once you cannot tell which of you looks more tired.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-10-late",
+   "name": "The Mirror Lake: A Half Second Late",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "types": [
+    "water"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mirror-watcher",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mirror-late",
+     "atLeast": 0,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "mirror-stage"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5f7f96",
+    "effect": "none"
+   },
+   "intro": "*Another still water. You lean over it, and look at your own reflection.*\n\nIt is half a second late. It has the same face, and it is watching you with the same patience as the one on the bank.",
+   "choices": [
+    {
+     "label": "Wave.",
+     "success": {
+      "text": "You wave. The reflection waves, after you have stopped. Then, very slightly, it nods. You wave goodbye. Its hand comes up a half second later.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mirror-late",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "mirror-late",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mirror-late",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "mirror-late",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mirror-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you, the water holds its breath. You do not look back, and you know it is still looking.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mirror-late",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "mirror-late",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mirror-late",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "mirror-late",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mirror-stage"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -45,6 +45,7 @@ import { lsAddress, lsDeal, lsTake, lsTicket } from './laststop';
 import { tyrEven, tyrEvolve, tyrLead, tyrResult, tyrTally, tyrogueJoin, tyrogueMon } from './tyrogue';
 import { muralJoin, muralPick } from './mural';
 import { cheerJoin } from './cheer';
+import { mirrorReady, mirrorStart } from './mirror';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -228,6 +229,8 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'entrantChampion') return !!entrantOf(run)?.champion;
   // gn.new.13: the lost team's n-th Ball (`n`) is still shut.
   if (c.test === 'leftHas') return leftHas(run, c.n ?? 1);
+  // gn.new.10: a lost (or nearly lost) battle is remembered as a team.
+  if (c.test === 'mirrorReady') return mirrorReady(run);
   if (c.test === 'entrantCameBack') return !!entrantOf(run)?.gn?.includes('came-back');
   // gn.45: a rival is well ahead of you (Lead +2 or more).
   if (c.test === 'allstarReady') return allstarReady(run);
@@ -901,6 +904,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   // gn.new.06: the Duelist, and the chosen one's Worthy Opponent.
   if (rule === 'duelist') duelistStart(content, run, battle, FOE_WAITS, makeFull(content));
   worthyStart(run, battle);
+  // gn.new.10: the Mirror Lake's reflections, the team from the battle the player would rather forget.
+  if (rule === 'mirror') mirrorStart(content, run, battle, makeFull(content));
   if (rule === 'quillfeather') quillfeatherStart(content, run, battle, makeFull(content));
   if (rule === 'draft') draftBattleStart(content, run, battle, battle.eventRule?.slot, makeFull(content));
   if (rule === 'allstar-final') {
