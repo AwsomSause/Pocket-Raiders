@@ -46,12 +46,14 @@ export const EVENTS: Json[] = [
     '*No one is asking for a speech. There are rugs on the grass and lanterns in the trees, and the evening is going slowly.*',
     '*Nobody has to fight tonight. Nobody has to win. They all got here by walking.*',
   ), [
-    ch('Walk among them and talk.', out('You go in. People make room without being asked, and then close up behind you.', room('gn-61-walk'))),
+    ch('Walk among them and talk.', out('You go in. People make room without being asked, and then close up behind you.', gn('reunionWalk', { n: 0 }), room('gn-61-walk'))),
     chIf([anyFlag('reunion-pair-1', 'reunion-pair-2', 'reunion-pair-3')], 'Introduce two people who should meet.', out('You look around the field for two who have never been in a room together.', room('gn-61-intro'))),
     chIf([anyFlag('psyduck-hat', 'psyduck-ibuprofen')], 'Give something back.', out('You have things that were never yours. You find the people they belong to.', room('gn-61-give'))),
-    ch('Sit down where you are.', out('Somebody has left a chair empty beside you. You sit in it. Where you sat is where you will be remembered at the table.', when('reunion-farvisit', { min: 1 }, [setTo('reunion-sat', 2)]), when('reunion-farvisit', { min: 0, max: 0 }, [setTo('reunion-sat', 1)]), when('reunion-offers', { min: 1 }, [room('gn-61-help-1')]), when('reunion-offers', { min: 0, max: 0 }, [room('gn-61-end')]))),
+    ch('Sit down where you are.', out('Somebody has left a chair empty beside you. You sit in it. Whoever you were last standing with sits down on your other side. Where you sat is where you will be at the table.', when('reunion-farvisit', { min: 1 }, [setTo('reunion-sat', 2)]), when('reunion-farvisit', { min: 0, max: 0 }, [setTo('reunion-sat', 1)]), when('reunion-offers', { min: 1 }, [room('gn-61-help-1')]), when('reunion-offers', { min: 0, max: 0 }, [room('gn-61-end')]))),
   ]),
-  rm('gn-61-walk', 'The Final Reunion: Everyone Has One Line', o(), say('{reunion:lines}'), [
+  // One at a time: the player walks up to each, and each has one line. Whoever they are with when they sit is beside them at the Long Table.
+  rm('gn-61-walk', 'The Final Reunion: Everyone Has One Line', o(), say('{reunion:one}'), [
+    chIf([is('reunion-walkleft')], 'Walk on to the next.', out('You walk on. Somebody else has been waiting, and trying not to look as if they were.', gn('reunionWalk', { n: 1 }), room('gn-61-walk'))),
     chIf([is('reunion-farleft')], 'Stand at the far edge.', out('You walk past the lanterns, and past the last of the chairs, to where the grass is long and nobody is standing.', room('gn-61-far'))),
     ch('Go back to the middle.', out('The crowd makes room, and closes up again.', room(HUB))),
   ]),
