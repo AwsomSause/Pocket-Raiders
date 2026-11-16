@@ -7434,6 +7434,7 @@ export function startBattle(ctx: BattleContext): BattleEvent[] {
   if (lead) quirkEntry(ctx, { side: 'player', mon: lead, stages: ctx.battle.playerStages, vol: ctx.battle.playerVolatile, flinched: false }, events);
   if (ctx.battle.totem) totemAura(ctx, events);
   championsAura(ctx, events);
+  forecastAhead(ctx, events);
   shadowBoonDebt(ctx, events);
   eventStartRules(ctx, events);
   ultraBattleStart(ctx);
@@ -7513,6 +7514,15 @@ function championsAura(ctx: BattleContext, events: BattleEvent[]): void {
   const player: Combatant = { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false };
   events.push({ type: 'raid', tone: 'phase', text: "Champion's Aura! Your Pokémon feels the Champion's resolve!" });
   applyStageChange(ctx, player, best, stages, events);
+}
+
+/** Greenneedle gn.new.15, Forecast Ahead: a party Pokémon with it tells you which weather, if any, the opponent's team can set. */
+function forecastAhead(ctx: BattleContext, events: BattleEvent[]): void {
+  const { battle, content } = ctx;
+  if (!ctx.party.some((m) => m.hp > 0 && abilityOf(content, m) === 'forecast-ahead')) return;
+  const set = [...new Set(battle.enemyTeam.map((m) => WEATHER_SETTERS[abilityOf(content, m) ?? '']).filter((w): w is Weather => !!w))];
+  const word: Record<string, string> = { rain: 'rain', sun: 'harsh sun', sand: 'a sandstorm', snow: 'snow', hail: 'hail' };
+  events.push(say('enemy', 'arena', set.length === 0 ? 'Forecast Ahead: nothing on their side can change the weather.' : `Forecast Ahead: their team can bring ${set.map((w) => word[w] ?? w).join(' or ')}.`));
 }
 
 /** Catalog Overhaul (SF102 Shadow Boon): the debt is collected at the start of a boss battle; the lead's five stats move by the owed stages. */

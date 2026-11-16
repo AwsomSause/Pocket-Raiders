@@ -217,6 +217,15 @@
    "tint": "#3b4060",
    "mood": "thunderstorm ridge",
    "start": "opened"
+  },
+  {
+   "id": "ps_gn_station",
+   "name": "The Weather Station",
+   "entry": "gn-new-15-door",
+   "themeId": "rock-ghost",
+   "tint": "#6c8aa6",
+   "mood": "mountain weather station",
+   "start": "opened"
   }
  ]
 }

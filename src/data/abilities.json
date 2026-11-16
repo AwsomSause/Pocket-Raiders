@@ -1688,5 +1688,10 @@
   "id": "kindness",
   "name": "Kindness",
   "description": "When its bearer steps out of a fight, the Pokémon that comes in moves first with its first move. Twice per battle."
+ },
+ {
+  "id": "forecast-ahead",
+  "name": "Forecast Ahead",
+  "description": "At the start of each battle, you are told which weather, if any, the opponent's team can set."
  }
 ]
