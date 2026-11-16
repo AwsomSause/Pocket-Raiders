@@ -2649,29 +2649,29 @@ test('New UI: an honest trade shows the Trade page: the card can be read with T,
   await expect(ev.locator('[data-act="pick"]').first()).toContainText('Trade.');
   await expect(ev.locator('[data-act="card"]')).toContainText('Trade card');
 
-  // T: the card before choosing. Their side only, with what they want; Esc closes it.
+  // T: the card before choosing, for the first Pokémon that fits (the lowest level). One button closes it.
   await page.keyboard.press('t');
   await expect(ev.locator('.hd')).toContainText('Trade');
-  for (const t of ['Effie', 'Krabby', 'Adamant', 'Collector', 'Their offer', 'They want: any non-Water Pokémon', 'ruined forty nets']) await expect(ev).toContainText(t);
-  await expect(ev.locator('[data-act="trade"]')).toHaveCount(0);
+  for (const t of ['Effie', 'Krabby', 'Adamant', 'Hyper Cutter', 'Collector', 'Caterpie', 'Shield Dust', 'Fair value', 'ruined forty nets']) await expect(ev).toContainText(t);
+  await expect(ev.locator('[data-act="accept"]')).toHaveCount(0);
+  await expect(ev.locator('[data-act="back"]')).toContainText('Close');
   await page.screenshot({ path: 'test-results/newui-honest-read.png' });
   await page.keyboard.press('Escape');
   await expect(ev.locator('[data-act="pick"]').first()).toContainText('Trade.');
 
-  // "Trade.": both sides. The list goes from the lowest level up, so the small one is first: an even trade.
+  // "Trade.": both sides, with Trade and Back. The list goes from the lowest level up, so the small one is first: an even trade.
   await page.waitForTimeout(250);
   await ev.locator('[data-act="pick"]').first().click();
-  await expect(ev.locator('[data-act="trade"]')).toHaveCount(2);
-  await expect(ev.locator('[data-act="trade"].on')).toContainText('Caterpie');
+  await expect(ev.locator('[data-act="accept"]')).toContainText('Trade');
+  await expect(ev).toContainText('Caterpie');
   await expect(ev).toContainText('Fair trade');
-  await expect(ev).toContainText('Shield Dust');
-  await expect(ev).toContainText('Hyper Cutter');
-  await expect(ev.locator('[data-value]')).toHaveCount(2);
+  await expect(ev).toContainText('1/2');
   await expect(ev.locator('.txt')).toContainText('ruined forty nets');
-  // The Charizard is worth more than the Krabby, and the card says so.
-  await page.keyboard.press('ArrowDown');
-  await expect(ev.locator('[data-act="trade"].on')).toContainText('Charizard');
-  await expect(ev).toContainText('You give more');
+  // Right: the Charizard. It is worth more than the Krabby, and the card says so.
+  await page.keyboard.press('ArrowRight');
+  await expect(ev).toContainText('Charizard');
+  await expect(ev).toContainText('2/2');
+  await expect(ev).toContainText('You give more than you get');
   await page.screenshot({ path: 'test-results/newui-honest-card.png' });
   // The level on the card is the level it arrives at (never above the run's level cap).
   const shown = Number(/Krabby Lv (\d+)/.exec(await ev.innerText())?.[1]);
@@ -2679,14 +2679,20 @@ test('New UI: an honest trade shows the Trade page: the card can be read with T,
   // The first Enter does not trade: the trader asks once more.
   await page.keyboard.press('Enter');
   await expect(ev.locator('.txt')).toContainText('You sure?');
-  await expect(ev.locator('[data-act="trade"].on')).toContainText('Yes, trade');
-  expect(await page.evaluate(() => (window as any).__pkr.session.run.party[0].speciesId)).toBe('charizard');
+  await expect(ev.locator('[data-act="accept"]')).toContainText('Yes, trade');
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.party.some((m: any) => m.speciesId === 'charizard'))).toBe(true);
   // Moving to the small one takes the question back.
-  await page.keyboard.press('ArrowUp');
+  await page.keyboard.press('ArrowLeft');
   await expect(ev).toContainText('Fair trade');
   await expect(ev.locator('.txt')).toContainText('ruined forty nets');
-  // Back down, and yes twice: the Charizard goes and Effie's Krabby arrives as the card showed.
+  await expect(ev.locator('[data-act="accept"]')).toHaveText('Trade');
+  // Down puts the cursor on Back, up on Trade again.
   await page.keyboard.press('ArrowDown');
+  await expect(ev.locator('[data-act="back"]')).toHaveClass(/\bon\b/);
+  await page.keyboard.press('ArrowUp');
+  await expect(ev.locator('[data-act="accept"]')).toHaveClass(/\bon\b/);
+  // The Charizard again, and yes twice: it goes and Effie's Krabby arrives as the card showed.
+  await page.keyboard.press('ArrowRight');
   await page.waitForTimeout(150);
   await page.keyboard.press('Enter');
   await expect(ev.locator('.txt')).toContainText('You sure?');

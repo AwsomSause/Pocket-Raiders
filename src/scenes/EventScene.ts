@@ -37,7 +37,7 @@ import { pageSpeaker, scriptPages, type ScriptPage } from '../ui/redux/script';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { tourneyHome, tourneyPage, tourneyRounds } from '../ui/redux/screens/bracket';
 import { eventView as rxEventView } from '../ui/redux/screens/event';
-import type { HonestModel, HonestSide } from '../ui/redux/screens/honest';
+import type { HonestModel, HonestSide } from '../ui/redux/screens/stops';
 
 
 const BOTTOM_H = 168;
@@ -77,6 +77,8 @@ export class EventScene extends Phaser.Scene {
   private pickSure: string | null = null;
   /** New UI: the event's trade card is open to read (T), before a choice is made. */
   private rxCard = false;
+  /** New UI, Honest Trade Card page: the cursor is on Trade (0) or Back (1). */
+  private pickFocus: 0 | 1 = 0;
   private result: EventResult | null = null;
   private calm = false;
   private moneyText: Phaser.GameObjects.Text | null = null;
@@ -212,16 +214,24 @@ export class EventScene extends Phaser.Scene {
       };
       // Catalog Overhaul: the Honest Trade Card (both sides with every line of TRADES.md 1.1), as its own page.
       const eventCard = eventTradeCard(content, run, this.sideId);
+      const cap1 = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
       const cardSide = (x: CardSide): HonestSide => ({
-        name: x.name, file: monFile(this, x.species, 'front', x.shiny), level: x.level, nature: x.nature, ability: x.ability ? content.abilities.get(x.ability)?.name ?? x.ability : null, hidden: x.hidden,
-        moves: x.moves.map((id) => content.moves.get(id)?.name ?? id), quirk: x.quirk ? { name: x.quirk.name, line: x.quirk.line } : null, marks: x.marks,
+        name: x.name, file: monFile(this, x.species, 'front', x.shiny), level: x.level, types: [...(content.species.get(x.species)?.types ?? [])], nature: cap1(x.nature),
+        ability: x.ability ? content.abilities.get(x.ability)?.name ?? x.ability : null, hidden: x.hidden,
+        moves: x.moves.map((id) => content.moves.get(id)?.name ?? id), quirk: x.quirk ? { name: x.quirk.name, line: x.quirk.line } : null, marks: x.marks.map(cap1),
         held: x.held ? content.items.get(x.held)?.name ?? x.held : null, evolvesTo: x.evolvesTo ? content.species.get(x.evolvesTo)?.name ?? x.evolvesTo : null, value: x.value, shiny: x.shiny,
       });
-      const honestOf = (card: HonestCard, picks: string[], at: number, asking: boolean): HonestModel => ({ trader: card.trader ?? 'Trader', why: card.why, wants: card.wants, yours: card.yours ? cardSide(card.yours) : null, theirs: cardSide(card.theirs), warn: card.warn, gift: card.gift, picks, at, asking });
+      const youArt = artOf(this, content.archetypes.get(run.archetypeId)?.spriteAssetId);
+      const honestOf = (card: HonestCard, at: number, count: number, readOnly: boolean, asking: boolean): HonestModel => ({
+        title: 'Trade', you: youArt, trader: card.trader ?? 'Trader', traderArt: castOf(card.trader), wants: card.wants, gift: card.gift,
+        give: card.yours ? cardSide(card.yours) : null, get: cardSide(card.theirs), warn: card.warn, why: card.why, asking, at, count, focus: this.pickFocus, readOnly,
+      });
       const honest = (): HonestModel | null => {
         const pk = this.picker, p = pk?.picks[pk.at];
-        if (pk && p?.card) return honestOf(p.card, pk.picks.map((x) => x.label), pk.at, this.pickSure === p.uid);
-        return this.rxCard && eventCard && this.phase === 'choose' ? honestOf(eventCard, [], 0, false) : null;
+        if (pk && p?.card) return honestOf(p.card, pk.at, pk.picks.length, false, this.pickSure === p.uid);
+        // Read before choosing: the card for the first of the player's Pokémon that fits (the trader's side alone when none does).
+        const read = view.choices.flatMap((c) => c.tradePicks ?? []).find((x) => x.card)?.card ?? eventCard;
+        return this.rxCard && read && this.phase === 'choose' ? honestOf(read, 0, 0, true, false) : null;
       };
       if (eventCard) {
         this.toggleCard = (): void => {
@@ -284,10 +294,13 @@ export class EventScene extends Phaser.Scene {
           bracketPage: (k) => { this.rxBracket = Number(k); this.rx?.refresh(); },
           next: () => this.advanceOutcome(),
           trade: (k) => { if (!this.picker?.picks[Number(k)]) return; this.pickAt(Number(k)); this.tryTrade(); },
-          tradeBack: () => this.handle('back'),
           card: () => this.toggleCard?.(),
+          // The Honest Trade Card page: Trade, Back, and the arrows that step through the player's fitting Pokémon.
+          accept: () => this.tryTrade(),
+          back: () => (this.rxCard ? this.toggleCard?.() : this.handlePick('back')),
+          step: (k) => { const pk = this.picker; if (pk) this.pickAt((pk.at + Number(k) + pk.picks.length) % pk.picks.length); },
         },
-        overs: { over: (k) => this.focus(Number(k)), tradeOver: (k) => this.pickAt(Number(k)) },
+        overs: { over: (k) => this.focus(Number(k)), tradeOver: (k) => this.pickAt(Number(k)), acc: () => this.pickFocusAt(0), dec: () => this.pickFocusAt(1) },
       });
     } else this.offerFullText(view.event.intro);
     if (!this.calm) this.ambient(scene.effect, area, layers.fx);
@@ -477,6 +490,7 @@ export class EventScene extends Phaser.Scene {
       return t;
     });
     this.pickSure = null;
+    this.pickFocus = 0;
     this.picker = { box, head, rows, picks, at: 0 };
     this.pickAt(0);
     this.rx?.refresh();
@@ -495,10 +509,26 @@ export class EventScene extends Phaser.Scene {
     this.rx?.refresh();
   }
 
+  private pickFocusAt(k: 0 | 1): void {
+    if (k === this.pickFocus) return;
+    this.pickFocus = k;
+    playSfx(this, 'ui.select', 0.3);
+    this.rx?.refresh();
+  }
+
   private handlePick(action: InputAction): void {
     const pk = this.picker;
     if (!pk) return;
     const n = pk.picks.length;
+    // New UI, Honest Trade Card page: left and right step through the Pokémon, up and down move between Trade and Back.
+    if (this.rx && pk.picks[pk.at]?.card) {
+      if (action === 'left') this.pickAt((pk.at - 1 + n) % n);
+      else if (action === 'right') this.pickAt((pk.at + 1) % n);
+      else if (action === 'up' || action === 'down') this.pickFocusAt(this.pickFocus === 0 ? 1 : 0);
+      else if (action === 'confirm' && this.pickFocus === 0) this.tryTrade();
+      if (action !== 'back' && !(action === 'confirm' && this.pickFocus === 1)) return;
+      action = 'back';
+    }
     if (action === 'up' || action === 'left') this.pickAt((pk.at - 1 + n) % n);
     else if (action === 'down' || action === 'right') this.pickAt((pk.at + 1) % n);
     else if (action === 'confirm') this.tryTrade();

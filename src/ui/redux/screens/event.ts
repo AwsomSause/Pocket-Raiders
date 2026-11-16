@@ -8,7 +8,7 @@ import type { ReduxCtx } from '../stage';
 import { priceOf } from '../storeFloors';
 import { figure, type Art } from '../templates';
 import { bracketView, type BracketModel, type RoundChip } from './bracket';
-import { honestView, type HonestModel } from './honest';
+import { honestView, type HonestModel } from './stops';
 
 export interface EventChoice { label: string; sub: string; chance: string; locked: boolean }
 export interface EventModel {
