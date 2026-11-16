@@ -2,7 +2,6 @@
  "category": "greenneedle",
  "note": "Catalog row 15 (Greenneedle). `external`: flags a Greenneedle event reads that another set (or a Greenneedle event not built yet) will write; remove each as its writer lands. `flags` with `rule`: flags code writes, not an event effect.",
  "external": {
-  "littlecup-cancelled": "gn.new.27",
   "dog-sat": "gn.new.02",
   "little-league-losing": "SF134.2 Little League",
   "starter-home": "a starter's visit home (gn.new)",
@@ -998,6 +997,10 @@
   {
    "key": "ls-visits",
    "rule": "core/greenneedle/lantern.ts (gn.new.36 The Lantern Sea: visits this run)"
+  },
+  {
+   "key": "littlecup-cancelled",
+   "rule": "core/greenneedle/littlecup.ts (gn.new.27 The Little Cup: an entrant cancelled its evolution)"
   }
  ]
 }
