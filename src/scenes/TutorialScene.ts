@@ -10,7 +10,7 @@ import { onInputAction } from '../ui/input';
 import { COLORS, GAME_WIDTH, textStyle } from '../ui/theme';
 import { drawBackdrop, drawPanel, Menu, type MenuOption } from '../ui/widgets';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
-import { eventView } from '../ui/redux/screens/event';
+import { talkView } from '../ui/redux/screens/talk';
 import { pageLines, pageSpeaker, type ScriptPage } from '../ui/redux/script';
 import { artOf } from '../ui/redux/game';
 import { playerPortrait, type Art } from '../ui/redux/templates';
@@ -70,7 +70,7 @@ abstract class PagedScene extends Phaser.Scene {
     this.rx = mountRedux(this, {
       render: (c) => {
         const index = this.menu?.index ?? 0, face = this.rxFace(index), pages = this.rxPages(face), at = Math.min(this.rxAt, pages.length - 1), page = pages[at]!;
-        return eventView(c, {
+        return talkView(c, {
           name: this.rxPage.title, tag: face.tag, lines: page, speaker: pageSpeaker(page), page: { at, of: pages.length },
           art: RX_ROOM, tint: null, fx: null, cast: face.cast, mon: null,
           choices: this.rxPage.options.map((o) => ({ label: o.label, sub: '', chance: '', locked: !!o.disabled })), index,

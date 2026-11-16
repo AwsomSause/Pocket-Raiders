@@ -21,6 +21,7 @@ import type { StarterScout } from '../core/story2/starterScouts';
 import { PocketFolk, folkAssets, pocketFolk, pocketScouts } from '../ui/hubTown/pocketFolk';
 import { itemVisual, pokemonIcon } from '../ui/sprites';
 import { onInputAction } from '../ui/input';
+import { useLookFont } from '../ui/redux/canvasFont';
 import type { TownPanelLike } from '../ui/townPanel';
 import { openBuilding, openTown, townBusy, type TownHost } from '../ui/townMenu';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
@@ -66,6 +67,7 @@ export class TownScene extends Phaser.Scene {
   }
 
   create(): void {
+    useLookFont(this);
     const { session } = services();
     const p = session.profile;
     const motion = session.settings.battleAnimations;

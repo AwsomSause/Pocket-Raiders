@@ -25,10 +25,19 @@ describe('New UI battle HUD', () => {
         expect(html).toContain('width:100%');
       });
 
+      it('a long move name beside its PP steps down a size so the whole name fits; a short one keeps the usual size', () => {
+        const long: BattleOption[] = [{ label: 'Struggle Bug', sub: 'PP 20/20', type: 'bug' }, { label: 'Parabolic Charge', sub: 'PP 20/20', type: 'electric' }, { label: 'Roost', sub: 'PP 5/5', type: 'flying' }];
+        const html = battleView(ctx(layout), model({ menu: { options: long, index: 0 } }));
+        const btn = (name: string) => new RegExp(`<div class="btn[^"]*"[^>]*style="([^"]*)"[^>]*>(?:(?!</div>).)*${name}`).exec(html)?.[1] ?? '';
+        expect(btn('Struggle Bug')).toContain('font-size:14px');
+        expect(btn('Parabolic Charge')).toContain('font-size:12px');
+        expect(btn('Roost')).not.toMatch(/font-size:1[24]px/);
+      });
+
       it('draws a move with its type colour and PP, and dims one that cannot be used', () => {
         const html = battleView(ctx(layout), model({ menu: { options: moves, index: 2 }, text: 'Air Slash · Flying · Special · Power 75 · Acc 95\nPP 9/15' }));
         expect(count(html, ' mv"')).toBe(4);
-        expect(html).toContain('<small>PP 12/15</small>');
+        expect(html).toContain('>PP 12/15</small>');
         expect(count(html, 'opacity:.5;')).toBe(1);
         expect(html).toMatch(/class="btn on mv"[^>]*data-arg="2"/);
         // A second line of text is a real line break.

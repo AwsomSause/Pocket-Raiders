@@ -10,6 +10,7 @@ import { services } from '../game/services';
 import { sceneForRun } from './routing';
 import { AERO, drawGlass, type MotionLevel } from '../ui/aero';
 import { onInputAction } from '../ui/input';
+import { useLookFont } from '../ui/redux/canvasFont';
 import { preloadPokemon } from '../ui/lazyAssets';
 import { LegacyGallery, hasGalleryLook } from '../ui/legacyGallery';
 import { screenStyleOf } from '../core/presentation/screenStyles';
@@ -43,6 +44,7 @@ export class LegacyGalleryScene extends Phaser.Scene {
   }
 
   create(): void {
+    useLookFont(this);
     this.motion = services().session.settings.battleAnimations;
     this.relive = null;
     this.confirmAbandon = false;

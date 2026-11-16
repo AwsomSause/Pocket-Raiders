@@ -1,5 +1,6 @@
-// The Legendary Blessing opening ("Side Plinth", Kice's pick): shown once after the starter is chosen, when the run has a blessing.
-// Black screen, the blessing's item on a slim plinth to the left in a cone of light, the passage on the right a line at a time.
+// The Legendary Blessing opening: shown once after the starter is chosen, when the run has a blessing.
+// Black screen, the blessing's item floating on the left, the passage on the right a line at a time. (It began as the
+// "Side Plinth" design; Kice had the spotlight and the plinth removed on 2026-11-16.)
 // Confirm finishes the sequence at once, a second confirm goes on to the briefing. Outcomes never depend on this screen:
 // the blessing was rolled at run start. Respects the animation setting (off = everything shown at once).
 
@@ -9,6 +10,7 @@ import { services } from '../game/services';
 import { playCry } from '../ui/audio';
 import { onInputAction } from '../ui/input';
 import { loadAssets } from '../ui/lazyAssets';
+import { useLookFont } from '../ui/redux/canvasFont';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 
 const TIER_LABEL = { lesser: 'LESSER', greater: 'GREATER', divine: 'DIVINE', primordial: 'PRIMORDIAL', origin: 'ORIGIN' } as const;
@@ -24,6 +26,7 @@ export class BlessingScene extends Phaser.Scene {
   }
 
   create(): void {
+    useLookFont(this);
     const { session } = services();
     const run = session.run!;
     const state = run.expansion?.blessing;
@@ -37,13 +40,8 @@ export class BlessingScene extends Phaser.Scene {
     const fast = motion !== 'full';
     this.cameras.main.setBackgroundColor(0x000000);
 
-    // Light cone and a slim plinth on the left; the item floats above it.
+    // The item floats on the left, on plain black.
     const px = 250;
-    const cone = this.add.graphics().setAlpha(0);
-    cone.fillStyle(0xfff2c0, 0.16);
-    cone.fillTriangle(px, 40, px - 150, GAME_HEIGHT - 120, px + 150, GAME_HEIGHT - 120);
-    this.add.rectangle(px, GAME_HEIGHT - 110, 120, 16, 0x2a2430).setStrokeStyle(2, 0x6a5f78);
-    this.add.rectangle(px, GAME_HEIGHT - 70, 60, 64, 0x1d1824).setStrokeStyle(2, 0x4a4058);
     const itemImg = this.add.image(px, 250, '__DEFAULT').setAlpha(0).setVisible(false);
     void loadAssets(this, [def.item]).then(() => {
       if (!this.sys.isActive() || !this.textures.exists(def.item)) return;
@@ -67,7 +65,7 @@ export class BlessingScene extends Phaser.Scene {
     };
     // [delay in ms (full motion), what to show]. Quiet, unhurried: the whole thing is about 13 seconds.
     const steps: Array<[number, () => void]> = [
-      [600, () => { fade(cone, 1600); fade(itemImg, 1600); }],
+      [600, () => fade(itemImg, 1600)],
       [1700, () => { const sp = def.speciesId && session.content.species.get(def.speciesId); if (sp) playCry(this, sp, 70); }],
       [2600, () => { fade(tier, 900); fade(title, 900); }],
       [4200, () => fade(passage, 1800)],
@@ -76,7 +74,7 @@ export class BlessingScene extends Phaser.Scene {
       [11500, () => fade(prompt, 600)],
     ];
     // Every faded object is known up front, so a first Confirm can show them all without replaying the cry.
-    this.shown = [cone, itemImg, tier, title, passage, blessed, head, sum, prompt];
+    this.shown = [itemImg, tier, title, passage, blessed, head, sum, prompt];
     if (motion === 'off') {
       this.finish();
       if (def.speciesId) { const sp = session.content.species.get(def.speciesId); if (sp) playCry(this, sp, 70); }
