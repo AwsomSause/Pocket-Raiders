@@ -30,7 +30,7 @@ export const bindGnEffects = (schema: z.ZodType, conditions?: z.ZodType): void =
  *  - `stampStage`: the run flag `key` remembers the stage number now (read with the `gn` conditions `laterStage`, `sameStage`, `notThisStage`).
  *  - `partyHas`: the run flag `key` becomes 1 when a party Pokémon is one of `species`, else 0 (a Clefairy or Clefable sees the secret dance).
  */
-export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem', 'markLast', 'dropMarked', 'lendHeld', 'returnLent', 'partner', 'oldMove', 'castBase', 'nextOp', 'natureLast', 'markLead'] as const;
+export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem', 'markLast', 'dropMarked', 'lendHeld', 'returnLent', 'partner', 'oldMove', 'castBase', 'nextOp', 'natureLast', 'markLead', 'crystal', 'crystalDrop', 'crystalMost'] as const;
 export const GnEffectSchema = z.object({
   kind: z.literal('gn'),
   op: z.enum(GN_OPS),
@@ -121,7 +121,7 @@ export type GnCond = z.infer<typeof GnCondSchema>;
  *  - `damian`: Damian himself (gn.05). His last Pokémon is the ace he actually trained: `ace` levels higher, a held item that fits its type,
  *    and two moves that cover its weaknesses.
  */
-export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame', 'hawlucha', 'final', 'lastExchange', 'pipes', 'sludge', 'furnace', 'core', 'savanna', 'herd', 'jungle', 'tsareena', 'slowking', 'forest'] as const;
+export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame', 'hawlucha', 'final', 'lastExchange', 'pipes', 'sludge', 'furnace', 'core', 'savanna', 'herd', 'jungle', 'tsareena', 'slowking', 'forest', 'golem'] as const;
 export const GnRuleSchema = z.enum(GN_RULES);
 export type GnRule = z.infer<typeof GnRuleSchema>;
 
@@ -140,6 +140,8 @@ export const GnRuleFields = {
   foeStages: Stages.optional(),
   /** The foe can't be caught (a Squad member fights for its Squad; one joins later, by choice). */
   noCatch: z.literal(true).optional(),
+  /** Catching is this many times easier (gn.32: the Pokémon that followed you through the caverns). */
+  catchTimes: z.number().min(1).max(4).optional(),
   /** With rule `damian`: how many levels the ace stands above the rest of the team. */
   ace: z.number().int().min(0).max(5).optional(),
 };

@@ -3094,7 +3094,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     rng: eliteDuelist(run.rules) ? Rng.steady(rng.state) : rng,
     captureRng,
     speciesCaught: run.log.speciesCaught,
-    catchMultiplier: captureMultiplier(archetype) * attributes.catchRate * throwMultiplier(content, run, currentEnemy(run.battle!)) * wildCatchMultiplier(content, run) * mutatorCatch(run),
+    catchMultiplier: captureMultiplier(archetype) * attributes.catchRate * throwMultiplier(content, run, currentEnemy(run.battle!)) * wildCatchMultiplier(content, run) * mutatorCatch(run) * (run.battle!.eventRule?.catchTimes ?? 1),
     healMultiplier: healingMultiplier(archetype) * attributes.healing,
     typeModifiers: typeModifiers(archetype, badgeTypesOf(content, run.badges), content.balance.badgePower),
     perks: blessingPerks(run).length > 0 ? [...archetype.modifiers, ...blessingPerks(run)] : archetype.modifiers,

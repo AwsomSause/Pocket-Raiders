@@ -290,5 +290,116 @@
         }
       ]
     }
+  },
+  {
+    "id": "cavern-red-crystal",
+    "name": "Red Cavern Crystal",
+    "family": "Held items",
+    "description": "A crystal from the Golem, still warm. Moves of the holder's own type hit 5% harder.",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "library/commonstone",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "ownTypePower",
+          "percent": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "cavern-blue-crystal",
+    "name": "Blue Cavern Crystal",
+    "family": "Held items",
+    "description": "A crystal from the Golem, cool as pool water. The holder takes 10% less from super-effective hits.",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "library/commonstone",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "damageTaken",
+          "percent": -10,
+          "superEffective": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "cavern-green-crystal",
+    "name": "Green Cavern Crystal",
+    "family": "Held items",
+    "description": "A crystal from the Golem, with something growing in it. Heals 1/16 of the holder's max HP each turn.",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "library/commonstone",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "endTurn",
+          "fraction": 0.0625
+        }
+      ]
+    }
+  },
+  {
+    "id": "cavern-white-crystal",
+    "name": "White Cavern Crystal",
+    "family": "Held items",
+    "description": "A crystal from the Golem, full of light. The holder's moves are 10% more accurate.",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "library/commonstone",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "accuracy",
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "cavern-black-crystal",
+    "name": "Black Cavern Crystal",
+    "family": "Held items",
+    "description": "A crystal from the Golem, cold to hold. 10% chance to make the target flinch.",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "library/commonstone",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "flinch",
+          "percent": 10
+        }
+      ]
+    }
   }
 ]

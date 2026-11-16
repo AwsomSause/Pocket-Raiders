@@ -1256,6 +1256,4240 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-32-door",
+   "name": "The Crystal Caverns",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "rock",
+    "ice",
+    "steel"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "crystal-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "crystal-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "carbink",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "A crack in the rock, and light coming out of it. Not daylight. Something cleaner.\n\nYour Pokémon go quiet. There's a hum in the stone, too low to hear, high enough to feel in your teeth.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "The crack opens into a mouth, and the mouth is full of light.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "crystal-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-red",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-blue",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-green",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-white",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-black",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-bag",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-phase",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "crystal-gentle",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-river",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "guzzlord-fed",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-gentle",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-mouth"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The hum follows you a little way down the road, then lets you go.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-mouth",
+   "name": "The Crystal Caverns: The Bright Mouth",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "carbink",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "Light from nowhere. It comes out of the walls, out of the floor, out of the air between.\n\nOn a ledge, a red crystal, the size of a fist. Free for the taking.\n\n*A Carbink watches you from a crack in the wall. It doesn't blink. It may not be able to.*",
+   "choices": [
+    {
+     "label": "Take the Red crystal, for one of mine.",
+     "pick": {
+      "types": []
+     },
+     "success": {
+      "text": "You hold it out to one of your Pokémon. It warms.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystal",
+        "key": "red"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-hummed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-hummed",
+          "n": 1
+         }
+        ],
+        "text": "*It hums. Somewhere far below, something hums back, a little lower.*"
+       },
+       {
+        "kind": "flag",
+        "key": "crystal-took-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-mouth"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-took-1",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "crystal-bag",
+       "atLeast": 0,
+       "atMost": 5
+      }
+     ]
+    },
+    {
+     "label": "Go deeper.",
+     "success": {
+      "text": "The light follows you in.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-gallery"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-gallery",
+   "name": "The Crystal Caverns: The Ore Gallery",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "remembers": [
+    {
+     "id": "swung",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "crystal-swings",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "*The deposits are worked out. Your arms ache.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "roggenrola",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "Ore in the walls: veins of it, glittering. Three good places to swing at. A pool, very clear, very deep, with blue light at the bottom.\n\nOff to one side, a warm chamber. Something red glows in there, and something big is sitting in front of it.",
+   "choices": [
+    {
+     "label": "Swing at the ore.",
+     "success": {
+      "text": "The rock gives. Something in it didn't want to be found.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "roggenrola",
+        "aron",
+        "nosepass"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "hard-stone",
+          "hard-stone",
+          "everstone",
+          "star-piece",
+          "metal-coat"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "crystal-swings",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-32-gallery"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "hard-stone",
+          "hard-stone",
+          "everstone",
+          "star-piece",
+          "metal-coat"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "crystal-swings",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-32-gallery"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "hard-stone",
+          "hard-stone",
+          "everstone",
+          "star-piece",
+          "metal-coat"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "crystal-swings",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-32-gallery"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-swings",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Send a Pokémon down for the Blue crystal.",
+     "success": {
+      "text": "A long dive, a long wait, and up it comes with the light in its mouth.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "crystal-took-2",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-blue-for",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-blue"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-took-2",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Go into the warm chamber.",
+     "success": {
+      "text": "It stands up. It's been guarding that light a long time.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "slugma",
+        "roggenrola",
+        "nosepass"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "crystal-took-3",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-32-warm"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "crystal-took-3",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-32-warm"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "crystal-took-3",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-32-gallery"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-took-3",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go on.",
+     "success": {
+      "text": "The gallery narrows into a hall of mirrors.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-beams"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-warm",
+   "name": "The Crystal Caverns: A Warm Chamber",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slugma",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "Behind where it sat: a second Red crystal, warm as a hand.",
+   "choices": [
+    {
+     "label": "Take it, for one of mine.",
+     "pick": {
+      "types": []
+     },
+     "success": {
+      "text": "It glows brighter as you choose.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystal",
+        "key": "red"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-hummed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-hummed",
+          "n": 1
+         }
+        ],
+        "text": "*It hums. Somewhere far below, something hums back, a little lower.*"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-gallery"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-bag",
+       "atLeast": 0,
+       "atMost": 5
+      }
+     ]
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it where it was. It keeps glowing, for nobody.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-gallery"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-blue",
+   "name": "The Crystal Caverns: A Blue Crystal",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bergmite",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "The Blue crystal is cold and wet and it shows three colours, depending how you hold it.",
+   "choices": [
+    {
+     "label": "Hold it to the water.",
+     "pick": {
+      "types": []
+     },
+     "success": {
+      "text": "The light goes the colour of deep water.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystal",
+        "key": "blue",
+        "type": "water"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-hummed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-hummed",
+          "n": 1
+         }
+        ],
+        "text": "*It hums. Somewhere far below, something hums back, a little lower.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-blue-for",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-gallery"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-blue-for",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-fall"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-bag",
+       "atLeast": 0,
+       "atMost": 5
+      }
+     ]
+    },
+    {
+     "label": "Hold it to the ice.",
+     "pick": {
+      "types": []
+     },
+     "success": {
+      "text": "The light goes the colour of old ice.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystal",
+        "key": "blue",
+        "type": "ice"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-hummed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-hummed",
+          "n": 1
+         }
+        ],
+        "text": "*It hums. Somewhere far below, something hums back, a little lower.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-blue-for",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-gallery"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-blue-for",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-fall"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-bag",
+       "atLeast": 0,
+       "atMost": 5
+      }
+     ]
+    },
+    {
+     "label": "Hold it to the stone.",
+     "pick": {
+      "types": []
+     },
+     "success": {
+      "text": "The light goes the colour of polished steel.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystal",
+        "key": "blue",
+        "type": "steel"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-hummed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-hummed",
+          "n": 1
+         }
+        ],
+        "text": "*It hums. Somewhere far below, something hums back, a little lower.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-blue-for",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-gallery"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-blue-for",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-fall"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-bag",
+       "atLeast": 0,
+       "atMost": 5
+      }
+     ]
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You set it back in the water.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-blue-for",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-gallery"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-blue-for",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-fall"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-beams",
+   "name": "The Crystal Caverns: The Hall of Beams",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "remembers": [
+    {
+     "id": "sang",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "crystal-hollow-heard",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A shaft of light, three crystal mirrors on turntables, and a dark door. The door is already open.\n\nSomebody sang into the Crystal Hollow once, and it carried all the way down here. The door remembered.",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Go through the open door.",
+       "success": {
+        "text": "It hums as you pass, the note you sang.",
+        "effects": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-door-1",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-beams-open"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "carbink",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "A shaft of light from somewhere above. Three crystal mirrors on turntables: one red, one blue, one green. A dark door.\n\nEach mirror colours the beam. The door is waiting for something.",
+   "choices": [
+    {
+     "label": "Turn the red mirror.",
+     "success": {
+      "text": "The turntable grinds round. The beam swings with it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "crystal-mirror-r",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-mirror-r",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-mirror-r",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-beam",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-mirror-r",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-beam",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-mirror-b",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-beam",
+          "amount": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-mirror-g",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-beam",
+          "amount": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "The door gets nothing: the beam goes straight past."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "The beam on the door is red. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "The beam on the door is blue. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "The beam on the door is violet. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "The beam on the door is green. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "The beam on the door is yellow. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 6,
+        "max": 6,
+        "then": [],
+        "text": "The beam on the door is teal. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-door-1",
+          "n": 1
+         }
+        ],
+        "text": "All three together: the beam goes white. The dark door grinds open."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-beams-open"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 0,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-beams"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn the blue mirror.",
+     "success": {
+      "text": "The turntable grinds round. The beam swings with it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "crystal-mirror-b",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-mirror-b",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-mirror-b",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-beam",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-mirror-r",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-beam",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-mirror-b",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-beam",
+          "amount": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-mirror-g",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-beam",
+          "amount": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "The door gets nothing: the beam goes straight past."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "The beam on the door is red. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "The beam on the door is blue. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "The beam on the door is violet. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "The beam on the door is green. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "The beam on the door is yellow. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 6,
+        "max": 6,
+        "then": [],
+        "text": "The beam on the door is teal. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-door-1",
+          "n": 1
+         }
+        ],
+        "text": "All three together: the beam goes white. The dark door grinds open."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-beams-open"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 0,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-beams"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn the green mirror.",
+     "success": {
+      "text": "The turntable grinds round. The beam swings with it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "crystal-mirror-g",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-mirror-g",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-mirror-g",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-beam",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-mirror-r",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-beam",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-mirror-b",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-beam",
+          "amount": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-mirror-g",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-beam",
+          "amount": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "The door gets nothing: the beam goes straight past."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "The beam on the door is red. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "The beam on the door is blue. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "The beam on the door is violet. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "The beam on the door is green. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "The beam on the door is yellow. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 6,
+        "max": 6,
+        "then": [],
+        "text": "The beam on the door is teal. The door doesn't move."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-door-1",
+          "n": 1
+         }
+        ],
+        "text": "All three together: the beam goes white. The dark door grinds open."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-beams-open"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-beam",
+        "min": 0,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-beams"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the door shut.",
+     "success": {
+      "text": "You leave the mirrors as they are.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-fall"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-beams-open",
+   "name": "The Crystal Caverns: Behind the Door",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "carbink",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "Behind the door: a small room, and a White crystal on the floor, lit up by the beam you made.",
+   "choices": [
+    {
+     "label": "Take the White crystal.",
+     "success": {
+      "text": "It's light to hold. When you look at the walls, you can see the cracks that go somewhere.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystal",
+        "key": "white"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-hummed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-hummed",
+          "n": 1
+         }
+        ],
+        "text": "*It hums. Somewhere far below, something hums back, a little lower.*"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-fall"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-bag",
+       "atLeast": 0,
+       "atMost": 5
+      }
+     ]
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it in its beam.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-fall"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-fall",
+   "name": "The Crystal Caverns: The Frozen Fall",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorunt",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "A waterfall, frozen mid-fall. Ice-types live in the gaps behind it. Inside the ice, a blue light.\n\nAnd another door, another beam, two mirrors. Where the third should be, there's an empty turntable.",
+   "choices": [
+    {
+     "label": "Break the Blue crystal out of the ice.",
+     "success": {
+      "text": "The ice cracks. The things that live in it are not happy.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "bergmite",
+        "snorunt"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "crystal-took-4",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "crystal-blue-for",
+         "n": 4
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-32-blue"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "crystal-took-4",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "crystal-blue-for",
+         "n": 4
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-32-blue"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "crystal-took-4",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-32-fall"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-took-4",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Stand a Steel-type in the gap.",
+     "success": {
+      "text": "It stands on the turntable, very still, and the beam bounces off it, true as a mirror. The door opens.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-door-2",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-green"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-door-2",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "partyTypes",
+       "types": [
+        "steel"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Hold the White crystal in the gap.",
+     "success": {
+      "text": "The White crystal catches the beam and throws it on. The door opens.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-door-2",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-green"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-door-2",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "crystal-white",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Go on, down.",
+     "success": {
+      "text": "The cold follows you down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-deep"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-green",
+   "name": "The Crystal Caverns: The Green Crystal",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "carbink",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "Behind the door, one Green crystal, on a shelf. Rare. One to a visit.\n\nIt lets a Pokémon change the way it couldn't on its own: without the stone, without the trade, without the time of day. That change is for good.",
+   "choices": [
+    {
+     "label": "Use it on one of mine.",
+     "pick": {
+      "types": []
+     },
+     "success": {
+      "text": "The green goes into it, all at once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystal",
+        "key": "green"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-hummed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-hummed",
+          "n": 1
+         }
+        ],
+        "text": "*It hums. Somewhere far below, something hums back, a little lower.*"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-fall"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-bag",
+       "atLeast": 0,
+       "atMost": 5
+      }
+     ]
+    },
+    {
+     "label": "Carry it.",
+     "success": {
+      "text": "It goes in your bag. It feels like it's growing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystal",
+        "key": "green"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-hummed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-hummed",
+          "n": 1
+         }
+        ],
+        "text": "*It hums. Somewhere far below, something hums back, a little lower.*"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-fall"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-bag",
+       "atLeast": 0,
+       "atMost": 5
+      }
+     ]
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it on its shelf.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-fall"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-deep",
+   "name": "The Crystal Caverns: The Deep",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "remembers": [
+    {
+     "id": "path",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "crystal-white",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "crystal-path",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*The White crystal shows you a crack in the wall that goes somewhere.*",
+     "addChoices": [
+      {
+       "label": "Follow the hidden path.",
+       "success": {
+        "text": "A side passage, and at the end of it, something somebody left a long time ago.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "crystal-path",
+          "amount": 1
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "rare-candy",
+           "star-piece",
+           "pp-up"
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-deep"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sableye",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "Dark. The light doesn't reach this far.\n\nOn a plinth, alone, a Black crystal. It's cold even from here. The hum is louder, and lower.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "Your fingers ache with the cold. Below you, the hum gets louder.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystal",
+        "key": "black"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-hummed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-hummed",
+          "n": 1
+         }
+        ],
+        "text": "*It hums. Somewhere far below, something hums back, a little lower.*"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-passage"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-bag",
+       "atLeast": 0,
+       "atMost": 5
+      }
+     ]
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it where it is. The hum doesn't change.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-passage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-passage",
+   "name": "The Crystal Caverns: The Passage",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sableye",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "Something comes up the passage toward you, drawn by the hum.",
+   "choices": [
+    {
+     "label": "Stand your ground.",
+     "success": {
+      "text": "Its eyes catch the light.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-black-roll",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-black",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "crystal-black-roll",
+          "weights": [
+           40,
+           40,
+           20
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-black-roll",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-32-heart"
+         }
+        ],
+        "text": "It sees what you're carrying, and runs."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-black-roll",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-passage-fight"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-black-roll",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "cast",
+          "key": "crystal-follower",
+          "species": [
+           "carbink",
+           "roggenrola",
+           "boldore",
+           "sableye",
+           "aron",
+           "bergmite",
+           "snorunt",
+           "klink",
+           "nosepass"
+          ],
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-follower",
+          "n": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-32-heart"
+         }
+        ],
+        "text": "It doesn't fight. It falls in behind you, and follows."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-passage-fight",
+   "name": "The Crystal Caverns: The Passage",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sableye",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "It comes at you.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "It's quick in the dark.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sableye",
+        "klink",
+        "carbink",
+        "boldore"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-32-heart"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-32-heart"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-32-heart"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-heart",
+   "name": "The Crystal Caverns: The Heart",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "remembers": [
+    {
+     "id": "follower",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "crystal-follower",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Behind you, the one that followed sits down to watch.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gigalith",
+    "tint": "#6f8fb8",
+    "effect": "shake"
+   },
+   "intro": "The far wall isn't a wall. It unfolds.\n\n*A Gigalith, twice the size it should be, grown through with crystal of every colour. It turns toward your bag.*",
+   "choices": [
+    {
+     "label": "Stand your ground.",
+     "success": {
+      "text": "It reads your bag the way you'd read a face.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "crystal-gentle",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-river",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "guzzlord-fed",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "crystal-gentle",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "crystalMost"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "crystal-plain",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "crystal-most",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-plain",
+        "min": 1,
+        "then": [],
+        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-phase-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-phase-1",
+   "name": "The Heart: Phase 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gigalith",
+    "tint": "#6f8fb8",
+    "effect": "shake"
+   },
+   "intro": "It leans down toward your bag, and the crystals in it light up.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "It comes at you like a landslide that has decided to.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "gigalith"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "crystal-phase",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-32-between-1"
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "gn": "golem",
+        "noCatch": true,
+        "giant": true,
+        "foeStages": {
+         "atk": 1,
+         "spd": 1
+        }
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "crystal-golem",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-32-folded"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Give it the crystals.",
+     "success": {
+      "text": "You hold them out. It takes them, one at a time, very carefully, with something that isn't a hand.\n\nIt sets them into itself. It folds back into the wall. The humming stops.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-golem",
+        "n": 2
+       },
+       {
+        "kind": "flag",
+        "key": "crystal-golem-given",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-red",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-shard-red",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-blue",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-shard-blue",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-green",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-shard-green",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-white",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-shard-white",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-black",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-shard-black",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-given"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-gentle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-32-between-1",
+   "name": "The Heart: Between",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gigalith",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "*It's looking at the bag again. It isn't angry. It's hungry, or it's lonely; with a rock, it's hard to tell.*",
+   "choices": [
+    {
+     "label": "Drop a crystal.",
+     "success": {
+      "text": "You open the bag.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-drop"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep everything.",
+     "success": {
+      "text": "You close the bag. It watches you do it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystalMost"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "crystal-plain",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "crystal-most",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-plain",
+        "min": 1,
+        "then": [],
+        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-3"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-between-2",
+   "name": "The Heart: Between",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gigalith",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "*It's looking at the bag again. It isn't angry. It's hungry, or it's lonely; with a rock, it's hard to tell.*",
+   "choices": [
+    {
+     "label": "Drop a crystal.",
+     "success": {
+      "text": "You open the bag.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-drop"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep everything.",
+     "success": {
+      "text": "You close the bag. It watches you do it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystalMost"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "crystal-plain",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "crystal-most",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-plain",
+        "min": 1,
+        "then": [],
+        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-3"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-drop",
+   "name": "The Heart: Drop a Crystal",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gigalith",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "Which one?",
+   "choices": [
+    {
+     "label": "The Red one.",
+     "success": {
+      "text": "It rolls a little way, and stops, and the Golem watches it go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystalDrop",
+        "key": "red"
+       },
+       {
+        "kind": "gn",
+        "op": "crystalMost"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "crystal-plain",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "crystal-most",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-plain",
+        "min": 1,
+        "then": [],
+        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-3"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-red",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "The Blue one.",
+     "success": {
+      "text": "It rolls a little way, and stops, and the Golem watches it go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystalDrop",
+        "key": "blue"
+       },
+       {
+        "kind": "gn",
+        "op": "crystalMost"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "crystal-plain",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "crystal-most",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-plain",
+        "min": 1,
+        "then": [],
+        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-3"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-blue",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "The Green one.",
+     "success": {
+      "text": "It rolls a little way, and stops, and the Golem watches it go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystalDrop",
+        "key": "green"
+       },
+       {
+        "kind": "gn",
+        "op": "crystalMost"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "crystal-plain",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "crystal-most",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-plain",
+        "min": 1,
+        "then": [],
+        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-3"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-green",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "The others.",
+     "success": {
+      "text": "You dig deeper in the bag.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-drop-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-drop-2",
+   "name": "The Heart: Drop a Crystal",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gigalith",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "Which one?",
+   "choices": [
+    {
+     "label": "The White one.",
+     "success": {
+      "text": "It rolls a little way, and stops, and the Golem watches it go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystalDrop",
+        "key": "white"
+       },
+       {
+        "kind": "gn",
+        "op": "crystalMost"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "crystal-plain",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "crystal-most",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-plain",
+        "min": 1,
+        "then": [],
+        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-3"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-white",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "The Black one.",
+     "success": {
+      "text": "It rolls a little way, and stops, and the Golem watches it go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystalDrop",
+        "key": "black"
+       },
+       {
+        "kind": "gn",
+        "op": "crystalMost"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "crystal-plain",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "crystal-most",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-plain",
+        "min": 1,
+        "then": [],
+        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-3"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-black",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Keep everything after all.",
+     "success": {
+      "text": "You close the bag.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "crystalMost"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-most",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "crystal-plain",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "crystal-most",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-plain",
+        "min": 1,
+        "then": [],
+        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-phase",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-32-phase-3"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-phase-2",
+   "name": "The Heart: Phase 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gigalith",
+    "tint": "#6f8fb8",
+    "effect": "shake"
+   },
+   "intro": "The second time, it's slower, and it looks at the bag longer.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "It comes at you like a landslide that has decided to.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "gigalith"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "crystal-phase",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-32-between-2"
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "gn": "golem",
+        "noCatch": true,
+        "giant": true,
+        "foeStages": {
+         "atk": 1,
+         "spd": 1
+        }
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "crystal-golem",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-32-folded"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Give it the crystals.",
+     "success": {
+      "text": "You hold them out. It takes them, one at a time, very carefully, with something that isn't a hand.\n\nIt sets them into itself. It folds back into the wall. The humming stops.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-golem",
+        "n": 2
+       },
+       {
+        "kind": "flag",
+        "key": "crystal-golem-given",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-red",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-shard-red",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-blue",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-shard-blue",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-green",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-shard-green",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-white",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-shard-white",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-black",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-shard-black",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-given"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-gentle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-32-phase-3",
+   "name": "The Heart: Phase 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gigalith",
+    "tint": "#6f8fb8",
+    "effect": "shake"
+   },
+   "intro": "The third time, it holds out something that isn't a hand.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "It comes at you like a landslide that has decided to.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "gigalith"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "crystal-golem",
+         "n": 1
+        },
+        {
+         "kind": "flag",
+         "key": "crystal-golem-defeated",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-32-defeated"
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "gn": "golem",
+        "noCatch": true,
+        "giant": true,
+        "foeStages": {
+         "atk": 1,
+         "spd": 1
+        }
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "crystal-golem",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-32-folded"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Give it the crystals.",
+     "success": {
+      "text": "You hold them out. It takes them, one at a time, very carefully, with something that isn't a hand.\n\nIt sets them into itself. It folds back into the wall. The humming stops.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-golem",
+        "n": 2
+       },
+       {
+        "kind": "flag",
+        "key": "crystal-golem-given",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-red",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-shard-red",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-blue",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-shard-blue",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-green",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-shard-green",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-white",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-shard-white",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crystal-black",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "crystal-shard-black",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-given"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-defeated",
+   "name": "The Heart: The Golem Falls",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gigalith",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "It settles. The crystals in it go dim, one by one.\n\nAmong the rubble: a Hard Stone, something rare, and one crystal that hasn't gone dark yet.",
+   "choices": [
+    {
+     "label": "Gather it up.",
+     "success": {
+      "text": "You fill your hands.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "hard-stone",
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "life-orb",
+         "focus-sash",
+         "eviolite",
+         "rocky-helmet",
+         "choice-band",
+         "choice-specs"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-keep"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-keep",
+   "name": "The Heart: One Crystal",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gigalith",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "One crystal stays lit, if you choose it. Its light at half strength, for good.",
+   "choices": [
+    {
+     "label": "Keep the Red one.",
+     "success": {
+      "text": "It stops humming in your hand, and goes quiet, and stays.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cavern-red-crystal",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-kept",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-follower-check"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-red",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Keep the Blue one.",
+     "success": {
+      "text": "It stops humming in your hand, and goes quiet, and stays.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cavern-blue-crystal",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-kept",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-follower-check"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-blue",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Keep the Green one.",
+     "success": {
+      "text": "It stops humming in your hand, and goes quiet, and stays.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cavern-green-crystal",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-kept",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-follower-check"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-green",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "The others.",
+     "success": {
+      "text": "You look again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-32-keep-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-keep-2",
+   "name": "The Heart: One Crystal",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gigalith",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "One crystal stays lit, if you choose it.",
+   "choices": [
+    {
+     "label": "Keep the White one.",
+     "success": {
+      "text": "It stops humming in your hand, and goes quiet, and stays.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cavern-white-crystal",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-kept",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-follower-check"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-white",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Keep the Black one.",
+     "success": {
+      "text": "It stops humming in your hand, and goes quiet, and stays.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cavern-black-crystal",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-kept",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-follower-check"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "crystal-black",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "None of them.",
+     "success": {
+      "text": "You let them go dark.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-follower-check"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-given",
+   "name": "The Heart: The Wall",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "carbink",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "Where it folded, the wall moves once more. A Carbink climbs out of it, and looks at you, and follows.\n\nIn your hand: one small shard of each colour you gave. They hum, faintly, when you turn toward places nobody's found.",
+   "choices": [
+    {
+     "label": "Let it come.",
+     "success": {
+      "text": "It walks at your heel all the way to the light.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "carbink"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "marks": [
+         "came out of the wall in the Crystal Caverns"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-follower-check"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-folded",
+   "name": "The Heart: The Wall",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gigalith",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "It doesn't follow you. It folds back into the wall, and the humming goes on without you.",
+   "choices": [
+    {
+     "label": "Find the way out.",
+     "success": {
+      "text": "The light leads you out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "crystal-golem",
+        "n": 3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-32-follower-check"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-follower-check",
+   "name": "The Crystal Caverns: The Way Out",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Dungeon"
+   ],
+   "remembers": [
+    {
+     "id": "follower",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "crystal-follower",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "At the mouth of the cave, the one that followed you all the way stops, and looks at you.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Try to catch it.",
+       "success": {
+        "text": "It doesn't run.",
+        "effects": [],
+        "battle": {
+         "kind": "wild",
+         "species": [
+          "@crystal-follower"
+         ],
+         "types": [],
+         "levelBonus": 1,
+         "shinyMultiplier": 1,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "crystal-done",
+           "amount": 1
+          },
+          {
+           "kind": "leavePseudo"
+          }
+         ],
+         "caught": [
+          {
+           "kind": "flag",
+           "key": "crystal-done",
+           "amount": 1
+          },
+          {
+           "kind": "leavePseudo"
+          }
+         ],
+         "exact": true,
+         "rule": {
+          "catchTimes": 2
+         },
+         "lose": [
+          {
+           "kind": "flag",
+           "key": "crystal-done",
+           "amount": 1
+          },
+          {
+           "kind": "leavePseudo"
+          }
+         ],
+         "pseudo": true
+        }
+       }
+      },
+      {
+       "label": "Let it wander off.",
+       "success": {
+        "text": "It watches you go. Then it turns, and goes back in, toward the hum.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "crystal-done",
+          "amount": 1
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "carbink",
+    "tint": "#6f8fb8",
+    "effect": "sparkle"
+   },
+   "intro": "Daylight, at last. Behind you, the hum goes on.",
+   "choices": [
+    {
+     "label": "Step out.",
+     "success": {
+      "text": "The crystals in your bag go quiet the moment the sun touches them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "crystal-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

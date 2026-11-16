@@ -23,6 +23,7 @@ import { freshHeldState } from '../state';
 import type { BattleState, HeldState, PokemonInstance, Stages, Volatile } from '../state';
 import { clampStage } from './damage';
 import { setHooks } from '../itemSets';
+import { ownTypes } from '../co/typeShift';
 import { growthBerryMultiplier, growthHealMultiplier } from '../overhaul/growth';
 
 export type Side = 'player' | 'enemy';
@@ -341,6 +342,7 @@ export function attackMultiplier(
   const all = hooksOf(ctx, user.mon, user.side);
   let m = 1;
   for (const { hook, copies } of hooks(all, 'typePower')) if (hook.types.includes(moveType)) m *= 1 + (hook.percent * copies) / 100;
+  for (const { hook } of hooks(all, 'ownTypePower')) if (ownTypes(ctx.content, user.mon).includes(moveType)) m *= 1 + hook.percent / 100;
   for (const { hook, copies } of hooks(all, 'categoryPower')) if (hook.category === move.category) m *= 1 + (hook.percent * copies) / 100;
   for (const { hook } of hooks(all, 'power')) m *= 1 + hook.percent / 100;
   for (const { hook } of hooks(all, 'punchingGlove')) if (move.flags.includes('punch')) m *= 1 + hook.percent / 100;

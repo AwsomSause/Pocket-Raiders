@@ -16,6 +16,8 @@
 // after a hit (Static, Rough Skin), at the end of the turn (Speed Boost) and
 // when switching out (Regenerator).
 
+import { ownTypes } from '../co/typeShift';
+import { golemBlueType, golemColour } from '../greenneedle/crystals';
 import { foresightBegin } from './foresight';
 import { CARE } from '../care/mods';
 import { shadowDamageMultiplier } from '../shadow';
@@ -1737,6 +1739,11 @@ function gnFoeWaits(ctx: BattleContext, enemy: Combatant, events: BattleEvent[])
 
 /** Greenneedle events: a `gn-you-wait:<line>` token costs your Pokémon its next move and shows the line (the Lush Jungle's vines). */
 function gnYouWait(ctx: BattleContext, player: Combatant, events: BattleEvent[]): boolean {
+  // gn.32: near the Golem read as Black, your Pokémon may refuse to attack it (20%), the way wild ones flee.
+  if (golemColour(ctx.battle) === 'black' && player.mon.hp > 0 && ctx.rng.float() < 0.2) {
+    events.push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, player.mon.speciesId).name} won't go near it. It backs away.` });
+    return true;
+  }
   const i = ctx.battle.storyEffects.findIndex((e) => e.startsWith('gn-you-wait:'));
   if (i < 0) return false;
   const [token] = ctx.battle.storyEffects.splice(i, 1);
@@ -4001,7 +4008,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     user.vol.typeShift = move.type;
   }
   const foeAbility = targetsEnemy ? targetAbility(ctx, user, target) : null;
-  const noGuard = userAbility === 'no-guard' || abilityIn(ctx, target) === 'no-guard' || userAbility === 'skys-resolve' || abilityIn(ctx, target) === 'skys-resolve';
+  // Greenneedle gn.32: the Golem read as White sees through evasion and can't miss.
+  const noGuard = userAbility === 'no-guard' || abilityIn(ctx, target) === 'no-guard' || userAbility === 'skys-resolve' || abilityIn(ctx, target) === 'skys-resolve' || (user.side === 'enemy' && golemColour(ctx.battle) === 'white');
   // A hidden target can only be hit by the moves that reach it (Earthquake hits Dig), or with No Guard.
   if (targetsEnemy && target.vol.semi && fx.hitsSemi?.semi !== target.vol.semi && !noGuard) {
     events.push({ type: 'avoided', side: target.side });
@@ -4419,6 +4427,9 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       final *= curseMultiplier(content, target.vol.curseTag, moveType);
       if (effectiveness > 1 && (foeAbility === 'filter' || foeAbility === 'solid-rock' || foeAbility === 'prism-armor')) final *= 0.75;
       if (effectiveness > 1 && foeAbility === 'deep-roots') final *= 0.9;
+      // Greenneedle gn.32: a carried Red crystal (+10% to its own-type moves); the Golem read as Red (+10% to its attacks).
+      if (user.side === 'player' && user.mon.crystal?.red && ownTypes(content, user.mon).includes(moveType)) final *= 1.1;
+      if (user.side === 'enemy' && golemColour(ctx.battle) === 'red') final *= 1.1;
       if ((foeAbility === 'multiscale' || foeAbility === 'shadow-shield') && target.mon.hp >= targetStats.hp) final *= 0.5;
       if (!crit) {
         const tfx = ctx.battle.sideEffects[target.side];
@@ -7027,6 +7038,19 @@ function applyResidual(ctx: BattleContext, c: Combatant, other: Combatant, event
     announce(c, ability, events);
     c.mon.hp += amount;
     events.push({ type: 'heal', side: c.side, amount, hpAfter: c.mon.hp });
+  }
+  // Greenneedle gn.32: the Golem read as Green restores 1/8 HP a turn; read as Blue, it takes a new second type from your team's.
+  if (c.side === 'enemy' && c.mon.hp > 0 && ctx.battle.eventRule?.gn === 'golem') {
+    const colour = golemColour(ctx.battle);
+    if (colour === 'green' && c.mon.hp < max) {
+      const amount = Math.min(max - c.mon.hp, Math.max(1, Math.floor(max / 8)));
+      c.mon.hp += amount;
+      events.push({ type: 'heal', side: c.side, amount, hpAfter: c.mon.hp });
+    }
+    if (colour === 'blue') {
+      c.vol.typeList = ['rock', golemBlueType(content, ctx.party, ctx.battle.turn)];
+      events.push({ type: 'raid', tone: 'info', text: `The Golem's crystals shift. It is part ${c.vol.typeList[1]} now.` });
+    }
   }
   // Greenneedle gn.31: Old Growth restores 1/16 HP each turn, in any weather.
   if (ability === 'old-growth' && c.mon.hp > 0 && c.mon.hp < max) {

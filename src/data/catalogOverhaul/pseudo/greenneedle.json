@@ -147,6 +147,15 @@
    "start": "opened"
   },
   {
+   "id": "ps_gn_crystal",
+   "name": "The Crystal Caverns",
+   "entry": "gn-32-door",
+   "themeId": "rock-fairy",
+   "tint": "#6f8fb8",
+   "mood": "crystal cave",
+   "start": "opened"
+  },
+  {
    "id": "ps_gn_forest",
    "name": "The Forgotten Forest",
    "entry": "gn-31-door",

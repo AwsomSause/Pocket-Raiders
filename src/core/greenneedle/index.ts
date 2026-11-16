@@ -16,6 +16,7 @@ import { SLUDGE_TURNS } from './factory';
 import { bondLevel, firstCatch } from '../co/who';
 import { NATURE_IDS } from '../natures';
 import { fnv1a } from '../expansion/hash';
+import { crystalOp, golemStart } from './crystals';
 
 type Cue = { type: 'spectacle'; kind: 'arena'; side: 'player' | 'enemy'; text: string; uid?: string };
 const cue = (side: 'player' | 'enemy', text: string, uid?: string): Cue => ({ type: 'spectacle', kind: 'arena', side, text, ...(uid ? { uid } : {}) });
@@ -97,6 +98,8 @@ export interface GnHost {
   stage: number;
   /** The run's current region id. */
   region: string;
+  /** The Pokémon picked for this choice (a `pick` choice), if any. */
+  picked?: string;
   /** Whether an ordinary event condition holds now (roll modifiers). */
   met?: (condition: unknown) => boolean;
 }
@@ -352,6 +355,11 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       else mon.moves[mon.moves[3]!.id === 'two-trainers' ? 2 : 3] = slot;
       return `${nameOf(content, mon)} remembered ${content.moves.get(id)!.name}!`;
     }
+    case 'crystal':
+    case 'crystalDrop':
+    case 'crystalMost':
+      // gn.32: the Crystal Caverns' bag (core/greenneedle/crystals.ts).
+      return crystalOp(content, run, e.op, e.key, e.type, host.picked ? run.party.find((m) => m.uid === host.picked) : undefined);
     case 'markLead': {
       // gn.30: a history mark on the lead (the pink one that ate the island fruit for a day).
       const lead = run.party.find((m) => m.hp > 0) ?? run.party[0];
@@ -440,6 +448,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   const battle = run.battle;
   if (!battle) return;
   if (gnFlag(run, FOREST.inside) > 0 && gnFlag(run, FOREST.fog) > 0) battle.accuracyMult = 0.9;
+  // gn.32: the Crystal Golem takes the type of the colour you carry most.
+  if (battle.eventRule?.gn === 'golem') golemStart(run, battle);
   // A Weedle duelist: the swarm's Beedrill will not strike first at one of their own.
   if (battle.event?.eventId === 'gn-03-oak' && battle.kind === 'wild' && ['weedle', 'kakuna', 'beedrill'].includes(markedMon(run, 'duelist')?.was ?? '')) {
     battle.storyEffects.push(`${FOE_WAITS}The swarm hangs back. They will not strike first at one of their own.`);

@@ -1168,6 +1168,8 @@ export const HeldHookSchema = z.discriminatedUnion('hook', [
   z.object({ hook: z.literal('typePower'), types: z.array(TypeNameSchema).min(1), percent: z.number().positive(), species: Species }),
   /** The holder's first move of this type in each battle does `multiplier` damage, once per copy (Gems). */
   z.object({ hook: z.literal('gem'), type: TypeNameSchema, multiplier: z.number().positive() }),
+  /** Moves of the holder's own types hit harder (gn.32: a kept Red crystal). */
+  z.object({ hook: z.literal('ownTypePower'), percent: z.number().positive() }),
   /** Physical (or special) moves do more damage. */
   z.object({ hook: z.literal('categoryPower'), category: z.enum(['physical', 'special']), percent: z.number().positive() }),
   /** Every damaging move does more damage; `recoil` is the share of max HP lost per hit that lands (Life Orb). */

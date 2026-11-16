@@ -152,6 +152,8 @@ export const PokemonInstanceSchema = z.object({
   teraType: TypeNameSchema.optional(),
   /** Catalog Overhaul (SF93 Heart Crystal): its second type is this one for the rest of the run (core/co/typeShift.ts). */
   shiftType: TypeNameSchema.optional(),
+  /** Greenneedle gn.32: a crystal carried for it, this stage only (Red: own-type moves +10%; Blue: its second type). Taken off on leaving. */
+  crystal: z.object({ red: z.boolean().optional(), blue: TypeNameSchema.optional() }).optional(),
   /** Catalog Overhaul (SF102 Bond Ceremony): it made the vow; it can't be released or traded and its friendship can't fall (core/co/placesRules.ts). */
   vowed: z.boolean().optional(),
   /** Moves that awakened this run (Signature Move Awakening): they hit harder; gone with the run. */

@@ -4,6 +4,10 @@ import type { PokemonInstance, RunState } from '../../src/core/state';
 import { content } from './helpers';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { takeTurn } from '../../src/core/run';
+import { chooseEvent } from '../../src/core/events';
+import { leavePseudoStage } from '../../src/core/dungeon/pseudo';
+import { ownTypes } from '../../src/core/co/typeShift';
+import { battleTypes } from '../../src/core/battle/transform';
 import { createBattle, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { choose, flagOf, gnRun, open, openSide, scene, setFlag, win } from './helpers/gnPlay';
@@ -196,5 +200,188 @@ describe('the Forgotten Forest\'s abilities (gn.31)', () => {
     expect(me.status).toBeFalsy();
     for (let i = 0; i < 4 && !me.status; i++) resolveTurn(ctx, { kind: 'move', index: 0 });
     expect(me.status?.id).toBe('par');
+  });
+});
+
+describe('gn.32 The Crystal Caverns', () => {
+  const pickFirst = (run: RunState, eventId: string, label: string): RunState => {
+    const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+    const side = here.sides.find((x) => x.kind === 'event' && !x.used && x.eventId === eventId)!;
+    const index = scene(run, eventId).labels.indexOf(label);
+    return chooseEvent(content, run, side.id, index, run.party[0]!.uid).run;
+  };
+  const inCave = (seed: string, setup: (run: RunState) => void = () => {}): RunState => {
+    const run = gnRun(seed);
+    setup(run);
+    open(run, 'gn-32-door');
+    return choose(run, 'gn-32-door', 'Go in.').run;
+  };
+  const carry = (run: RunState, counts: Partial<Record<'red' | 'blue' | 'green' | 'white' | 'black', number>>): void => {
+    for (const [c, n] of Object.entries(counts)) setFlag(run, `crystal-${c}`, n);
+    setFlag(run, 'crystal-bag', Object.values(counts).reduce((a, b) => a + b, 0));
+  };
+  const atHeart = (seed: string, counts: Parameters<typeof carry>[1], setup: (run: RunState) => void = () => {}): RunState => {
+    const run = gnRun(seed);
+    setup(run);
+    carry(run, counts);
+    open(run, 'gn-32-heart');
+    return choose(run, 'gn-32-heart', 'Stand your ground.').run;
+  };
+  const golemOf = (run: RunState, phase = 1): RunState => choose(run, `gn-32-phase-${phase}`, 'Fight.').run;
+
+  it('a door at step 13 needing a cave or snow (A7, once a run)', () => {
+    expect(content.coPlacement!.get('gn-32-door')).toMatchObject({ home: 13, window: [11, 16], sits: 'optional', attaches: 'instead', earliest: 7, tags: ['cave|snow'] });
+    expect(openSide(inCave('t32-door'))!.eventId).toBe('gn-32-mouth');
+  });
+
+  it('the Red crystal goes on the Pokémon you pick: its own-type moves +10%, this stage only', () => {
+    let run = inCave('t32-red');
+    run = pickFirst(run, 'gn-32-mouth', 'Take the Red crystal, for one of mine.');
+    expect(run.party[0]!.crystal?.red).toBe(true);
+    expect(flagOf(run, 'crystal-red')).toBe(1);
+    expect(flagOf(run, 'crystal-hummed')).toBe(1);
+    expect(scene(run, 'gn-32-mouth').labels).toEqual(['Go deeper.']);
+  });
+
+  it('the Blue crystal changes the picked Pokémon\'s second type while carried; leaving the stage takes it off', () => {
+    let run = inCave('t32-blue');
+    open(run, 'gn-32-blue');
+    setFlag(run, 'crystal-blue-for', 2);
+    run = pickFirst(run, 'gn-32-blue', 'Hold it to the ice.');
+    const mon = run.party[0]!;
+    expect(mon.crystal?.blue).toBe('ice');
+    expect(ownTypes(content, mon)).toContain('ice');
+    expect(run.stage!.pseudo).toBeTruthy();
+    leavePseudoStage(run);
+    expect(run.party[0]!.crystal).toBeUndefined();
+    expect(flagOf(run, 'crystal-blue')).toBe(0);
+  });
+
+  it('the bag holds six', () => {
+    const run = inCave('t32-bag');
+    carry(run, { red: 2, blue: 2, white: 1, black: 1 });
+    expect(scene(run, 'gn-32-mouth').labels).toEqual(['Go deeper.']);
+  });
+
+  it('the Hall of Beams: the door wants white, all three mirrors together; turning one again takes it out', () => {
+    let run = gnRun('t32-beams');
+    open(run, 'gn-32-beams');
+    let r = choose(run, 'gn-32-beams', 'Turn the red mirror.');
+    expect(said(r)).toMatch(/is red/);
+    r = choose(r.run, 'gn-32-beams', 'Turn the blue mirror.');
+    expect(said(r)).toMatch(/is violet/);
+    r = choose(r.run, 'gn-32-beams', 'Turn the red mirror.');
+    expect(said(r)).toMatch(/is blue/);
+    r = choose(r.run, 'gn-32-beams', 'Turn the red mirror.');
+    r = choose(r.run, 'gn-32-beams', 'Turn the green mirror.');
+    expect(said(r)).toMatch(/goes white/);
+    expect(openSide(r.run)!.eventId).toBe('gn-32-beams-open');
+    run = choose(r.run, 'gn-32-beams-open', 'Take the White crystal.').run;
+    expect(flagOf(run, 'crystal-white')).toBe(1);
+  });
+
+  it('sang into the Crystal Hollow: the Hall of Beams\' door is already open', () => {
+    const run = inCave('t32-sang', (r) => setFlag(r, 'crystal-hollow-heard'));
+    open(run, 'gn-32-beams');
+    expect(scene(run, 'gn-32-beams').labels).toEqual(['Leave the door shut.', 'Go through the open door.']);
+  });
+
+  it('the Frozen Fall: a Steel-type or a carried White crystal stands in for the missing mirror; the Green crystal evolves for good', () => {
+    const run = gnRun('t32-fall');
+    open(run, 'gn-32-fall');
+    expect(scene(run, 'gn-32-fall').labels).not.toContain('Hold the White crystal in the gap.');
+    setFlag(run, 'crystal-white');
+    const r = choose(run, 'gn-32-fall', 'Hold the White crystal in the gap.').run;
+    expect(openSide(r)!.eventId).toBe('gn-32-green');
+    r.party[0] = createPokemon(content, 'eevee', 20, r.party[0]!.uid);
+    const used = pickFirst(r, 'gn-32-green', 'Use it on one of mine.');
+    expect(used.party[0]!.speciesId).not.toBe('eevee');
+    expect(flagOf(used, 'crystal-green-used')).toBe(1);
+    leavePseudoStage(used);
+    expect(used.party[0]!.speciesId).not.toBe('eevee');
+  });
+
+  it('the Golem takes the type of the colour carried most; none or a tie is plain Rock', () => {
+    const red = golemOf(atHeart('t32-g-red', { red: 2, blue: 1 }));
+    expect(battleTypes(content, red.battle!, red.battle!.enemyTeam[0]!)).toEqual(['rock', 'fire']);
+    expect(red.battle!.enemyTeam[0]!.fixedAbility).toBe('flame-body');
+    const tie = golemOf(atHeart('t32-g-tie', { red: 1, blue: 1 }));
+    expect(battleTypes(content, tie.battle!, tie.battle!.enemyTeam[0]!)).toEqual(['rock']);
+    const black = gnRun('t32-g-black');
+    carry(black, { black: 1 });
+    open(black, 'gn-32-heart');
+    expect(said(choose(black, 'gn-32-heart', 'Stand your ground.'))).toMatch(/Rock and Dark/);
+  });
+
+  it('Green heals it 1/8 a turn; Blue takes a type from your team each turn', () => {
+    let run = golemOf(atHeart('t32-g-green', { green: 1 }));
+    const g = run.battle!.enemyTeam[0]!;
+    g.hp = 10;
+    run = takeTurn(content, run, { kind: 'move', index: 0 }).run;
+    if (run.battle) expect(run.battle.enemyTeam[0]!.hp).toBeGreaterThan(10 - 1);
+    let blue = golemOf(atHeart('t32-g-blue', { blue: 2 }));
+    blue = takeTurn(content, blue, { kind: 'move', index: 0 }).run;
+    if (blue.battle) expect(blue.party.flatMap((m) => content.species.get(m.speciesId)!.types)).toContain(battleTypes(content, blue.battle, blue.battle.enemyTeam[0]!)[1]);
+  });
+
+  it('three phases with a choice between; drop a crystal and the next phase reads the bag again', () => {
+    let run = win(golemOf(atHeart('t32-phases', { red: 2, blue: 1 })));
+    expect(flagOf(run, 'crystal-phase')).toBe(1);
+    expect(scene(run, 'gn-32-between-1').labels).toEqual(['Drop a crystal.', 'Keep everything.']);
+    run = choose(run, 'gn-32-between-1', 'Drop a crystal.').run;
+    run = choose(run, 'gn-32-drop', 'The Red one.').run;
+    expect(flagOf(run, 'crystal-most')).toBe(0);
+    expect(openSide(run)!.eventId).toBe('gn-32-phase-2');
+    expect(scene(run, 'gn-32-phase-2').labels).toEqual(['Fight.']);
+    run = win(golemOf(run, 2));
+    run = choose(run, 'gn-32-between-2', 'Keep everything.').run;
+    expect(scene(run, 'gn-32-phase-3').labels).toEqual(['Fight.', 'Give it the crystals.']);
+    run = win(golemOf(run, 3));
+    expect(flagOf(run, 'crystal-golem-defeated')).toBe(1);
+    run = choose(run, 'gn-32-defeated', 'Gather it up.').run;
+    run = choose(run, 'gn-32-keep', 'Keep the Red one.').run;
+    expect(JSON.stringify(run)).toMatch(/cavern-red-crystal/);
+    expect(JSON.stringify(run)).toMatch(/hard-stone/);
+  });
+
+  it('gave the Snorlax room or fed the Guzzlord: "Give it the crystals" from the first phase; a Carbink comes out of the wall', () => {
+    const run = atHeart('t32-give', { white: 1 }, (r) => setFlag(r, 'guzzlord-fed'));
+    expect(scene(run, 'gn-32-phase-1').labels).toEqual(['Fight.', 'Give it the crystals.']);
+    let r = choose(run, 'gn-32-phase-1', 'Give it the crystals.').run;
+    expect(flagOf(r, 'crystal-shard-white')).toBe(1);
+    r = choose(r, 'gn-32-given', 'Let it come.').run;
+    const carbink = [...r.party, ...r.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].find((m) => m.speciesId === 'carbink');
+    expect(carbink).toBeTruthy();
+  });
+
+  it('the Black crystal: what comes up the passage flees, fights or follows; one that follows can be caught at double the chance', () => {
+    const seen = new Set<string>();
+    for (let i = 0; i < 40 && seen.size < 3; i++) {
+      const run = gnRun(`t32-black-${i}`);
+      carry(run, { black: 1 });
+      open(run, 'gn-32-passage');
+      const r = choose(run, 'gn-32-passage', 'Stand your ground.');
+      seen.add(flagOf(r.run, 'crystal-black-roll') === 1 ? 'flee' : flagOf(r.run, 'crystal-black-roll') === 2 ? 'fight' : 'follow');
+      if (flagOf(r.run, 'crystal-follower')) {
+        open(r.run, 'gn-32-follower-check');
+        expect(scene(r.run, 'gn-32-follower-check').labels).toEqual(['Try to catch it.', 'Let it wander off.']);
+        const b = choose(r.run, 'gn-32-follower-check', 'Try to catch it.').run;
+        expect(b.battle!.eventRule?.catchTimes).toBe(2);
+      }
+    }
+    expect([...seen].sort()).toEqual(['fight', 'flee', 'follow']);
+    const plain = gnRun('t32-noblack');
+    open(plain, 'gn-32-passage');
+    expect(openSide(choose(plain, 'gn-32-passage', 'Stand your ground.').run)!.eventId).toBe('gn-32-passage-fight');
+  });
+});
+
+describe('the kept cavern crystals (gn.32)', () => {
+  it('each is a gift-only held item at half the Golem\'s strength', () => {
+    for (const id of ['cavern-red-crystal', 'cavern-blue-crystal', 'cavern-green-crystal', 'cavern-white-crystal', 'cavern-black-crystal']) {
+      const it = content.catalog.get(id)!;
+      expect(it.giftOnly).toBe(true);
+      expect(it.effect?.kind).toBe('held');
+    }
   });
 });

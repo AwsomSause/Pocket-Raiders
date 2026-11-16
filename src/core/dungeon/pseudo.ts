@@ -3,6 +3,7 @@
 // count (no stage index, badge or region clear). Each map node plays a room event (compile.ts). Rules: a Leave option before the first
 // fight, caps and bans, one reward item, and a loss ejects back to the parent stage.
 
+import { endCrystals } from '../greenneedle/crystals';
 import { z } from 'zod';
 import json from '../../data/pseudoStages.json';
 import type { Content, EventDef } from '../contentSchema';
@@ -133,6 +134,7 @@ export function enterPseudoStage(_content: Content, run: RunState, id: string): 
 /** Back to the parent stage, standing on the node the pseudo-stage was opened from. A no-op when no pseudo-stage is being played. */
 export function leavePseudoStage(run: RunState): void {
   if (!run.stage?.pseudo || !run.pseudoParent) return;
+  endCrystals(run);
   run.stage = run.pseudoParent;
   delete run.pseudoParent;
 }

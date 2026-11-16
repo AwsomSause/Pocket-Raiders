@@ -135,6 +135,8 @@ function hookText(hook: HeldHook, copies: number): HookText {
       return { text: 'When it is hit, it switches out. Used up.', once: true };
     case 'mentalHerb':
       return { text: 'Shrugs off infatuation, Taunt, Encore and similar once.', once: true };
+    case 'ownTypePower':
+      return { text: `Moves of its own type hit ${pct(hook.percent)} harder.`, when: 'when it uses a move of its own type' };
     case 'damageTaken':
       return { text: `${hook.percent < 0 ? `Takes ${pct(-hook.percent)} less` : `Takes ${pct(hook.percent)} more`} damage${hook.fromWild ? ' from wild Pokémon' : ''}${hook.superEffective ? ' from super-effective hits' : ''}${hook.holderType ? ` while it is ${cap(hook.holderType)}-type` : ''}.` };
     case 'weatherTurns':
