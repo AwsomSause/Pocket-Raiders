@@ -5132,5 +5132,32 @@
    "Hub Destination"
   ],
   "tags": []
+ },
+ "gn-new-15-door": {
+  "gn": "gn.new.15",
+  "shape": "Door",
+  "earliest": "A7",
+  "home": 12,
+  "window": [
+   10,
+   17
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A-1 wild Pokémon in the rooms",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Weather Station",
+   "elsewhere": "The Weather Station"
+  },
+  "note": "Badge: a weather vane. A door at step 12, optional (fallback step 17). A porch, the floor plan with four rooms (scenes) and the tower. Afterstory: a hand-written forecast at step 1 of each later stage (run.ts, core/greenneedle/weather.ts).",
+  "kinds": [
+   "Pseudo Stage",
+   "Mystery Episode"
+  ],
+  "tags": [
+   "high"
+  ]
  }
 }

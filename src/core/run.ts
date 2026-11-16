@@ -37,6 +37,7 @@ import { snorlaxForgives, snorlaxGym, snorlaxRest } from './greenneedle/snorlax'
 import { farFromHome, smuggleRest } from './greenneedle/smuggling';
 import { standingWelcome } from './greenneedle/welcome';
 import { ranchRest } from './greenneedle/ranch';
+import { pinLine } from './greenneedle/weather';
 import { CENTER_SHUT, SHOP_SHUT, sgCenterLine, sgCenterShut, sgHealShare, sgPriceFactor, sgRest } from './greenneedle/citysiege';
 import { taRoomsAfraid } from './greenneedle/teamauction';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
@@ -3187,6 +3188,8 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   const ripple = exRipple(content, run);
   // Greenneedle gn.49: the Snorlax that followed your bag sits down at the Gym door.
   const gymDoor = snorlaxGym(run, stageNumber(content, run));
+  // Greenneedle gn.new.15: the Weather Station's hand-written forecast, pinned up at step 1 of each later stage.
+  const pinned = pinLine(content, run);
   kantoSweetAir(content, run);
   // Greenneedle gn.55: after the Angry Bidoof's bow, no wild Bidoof or Bibarel attacks first.
   bidoofPeace(run, FOE_WAITS);
@@ -3194,6 +3197,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   if (afterstory) events.push({ type: 'raid', tone: 'info', text: afterstory });
   if (ripple) events.push({ type: 'raid', tone: 'info', text: ripple });
   if (gymDoor) events.push({ type: 'raid', tone: 'info', text: gymDoor });
+  if (pinned) events.push({ type: 'raid', tone: 'info', text: pinned });
   run.rng.battle = rng.state;
   noteBattle(content, run);
   wildBehaviorEffect(content, run, events);

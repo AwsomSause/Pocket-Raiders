@@ -235,6 +235,15 @@
    "tint": "#6b5a3a",
    "mood": "high wind",
    "start": "opened"
+  },
+  {
+   "id": "ps_gn_station",
+   "name": "The Weather Station",
+   "entry": "gn-new-15-door",
+   "themeId": "rock-ghost",
+   "tint": "#6c8aa6",
+   "mood": "mountain weather station",
+   "start": "opened"
   }
  ]
 }
