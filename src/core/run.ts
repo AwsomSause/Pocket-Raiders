@@ -12,6 +12,8 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
+import { noteReleased } from './co/familiesA';
+import { regionGifts, regionInterest } from './flagPerks';
 import { noteBattle } from './expansion/fieldNotes';
 import { settleSky } from './sky/story';
 import { finishSpectate } from './sky/spectate';
@@ -977,6 +979,12 @@ function enterNextRegion(content: Content, run: RunState): void {
   const orbMoney = regionMoneyFromItems(content, run);
   run.money += orbMoney;
   count(run, 'moneyEarned', orbMoney);
+  // Catalog overhaul SF1.6: Faulk's account pays interest between regions.
+  const interest = regionInterest(run);
+  run.money += interest;
+  count(run, 'moneyEarned', interest);
+  // Catalog overhaul SF8.3: Oswin's bedroll is back in the bag for the new region.
+  for (const id of regionGifts(run)) addItem(run.inventory, id, 1);
   // Linden's Notebook works in the region after the one it was given in.
   startWildMovesRegion(content, run);
   enterStage(content, run, 0);
@@ -4375,6 +4383,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       count(run, 'caughtToCandies');
       message = `${name} was released. You got ${candies} cand${candies === 1 ? 'y' : 'ies'}. ${markDecided(run, caught, false)}`.trim();
       recordReleased(content, run, caught);
+      noteReleased(run, caught);
     } else {
       throw new Error('Choose what to do with the caught Pokémon');
     }

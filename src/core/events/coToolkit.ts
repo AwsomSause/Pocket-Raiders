@@ -3,6 +3,7 @@
 // in `run.story.flags` (`ev:<key>` numbers, like the `flag` effect; `co:<key>` strings for the Time Machine).
 // Guide: docs/status/co-families-c.md.
 
+import { fillFamiliesAText } from '../co/familiesA';
 import data from '../../data/catalogOverhaul/familiesC.json';
 import { TYPE_NAMES, type Content, type EventCondition, type EventEffect, type TypeName } from '../contentSchema';
 import { typeEffectiveness } from '../battle/damage';
@@ -77,6 +78,7 @@ export function fillCoText(content: Content, run: Run, text: string): string {
     finalRegion: () => content.regions.get(run.regionOrder[run.regionOrder.length - 1] ?? '')?.name ?? 'the League',
   };
   const item = (id: string | null) => (id ? content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? id : 'nothing of that kind');
+  text = fillFamiliesAText(content, run as RunState, text);
   return text
     .replace(/\{(lead|starter|most|least|impostorType|nextRegion|finalRegion|lowestBond|gymType|rotomAppliance)\}/g, (_, k: string) => table[k]!())
     // Pokémon Moments (PA11): the first party Pokémon from a moment group, by name (the lead when none is in the party).

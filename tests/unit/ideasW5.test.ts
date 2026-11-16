@@ -183,7 +183,9 @@ describe('save migrations', () => {
 
 describe('the new NPC events', () => {
   const w5 = [...content.events.values()].filter((e) => e.group === 'NPC Stories');
-  const effects = [...w5, ...[...content.events.values()].filter((e) => e.group === 'Story and characters')].flatMap((e) => e.choices.flatMap((c) => [c.success, c.failure].flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? [])])));
+  // Any event may set a flag an NPC story waits for (Catalog Overhaul: Tib's lesson is a Famous Faces stop).
+  const effects = [...content.events.values()].flatMap((e) => e.choices.flatMap((c) => [...[c.success, c.failure].flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]), ...(c.branches ?? []).flatMap((b) => b.effects)]));
+  // (Branch effects count too: a Catalog Overhaul choice can set a flag only when its branch holds, e.g. shelf-kit-home.)
   const setKeys = new Set(effects.flatMap((e) => (e.kind === 'flag' ? [e.key] : [])));
   it('adds a real batch, all valid and uniquely named', () => {
     expect(w5.length).toBeGreaterThanOrEqual(60);

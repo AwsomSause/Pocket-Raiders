@@ -65,11 +65,12 @@ describe('run clock', () => {
 
 describe('camp by the hour', () => {
   it('time-of-day choices open and close with the period', () => {
-    const run = atEvent(newRun(), 'camp-party');
+    // Catalog Overhaul (SF45 camp): the hour-gated jobs are on camp-prepare now (scout any time, sort in the afternoon, mend at night).
+    const run = atEvent(newRun(), 'camp-prepare');
     const view = (r: RunState) => eventView(content, r, 'test-event').choices.map((c) => !c.locked);
-    expect(view(run)).toEqual([true, false, false, true]); // morning play and a talk
+    expect(view(run)).toEqual([true, false, false, false]); // morning: scout only (no milestone today)
     run.clock.tick = 3;
-    expect(view(run)).toEqual([false, false, true, true]); // stories by the fire at night
+    expect(view(run)).toEqual([true, false, true, false]); // night: mend gear by the fire
     expect(conditionMet(content, run, { kind: 'period', in: ['night'] })).toBe(true);
   });
 
@@ -165,9 +166,10 @@ describe('camp talks', () => {
   it('the rival talk opens once a rival has been met, and leads to the room that fits their path', () => {
     const run = atEvent(newRun(), 'camp-talk');
     const open = (r: RunState) => eventView(content, r, 'test-event').choices.map((c) => c.locked === null);
-    expect(open(run)).toEqual([true, false, false]); // no rival, no mentor
+    // Catalog Overhaul (SF45 camp): two talks are always open; the rival talk is third and the mentor talk fourth.
+    expect(open(run)).toEqual([true, true, false, false]); // no rival, no mentor
     run.story.rivals.push({ ...(run.story.rivals[0] ?? ({} as never)), encounters: 1 } as never);
-    expect(open(run)[1]).toBe(true);
+    expect(open(run)[2]).toBe(true);
     const room = atEvent(run, 'camp-rival');
     expect(eventView(content, room, 'test-event').choices.filter((c) => c.locked === null).length).toBeGreaterThan(0);
   });
@@ -176,10 +178,10 @@ describe('camp talks', () => {
 describe('camp bonding', () => {
   it('time together at camp builds chemistry and lets grudges go', () => {
     const run = atEvent(newRun(), 'camp-party');
-    run.clock.tick = 3; // night: stories by the fire
     run.party.push({ ...run.party[0]!, uid: 'friend' });
     run.partyLife.grudges.push({ uid: run.party[0]!.uid, species: 'rattata', since: 1, settled: false });
-    const done = chooseEvent(content, run, 'test-event', 2).run;
+    // Catalog Overhaul (SF45 camp): breaking up the argument is what settles grudges.
+    const done = chooseEvent(content, run, 'test-event', 0).run;
     expect(done.partyLife.pairs.some((p) => p.points > 0)).toBe(true);
     expect(done.partyLife.grudges.every((g) => g.settled)).toBe(true);
   });
@@ -189,7 +191,7 @@ describe('mentor talks', () => {
   it('only open with a mentor, and the mission can be asked for once', () => {
     const run = atEvent(newRun(), 'camp-talk');
     const open = (r: RunState) => eventView(content, r, 'test-event').choices.map((c) => c.locked === null);
-    expect(open(run)[2]).toBe(false); // no mentor
+    expect(open(run)[3]).toBe(false); // no mentor (SF45: the mentor talk is the fourth camp talk)
     const mentored = atEvent(newRun(), 'camp-mentor');
     mentored.mentor = { mentorId: 'x' } as never;
     mentored.clock.tick = 3;

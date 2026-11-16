@@ -2931,7 +2931,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** Pokémon Moments (PA11): a party member from one of the moment groups in pokemonMoments.json (ultra-beasts, starters...). */
   z.object({ kind: z.literal('partyGroup'), group: z.string().min(1), atLeast: z.number().int().min(1).max(6).default(1) }),
   /** The Pokémon you started with (still in the party) has this type, species or species tag: starter-tagged events. */
-  z.object({ kind: z.literal('starter'), type: TypeNameSchema.optional(), species: z.string().optional(), tag: z.enum(SPECIES_TAGS).optional() }).refine((c) => c.type !== undefined || c.species !== undefined || c.tag !== undefined, { message: 'a starter condition needs a type, species or tag' }),
+  // A starter condition: the run's starter is still in the party, and (when given) has this type, species or tag.
+  z.object({ kind: z.literal('starter'), type: TypeNameSchema.optional(), species: z.string().optional(), tag: z.enum(SPECIES_TAGS).optional() }),
   /** Mentors (spec section 15): you train under a mentor, optionally this one / this category, with enough trust or loyalty, having learned a lesson, or at a mission state. */
   z.object({
     kind: z.literal('mentor'),
@@ -3269,6 +3270,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('blessing'), id: z.string().min(1) }),
   /** A Blissful awakening: the healthiest, fondest party Pokémon that is not Shadow becomes Blissful for good (needs friendship 150). */
   z.object({ kind: z.literal('awaken') }),
+  /** Catalog overhaul SF16 (families-a): the last Pokémon released this run comes back and asks to join, at its old level (nothing without a release). */
+  z.object({ kind: z.literal('rejoinReleased') }),
   /** You get an Egg (core/eggs.ts) that hatches after `left` battles or stages; it carries up to two egg moves. */
   z.object({
     kind: z.literal('egg'),
