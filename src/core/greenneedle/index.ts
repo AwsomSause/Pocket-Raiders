@@ -32,6 +32,7 @@ import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
+import { ballFind, ballForce, ballHatched, ballHold, ballKind, ballTokens } from './ball';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -73,6 +74,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{smuggle:')) text = smuggleTokens(content, run, text);
   if (text.includes('{siege:')) text = siegeTokens(content, run, text);
   if (text.includes('{karp:')) text = karpTokens(run, text);
+  if (text.includes('{ball:')) text = ballTokens(run, text);
   // gn.47: the Exhibition.
   if (text.includes('{ex:')) text = exTokens(content, run, text);
   // gn.46: the All-Star bracket.
@@ -640,6 +642,16 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return kcEvolve(run);
     case 'bidoofJoin':
       return bidoofJoin(content, run, host);
+    case 'ballFind':
+      return ballFind(content, run, host.float);
+    case 'ballKind':
+      return ballKind(run);
+    case 'ballHold':
+      return ballHold(run);
+    case 'ballHatched':
+      return ballHatched(run);
+    case 'ballForce':
+      return ballForce(run);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':

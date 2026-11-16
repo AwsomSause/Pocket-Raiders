@@ -1650,6 +1650,11 @@
   "description": "Restores 1/8 of its HP at the end of any turn in which it didn't use a damaging move."
  },
  {
+  "id": "trust-earned",
+  "name": "Trust Earned",
+  "description": "Can't be made to flinch, be confused or be infatuated while its trainer has another Pokémon able to battle."
+ },
+ {
   "id": "unbothered",
   "name": "Unbothered",
   "description": "Its stats can't be lowered by opponents."

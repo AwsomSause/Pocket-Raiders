@@ -25,6 +25,7 @@ import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
 import { draftTurn } from '../greenneedle/draft';
 import { snorlaxTurn } from '../greenneedle/snorlax';
 import { bidoofTurn, NO_FLINCH } from '../greenneedle/bidoof';
+import { trustHolds } from '../greenneedle/ball';
 import { champPower, lessonTurn, seenItFirst, seenItSpend, summitSaves } from '../greenneedle/champion';
 import { earthLine, overchargeSelfHurt } from '../greenneedle/ridge';
 import { foresightBegin } from './foresight';
@@ -1736,7 +1737,7 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
     if (special !== undefined) return special;
     if (ctx.battle.kind !== 'wild') return "You can't catch another trainer's Pokémon!";
     if (ctx.catchBlocked) return ctx.catchBlocked;
-    if (ctx.battle.eventRule?.noCatch) return FACTORY_RULES.has(ctx.battle.eventRule.gn ?? '') ? "It can't be caught. It's barely holding itself together." : ctx.battle.eventRule.gn === 'bidoof' ? "It won't be caught. It wants to be beaten, fair and square." : "It won't be caught. It fights for its Squad.";
+    if (ctx.battle.eventRule?.noCatch) return FACTORY_RULES.has(ctx.battle.eventRule.gn ?? '') ? "It can't be caught. It's barely holding itself together." : ctx.battle.eventRule.gn === 'bidoof' ? "It won't be caught. It wants to be beaten, fair and square." : ctx.battle.eventRule.gn === 'ball' ? "It won't be caught. It was a Ball once, and it remembers." : "It won't be caught. It fights for its Squad.";
     if (ctx.battle.totem) return "A Totem can't be caught mid-fight. Beat it and something rare may follow!";
     if (ctx.battle.raid) {
       // S409 Boss Pokémon Capture: some bosses can be caught once they are worn down (not a called minion).
@@ -2888,7 +2889,7 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
     events.push({ type: 'raid', tone: 'info', text: lostTurn });
     return false;
   }
-  if (user.vol.infatuated && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.vol.infatuated = false;
+  if (user.vol.infatuated && (variantBlocksMind(ctx.battle.extra.variants, user.mon.uid) || trustHolds(ctx.party, user))) user.vol.infatuated = false;
   if (user.flinched && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.flinched = false;
   // Greenneedle gn.46: a handshake before the All-Star final: neither side can be flinched on turn one.
   if (user.flinched && ctx.battle.turn <= 1 && ctx.battle.storyEffects.includes('allstar-shake')) user.flinched = false;
@@ -5013,7 +5014,7 @@ function foeMissLesson(ctx: BattleContext, target: Combatant, events: BattleEven
 
 /** Makes the target flinch, unless Inner Focus stops it or it is Dynamaxed. */
 function flinch(ctx: BattleContext, user: Combatant, target: Combatant): void {
-  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed && !momentNoFlinch(ctx, target) && !ctx.battle.storyEffects.includes(`${NO_FLINCH}${target.mon.uid}`) && !revivalNoFlinch(target) && !(target.side === 'player' && unflinching(target.mon))) target.flinched = true;
+  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed && !momentNoFlinch(ctx, target) && !trustHolds(ctx.party, target) && !ctx.battle.storyEffects.includes(`${NO_FLINCH}${target.mon.uid}`) && !revivalNoFlinch(target) && !(target.side === 'player' && unflinching(target.mon))) target.flinched = true;
 }
 
 /** Greenneedle gn.38 Self-Made: once per battle, when an opponent's ability would affect it, it isn't. True when it stepped in. */
@@ -5097,7 +5098,7 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
       tryInflictStatus(ctx, target, user, status, undefined, events, false);
       noteGrowthMark(ctx, target, 'thorn');
     }
-    if (holder === 'cute-charm' && !user.vol.infatuated && rng.chance(0.3) && oppositeGender(ctx.content, target.mon, user.mon) && abilityIn(ctx, user) !== 'oblivious' && !Held.statusBlocked(ctx, user, 'infatuation')) {
+    if (holder === 'cute-charm' && !user.vol.infatuated && rng.chance(0.3) && oppositeGender(ctx.content, target.mon, user.mon) && abilityIn(ctx, user) !== 'oblivious' && !trustHolds(ctx.party, user) && !Held.statusBlocked(ctx, user, 'infatuation')) {
       announce(target, holder, events);
       user.vol.infatuated = true;
       events.push({ type: 'selfState', side: user.side, state: 'infatuated' });
@@ -5990,7 +5991,7 @@ function applyStateEffects(ctx: BattleContext, user: Combatant, target: Combatan
   }
   if (fx.confuseBoth) {
     for (const c of [user, target]) {
-      if (c.vol.confusion === 0 && c.mon.hp > 0 && abilityIn(ctx, c) !== 'own-tempo' && abilityIn(ctx, c) !== 'hoop-focus' && !momentNoConfuse(ctx, c)) {
+      if (c.vol.confusion === 0 && c.mon.hp > 0 && abilityIn(ctx, c) !== 'own-tempo' && abilityIn(ctx, c) !== 'hoop-focus' && !momentNoConfuse(ctx, c) && !trustHolds(ctx.party, c)) {
         c.vol.confusion = rng.int(2, 5);
         events.push({ type: 'confused', side: c.side });
       }
@@ -6179,7 +6180,7 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
     return;
   }
   if (fx.attract) {
-    if (target.vol.infatuated || variantBlocksMind(ctx.battle.extra.variants, target.mon.uid) || !oppositeGender(content, user.mon, target.mon) || abilityIn(ctx, target) === 'oblivious' || Held.statusBlocked(ctx, target, 'infatuation')) {
+    if (target.vol.infatuated || variantBlocksMind(ctx.battle.extra.variants, target.mon.uid) || !oppositeGender(content, user.mon, target.mon) || abilityIn(ctx, target) === 'oblivious' || trustHolds(ctx.party, target) || Held.statusBlocked(ctx, target, 'infatuation')) {
       if (abilityIn(ctx, target) === 'oblivious') announce(target, 'oblivious', events);
       return void events.push({ type: 'fail', side: user.side });
     }
@@ -6740,7 +6741,7 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
 /** Confuses for 2–5 turns of moves (1–4 of them are checks); Own Tempo prevents it. Returns true if it worked. */
 function tryConfuse(ctx: BattleContext, source: Combatant, target: Combatant, events: BattleEvent[], announceFailure: boolean): boolean {
   const ownTempo = ['own-tempo', 'hoop-focus'].includes(targetAbility(ctx, source, target) ?? '');
-  if (target.vol.confusion > 0 || ownTempo || Held.statusBlocked(ctx, target, 'confusion') || momentNoConfuse(ctx, target)) {
+  if (target.vol.confusion > 0 || ownTempo || Held.statusBlocked(ctx, target, 'confusion') || momentNoConfuse(ctx, target) || trustHolds(ctx.party, target)) {
     if (announceFailure && ownTempo) announce(target, targetAbility(ctx, source, target)!, events);
     if (announceFailure) events.push({ type: 'fail', side: target.side });
     return false;

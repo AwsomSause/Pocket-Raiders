@@ -20,6 +20,7 @@ import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { FOE_WAITS, gnAfterTurn, gnShape } from './greenneedle';
 import { bidoofPeace } from './greenneedle/bidoof';
+import { ballBattle, ballRest } from './greenneedle/ball';
 import { ridgeCatch } from './greenneedle/ridge';
 import { unflinchingStart } from './greenneedle/daycare';
 import { gavelStart } from './greenneedle/auction';
@@ -2713,6 +2714,8 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const afraidLine = taRoomsAfraid(content, run, before, stageNumber(content, run));
     // Greenneedle gn.51: the rescued Pokémon that won't go in a Ball comes a little closer at each rest.
     smuggleRest(content, run);
+    // Greenneedle gn.new.03: the Ball that wouldn't open has a scene at every rest.
+    ballRest(content, run);
     partyLifeCamp(run);
     const comboLine = [partyLifeCombos(content, run), ...assignGrowthPaths(content, run.party, run.story.histories)].filter(Boolean).join(' ');
     runSide.used = true;
@@ -3774,6 +3777,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   allstarRecord(run);
   // Greenneedle gn.48: what each drafted Pokémon did this battle, kept on it for the win's Bond.
   draftRecord(run);
+  // Greenneedle gn.new.03: the Ball held through this battle answers.
+  ballBattle(run);
   // Nuzlocke: the fallen are lost for good.
   buryFallen(content, run, battleCause(content, battle));
   const archetype = runArchetype(content, run);
