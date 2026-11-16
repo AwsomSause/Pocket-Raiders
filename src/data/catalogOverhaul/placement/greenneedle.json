@@ -3539,5 +3539,29 @@
    "Region-long"
   ],
   "tags": []
+ },
+ "gn-lt-door": {
+  "gn": "gn.new.38",
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 19,
+  "window": [
+   18,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "level": "No battle",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Long Table",
+   "elsewhere": "The Long Table"
+  },
+  "note": "Finale: only on the run's last stage (the last stage of the last region), step 19, before the final battle. Once per run. +1% to every stat of the party in the last battle per filled place, capped at 10%.",
+  "kinds": [
+   "Finale"
+  ],
+  "tags": []
  }
 }
