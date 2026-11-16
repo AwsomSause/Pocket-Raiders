@@ -1,6 +1,9 @@
 // gn.new.16 The Thing in the Well (tools/events/co/greenneedle-new-16.ts).
 import { describe, expect, it } from 'vitest';
 import { content } from './helpers';
+import { createPokemon } from '../../src/core/pokemon';
+import { evolve } from '../../src/core/evolution';
+import { eligibleEvents } from '../../src/core/events';
 import { choose, flagOf, gnRun, open, scene } from './helpers/gnPlay';
 
 describe('gn.new.16 The Thing in the Well', () => {
@@ -18,7 +21,7 @@ describe('gn.new.16 The Thing in the Well', () => {
     const r = choose(run, 'gn-new-16-well', 'Lower a light.').run;
     expect(flagOf(r, 'well-seen')).toBe(0);
     expect(scene(r, 'gn-new-16-again').labels).toHaveLength(4);
-    expect(r.pending).toHaveLength(0);
+    expect(r.pending.some((p) => p.kind === 'caught')).toBe(false);
   });
 
   for (const [label, flagName] of [['Lift it out.', 'well-lifted'], ['Tell the village.', 'well-told']] as const) {
@@ -36,7 +39,7 @@ describe('gn.new.16 The Thing in the Well', () => {
     });
   }
 
-  it('three gifts (Berry, Pearl, Heart Scale) give a Pearl, a Heart Scale, a Prism Scale; then the choice; leaving gives the pebble, not the Feebas', () => {
+  it('three gifts (Berry, Pearl, Heart Scale) give a Pearl, a Heart Scale, a Prism Scale; then the choice; leaving still gives the Feebas', () => {
     let run = gnRun('t-well-gifts');
     open(run, 'gn-new-16-well');
     run = choose(run, 'gn-new-16-well', 'Lower a gift.').run;
@@ -47,8 +50,22 @@ describe('gn.new.16 The Thing in the Well', () => {
     expect(flagOf(run, 'well-gift')).toBe(3);
     expect(run.inventory['prism-scale']).toBe(1);
     run = choose(run, 'gn-new-16-choose', 'Leave it its bucket.').run;
-    expect(run.pending.some((p) => p.kind === 'caught')).toBe(false);
+    expect(run.pending.some((p) => p.kind === 'caught' && p.mon.fixedAbility === 'unlooked-for')).toBe(true);
     expect(flagOf(run, 'well-left')).toBe(1);
     expect(flagOf(run, 'well-done')).toBe(1);
+  });
+
+  it('Unlooked-For: when the Feebas evolves, the villagers come to look once', () => {
+    let run = gnRun('t-well-look');
+    const feebas = createPokemon(content, 'feebas', 20, 'p-feebas');
+    feebas.gn = ['well-feebas'];
+    run.party.push(feebas);
+    expect(eligibleEvents(content, run).map((e) => e.id)).not.toContain('gn-new-16-look');
+    evolve(content, feebas, 'milotic');
+    expect(feebas.gn).toContain('well-evolved');
+    open(run, 'gn-new-16-look');
+    expect(scene(run, 'gn-new-16-look').labels).toEqual(['Let them look.']);
+    run = choose(run, 'gn-new-16-look', 'Let them look.').run;
+    expect(flagOf(run, 'well-looked')).toBe(1);
   });
 });

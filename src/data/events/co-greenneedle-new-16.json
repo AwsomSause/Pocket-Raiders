@@ -433,12 +433,20 @@
     {
      "label": "Leave it its bucket.",
      "success": {
-      "text": "You do not lift it out. You tie the rope off and step back. The bucket goes down, and comes up once more, slowly.\n\nThere is one pebble in it. The best one. Smooth, and warm, and set in the middle like a seed. You take it, and leave the well to the thing that lives in it.",
+      "text": "You do not lift it out. You tie the rope off and step back, and let it keep its bucket. The bucket goes down, and comes up once more, slowly.\n\nThere is one pebble in it, the best one: smooth, and warm, and set in the middle like a seed. Beside the pebble, the Feebas. It has climbed in by itself.\n\nIt looks at the well, and at you. Then it settles on the pebble, as if the bucket were going with it, and you carry it out into the light.",
       "effects": [
        {
-        "kind": "item",
-        "id": "oval-stone",
-        "count": 1
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "feebas"
+        ],
+        "types": [],
+        "levelBonus": -1,
+        "shinyMultiplier": 1,
+        "asIs": true,
+        "ability": "unlooked-for",
+        "mark": "well-feebas"
        },
        {
         "kind": "flag",
@@ -452,8 +460,61 @@
        },
        {
         "kind": "moment",
-        "text": "You left a Feebas its well, and it left you its best pebble.",
+        "text": "You left a Feebas its bucket, and it chose to come with you, riding on its best pebble.",
         "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-16-look",
+   "name": "The Villagers Come to Look",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "hasMark",
+     "key": "well-evolved"
+    },
+    {
+     "kind": "flag",
+     "key": "well-looked",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "feebas",
+    "tint": "#5d7f78",
+    "effect": "fog"
+   },
+   "intro": "A small crowd has come down the road. You know the coat on the old man in front.\n\n**Old Tabor:** \"We heard. A month of river water, and it was this all along.\"\n\nYour Pokémon stands in front of you, no longer ragged, with the light moving on its scales. Nobody in the crowd says a word.",
+   "choices": [
+    {
+     "label": "Let them look.",
+     "success": {
+      "text": "You step aside. They come one at a time, hats in their hands. Old Tabor stops longest, and sets a single smooth pebble on the ground by its tail. The village does not say sorry. It says thank you, and it means both.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "well-looked",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The villagers who did not believe in the Feebas came to look when it evolved. Old Tabor left a pebble.",
+        "importance": 60
        }
       ]
      }

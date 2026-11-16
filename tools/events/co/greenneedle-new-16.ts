@@ -75,9 +75,18 @@ const EVENTS: Json[] = [
       'He says it twice, and the second time he does not mean it any more. The Feebas, in your arms, looks at the ground. You take it with you.',
     ), FEEBAS(), flag('well-done'), flag('well-told'), moment('You told a village there was a Feebas in their well. Half were ashamed. Half did not believe you.', 55))),
     ch('Leave it its bucket.', out(say(
-      'You do not lift it out. You tie the rope off and step back. The bucket goes down, and comes up once more, slowly.',
-      'There is one pebble in it. The best one. Smooth, and warm, and set in the middle like a seed. You take it, and leave the well to the thing that lives in it.',
-    ), item('oval-stone'), flag('well-done'), flag('well-left'), moment('You left a Feebas its well, and it left you its best pebble.', 55))),
+      'You do not lift it out. You tie the rope off and step back, and let it keep its bucket. The bucket goes down, and comes up once more, slowly.',
+      'There is one pebble in it, the best one: smooth, and warm, and set in the middle like a seed. Beside the pebble, the Feebas. It has climbed in by itself.',
+      'It looks at the well, and at you. Then it settles on the pebble, as if the bucket were going with it, and you carry it out into the light.',
+    ), FEEBAS(), flag('well-done'), flag('well-left'), moment('You left a Feebas its bucket, and it chose to come with you, riding on its best pebble.', 55))),
+  ]),
+  // ---- if it evolves: the villagers who did not believe it come to look ----
+  gev('gn-new-16-look', 'The Villagers Come to Look', well({ stop: 'event', rarity: 'uncommon', callback: true, minStage: 2, requires: [{ kind: 'gn', test: 'hasMark', key: 'well-evolved' }, not('well-looked')] }), say(
+    'A small crowd has come down the road. You know the coat on the old man in front.',
+    '**Old Tabor:** "We heard. A month of river water, and it was this all along."',
+    'Your Pokémon stands in front of you, no longer ragged, with the light moving on its scales. Nobody in the crowd says a word.',
+  ), [
+    ch('Let them look.', out('You step aside. They come one at a time, hats in their hands. Old Tabor stops longest, and sets a single smooth pebble on the ground by its tail. The village does not say sorry. It says thank you, and it means both.', flag('well-looked'), moment('The villagers who did not believe in the Feebas came to look when it evolved. Old Tabor left a pebble.', 60))),
   ]),
 ];
 
