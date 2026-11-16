@@ -4074,5 +4074,274 @@
    "Story"
   ],
   "tags": []
+ },
+ "gn-new-06-d1": {
+  "gn": "gn.new.06",
+  "earliest": "A2",
+  "sits": "optional",
+  "attaches": "after",
+  "kinds": [
+   "Pokémon"
+  ],
+  "level": "Matches the chosen Pokémon exactly; +1 after each of its losses",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Duelist",
+   "elsewhere": "The Duelist"
+  },
+  "shape": "World Event",
+  "beat": 2,
+  "home": 12,
+  "window": [
+   12,
+   16
+  ],
+  "note": "Duel 1, the same stage as the critical hit (placed ahead of the player the moment the chosen one is marked). Badge: a leek. Once a run (the doc says per save).",
+  "tags": []
+ },
+ "gn-new-06-d1-late": {
+  "gn": "gn.new.06",
+  "earliest": "A2",
+  "sits": "optional",
+  "attaches": "after",
+  "kinds": [
+   "Pokémon"
+  ],
+  "level": "Matches the chosen Pokémon exactly; +1 after each of its losses",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Duelist",
+   "elsewhere": "The Duelist"
+  },
+  "shape": "Single",
+  "home": 3,
+  "window": [
+   3,
+   7
+  ],
+  "note": "Duel 1 again after \"Not now\": the Duelist is at the next duel's step. It never ambushes.",
+  "tags": []
+ },
+ "gn-new-06-d2": {
+  "gn": "gn.new.06",
+  "earliest": "A2",
+  "sits": "optional",
+  "attaches": "after",
+  "kinds": [
+   "Pokémon"
+  ],
+  "level": "Matches the chosen Pokémon exactly; +1 after each of its losses",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Duelist",
+   "elsewhere": "The Duelist"
+  },
+  "shape": "Single",
+  "beat": 1,
+  "home": 3,
+  "window": [
+   3,
+   7
+  ],
+  "note": "Duel 2, the stage after the last duel at the earliest. Optional.",
+  "tags": []
+ },
+ "gn-new-06-d2-late": {
+  "gn": "gn.new.06",
+  "earliest": "A2",
+  "sits": "optional",
+  "attaches": "after",
+  "kinds": [
+   "Pokémon"
+  ],
+  "level": "Matches the chosen Pokémon exactly; +1 after each of its losses",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Duelist",
+   "elsewhere": "The Duelist"
+  },
+  "shape": "Single",
+  "home": 12,
+  "window": [
+   12,
+   16
+  ],
+  "note": "Duel 2 again after \"Not now\": the Duelist is at the next duel's step. It never ambushes.",
+  "tags": []
+ },
+ "gn-new-06-d3": {
+  "gn": "gn.new.06",
+  "earliest": "A2",
+  "sits": "optional",
+  "attaches": "after",
+  "kinds": [
+   "Pokémon"
+  ],
+  "level": "Matches the chosen Pokémon exactly; +1 after each of its losses",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Duelist",
+   "elsewhere": "The Duelist"
+  },
+  "shape": "Single",
+  "beat": 1,
+  "home": 12,
+  "window": [
+   12,
+   16
+  ],
+  "note": "Duel 3, the stage after the last duel at the earliest. Optional.",
+  "tags": []
+ },
+ "gn-new-06-d3-late": {
+  "gn": "gn.new.06",
+  "earliest": "A2",
+  "sits": "optional",
+  "attaches": "after",
+  "kinds": [
+   "Pokémon"
+  ],
+  "level": "Matches the chosen Pokémon exactly; +1 after each of its losses",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Duelist",
+   "elsewhere": "The Duelist"
+  },
+  "shape": "Single",
+  "home": 3,
+  "window": [
+   3,
+   7
+  ],
+  "note": "Duel 3 again after \"Not now\": the Duelist is at the next duel's step. It never ambushes.",
+  "tags": []
+ },
+ "gn-new-06-d4": {
+  "gn": "gn.new.06",
+  "earliest": "A2",
+  "sits": "optional",
+  "attaches": "after",
+  "kinds": [
+   "Pokémon"
+  ],
+  "level": "Matches the chosen Pokémon exactly; +1 after each of its losses",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Duelist",
+   "elsewhere": "The Duelist"
+  },
+  "shape": "Single",
+  "beat": 1,
+  "home": 3,
+  "window": [
+   3,
+   7
+  ],
+  "note": "Duel 4, the stage after the last duel at the earliest. Optional.",
+  "tags": []
+ },
+ "gn-new-06-d4-late": {
+  "gn": "gn.new.06",
+  "earliest": "A2",
+  "sits": "optional",
+  "attaches": "after",
+  "kinds": [
+   "Pokémon"
+  ],
+  "level": "Matches the chosen Pokémon exactly; +1 after each of its losses",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Duelist",
+   "elsewhere": "The Duelist"
+  },
+  "shape": "Single",
+  "home": 16,
+  "window": [
+   16,
+   19
+  ],
+  "note": "Duel 4 again after \"Not now\": the Duelist is at the next duel's step. It never ambushes.",
+  "tags": []
+ },
+ "gn-new-06-d5": {
+  "gn": "gn.new.06",
+  "earliest": "A2",
+  "sits": "optional",
+  "attaches": "after",
+  "kinds": [
+   "Pokémon"
+  ],
+  "level": "Matches the chosen Pokémon exactly; +1 after each of its losses",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Duelist",
+   "elsewhere": "The Duelist"
+  },
+  "shape": "Single",
+  "beat": 1,
+  "home": 16,
+  "window": [
+   16,
+   19
+  ],
+  "note": "Duel 5, the stage after the last duel at the earliest. Optional.",
+  "tags": []
+ },
+ "gn-new-06-d5-late": {
+  "gn": "gn.new.06",
+  "earliest": "A2",
+  "sits": "optional",
+  "attaches": "after",
+  "kinds": [
+   "Pokémon"
+  ],
+  "level": "Matches the chosen Pokémon exactly; +1 after each of its losses",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Duelist",
+   "elsewhere": "The Duelist"
+  },
+  "shape": "Single",
+  "home": 16,
+  "window": [
+   16,
+   19
+  ],
+  "note": "Duel 5 again after \"Not now\": the Duelist is at the next duel's step. It never ambushes.",
+  "tags": []
+ },
+ "gn-new-06-d1n": {
+  "gn": "gn.new.06",
+  "earliest": "A2",
+  "sits": "optional",
+  "attaches": "after",
+  "kinds": [
+   "Pokémon"
+  ],
+  "level": "Matches the chosen Pokémon exactly; +1 after each of its losses",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Duelist",
+   "elsewhere": "The Duelist"
+  },
+  "shape": "Single",
+  "home": 12,
+  "window": [
+   12,
+   16
+  ],
+  "note": "Duel 1 when the stage of the critical hit had no step left ahead: the next stage, same steps.",
+  "tags": []
  }
 }

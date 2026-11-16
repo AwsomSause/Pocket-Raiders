@@ -26,6 +26,7 @@ import { gavelStart } from './greenneedle/auction';
 import { lessonAfterstory } from './greenneedle/champion';
 import { allstarRecord, allstarTurn } from './greenneedle/allstar';
 import { listenedPass, listenedTurn, listenedWin } from './greenneedle/listened';
+import { duelAfterstory, duelistMark } from './greenneedle/duelist';
 import { draftRecord } from './greenneedle/draft';
 import { exRipple } from './greenneedle/exhibition';
 import { snorlaxForgives, snorlaxGym, snorlaxRest } from './greenneedle/snorlax';
@@ -129,7 +130,7 @@ import { spendTakenNode } from './co/takeNode';
 import { partnerOwed, quietWildWeight, spendPartner } from './co/neRules';
 import { quirkBadgeBond } from './co/quirks';
 import { attachBlocker, holdNodeBattle, releaseNodeBattle, takeNodeLevelShift } from './co/attach';
-import { addEventStops, stageNumber, BETRAYAL_FLAG, continueEventChain, eventBattleCaught, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
+import { addEventStops, placeEarnedCoBeats, stageNumber, BETRAYAL_FLAG, continueEventChain, eventBattleCaught, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -3173,7 +3174,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   unflinchingStart(run);
   gavelStart(run);
   // Greenneedle gn.45: the Champion who taught your ace a move opens with it.
-  const afterstory = lessonAfterstory(content, run);
+  const afterstory = lessonAfterstory(content, run) || duelAfterstory(run);
   // Greenneedle gn.47: a trainer of a later stage talks about the Exhibition, and copied a move from it.
   const ripple = exRipple(content, run);
   // Greenneedle gn.49: the Snorlax that followed your bag sits down at the Gym door.
@@ -3779,6 +3780,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   // Greenneedle gn.46: every trainer met this run, and how it went (the All-Star Tournament draws from it).
   allstarRecord(run);
   listenedWin(run); // gn.new.05: a quick win
+  // Greenneedle gn.new.06: the first critical hit a party Pokémon lands marks the chosen one for the Duelist.
+  if (duelistMark(content, run, stageNumber(content, run))) placeEarnedCoBeats(content, run);
   // Greenneedle gn.48: what each drafted Pokémon did this battle, kept on it for the win's Bond.
   draftRecord(run);
   // Nuzlocke: the fallen are lost for good.

@@ -1019,6 +1019,9 @@ export const BattleStateSchema = z.object({
   flair: z.object({ crowdTypes: z.array(z.string()).default([]), cheers: z.number().int().min(0).default(0), floodUntil: z.number().int().default(-1), paired: z.boolean().default(false) }).optional(),
   /** Critical hits in a row per Pokémon (uid); the Streak Lens reads it (ideas W1). */
   critStreak: z.record(z.string(), z.number().int().min(0)).optional(),
+  /** Greenneedle gn.new.06: the uid of the first party Pokémon to land a critical hit this battle, and the last damaging move one of them used (the Duelist's answer). */
+  critBy: z.string().optional(),
+  lastHit: z.string().optional(),
   /** Nuzlocke: this wild Pokémon is not the area's first encounter, so it can't be caught (core/nuzlocke.ts). */
   nuzlockeNoCatch: z.boolean().optional(),
   /** Pacifist run: damage never knocks out this wild Pokémon (core/rules.ts). */

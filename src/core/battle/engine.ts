@@ -4424,6 +4424,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (user.side === 'player' && ctx.battle.noPlayerCrit) crit = false;
       if (crit) user.vol.laserFocus = false;
       (ctx.battle.critStreak ??= {})[user.mon.uid] = crit ? (ctx.battle.critStreak[user.mon.uid] ?? 0) + 1 : 0;
+      if (user.side === 'player') { ctx.battle.lastHit = move.id; if (crit) ctx.battle.critBy ??= user.mon.uid; }
       const randomFactor = rng.int(content.ruleset.randomFactorMin, 100);
       let power = fx.lowHpPower ? lowHpPower(user.mon.hp, userStats.hp) : (move.power ?? 0);
       if (fx.beatUp && beaters.length > 0) power = Math.floor(getSpecies(content, beaters[Math.min(hit, beaters.length - 1)]!.speciesId).baseStats.atk / 10) + 5;
