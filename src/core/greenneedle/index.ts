@@ -29,6 +29,7 @@ import { draftAldhelm, draftBattleStart, draftEnd, draftFriend, draftLetter, dra
 import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
 import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorStart, defectorTokens, defectorTrust, guestOf } from './defector';
 import { taEnd, taLot, taRare, taStart } from './teamauction';
+import { prDo, prEnd, prEnter, prFree, prNext, prStart, prStep, prStranger, prCaught, prWardenStart, prisonTokens } from './prison';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
@@ -72,6 +73,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   // gn.51: the Smuggling Ring.
   if (text.includes('{smuggle:')) text = smuggleTokens(content, run, text);
   if (text.includes('{siege:')) text = siegeTokens(content, run, text);
+  if (text.includes('{prison:')) text = prisonTokens(content, run, text);
   if (text.includes('{karp:')) text = karpTokens(run, text);
   // gn.47: the Exhibition.
   if (text.includes('{ex:')) text = exTokens(content, run, text);
@@ -614,6 +616,19 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return taRare(run, e.n ?? 1, host.stage, host);
     case 'taEnd':
       return taEnd(run, host);
+    // gn.62 The Pokémon Prison (prison.ts).
+    case 'prison':
+      switch (e.key) {
+        case 'start': return prStart(content, run);
+        case 'enter': return prEnter(run, e.n ?? 1);
+        case 'go': case 'wait': return prStep(run, e.key);
+        case 'caught': return prCaught(run);
+        case 'free': return prFree(run, e.n ?? 1);
+        case 'stranger': return prStranger(run, e.n ?? 1, e.min ?? 2);
+        case 'next': return prNext(content, run);
+        case 'end': return prEnd(content, run, e.n ?? 1);
+        default: return prDo(run, e.key!, host);
+      }
     case 'sgStart':
       return sgStart(content, run);
     case 'sgAssign':
@@ -782,6 +797,7 @@ export function gnBattleStart(content: Content, run: RunState): void {
   // gn.49: the Sleeping Snorlax, double HP and half asleep.
   if (rule === 'snorlax') snorlaxStart(content, battle);
   // gn.53: the siege's commander, as strong as the clock let them be.
+  if (rule === 'prison-warden') prWardenStart(run, battle, FOE_WAITS);
   if (rule === 'siege-commander') sgCommanderStart(run, battle, FOE_WAITS);
   // gn.54: the serious man's six Magikarp (seven, once he's been beaten).
   // gn.55: the Angry Bidoof, tripled.

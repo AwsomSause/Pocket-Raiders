@@ -1,0 +1,2103 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-62-cell",
+   "name": "The Pokémon Prison",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 3
+    },
+    {
+     "kind": "flag",
+     "key": "prison-seen",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "kanto-flight-stolen",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "inside-team",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "defector",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "defector-trust",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "The cell door is already unlatched. Someone left it that way. On the cot lies a guard's cap and jacket, folded, with a note that says only: \"Sorry it's late.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*A cell. A cot. A slot in the door.*\n\n*The belt's on a hook on the far side of the bars. It's empty. The Balls are gone.*\n\nYour team is gone. Your hands are empty. Somewhere in this building, they are being counted like crates.\n\n**A voice from the next cell, an old man, Osei Tarrant:** \"New one. They take the Pokémon first. Then they wait for you to stop asking. Don't stop asking.\"\n\nSix steps on the clock. Then a transport comes, and takes every Pokémon in the building where you can never follow.",
+   "choices": [
+    {
+     "label": "Answer the old man.",
+     "success": {
+      "text": "\"Osei Tarrant,\" he says. \"Thirty-one years a ranger. Listen. Guards walk loops, and a loop can be learned. Count them.\" You count.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "start"
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "osei-talk"
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Try the door.",
+     "success": {
+      "text": "You try the latch. It's old iron and a stubborn bolt, but the bolt was never meant for someone who keeps trying. It gives. Cold air.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "start"
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-hub",
+   "name": "The Pokémon Prison: The Cell Block",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*The cell block. A long, low corridor, damp walls, a lamp every ten steps.*\n\n{prison:clock}\n\n{prison:status}\n\nNorth, the Kennels: the scent of dog. East, the Tanks: wet floors. South, the Quiet Cells: no guards at all. West, the Yard: a searchlight.",
+   "choices": [
+    {
+     "label": "North: the Kennels.",
+     "success": {
+      "text": "You take the north passage. The smell reaches you first. Then, deep in the dark, a low, wet, patient breathing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "enter",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-done-1",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "East: the Tanks.",
+     "success": {
+      "text": "You take the east passage. The floor shines. Somewhere, water drips, and every drop sounds like a footstep.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "enter",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-done-2",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "South: the Quiet Cells.",
+     "success": {
+      "text": "You take the south passage. It gets quieter with every step. It is the kind of quiet someone made on purpose.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "enter",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-done-3",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Further along the block.",
+     "success": {
+      "text": "You go on down the block, past the first lamp, past the second.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-hub-b"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-hub-b",
+   "name": "The Pokémon Prison: The Other Doors",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*Further along. Doors on both sides, and one corridor going west into the night air.*\n\n{prison:clock}\n\nWest: the Yard. The laundry, the kitchen and the guardroom. Osei Tarrant's door. And at the end of it all, the gatehouse.",
+   "choices": [
+    {
+     "label": "West: the Yard.",
+     "success": {
+      "text": "You push the west door. Wind, stars, and the sound of big wings tied down against their will.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "enter",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-done-4",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "The laundry, the kitchen, the guardroom.",
+     "success": {
+      "text": "Three doors in a row, all unlocked. Nobody locks the doors nobody wants.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-supplies"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Osei Tarrant's door.",
+     "success": {
+      "text": "You stop at the next cell. He looks up, and doesn't ask for anything.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-osei"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The gatehouse, or back.",
+     "success": {
+      "text": "The corridor opens to a wider hall. Lamplight comes under a door at the far end.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-end-hall"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-end-hall",
+   "name": "The Pokémon Prison: The End of the Block",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*A wide hall. At the far end, a door with lamplight under it, and a smell of supper.*\n\nBehind you, the cell block. Ahead, the gatehouse, and the man who runs this place.\n\n{prison:clock}",
+   "choices": [
+    {
+     "label": "Go to the gatehouse.",
+     "success": {
+      "text": "You have what you have. You open the door.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "gate"
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cell block.",
+     "success": {
+      "text": "You turn back. There is still time. There is, in fact, a clock.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-supplies",
+   "name": "The Pokémon Prison: Supplies",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*Three doors. The laundry, with its warm wet smell of soap. The kitchen, with a pot still on the stove. The guardroom, where someone is snoring.*\n\n{prison:status}",
+   "choices": [
+    {
+     "label": "The laundry.",
+     "success": {
+      "text": "Racks of grey uniforms, and a big wicker cart on wheels.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-laundry"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The kitchen.",
+     "success": {
+      "text": "A pot of something with onions in it. A strong smell, almost a weapon.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-kitchen"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The guardroom.",
+     "success": {
+      "text": "A guard asleep in a chair, boots on the desk, a ring of keys on his chest going up and down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-guardroom"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cell block.",
+     "success": {
+      "text": "You ease the door shut behind you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-laundry",
+   "name": "The Pokémon Prison: The Laundry",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*Racks of grey uniforms. A cap and jacket on a hook, your size, near enough.*\n\nA guard's cap will pass you by the guards at a distance. It won't pass a sergeant, and it won't fool a dog, who knows the smell.\n\nIn the corner, a laundry cart on wheels. Something small could ride in it, with you hiding under the sheets.",
+   "choices": [
+    {
+     "label": "Take the guard's cap and jacket.",
+     "success": {
+      "text": "The jacket smells of other people's sweat. It fits. You settle the cap low, and for a moment you feel like somebody else.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "cap"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-supplies"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-disguise",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Take the laundry cart.",
+     "success": {
+      "text": "You push the cart out. One wheel squeals. You oil it with a drop of soap.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "cart"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pr-cart-used",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-supplies"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-cart",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "pr-cart-used",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "You leave the soap and the steam behind.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-supplies"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-kitchen",
+   "name": "The Pokémon Prison: The Kitchen",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*A pot of stew on the stove, thick with onion and old pepper. Strong enough to make your eyes water at ten paces.*\n\nWater, or a smell strong enough to bury yours, would send a tracker-dog the wrong way. A torch hangs by the door, for the cellar.",
+   "choices": [
+    {
+     "label": "Take the scraps and the pot-water.",
+     "success": {
+      "text": "You fill a pail with the stew's cold water and wrap the onion-ends in a rag. You will smell like a kitchen for a week.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "smell"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-supplies"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-scraps",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Take the torch.",
+     "success": {
+      "text": "A steady beam. In the dark, you will see two steps farther than anyone expects.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "torch"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-supplies"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-torch",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "You leave the stew to go cold.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-supplies"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-guardroom",
+   "name": "The Pokémon Prison: The Guardroom",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*A guard, asleep, boots on the desk. A ring of keys on his chest rises and falls. A whistle hangs on a hook by his head.*\n\n{prison:snore}\n\nThe ring only comes away in the pause. Reach at any other moment and he wakes.",
+   "choices": [
+    {
+     "label": "Reach for the key ring.",
+     "success": {
+      "text": "Your fingers close on cold iron, and the ring slides free without a sound, and you do not breathe until you are in the doorway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "ring"
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-keys",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Wait a breath.",
+     "success": {
+      "text": "You wait. His chest rises and falls. You count it, and learn it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "snore"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-guardroom"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-keys",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Take the whistle from the hook.",
+     "success": {
+      "text": "A plain tin whistle, shrill enough for any corridor. You tuck it away. It will call guards to the wrong place.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "whistle"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-guardroom"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-whistle",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "You leave him snoring.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-supplies"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-osei",
+   "name": "The Pokémon Prison: Osei Tarrant",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*The next cell. An old man in a ranger's grey coat that has lost its badges, sitting very straight on the cot.*\n\n**Osei:** \"I don't ask. I've asked thirty-one years and it never once worked. But I won't say no.\"",
+   "choices": [
+    {
+     "label": "Open his door.",
+     "success": {
+      "text": "The bolt turns. He doesn't move for a moment. Then he stands, slowly, like a man remembering how. \"Go on,\" he says. \"I'll keep the light.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "osei"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-hub"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-keys",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "prison-osei",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Talk through the bars.",
+     "success": {
+      "text": "He tells you which corridor to try first, and how the guards ate their supper in shifts. You listen. It is a kind of gift.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "osei-talk"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-hub"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cell block.",
+     "success": {
+      "text": "You touch the bars once. \"Don't stop asking,\" he says.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-wing",
+   "name": "The Pokémon Prison: The Corridor",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "{prison:wing}\n\n{prison:clock}",
+   "choices": [
+    {
+     "label": "Move on.",
+     "success": {
+      "text": "You step to the next lamp, heart in your mouth.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "go"
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait a step.",
+     "success": {
+      "text": "You press into the wall and hold your breath, and the corridor shows you what it does next.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "wait"
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use something, or fight.",
+     "success": {
+      "text": "You think about what you are carrying, and who is with you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-use"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cell block.",
+     "success": {
+      "text": "You back out the way you came. No one saw. This time.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "back"
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-use",
+   "name": "The Pokémon Prison: What You Carry",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "{prison:status}\n\nA whistle calls the watcher to the wrong corridor for two steps. A cart hides you for three. A freed Pokémon can fight a guard instead of dodging one.",
+   "choices": [
+    {
+     "label": "Blow the whistle.",
+     "success": {
+      "text": "Somewhere behind you, a shrill note. Boots go the wrong way, shouting.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "use-whistle"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-wing"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-whistle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Climb into the cart.",
+     "success": {
+      "text": "Under the sheets, in the dark, hidden among the wet linen. A cart, to a guard, is just a cart.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "use-cart"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-wing"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-cart",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Battle the guard.",
+     "success": {
+      "text": "Your freed Pokémon steps in front of you, hackles up. The guard drops his lamp and reaches for a Ball.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Prison Guard",
+       "size": 2,
+       "levelBonus": 0,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "prison",
+         "key": "clear"
+        },
+        {
+         "kind": "gn",
+         "op": "prison",
+         "key": "next"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "prison",
+         "key": "caught"
+        },
+        {
+         "kind": "gn",
+         "op": "prison",
+         "key": "next"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "partySize",
+       "atLeast": 1
+      },
+      {
+       "kind": "flag",
+       "key": "pr-loc",
+       "atLeast": 1,
+       "atMost": 2
+      },
+      {
+       "kind": "flag",
+       "key": "pr-clear-1",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "pr-clear-2",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Never mind.",
+     "success": {
+      "text": "You decide to keep going.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-wing"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-caught",
+   "name": "The Pokémon Prison: Seen",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*\"Hey!\"*\n\nA hand on your collar. A lamp in your face. They walk you back down the block without a word, as if it was always going to end this way.\n\nThe door shuts. The clock moves on one step. What you already unlocked stays unlocked. It is the only comfort here.\n\n{prison:clock}",
+   "choices": [
+    {
+     "label": "Get up and begin again.",
+     "success": {
+      "text": "You count the loops from the beginning. You know them better now.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-cell-room",
+   "name": "The Pokémon Prison: The Cells",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "smuggled",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "smuggle-joined",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "pr-loc",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "notice": "One of them is already awake, at the back, calm as a stone. The smuggled one, the one you waited out. It is keeping the little ones quiet."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*It's at the back.*\n\n{prison:cell}\n\nThe lock needs the key ring. {prison:strangers}.",
+   "choices": [
+    {
+     "label": "Open the cells.",
+     "success": {
+      "text": "It hears the key. It doesn't move until it sees who it is. Then it moves.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "free",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-strangers"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-keys",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "The lock won't open.",
+     "success": {
+      "text": "You rattle it, and swear softly. You need the key ring from the guardroom.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "back"
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-keys",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go back for now.",
+     "success": {
+      "text": "You press a palm to the bars, and promise. Then you walk back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "back"
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-strangers",
+   "name": "The Pokémon Prison: The Others",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "Every wing has strangers' Pokémon too: other people's, taken the same way. {prison:strangers}.\n\nThey watch you. They don't cry out. They've learned not to.\n\n{prison:clock}",
+   "choices": [
+    {
+     "label": "Open them all.",
+     "success": {
+      "text": "It costs a step of the clock to do the locks. They scatter, loudly. Every guard in the building has a great deal to do.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "stranger",
+        "n": 0,
+        "min": 1
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just mine. There isn't time.",
+     "success": {
+      "text": "You leave them. They watch you go, and say nothing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "stranger",
+        "n": 0,
+        "min": 2
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Open them, and tell them to wait for the signal.",
+     "success": {
+      "text": "You open every cell. \"Wait,\" you whisper. \"Stay in. Be silent. I'll call you.\" They don't move. They're good at waiting.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "stranger",
+        "n": 0,
+        "min": 3
+       },
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "next"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-warden",
+   "name": "The Pokémon Prison: The Warden",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "timesup",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pr-out",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A truck idles in the yard. The transport has come. There is no more time."
+    },
+    {
+     "id": "none",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "prison-strangers-open",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "prison-signal",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "**The warden:** \"And you left the rest. Sensible. That's exactly what I would have done.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*The gatehouse. A man in a clean uniform, eating his supper, with your belt on the desk beside the plate.*\n\n**Warden, Mr. Silas Venn:** \"Out of your cell. Enterprising. Sit down. You'll be going back in a moment, and you may as well be comfortable.\"\n\n{prison:left}",
+   "choices": [
+    {
+     "label": "Give the signal.",
+     "success": {
+      "text": "You raise one hand. In every open cell of the building, something lifts its head, and listens, and understands.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "signal"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-warden"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "prison-signal",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "pr-signaled",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Fight. The signal is out.",
+     "success": {
+      "text": "The doors burst. Every stranger's Pokémon in the building pours into the gatehouse. The warden's first two don't get to act.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "leader",
+       "name": "Warden Silas Venn",
+       "size": 5,
+       "levelBonus": 2,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "prison",
+         "key": "end",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "prison-osei",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "prison-trench-key",
+           "n": 1
+          }
+         ],
+         "text": "Osei Tarrant's key is in your pocket. He pressed it into your palm and said nothing. It opens one locked room in the team's Hideout."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "prison-freed-strangers",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "cast",
+           "key": "prison-stranger",
+           "species": [
+            "growlithe",
+            "poochyena",
+            "azurill",
+            "vulpix",
+            "swablu",
+            "snorunt",
+            "meowth",
+            "machop"
+           ],
+           "n": 1
+          },
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "@prison-stranger"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1
+          }
+         ],
+         "text": "A stranger's Pokémon, whose trainer can't be found, steps out of the crowd and asks, with its whole body, to stay."
+        },
+        {
+         "kind": "evil",
+         "mark": "files"
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "prison-ledger",
+         "n": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Broke out of the team's Pokémon Prison, and beat its warden at his own supper.",
+         "importance": 80
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-62-after"
+        }
+       ],
+       "friendly": true,
+       "rule": {
+        "gn": "prison-warden"
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "prison",
+         "key": "end",
+         "n": 2
+        },
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-62-lost"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-signaled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Face the warden.",
+     "success": {
+      "text": "You stand. The lamplight shows what you are: alone, with whoever you freed, and nothing left to lose.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "leader",
+       "name": "Warden Silas Venn",
+       "size": 5,
+       "levelBonus": 2,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "prison",
+         "key": "end",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "prison-osei",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "prison-trench-key",
+           "n": 1
+          }
+         ],
+         "text": "Osei Tarrant's key is in your pocket. He pressed it into your palm and said nothing. It opens one locked room in the team's Hideout."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "prison-freed-strangers",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "cast",
+           "key": "prison-stranger",
+           "species": [
+            "growlithe",
+            "poochyena",
+            "azurill",
+            "vulpix",
+            "swablu",
+            "snorunt",
+            "meowth",
+            "machop"
+           ],
+           "n": 1
+          },
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "@prison-stranger"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1
+          }
+         ],
+         "text": "A stranger's Pokémon, whose trainer can't be found, steps out of the crowd and asks, with its whole body, to stay."
+        },
+        {
+         "kind": "evil",
+         "mark": "files"
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "prison-ledger",
+         "n": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Broke out of the team's Pokémon Prison, and beat its warden at his own supper.",
+         "importance": 80
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-62-after"
+        }
+       ],
+       "friendly": true,
+       "rule": {
+        "gn": "prison-warden"
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "prison",
+         "key": "end",
+         "n": 2
+        },
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-62-lost"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-signaled",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go back for the ones you left.",
+     "success": {
+      "text": "It costs the last step of the clock. You run the block again, and open every cell you passed, and carry them out one by one.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "return"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-warden"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pr-unfreed",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "prison-went-back",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-62-warden-bare",
+   "name": "The Pokémon Prison: The Warden",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*The gatehouse. A man in a clean uniform, eating his supper, with your belt on the desk beside the plate.*\n\n**Warden, Mr. Silas Venn:** \"Out of your cell. Enterprising. Sit down. You'll be going back in a moment, and you may as well be comfortable.\"\n\nYou have nobody. Not one Pokémon freed, and nothing to fight with. He doesn't even look up.",
+   "choices": [
+    {
+     "label": "Sit down.",
+     "success": {
+      "text": "You sit. He finishes his supper. In the morning, he has you put out of the gate, with your team beside you, and no explanation.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "prison",
+        "key": "end",
+        "n": 2
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-lost"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-lost",
+   "name": "The Pokémon Prison: The Gate",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*In the morning, the gate opens. You're put out of it with your whole team and no explanation. Nobody even looks.*\n\nThey kept the ledger. They kept the reward. They kept something for later. It costs you the prize, and not the run.",
+   "choices": [
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "You walk down the road with all of them around you. Nobody says anything, and everybody leans in close.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Put out of the Pokémon Prison at dawn, with the whole team and no explanation.",
+        "importance": 55
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "prison-warden",
+        "n": 2
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-after",
+   "name": "The Pokémon Prison: After",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "left",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "prison-left",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The last cell's opened by a guard, after it's over. The Pokémon in it walks out. It looks at the others, who came for the warden. It looks at you. It gets into its Ball without being asked. Its Bond drops by one."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*Dawn. The gate stands open. A truck rolls away, empty.*\n\nEvery rescued Pokémon is back in the party. The prison's ledger is in your hands: every name, every date, every price.",
+   "choices": [
+    {
+     "label": "Walk out.",
+     "success": {
+      "text": "You walk out with your team around you, whole. The old man's lamp is still lit behind you.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-stranger",
+   "name": "The Pokémon Prison: A Trainer on the Road",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "prison-reunions",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*A trainer on the road stops dead, and stares.*\n\nBehind them, a Pokémon is already running. It knows you. It knows the Yard, the Tanks, the dark. It crosses the road in a streak.\n\n**The trainer:** \"You're the one. They said your name in the paper. They said you opened every door.\"",
+   "choices": [
+    {
+     "label": "Kneel and let it come.",
+     "success": {
+      "text": "It crashes into you, and then, shaking, into its trainer. Neither of them has a word. Both of them have your name.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "prison-reunions",
+        "n": 0
+       },
+       {
+        "kind": "moment",
+        "text": "A stranger's Pokémon you freed found its trainer on the road.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-guard",
+   "name": "The Pokémon Prison: Posted",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 3
+    },
+    {
+     "kind": "flag",
+     "key": "prison-seen",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "inside-team",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*A grey uniform. A ring of keys. A mission order with the team's seal.*\n\nYou've been posted to the prison for one shift, as a guard. Nobody here knows what you are.\n\nEvery cell is yours to lock or not. Each one has somebody in it.",
+   "choices": [
+    {
+     "label": "Take the keys.",
+     "success": {
+      "text": "The ring is heavier than you thought. You start down the block, a guard among guards.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "prison-seen",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-guard-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-guard-1",
+   "name": "The Pokémon Prison: Posted (Kennels)",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*North, the Kennels. The big ones, in iron, still growling at the dark.*\n\nKeys on your belt. A clipboard that says what to do. Nobody has asked what you think.",
+   "choices": [
+    {
+     "label": "Lock it, as ordered.",
+     "success": {
+      "text": "You turn the key. The click is very loud. You don't look at what is inside.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-guard-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it unlatched.",
+     "success": {
+      "text": "You turn the key halfway, the way a careless man would. Behind you, something that has learned patience starts to wait.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "prison-guard-freed-1",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-guard-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-guard-2",
+   "name": "The Pokémon Prison: Posted (Tanks)",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*East, the Tanks. Glass, standing water, shapes turning slowly behind it.*\n\nKeys on your belt. A clipboard that says what to do. Nobody has asked what you think.",
+   "choices": [
+    {
+     "label": "Lock it, as ordered.",
+     "success": {
+      "text": "You turn the key. The click is very loud. You don't look at what is inside.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-guard-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it unlatched.",
+     "success": {
+      "text": "You turn the key halfway, the way a careless man would. Behind you, something that has learned patience starts to wait.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "prison-guard-freed-2",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-guard-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-guard-3",
+   "name": "The Pokémon Prison: Posted (Quiet Cells)",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*South, the Quiet Cells. The smallest and the youngest, kept apart, calling to nobody.*\n\nKeys on your belt. A clipboard that says what to do. Nobody has asked what you think.",
+   "choices": [
+    {
+     "label": "Lock it, as ordered.",
+     "success": {
+      "text": "You turn the key. The click is very loud. You don't look at what is inside.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-guard-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it unlatched.",
+     "success": {
+      "text": "You turn the key halfway, the way a careless man would. Behind you, something that has learned patience starts to wait.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "prison-guard-freed-3",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-guard-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-guard-4",
+   "name": "The Pokémon Prison: Posted (Yard)",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*West, the Yard. Tethered wings against a night sky.*\n\nKeys on your belt. A clipboard that says what to do. Nobody has asked what you think.",
+   "choices": [
+    {
+     "label": "Lock it, as ordered.",
+     "success": {
+      "text": "You turn the key. The click is very loud. You don't look at what is inside.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-guard-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it unlatched.",
+     "success": {
+      "text": "You turn the key halfway, the way a careless man would. Behind you, something that has learned patience starts to wait.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "prison-guard-freed-4",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-62-guard-end"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-guard-end",
+   "name": "The Pokémon Prison: The Shift Ends",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*The shift ends at dawn. The count comes up short in ways nobody can quite explain.*\n\nYou hand in the keys. The sergeant looks at you a moment too long, and then, tiredly, writes something in his book.",
+   "choices": [
+    {
+     "label": "Hand in the keys.",
+     "success": {
+      "text": "You hand in the keys, and nobody says a thing. Somewhere behind you, a cell door sits a little open.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "files"
+       },
+       {
+        "kind": "moment",
+        "text": "Posted as a prison guard for a night, and decided about every cell.",
+        "importance": 60
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

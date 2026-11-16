@@ -2459,6 +2459,70 @@
   ],
   "tags": []
  },
+ "gn-62-cell": {
+  "gn": "gn.62",
+  "shape": "Pseudo Stage",
+  "earliest": "A7",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "level": "Guards A+0; the warden A+2",
+  "often": "run",
+  "badge": "None",
+  "dressing": {
+   "kanto": "The Pokémon Prison",
+   "elsewhere": "The Pokémon Prison"
+  },
+  "note": "Only in a region with an evil-team story, as an ambush at a team node (the doc's 10%); not in a run where Flight North's theft happened. The doc's other trigger (a loss to the lieutenant or boss, instead of the usual loss cost) is not wired: it needs a hook in the loss path. Four wings, a clock of six steps, the warden.",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-62-guard": {
+  "gn": "gn.62",
+  "shape": "Pseudo Stage",
+  "earliest": "A7",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "level": "None",
+  "often": "run",
+  "badge": "None",
+  "note": "The doc's \"inside the team\" version: posted here as a guard for one mission. Opens only once the inside-the-team route exists (flag inside-team, not built yet).",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-62-stranger": {
+  "gn": "gn.62",
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 6,
+  "window": [
+   2,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: one per later stage, for as many strangers' Pokémon as were freed.",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
  "gn-31-door": {
   "gn": "gn.31",
   "shape": "Door",
