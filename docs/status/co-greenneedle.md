@@ -306,4 +306,4 @@ New (gn.new.16): ability Unlooked-For (abilities.json, SUPPORTED list, one accur
 ## Still to do
 - Tell the legends thread about `eventBattleLost` now using `choiceAt` and the `remembers` walk in `pseudo.ts`; tell the Kanto canon thread about retired ids (`pp-rematch-exceptional`).
 - Samurai Slash power 70 → 60.
-- A Playwright spec for one Greenneedle event in the New UI (covered by unit tests only so far).
+- Browser test: only gn.new.29 has one (tests/e2e/borrowedTeam.spec.ts, New UI); the rest are covered by unit tests.
