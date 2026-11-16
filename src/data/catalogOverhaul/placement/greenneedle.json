@@ -6551,5 +6551,76 @@
    "Mystery"
   ],
   "tags": []
+ },
+ "gn-new-12-xatu": {
+  "gn": "gn.new.12",
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 6,
+  "window": [
+   2,
+   11
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Cartographer",
+   "elsewhere": "The Cartographer"
+  },
+  "note": "Step 6 side branch (high ground); fallback Step 11 side branch, then Step 2 optional. Once a run. Look and listen: the whole map (20 columns) and one image drawn from the stop's seeded roll, which will happen (core/greenneedle/cartographer.ts).",
+  "kinds": [
+   "Story"
+  ],
+  "tags": [
+   "high"
+  ]
+ },
+ "gn-new-12-furious": {
+  "gn": "gn.new.12",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 6,
+  "window": [
+   2,
+   11
+  ],
+  "sits": "side-branch",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: only when the run's Legendary Blessing has reached Communion. The image is drawn again.",
+  "kinds": [
+   "Story"
+  ],
+  "tags": [
+   "high"
+  ]
+ },
+ "gn-new-12-natu": {
+  "gn": "gn.new.12",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 4,
+  "window": [
+   1,
+   8
+  ],
+  "stages": [
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: at the final rest of the run, when the image came true.",
+  "kinds": [
+   "Story"
+  ],
+  "tags": []
  }
 }

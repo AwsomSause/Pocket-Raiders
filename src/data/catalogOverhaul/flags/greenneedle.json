@@ -878,6 +878,14 @@
   {
    "key": "followed-at-road",
    "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
+  },
+  {
+   "key": "xatu-prophecy",
+   "rule": "core/greenneedle/cartographer.ts (gn.new.12: 1 a place, 2 a silhouette, 3 a number)"
+  },
+  {
+   "key": "xatu-changed",
+   "rule": "core/greenneedle/cartographer.ts (gn.new.12: the second draw after Communion)"
   }
  ]
 }
