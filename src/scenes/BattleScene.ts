@@ -58,6 +58,8 @@ import { currentEnemy, type BattleState, type PokemonInstance, type RunState } f
 import { isBossClass } from '../core/trainerPerks';
 import { arenaFor, getTheme } from '../core/themes';
 import { shinyCatchBurst, targetReticle } from '../ui/battleFx/arenaLife';
+import { addFollowedCue } from '../ui/battleFx/followedCue';
+import { followedCue } from '../core/greenneedle/followed';
 import { addContactShadows, addParallax, addVignette, ArenaLight, dressArena, type ShadowTarget } from '../ui/battleFx/arenaLife';
 import { pickUieArena } from '../core/arenaStyle';
 import { pokemonAssetIds, bossAnimId, bossBackId, uieArenaId, VS_SHARED, vsCardFor } from '../assets/catalog';
@@ -562,6 +564,8 @@ export class BattleScene extends Phaser.Scene {
     this.arenaPhase = 0;
     // A battle style's floor, tint or whole backdrop, under the Pokémon.
     this.skin?.backdrop?.(this, this.field, this.frameInfo());
+    // Greenneedle gn.60: what follows the player shows in the scenery, if it shows at all.
+    addFollowedCue(this, this.field, followedCue(run), this.motion, PLAYER_POS);
     addContactShadows(this, this.field, () => this.shadowTargets());
     this.fieldBase = this.field.length;
     this.setupTrainerActor(Boolean(battle.doubles));
