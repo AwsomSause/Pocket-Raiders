@@ -1,0 +1,1682 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-34",
+   "name": "The Warning",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "warning-open",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "absol",
+    "tint": "#4b5563",
+    "effect": "fog"
+   },
+   "intro": "A village is throwing stones at an Absol on the ridge. It does not leave.\n\n**Goody Prowse:** \"It came before the flood. It came before the fire. Drive it off and we'll pay.\"\n\n*A stone hits it. It does not flinch. It looks at the school.*",
+   "choices": [
+    {
+     "label": "Drive it off.",
+     "success": {
+      "text": "You step up with your team, and the stones stop, because now somebody else is doing it. The Absol looks at you. It looks at you for a long time. It does not look afraid. It looks sorry.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "absol-driven",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "warning-open",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "warning-turns",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "warning-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "warning-region"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "absol"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [],
+       "rule": {
+        "noCatch": true
+       },
+       "caught": []
+      }
+     }
+    },
+    {
+     "label": "Stand between it and the stones.",
+     "success": {
+      "text": "You step between. A stone hits your bag, and then another, and then the throwing stops, one arm at a time.\n\nGoody Prowse lowers hers last. The Absol looks at you once. Then it turns and walks up the ridge, and stops, and waits.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "absol-shielded",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "absol-believed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "warning-open",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "warning-turns",
+        "n": 6
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "warning-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "warning-region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow it.",
+     "success": {
+      "text": "The Absol goes up the ridge without looking back. You follow it, and the village watches you go.\n\nAbove the school there is a crack in the hillside. It is wet. It is widening. Nobody else has looked up here in a week.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "absol-believed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "warning-open",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "warning-turns",
+        "n": 6
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "warning-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "warning-region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-34-slide",
+   "name": "The Slide",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "warning-open",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "warning-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "absol-believed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "absol-driven",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "absol",
+    "tint": "#33404f",
+    "effect": "rain"
+   },
+   "intro": "The crack goes. A sound like a door in the sky, and then the hill starts moving, all of it, quietly.\n\nThe Absol is already at the school, and so are you. It is the only warning anyone is going to get, and you have six turns.\n\n*Every task is a person.*",
+   "choices": [
+    {
+     "label": "Carry the children.",
+     "success": {
+      "text": "Anything strong or large takes a child under each arm and runs. They are heavy, and wet, and silent. You count heads. The count is right. You count again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-carried",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig a channel to turn the slide.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "rock",
+        "fighting"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Claws, fists and shoulders cut a trench across the slope, as deep as they can make it, as fast as they can make it. The mud arrives at it, and leans, and starts to go the other way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-dug",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shout the houses awake.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyMoveFlag",
+         "flag": "sound"
+        }
+       ],
+       "text": "A sound move, as loud as you can make it. It rolls down the street and into every house, and every house wakes up at once. Somebody laughs, crying, in the dark.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-shouted",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-b2"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Every window on the street lights up. Doors bang. Nobody remembers dressing, and everybody is dressed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-shouted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold the school door.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyTypes",
+         "types": [
+          "steel"
+         ]
+        }
+       ],
+       "text": "Steel takes the door and does not bend. The mud hits it, and it holds, and it holds, and the last child is out.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-held",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-b2"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Something brave puts its shoulder to the school door and does not give. Behind it, small hands pass children out through the gap, one at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-34-b2",
+   "name": "The Slide, Turn 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "absol",
+    "tint": "#33404f",
+    "effect": "rain"
+   },
+   "intro": "Turn 2 of 6. The crack above the school has widened to a hand. Mud runs down it, brown and slow, and then not so slow.\n\nVoices below. A bell, rung wrong. Somebody is carrying a child on their back and does not know which way to go.",
+   "choices": [
+    {
+     "label": "Carry the children.",
+     "success": {
+      "text": "Anything strong or large takes a child under each arm and runs. They are heavy, and wet, and silent. You count heads. The count is right. You count again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-carried",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig a channel to turn the slide.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "rock",
+        "fighting"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Claws, fists and shoulders cut a trench across the slope, as deep as they can make it, as fast as they can make it. The mud arrives at it, and leans, and starts to go the other way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-dug",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shout the houses awake.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyMoveFlag",
+         "flag": "sound"
+        }
+       ],
+       "text": "A sound move, as loud as you can make it. It rolls down the street and into every house, and every house wakes up at once. Somebody laughs, crying, in the dark.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-shouted",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-b3"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Every window on the street lights up. Doors bang. Nobody remembers dressing, and everybody is dressed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-shouted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold the school door.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyTypes",
+         "types": [
+          "steel"
+         ]
+        }
+       ],
+       "text": "Steel takes the door and does not bend. The mud hits it, and it holds, and it holds, and the last child is out.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-held",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-b3"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Something brave puts its shoulder to the school door and does not give. Behind it, small hands pass children out through the gap, one at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-34-b3",
+   "name": "The Slide, Turn 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "absol",
+    "tint": "#33404f",
+    "effect": "rain"
+   },
+   "intro": "Turn 3 of 6. The crack above the school has widened to a hand. Mud runs down it, brown and slow, and then not so slow.\n\nVoices below. A bell, rung wrong. Somebody is carrying a child on their back and does not know which way to go.",
+   "choices": [
+    {
+     "label": "Carry the children.",
+     "success": {
+      "text": "Anything strong or large takes a child under each arm and runs. They are heavy, and wet, and silent. You count heads. The count is right. You count again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-carried",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig a channel to turn the slide.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "rock",
+        "fighting"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Claws, fists and shoulders cut a trench across the slope, as deep as they can make it, as fast as they can make it. The mud arrives at it, and leans, and starts to go the other way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-dug",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shout the houses awake.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyMoveFlag",
+         "flag": "sound"
+        }
+       ],
+       "text": "A sound move, as loud as you can make it. It rolls down the street and into every house, and every house wakes up at once. Somebody laughs, crying, in the dark.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-shouted",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-b4"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Every window on the street lights up. Doors bang. Nobody remembers dressing, and everybody is dressed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-shouted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold the school door.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyTypes",
+         "types": [
+          "steel"
+         ]
+        }
+       ],
+       "text": "Steel takes the door and does not bend. The mud hits it, and it holds, and it holds, and the last child is out.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-held",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-b4"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Something brave puts its shoulder to the school door and does not give. Behind it, small hands pass children out through the gap, one at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-34-b4",
+   "name": "The Slide, Turn 4",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "absol",
+    "tint": "#33404f",
+    "effect": "rain"
+   },
+   "intro": "Turn 4 of 6. The crack above the school has widened to a hand. Mud runs down it, brown and slow, and then not so slow.\n\nVoices below. A bell, rung wrong. Somebody is carrying a child on their back and does not know which way to go.",
+   "choices": [
+    {
+     "label": "Carry the children.",
+     "success": {
+      "text": "Anything strong or large takes a child under each arm and runs. They are heavy, and wet, and silent. You count heads. The count is right. You count again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-carried",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig a channel to turn the slide.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "rock",
+        "fighting"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Claws, fists and shoulders cut a trench across the slope, as deep as they can make it, as fast as they can make it. The mud arrives at it, and leans, and starts to go the other way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-dug",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shout the houses awake.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyMoveFlag",
+         "flag": "sound"
+        }
+       ],
+       "text": "A sound move, as loud as you can make it. It rolls down the street and into every house, and every house wakes up at once. Somebody laughs, crying, in the dark.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-shouted",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-b5"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Every window on the street lights up. Doors bang. Nobody remembers dressing, and everybody is dressed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-shouted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold the school door.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyTypes",
+         "types": [
+          "steel"
+         ]
+        }
+       ],
+       "text": "Steel takes the door and does not bend. The mud hits it, and it holds, and it holds, and the last child is out.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-held",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-b5"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Something brave puts its shoulder to the school door and does not give. Behind it, small hands pass children out through the gap, one at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-34-b5",
+   "name": "The Slide, Turn 5",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "absol",
+    "tint": "#33404f",
+    "effect": "rain"
+   },
+   "intro": "Turn 5 of 6. The crack above the school has widened to a hand. Mud runs down it, brown and slow, and then not so slow.\n\nVoices below. A bell, rung wrong. Somebody is carrying a child on their back and does not know which way to go.",
+   "choices": [
+    {
+     "label": "Carry the children.",
+     "success": {
+      "text": "Anything strong or large takes a child under each arm and runs. They are heavy, and wet, and silent. You count heads. The count is right. You count again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-carried",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig a channel to turn the slide.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "rock",
+        "fighting"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Claws, fists and shoulders cut a trench across the slope, as deep as they can make it, as fast as they can make it. The mud arrives at it, and leans, and starts to go the other way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-dug",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shout the houses awake.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyMoveFlag",
+         "flag": "sound"
+        }
+       ],
+       "text": "A sound move, as loud as you can make it. It rolls down the street and into every house, and every house wakes up at once. Somebody laughs, crying, in the dark.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-shouted",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-b6"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Every window on the street lights up. Doors bang. Nobody remembers dressing, and everybody is dressed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-shouted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold the school door.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyTypes",
+         "types": [
+          "steel"
+         ]
+        }
+       ],
+       "text": "Steel takes the door and does not bend. The mud hits it, and it holds, and it holds, and the last child is out.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-held",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-b6"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Something brave puts its shoulder to the school door and does not give. Behind it, small hands pass children out through the gap, one at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-b6"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-34-b6",
+   "name": "The Slide, Turn 6",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "absol",
+    "tint": "#33404f",
+    "effect": "rain"
+   },
+   "intro": "Turn 6 of 6. The crack above the school has widened to a hand. Mud runs down it, brown and slow, and then not so slow.\n\nThis is the last turn. Whatever is not done now is going to be done for you.",
+   "choices": [
+    {
+     "label": "Carry the children.",
+     "success": {
+      "text": "Anything strong or large takes a child under each arm and runs. They are heavy, and wet, and silent. You count heads. The count is right. You count again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-carried",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig a channel to turn the slide.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "rock",
+        "fighting"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Claws, fists and shoulders cut a trench across the slope, as deep as they can make it, as fast as they can make it. The mud arrives at it, and leans, and starts to go the other way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-dug",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shout the houses awake.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyMoveFlag",
+         "flag": "sound"
+        }
+       ],
+       "text": "A sound move, as loud as you can make it. It rolls down the street and into every house, and every house wakes up at once. Somebody laughs, crying, in the dark.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-shouted",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-end"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Every window on the street lights up. Doors bang. Nobody remembers dressing, and everybody is dressed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-shouted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold the school door.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyTypes",
+         "types": [
+          "steel"
+         ]
+        }
+       ],
+       "text": "Steel takes the door and does not bend. The mud hits it, and it holds, and it holds, and the last child is out.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-held",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-end"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Something brave puts its shoulder to the school door and does not give. Behind it, small hands pass children out through the gap, one at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-end"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-34-slide-driven",
+   "name": "The Slide, at Night",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "warning-open",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "warning-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "absol-driven",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "absol",
+    "tint": "#33404f",
+    "effect": "rain"
+   },
+   "intro": "That night, the hill comes down.\n\nThe Absol is already there, digging at the school door with its horn. It did not wait to be asked, and it did not wait to be forgiven.\n\nThere are three turns. Somebody has to be quicker than the mud.",
+   "choices": [
+    {
+     "label": "Carry the children.",
+     "success": {
+      "text": "Anything strong or large takes a child under each arm and runs. They are heavy, and wet, and silent. You count heads. The count is right. You count again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-carried",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-d2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig a channel to turn the slide.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "rock",
+        "fighting"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Claws, fists and shoulders cut a trench across the slope, as deep as they can make it, as fast as they can make it. The mud arrives at it, and leans, and starts to go the other way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-dug",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-d2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shout the houses awake.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyMoveFlag",
+         "flag": "sound"
+        }
+       ],
+       "text": "A sound move, as loud as you can make it. It rolls down the street and into every house, and every house wakes up at once. Somebody laughs, crying, in the dark.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-shouted",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-d2"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Every window on the street lights up. Doors bang. Nobody remembers dressing, and everybody is dressed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-shouted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-d2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold the school door.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyTypes",
+         "types": [
+          "steel"
+         ]
+        }
+       ],
+       "text": "Steel takes the door and does not bend. The mud hits it, and it holds, and it holds, and the last child is out.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-held",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-d2"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Something brave puts its shoulder to the school door and does not give. Behind it, small hands pass children out through the gap, one at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-d2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-34-d2",
+   "name": "The Slide, Turn 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "absol",
+    "tint": "#33404f",
+    "effect": "rain"
+   },
+   "intro": "Turn 2 of 3. The crack above the school has widened to a hand. Mud runs down it, brown and slow, and then not so slow.\n\nVoices below. A bell, rung wrong. Somebody is carrying a child on their back and does not know which way to go.",
+   "choices": [
+    {
+     "label": "Carry the children.",
+     "success": {
+      "text": "Anything strong or large takes a child under each arm and runs. They are heavy, and wet, and silent. You count heads. The count is right. You count again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-carried",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-d3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig a channel to turn the slide.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "rock",
+        "fighting"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Claws, fists and shoulders cut a trench across the slope, as deep as they can make it, as fast as they can make it. The mud arrives at it, and leans, and starts to go the other way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-dug",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-d3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shout the houses awake.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyMoveFlag",
+         "flag": "sound"
+        }
+       ],
+       "text": "A sound move, as loud as you can make it. It rolls down the street and into every house, and every house wakes up at once. Somebody laughs, crying, in the dark.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-shouted",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-d3"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Every window on the street lights up. Doors bang. Nobody remembers dressing, and everybody is dressed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-shouted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-d3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold the school door.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyTypes",
+         "types": [
+          "steel"
+         ]
+        }
+       ],
+       "text": "Steel takes the door and does not bend. The mud hits it, and it holds, and it holds, and the last child is out.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-held",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-d3"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Something brave puts its shoulder to the school door and does not give. Behind it, small hands pass children out through the gap, one at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-d3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-34-d3",
+   "name": "The Slide, Turn 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "absol",
+    "tint": "#33404f",
+    "effect": "rain"
+   },
+   "intro": "Turn 3 of 3. The crack above the school has widened to a hand. Mud runs down it, brown and slow, and then not so slow.\n\nThis is the last turn. Whatever is not done now is going to be done for you.",
+   "choices": [
+    {
+     "label": "Carry the children.",
+     "success": {
+      "text": "Anything strong or large takes a child under each arm and runs. They are heavy, and wet, and silent. You count heads. The count is right. You count again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-carried",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig a channel to turn the slide.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "rock",
+        "fighting"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Claws, fists and shoulders cut a trench across the slope, as deep as they can make it, as fast as they can make it. The mud arrives at it, and leans, and starts to go the other way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-dug",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shout the houses awake.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyMoveFlag",
+         "flag": "sound"
+        }
+       ],
+       "text": "A sound move, as loud as you can make it. It rolls down the street and into every house, and every house wakes up at once. Somebody laughs, crying, in the dark.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-shouted",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-end"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Every window on the street lights up. Doors bang. Nobody remembers dressing, and everybody is dressed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-shouted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold the school door.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyTypes",
+         "types": [
+          "steel"
+         ]
+        }
+       ],
+       "text": "Steel takes the door and does not bend. The mud hits it, and it holds, and it holds, and the last child is out.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "warning-held",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-34-end"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Something brave puts its shoulder to the school door and does not give. Behind it, small hands pass children out through the gap, one at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-end"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-34-end",
+   "name": "After the Slide",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "absol",
+    "tint": "#4b5563",
+    "effect": "rain"
+   },
+   "intro": "It is quiet after. Mud to the windowsills. The school is standing, or it is not. Nobody is under it.\n\nGoody Prowse is sitting in the street with a child on her knee, counting heads. She counts them twice.\n\nThe Absol stands on the ridge, in the grey light, looking at the village.",
+   "choices": [
+    {
+     "label": "Walk up to the Absol.",
+     "success": {
+      "text": "It does not run. It looks like something that was right, and is too tired to be glad of it.\n\nNobody says the word sorry out loud. The village sends up a pot of something warm, which is how a village says it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-join"
+       },
+       {
+        "kind": "moment",
+        "text": "An Absol warned a village about the slide. It was believed too late by some, and in time by enough.",
+        "importance": 70
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "absol-driven",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Watch it go.",
+     "success": {
+      "text": "It does not run. It looks at your hands, and the hands of everyone behind you, and every one of them has held a stone.\n\nIt turns and walks over the ridge, and does not look back. You do not follow. Some things are not yours to ask for.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The village drove the Absol off, and it came back to dig anyway. Nobody has forgotten it.",
+        "importance": 65
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "absol-driven",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-34-join",
+   "name": "Before the Fall",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "absol",
+    "tint": "#4b5563",
+    "effect": "sparkle"
+   },
+   "intro": "It comes down off the ridge slowly, as if the ground might change its mind.\n\nIt stops an arm's length away. Then it presses its forehead to the back of your hand and stays there.\n\nIt knows what comes before the falling. It will tell you, every time.",
+   "choices": [
+    {
+     "label": "Come with me.",
+     "success": {
+      "text": "It falls in beside you. Somewhere behind, a child is waving from the school steps.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "absol"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "before-the-fall"
+       },
+       {
+        "kind": "flag",
+        "key": "absol-joined",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-34-shrine",
+   "name": "The Pile of Stones",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "warning-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "warning-region"
+    },
+    {
+     "kind": "flag",
+     "key": "warning-shrine-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "absol",
+    "tint": "#4b5563",
+    "effect": "fog"
+   },
+   "intro": "A small shrine at the edge of a road, with a flat stone for an offering and a dish of water in front of it.\n\nBehind it, on the ridge, there are stones. They are stacked in a neat pile, each one set on the last.\n\nSomebody stacked them. Nobody threw them.",
+   "choices": [
+    {
+     "label": "Leave a stone on the pile.",
+     "success": {
+      "text": "You set it on top, gently, the way you would put down something that could still hurt. The wind turns, and for a moment the whole ridge sounds like someone saying thank you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-shrine-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you, the pile does not move. It is not going to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "warning-shrine-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
