@@ -148,7 +148,7 @@ const police: Json[] = [
 const own: Json[] = [
   step('rk-own-duel', 'The Duel', `One on one: his Rhydon, Vault-Breaker, against your lead. No items. The Persian, Chairman, watches from the desk. Mid-fight, he says: ${say('Giovanni', `You'll keep the tenth. Say you'll keep the tenth. It's what stops it becoming a gang.`)}`, [
     ...([['"I\'ll keep the tenth."', 'tenth'], ['"I\'ll keep all four rules."', 'rules'], [`"I'll run it my way."`, 'mine']] as const).map(([label, k]) => ch(label, fight(`The Rhydon comes on like a wall.`,
-      trainer('Giovanni', { sprite: BOSS, team: ['rhydon'], size: 1, lv: 2, win: [room('rk-own-matori')], lose: [room('rk-plan-verdict')] }), flag(`rocket-own-${k}`)))),
+      trainer('Giovanni', { sprite: BOSS, team: ['rhydon'], size: 1, lv: 2, win: [room('rk-own-matori')], lose: [room('rk-own-lost')] }), flag(`rocket-own-${k}`)))),
   ], { cast: [BOSS], pokemon: 'rhydon' }),
   step('rk-own-matori', 'The First Hour', `He looks at the Rhydon. He recalls it himself. ${say('Giovanni', `There. I'm told a handshake's customary.`)} He means it. He takes the photograph from the drawer, and nothing else. At the lift: ${say('Giovanni', `Mind Matori. She's never had a day's leave. And answer the telephone on Thursdays; she'll only ring your mother otherwise.`)} The office is yours. Four people come to the door, one at a time. The first is Matori. ${say('Matori', `You've a helicopter at one, a call with Johto at two, and a decision about the roof that I'd make before lunch. What are you running from? I'm obliged to ask the new ones.`)}`, [
     ch('(The same answer as your first day.)', on(`She writes it down again, in the same words, and underlines it.`, 'rk-own-callers')),
@@ -178,6 +178,9 @@ const own: Json[] = [
     ch('Leave it off.', out(`The pale square stays pale. Kanto is yours. ${EPILOGUE.own}`, story({ beat: true }), story({ end: 'allied' }), flag('rocket-ending-own'))),
   ], { cast: [EXEC] }),
 ];
+
+// A lost duel: "Not today." The Carry it out ending, from its Verdict, on the duel's own map.
+own.push(step('rk-own-lost', 'The Verdict', `The Rhydon stands over your lead. Giovanni doesn't gloat. ${say('Giovanni', `Not today. Executive, then.`)}`, [ch('Take the title.', PLAN_END())], { cast: [BOSS] }));
 
 // ---------- Team Ledger: the third option ----------
 const LEDGER = { cast: [GRUNT], tint: '#2a2418', effect: 'sparkle' };

@@ -13,7 +13,7 @@ const EXEC = R.ranks.executive.sprite;
 const TINT = R.color;
 const say = (who: string, line: string): string => `${who}: "${line}"`;
 /** Rocket is the region's team, the run is in Kanto, and its story has reached this far. */
-const rk = (after: number, o: Json = {}): Json[] => [{ kind: 'evil', team: 'rocket', after, ...o }, inRegion('kanto')];
+const rk = (after: number, o: Json = {}): Json[] => [{ kind: 'evil', team: 'rocket', after, anyRoute: true, ...o }, inRegion('kanto')];
 const night: Json = { kind: 'period', in: ['night'] };
 const intel = (n: number): Json => flag('intel', n);
 const heat = (n: number): Json => story({ heat: n });
@@ -62,7 +62,7 @@ const EVENTS_A: Json[] = [
       ch(`"It's a good tree."`, out(`"It is," she says, and picks you a plum, and tells you to give it back when you can pay.`, flag('rocket-madame-met'), flag('rocket-madame-line'), flag('rocket-rules-heard'))),
     ]),
   // R6. Induction Day
-  ev('rk-induction-day', 'Induction Day', 'Evil Teams', { requires: rk(0, { ends: ['none'] }), cast: [GRUNT], tint: TINT },
+  ev('rk-induction-day', 'Induction Day', 'Evil Teams', { requires: rk(0, { ends: ['none'], anyRoute: false, inside: false }), cast: [GRUNT], tint: TINT },
     `A hired hall. Folding chairs. Twenty people who've never met, each holding a uniform in a paper bag. ${say('Sergeant Jardine, delighted', `Welcome to Team Rocket! Tea's at the back. Three things. One: you're paid Fridays. Two: you'll be given a twelfth. Do your twelfth. Three: don't ask what the other eleven are. Questions? No. Lovely. That's the point of three.`)} You're taken for a recruit, and handed a bag. Beside you, a woman of fifty in a cleaner's tabard: "My sister said they've a dentist." A boy of seventeen: "I failed the League entrance twice. They don't have an entrance." A man in a good coat worn at the cuffs: "I was a bank manager. Was. Do you know who came to my leaving do? Nobody. Do you know who rang the day after?"`,
     [
       ch('Take the bag.', out(`You take it. Jardine shakes your hand with both of his. You're Team Rocket now, from the inside, and early.`, story({ mark: 'inside' }), flag('rocket-offered')), { requires: [flagIs('rocket-offered', 0, 0), { kind: 'evil', team: 'rocket', after: 0, inside: false }] }),

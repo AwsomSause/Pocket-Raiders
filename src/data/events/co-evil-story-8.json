@@ -11,7 +11,8 @@
     {
      "kind": "evil",
      "team": "rocket",
-     "after": 2
+     "after": 2,
+     "anyRoute": true
     },
     {
      "kind": "region",
@@ -82,7 +83,8 @@
     {
      "kind": "evil",
      "team": "rocket",
-     "after": 3
+     "after": 3,
+     "anyRoute": true
     },
     {
      "kind": "region",
@@ -173,7 +175,8 @@
     {
      "kind": "evil",
      "team": "rocket",
-     "after": 2
+     "after": 2,
+     "anyRoute": true
     },
     {
      "kind": "region",
@@ -250,7 +253,8 @@
     {
      "kind": "evil",
      "team": "rocket",
-     "after": 3
+     "after": 3,
+     "anyRoute": true
     },
     {
      "kind": "region",
@@ -310,7 +314,8 @@
     {
      "kind": "evil",
      "team": "rocket",
-     "after": 1
+     "after": 1,
+     "anyRoute": true
     },
     {
      "kind": "region",
@@ -403,9 +408,11 @@
      "kind": "evil",
      "team": "rocket",
      "after": 0,
+     "anyRoute": false,
      "ends": [
       "none"
-     ]
+     ],
+     "inside": false
     },
     {
      "kind": "region",
@@ -511,7 +518,8 @@
     {
      "kind": "evil",
      "team": "rocket",
-     "after": 4
+     "after": 4,
+     "anyRoute": true
     },
     {
      "kind": "region",
@@ -595,7 +603,8 @@
     {
      "kind": "evil",
      "team": "rocket",
-     "after": 4
+     "after": 4,
+     "anyRoute": true
     },
     {
      "kind": "region",
@@ -694,7 +703,8 @@
     {
      "kind": "evil",
      "team": "rocket",
-     "after": 3
+     "after": 3,
+     "anyRoute": true
     },
     {
      "kind": "region",
@@ -780,7 +790,8 @@
     {
      "kind": "evil",
      "team": "rocket",
-     "after": 3
+     "after": 3,
+     "anyRoute": true
     },
     {
      "kind": "region",
@@ -862,7 +873,8 @@
     {
      "kind": "evil",
      "team": "rocket",
-     "after": 4
+     "after": 4,
+     "anyRoute": true
     },
     {
      "kind": "region",

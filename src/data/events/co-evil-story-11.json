@@ -1,0 +1,1340 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "neo-candy-bar",
+   "name": "A Very Good Candy Bar",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 1,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A souvenir shop in Mahogany. A pyramid of Rage Candy Bars. A poster of a Gyarados with one eye worn pale by thumbs. Mrs. Yates: \"Rage Candy Bar? Local speciality. We've been making them forty years. It's the only shop in Johto that's never once been raided, and I'll tell you why: we make a very good candy bar.\" Mr. Yates, from the crossword: \"And we don't ask.\" From under the floor: a kettle. A chair being moved. Somebody singing, quietly, a tune about closing time. Mrs. Yates: \"That's the boiler.\"",
+   "choices": [
+    {
+     "label": "\"Who rents downstairs?\"",
+     "success": {
+      "text": "Mrs. Yates: \"A firm. Very quiet. Pay on the first. The tall one brings our tea tray back, washed. In forty years of letting that cellar, he's the only tenant who's washed the tray.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "neo-lore-yates",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"A bar, please.\" (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "It's excellent.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "ragecandybar",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The boiler's singing.\"",
+     "success": {
+      "text": "She looks at her husband. He looks at his crossword. Mr. Yates: \"Nine down. \"Knowledge one would rather not have.\" Eleven letters.\" A pause. Mr. Yates: \"...\"Awkwardness.\" No. Too short.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "neo-lore-yates",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You know what they are.\"",
+     "success": {
+      "text": "Mrs. Yates: \"We know what they did. We also know the one in the nice coat's sold his mother's ring to pay those children's wages. We've been married forty years, dear. We know you can be two things.\" When you leave, the Gyarados poster has swung a little open, and the Yateses are pretending not to see it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "neo-lore-yates",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-door-found",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-car-park",
+   "name": "The Car Park",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 1,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman",
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "intro": "An inn's back room. Twelve people in their forties and fifties at one long table, in civvies, with one thing each that's black: a scarf, a hatband, a pair of gloves. Mr. Sallow: \"Private party. ...No. Sit. You've the look of someone who was there. Were you there?\" A woman with a hatband: \"The car park. The morning after. Sixty of us, in uniform, in the rain, with the police going in the front and us not knowing if we were sacked or arrested or what.\" A man with one glove: \"And nobody came. That's what I remember. The Boss always sent someone. A car. A man with a clipboard. That morning: nobody.\" Mr. Sallow: \"Then a door opens. And it's Archer. Six years I'd worked there; I'd never heard him speak. He says: \"Is anybody still here?\" Like he was frightened of the answer.\" The woman: \"We're the ones who said yes.\"",
+   "choices": [
+    {
+     "label": "\"Why did you say yes?\"",
+     "success": {
+      "text": "The man with one glove: \"I'd a mortgage.\" The woman: \"I'd nowhere.\" Mr. Sallow: \"He looked like he'd nobody. Archer. I thought: well. That makes sixty-one.\" Before you go, Mr. Sallow teaches you the closing-time song, with the words. Wherever Old Rocket are, you can sing it and be let by.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "neo-lore-carpark",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-song-words",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What was he like? The Boss.\"",
+     "success": {
+      "text": "A silence. Mr. Sallow: \"I saw the back of his head for four seconds.\" The woman: \"He nodded at me once. I think. It might've been at the lift.\" The man: \"I never saw him at all. I've said I did for three years.\" They look at each other. Nobody's said it before. Mr. Sallow teaches you the closing-time song before you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "neo-lore-carpark",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-song-words",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Do you think he's coming back?\"",
+     "success": {
+      "text": "All twelve, not quite together: \"No.\" Then, after a moment: Mr. Sallow: \"Don't tell the choir.\" He teaches you the closing-time song, with the words, so you'll know it when you hear it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "neo-lore-carpark",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-song-words",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-handcart",
+   "name": "Four Days on a Handcart",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 0,
+     "anyRoute": true,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A man selling souvenirs from a handcart with one new wheel. Mr. Bexley Quartermain: \"Lovely cart, isn't she? I lent her out once. Three years back. A gentleman in a good coat. Paid a month's takings for four days. Wanted her for a chair.\" Mr. Quartermain: \"One chair. Under a tarpaulin. He wouldn't let me help lift. Walked her himself, Viridian to Mahogany, in the rain. I followed a way, to see my cart didn't come to harm. He talked to it. The chair. On the hills. \"Nearly there, sir.\" I thought: that's either the saddest man in Kanto or the happiest.\" Mr. Quartermain: \"Brought her back with a new wheel. I hadn't asked. The old one was fine.\"",
+   "choices": [
+    {
+     "label": "\"Which was he?\"",
+     "success": {
+      "text": "Mr. Quartermain: \"Both, I've decided. It's a long road, Viridian to Mahogany. You can be both on a road that long.\" He gives you a tin Gyarados off the cart, for listening.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-lore-cart",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-tin-gyarados",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What did the chair look like?\"",
+     "success": {
+      "text": "Mr. Quartermain: \"Leather. Old. A mark on one arm, like a hand had gripped it a long time. That's all I saw; he kept the tarpaulin tight.\" He gives you a tin Gyarados off the cart.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-lore-cart",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-tin-gyarados",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Did he say why?\"",
+     "success": {
+      "text": "Mr. Quartermain: \"I asked. He said: \"Somebody has to know where it is.\" I said: \"The chair?\" He said: \"Yes.\" But he'd stopped for a second before the \"yes.\"\" He gives you a tin Gyarados off the cart.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-lore-cart",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-tin-gyarados",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-grow-back",
+   "name": "Do They Grow Back",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "slowpoke",
+    "tint": "#2a3a3a",
+    "effect": "none"
+   },
+   "intro": "The Well's edge. The vendor from the Tail Market, without his hat, with his feet over the side. Kingsolver: \"I packed up. After you asked. \"Do they grow back.\" I'd been saying yes for six months. I came down here to look.\" In the pool below, a Slowpoke. Its tail's a stump, healed pink. It's fishing with the stump. It isn't catching anything. It keeps looking at where the end of it should be, as if it's mislaid something. Kingsolver: \"It grows back. That's true. Takes a season. D'you know what they do, in the season? That. They fish with it. And nothing bites, because the sweet bit's the end. So they go hungry, a season, and they don't know why.\" Kingsolver: \"\"It grows back.\" It does. It's just not the whole of the sentence.\"",
+   "choices": [
+    {
+     "label": "Feed it.",
+     "success": {
+      "text": "A Berry. It takes a long time to notice. It eats. It looks at you. It goes back to fishing with the stump, a little less puzzled. Kingsolver takes off his jacket and wades in with a bag of his own lunch. On the bank, where it dropped in the autumn, there's a tail that was shed, not cut. It's the only one Kurt will look at without shouting.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "slowpoketail",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-tails-fed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What'll you do now?\"",
+     "success": {
+      "text": "Kingsolver: \"This. Every day, till they've all grown back. There's forty. I counted them when I was selling them.\" He finds you a tail on the bank that was shed, not cut.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "slowpoketail",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-tails-fed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who told you to say it?\"",
+     "success": {
+      "text": "Kingsolver: \"Proton. He said it the way you'd say a prayer. I think he was saying it to himself.\" He finds you a tail on the bank that was shed, not cut.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "slowpoketail",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-tails-fed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-pawnbroker",
+   "name": "The Pawnbroker of Ecruteak",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A pawnshop. In the window, on a velvet pad, a man's wristwatch, a set of flat keys, and a ring with a small stone. Miss Xiomara Eastlake: \"The three in the window? Same gentleman. One a year. I'm not meant to say. I'll say this: he's never once haggled. I've offered him more. He says, \"Whatever's fair.\" Nobody says that in a pawnshop. It's upsetting.\" Miss Eastlake: \"The ring was this spring. He held it a long time. He said, \"She'd understand. She kept books for a firm that folded.\" I said I was sorry. He said, \"It's Friday tomorrow.\" As if that was an answer.\" The tickets: the watch, ₽8,000. The keys (a flat in Saffron, long sold; the keys are only keys), ₽500. The ring, ₽30,000.",
+   "choices": [
+    {
+     "label": "\"I'll redeem the ring.\" (₽30,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 30000
+      }
+     ],
+     "success": {
+      "text": "She wraps it in tissue, as if it were going to someone. It is.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -30000
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ring-redeemed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Does he ever come back for them?\"",
+     "success": {
+      "text": "Miss Eastlake: \"He looks in the window, Fridays. From across the road. He doesn't come in.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why's it upsetting?\"",
+     "success": {
+      "text": "Miss Eastlake: \"Because a man who says \"whatever's fair\" in here has stopped expecting anything to be. I'd rather he haggled.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-jingle",
+   "name": "The Jingle",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#3a2e3a",
+    "effect": "none"
+   },
+   "intro": "Goldenrod. Every shop's playing the same eight bars. A man at a café table with his head in his hands. Mr. Mallory Ziegler: \"That's mine. That tune. I wrote it in twenty minutes for a man who paid cash and wouldn't say who for. \"Something cheerful. Something you can't get out.\" I'm good at that. It's the only thing I'm good at.\" Mr. Ziegler: \"It's everywhere. My mother hums it. I wrote the anthem of a crime, and it's the best thing I've done.\" The jingle. Again.",
+   "choices": [
+    {
+     "label": "\"Write a better one.\"",
+     "success": {
+      "text": "He gets out a spoon and a cup. Mr. Ziegler: \"Give me four. Any four.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-jingle-write"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What are the words?\"",
+     "success": {
+      "text": "Mr. Ziegler: \"There aren't any. That's what makes it stick. You put your own in. I've heard children skipping to it. \"Rocket, Rocket, in your pocket.\" I didn't write that. They did.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Who paid you?\"",
+     "success": {
+      "text": "Mr. Ziegler: \"A tall man in a good coat, who said \"whatever's fair\" when I named my price. I doubled it. He paid it. I've felt bad ever since.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-jingle-write",
+   "name": "The Jingle",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#3a2e3a",
+    "effect": "none"
+   },
+   "intro": "Four phrases, of the eight on his napkin: \"the kettle's on\"; \"rain by Tuesday\"; \"a very good candy bar\"; \"nobody's coming\"; \"push the eye\"; \"tails grow back\"; \"home you go\"; \"standing by\".",
+   "choices": [
+    {
+     "label": "\"The kettle's on,\" \"rain by Tuesday,\" \"a very good candy bar,\" \"home you go.\"",
+     "success": {
+      "text": "He plays it on a spoon and a cup. Mr. Ziegler: \"...That's it. That's worse. That's so much worse it's better. You can't hum the old one once you've heard this.\" By the next stage the shops are playing the new one, and nobody can remember the old one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-jingle-replaced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-jingle-kettle",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Nobody's coming,\" \"standing by,\" \"push the eye,\" \"home you go.\"",
+     "success": {
+      "text": "He plays it on a spoon and a cup. Mr. Ziegler: \"...That's it. That's worse. That's so much worse it's better. You can't hum the old one once you've heard this.\" By the next stage the shops are playing the new one, and nobody can remember the old one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-jingle-replaced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-jingle-nobody",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tails grow back,\" \"rain by Tuesday,\" \"the kettle's on,\" \"standing by.\"",
+     "success": {
+      "text": "He plays it on a spoon and a cup. Mr. Ziegler: \"...That's it. That's worse. That's so much worse it's better. You can't hum the old one once you've heard this.\" By the next stage the shops are playing the new one, and nobody can remember the old one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-jingle-replaced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-jingle-tails",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-somebodys-son",
+   "name": "Somebody's Son",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/petrel"
+    ],
+    "tint": "#3a3a2e",
+    "effect": "none"
+   },
+   "intro": "A front garden. An old woman pegging out washing. A man at the gate, in a plain coat, with no particular face, who hasn't opened it. The old woman: \"Can I help you, dear? Are you from the gas?\" Petrel: \"No. I— no. Wrong house. Sorry to trouble you.\" She goes in. He's still at the gate. Petrel, to you, who he's noticed, and doesn't mind: \"That's my mum. I came as myself. First time in six years. She didn't know me.\" Petrel: \"I've been the Director. I've been the Boss, with the lights down. I've been a well-digger, a nurse, a man from the gas. I've come to this gate as eleven different people and she's known every one of them was a stranger. I thought: I'll come as me, and she'll see. And I've forgotten what I look like when I'm doing it.\"",
+   "choices": [
+    {
+     "label": "\"What did you look like, at eight?\"",
+     "success": {
+      "text": "He thinks. Petrel: \"I'd a cowlick. I scowled at cameras. I did voices. She used to say, \"Do the milkman,\" and I'd do the milkman.\" He flattens his hair the wrong way, and scowls, and for a second he's somebody.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "petrel-gate",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Knock again. Say your name.\"",
+     "success": {
+      "text": "Petrel: \"And say what? \"It's Petrel\"? That's not what she called me.\" \"Then say that one.\" He's quiet a long time. He says a name. You don't hear it. The door opens.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "petrel-gate",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's she like?\"",
+     "success": {
+      "text": "Petrel: \"She thinks everyone's from the gas. She's been right about that for six years.\" He laughs, and it's his own laugh, and he hears it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "petrel-gate",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-one-he-kept",
+   "name": "The One He Kept",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/proton"
+    ],
+    "pokemon": "slowpoke",
+    "tint": "#2a3a3a",
+    "effect": "none"
+   },
+   "intro": "A locked room. A sound of water. A Slowpoke in a tin bath, with a whole tail, being fed, one Berry at a time, by a man with his back to the door. Proton: \"Don't. Don't say anything. Shut the door.\" The Slowpoke yawns at you. It's fat. It's the best-kept Pokémon in the building. Proton: \"First one I was sent to do. Three years ago. I'd the shears. It looked at me. They do that: they look, and then a week later they realise what they saw. I thought: by the time it works out what I've done, I'll be gone. And I couldn't have it sitting in a well, a week on, working it out.\" Proton: \"So I did the next one. And the next. Forty. And this one's had a bath every day for three years, and it hasn't the faintest idea why I can't look at it.\"",
+   "choices": [
+    {
+     "label": "\"Does it have a name?\"",
+     "success": {
+      "text": "Proton: \"...Mercy. I know. I know. I was twenty-two.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "proton-mercy",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's not enough.\"",
+     "success": {
+      "text": "Proton: \"No. It's one in forty-one. I can do sums.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "proton-mercy",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let it out. With the others.\"",
+     "success": {
+      "text": "He carries it to the Well himself. It walks in among the forty with stumps, and it looks at them, and a week later it's worked something out. It comes back up to the edge every morning, and waits for him. He comes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "proton-mercy",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "proton-mercy-free",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-the-vote",
+   "name": "The Vote",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ariana"
+    ],
+    "tint": "#2e2a2a",
+    "effect": "none"
+   },
+   "intro": "Ariana, alone, with a shoebox of folded slips. Ariana: \"Sixty ballots. The week after the car park. Who leads. I kept them. I don't know why I kept them.\" She tips them out. Almost all say ARCHER. Ariana: \"I was his second. For four years. I ran the Celadon side while Archer was still carrying coats. And when it came to it, fifty-one of sixty wrote the name of the man who'd cried in the car park. I didn't cry. I made a list of what needed doing.\" Ariana: \"They were right. That's what I can't forgive. They didn't need a list. They needed somebody who minded as much as they did. I've been correct for three years, and it's got me a shoebox.\"",
+   "choices": [
+    {
+     "label": "\"Who were the nine?\"",
+     "success": {
+      "text": "Ariana: \"Eight for me. One spoiled: it says \"the Boss.\" In a child's hand. We'd no children then. I've never worked that one out.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "ariana-ballots",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Would you have done the tails?\"",
+     "success": {
+      "text": "Ariana: \"No. It was the first thing on the list I didn't write down, because I thought it went without saying. Nothing goes without saying. Write that down.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "ariana-ballots",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What was on the list?\"",
+     "success": {
+      "text": "She still has it. Ariana: \"One: find honest income. Two: stop wearing the uniform in daylight. Three: tell them he's not coming, in the first month, while it could still be survived.\" She folds it. Ariana: \"None of it was done. All of it was right.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "ariana-list",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-listener",
+   "name": "The Listener",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "A child of seven on the stairs of an inn, in pyjamas, with a wireless under a blanket. Her mother is calling her to bed from somewhere below. The child, whispering: \"It's the Black Hour. Mum says I'm not allowed. It's a story. There's a lady called Mary and she's a spy and she says things in code. \"The kettle's on at the usual place.\" That means the baddies are moving. I've a notebook.\" She has. It's very thorough. She's decoded more of it than the police. The child: \"Tonight she sounded sad. D'you think the baddies have got her? In the story?\"",
+   "choices": [
+    {
+     "label": "\"It's not a story.\"",
+     "success": {
+      "text": "She thinks about it. \"...Then she got my letters.\" She's delighted, and then, slowly, she isn't. \"Then she's really sad.\" You promise to tell Mary.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-listener",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-listener-promise",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's the code, so far?\"",
+     "success": {
+      "text": "Her notebook is better than any File: it gives the time of the next Olivine lorry.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 4
+       },
+       {
+        "kind": "flag",
+        "key": "neo-listener",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What would you do, if they had?\"",
+     "success": {
+      "text": "\"Write to her. I have. I've written nine. Mum says there's no such lady. I post them anyway. 'Mary, The Wireless, Goldenrod.'\" You promise to tell Mary.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-listener",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-listener-promise",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-dead-letter",
+   "name": "The Dead Letter Office",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2e2e2a",
+    "effect": "none"
+   },
+   "intro": "A back room of the Goldenrod post office. Pigeonholes to the ceiling. A clerk with a stamp: NOT KNOWN AT THIS ADDRESS. Mr. Inverness: \"Everything that can't be delivered comes to me. I'm meant to burn it after a year. I don't. I read the envelopes. Never the insides. The envelopes are enough.\" Mr. Inverness: \"There's one came through a year back. Viridian Gym. Thick. The address was in a very careful hand: someone who'd written it out three times to get the lines straight. I stamped it. That's the job. I've thought about that one.\" He takes down a different bundle: a child's writing, nine letters, each to \"Mary, The Wireless.\" Mr. Inverness: \"These I could deliver, if I knew she was real.\"",
+   "choices": [
+    {
+     "label": "\"She's real. Third floor of the Tower.\"",
+     "success": {
+      "text": "He stamps all nine DELIVER, and puts them in his own coat pocket to walk round himself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-letters-delivered",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Where did the Viridian one come from?\"",
+     "success": {
+      "text": "Mr. Inverness: \"Mahogany. A souvenir shop's address, care of a basement. The careful hand again. Every year, on the same day.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Is there anything for the Gym that wasn't returned?\"",
+     "success": {
+      "text": "He looks. Mr. Inverness: \"...One. Went the other way. From Viridian, three years ago. No stamp; hand-delivered to this office to be held. \"To be collected by A.\" Nobody's collected.\" He gives it to you, to give. Later, Archer knows the hand. He doesn't open it in front of anyone. If asked: Archer: \"Four lines. \"A. I am not coming back. Do not wait. You were the best of them; that is why I'm telling you and not the others. Sell the chair.\"\" A pause. Archer: \"It's been in a pigeonhole for three years. He told me the day he left. I've spent everything I had on a question he'd already answered.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-letter-held",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-coat-bench",
+   "name": "The Coat on the Bench",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sneasel",
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "A bench outside the souvenir shop. A folded coat with white trim. A red-haired boy sitting at the far end of it, as far from the coat as the bench allows. The Heir: \"He leaves it every day. Fresh. Pressed. I've never touched it. I come and look at it. I don't know why I come.\" The Heir: \"My father's got a chair in a cellar and a man who dusts it. I've got a coat on a bench. That's the family estate.\" His Sneasel is sitting on the coat. It's comfortable. The Heir: \"Get off that.\" It doesn't.",
+   "choices": [
+    {
+     "label": "\"It's a good coat.\"",
+     "success": {
+      "text": "The Heir: \"It's a very good coat. That's the worst part.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-coat-tell"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who's it from, really?\"",
+     "success": {
+      "text": "The Heir: \"Archer. Not him. He's never given me anything. Archer's the one who—\" He stops. The Heir: \"Archer came to a school play. When I was six. My father sent him \"to represent the firm.\" He stayed for the whole thing. He clapped.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-coat-tell"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What would you do with a team?\"",
+     "success": {
+      "text": "The Heir: \"Burn it down.\" A pause. The Heir: \"...Or run it properly. I can't tell which I want. That's the worst part.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-coat-tell"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-coat-tell",
+   "name": "The Coat on the Bench",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sneasel",
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "You can tell him one thing, from what this run has found.",
+   "choices": [
+    {
+     "label": "\"He keeps your photograph in a drawer.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rocket-boss-photograph",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.8,
+     "success": {
+      "text": "The Heir: \"Which one.\" You describe it. The Heir: \"...I was nine. I'd lost. He took that after I'd lost.\" When you look back from the corner, the coat is gone from the bench.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-heir-told",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-heir-coat",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Heir: \"Which one.\" You describe it. The Heir: \"...I was nine. I'd lost.\" He doesn't touch the coat. Not today.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-heir-told",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The Gym was real. Eleven inspections.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rocket-lore-inspector",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.7,
+     "success": {
+      "text": "The Heir: \"I don't believe that from anyone.\" A pause. The Heir: \"Who said it?\" When you look back from the corner, the coat is gone from the bench.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-heir-told",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-heir-coat",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Heir: \"I don't believe that from anyone.\" A pause. The Heir: \"Who said it?\" The coat stays on the bench.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-heir-told",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"He told Archer he wasn't coming back. Three years ago. It was never delivered.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-letter-held",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.9,
+     "success": {
+      "text": "He looks at the coat. The Heir: \"Then Archer's been doing this for nothing.\" \"Not for nothing. For you.\" He picks it up, and the Sneasel falls off, offended.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-heir-told",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-heir-coat",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "He looks at the coat. The Heir: \"Then Archer's been doing this for nothing.\" \"Not for nothing. For you.\" He doesn't answer, and he doesn't pick it up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-heir-told",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's only a coat.\"",
+     "chance": 0.4,
+     "success": {
+      "text": "The Heir: \"It's never only a coat.\" The next morning, the bench is empty.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-heir-coat",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Heir: \"It's never only a coat.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-ring-given",
+   "name": "The Ring",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "neo-ring-redeemed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "neo-ring-given",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/archer"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "Archer, alone, by the souvenir shop. You have a ring in tissue paper in your pocket.",
+   "choices": [
+    {
+     "label": "Give it to him.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "team": "rocket",
+         "inside": true
+        }
+       ],
+       "text": "He doesn't take it at once. Archer: \"I sold that. It's not mine to— where did you—\" Then he does. He doesn't say anything else, and he doesn't need to.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "neo-ring-given",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "standing": 3
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "He doesn't take it at once. Archer: \"I sold that. It's not mine to— where did you—\" Then he does. He doesn't say anything else, and he doesn't need to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-ring-given",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

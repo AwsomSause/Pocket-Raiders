@@ -793,7 +793,204 @@
      "rk-own-roof"
     ],
     [
-     "rk-own-rule"
+     "rk-own-rule",
+     "rk-own-lost"
+    ]
+   ]
+  },
+  {
+   "id": "ps_neo_tower",
+   "name": "The Radio Tower: Dress Rehearsal",
+   "entry": "neo-act3",
+   "themeId": "ghost-dark",
+   "tint": "#1e1e2e",
+   "mood": "a building that hums at night",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "neo-tower-basement"
+    ],
+    [
+     "neo-tower-studio"
+    ],
+    [
+     "neo-tower-library"
+    ],
+    [
+     "neo-tower-roof"
+    ]
+   ]
+  },
+  {
+   "id": "ps_neo_plan",
+   "name": "The Radio Tower: The Call",
+   "entry": "neo-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1e2e",
+   "mood": "every radio in Johto on",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "neo-plan-hold"
+    ],
+    [
+     "neo-plan-keys"
+    ],
+    [
+     "neo-plan-rival"
+    ],
+    [
+     "neo-plan-defender"
+    ],
+    [
+     "neo-plan-roof"
+    ],
+    [
+     "neo-plan-door"
+    ],
+    [
+     "neo-plan-verdict"
+    ]
+   ]
+  },
+  {
+   "id": "ps_neo_turn",
+   "name": "The Radio Tower: Dead Air, From the Booth",
+   "entry": "neo-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1e2e",
+   "mood": "from the microphone, downward",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "neo-turn-air-1"
+    ],
+    [
+     "neo-turn-air-2"
+    ],
+    [
+     "neo-turn-studio"
+    ],
+    [
+     "neo-turn-corridor"
+    ],
+    [
+     "neo-turn-third"
+    ],
+    [
+     "neo-turn-library"
+    ],
+    [
+     "neo-turn-lobby"
+    ],
+    [
+     "neo-turn-basement"
+    ],
+    [
+     "neo-turn-roof"
+    ],
+    [
+     "neo-turn-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_neo_lance",
+   "name": "The Radio Tower: The Dragon's Order",
+   "entry": "neo-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1e2e",
+   "mood": "a Dragonite at every window",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "neo-lance-windows"
+    ],
+    [
+     "neo-lance-order"
+    ],
+    [
+     "neo-lance-roof"
+    ],
+    [
+     "neo-lance-ball"
+    ]
+   ]
+  },
+  {
+   "id": "ps_neo_own",
+   "name": "The Radio Tower: Standby No Longer",
+   "entry": "neo-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1e2e",
+   "mood": "a microphone left on",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "neo-own-duel"
+    ],
+    [
+     "neo-own-chair"
+    ],
+    [
+     "neo-own-hour"
+    ],
+    [
+     "neo-own-hour-2"
+    ],
+    [
+     "neo-own-signal"
+    ],
+    [
+     "neo-own-tails"
+    ],
+    [
+     "neo-own-celebi"
+    ],
+    [
+     "neo-own-call",
+     "neo-own-lost"
+    ]
+   ]
+  },
+  {
+   "id": "ps_static_mary",
+   "name": "Broadcast 1: This Is Mary",
+   "entry": "static-broadcast-1",
+   "themeId": "ghost-dark",
+   "tint": "#1e2a2e",
+   "mood": "a suitcase on a car park roof, in the rain",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "static-mary-roof"
+    ],
+    [
+     "static-mary-switch"
+    ]
+   ]
+  },
+  {
+   "id": "ps_static_air",
+   "name": "Two Frequencies",
+   "entry": "static-two-frequencies",
+   "themeId": "ghost-dark",
+   "tint": "#1e2a2e",
+   "mood": "a kettle whistling on every band",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "static-air-roof"
+    ],
+    [
+     "static-air-after"
     ]
    ]
   },

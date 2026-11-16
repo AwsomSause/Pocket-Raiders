@@ -1,0 +1,2722 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "evil-rocket-offer-johto",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#b01030",
+    "effect": "glint"
+   },
+   "intro": "A man in a bad disguise as a well-digger leans on his shovel. Petrel: \"You're good. We're short of good. We've got loyal. Loyal's all we've got. Three years of loyal and not one of us can read a map.\" Petrel: \"I'll be honest, which I never am: there's no Boss. There's a chair. We polish it. We're going to take a radio tower and call him home on every wireless in Johto, and if he doesn't come, I don't know what we are. Come and find out with us. It's steady work till then.\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "Petrel: \"Lovely. Mahogany. The souvenir shop. Don't buy anything; it confuses them.\" You're with the Return now, on the inside.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Petrel: \"Shame. You'd have made a lovely Grunt.\" He shoulders the shovel and goes, whistling something about closing time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell Lance.)",
+     "success": {
+      "text": "You say yes to Petrel. That night a man in a cape lands on the roof of the Pokémon Center as if he owned it. Lance: \"Inside, then. Tell me what they do. I'll decide what's done about it.\" You have a handler. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-lance-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-act1",
+   "name": "Keeping the Chair",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "beat": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "intro": "A souvenir shop in Mahogany. Rage Candy Bars in a pyramid. Mrs. Ferelith Yates: \"You're for downstairs. I can tell; you didn't look at the price. It's the poster of the Gyarados. Push the eye.\" Mr. Yates, from his crossword: \"They pay the rent. They're no trouble. The tall one brings back the tea tray. We don't ask. We make a very good candy bar.\" Stairs; a corridor; coffee and floor polish; a woman with a clipboard and a duster. Quartermaster Sabela Kilbride: \"Hopeful. One question, and it's the only one that matters. Did you see him?\"",
+   "choices": [
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Sabela: \"Nor did most. You'll be told what he was like. Believe about half.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-chair-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Once.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "team-rocket-beaten",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "She puts the duster down. Sabela: \"...You saw him. What was he wearing? No. Don't tell me here. Tell me in the mess, Friday, where the old ones can hear.\" Old Rocket treat you as one of theirs from then on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-saw-him",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-chair-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I fought him.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "team-rocket-beaten",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "A very long look. Sabela: \"Then you know he can lose. Don't say that downstairs. They've only got the one thing.\" Ariana will want a word.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-saw-him",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-chair-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who?\"",
+     "success": {
+      "text": "Sabela: \"Good. Keep that face. You'll go far, or you'll be out by Friday.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-chair-room"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-chair-room",
+   "name": "The Chair Room",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "intro": "She unlocks a door with a key on a ribbon. A desk; a lamp; a bowl on the floor with fresh water in it; a black leather chair, turned a little toward the window that isn't there. Sabela: \"From Viridian. The real one. Mr. Archer brought it himself, on a cart, in the rain. There's a mark on the arm. Don't touch the mark.\" She dusts it. She doesn't dust the mark. Sabela: \"Every morning. Twenty minutes. If he walked in tomorrow, he'd find it as he left it. That's the whole of my job, and I'll not hear it called small.\"",
+   "choices": [
+    {
+     "label": "\"Why the water?\"",
+     "success": {
+      "text": "Sabela: \"For the Persian. He'd not come without the Persian.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-dormitory"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Has anyone ever sat in it?\"",
+     "success": {
+      "text": "Sabela: \"Mr. Petrel. Once. In a wig. I didn't speak to him for a month, and he brought me flowers every day of it, and he's never done it again.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-dormitory"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"May I?\" (The duster.)",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "She hands it over. It's the first test. You dust the room, every corner, and leave the mark. She says nothing, and unlocks the dormitory.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-dormitory"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your sleeve brushes the arm of the chair, right across the mark. Sabela takes the duster back without a word, and unlocks the dormitory.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-mark-touched",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-dormitory"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-dormitory",
+   "name": "The Dormitory",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "intro": "A girl of fourteen sits on a bunk under a hand-coloured poster of the Boss. Mika Everleigh: \"You're new! I'm Mika. I've been here a year. I was eleven when the Tower fell. My brother was a Grunt. They fed him. Nobody else was feeding him. He's coming back. Archer says. There's a broadcast, and he'll hear it, and he'll come. I've got a speech. In case I meet him. It's two words. It's \"Thank you.\" I'm working on a third.\"",
+   "choices": [
+    {
+     "label": "\"What did he do for you?\"",
+     "success": {
+      "text": "Mika: \"Nothing. I never met him. My brother was a Grunt. They fed him.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-pressing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What if he doesn't come?\"",
+     "success": {
+      "text": "She laughs, as at a joke. Mika: \"He will. Why would there be a chair?\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-pressing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's the third word?\"",
+     "success": {
+      "text": "Mika: \"I'll know it when I've got it.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-pressing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Where's your brother now?\"",
+     "success": {
+      "text": "Mika: \"He went home. After. He's got a job in a cannery. He says it's fine. He says it like that: \"It's fine.\" I didn't want \"fine.\"\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-pressing"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-pressing",
+   "name": "Pressing Day",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "intro": "No crates. Pressing day: forty uniforms, one iron, and an old Grunt who shows how. Mr. Jericho Sallow: \"Collar first. Then the R. Never iron over the R; it shines. He hated a shiny R. I saw him say so. Corridor B, third floor, a Tuesday. He was wearing grey.\" Mika: \"Mr. Sallow saw him.\" When she's gone for hangers, Mr. Sallow says, quietly: \"I saw the back of his head for four seconds. I've been dining out on it for three years. Don't tell the choir. It's all some of them have got.\"",
+   "choices": [
+    {
+     "label": "Iron round the R.",
+     "success": {
+      "text": "Forty collars, forty Rs, none of them shiny. Mr. Sallow nods once.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I won't tell.\"",
+     "success": {
+      "text": "Mr. Sallow: \"Good lad. Good lass. Whichever. Collar first.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-act2",
+   "name": "Red Water",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "beat": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "pokemon": "magikarp",
+    "tint": "#4a1a1a",
+    "effect": "rain"
+   },
+   "intro": "The Lake of Rage is the wrong colour. A flat boat sits in the middle of red water, a humming mast on it, and round the barge the lake boils with Magikarp, thrashing, each one too big for itself. Tyson, with a clipboard: \"Pulse every ninety seconds. They evolve in a week instead of a year. We net them at the weir. It's a job. Somebody runs it. Today that's your squad.\" The squad: Mika, and a man of twenty-five with one stripe unpicked from his sleeve. Tobi Northcott: \"Demoted. Slowpoke Well. I wouldn't do the tails. Proton said, \"It grows back.\" So does a fingernail. I'd still rather you asked.\" Mika: \"It's for the funds. Archer says. Gyarados sell.\" The pulse: twenty Magikarp jump, and land wrong. A fisherman rows out, furious, and says it anyway: sixty years on this lake. Then the mast's dial is in front of you.",
+   "choices": [
+    {
+     "label": "Keep it at full.",
+     "success": {
+      "text": "The count's made. Twelve Gyarados at the weir by evening. Tyson's pleased. Mika doesn't eat.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "neo-lake-full",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act2-stuck"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn it down to half; nobody'll check.",
+     "success": {
+      "text": "Six. Tyson: \"Slow day.\" He writes it. He doesn't look at the dial.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "neo-lake-half",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act2-stuck"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tobi. Can it be made to look broken?\"",
+     "success": {
+      "text": "Tobi: \"I've been making it look broken every third night for a month. I thought nobody'd noticed. Welcome to the squad.\" He does something with a coin and a fuse. The mast hums, and does nothing. The count's nil. Tyson radios Proton.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 2,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "neo-lake-broken",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act2-stuck"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-act2-stuck",
+   "name": "Red Water",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "pokemon": "magikarp",
+    "tint": "#4a1a1a",
+    "effect": "rain"
+   },
+   "intro": "One Magikarp isn't evolving. It's being evolved. It's got halfway and stuck: one eye huge, a fin too long. It's against the barge, not thrashing now, looking at Mika. Whatever the dial says, it's too late for it to go back, and too soon to go on. Mika: \"We can't leave it like that.\"",
+   "choices": [
+    {
+     "label": "Let it finish. Turn the mast on it, once, gently.",
+     "success": {
+      "text": "One pulse, aimed. It finishes. A Gyarados, red, exhausted, alive. It doesn't rage. It lies on the surface, looking at Mika. It will remember who stayed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-red-gyarados",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Get it out of the water and into a Ball. Mika's.",
+     "success": {
+      "text": "It's Mika's: the first Pokémon she's had that wasn't issued. She won't put it in the tally.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-mika-karp",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Rule three.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rocket-rules-heard",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "\"Nobody touches the children. That one's a month old.\" Tobi: \"...Whose rule's that?\" Mr. Sallow, on the radio, who's been listening: \"Hers. Madame's. I'd forgotten it had words. Tyson. Shut it off.\" Tyson: \"It's not in my brief.\" Mr. Sallow: \"It was in ours.\" The twelve Old Rocket on the shore have stopped work. The mast goes quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-rule3-spoken",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Rule three.\" (Mr. Sallow told you.)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-saw-him",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "\"Nobody touches the children. That one's a month old.\" Mr. Sallow, on the radio: \"Hers. Madame's. I'd forgotten it had words. Tyson. Shut it off.\" The twelve Old Rocket on the shore have stopped work. The mast goes quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-rule3-spoken",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-act3",
+   "name": "The Dress Rehearsal",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "beat": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "Goldenrod. The Radio Tower is giving tours. The Director greets each group himself, and salutes with the wrong hand. Petrel, as the Director, without moving his lips: Petrel: \"Standby. You're \"new programme assistant.\" Basement, studio three, the roof. It's a walk-through for noon on the day. Don't touch anything that's lit.\"",
+   "choices": [
+    {
+     "label": "Start in the basement.",
+     "success": {
+      "text": "The stairs down smell of dust and old tape.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-tower-basement"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-tower-basement",
+   "name": "The Basement",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "A store room. A camp bed. A man of seventy in a cardigan, with a book. The real Director: \"Ah. A new one. Do sit. I don't mind the kidnapping. I've had a dull career. I mind the pills. Heart. Twice a day, the small white ones. The young man with the scowl said he'd see to it. That was Tuesday.\" It's Friday.",
+   "choices": [
+    {
+     "label": "Fetch the pills.",
+     "success": {
+      "text": "His flat, four streets off: a cat, forty years of programme schedules, bound, and the pills on the kitchen table, where he said. Back in the basement he takes two, and holds your wrist a moment. \"I'll remember the face. I'm good with faces; I did television.\" Proton has noticed you were gone.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 2
+       },
+       {
+        "kind": "flag",
+        "key": "neo-director-pills",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-tower-studio"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let him out the back, and tell Proton he escaped.",
+     "success": {
+      "text": "He won't go. \"And leave Mary upstairs with them? I'm the Director. I direct. From here, if I must.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-director-out",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-tower-studio"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"He stays. The plan's the plan.\"",
+     "success": {
+      "text": "He nods. \"Then would you at least tell me the cricket score.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-director-stays",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-tower-studio"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Which young man?\"",
+     "success": {
+      "text": "Proton. Who's been bringing him a newspaper every day, and reading him the crossword clues through the door, and forgot the one thing that mattered.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-proton-papers",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-tower-studio"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-tower-studio",
+   "name": "Studio Three",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#3a1a1a",
+    "effect": "none"
+   },
+   "intro": "A red light. A desk. A young woman at a microphone, with a script, and a Grunt behind her chair. Mary, on air, bright as a bell: \"...and that's the weather! Sunny all day. Stay indoors anyway; it's lovely indoors. And now a message for our friends on the late shift: the kettle's on at the usual place.\" The light goes off. Her hands are shaking so hard that the script rattles. Mary: \"Are you one of the kind ones or one of the others? I've stopped being able to tell. You all say \"please.\"\"",
+   "choices": [
+    {
+     "label": "\"One of the kind ones.\"",
+     "success": {
+      "text": "\"That's what the last one said,\" she says, but she stops shaking.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-tower-library"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What does 'the kettle's on' mean?\"",
+     "success": {
+      "text": "Mary: \"It means a lorry's at Olivine. I've been reading your timetable to the whole of Johto for a month, and they think I'm doing the shipping forecast.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-tower-library"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Read something true. Once. I'll say the tape slipped.\"",
+     "success": {
+      "text": "The red light. She breathes in. Mary: \"This is Mary. The weather's actually rain. I'm sorry. I've been told what to say. If you can hear this: I'm all right. I'm on the third floor.\" The light. Every radio in Johto has heard it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 3
+       },
+       {
+        "kind": "flag",
+        "key": "neo-mary-spoke",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-tower-library"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-tower-library",
+   "name": "The Record Library",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "Forty years of jingles. A Signal Technician asleep in a chair. On a shelf, a cassette with no label, and a smell of hair oil.",
+   "choices": [
+    {
+     "label": "Play it.",
+     "success": {
+      "text": "The Carrier Beat, alone, with no speech over it. It's a very good dance track. You pocket the cassette.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "neo-cassette",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-tower-roof"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it, and go up.",
+     "success": {
+      "text": "The technician snores on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-tower-roof"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-tower-roof",
+   "name": "The Roof",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "The great dish. A man in an iron mask leans on the rail, eating an apple, and isn't on anyone's list. The man in the iron mask: \"Ha! A child. He's sending children up to look at me now. Do you know what I am, child? I'm a line item. \"Consultancy.\" He paid half up front. Half! For a thing he doesn't understand and I do. Go and tell your sad man in the nice coat that the Marauder's had a look at his roof, and it'll hold.\" He throws the apple core off the building, and doesn't watch it land.",
+   "choices": [
+    {
+     "label": "\"What's he paying you for?\"",
+     "success": {
+      "text": "The Marauder: \"To bring him a door. He thinks it opens his way. Doors open the way they open.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "neo-marauder-seen",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who are you?\"",
+     "success": {
+      "text": "\"Nobody you'll see twice,\" he says, and you're quite sure that's a lie.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-marauder-seen",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Say nothing; go back down.)",
+     "success": {
+      "text": "You go back down. Behind you, he's laughing at something.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-act4",
+   "name": "Not Known at This Address",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "beat": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "glint"
+   },
+   "intro": "The Radio Tower's roof, by the great dish, at night. A man in a white-trimmed coat with his back to the stairs. Archer: \"Standby. Come up. Mind the cable.\" Goldenrod, below, all lit; every window with a radio in it. Archer: \"I'm going to tell you something the other three don't know. I wrote to him. A year ago. Care of the Gym. Eleven pages. I crossed out nine.\" He takes an envelope from his breast pocket, a red stamp across it. Archer: \"\"Not known at this address.\" His own Gym. I've carried it a year. I look at the stamp when I need to remember that I'm not a fool. I'm something else. I haven't a word for it. He isn't coming. I've known for a year. I'm doing the broadcast anyway. There are two hundred people downstairs who've nothing else, and if I tell them, they've nothing at all. I'm not calling him home. I'm giving them one more day of thinking he might.\"",
+   "choices": [
+    {
+     "label": "\"And the day after?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-asked-after",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "He's quiet. Archer: \"That's what the man in the mask is for.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-asked-after",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's the man in the mask for?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-asked-mask",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Archer: \"There's a thing in Ilex Forest that goes where it likes in time. He can hold it. I've paid him to. If the Boss doesn't answer at noon, I shan't ask again. I'll go and fetch. Three years back. The lobby at Silph. There was a child at the door, that night, who went up the stairs and ended it. I'll stand in the door. That's all. I'll simply stand in it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-asked-mask",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What did it cost?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-asked-cost",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "He turns out his pockets. A pawn ticket. Another. Another. Archer: \"A watch. A flat. My mother's ring; that was this spring. The half up front was the ring. I've the coat. I'll not pawn the coat. He gave me the coat.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-asked-cost",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about him.",
+     "success": {
+      "text": "He looks out at Goldenrod, every window lit.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act4-him"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "cart",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "neo-lore-cart",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You say: \"'Nearly there, sir.'\" He's very still. Archer: \"...Who told you that. Nobody was on that road.\""
+    }
+   ]
+  },
+  {
+   "id": "neo-act4-talk",
+   "name": "Not Known at This Address",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "He waits, the envelope still in his hand.",
+   "choices": [
+    {
+     "label": "\"And the day after?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-asked-after",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "He's quiet. Archer: \"That's what the man in the mask is for.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-asked-after",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's the man in the mask for?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-asked-mask",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Archer: \"There's a thing in Ilex Forest that goes where it likes in time. He can hold it. I've paid him to. If the Boss doesn't answer at noon, I shan't ask again. I'll go and fetch. Three years back. The lobby at Silph. There was a child at the door, that night, who went up the stairs and ended it. I'll stand in the door. That's all. I'll simply stand in it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-asked-mask",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What did it cost?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-asked-cost",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "He turns out his pockets. A pawn ticket. Another. Another. Archer: \"A watch. A flat. My mother's ring; that was this spring. The half up front was the ring. I've the coat. I'll not pawn the coat. He gave me the coat.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-asked-cost",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about him.",
+     "success": {
+      "text": "He looks out at Goldenrod, every window lit.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act4-him"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-act4-him",
+   "name": "Not Known at This Address",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "The wind pulls at his coat.",
+   "choices": [
+    {
+     "label": "\"What would he have wanted?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-asked-want",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Archer: \"Profit. He'd have shut us down in a week. We don't make any. I know that. I kept his chair and I've run his firm into the ground with love. He'd be appalled.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-asked-want",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act4-him"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tell them the truth.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "neo-asked-truth",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Archer: \"I'll tell them at noon, one way or the other. Either he answers, and it was true all along. Or I'll have gone to fetch him, and it won't matter what was true.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-asked-truth",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act4-him"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let him say what he came up here to say.",
+     "success": {
+      "text": "He holds out a script.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act4-script"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-act4-script",
+   "name": "The Script",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Archer: \"You'll read it. The Call. They've heard my voice for three years; it's got the pleading in it now, and they can tell. They'll believe it from somebody new. That's why \"Standby.\" That's what you've been standing by for.\" One page. Typed. Corrected, in ink, many times, and then corrected back. At the stair's head he stops you. Archer: \"The red-haired boy. Outside the shop. I leave him a coat. If he ever takes it— I'd not need the door. Do you see? I'd have somebody to make the room ready for. I'd like that better than the door. I've not said that to anyone either.\"",
+   "choices": [
+    {
+     "label": "\"I'll read it.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "standing": 8
+        }
+       ],
+       "text": "He gives you the page. \"The Voice,\" he says. \"That's what you are now.\"",
+       "effects": [
+        {
+         "kind": "evil",
+         "rank": 6
+        },
+        {
+         "kind": "evil",
+         "mark": "confided"
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "He gives you the page. You're the fifth Executive, by his word.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll read it my way.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "standing": 8
+        }
+       ],
+       "text": "\"That's what I'm afraid of, and what I'm hoping for. The Voice.\"",
+       "effects": [
+        {
+         "kind": "evil",
+         "rank": 6
+        },
+        {
+         "kind": "evil",
+         "mark": "confided"
+        },
+        {
+         "kind": "flag",
+         "key": "neo-my-way",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "\"That's what I'm afraid of,\" he says, \"and what I'm hoping for.\" You're the fifth Executive.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-my-way",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "standing": 8
+        }
+       ],
+       "text": "He folds the page into your hand anyway. \"The Voice. Until noon, and after.\"",
+       "effects": [
+        {
+         "kind": "evil",
+         "rank": 6
+        },
+        {
+         "kind": "evil",
+         "mark": "confided"
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "He folds the page into your hand anyway. \"Noon is a long way off. Until it isn't.\" You're the fifth Executive.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-act5",
+   "name": "The Third Word",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "beat": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "intro": "The night before noon. The Mahogany mess: trestle tables, Old Rocket at one end, new blood at the other. Mika, with a paper folded very small: \"I've got the third word. It's \"sir.\" \"Thank you, sir.\" Is that better? Is \"sir\" right? Mr. Sallow says he liked \"sir.\"\" Mr. Sallow, into his tea: \"I said I assumed he liked \"sir.\"\" Tobi: \"If he walks in tomorrow, d'you know the first thing he'll ask? \"What have you made?\" And Archer'll have to say: \"Nothing, sir. We kept your chair.\" And I can't decide if that's the saddest thing I've ever heard or the best.\" Ariana, in the doorway, with a file she's stopped burning: Ariana: \"Standby. A word. You're reading it. I was his second for four years before Archer ever carried his coat. If you get to \"calls you home\" and you find you can't say it— don't. Say what's true. I'll have the studio door. Nobody'll get through me before you've finished.\" Then it's Friday, and Old Rocket sing: a slow tune about closing time. Glasses in, lights down, mind the step, home you go. New blood stand for it. Mika, whispering: \"It's the anthem.\" Mr. Sallow, under it: \"It's what the Game Corner played to get the drunks out. \"Home you go.\" Three years I've sung it at them and not one's taken the hint.\"",
+   "choices": [
+    {
+     "label": "Sing.",
+     "success": {
+      "text": "You don't know the words. Mr. Sallow feeds them to you, a line ahead. For the length of a song, there's one team in the room.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ariana-door",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act5-mika"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them what the song's for.",
+     "success": {
+      "text": "A silence. A new-blood Grunt laughs. Then another. Then Mika, who doesn't want to: \"It's telling us to go home? For a year?\" Nobody leaves. But some of them have heard it now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ariana-door",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-song-told",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act5-mika"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask Old Rocket to teach them the fourth rule.",
+     "success": {
+      "text": "Mr. Sallow: \"There wasn't a fourth.\" An older woman at the end, who's never spoken: \"There was. Before your time. 'Give it back when they can pay.' He took it off the wall.\" She chalks it up, under the three.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ariana-door",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-rule4",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-act5-mika"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-act5-mika",
+   "name": "Lights Out",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1a1a24",
+    "effect": "none"
+   },
+   "intro": "Mika, at lights out: \"If he comes— will you stand next to me? When I say it? In case I forget the third word.\"",
+   "choices": [
+    {
+     "label": "\"I'll be there.\"",
+     "success": {
+      "text": "She's asleep before you've finished saying it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Mika. He might not.\"",
+     "success": {
+      "text": "\"He will,\" she says, into the pillow. \"He has to. There's a chair.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What would you say to Archer, instead?\"",
+     "success": {
+      "text": "She's never thought of it. \"...He's the one who fed us. Actually. It was always Archer with the tray.\" She unfolds the paper and looks at it. \"I've been saying thank you to the wrong chair.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-mika-archer",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "neo-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-op-tail-run",
+   "name": "Operation: The Tail Run",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "pokemon": "slowpoke",
+    "tint": "#b01030",
+    "effect": "none"
+   },
+   "intro": "A folding table in Goldenrod. A sign: SLOWPOKE TAIL. ₽1,000,000. Sell one.",
+   "choices": [
+    {
+     "label": "Sell one.",
+     "success": {
+      "text": "Nobody buys at a million. That's not the point of the price. You've \"stock,\" and you've stood behind it all day.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sell carved turnips.",
+     "success": {
+      "text": "Tobi's idea; Mr. Sallow carves. Mr. Sallow, whittling: \"Nobody's ever bought one. That's the trick of the million. It's not a price. It's so we can say we've stock.\" A customer does look. A long look. \"...That's a turnip.\" Tobi: \"It's a rare tail.\" \"It's got a root.\" Mr. Sallow: \"Regional form.\" That night, forty real tails go back to the Well in a sack.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-turnips",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-op-red-lake",
+   "name": "Operation: The Red Lake",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "pokemon": "gyarados",
+    "tint": "#4a1a1a",
+    "effect": "none"
+   },
+   "intro": "Net the forced Gyarados at the weir.",
+   "choices": [
+    {
+     "label": "Net them.",
+     "success": {
+      "text": "Twelve red Gyarados in the nets by dark. Tyson signs for them.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cut the nets' anchor lines.",
+     "success": {
+      "text": "A man in a cape is on the bank, watching the water. Lance: \"You're in their colours. And you've a knife out, and you're on the wrong side of the net for someone who means to use it as a net.\" You hold out the rope. \"Hold this end.\" He does. Courteously. Lance: \"I had intended a Hyper Beam. This is tidier.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-lance-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-op-wig",
+   "name": "Operation: The Wig",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "sparkle"
+   },
+   "intro": "Petrel's due at the Tower as the Director, and at Mahogany as himself. Be the Director for a day: a wig, a cardigan, a shuffle. The day brings a frightened sound engineer, Mary's script for tonight, a schools broadcast to be cut for Rocket's jingle, and a listener's letter about the weather being wrong.",
+   "choices": [
+    {
+     "label": "Do as Petrel would.",
+     "success": {
+      "text": "You stride, as Petrel strides, and cut the schools broadcast, and pass Mary her script. Nobody notices a thing.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do the Director's job. Well.",
+     "success": {
+      "text": "You send the engineer home on full pay (\"family matter\"), lose Mary's script, run the schools broadcast, and answer the letter by hand, with an apology. The real Director, in the basement, hearing about it: \"You answered the post? I never answered the post. You've made me a better Director than I was.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-wig-honest",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-op-poster-round",
+   "name": "Operation: The Poster Round",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "rain"
+   },
+   "intro": "Paper six towns with the Boss's face: ROCKET'S FUTURE IS BRIGHT. Mika, with the brush, loving it: \"We're doing the whole street!\"",
+   "choices": [
+    {
+     "label": "Paper them.",
+     "success": {
+      "text": "Six towns, a thousand grey faces. Mika's arms ache. She's never been happier.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Paper them, with flour-and-water paste.",
+     "success": {
+      "text": "It rains. By morning, six towns have a grey man sliding slowly down every wall. Mika: \"They've all come off.\" Tobi: \"Weather.\" Mika: \"It said sunny. On the wireless. Mary said.\" One poster stays up: the one Mika coloured by hand, over her bunk.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-op-old-guard",
+   "name": "Operation: The Old Guard",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "intro": "Collect \"dues\" from six retired Grunts of the first team. They owe nothing. Proton thinks they owe loyalty, in cash.",
+   "choices": [
+    {
+     "label": "Collect.",
+     "success": {
+      "text": "Six front doors; six envelopes, handed over without a word.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring soup.",
+     "success": {
+      "text": "Each pays in a story. A night watchman: \"He sent a car for my wife, when she was ill.\" A widow: \"My husband drove the lorry. He died not knowing. I envy him.\" A man with a Raticate: \"I was at Silph. I saw the child go up the stairs. I stepped aside.\" He tells you the Tower's back stair. A tailor's apprentice gives you a thimble. A woman who won't open the door takes the soup through the letterbox, and a note comes back out: \"I was the one who wrote 'the Boss.' On the ballot. I was nineteen. I'm sorry.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ballot-solved",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-op-frequency",
+   "name": "Operation: The Frequency",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Guard the Tower's transmitter room through the night before noon. At two in the morning, a scrape at the window: a man of seventy, in a cardigan, on a ledge he's too old for, with a screwdriver. The Director: \"Ah. A guard. How tiresome. I'd hoped for the one who snores.\"",
+   "choices": [
+    {
+     "label": "Call it in.",
+     "success": {
+      "text": "Two Grunts haul him in off the ledge, gently enough. The dial stays where it was.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm asleep.\"",
+     "success": {
+      "text": "You shut your eyes and breathe slowly. He turns one dial four degrees. Whatever you say into the microphone at noon, in any ending, will go out on a band nobody can switch off.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-frequency-open",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What are you doing?\"",
+     "success": {
+      "text": "The Director: \"Turning one dial four degrees. It won't stop your Call. It'll put it on a band where every wireless in Johto can also hear whatever's said next. I thought somebody might like the last word.\" You let him.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-frequency-open",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You'll fall. Come in by the door.\"",
+     "success": {
+      "text": "He comes in by the door, turns the dial anyway, and thanks you for the arm.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-frequency-open",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-friday-3",
+   "name": "Friday in Mahogany",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#2e2a22",
+    "effect": "sparkle"
+   },
+   "intro": "Pay day. An envelope, in Archer's own hand, to the coin. A slip: \"First week. Thank you for staying.\" Nobody else in Rocket's history has been thanked on a pay slip.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You pocket it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back in the tin.",
+     "success": {
+      "text": "You drop it back in the Friday tin, and it's seen. By the last Friday, the tin is fuller than it was paid out: the Grunts are paying the Return.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-tin",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-friday-4",
+   "name": "Friday in Mahogany",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#2e2a22",
+    "effect": "sparkle"
+   },
+   "intro": "Pay day. An envelope, in Archer's own hand, to the coin. Mr. Sallow, quietly: \"I drove him to Ecruteak this morning. Don't ask what for. Spend it carefully.\"",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You pocket it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back in the tin.",
+     "success": {
+      "text": "You drop it back in the Friday tin, and it's seen. By the last Friday, the tin is fuller than it was paid out: the Grunts are paying the Return.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-tin",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-friday-5",
+   "name": "Friday in Mahogany",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#2e2a22",
+    "effect": "sparkle"
+   },
+   "intro": "Pay day. An envelope, in Archer's own hand, to the coin. It's short, by a tenth. A note: \"Made up next week. My apologies. — A.\" If you put yours back in the tin, so do four of Old Rocket, and Mika, who doesn't know why.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You pocket it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back in the tin.",
+     "success": {
+      "text": "You drop it back in the Friday tin, and it's seen. By the last Friday, the tin is fuller than it was paid out: the Grunts are paying the Return.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-tin",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-friday-6",
+   "name": "Friday in Mahogany",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#2e2a22",
+    "effect": "sparkle"
+   },
+   "intro": "Pay day. An envelope, in Archer's own hand, to the coin. Full, and last week's tenth made up. The pawnshop window in Ecruteak has a ring in it now.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You pocket it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back in the tin.",
+     "success": {
+      "text": "You drop it back in the Friday tin, and it's seen. By the last Friday, the tin is fuller than it was paid out: the Grunts are paying the Return.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-tin",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-friday-7",
+   "name": "Friday in Mahogany",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#2e2a22",
+    "effect": "sparkle"
+   },
+   "intro": "Pay day. An envelope, in Archer's own hand, to the coin. Double. \"For tomorrow.\" Mika's saving hers \"to buy him something. For when he comes.\"",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You pocket it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back in the tin.",
+     "success": {
+      "text": "You drop it back in the Friday tin, and it's seen. By the last Friday, the tin is fuller than it was paid out: the Grunts are paying the Return.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-tin",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-black-hour",
+   "name": "The Black Hour Shift",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#3a1a1a",
+    "effect": "none"
+   },
+   "intro": "You're posted behind Mary's chair for the midnight show. Mary, off air, not turning: \"You're new. The last one hummed. I asked him to stop. He said, \"Sorry, miss,\" and stopped. That's what I can't bear about you lot. You're polite.\" Three scripts on the desk: the weather, wrong on purpose; \"a message for the late shift,\" the lorry times; and a request, \"for Mika, from her brother at the cannery.\" It came by post. Nobody was going to read it.",
+   "choices": [
+    {
+     "label": "Hand her all three, as they are.",
+     "success": {
+      "text": "She reads them all. The request is the last thing on the show. Mary, on air: \"...And this one's for Mika. Your brother says the cannery's \"fine.\" He says it twice. He says he's got a bed made up.\" Her voice has changed. In Mahogany, under a blanket, a fourteen-year-old is listening.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-mika-brother",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Write the real weather in the margin, and hand her the request.",
+     "success": {
+      "text": "She reads your margin, not the script: \"Rain.\" Then the request, and her voice changes. In Mahogany, under a blanket, Mika is listening.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-mika-brother",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Swap two sea areas, and hand her the request.",
+     "success": {
+      "text": "The Olivine lorry goes to the wrong dock. The request is the last thing on the show, and Mika, in Mahogany, hears that her brother has a bed made up.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-mika-brother",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the request out.",
+     "success": {
+      "text": "The show ends on the shipping forecast. Mary doesn't look at you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-doing-the-boss",
+   "name": "Doing the Boss",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 5,
+     "rank": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "intro": "Petrel: \"You're reading the Call. You'll need to know what it's a call to. Sit. I'll do him.\" He turns his back, rolls his shoulders, turns round. It isn't a wig. It's the stillness. The room's colder. Petrel, as Giovanni: \"You've been keeping my chair. How touching. Tell me what you've made.\" He holds it for five seconds. Then he's a tired man in a cardigan, sweating. Petrel: \"That's all I've got. Five seconds. I've forty of tape and the back of his head. Everything else, I made up. D'you know what frightens me? It works. They cheer.\"",
+   "choices": [
+    {
+     "label": "\"Teach me.\"",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "He teaches you the stillness. It takes all evening. You have it, once: for one line, in any ending, you could speak as him.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-stillness",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You can't quite find it. \"Nobody can,\" he says. \"That's the secret. Neither can I.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What have you got wrong?\"",
+     "success": {
+      "text": "Petrel: \"Everything but the five seconds. I gave him a laugh. He didn't have one. I couldn't bear it.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Who do they think they're waiting for, then?\"",
+     "success": {
+      "text": "Petrel: \"Mine. My Boss. The one I do. He's kinder than the real one. I put that in. I couldn't help it. They're waiting for a man I invented, and Archer's bankrupting himself to send for the original, who'd sack the lot of us.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-roll-call",
+   "name": "Roll Call",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "intro": "Sabela calls the roll: the Return's one ceremony, a hundred and fifty names. \"Everleigh, M.\" \"Standing by.\" \"Northcott, T.\" \"Standing by.\" It takes ten minutes. At the end: \"The Boss.\" Silence. Three seconds. It's kept, every Friday. \"Absent. Noted.\" Then she calls your name.",
+   "choices": [
+    {
+     "label": "\"Standing by.\"",
+     "success": {
+      "text": "She ticks it, and moves on.",
+      "effects": []
+     }
+    },
+    {
+     "label": "(Silence.)",
+     "success": {
+      "text": "She looks up. She ticks it anyway. \"Noted.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Present.\"",
+     "success": {
+      "text": "Heads turn. It's not the word. Mr. Sallow, slowly: \"...'Present.' Not 'standing by.' Here.\" He tries it the next Friday. So do the twelve. By the last Friday, half the room answers \"Present,\" and Sabela has stopped correcting them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "neo-present",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-loyalty-test",
+   "name": "The Loyalty Test",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "suspicion": 7,
+     "suspicionBelow": 10,
+     "lacks": "loyalty-test"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "intro": "Proton, in the corridor, blocking it. Proton: \"The pills. The mast. Mary. Somebody's been very kind around here lately, Standby. Kindness is how they get in. Tell me it isn't you.\"",
+   "choices": [
+    {
+     "label": "\"It isn't me.\"",
+     "chance": 0.6,
+     "success": {
+      "text": "He looks at you a long time. He decides something, and steps aside. You won't know what for some while.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -2
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "proton-decided",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "He doesn't believe you. He doesn't say so. He writes something down.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's me. Somebody had to be.\"",
+     "success": {
+      "text": "He flinches as if you'd hit him. Proton: \"...Somebody has to be the one. I know.\" He doesn't report it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "proton-decided",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask Archer.\"",
+     "success": {
+      "text": "Proton: \"I'd sooner not. He'd only be kind about it.\" He lets you by.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neo-found-out",
+   "name": "Found Out",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "inside": true,
+     "suspicion": 10,
+     "lacks": "found-out"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket",
+     "boss.teamrocket"
+    ],
+    "tint": "#3a1418",
+    "effect": "glint"
+   },
+   "intro": "Tyson and a dozen new blood are waiting at the foot of the hideout stairs. Tyson: \"Standby. We've had a listen to your shifts. You're done.\" You've been found out. There's only one way back outside, and it's through them, with your own party.",
+   "choices": [
+    {
+     "label": "Fight your way out.",
+     "success": {
+      "text": "They come at you two at once.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "found-out"
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "neo-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "neo-found-out",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "Tyson and the new blood",
+       "size": 6,
+       "levelBonus": 2,
+       "format": "doubles",
+       "chain": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

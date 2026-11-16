@@ -68,8 +68,8 @@ export function clearInside(run: RunState, teamId: string): void {
  * its Operations, ambushes and the scenes that wait on the story are hidden unless they ask for the inside route themselves.
  * With a third option founded (`third`), the Hideout gives way to that team's own climax.
  */
-export function replacedByInside(run: RunState, teamId: string, c: { beat?: number; after?: number; op?: string; heat?: number; inside?: boolean }): boolean {
-  if (c.inside !== undefined) return false;
+export function replacedByInside(run: RunState, teamId: string, c: { beat?: number; after?: number; op?: string; heat?: number; inside?: boolean; anyRoute?: boolean }): boolean {
+  if (c.inside !== undefined || c.anyRoute) return false;
   if (insideOn(run, teamId)) return (c.beat !== undefined && c.beat >= 2) || c.after !== undefined || c.op !== undefined || c.heat !== undefined;
   return c.beat === 6 && read(run, key(teamId, 'third')) > 0;
 }

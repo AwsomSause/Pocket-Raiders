@@ -1426,7 +1426,7 @@
        "lose": [
         {
          "kind": "addEvent",
-         "eventId": "rk-plan-verdict"
+         "eventId": "rk-own-lost"
         }
        ],
        "sprite": "boss.giovanni-rocketboss",
@@ -1462,7 +1462,7 @@
        "lose": [
         {
          "kind": "addEvent",
-         "eventId": "rk-plan-verdict"
+         "eventId": "rk-own-lost"
         }
        ],
        "sprite": "boss.giovanni-rocketboss",
@@ -1498,7 +1498,7 @@
        "lose": [
         {
          "kind": "addEvent",
-         "eventId": "rk-plan-verdict"
+         "eventId": "rk-own-lost"
         }
        ],
        "sprite": "boss.giovanni-rocketboss",
@@ -1918,6 +1918,56 @@
        {
         "kind": "flag",
         "key": "rocket-ending-own",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-own-lost",
+   "name": "The Verdict",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giovanni-rocketboss"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "The Rhydon stands over your lead. Giovanni doesn't gloat. Giovanni: \"Not today. Executive, then.\"",
+   "choices": [
+    {
+     "label": "Take the title.",
+     "success": {
+      "text": "Giovanni: \"You held. I don't need loyalty. I need people who finish the job. Executive. Your first task: do not let me down.\" Kanto is under new management. Every Poké Ball sold here pays a tenth to a company nobody's heard of. Prices are stable; shops are open; people have stopped saying the word. Shops charge you less, and call you \"sir\" or \"ma'am.\" The rival won't meet your eye for a region. Otis has a desk, and he's good at it. Faye moves one name a week to \"Returned.\" Matori still takes no day's leave. Domino is promoted. Butch's twelfth commendation says \"Buck.\" Cassidy skims the new company. Dr. Sotheby says nothing about the switch. Jardine drives. Madame, on the telephone: \"He'll be unbearable.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied",
+        "mods": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.85
+         }
+        ],
+        "modsText": "Every Kanto shop charges you 15% less for the rest of the region."
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-occupied",
         "amount": 1
        }
       ]

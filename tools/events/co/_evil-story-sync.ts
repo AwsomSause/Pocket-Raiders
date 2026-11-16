@@ -107,6 +107,7 @@ const LASTING: Record<string, Json> = {
 const ROUTES: Record<string, { region: string; ranks: string[] }[]> = {
   rocket: [
     { region: 'kanto', ranks: ['Recruit', 'Grunt', 'Field Agent', 'Section Chief', 'Executive', `The Boss's Right Hand`] },
+    { region: 'johto', ranks: ['Hopeful', 'Grunt', 'Operative', 'Cell Leader', 'Executive (the fifth)', 'The Voice'] },
   ],
 };
 
@@ -177,7 +178,16 @@ inside('ps_rk_tower', 'Pokémon Tower, at Night', 'rk-act3', [['rk-tower-graves'
 inside('ps_rk_plan', 'Silph Co.: Under New Management', 'rk-final-choice', [['rk-plan-hold'], ['rk-plan-gate'], ['rk-plan-rival'], ['rk-plan-defender'], ['rk-plan-roof'], ['rk-plan-verdict']], 'sealed, humming, raining on the roof');
 inside('ps_rk_turn', 'Silph Co.: The Long Ledger, From the Top', 'rk-final-choice', [['rk-turn-11'], ['rk-turn-10'], ['rk-turn-9'], ['rk-turn-7'], ['rk-turn-6'], ['rk-turn-b'], ['rk-turn-roof'], ['rk-turn-door']], 'floor by floor, downward');
 inside('ps_rk_police', 'Silph Co.: Safekeeping', 'rk-final-choice', [['rk-police-cordon'], ['rk-police-arrests'], ['rk-police-roof'], ['rk-police-door']], 'forty officers on the stairs');
-inside('ps_rk_own', 'Silph Co.: The Fourth Rule', 'rk-final-choice', [['rk-own-duel'], ['rk-own-matori'], ['rk-own-callers'], ['rk-own-list'], ['rk-own-rigs'], ['rk-own-roof'], ['rk-own-rule']], 'an office that is yours now');
+inside('ps_rk_own', 'Silph Co.: The Fourth Rule', 'rk-final-choice', [['rk-own-duel'], ['rk-own-matori'], ['rk-own-callers'], ['rk-own-list'], ['rk-own-rigs'], ['rk-own-roof'], ['rk-own-rule', 'rk-own-lost']], 'an office that is yours now');
+// Volume III, Johto: Act 3's dress rehearsal, the four endings at Noon, and Team Static's car park and Two Frequencies.
+// A lost duel's Verdict sits in the last column, so it is only reached by losing and walks straight back out.
+inside('ps_neo_tower', 'The Radio Tower: Dress Rehearsal', 'neo-act3', [['neo-tower-basement'], ['neo-tower-studio'], ['neo-tower-library'], ['neo-tower-roof']], 'a building that hums at night', '#1e1e2e');
+inside('ps_neo_plan', 'The Radio Tower: The Call', 'neo-final-choice', [['neo-plan-hold'], ['neo-plan-keys'], ['neo-plan-rival'], ['neo-plan-defender'], ['neo-plan-roof'], ['neo-plan-door'], ['neo-plan-verdict']], 'every radio in Johto on', '#1e1e2e');
+inside('ps_neo_turn', 'The Radio Tower: Dead Air, From the Booth', 'neo-final-choice', [['neo-turn-air-1'], ['neo-turn-air-2'], ['neo-turn-studio'], ['neo-turn-corridor'], ['neo-turn-third'], ['neo-turn-library'], ['neo-turn-lobby'], ['neo-turn-basement'], ['neo-turn-roof'], ['neo-turn-after']], 'from the microphone, downward', '#1e1e2e');
+inside('ps_neo_lance', `The Radio Tower: The Dragon's Order`, 'neo-final-choice', [['neo-lance-windows'], ['neo-lance-order'], ['neo-lance-roof'], ['neo-lance-ball']], 'a Dragonite at every window', '#1e1e2e');
+inside('ps_neo_own', 'The Radio Tower: Standby No Longer', 'neo-final-choice', [['neo-own-duel'], ['neo-own-chair'], ['neo-own-hour'], ['neo-own-hour-2'], ['neo-own-signal'], ['neo-own-tails'], ['neo-own-celebi'], ['neo-own-call', 'neo-own-lost']], 'a microphone left on', '#1e1e2e');
+inside('ps_static_mary', 'Broadcast 1: This Is Mary', 'static-broadcast-1', [['static-mary-roof'], ['static-mary-switch']], 'a suitcase on a car park roof, in the rain', '#1e2a2e');
+inside('ps_static_air', 'Two Frequencies', 'static-two-frequencies', [['static-air-roof'], ['static-air-after']], 'a kettle whistling on every band', '#1e2a2e');
 inside('ps_ledger_freighter', 'The Vermilion Freighter', 'ledger-audit-2', [['ledger-freighter-deck'], ['ledger-freighter-hold'], ['ledger-freighter-crane']], 'a clipboard on a wet deck', '#1a2230');
 inside('ps_ledger_readout', 'Silph Co.: The Read-Out', 'ledger-readout', [['ledger-readout-floors'], ['ledger-readout-top']], 'six people and a tea towel');
 writeFileSync(pseudoFile, JSON.stringify({ category: 'evil-story', note: 'Evil Team Hideouts (STORY_FAMILIES_13 A8, STORY_FAMILIES_18 SF131 to SF133) and the Plasma Holding Camp (SF130). Written by tools/events/co/_evil-story-sync.ts.', chains }, null, 1) + '\n');

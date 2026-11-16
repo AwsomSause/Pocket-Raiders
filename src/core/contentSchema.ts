@@ -3038,6 +3038,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     standing: z.number().int().min(0).max(10).optional(),
     suspicion: z.number().int().min(0).max(10).optional(),
     suspicionBelow: z.number().int().min(1).max(10).optional(),
+    /** Volume III: a scene for any player, inside the team or out of it (`after`/`beat` still count; the inside route doesn't hide it). */
+    anyRoute: z.boolean().optional(),
   }),
   /** Beta 0.6 rival questlines: the featured rival's overhaul state (core/rivals/overhaul.ts): a feeling at least this (0 to 10), their Lead in a range (-3 to +3, rival ahead is positive), or a mark they hold. Never true without a rival. */
   z.object({
