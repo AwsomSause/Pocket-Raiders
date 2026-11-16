@@ -143,6 +143,24 @@
    "effects": {
     "flinchChance": 100
    }
+  },
+  {
+   "id": "foster-wing",
+   "name": "Foster Wing",
+   "type": "flying",
+   "category": "physical",
+   "power": 65,
+   "accuracy": 100,
+   "pp": 10,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "contact"
+   ],
+   "effects": {
+    "drain": 0.5
+   }
   }
  ]
 }

@@ -2759,5 +2759,29 @@
    "Mystery Episode"
   ],
   "tags": []
+ },
+ "gn-new-37-nest": {
+  "gn": "gn.new.37",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 3,
+  "window": [
+   1,
+   8
+  ],
+  "sits": "optional",
+  "level": "A-1 if the flock is fought",
+  "often": "run",
+  "dressing": {
+   "kanto": "The Second Nest",
+   "elsewhere": "The Second Nest"
+  },
+  "note": "Once per run. Home step 3, fallback step 8. The afterstory (a Braviary on a low branch) is a callback in a later region.",
+  "kinds": [
+   "Moral Choice"
+  ],
+  "tags": [
+   "forest"
+  ]
  }
 }

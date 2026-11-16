@@ -23086,6 +23086,14 @@
       "hitStopMs": 60,
       "telegraph": "normal"
     },
+    "foster-wing": {
+      "anim": "wing-attack",
+      "source": "type",
+      "shake": 2,
+      "flash": null,
+      "hitStopMs": 60,
+      "telegraph": "normal"
+    },
     "stamp": {
       "anim": "stomp",
       "source": "type",
