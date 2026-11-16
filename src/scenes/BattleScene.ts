@@ -125,6 +125,7 @@ import { battleView, panelOf, splitChoice, type BattleBox, type BattleEvolve, ty
 import { artOf, monFile } from '../ui/redux/game';
 import { moveTipOf, ownAbilityCard, seenFact } from '../ui/redux/tips';
 import { versusView, type VersusModel } from '../ui/redux/screens/versus';
+import { eventView } from '../ui/redux/screens/event';
 import type { CutModel } from '../ui/redux/screens/cut';
 import type { Art } from '../ui/redux/templates';
 import { playCutMoment } from '../ui/redux/moment';
@@ -2989,6 +2990,7 @@ export class BattleScene extends Phaser.Scene {
         say: (text) => this.say(text),
         announce: (text) => this.speakWithArt('Reporter', INTERVIEWERS_SPRITE, text, 'crowd'),
         opponentSays: (name, assetId, text) => this.speakWithArt(name, assetId, text, 'crowd'),
+        tag: (text) => { this.rxAirTag = text; },
         // Read when a moment plays (the New layer is mounted after this director is made).
         get card() {
           return rxOn() ? rxCard : undefined;
@@ -4688,6 +4690,45 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
+  /** New UI: the broadcast page's tag while an interview plays (set by the stadium director), else null. */
+  private rxAirTag: string | null = null;
+
+  /**
+   * New UI: one stadium broadcast line as the mock-ups' talk page over the field (the Galar interview): the stadium
+   * behind, the speaker's picture, their name on the plate and the line in the text box. A key, a click or the
+   * auto-advance timer goes on. Presentation only.
+   */
+  private rxBroadcast(speaker: string, text: string, artId: string | null): Promise<void> {
+    const settings = services().session.settings;
+    const backdrop = this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null;
+    const cast = artOf(this, artId);
+    const tag = this.rxAirTag ?? 'Live from the stadium';
+    return new Promise<void>((resolve) => {
+      let over = false;
+      const end = (): void => {
+        if (over) return;
+        over = true;
+        auto?.remove(false);
+        if (this.advance === end) this.advance = null;
+        view.destroy();
+        resolve();
+      };
+      const view = mountRedux(this, {
+        render: (c) => eventView(c, {
+          name: 'Stadium broadcast', tag, lines: [{ who: speaker, text }], speaker, page: { at: 0, of: 1 },
+          art: backdrop, tint: null, fx: null, cast, mon: null,
+          choices: [{ label: 'Go on', sub: '', chance: '', locked: false }], index: 0,
+          money: null, outcome: null, pick: null, countdown: '', timer: null,
+        }),
+        acts: { pick: end, page: end, next: end },
+        card: true,
+      });
+      const auto = settings.autoAdvance ? this.time.delayedCall(MESSAGE_DELAYS[settings.messageDelay] + text.length * LETTER_MS[settings.speechSpeed] * 1.4, end) : null;
+      // A press that closed the line before must not close this one too.
+      this.time.delayedCall(120, () => { if (!over) this.advance = end; });
+    });
+  }
+
   private async speak(speaker: string, text: string, voice: SpeechVoice = 'calm', shout = false, artOverride?: { assetId: string; look?: 'crowd' | 'champion' }): Promise<void> {
     const settings = services().session.settings;
     const content = services().session.content;
@@ -4711,6 +4752,8 @@ export class BattleScene extends Phaser.Scene {
       void hop(this, this.enemySprite, this.motion);
     };
     const look = artOverride?.look ?? (this.stadium && (isFoe ? boss?.role === 'champion' : Boolean(this.hostArtFor(speaker))) ? 'champion' : undefined);
+    // New UI: a stadium broadcast line (the reporter, a guest in the stands, a round's opponent) is the mock-ups' talk page.
+    if (this.rx && this.stadium && (artOverride?.look === 'crowd' || speaker === 'Reporter')) return this.rxBroadcast(speaker, plain, artOverride?.assetId ?? this.hostArtFor(speaker));
     const line = storyLine(this, {
       speaker,
       role,
