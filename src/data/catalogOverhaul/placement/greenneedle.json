@@ -2759,5 +2759,1278 @@
    "Mystery Episode"
   ],
   "tags": []
+ },
+ "gn-31-shrine": {
+  "gn": "gn.new.31",
+  "shape": "Region",
+  "earliest": "A9",
+  "sits": "must-see",
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.31",
+  "beat": 0,
+  "attaches": "before",
+  "stages": [
+   1
+  ],
+  "home": 1,
+  "window": [
+   1,
+   2
+  ],
+  "beats": [
+   {
+    "beat": "The shrine",
+    "event": "gn-31-shrine",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     2
+    ]
+   },
+   {
+    "beat": "Lantern 1",
+    "event": "gn-31-l1",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     3,
+     6
+    ]
+   },
+   {
+    "beat": "Lantern 2",
+    "event": "gn-31-l2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     4,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 3",
+    "event": "gn-31-l3",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Lantern 4",
+    "event": "gn-31-l4",
+    "stage": "S4",
+    "home": 6,
+    "window": [
+     6,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 5",
+    "event": "gn-31-l5",
+    "stage": "S5",
+    "home": 15,
+    "window": [
+     13,
+     17
+    ]
+   },
+   {
+    "beat": "Lantern 6",
+    "event": "gn-31-l6",
+    "stage": "S6",
+    "home": 3,
+    "window": [
+     2,
+     5
+    ]
+   },
+   {
+    "beat": "Lantern 7",
+    "event": "gn-31-l7",
+    "stage": "S7",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Lantern 8",
+    "event": "gn-31-l8",
+    "stage": "S8",
+    "home": 10,
+    "window": [
+     8,
+     12
+    ]
+   },
+   {
+    "beat": "Lantern 9",
+    "event": "gn-31-l9",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     17,
+     19
+    ]
+   }
+  ],
+  "note": "Badge: a stone lantern. Step 1 of Stage 1. Not a run's first region. Once a run (the doc says once per save; no memory across runs); a refused lantern stays dark for the rest of this run.",
+  "kinds": [
+   "Region-Wide Story",
+   "Legendary-Adjacent"
+  ],
+  "tags": []
+ },
+ "gn-31-l1": {
+  "gn": "gn.new.31",
+  "shape": "Region",
+  "earliest": "A9",
+  "sits": "optional",
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.31",
+  "beat": 1,
+  "attaches": "after",
+  "stages": [
+   1
+  ],
+  "home": 4,
+  "window": [
+   3,
+   6
+  ],
+  "beats": [
+   {
+    "beat": "The shrine",
+    "event": "gn-31-shrine",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     2
+    ]
+   },
+   {
+    "beat": "Lantern 1",
+    "event": "gn-31-l1",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     3,
+     6
+    ]
+   },
+   {
+    "beat": "Lantern 2",
+    "event": "gn-31-l2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     4,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 3",
+    "event": "gn-31-l3",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Lantern 4",
+    "event": "gn-31-l4",
+    "stage": "S4",
+    "home": 6,
+    "window": [
+     6,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 5",
+    "event": "gn-31-l5",
+    "stage": "S5",
+    "home": 15,
+    "window": [
+     13,
+     17
+    ]
+   },
+   {
+    "beat": "Lantern 6",
+    "event": "gn-31-l6",
+    "stage": "S6",
+    "home": 3,
+    "window": [
+     2,
+     5
+    ]
+   },
+   {
+    "beat": "Lantern 7",
+    "event": "gn-31-l7",
+    "stage": "S7",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Lantern 8",
+    "event": "gn-31-l8",
+    "stage": "S8",
+    "home": 10,
+    "window": [
+     8,
+     12
+    ]
+   },
+   {
+    "beat": "Lantern 9",
+    "event": "gn-31-l9",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     17,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Legendary-Adjacent"
+  ],
+  "tags": []
+ },
+ "gn-31-l2": {
+  "gn": "gn.new.31",
+  "shape": "Region",
+  "earliest": "A9",
+  "sits": "must-see",
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.31",
+  "beat": 2,
+  "attaches": "after",
+  "stages": [
+   2
+  ],
+  "home": 5,
+  "window": [
+   4,
+   7
+  ],
+  "beats": [
+   {
+    "beat": "The shrine",
+    "event": "gn-31-shrine",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     2
+    ]
+   },
+   {
+    "beat": "Lantern 1",
+    "event": "gn-31-l1",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     3,
+     6
+    ]
+   },
+   {
+    "beat": "Lantern 2",
+    "event": "gn-31-l2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     4,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 3",
+    "event": "gn-31-l3",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Lantern 4",
+    "event": "gn-31-l4",
+    "stage": "S4",
+    "home": 6,
+    "window": [
+     6,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 5",
+    "event": "gn-31-l5",
+    "stage": "S5",
+    "home": 15,
+    "window": [
+     13,
+     17
+    ]
+   },
+   {
+    "beat": "Lantern 6",
+    "event": "gn-31-l6",
+    "stage": "S6",
+    "home": 3,
+    "window": [
+     2,
+     5
+    ]
+   },
+   {
+    "beat": "Lantern 7",
+    "event": "gn-31-l7",
+    "stage": "S7",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Lantern 8",
+    "event": "gn-31-l8",
+    "stage": "S8",
+    "home": 10,
+    "window": [
+     8,
+     12
+    ]
+   },
+   {
+    "beat": "Lantern 9",
+    "event": "gn-31-l9",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     17,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Legendary-Adjacent"
+  ],
+  "tags": []
+ },
+ "gn-31-l3": {
+  "gn": "gn.new.31",
+  "shape": "Region",
+  "earliest": "A9",
+  "sits": "optional",
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.31",
+  "beat": 3,
+  "attaches": "after",
+  "stages": [
+   3
+  ],
+  "home": 8,
+  "window": [
+   6,
+   10
+  ],
+  "beats": [
+   {
+    "beat": "The shrine",
+    "event": "gn-31-shrine",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     2
+    ]
+   },
+   {
+    "beat": "Lantern 1",
+    "event": "gn-31-l1",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     3,
+     6
+    ]
+   },
+   {
+    "beat": "Lantern 2",
+    "event": "gn-31-l2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     4,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 3",
+    "event": "gn-31-l3",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Lantern 4",
+    "event": "gn-31-l4",
+    "stage": "S4",
+    "home": 6,
+    "window": [
+     6,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 5",
+    "event": "gn-31-l5",
+    "stage": "S5",
+    "home": 15,
+    "window": [
+     13,
+     17
+    ]
+   },
+   {
+    "beat": "Lantern 6",
+    "event": "gn-31-l6",
+    "stage": "S6",
+    "home": 3,
+    "window": [
+     2,
+     5
+    ]
+   },
+   {
+    "beat": "Lantern 7",
+    "event": "gn-31-l7",
+    "stage": "S7",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Lantern 8",
+    "event": "gn-31-l8",
+    "stage": "S8",
+    "home": 10,
+    "window": [
+     8,
+     12
+    ]
+   },
+   {
+    "beat": "Lantern 9",
+    "event": "gn-31-l9",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     17,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Legendary-Adjacent"
+  ],
+  "tags": []
+ },
+ "gn-31-l4": {
+  "gn": "gn.new.31",
+  "shape": "Region",
+  "earliest": "A9",
+  "sits": "must-see",
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.31",
+  "beat": 4,
+  "attaches": "after",
+  "stages": [
+   4
+  ],
+  "home": 6,
+  "window": [
+   6,
+   7
+  ],
+  "beats": [
+   {
+    "beat": "The shrine",
+    "event": "gn-31-shrine",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     2
+    ]
+   },
+   {
+    "beat": "Lantern 1",
+    "event": "gn-31-l1",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     3,
+     6
+    ]
+   },
+   {
+    "beat": "Lantern 2",
+    "event": "gn-31-l2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     4,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 3",
+    "event": "gn-31-l3",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Lantern 4",
+    "event": "gn-31-l4",
+    "stage": "S4",
+    "home": 6,
+    "window": [
+     6,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 5",
+    "event": "gn-31-l5",
+    "stage": "S5",
+    "home": 15,
+    "window": [
+     13,
+     17
+    ]
+   },
+   {
+    "beat": "Lantern 6",
+    "event": "gn-31-l6",
+    "stage": "S6",
+    "home": 3,
+    "window": [
+     2,
+     5
+    ]
+   },
+   {
+    "beat": "Lantern 7",
+    "event": "gn-31-l7",
+    "stage": "S7",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Lantern 8",
+    "event": "gn-31-l8",
+    "stage": "S8",
+    "home": 10,
+    "window": [
+     8,
+     12
+    ]
+   },
+   {
+    "beat": "Lantern 9",
+    "event": "gn-31-l9",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     17,
+     19
+    ]
+   }
+  ],
+  "note": "Steps 6 to 7, any lane. The step is a run of rooms whose only choice is \"…\".",
+  "kinds": [
+   "Region-Wide Story",
+   "Legendary-Adjacent"
+  ],
+  "tags": []
+ },
+ "gn-31-l5": {
+  "gn": "gn.new.31",
+  "shape": "Region",
+  "earliest": "A9",
+  "sits": "must-see",
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.31",
+  "beat": 5,
+  "attaches": "after",
+  "stages": [
+   5
+  ],
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "beats": [
+   {
+    "beat": "The shrine",
+    "event": "gn-31-shrine",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     2
+    ]
+   },
+   {
+    "beat": "Lantern 1",
+    "event": "gn-31-l1",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     3,
+     6
+    ]
+   },
+   {
+    "beat": "Lantern 2",
+    "event": "gn-31-l2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     4,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 3",
+    "event": "gn-31-l3",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Lantern 4",
+    "event": "gn-31-l4",
+    "stage": "S4",
+    "home": 6,
+    "window": [
+     6,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 5",
+    "event": "gn-31-l5",
+    "stage": "S5",
+    "home": 15,
+    "window": [
+     13,
+     17
+    ]
+   },
+   {
+    "beat": "Lantern 6",
+    "event": "gn-31-l6",
+    "stage": "S6",
+    "home": 3,
+    "window": [
+     2,
+     5
+    ]
+   },
+   {
+    "beat": "Lantern 7",
+    "event": "gn-31-l7",
+    "stage": "S7",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Lantern 8",
+    "event": "gn-31-l8",
+    "stage": "S8",
+    "home": 10,
+    "window": [
+     8,
+     12
+    ]
+   },
+   {
+    "beat": "Lantern 9",
+    "event": "gn-31-l9",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     17,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Legendary-Adjacent"
+  ],
+  "tags": []
+ },
+ "gn-31-l6": {
+  "gn": "gn.new.31",
+  "shape": "Region",
+  "earliest": "A9",
+  "sits": "optional",
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.31",
+  "beat": 6,
+  "attaches": "after",
+  "stages": [
+   6
+  ],
+  "home": 3,
+  "window": [
+   2,
+   5
+  ],
+  "beats": [
+   {
+    "beat": "The shrine",
+    "event": "gn-31-shrine",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     2
+    ]
+   },
+   {
+    "beat": "Lantern 1",
+    "event": "gn-31-l1",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     3,
+     6
+    ]
+   },
+   {
+    "beat": "Lantern 2",
+    "event": "gn-31-l2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     4,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 3",
+    "event": "gn-31-l3",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Lantern 4",
+    "event": "gn-31-l4",
+    "stage": "S4",
+    "home": 6,
+    "window": [
+     6,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 5",
+    "event": "gn-31-l5",
+    "stage": "S5",
+    "home": 15,
+    "window": [
+     13,
+     17
+    ]
+   },
+   {
+    "beat": "Lantern 6",
+    "event": "gn-31-l6",
+    "stage": "S6",
+    "home": 3,
+    "window": [
+     2,
+     5
+    ]
+   },
+   {
+    "beat": "Lantern 7",
+    "event": "gn-31-l7",
+    "stage": "S7",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Lantern 8",
+    "event": "gn-31-l8",
+    "stage": "S8",
+    "home": 10,
+    "window": [
+     8,
+     12
+    ]
+   },
+   {
+    "beat": "Lantern 9",
+    "event": "gn-31-l9",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     17,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Legendary-Adjacent"
+  ],
+  "tags": []
+ },
+ "gn-31-l7": {
+  "gn": "gn.new.31",
+  "shape": "Region",
+  "earliest": "A9",
+  "sits": "optional",
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.31",
+  "beat": 7,
+  "attaches": "after",
+  "stages": [
+   7
+  ],
+  "home": 12,
+  "window": [
+   10,
+   14
+  ],
+  "beats": [
+   {
+    "beat": "The shrine",
+    "event": "gn-31-shrine",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     2
+    ]
+   },
+   {
+    "beat": "Lantern 1",
+    "event": "gn-31-l1",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     3,
+     6
+    ]
+   },
+   {
+    "beat": "Lantern 2",
+    "event": "gn-31-l2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     4,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 3",
+    "event": "gn-31-l3",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Lantern 4",
+    "event": "gn-31-l4",
+    "stage": "S4",
+    "home": 6,
+    "window": [
+     6,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 5",
+    "event": "gn-31-l5",
+    "stage": "S5",
+    "home": 15,
+    "window": [
+     13,
+     17
+    ]
+   },
+   {
+    "beat": "Lantern 6",
+    "event": "gn-31-l6",
+    "stage": "S6",
+    "home": 3,
+    "window": [
+     2,
+     5
+    ]
+   },
+   {
+    "beat": "Lantern 7",
+    "event": "gn-31-l7",
+    "stage": "S7",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Lantern 8",
+    "event": "gn-31-l8",
+    "stage": "S8",
+    "home": 10,
+    "window": [
+     8,
+     12
+    ]
+   },
+   {
+    "beat": "Lantern 9",
+    "event": "gn-31-l9",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     17,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Legendary-Adjacent"
+  ],
+  "tags": []
+ },
+ "gn-31-l8": {
+  "gn": "gn.new.31",
+  "shape": "Region",
+  "earliest": "A9",
+  "sits": "must-see",
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.31",
+  "beat": 8,
+  "attaches": "rest",
+  "stages": [
+   8
+  ],
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "beats": [
+   {
+    "beat": "The shrine",
+    "event": "gn-31-shrine",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     2
+    ]
+   },
+   {
+    "beat": "Lantern 1",
+    "event": "gn-31-l1",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     3,
+     6
+    ]
+   },
+   {
+    "beat": "Lantern 2",
+    "event": "gn-31-l2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     4,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 3",
+    "event": "gn-31-l3",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Lantern 4",
+    "event": "gn-31-l4",
+    "stage": "S4",
+    "home": 6,
+    "window": [
+     6,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 5",
+    "event": "gn-31-l5",
+    "stage": "S5",
+    "home": 15,
+    "window": [
+     13,
+     17
+    ]
+   },
+   {
+    "beat": "Lantern 6",
+    "event": "gn-31-l6",
+    "stage": "S6",
+    "home": 3,
+    "window": [
+     2,
+     5
+    ]
+   },
+   {
+    "beat": "Lantern 7",
+    "event": "gn-31-l7",
+    "stage": "S7",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Lantern 8",
+    "event": "gn-31-l8",
+    "stage": "S8",
+    "home": 10,
+    "window": [
+     8,
+     12
+    ]
+   },
+   {
+    "beat": "Lantern 9",
+    "event": "gn-31-l9",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     17,
+     19
+    ]
+   }
+  ],
+  "note": "At a + node if one is near.",
+  "kinds": [
+   "Region-Wide Story",
+   "Legendary-Adjacent"
+  ],
+  "tags": []
+ },
+ "gn-31-l9": {
+  "gn": "gn.new.31",
+  "shape": "Region",
+  "earliest": "A9",
+  "sits": "must-see",
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.31",
+  "beat": 9,
+  "attaches": "before",
+  "stages": [
+   8
+  ],
+  "home": 19,
+  "window": [
+   17,
+   19
+  ],
+  "beats": [
+   {
+    "beat": "The shrine",
+    "event": "gn-31-shrine",
+    "stage": "S1",
+    "home": 1,
+    "window": [
+     1,
+     2
+    ]
+   },
+   {
+    "beat": "Lantern 1",
+    "event": "gn-31-l1",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     3,
+     6
+    ]
+   },
+   {
+    "beat": "Lantern 2",
+    "event": "gn-31-l2",
+    "stage": "S2",
+    "home": 5,
+    "window": [
+     4,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 3",
+    "event": "gn-31-l3",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Lantern 4",
+    "event": "gn-31-l4",
+    "stage": "S4",
+    "home": 6,
+    "window": [
+     6,
+     7
+    ]
+   },
+   {
+    "beat": "Lantern 5",
+    "event": "gn-31-l5",
+    "stage": "S5",
+    "home": 15,
+    "window": [
+     13,
+     17
+    ]
+   },
+   {
+    "beat": "Lantern 6",
+    "event": "gn-31-l6",
+    "stage": "S6",
+    "home": 3,
+    "window": [
+     2,
+     5
+    ]
+   },
+   {
+    "beat": "Lantern 7",
+    "event": "gn-31-l7",
+    "stage": "S7",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Lantern 8",
+    "event": "gn-31-l8",
+    "stage": "S8",
+    "home": 10,
+    "window": [
+     8,
+     12
+    ]
+   },
+   {
+    "beat": "Lantern 9",
+    "event": "gn-31-l9",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     17,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Legendary-Adjacent"
+  ],
+  "tags": []
  }
 }

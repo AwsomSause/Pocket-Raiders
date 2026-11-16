@@ -50,7 +50,7 @@ import { storyHype, storyNoCrit, storyOldHabits } from '../expansion/storyTraits
 import { KINDNESS_USES } from '../episodes/poliPond';
 import { HOUSE_WINS_STAGES, LIGHTS_OUT_ACCURACY, LIGHTS_OUT_TURNS, housePending, isHousePair, takeHousePending, traitDoubleEntry, traitDrill, traitFeedHeal, traitFoodKnocked, traitLightsOut, traitOverhears, traitPayout, traitSeatMessage, traitTakesBerry, GRID_TIE_SHARE, traitBloodScent, traitGridTie, traitLingering, traitOnSchedule, traitSubtraction, traitUndertow, traitUpdraft } from '../expansion/traits';
 import { ACCESSORY_TORN_MESSAGE, SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantAccessory, variantAccessoryTorn, variantCheer, variantEndTurnStages, variantGimmickTick, variantGadget, variantIncoming, variantItemMove, variantLosesTurn, variantNeverMisses, variantOnEntry, variantOutgoing, variantPriorityBonus, variantSnagRefuses, variantTagCall } from '../expansion/variantLines';
-import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
+import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, curseDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
 import { deriveRng, type Rng } from '../rng';
 import { turnOneKoSpeedStages, noFlinchTurnOne, foeMissBoostStages, hasFoeMovePreview } from '../trainerPerks';
 import { fnv1a } from '../expansion/hash';
@@ -3150,6 +3150,11 @@ function takeHp(
       lastStand = charm;
     }
   }
+  // Greenneedle gn.new.31: Thousand-Year Promise. The first time each battle that an ally would faint, it is left at 1 HP.
+  if (hit !== null && c.side === 'player' && lost > 0 && lost >= c.mon.hp && c.mon.hp > 1 && !ctx.battle.storyEffects.includes('promise-used') && ctx.party.some((p) => p.uid !== c.mon.uid && p.hp > 0 && abilityOf(ctx.content, p) === 'thousand-year-promise')) {
+    ctx.battle.storyEffects.push('promise-used');
+    lost = c.mon.hp - 1;
+  }
   c.mon.hp -= lost;
   if (c.mon.revivalStatus) revivalNoteHp(ctx, c.mon);
   // One HP (PI3): a hit that leaves your Pokémon on exactly 1 HP is counted for the run.
@@ -4522,7 +4527,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       let final = 1;
       if (target.vol.exposed) final *= 2;
       if (user.side === 'player') final *= resonanceMultiplier(content, ctx.party, moveType);
-      final *= curseMultiplier(content, target.vol.curseTag, moveType);
+      final *= target.side === 'player' ? 1 + (curseMultiplier(content, target.vol.curseTag, moveType) - 1) * curseDamageTakenPerk(ctx.perks) : curseMultiplier(content, target.vol.curseTag, moveType);
       if (effectiveness > 1 && (foeAbility === 'filter' || foeAbility === 'solid-rock' || foeAbility === 'prism-armor')) final *= 0.75;
       if (effectiveness > 1 && foeAbility === 'deep-roots') final *= 0.9;
       // Greenneedle gn.32: a carried Red crystal (+10% to its own-type moves); the Golem read as Red (+10% to its attacks).

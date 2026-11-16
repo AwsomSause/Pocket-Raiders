@@ -418,5 +418,39 @@
       "kind": "ability",
       "mode": "hidden"
     }
+  },
+  {
+    "id": "fox-charm",
+    "name": "Fox Lantern Charm",
+    "family": "Key items: gadgets",
+    "description": "A small paper lantern the Ninetales let you keep. Burns and curse tags do half damage to your Pokémon.",
+    "rarity": "rare",
+    "stacksOn": "player",
+    "max": 1,
+    "how": "passive",
+    "icon": "library/abilityvial",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "run"
+      },
+      "perks": [
+        {
+          "perk": "runModifier",
+          "modifiers": [
+            {
+              "kind": "burnDamageTakenMultiplier",
+              "value": 0.5
+            },
+            {
+              "kind": "curseDamageTakenMultiplier",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
+    }
   }
 ]

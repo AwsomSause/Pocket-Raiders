@@ -1688,5 +1688,10 @@
   "id": "kindness",
   "name": "Kindness",
   "description": "When its bearer steps out of a fight, the Pokémon that comes in moves first with its first move. Twice per battle."
+ },
+ {
+  "id": "thousand-year-promise",
+  "name": "Thousand-Year Promise",
+  "description": "The first time each battle that an ally would faint, it is left at 1 HP instead. Once per battle."
  }
 ]

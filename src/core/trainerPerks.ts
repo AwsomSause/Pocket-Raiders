@@ -424,6 +424,11 @@ export function burnDamageTakenPerk(perks: Perks | undefined): number {
   return product(perks, 'burnDamageTakenMultiplier');
 }
 
+/** The extra damage a curse tag adds to a hit on your own Pokémon (1 = all of it; the Fox's charm halves it). */
+export function curseDamageTakenPerk(perks: Perks | undefined): number {
+  return product(perks, 'curseDamageTakenMultiplier');
+}
+
 export function bossMoneyPerk(perks: Perks | undefined): number {
   return product(perks, 'bossMoneyMultiplier');
 }

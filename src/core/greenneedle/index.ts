@@ -32,6 +32,7 @@ import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
+import { giveDearest } from './fox';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -640,6 +641,9 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return kcEvolve(run);
     case 'bidoofJoin':
       return bidoofJoin(content, run, host);
+    // gn.new.31 The Fox at the Shrine (fox.ts).
+    case 'giveDearest':
+      return giveDearest(content, run, e.key!);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
