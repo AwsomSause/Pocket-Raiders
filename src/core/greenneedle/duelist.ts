@@ -6,7 +6,7 @@
 //  - gn ops `duelEnter` (the chosen one alone, the rest on the bench), `duelWin` / `duelLoss` (`n` the duel; `duelEnd` is the same bookkeeping),
 //    `duelWorthy` (the chosen one gains Worthy Opponent), `duelLeave` (the Duelist went; it will be in the crowd).
 //  - Battle rule `duelist`: the Duelist at the chosen one's level plus its losses, with its answers.
-//  - Worthy Opponent (a mark on the chosen one): it starts any battle against a foe of its level or higher with +1 Speed.
+//  - Worthy Opponent (a mark on the chosen one; rule in worthy.ts): +1 to its highest stat on entry when the foe's active Pokémon is at full HP.
 //  - The afterstory (`duelAfterstory`, run.ts beginBattle): the first Champion fight after the Duelist left, a Sirfetch'd in the crowd.
 import type { Content } from '../contentSchema';
 import type { BattleState, PokemonInstance, RunState } from '../state';

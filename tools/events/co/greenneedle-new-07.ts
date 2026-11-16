@@ -51,14 +51,15 @@ export const EVENTS: Json[] = [
 ];
 export const REMOVE: string[] = [];
 
-const CHAIN: Placement = { gn: 'gn.new.07', shape: 'Chain', earliest: 'A4', sits: 'optional', attaches: 'rest', needs: ['forest'], tags: ['Miniature Episode', 'Companion Story'], level: 'No battles', often: 'run', badge: 'own' };
+// Only the cold open needs a forest; the three rests and the Ninjask are on "the next three stages", whatever they are.
+const CHAIN: Placement = { gn: 'gn.new.07', shape: 'Chain', earliest: 'A4', sits: 'optional', attaches: 'rest', tags: ['Miniature Episode', 'Companion Story'], level: 'No battles', often: 'run', badge: 'own' };
 const BEATS = [
-  { beat: 'Cold open (optional; fallback step 12)', event: 'gn-n07-open', stage: 'S(n)', home: 7, window: [5, 9] as [number, number] },
+  { beat: 'Cold open (optional; fallback step 12)', event: 'gn-n07-open', stage: 'S(n)', home: 7, window: [7, 12] as [number, number] },
   { beat: 'Rests 1 to 3', event: 'gn-n07-rest', stage: 'S(n+1) to S(n+3)', home: 10, window: [6, 14] as [number, number] },
   { beat: 'Find the Ninjask (optional)', event: 'gn-n07-ninjask', stage: 'S(next)', home: 12, window: [10, 14] as [number, number] },
 ];
 export const PLACEMENT: Record<string, Placement> = {
-  'gn-n07-open': { ...CHAIN, attaches: 'after', beat: 1, chain: 'gn.new.07', beats: BEATS, shape: 'Chain', home: 7, window: [5, 9], note: 'Badge: an empty shell. Fallback: step 12. Once a run (the doc says once per save; no memory across runs). No battles.' },
+  'gn-n07-open': { ...CHAIN, needs: ['forest'], attaches: 'after', beat: 1, chain: 'gn.new.07', beats: BEATS, shape: 'Chain', home: 7, window: [7, 12], note: 'Badge: an empty shell. Fallback: step 12. Once a run (the doc says once per save; no memory across runs). No battles.' },
   'gn-n07-rest': { ...CHAIN, beat: 2, chain: 'gn.new.07', beats: BEATS, home: 10, note: 'The heal (+) node nearest step 10, or step 10 itself, on each of the next three stages. Three acceptances: it joins (more acceptances than silences, after three rests). Three silences: it is gone.' },
   'gn-n07-ninjask': { ...CHAIN, attaches: 'after', beat: 3, chain: 'gn.new.07', beats: BEATS, home: 12, window: [10, 14], note: 'Only after "Find the Ninjask" at the second rest. Step 12 of the next stage; the third rest waits for it.' },
 };

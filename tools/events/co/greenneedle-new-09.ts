@@ -20,6 +20,12 @@ const END = 'gn-new-09-end';
 /** The Drifloon that holds the lantern, with the move Last Stop. */
 const LANTERN: Json = { ...join({ species: ['drifloon'], lv: 0 }), moves: ['last-stop'], mark: 'lantern-drifloon' };
 
+/** Old notes: "Get off early: nothing follows." No punched ticket, no lantern, and the platform does not come back. */
+const OFF: Json = ch('Get off early.', out(
+  'You pull the cord. The train stops without a sound, at a platform with no name. The doors open on the road you left.\n\nWhen you turn round, the train is not there. The ticket in your pocket is blank. Nothing follows.',
+  flag('last-stop-off-early'), leavePseudo(),
+));
+
 const gn09: Json[] = [
   // ---- the platform (the door) ----
   gev('gn-new-09-door', 'The Last Stop', train({
@@ -47,6 +53,7 @@ const gn09: Json[] = [
   ), [
     ch('Bet the move.', out('You nod. The Gengar slides the card for your move across the cloth, and it does not even look pleased. It looks fair.', scene(CARDS))),
     ch('Watch.', out('You watch. The Gengar deals the three cards to an empty chair, takes the empty chair\'s move, and shakes its own hand. Then it bows to you, and you go on.', room(SLEEPER))),
+    OFF,
   ]),
   rm(CARDS, 'The Last Stop: The Cards', train({ tags: ['Story'] }), say(
     'The three cards lie face up. **{cast:ls-stake}** goes into the middle of the cloth. One of the three comes back, and the other two go back in the deck.',
@@ -70,6 +77,7 @@ const gn09: Json[] = [
       when('ls-lift', { min: 3, max: 3 }, [scene('gn-new-09-coat')]),
     )),
     ch('Tiptoe.', out('You walk the length of the carriage on the sides of your feet. Nobody stirs. Behind you something sighs, relieved, in its sleep.', room(MAIL))),
+    OFF,
   ]),
   rm('gn-new-09-litwick', 'The Last Stop: A Sleeping Litwick', train({ cast: [], tags: ['Pokémon', 'Story'] }), say(
     'A Litwick, curled around its own small flame, which burns very low. It has been asleep so long that the wax has pooled round it like a blanket.',
@@ -111,6 +119,7 @@ const gn09: Json[] = [
       bond(1), scene(END),
     )),
     ch('Leave it.', out('You set it back in the sack, address up, where somebody who knows how to deliver it will find it. You do not look back. You look back.', scene(END))),
+    OFF,
   ]),
 
   // ---- the end of the line ----
@@ -128,7 +137,7 @@ const gn09: Json[] = [
   // ---- the afterstory: the ticket's date ----
   gev('gn-new-09-return', 'The Last Stop, Again', train({
     stop: 'event', rarity: 'rare', callback: true,
-    requires: [is('last-stop-boarded'), sameStage('ls-date'), not('gn-new-09-returned')],
+    requires: [is('last-stop-boarded'), not('last-stop-off-early'), sameStage('ls-date'), not('gn-new-09-returned')],
   }), say(
     '*The platform is back. The clock above it has hands now. They show the day on your ticket, and the day is today.*',
     '**Conductor, a Dusknoir:** It looks at the ticket in your pocket, and at you, and tips its cap. Something about its face has been put right.',
@@ -146,15 +155,15 @@ export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
   'gn-new-09-door': {
-    gn: 'gn.new.09', shape: 'Pseudo Stage', earliest: 'A6', home: 13, window: [11, 15], sits: 'side-branch', attaches: 'instead', tags: ['Pseudo Stage', 'Exploration'], needs: ['night'],
+    gn: 'gn.new.09', shape: 'Pseudo Stage', earliest: 'A6', home: 13, window: [8, 13], sits: 'side-branch', attaches: 'instead', tags: ['Pseudo Stage', 'Exploration'], needs: ['night'],
     level: 'A+0 (no battle)', often: 'run', badge: 'None',
     dressing: { kanto: 'The Last Stop', elsewhere: 'The Last Stop' },
     note: 'Three carriages. The platform is not on the stage map until the player is standing on it. Fallback: step 8, side branch, a node added if no three-node column exists. Night only.',
   },
   'gn-new-09-return': {
-    gn: 'gn.new.09', shape: 'Single', earliest: 'A6', home: 13, window: [11, 15], sits: 'side-branch', attaches: 'instead', tags: ['Exploration'], needs: ['night'],
+    gn: 'gn.new.09', shape: 'Single', earliest: 'A6', home: 13, window: [2, 19], sits: 'side-branch', attaches: 'instead', tags: ['Exploration'],
     level: 'None', often: 'run', badge: 'None',
-    note: 'Afterstory: on the stage that matches the date on the ticket (5 stages after boarding), the platform is back.',
+    note: 'Afterstory: on the stage that matches the date on the ticket (5 stages after boarding), the platform is back at step 13, side branch. Any time of day; if step 13 has no three-node column it takes the nearest one that has, so the date is not lost.',
   },
 };
 

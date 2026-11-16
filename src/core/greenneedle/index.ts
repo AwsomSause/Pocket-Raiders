@@ -57,7 +57,7 @@ import { ballAnswer, ballFind, ballForce, ballHatched, ballHold, ballKind, ballT
 import { reunionArrive, reunionFar, reunionTokens } from './reunion';
 import { giveDearest } from './fox';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
-import { paradeAll, paradeEgg, paradeEggReady, paradeForget, paradeMemory, paradeNickname, paradeSecret, paradeSwap, paradeWake } from './parade';
+import { paradeAll, paradeEgg, paradeEggReady, paradeForget, paradeMemory, paradeMoveReady, paradeNickname, paradeRare, paradeSecret, paradeSwap, paradeWake } from './parade';
 import { finalRest, xatuBlur, xatuDraw, xatuPeek, xatuTokens, xatuTrue } from './cartographer';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -209,6 +209,7 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'paradeMemory') return paradeMemory(run);
   if (c.test === 'paradeNickname') return paradeNickname(run);
   if (c.test === 'paradeEggReady') return paradeEggReady(content, run);
+  if (c.test === 'paradeMoveReady') return paradeMoveReady(run);
   if (c.test === 'paradeAll') return paradeAll(run, gnFlag(run, c.key!));
   // gn.new.12: the Xatu's image came true; the last rest of the run; the run's Blessing has answered (Communion).
   if (c.test === 'prophecyTrue') return xatuTrue(run);
@@ -704,11 +705,13 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return draftLetter(content, run);
     // gn.new.11: the Night Parade's Spirit Market.
     case 'paradeSwap':
-      return paradeSwap(content, run, e.key!);
+      return paradeSwap(content, run, host.float);
     case 'paradeEgg':
       return paradeEgg(content, run);
     case 'paradeForget':
       return paradeForget(run);
+    case 'paradeRare':
+      return paradeRare(content, run, host.float());
     case 'paradeSecret':
       return paradeSecret(content, run);
     case 'paradeWake':

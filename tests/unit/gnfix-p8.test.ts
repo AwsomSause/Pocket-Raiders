@@ -7,6 +7,8 @@ import { hashSeed, Rng } from '../../src/core/rng';
 import { worthyStat } from '../../src/core/greenneedle/worthy';
 import { worthyStart } from '../../src/core/greenneedle/duelist';
 import { tyrogueMon, tyrogueTurn } from '../../src/core/greenneedle/tyrogue';
+import { banetteCloth, dusclopsLessons, paradeRare } from '../../src/core/greenneedle/parade';
+import { resolveDecision } from '../../src/core/run';
 import { content } from './helpers';
 import { addEventStops, stageNumber } from '../../src/core/events';
 import { choose, flagOf, gnRun, open, scene, setFlag } from './helpers/gnPlay';
@@ -271,5 +273,84 @@ describe('gn.new.14 The Arcade Cabinet (fixes): Debug', () => {
   it('without Debug every hit paralyses; Debug no longer guards stat drops', () => {
     expect(run(undefined)).toEqual({ first: 'par', second: 'par', third: 'par', used: false });
     expect(content.abilities.get('debug')!.description).toMatch(/second time/);
+  });
+});
+
+describe('gn.new.09 The Last Stop (fixes): the ride', () => {
+  it('"Get off early." is offered in every carriage; nothing follows, and the platform does not come back', () => {
+    for (const id of ['gn-new-09-dining', 'gn-new-09-sleeper', 'gn-new-09-mail']) expect(content.events.get(id)!.choices.map((c) => c.label), id).toContain('Get off early.');
+    const run = at('lsfix-off', 'gn-new-09-sleeper', { 'last-stop-boarded': 1 });
+    const r = choose(run, 'gn-new-09-sleeper', 'Get off early.');
+    expect(flagOf(r.run, 'last-stop-off-early')).toBe(1);
+    expect(flagOf(r.run, 'last-stop-ticket')).toBe(0);
+    expect(joined(r.run, 'drifloon')).toBeUndefined();
+    setFlag(r.run, 'ls-date', stageNumber(content, r.run));
+    expect(content.events.get('gn-new-09-return')!.requires.every((c) => conditionMet(content, r.run, c))).toBe(false);
+  });
+  it('the return visit needs no night and takes any three-node column, so the ticket\'s date is not lost', () => {
+    const p = placement('gn-new-09-return');
+    expect(p.tags).toEqual([]);
+    expect([p.home, p.sits, p.window]).toEqual([13, 'side-branch', [2, 19]]);
+    expect(placement('gn-new-09-door').tags).toEqual(['night']);
+    expect(placement('gn-new-09-door').window).toEqual([8, 13]);
+  });
+});
+
+describe('gn.new.11 The Night Parade (fixes): the stalls', () => {
+  const four = (run: RunState): void => { run.party[0]!.moves = ['tackle', 'growl', 'leer', 'scratch'].map((id) => ({ id, pp: 10 })); };
+  it('the Banette shows three moves dealt by the seed, different for different leads, never one it knows', () => {
+    const a = mon('gastly', 30, 'c-a', 'lick', 'hypnosis', 'spite', 'curse');
+    const float = (seed: string) => { const r = new Rng(hashSeed(seed)); return () => r.float(); };
+    const one = banetteCloth(content, a, float('cloth-1'));
+    expect(one).toHaveLength(3);
+    expect(new Set(one).size).toBe(3);
+    expect(one.some((id) => a.moves.some((m) => m.id === id))).toBe(false);
+    expect(banetteCloth(content, a, float('cloth-1'))).toEqual(one);
+    const seen = new Set(['cloth-1', 'cloth-2', 'cloth-3', 'cloth-4', 'cloth-5'].map((x) => banetteCloth(content, a, float(x)).join()));
+    expect(seen.size).toBeGreaterThan(1);
+  });
+  it('the trade is the player\'s: take one of the three, and choose which of the lead\'s moves goes to the cloth', () => {
+    let run = at('npfix-banette', 'gn-new-11-banette', { 'parade-lanterns': 6 });
+    expect(scene(run, 'gn-new-11-banette').labels).toEqual(['Trade a move.', 'Back to the lane.']);
+    four(run);
+    run = choose(run, 'gn-new-11-banette', 'Trade a move.').run;
+    const offer = run.pending[0]!;
+    expect(offer.kind).toBe('teachMove');
+    const want = offer.kind === 'teachMove' ? offer.moveIds[1]! : '';
+    run = resolveDecision(content, run, { kind: 'teachMove', moveIndex: 1 }).run;
+    expect(run.pending[0]?.kind).toBe('learnMove');
+    run = resolveDecision(content, run, { kind: 'forgetMove', moveIndex: 2 }).run;
+    expect(run.party[0]!.moves.map((m) => m.id)).toEqual(['tackle', 'growl', want, 'scratch']);
+    expect(flagOf(run, 'parade-lanterns')).toBe(5);
+  });
+  it('failure: a lead with fewer than four moves has nothing to put on the cloth', () => {
+    const run = at('npfix-short', 'gn-new-11-banette', { 'parade-lanterns': 6 });
+    run.party[0]!.moves = run.party[0]!.moves.slice(0, 2);
+    const banette = content.events.get('gn-new-11-banette')!;
+    expect(banette.choices[0]!.requires.every((c) => conditionMet(content, run, c))).toBe(false);
+  });
+  it('the Dusclops offers every egg move of the line, for the player to choose', () => {
+    const m = mon('eevee', 30, 'c-egg', 'tackle', 'growl', 'sand-attack', 'quick-attack');
+    const lessons = dusclopsLessons(content, m);
+    expect(lessons.length).toBeGreaterThan(1);
+    const run = at('npfix-egg', 'gn-new-11-dusclops', { 'parade-lanterns': 6 });
+    run.party[0] = m;
+    const r = choose(run, 'gn-new-11-dusclops', 'Trade for an egg move.').run;
+    const offer = r.pending[0]!;
+    expect(offer.kind === 'teachMove' && offer.moveIds).toEqual(lessons);
+  });
+  it('the Sableye\'s Rare item is drawn from the rare items by the seed, not always a Rare Candy', () => {
+    const got = new Set<string>();
+    for (const roll of [0, 0.2, 0.4, 0.6, 0.8, 0.999]) {
+      const run = gnRun('npfix-rare');
+      run.inventory = {};
+      paradeRare(content, run, roll);
+      const id = Object.keys(run.inventory)[0]!;
+      expect(content.catalog.get(id)!.rarity).toBe('rare');
+      expect(content.catalog.get(id)!.giftOnly).toBeFalsy();
+      got.add(id);
+    }
+    expect(got.size).toBeGreaterThan(2);
+    expect(JSON.stringify(content.events.get('gn-new-11-sableye'))).not.toMatch(/rare-candy/);
   });
 });

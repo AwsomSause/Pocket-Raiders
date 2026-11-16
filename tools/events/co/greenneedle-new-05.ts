@@ -110,11 +110,11 @@ export const REMOVE: string[] = [];
 /** Placement as the doc gives it (written to src/data/catalogOverhaul/placement/greenneedle.json by tools/catalog-overhaul/gn-placement.ts). */
 export const PLACEMENT: Record<string, Placement> = {
   'gn-new-05-daycare': {
-    gn: 'gn.new.05', shape: 'Region-long', earliest: 'A1', home: 5, window: [4, 6], sits: 'must-see', attaches: 'town', tags: ['Region-long'], stages: [1],
+    gn: 'gn.new.05', shape: 'Region-long', earliest: 'A1', home: 5, window: [5, 15], sits: 'must-see', attaches: 'town', tags: ['Region-long'], stages: [1],
     level: 'None', often: 'region',
     dressing: { kanto: 'The Egg That Listened', elsewhere: 'The Egg That Listened' },
     beats: [
-      { beat: 'The gift (must-see; fallback Step 15)', event: 'gn-new-05-daycare', stage: 'S1', home: 5, window: [4, 15] },
+      { beat: 'The gift (must-see; fallback Step 15)', event: 'gn-new-05-daycare', stage: 'S1', home: 5, window: [5, 15] },
       { beat: 'The word, at each rest', event: 'gn-new-05-rest', stage: 'S1-S7', home: 10, window: [8, 12] },
       { beat: 'The hatch', event: 'gn-new-05-hatch', stage: 'S8', home: 19, window: [17, 20] },
     ],

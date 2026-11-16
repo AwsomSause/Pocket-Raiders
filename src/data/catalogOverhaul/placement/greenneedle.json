@@ -4962,8 +4962,8 @@
   "earliest": "A1",
   "home": 5,
   "window": [
-   4,
-   6
+   5,
+   15
   ],
   "sits": "must-see",
   "attaches": "town",
@@ -4983,7 +4983,7 @@
     "stage": "S1",
     "home": 5,
     "window": [
-     4,
+     5,
      15
     ]
    },
@@ -5351,8 +5351,8 @@
     "stage": "S(n)",
     "home": 7,
     "window": [
-     5,
-     9
+     7,
+     12
     ]
    },
    {
@@ -5378,8 +5378,8 @@
   ],
   "home": 7,
   "window": [
-   5,
-   9
+   7,
+   12
   ],
   "note": "Badge: an empty shell. Fallback: step 12. Once a run (the doc says once per save; no memory across runs). No battles.",
   "kinds": [
@@ -5408,8 +5408,8 @@
     "stage": "S(n)",
     "home": 7,
     "window": [
-     5,
-     9
+     7,
+     12
     ]
    },
    {
@@ -5439,9 +5439,7 @@
    "Miniature Episode",
    "Companion Story"
   ],
-  "tags": [
-   "forest"
-  ]
+  "tags": []
  },
  "gn-n07-ninjask": {
   "gn": "gn.new.07",
@@ -5461,8 +5459,8 @@
     "stage": "S(n)",
     "home": 7,
     "window": [
-     5,
-     9
+     7,
+     12
     ]
    },
    {
@@ -5496,9 +5494,7 @@
    "Miniature Episode",
    "Companion Story"
   ],
-  "tags": [
-   "forest"
-  ]
+  "tags": []
  },
  "gn-new-08-door": {
   "gn": "gn.new.08",
@@ -5550,8 +5546,8 @@
   "earliest": "A6",
   "home": 13,
   "window": [
-   11,
-   15
+   8,
+   13
   ],
   "sits": "side-branch",
   "attaches": "instead",
@@ -5577,21 +5573,19 @@
   "earliest": "A6",
   "home": 13,
   "window": [
-   11,
-   15
+   2,
+   19
   ],
   "sits": "side-branch",
   "attaches": "instead",
   "level": "None",
   "often": "run",
   "badge": "None",
-  "note": "Afterstory: on the stage that matches the date on the ticket (5 stages after boarding), the platform is back.",
+  "note": "Afterstory: on the stage that matches the date on the ticket (5 stages after boarding), the platform is back at step 13, side branch. Any time of day; if step 13 has no three-node column it takes the nearest one that has, so the date is not lost.",
   "kinds": [
    "Exploration"
   ],
-  "tags": [
-   "night"
-  ]
+  "tags": []
  },
  "gn-new-10-lake": {
   "gn": "gn.new.10",
