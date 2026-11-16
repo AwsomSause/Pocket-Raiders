@@ -57,6 +57,7 @@ import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, ref
 import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
 import { syncLegendFlags, weekInfluence } from './legends/signs';
 import { noteSpirits, syncLegendKeys } from './legends/keys';
+import { weekFlags, weekLegends } from './co/weeks';
 import { drawWholeRun } from './legends/wholeRun';
 import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
@@ -509,6 +510,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     run.story.v2 ??= StoryV2Schema.parse({ mode: 'story_run' });
     run.story.v2.protagonist = { ...run.story.v2.protagonist, look: opts.protagonist.look, name: opts.protagonist.name, pronouns: opts.protagonist.pronouns, ...(opts.protagonist.backstory ? { backstory: opts.protagonist.backstory } : {}) };
   }
+  weekFlags(run); // Catalog Overhaul (legends, row C): a calendar week's run flags (Rivalry weeks open the Rival Circuit)
   if (opts.expansion) {
     const e = opts.expansion;
     const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {}, ...(e.labyrinthResume ? { labResume: true } : {}) } } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.ultraBeasts ? { ultra: freshUltra() } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}), ...(e.climaxCut === 'extended' ? { climaxCut: 'extended' as const } : {}), ...(e.storyTraits ? { storyTraits: true } : {}) };
@@ -516,7 +518,9 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     if (e.secondChancePct || e.heatedMoments || e.mythicalPromises) run.expansion = { ...run.expansion, ...(e.secondChancePct ? { secondChancePct: e.secondChancePct } : {}), ...(e.heatedMoments ? { heated: true } : {}), ...(e.mythicalPromises ? { promises: true } : {}) };
     if (e.blessings) assignBlessing(run);
     if (e.wholeRunEvents) drawWholeRun(run); // Catalog Overhaul (legends): a Whole Run Event, 35% of runs, own stream
-    weekInfluence(run); // Catalog Overhaul (legends): Legend weeks raise the blessing's starting Influence, or tell of a Mythical
+    weekInfluence(run);
+    weekLegends(run); // Catalog Overhaul (legends, row C): Paradox Tide's +1 Influence, Leap Day's free Telling
+    // Catalog Overhaul (legends): Legend weeks raise the blessing's starting Influence, or tell of a Mythical
     // Beta 0.7 Node Event Menus: on for this run when the setting is on, except in speedrun, boss rush and time attack.
     if (e.nodeMenus && nodeMenusAllowed(run.rules.modifierIds)) run.expansion = { ...run.expansion, nodeMenus: freshNodeMenuState() };
     setClimaxCut(run, e.climaxCut);

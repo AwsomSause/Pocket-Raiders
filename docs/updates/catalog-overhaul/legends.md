@@ -27,3 +27,12 @@ Source: `catalog_overhaul_pack/catalog_overhaul/QUESTLINES_ALPHAS_AND_ANOMALIES.
 - Form items are Communion upgrades: the Reveal Glass (Forces of Nature in Communion), Kyurem's fusions after the Tao Trial, the Meteorite's Forme stance while Deoxys is your Guest, and the Odd Keystone (108 Ghost spirits, then Spiritomb).
 - A researcher now reacts when you travel with a Legendary or a Mythical Guest.
 - Limits: blessings not yet in the roster only earn keys through their questlines; Speed Forme is a Speed stance.
+### Calendar weeks, the Shadow chain and your reputation (batch 5, row C)
+- Rivalry Week and Roadside Rival Week open the Rival Circuit without qualifying, and your rival waits for you inside every pseudo-stage (fight, team up, or walk past).
+- League weeks (Gym Circuit, Champion's Gauntlet, Gym Leader Rematch Week, Elite Four Sweep, Champion Cup Weekend) bring the Past Gym Leaders and Past Champions onto the road more often.
+- Legendary weeks: Raid Rally and World Boss Week bring the Alpha questlines, Dragon Week the dragon Legendaries' questlines, Legendary Beasts Chase sends Raikou, Entei and Suicune's gates. Mega Evolution Showcase, Mega Stone Hunt and Z-Move Trial bring the Mega and Z Anomalies.
+- Team Plasma Liberation Operation makes Team Plasma the run's team (the other team weeks already did this for theirs).
+- Paradox Tide: a Koraidon, Miraidon or Dialga blessing starts with 1 more Influence. Leap Day: one free Telling of a Mythical at run start.
+- The Shadow chain is part of the Shadow system now: sightings stir up the factions, the Sanctuary will look after a Shadow Pokémon (yours or a caged one) and give it back purified, steadying really soothes the Heart Gauge, The Haze Lifts purifies, and the Lieutenant who escapes a hideout comes back for you. Shadow Triad only appears when Team Plasma is hunting you.
+- "An Echo of What You Did": a stranger reads your reputation back to you, with the numbers.
+- Known limits: Koraidon and Miraidon blessings are not in the game yet, so Paradox Tide's bonus lands only on Dialga today. The Beasts (L1) and Tower of Legends (L16) questlines are still the older week events, not rebuilt from QUESTLINES_LEGENDARY.md.

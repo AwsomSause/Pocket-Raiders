@@ -133,9 +133,10 @@ const priority = (e: CoEntry): number => (OWED.has(e.p.shape) && e.p.beat >= 2 ?
 /**
  * Places the stage's positioned events (pack section 7). `only` limits the nodes that may be used (the ones still ahead of the player, when
  * placing a beat mid-stage). Events that find no place are left out: a single waits for a later stage; an owed beat takes the next free
- * chokepoint after its window, and failing that every node of its home column, so it is never dropped.
+ * chokepoint after its window, and failing that every node of its home column, so it is never dropped. `featured` (a calendar week's
+ * questline openings) are placed first within their priority tier, so the week raises their odds of making the stage.
  */
-export function planCoStage(map: StageMap, entries: readonly CoEntry[], seed: string, only?: ReadonlySet<string>): CoPlaced[] {
+export function planCoStage(map: StageMap, entries: readonly CoEntry[], seed: string, only?: ReadonlySet<string>, featured?: ReadonlySet<string>): CoPlaced[] {
   const usable = map.nodes.filter((n) => n.column < map.columns && (!only || only.has(n.id)));
   const byColumn = new Map<number, MapNode[]>();
   for (const n of usable) byColumn.set(n.column, [...(byColumn.get(n.column) ?? []), n]);
@@ -151,7 +152,9 @@ export function planCoStage(map: StageMap, entries: readonly CoEntry[], seed: st
   const hardColumns: number[] = [];
   let hardest = 0;
   const out: CoPlaced[] = [];
-  const order = [...entries].sort((a, b) => priority(a) - priority(b) || hash(`${seed}::${a.id}`) - hash(`${seed}::${b.id}`) || a.id.localeCompare(b.id));
+  // A calendar week's featured openings go first inside their tier (they win the budget); with no week the order is unchanged.
+  const boost = (e: CoEntry): number => (featured?.has(e.id) ? 0 : 1);
+  const order = [...entries].sort((a, b) => priority(a) - priority(b) || boost(a) - boost(b) || hash(`${seed}::${a.id}`) - hash(`${seed}::${b.id}`) || a.id.localeCompare(b.id));
   const free = (n: MapNode, alone: boolean) => !doorNodes.has(n.id) && (alone ? (badges.get(n.id) ?? 0) === 0 : (badges.get(n.id) ?? 0) < CO_BUDGET.badges);
 
   for (const e of order) {

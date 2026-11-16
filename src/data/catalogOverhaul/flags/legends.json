@@ -1289,6 +1289,46 @@
   {
    "key": "<legend>-key-met",
    "about": "row A: the Legendary was fought at its key place"
+  },
+  {
+   "key": "sighting-kind",
+   "about": "shadow-sighting berry -> shadow-sanctuary remembers"
+  },
+  {
+   "key": "sanctuary-friend",
+   "about": "shadow-sanctuary (helped, left a Pokémon) and shadow-stronghold (freed cages) -> shadow-stabilize Sanctuary visit"
+  },
+  {
+   "key": "sanctuary-ward-wild",
+   "about": "shadow-sanctuary / shadow-stronghold: a Shadow Pokémon left in the caretaker's care -> shadow-purified Reclaim"
+  },
+  {
+   "key": "shadow-sanctuary-ward",
+   "about": "sendAway key: your own Shadow Pokémon left at the Sanctuary -> shadow-purified Reclaim (bringBack, purified)"
+  },
+  {
+   "key": "sanctuary-reclaimed",
+   "about": "shadow-purified Reclaim, once per run -> shadow-purified"
+  },
+  {
+   "key": "sanctuary-visits",
+   "about": "shadow-stabilize Sanctuary visit -> shadow-purified remembers"
+  },
+  {
+   "key": "lieutenant-beaten",
+   "about": "shadow-lieutenant won -> shadow-lieutenant remembers"
+  },
+  {
+   "key": "week-rival-won",
+   "about": "co-week-rival won -> co-week-rival remembers"
+  },
+  {
+   "key": "rivalry-week",
+   "about": "Rivalry weeks at run start (startFlag) -> core/co/weeks.ts rivalInPseudo"
+  },
+  {
+   "key": "circuit-qualified",
+   "about": "also set by Rivalry weeks at run start (startFlag) -> tournament-entry (families-a)"
   }
  ],
  "external": {
