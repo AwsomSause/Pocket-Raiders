@@ -74,12 +74,13 @@ describe('story foundation: random streams', () => {
   // Re-pinned for gym leaders one level lower (gymBonus -1). Re-pinned again for the flatter early curve and +1 HP per level. Re-pinned for second-wind healing and the 6-fight gentle opening (early-deaths-difficulties). Premier Ball rewards (instead of Hyper Potions) re-pinned STORY8. Role Pool Casting re-baselined these (leaders now come from the whole pool, not the region's own list); the 'map' stream itself did not move. Re-pinned STORY8 for Fury Cutter's streak power and Alluring Voice's confusion (content-audit-2). Re-pinned for IVs and EVs (W5, ivs-evs.md) and for the second library item batch (#1021: 3,000+ lines of new catalog items change drafts, shops and rewards).
   // Re-pinned for starters drawn from Remembrances (all seven change: the starter draw is new). Re-pinned for the boss teams (custom forms, lore Legendaries; #1063/#1066/boss-forms fix): STORY1, 2, 5 and 8 meet a changed gym. Re-pinned three seeds (STORY2/0, STORY5/0 and one more) for the Beta 0.6 boss item budget (bosses and rivals now heal up to 10 times and revive fallen teammates; verified it is the only cause by switching the budget off, which restored the old hash).
   // Re-pinned STORY6/0 for Shadow II (Shadow tiers replace the flat Shadow damage and the old Sealed ignore roll; a player Shadow fights in that seed).
+  // Re-pinned STORY1, 2, 5 and 6 for the Catalog Overhaul singles row (SF155 fossil dig): Plume, Root and Claw Fossils are uncommon, as the doc's fossil dig names them the common fossils, so reward and shop draws that hold a fossil pick differently.
   const BEFORE_STORY: Record<string, string> = {
-    'STORY1/0': '1dda0e89a180298f',
-    'STORY2/0': 'b24a1a0604f703b8', // STORY2, 5, 6 re-pinned after #1098 (Starter Sets removal); cause not isolated, see PR
+    'STORY1/0': 'cabc4bb125bf0f5e',
+    'STORY2/0': '27bc797692f089e5', // STORY2, 5, 6 re-pinned after #1098 (Starter Sets removal); cause not isolated, see PR
     'STORY4/0': '927fbd65e715ebbc',
-    'STORY5/0': '93fa407c6ffa3882',
-    'STORY6/0': '445823286623fbbc', // re-pinned in the Lavender canon PR: new Flashlight (wild-preview key item) joins the item draws; earlier: new Silver Powder (Bug type booster) joins trainer held-item draws; proven by removing it (pin returns)
+    'STORY5/0': 'f1c1af10881e9c94',
+    'STORY6/0': 'ff548047e71e4ff6', // re-pinned in the Lavender canon PR: new Flashlight (wild-preview key item) joins the item draws; earlier: new Silver Powder (Bug type booster) joins trainer held-item draws; proven by removing it (pin returns)
     'STORY7/0': '2db6e08d823e4f4c',
     'STORY8/0': '2fa3b04267e0313a',
   };
