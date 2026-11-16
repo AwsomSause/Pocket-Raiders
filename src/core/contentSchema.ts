@@ -864,6 +864,8 @@ export const ArchetypeModifierSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('healingMoveMultiplier'), value: z.number().positive() }),
   /** Burn damage on your own Pokémon. */
   z.object({ kind: z.literal('burnDamageTakenMultiplier'), value: z.number().positive() }),
+  /** gn.new.31: the extra damage a curse tag adds to hits on your own Pokémon. */
+  z.object({ kind: z.literal('curseDamageTakenMultiplier'), value: z.number().positive() }),
   /** Damage dealt by the first or last Pokémon in your party order. */
   z.object({ kind: z.literal('partyPositionDamage'), position: z.enum(['first', 'last']), value: z.number().positive() }),
   /** Prize money from gym leaders, Elite Four members and champions. */

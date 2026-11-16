@@ -55,6 +55,7 @@ import { ferrisArrive, ferrisBest, ferrisHand, ferrisShape, ferrisStart, ferrisT
 import { followedJoin } from './followed';
 import { ballFind, ballForce, ballHatched, ballHold, ballKind, ballTokens } from './ball';
 import { reunionArrive, reunionFar, reunionTokens } from './reunion';
+import { giveDearest } from './fox';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { paradeAll, paradeEgg, paradeEggReady, paradeForget, paradeMemory, paradeNickname, paradeSecret, paradeSwap, paradeWake } from './parade';
 import { finalRest, xatuDraw, xatuTokens, xatuTrue } from './cartographer';
@@ -868,6 +869,9 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return reunionArrive(content, run);
     case 'reunionFar':
       return reunionFar(run, e.n ?? 3);
+    // gn.new.31 The Fox at the Shrine (fox.ts).
+    case 'giveDearest':
+      return giveDearest(content, run, e.key!);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
