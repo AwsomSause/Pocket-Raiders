@@ -1142,7 +1142,7 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
     // R16 Wants to Stop: a turn the foe is not hurt fills its meter; full, it sits down (`calm:done` tells the scene how it ended).
     battle.storyEffects.push('calm');
     const n = battle.storyEffects.filter((s) => s === 'calm').length;
-    events.push({ type: 'raid', tone: 'info', text: n >= rule.calm ? 'It sits down. It looks at its trainer. It does not get up.' : `Wants to Stop: ${n} of ${rule.calm}.` });
+    events.push({ type: 'raid', tone: 'info', text: battle.kind === 'wild' ? (n >= rule.calm ? 'The red goes out of its eyes. It lowers its head, and breathes.' : `Calm: ${n} of ${rule.calm}.`) : n >= rule.calm ? 'It sits down. It looks at its trainer. It does not get up.' : `Wants to Stop: ${n} of ${rule.calm}.` });
     if (n >= rule.calm) {
       battle.storyEffects.push('calm:done');
       battle.outcome = 'win';

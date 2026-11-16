@@ -240,5 +240,12 @@
  "festival": {
   "_note": "SF76.8: the seedling fruits after this many rests.",
   "seedlingRests": 4
+ },
+ "roam": {
+  "_note": "The other roamers (STORY_FAMILIES_10): following a trail finds the Legendary at base + perInfluence x the run blessing's Influence (only when it is that Legendary's) + leftBonus after 'Leave it be', capped at max (percent).",
+  "base": 25,
+  "perInfluence": 15,
+  "leftBonus": 15,
+  "max": 90
  }
 }

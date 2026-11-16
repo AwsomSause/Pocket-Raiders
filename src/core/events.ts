@@ -16,6 +16,7 @@ import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priori
 import { rememberPick, rememberedPick } from './co/pickMemory';
 import { PSEUDO, enterPseudoStage, leavePseudoStage, routeChainEvent } from './dungeon/pseudo';
 import { dropOneHeld, dungeonNext, dungeonStart } from './events/coDungeon';
+import { blessedSpecies, roamFound } from './events/coLegends';
 import { addMark, overhaulOf, type FeelingKey } from './rivals/overhaul';
 import { friendName, friendTeam, pseudoRivalBeat } from './rivals/live';
 import { repAtLeast } from './rivals/reputation';
@@ -280,6 +281,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     case 'keptGoods':
     case 'eggOf':
     case 'gymHere':
+    case 'blessed':
+    case 'partyHpBelow':
       return coConditionMet(content, run, c);
     case 'partyBlissful':
       return run.party.some((m) => m.blissful);
@@ -526,6 +529,8 @@ export function conditionText(content: Content, c: EventCondition): string {
     case 'keptGoods':
     case 'eggOf':
     case 'gymHere':
+    case 'blessed':
+    case 'partyHpBelow':
       return coConditionText(c);
     case 'partyBlissful':
       return 'Needs a Blissful Pokémon in your party';
@@ -1271,7 +1276,13 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'returnEgg':
     case 'boxBond':
     case 'gymTypeItem':
+    case 'sign':
+    case 'offer':
       return coEffectWords(e);
+    case 'roamChase':
+      return 'you follow the trail';
+    case 'joinBlessed':
+      return 'a Legendary joins';
     case 'friendshipLine':
       return `${content.species.get(e.species)?.name ?? e.species}: friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
     case 'dungeon':
@@ -1735,6 +1746,12 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       }
       return r.next ? applyEffect(content, run, EventEffectSchema.parse({ kind: 'addEvent', eventId: r.next }), rng, tradeUid) : '';
     }
+    case 'roamChase':
+      return roamFound(run, e.species) ? applyEffect(content, run, EventEffectSchema.parse({ kind: 'addEvent', eventId: e.found }), rng, tradeUid) : 'the trail goes cold';
+    case 'joinBlessed': {
+      const legend = blessedSpecies(run);
+      return legend ? applyEffect(content, run, EventEffectSchema.parse({ kind: 'join', species: [legend], levelBonus: e.levelBonus }), rng, tradeUid) : '';
+    }
     case 'regionJoin':
       return applyEffect(content, run, EventEffectSchema.parse({ kind: 'join', species: [coRegionPick(run, e.table, currentRegion(content, run).id)], shadow: e.shadow, levelBonus: e.levelBonus }), rng, tradeUid);
     case 'ruleRead':
@@ -1750,6 +1767,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'returnEgg':
     case 'boxBond':
     case 'gymTypeItem':
+    case 'sign':
+    case 'offer':
       return applyCoEffect(content, run, e, tradeUid, (id) => giveItem(content, run, id, 1, rng), (speciesId, level, shiny) => {
         const mon = newMon(content, run, speciesId, level, 'p');
         mon.shiny = shiny;
@@ -1980,7 +1999,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     return;
   }
   if (b.kind === 'wild') {
-    const speciesId = (b.recall ? oldFoe(run) : null) ?? pickSpecies(content, run, b.species, b.types, rng);
+    const speciesId = (b.recall ? oldFoe(run) : null) ?? (b.blessed ? blessedSpecies(run) : null) ?? pickSpecies(content, run, b.species, b.types, rng);
     const level = Math.min(cap, Math.max(1, base));
     const enemy = newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
     enemy.shiny = rollShiny(content, rng, runAttributeEffects(content, run).shinyChance * b.shinyMultiplier);

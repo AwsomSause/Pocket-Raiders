@@ -286,6 +286,156 @@
    "key": "oath-speed-paid",
    "setBy": "oath-reckoning-speed (SF85)",
    "readBy": "engine: coBattleStarted oathSpeedStart (+1 Speed at battle start)"
+  },
+  {
+   "key": "calmed-alpha",
+   "setBy": "alpha-noble-*-after (A1, a Noble calmed)",
+   "readBy": "new-events (future kid, {flag:calmed-alpha}); alphas Z7 (6 calms: the Alpha of Alphas notices)"
+  },
+  {
+   "key": "telling-arceus",
+   "setBy": "tower-5 (L16 empty summit), mr-ancient-gym-vault (GL3 badges left)",
+   "readBy": "legends (Signs and Tellings API)"
+  },
+  {
+   "key": "letter-ignored",
+   "setBy": "ovc-the-letter-to-future-you-s1 (FE1)",
+   "readBy": "ovc-the-letter-to-future-you-s2 (anyFlag)"
+  },
+  {
+   "key": "sign-raikou",
+   "setBy": "roamer-*/roamer-*-tower win (L1, sign effect)",
+   "readBy": "legends (Signs and Tellings API); also raises Influence when it is the run blessing"
+  },
+  {
+   "key": "sign-entei",
+   "setBy": "roamer-*/roamer-*-tower win (L1, sign effect)",
+   "readBy": "legends (Signs and Tellings API)"
+  },
+  {
+   "key": "sign-suicune",
+   "setBy": "roamer-*/roamer-*-tower win (L1, sign effect)",
+   "readBy": "legends (Signs and Tellings API)"
+  },
+  {
+   "key": "sign-mesprit",
+   "setBy": "roamer-mesprit Wait (sign effect)",
+   "readBy": "legends (Lake guardians)"
+  },
+  {
+   "key": "sign-koraidon",
+   "setBy": "turo-machine (FE4, sign effect)",
+   "readBy": "legends"
+  },
+  {
+   "key": "sign-miraidon",
+   "setBy": "turo-machine (FE4, sign effect)",
+   "readBy": "legends"
+  },
+  {
+   "key": "roam-cresselia-left",
+   "setBy": "roamer-cresselia Leave it be",
+   "readBy": "engine: coLegends roamPercent (next trail +leftBonus)"
+  },
+  {
+   "key": "roam-cresselia-chased",
+   "setBy": "engine: coLegends roamFound",
+   "readBy": "engine: coLegends roamFound (each try rolls differently)"
+  },
+  {
+   "key": "sign-cresselia",
+   "setBy": "roamer-cresselia Wait (with its blessing)",
+   "readBy": "legends (Signs and Tellings API)"
+  },
+  {
+   "key": "roam-landorus-left",
+   "setBy": "roamer-landorus Leave it be",
+   "readBy": "engine: coLegends roamPercent (next trail +leftBonus)"
+  },
+  {
+   "key": "roam-landorus-chased",
+   "setBy": "engine: coLegends roamFound",
+   "readBy": "engine: coLegends roamFound (each try rolls differently)"
+  },
+  {
+   "key": "sign-landorus",
+   "setBy": "roamer-landorus Wait (with its blessing)",
+   "readBy": "legends (Signs and Tellings API)"
+  },
+  {
+   "key": "roam-latias-left",
+   "setBy": "roamer-latias Leave it be",
+   "readBy": "engine: coLegends roamPercent (next trail +leftBonus)"
+  },
+  {
+   "key": "roam-latias-chased",
+   "setBy": "engine: coLegends roamFound",
+   "readBy": "legends L7 (the sightings are its clues)"
+  },
+  {
+   "key": "sign-latias",
+   "setBy": "roamer-latias Wait (with its blessing)",
+   "readBy": "legends (Signs and Tellings API)"
+  },
+  {
+   "key": "roam-latios-left",
+   "setBy": "roamer-latios Leave it be",
+   "readBy": "engine: coLegends roamPercent (next trail +leftBonus)"
+  },
+  {
+   "key": "roam-latios-chased",
+   "setBy": "engine: coLegends roamFound",
+   "readBy": "legends L7 (the sightings are its clues)"
+  },
+  {
+   "key": "sign-latios",
+   "setBy": "roamer-latios Wait (with its blessing)",
+   "readBy": "legends (Signs and Tellings API)"
+  },
+  {
+   "key": "roam-mesprit-left",
+   "setBy": "roamer-mesprit Leave it be",
+   "readBy": "engine: coLegends roamPercent (next trail +leftBonus)"
+  },
+  {
+   "key": "roam-mesprit-chased",
+   "setBy": "engine: coLegends roamFound",
+   "readBy": "engine: coLegends roamFound (each try rolls differently)"
+  },
+  {
+   "key": "sign-mesprit",
+   "setBy": "roamer-mesprit Wait (with its blessing)",
+   "readBy": "legends (Signs and Tellings API)"
+  },
+  {
+   "key": "roam-thundurus-left",
+   "setBy": "roamer-thundurus Leave it be",
+   "readBy": "engine: coLegends roamPercent (next trail +leftBonus)"
+  },
+  {
+   "key": "roam-thundurus-chased",
+   "setBy": "engine: coLegends roamFound",
+   "readBy": "engine: coLegends roamFound (each try rolls differently)"
+  },
+  {
+   "key": "sign-thundurus",
+   "setBy": "roamer-thundurus Wait (with its blessing)",
+   "readBy": "legends (Signs and Tellings API)"
+  },
+  {
+   "key": "roam-tornadus-left",
+   "setBy": "roamer-tornadus Leave it be",
+   "readBy": "engine: coLegends roamPercent (next trail +leftBonus)"
+  },
+  {
+   "key": "roam-tornadus-chased",
+   "setBy": "engine: coLegends roamFound",
+   "readBy": "engine: coLegends roamFound (each try rolls differently)"
+  },
+  {
+   "key": "sign-tornadus",
+   "setBy": "roamer-tornadus Wait (with its blessing)",
+   "readBy": "legends (Signs and Tellings API)"
   }
  ]
 }

@@ -11,6 +11,7 @@ import { hashSeed, Rng } from '../rng';
 import type { BattleEvent } from '../battle/engine';
 import { bagCount, barter, boxBond, hereGymType, oathSpeedStart, rangerRescue, hasEgg, returnEgg, barterGive, barterHas, barterStock, copyHeld, helpedReturn, noteHelped, notePicked, noted, rejoin, sideBattleBegin, spendFromBag, takeSoon } from './coHelpers';
 import type { PokemonInstance, RunState } from '../state';
+import { blessedMet, giveSign, offerItem, roamPercent } from './coLegends';
 
 const RULES: { multiplier: { veryBad: number; bad: number; even: number; favours: number }; words: Record<string, string> } = data.rules;
 type Run = RunState;
@@ -71,6 +72,7 @@ export function fillCoText(content: Content, run: Run, text: string): string {
   const item = (id: string | null) => (id ? content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? id : 'nothing of that kind');
   return text
     .replace(/\{(lead|starter|most|least|impostorType|nextRegion|finalRegion|lowestBond|gymType)\}/g, (_, k: string) => table[k]!())
+    .replace(/\{roam:([a-z][a-z0-9-]*)\}/g, (_, k: string) => `${roamPercent(run, k)}%`)
     .replace(/\{flag:([a-z][a-z0-9-]*)\}/g, (_, k: string) => String(num(run, k)))
     .replace(/\{(give|stock):(common|uncommon|rare)\}/g, (_, k: string, t: 'common') => item(k === 'give' ? barterGive(content, run, t) : barterStock(run, t)))
     .replace(/\{note:([a-z][a-z0-9-]*)\}/g, (_, k: string) => { const m = noted(run, k); return m ? m.care?.nickname || (content.species.get(m.speciesId)?.name ?? m.speciesId) : 'your Pokémon'; });
@@ -174,13 +176,15 @@ export function coRegionPick(run: Pick<Run, 'seed' | 'regionIndex' | 'stage'>, t
 
 // ---------- conditions and effects ----------
 
-export type CoCondition = Extract<EventCondition, { kind: 'record' | 'barterHas' | 'bagHas' | 'keptGoods' | 'eggOf' | 'gymHere' }>;
+export type CoCondition = Extract<EventCondition, { kind: 'record' | 'barterHas' | 'bagHas' | 'keptGoods' | 'eggOf' | 'gymHere' | 'blessed' | 'partyHpBelow' }>;
 export function coConditionMet(content: Content, run: Run, c: CoCondition): boolean {
   switch (c.kind) {
     case 'record': return recordOf(run) === c.is;
     case 'keptGoods': return keptGoods(run);
     case 'eggOf': return hasEgg(run, c.species);
     case 'gymHere': return hereGymType(content, run, true) !== null;
+    case 'blessed': return blessedMet(run, c.has, c.species, c.atLeast);
+    case 'partyHpBelow': { const max = run.party.reduce((s, m) => s + maxHp(content, m), 0); return max > 0 && run.party.reduce((s, m) => s + Math.max(0, m.hp), 0) < max * c.share; }
     case 'barterHas': return barterHas(content, run, c.tier, c.berry);
     case 'bagHas': return bagCount(run, c.ids, c.suffix) >= c.count;
   }
@@ -191,12 +195,14 @@ export function coConditionText(c: CoCondition): string {
     case 'keptGoods': return 'Only if you kept something that was not yours';
     case 'eggOf': return 'Needs the Egg';
     case 'gymHere': return 'Only after a Gym in this region';
+    case 'blessed': return !c.has ? 'Only without a Legendary Blessing' : c.species ? `Needs ${c.species}'s Blessing${c.atLeast ? ` and Influence ${c.atLeast}` : ''}` : `Needs a Legendary Blessing${c.atLeast ? ` and Influence ${c.atLeast}` : ''}`;
+    case 'partyHpBelow': return `Only when your party is below ${Math.round(c.share * 100)}% HP`;
     case 'barterHas': return `Needs a${c.tier === 'uncommon' ? 'n Uncommon' : c.tier === 'rare' ? ' Rare' : ' Common'} item to trade${c.berry ? ', and a Berry' : ''}`;
     case 'bagHas': return `Needs ${c.label ?? (c.suffix === '-berry' ? 'a Berry' : 'the right item')}${c.count > 1 ? ` (${c.count})` : ''}`;
   }
 }
 
-export type CoEffect = Extract<EventEffect, { kind: 'ruleRead' | 'rulePrize' | 'pickTest' | 'timeMachine' | 'barter' | 'spendBag' | 'notePicked' | 'rejoin' | 'copyHeld' | 'helped' | 'returnEgg' | 'boxBond' | 'gymTypeItem' }>;
+export type CoEffect = Extract<EventEffect, { kind: 'ruleRead' | 'rulePrize' | 'pickTest' | 'timeMachine' | 'barter' | 'spendBag' | 'notePicked' | 'rejoin' | 'copyHeld' | 'helped' | 'returnEgg' | 'boxBond' | 'gymTypeItem' | 'sign' | 'offer' }>;
 export function coEffectWords(e: CoEffect): string {
   switch (e.kind) {
     case 'barter': return e.give ? 'a fair trade' : 'a free trade';
@@ -212,6 +218,8 @@ export function coEffectWords(e: CoEffect): string {
     case 'timeMachine': return `your lead steps into the ${e.era}`;
     case 'boxBond': return '';
     case 'gymTypeItem': return 'an old badge';
+    case 'sign': return 'a Sign';
+    case 'offer': return 'you leave an item in the bowl';
   }
 }
 
@@ -219,6 +227,8 @@ export function coEffectWords(e: CoEffect): string {
 export function applyCoEffect(content: Content, run: Run, e: CoEffect, pickedUid: string | undefined, gift: (id: string) => string, hatchMon?: (speciesId: string, level: number, shiny: boolean) => PokemonInstance): string {
   switch (e.kind) {
     case 'boxBond': boxBond(run, e.key); return '';
+    case 'sign': return giveSign(run, e.species, e.amount) ? `a Sign of ${content.species.get(e.species)?.name ?? e.species}: its attention on you grows` : '';
+    case 'offer': { const id = offerItem(content, run, e.tier); return id ? `you leave the ${content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? id}` : 'you have nothing of that kind'; }
     case 'gymTypeItem': { const t = hereGymType(content, run, false); return t ? gift(`${e.prefix}-${t}`) : ''; }
     case 'returnEgg': return hatchMon ? returnEgg(content, run, e.species, e.hatch, hatchMon) : '';
     case 'barter': return barter(content, run, e.give, e.get, e.berry, gift);
@@ -283,6 +293,7 @@ export function coBattleStarted(content: Content, run: Run): BattleEvent[] {
 /** The battle is over (the battle state is about to go). Roofer Jax: a knockout in the opening turns pays the bonus. */
 export function coBattleEnd(content: Content, run: Run, battle: NonNullable<Run['battle']>): void {
   put(run, 'co-early-ko', battle.storyEffects.includes('co-early-ko') ? 1 : 0);
+  put(run, 'co-calm-done', battle.storyEffects.includes('calm:done') ? 1 : 0); // A1: a Noble calmed (not beaten) shows in the room after
   rangerRescue(content, run, battle.outcome === 'lose');
 }
 

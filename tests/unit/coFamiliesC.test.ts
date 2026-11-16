@@ -23,7 +23,7 @@ function walk(v: unknown, out: Record<string, unknown>[] = []): Record<string, u
 }
 
 // Flags other families set that these events read (names agreed on the shared board or with the owning thread).
-const FROM_OTHERS = new Set(['quarry-in', 'farmer-end', 'hospice-stayed', 'hospice-sea', 'cages-opened', 'promise-deoxys', 'promise-volcanion', 'promise-zeraora', 'blessing-dialga', 'blessing-zekrom', 'forgotten-badge', 'rep', 'kind-total']);
+const FROM_OTHERS = new Set(['quarry-in', 'farmer-end', 'hospice-stayed', 'hospice-sea', 'cages-opened', 'promise-deoxys', 'promise-volcanion', 'promise-zeraora', 'blessing-dialga', 'blessing-zekrom', 'forgotten-badge', 'first-gym-keepers-moved', 'rep', 'kind-total']);
 
 describe('families-c events', () => {
   const content = getContent();
@@ -51,7 +51,7 @@ describe('families-c events', () => {
       if (o.stamp === 'region') set.add(`${String(o.key)}-at`);
     }
     // Engine-set flags: the helped Pokémon's return, the egg and other `ovt-` timers tick on their own once started.
-    for (const k of ['helped-rare-returned', 'helped-returned', 'co-early-ko', 'letter-glow', 'idol-curse', 'idol-paid', 'oath-broken', 'oath-rests', 'berry-grown', 'left-fainted']) set.add(k);
+    for (const k of ['helped-rare-returned', 'helped-returned', 'co-early-ko', 'co-calm-done', 'roam-cresselia-chased', 'roam-landorus-chased', 'roam-latias-chased', 'roam-latios-chased', 'roam-mesprit-chased', 'roam-thundurus-chased', 'roam-tornadus-chased', 'letter-glow', 'idol-curse', 'idol-paid', 'oath-broken', 'oath-rests', 'berry-grown', 'left-fainted']) set.add(k);
     const unset = new Set<string>();
     for (const e of raw) for (const o of walk(e)) if (o.kind === 'flag' && typeof o.atLeast === 'number') {
       const key = String(o.key);

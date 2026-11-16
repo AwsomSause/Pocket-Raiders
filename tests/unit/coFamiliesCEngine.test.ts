@@ -101,3 +101,63 @@ describe('Mystery Dungeon (SF73)', () => {
     expect(dungeonNext(run, 'md-2-no')).toEqual({ out: false, next: expect.stringMatching(/^md-3-(ambush|boss-door)$/) });
   });
 });
+
+describe('Legendary pieces (L1, L16, the other roamers)', () => {
+  const bless = (run: RunState, id: string, influence: number): void => {
+    run.expansion = { ...run.expansion, blessing: { id, tier: 'greater', influence, seen: true, ashRegions: [], communion: false, riteUsed: false, stagesDone: [] } } as RunState['expansion'];
+  };
+
+  it('a Sign raises Influence only when it is the blessed Legendary', async () => {
+    const { blessedMet, giveSign } = await import('../../src/core/events/coLegends');
+    const run = start();
+    run.expansion = { ...run.expansion, blessing: undefined } as RunState['expansion'];
+    expect(blessedMet(run, false, undefined, 0)).toBe(true);
+    expect(giveSign(run, 'tornadus', 1)).toBe(false);
+    expect(run.story.flags['ev:sign-tornadus']).toBe(1);
+    bless(run, 'tornadus', 2);
+    expect(giveSign(run, 'entei', 1)).toBe(false);
+    expect(giveSign(run, 'tornadus', 2)).toBe(true);
+    expect(blessedMet(run, true, 'tornadus', 4)).toBe(true);
+    expect(blessedMet(run, true, 'tornadus', 5)).toBe(false);
+    expect(blessedMet(run, true, 'entei', 0)).toBe(false);
+  });
+
+  it('a roamer trail: the chance grows with its Influence and after "Leave it be", and each try is fixed by the seed', async () => {
+    const { roamFound, roamPercent } = await import('../../src/core/events/coLegends');
+    const run = start();
+    run.expansion = { ...run.expansion, blessing: undefined } as RunState['expansion'];
+    expect(roamPercent(run, 'tornadus')).toBe(25);
+    run.story.flags['ev:roam-tornadus-left'] = 1;
+    expect(roamPercent(run, 'tornadus')).toBe(40);
+    bless(run, 'tornadus', 10);
+    expect(roamPercent(run, 'tornadus')).toBe(90);
+    const a = structuredClone(run);
+    const b = structuredClone(run);
+    expect(roamFound(a, 'tornadus')).toBe(roamFound(b, 'tornadus'));
+    expect(a.story.flags['ev:roam-tornadus-chased']).toBe(1);
+    expect(a.story.flags['ev:roam-tornadus-left']).toBe(0);
+  });
+
+  it('the Tower bowl takes one item of the tier, and nothing when there is none', async () => {
+    const { offerItem } = await import('../../src/core/events/coLegends');
+    const { tierOf } = await import('../../src/core/events/coHelpers');
+    const run = start();
+    run.inventory = {};
+    expect(offerItem(content, run, 'rare')).toBeNull();
+    const common = [...content.catalog.keys()].find((id) => tierOf(content, id) === 'common')!;
+    run.inventory[common] = 2;
+    expect(offerItem(content, run, 'common')).toBe(common);
+    expect(run.inventory[common]).toBe(1);
+  });
+
+  it('every Part 0 pointer id is built, and the Noble fight calms on turns it is not hurt', () => {
+    for (const id of ['alpha-noble-kleavor', 'beast-lookout', 'beast-clue-ripple', 'roamer-suicune', 'roamer-latias', 'tower-entrance', 'tower-5', 'tower-week-entrance', 'mr-ancient-gym-vault', 'time-capsule', 'rk-sealed-letter-open', 'ovc-the-letter-to-future-you-s3', 'turo-machine', 'oracle', 'rainbow-rocket']) {
+      expect(content.events.has(id), id).toBe(true);
+    }
+    const noble = content.events.get('alpha-noble-kleavor')!;
+    const b = noble.choices[0]!.success.battle as { kind: string; rule?: { calm?: number }; friendly?: boolean };
+    expect(b.kind).toBe('wild');
+    expect(b.rule?.calm).toBe(3);
+    expect(b.friendly).toBe(true);
+  });
+});

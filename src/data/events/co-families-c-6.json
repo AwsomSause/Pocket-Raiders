@@ -1450,6 +1450,40 @@
     "tint": "#2a2418",
     "effect": "none"
    },
+   "remembers": [
+    {
+     "id": "warned",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "letter-followed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You remember a letter in your own handwriting: \"Don't trust the guide with the free shortcut.\"",
+     "addChoices": [
+      {
+       "label": "No. Somebody warned me.",
+       "success": {
+        "text": "He tips his hat. Mosley: \"Somebody warned you. Smart somebody.\" He walks off whistling, and doesn't look back.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "guide-met",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "letter-came-true",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
    "intro": "A weathered guide offers you a shortcut. Guide, Mosley: \"No charge. I just like company.\" If you look closely: his boots are new. He checks your bag twice. His \"shortcut\" adds distance on the map.",
    "choices": [
     {

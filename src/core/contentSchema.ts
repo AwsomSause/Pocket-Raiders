@@ -2975,6 +2975,10 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('eggOf'), species: z.string().min(1) }),
   /** GL2: a Gym of the current region was beaten this run. */
   z.object({ kind: z.literal('gymHere') }),
+  /** Catalog Overhaul families-c (L1, L16, roamers): the run has a Legendary Blessing (`has: false`: has none); `species` names whose; `atLeast` is its Influence. */
+  z.object({ kind: z.literal('blessed'), has: z.boolean().default(true), species: z.string().optional(), atLeast: z.number().int().min(0).default(0) }),
+  /** FE2: the party's HP, all together, is below this share of its max. */
+  z.object({ kind: z.literal('partyHpBelow'), share: z.number().gt(0).max(1) }),
   z.object({ kind: z.literal('barterHas'), tier: z.enum(['common', 'uncommon', 'rare']), berry: z.boolean().default(false) }),
   /** Catalog Overhaul (families-c): the bag holds `count` of these items (or of any item ending in `suffix`, like "-berry"). */
   z.object({ kind: z.literal('bagHas'), ids: z.array(z.string()).default([]), suffix: z.string().optional(), count: z.number().int().min(1).default(1), label: z.string().optional() }),
@@ -3330,6 +3334,14 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** GL2: the item `<prefix>-<type>` for this region's Gym (the last one beaten here, else the first not yet met). */
   z.object({ kind: z.literal('gymTypeItem'), prefix: z.string().min(1) }),
   /** SF73 Mystery Dungeon (core/events/coDungeon.ts): `start` resets the rooms and Luck (+1 with `scarf`); `next` ends room `from` and opens the next (or, out of Luck, drops a held item and walks out). */
+  /** L1/L16/roamers: a Legendary's Sign: `sign-<species>` goes up, and so does the run blessing's Influence when it is that Legendary's. */
+  z.object({ kind: z.literal('sign'), species: z.string().min(1), amount: z.number().int().min(1).max(3).default(1) }),
+  /** The other roamers: following the trail finds it at the Influence chance (familiesC.json roam); a hit queues `found`. */
+  z.object({ kind: z.literal('roamChase'), species: z.string().min(1), found: z.string().min(1) }),
+  /** L16 floor 1: the bowl takes one bag item of this tier (the one you hold most of). */
+  z.object({ kind: z.literal('offer'), tier: z.enum(['common', 'uncommon', 'rare']) }),
+  /** L16 summit: the run's blessed Legendary comes down the stairs and joins (nothing without a blessing). */
+  z.object({ kind: z.literal('joinBlessed'), levelBonus: z.number().int().min(0).max(10).default(0) }),
   z.object({ kind: z.literal('dungeon'), action: z.enum(['start', 'next']), from: z.string().optional(), scarf: z.boolean().default(false) }),
   /** SF63: a Pokémon the player helped; one comes back once a region at the worst moment (`rare`: SF63.8's, the one that returns). */
   z.object({ kind: z.literal('helped'), species: z.string().min(1), rare: z.boolean().default(false) }),
@@ -3601,6 +3613,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     special: z.string().optional(),
     /** Beta 0.7 U1: special rules for this wild fight (the Ultra Rule of an Ultra Beast's home world). */
     rule: EventRuleSchema.optional(),
+    /** Catalog Overhaul L16: the foe is the run's blessed Legendary (none: one of `species`). */
+    blessed: z.boolean().optional(),
     /** Beta 0.7 U1: Ultra Aura: every foe starts with +1 to all its stats. */
     aura: z.boolean().optional(),
     /** Catalog Overhaul: a friendly fight. A loss never ends the run: the party gets back on its feet, you return to the map and `lose` applies. */

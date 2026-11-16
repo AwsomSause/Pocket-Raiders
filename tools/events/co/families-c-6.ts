@@ -157,7 +157,10 @@ const SF81: Json[] = [
 // ---------- SF82 The Friendly Guide ----------
 const GUIDE = { cast: ['trainer.hiker'], tint: '#2a2418', effect: 'none' };
 const SF82: Json[] = [
-  ev('guide-offer', 'No Charge', 'Story and characters', { ...GUIDE, requires: [notYet('guide-met')] },
+  ev('guide-offer', 'No Charge', 'Story and characters', { ...GUIDE, requires: [notYet('guide-met')],
+    // FE1: the letter in your own handwriting warned you about him.
+    remembers: [{ id: 'warned', when: [flagIs('letter-followed')], notice: 'You remember a letter in your own handwriting: "Don\'t trust the guide with the free shortcut."',
+      addChoices: [ch('No. Somebody warned me.', out('He tips his hat. Mosley: "Somebody warned you. Smart somebody." He walks off whistling, and doesn\'t look back.', done('guide-met'), flag('letter-came-true')))] }] },
     'A weathered guide offers you a shortcut. Guide, Mosley: "No charge. I just like company." If you look closely: his boots are new. He checks your bag twice. His "shortcut" adds distance on the map.',
     [
       ch('Lead on.', out('The shortcut is real, more or less. He chats the whole way. You notice him writing something in a little book.', stamped('guide-followed'), done('guide-met'))),
