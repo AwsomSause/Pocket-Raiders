@@ -2,8 +2,8 @@
 // - Rivalry weeks (`startFlag`): the Rival Circuit opens (`circuit-qualified`) and the rival turns up in every pseudo-stage (`rivalry-week`).
 // - Legend weeks (`blessingWeek`, and `legendaryFocus` in legends/signs.ts weekInfluence): the matching blessing starts at Influence +1.
 // - Leap Day (`freeTelling`): one free Telling.
-// - Odds weeks (Legendary, League, Z and Mega): their questline openings are the week's `mapEvents`; the placer gives featured
-//   openings first claim on a stage's event budget (co/placement.ts planCoStage `featured`). Evil-team weeks use `evilTeamFocus`.
+// - Odds weeks (Legendary, League, Z and Mega): the placer gives the week's featured questline
+//   openings (`featuredOpenings`) first claim on a stage's event budget (co/placement.ts planCoStage `featured`). Evil-team weeks use `evilTeamFocus`.
 // Pure; no RNG of its own (the Telling uses the Telling stop's own stream).
 
 import type { Content } from '../contentSchema';
@@ -13,6 +13,11 @@ import type { MapNode, RunState } from '../state';
 /** The rival's scene a Rivalry week adds to every pseudo-stage (tools/events/co/legends-13.ts). */
 export const WEEK_RIVAL_EVENT = 'co-week-rival';
 const flag = (run: Pick<RunState, 'story'>, key: string): number => Number(run.story.flags[`ev:${key}`] ?? 0);
+
+/** The placed questline openings this run's weeks feature (`featuredOpenings`), plus the weeks' own map events. */
+export function featuredOpenings(run: Pick<RunState, 'perkEffects'>, mapEvents: ReadonlySet<string>): Set<string> {
+  return new Set([...mapEvents, ...(run.perkEffects ?? []).flatMap((m) => (m.kind === 'featuredOpenings' ? m.ids : []))]);
+}
 
 /** Run start, every run: the week's run flags (`startFlag`). A flag already higher keeps its value. */
 export function weekFlags(run: Pick<RunState, 'perkEffects' | 'story'>): void {

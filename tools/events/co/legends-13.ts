@@ -147,7 +147,7 @@ export const EVENTS: Json[] = [
 
   // ---------- Rivalry weeks: the rival in every pseudo-stage ----------
   {
-    ...ev('co-week-rival', 'Your Rival, Here Too', 'Rival questline', { room: true, stop: 'event', tint: '#e04848', effect: 'sparkle' },
+    ...ev('co-week-rival', 'Your Rival, Here Too', 'Rivalry Week', { room: true, stop: 'event', tint: '#e04848', effect: 'sparkle' },
     'Halfway through, somebody is leaning on the wall like they have been waiting all day.\n\n{rival}: "Rivalry Week. You didn\'t think I\'d let you have this place to yourself, did you?"',
     [
       ch('"Then let\'s settle it here."', fight('{rival} grins and throws first. In a place like this, nobody is coming to break it up.', rival({ lv: 1, size: 4, win: [$(900), flag('week-rival-won')] })), { requires: [{ kind: 'rivalMet', atLeast: 1 }] }),

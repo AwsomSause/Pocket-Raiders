@@ -1405,7 +1405,7 @@
   {
    "id": "co-week-rival",
    "name": "Your Rival, Here Too",
-   "group": "Rival questline",
+   "group": "Rivalry Week",
    "room": true,
    "stop": "event",
    "scene": {

@@ -3,9 +3,9 @@
 Built 2026-11-16 on `claude/project-thread-qrlk9b` (PR into `ui-mockups`). Ids from `/mnt/project-files/plans/catalog-overhaul/OPEN_IDS.md` row C; rules from `CATALOG_INDEX.md` and `rules/08_villains.js`, `12_setpieces.js`, `18_calendar.js`.
 
 ## What was built
-- Engine: `src/core/co/weeks.ts` (`startFlag`, `blessingWeek`, `freeTelling` week modifiers; `rivalInPseudo`), `src/core/co/shadowChain.ts` (`purifyShadow` effect), `planCoStage(..., featured)` in `co/placement.ts` (a week's `mapEvents` openings go first in their tier; no week = old order). Hooks: `run.ts` (run start), `dungeon/pseudo.ts` (record and chain pseudo-stages).
-- Data: `gameEvents.json` (22 weeks: modifiers, featured openings, rule text; retired map events dropped from their lists), `tools/events/co/legends-13.ts` -> `co-legends-13.json` (9 Shadow chain events, `karma-echo`, `co-week-rival`). Status: 10 `built`, 22 `rule` in `status/legends.json`; flags in `flags/legends.json`.
-- Tests: `tests/unit/coLegendsWeeks.test.ts` (18). No new screen (events use the New UI event screen), so no new browser spec.
+- Engine: `src/core/co/weeks.ts` (`startFlag`, `blessingWeek`, `freeTelling`, `featuredOpenings` week modifiers; `rivalInPseudo`), `src/core/co/shadowChain.ts` (`purifyShadow` effect), `planCoStage(..., featured)` in `co/placement.ts` (a week's `featuredOpenings` and `mapEvents` go first in their tier; no week = old order). `featuredOpenings` ids are checked by the unit test, not by `buildContent`, so the old-seed content in `story.test.ts` (no Catalog Overhaul files) still builds. Hooks: `run.ts` (run start), `dungeon/pseudo.ts` (record and chain pseudo-stages).
+- Data: `gameEvents.json` (22 weeks plus z-move-trial: modifiers, featured openings, rule text), `tools/events/co/legends-13.ts` -> `co-legends-13.json` (9 Shadow chain events, `karma-echo`, `co-week-rival`). Status: 10 `built`, 22 `rule` in `status/legends.json`; flags in `flags/legends.json`.
+- Tests: `tests/unit/coLegendsWeeks.test.ts` (19). `gameEvents.test.ts` gate test now brings its own copy of an event (it relied on `shadow-triad` being the last raw event no co file overrides). `world.test.ts` lists `co-week-rival` as placed by code. No new screen (events use the New UI event screen), so no new browser spec.
 
 ## Re-read table
 | Catalog ids | Rule (doc) | Built | Checked |

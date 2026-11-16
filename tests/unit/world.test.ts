@@ -382,6 +382,8 @@ describe('landmarks and dungeons', () => {
     opened.add('gn-14-return');
     // gn.16: the Tournament rival's return is placed by code too (addRivalReturnStop).
     opened.add('gn-16-rival-return');
+    // Rivalry weeks (legends row C): the rival's scene is placed in every pseudo-stage by code (core/co/weeks.ts rivalInPseudo).
+    opened.add('co-week-rival');
     // gn.60: the Pokémon that followed you walks in beside a rest (core/greenneedle/followed.ts followedRest).
     opened.add('gn-60-reveal');
     // Catalog Overhaul: a placed event (core/co/placement.ts) is put on the map at its home step, room or not.

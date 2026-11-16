@@ -85,6 +85,7 @@ import { anyFlagSet, eggWarm, hasEgg, itemForType, owePartner, quietWild, runPla
 import { makeShadow, rollShadowHeart } from './shadow';
 import { addFlag } from './shadowWorld/world';
 import { purifyShadow } from './co/shadowChain';
+import { featuredOpenings } from './co/weeks';
 import { grantBlessing, makeBlissful } from './shadowWorld/blissful';
 import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
@@ -870,7 +871,7 @@ export function addEventStops(content: Content, run: RunState): void {
     // A same-stage story's later beats are placed when they are earned (placeEarnedCoBeats), not at the start of the stage.
     const entries = coOpen.map((id) => ({ id, p: content.coPlacement!.get(id)!, door: content.events.get(id)!.pseudo })).filter((e) => !(SAME_STAGE.has(e.p.shape) && e.p.beat >= 2));
     // Calendar weeks (legends, row C): the week's questline openings (its `mapEvents`) get first claim on the stage's budget.
-    coPut(run, planCoStage(stage.map, entries, `${run.seed}::co-place::${stageKey(run)}`, undefined, featuredMapEvents(content, run)));
+    coPut(run, planCoStage(stage.map, entries, `${run.seed}::co-place::${stageKey(run)}`, undefined, featuredOpenings(run, featuredMapEvents(content, run))));
     for (const id of coOpen) { taken.add(id); open.delete(id); }
   }
   // A run milestone (catalog 99) is offered at the middle stage of every region.

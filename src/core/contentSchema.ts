@@ -796,6 +796,8 @@ export const ArchetypeModifierSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('freeTelling'), count: z.number().int().min(1).max(3).default(1) }),
   /** Catalog Overhaul (legends, row C): a Legend week whose matching blessings are not a Legendary world event (Paradox Tide): the blessing's starting Influence is +1 when its Legendary is listed. */
   z.object({ kind: z.literal('blessingWeek'), species: z.array(z.string()).min(1) }),
+  /** Catalog Overhaul (legends, row C): an odds week's placed questline openings (Catalog Overhaul placement): the placer gives them first claim on a stage's event budget. Checked by tests/unit/coLegendsWeeks.test.ts (not here, so old-content fingerprints still build). */
+  z.object({ kind: z.literal('featuredOpenings'), ids: z.array(z.string().min(1)).min(1) }),
   /** Wild odds of a kind of species: dual-type, single-type, baby, pseudo-legend (600 BST, 3 stages), or the lines that start at the listed base species. */
   z.object({ kind: z.literal('speciesEncounterWeight'), trait: z.enum(['dual', 'mono', 'baby', 'pseudo', 'unevolved', 'fullyEvolved']).optional(), generation: z.number().int().min(1).max(9).optional(), lines: z.array(z.string()).min(1).optional(), value: z.number().positive() }),
   /** Shiny odds for wild Pokémon, event gifts and Eggs. */

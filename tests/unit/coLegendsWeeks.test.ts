@@ -3,7 +3,7 @@
 import { describe, expect, it } from 'vitest';
 import { planCoStage, readPlacement, type CoEntry } from '../../src/core/co/placement';
 import { purifyShadow } from '../../src/core/co/shadowChain';
-import { rivalInPseudo, WEEK_RIVAL_EVENT, weekFlags } from '../../src/core/co/weeks';
+import { featuredOpenings, rivalInPseudo, WEEK_RIVAL_EVENT, weekFlags } from '../../src/core/co/weeks';
 import { enterPseudoStage, PSEUDO } from '../../src/core/dungeon/pseudo';
 import { chooseEvent } from '../../src/core/events';
 import { blessingLegend } from '../../src/core/legends/signs';
@@ -35,18 +35,26 @@ describe('row C status', () => {
     for (const id of ROW_C.slice(0, 10)) expect(s.built[id], id).toBeDefined();
     for (const id of WEEKS) expect(s.rule[id], id).toBeDefined();
   });
-  it('every week names a live game event and features only live, enabled map events', () => {
+  it('every week names a live game event; its featured openings are live, enabled and placed', () => {
     for (const id of WEEKS) {
       const week = content.gameEvents.get(id);
       expect(week, id).toBeDefined();
-      for (const e of week!.mapEvents) expect(content.events.get(e)?.disabled, `${id} -> ${e}`).not.toBe(true);
+      for (const m of week!.modifiers) if (m.kind === 'featuredOpenings') for (const e of m.ids) {
+        expect(content.events.get(e), `${id} -> ${e}`).toBeDefined();
+        expect(content.events.get(e)!.disabled, `${id} -> ${e}`).not.toBe(true);
+        expect(content.coPlacement?.has(e), `${id} -> ${e}`).toBe(true);
+      }
     }
   });
   it('evil-team weeks focus their team; Z and Mega weeks feature the Anomaly openings', () => {
     const focus = (id: string) => content.gameEvents.get(id)!.modifiers.flatMap((m) => (m.kind === 'evilTeamFocus' ? m.teams : []));
     expect(focus('plasma-operation')).toEqual(['plasma']);
     for (const id of ['team-rocket-invasion', 'aqua-magma-showdown', 'galactic-machination', 'flare-experiment', 'aether-rescue']) expect(focus(id).length, id).toBeGreaterThan(0);
-    for (const id of ['mega-evolution-showcase', 'mega-stone-hunt', 'z-move-trial']) expect(content.gameEvents.get(id)!.mapEvents).toEqual(expect.arrayContaining(['co-m1-absol', 'co-z3-cave']));
+    const openings = (id: string) => content.gameEvents.get(id)!.modifiers.flatMap((m) => (m.kind === 'featuredOpenings' ? m.ids : []));
+    for (const id of ['mega-evolution-showcase', 'mega-stone-hunt', 'z-move-trial']) expect(openings(id)).toEqual(expect.arrayContaining(['co-m1-absol', 'co-z3-cave']));
+    for (const id of ['gym-circuit', 'champions-gauntlet', 'elite-four-sweep', 'champion-cup-weekend']) expect(openings(id)).toEqual(expect.arrayContaining(['face-leader-day-off', 'face-champion-coffee']));
+    expect(openings('gym-rematch-week')).not.toContain('face-champion-coffee');
+    for (const id of ['rivalry-week', 'roadside-rival-week']) expect(content.gameEvents.get(id)!.mapEvents).toContain('tournament-entry');
   });
 });
 
@@ -118,6 +126,11 @@ describe('Legend weeks (Paradox Tide, Leap Day)', () => {
 });
 
 describe('odds weeks: featured openings win the stage budget', () => {
+  it('a run started in an odds week carries its openings; featuredOpenings joins them with the map events', () => {
+    const run = start('od', ['dragon-week']);
+    expect(featuredOpenings(run, new Set(['x'])).has('co-l6-towns')).toBe(true);
+    expect(featuredOpenings(start('od'), new Set(['x']))).toEqual(new Set(['x']));
+  });
   it('a featured entry is placed first in its tier; with no week the order is unchanged', () => {
     const run = start('od');
     const map = run.stage!.map;
