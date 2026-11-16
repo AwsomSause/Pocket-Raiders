@@ -2702,7 +2702,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   const galarLeagueShop = stage.kind === 'league' && currentRegion(content, run).id === 'galar';
   const visit = Math.max(0, Math.floor(findNode(stage.map, stage.current).column / 2) - 1);
   if (galarLeagueShop) run.shop = { type: 'ballguy', place, visit, sold: {} };
-  else run.shop = { type: shopTypeAt({ seed: run.seed, regionIndex: run.regionIndex, stageIndex: stage.index, nodeId: stage.current, period: periodOf(run), blackMarket: blackMarketMarkup(runPerks(content, run)) !== null }), place };
+  else run.shop = { type: shopTypeAt({ seed: run.seed, regionIndex: run.regionIndex, stageIndex: stage.index, nodeId: stage.current, period: periodOf(run), blackMarket: marketMarkup(content, run) !== null }), place };
   // A Bike Voucher is traded for its bike (or money, if the player already has one).
   const voucher = voucherOf(content, run);
   if (voucher) {
@@ -2756,7 +2756,7 @@ export function shopStock(content: Content, run: Pick<RunState, 'badges' | 'arch
     .slice(0, shopEarlyRareStockPerk(runPerks(content, run)));
   early.push(...earlyRare);
   // Rocket Boss Giovanni's Black Market sells everything, locked stock at a markup (shopPrice).
-  const black = blackMarketMarkup(runPerks(content, run)) !== null;
+  const black = marketMarkup(content, run) !== null;
   const modeStock = (content.balance.modeShops[run.rules?.modeId ?? ''] ?? []).filter((x) => content.items.has(x.item) && !content.shop.some((e) => e.item === x.item));
   const secret = secretTierEntries(content, run.story).filter((x) => !content.shop.some((e) => e.item === x.item) && !modeStock.some((e) => e.item === x.item));
   const stock = [...content.shop, ...bankShopEntries(content, run.licenses).filter((x) => !content.shop.some((e) => e.item === x.item)), ...modeStock, ...secret];
@@ -2767,9 +2767,15 @@ export function shopStock(content: Content, run: Pick<RunState, 'badges' | 'arch
   return trackForgetStock(content, run as Partial<RunState>, typedStock(content, run, selling, locked) as Content['shop']) as Content['shop'];
 }
 
+/** Giovanni's Black Market (a perk), or the Hideout's black-market pass for the region it was won in (Greenneedle gn.28). */
+function marketMarkup(content: Content, run: Pick<RunState, 'badges' | 'archetypeId'> & Partial<Pick<RunState, 'perkEffects' | 'story' | 'regionIndex'>>): number | null {
+  const pass = Number(run.story?.flags['ev:hideout-pass'] ?? 0) === (run.regionIndex ?? -2) + 1;
+  return blackMarketMarkup(runPerks(content, run)) ?? (pass ? content.balance.co.hideoutPassMarkup : null);
+}
+
 /** Whether an entry is on sale only through the Black Market (your badges haven't opened it). */
-export function isBlackMarket(content: Content, run: Pick<RunState, 'badges' | 'archetypeId'> & Partial<Pick<RunState, 'perkEffects'>>, entry: Content['shop'][number]): boolean {
-  return blackMarketMarkup(runPerks(content, run)) !== null && run.badges.length < shopBadgesNeeded(content, run, entry);
+export function isBlackMarket(content: Content, run: Pick<RunState, 'badges' | 'archetypeId'> & Partial<Pick<RunState, 'perkEffects' | 'story' | 'regionIndex'>>, entry: Content['shop'][number]): boolean {
+  return marketMarkup(content, run) !== null && run.badges.length < shopBadgesNeeded(content, run, entry);
 }
 
 /** Key items, Mega Stones and Z-Crystals last the whole run, so you only ever need one. */
@@ -2803,7 +2809,7 @@ export function shopSaleItem(content: Content, run: RunState): string | null {
 
 export function shopPrice(content: Content, run: RunState, entry: Content['shop'][number]): number {
   // Coupons lower the price; a full Point Card makes it free.
-  const markup = isBlackMarket(content, run, entry) ? blackMarketMarkup(runPerks(content, run))! : 1;
+  const markup = isBlackMarket(content, run, entry) ? marketMarkup(content, run)! : 1;
   const deal = currentShopType(run) === 'pokenet' ? pokenetDeal(content, run, shopStock(content, run), shopSaleItem(content, run)) : null;
   return Math.round(entry.price * markup * buildPriceFactor(content, run.party, entry.item) * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story) * dynamicPriceFactor(content, run, entry.item) * trackShopFactor(content, run) * blessingShopFactor(run) * shopDealFactor(content, run, entry.item));
 }

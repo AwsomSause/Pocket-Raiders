@@ -120,6 +120,15 @@
    "start": "opened"
   },
   {
+   "id": "ps_gn_hideout",
+   "name": "The Hideout",
+   "entry": "gn-28-door",
+   "themeId": "dark-steel",
+   "tint": "#2a1f24",
+   "mood": "evil team hideout",
+   "start": "opened"
+  },
+  {
    "id": "ps_gn_giants",
    "name": "The Island of Giant Pokémon",
    "entry": "gn-26-door",

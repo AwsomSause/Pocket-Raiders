@@ -2206,7 +2206,7 @@ export const BalanceSchema = z.object({
   /** Beta 0.7 L3 Rewinds (core/rewind.ts): how far back a battle rewind may go, and how many rewinds a stage allows. */
   rewind: z.object({ maxTurnsBack: z.number().int().min(1), usesPerStage: z.number().int().min(0) }).default({ maxTurnsBack: 5, usesPerStage: 1 }),
   /** Catalog Overhaul Pack words: "+1 Bond" on one Pokémon is `bondFriendship` friendship (`bondFriendshipParty` each for the whole party); Bond level N is friendship N x `bondLevelStep`. */
-  co: z.object({ bondFriendship: z.number().int().min(1), bondFriendshipParty: z.number().int().min(1), bondLevelStep: z.number().int().min(1), /** new events: weight of a wild species while its type is quiet (an Alpha left, the river emptied). */ quietWildWeight: z.number().min(0).max(1).default(0.1), /** Greenneedle gn.26: a giant's max HP boost (percent) and Speed multiplier. */ giantHpPercent: z.number().int().min(0).max(300).default(100), giantSpeed: z.number().min(0.1).max(1).default(0.75) }).default({ bondFriendship: 5, bondFriendshipParty: 3, bondLevelStep: 50, quietWildWeight: 0.1, giantHpPercent: 100, giantSpeed: 0.75 }),
+  co: z.object({ bondFriendship: z.number().int().min(1), bondFriendshipParty: z.number().int().min(1), bondLevelStep: z.number().int().min(1), /** new events: weight of a wild species while its type is quiet (an Alpha left, the river emptied). */ quietWildWeight: z.number().min(0).max(1).default(0.1), /** Greenneedle gn.26: a giant's max HP boost (percent) and Speed multiplier. */ giantHpPercent: z.number().int().min(0).max(300).default(100), giantSpeed: z.number().min(0.1).max(1).default(0.75), /** Greenneedle gn.28: the black-market pass's markup on locked stock. */ hideoutPassMarkup: z.number().min(1).max(5).default(1.5) }).default({ bondFriendship: 5, bondFriendshipParty: 3, bondLevelStep: 50, quietWildWeight: 0.1, giantHpPercent: 100, giantSpeed: 0.75, hideoutPassMarkup: 1.5 }),
   badgePower: z.object({ damagePerBadge: z.number().min(0).default(0.03), weaknessCutPerBadge: z.number().min(0).default(0.03), maxStacks: z.number().int().min(1).default(4) }).default({ damagePerBadge: 0.03, weaknessCutPerBadge: 0.03, maxStacks: 4 }),
   /** Item rework (Kice, 2026-11-07): charm odds in the draft, and how much of each Luck gain a run keeps. */
   itemRework: z
@@ -3595,6 +3595,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     foeMoves: z.array(z.string()).max(3).optional(),
     /** With `team`: this team instead when your lead is weak to `weakTo` (the Samurai counters your Bug-type). */
     counter: z.object({ weakTo: TypeNameSchema, team: z.array(z.string()).min(1) }).optional(),
+    /** Greenneedle gn.28: one more Pokémon while run flag `key` is at least `at` (the Hideout's Alert meter at 10). */
+    moreIf: z.object({ key: z.string().min(1), at: z.number().int().min(1) }).optional(),
     /** A trainer class from trainers.json, or a boss id (its signature team). */
     classId: z.string().optional(),
     bossId: z.string().optional(),

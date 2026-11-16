@@ -6,6 +6,7 @@ import { calcStats, createPokemon, maxHp } from '../../src/core/pokemon';
 import { chainRooms, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
 import { choose, flagOf, gnRun, lose, open, openSide, scene, setFlag, win } from './helpers/gnPlay';
 import { conditionMet } from '../../src/core/events';
+import { isBlackMarket } from '../../src/core/run';
 
 const party = (seed: string, extra: string[] = []): RunState => {
   const run = gnRun(seed);
@@ -238,5 +239,162 @@ describe('gn.27 The Pokémon Circus', () => {
     expect(team).toHaveLength(5);
     const after = win(fight);
     expect(flagOf(after, 'circus-season')).toBe(1);
+  });
+});
+
+describe('gn.28 The Team Rocket Hideout', () => {
+  const rocket = (seed: string, extra: string[] = []): RunState => {
+    const run = party(seed, extra);
+    run.story.evil = { teamId: 'rocket', beat: 0, nextAt: 0, heat: 0, ops: [], villains: {}, defector: false, end: 'none', region: 0, stages: 0 } as never;
+    return run;
+  };
+  const inside = (seed: string, setup: (run: RunState) => void = () => {}): RunState => {
+    const run = rocket(seed);
+    setup(run);
+    open(run, 'gn-28-door');
+    return choose(run, 'gn-28-door', 'Go in.').run;
+  };
+  const toLabs = (seed: string): RunState => choose(inside(seed), 'gn-28-offices', 'Talk your way past.').run;
+  const toVault = (seed: string, alert: number): RunState => {
+    const run = rocket(seed);
+    setFlag(run, 'hideout-entered');
+    setFlag(run, 'hideout-alert', alert);
+    open(run, 'gn-28-vault');
+    return run;
+  };
+
+  it('a door at step 14, optional, instead of the battle; A6; four floors; only while the region\'s team is active', () => {
+    expect(content.coPlacement!.get('gn-28-door')).toMatchObject({ shape: 'door', home: 14, window: [12, 17], sits: 'optional', attaches: 'instead', earliest: 6 });
+    const chain = PSEUDO_CHAINS.find((c) => c.id === 'ps_gn_hideout')!;
+    expect(chainRooms(content, chain).map((r) => `${r.depth}:${r.event}`).slice(0, 4)).toEqual(['1:gn-28-offices', '2:gn-28-labs', '3:gn-28-holding', '4:gn-28-vault']);
+    const req = content.events.get('gn-28-door')!.requires;
+    expect(req.every((c) => conditionMet(content, gnRun('t28-none'), c))).toBe(false);
+    expect(req.every((c) => conditionMet(content, rocket('t28-req'), c))).toBe(true);
+  });
+
+  it('written in the team\'s own words; going in, the first camera sees you (Alert +2)', () => {
+    const run = rocket('t28-words');
+    open(run, 'gn-28-door');
+    expect(scene(run, 'gn-28-door').intro).toMatch(/Silph Surplus Co\.[\s\S]*Rocket Grunt/);
+    expect(scene(run, 'gn-28-door').intro).not.toContain('{');
+    const went = choose(run, 'gn-28-door', 'Go in.');
+    expect(said(went)).toMatch(/Alert \+2/);
+    expect(flagOf(went.run, 'hideout-alert')).toBe(2);
+    expect(went.run.stage!.pseudo?.id).toBe('ps_gn_hideout');
+    expect(scene(went.run, 'gn-28-offices').intro).toMatch(/LOST: one Meowth, answers to nothing/);
+  });
+
+  it('the offices: the File for the team\'s story (a camera sees you), and talking past only while they\'re bored', () => {
+    let run = inside('t28-file');
+    expect(scene(run, 'gn-28-offices').labels).toEqual(['Search the filing cabinet.', 'Slip behind the canteen.', 'Talk your way past.', 'Fight your way through.']);
+    run = choose(run, 'gn-28-offices', 'Search the filing cabinet.').run;
+    expect(flagOf(run, 'team-rocket-files')).toBeGreaterThan(0);
+    expect(flagOf(run, 'hideout-alert')).toBe(4);
+    expect(scene(run, 'gn-28-offices').labels).toEqual(['Slip behind the canteen.', 'Talk your way past.', 'Fight your way through.']);
+    const later = inside('t28-bored');
+    setFlag(later, 'hideout-alert', 5);
+    expect(scene(later, 'gn-28-offices').labels).not.toContain('Talk your way past.');
+  });
+
+  it('behind the canteen: petty cash, and the tape loop blinds the next two cameras', () => {
+    let run = choose(inside('t28-loop'), 'gn-28-offices', 'Slip behind the canteen.').run;
+    expect(scene(run, 'gn-28-back').labels).toEqual(['Take the petty cash.', 'Put the loop on.', 'Smash the monitors.', 'Back to the offices.']);
+    const money = run.money;
+    run = choose(run, 'gn-28-back', 'Take the petty cash.').run;
+    expect(run.money).toBe(money + 1200);
+    run = choose(run, 'gn-28-back', 'Put the loop on.').run;
+    run = choose(choose(run, 'gn-28-back', 'Back to the offices.').run, 'gn-28-offices', 'Talk your way past.').run;
+    expect(flagOf(run, 'hideout-alert')).toBe(2);
+    expect(flagOf(run, 'hideout-loop')).toBe(1);
+  });
+
+  it('smashing the monitors trips an alarm (Alert +3) and brings a Grunt', () => {
+    const run = choose(choose(inside('t28-smash'), 'gn-28-offices', 'Slip behind the canteen.').run, 'gn-28-back', 'Smash the monitors.');
+    expect(flagOf(run.run, 'hideout-alert')).toBe(5);
+    expect(run.run.battle?.kind).toBe('trainer');
+  });
+
+  it('at Alert 10 every Grunt left has one more Pokémon', () => {
+    const calm = choose(inside('t28-calm'), 'gn-28-offices', 'Fight your way through.').run;
+    const loudIn = inside('t28-loud');
+    setFlag(loudIn, 'hideout-alert', 10);
+    const loud = choose(loudIn, 'gn-28-offices', 'Fight your way through.').run;
+    expect(flagOf(loud, 'hideout-alert')).toBe(10);
+    expect(loud.battle!.enemyTeam.length).toBe(calm.battle!.enemyTeam.length + 1);
+  });
+
+  it('the scientist: the doc\'s four choices; asking what\'s inside, then "Come with me": the key, and he turns', () => {
+    let run = choose(toLabs('t28-sci'), 'gn-28-labs', 'Talk to the scientist at the window.').run;
+    expect(scene(run, 'gn-28-scientist').labels).toEqual(['Give me the key.', 'What\'s in the locked lab?', 'Come with me.', 'You knew. You stayed.']);
+    expect(scene(run, 'gn-28-scientist').intro).toMatch(/Dr\. Emmerich Aldersey/);
+    const asked = choose(run, 'gn-28-scientist', 'What\'s in the locked lab?');
+    expect(asked.text).toMatch(/Nobody's switched the lights off/);
+    run = choose(asked.run, 'gn-28-scientist', 'Come with me.').run;
+    expect(flagOf(run, 'hideout-scientist-turned')).toBe(1);
+    expect(flagOf(run, 'hideout-lab-known')).toBe(1);
+    expect(scene(run, 'gn-28-labs').labels).toContain('Unlock the laboratory.');
+  });
+
+  it('the locked lab: a Shadow Pokémon, never forced', () => {
+    let run = choose(toLabs('t28-lab'), 'gn-28-labs', 'Talk to the scientist at the window.').run;
+    run = choose(choose(run, 'gn-28-scientist', 'Give me the key.').run, 'gn-28-labs', 'Unlock the laboratory.').run;
+    expect(scene(run, 'gn-28-lab').labels).toEqual(['Open its tank.', 'Leave them sleeping.']);
+    const left = choose(run, 'gn-28-lab', 'Leave them sleeping.').run;
+    expect(left.pending.length + left.party.length).toBe(run.pending.length + run.party.length);
+    expect(content.events.get('gn-28-lab')!.choices[0]!.success.effects.some((e) => e.kind === 'join' && e.shadow)).toBe(true);
+  });
+
+  it('holding: the keeper helps while it\'s quiet; the cast is freed and the vault opens', () => {
+    const labs = toLabs('t28-pen');
+    expect(flagOf(labs, 'hideout-alert')).toBe(4);
+    setFlag(labs, 'hideout-alert', 0);
+    const run = choose(labs, 'gn-28-labs', 'Take the stairs down.').run;
+    expect(scene(run, 'gn-28-holding').labels).toEqual(['Open every cage.', 'Ask the keeper to help.']);
+    const freed = choose(run, 'gn-28-holding', 'Ask the keeper to help.').run;
+    expect(flagOf(freed, 'freed-caged')).toBe(1);
+    expect(next(freed)).toBe('gn-28-vault');
+  });
+
+  it('the Executive at A+2; at Alert 10 two Grunts stand with them', () => {
+    const quiet = choose(toVault('t28-exec', 3), 'gn-28-vault', 'Fight.').run;
+    expect(quiet.battle!.kind).toBe('trainer');
+    const loud = win(choose(toVault('t28-exec10', 10), 'gn-28-vault', 'Fight.').run);
+    expect(next(loud)).toBe('gn-28-vault-2');
+  });
+
+  it('beating the Executive: choose one of four rewards; the black-market pass lasts the region', () => {
+    const run = win(choose(toVault('t28-win', 3), 'gn-28-vault', 'Fight.').run);
+    expect(next(run)).toBe('gn-28-reward');
+    expect(scene(run, 'gn-28-reward').labels).toEqual(['A Shadow Pokémon.', 'A stolen evolution item.', 'A rare egg.', 'A pass to the black market.']);
+    const pass = choose(run, 'gn-28-reward', 'A pass to the black market.').run;
+    expect(flagOf(pass, 'hideout-pass')).toBe(pass.regionIndex + 1);
+    expect(flagOf(pass, 'hideout-done')).toBe(1);
+    expect(content.shop.some((e) => isBlackMarket(content, pass, e))).toBe(true);
+    expect(content.shop.some((e) => isBlackMarket(content, run, e))).toBe(false);
+    pass.regionIndex += 1;
+    expect(content.shop.some((e) => isBlackMarket(content, pass, e))).toBe(false);
+    const stone = choose(choose(run, 'gn-28-reward', 'A stolen evolution item.').run, 'gn-28-stone', 'Return it to its owner.');
+    expect(flagOf(stone.run, 'hideout-reward-stone-returned')).toBe(1);
+  });
+
+  it('losing to the Executive throws you out, and nothing worse', () => {
+    const after = lose(choose(toVault('t28-lose', 3), 'gn-28-vault', 'Fight.').run);
+    expect(after.phase).toBe('map');
+    expect(flagOf(after, 'hideout-thrown-out')).toBe(1);
+  });
+
+  it('afterwards: the freed nod on later stages; a rescue centre and the scientist\'s note in the next region', () => {
+    const run = rocket('t28-after');
+    setFlag(run, 'freed-caged');
+    setFlag(run, 'hideout-at', run.stage!.index + 1);
+    setFlag(run, 'hideout-region', run.regionIndex + 1);
+    setFlag(run, 'hideout-scientist-turned');
+    setFlag(run, 'hideout-turned-region', run.regionIndex + 1);
+    const req = (id: string) => content.events.get(id)!.requires.every((c) => conditionMet(content, run, c));
+    expect([req('gn-28-nod'), req('gn-28-centre'), req('gn-28-note')]).toEqual([false, false, false]);
+    run.regionIndex += 1;
+    expect([req('gn-28-centre'), req('gn-28-note')]).toEqual([true, true]);
+    open(run, 'gn-28-note');
+    expect(said(choose(run, 'gn-28-note', 'Read it.'))).toMatch(/Team Rocket's next operation is Pokémon Heist/);
   });
 });

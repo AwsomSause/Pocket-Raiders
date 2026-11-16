@@ -1,7 +1,8 @@
 // Greenneedle, part 6: gn.26 The Island of Giant Pokémon, gn.27 The Pokémon Circus (doc GREENNEEDLE_REWORKED_PLACED_6.md).
 // Build: npm run co:build -- greenneedle-6   then   npm run co:gn
+import { foe } from './_evil-story-kit.ts';
 import { $, any, anyType, ch, egg, fight, flag, heal, hurtLead, item, join, out, RARE_HELD, takeNode, trainer, wild, type Json } from '../dsl.ts';
-import { bond, chIf, gev, gn, inside, is, leavePseudo, moment, not, notThisRegion, pick, regionChanged, rm, say, scene, setTo, stampRegion, when, type Placement } from './_gn.ts';
+import { bond, cap, chIf, gev, gn, inside, is, kindness, laterStage, leavePseudo, moment, not, notThisRegion, pick, regionChanged, rm, say, scene, setTo, stampRegion, stampStage, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -367,8 +368,189 @@ const gn27: Json[] = [
   ]),
 ];
 
+// =====================================================================================================================
+// gn.28  THE TEAM ROCKET HIDEOUT  (a door, then a Pseudo Stage of four floors; needs an active Evil Team, written in its
+// words: Rocket's, or the region's own team re-dressed; step 14, optional, instead of the battle; A6; once a run).
+// The Alert meter (0 to 10): a camera that sees you +2, an alarm +3; the tape loop blinds the next two cameras.
+// =====================================================================================================================
+const HIDE_TINT = '#2a1f24';
+const base = (o: Json = {}): Json => ({ tint: HIDE_TINT, tags: ['Evil Team', 'Dungeon', 'Story'], effect: 'none', ...o });
+const floor = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, base(o), intro, choices);
+const ALERT = 'hideout-alert';
+const LOOP = 'hideout-loop';
+/** A camera on the floor you've just reached: +2, unless the tapes are looping. */
+const camera: Json[] = [
+  gn('check', { key: 'hideout-looped', if: [is(LOOP)] }),
+  when('hideout-looped', { min: 1 }, [flag(LOOP, -1)], 'The camera\'s red light stays off. The loop is still running.'),
+  when('hideout-looped', { min: 0, max: 0 }, [flag(ALERT, 2), cap(ALERT, 10)], 'A camera turns, slowly, to follow you. (Alert +2)'),
+];
+const alarm: Json[] = [flag(ALERT, 3), cap(ALERT, 10)];
+/** On to the next floor, past its camera. */
+const down = (next: string): Json[] => [...camera, { kind: 'addEvent', eventId: next }];
+/** How awake the floor is: bored (0 to 4), patrols (5 to 9), everyone (10). Three lines, one shows. */
+const MOOD = (where: string): Json[] => [
+  { id: 'bored', when: [is(ALERT, 0, 4)], notice: `*Alert low: the ${where} is bored. Some of them could be talked past.*` },
+  { id: 'patrol', when: [is(ALERT, 5, 9)], notice: `*Alert: patrols. Torches sweep the ${where}. Nobody's talking their way past anyone now.*` },
+  { id: 'full', when: [is(ALERT, 10)], notice: '*Alert 10. Every alarm in the building is going. Every Grunt left has called up one more Pokémon.*' },
+];
+/** A Grunt fight inside the Hideout (A+0): at Alert 10 each one has one more Pokémon. */
+const grunts = (n: number, win: Json[]): Json => ({ ...foe('grunt', '{grunt}', 2, { pseudo: true, lv: 0, chain: n, win }), moreIf: { key: ALERT, at: 10 } });
+const THROWN_OUT: Json[] = [flag('hideout-thrown-out'), flag('hideout-done'), leavePseudo()];
+/** The rescued cast (freed here) are remembered: some nod, a few ask to join, the rest found a rescue centre. */
+const FREED: Json[] = [flag('freed-caged'), stampStage('hideout-at'), stampRegion('hideout-region'), kindness(1)];
+/** A reward, then out the way you came. */
+const REWARD = (key: string, text: string, ...effects: Json[]): Json => out(text, ...effects, setTo(`hideout-reward`, 1), flag(`hideout-reward-${key}`), flag('hideout-done'), stampRegion('hideout-done-region'), leavePseudo());
+const RARE_EGGS = ['dratini', 'larvitar', 'bagon', 'beldum', 'gible', 'deino', 'goomy', 'jangmo-o', 'riolu', 'axew'];
 
-export const EVENTS: Json[] = [...gn26, ...gn27];
+const gn28: Json[] = [
+  gev('gn-28-door', 'The {team} Hideout', base({ stop: 'event', rarity: 'rare', pokemon: 'meowth', requires: [{ kind: 'evil', ends: ['none'] }, not('hideout-done'), not('hideout-entered')] }), say(
+    'A shuttered {front} building on the edge of town. No sign on the door.',
+    'A {grunt} is smoking by the bins. He doesn\'t see you. Behind him, the door is propped open with a fire extinguisher.',
+  ), [
+    ch('Go in.', out('You step over the extinguisher. Inside it smells of floor polish and burnt coffee.', flag('hideout-entered'), setTo(ALERT, 0), setTo(LOOP, 0), ...camera, { kind: 'addEvent', eventId: 'gn-28-offices' })),
+    ch('Walk on.', out('You walk on. Behind you the {grunt} finishes his cigarette, kicks the extinguisher, and the door swings shut.')),
+  ]),
+  // ---- Floor 1. Offices ----
+  floor('gn-28-offices', '{team} Hideout: The Offices', { pokemon: 'meowth', remembers: MOOD('office') }, say(
+    'Desks. A canteen with a broken kettle. Two {grunt}s arguing over a stapler.',
+    'On the staff noticeboard: *LOST: one Meowth, answers to nothing.*',
+  ), [
+    chIf([not('hideout-file')], 'Search the filing cabinet.', out(say(
+      'Third drawer down, under a lunch order: a File. Names, dates, a map with red pins in it.',
+      'You fold it into your jacket. The drawer squeaks shut.',
+    ), flag('hideout-file'), { kind: 'evil', mark: 'files' }, ...alarmIfSeen(), scene('gn-28-offices'))),
+    ch('Slip behind the canteen.', out('Past the fridge, a door marked STAFF ONLY. Somebody has written *REALLY* under it.', scene('gn-28-back'))),
+    chIf([is(ALERT, 0, 4)], 'Talk your way past.', out('"New starter," you say. "They sent me down to Labs." The {grunt}s shrug. Neither of them wants the stapler that much.', ...down('gn-28-labs'))),
+    ch('Fight your way through.', fight('The stapler goes flying. Both of them reach for their Balls.', grunts(2, down('gn-28-labs')))),
+  ]),
+  floor('gn-28-back', '{team} Hideout: Behind the Canteen', { pokemon: 'meowth' }, say(
+    'A cupboard full of mops. Behind the mops, a cash box. Beside it, a wall of little monitors.',
+    'A tape deck under the desk, labelled *LOOP*.',
+  ), [
+    chIf([not('hideout-cash')], 'Take the petty cash.', out('Notes, coins, a voucher for a free noodle bowl. The team\'s petty cash. (₽1,200)', $(1200), flag('hideout-cash'), scene('gn-28-back'))),
+    chIf([not('hideout-tapes')], 'Put the loop on.', out('The monitors flicker, and show an empty corridor, over and over. The next two cameras see nothing.', setTo(LOOP, 2), flag('hideout-tapes'), scene('gn-28-back'))),
+    chIf([not('hideout-tapes')], 'Smash the monitors.', fight('Glass everywhere. Somewhere upstairs, a bell starts ringing. Boots on the stairs. (Alert +3)', grunts(1, [scene('gn-28-offices')]), ...alarm, flag('hideout-tapes'))),
+    ch('Back to the offices.', out('You put the mops back the way they were.', scene('gn-28-offices'))),
+  ]),
+  // ---- Floor 2. Labs ----
+  floor('gn-28-labs', '{team} Hideout: The Labs', {
+    pokemon: 'porygon',
+    remembers: [
+      { id: 'known', when: [is('hideout-lab-known')], notice: '*Through the frosted glass of the locked lab, the lights are still on.*' },
+      ...MOOD('lab floor').slice(1),
+    ],
+  }, say(
+    'Glass. Machines that hum. Scientists in white coats who don\'t look up.',
+    'At the end of the floor, one laboratory is locked. Beside it, one scientist is standing at a window, not working.',
+  ), [
+    chIf([not('hideout-scientist')], 'Talk to the scientist at the window.', out('He doesn\'t turn round. He\'s been waiting for somebody, and it might as well be you.', scene('gn-28-scientist'))),
+    chIf([is('hideout-lab-key'), not('hideout-lab-open')], 'Unlock the laboratory.', out('The key turns. The door hisses.', flag('hideout-lab-open'), scene('gn-28-lab'))),
+    ch('Take the stairs down.', out('The stairs go down to a floor that smells of straw.', ...down('gn-28-holding'))),
+    chIf([is(ALERT, 5)], 'Fight the patrol.', fight('A patrol comes round the corner. They\'ve been looking for you.', grunts(1, [scene('gn-28-labs')]))),
+  ]),
+  floor('gn-28-scientist', '{team} Hideout: Dr. Emmerich Aldersey', { pokemon: 'porygon' }, say(
+    '**Dr. Emmerich Aldersey:** "You\'re not staff. Good. I\'ve been hoping someone who isn\'t staff would come."',
+    '**Dr. Emmerich Aldersey:** "I signed on for the research. I didn\'t ask what it was for. I\'ve started asking."',
+  ), [
+    ch('Give me the key.', out('He takes a key off a string round his neck and holds it out. He doesn\'t follow you.', flag('hideout-lab-key'), flag('hideout-scientist'), scene('gn-28-labs'))),
+    chIf([not('hideout-lab-known')], 'What\'s in the locked lab?', out(say(
+      '**Dr. Emmerich Aldersey:** "The ones that didn\'t take. They\'re still alive."',
+      '"Nobody\'s switched the lights off. That\'s how I know someone here still feels something."',
+    ), flag('hideout-lab-known'), scene('gn-28-scientist'))),
+    ch('Come with me.', out(say(
+      'He looks at you for a long moment. Then he takes off his badge, and goes down the floor opening every door.',
+      '**Dr. Emmerich Aldersey:** "Next region. Look under a rock. I\'ll find you."',
+    ), flag('hideout-lab-key'), flag('hideout-scientist'), setTo('hideout-scientist-turned', 1), stampRegion('hideout-turned-region'), setTo(LOOP, 1), scene('gn-28-labs'))),
+    ch('You knew. You stayed.', out('**Dr. Emmerich Aldersey:** "Yes." He gives you the key. He goes back to his window.', flag('hideout-lab-key'), flag('hideout-scientist'), setTo('hideout-scientist-judged', 1), scene('gn-28-labs'))),
+  ]),
+  floor('gn-28-lab', '{team} Hideout: The Locked Laboratory', {
+    pokemon: 'porygon',
+    remembers: [{ id: 'known', when: [is('hideout-lab-known')], notice: '*He was right. The lights are on. Someone kept them on.*' }],
+  }, say(
+    'Tanks. In them, Pokémon mid-way through something. They turn their heads to follow you.',
+    'One tank glows a dark, wrong purple. The Pokémon inside it is a Shadow Pokémon. It presses one paw to the glass.',
+  ), [
+    ch('Open its tank.', out(say(
+      'The glass slides up. It steps out into the cold air and stands very close to you.',
+      'It doesn\'t trust you. It doesn\'t trust anyone. It comes anyway.',
+    ), { ...join({ shadow: true }) }, flag('hideout-shadow-freed'), scene('gn-28-labs'))),
+    ch('Leave them sleeping.', out('You leave the lights on.', scene('gn-28-labs'))),
+  ]),
+  // ---- Floor 3. Holding (SF133, the Holding Pen) ----
+  floor('gn-28-holding', '{team} Hideout: Holding', {
+    pokemon: 'chansey',
+    remembers: [
+      { id: 'kind', when: [is('kind-total', 10)], notice: '*One of them knows your lead. A kindness you did on some road, a long time ago. It comes to the bars first.*' },
+      ...MOOD('pen').slice(1),
+    ],
+  }, say(
+    'Cages, stacked three high, labelled for shipping. A Chansey in the nearest one is trying to look after all of them through the bars.',
+    'The pen keeper, a tired {grunt} with a bucket of feed, steps in front of them. "Don\'t. I just feed them. Don\'t."',
+  ), [
+    ch('Open every cage.', fight('You open every cage. She drops the bucket and reaches for a Ball.', grunts(1, [...FREED, ...down('gn-28-vault')]), flag('hideout-pen-fought'))),
+    chIf([is(ALERT, 0, 4)], 'Ask the keeper to help.', out(say(
+      'She looks at you for a long time. "...They bite the boss. They never bite me."',
+      'She hands you the keys, folds her jacket on the bucket, and helps you open every cage. Then she walks out with them.',
+    ), flag('hideout-keeper-quit'), ...FREED, ...down('gn-28-vault'))),
+    chIf([is(ALERT, 5)], 'Ask the keeper to help.', fight('"Not with the alarms going," she says. "They\'ll know it was me." She puts the bucket down, and reaches for a Ball.', grunts(1, [...FREED, ...down('gn-28-vault')]))),
+  ]),
+  // ---- Floor 4. The Vault ----
+  floor('gn-28-vault', '{team} Hideout: The Vault', { pokemon: 'persian', effect: 'shake' }, say(
+    'A round steel door, open. Inside, gold-coloured shelves and a desk. Behind the desk, {lt}.',
+    '**{lt}:** "You\'ve cost us a floor of salaries. Do you know what a {grunt} *costs?* The hats alone."',
+  ), [
+    chIf([is(ALERT, 0, 9)], 'Fight.', fight('{lt} stands, and straightens their cuffs.', exec([]), flag('hideout-exec'))),
+    chIf([is(ALERT, 10)], 'Fight.', fight('{lt} snaps their fingers. Two {grunt}s step out from behind the shelves.', grunts(2, [{ kind: 'addEvent', eventId: 'gn-28-vault-2' }]), flag('hideout-exec'))),
+  ]),
+  floor('gn-28-vault-2', '{team} Hideout: The Vault', { pokemon: 'persian', effect: 'shake' }, say(
+    'The two {grunt}s are down. {lt} hasn\'t moved from behind the desk.',
+    '**{lt}:** "Fine. I\'ll do it myself. I always do."',
+  ), [ch('Fight.', fight('{lt} stands.', exec([])))]),
+  floor('gn-28-reward', '{team} Hideout: The Vault Shelves', { pokemon: 'persian' }, say(
+    '{lt} is gone, out a back door you didn\'t see. The shelves are full of things the team took.',
+    'You can carry one. Anything more and you won\'t make the stairs.',
+  ), [
+    ch('A Shadow Pokémon.', REWARD('shadow', 'A Poké Ball in a velvet box, cold to the touch. It never asked to be like this. It comes with you.', { ...join({ shadow: true }) })),
+    ch('A stolen evolution item.', out('A stone with a luggage label tied to it. A name and an address, in a child\'s writing.', scene('gn-28-stone'))),
+    ch('A rare egg.', REWARD('egg', 'An Egg in a padded crate stamped FRAGILE. Nobody has written what it is.', egg({ species: RARE_EGGS }))),
+    ch('A pass to the black market.', REWARD('pass', 'A plastic card with a red R on it. For the rest of the region, the night market will treat you as one of theirs.', stampRegion('hideout-pass'))),
+  ]),
+  floor('gn-28-stone', '{team} Hideout: The Luggage Label', { pokemon: 'persian' }, say(
+    'The label says who it belongs to. They live two towns back.',
+  ), [
+    ch('Return it to its owner.', REWARD('stone-returned', 'You post it back with a note. A week later a drawing finds you: you, a stone, and a very big smile.', kindness(1))),
+    ch('Keep it.', REWARD('stone', 'You untie the label and put it in your pocket. The stone is yours now.', { kind: 'itemFrom', ids: ['fire-stone', 'water-stone', 'thunder-stone', 'leaf-stone', 'moon-stone', 'sun-stone', 'dusk-stone', 'dawn-stone', 'shiny-stone', 'ice-stone'] })),
+  ]),
+  // ---- After: the rescued cast, the rescue centre, the scientist's note ----
+  gev('gn-28-nod', 'Someone You Freed', base({ stop: 'event', rarity: 'uncommon', callback: true, tags: ['Pokémon', 'Relationship'], requires: [is('freed-caged'), laterStage('hideout-at')] }), say(
+    'A wild Pokémon steps onto the path. It doesn\'t raise its hackles. It doesn\'t run.',
+    'It looks at you, and it nods, once. You were the one who opened the cage.',
+  ), [ch('Nod back.', out('It turns, and goes back into the long grass. It knows where you are now.', flag('hideout-nods')))]),
+  gev('gn-28-asks', 'Someone You Freed, Again', base({ stop: 'event', rarity: 'uncommon', callback: true, tags: ['Pokémon', 'Relationship'], requires: [is('freed-caged'), notThisRegion('hideout-region'), notThisRegion('hideout-asked')] }), say(
+    'One of the Pokémon from the Hideout cages has been following you for a whole stage.',
+    'It finally comes close enough to touch. It sits down at your feet and waits.',
+  ), [
+    ch('Come with us.', out('It comes. It already knows your voice. (Bond +1)', { ...join({}), friendship: 50 }, stampRegion('hideout-asked'))),
+    ch('Go on. You\'re free.', out('It stays a moment longer. Then it goes, light-footed, the way free things go.', stampRegion('hideout-asked'))),
+  ]),
+  gev('gn-28-centre', 'The Rescue Centre', base({ stop: 'event', rarity: 'common', callback: true, tags: ['Recovery', 'Pokémon'], pokemon: 'chansey', requires: [is('freed-caged'), notThisRegion('hideout-region'), not('hideout-centre')] }), say(
+    'A hand-painted sign by the road: *RESCUE CENTRE. ALL WELCOME. NO TEAMS.*',
+    'The nurse is a Chansey. You know her. She was in the nearest cage, looking after everyone through the bars.',
+  ), [ch('Go in.', out('She looks after your whole team, and won\'t take a thing for it. The ones you freed built the place themselves.', heal(1), flag('hideout-centre')))]),
+  gev('gn-28-note', 'A Note Under a Rock', base({ stop: 'event', rarity: 'common', callback: true, tags: ['Evil Team', 'Story'], requires: [is('hideout-scientist-turned'), notThisRegion('hideout-turned-region'), not('hideout-note'), { kind: 'evil', ends: ['none'] }] }), say(
+    'A flat stone on a fence post, with a corner of paper sticking out from under it.',
+  ), [ch('Read it.', out('Folded small. It\'s signed E.A.', gn('nextOp', {}), flag('hideout-note')))]),
+];
+
+/** The cabinet: a camera in the corner sees you unless the tape's looping. */
+function alarmIfSeen(): Json[] { return camera; }
+/** {lt} at A+2. Winning opens the shelves; losing throws you out, and nothing else. */
+function exec(extra: Json[]): Json {
+  return { ...foe('executive', '{lt}', 3, { pseudo: true, lv: 2, win: [flag('hideout-exec-beaten'), ...extra, { kind: 'addEvent', eventId: 'gn-28-reward' }] }), lose: THROWN_OUT };
+}
+
+
+export const EVENTS: Json[] = [...gn26, ...gn27, ...gn28];
 
 export const REMOVE: string[] = [];
 
@@ -378,6 +560,11 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'Giants A+1; the guardian A+2', often: 'run', badge: 'own', dressing: { kanto: 'Off Vermilion: the Island of Giants', elsewhere: 'The Island of Giant Pokémon' },
     note: 'Badge: a very large footprint. Six nodes. Kanto has no older Island of Giants space to replace.',
   },
+  'gn-28-door': {
+    gn: 'gn.28', shape: 'Door', earliest: 'A6', home: 14, window: [12, 17], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage', 'Evil Team'],
+    level: 'Grunts A+0; the Executive A+2', often: 'run', badge: 'own', dressing: { kanto: 'Under the Celadon Game Corner: the Rocket Hideout', elsewhere: 'The {team} Hideout' },
+    note: 'Badge: a red R (a "?" until the team is known). Four floors: Offices, Labs, Holding, the Vault. The Hideout of the evil-team story (step 7), written out as a stage of its own.',
+  },
   'gn-27-gate': {
     gn: 'gn.27', shape: 'Single', earliest: 'A4', home: 10, window: [8, 13], sits: 'optional', attaches: 'town', tags: ['Hub Destination'], level: 'The arena and the owner A+0', often: 'region', badge: 'own',
     note: 'Badge: a striped tent. At a Town or Hub node; until towns exist, step 10. Returns in later regions with new acts (the trapeze and fire-eater, then the water show and the evolved ace).',
@@ -385,5 +572,6 @@ export const PLACEMENT: Record<string, Placement> = {
 };
 
 export const CHAINS: Json[] = [
+  { id: 'ps_gn_hideout', name: 'The Hideout', entry: 'gn-28-door', themeId: 'dark-steel', tint: HIDE_TINT, mood: 'evil team hideout', start: 'opened' },
   { id: 'ps_gn_giants', name: 'The Island of Giant Pokémon', entry: 'gn-26-door', themeId: 'water-grass', tint: GIANT_TINT, mood: 'giant island', start: 'opened' },
 ];

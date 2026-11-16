@@ -30,7 +30,7 @@ export const bindGnEffects = (schema: z.ZodType, conditions?: z.ZodType): void =
  *  - `stampStage`: the run flag `key` remembers the stage number now (read with the `gn` conditions `laterStage`, `sameStage`, `notThisStage`).
  *  - `partyHas`: the run flag `key` becomes 1 when a party Pokémon is one of `species`, else 0 (a Clefairy or Clefable sees the secret dance).
  */
-export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem', 'markLast', 'dropMarked', 'lendHeld', 'returnLent', 'partner', 'oldMove', 'castBase'] as const;
+export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem', 'markLast', 'dropMarked', 'lendHeld', 'returnLent', 'partner', 'oldMove', 'castBase', 'nextOp'] as const;
 export const GnEffectSchema = z.object({
   kind: z.literal('gn'),
   op: z.enum(GN_OPS),

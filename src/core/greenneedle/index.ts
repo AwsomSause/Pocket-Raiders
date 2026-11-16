@@ -352,6 +352,14 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       else mon.moves[mon.moves[3]!.id === 'two-trainers' ? 2 : 3] = slot;
       return `${nameOf(content, mon)} remembered ${content.moves.get(id)!.name}!`;
     }
+    case 'nextOp': {
+      // gn.28: the turned scientist's note names the team's next operation (the one after those already drawn).
+      const s = run.story.evil;
+      const team = content.evilTeams.teams.find((t) => t.id === s?.teamId);
+      if (!s || !team || team.ops.length === 0 || s.end !== 'none') return '';
+      const def = team.ops[s.ops.length % team.ops.length]!;
+      return `The note, in a careful scientist's hand: ${team.name}'s next operation is ${def.name}.`;
+    }
     case 'castBase': {
       const mon = [...run.party, ...run.box].find((m) => m.gn?.includes(e.type!));
       if (!mon || castOf(run, e.key!)) return '';

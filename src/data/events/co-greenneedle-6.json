@@ -5596,6 +5596,2021 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-28-door",
+   "name": "The {team} Hideout",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "evil",
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "hideout-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "hideout-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "A shuttered {front} building on the edge of town. No sign on the door.\n\nA {grunt} is smoking by the bins. He doesn't see you. Behind him, the door is propped open with a fire extinguisher.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You step over the extinguisher. Inside it smells of floor polish and burnt coffee.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-alert",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-loop",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "hideout-looped",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "amount": -1
+         }
+        ],
+        "text": "The camera's red light stays off. The loop is still running."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-alert",
+          "amount": 2
+         },
+         {
+          "kind": "gn",
+          "op": "capFlag",
+          "key": "hideout-alert",
+          "n": 10
+         }
+        ],
+        "text": "A camera turns, slowly, to follow you. (Alert +2)"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-28-offices"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you the {grunt} finishes his cigarette, kicks the extinguisher, and the door swings shut.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-offices",
+   "name": "{team} Hideout: The Offices",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "bored",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 0,
+       "atMost": 4
+      }
+     ],
+     "notice": "*Alert low: the office is bored. Some of them could be talked past.*"
+    },
+    {
+     "id": "patrol",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 5,
+       "atMost": 9
+      }
+     ],
+     "notice": "*Alert: patrols. Torches sweep the office. Nobody's talking their way past anyone now.*"
+    },
+    {
+     "id": "full",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 10,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Alert 10. Every alarm in the building is going. Every Grunt left has called up one more Pokémon.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "Desks. A canteen with a broken kettle. Two {grunt}s arguing over a stapler.\n\nOn the staff noticeboard: *LOST: one Meowth, answers to nothing.*",
+   "choices": [
+    {
+     "label": "Search the filing cabinet.",
+     "success": {
+      "text": "Third drawer down, under a lunch order: a File. Names, dates, a map with red pins in it.\n\nYou fold it into your jacket. The drawer squeaks shut.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-file",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "files"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "hideout-looped",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "amount": -1
+         }
+        ],
+        "text": "The camera's red light stays off. The loop is still running."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-alert",
+          "amount": 2
+         },
+         {
+          "kind": "gn",
+          "op": "capFlag",
+          "key": "hideout-alert",
+          "n": 10
+         }
+        ],
+        "text": "A camera turns, slowly, to follow you. (Alert +2)"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-offices"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-file",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Slip behind the canteen.",
+     "success": {
+      "text": "Past the fridge, a door marked STAFF ONLY. Somebody has written *REALLY* under it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-back"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Talk your way past.",
+     "success": {
+      "text": "\"New starter,\" you say. \"They sent me down to Labs.\" The {grunt}s shrug. Neither of them wants the stapler that much.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "hideout-looped",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "amount": -1
+         }
+        ],
+        "text": "The camera's red light stays off. The loop is still running."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-alert",
+          "amount": 2
+         },
+         {
+          "kind": "gn",
+          "op": "capFlag",
+          "key": "hideout-alert",
+          "n": 10
+         }
+        ],
+        "text": "A camera turns, slowly, to follow you. (Alert +2)"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-28-labs"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 0,
+       "atMost": 4
+      }
+     ]
+    },
+    {
+     "label": "Fight your way through.",
+     "success": {
+      "text": "The stapler goes flying. Both of them reach for their Balls.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "{grunt}",
+       "size": 2,
+       "levelBonus": 0,
+       "pseudo": true,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "hideout-looped",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "hideout-loop",
+           "atLeast": 1,
+           "atMost": 99
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "hideout-looped",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "hideout-loop",
+           "amount": -1
+          }
+         ],
+         "text": "The camera's red light stays off. The loop is still running."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "hideout-looped",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "hideout-alert",
+           "amount": 2
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "hideout-alert",
+           "n": 10
+          }
+         ],
+         "text": "A camera turns, slowly, to follow you. (Alert +2)"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-28-labs"
+        }
+       ],
+       "moreIf": {
+        "key": "hideout-alert",
+        "at": 10
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-back",
+   "name": "{team} Hideout: Behind the Canteen",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "A cupboard full of mops. Behind the mops, a cash box. Beside it, a wall of little monitors.\n\nA tape deck under the desk, labelled *LOOP*.",
+   "choices": [
+    {
+     "label": "Take the petty cash.",
+     "success": {
+      "text": "Notes, coins, a voucher for a free noodle bowl. The team's petty cash. (₽1,200)",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 1200
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-cash",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-back"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-cash",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Put the loop on.",
+     "success": {
+      "text": "The monitors flicker, and show an empty corridor, over and over. The next two cameras see nothing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-loop",
+        "n": 2
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-tapes",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-back"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-tapes",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Smash the monitors.",
+     "success": {
+      "text": "Glass everywhere. Somewhere upstairs, a bell starts ringing. Boots on the stairs. (Alert +3)",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-alert",
+        "amount": 3
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "hideout-alert",
+        "n": 10
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-tapes",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "{grunt}",
+       "size": 2,
+       "levelBonus": 0,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-28-offices"
+        }
+       ],
+       "moreIf": {
+        "key": "hideout-alert",
+        "at": 10
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-tapes",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the offices.",
+     "success": {
+      "text": "You put the mops back the way they were.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-offices"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-labs",
+   "name": "{team} Hideout: The Labs",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "known",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-lab-known",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Through the frosted glass of the locked lab, the lights are still on.*"
+    },
+    {
+     "id": "patrol",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 5,
+       "atMost": 9
+      }
+     ],
+     "notice": "*Alert: patrols. Torches sweep the lab floor. Nobody's talking their way past anyone now.*"
+    },
+    {
+     "id": "full",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 10,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Alert 10. Every alarm in the building is going. Every Grunt left has called up one more Pokémon.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "porygon",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "Glass. Machines that hum. Scientists in white coats who don't look up.\n\nAt the end of the floor, one laboratory is locked. Beside it, one scientist is standing at a window, not working.",
+   "choices": [
+    {
+     "label": "Talk to the scientist at the window.",
+     "success": {
+      "text": "He doesn't turn round. He's been waiting for somebody, and it might as well be you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-scientist"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-scientist",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Unlock the laboratory.",
+     "success": {
+      "text": "The key turns. The door hisses.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-lab-open",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-lab"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-lab-key",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "hideout-lab-open",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Take the stairs down.",
+     "success": {
+      "text": "The stairs go down to a floor that smells of straw.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "hideout-looped",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "amount": -1
+         }
+        ],
+        "text": "The camera's red light stays off. The loop is still running."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-alert",
+          "amount": 2
+         },
+         {
+          "kind": "gn",
+          "op": "capFlag",
+          "key": "hideout-alert",
+          "n": 10
+         }
+        ],
+        "text": "A camera turns, slowly, to follow you. (Alert +2)"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-28-holding"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight the patrol.",
+     "success": {
+      "text": "A patrol comes round the corner. They've been looking for you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "{grunt}",
+       "size": 2,
+       "levelBonus": 0,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-28-labs"
+        }
+       ],
+       "moreIf": {
+        "key": "hideout-alert",
+        "at": 10
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-28-scientist",
+   "name": "{team} Hideout: Dr. Emmerich Aldersey",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "porygon",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "**Dr. Emmerich Aldersey:** \"You're not staff. Good. I've been hoping someone who isn't staff would come.\"\n\n**Dr. Emmerich Aldersey:** \"I signed on for the research. I didn't ask what it was for. I've started asking.\"",
+   "choices": [
+    {
+     "label": "Give me the key.",
+     "success": {
+      "text": "He takes a key off a string round his neck and holds it out. He doesn't follow you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-lab-key",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-scientist",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-labs"
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's in the locked lab?",
+     "success": {
+      "text": "**Dr. Emmerich Aldersey:** \"The ones that didn't take. They're still alive.\"\n\n\"Nobody's switched the lights off. That's how I know someone here still feels something.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-lab-known",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-scientist"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-lab-known",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Come with me.",
+     "success": {
+      "text": "He looks at you for a long moment. Then he takes off his badge, and goes down the floor opening every door.\n\n**Dr. Emmerich Aldersey:** \"Next region. Look under a rock. I'll find you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-lab-key",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-scientist",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-scientist-turned",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-turned-region"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-loop",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-labs"
+       }
+      ]
+     }
+    },
+    {
+     "label": "You knew. You stayed.",
+     "success": {
+      "text": "**Dr. Emmerich Aldersey:** \"Yes.\" He gives you the key. He goes back to his window.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-lab-key",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-scientist",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-scientist-judged",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-labs"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-lab",
+   "name": "{team} Hideout: The Locked Laboratory",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "known",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-lab-known",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*He was right. The lights are on. Someone kept them on.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "porygon",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "Tanks. In them, Pokémon mid-way through something. They turn their heads to follow you.\n\nOne tank glows a dark, wrong purple. The Pokémon inside it is a Shadow Pokémon. It presses one paw to the glass.",
+   "choices": [
+    {
+     "label": "Open its tank.",
+     "success": {
+      "text": "The glass slides up. It steps out into the cold air and stands very close to you.\n\nIt doesn't trust you. It doesn't trust anyone. It comes anyway.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": true,
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-shadow-freed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-labs"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them sleeping.",
+     "success": {
+      "text": "You leave the lights on.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-labs"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-holding",
+   "name": "{team} Hideout: Holding",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "kind",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kind-total",
+       "atLeast": 10,
+       "atMost": 99
+      }
+     ],
+     "notice": "*One of them knows your lead. A kindness you did on some road, a long time ago. It comes to the bars first.*"
+    },
+    {
+     "id": "patrol",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 5,
+       "atMost": 9
+      }
+     ],
+     "notice": "*Alert: patrols. Torches sweep the pen. Nobody's talking their way past anyone now.*"
+    },
+    {
+     "id": "full",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 10,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Alert 10. Every alarm in the building is going. Every Grunt left has called up one more Pokémon.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "chansey",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "Cages, stacked three high, labelled for shipping. A Chansey in the nearest one is trying to look after all of them through the bars.\n\nThe pen keeper, a tired {grunt} with a bucket of feed, steps in front of them. \"Don't. I just feed them. Don't.\"",
+   "choices": [
+    {
+     "label": "Open every cage.",
+     "success": {
+      "text": "You open every cage. She drops the bucket and reaches for a Ball.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-pen-fought",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "{grunt}",
+       "size": 2,
+       "levelBonus": 0,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "freed-caged",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "hideout-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "hideout-region"
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "hideout-looped",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "hideout-loop",
+           "atLeast": 1,
+           "atMost": 99
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "hideout-looped",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "hideout-loop",
+           "amount": -1
+          }
+         ],
+         "text": "The camera's red light stays off. The loop is still running."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "hideout-looped",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "hideout-alert",
+           "amount": 2
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "hideout-alert",
+           "n": 10
+          }
+         ],
+         "text": "A camera turns, slowly, to follow you. (Alert +2)"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-28-vault"
+        }
+       ],
+       "moreIf": {
+        "key": "hideout-alert",
+        "at": 10
+       }
+      }
+     }
+    },
+    {
+     "label": "Ask the keeper to help.",
+     "success": {
+      "text": "She looks at you for a long time. \"...They bite the boss. They never bite me.\"\n\nShe hands you the keys, folds her jacket on the bucket, and helps you open every cage. Then she walks out with them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-keeper-quit",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "freed-caged",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "hideout-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-region"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "hideout-looped",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "amount": -1
+         }
+        ],
+        "text": "The camera's red light stays off. The loop is still running."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-alert",
+          "amount": 2
+         },
+         {
+          "kind": "gn",
+          "op": "capFlag",
+          "key": "hideout-alert",
+          "n": 10
+         }
+        ],
+        "text": "A camera turns, slowly, to follow you. (Alert +2)"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-28-vault"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 0,
+       "atMost": 4
+      }
+     ]
+    },
+    {
+     "label": "Ask the keeper to help.",
+     "success": {
+      "text": "\"Not with the alarms going,\" she says. \"They'll know it was me.\" She puts the bucket down, and reaches for a Ball.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "{grunt}",
+       "size": 2,
+       "levelBonus": 0,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "freed-caged",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "hideout-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "hideout-region"
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "hideout-looped",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "hideout-loop",
+           "atLeast": 1,
+           "atMost": 99
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "hideout-looped",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "hideout-loop",
+           "amount": -1
+          }
+         ],
+         "text": "The camera's red light stays off. The loop is still running."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "hideout-looped",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "hideout-alert",
+           "amount": 2
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "hideout-alert",
+           "n": 10
+          }
+         ],
+         "text": "A camera turns, slowly, to follow you. (Alert +2)"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-28-vault"
+        }
+       ],
+       "moreIf": {
+        "key": "hideout-alert",
+        "at": 10
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-28-vault",
+   "name": "{team} Hideout: The Vault",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "persian",
+    "tint": "#2a1f24",
+    "effect": "shake"
+   },
+   "intro": "A round steel door, open. Inside, gold-coloured shelves and a desk. Behind the desk, {lt}.\n\n**{lt}:** \"You've cost us a floor of salaries. Do you know what a {grunt} *costs?* The hats alone.\"",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "{lt} stands, and straightens their cuffs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-exec",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "{lt}",
+       "size": 3,
+       "levelBonus": 2,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hideout-exec-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-28-reward"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "hideout-thrown-out",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hideout-done",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 0,
+       "atMost": 9
+      }
+     ]
+    },
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "{lt} snaps their fingers. Two {grunt}s step out from behind the shelves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-exec",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "{grunt}",
+       "size": 2,
+       "levelBonus": 0,
+       "pseudo": true,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-28-vault-2"
+        }
+       ],
+       "moreIf": {
+        "key": "hideout-alert",
+        "at": 10
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 10,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-28-vault-2",
+   "name": "{team} Hideout: The Vault",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "persian",
+    "tint": "#2a1f24",
+    "effect": "shake"
+   },
+   "intro": "The two {grunt}s are down. {lt} hasn't moved from behind the desk.\n\n**{lt}:** \"Fine. I'll do it myself. I always do.\"",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "{lt} stands.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "{lt}",
+       "size": 3,
+       "levelBonus": 2,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hideout-exec-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-28-reward"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "hideout-thrown-out",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hideout-done",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-reward",
+   "name": "{team} Hideout: The Vault Shelves",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "persian",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "{lt} is gone, out a back door you didn't see. The shelves are full of things the team took.\n\nYou can carry one. Anything more and you won't make the stairs.",
+   "choices": [
+    {
+     "label": "A Shadow Pokémon.",
+     "success": {
+      "text": "A Poké Ball in a velvet box, cold to the touch. It never asked to be like this. It comes with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": true,
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-reward",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-reward-shadow",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-done-region"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A stolen evolution item.",
+     "success": {
+      "text": "A stone with a luggage label tied to it. A name and an address, in a child's writing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-stone"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A rare egg.",
+     "success": {
+      "text": "An Egg in a padded crate stamped FRAGILE. Nobody has written what it is.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "dratini",
+         "larvitar",
+         "bagon",
+         "beldum",
+         "gible",
+         "deino",
+         "goomy",
+         "jangmo-o",
+         "riolu",
+         "axew"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-reward",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-reward-egg",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-done-region"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A pass to the black market.",
+     "success": {
+      "text": "A plastic card with a red R on it. For the rest of the region, the night market will treat you as one of theirs.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-pass"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-reward",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-reward-pass",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-done-region"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-stone",
+   "name": "{team} Hideout: The Luggage Label",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "persian",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "The label says who it belongs to. They live two towns back.",
+   "choices": [
+    {
+     "label": "Return it to its owner.",
+     "success": {
+      "text": "You post it back with a note. A week later a drawing finds you: you, a stone, and a very big smile.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-reward",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-reward-stone-returned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-done-region"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You untie the label and put it in your pocket. The stone is yours now.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-stone",
+         "water-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "moon-stone",
+         "sun-stone",
+         "dusk-stone",
+         "dawn-stone",
+         "shiny-stone",
+         "ice-stone"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-reward",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-reward-stone",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-done-region"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-nod",
+   "name": "Someone You Freed",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "freed-caged",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "hideout-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "A wild Pokémon steps onto the path. It doesn't raise its hackles. It doesn't run.\n\nIt looks at you, and it nods, once. You were the one who opened the cage.",
+   "choices": [
+    {
+     "label": "Nod back.",
+     "success": {
+      "text": "It turns, and goes back into the long grass. It knows where you are now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-nods",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-asks",
+   "name": "Someone You Freed, Again",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "freed-caged",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "hideout-region"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "hideout-asked"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "One of the Pokémon from the Hideout cages has been following you for a whole stage.\n\nIt finally comes close enough to touch. It sits down at your feet and waits.",
+   "choices": [
+    {
+     "label": "Come with us.",
+     "success": {
+      "text": "It comes. It already knows your voice. (Bond +1)",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 50
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-asked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on. You're free.",
+     "success": {
+      "text": "It stays a moment longer. Then it goes, light-footed, the way free things go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-asked"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-centre",
+   "name": "The Rescue Centre",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "freed-caged",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "hideout-region"
+    },
+    {
+     "kind": "flag",
+     "key": "hideout-centre",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "chansey",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "A hand-painted sign by the road: *RESCUE CENTRE. ALL WELCOME. NO TEAMS.*\n\nThe nurse is a Chansey. You know her. She was in the nearest cage, looking after everyone through the bars.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "She looks after your whole team, and won't take a thing for it. The ones you freed built the place themselves.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-centre",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-note",
+   "name": "A Note Under a Rock",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "hideout-scientist-turned",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "hideout-turned-region"
+    },
+    {
+     "kind": "flag",
+     "key": "hideout-note",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "evil",
+     "ends": [
+      "none"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "A flat stone on a fence post, with a corner of paper sticking out from under it.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "Folded small. It's signed E.A.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "nextOp"
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-note",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

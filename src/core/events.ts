@@ -1972,6 +1972,8 @@ function raidFlagMods(content: Content, run: RunState, mods: Extract<EventBattle
 export function startEventBattle(content: Content, run: RunState, node: MapNode, b: EventBattle, rng: Rng, event: EventBattleRef): void {
   // Pidgey's Resolve: the two watched CPU fights set the player's team aside first.
   prepareSpectate(content, run, event.eventId);
+  // Greenneedle gn.28: at full Alert every Grunt has one more Pokémon.
+  if (b.kind === 'trainer' && b.moreIf && Number(run.story.flags[`ev:${b.moreIf.key}`] ?? 0) >= b.moreIf.at) b = { ...b, size: Math.min(7, b.size + 1) };
   const lastAlive = b.kind === 'trainer' && b.rule?.reversed ? run.party.map((p) => p.hp > 0).lastIndexOf(true) : -1;
   const pondLead = b.kind === 'trainer' && b.rule?.pondDuel ? run.party.findIndex((p) => p.pond && p.hp > 0) : -1;
   const marked = b.kind !== 'raid' && b.rule?.leadMark ? run.party.findIndex((p) => p.hp > 0 && p.gn?.some((t) => t === b.rule!.leadMark || t.startsWith(`${b.rule!.leadMark}:`))) : -1;
