@@ -31,9 +31,10 @@ const pct = (n: number, of: number): string => `${((n / Math.max(1, of)) * 100).
 const table = (head: [string, string], rows: [string, number][], of: number): string => [`| ${head[0]} | ${head[1]} | Share |`, '|---|---:|---:|', ...rows.map(([k, n]) => `| ${k} | ${n} | ${pct(n, of)} |`)].join('\n');
 
 const failed: string[] = [];
+const families = V.familyPlaces(events);
 const rows = events.map((e) => {
   const kinds = e.choices.map((c) => choiceKind(c, c.chance ?? null));
-  const v = V.eventVisual(e, { period: 'afternoon', stageTypes: [(e.types?.[0] ?? 'normal').toLowerCase()], kinds });
+  const v = V.eventVisual(e, { period: 'afternoon', stageTypes: [(e.types?.[0] ?? 'normal').toLowerCase()], kinds, family: families.get(e.id) });
   const pic = v.pictures.find((id) => have.has(id)) ?? null;
   if (!V.PLACES[v.place] || (v.pictures.length > 0 && !pic)) failed.push(e.id);
   const said = `${e.name}. ${e.intro}`;
@@ -59,7 +60,7 @@ const lines = [
   '',
   '## How the place was found',
   '',
-  table(['By', 'Events'], tally(rows.map((r) => ({ words: 'The event\'s own words', stop: 'Its map stop', group: 'Its event group', stage: 'The stage\'s type (changes with the stage in play)', default: 'Nothing to go on: the road' })[r.v.placedBy])), n),
+  table(['By', 'Events'], tally(rows.map((r) => ({ words: 'The event\'s own words', stop: 'Its map stop', group: 'Its event group', family: 'Its storyline (the events that share the start of its id)', stage: 'The stage\'s type (changes with the stage in play)', default: 'Nothing to go on: the road' })[r.v.placedBy])), n),
   '',
   '## Places',
   '',

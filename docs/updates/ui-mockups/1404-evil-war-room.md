@@ -9,6 +9,14 @@ Kice, 2026-11-16: "Make Evil-Leaders table and Siege-Map more Extravagant and ey
 - A bar at the top shows how much of the city is held, contested and lost. The side window stamps the district's status, and each lost district's effect is a red warning strip. The button to go in glows when the way is open.
 - Arrow keys on the map go to the nearest district in that direction.
 
+- **Fix: Pokémon Moments in battle were half hidden (New look).** The full-screen scene of "Failure Will (NOT) Be Tolerated" and the last-stand scenes is drawn under the New look's bars and text box, which covered its lines. The battle now clears them while the scene plays and brings them back after.
+- **Fix: events drawn in the wrong place.** Poli-Pond's opening was drawn at a rainy fairground and Pidgey's Resolve in a volcano. The event director now:
+  - reads a hyphenated name as its parts ("Poli-Pond" is at a pond);
+  - no longer trusts one word that usually means something else ("put on a show", "the ring of dancers", "Ice Stone", "TM Surf", "looks at the sky");
+  - places an event with no place words where its storyline is set (the Clefairy dance is on Mt. Moon, Damian's fights are in his gym, every Pidgey's Resolve scene is outdoors) before falling back to the stage's type;
+  - knows the Battle Frontier's halls (Arena, Dome, Pike, Pyramid).
+  About 1,090 of the 9,135 events moved to a better place. Report: `docs/quality/EVENT_VISUALS.md`.
+
 **Save:** none. Rules, odds and costs are unchanged; only the drawing changed.
 
 **Limits:**
@@ -16,5 +24,6 @@ Kice, 2026-11-16: "Make Evil-Leaders table and Siege-Map more Extravagant and ey
 - The second Admin still has no picture, so a shadow sits in that seat.
 - With animations turned down both screens are still pictures.
 - The city on the war map is drawn from the siege's name; it is not a real map of that city.
+- Event places: an event with no place words and no storyline still takes the stage's type (a volcano on a Fire stage). A lone unsure word still places an event when nothing else does.
 
-**Tests:** unit `reduxEvilTable.test.ts` (7, new), `reduxOps.test.ts` (38; new checks: gates on their own sides, no district off the board or on another from 1 to 12, flag/swords/fire, the marching road); browser `coEvilHsu.spec.ts` (Leader's Table), `storyNewUi.spec.ts` (Siege: keys, clicks, free gate), `wideFormats.spec.ts` (Siege, Old look). Shots: `/mnt/project-files/shots/evil-new-ui/after-*.png`.
+**Tests:** unit `eventVisuals.test.ts` (28; 6 new: misleading words, storylines, and the real Poli-Pond, Pidgey's Resolve and Mt. Moon events); browser `battleNewUi.spec.ts` (new: a Moment scene clears the bars and they come back); unit `reduxEvilTable.test.ts` (7, new), `reduxOps.test.ts` (38; new checks: gates on their own sides, no district off the board or on another from 1 to 12, flag/swords/fire, the marching road); browser `coEvilHsu.spec.ts` (Leader's Table), `storyNewUi.spec.ts` (Siege: keys, clicks, free gate), `wideFormats.spec.ts` (Siege, Old look). Shots: `/mnt/project-files/shots/evil-new-ui/after-*.png`.
