@@ -281,7 +281,9 @@ export class GameOverScene extends Phaser.Scene {
     fitBlock(endText, GAME_WIDTH - 540, 266);
     const choose = (i: number): void => {
       if (won && i === (run ? 2 : 1)) {
-        this.scene.start('Credits');
+        // Said outright: Phaser would hand the scene its last start data again, and after a look at the asset credits
+        // in Settings that would show those instead of the ending.
+        this.scene.start('Credits', { assets: false });
         return;
       }
       if (i === 1 && run) {
