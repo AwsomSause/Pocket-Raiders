@@ -64,6 +64,7 @@ Branch `claude/project-thread-uehq47`, draft PR #1314 into `ui-mockups`.
 | gn.55 The Angry Bidoof | done, 5 tests pass (optional, step 6, window 4-9, instead of the battle, once a run from A4; Lucan Fairweather laughing, Mr. Applewhite mild; the doc's three answers: "I wasn't laughing" (it decides you were), "It's a Bidoof" (+1 Attack), "a very fine Bidoof" (Bond 3+ lead: the bow, a Silk Scarf, and no wild Bidoof or Bibarel attacks first for the rest of the run; otherwise it bows first and fights); the battle: a Bidoof's stats tripled at A+2, Superpower, Aqua Tail, full-power Return, Curse, Simple, never flinches, can't be caught; Mr. Applewhite's six lines (first faint, Curse, a super-effective hit survived, second faint, winning, losing), each once; beaten: it sits on your foot and joins with Unbothered (opponents can't lower its stats) and a fixed +30%; lost: nothing's taken, he apologises, try again; the Bibarel dam (gn.new.20) means +2 Attack whatever you say; the future Gym's Normal-type cousin (NE44); later, Lucan crosses the road, two with the Bidoof beside you) | yes |
 | gn.56–gn.62 | not started | |
 | gn.new.01–38 | not started | |
+| gn.new.20 The Drought Ranch | done, 7 tests pass (tools/events/co/greenneedle-new-20.ts; Single, forest, A4, step 6 optional, fallback 11, once per run; four doc choices: break the dam (a Bibarel and three Bidoof at A+0, sets `bibarel-dam-broken` for gn.55, pays ₽1200, three thin Bidoof on the road a stage later), move the colony (a node, two wild fights as escort), dig a second channel (two nodes, needs a Ground- or Water-type; a Fresh Milk at every rest this region: `ranchRest` in core/greenneedle/ranch.ts, one line in run.ts), walk away (`kind-walked-past`); a loss costs nothing and can be retried; afterstory: a Bibarel building by a road in a later region, watching if the dam was broken) | yes |
 
 ## Limits (documented)
 - gn.06 "a later run finds a signpost": cross-run memory is not allowed (Kice 2026-11-14), so a later bridge in the same run shows the sign and the village stall instead.
@@ -159,6 +160,8 @@ Branch `claude/project-thread-uehq47`, draft PR #1314 into `ui-mockups`.
 - An event raid whose boss is caught now pays its `win` effects (it used to pay nothing).
 - Older tests updated: retired Cerulean canon rooms (bridge, village, squad, rain) dropped from canonCerulean.test.ts; world/eventMemory walk `gn` effects; placed stops sit outside the drawn quota; plain-stage tests use `withoutDoors`; test autoplay plays a chain room when it is the only way on.
 - Placement data: the placer reads `tags` as stage needs, so the doc's category labels now go to `kinds`, `needs` become `tags` ("cave|high" = either; `core/co/placement.ts` tagHolds), and the key event's own beat gives its step and stage. Before this no Greenneedle event was ever placed.
+
+- gn.new.20: new item `fresh-milk` (heals 60 HP, +1 Love, gift only). Limits: the escort's two wild fights end on a win or a catch; the Bidoof on the road and the later Bibarel are follow-up stops (`callback`). `ranch.broke/moved/dug` are run flags `ranch-broke/-moved/-dug` (the pack's dotted names aren't valid flag keys).
 
 ## Still to do
 - Files 2–13 of the pack (gn.06–62; reconcile gn.13–16), then the 38 new events.

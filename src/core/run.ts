@@ -29,6 +29,7 @@ import { draftRecord } from './greenneedle/draft';
 import { exRipple } from './greenneedle/exhibition';
 import { snorlaxForgives, snorlaxGym, snorlaxRest } from './greenneedle/snorlax';
 import { farFromHome, smuggleRest } from './greenneedle/smuggling';
+import { ranchRest } from './greenneedle/ranch';
 import { CENTER_SHUT, SHOP_SHUT, sgCenterLine, sgCenterShut, sgHealShare, sgPriceFactor, sgRest } from './greenneedle/citysiege';
 import { taRoomsAfraid } from './greenneedle/teamauction';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
@@ -2713,6 +2714,8 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const afraidLine = taRoomsAfraid(content, run, before, stageNumber(content, run));
     // Greenneedle gn.51: the rescued Pokémon that won't go in a Ball comes a little closer at each rest.
     smuggleRest(content, run);
+    // Greenneedle gn.new.20: the ranch's second channel sends a Fresh Milk to every rest this region.
+    const milkLine = ranchRest(content, run);
     partyLifeCamp(run);
     const comboLine = [partyLifeCombos(content, run), ...assignGrowthPaths(content, run.party, run.story.histories)].filter(Boolean).join(' ');
     runSide.used = true;
@@ -2732,7 +2735,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const camp = campQuirkLine(run.party, campMoment(content, run), campKey, nameOf) ?? quirkReaction(run.party, 'rest_node', campKey, nameOf) ?? partyNarration(run.party, 'rest_node', campKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
     // Pokémon moments (Beta 0.6): a party member's rest moment can add a line.
     const momentLine = restMoments(content, run).join(' ');
-    return { run, message: `Your Pokémon were fully healed!${momentLine ? ` ${momentLine}` : ''}${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}${snorlaxLine ? ` ${snorlaxLine}` : ''}${afraidLine ? ` ${afraidLine}` : ''}${siegeLine ? ` ${siegeLine}` : ''}` };
+    return { run, message: `Your Pokémon were fully healed!${momentLine ? ` ${momentLine}` : ''}${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}${snorlaxLine ? ` ${snorlaxLine}` : ''}${afraidLine ? ` ${afraidLine}` : ''}${siegeLine ? ` ${siegeLine}` : ''}${milkLine ? ` ${milkLine}` : ''}` };
   }
   run.phase = 'shop';
   noteMapGrowth(content, run, run.party[0]?.uid, 'shopVisit');
