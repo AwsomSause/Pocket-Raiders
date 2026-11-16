@@ -6,8 +6,10 @@ import { counterLine } from './typeRules';
 import descriptionsJson from '../../data/moveDescriptions.json';
 import storySignatureJson from '../../data/storySignatureMoves.json';
 import megaMovesJson from '../../data/megaMoves.json';
+import coMoveDescriptions from '../../data/catalogOverhaul/moveDescriptions.json';
 
-const DESCRIPTIONS = descriptionsJson as Record<string, string>;
+/** The game's move descriptions, plus the Catalog Overhaul's own moves (catalogOverhaul/moves/*.json). */
+const DESCRIPTIONS = { ...(descriptionsJson as Record<string, string>), ...(coMoveDescriptions as Record<string, string>) };
 
 const STAT: Record<string, string> = { atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', acc: 'accuracy', eva: 'evasiveness' };
 const STATUS: Record<string, string> = { brn: 'burn the foe', psn: 'poison the foe', par: 'paralyze the foe', slp: 'put the foe to sleep', frz: 'freeze the foe' };

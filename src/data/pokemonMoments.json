@@ -16,7 +16,38 @@
    "genesect",
    "cryogonal",
    "bastiodon",
-   "probopass"
+   "probopass",
+   "magnemite",
+   "magneton",
+   "porygon",
+   "golurk-mega",
+   "klink",
+   "klang",
+   "magearna",
+   "beldum",
+   "metang",
+   "metagross-mega",
+   "bronzor",
+   "registeel",
+   "duraludon",
+   "archaludon",
+   "iron-treads",
+   "iron-bundle",
+   "iron-hands",
+   "iron-jugulis",
+   "iron-moth",
+   "iron-thorns",
+   "iron-valiant",
+   "iron-leaves",
+   "iron-boulder",
+   "iron-crown",
+   "varoom",
+   "revavroom",
+   "rotom-heat",
+   "rotom-wash",
+   "rotom-frost",
+   "rotom-fan",
+   "rotom-mow"
   ],
   "starters": [
    "venusaur",
@@ -132,6 +163,460 @@
    "solrock",
    "latias",
    "latios"
+  ],
+  "pa2-the-dead": [
+   "yamask",
+   "cofagrigus",
+   "yamask-galar",
+   "runerigus",
+   "duskull",
+   "dusclops",
+   "dusknoir",
+   "spiritomb",
+   "sinistea",
+   "polteageist",
+   "drifloon",
+   "drifblim",
+   "phantump",
+   "trevenant",
+   "pumpkaboo",
+   "gourgeist",
+   "greavard",
+   "houndstone",
+   "poltchageist",
+   "sinistcha",
+   "marowak-alola",
+   "annihilape"
+  ],
+  "pa3-guardians": [
+   "regirock",
+   "regice",
+   "registeel",
+   "regieleki",
+   "regidrago",
+   "regigigas",
+   "golett",
+   "golurk",
+   "golurk-mega",
+   "sudowoodo",
+   "bronzong",
+   "carbink",
+   "stonjourner",
+   "kleavor"
+  ],
+  "pa7-tricksters": [
+   "zorua",
+   "zoroark",
+   "zorua-hisui",
+   "zoroark-hisui",
+   "ditto",
+   "mimikyu",
+   "sableye",
+   "murkrow",
+   "honchkrow",
+   "purrloin",
+   "liepard",
+   "impidimp",
+   "morgrem",
+   "grimmsnarl",
+   "grimmsnarl-gmax",
+   "nickit",
+   "thievul",
+   "meowth",
+   "persian",
+   "meowth-alola",
+   "persian-alola",
+   "meowth-galar",
+   "perrserker",
+   "spinda"
+  ],
+  "pa8-pack": [
+   "poochyena",
+   "mightyena",
+   "houndour",
+   "houndoom",
+   "houndoom-mega",
+   "lillipup",
+   "herdier",
+   "stoutland",
+   "electrike",
+   "manectric",
+   "manectric-mega",
+   "rockruff",
+   "lycanroc",
+   "lycanroc-midnight",
+   "lycanroc-dusk",
+   "zigzagoon",
+   "linoone",
+   "zigzagoon-galar",
+   "linoone-galar",
+   "obstagoon",
+   "nickit",
+   "thievul",
+   "maschiff",
+   "mabosstiff",
+   "greavard",
+   "houndstone"
+  ],
+  "pa15-giants": [
+   "munchlax",
+   "snorlax",
+   "snorlax-gmax",
+   "wailord",
+   "hippowdon",
+   "avalugg",
+   "cetitan",
+   "dondozo",
+   "copperajah",
+   "stonjourner",
+   "guzzlord",
+   "torterra"
+  ],
+  "pa16-mascots": [
+   "pichu",
+   "pikachu",
+   "pikachu-gmax",
+   "raichu",
+   "raichu-alola",
+   "raichu-mega-x",
+   "raichu-mega-y",
+   "plusle",
+   "minun",
+   "pachirisu",
+   "emolga",
+   "dedenne",
+   "togedemaru",
+   "morpeko",
+   "pawmi",
+   "pawmo",
+   "pawmot"
+  ],
+  "trio-birds": [
+   "articuno",
+   "zapdos",
+   "moltres",
+   "articuno-galar",
+   "zapdos-galar",
+   "moltres-galar"
+  ],
+  "trio-beasts": [
+   "raikou",
+   "entei",
+   "suicune"
+  ],
+  "trio-lake": [
+   "uxie",
+   "mesprit",
+   "azelf"
+  ],
+  "trio-weather": [
+   "groudon",
+   "kyogre",
+   "rayquaza"
+  ],
+  "trio-creation": [
+   "dialga",
+   "palkia",
+   "giratina",
+   "arceus"
+  ],
+  "trio-swords": [
+   "cobalion",
+   "terrakion",
+   "virizion",
+   "keldeo"
+  ],
+  "trio-tao": [
+   "reshiram",
+   "zekrom",
+   "kyurem"
+  ],
+  "trio-forces": [
+   "tornadus",
+   "thundurus",
+   "landorus",
+   "enamorus"
+  ],
+  "trio-regis": [
+   "regirock",
+   "regice",
+   "registeel",
+   "regieleki",
+   "regidrago",
+   "regigigas"
+  ],
+  "trio-tapus": [
+   "tapu-koko",
+   "tapu-lele",
+   "tapu-bulu",
+   "tapu-fini"
+  ],
+  "trio-lati": [
+   "latias",
+   "latios"
+  ],
+  "trio-aura": [
+   "xerneas",
+   "yveltal",
+   "zygarde"
+  ],
+  "trio-light": [
+   "solgaleo",
+   "lunala",
+   "necrozma",
+   "cosmog",
+   "cosmoem"
+  ],
+  "trio-heroes": [
+   "zacian",
+   "zamazenta",
+   "eternatus"
+  ],
+  "trio-ruin": [
+   "wo-chien",
+   "chien-pao",
+   "ting-lu",
+   "chi-yu"
+  ],
+  "trio-steeds": [
+   "calyrex",
+   "glastrier",
+   "spectrier"
+  ],
+  "trio-loyal": [
+   "okidogi",
+   "munkidori",
+   "fezandipiti",
+   "ogerpon"
+  ],
+  "trio-bells": [
+   "ho-oh",
+   "lugia"
+  ],
+  "trio-paradise": [
+   "koraidon",
+   "miraidon"
+  ],
+  "pa10-starter-lines": [
+   "bulbasaur",
+   "ivysaur",
+   "venusaur",
+   "venusaur-mega",
+   "venusaur-gmax",
+   "charmander",
+   "charmeleon",
+   "charizard",
+   "charizard-mega-x",
+   "charizard-mega-y",
+   "charizard-gmax",
+   "squirtle",
+   "wartortle",
+   "blastoise",
+   "blastoise-mega",
+   "blastoise-gmax",
+   "chikorita",
+   "bayleef",
+   "meganium",
+   "meganium-mega",
+   "cyndaquil",
+   "quilava",
+   "typhlosion",
+   "typhlosion-hisui",
+   "totodile",
+   "croconaw",
+   "feraligatr",
+   "feraligatr-mega",
+   "treecko",
+   "grovyle",
+   "sceptile",
+   "sceptile-mega",
+   "torchic",
+   "combusken",
+   "blaziken",
+   "blaziken-mega",
+   "mudkip",
+   "marshtomp",
+   "swampert",
+   "swampert-mega",
+   "turtwig",
+   "grotle",
+   "torterra",
+   "chimchar",
+   "monferno",
+   "infernape",
+   "piplup",
+   "prinplup",
+   "empoleon",
+   "snivy",
+   "servine",
+   "serperior",
+   "tepig",
+   "pignite",
+   "emboar",
+   "emboar-mega",
+   "oshawott",
+   "dewott",
+   "samurott",
+   "samurott-hisui",
+   "chespin",
+   "quilladin",
+   "chesnaught",
+   "chesnaught-mega",
+   "fennekin",
+   "braixen",
+   "delphox",
+   "delphox-mega",
+   "froakie",
+   "frogadier",
+   "greninja",
+   "greninja-ash",
+   "greninja-mega",
+   "rowlet",
+   "dartrix",
+   "decidueye",
+   "decidueye-hisui",
+   "litten",
+   "torracat",
+   "incineroar",
+   "popplio",
+   "brionne",
+   "primarina",
+   "grookey",
+   "thwackey",
+   "rillaboom",
+   "rillaboom-gmax",
+   "scorbunny",
+   "raboot",
+   "cinderace",
+   "cinderace-gmax",
+   "sobble",
+   "drizzile",
+   "inteleon",
+   "inteleon-gmax",
+   "sprigatito",
+   "floragato",
+   "meowscarada",
+   "fuecoco",
+   "crocalor",
+   "skeledirge",
+   "quaxly",
+   "quaxwell",
+   "quaquaval",
+   "pichu",
+   "pikachu",
+   "pikachu-gmax",
+   "raichu",
+   "raichu-alola",
+   "raichu-mega-x",
+   "raichu-mega-y",
+   "eevee",
+   "vaporeon",
+   "jolteon",
+   "flareon",
+   "espeon",
+   "umbreon",
+   "leafeon",
+   "glaceon",
+   "sylveon"
+  ],
+  "pa20-canines": [
+   "lycanroc",
+   "lycanroc-midnight",
+   "lycanroc-dusk",
+   "houndoom",
+   "mightyena",
+   "arcanine",
+   "arcanine-hisui",
+   "manectric",
+   "boltund",
+   "mabosstiff",
+   "houndstone",
+   "stoutland",
+   "thievul",
+   "zoroark-hisui",
+   "lucario"
+  ],
+  "eeveelutions": [
+   "eevee",
+   "vaporeon",
+   "jolteon",
+   "flareon",
+   "espeon",
+   "umbreon",
+   "leafeon",
+   "glaceon",
+   "sylveon"
+  ],
+  "pg4-galar-birds": [
+   "articuno-galar",
+   "zapdos-galar",
+   "moltres-galar"
+  ],
+  "pg15-nidos": [
+   "nidoran-f",
+   "nidorina",
+   "nidoqueen",
+   "nidoran-m",
+   "nidorino",
+   "nidoking"
+  ],
+  "pg15-nido-f": [
+   "nidoran-f",
+   "nidorina",
+   "nidoqueen"
+  ],
+  "pg15-nido-m": [
+   "nidoran-m",
+   "nidorino",
+   "nidoking"
+  ],
+  "pg15-royals": [
+   "nidoqueen",
+   "nidoking"
+  ],
+  "pg16-hisui": [
+   "growlithe-hisui",
+   "arcanine-hisui",
+   "voltorb-hisui",
+   "electrode-hisui",
+   "typhlosion-hisui",
+   "qwilfish-hisui",
+   "sneasel-hisui",
+   "samurott-hisui",
+   "lilligant-hisui",
+   "zorua-hisui",
+   "zoroark-hisui",
+   "braviary-hisui",
+   "sliggoo-hisui",
+   "goodra-hisui",
+   "avalugg-hisui",
+   "decidueye-hisui"
+  ],
+  "pg17-galar": [
+   "meowth-galar",
+   "ponyta-galar",
+   "rapidash-galar",
+   "slowpoke-galar",
+   "slowbro-galar",
+   "farfetchd-galar",
+   "weezing-galar",
+   "mr-mime-galar",
+   "articuno-galar",
+   "zapdos-galar",
+   "moltres-galar",
+   "slowking-galar",
+   "corsola-galar",
+   "zigzagoon-galar",
+   "linoone-galar",
+   "darumaka-galar",
+   "yamask-galar",
+   "stunfisk-galar"
+  ],
+  "pg2-eevee": [
+   "eevee"
+  ],
+  "pg18-rotom": [
+   "rotom"
   ]
  },
  "moments": [
@@ -174,6 +659,20 @@
    "effect": {
     "reviveHpMult": 1.5,
     "overcharged": true
+   },
+   "layer": "archetype",
+   "chancePlus": {
+    "species": [
+     "magnezone",
+     "golurk",
+     "rotom",
+     "rotom-heat",
+     "rotom-wash",
+     "rotom-frost",
+     "rotom-fan",
+     "rotom-mow"
+    ],
+    "plus": 0.1
    }
   },
   {
@@ -747,15 +1246,21 @@
      "ground"
     ]
    },
-   "trigger": "lethal",
-   "chance": 0.12,
+   "trigger": "start",
+   "chance": 1,
    "limit": "battle",
    "tier": "minor",
    "status": "supported",
-   "effectText": "Survive at 1 HP, takes half damage for the next 2 turns.",
-   "presentation": "Rumble | \"Dug in deep.\"",
+   "effectText": "Against a Flying-type ace: its first Ground move this battle hits Flying-types.",
+   "presentation": "Rumble | [Name] braces. The ground is its.",
    "effect": {
-    "guard": 2
+    "groundHitsFlying": true
+   },
+   "requires": {
+    "named": true,
+    "foeAceTypes": [
+     "flying"
+    ]
    }
   },
   {
@@ -1482,42 +1987,6 @@
      "atk": 1,
      "spe": 1
     }
-   }
-  },
-  {
-   "id": "eevee-bond",
-   "name": "Eeveelution Bond",
-   "scope": {
-    "lines": [
-     "eevee",
-     "vaporeon",
-     "jolteon",
-     "flareon",
-     "espeon",
-     "umbreon",
-     "leafeon",
-     "glaceon",
-     "sylveon"
-    ]
-   },
-   "trigger": "start",
-   "chance": 0.15,
-   "limit": "battle",
-   "tier": "major",
-   "status": "supported",
-   "effectText": "All stats +1 if the player's party has 2+ Eeveelutions.",
-   "presentation": "Chorus | \"Siblings.\"",
-   "effect": {
-    "boost": {
-     "atk": 1,
-     "def": 1,
-     "spa": 1,
-     "spd": 1,
-     "spe": 1
-    }
-   },
-   "requires": {
-    "partyMatching": 2
    }
   },
   {
@@ -2439,28 +2908,23 @@
   },
   {
    "id": "rock-hold",
-   "name": "Held The Line",
+   "name": "Still Standing",
    "scope": {
-    "lines": [
-     "graveler",
-     "golem",
-     "rhydon",
-     "rhyperior",
-     "tyranitar"
+    "types": [
+     "rock"
     ]
    },
    "trigger": "super",
-   "chance": 0.15,
+   "chance": 1,
    "limit": "battle",
    "tier": "minor",
    "status": "supported",
-   "effectText": "After a super-effective hit: Def +1 and heal 5%.",
-   "presentation": "Dust | \"Held the line.\"",
+   "effectText": "A super-effective hit that doesn't knock it out: Defence +1.",
+   "presentation": "A crack, then silence | [Name] has a new chip in it. That's all.",
    "effect": {
     "boost": {
      "def": 1
-    },
-    "healNowPct": 5
+    }
    }
   },
   {
@@ -2787,26 +3251,6 @@
    }
   },
   {
-   "id": "snorlax-rest",
-   "name": "Lazy Afternoon",
-   "scope": {
-    "species": [
-     "snorlax"
-    ]
-   },
-   "trigger": "rest",
-   "chance": 1,
-   "limit": "run",
-   "tier": "minor",
-   "status": "supported",
-   "effectText": "At the next rest node: +8 friendship and a free berry.",
-   "presentation": "Snore | \"Snuggle.\"",
-   "effect": {
-    "friendship": 8,
-    "freeBerry": true
-   }
-  },
-  {
    "id": "pikachu-spark-night",
    "name": "Spark Night",
    "scope": {
@@ -2979,9 +3423,6 @@
    }
   },
   {
-   "status": "supported",
-   "limit": "battle",
-   "tier": "minor",
    "id": "p2-static-discharge",
    "name": "Static Discharge",
    "scope": {
@@ -2991,17 +3432,17 @@
    },
    "trigger": "faint",
    "chance": 0.35,
-   "effectText": "When it faints: the foe is paralysed.",
-   "presentation": "Spark sfx | \"A last discharge.\"",
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "When it faints, the attacker is paralysed.",
+   "presentation": "A loud snap, the screen flashes white | [Name] goes out with a spark.",
    "effect": {
     "foeStatus": "par",
     "foeStatusChance": 100
    }
   },
   {
-   "status": "supported",
-   "limit": "battle",
-   "tier": "minor",
    "id": "p2-spite-blood",
    "name": "Spite in the Blood",
    "scope": {
@@ -3011,11 +3452,16 @@
    },
    "trigger": "faint",
    "chance": 0.4,
-   "effectText": "When it faints: the foe is poisoned (any hit, not only contact).",
-   "presentation": "Bubble | \"Poison in the blood.\"",
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Knocked out by a contact move, it bites down: the attacker is badly poisoned.",
+   "presentation": "A hiss | [Name] bit down on the way out.",
    "effect": {
-    "foeStatus": "psn",
-    "foeStatusChance": 100
+    "foeBadPoison": true
+   },
+   "requires": {
+    "contact": true
    }
   },
   {
@@ -3035,7 +3481,8 @@
    "presentation": "Shout | \"Formation!\"",
    "effect": {
     "firstPriority": 1
-   }
+   },
+   "layer": "species"
   },
   {
    "status": "supported",
@@ -3059,7 +3506,8 @@
     "boost": {
      "atk": 1
     }
-   }
+   },
+   "layer": "species"
   },
   {
    "limit": "battle",
@@ -3082,7 +3530,8 @@
      "type": "psychic",
      "pct": 100
     }
-   }
+   },
+   "layer": "species"
   },
   {
    "limit": "battle",
@@ -3106,7 +3555,8 @@
     "foeStage": {
      "spe": -1
     }
-   }
+   },
+   "layer": "species"
   },
   {
    "limit": "battle",
@@ -3134,7 +3584,3789 @@
      "move": "gigaton-hammer",
      "pct": 50
     }
+   },
+   "layer": "species"
+  },
+  {
+   "id": "pt1-plain-and-stubborn",
+   "name": "Plain and Stubborn",
+   "scope": {
+    "types": [
+     "normal"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Survives the next hit that would knock it out, at 1 HP.",
+   "presentation": "No music, just breathing | [Name] plants its feet. It's not special. It's still here.",
+   "effect": {
+    "endure": true
+   },
+   "requires": {
+    "lastStanding": true
+   },
+   "hpBelow": 25
+  },
+  {
+   "id": "pt2-embers-left",
+   "name": "Embers Left",
+   "scope": {
+    "types": [
+     "fire"
+    ]
+   },
+   "trigger": "faint",
+   "chance": 0.3,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "The next Fire-type you send in is Kindled: its Fire moves do 50% more for the battle.",
+   "presentation": "The sprite dims to an ember glow, a small crackle | Something in [Name] is still warm.",
+   "effect": {
+    "kindleNext": {
+     "type": "fire",
+     "pct": 50
+    }
+   }
+  },
+  {
+   "id": "pt3-the-tide-comes-back",
+   "name": "The Tide Comes Back",
+   "scope": {
+    "types": [
+     "water"
+    ]
+   },
+   "trigger": "turn",
+   "chance": 1,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "It drinks the rain: it gets back an eighth of its HP.",
+   "presentation": "The rain sound swells | [Name] lifts its head into the rain.",
+   "effect": {
+    "healNowPct": 12.5
+   },
+   "requires": {
+    "weather": "rain"
+   }
+  },
+  {
+   "id": "pt4-sunlight-through-leaves",
+   "name": "Sunlight Through Leaves",
+   "scope": {
+    "types": [
+     "grass"
+    ]
+   },
+   "trigger": "rest",
+   "chance": 1,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "It wakes with Bond +1, and any status is gone.",
+   "presentation": "A green glow on the camp screen | [Name] sleeps in the last of the sun.",
+   "effect": {
+    "bond": 1,
+    "cure": true
+   }
+  },
+  {
+   "id": "pt6-frozen-in-place",
+   "name": "Frozen in Place",
+   "scope": {
+    "types": [
+     "ice"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Defence and Sp. Def x1.5 for 2 turns, and it can't be switched out.",
+   "presentation": "Wind, frost creeps over the screen edge | [Name] stops moving. It isn't giving ground.",
+   "effect": {
+    "boost": {
+     "def": 1,
+     "spd": 1
+    },
+    "boostTurns": 2,
+    "rooted": 2
+   },
+   "requires": {
+    "lastStanding": true
+   },
+   "hpBelow": 25
+  },
+  {
+   "id": "pt7-one-more-round",
+   "name": "One More Round",
+   "scope": {
+    "types": [
+     "fighting"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.3,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Resolute: it can't be flinched or confused, and its next move has +1 priority.",
+   "presentation": "A bell rings once | [Name] wipes its face. Raises its fists.",
+   "effect": {
+    "resolute": true
+   },
+   "requires": {
+    "lastStanding": true
+   },
+   "hpBelow": 25
+  },
+  {
+   "id": "pt10-catch-the-wind",
+   "name": "Catch the Wind",
+   "scope": {
+    "types": [
+     "flying"
+    ]
+   },
+   "trigger": "turn",
+   "chance": 1,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "With a Tailwind or strong winds: Speed +1.",
+   "presentation": "Wind rises | [Name] spreads its wings and waits for nothing.",
+   "effect": {
+    "boost": {
+     "spe": 1
+    }
+   },
+   "requires": {
+    "tailwind": true
+   }
+  },
+  {
+   "id": "pt11-it-saw-this-coming",
+   "name": "It Saw This Coming",
+   "scope": {
+    "types": [
+     "psychic"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "The opponent's ace is revealed.",
+   "presentation": "A soft chime | [Name] looks at the opponent's last Pokémon before it's sent out.",
+   "effect": {
+    "revealAce": true
+   },
+   "requires": {
+    "named": true
+   }
+  },
+  {
+   "id": "pt12-the-swarm-answers",
+   "name": "The Swarm Answers",
+   "scope": {
+    "types": [
+     "bug"
+    ]
+   },
+   "trigger": "ally",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "When an ally faints: Attack and Speed +1.",
+   "presentation": "Buzzing from offscreen | Something in the grass heard.",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "spe": 1
+    }
+   },
+   "allyScope": "any"
+  },
+  {
+   "id": "pt14-not-quite-gone",
+   "name": "Not Quite Gone",
+   "scope": {
+    "types": [
+     "ghost"
+    ]
+   },
+   "trigger": "faint",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Haunting: for 3 turns its spirit stays and strikes with its best move at half power. It can't be hit.",
+   "presentation": "The sprite fades to an outline | [Name] isn't finished.",
+   "effect": {
+    "haunting": {
+     "turns": 3,
+     "pct": 50
+    }
+   }
+  },
+  {
+   "id": "pt15-old-blood",
+   "name": "Old Blood",
+   "scope": {
+    "types": [
+     "dragon"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Dragon moves x1.5 for the rest of the battle.",
+   "presentation": "A low roar under the music | Something very old in [Name] wakes up.",
+   "effect": {
+    "kindle": {
+     "type": "dragon",
+     "pct": 50
+    }
+   },
+   "requires": {
+    "lastStanding": true
+   },
+   "hpBelow": 25
+  },
+  {
+   "id": "pt16-takes-advantage",
+   "name": "Takes Advantage",
+   "scope": {
+    "types": [
+     "dark"
+    ]
+   },
+   "trigger": "turn",
+   "chance": 0.3,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "With the foe below a quarter of its HP: +1 priority on its next move.",
+   "presentation": "The music drops to a bass note | [Name] smiles.",
+   "effect": {
+    "nextPriority": 1
+   },
+   "requires": {
+    "foeHpBelow": 25
+   }
+  },
+  {
+   "id": "pt17-built-to-last",
+   "name": "Built to Last",
+   "scope": {
+    "types": [
+     "steel"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 1,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "A hit that would knock it out from full HP leaves it at 1 HP, as Sturdy does.",
+   "presentation": "A metal clang | [Name] rings like a bell and stays up.",
+   "effect": {},
+   "requires": {
+    "fullHp": true
+   }
+  },
+  {
+   "id": "pt18-a-small-kindness",
+   "name": "A Small Kindness",
+   "scope": {
+    "types": [
+     "fairy"
+    ]
+   },
+   "trigger": "ally",
+   "chance": 0.3,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "When an ally faints: the next Pokémon you send in is Remembered (+10% to every stat but HP).",
+   "presentation": "Soft bells | [Name] goes to its fallen friend before the next turn.",
+   "effect": {
+    "rememberedNext": true
+   },
+   "allyScope": "any"
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "id": "pa2-the-ones-who-were-people",
+   "name": "The Ones Who Were People",
+   "scope": {
+    "groups": [
+     "pa2-the-dead"
+    ]
+   },
+   "trigger": "faint",
+   "chance": 0.25,
+   "effect": {
+    "haunting": {
+     "turns": 3,
+     "pct": 50,
+     "foeAccDown": 10
+    }
+   },
+   "effectText": "Haunting: for 3 turns its spirit strikes with its best move at half power, and the foe's moves are 10% less accurate.",
+   "presentation": "The battlefield goes silent, a faint kind voice that is not its own | \"Not like this.\""
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "pa3-set-in-stone",
+   "name": "Set in Stone",
+   "scope": {
+    "groups": [
+     "pa3-guardians"
+    ]
+   },
+   "trigger": "ally",
+   "allyScope": "any",
+   "chance": 0.4,
+   "effect": {
+    "guardNext": true
+   },
+   "effectText": "When an ally faints: the next ally sent in is Guarded (this Pokémon takes the next hit meant for it) and gets Defence +1.",
+   "presentation": "A heavy thud | [Name] steps forward without being told."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "pa5-older-than-the-map",
+   "name": "Older Than the Map",
+   "scope": {
+    "groups": [
+     "fossils"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.5,
+   "requires": {
+    "foeWeakTo": true,
+    "foeNotGroup": "fossils"
+   },
+   "effect": {
+    "firstSuperCut": 25
+   },
+   "effectText": "Facing a modern Pokémon of a type it is weak to: its first super-effective hit taken does 25% less.",
+   "presentation": "A low, old cry | [Name] has survived worse than this. It survived the end of the world."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "pa5-older-than-the-map-face-off",
+   "name": "Older Than the Map",
+   "scope": {
+    "groups": [
+     "fossils"
+    ]
+   },
+   "trigger": "enter",
+   "chance": 0.5,
+   "requires": {
+    "foeWeakTo": true,
+    "foeNotGroup": "fossils"
+   },
+   "effect": {
+    "firstSuperCut": 25
+   },
+   "effectText": "Facing a modern Pokémon of a type it is weak to: its first super-effective hit taken does 25% less.",
+   "presentation": "A low, old cry | [Name] has survived worse than this. It survived the end of the world."
+  },
+  {
+   "limit": "run",
+   "tier": "major",
+   "status": "supported",
+   "id": "pa7-playing-dead",
+   "name": "Playing Dead",
+   "scope": {
+    "groups": [
+     "pa7-tricksters"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.15,
+   "effect": {
+    "healPct": 25
+   },
+   "effectText": "It was faking: it gets back up at 25% HP. Once per run for each Pokémon.",
+   "presentation": "It faints, the other side cheers | Wait."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "pa8-the-pack",
+   "name": "The Pack",
+   "scope": {
+    "groups": [
+     "pa8-pack"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "packStat": 5
+   },
+   "effectText": "Each pack Pokémon gets +5% to every stat but HP for each other pack member in the party.",
+   "presentation": "The party howls together (pa8_howl) | The pack is all here."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa10-the-starters",
+   "name": "The Starters",
+   "scope": {
+    "groups": [
+     "pa10-starter-lines"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.25,
+   "layer": "archetype",
+   "requires": {
+    "starter": true
+   },
+   "effect": {
+    "resolute": true
+   },
+   "effectText": "Your chosen starter stands back up at 1 HP, Resolute (no flinch, no confusion, +1 priority on its next move).",
+   "presentation": "The fade begins, then stops, and the lab and the Poké Ball on the table flash by | [Name] was there at the start."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "pa12-out-of-time",
+   "name": "Out of Time",
+   "scope": {
+    "groups": [
+     "paradox"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "requires": {
+    "foeCounterpart": true
+   },
+   "effect": {
+    "paradoxDrive": true
+   },
+   "effectText": "Facing its own modern counterpart: its Protosynthesis or Quark Drive turns on without sun or terrain.",
+   "presentation": "Both stop, the music skips like a scratched record | They know each other. Neither knows how."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "pa12-out-of-time-face-off",
+   "name": "Out of Time",
+   "scope": {
+    "groups": [
+     "paradox"
+    ]
+   },
+   "trigger": "enter",
+   "chance": 1,
+   "requires": {
+    "foeCounterpart": true
+   },
+   "effect": {
+    "paradoxDrive": true
+   },
+   "effectText": "Facing its own modern counterpart: its Protosynthesis or Quark Drive turns on without sun or terrain.",
+   "presentation": "Both stop, the music skips like a scratched record | They know each other. Neither knows how."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa13-the-weight-of-the-world",
+   "name": "The Weight of the World",
+   "scope": {
+    "tags": [
+     "legendary"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.15,
+   "layer": "archetype",
+   "requires": {
+    "notVsOwnTrio": true
+   },
+   "effect": {
+    "reviveHpPct": 50
+   },
+   "effectText": "A Legendary will not fall on a road: it gets back up at 50% HP. Not against its own trio or counterpart.",
+   "presentation": "The fade stops halfway, everything greys except the Legendary | It doesn't die here. Not on a road. Not like this."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "limited",
+   "id": "pa15-sleeping-giants",
+   "name": "Sleeping Giants",
+   "scope": {
+    "groups": [
+     "pa15-giants"
+    ]
+   },
+   "trigger": "allyLethal",
+   "chance": 0.2,
+   "effect": {},
+   "effectText": "A hit that would knock out the Pokémon in front is taken by this giant from the bench (it holds at 1 HP or more).",
+   "presentation": "A huge shape moves in front | [Name] got up. It doesn't do that."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa16-the-mascots",
+   "name": "The Mascots",
+   "scope": {
+    "groups": [
+     "pa16-mascots"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "layer": "archetype",
+   "effect": {
+    "reviveHpPct": 25,
+    "boost": {
+     "spe": 2
+    }
+   },
+   "effectText": "It gets back up at 25% HP with its Speed doubled.",
+   "presentation": "A small squeak in the dark, a spark, another | [Name] won't let it end like this."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "id": "pa4-the-little-ones",
+   "name": "The Little Ones",
+   "scope": {
+    "tags": [
+     "baby"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "layer": "archetype",
+   "requires": {
+    "foeLevelAbove": 15,
+    "flagBelow": {
+     "key": "pm-brave-count:{uid}",
+     "n": 3
+    }
+   },
+   "effect": {
+    "braveBond": 2
+   },
+   "effectText": "Against a foe 15 or more levels higher: if it lands any move, +2 Bond after the battle, win or lose.",
+   "presentation": "It hides behind your leg | [Name] is scared. It goes anyway."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "id": "pa4-the-little-ones-grown",
+   "name": "The Little Ones",
+   "scope": {
+    "tags": [
+     "baby"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "layer": "archetype",
+   "requires": {
+    "flagAtLeast": {
+     "key": "pm-brave-count:{uid}",
+     "n": 3
+    }
+   },
+   "effect": {
+    "resolute": true
+   },
+   "effectText": "It was brave three times this run: Resolute at the start of every battle for the rest of the run.",
+   "presentation": "It steps out in front | [Name] doesn't look back at you this time."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "limited",
+   "id": "pa6-the-slow-road",
+   "name": "The Slow Road",
+   "scope": {
+    "groups": [
+     "pseudo-legendaries"
+    ]
+   },
+   "trigger": "evolve",
+   "chance": 1,
+   "layer": "archetype",
+   "requires": {
+    "finalForm": true
+   },
+   "effect": {
+    "bond": 2
+   },
+   "effectText": "It reaches its final form: +2 Bond. Once per Pokémon. (Limited: the tutor move for using it every stage is not built yet.)",
+   "presentation": "The evolution finishes, then one more shot | [Name] looks back at you. It remembers being small."
+  },
+  {
+   "limit": "run",
+   "tier": "major",
+   "status": "supported",
+   "id": "pa9-what-it-becomes",
+   "name": "What It Becomes",
+   "scope": {
+    "species": [
+     "butterfree",
+     "beedrill",
+     "beautifly",
+     "dustox",
+     "vivillon"
+    ]
+   },
+   "trigger": "evolve",
+   "chance": 1,
+   "layer": "archetype",
+   "requires": {
+    "fromCocoon": true
+   },
+   "effect": {
+    "bond": 2,
+    "evAll": 1
+   },
+   "effectText": "It spent a full stage or more as a cocoon: +1 effort in every stat and +2 Bond.",
+   "presentation": "A crack of light, wings scatter across the screen | [Name] waited a long time in the dark. It's here now."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "id": "pa11-sleeps-by-the-fire",
+   "name": "Not From Here",
+   "scope": {
+    "groups": [
+     "ultra-beasts"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "layer": "archetype",
+   "requires": {
+    "flagAtLeast": {
+     "key": "pa11-sleeps",
+     "n": 1
+    }
+   },
+   "effect": {
+    "boostBest": 1
+   },
+   "effectText": "It stopped looking at the sky (sat with it three times at camp): Beast Boost at the start of every battle, best stat +1.",
+   "presentation": "It doesn't look up any more | [Name] is here. Only here."
+  },
+  {
+   "limit": "region",
+   "tier": "major",
+   "status": "limited",
+   "id": "pa14-the-promised-ones",
+   "name": "The Promised Ones",
+   "scope": {
+    "tags": [
+     "mythical"
+    ]
+   },
+   "trigger": "rest",
+   "chance": 1,
+   "layer": "archetype",
+   "requires": {
+    "promiseKept": true
+   },
+   "effect": {
+    "giveItem": {
+     "mew": "leftovers",
+     "jirachi": "star-piece",
+     "celebi": "revive"
+    }
+   },
+   "effectText": "Its promise is kept: once per region it comes back from the night with something (Mew a Leftovers, Jirachi a Star Piece, Celebi a Revive).",
+   "presentation": "It's gone when you wake. Then back, with something | It went somewhere you can't follow. It came back."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa17-the-grave-refuses",
+   "name": "The Grave Refuses",
+   "scope": {
+    "species": [
+     "spiritomb",
+     "duskull",
+     "dusclops",
+     "dusknoir",
+     "yamask",
+     "cofagrigus",
+     "yamask-galar",
+     "runerigus",
+     "greavard",
+     "houndstone",
+     "gastly",
+     "haunter",
+     "gengar",
+     "drifloon",
+     "drifblim",
+     "phantump",
+     "trevenant",
+     "sinistea",
+     "polteageist",
+     "poltchageist",
+     "sinistcha",
+     "marowak-alola",
+     "annihilape"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "dusknoir",
+     "spiritomb",
+     "houndstone"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "revenant"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, max HP x1.5, moves x1.75, immune to status conditions. Cost: loses 1/10 of its max HP each turn and can't be healed by anything. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "A funeral bell far away, whispers; an old, dry voice | \"Another one comes to the gate.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Another one comes to the gate.\"",
+     "\"I know this one. It has someone waiting.\"",
+     "\"The gate is closed.\"",
+     "\"Go back. Finish it.\""
+    ],
+    "after": "revenant",
+    "sound": "pa17_bell",
+    "voice": "pa17_voice",
+    "theme": "pa17_theme",
+    "veil": "#000000",
+    "glow": "#9aa8c8",
+    "textColor": "#c8d0e0",
+    "rise": "The battlefield returns, colder and grey. [Name] stands up slowly, as if it's being pulled up by strings."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa18-the-old-blood",
+   "name": "The Old Blood",
+   "scope": {
+    "species": [
+     "dragonite",
+     "salamence",
+     "garchomp",
+     "hydreigon",
+     "goodra",
+     "kommo-o",
+     "dragapult",
+     "baxcalibur",
+     "haxorus",
+     "druddigon",
+     "noivern",
+     "flygon",
+     "kingdra",
+     "dragalge",
+     "altaria",
+     "archaludon",
+     "roaring-moon"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "dragonite",
+     "salamence",
+     "garchomp"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "wrathborn"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, max HP x1.25, Attack and Sp. Atk x1.75, can't flinch. Cost: it uses its highest-damage move every turn. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "Two heartbeats, one huge; old letters burn onto the black as a deep cave voice reads them | \"Before your kind walked, we flew.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Before your kind walked, we flew.\"",
+     "\"Before your names, we had ours.\"",
+     "\"We do not end on a road.\"",
+     "\"We end when we choose.\""
+    ],
+    "after": "wrathborn",
+    "sound": "pa18_heart",
+    "voice": "pa18_voice",
+    "theme": "pa18_theme",
+    "veil": "#000000",
+    "glow": "#ff3020",
+    "textColor": "#ffb070",
+    "rise": "A roar shakes the screen. [Name] rises in red light."
+   },
+   "remembers": [
+    {
+     "flag": "pm:pa6-the-slow-road@{uid}",
+     "line": [
+      3,
+      "\"And I do not choose this.\""
+     ]
+    }
+   ]
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa19-nature-reclaims",
+   "name": "Nature Reclaims",
+   "scope": {
+    "species": [
+     "trevenant",
+     "decidueye",
+     "rillaboom",
+     "sceptile",
+     "venusaur",
+     "meganium",
+     "torterra",
+     "leavanny",
+     "tsareena",
+     "abomasnow",
+     "tangrowth",
+     "shiftry",
+     "ludicolo",
+     "whimsicott",
+     "breloom",
+     "arboliva",
+     "brute-bonnet"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "trevenant",
+     "torterra",
+     "tangrowth"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "overgrown"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, Defence and Sp. Def x2, restores 1/8 HP each turn. Cost: Speed x0.5 and it can't switch out. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "Roots crack through the black, slowed birdsong; many voices at once, like wind through leaves | \"You walked through us. You did not cut us down.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"You walked through us. You did not cut us down.\"",
+     "\"The forest remembers who passed through gently.\"",
+     "\"This one is ours as well.\"",
+     "\"Grow.\""
+    ],
+    "after": "overgrown",
+    "sound": "pa19_roots",
+    "voice": "pa19_voice",
+    "theme": "pa19_theme",
+    "veil": "#000000",
+    "glow": "#5ad06a",
+    "textColor": "#c8f0b8",
+    "rise": "Vines lift [Name] back up. Moss covers its wounds."
+   },
+   "remembers": [
+    {
+     "flag": "berrytree-left",
+     "chance": 0.05
+    }
+   ]
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa20-the-pack-doesnt-leave-its-own",
+   "name": "The Pack Doesn't Leave Its Own",
+   "scope": {
+    "groups": [
+     "pa20-canines"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "arcanine",
+     "lycanroc",
+     "mightyena"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "alphas-howl"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, Speed x2, Attack x1.5, the foe's Attack drops each turn. Cost: it takes 1.25x damage. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "Silence, then howls getting closer; no voice, the lines appear one per howl | A pack does not leave its own.",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "A pack does not leave its own.",
+     "Not in the cold.",
+     "Not in the dark.",
+     "Not ever."
+    ],
+    "after": "alphas-howl",
+    "sound": "pa20_howl",
+    "theme": "pa20_theme",
+    "veil": "#000000",
+    "glow": "#ffd040",
+    "textColor": "#f0e0c0",
+    "rise": "[Name] gets up in the dark, eyes bright."
+   },
+   "remembers": [
+    {
+     "groupCount": {
+      "group": "pa20-canines",
+      "n": 2
+     },
+     "add": "The whole pack howls. Another pair of eyes opens in the dark first.",
+     "boost": {
+      "spe": 1
+     }
+    }
+   ]
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa21-the-contract",
+   "name": "The Contract",
+   "scope": {
+    "species": [
+     "banette",
+     "gengar",
+     "hypno",
+     "grimmsnarl",
+     "honchkrow",
+     "sableye",
+     "mismagius",
+     "cofagrigus",
+     "gholdengo",
+     "hatterene"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "banette",
+     "gengar",
+     "gholdengo"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "collected"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, every stat x1.75. Cost: the Collector takes 10% of this battle's prize money. Nothing else. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "A pen scratching on paper; a smooth, polite salesman's voice | \"Ah. There you are.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Ah. There you are.\"",
+     "\"Do you remember our agreement? You fed me. You kept me. You didn't trade me away.\"",
+     "\"Terms: one more fight.\"",
+     "\"Fee: a small one. I'll collect it later.\""
+    ],
+    "after": "collected",
+    "sound": "pa21_pen",
+    "voice": "pa21_voice",
+    "theme": "pa21_theme",
+    "veil": "#000000",
+    "glow": "#b050ff",
+    "textColor": "#e0c8ff",
+    "rise": "A signature flares in purple fire across the screen. [Name] stands up, grinning."
+   },
+   "remembers": [
+    {
+     "flag": "honest-shop",
+     "add": "\"You're a fair dealer. I'll take 5%.\"",
+     "feePct": 5
+    }
+   ]
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa22-critical-mass",
+   "name": "Critical Mass",
+   "scope": {
+    "species": [
+     "electrode",
+     "electrode-hisui",
+     "magcargo",
+     "camerupt",
+     "torkoal",
+     "coalossal",
+     "magmortar",
+     "volcarona",
+     "iron-moth",
+     "scovillain",
+     "armarouge",
+     "toxtricity",
+     "toxtricity-low-key"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "electrode",
+     "coalossal",
+     "iron-moth"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "critical-mass"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, every stat x2.5. Cost: a countdown from 5; at 0 it uses Explosion. If that downs the last foe you win, if not the run ends. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "A rising whine like a generator; a flat, automatic alarm voice | \"Core temperature: critical.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Core temperature: critical.\"",
+     "\"Containment: failed.\"",
+     "\"Evacuate.\"",
+     "\"...Correction. Do not evacuate. Fight.\""
+    ],
+    "after": "critical-mass",
+    "sound": "pa22_whine",
+    "voice": "pa22_voice",
+    "theme": "pa22_theme",
+    "veil": "#000000",
+    "glow": "#ffffff",
+    "textColor": "#ffe080",
+    "rise": "White light. [Name] is back, glowing too brightly to look at. The countdown starts: 5."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa23-ascension",
+   "name": "Ascension",
+   "scope": {
+    "species": [
+     "alakazam",
+     "reuniclus",
+     "gothitelle",
+     "beheeyem",
+     "espeon",
+     "hatterene",
+     "indeedee",
+     "indeedee-female",
+     "bronzong",
+     "orbeetle",
+     "oranguru",
+     "gardevoir",
+     "farigiraf"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "alakazam",
+     "reuniclus",
+     "beheeyem"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "transcendent"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, Sp. Atk and Sp. Def x2, immune to Ground moves and contact moves. Cost: it can't use physical moves. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "The screen fades to white, a long high tone; a soft, clear voice inside the head | \"My body stopped.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"My body stopped.\"",
+     "\"I didn't.\"",
+     "\"I let go of the body. I didn't let go of you.\"",
+     "\"Watch.\""
+    ],
+    "after": "transcendent",
+    "sound": "pa23_tone",
+    "voice": "pa23_voice",
+    "theme": "pa23_theme",
+    "veil": "#f4f4ff",
+    "glow": "#a0c8ff",
+    "textColor": "#303050",
+    "rise": "[Name] floats up from where it fell, outlined in light, with its eyes closed."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa24-the-oath",
+   "name": "The Oath",
+   "scope": {
+    "species": [
+     "kingambit",
+     "bisharp",
+     "aegislash",
+     "aegislash-blade",
+     "escavalier",
+     "sirfetchd",
+     "samurott",
+     "samurott-hisui",
+     "kleavor",
+     "ceruledge",
+     "gallade",
+     "lucario"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "kingambit",
+     "aegislash",
+     "sirfetchd"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "oathbound"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, Attack x2, can't fall below 1 HP for 3 turns. Cost: at the end of the third turn, if the battle isn't won, it faints. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "Steel sliding from a sheath; its own voice, low and steady | \"I swore to stand in front of you.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"I swore to stand in front of you.\"",
+     "\"I'm not standing.\"",
+     "\"Then I swore wrong.\"",
+     "\"Again. I swear it again.\""
+    ],
+    "after": "oathbound",
+    "sound": "pa24_steel",
+    "voice": "pa24_voice",
+    "theme": "pa24_theme",
+    "veil": "#000000",
+    "glow": "#e0e8ff",
+    "textColor": "#e8eef8",
+    "rise": "[Name] rises on one knee, then two feet, and raises its blade toward the opponent."
+   },
+   "remembers": [
+    {
+     "flag": "mem-glove-spared",
+     "add": "It remembers the glove on the ground. It stands like it did then.",
+     "resolute": true
+    },
+    {
+     "species": [
+      "sirfetchd"
+     ],
+     "add": "The leek is bent. It doesn't care."
+    }
+   ]
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa25-hive-mind",
+   "name": "Hive Mind",
+   "scope": {
+    "species": [
+     "vespiquen",
+     "beedrill",
+     "ribombee",
+     "durant",
+     "galvantula",
+     "falinks",
+     "dugtrio",
+     "dugtrio-alola",
+     "wishiwashi",
+     "maushold",
+     "maushold-family-of-three",
+     "ariados"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "vespiquen",
+     "durant",
+     "maushold"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "swarm"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, three bodies, each hit removes one whatever the damage; its moves hit twice at 60%. Cost: it can't Protect, and when the last body falls it faints. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "Buzzing from everywhere; hundreds of tiny voices, slightly out of sync | \"ONE FELL.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"ONE FELL.\"",
+     "\"ONE IS NOT US.\"",
+     "\"WE ARE MANY.\"",
+     "\"WE ARE STILL HERE.\""
+    ],
+    "after": "swarm",
+    "sound": "pa25_buzz",
+    "voice": "pa25_voice",
+    "theme": "pa25_theme",
+    "veil": "#000000",
+    "glow": "#ffd020",
+    "textColor": "#fff0a0",
+    "rise": "[Name] reforms out of a cloud of smaller copies of itself. Three outlines."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa26-the-deep",
+   "name": "The Deep",
+   "scope": {
+    "species": [
+     "dhelmise",
+     "lanturn",
+     "relicanth",
+     "gyarados",
+     "wailord",
+     "dondozo",
+     "kingdra",
+     "sharpedo",
+     "huntail",
+     "gorebyss",
+     "toxapex",
+     "cursola",
+     "basculegion",
+     "basculegion-female"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "dhelmise",
+     "relicanth",
+     "dondozo"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "crushing-depth"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, Defence x2, Water moves x1.5, an attacker that hits it loses 1 Speed. Cost: Speed x0.5. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "Deep blue, then black; sonar and slow whale song; a calm dive-computer voice | \"Depth: two hundred metres. Light: fading.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Depth: two hundred metres. Light: fading.\"",
+     "\"Depth: one thousand metres. Light: none.\"",
+     "\"Depth: the bottom.\"",
+     "\"Ascending.\""
+    ],
+    "after": "crushing-depth",
+    "sound": "pa26_sonar",
+    "voice": "pa26_voice",
+    "theme": "pa26_theme",
+    "veil": "#020818",
+    "glow": "#40a0ff",
+    "textColor": "#a0d8ff",
+    "rise": "Bubbles rise. [Name] comes up from below the battlefield with the water."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa27-thrown-away",
+   "name": "Thrown Away",
+   "scope": {
+    "species": [
+     "banette",
+     "garbodor",
+     "muk",
+     "muk-alola",
+     "polteageist",
+     "mimikyu",
+     "sandygast",
+     "palossand",
+     "dhelmise",
+     "trubbish",
+     "grimer",
+     "grimer-alola",
+     "klefki"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "banette",
+     "garbodor",
+     "polteageist"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "spiteful"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, max HP x1.5, an attacker that hits it loses 1 from its highest stat. Cost: its own moves x0.75. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "A music box winds down and stops; a cracked, quiet toy voice | \"Somebody threw me out once.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Somebody threw me out once.\"",
+     "\"I waited by the bins for a long time.\"",
+     "\"Then you came.\"",
+     "\"Nobody throws you out. Not while I'm here.\""
+    ],
+    "after": "spiteful",
+    "sound": "pa27_musicbox",
+    "voice": "pa27_voice",
+    "theme": "pa27_theme",
+    "veil": "#000000",
+    "glow": "#c080ff",
+    "textColor": "#e8d0f0",
+    "rise": "The music box starts again, wound by something unseen. [Name] stands, patched and stitched."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa28-primal-awakening",
+   "name": "Primal Awakening",
+   "scope": {
+    "species": [
+     "great-tusk",
+     "scream-tail",
+     "brute-bonnet",
+     "flutter-mane",
+     "slither-wing",
+     "sandy-shocks",
+     "roaring-moon",
+     "walking-wake",
+     "gouging-fire",
+     "raging-bolt"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "great-tusk",
+     "roaring-moon",
+     "gouging-fire"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "primal"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, Protosynthesis doubled, on its two best stats, sun or not; max HP x1.25. Cost: it can't switch and loses 1/16 HP each turn. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "A cave painting draws itself across the black; a growl the subtitles translate | [Before the cities.]",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "[Before the cities.]",
+     "[Before the names.]",
+     "[We survived.]",
+     "[We survive.]"
+    ],
+    "after": "primal",
+    "sound": "pa28_paint",
+    "voice": "pa28_voice",
+    "theme": "pa28_theme",
+    "veil": "#000000",
+    "glow": "#ff8030",
+    "textColor": "#f0d0a0",
+    "rise": "A roar. [Name] rises, the ground around it cracked like old earth."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa29-supernova",
+   "name": "Supernova",
+   "scope": {
+    "species": [
+     "solrock",
+     "volcarona",
+     "charizard",
+     "sunflora",
+     "heliolisk",
+     "arcanine",
+     "delphox",
+     "cinderace",
+     "skeledirge",
+     "ninetales",
+     "rapidash",
+     "talonflame"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "volcarona",
+     "solrock",
+     "charizard"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "supernova"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, sun for 5 turns, Fire moves x2, every Pokémon on the field loses 1/16 HP a turn. Cost: it loses the 1/16 too. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "A heavy, low hum getting brighter; a calm, enormous readout voice | \"Fuel: spent.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Fuel: spent.\"",
+     "\"Light: going out.\"",
+     "\"Final phase.\"",
+     "\"Brighter than ever.\""
+    ],
+    "after": "supernova",
+    "sound": "pa29_hum",
+    "voice": "pa29_voice",
+    "theme": "pa29_theme",
+    "veil": "#000000",
+    "glow": "#ffc030",
+    "textColor": "#fff0c0",
+    "rise": "The screen goes white-hot, then the battlefield returns under a gold sky. [Name] is burning."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa30-absolute-zero",
+   "name": "Absolute Zero",
+   "scope": {
+    "species": [
+     "froslass",
+     "glalie",
+     "avalugg",
+     "frosmoth",
+     "cetitan",
+     "baxcalibur",
+     "cryogonal",
+     "walrein",
+     "mamoswine",
+     "weavile",
+     "ninetales-alola",
+     "arctozolt",
+     "arctovish",
+     "iron-bundle"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "froslass",
+     "cryogonal",
+     "avalugg"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "absolute-zero"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, Ice moves have a 30% freeze chance, Defence x2, hail for 5 turns. Cost: after its first move it can act only every other turn. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "Ice cracking, then wind, frost creeping over the black; a whisper like breath on a window | \"Cold.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Cold.\"",
+     "\"Colder.\"",
+     "\"Nothing moves now.\"",
+     "\"Except me.\""
+    ],
+    "after": "absolute-zero",
+    "sound": "pa30_wind",
+    "voice": "pa30_voice",
+    "theme": "pa30_theme",
+    "veil": "#000000",
+    "glow": "#c0f0ff",
+    "textColor": "#e0f8ff",
+    "rise": "Snow begins to fall on the battlefield. [Name] rises out of a block of ice."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa31-eclipse",
+   "name": "Eclipse",
+   "scope": {
+    "species": [
+     "umbreon",
+     "lunatone",
+     "clefable",
+     "mismagius",
+     "honchkrow",
+     "noctowl",
+     "crobat",
+     "absol",
+     "gengar",
+     "sableye",
+     "lycanroc-midnight"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "umbreon",
+     "lunatone",
+     "clefable"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "eclipsed"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, night for the battle, Dark and Ghost moves x1.75, evasion +1 (no higher). Cost: accuracy -1. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "The moon in the black, a shadow sliding across it; a lullaby sung very slowly | \"The sun went down on you.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"The sun went down on you.\"",
+     "\"That's all right.\"",
+     "\"I'm better in the dark.\"",
+     "\"Close your eyes. I'll do the rest.\""
+    ],
+    "after": "eclipsed",
+    "sound": "pa31_eclipse",
+    "voice": "pa31_voice",
+    "theme": "pa31_theme",
+    "veil": "#000000",
+    "glow": "#ffe060",
+    "textColor": "#d8d8f8",
+    "rise": "The battlefield returns at night. [Name]'s rings, eyes and markings glow."
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "pa11-not-from-here",
+   "name": "Not From Here",
+   "scope": {
+    "groups": [
+     "ultra-beasts"
+    ]
+   },
+   "trigger": "rest",
+   "chance": 0.2,
+   "layer": "archetype",
+   "requires": {
+    "flagBelow": {
+     "key": "pa11-sleeps",
+     "n": 1
+    }
+   },
+   "effect": {
+    "openEvent": "pa11-not-from-here"
+   },
+   "effectText": "It is looking at a place that isn't here. (A stop opens: sit with it, or leave it be.)",
+   "presentation": "It looks up at the sky | [Name] is looking at a place that isn't here."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "limited",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg1-sibling-rivalry",
+   "name": "Sibling Rivalry",
+   "scope": {
+    "groups": [
+     "eeveelutions"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "packBest": 10
+   },
+   "effectText": "Two or more Eeveelutions in the party: each gets +10% to its best stat for the battle. (Limited: the family photo for all nine is not built yet.)",
+   "presentation": "They argue for a second, then turn to the opponent together | [Name] and its siblings argue, then face the foe as one."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "group",
+   "chance": 0.25,
+   "id": "pg2-any-road",
+   "name": "Any Road",
+   "scope": {
+    "species": [
+     "eevee"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "openEvent": "pg2-any-road"
+   },
+   "effectText": "Eevee is looking at the stones in your bag. (A stop opens: let it choose its road, or not yet.)",
+   "presentation": "It noses at your bag | Eevee is looking at the stones in your bag."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg3-the-three-skies",
+   "name": "The Three Skies",
+   "scope": {
+    "species": [
+     "articuno",
+     "zapdos",
+     "moltres"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "weatherBySpecies": {
+     "articuno": "hail",
+     "zapdos": "rain",
+     "moltres": "sun"
+    }
+   },
+   "effectText": "Two or more legendary birds: each bird brings its own sky for one turn when it comes out (Articuno hail, Zapdos storm, Moltres sun).",
+   "presentation": "The weather flickers between hail, storm and heat | The sky remembers [Name]."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg3-the-three-skies-entry",
+   "name": "The Three Skies",
+   "scope": {
+    "species": [
+     "articuno",
+     "zapdos",
+     "moltres"
+    ]
+   },
+   "trigger": "enter",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "weatherBySpecies": {
+     "articuno": "hail",
+     "zapdos": "rain",
+     "moltres": "sun"
+    }
+   },
+   "effectText": "A legendary bird comes out with its own sky for one turn.",
+   "presentation": "The weather flickers | The sky changes for [Name]."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg4-the-wrong-feathers",
+   "name": "The Wrong Feathers",
+   "scope": {
+    "groups": [
+     "pg4-galar-birds"
+    ]
+   },
+   "trigger": "enter",
+   "requires": {
+    "foeCounterpart": true
+   },
+   "effect": {
+    "boost": {
+     "spe": 1,
+     "spa": 1
+    }
+   },
+   "effectText": "Facing the Kanto bird of the same name: Speed +1 and Sp. Atk +1. It has something to prove.",
+   "presentation": "Both stop and stare; the Galarian bird looks away first | [Name] has something to prove."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg4-the-wrong-feathers-face-off",
+   "name": "The Wrong Feathers",
+   "scope": {
+    "groups": [
+     "pg4-galar-birds"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "foeCounterpart": true
+   },
+   "effect": {
+    "boost": {
+     "spe": 1,
+     "spa": 1
+    }
+   },
+   "effectText": "Facing the Kanto bird of the same name: Speed +1 and Sp. Atk +1. It has something to prove.",
+   "presentation": "Both stop and stare; the Galarian bird looks away first | [Name] has something to prove."
+  },
+  {
+   "limit": "battle",
+   "tier": "landmark",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg5-knowledge-emotion-willpower",
+   "name": "Knowledge, Emotion, Willpower",
+   "scope": {
+    "groups": [
+     "trio-lake"
+    ]
+   },
+   "trigger": "rest",
+   "requires": {
+    "partyMatching": 3
+   },
+   "effect": {
+    "legendHint": true
+   },
+   "effectText": "All three guardians rest together. You dream of three lakes.",
+   "presentation": "You dream of three lakes | Three lakes, three voices, one name."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg6-we-fight-together",
+   "name": "We Fight Together",
+   "scope": {
+    "groups": [
+     "trio-swords"
+    ]
+   },
+   "trigger": "ally",
+   "allyScope": "any",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "resoluteAll": true
+   },
+   "effectText": "An ally falls with two or more Swords of Justice in the party: every Sword is Resolute (no flinch, no confusion).",
+   "presentation": "A ring of steel | [Name] steps forward. They fight together."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 0.5,
+   "id": "pg7-keys-without-locks",
+   "name": "Keys Without Locks",
+   "scope": {
+    "groups": [
+     "trio-regis"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "bestDefStage": 1
+   },
+   "effectText": "Two or more Regis: half the time, each Regi gets +1 to its higher defence when it comes out.",
+   "presentation": "Braille glows on the battle border | [Name] hums."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 0.5,
+   "id": "pg7-keys-without-locks-entry",
+   "name": "Keys Without Locks",
+   "scope": {
+    "groups": [
+     "trio-regis"
+    ]
+   },
+   "trigger": "enter",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "bestDefStage": 1
+   },
+   "effectText": "Two or more Regis: half the time, each Regi gets +1 to its higher defence when it comes out.",
+   "presentation": "Braille glows on the battle border | [Name] hums."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg8-old-quarrels",
+   "name": "Old Quarrels",
+   "scope": {
+    "groups": [
+     "trio-weather"
+    ]
+   },
+   "trigger": "rest",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "openEvent": "pg8-old-quarrels"
+   },
+   "effectText": "They won't sleep near each other. (A stop opens: sleep between them, or make separate camps.)",
+   "presentation": "They won't sleep near each other | [Name] glares across the fire."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg9-the-order-of-things-palkia",
+   "name": "The Order of Things",
+   "scope": {
+    "species": [
+     "palkia"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyGroups": [
+     {
+      "group": "trio-creation",
+      "n": 2
+     }
+    ]
+   },
+   "effect": {
+    "trickRoom": 2
+   },
+   "effectText": "Two of the creation trio, Palkia leading: space bends, Trick Room for 2 turns.",
+   "presentation": "Space bends | [Name] folds the field."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg9-the-order-of-things-dialga",
+   "name": "The Order of Things",
+   "scope": {
+    "species": [
+     "dialga"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyGroups": [
+     {
+      "group": "trio-creation",
+      "n": 2
+     }
+    ]
+   },
+   "effect": {
+    "boost": {
+     "spe": 1
+    }
+   },
+   "effectText": "Two of the creation trio, Dialga leading: time slows for everyone else, Speed +1.",
+   "presentation": "Time slows | [Name] moves between the seconds."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg9-the-order-of-things-giratina",
+   "name": "The Order of Things",
+   "scope": {
+    "species": [
+     "giratina"
+    ]
+   },
+   "trigger": "faint",
+   "requires": {
+    "partyGroups": [
+     {
+      "group": "trio-creation",
+      "n": 2
+     }
+    ]
+   },
+   "effect": {
+    "haunting": {
+     "turns": 2,
+     "pct": 40
+    }
+   },
+   "effectText": "Two of the creation trio, and Giratina falls: it haunts the foe for 2 turns.",
+   "presentation": "The shadows lengthen | [Name] is not gone. Not from here."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg10-the-islands-eye",
+   "name": "The Island's Eye",
+   "scope": {
+    "groups": [
+     "trio-tapus"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "terrainTurns": 8
+   },
+   "effectText": "Its terrain lasts 8 turns instead of 5.",
+   "presentation": "The Tapu's terrain hums | The island watches through [Name]."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg10-the-islands-eye-entry",
+   "name": "The Island's Eye",
+   "scope": {
+    "groups": [
+     "trio-tapus"
+    ]
+   },
+   "trigger": "enter",
+   "effect": {
+    "terrainTurns": 8
+   },
+   "effectText": "Its terrain lasts 8 turns instead of 5.",
+   "presentation": "The Tapu's terrain hums | The island watches through [Name]."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg11-four-seals",
+   "name": "Four Seals",
+   "scope": {
+    "groups": [
+     "trio-ruin"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "ruinExtra": {
+     "wo-chien": "spa",
+     "chien-pao": "spd",
+     "ting-lu": "atk",
+     "chi-yu": "def"
+    }
+   },
+   "effectText": "Two or more Treasures of Ruin: each one's Ruin also lowers one more stat (Wo-Chien Sp. Atk, Chien-Pao Sp. Def, Ting-Lu Attack, Chi-Yu Defence).",
+   "presentation": "Chains rattle | [Name]'s seal weighs on the field."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg11-four-seals-entry",
+   "name": "Four Seals",
+   "scope": {
+    "groups": [
+     "trio-ruin"
+    ]
+   },
+   "trigger": "enter",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "ruinExtra": {
+     "wo-chien": "spa",
+     "chien-pao": "spd",
+     "ting-lu": "atk",
+     "chi-yu": "def"
+    }
+   },
+   "effectText": "Its Ruin also lowers one more stat (Wo-Chien Sp. Atk, Chien-Pao Sp. Def, Ting-Lu Attack, Chi-Yu Defence).",
+   "presentation": "Chains rattle | [Name]'s seal weighs on the field."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg12-the-ones-who-were-angry",
+   "name": "The Ones Who Were Angry",
+   "scope": {
+    "species": [
+     "okidogi",
+     "munkidori",
+     "fezandipiti"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "foeSpecies": [
+     "ogerpon",
+     "ogerpon-wellspring-mask",
+     "ogerpon-hearthflame-mask",
+     "ogerpon-cornerstone-mask"
+    ],
+    "flagBelow": {
+     "key": "kieran-met",
+     "n": 1
+    }
+   },
+   "effect": {
+    "noAttackFoe": [
+     "ogerpon",
+     "ogerpon-wellspring-mask",
+     "ogerpon-hearthflame-mask",
+     "ogerpon-cornerstone-mask"
+    ]
+   },
+   "effectText": "Against Ogerpon: it won't look at it, and can't attack it this battle. (Once you have heard Kieran's story, they bow to it instead and can fight.)",
+   "presentation": "They won't look at it | [Name] turns its face away."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg12-the-ones-who-were-angry-entry",
+   "name": "The Ones Who Were Angry",
+   "scope": {
+    "species": [
+     "okidogi",
+     "munkidori",
+     "fezandipiti"
+    ]
+   },
+   "trigger": "enter",
+   "requires": {
+    "foeSpecies": [
+     "ogerpon",
+     "ogerpon-wellspring-mask",
+     "ogerpon-hearthflame-mask",
+     "ogerpon-cornerstone-mask"
+    ],
+    "flagBelow": {
+     "key": "kieran-met",
+     "n": 1
+    }
+   },
+   "effect": {
+    "noAttackFoe": [
+     "ogerpon",
+     "ogerpon-wellspring-mask",
+     "ogerpon-hearthflame-mask",
+     "ogerpon-cornerstone-mask"
+    ]
+   },
+   "effectText": "Against Ogerpon: it won't look at it, and can't attack it this battle.",
+   "presentation": "They won't look at it | [Name] turns its face away."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg13-the-same-lab",
+   "name": "The Same Lab",
+   "scope": {
+    "groups": [
+     "pa10-starter-lines"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "starterTrio": true
+   },
+   "effect": {
+    "typeGuard": 10
+   },
+   "effectText": "All three starters of one region: each takes 10% less from the type it beats (Grass from Water, Fire from Grass, Water from Fire).",
+   "presentation": "They stand side by side | [Name] remembers the same lab."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 0.5,
+   "id": "pg14-whos-the-real-one",
+   "name": "Who's the Real One",
+   "scope": {
+    "groups": [
+     "pa16-mascots"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyMatching": 2,
+    "topBond": true
+   },
+   "effect": {
+    "boost": {
+     "spe": 1
+    }
+   },
+   "effectText": "Two or more electric mice: half the time they squabble, and the one with the highest Bond gets Speed +1 (when it leads).",
+   "presentation": "They squabble | [Name] is the real one. Obviously."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg15-two-halves",
+   "name": "Two Halves",
+   "scope": {
+    "groups": [
+     "pg15-nidos"
+    ]
+   },
+   "trigger": "rest",
+   "requires": {
+    "partyGroups": [
+     {
+      "group": "pg15-nido-f",
+      "n": 1
+     },
+     {
+      "group": "pg15-nido-m",
+      "n": 1
+     }
+    ]
+   },
+   "effect": {
+    "bond": 1
+   },
+   "effectText": "Both Nidoran lines in the party: they sleep curled together. +1 Bond each.",
+   "presentation": "They sleep curled together | [Name] sleeps curled against the other."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg15-two-halves-royal",
+   "name": "Two Halves",
+   "scope": {
+    "groups": [
+     "pg15-royals"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyGroups": [
+     {
+      "group": "pg15-royals",
+      "n": 2
+     }
+    ]
+   },
+   "effect": {
+    "statPct": {
+     "atk": 10
+    }
+   },
+   "effectText": "Nidoqueen and Nidoking together: +10% Attack while the other is in the party.",
+   "presentation": "It glances at the other | [Name] fights for two."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg15-two-halves-royal-entry",
+   "name": "Two Halves",
+   "scope": {
+    "groups": [
+     "pg15-royals"
+    ]
+   },
+   "trigger": "enter",
+   "requires": {
+    "partyGroups": [
+     {
+      "group": "pg15-royals",
+      "n": 2
+     }
+    ]
+   },
+   "effect": {
+    "statPct": {
+     "atk": 10
+    }
+   },
+   "effectText": "Nidoqueen and Nidoking together: +10% Attack while the other is in the party.",
+   "presentation": "It glances at the other | [Name] fights for two."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg16-from-before",
+   "name": "From Before",
+   "scope": {
+    "groups": [
+     "pg16-hisui"
+    ]
+   },
+   "trigger": "enter",
+   "requires": {
+    "foeCounterpart": true
+   },
+   "effect": {
+    "boostTop": 1
+   },
+   "effectText": "Facing its modern form: +1 to its best stat.",
+   "presentation": "A distant bell | [Name] was here first."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg16-from-before-face-off",
+   "name": "From Before",
+   "scope": {
+    "groups": [
+     "pg16-hisui"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "foeCounterpart": true
+   },
+   "effect": {
+    "boostTop": 1
+   },
+   "effectText": "Facing its modern form: +1 to its best stat.",
+   "presentation": "A distant bell | [Name] was here first."
+  },
+  {
+   "limit": "region",
+   "tier": "minor",
+   "status": "limited",
+   "layer": "group",
+   "chance": 0.15,
+   "id": "pg17-far-from-home",
+   "name": "Far From Home",
+   "scope": {
+    "groups": [
+     "pg17-galar"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "bond": 1
+   },
+   "effectText": "+1 Bond, once per region. (Limited: the Galarica Twig gift waits for the item to exist.)",
+   "presentation": "It looks west | [Name] looks west."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "group",
+   "chance": 0.2,
+   "id": "pg18-change-of-clothes",
+   "name": "Change of Clothes",
+   "scope": {
+    "species": [
+     "rotom"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "openEvent": "pg18-change-of-clothes"
+   },
+   "effectText": "Rotom has got into an appliance it found. (A stop opens: let it stay, or out you get.)",
+   "presentation": "A whirr and a clank | Rotom has got into an appliance it found."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps1-the-magikarp-that-could",
+   "name": "The Magikarp That Could",
+   "scope": {
+    "species": [
+     "magikarp"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "evolveAfter": {
+     "to": "gyarados",
+     "turns": 3
+    }
+   },
+   "effectText": "Against a Gym Leader: if it is still standing after three turns, it evolves when the battle ends, whatever its level.",
+   "presentation": "It flops onto the field. The crowd laughs | Magikarp doesn't care.",
+   "requires": {
+    "gymLeader": true
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps2-the-empty-shell",
+   "name": "The Empty Shell",
+   "scope": {
+    "species": [
+     "shedinja"
+    ]
+   },
+   "trigger": "faint",
+   "effect": {
+    "entryBoost": {
+     "species": [
+      "ninjask"
+     ],
+     "stat": "spe",
+     "n": 2
+    }
+   },
+   "effectText": "When it falls, the Ninjask in your party gets Speed +2 each time it comes in, for the rest of the battle.",
+   "presentation": "It doesn't fall. It just stops | There was never anything inside it. Was there?"
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps3-copy-of-a-copy",
+   "name": "Copy of a Copy",
+   "scope": {
+    "species": [
+     "ditto"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "bothSkip": true
+   },
+   "effectText": "Facing another Ditto: both stare, blink, and lose their first turn laughing.",
+   "presentation": "Two Ditto stare. Both blink | Neither of them can stop laughing.",
+   "requires": {
+    "foeSpecies": [
+     "ditto"
+    ]
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps5-aura-sight",
+   "name": "Aura Sight",
+   "scope": {
+    "species": [
+     "lucario"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "revealNext": true
+   },
+   "effectText": "It sees the opponent's next Pokémon before it comes out. Raised from a brave Riolu, it sees their held items too.",
+   "presentation": "Its eyes glow blue. It looks past the opponent's lead | [Name] already knows who comes next.",
+   "requires": {
+    "named": true
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.15,
+   "id": "ps6-i-will-protect-my-trainer-gardevoir",
+   "name": "I Will Protect My Trainer",
+   "scope": {
+    "species": [
+     "gardevoir"
+    ]
+   },
+   "trigger": "runEnd",
+   "effect": {
+    "reviveHpPct": 50,
+    "guard": 3
+   },
+   "effectText": "Instead of the run ending: Gardevoir stands back up at 50% HP and is Guarded for three turns.",
+   "presentation": "A black hole of a screen. A white figure steps into it | [Name] will protect you."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.15,
+   "id": "ps6-i-will-protect-my-trainer-gallade",
+   "name": "I Will Protect My Trainer",
+   "scope": {
+    "species": [
+     "gallade"
+    ]
+   },
+   "trigger": "runEnd",
+   "effect": {
+    "reviveHpPct": 50,
+    "resolute": true
+   },
+   "effectText": "Instead of the run ending: Gallade stands back up at 50% HP, Resolute.",
+   "presentation": "A black hole of a screen. A white figure steps into it | [Name] will protect you."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps8-just-five-more-minutes",
+   "name": "Just Five More Minutes",
+   "scope": {
+    "species": [
+     "snorlax"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "openEvent": "ps8-just-five-more-minutes"
+   },
+   "effectText": "At rest it won't wake up. Let it sleep (a node lost) and it starts the next battle with +1 to every stat; poke it and it wakes up grumpy.",
+   "presentation": "It won't wake up | Just five more minutes."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps8-just-five-more-minutes-rested",
+   "name": "Just Five More Minutes",
+   "scope": {
+    "species": [
+     "snorlax"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "def": 1,
+     "spa": 1,
+     "spd": 1,
+     "spe": 1
+    },
+    "spendFlag": "pm-snorlax-slept"
+   },
+   "effectText": "It slept in: +1 to every stat for this battle.",
+   "presentation": "It stretches. It yawns. It is very, very rested | [Name] is ready now.",
+   "requires": {
+    "flagAtLeast": {
+     "key": "pm-snorlax-slept",
+     "n": 1
+    }
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.1,
+   "id": "ps9-just-standing-there",
+   "name": "Just Standing There",
+   "scope": {
+    "species": [
+     "wobbuffet"
+    ]
+   },
+   "trigger": "runEnd",
+   "effect": {
+    "reviveHpPct": 25,
+    "counterMult": 3
+   },
+   "effectText": "Instead of the run ending: it stands back up at 25% HP, and its first Counter or Mirror Coat does triple damage.",
+   "presentation": "Silence. Then Wobbuffet salutes | Wobbuffet!"
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps10-one-hundred-and-eight",
+   "name": "One Hundred and Eight",
+   "scope": {
+    "species": [
+     "spiritomb"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "setFlag": "pm-keystone:{uid}"
+   },
+   "effectText": "When your Kindness reaches 108: its Odd Keystone cracks. Every stat but HP +10% for the rest of the run.",
+   "presentation": "Each of the 108 spirits says a single word | They all say \"thank you.\"",
+   "requires": {
+    "flagAtLeast": {
+     "key": "kindness",
+     "n": 108
+    }
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps10-one-hundred-and-eight-cracked",
+   "name": "One Hundred and Eight",
+   "scope": {
+    "species": [
+     "spiritomb"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "statPct": {
+     "atk": 10,
+     "def": 10,
+     "spa": 10,
+     "spd": 10,
+     "spe": 10
+    }
+   },
+   "effectText": "Its Odd Keystone is cracked: every stat but HP +10%.",
+   "presentation": "The keystone hums | 108 voices, quiet now.",
+   "requires": {
+    "flagAtLeast": {
+     "key": "pm-keystone:{uid}",
+     "n": 1
+    }
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps11-dont-look",
+   "name": "Don't Look",
+   "scope": {
+    "species": [
+     "mimikyu",
+     "mimikyu-busted"
+    ]
+   },
+   "trigger": "turn",
+   "effect": {
+    "boost": {
+     "atk": 1
+    }
+   },
+   "effectText": "When its Disguise breaks: Attack +1. It's embarrassed.",
+   "presentation": "The rag head falls. Mimikyu fixes it, furious | Don't look.",
+   "requires": {
+    "disguiseBroken": true
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps12-wrong-face",
+   "name": "Wrong Face",
+   "scope": {
+    "species": [
+     "zoroark",
+     "zoroark-hisui"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "wrongFace": true
+   },
+   "effectText": "While its Illusion holds, the first super-effective hit on the \"fake\" does neutral damage. Once per battle.",
+   "presentation": "It enters wearing another team member's face | The opponent pauses."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.05,
+   "id": "ps13-wait-for-it",
+   "name": "Wait for It",
+   "scope": {
+    "species": [
+     "slowpoke"
+    ]
+   },
+   "trigger": "runEnd",
+   "effect": {
+    "slowFirst": true
+   },
+   "effectText": "Instead of the run ending: it stands at 1 HP. Its first move always goes last, and does double damage.",
+   "presentation": "The run-end screen starts to show. Then, about four seconds late | Slowpoke realises what happened."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.1,
+   "id": "ps15-lucky-star",
+   "name": "Lucky Star",
+   "scope": {
+    "lines": [
+     "togepi"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "accAll": 10
+   },
+   "effectText": "Every move in this battle has +10% accuracy, for both sides.",
+   "presentation": "Little stars in the corner of the screen | Something lucky is about to happen."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "limited",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps16-nurses-orders",
+   "name": "Nurse's Orders",
+   "scope": {
+    "species": [
+     "chansey",
+     "blissey"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "cureTeam": true,
+    "healLowestPct": 25
+   },
+   "effectText": "At rest it inspects the team: every status is cured, and the lowest-HP Pokémon gets back 25% of its max HP.",
+   "presentation": "It inspects each team member in turn | Nurse's orders."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.5,
+   "id": "ps17-your-shadow",
+   "name": "Your Shadow",
+   "scope": {
+    "species": [
+     "gengar"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "foeStage": {
+     "acc": -1
+    }
+   },
+   "effectText": "At night: the opponent's lead starts with Accuracy -1.",
+   "presentation": "The opponent's shadow grins | It isn't their shadow any more.",
+   "requires": {
+    "night": true
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.5,
+   "id": "ps18-the-ferryman",
+   "name": "The Ferryman",
+   "scope": {
+    "species": [
+     "dusknoir"
+    ]
+   },
+   "trigger": "ally",
+   "effect": {
+    "hauntFallen": {
+     "turns": 2,
+     "pct": 50
+    }
+   },
+   "effectText": "When an ally falls: it reaches out and doesn't let go. The fallen ally Haunts the foe for 2 turns, even if it isn't a Ghost.",
+   "presentation": "It reaches out | It doesn't let go.",
+   "allyScope": "any"
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps20-leader-of-the-pack",
+   "name": "Leader of the Pack",
+   "scope": {
+    "species": [
+     "bisharp"
+    ]
+   },
+   "trigger": "ko",
+   "effect": {
+    "evolveAfter": {
+     "to": "kingambit"
+    }
+   },
+   "effectText": "When it defeats an opposing Bisharp: the other kneels, and it evolves into Kingambit after the battle (the canon count is waived once).",
+   "presentation": "The other Bisharp kneels | [Name] leads now.",
+   "requires": {
+    "koSpecies": [
+     "bisharp"
+    ]
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps21-rage-past-death",
+   "name": "Rage Past Death",
+   "scope": {
+    "species": [
+     "primeape"
+    ]
+   },
+   "trigger": "turn",
+   "effect": {
+    "evolveAfter": {
+     "to": "annihilape"
+    }
+   },
+   "effectText": "When Primeape has used Rage Fist 20 times this run, it goes quiet, and it evolves into Annihilape when the battle ends.",
+   "presentation": "The screen goes red. It stops shaking. It goes quiet | [Name] is past rage now.",
+   "requires": {
+    "moveUses": {
+     "move": "rage-fist",
+     "n": 20
+    }
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.01,
+   "id": "ps22-one-in-a-hundred",
+   "name": "One in a Hundred",
+   "scope": {
+    "species": [
+     "dudunsparce"
+    ]
+   },
+   "trigger": "evolve",
+   "effect": {
+    "evolveForm": "dudunsparce-three-segment"
+   },
+   "effectText": "One time in a hundred, Dunsparce evolves into the Three-Segment form.",
+   "presentation": "It's longer than usual | One in a hundred."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "limited",
+   "layer": "species",
+   "chance": 0.25,
+   "id": "ps27-self-portrait",
+   "name": "Self-Portrait",
+   "scope": {
+    "species": [
+     "smeargle"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "openEvent": "ps27-self-portrait"
+   },
+   "effectText": "At rest it is painting. Look at it, or let it finish: the painting is of the team, or of you.",
+   "presentation": "It's painting | Don't peek."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps28-the-leek",
+   "name": "The Leek",
+   "scope": {
+    "species": [
+     "farfetchd-galar"
+    ]
+   },
+   "trigger": "turn",
+   "effect": {
+    "evolveAfter": {
+     "to": "sirfetchd"
+    }
+   },
+   "effectText": "When it lands its third critical hit in one battle, it evolves into Sirfetch'd after the battle.",
+   "presentation": "It stands taller. It looks at the leek | [Name] is ready.",
+   "requires": {
+    "critsAtLeast": 3
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps32-the-speed",
+   "name": "The Speed",
+   "scope": {
+    "species": [
+     "ninjask"
+    ]
+   },
+   "trigger": "turn",
+   "effect": {
+    "boost": {
+     "eva": 1
+    }
+   },
+   "effectText": "When its Speed reaches +6: Evasion +1, once. The only time evasion goes up in this design.",
+   "presentation": "It vanishes. A buzz all over the screen | You can't see [Name] any more.",
+   "requires": {
+    "stageAtLeast": {
+     "stat": "spe",
+     "n": 6
+    }
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.2,
+   "id": "ps33-corrupted",
+   "name": "Corrupted",
+   "scope": {
+    "species": [
+     "porygon-z"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "randomMove": true
+   },
+   "effectText": "It learns a random attacking move it doesn't know for this battle, shown before it's used. Adaptability applies.",
+   "presentation": "The battle screen glitches for a second | Instance corrupted."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps38-the-school",
+   "name": "The School",
+   "scope": {
+    "species": [
+     "wishiwashi",
+     "wishiwashi-school"
+    ]
+   },
+   "trigger": "low",
+   "effect": {
+    "schoolOnce": true
+   },
+   "effectText": "Below 25% HP: a hundred little fish answer. It returns to School Form once, at that HP.",
+   "presentation": "Silence. Then a hundred little fish answer | [Name] isn't alone.",
+   "hpBelow": 25
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps40-asleep-the-whole-time",
+   "name": "Asleep the Whole Time",
+   "scope": {
+    "species": [
+     "komala"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "resoluteAll": true
+   },
+   "effectText": "It's asleep, and it was always asleep: nothing wakes it, so nothing flinches or confuses it this battle.",
+   "presentation": "It's asleep | It was always asleep."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps44-just-a-bidoof",
+   "name": "Just a Bidoof",
+   "scope": {
+    "species": [
+     "bidoof"
+    ]
+   },
+   "trigger": "ko",
+   "effect": {
+    "bond": 3
+   },
+   "effectText": "When it defeats a Legendary or a trainer's ace: +3 Bond.",
+   "presentation": "Silence. Then the crowd erupts | Bidoof did it.",
+   "requires": {
+    "koLegendOrAce": true
+   }
+  },
+  {
+   "limit": "region",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.2,
+   "id": "ps45-presents",
+   "name": "Presents",
+   "scope": {
+    "species": [
+     "delibird"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "present": [
+     "rare-candy",
+     "nugget",
+     "pp-up",
+     "big-mushroom",
+     "pearl",
+     "heart-scale",
+     "star-piece"
+    ]
+   },
+   "effectText": "At rest it opens its sack: one present from Rare Candy, Nugget, PP Up, Big Mushroom, Pearl, Heart Scale or Star Piece.",
+   "presentation": "It opens its sack | Something for you."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "layer": "individual",
+   "chance": 0.3,
+   "id": "pi1-the-first-one",
+   "name": "The First One",
+   "scope": {
+    "all": true
+   },
+   "trigger": "runEnd",
+   "effect": {
+    "reviveHpPct": 50,
+    "resolute": true
+   },
+   "effectText": "Instead of the run ending: your starter, if it has the highest Bond, stands back up at 50% HP, Resolute. Comes before The Starters.",
+   "presentation": "The first frame of the run, a Poké Ball on a table, cuts in for a second | It was there first.",
+   "requires": {
+    "starter": true,
+    "topBond": true
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "individual",
+   "chance": 1,
+   "id": "pi3-one-hp",
+   "name": "One HP",
+   "scope": {
+    "all": true
+   },
+   "trigger": "lethal",
+   "effect": {
+    "resolute": true
+   },
+   "effectText": "Survived at 1 HP three times this run: the fourth time it survives again, Resolute.",
+   "presentation": "A heartbeat | [Name] is still here.",
+   "requires": {
+    "flagAtLeast": {
+     "key": "pm-one-hp:{uid}",
+     "n": 3
+    }
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "individual",
+   "chance": 1,
+   "id": "pi5-most-knockouts",
+   "name": "Most Knockouts",
+   "scope": {
+    "all": true
+   },
+   "trigger": "start",
+   "effect": {
+    "boostTop": 1
+   },
+   "effectText": "Against the final opponent: your Pokémon with the most knockouts this run gets +1 to its best stat.",
+   "presentation": "The crowd chants its name | [Name]! [Name]!",
+   "requires": {
+    "finalBoss": true,
+    "mostKos": true
    }
   }
+ ],
+ "counterparts": {
+  "great-tusk": [
+   "donphan"
+  ],
+  "scream-tail": [
+   "jigglypuff"
+  ],
+  "brute-bonnet": [
+   "amoonguss"
+  ],
+  "flutter-mane": [
+   "misdreavus"
+  ],
+  "slither-wing": [
+   "volcarona"
+  ],
+  "sandy-shocks": [
+   "magneton"
+  ],
+  "roaring-moon": [
+   "salamence"
+  ],
+  "walking-wake": [
+   "suicune"
+  ],
+  "gouging-fire": [
+   "entei"
+  ],
+  "raging-bolt": [
+   "raikou"
+  ],
+  "iron-treads": [
+   "donphan"
+  ],
+  "iron-bundle": [
+   "delibird"
+  ],
+  "iron-hands": [
+   "hariyama"
+  ],
+  "iron-jugulis": [
+   "hydreigon"
+  ],
+  "iron-moth": [
+   "volcarona"
+  ],
+  "iron-thorns": [
+   "tyranitar"
+  ],
+  "iron-valiant": [
+   "gardevoir",
+   "gallade"
+  ],
+  "iron-leaves": [
+   "virizion"
+  ],
+  "iron-boulder": [
+   "terrakion"
+  ],
+  "iron-crown": [
+   "cobalion"
+  ],
+  "growlithe-hisui": [
+   "growlithe"
+  ],
+  "arcanine-hisui": [
+   "arcanine"
+  ],
+  "voltorb-hisui": [
+   "voltorb"
+  ],
+  "electrode-hisui": [
+   "electrode"
+  ],
+  "typhlosion-hisui": [
+   "typhlosion"
+  ],
+  "qwilfish-hisui": [
+   "qwilfish"
+  ],
+  "sneasel-hisui": [
+   "sneasel"
+  ],
+  "samurott-hisui": [
+   "samurott"
+  ],
+  "lilligant-hisui": [
+   "lilligant"
+  ],
+  "zorua-hisui": [
+   "zorua"
+  ],
+  "zoroark-hisui": [
+   "zoroark"
+  ],
+  "braviary-hisui": [
+   "braviary"
+  ],
+  "sliggoo-hisui": [
+   "sliggoo"
+  ],
+  "goodra-hisui": [
+   "goodra"
+  ],
+  "avalugg-hisui": [
+   "avalugg"
+  ],
+  "decidueye-hisui": [
+   "decidueye"
+  ],
+  "articuno-galar": [
+   "articuno"
+  ],
+  "zapdos-galar": [
+   "zapdos"
+  ],
+  "moltres-galar": [
+   "moltres"
+  ]
+ },
+ "revivalStatuses": {
+  "revenant": {
+   "name": "Revenant",
+   "chip": "Revenant: max HP x1.5, moves x1.75, immune to status conditions. Cost: loses 1/10 of its max HP each turn and can't be healed by anything.",
+   "stats": {
+    "hp": 1.5
+   },
+   "movePower": 1.75,
+   "statusImmune": true,
+   "turnHpPct": -10,
+   "noHeal": true
+  },
+  "wrathborn": {
+   "name": "Wrathborn",
+   "chip": "Wrathborn: max HP x1.25, Attack and Sp. Atk x1.75, can't flinch. Cost: it uses its highest-damage move every turn.",
+   "stats": {
+    "hp": 1.25,
+    "atk": 1.75,
+    "spa": 1.75
+   },
+   "noFlinch": true,
+   "forceBest": true
+  },
+  "overgrown": {
+   "name": "Overgrown",
+   "chip": "Overgrown: Defence and Sp. Def x2, restores 1/8 HP each turn. Cost: Speed x0.5 and it can't switch out.",
+   "stats": {
+    "def": 2,
+    "spd": 2,
+    "spe": 0.5
+   },
+   "turnHpPct": 12.5,
+   "noSwitch": true
+  },
+  "alphas-howl": {
+   "name": "Alpha's Howl",
+   "chip": "Alpha's Howl: Speed x2, Attack x1.5, the foe's Attack drops each turn. Cost: it takes 1.25x damage.",
+   "stats": {
+    "spe": 2,
+    "atk": 1.5
+   },
+   "foeStage": {
+    "stat": "atk",
+    "n": -1
+   },
+   "taken": 1.25
+  },
+  "collected": {
+   "name": "Collected",
+   "chip": "Collected: every stat x1.75. Cost: the Collector takes 10% of this battle's prize money. Nothing else.",
+   "stats": {
+    "atk": 1.75,
+    "def": 1.75,
+    "spa": 1.75,
+    "spd": 1.75,
+    "spe": 1.75
+   },
+   "feePct": 10
+  },
+  "critical-mass": {
+   "name": "Critical Mass",
+   "chip": "Critical Mass: every stat x2.5. Cost: a countdown from 5; at 0 it uses Explosion. If that downs the last foe you win, if not the run ends.",
+   "stats": {
+    "atk": 2.5,
+    "def": 2.5,
+    "spa": 2.5,
+    "spd": 2.5,
+    "spe": 2.5
+   },
+   "countdown": {
+    "turns": 5,
+    "move": "explosion"
+   }
+  },
+  "transcendent": {
+   "name": "Transcendent",
+   "chip": "Transcendent: Sp. Atk and Sp. Def x2, immune to Ground moves and contact moves. Cost: it can't use physical moves.",
+   "stats": {
+    "spa": 2,
+    "spd": 2
+   },
+   "immuneTypes": [
+    "ground"
+   ],
+   "immuneContact": true,
+   "noPhysical": true
+  },
+  "oathbound": {
+   "name": "Oathbound",
+   "chip": "Oathbound: Attack x2, can't fall below 1 HP for 3 turns. Cost: at the end of the third turn, if the battle isn't won, it faints.",
+   "stats": {
+    "atk": 2
+   },
+   "oathTurns": 3
+  },
+  "swarm": {
+   "name": "Swarm",
+   "chip": "Swarm: three bodies, each hit removes one whatever the damage; its moves hit twice at 60%. Cost: it can't Protect, and when the last body falls it faints.",
+   "bodies": 3,
+   "twicePct": 60,
+   "noProtect": true
+  },
+  "crushing-depth": {
+   "name": "Crushing Depth",
+   "chip": "Crushing Depth: Defence x2, Water moves x1.5, an attacker that hits it loses 1 Speed. Cost: Speed x0.5.",
+   "stats": {
+    "def": 2,
+    "spe": 0.5
+   },
+   "typePower": {
+    "water": 1.5
+   },
+   "onHit": "spe"
+  },
+  "spiteful": {
+   "name": "Spiteful",
+   "chip": "Spiteful: max HP x1.5, an attacker that hits it loses 1 from its highest stat. Cost: its own moves x0.75.",
+   "stats": {
+    "hp": 1.5
+   },
+   "onHit": "highest",
+   "movePower": 0.75
+  },
+  "primal": {
+   "name": "Primal",
+   "chip": "Primal: Protosynthesis doubled, on its two best stats, sun or not; max HP x1.25. Cost: it can't switch and loses 1/16 HP each turn.",
+   "stats": {
+    "hp": 1.25
+   },
+   "primal": {
+    "mult": 2,
+    "stats": 2
+   },
+   "noSwitch": true,
+   "turnHpPct": -6.25
+  },
+  "supernova": {
+   "name": "Supernova",
+   "chip": "Supernova: sun for 5 turns, Fire moves x2, every Pokémon on the field loses 1/16 HP a turn. Cost: it loses the 1/16 too.",
+   "weather": {
+    "id": "sun",
+    "turns": 5
+   },
+   "typePower": {
+    "fire": 2
+   },
+   "fieldChipPct": 6.25
+  },
+  "absolute-zero": {
+   "name": "Absolute Zero",
+   "chip": "Absolute Zero: Ice moves have a 30% freeze chance, Defence x2, hail for 5 turns. Cost: after its first move it can act only every other turn.",
+   "stats": {
+    "def": 2
+   },
+   "freezePct": 30,
+   "weather": {
+    "id": "hail",
+    "turns": 5
+   },
+   "everyOther": true
+  },
+  "eclipsed": {
+   "name": "Eclipsed",
+   "chip": "Eclipsed: night for the battle, Dark and Ghost moves x1.75, evasion +1 (no higher). Cost: accuracy -1.",
+   "night": true,
+   "typePower": {
+    "dark": 1.75,
+    "ghost": 1.75
+   },
+   "stages": {
+    "eva": 1,
+    "acc": -1
+   },
+   "evasionCap": 1
+  }
+ },
+ "regionLegends": {
+  "kanto": [
+   "mewtwo"
+  ],
+  "johto": [
+   "ho-oh",
+   "lugia"
+  ],
+  "hoenn": [
+   "groudon",
+   "kyogre",
+   "rayquaza"
+  ],
+  "sinnoh": [
+   "dialga",
+   "palkia",
+   "giratina"
+  ],
+  "unova": [
+   "reshiram",
+   "zekrom",
+   "kyurem"
+  ],
+  "kalos": [
+   "xerneas",
+   "yveltal",
+   "zygarde"
+  ],
+  "alola": [
+   "solgaleo",
+   "lunala",
+   "necrozma"
+  ],
+  "galar": [
+   "zacian",
+   "zamazenta",
+   "eternatus"
+  ],
+  "paldea": [
+   "koraidon",
+   "miraidon"
+  ]
+ },
+ "starterTrios": [
+  [
+   [
+    "bulbasaur",
+    "ivysaur",
+    "venusaur"
+   ],
+   [
+    "charmander",
+    "charmeleon",
+    "charizard"
+   ],
+   [
+    "squirtle",
+    "wartortle",
+    "blastoise"
+   ]
+  ],
+  [
+   [
+    "chikorita",
+    "bayleef",
+    "meganium"
+   ],
+   [
+    "cyndaquil",
+    "quilava",
+    "typhlosion",
+    "typhlosion-hisui"
+   ],
+   [
+    "totodile",
+    "croconaw",
+    "feraligatr"
+   ]
+  ],
+  [
+   [
+    "treecko",
+    "grovyle",
+    "sceptile"
+   ],
+   [
+    "torchic",
+    "combusken",
+    "blaziken"
+   ],
+   [
+    "mudkip",
+    "marshtomp",
+    "swampert"
+   ]
+  ],
+  [
+   [
+    "turtwig",
+    "grotle",
+    "torterra"
+   ],
+   [
+    "chimchar",
+    "monferno",
+    "infernape"
+   ],
+   [
+    "piplup",
+    "prinplup",
+    "empoleon"
+   ]
+  ],
+  [
+   [
+    "snivy",
+    "servine",
+    "serperior"
+   ],
+   [
+    "tepig",
+    "pignite",
+    "emboar"
+   ],
+   [
+    "oshawott",
+    "dewott",
+    "samurott",
+    "samurott-hisui"
+   ]
+  ],
+  [
+   [
+    "chespin",
+    "quilladin",
+    "chesnaught"
+   ],
+   [
+    "fennekin",
+    "braixen",
+    "delphox"
+   ],
+   [
+    "froakie",
+    "frogadier",
+    "greninja"
+   ]
+  ],
+  [
+   [
+    "rowlet",
+    "dartrix",
+    "decidueye",
+    "decidueye-hisui"
+   ],
+   [
+    "litten",
+    "torracat",
+    "incineroar"
+   ],
+   [
+    "popplio",
+    "brionne",
+    "primarina"
+   ]
+  ],
+  [
+   [
+    "grookey",
+    "thwackey",
+    "rillaboom"
+   ],
+   [
+    "scorbunny",
+    "raboot",
+    "cinderace"
+   ],
+   [
+    "sobble",
+    "drizzile",
+    "inteleon"
+   ]
+  ],
+  [
+   [
+    "sprigatito",
+    "floragato",
+    "meowscarada"
+   ],
+   [
+    "fuecoco",
+    "crocalor",
+    "skeledirge"
+   ],
+   [
+    "quaxly",
+    "quaxwell",
+    "quaquaval"
+   ]
+  ]
  ]
 }

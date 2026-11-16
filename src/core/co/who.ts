@@ -4,7 +4,9 @@
 import type { Content, TypeName } from '../contentSchema';
 import type { PokemonInstance, RunState } from '../state';
 
-export const CO_WHO_NAMES = ['lead', 'party', 'picked', 'starter', 'top', 'firstCatch', 'newest'] as const;
+export const CO_WHO_NAMES = ['lead', 'party', 'picked', 'starter', 'top', 'firstCatch', 'newest', 'moment'] as const;
+/** SF161 Battle Moments: the story flag naming the Pokémon of the last moment with an after-battle choice (uids joined by `|`). */
+export const MOMENT_MON_FLAG = 'moment-mon';
 export const CO_MOVE_FLAGS = ['sound', 'wind', 'punch', 'bite', 'pulse', 'bullet', 'slicing', 'powder'] as const;
 /** The first party Pokémon able to fight that fits every given part (types: any one of them). */
 export interface CoMatch { types?: TypeName[]; moveFlag?: (typeof CO_MOVE_FLAGS)[number]; species?: string[] }
@@ -66,6 +68,10 @@ export function whoOf(content: Content, run: RunState, who: CoWho, pickedUid?: s
       return one(firstCatch(run));
     case 'newest':
       return one([...party].sort((a, b) => uidNumber(b.uid) - uidNumber(a.uid))[0]);
+    case 'moment': {
+      const uids = String(run.story.flags[MOMENT_MON_FLAG] ?? '').split('|');
+      return party.filter((m) => uids.includes(m.uid));
+    }
   }
 }
 
@@ -80,7 +86,7 @@ export function whoWords(who: CoWho): string {
     const parts = [who.types?.length ? `${who.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' or ')}-type` : '', who.moveFlag ? `${who.moveFlag}-move Pokémon` : '', who.species?.length ? 'that Pokémon' : ''].filter(Boolean);
     return parts.length > 0 ? `your ${parts.join(' ')}`.replace('-type your', '-type') : 'one Pokémon';
   }
-  return { lead: 'lead', party: 'party', picked: 'the chosen Pokémon', weakest: 'lowest-level Pokémon', starter: 'your starter', top: 'your closest Pokémon', firstCatch: 'your first catch', newest: 'your newest Pokémon' }[who];
+  return { lead: 'lead', party: 'party', picked: 'the chosen Pokémon', weakest: 'lowest-level Pokémon', starter: 'your starter', top: 'your closest Pokémon', firstCatch: 'your first catch', moment: 'that Pokémon', newest: 'your newest Pokémon' }[who];
 }
 
 /** A Bond-level check: someone (or the named one) is at this level or above. */

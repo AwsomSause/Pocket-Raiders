@@ -1,0 +1,2459 @@
+{
+ "catalogOverhaul": "markets",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "game-corner",
+   "name": "The Game Corner",
+   "group": "Games of chance",
+   "stop": "casino",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#281838",
+    "effect": "spin"
+   },
+   "intro": "Slot reels under flashing lights. A sign over the door: EVERY ODD ON THE WALL. ASK. Delphine Ruez, the manager, meets you at it. \"Welcome. Read the wall. Anyone says a machine is due, they're lying, and I throw them out.\"",
+   "choices": [
+    {
+     "label": "Play the slots.",
+     "success": {
+      "text": "\"Third row, the dusty one,\" Delphine says. \"It's honest. They all are now.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "slot-machine"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the wall.",
+     "success": {
+      "text": "The wall, in plain letters: SLOTS win 1 in 6, pay ₽550 on ₽100 (edge 8%). CARDS 1 in 3, pay 2.7× (10%). COIN 1 in 2, pay 1.9× (5%). DICE 44% you, 42% house, 14% tie, pay ₽205 (10%). ROULETTE red 18 in 37, pay 2×; number 1 in 37, pay 35 to 1 (3%). SCRATCH 1 in 4 wins (9%). PACHINKO pockets printed (6%). SKILL GAMES: no odds, just you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "corner-read",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "game-corner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about your father.",
+     "success": {
+      "text": "\"My father ran this place crooked for thirty years. He lost it in a bet with me. I won honestly.\" She almost smiles. \"He's at the coin fountain outside. He's made his peace. Mostly.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "corner-father",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "game-corner"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "corner-dice",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "corner-played-slot-machine",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-ball-toss",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-card-shark",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-coin-flip",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-coin-fountain",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-dice-game",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-fortune-teller-2",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-ghost-gamble",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-lottery-booth",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-mysterious-chest-2",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-mystery-door",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-prize-wheel",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-reward-wheel",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-rf-claw-machine",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-rf-pachinko",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-rf-shell-game",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-rf-weather-bet",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-roulette-of-fate",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-scratch-card",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-played-voltorb-flip",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "corner-dice",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Delphine is waiting by the door with a small frame under her arm. \"Every game in the house. Once each. Nobody does that.\"",
+     "addChoices": [
+      {
+       "label": "Take the frame.",
+       "success": {
+        "text": "Inside the frame: a pair of dice, worn smooth, loaded. Her father's. \"So nobody uses them again,\" Delphine says. \"Hang them somewhere you'll see them.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "corner-dice",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Delphine Ruez gave you her father's crooked dice, framed, so nobody uses them again.",
+          "importance": 65
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "corner-lucky",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-lucky-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Lucky works the Corner's door now, his Persian asleep on his feet. He nods you in. He doesn't play. He never will again."
+    },
+    {
+     "id": "corner-read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "corner-read",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have read the wall. The odds are in your head now, every one.",
+     "hide": [
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "id": "slot-machine",
+   "name": "The Slot Machine",
+   "group": "Games of chance",
+   "stop": "casino",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "effect": "spin"
+   },
+   "intro": "A dusty slot machine that blinks 777! at nobody. A brass plate is screwed to its side. Printed: \"Win 1 in 6. Pays ₽550 on a ₽100 pull. House edge 8%.\"",
+   "choices": [
+    {
+     "label": "Pull (100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "The reels spin, rattle, and stop one at a time, exactly as fast as the plate says they will.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 100,
+        "table": [
+         {
+          "weight": 1,
+          "label": "Three 7s! ₽550",
+          "money": 550
+         },
+         {
+          "weight": 5,
+          "label": "No match"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-slot-machine",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull ten times.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "Ten pulls, ten clanks. A little paper tape curls out of the side with every result and the total at the bottom.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 100,
+        "table": [
+         {
+          "weight": 1,
+          "label": "Three 7s! ₽550",
+          "money": 550
+         },
+         {
+          "weight": 5,
+          "label": "No match"
+         }
+        ],
+        "times": 10
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-slot-machine",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "You walk away. The machine blinks 777! at your back, honestly hopeful.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ball-toss",
+   "name": "The Ball Toss",
+   "group": "Games of chance",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "effect": "float"
+   },
+   "intro": "A basket at the far end of a long lane. Kip-Ro, the attendant, spins a ball on one finger. \"Skill game. Your aim, your prize.\" The sign: ₽50 a throw. A hit wins a Great Ball.",
+   "choices": [
+    {
+     "label": "Throw (50).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Your throw drops into the basket like it was always going there. Kip-Ro whistles and hands over a Great Ball.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-ball-toss",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It clips the rim and bounces out. Kip-Ro winces with you. \"So close. That one's on the lane, not on you.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-ball-toss",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Pokémon throw.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      },
+      {
+       "kind": "partyTypes",
+       "types": [
+        "psychic",
+        "fighting"
+       ]
+      }
+     ],
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Your Pokémon takes aim, and the ball floats, or flies, straight in. Kip-Ro laughs. \"Cheating with style. Allowed.\" A Great Ball.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-ball-toss",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Even your Pokémon misses. It looks at its own paws, betrayed.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-ball-toss",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch someone else.",
+     "success": {
+      "text": "A kid in a cap throws five times and misses five times, each one a little closer. He counts his last coins, and there aren't enough. He looks at the basket like it broke his heart.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ball-toss-kid"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ball-toss-kid",
+   "name": "The Ball Toss",
+   "group": "Games of chance",
+   "room": true,
+   "intro": "The kid in the cap stands at the line with no ball and no coins, looking at the basket. Kip-Ro looks at you over the kid's head. The sixth throw is ₽50.",
+   "choices": [
+    {
+     "label": "Pay for his sixth throw.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "You put down ₽50. The kid throws with his whole body. It goes in. He screams, and Kip-Ro hands him a Great Ball, and he runs off to show somebody without saying thank you, which is exactly right.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just watch.",
+     "success": {
+      "text": "The kid trudges away. Kip-Ro sighs and quietly puts a ball in the kid's hand as he passes.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "card-shark",
+   "name": "The Card Shark",
+   "group": "Games of chance",
+   "scene": {
+    "cast": [],
+    "effect": "spin"
+   },
+   "intro": "A harlequin in diamonds shuffles three cards faster than you can see. Mister Harl smiles. \"Pick the queen. I won't cheat. It's on the wall.\" The wall: 1 in 3, pays 2.7×.",
+   "choices": [
+    {
+     "label": "Pick a card (100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "He lays them out face down. You pick. He turns it over slowly, because he likes this part.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 100,
+        "table": [
+         {
+          "weight": 1,
+          "label": "The queen! ₽270",
+          "money": 270
+         },
+         {
+          "weight": 2,
+          "label": "Not the queen"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-card-shark",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shuffle it yourself.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "He hands you the deck happily. \"Please. Shuffle all you like. The odds are the same in your hands as in mine.\" You shuffle, lay them out, and pick.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 100,
+        "table": [
+         {
+          "weight": 1,
+          "label": "The queen! ₽270",
+          "money": 270
+         },
+         {
+          "weight": 2,
+          "label": "Not the queen"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-card-shark",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the odds.",
+     "success": {
+      "text": "\"One in three. I lose a little more than I win, over a year.\" He fans the cards. \"I like the company.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "card-shark"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "coin-flip",
+   "name": "Coin Flip",
+   "group": "Games of chance",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A young man flipping a silver coin, catching it without looking. Duo grins. \"Heads or tails? Double or nothing!\" A card on his table: ₽100. 1 in 2. Pays 1.9×. Edge 5%.",
+   "choices": [
+    {
+     "label": "Heads.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "The coin goes up, spinning, catching the light, and comes down on the back of his hand.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 100,
+        "table": [
+         {
+          "weight": 1,
+          "label": "Called it! ₽190",
+          "money": 190
+         },
+         {
+          "weight": 1,
+          "label": "Wrong side"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-coin-flip",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tails.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "The coin goes up, spinning, catching the light, and comes down on the back of his hand.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 100,
+        "table": [
+         {
+          "weight": 1,
+          "label": "Called it! ₽190",
+          "money": 190
+         },
+         {
+          "weight": 1,
+          "label": "Wrong side"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-coin-flip",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the coin.",
+     "success": {
+      "text": "He hands it over, offended. Two sides, a head and a tail, both honest. Then he laughs. \"Fair. Everyone should check. Nobody does.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "coin-flip"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "coin-fountain",
+   "name": "The Coin Fountain",
+   "group": "Games of chance",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "A fountain shining with coins under a sign: MAKE A WISH. An old man sits on its rim. Old Ruez nods. \"Toss one in. It goes to the Lost and Found fund. Your wish goes wherever wishes go.\"",
+   "choices": [
+    {
+     "label": "Toss a coin (10).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 10
+      }
+     ],
+     "success": {
+      "text": "Plink. A tiny splash. Somewhere, a lost Pokémon is ten coins closer to home. You make a wish. You will not say what.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -10
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-coin-fountain",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Toss a lot (500).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "A whole handful, ringing on the coins below. Old Ruez whistles. \"That's a rescue, that is. A real one. Somebody in this region gets found because of you.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "lost-and-found-sure",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-coin-fountain",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with him.",
+     "success": {
+      "text": "You sit. The water talks to itself. \"I lost this place to my daughter,\" Old Ruez says. \"Best thing I ever lost.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "corner-played-coin-fountain",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "fountain-father",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "corner-father",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know who he is now. Delphine's father, watching the door of the place he used to cheat in.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Sit with him.",
+       "success": {
+        "text": "You sit, and tell him Delphine sent you, more or less. He goes very quiet. \"She told you? About the bet?\" He wipes his eyes. \"Tell her the fountain says hello.\" Later, Delphine nods at you like family.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delphine-standing",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "corner-played-coin-fountain",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dice-game",
+   "name": "The Dice Game",
+   "group": "Games of chance",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "effect": "rattle"
+   },
+   "intro": "A felt table, two dice, and a big woman with bigger rings. Mags-Fen rattles the cup. \"Roll higher than me and double your money!\" The sign: ties go to the house. 44% you, 42% me, 14% tie.",
+   "choices": [
+    {
+     "label": "Roll (100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You roll. She rolls. The dice are clear glass; you can see they're true right through.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 100,
+        "table": [
+         {
+          "weight": 44,
+          "label": "You roll higher! ₽205",
+          "money": 205
+         },
+         {
+          "weight": 42,
+          "label": "Mags-Fen rolls higher"
+         },
+         {
+          "weight": 14,
+          "label": "A tie (the house)"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-dice-game",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the odds.",
+     "success": {
+      "text": "\"Forty-four in a hundred you win and I pay ₽205. Forty-two I win. Fourteen we tie, and ties are mine. That's my edge, and it's on the sign, and it's small.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dice-game"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "Mags-Fen rattles the cup at you as you go, cheerfully, no hard feelings.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fortune-teller-2",
+   "name": "The Medium's Crystal",
+   "group": "Games of chance",
+   "scene": {
+    "cast": [],
+    "tint": "#301848",
+    "effect": "float"
+   },
+   "intro": "A small tent, a big crystal ball, a woman with silver rings on every finger. Orla, the medium, does not look up. \"One reading, ₽200. I'll tell you true or not at all.\"",
+   "choices": [
+    {
+     "label": "Read me.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "She looks a long time. \"The next land you walk into is already in trouble, and the trouble has a shape. Watch whoever is helping too much, too early.\" She sits back. \"That's all. That's plenty.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "flag",
+        "key": "crisis-hint",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-fortune-teller-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read my lead.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Orla looks past the crystal at your lead, not into it. She tells you exactly what it is like, and what it likes, and your lead sits down in front of her like it has been understood.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "market",
+        "action": "advise",
+        "key": "nature",
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-fortune-teller-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Is any of it real?",
+     "success": {
+      "text": "\"The crystal's glass.\" Orla taps it. It rings. \"What I see is how you stand. How you hold the lead. Where you look when you're worried.\" She smiles. \"That one's free.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "corner-played-fortune-teller-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ghost-gamble",
+   "name": "Ghost's Gamble",
+   "group": "Games of chance",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "pokemon": "gengar",
+    "tint": "#180820",
+    "effect": "flicker"
+   },
+   "intro": "A grinning Gengar shuffles cards in a dark corner, its prizes glinting in a stack. A sign in a child's handwriting: THE GENGAR PLAYS FAIR. ITS PRIZES ARE LOST THINGS. IT TELLS YOU WHOSE. It fans three cards and grins wider.",
+   "choices": [
+    {
+     "label": "Pick one (200).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You pick. The Gengar turns the card over with one long finger, very slowly, enjoying it enormously. One in three wins.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 200,
+        "table": [
+         {
+          "weight": 1,
+          "label": "You win a lost thing",
+          "flag": "gamble-won",
+          "event": "ghost-gamble-prize"
+         },
+         {
+          "weight": 2,
+          "label": "The Gengar wins"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-ghost-gamble",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask whose prizes they are.",
+     "success": {
+      "text": "The Gengar holds up each prize, and over each one a face swirls up in purple smoke. A girl in a sunhat. An old fisherman. And one face you know, from somewhere on the road.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ghost-gamble"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pass.",
+     "success": {
+      "text": "The Gengar sulks magnificently. It turns its back on you and shuffles at the wall.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ghost-gamble-prize",
+   "name": "Ghost's Gamble",
+   "group": "Games of chance",
+   "room": true,
+   "intro": "The Gengar slides your prize across the table. As your hand touches it, smoke puffs up and shows you the face of the trainer who lost it, looking for it still. The Gengar watches you, waiting.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You keep it. The Gengar shrugs. Lost is lost; you won it fair. The face in the smoke fades.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "quick-claw",
+         "soothe-bell",
+         "silk-scarf",
+         "lucky-egg"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Return it to its owner.",
+     "success": {
+      "text": "You carry it to its owner. Their face does exactly what it did in the smoke, only the other way round. When you turn to go, the Gengar is in the shadow of a lamp post, grinning. Later you find an Egg on your bag strap.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "gastly"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 4,
+        "unit": "stage"
+       },
+       {
+        "kind": "flag",
+        "key": "gengar-follows",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lottery-booth",
+   "name": "The Lottery",
+   "group": "Games of chance",
+   "scene": {
+    "cast": [],
+    "effect": "spin"
+   },
+   "intro": "A glass drum of numbered balls, turning. The clerk taps the board. \"Try your luck! Odds on the board.\" The board: ₽100 a ticket. 1 in 100, a Master Ball. 1 in 20, a Rare Candy. 1 in 5, a Berry.",
+   "choices": [
+    {
+     "label": "Buy a ticket (100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "The drum turns. A ball pops up into the clerk's hand. She reads it out like it matters, because it does.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 100,
+        "table": [
+         {
+          "weight": 1,
+          "label": "Jackpot! A Master Ball",
+          "item": "master-ball"
+         },
+         {
+          "weight": 5,
+          "label": "A Rare Candy",
+          "item": "rare-candy"
+         },
+         {
+          "weight": 20,
+          "label": "A Berry",
+          "item": "oran-berry"
+         },
+         {
+          "weight": 74,
+          "label": "No number this time"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-lottery-booth",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy for a friend.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You write your lead's name on the ticket, carefully. Your lead watches the drum like it is the most important thing in the world.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 100,
+        "table": [
+         {
+          "weight": 1,
+          "label": "Jackpot! A Master Ball",
+          "item": "master-ball",
+          "event": "lottery-friend-win"
+         },
+         {
+          "weight": 5,
+          "label": "A Rare Candy",
+          "item": "rare-candy",
+          "event": "lottery-friend-win"
+         },
+         {
+          "weight": 20,
+          "label": "A Berry",
+          "item": "oran-berry",
+          "event": "lottery-friend-win"
+         },
+         {
+          "weight": 74,
+          "label": "No number this time"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-lottery-booth",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the odds.",
+     "success": {
+      "text": "The clerk reads the board out loud, slowly, and adds: \"Seventy-four in a hundred, nothing. I say that part loudest.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lottery-booth"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lottery-friend-win",
+   "name": "The Lottery",
+   "group": "Games of chance",
+   "room": true,
+   "intro": "The ticket in your lead's name won. The clerk calls the name out loud across the Corner, and everyone turns. Your lead has never been so proud of anything.",
+   "choices": [
+    {
+     "label": "Celebrate.",
+     "success": {
+      "text": "Your lead parades the prize around the Corner. Strangers clap. It will not stop talking about this for days.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mysterious-chest-2",
+   "name": "The Rattling Chest",
+   "group": "Games of chance",
+   "stop": "treasure",
+   "scene": {
+    "cast": [],
+    "effect": "rattle"
+   },
+   "intro": "An iron chest that rattles a lot. The attendant pats the lid. \"₽300 to open. Contents list on the lid.\" The lid: ₽250 pouch 40%, Ultra Ball 30%, Nugget 20%, Rare Candy 10%.",
+   "choices": [
+    {
+     "label": "Open it.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "The lock clicks. You lift the lid on one of the list's four things, exactly as promised.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 300,
+        "table": [
+         {
+          "weight": 40,
+          "label": "A pouch of ₽250",
+          "money": 250
+         },
+         {
+          "weight": 30,
+          "label": "An Ultra Ball",
+          "item": "ultra-ball"
+         },
+         {
+          "weight": 20,
+          "label": "A Nugget",
+          "item": "nugget"
+         },
+         {
+          "weight": 10,
+          "label": "A Rare Candy",
+          "item": "rare-candy"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-mysterious-chest-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the lid.",
+     "success": {
+      "text": "Painted in neat white letters, with the odds beside each line. At the bottom, smaller: \"Nothing is ever not on this list.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mysterious-chest-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shake it.",
+     "success": {
+      "text": "It rattles back. Hard. You open it and out tumbles a Pumpkaboo, furious, and then a Mimikyu, more furious. They flee. The attendant puts his face in his hands. \"Not again.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "corner-played-mysterious-chest-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mystery-door",
+   "name": "Three Doors",
+   "group": "Games of chance",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#201828",
+    "effect": "fog"
+   },
+   "intro": "Three painted doors. One hides treasure, one a Pokémon, one nothing. Monty, the host, beams. \"Pick a door. Then I'll open one you didn't pick, and you can switch.\" The sign: \"Switching wins two times in three. Look it up.\"",
+   "choices": [
+    {
+     "label": "Door one.",
+     "success": {
+      "text": "You touch door one. Monty nods, then opens door three. Empty. \"Now then,\" he says.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mystery-door-monty"
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-mystery-door",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Door two.",
+     "success": {
+      "text": "You touch door two. Monty nods, then opens door one. Empty. \"Now then,\" he says.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mystery-door-monty"
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-mystery-door",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Door three.",
+     "success": {
+      "text": "You touch door three. Monty nods, then opens door two. Empty. \"Now then,\" he says.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mystery-door-monty"
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-mystery-door",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mystery-door-monty",
+   "name": "Three Doors",
+   "group": "Games of chance",
+   "room": true,
+   "intro": "One door open on nothing. Your door, closed. One other door, closed. Monty taps the sign: switching wins two times in three. \"Your call. Switch, or stay?\"",
+   "choices": [
+    {
+     "label": "Switch.",
+     "chance": 0.6666666666666666,
+     "success": {
+      "text": "You switch. Monty throws the door open with a flourish.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 0,
+        "table": [
+         {
+          "weight": 1,
+          "label": "The treasure: a Nugget",
+          "item": "nugget"
+         },
+         {
+          "weight": 1,
+          "label": "The Pokémon!",
+          "event": "mystery-door-pokemon"
+         }
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "You switch, and the door opens on an empty room. Monty spreads his hands. \"One in three. It happens. It's still the right call.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Stay.",
+     "chance": 0.3333333333333333,
+     "success": {
+      "text": "You stay. Monty opens your door.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 0,
+        "table": [
+         {
+          "weight": 1,
+          "label": "The treasure: a Nugget",
+          "item": "nugget"
+         },
+         {
+          "weight": 1,
+          "label": "The Pokémon!",
+          "event": "mystery-door-pokemon"
+         }
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "You stay, and your door opens on an empty room. \"Should've switched,\" Monty says, kindly. \"Everyone thinks they shouldn't.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mystery-door-pokemon",
+   "name": "Three Doors",
+   "group": "Games of chance",
+   "room": true,
+   "intro": "Behind the door, a Pokémon sits on a velvet cushion, blinking at the light. It has a ribbon round its neck that says PRIZE. It looks at you to see if you are the sort of person it would like.",
+   "choices": [
+    {
+     "label": "Welcome it.",
+     "success": {
+      "text": "You kneel and hold out a hand. It sniffs, decides, and climbs into your arms. Monty dabs his eyes.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "eevee",
+         "pichu",
+         "cleffa",
+         "igglybuff",
+         "togepi",
+         "azurill"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go home.",
+     "success": {
+      "text": "You untie the ribbon. It hops off the cushion, looks back once, and trots away to wherever it came from. Monty says that's never happened before.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "prize-wheel",
+   "name": "The Idol's Wheel",
+   "group": "Games of chance",
+   "scene": {
+    "cast": [],
+    "effect": "spin"
+   },
+   "intro": "A pop idol in sequins presents a wheel with eight Pokémon painted on it. Starla waves. \"Spin it! You win a meet-and-greet with whoever it lands on!\" Each slice is one in eight. ₽100 a spin.",
+   "choices": [
+    {
+     "label": "Spin (100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "The wheel clicks round and slows, and the crowd counts it down, and then the Pokémon on the slice is right there, very real, and ready to meet you properly.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-prize-wheel",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "jigglypuff",
+        "clefairy",
+        "pikachu",
+        "eevee",
+        "togepi",
+        "skitty",
+        "buneary",
+        "swirlix"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Can I just meet them?",
+     "success": {
+      "text": "Starla laughs, delighted. \"Nobody asks that! One free spin, then.\" The wheel spins. The Pokémon it lands on bounces out to meet you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "corner-played-prize-wheel",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "jigglypuff",
+        "clefairy",
+        "pikachu",
+        "eevee",
+        "togepi",
+        "skitty",
+        "buneary",
+        "swirlix"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "Starla blows you a kiss anyway. The crowd cheers, because they cheer at everything.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "reward-wheel",
+   "name": "The Free Wheel",
+   "group": "Games of chance",
+   "scene": {
+    "cast": [],
+    "effect": "spin"
+   },
+   "intro": "A promoter in a Mart apron by a wheel with its odds painted right on the slices. Gus-Ann grins. \"Free! No tickets, no catch. The Mart pays for it.\" Potion 60%, Super Potion 25%, Great Ball 10%, Rare Candy 5%.",
+   "choices": [
+    {
+     "label": "Spin.",
+     "success": {
+      "text": "The wheel ticks round and settles. Gus-Ann hands you the prize with a Mart flyer folded around it.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 0,
+        "table": [
+         {
+          "weight": 60,
+          "label": "A Potion",
+          "item": "potion"
+         },
+         {
+          "weight": 25,
+          "label": "A Super Potion",
+          "item": "super-potion"
+         },
+         {
+          "weight": 10,
+          "label": "A Great Ball",
+          "item": "great-ball"
+         },
+         {
+          "weight": 5,
+          "label": "A Rare Candy",
+          "item": "rare-candy"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-reward-wheel",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's the catch?",
+     "success": {
+      "text": "\"You'll come into the Mart after. That's it.\" She shrugs. \"Most people do. Most people buy something. The wheel pays for itself.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "reward-wheel"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "Gus-Ann waves the flyer after you. \"The wheel will be here!\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-claw-machine",
+   "name": "The Claw Machine",
+   "group": "Games of chance",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#102a3a",
+    "effect": "glint"
+   },
+   "intro": "A glass box full of Poké Dolls and one shiny prize. The sign: \"Skill game. The claw grips at full strength. We checked.\" ₽100 a go. A hit: a Poké Doll, 9 in 10, or a Shiny Stone, 1 in 10.",
+   "choices": [
+    {
+     "label": "Play (100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "prompt": {
+      "id": "claw-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "The claw drops, grips, and holds. Honestly holds. It carries the prize all the way to the chute.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 0,
+        "table": [
+         {
+          "weight": 9,
+          "label": "A Poké Doll",
+          "item": "poke-doll"
+         },
+         {
+          "weight": 1,
+          "label": "The Shiny Stone!",
+          "item": "shiny-stone"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-rf-claw-machine",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The claw closes on air an inch to the left. Full strength, wrong place. That one is on you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-rf-claw-machine",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Pokémon with a steady hand play.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      },
+      {
+       "kind": "partyTypes",
+       "types": [
+        "psychic",
+        "fighting"
+       ]
+      }
+     ],
+     "prompt": {
+      "id": "claw-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Your Pokémon steers the claw with total concentration, tongue out. It drops right on the prize.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 0,
+        "table": [
+         {
+          "weight": 9,
+          "label": "A Poké Doll",
+          "item": "poke-doll"
+         },
+         {
+          "weight": 1,
+          "label": "The Shiny Stone!",
+          "item": "shiny-stone"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-rf-claw-machine",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Even your steadiest Pokémon misses. It glares at the claw as if the claw did it on purpose.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-rf-claw-machine",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look at the prizes.",
+     "success": {
+      "text": "Rows of Poké Dolls. And near the back, one that looks exactly like your starter, down to the expression. Somebody made it with care.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-claw-machine"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-pachinko",
+   "name": "Pachinko",
+   "group": "Games of chance",
+   "stop": "casino",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2a1030",
+    "effect": "spin"
+   },
+   "intro": "Rows of brass pins and a hundred little pockets, each with its prize printed beneath it. ₽50 a ball. Most pockets are empty. Some pay ₽50, ₽100, ₽250. Two at the bottom pay ₽600.",
+   "choices": [
+    {
+     "label": "Drop a ball (50).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "The ball clatters down through the pins, bouncing, ringing, and drops into a pocket.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 50,
+        "table": [
+         {
+          "weight": 62,
+          "label": "An empty pocket"
+         },
+         {
+          "weight": 20,
+          "label": "₽50 pocket",
+          "money": 50
+         },
+         {
+          "weight": 10,
+          "label": "₽100 pocket",
+          "money": 100
+         },
+         {
+          "weight": 6,
+          "label": "₽250 pocket",
+          "money": 250
+         },
+         {
+          "weight": 2,
+          "label": "The ₽600 pocket!",
+          "money": 600
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-rf-pachinko",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Drop ten.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "Ten balls, one after another, a waterfall of ringing brass. The counter at the side adds it up.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 50,
+        "table": [
+         {
+          "weight": 62,
+          "label": "An empty pocket"
+         },
+         {
+          "weight": 20,
+          "label": "₽50 pocket",
+          "money": 50
+         },
+         {
+          "weight": 10,
+          "label": "₽100 pocket",
+          "money": 100
+         },
+         {
+          "weight": 6,
+          "label": "₽250 pocket",
+          "money": 250
+         },
+         {
+          "weight": 2,
+          "label": "The ₽600 pocket!",
+          "money": 600
+         }
+        ],
+        "times": 10
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-rf-pachinko",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "The pins ring softly behind you, a ball still finding its way down from someone else's go.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-shell-game",
+   "name": "The Shell Game",
+   "group": "Games of chance",
+   "stop": "casino",
+   "scene": {
+    "cast": [
+     "trainer.gambler"
+    ],
+    "tint": "#2a2a10",
+    "effect": "spin"
+   },
+   "intro": "Three shells on an upturned crate. Nimble Nan shows you the Poké Ball under one. \"Follow the Ball, friend! Guess right and your money doubles.\" The sign: \"Skill game. No ball palmed. Ever.\" ₽100 a go.",
+   "choices": [
+    {
+     "label": "Play (100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "prompt": {
+      "id": "shell-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Her hands blur. They stop. You point. She lifts the shell: the Ball. Nan laughs and pays out ₽200. \"Sharp eyes!\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-rf-shell-game",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You point. She lifts the shell: nothing. She lifts the other: the Ball, right where it should be. \"Fair and square,\" she says, and she means it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-rf-shell-game",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch her hands.",
+     "success": {
+      "text": "Nothing up her sleeves. She rolls them up to the elbow to show you, then shuffles slowly, just for you, so you can see how it goes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-shell-game"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "Nan tips an imaginary hat. \"Come back when your eyes are rested.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-weather-bet",
+   "name": "The Weather Bet",
+   "group": "Games of chance",
+   "stop": "casino",
+   "scene": {
+    "cast": [
+     "trainer.scientist"
+    ],
+    "tint": "#2a3a4a",
+    "effect": "rain"
+   },
+   "intro": "A man in a rain hat with a barometer under his arm. Cloudy Pete squints at the sky. \"Next node, rainy or clear? ₽200 says you can't tell.\" Right, he pays ₽200. Wrong, you pay him.",
+   "choices": [
+    {
+     "label": "Rainy.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Pete licks a finger, holds it up, and waits. The sky makes up its mind.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 200,
+        "table": [
+         {
+          "weight": 1,
+          "label": "You called it! ₽400",
+          "money": 400
+         },
+         {
+          "weight": 1,
+          "label": "Wrong sky"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-rf-weather-bet",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Clear.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Pete licks a finger, holds it up, and waits. The sky makes up its mind.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 200,
+        "table": [
+         {
+          "weight": 1,
+          "label": "You called it! ₽400",
+          "money": 400
+         },
+         {
+          "weight": 1,
+          "label": "Wrong sky"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-rf-weather-bet",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the sky.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "flying"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type goes up, circles once, and comes down certain. You tell Pete. Pete groans, looks up, and pays. \"Birds,\" he says bitterly. \"Always birds.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-rf-weather-bet",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "roulette-of-fate",
+   "name": "Roulette of Fate",
+   "group": "Games of chance",
+   "scene": {
+    "cast": [],
+    "tint": "#300818",
+    "effect": "spin"
+   },
+   "intro": "A clown in a sparkly waistcoat spins a giant wheel. Bimbo the Somewhat Honest bows. \"Fate decides! The wall decides how often!\" Red: 18 in 37, pays 2×. One number: 1 in 37, pays 35 to 1. ₽100 a bet.",
+   "choices": [
+    {
+     "label": "Bet on red (100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "The ball skitters round the rim, drops, bounces, and settles.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 100,
+        "table": [
+         {
+          "weight": 18,
+          "label": "Red! ₽200",
+          "money": 200
+         },
+         {
+          "weight": 19,
+          "label": "Black or green"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-roulette-of-fate",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bet on a number (100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You pick your number. Bimbo writes it on a little card and holds it up to the crowd. The ball goes round.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 100,
+        "table": [
+         {
+          "weight": 1,
+          "label": "Your number! ₽3,600",
+          "money": 3600
+         },
+         {
+          "weight": 36,
+          "label": "Another number"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-roulette-of-fate",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You watch a dozen spins. Red, black, red, red, green. Bimbo honks his nose at every one. Nobody gets rich. Nobody gets hurt.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "scratch-card",
+   "name": "Scratch Cards",
+   "group": "Games of chance",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "effect": "glint"
+   },
+   "intro": "A kiosk with a fan of glittering cards. \"Scratch cards, ₽200 each!\" The back of every card prints the odds: 1 in 4 wins back the stake or more. Top prize ₽5,000, 1 in 100.",
+   "choices": [
+    {
+     "label": "Buy one.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You scratch with a coin, silver flaking off like snow.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 200,
+        "table": [
+         {
+          "weight": 75,
+          "label": "No match"
+         },
+         {
+          "weight": 10,
+          "label": "Stake back: ₽200",
+          "money": 200
+         },
+         {
+          "weight": 8,
+          "label": "₽400",
+          "money": 400
+         },
+         {
+          "weight": 4,
+          "label": "₽1,000",
+          "money": 1000
+         },
+         {
+          "weight": 2,
+          "label": "₽2,000",
+          "money": 2000
+         },
+         {
+          "weight": 1,
+          "label": "Top prize: ₽5,000",
+          "money": 5000
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-scratch-card",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy five.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Five cards, five coins' worth of silver dust on the counter.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 200,
+        "table": [
+         {
+          "weight": 75,
+          "label": "No match"
+         },
+         {
+          "weight": 10,
+          "label": "Stake back: ₽200",
+          "money": 200
+         },
+         {
+          "weight": 8,
+          "label": "₽400",
+          "money": 400
+         },
+         {
+          "weight": 4,
+          "label": "₽1,000",
+          "money": 1000
+         },
+         {
+          "weight": 2,
+          "label": "₽2,000",
+          "money": 2000
+         },
+         {
+          "weight": 1,
+          "label": "Top prize: ₽5,000",
+          "money": 5000
+         }
+        ],
+        "times": 5
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-scratch-card",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the back.",
+     "success": {
+      "text": "Three in four: no match. One in ten: your ₽200 back. One in twelve-and-a-half: ₽400. One in twenty-five: ₽1,000. One in fifty: ₽2,000. One in a hundred: ₽5,000. Edge: 9%.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "scratch-card"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "voltorb-flip",
+   "name": "Voltorb Flip",
+   "group": "Games of chance",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "pokemon": "voltorb",
+    "effect": "sparkle"
+   },
+   "intro": "A board of face-down cards. Some hide coins, some hide Voltorb. The sign: \"Skill game. Row and column totals are shown. Think.\" The board hums faintly.",
+   "choices": [
+    {
+     "label": "Play.",
+     "success": {
+      "text": "You sit down at the board. It lights up, row by row, numbers glowing at the ends of each line. Think.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "minigame",
+        "game": "puzzle-slots"
+       },
+       {
+        "kind": "flag",
+        "key": "corner-played-voltorb-flip",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the rules.",
+     "success": {
+      "text": "Every row and column shows two numbers: the coins in it, and the Voltorb in it. Flip a coin card and your round's coins multiply. Flip a Voltorb and you lose that round's coins only.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "voltorb-flip"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "The board hums behind you, every card still face down.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

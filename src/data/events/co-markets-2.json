@@ -1,0 +1,4946 @@
+{
+ "catalogOverhaul": "markets",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "ability-capsule-booth",
+   "name": "Ability Capsule Booth",
+   "group": "Training and growth",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a33",
+    "effect": "glint"
+   },
+   "intro": "A booth painted in two colours, split straight down the middle. Fizz bounces on her heels behind the counter. \"Ability swaps, 500! I'll tell you both abilities first.\" The price, ₽500, is on a card. So is what it does: a Pokémon swaps between its two normal abilities, and nothing else changes.",
+   "choices": [
+    {
+     "label": "Swap.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "Fizz cracks a capsule under your Pokémon's nose. It sneezes, blinks, and looks at its own paws as if they were new. \"There! Same friend. New trick.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "abilitySwap",
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show me both.",
+     "success": {
+      "text": "Fizz reads both off a little card for each of your Pokémon, slowly, pointing at each word. \"I never swap anyone who hasn't heard both. It's their life.\"",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "advise",
+        "key": "abilities",
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ability-capsule-booth"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"That's fine! Some people like who they are!\" Fizz waves with both hands.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dragons-den",
+   "name": "Dragon's Den",
+   "group": "Training and growth",
+   "types": [
+    "dragon"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.dragon_tamer"
+    ],
+    "effect": "fire"
+   },
+   "intro": "A cave mouth hung with shed scales that chime in the wind. Ysra, the Dragon Tamer, does not rise. \"A Dragon Scale. Fair price. Only if you've a Seadra.\" A pause, and she looks at your team more kindly. \"Or I can train your dragon to fly straight.\" The Scale is ₽2500. The training is free, and adds Speed effort to a Dragon-type, within the cap.",
+   "choices": [
+    {
+     "label": "Buy.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2500
+      },
+      {
+       "kind": "partySpecies",
+       "species": "seadra"
+      }
+     ],
+     "success": {
+      "text": "Ysra lays the scale in your palm. It is heavier than it looks, and warm. \"It came off my first partner. She would want it used, not kept in a box.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2500
+       },
+       {
+        "kind": "item",
+        "id": "dragon-scale",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just look.",
+     "success": {
+      "text": "She lets you hold it up to the light. Colours move in it like oil on deep water. \"I won't sell it to anyone who can't use it. A scale in a bag is a sad thing.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dragons-den"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Train.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "dragon"
+      }
+     ],
+     "success": {
+      "text": "Ysra walks your dragon to the cliff edge and talks to it, low and steady, until it stops fighting the wind and starts riding it. When it lands, it lands exactly where it meant to.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spe",
+        "amount": 1,
+        "type": "dragon",
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "The scales chime behind you all the way down the path.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "egg-moves-library",
+   "name": "Egg Move Library",
+   "group": "Training and growth",
+   "stop": "library",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2a1e",
+    "effect": "sparkle"
+   },
+   "intro": "Shelves of thin books, each no bigger than a hand. Mote, the librarian, speaks in a whisper even though the room is empty. \"Rare techniques only the youngest Pokémon know.\" One egg move for a Pokémon that could have had it: ₽2500.",
+   "choices": [
+    {
+     "label": "Teach one.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2500
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "Mote reads to your Pokémon from a book you cannot see the words of. It listens with its whole body. Somewhere in the middle, it remembers something it was never taught.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2500
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "eggMove",
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Which can it learn?",
+     "success": {
+      "text": "Mote runs a finger along the spines. \"Whatever its parents might have sung to it in the shell. I can only teach what was already waiting there. I never promise more.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "egg-moves-library"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Mote puts a finger to her lips, smiling, and you close the door very quietly.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "egg-moves-library-no-machines",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "promise-genesect-no-machines",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Shelves of thin books. Mote meets you at the door and does not let you past it. \"No machines,\" she whispers. \"You promised.\" A pause. \"These are books. ...I know. I know they are. I am keeping your promise wider than you made it.\"",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ev-trainer",
+   "name": "Effort Trainer",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.marshal"
+    ],
+    "effect": "shake"
+   },
+   "intro": "A chalk square on packed earth, and a woman with a whistle she never needs to blow. Coach Ilka looks your team over. \"One stat at a time. Pick your focus.\" One point of effort in one stat, within the cap: ₽1200.",
+   "choices": [
+    {
+     "label": "Pick a stat.",
+     "success": {
+      "text": "Coach Ilka chalks six words on the ground.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ev-trainer-stats"
+       }
+      ]
+     }
+    },
+    {
+     "label": "How much?",
+     "success": {
+      "text": "\"1200. One point of effort, one stat, one Pokémon.\" Coach Ilka holds up one finger. \"If it's already at its limit, I'll say so and you keep your money. I don't sell sweat for nothing.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ev-trainer"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Then rest. Rest is training too.\" She means it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-trainer-stats",
+   "name": "Coach Ilka's Square",
+   "group": "Training and growth",
+   "stop": "tutor",
+   "scene": {
+    "cast": [
+     "trainer.marshal"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "Six words in chalk. \"Point, and say who.\" ₽1200 each.",
+   "choices": [
+    {
+     "label": "Attack.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "An hour of strikes against a padded post. Coach Ilka corrects one elbow, once. It is enough.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "atk",
+        "amount": 1,
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Defense.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "An hour of taking hits on a braced guard. Coach Ilka never swings hard, and never stops.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "def",
+        "amount": 1,
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Speed.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "An hour of sprints between two chalk lines. Coach Ilka runs the last one alongside, and loses on purpose.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spe",
+        "amount": 1,
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "More stats.",
+     "success": {
+      "text": "She rubs out three words and chalks three more.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ev-trainer-stats-2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "ev-trainer-stats-2",
+   "name": "Coach Ilka's Square",
+   "group": "Training and growth",
+   "stop": "tutor",
+   "scene": {
+    "cast": [
+     "trainer.marshal"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "She wipes the board and chalks three more words, slower this time. ₽1200 each.",
+   "choices": [
+    {
+     "label": "HP.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "An hour of slow laps with a weighted pack. Coach Ilka carries one too.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "hp",
+        "amount": 1,
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sp. Atk.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "An hour of focus: one target, one breath, one burst. Coach Ilka holds the target herself.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spa",
+        "amount": 1,
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sp. Def.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "An hour of standing still while the wind machine howls. Coach Ilka stands in it too.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spd",
+        "amount": 1,
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "\"Think about it. A focus you chose badly is worse than none.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "evolution-tutor",
+   "name": "Evolution Tutor",
+   "group": "Training and growth",
+   "stop": "tutor",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a3322",
+    "effect": "sparkle"
+   },
+   "intro": "A folding table, a tower of notebooks, and a professor with ink on his chin. Professor Bram-Hale adjusts his glasses. \"Tell me who you're carrying and I'll tell you when they'll change.\" It is free. He would do it for nothing, and does.",
+   "choices": [
+    {
+     "label": "Ask about one.",
+     "pick": {},
+     "success": {
+      "text": "Professor Bram-Hale kneels to look your Pokémon in the eye, and speaks to it rather than to you. \"You have a way to go yet. Or perhaps you don't. Let me tell you.\"",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "advise",
+        "key": "evolutions",
+        "who": "picked"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evolution-tutor"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about all.",
+     "success": {
+      "text": "He goes down the whole line, one by one, and has something true and gentle to say about each. Nobody is left out. Nobody is told they are behind.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "advise",
+        "key": "evolutions",
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evolution-tutor"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Quite right. Some things are better found out by living them.\" He goes back to his notebooks, smiling.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "expert-breeder",
+   "name": "Expert Breeder",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "A porch full of baskets, each lined with a different blanket. Nan Okafor rocks slowly, an Egg in her lap. \"I can teach an egg move. I'll tell you which first.\" Cheaper than the Library: ₽1200. One move each region; she will not rush more than that.",
+   "choices": [
+    {
+     "label": "Teach.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "Nan hums something old, and your Pokémon hums it back, haltingly, then surely. \"There. Its mother knew that. Now it does. Nothing is ever really lost, you see.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "eggMove",
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "breeder-nan-taught",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Which?",
+     "success": {
+      "text": "\"The one its line carries. I listen to them first. They tell me.\" Nan pats the Egg in her lap. \"If it has none waiting, I'll say so, and you'll owe me nothing but the visit.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "expert-breeder"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Nan keeps rocking. The Egg keeps listening.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "expert-breeder-no-machines",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "promise-genesect-no-machines",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A porch full of baskets. Nan Okafor stops rocking when she sees you. \"No machines, you said. I'm no machine, child.\" She thinks about it. \"But I'll honour the spirit of it. Sit. Have some tea instead.\"",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "heavy-armor-fitting",
+   "name": "Armour Fitting",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "steelix",
+    "tint": "#2a2d33",
+    "effect": "glint"
+   },
+   "intro": "A forge that has been burning since before the road was paved. Roald, the blacksmith, lifts a breastplate as if it weighed nothing. \"Heavy armour. Slows you. Nothing gets through.\" A held item: Defense up, Speed down. ₽1200.",
+   "choices": [
+    {
+     "label": "Fit it.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "Roald measures with a knotted cord, hammers twice, and buckles it on himself. Your Pokémon takes one heavy step. Then it plants its feet, and you understand that nothing is going to move it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "item",
+        "id": "iron-ball",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "How slow?",
+     "success": {
+      "text": "\"Half as quick. I won't dress that up.\" Roald knocks on the plate. It rings like a bell. \"But you could drop a wall on it. Ask me how I know.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "heavy-armor-fitting"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Roald nods and goes back to the anvil. The hammer falls in a slow, unhurried rhythm.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "hyper-training-gym",
+   "name": "Hyper Training Gym",
+   "group": "Training and growth",
+   "stop": "dojo",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#331e1e",
+    "effect": "shake"
+   },
+   "intro": "A gym with one piece of equipment and a man built like a doorway. Brick-Jaw cracks his knuckles. \"Turn your weakest stat into a strength. 400.\" ₽400: one Pokémon's weakest inborn stat is trained to its best, within the cap.",
+   "choices": [
+    {
+     "label": "Train it.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "Brick-Jaw works your Pokémon until it shakes, then sits down next to it on the mat and shares his water. \"Wasn't weak. Just hadn't been asked.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "hyper",
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "What exactly?",
+     "success": {
+      "text": "\"Whatever they were born worst at. I bring it level with the best there is. Not past it. There's a ceiling, and I respect a ceiling.\" He taps the price card. \"Four hundred. Same for everybody.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hyper-training-gym"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Brick-Jaw shrugs, enormous and unoffended.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "move-forgetter",
+   "name": "Move Forgetter",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.pr/nursery_aide"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "A schoolroom with one small desk. Miss Ory cleans a slate with her sleeve. \"Need to forget something? Free. I'll tell you it's gone for good.\" It is free. A Pokémon forgets the last move it learned.",
+   "choices": [
+    {
+     "label": "Forget a move.",
+     "pick": {},
+     "success": {
+      "text": "Miss Ory writes the move on the slate, shows it to your Pokémon, and wipes it clean. Your Pokémon watches the chalk dust fall. \"It's gone, dear. You're lighter now. That's allowed.\"",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "forget",
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Can it relearn?",
+     "success": {
+      "text": "\"Yes. At the Move Tutor. Oru keeps the old scrolls.\" Miss Ory sets down the slate. \"I say gone for good so people think before they ask. But nothing learned with love is ever quite gone.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "move-forgetter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Good. Keep what you've earned.\" She goes back to her slate.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "move-tutor",
+   "name": "Move Tutor",
+   "group": "Training and growth",
+   "stop": "tutor",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "A hut papered with scrolls, floor to rafters. Oru, the sage, unrolls one across his knees. \"Old scrolls. Old moves.\" A tutor move for one Pokémon: ₽1200. Relearning a forgotten move: ₽300.",
+   "choices": [
+    {
+     "label": "Learn one.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "Oru traces the scroll with a fingertip while your Pokémon follows the line with its eyes. Halfway down, its breathing changes. It has it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "learnMove",
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Relearn a forgotten one.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      },
+      {
+       "kind": "flag",
+       "key": "move-forgotten",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "Oru finds the right scroll without looking. \"Ah. This one missed you,\" he tells your Pokémon. It leans forward, and remembers.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "market",
+        "action": "relearn",
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Oru rolls the scroll back up, slowly, the way you would tuck in a child.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "move-tutor-no-machines",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "promise-genesect-no-machines",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A hut papered with scrolls. Oru looks at you over the top of one. \"No machines.\" He looks at the scroll. \"These are scrolls.\" He looks at you again, and sighs, and rolls it up. \"...Fine, no scrolls either.\"",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "moveset-rehearsal",
+   "name": "Moveset Rehearsal",
+   "group": "Training and growth",
+   "stop": "tutor",
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2a33",
+    "effect": "glint"
+   },
+   "intro": "A practice hall with a move board on the wall, every peg labelled. Coach Tavi spins a marker between her fingers. \"Same Pokémon, new tricks.\" Reordering what a Pokémon already knows is free, any time, from your party. Teaching one level-up move early: ₽1200.",
+   "choices": [
+    {
+     "label": "Rehearse.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "Coach Tavi walks your Pokémon through a move it was not due to learn for weeks, step by step, until the steps disappear and only the move is left. \"See? You were ready. You just hadn't been told.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "learnMove",
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show the board.",
+     "success": {
+      "text": "She turns the board to face you: every move your team knows, and beside each Pokémon the next one it is due. \"Nothing here it couldn't learn on its own. I just don't make it wait.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "moveset-rehearsal"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Coach Tavi caps the marker. \"Door's always open. Bring snacks next time.\"",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "moveset-rehearsal-no-machines",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "promise-genesect-no-machines",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A practice hall, a move board, and Coach Tavi turning the board to face the wall. \"No machines. I heard.\" She shrugs. \"The board's got wheels. Counts as a machine. I'm being careful with your promise.\"",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "nature-counselor",
+   "name": "Nature Counsellor",
+   "group": "Training and growth",
+   "stop": "tutor",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a3322",
+    "effect": "sparkle"
+   },
+   "intro": "A quiet room with two cushions and a window. Imelda pours tea for three: you, herself, and your lead. \"Natures aren't fixed. Tell me who your lead wants to be.\" A change of Nature: ₽2500.",
+   "choices": [
+    {
+     "label": "Change nature.",
+     "success": {
+      "text": "Imelda sets down her cup and gives your Pokémon her whole attention.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "nature-counselor-who"
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's it now?",
+     "success": {
+      "text": "Imelda watches your lead drink its tea, and tells you what she sees. She is right about all of it, including the thing you had not noticed.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "advise",
+        "key": "nature",
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "nature-counselor"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Then finish your tea,\" Imelda says. \"That, too, is counsel.\"",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "imelda-meloetta",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "promise-meloetta-kept",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "meloetta-nature-used",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Imelda tilts her head, listening to something. \"There is a song on you. Meloetta's. One change this region is already paid for.\"",
+     "addChoices": [
+      {
+       "label": "Change nature, free. (Meloetta's Promise)",
+       "success": {
+        "text": "Imelda hums three notes she cannot possibly know, and gives your Pokémon her whole attention.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "nature-counselor-who-free"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "nature-counselor-who",
+   "name": "Who They Want to Be",
+   "group": "Training and growth",
+   "stop": "tutor",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "Imelda folds her hands. \"Tell me who they want to be. Not who you want. Them.\" ₽2500, as posted.",
+   "choices": [
+    {
+     "label": "Braver. (Attack)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2500
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "Imelda speaks to your Pokémon for a long while, too low for you to hear. When it turns back to you, it stands as if it has finally been given permission.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2500
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "natureNudge",
+        "who": "picked",
+        "stat": "atk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Steadier. (Defense)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2500
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "Imelda speaks to your Pokémon for a long while. When it turns back to you, something that was braced in it has settled.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2500
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "natureNudge",
+        "who": "picked",
+        "stat": "def"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quicker. (Speed)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2500
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "Imelda speaks to your Pokémon for a long while. When it turns back, it is already half a step ahead of you, and delighted about it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2500
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "natureNudge",
+        "who": "picked",
+        "stat": "spe"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Something gentler.",
+     "success": {
+      "text": "\"There are quieter ways to change,\" Imelda says, and turns the page.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "nature-counselor-quiet"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "nature-counselor-quiet",
+   "name": "The Quieter Ways",
+   "group": "Training and growth",
+   "stop": "tutor",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "\"Some want to think more clearly. Some want to feel less hurt by the world.\" Imelda waits. ₽2500, as posted.",
+   "choices": [
+    {
+     "label": "Sharper of mind. (Sp. Atk)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2500
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "Imelda speaks to your Pokémon for a long while. When it turns back, its eyes are clear and very far-seeing.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2500
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "natureNudge",
+        "who": "picked",
+        "stat": "spa"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Calmer of heart. (Sp. Def)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2500
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "Imelda speaks to your Pokémon for a long while. When it turns back, it leans on you, and the leaning is lighter than before.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2500
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "natureNudge",
+        "who": "picked",
+        "stat": "spd"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it as it is.",
+     "success": {
+      "text": "\"Then it is already who it wants to be,\" Imelda says. \"That is the best answer. I never charge for it.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "nature-counselor-who-free",
+   "name": "Who They Want to Be",
+   "group": "Training and growth",
+   "stop": "tutor",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "Imelda folds her hands. \"Tell me who they want to be. Not who you want. Them.\" No charge. Meloetta's song paid for this one.",
+   "choices": [
+    {
+     "label": "Braver. (Attack)",
+     "pick": {},
+     "success": {
+      "text": "Imelda speaks to your Pokémon for a long while, too low for you to hear. When it turns back to you, it stands as if it has finally been given permission.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "meloetta-nature-used",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "natureNudge",
+        "who": "picked",
+        "stat": "atk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Steadier. (Defense)",
+     "pick": {},
+     "success": {
+      "text": "Imelda speaks to your Pokémon for a long while. When it turns back to you, something that was braced in it has settled.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "meloetta-nature-used",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "natureNudge",
+        "who": "picked",
+        "stat": "def"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quicker. (Speed)",
+     "pick": {},
+     "success": {
+      "text": "Imelda speaks to your Pokémon for a long while. When it turns back, it is already half a step ahead of you, and delighted about it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "meloetta-nature-used",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "natureNudge",
+        "who": "picked",
+        "stat": "spe"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Something gentler.",
+     "success": {
+      "text": "\"There are quieter ways to change,\" Imelda says, and turns the page.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "nature-counselor-quiet-free"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "nature-counselor-quiet-free",
+   "name": "The Quieter Ways",
+   "group": "Training and growth",
+   "stop": "tutor",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "\"Some want to think more clearly. Some want to feel less hurt by the world.\" Imelda waits. No charge. Meloetta's song paid for this one.",
+   "choices": [
+    {
+     "label": "Sharper of mind. (Sp. Atk)",
+     "pick": {},
+     "success": {
+      "text": "Imelda speaks to your Pokémon for a long while. When it turns back, its eyes are clear and very far-seeing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "meloetta-nature-used",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "natureNudge",
+        "who": "picked",
+        "stat": "spa"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Calmer of heart. (Sp. Def)",
+     "pick": {},
+     "success": {
+      "text": "Imelda speaks to your Pokémon for a long while. When it turns back, it leans on you, and the leaning is lighter than before.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "meloetta-nature-used",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "natureNudge",
+        "who": "picked",
+        "stat": "spd"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it as it is.",
+     "success": {
+      "text": "\"Then it is already who it wants to be,\" Imelda says. \"That is the best answer. I never charge for it.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "tm-workshop",
+   "name": "TM Workshop",
+   "group": "Training and growth",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2d33",
+    "effect": "spin"
+   },
+   "intro": "A shed that sparks. Fidget, the tinker, pushes up a pair of goggles and leaves two clean circles in the soot. \"Three Machine Parts and I'll forge you a disc.\" Three Machine Parts, no money: one TM of your choice from his list.",
+   "choices": [
+    {
+     "label": "Forge.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
+      }
+     ],
+     "success": {
+      "text": "Fidget sweeps your three parts into a crucible with the side of his hand. \"Right. What'll it be?\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "tm-workshop-list"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Where are parts?",
+     "success": {
+      "text": "\"Wex. The scrap buyer. Sell him junk, he hands back the good cogs.\" Fidget grins. \"He thinks he's doing me a favour. He is. Don't tell him how big.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "tm-workshop"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Something in the shed goes bang. \"That's fine!\" Fidget calls. \"That's meant to happen!\"",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tm-workshop-no-machines",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "promise-genesect-no-machines",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A shed that has, for once, stopped sparking. Fidget sits on an upturned bucket with his goggles in his lap. \"No machines.\" He looks around at a shed made entirely of machines. \"So. I'm learning to whittle. Look.\" It is a very bad spoon. He is very proud of it.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "tm-workshop-list",
+   "name": "Fidget's List",
+   "group": "Training and growth",
+   "stop": "merchant",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "A list nailed to the shed door, in six colours of paint. \"Pick. The crucible's hot.\" Three Machine Parts for any one.",
+   "choices": [
+    {
+     "label": "A Fire disc.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
+      }
+     ],
+     "success": {
+      "text": "Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. \"Made from three things nobody wanted. Best kind.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "machine-part",
+        "count": 3
+       },
+       {
+        "kind": "item",
+        "id": "tm-fire",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Water disc.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
+      }
+     ],
+     "success": {
+      "text": "Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. \"Made from three things nobody wanted. Best kind.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "machine-part",
+        "count": 3
+       },
+       {
+        "kind": "item",
+        "id": "tm-water",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Grass disc.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
+      }
+     ],
+     "success": {
+      "text": "Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. \"Made from three things nobody wanted. Best kind.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "machine-part",
+        "count": 3
+       },
+       {
+        "kind": "item",
+        "id": "tm-grass",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "More discs.",
+     "success": {
+      "text": "Fidget flips the list over. There is more on the back.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "tm-workshop-list-2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "tm-workshop-list-2",
+   "name": "Fidget's List, the Back",
+   "group": "Training and growth",
+   "stop": "merchant",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "The back of the list. Three Machine Parts for any one.",
+   "choices": [
+    {
+     "label": "An Electric disc.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
+      }
+     ],
+     "success": {
+      "text": "Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. \"Made from three things nobody wanted. Best kind.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "machine-part",
+        "count": 3
+       },
+       {
+        "kind": "item",
+        "id": "tm-electric",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Psychic disc.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
+      }
+     ],
+     "success": {
+      "text": "Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. \"Made from three things nobody wanted. Best kind.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "machine-part",
+        "count": 3
+       },
+       {
+        "kind": "item",
+        "id": "tm-psychic",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Ground disc.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
+      }
+     ],
+     "success": {
+      "text": "Fidget pours, hammers, quenches, and hands you a disc still too warm to hold. \"Made from three things nobody wanted. Best kind.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "machine-part",
+        "count": 3
+       },
+       {
+        "kind": "item",
+        "id": "tm-ground",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "\"Parts keep. Come back when you've decided.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "drill-sergeant-kangaskhan",
+   "name": "The Training Ground",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "pokemon": "kangaskhan",
+    "tint": "#3a2a1e",
+    "effect": "shake"
+   },
+   "intro": "A field, mown flat. A Kangaskhan stands at its centre in a whistle and a tiny cap. The baby in its pouch has a tiny whistle too. A blast, and you somehow understand every word: \"PICK A STAT. EVERYTHING ELSE, EYES FRONT.\" The baby blows its whistle, late. One drill per visit. Each drill says its cost and its gain before you start.",
+   "choices": [
+    {
+     "label": "Pick a drill.",
+     "success": {
+      "text": "The Sergeant points, three sharp jabs of a claw: three drills are running today, and you may join one. The baby points too, at a butterfly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "combo-practice",
+         "cross-training-camp",
+         "crowd-support-training",
+         "endurance-hike",
+         "gym-rat",
+         "ice-training",
+         "meditation-shrine",
+         "mental-training-dojo",
+         "mountain-climb"
+        ]
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "nap-pod-corner",
+         "obstacle-course",
+         "obstacle-dojo",
+         "rain-run",
+         "sandpit-digging",
+         "shadow-boxing",
+         "sparring-partner",
+         "speed-lane-treadmill",
+         "sprint-intervals"
+        ]
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "stretching-break",
+         "swim-class",
+         "team-photo-day",
+         "trainers-pep-talk",
+         "training-session-2",
+         "waterfall-training",
+         "weak-spot-remedy",
+         "weight-room-roulette",
+         "yoga-retreat"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Salute.",
+     "success": {
+      "text": "You salute. The Sergeant salutes back, crisp as a snapped flag. The baby salutes with the wrong arm, notices, and switches. Your lead Pokémon stands a little taller for the rest of the day.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "The Sergeant watches you to the edge of the field. The baby waves until you are out of sight.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sergeant-whistle-gift",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "drills-done",
+       "atLeast": 5,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sergeant-whistle-kept",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Five drills done under the Sergeant's eye. The baby climbs half out of the pouch, lifts its tiny whistle off over its ears, and holds it out to you in both paws.",
+     "addChoices": [
+      {
+       "label": "Take the baby's whistle.",
+       "success": {
+        "text": "It is still warm. The Sergeant looks away across the field, very deliberately, so that nobody can say it saw anything. The baby salutes you. Correct arm, first time.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sergeant-whistle-kept",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "sergeant-whistle",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "The Sergeant's baby gave you its whistle.",
+          "importance": 70
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "sergeant-whistle-ready",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sergeant-whistle-kept",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sergeant-whistle",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "The baby spots its old whistle on your cord and squeaks with joy. This visit, one drill will cost you no node.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Pick a drill.",
+       "success": {
+        "text": "The Sergeant points out three drills. The baby points at your whistle, and then at itself, so you know who to thank.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sergeant-whistle",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "drill-open",
+          "amount": 1
+         },
+         {
+          "kind": "addEventFrom",
+          "ids": [
+           "combo-practice",
+           "cross-training-camp",
+           "crowd-support-training",
+           "endurance-hike",
+           "gym-rat",
+           "ice-training",
+           "meditation-shrine",
+           "mental-training-dojo",
+           "mountain-climb"
+          ]
+         },
+         {
+          "kind": "addEventFrom",
+          "ids": [
+           "nap-pod-corner",
+           "obstacle-course",
+           "obstacle-dojo",
+           "rain-run",
+           "sandpit-digging",
+           "shadow-boxing",
+           "sparring-partner",
+           "speed-lane-treadmill",
+           "sprint-intervals"
+          ]
+         },
+         {
+          "kind": "addEventFrom",
+          "ids": [
+           "stretching-break",
+           "swim-class",
+           "team-photo-day",
+           "trainers-pep-talk",
+           "training-session-2",
+           "waterfall-training",
+           "weak-spot-remedy",
+           "weight-room-roulette",
+           "yoga-retreat"
+          ]
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "combo-practice",
+   "name": "Combo Practice",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a1e33",
+    "effect": "glint"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "Twins in matching headbands, finishing each other's moves. Ada and Ari speak in turns: \"It only works the first time,\" \"so make it count.\" Cost: a node. Gain: your next double battle, the follow-up hits a fifth harder.",
+   "choices": [
+    {
+     "label": "Practise the combo.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Two of your Pokémon run it until they stop looking at each other and just know. Ada and Ari high-five without turning their heads. \"That's it,\" \"that's the one.\"",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Combo: follow-up moves +20%",
+        "effects": [
+         {
+          "kind": "battleOrderDamage",
+          "first": 1,
+          "later": 1.2
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You watch the twins instead. They are so in step it is like watching one person in a mirror. Your team watches too, and leans a little closer to one another.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "combo-practice-whistle",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sergeant-whistle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The baby's whistle hangs on a cord round your neck. Blow it, and this drill costs you no node.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Practise the combo.",
+       "requires": [
+        {
+         "kind": "flag",
+         "key": "drill-open",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "success": {
+        "text": "Two of your Pokémon run it until they stop looking at each other and just know. Ada and Ari high-five without turning their heads. \"That's it,\" \"that's the one.\"",
+        "effects": [
+         {
+          "kind": "tempEffect",
+          "label": "Combo: follow-up moves +20%",
+          "effects": [
+           {
+            "kind": "battleOrderDamage",
+            "first": 1,
+            "later": 1.2
+           }
+          ],
+          "battles": 1,
+          "until": "battle"
+         },
+         {
+          "kind": "flag",
+          "key": "sergeant-whistle",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drill-open",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drills-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cross-training-camp",
+   "name": "Cross-Training",
+   "group": "Training and growth",
+   "stop": "dojo",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#33292a",
+    "effect": "shake"
+   },
+   "room": true,
+   "intro": "Mats, a quiet room, a ring of lamps. Saffi, the organiser, claps a clipboard. \"Learn something outside your type.\" Cost: your lead starts its next battle down 10% HP. Gain: one Fighting, Psychic or Dark move it can learn.",
+   "choices": [
+    {
+     "label": "Swap drills.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Your lead spends the day in someone else's shoes, and comes out sore, baffled, and holding something new. Saffi ticks a box. \"Everyone hates it. Everyone thanks me.\"",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "market",
+        "action": "service",
+        "what": "learnMove",
+        "types": [
+         "fighting",
+         "psychic",
+         "dark"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stick to type.",
+     "success": {
+      "text": "\"That's a choice too,\" Saffi says, not unkindly. Your lead does what it has always done, and does it well.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "crowd-support-training",
+   "name": "Crowd Support",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#33222a",
+    "effect": "sparkle"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A set of bleachers, packed, for no reason anyone can explain. The fans have made signs. \"DEFENCE! DEFENCE!\" Cost: a node. Gain: +1 Defense effort for your lead.",
+   "choices": [
+    {
+     "label": "Hold the line.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Your lead braces while the crowd roars it through every hit. By the end it is not flinching, and half the bleachers are in tears. Somebody has made a sign with its name on.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "def",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave at them.",
+     "success": {
+      "text": "You wave. They go absolutely wild. Your lead waves too, shyly, and the noise doubles.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "crowd-support-training-whistle",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sergeant-whistle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The baby's whistle hangs on a cord round your neck. Blow it, and this drill costs you no node.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Hold the line.",
+       "requires": [
+        {
+         "kind": "flag",
+         "key": "drill-open",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "success": {
+        "text": "Your lead braces while the crowd roars it through every hit. By the end it is not flinching, and half the bleachers are in tears. Somebody has made a sign with its name on.",
+        "effects": [
+         {
+          "kind": "market",
+          "action": "effort",
+          "stat": "def",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "sergeant-whistle",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drill-open",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drills-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "endurance-hike",
+   "name": "Endurance Hike",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a3a22",
+    "effect": "float"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A trailhead and a guide already wearing her pack. Hama checks the sky. \"Six hours up and down. Lots of experience, lots of sweat.\" Cost: the party at −20% HP (half the hike: −10%). Gain: experience for every Pokémon (half the hike: half).",
+   "choices": [
+    {
+     "label": "Hike.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Six hours. Nobody talks for the last two. At the top Hama passes round a flask and everyone looks at the view they earned. They come down tired and bigger than they went up.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "market",
+        "action": "xp",
+        "factor": 0.5,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Half the hike.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Three hours, to the first ridge and back. Hama does not judge. \"Half a mountain is still a mountain.\"",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "market",
+        "action": "xp",
+        "factor": 0.25,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gym-rat",
+   "name": "Gym Rat",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "effect": "shake"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A man doing three things at once and breathing easily. Corso, the triathlete, grins. \"Bike, swim, run!\" Cost: a node. Gain: +1 effort in Speed, Sp. Def and HP for your lead (or just one: Speed).",
+   "choices": [
+    {
+     "label": "All three.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Bike, then swim, then run, with Corso shouting cheerful lies about how close the finish is. Your lead collapses over the line and Corso collapses next to it, laughing.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spe",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spd",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "hp",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just one.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Just the run. Corso runs it with you, backwards, talking the whole way.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spe",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gym-rat-whistle",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sergeant-whistle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The baby's whistle hangs on a cord round your neck. Blow it, and this drill costs you no node.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "All three.",
+       "requires": [
+        {
+         "kind": "flag",
+         "key": "drill-open",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "success": {
+        "text": "Bike, then swim, then run, with Corso shouting cheerful lies about how close the finish is. Your lead collapses over the line and Corso collapses next to it, laughing.",
+        "effects": [
+         {
+          "kind": "market",
+          "action": "effort",
+          "stat": "spe",
+          "amount": 1
+         },
+         {
+          "kind": "market",
+          "action": "effort",
+          "stat": "spd",
+          "amount": 1
+         },
+         {
+          "kind": "market",
+          "action": "effort",
+          "stat": "hp",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "sergeant-whistle",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drill-open",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drills-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ice-training",
+   "name": "Ice Training",
+   "group": "Training and growth",
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#203040",
+    "effect": "snow"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A frozen pond, swept smooth. Lumi glides past on one skate. \"Slide practice! Don't fall.\" Cost: a 1 in 10 chance of a fall (−10% HP for the slider), posted on the bank. Gain: +1 Speed effort; Ice-types +2.",
+   "choices": [
+    {
+     "label": "Slide.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.9,
+     "success": {
+      "text": "Out, turn, back, faster each time. Lumi skates alongside calling the rhythm. By the end your lead is cutting lines in the ice as clean as hers.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spe",
+        "amount": 1,
+        "type": "ice",
+        "typeAmount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A skid, a spin, and a long slide into the snowbank on its back. Lumi is there before it stops. \"Everyone falls. Up you get.\" It gets up. It goes again, more carefully.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spe",
+        "amount": 1,
+        "type": "ice",
+        "typeAmount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch from the bank.",
+     "success": {
+      "text": "You sit on the bank with a hot drink and watch Lumi write her name on the ice in one long line.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "meditation-shrine",
+   "name": "Meditation Shrine",
+   "group": "Training and growth",
+   "stop": "dojo",
+   "types": [
+    "psychic"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "effect": "float"
+   },
+   "room": true,
+   "intro": "A shrine with no walls. Ondra floats a hand's width above the boards, eyes closed. \"Breathe.\" Cost: a node. Gain: +1 Sp. Def effort for your lead, and its mind is cleared.",
+   "choices": [
+    {
+     "label": "Meditate.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Your lead breathes. In, and out. Something it has been carrying since the last hard fight gets set down, quietly, on the boards. Ondra does not open her eyes. She is smiling.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spd",
+        "amount": 1
+       },
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fidget.",
+     "success": {
+      "text": "You fidget. Your lead fidgets. Ondra opens one eye. \"Also breathing,\" she says. \"Technically.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "meditation-shrine-whistle",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sergeant-whistle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The baby's whistle hangs on a cord round your neck. Blow it, and this drill costs you no node.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Meditate.",
+       "requires": [
+        {
+         "kind": "flag",
+         "key": "drill-open",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "success": {
+        "text": "Your lead breathes. In, and out. Something it has been carrying since the last hard fight gets set down, quietly, on the boards. Ondra does not open her eyes. She is smiling.",
+        "effects": [
+         {
+          "kind": "market",
+          "action": "effort",
+          "stat": "spd",
+          "amount": 1
+         },
+         {
+          "kind": "cure"
+         },
+         {
+          "kind": "flag",
+          "key": "sergeant-whistle",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drill-open",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drills-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mental-training-dojo",
+   "name": "Mental Dojo",
+   "group": "Training and growth",
+   "stop": "dojo",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2233",
+    "effect": "glint"
+   },
+   "room": true,
+   "intro": "A dojo with a single target at the far end and nothing else. Sensei Kaito kneels. \"Aim is a state of mind. Sit.\" Cost: a node. Gain: your lead aims truer in its next 3 battles.",
+   "choices": [
+    {
+     "label": "Sit.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Your lead sits facing the target for an hour and does not fire once. When Sensei Kaito finally nods, it stands, turns away, and hits the centre without looking.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Mental Dojo: accuracy +10%",
+        "effects": [
+         {
+          "kind": "accuracyMultiplier",
+          "value": 1.1
+         }
+        ],
+        "battles": 3,
+        "until": "battle"
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shoot first.",
+     "success": {
+      "text": "Your lead shoots first. It misses. Sensei Kaito says nothing at all, which is somehow worse.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "mental-training-dojo-whistle",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sergeant-whistle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The baby's whistle hangs on a cord round your neck. Blow it, and this drill costs you no node.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Sit.",
+       "requires": [
+        {
+         "kind": "flag",
+         "key": "drill-open",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "success": {
+        "text": "Your lead sits facing the target for an hour and does not fire once. When Sensei Kaito finally nods, it stands, turns away, and hits the centre without looking.",
+        "effects": [
+         {
+          "kind": "tempEffect",
+          "label": "Mental Dojo: accuracy +10%",
+          "effects": [
+           {
+            "kind": "accuracyMultiplier",
+            "value": 1.1
+           }
+          ],
+          "battles": 3,
+          "until": "battle"
+         },
+         {
+          "kind": "flag",
+          "key": "sergeant-whistle",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drill-open",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drills-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mountain-climb",
+   "name": "Mountain Climb",
+   "group": "Training and growth",
+   "types": [
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#283038",
+    "effect": "snow"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A rock face with a rope already hung. Ludo, the hiker, chalks his hands. \"The view's worth it.\" Cost: the party at −10% HP. Gain: +1 Attack effort for your lead, and from the top you can see the road ahead.",
+   "choices": [
+    {
+     "label": "Climb.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Hand over hand. At the top Ludo sits you all in a row on the edge. The whole road ahead is laid out below like a map somebody drew for you. Nobody says anything for a while.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "atk",
+        "amount": 1
+       },
+       {
+        "kind": "scout",
+        "columns": 8
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back halfway.",
+     "success": {
+      "text": "Halfway up, you look down, and that is enough. Ludo ropes you back to the ground. \"Halfway's higher than most get.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "nap-pod-corner",
+   "name": "Nap Pods",
+   "group": "Training and growth",
+   "stop": "dojo",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a3a",
+    "effect": "float"
+   },
+   "room": true,
+   "intro": "A row of soft white pods, humming. Snooze, the attendant, speaks through a yawn. \"Forty minutes can save a day.\" Cost: a node. Gain: the party heals 25%.",
+   "choices": [
+    {
+     "label": "Nap.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Forty minutes. Somebody snores. Somebody kicks in their sleep, chasing something. Everyone wakes up softer round the edges and readier than they were.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "mend",
+        "factor": 0.25,
+        "who": "party"
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lead naps alone.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Your lead naps. You sit beside the pod and keep watch, which it does not need, and which it will remember.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "mend",
+        "factor": 0.25,
+        "who": "lead"
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "nap-pod-corner-whistle",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sergeant-whistle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The baby's whistle hangs on a cord round your neck. Blow it, and this drill costs you no node.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Nap.",
+       "requires": [
+        {
+         "kind": "flag",
+         "key": "drill-open",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "success": {
+        "text": "Forty minutes. Somebody snores. Somebody kicks in their sleep, chasing something. Everyone wakes up softer round the edges and readier than they were.",
+        "effects": [
+         {
+          "kind": "market",
+          "action": "mend",
+          "factor": 0.25,
+          "who": "party"
+         },
+         {
+          "kind": "flag",
+          "key": "sergeant-whistle",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drill-open",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drills-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "obstacle-course",
+   "name": "Obstacle Course",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "effect": "float"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "Tyres, a net, a wall, a rope swing. Prix, the marshal, holds a stopwatch like a holy thing. \"Record time wins a prize.\" Cost: a stumble costs the runner 5% HP. Gain: beat the record and win a Quick Claw.",
+   "choices": [
+    {
+     "label": "Run it.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Over, under, through, and across the line with Prix screaming the seconds. He stares at the watch. He shows it to you. He shows it to a stranger. A record.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "quick-claw",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A caught foot on the tyres, a tumble, a finish two seconds over. Prix pats your runner's head. \"Good line. Bad tyre. Come back.\"",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk it.",
+     "success": {
+      "text": "You walk the course together, touching each obstacle as you pass, in no hurry at all. Prix stops the watch out of respect.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "obstacle-dojo",
+   "name": "Obstacle Dojo",
+   "group": "Training and growth",
+   "stop": "dojo",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2233",
+    "effect": "shake"
+   },
+   "room": true,
+   "intro": "A dojo floor strung with bells on threads. Master Gisele stands in the middle of them, perfectly still. \"Pass the course without a scratch.\" Cost: a failed pass costs your lead 10% HP. Gain: your lead is harder to hit in its next battle.",
+   "choices": [
+    {
+     "label": "Attempt.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Your lead goes through the bells like water through reeds. Not one rings. Master Gisele bows, low, the way she bows to an equal.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Obstacle Dojo: harder to hit",
+        "effects": [
+         {
+          "kind": "evasionMultiplier",
+          "value": 1.1
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "One bell. Then all of them. Your lead ends up tangled and stinging, and Master Gisele untangles it herself, thread by thread, without a word of blame.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "Master Gisele walks the course for you, eyes closed. The bells do not so much as tremble.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rain-run",
+   "name": "Rain Run",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "politoed",
+    "tint": "#1e2a3a",
+    "effect": "rain"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "It is pouring. A coach in a yellow raincoat is delighted about it. Hoyt bellows over the weather. \"Nobody trains in dry weather!\" Cost: the party is soaked: slower in its next battle. Gain: +1 Speed effort for everyone; Water-types +2.",
+   "choices": [
+    {
+     "label": "Run.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You run. Everyone runs. The Water-types have the time of their lives and the rest endure it with dignity. Hoyt runs at the back so nobody is last.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Soaked: Speed −10%",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 0.9
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spe",
+        "amount": 1,
+        "type": "water",
+        "typeAmount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter.",
+     "success": {
+      "text": "You shelter under Hoyt's spare tarpaulin and watch him run laps alone, perfectly happy.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sandpit-digging",
+   "name": "Sandpit Dig",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "sandslash",
+    "tint": "#3a321e",
+    "effect": "spin"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A sandpit the size of a house. Grubb leans on a shovel. \"Buried a few Ground TMs. Find 'em, keep 'em.\" Cost: a node. Gain: a Ground TM if you find one (a Ground-type digs twice as well).",
+   "choices": [
+    {
+     "label": "Dig.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.5,
+     "success": {
+      "text": "Sand everywhere. In ears. In bags. And then a corner of something flat and hard, and Grubb whooping from the edge. \"That's one! Told you they were down there!\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "tm-ground",
+        "count": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Sand everywhere, and nothing under it but more sand. Grubb scratches his head. \"Could've sworn. Maybe I buried them over there.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Ground-type dig.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "chance": 0.75,
+     "success": {
+      "text": "Your Ground-type goes into the sand like a diver into water. It surfaces twice, with a disc each time in its teeth, and drops the better one at your feet.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "tm-ground",
+        "count": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your Ground-type digs two long tunnels and comes up empty both times, sneezing sand. Grubb gives it a biscuit anyway.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sandpit-digging-whistle",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sergeant-whistle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The baby's whistle hangs on a cord round your neck. Blow it, and this drill costs you no node.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Dig.",
+       "requires": [
+        {
+         "kind": "flag",
+         "key": "drill-open",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "chance": 0.5,
+       "success": {
+        "text": "Sand everywhere. In ears. In bags. And then a corner of something flat and hard, and Grubb whooping from the edge. \"That's one! Told you they were down there!\"",
+        "effects": [
+         {
+          "kind": "item",
+          "id": "tm-ground",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "sergeant-whistle",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drill-open",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drills-done",
+          "amount": 1
+         }
+        ]
+       },
+       "failure": {
+        "text": "Sand everywhere, and nothing under it but more sand. Grubb scratches his head. \"Could've sworn. Maybe I buried them over there.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sergeant-whistle",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drill-open",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drills-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "shadow-boxing",
+   "name": "Shadow Boxing",
+   "group": "Training and growth",
+   "stop": "dojo",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#1e1e28",
+    "effect": "flicker"
+   },
+   "room": true,
+   "intro": "A dojo with one lamp, set low, so that every shadow is twice its owner's size. Sensei Mirro gestures at the wall. \"Beat yourself.\" Cost: a battle against your lead's own copy. Gain: win, and your lead's best stat gains +1 effort.",
+   "choices": [
+    {
+     "label": "Fight the shadow.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The shadow steps off the wall. It knows every move your lead knows, and it is not afraid.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "Your Shadow",
+       "mirror": true,
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "market",
+         "action": "effort",
+         "stat": "highest",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Bow to it.",
+     "success": {
+      "text": "Your lead bows to its own shadow. The shadow bows back. Sensei Mirro lets out a breath. \"Most never think to.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sparring-partner",
+   "name": "Sparring",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "effect": "shake"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A ring marked in rope. Black Belt Kenji tightens his belt, and his Hitmonchan shadow-boxes the air beside him. \"My Hitmonchan wants a go.\" Cost: a battle. Gain: experience.",
+   "choices": [
+    {
+     "label": "Spar.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Kenji bows. His Hitmonchan bows. Then nobody is polite for a while.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kenji-sparred",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "team": [
+        "hitmonchan"
+       ],
+       "name": "Black Belt Kenji",
+       "classId": "black-belt",
+       "size": 1,
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "market",
+         "action": "xp",
+         "factor": 0.5,
+         "who": "party"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Decline.",
+     "success": {
+      "text": "Kenji nods. \"Another day. He'll still want a go.\" The Hitmonchan looks crushed, and then punches the air some more.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "speed-lane-treadmill",
+   "name": "Speed Lane",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "pokemon": "ninjask",
+    "tint": "#1d2a3a",
+    "effect": "glint"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A long belt of rubber, rolling. The attendant holds a clock the size of a dinner plate. \"Beat the clock and keep your pace.\" Cost: a node. Gain: +1 Speed effort for your lead.",
+   "choices": [
+    {
+     "label": "Run.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The belt speeds up. Your lead speeds up. The clock gives in first. The attendant writes the time on the wall, under a list of other names, and adds a star.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spe",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk.",
+     "success": {
+      "text": "Your lead walks the belt at a stroll, going nowhere, enjoying it.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "speed-lane-treadmill-whistle",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sergeant-whistle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The baby's whistle hangs on a cord round your neck. Blow it, and this drill costs you no node.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Run.",
+       "requires": [
+        {
+         "kind": "flag",
+         "key": "drill-open",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "success": {
+        "text": "The belt speeds up. Your lead speeds up. The clock gives in first. The attendant writes the time on the wall, under a list of other names, and adds a star.",
+        "effects": [
+         {
+          "kind": "market",
+          "action": "effort",
+          "stat": "spe",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "sergeant-whistle",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drill-open",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drills-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sprint-intervals",
+   "name": "Sprint Intervals",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "pokemon": "rapidash",
+    "tint": "#1e2a33",
+    "effect": "float"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "Cones in a line. Stopwatch Sue clicks her watch twice for luck. \"Fast now, pay later.\" Cost: your lead's guard is down in its next battle. Gain: +2 Speed effort.",
+   "choices": [
+    {
+     "label": "Sprint.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Flat out, rest, flat out, rest, until your lead's legs are jelly and Sue is hoarse. \"That's speed in the bank. Tomorrow you'll hate me. Day after, you'll thank me.\"",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Spent legs: Defense −10%",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 0.9
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spe",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Jog.",
+     "success": {
+      "text": "A gentle jog round the cones. Sue jogs with you and tells you about her knees.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "stretching-break",
+   "name": "Stretch Break",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a3322",
+    "effect": "sparkle"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A mat in the shade. Bendy, the instructor, is folded in a way that should not be possible. \"Reach for the sky!\" No cost. Gain: one status cured, and +1 Bond for your lead.",
+   "choices": [
+    {
+     "label": "Stretch.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You stretch together, you and your lead, both of you terrible at it. Something that ached stops aching. Bendy applauds with her feet.",
+      "effects": [
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip.",
+     "success": {
+      "text": "\"Next time!\" Bendy says, upside down.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "swim-class",
+   "name": "Swim Class",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "wartortle",
+    "tint": "#1e3a4a",
+    "effect": "rain"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A roped-off bay, and a lifeguard on a tall white chair. Finn blows a kind sort of whistle. \"Water-types train best. Everybody else floats.\" Cost: a node. Gain: Water-types +2 Sp. Atk effort; everyone else +1 Bond.",
+   "choices": [
+    {
+     "label": "Swim.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The Water-types cut laps like knives. Everybody else bobs about in rubber rings, being towed, shrieking. Finn watches every single head, the whole time.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spa",
+        "amount": 2,
+        "type": "water",
+        "who": "party"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Float.",
+     "success": {
+      "text": "You all float on your backs and watch the clouds. Finn says nothing. He counts heads, and smiles.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "swim-class-whistle",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sergeant-whistle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The baby's whistle hangs on a cord round your neck. Blow it, and this drill costs you no node.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Swim.",
+       "requires": [
+        {
+         "kind": "flag",
+         "key": "drill-open",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "success": {
+        "text": "The Water-types cut laps like knives. Everybody else bobs about in rubber rings, being towed, shrieking. Finn watches every single head, the whole time.",
+        "effects": [
+         {
+          "kind": "market",
+          "action": "effort",
+          "stat": "spa",
+          "amount": 2,
+          "type": "water",
+          "who": "party"
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "flag",
+          "key": "sergeant-whistle",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drill-open",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drills-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "team-photo-day",
+   "name": "Team Photo",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.penny"
+    ],
+    "tint": "#332a2a",
+    "effect": "sparkle"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A camera on three legs and a photographer under a black cloth. Flick's voice comes out muffled. \"Everybody squeeze in! Say Poké Ball!\" Cost: ₽100. Gain: the photo, and +1 Bond for everyone.",
+   "choices": [
+    {
+     "label": "Pose.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "Everybody squeezes in. Somebody blinks. Somebody is looking at you instead of the camera. Flick says it is the best one he has taken all year, and he means it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "A team photo, taken at the Training Ground, to hang in the hub.",
+        "importance": 60
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Make a funny face.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You make a face. They all make faces. The photo is a disaster and the most treasured thing you own.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "A team photo with everyone pulling faces.",
+        "importance": 60
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "trainers-pep-talk",
+   "name": "Pep Talk",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#33332a",
+    "effect": "sparkle"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A coach in a tracksuit, arms already out for a huddle. Juniper beams. \"Hands in, everybody!\" No cost. Gain: your lead's first move next battle hits a tenth harder.",
+   "choices": [
+    {
+     "label": "Hands in.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Hands in. Paws in. A wing. A tail. Juniper counts to three and the shout goes up loud enough to scare birds out of the trees. Everyone is grinning.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Pep talk: first move +10%",
+        "effects": [
+         {
+          "kind": "firstAttackDamage",
+          "first": 1.1,
+          "later": 1
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Too cheesy.",
+     "success": {
+      "text": "\"It is cheesy!\" Juniper agrees, delighted. \"That's why it works!\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "training-session-2",
+   "name": "Punching Bag",
+   "group": "Training and growth",
+   "types": [
+    "fighting"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "effect": "shake"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A heavy bag on a chain, scarred by generations. The Sergeant stands beside it and blows one blast. Cost: a node. Gain: +1 Attack effort for your lead.",
+   "choices": [
+    {
+     "label": "Punch.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Your lead hits the bag until the chain sings. The Sergeant holds it steady from behind, taking every blow through the leather, and nods once. From the Sergeant, that is a medal.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "atk",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Kick.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Your lead kicks the bag clean off its hook. The Sergeant catches it one-armed. The baby cheers.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "atk",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "training-session-2-whistle",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sergeant-whistle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The baby's whistle hangs on a cord round your neck. Blow it, and this drill costs you no node.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Punch.",
+       "requires": [
+        {
+         "kind": "flag",
+         "key": "drill-open",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "success": {
+        "text": "Your lead hits the bag until the chain sings. The Sergeant holds it steady from behind, taking every blow through the leather, and nods once. From the Sergeant, that is a medal.",
+        "effects": [
+         {
+          "kind": "market",
+          "action": "effort",
+          "stat": "atk",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "sergeant-whistle",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drill-open",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drills-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "waterfall-training",
+   "name": "Waterfall",
+   "group": "Training and growth",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#103040",
+    "effect": "rain"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A waterfall, white and deafening. A monk sits under it as if it were a light rain. Brother Sel does not raise his voice. \"Stand. Don't fall.\" Cost: your lead at −20% HP. Gain: it learns Waterfall if it can; if not, +1 Defense effort.",
+   "choices": [
+    {
+     "label": "Stand under it.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The water hits like a wall. Your lead goes to one knee, and gets up, and stays up. When it walks out, Brother Sel bows from the waist. \"The river could not move you. Remember that.\"",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "market",
+        "action": "teachOr",
+        "move": "waterfall",
+        "stat": "def",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit beside it.",
+     "success": {
+      "text": "You sit beside the falls in the cold mist. Brother Sel sits with you. Nobody needs to prove anything.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "weak-spot-remedy",
+   "name": "Weak-Spot Therapy",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#222a33",
+    "effect": "glint"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A quiet tent with a treatment table. Dr. Kade warms her hands. \"Which one hurts most?\" Cost: ₽200. Gain: +1 effort to your lead's lowest stat, or a status cured.",
+   "choices": [
+    {
+     "label": "Treat the weakest stat.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Dr. Kade finds the weak place without being told and works on it, patiently, until it is only a place. \"Everyone has one. It isn't a flaw. It's just where you start from.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "lowest",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Treat a sore Pokémon.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Dr. Kade treats what ails them, gently, talking the whole time about nothing in particular so that nobody is frightened.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "weight-room-roulette",
+   "name": "Weight Room Roulette",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "pokemon": "machamp",
+    "tint": "#2b2b33",
+    "effect": "shake"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A rack of weights and a wheel on the wall. Spinner, the owner, gives it a flick. \"Pick your weight and spin.\" A card on the wall: HEAVY, 1 IN 3: THE LEAD STARTS ITS NEXT BATTLE AT −20%. Gain: Light, +1 Attack effort; Heavy, +2.",
+   "choices": [
+    {
+     "label": "Light.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Light weights, many times. Spinner counts every one out loud and gets to a number he has to check twice.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "atk",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Heavy.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.6666666666666666,
+     "success": {
+      "text": "The bar bends. Your lead does not. Spinner whistles through his teeth. \"Clean. Clean as anything.\"",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "atk",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The bar goes up. It also comes down, harder than planned. Your lead got the lift, and a pulled shoulder with it. Spinner fetches ice. \"One in three. It's on the card. Sorry, friend.\"",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "atk",
+        "amount": 2
+       },
+       {
+        "kind": "damage",
+        "share": 0.2,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "yoga-retreat",
+   "name": "Yoga Retreat",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#283028",
+    "effect": "hearts"
+   },
+   "stop": "dojo",
+   "room": true,
+   "intro": "A deck over still water, a row of mats. Om-Pol sits with his palms up. \"Breathe in. Breathe out.\" Cost: a node (one pose costs nothing). Gain: the party heals 25% and +1 Bond; or +1 Bond for your lead.",
+   "choices": [
+    {
+     "label": "Stay the day.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "A whole day of breathing in and breathing out. By sunset the party is draped across the deck in a heap, half asleep, all touching. Om-Pol covers them with a blanket.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "mend",
+        "factor": 0.25,
+        "who": "party"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "One pose.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "drill-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "One pose, held together, wobbling. Your lead falls over. You fall over. Om-Pol says that is the pose.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "drill-open",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "drills-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Sergeant.",
+     "success": {
+      "text": "The Sergeant blows one short blast. Dismissed. The baby blows one too, a second late.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "yoga-retreat-whistle",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sergeant-whistle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The baby's whistle hangs on a cord round your neck. Blow it, and this drill costs you no node.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Stay the day.",
+       "requires": [
+        {
+         "kind": "flag",
+         "key": "drill-open",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "success": {
+        "text": "A whole day of breathing in and breathing out. By sunset the party is draped across the deck in a heap, half asleep, all touching. Om-Pol covers them with a blanket.",
+        "effects": [
+         {
+          "kind": "market",
+          "action": "mend",
+          "factor": 0.25,
+          "who": "party"
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "flag",
+          "key": "sergeant-whistle",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drill-open",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "drills-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

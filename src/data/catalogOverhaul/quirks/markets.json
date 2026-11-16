@@ -1,0 +1,18 @@
+{
+  "quirks": [
+    { "id": "bites-strangers", "name": "Bites strangers", "line": "It snaps at anyone it doesn't know. It won't go to a new trainer until it trusts you deeply (Bond 4).", "hooks": [] },
+    { "id": "hates-rain", "name": "Hates rain", "line": "It sulks under every cloud. In rain it's slower (-1 Speed).", "hooks": [{ "kind": "weatherStage", "weather": "rain", "stat": "spe", "stages": -1 }] },
+    { "id": "loves-rain", "name": "Loves rain", "line": "It dances in puddles. In rain it's quicker (+1 Speed).", "hooks": [{ "kind": "weatherStage", "weather": "rain", "stat": "spe", "stages": 1 }] },
+    { "id": "wont-lead", "name": "Won't lead", "line": "It hangs back and lets the others go first. Given the choice, it would rather not be first out.", "hooks": [] },
+    { "id": "always-leads", "name": "Always leads", "line": "It pushes to the front of every line. Given the choice, it would always be first out.", "hooks": [] },
+    { "id": "steals-berries", "name": "Steals Berries", "line": "Berries go missing from your bag. It looks very innocent about it.", "hooks": [] },
+    { "id": "sings-at-night", "name": "Sings at night", "line": "It hums softly when the fire burns low. Everyone sleeps a little better.", "hooks": [] },
+    { "id": "afraid-of-balls", "name": "Afraid of Balls", "line": "It flinches at the click of a Ball. It would rather walk beside you.", "hooks": [] },
+    { "id": "show-off", "name": "Show-off", "line": "It plays to a crowd. Its first move against a Gym Leader, Elite or Champion hits 10% harder.", "hooks": [{ "kind": "firstMoveDamage", "pct": 10, "at": "gym" }] },
+    { "id": "gentle", "name": "Gentle", "line": "It never hits to hurt. It can't land a critical hit, and it grows fond of you faster.", "hooks": [{ "kind": "noCrits" }, { "kind": "bondGain", "before": 1.5, "after": 1.5, "untilBond": 5 }] },
+    { "id": "grudge", "name": "Grudge", "line": "It remembers who wronged it. Its moves hit trainers' Pokémon 10% harder.", "hooks": [{ "kind": "damageVsTrainer", "pct": 10 }] },
+    { "id": "collector", "name": "Collector", "line": "It picks up shiny things on the road and brings them to you, proud as anything.", "hooks": [] },
+    { "id": "old", "name": "Old", "line": "It has seen a lot of roads. It trusts easily, and grows fond of you faster than most.", "hooks": [{ "kind": "bondGain", "before": 1.25, "after": 1.25, "untilBond": 5 }] },
+    { "id": "night-owl", "name": "Night owl", "line": "It wakes up when the sun goes down. Its moves are 5% more accurate at night, 5% less by day.", "hooks": [{ "kind": "accuracyByPeriod", "periods": ["night"], "pct": 5 }, { "kind": "accuracyByPeriod", "periods": ["morning", "afternoon"], "pct": -5 }] }
+  ]
+}

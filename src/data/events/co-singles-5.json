@@ -1,0 +1,1913 @@
+{
+ "catalogOverhaul": "singles",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "hidden-path-keeper",
+   "name": "The Path Keeper",
+   "group": "Hidden Paths",
+   "rarity": "uncommon",
+   "gameEvent": "hidden-path-week",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2830",
+    "effect": "none"
+   },
+   "intro": "**A keeper of forgotten roads, Wend**, has set a folding table at the roadside with three drawings pinned to it. Her coat is patched with old map pieces. \"Most folk walk right past them, the old roads. Prove you can see them, and I'll show you one.\"",
+   "choices": [
+    {
+     "label": "Take the test.",
+     "success": {
+      "text": "She turns the three drawings toward you and sits back, hands folded, watching your face more than the paper.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hidden-path-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"No shame in it.\" She rolls the drawings up with great care, as if they might bruise. \"The roads will wait. They're good at waiting.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "hidden-path-test",
+   "name": "Wend's Picture Test",
+   "group": "Hidden Paths",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Three drawings of the same hillside. In each, the same trees, the same stream, the same tumbled wall. In one of them, and only one, there is a path. \"Find it,\" says Wend.",
+   "choices": [
+    {
+     "label": "The path through the pines.",
+     "success": {
+      "text": "You look, and look, and nothing. \"Pretty trees,\" Wend says gently. \"No road.\" She lets you look at the right one before she packs up, and you see it then, plain as anything. Next time.",
+      "effects": []
+     }
+    },
+    {
+     "label": "The path along the stream.",
+     "success": {
+      "text": "\"Look again,\" says Wend, not unkindly. \"That's water, not a road.\" She shows you the right one, and once you have seen it you cannot stop seeing it.",
+      "effects": []
+     }
+    },
+    {
+     "label": "The path behind the tumbled wall.",
+     "success": {
+      "text": "You put your finger on it: a line of flattened grass behind the wall, there all along. Wend lets out a long breath, almost a laugh. \"There you are. Most never see it.\" She draws you a little map on the back of her hand-out. It cuts through this very stage.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "moment",
+        "text": "Wend the road-keeper showed you a forgotten road.",
+        "importance": 40
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hidden-path-shortcut",
+   "name": "The Hidden Shortcut",
+   "group": "Hidden Paths",
+   "rarity": "uncommon",
+   "gameEvent": "hidden-path-week",
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a30",
+    "effect": "glint"
+   },
+   "intro": "A gap between two boulders, so narrow you would never notice it unless the light fell exactly right, as it does now. Beyond it, a path runs straight as a ruler. It cuts the whole stage in half.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You turn sideways and squeeze through, your team piling after you, and the path carries you a long, quiet way. When you step out, half the stage is behind you, and nobody saw you go.",
+      "effects": [
+       {
+        "kind": "skipAhead",
+        "half": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hidden-path-signpost",
+   "name": "A Signpost for Nowhere",
+   "group": "Hidden Paths",
+   "rarity": "rare",
+   "gameEvent": "hidden-path-week",
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#242a30",
+    "effect": "sparkle"
+   },
+   "intro": "A signpost points down a path that is not there. Then you take one step to the left, and it is. It has always been there, at exactly this angle, for exactly this week. This is Secret Paths Week.",
+   "choices": [
+    {
+     "label": "Stand at the angle.",
+     "success": {
+      "text": "You stand very still at the angle, and the path holds. It runs on ahead of you, real as stone, and other paths like it glint in the corners of the map. This week, every stage keeps one.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "moment",
+        "text": "Found a path that only exists during Secret Paths Week.",
+        "importance": 35
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mirage-island",
+   "name": "Mirage Island",
+   "group": "Mysteries and story",
+   "stop": "mirage",
+   "rarity": "epic",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#103040",
+    "effect": "sparkle"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mirage-sailed",
+     "atMost": 0
+    }
+   ],
+   "intro": "Offshore, an island shimmers where no island was this morning. A ribbon of light runs around it, and something red and white flies low over the trees, too fast to see clearly. It will not be there long.",
+   "choices": [
+    {
+     "label": "Sail out.",
+     "success": {
+      "text": "You borrow a rowing boat and pull hard, and the island stays. Its sand is warm. A Wynaut is sitting on a rock, waiting as if it expected you, and a Liechi Berry hangs from the only tree. Overhead, a shape banks once and is gone, and you would swear it looked straight at you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "wynaut"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "liechi-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-latias",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mirage-sailed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Landed on Mirage Island.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch it.",
+     "success": {
+      "text": "You watch it from the shore with your team until the light thins and the island fades, tree by tree. Just before the last of it goes, something red and white rises out of it and turns toward you, and then there is only sea.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "sign-latias",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mirage-sailed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-abandoned-observatory",
+   "name": "The Abandoned Observatory",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#10142a",
+    "effect": "sparkle"
+   },
+   "intro": "A dome on the hilltop, half its panels gone, and a great brass telescope inside with a lens so filthy it is just grey. Someone once sat here every night. Their chair is still pulled up to the eyepiece.",
+   "choices": [
+    {
+     "label": "Clean the lens (a node).",
+     "success": {
+      "text": "It takes you the whole afternoon, with your sleeve and your water bottle and a great deal of patience. When it is done you put your eye to it, and the whole region spreads out below you, every road and every hidden turn of it, as clear as a map.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "scout",
+        "columns": 12
+       },
+       {
+        "kind": "moment",
+        "text": "Cleaned the old observatory's lens and saw the whole road ahead.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave the chair where it is. Someone may want it again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-ancient-arena",
+   "name": "The Ancient Arena Ruins",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2218",
+    "effect": "sparkle"
+   },
+   "intro": "A ruined arena, open to the sky, and every seat in it full of ghosts. Hundreds of them, pale as breath, leaning forward. They do not want a fight. They want a show, and they have waited a very long time for one.",
+   "choices": [
+    {
+     "label": "Give them one.",
+     "success": {
+      "text": "You walk out onto the sand and bow, and the crowd roars without making a sound. Three exhibition bouts, one after another, no rest between. Win them all and they will teach your lead their favourite move, the one they chant for.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Arena Spectre",
+       "classId": "veteran",
+       "size": 2,
+       "types": [
+        "ghost",
+        "fighting"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "teachMove",
+         "move": "mega-punch"
+        },
+        {
+         "kind": "moment",
+         "text": "Won three bouts for a ghostly crowd; they taught your lead Mega Punch.",
+         "importance": 55
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Bow and leave.",
+     "success": {
+      "text": "You bow to the stands. Hundreds of pale heads bow back. Some of them, you are sure, look disappointed, and some look glad that anyone came at all.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-clockwork-crypt",
+   "name": "The Clockwork Crypt",
+   "group": "Mysteries & Ruins",
+   "stop": "tower",
+   "rarity": "rare",
+   "types": [
+    "steel",
+    "ghost"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "spin"
+   },
+   "intro": "A crypt full of gears. They turn behind every wall, in the floor, in the ceiling, ticking, ticking. Far ahead, a door opens on the beat and closes on the next, and in the dark behind it something very old is keeping time.",
+   "choices": [
+    {
+     "label": "Walk on the beat.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Tick, step. Tick, step. You walk the whole crypt on the beat, and every door opens for you exactly when you reach it. In the last room, the gears all stop at once, and in the silence you feel time itself look at you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-dialga",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Walked the Clockwork Crypt on the beat.",
+        "importance": 45
+       }
+      ]
+     },
+     "failure": {
+      "text": "You miss a beat, and a door closes in your face with a clang that rings through the whole crypt. When it opens again, you are back at the entrance, and the ticking sounds a little like laughter.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Wait for the pattern.",
+     "success": {
+      "text": "You sit down and listen for a long time, until you know the ticking better than your own heartbeat, and then you walk through without hurrying once. In the last room, the gears stop. In the silence, you feel time itself look at you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-dialga",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Learned the Clockwork Crypt's pattern.",
+        "importance": 45
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-dragon-skeleton",
+   "name": "The Dragon Skeleton Gallery",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "types": [
+    "dragon"
+   ],
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1818",
+    "effect": "shake"
+   },
+   "intro": "Bones. Each one the size of a house, half sunk in the earth, ribs arching over the path like the roof of a hall. When the wind blows through them, they hum, low and long, like something very far away that is still roaring.",
+   "choices": [
+    {
+     "label": "Touch one.",
+     "success": {
+      "text": "You lay your palm on the nearest rib. It is warm. The hum goes through your hand, your arm, your chest, and for one moment you hear it properly: a roar, from very far away, and very much alive. Your team all turn to look in the same direction.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-dragon",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Touched the dragon bones and heard a roar.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look, don't touch.",
+     "success": {
+      "text": "You walk under the great ribs with your hands in your pockets, looking up. Some things are not yours to wake.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-echoing-well",
+   "name": "The Echoing Well",
+   "group": "Mysteries & Ruins",
+   "stop": "well",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1a2430",
+    "effect": "sparkle"
+   },
+   "intro": "An old stone well with a sign: \"Toss a coin and hear what is coming.\" The bucket is gone. When you lean over, the dark below breathes back at you, cool, and the sound of your breathing comes up twice.",
+   "choices": [
+    {
+     "label": "Toss ₽10.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 10
+      }
+     ],
+     "success": {
+      "text": "The coin falls for a long, long time. Then a voice comes up the well, your own voice, and it names the road ahead, one stop at a time, as if remembering it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -10
+       },
+       {
+        "kind": "scout",
+        "columns": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shout into it.",
+     "success": {
+      "text": "\"Hello!\" you shout. \"Hello,\" says the well, a moment later, and then, much quieter, in a voice that is nearly yours: \"Careful.\" You step back, and you are careful.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-graveyard-choir",
+   "name": "The Hidden Graveyard Choir",
+   "group": "Mysteries & Ruins",
+   "stop": "haunted",
+   "rarity": "uncommon",
+   "types": [
+    "ghost"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1c1e30",
+    "effect": "float"
+   },
+   "intro": "In a forgotten graveyard, ghosts are singing. The song is lovely and a little sad, like the end of a long day. In the middle of the choir there is a gap, a place held open, and they keep glancing at you.",
+   "choices": [
+    {
+     "label": "Take the place.",
+     "success": {
+      "text": "You step into the gap. You do not know the song, but somehow you know the next note, and the next. You sing until the stars come out. Your team sleeps among the stones, and your Ghost-types sing with you, very softly. Everyone is rested.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "types": [
+          "ghost"
+         ]
+        }
+       },
+       {
+        "kind": "moment",
+        "text": "Sang with a ghost choir in a forgotten graveyard.",
+        "importance": 45
+       }
+      ]
+     }
+    },
+    {
+     "label": "Listen from the gate.",
+     "success": {
+      "text": "You lean on the gate and listen, and the choir sings to you, and when it ends they bow, and are gone. Your team is curled up asleep at your feet. Everyone is rested.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-memory-fog",
+   "name": "The Memory Fog",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#26262c",
+    "effect": "fog"
+   },
+   "intro": "A thick fog rolls in off nowhere. Your pockets feel lighter, all at once. You reach in, and for a terrible moment you cannot remember what was there.",
+   "choices": [
+    {
+     "label": "Wait it out.",
+     "success": {
+      "text": "You sit down on the road and wait, holding your bag shut with both arms. When the fog lifts, one thing is gone, and you know exactly what. It will come back. You do not know how you know that.",
+      "effects": [
+       {
+        "kind": "coFog",
+        "action": "take",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "memory-fog",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push through.",
+     "success": {
+      "text": "You put your head down and push through, fast. You come out the other side with two things missing, in the order they went. The fog will give them back. Not yet.",
+      "effects": [
+       {
+        "kind": "coFog",
+        "action": "take",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "memory-fog",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-memory-fog-clears",
+   "name": "The Fog Gives It Back",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "memory-fog",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "memory-fog",
+     "atLeast": 1
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#26262c",
+    "effect": "sparkle"
+   },
+   "intro": "You stop in the middle of the road, because you suddenly remember exactly what you lost in the fog, in order. And there, on the roadside, is a little pile, sitting in the grass, waiting.",
+   "choices": [
+    {
+     "label": "Pick them up.",
+     "success": {
+      "text": "You pick them up one at a time, in the order they went. Each one is a little damp, and each one is yours.",
+      "effects": [
+       {
+        "kind": "coFog",
+        "action": "give",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "memory-fog",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-mind-palace",
+   "name": "The Mind Palace",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#201c2a",
+    "effect": "sparkle"
+   },
+   "intro": "A room with no walls, only memories. Every battle of this run hangs in the air like a painting, and you can step into any of them. The hard ones glow a little brighter.",
+   "choices": [
+    {
+     "label": "Relive a loss.",
+     "success": {
+      "text": "You step into the one that still stings. It is all there: the field, the foe, the moment it went wrong. This time you know what is coming. Win, and your lead keeps what it learned.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "A Memory",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "train",
+         "what": "learnMove"
+        },
+        {
+         "kind": "moment",
+         "text": "Relived a loss in the Mind Palace, and won it this time.",
+         "importance": 55
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Relive a win.",
+     "success": {
+      "text": "You step into one you are proud of, and fight it again, differently, to see what else was possible. Win, and your lead keeps what it learned.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "A Memory",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "train",
+         "what": "learnMove"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-moss-obelisk",
+   "name": "Moss-Covered Obelisk",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "types": [
+    "rock",
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1e2a1e",
+    "effect": "glint"
+   },
+   "intro": "An obelisk furred with moss, runes running down it. Some of them glow faintly, green and cold. They are a warning, written long ago, of what waits at the end of this region's road.",
+   "choices": [
+    {
+     "label": "Read the runes.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "crisis",
+         "atLeast": 4
+        }
+       ],
+       "text": "The runes name the trouble at the end of this region's road, and they burn bright: it is close now, and very bad. Whatever is coming, it is nearly here.",
+       "effects": [
+        {
+         "kind": "moment",
+         "text": "The moss obelisk warned that the region's crisis is nearly here.",
+         "importance": 45
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "crisis",
+         "atLeast": 2
+        }
+       ],
+       "text": "The runes name the trouble at the end of this region's road. It is growing, steadily, the way a river rises.",
+       "effects": [
+        {
+         "kind": "moment",
+         "text": "The moss obelisk warned of the region's growing crisis.",
+         "importance": 40
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "crisis",
+         "atMost": 1
+        }
+       ],
+       "text": "The runes name the trouble at the end of this region's road. It is still small, still sleeping. There is time, if you use it.",
+       "effects": []
+      }
+     ],
+     "success": {
+      "text": "You trace the glowing runes with a finger. They name the trouble waiting at the end of the road, plainly.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Rub them clean.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "crisis",
+         "atLeast": 4
+        }
+       ],
+       "text": "The runes name the trouble at the end of this region's road, and they burn bright: it is close now, and very bad. Whatever is coming, it is nearly here.",
+       "effects": [
+        {
+         "kind": "moment",
+         "text": "The moss obelisk warned that the region's crisis is nearly here.",
+         "importance": 45
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "crisis",
+         "atLeast": 2
+        }
+       ],
+       "text": "The runes name the trouble at the end of this region's road. It is growing, steadily, the way a river rises.",
+       "effects": [
+        {
+         "kind": "moment",
+         "text": "The moss obelisk warned of the region's growing crisis.",
+         "importance": 40
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "crisis",
+         "atMost": 1
+        }
+       ],
+       "text": "The runes name the trouble at the end of this region's road. It is still small, still sleeping. There is time, if you use it.",
+       "effects": []
+      }
+     ],
+     "success": {
+      "text": "You scrub the moss away with your sleeve until the runes stand out sharp, and then you can read them.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-poltergeist-poker",
+   "name": "Poltergeist Poker",
+   "group": "Mysteries & Ruins",
+   "stop": "casino",
+   "rarity": "uncommon",
+   "types": [
+    "ghost"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#1c1e30",
+    "effect": "flicker"
+   },
+   "intro": "Three ghosts at a mouldy card table, dealing from a deck that has gone soft with damp. They play for items. One of them pulls out a chair for you with a creak. The odds are written on the table in chalk: one in two.",
+   "choices": [
+    {
+     "label": "Play honest.",
+     "chance": 0.5,
+     "success": {
+      "text": "You play it straight, and so do they, mostly. Your hand wins. The ghosts pay up with great dignity: a Spell Tag, still faintly warm.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "spell-tag",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You play it straight, and so do they, mostly. Their hand wins. They take your stake with great dignity and a little bow.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cheat.",
+     "success": {
+      "text": "You slip a card from your sleeve. Every ghost at the table goes still. They know. Of course they know. They fold, all three, and keep your stake, and their silence follows you out the door.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-prophecy-wall",
+   "name": "The Painted Prophecy Wall",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1e1e",
+    "effect": "glint"
+   },
+   "intro": "A mural on a ruined wall: a tall figure with a team at its side. The paint is fresh, still tacky. And the face is your rival's.",
+   "choices": [
+    {
+     "label": "Look closer.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "rivalState",
+         "leadAtLeast": 2
+        }
+       ],
+       "text": "Your rival stands in the mural on the Champion's dais, their team around them, the crowd painted as a blur of light. The paint is still wet. It is not finished. It could still be painted over.",
+       "effects": [
+        {
+         "kind": "moment",
+         "text": "Saw your rival painted as Champion on the prophecy wall.",
+         "importance": 55
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your rival stands in the mural at a crossroads, looking down two roads at once, and the paint has not decided which one they take.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Saw your rival at a crossroads on the prophecy wall.",
+        "importance": 45
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-vault-key-a",
+   "name": "A Rusted Key",
+   "group": "Mysteries & Ruins",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "glint"
+   },
+   "intro": "A rusted key half sunk in the mud of a riverbank, a little tag tied to it. The tag shows a round door with three keyholes.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You rinse it in the river. One of three. Somewhere there is a door with your name on it, or at least a keyhole that fits.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-key",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-vault-key-b",
+   "name": "A Bronze Key",
+   "group": "Mysteries & Ruins",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "glint"
+   },
+   "intro": "A bronze key caught in the roots of a dead tree, its tag faded but the drawing still clear: a round door, three keyholes.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You work it free of the roots. Another one for the ring. It clinks against the others like it knows them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-key",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-vault-key-c",
+   "name": "A Silver Key",
+   "group": "Mysteries & Ruins",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "glint"
+   },
+   "intro": "A silver key at the foot of a fallen signpost, as if the sign had been pointing to it all along. The same tag: a round door, three keyholes.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You pick it up, and it is warm from the sun. Another key for the ring, and the drawing on every tag the same.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-key",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-sealed-vault",
+   "name": "The Sealed Vault Door",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "vault-key",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "glint"
+   },
+   "intro": "A round door set into a hillside, with three keyholes in a row. Painted around the door, in faded gold, is a list of what the vault keeps: a Comet Shard, Sacred Ash, a Poké Radar, a Super Rod, and two old battle tonics.",
+   "choices": [
+    {
+     "label": "Use the keys.",
+     "success": {
+      "text": "The rusted key, the bronze key, the silver key. Each one turns with a different sound, and the third makes the whole hillside sigh. The door rolls back, and the vault gives you one thing from its list, the one it thinks you need.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "comet-shard",
+         "sacred-ash",
+         "poke-radar",
+         "super-rod",
+         "x-attack-6",
+         "x-speed-6"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "vault-key",
+        "amount": -3
+       },
+       {
+        "kind": "moment",
+        "text": "Opened the sealed vault with three keys.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-spectral-duelist",
+   "name": "The Spectral Duelist",
+   "group": "Mysteries & Ruins",
+   "stop": "haunted",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#1c1e30",
+    "effect": "float"
+   },
+   "intro": "**A ghost in an old-fashioned coat** bows to you from the middle of the path: \"I fight with the moves you've used the most.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It raises a hand, and its team turns into a copy of yours: your lead, your moves, your habits. You will be fighting yourself.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Spectral Duelist",
+       "classId": "hex-maniac",
+       "mirror": true,
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        },
+        {
+         "kind": "moment",
+         "text": "Beat a ghost who fought with your own moves.",
+         "importance": 50
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Ask why.",
+     "success": {
+      "text": "\"So you see yourself,\" it says, quite kindly. \"Most never do.\" Then it raises a hand, and its team becomes a copy of yours.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Spectral Duelist",
+       "classId": "hex-maniac",
+       "mirror": true,
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        },
+        {
+         "kind": "moment",
+         "text": "A ghost showed you yourself in battle.",
+         "importance": 50
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-starfall-seeker",
+   "name": "The Starfall Seeker",
+   "group": "Mysteries & Ruins",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#10142a",
+    "effect": "sparkle"
+   },
+   "intro": "**A stargazer, Nova**, sits on a camp stool with a telescope across her knees, though it is broad daylight. \"The sky's picked a lucky stop for you. Last night. I watched it happen.\"",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "She points down the road. \"That one. The next fight you walk into. Whatever it pays, it'll pay half again.\" She seems very sure. Stars are rarely wrong about money.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The lucky stop: prize money ×1.5 in your next battle",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-unwritten-library",
+   "name": "The Library of Unwritten Books",
+   "group": "Mysteries & Ruins",
+   "stop": "library",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#201c2a",
+    "effect": "sparkle"
+   },
+   "intro": "A library where every book is blank. Thousands of them, shelf on shelf. On a stand by the door, one book lies open with a pen beside it. A card reads: \"Write your own tale. One line.\"",
+   "choices": [
+    {
+     "label": "Write one line.",
+     "pick": {},
+     "success": {
+      "text": "You think about it for a long time, with your team leaning on you. Then you write it, about the one you chose, and the ink sinks in and stays. When this run ends, it will be the line they remember it by.",
+      "effects": [
+       {
+        "kind": "coEpitaph",
+        "text": "{picked} walked every step of it with me, and never once looked back."
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-whispering-door",
+   "name": "The Whispering Door",
+   "group": "Mysteries & Ruins",
+   "stop": "shrine",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1c1a2e",
+    "effect": "fog"
+   },
+   "intro": "A door stands alone in the grass, no wall around it, no house behind it. As you pass, it whispers: **\"What walks on four legs at dawn and is never counted?\"**",
+   "choices": [
+    {
+     "label": "A shadow.",
+     "success": {
+      "text": "The latch clicks. The door swings open onto a little room that cannot possibly be there, and on the floor lies a gift for whoever answered.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-bone",
+         "star-piece",
+         "nugget",
+         "heart-scale",
+         "pp-up"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Pokémon.",
+     "success": {
+      "text": "\"Close,\" whispers the door, sounding almost sorry. It stays shut.",
+      "effects": []
+     }
+    },
+    {
+     "label": "A dream.",
+     "success": {
+      "text": "\"Lovely,\" whispers the door. \"Wrong.\" It stays shut, and you could swear it is smiling.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "shrine-maiden",
+   "name": "Shrine Maiden",
+   "group": "Mysteries and story",
+   "stop": "shrine",
+   "scene": {
+    "cast": [],
+    "tint": "#401818",
+    "effect": "sparkle"
+   },
+   "intro": "A shrine maiden in red and white sweeps fallen leaves beneath a red gate. She does not stop sweeping when you come up the steps, but she smiles.",
+   "choices": [
+    {
+     "label": "Ask for a Telling.",
+     "success": {
+      "text": "She sets down her broom and lights one stick of incense. Then she tells you something about a Pokémon nobody has seen in a hundred years, softly, as if it were a secret between friends.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-shrine",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help sweep.",
+     "pick": {},
+     "success": {
+      "text": "You pick up a second broom, and the one you chose helps too, chasing leaves with great seriousness. When the steps are clean she tells you something, softly, about a Pokémon nobody has seen in a hundred years, and pats your helper on the head.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "telling-shrine",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "spooky-festival",
+   "name": "Spooky Festival",
+   "group": "Mysteries and story",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#281008",
+    "effect": "fire"
+   },
+   "intro": "Jack-o'-lanterns line the road, grinning, and a parade of costumes winds through town: children, Pokémon, children dressed as Pokémon. Somewhere at the back, someone is carrying one hollow lantern with no light in it at all.",
+   "choices": [
+    {
+     "label": "Join the parade.",
+     "success": {
+      "text": "You fall in with the parade and march through town to a square full of stalls. A costume stall dresses your lead as a little ghost, which it takes very seriously. At the end, the person with the empty lantern looks at you for a long moment, and then walks off into the dark. You feel you should follow, someday.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "hollow-lantern-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trick or treat.",
+     "success": {
+      "text": "You hold out your bag, and a grandmother dressed as a Mismagius fills it with sweets and a Rare Candy, and then a child in a sheet jumps out of a doorway and shouts BOO, and your whole team screams.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "lava-cookie",
+         "casteliacone"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "secret-arena-tunnel",
+   "name": "A Tunnel Under the Road",
+   "group": "Secret Paths",
+   "rarity": "rare",
+   "minStage": 3,
+   "secret": [
+    {
+     "kind": "partyAbility",
+     "abilities": [
+      "arena-trap",
+      "sand-veil"
+     ],
+     "label": "a Pokémon with Arena Trap or Sand Veil"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a241c",
+    "effect": "glint"
+   },
+   "intro": "A tunnel mouth under the road, half full of sand, propped with old stone. It points straight toward the Gym. Your Pokémon is already pawing at it.",
+   "choices": [
+    {
+     "label": "Dig it out.",
+     "requires": [
+      {
+       "kind": "partyAbility",
+       "abilities": [
+        "arena-trap",
+        "sand-veil"
+       ],
+       "label": "a Pokémon with Arena Trap or Sand Veil"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon digs like it was born for this, which it was. The tunnel opens, and runs under the whole stage, and lets you out within sight of the Gym town.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay on the road.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "secret-damp-cave",
+   "name": "A Flooded Cave",
+   "group": "Secret Paths",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "secret": [
+    {
+     "kind": "partyAbility",
+     "abilities": [
+      "swift-swim",
+      "water-absorb"
+     ],
+     "label": "a Pokémon with Swift Swim or Water Absorb"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#14242c",
+    "effect": "glint"
+   },
+   "intro": "A cave mouth, half flooded. The water inside is cold and very clean, and your Pokémon pulls toward it like it smells home.",
+   "choices": [
+    {
+     "label": "Swim in.",
+     "requires": [
+      {
+       "kind": "partyAbility",
+       "abilities": [
+        "swift-swim",
+        "water-absorb"
+       ],
+       "label": "a Pokémon with Swift Swim or Water Absorb"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon slips into the water and is gone for a long minute. Then it surfaces, delighted, with a Mystic Water held carefully in its mouth.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "secret-flash-fire-door",
+   "name": "A Sealed Stone Door",
+   "group": "Secret Paths",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "secret": [
+    {
+     "kind": "partyAbility",
+     "abilities": [
+      "flash-fire"
+     ],
+     "label": "a Pokémon with Flash Fire"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c14",
+    "effect": "glint"
+   },
+   "intro": "A door of black stone, sealed with wax and soot. The stone is faintly warm, as if a fire is still burning somewhere behind it.",
+   "choices": [
+    {
+     "label": "Melt the seal.",
+     "requires": [
+      {
+       "kind": "partyAbility",
+       "abilities": [
+        "flash-fire"
+       ],
+       "label": "a Pokémon with Flash Fire"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon breathes on the seal, and the wax runs like water, and the door swings in on a cold hearth. In the ashes, a lump of Charcoal, still warm after all these years.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "charcoal",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "secret-intimidate-gate",
+   "name": "A Gate Nobody Opens",
+   "group": "Secret Paths",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "secret": [
+    {
+     "kind": "partyAbility",
+     "abilities": [
+      "intimidate"
+     ],
+     "label": "a Pokémon with Intimidate"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c1c",
+    "effect": "glint"
+   },
+   "intro": "A gate, and a big, calm guardian in front of it who has not moved in years. It looks at your party. Then it looks, for a long time, at your lead.",
+   "choices": [
+    {
+     "label": "Meet its eyes.",
+     "requires": [
+      {
+       "kind": "partyAbility",
+       "abilities": [
+        "intimidate"
+       ],
+       "label": "a Pokémon with Intimidate"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon meets its stare and does not blink. After a long moment, the guardian dips its great head, respectfully, and steps aside. Behind the gate, hung on a nail, is a Muscle Band.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "muscle-band",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back away.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "secret-keen-eye-ledge",
+   "name": "A Ledge Nobody Sees",
+   "group": "Secret Paths",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "secret": [
+    {
+     "kind": "partyAbility",
+     "abilities": [
+      "keen-eye"
+     ],
+     "label": "a Pokémon with Keen Eye"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a1c",
+    "effect": "glint"
+   },
+   "intro": "A glint on a cliff face, high up, that your Pokémon will not stop staring at. Most people would never notice it.",
+   "choices": [
+    {
+     "label": "Find the way up.",
+     "requires": [
+      {
+       "kind": "partyAbility",
+       "abilities": [
+        "keen-eye"
+       ],
+       "label": "a Pokémon with Keen Eye"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon picks out handholds you would never have seen, one after another, all the way up. The glint is a Scope Lens, wedged in a crack, waiting for someone with sharp enough eyes.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "scope-lens",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "secret-levitate-chasm",
+   "name": "A Chasm With No Bridge",
+   "group": "Secret Paths",
+   "rarity": "rare",
+   "minStage": 3,
+   "secret": [
+    {
+     "kind": "partyAbility",
+     "abilities": [
+      "levitate"
+     ],
+     "label": "a Pokémon with Levitate"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2430",
+    "effect": "glint"
+   },
+   "intro": "A chasm splits the road, and on the far side, on a ledge, an old chest sits with its lid half open. There is no bridge. Nothing could cross that, unless it floated.",
+   "choices": [
+    {
+     "label": "Float over.",
+     "requires": [
+      {
+       "kind": "partyAbility",
+       "abilities": [
+        "levitate"
+       ],
+       "label": "a Pokémon with Levitate"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon floats across with you holding on, your feet dangling over nothing. In the chest, wrapped in oilcloth, something rare.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look for another way.",
+     "success": {
+      "text": "The chasm stays a chasm.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "secret-magnet-vein",
+   "name": "A Vein of Ore",
+   "group": "Secret Paths",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "secret": [
+    {
+     "kind": "partyAbility",
+     "abilities": [
+      "magnet-pull"
+     ],
+     "label": "a Pokémon with Magnet Pull"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2830",
+    "effect": "glint"
+   },
+   "intro": "Your compass spins and spins. In the rock face beside the road, a seam of something heavy is humming.",
+   "choices": [
+    {
+     "label": "Draw it out.",
+     "requires": [
+      {
+       "kind": "partyAbility",
+       "abilities": [
+        "magnet-pull"
+       ],
+       "label": "a Pokémon with Magnet Pull"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon hums back at the rock, and the seam answers, and a lump of ore slides out into your hands: a Magnet, perfectly formed.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "magnet",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "secret-pickup-burrow",
+   "name": "A Burrow Full of Berries",
+   "group": "Secret Paths",
+   "rarity": "uncommon",
+   "secret": [
+    {
+     "kind": "partyAbility",
+     "abilities": [
+      "pickup"
+     ],
+     "label": "a Pokémon with Pickup"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#242a1c",
+    "effect": "glint"
+   },
+   "intro": "Your Pokémon scrabbles at a hollow log and uncovers a little burrow, stocked for winter: three Berries, set out neatly in a row.",
+   "choices": [
+    {
+     "label": "Take all three.",
+     "requires": [
+      {
+       "kind": "partyAbility",
+       "abilities": [
+        "pickup"
+       ],
+       "label": "a Pokémon with Pickup"
+      }
+     ],
+     "success": {
+      "text": "You take all three Berries. The burrow looks very empty afterwards.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take two, leave one.",
+     "requires": [
+      {
+       "kind": "partyAbility",
+       "abilities": [
+        "pickup"
+       ],
+       "label": "a Pokémon with Pickup"
+      }
+     ],
+     "success": {
+      "text": "You take two and leave one for whoever stocked it. Your Pokémon watches you do it and leans against your leg, approving.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "secret-synchronize-whisper",
+   "name": "A Whisper in the Air",
+   "group": "Secret Paths",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "secret": [
+    {
+     "kind": "partyAbility",
+     "abilities": [
+      "synchronize"
+     ],
+     "label": "a Pokémon with Synchronize"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2038",
+    "effect": "glint"
+   },
+   "intro": "Your Pokémon stops dead and tilts its head. It is listening to something you cannot hear, and then it starts to walk, quickly, off the path.",
+   "choices": [
+    {
+     "label": "Follow it.",
+     "requires": [
+      {
+       "kind": "partyAbility",
+       "abilities": [
+        "synchronize"
+       ],
+       "label": "a Pokémon with Synchronize"
+      }
+     ],
+     "success": {
+      "text": "It leads you to a clearing where a Psychic-type is hiding, very still, listening right back.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "psychic"
+       ],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Call it back.",
+     "success": {
+      "text": "It comes back, reluctantly, still listening over its shoulder.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

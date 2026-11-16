@@ -6,6 +6,7 @@ import { shinyMeterText } from '../wildLuck';
 import { TYPE_NAMES, type Content, type TypeName } from '../contentSchema';
 import { typeEffectiveness } from './damage';
 import { abilityOf, calcStats, getSpecies } from '../pokemon';
+import { ownTypes } from '../co/typeShift';
 import { currentEnemy, type PokemonInstance, type RunState, type SideEffects, type Stages } from '../state';
 import { emotionOf } from '../story/emotions';
 import { STANCE_INFO, autoProfile, stanceOf } from './autoBattle';
@@ -38,7 +39,7 @@ export function foeIdentityHidden(battle: NonNullable<RunState['battle']>): bool
 /** Types a Pokémon has right now: its Tera type once Terastallized, plus any extra type a boss carries. */
 function currentTypes(content: Content, battle: NonNullable<RunState['battle']>, mon: PokemonInstance): TypeName[] {
   const tera = battle.transform.teraTypes[mon.uid];
-  const base = tera ? [tera] : [...getSpecies(content, mon.speciesId).types];
+  const base = tera ? [tera] : [...ownTypes(content, mon)];
   const extra = battle.transform.bonusTypes[mon.uid];
   return extra && !base.includes(extra) ? [...base, extra] : base;
 }

@@ -1,0 +1,2577 @@
+{
+ "catalogOverhaul": "places",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "galar-swordbert-shieldbert",
+   "name": "Swordbert & Shieldbert",
+   "group": "Galar",
+   "rarity": "rare",
+   "tags": [
+    "Region",
+    "Trainer"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "swsh-met",
+     "atLeast": 0,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.sordward-shielbert"
+    ],
+    "tint": "#802020",
+    "effect": "glint"
+   },
+   "intro": "Two identical men in dramatic cloaks leap out from behind a rock. \"We founded this town!\" \"And that bridge!\" \"And probably you!\" They hold the pose until it gets awkward.",
+   "choices": [
+    {
+     "label": "\"Sure you did.\"",
+     "success": {
+      "text": "\"He believes us!\" \"Of course he does! History is on our side!\" They sweep off in a swirl of cloak, arguing about which of them is history.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "swsh-met",
+        "amount": 1
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "galar-swordbert-shieldbert"
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"A challenger! As we foresaw!\" \"We did not foresee this.\" \"Hush!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "swsh-met",
+         "amount": 1
+        },
+        {
+         "kind": "seeAgain",
+         "eventId": "galar-swordbert-shieldbert"
+        }
+       ],
+       "name": "Swordbert & Shieldbert",
+       "bossId": "sordward-shielbert",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "flag",
+         "key": "swsh-met",
+         "amount": 1
+        },
+        {
+         "kind": "seeAgain",
+         "eventId": "galar-swordbert-shieldbert"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "second",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "swsh-met",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "intro": "The cloaks again, behind a different rock. \"You! The witness to our greatness!\" \"We have founded several more things since.\" \"A fountain, mostly.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"What else did you found?\"",
+       "success": {
+        "text": "\"The Gym Challenge.\" \"The concept of lunch.\" \"Wednesday.\" Somewhere under the nonsense, one of them says, quietly, \"Our grandmother told us we were someone. We just never found out who.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "swsh-met",
+          "amount": 1
+         },
+         {
+          "kind": "research",
+          "amount": 2
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "galar-swordbert-shieldbert-truth",
+   "name": "Swordbert and Shieldbert, Again",
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "fairy",
+    "fighting"
+   ],
+   "minStage": 2,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "swsh-met",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "swsh-truth",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3b3550",
+    "effect": "none"
+   },
+   "intro": "Just the two of them this time, sitting on a rock, cloaks folded on their knees. No pose. \"You keep finding us,\" says one. \"Nobody keeps finding us.\"",
+   "choices": [
+    {
+     "label": "\"Who were you really?\"",
+     "chance": 0.5,
+     "success": {
+      "text": "They show you a rusted thing wrapped in cloth: half a hilt. \"Our family served a knight who served the hero of Galar. That's all. That's the whole of it.\" They press it into your hands. It is warm. It remembers a wolf with a sword in its jaws.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-zacian",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "swsh-truth",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Swordbert and Shieldbert told you who they really were.",
+        "importance": 55
+       }
+      ]
+     },
+     "failure": {
+      "text": "They show you a rusted thing wrapped in cloth: a shield's rim. \"Our family served a knight who served the hero of Galar. That's the whole of it.\" They press it into your hands. It is warm. It remembers a wolf with a shield on its back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-zamazenta",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "swsh-truth",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Swordbert and Shieldbert told you who they really were.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "galar-dynamax-disturbance",
+   "name": "Dynamax Disturbance",
+   "group": "Galar",
+   "rarity": "rare",
+   "tags": [
+    "Region",
+    "Combat",
+    "Mystery"
+   ],
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "eternatus",
+    "tint": "#5a1a6a",
+    "effect": "flicker"
+   },
+   "intro": "A red column of energy tears out of the ground at a Power Spot. Wild Pokémon nearby swell, huge and furious. A researcher with a humming meter skids up beside you. \"Researcher Sonnet! It's erupting! It's actually erupting!\"",
+   "choices": [
+    {
+     "label": "Fight the raid.",
+     "success": {
+      "text": "\"Shield first, then it surges, then the final push! I've only ever read about this!\" The giant turns its red eyes on you.",
+      "effects": [],
+      "battle": {
+       "kind": "raid",
+       "raidId": "power-spot-eruption",
+       "name": "Power Spot Eruption",
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "calmDisturbance"
+        },
+        {
+         "kind": "flag",
+         "key": "power-spot-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You fought a Power Spot eruption down to its last phase.",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Cap the Spot.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "rock",
+        "steel"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon sets itself on the vent and does not move while the red light hammers against it. Slowly the column narrows to a thread, and then to nothing. Sonnet is crying a little. \"It held. It held.\"",
+      "effects": [
+       {
+        "kind": "calmDisturbance"
+       },
+       {
+        "kind": "flag",
+        "key": "readings-capped",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "rock",
+          "steel"
+         ]
+        }
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run.",
+     "success": {
+      "text": "You run, and Sonnet runs with you, meter clutched to her chest. Behind you the column climbs into the clouds. \"It won't stop,\" she pants. \"Not now. Something will come out of that, later.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "readings-erupts",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-ranger-mission",
+   "name": "Ranger Mission",
+   "group": "World Events",
+   "rarity": "uncommon",
+   "types": [
+    "normal",
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c3a20",
+    "effect": "glint"
+   },
+   "intro": "A park ranger waves you down, out of breath. \"A wild Pokémon's tangled in a snare up the trail. Wire. It's been fighting it all night. I need a steady hand.\"",
+   "choices": [
+    {
+     "label": "Free it (capture-styler minigame).",
+     "prompt": {
+      "id": "pull-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "She hands you her Styler. You circle, and circle, slow and patient, until the frightened thing stops fighting and lets you near. The wire falls away. It looks at you a long moment before it goes.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Styler's line snaps. The Pokémon tears free on its own, bleeding a little, and is gone into the trees. The ranger sighs. \"Free is free. It'll heal.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 150
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cut it free.",
+     "success": {
+      "text": "You cut the wire. The Pokémon bolts the second it can, without looking back. \"Freed, but scared of people now,\" says the ranger. \"Can't blame it.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 150
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find who set it. (a node)",
+     "success": {
+      "text": "You follow the wire to a stake, the stake to boot prints, the prints to a road. Somebody sets these on purpose. The ranger marks the map. \"Poachers. They'll be camped further on.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ranger-poacher-trail",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ranger-poacher-camp",
+   "name": "The Poacher Camp",
+   "group": "World Events",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ranger-poacher-trail",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgoMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ranger-poacher-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3b3326",
+    "effect": "none"
+   },
+   "intro": "The boot prints end at a camp in a hollow. Cages under a tarp. Something inside them is crying, very quietly, the way animals cry when they have stopped expecting anyone to come.",
+   "choices": [
+    {
+     "label": "Open the cages.",
+     "success": {
+      "text": "Two poachers come out of the tent before the first latch is up. \"That's our living, kid.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "ranger-poacher-done",
+         "amount": 1
+        }
+       ],
+       "name": "Poachers",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ranger-poacher-done",
+         "amount": 1
+        },
+        {
+         "kind": "friendship",
+         "amount": 5,
+         "who": "party"
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You opened the poachers' cages.",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Fetch the ranger.",
+     "success": {
+      "text": "You run back for the ranger. By the time you return with her, the camp is half packed, but the cages are still there. She opens them one by one, saying sorry to each.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ranger-poacher-done",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You back away from the hollow. The crying follows you a long way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ranger-poacher-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-walked-past",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rain-dance-ritual",
+   "name": "Rain Dance Ritual",
+   "group": "Helpers, gifts and kindness",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_channeler"
+    ],
+    "effect": "rain"
+   },
+   "intro": "A parched village. The well rope hangs over a dry hole. Elders dance in the square and sing, and the sky stays hard and blue. \"Help us,\" says the youngest of them. \"The crops have a week.\"",
+   "choices": [
+    {
+     "label": "Use Rain Dance.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "rain-dance"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon dances with the elders, and the clouds come. Rain hammers the dust. Children run out into it. Far downstream, you think, the river will rise, and someone there does not know.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 3
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raindance-flood",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warn the town downstream first. (a node)",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "rain-dance"
+      }
+     ],
+     "success": {
+      "text": "You run the river road and knock on doors until everyone has moved up the hill. Then you come back and your Pokémon calls the rain. Both towns watch it fall: one dancing, one dry and safe.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 3
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You saved two towns from one rain.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Coax the clouds with a Water-type.",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "It is not a dance, but your Water-type tries its hardest, again and again. A thin rain comes. Enough. The river barely rises.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 2
+       },
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "\"Good luck,\" you say, and you mean it. The singing follows you down the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rain-dance-flooded-town",
+   "name": "The Flooded Town",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "water"
+   ],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "raindance-flood",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgoMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "raindance-flood-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2b3d4d",
+    "effect": "none"
+   },
+   "intro": "Downstream, a town stands in brown water to the knees. A man is carrying chairs out of his own front room. \"Rain came out of nowhere,\" he says. \"Up at the village they were dancing for it.\"",
+   "choices": [
+    {
+     "label": "Help them bail out. (a node)",
+     "success": {
+      "text": "You bail until your arms stop working. Your Pokémon carry sandbags. By night the water is out of the houses. Nobody here knows it was your rain. You know.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raindance-flood-seen",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them it was you.",
+     "success": {
+      "text": "The man listens. Then he hands you a bucket. \"Then you know where the water goes.\" You bail till dark. At the end he shakes your hand, wet to the elbow.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "raindance-flood-seen",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You keep to the high road and do not look at the water.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "raindance-flood-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-walked-past",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "absolute-avarice",
+   "name": "Absolute Avarice",
+   "group": "PokeRogue-style encounters",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "pokemon": "greedent",
+    "effect": "shake"
+   },
+   "intro": "A huge Greedent sits on a hoard of Berries taller than you. It glares. A villager leaning on a fence says, \"It's stocking up. Winter's early this year. Everything round here is hungry.\"",
+   "choices": [
+    {
+     "label": "Rob it.",
+     "success": {
+      "text": "You reach for the hoard. The Greedent comes off the pile like a landslide.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "greedent"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "oran-berry",
+         "count": 6
+        },
+        {
+         "kind": "flag",
+         "key": "greedent-famine",
+         "amount": 1,
+         "stamp": "region"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Help it fill the store. (a node)",
+     "success": {
+      "text": "You spend the day shaking trees and carrying Berries to the hoard. At dusk the Greedent pushes one back toward you with its nose, then waddles after you when you leave. It holds its Berry the way it holds a grudge: forever.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "greedent"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "harvest"
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "relic-growth-leaf",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave the hoard where it is. The Greedent watches you all the way to the bend in the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "greedent-famine",
+   "name": "The Hungry Verge",
+   "group": "Wild Scenes",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "normal"
+   ],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "greedent-famine",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgoMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "greedent-famine-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3b2a",
+    "effect": "none"
+   },
+   "intro": "Wild Pokémon line the verge, thin, watching your bag. The trees here are bare; the hoard that fed them all winter is in your pack.",
+   "choices": [
+    {
+     "label": "Give back what you took.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "You tip the Berries out onto the grass. They come forward one at a time, then all at once. A small one eats from your hand.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "flag",
+        "key": "greedent-famine-seen",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share a little.",
+     "success": {
+      "text": "You scatter what you can spare. It is not enough. It is something.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "greedent-famine-seen",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on with a full bag past empty faces.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "greedent-famine-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-walked-past",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r146-wailmer-whale-song",
+   "name": "Wailmer Whale Song",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "wailord",
+    "tint": "#0c2038",
+    "effect": "rain"
+   },
+   "intro": "Far out on the water a Wailmer pod is singing, low and rolling. You feel it in the boat's planks. One chord is missing, and they keep leaving a gap for it, waiting.",
+   "choices": [
+    {
+     "label": "Supply the chord (a sound move).",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon finds the note and holds it. The pod answers all at once, and the sea under you goes warm with the sound. They turn and swim alongside, and they know a way across the water that no chart has.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "moveFlag": "sound"
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "wailmer-song",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "relic-growth-tide",
+        "amount": 1
+       },
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "moment",
+        "text": "You finished the Wailmer pod's song.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You ship the oars and drift. Nobody finishes the chord, and it is beautiful anyway, like a question you are allowed not to answer.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Row on.",
+     "success": {
+      "text": "You row on. The song follows the boat a long way, still waiting.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "clue-strange-move",
+   "name": "It Knows Something It Should Not",
+   "group": "Legendary Route",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#1d1d30",
+    "effect": "glint"
+   },
+   "intro": "A wild Pokémon is practising a move its kind should never know, over and over, getting it a little wrong each time. It stops and stares at you, as if it wants to be asked.",
+   "choices": [
+    {
+     "label": "Ask who taught it.",
+     "success": {
+      "text": "It turns and trots off, looking back to see if you follow. It leads you to a hollow full of old tracks: a Pokémon you met on this road lives here, and has been teaching. You can see, now, where everything is.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It shows you the move, proudly, right in your face.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 4
+        },
+        {
+         "kind": "flag",
+         "key": "legend-clue",
+         "amount": 1
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You sit and watch until your lead starts copying it, badly, then less badly. By sundown it has the shape of something new.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "learnMove"
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-beacon-fire",
+   "name": "The Beacon Fire",
+   "group": "World & Traversal",
+   "types": [
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1a0c",
+    "effect": "fire"
+   },
+   "intro": "An old beacon of stacked wood on a rise, dry and ready. Lit, it would show the whole road ahead. Anyone watching the hills would see it too.",
+   "choices": [
+    {
+     "label": "Light it.",
+     "success": {
+      "text": "The beacon roars up into the night. You can see the next stage laid out under you like a map. Somewhere out there, someone who wants to find you sees it too.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 8
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-ambush",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "relic-growth-ember",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it dark. The road ahead stays a road you will have to walk to know.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-weather-tower",
+   "name": "Weather Control Tower",
+   "group": "World Events",
+   "rarity": "rare",
+   "types": [
+    "electric",
+    "steel"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3050",
+    "effect": "shake"
+   },
+   "intro": "A humming tower of coils and dishes. On a panel at its foot: three buttons and a hand-lettered sign. \"Pick tomorrow's weather. It's for everyone. Think about that.\"",
+   "choices": [
+    {
+     "label": "Rain.",
+     "success": {
+      "text": "The dishes turn. Clouds come over the hills and stay. Everyone will be fighting in the wet tomorrow, your rivals too. Somewhere the region's trouble gets a little worse.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 8
+       },
+       {
+        "kind": "crisis",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sun.",
+     "success": {
+      "text": "The dishes turn. The sky burns clear and hot, and it is going to stay that way, for everyone. Somewhere the region's trouble gets a little worse.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "sun",
+        "columns": 8
+       },
+       {
+        "kind": "crisis",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Snow.",
+     "success": {
+      "text": "The dishes turn. Snow comes sideways out of a clear sky, and it will lie on every road tomorrow. Somewhere the region's trouble gets a little worse.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "snow",
+        "columns": 8
+       },
+       {
+        "kind": "crisis",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave tomorrow to itself.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "beg-for-mercy",
+   "name": "Out-levelled",
+   "group": "NPC Stories",
+   "stop": "ambush",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c1c",
+    "effect": "none"
+   },
+   "intro": "A veteran blocks the path. Their team is clearly, plainly stronger than yours, and they know it. \"You're in over your head, kid. Turn round.\"",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "\"Your funeral.\" They are not cruel about it. That is worse.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "Veteran",
+       "classId": "veteran",
+       "size": 3,
+       "types": [],
+       "levelBonus": 4,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1200
+        },
+        {
+         "kind": "moment",
+         "text": "You beat a veteran far stronger than you.",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Yield and pay.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "You hold out the money. They take it, step aside, and say nothing. You keep going, lighter.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Talk.",
+     "success": {
+      "text": "You ask how they got this strong. They are surprised into answering, and talk for an hour: what they would do in your place, which leader to fear. Then they let you pass. \"Don't waste it.\"",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "flag",
+        "key": "mem-veteran-spared",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "debt-collector",
+   "name": "The Debt Collector",
+   "group": "NPC Stories",
+   "stop": "ambush",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "debt",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2a1c20",
+    "effect": "none"
+   },
+   "intro": "Three big trainers block the road, arms folded. \"Boss says time's up. A thousand. Or we settle it the other way.\"",
+   "choices": [
+    {
+     "label": "Pay.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "They count it twice and go. The debt is cleared. It feels like taking off a wet coat.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "flag",
+        "key": "debt",
+        "amount": -99
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "\"Wrong answer.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "Debt Collectors",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "debt-collectors-angry",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 300
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Work it off. (three nodes)",
+     "success": {
+      "text": "Three long errands for the lender: crates, letters, a dog to walk that bites. At the end he crosses your name out of his book himself.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 3
+       },
+       {
+        "kind": "flag",
+        "key": "debt",
+        "amount": -99
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "angry",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "debt-collectors-angry",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Bigger trainers this time, and more of them. \"You beat the last lot. Boss took it personal. A thousand. Last chance.\"",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Fight.",
+       "success": {
+        "text": "\"Told you.\"",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "name": "Hard Collectors",
+         "classId": "roughneck",
+         "size": 4,
+         "types": [],
+         "levelBonus": 4,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "debt",
+           "amount": -99
+          },
+          {
+           "kind": "money",
+           "amount": 500
+          }
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "quarrel-sides",
+   "name": "A Loud Argument",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.roughneck",
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2c2024",
+    "effect": "none"
+   },
+   "intro": "Two villagers are arguing over a Berry bush heavy with fruit. The Hollins say their grandfather planted it. The Barreys say it grows on their side. Both turn to you. \"Well?\"",
+   "choices": [
+    {
+     "label": "Side with the Hollins.",
+     "success": {
+      "text": "Old Mr Hollin shakes your hand with both of his. The Barreys go in and shut the door hard. \"We won't forget this,\" says Mrs Hollin, and means it kindly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "quarrel-hollins",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "quarrel-sided",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Side with the Barreys.",
+     "success": {
+      "text": "The Barrey girl whoops. The Hollins say nothing at all. \"We look after our own,\" says Mr Barrey, \"and you're our own now.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "quarrel-barreys",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "quarrel-sided",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Split the bush.",
+     "success": {
+      "text": "You draw a line down the middle of the bush with a stick. Both families grumble at you, together, for the first time in years. The bush, pruned at last, looks happier than any of them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "quarrel-split",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "quarrel-family-help",
+   "name": "A Friend in the Village",
+   "group": "NPC Stories",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "quarrel-sided",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "quarrel-help-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3f4a2c",
+    "effect": "none"
+   },
+   "intro": "Someone is waving from a cart on the road: a face from the Berry-bush village. \"You took our side. We don't forget.\"",
+   "choices": [
+    {
+     "label": "Accept their help.",
+     "success": {
+      "text": "They make you sit, and feed your team, and patch what needs patching, and fill your bag with Berries from the famous bush.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "quarrel-help-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say you only told the truth.",
+     "success": {
+      "text": "\"That's why,\" they say, and give you the Berries anyway.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "quarrel-help-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "quarrel-bush-thrives",
+   "name": "The Shared Bush",
+   "group": "NPC Stories",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "grass"
+   ],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "quarrel-split",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "quarrel-bush-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2f4a2c",
+    "effect": "none"
+   },
+   "intro": "You pass the village again. The Berry bush you split down the middle has grown so thick that nobody can tell where the line was. Both families are picking from it, not speaking, side by side.",
+   "choices": [
+    {
+     "label": "Pick a few.",
+     "success": {
+      "text": "A Hollin hands you one Berry. A Barrey hands you another. They glare at each other over your head.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "lum-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "quarrel-bush-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just look.",
+     "success": {
+      "text": "You watch them a while. It is the closest thing to peace the village has had in years.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       },
+       {
+        "kind": "flag",
+        "key": "quarrel-bush-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "research-offer",
+   "name": "A Special Opportunity",
+   "group": "Lasting Choices",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "boss.npc_scientist"
+    ],
+    "tint": "#203040",
+    "effect": "none"
+   },
+   "intro": "A researcher with ink on her sleeves blocks your way with a clipboard. \"Dr. Ota. Prototype today, or fund my work and get the real thing in two stages. I'm close. I'm so close.\"",
+   "choices": [
+    {
+     "label": "Prototype.",
+     "success": {
+      "text": "She hands over something still warm from her bench. \"It works! Mostly. Tell me if it explodes.\"",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "scope-lens",
+         "wide-lens",
+         "quick-claw",
+         "muscle-band",
+         "wise-glasses"
+        ]
+       },
+       {
+        "kind": "choice",
+        "id": "research-offer",
+        "pick": "now",
+        "text": "Took Dr. Ota's prototype right away"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fund (500).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "Her eyes fill. \"Nobody funds me. Nobody.\" She writes your name at the top of a page in big letters. \"Two stages. I promise.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "research-funded",
+        "amount": 1
+       },
+       {
+        "kind": "choice",
+        "id": "research-offer",
+        "pick": "funded",
+        "text": "Funded Dr. Ota's work",
+        "weight": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "research-offer-payoff",
+   "name": "The Research Pays Off",
+   "group": "Lasting Choices",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "choice",
+     "id": "research-offer",
+     "pick": "funded",
+     "made": true
+    },
+    {
+     "kind": "flagAge",
+     "key": "research-funded",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_scientist"
+    ],
+    "tint": "#204060",
+    "effect": "glint"
+   },
+   "intro": "Dr. Ota finds you on the road, out of breath, clutching a box. \"Two stages. I said two stages.\" She sets the box down between you and does not open it yet.",
+   "choices": [
+    {
+     "label": "Open it.",
+     "chance": 0.7,
+     "success": {
+      "text": "It is finished, and it is beautiful, and it works. She laughs and cries at once. \"Your name is on the paper. First line.\"",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Dr. Ota's research worked, and your name is on it.",
+        "importance": 55
+       }
+      ]
+     },
+     "failure": {
+      "text": "It is in pieces. \"It failed,\" she says, plainly. \"I'm sorry. Here: half of it back. You believed in me. That counts.\" She means it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 250
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "road-fork",
+   "name": "The Fork in the Road",
+   "group": "Lasting Choices",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#304030",
+    "effect": "none"
+   },
+   "intro": "Three roads, three towns, one signpost. The market town: every shop open. The Gym town: its leader's team written up on the gate. The healer's town: a Center that never closes. Choose one. The others fall behind for good.",
+   "choices": [
+    {
+     "label": "The market town.",
+     "success": {
+      "text": "You take the market road. Stalls on both sides, all the way in. The other two roads are gone behind you.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       },
+       {
+        "kind": "relic",
+        "id": "road-market",
+        "name": "Market Road",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.9
+         }
+        ]
+       },
+       {
+        "kind": "choice",
+        "id": "road-fork",
+        "pick": "market",
+        "text": "Took the market town road",
+        "weight": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Gym town.",
+     "success": {
+      "text": "You take the Gym road. The leader's team is chalked on the gate: you copy it all down. The other two roads are gone behind you.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "relic",
+        "id": "road-gym",
+        "name": "Gym Road",
+        "effects": [
+         {
+          "kind": "xpMultiplier",
+          "value": 1.08
+         }
+        ]
+       },
+       {
+        "kind": "choice",
+        "id": "road-fork",
+        "pick": "gym",
+        "text": "Took the Gym town road",
+        "weight": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "The healer's town.",
+     "success": {
+      "text": "You take the healer's road. Somebody meets you at the gate with blankets. The other two roads are gone behind you.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "relic",
+        "id": "road-healer",
+        "name": "Healer's Road",
+        "effects": [
+         {
+          "kind": "postBattleHeal",
+          "percent": 3
+         }
+        ]
+       },
+       {
+        "kind": "choice",
+        "id": "road-fork",
+        "pick": "healer",
+        "text": "Took the healer's town road",
+        "weight": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sick-trainer-rain",
+   "name": "Sick Trainer in the Rain",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "effect": "rain"
+   },
+   "intro": "Rain. A trainer sits shivering under a tree, flushed with fever, their Pokémon pressed close round them. \"I just need to rest,\" they say. \"Just a bit.\"",
+   "choices": [
+    {
+     "label": "Stay with them. (a node)",
+     "success": {
+      "text": "You stay through the night, and keep the fire going, and make them drink. By morning the fever breaks. \"When it gets bad round here,\" they say, \"I'll come. I'll bring everyone I know.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "aid",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You sat with a sick trainer through the rain.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them a Potion.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "potion"
+      }
+     ],
+     "success": {
+      "text": "You press a Potion into their hand. \"For your team, and you.\" They hold on to your sleeve a moment. \"Thank you. Really.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "potion"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you the rain keeps falling on them. You will remember that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sick-trainer-left",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-walked-past",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "spy-trade",
+   "name": "The Masked Stranger",
+   "group": "NPC Stories",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#1c1c28",
+    "effect": "fog"
+   },
+   "intro": "A masked figure falls into step beside you and never stops walking. \"A secret for a secret. You first.\"",
+   "choices": [
+    {
+     "label": "Tell them my lead's weakness.",
+     "success": {
+      "text": "You tell the truth. The mask tilts. \"Brave.\" Then, quietly: where the evil team will strike next, and when. They are gone before you can thank them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "spy-told-truth",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A masked stranger traded you the evil team's next plan.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell a lie.",
+     "success": {
+      "text": "You make something up. The mask is silent for three steps. \"No,\" they say, and turn off down an alley. No trade.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "\"Wise.\" The figure turns a corner, and when you follow it, there is no one there.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r124-rival-pack-territory",
+   "name": "Rival Pack Territory",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "normal",
+    "dark"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "mightyena",
+    "tint": "#2a1c14",
+    "effect": "rattle"
+   },
+   "intro": "Two wild packs stand nose to nose across a clearing, hackles up: Mightyena on one side, Houndour on the other. Both turn to look at you. Whoever you stand with wins.",
+   "choices": [
+    {
+     "label": "Side with the Mightyena.",
+     "success": {
+      "text": "You step to the Mightyena side. The Houndour fall back, snarling, and the Mightyena lope round you, pleased. You have made friends and enemies in one step.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pack-houndour-hostile",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "pack-hostile",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Side with the Houndour.",
+     "success": {
+      "text": "You step to the Houndour side. The Mightyena melt into the grass, growling. The Houndour sit down round your feet, warm as coals. You have made friends and enemies in one step.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pack-mightyena-hostile",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "pack-hostile",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse both.",
+     "success": {
+      "text": "You step between them. Both packs decide you are the problem, and come to test you, one after the other.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 2,
+       "species": [
+        "mightyena",
+        "houndour"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 3
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 1
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "pack-territory-hostile",
+   "name": "The Pack Remembers",
+   "group": "Wild Scenes",
+   "stop": "ambush",
+   "rarity": "uncommon",
+   "types": [
+    "dark"
+   ],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pack-hostile",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgoMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "pack-hostile-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2626",
+    "effect": "none"
+   },
+   "intro": "Eyes in the grass, low and red. The pack you stood against has followed you, and waited for you to be tired.",
+   "choices": [
+    {
+     "label": "Stand your ground.",
+     "success": {
+      "text": "They come from both sides at once.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mightyena",
+        "houndour",
+        "houndoom"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "pack-hostile-seen",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Back away slowly.",
+     "success": {
+      "text": "You back away step by step, never turning. They let you go, this time. This time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pack-hostile-seen",
+        "amount": 1
+       },
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r161-cursola-reef-grudge",
+   "name": "Cursola Reef Grudge",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "types": [
+    "ghost",
+    "water"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "cursola",
+    "tint": "#1c2038",
+    "effect": "fog"
+   },
+   "intro": "A Cursola clings to a dying reef, white as old bone. It hates the sea for what it took. In a cold voice inside your head it asks for a guard: one Water-type, to stay with the reef a while.",
+   "choices": [
+    {
+     "label": "Leave a Water-type here for a region.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      },
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "You choose. Your Water-type looks at you for a long moment, then swims down to the reef and settles there. The Cursola goes quiet. You row away without looking back, because you would not go if you looked back.",
+      "effects": [
+       {
+        "kind": "sendAway",
+        "key": "cursola-reef-guard",
+        "type": "water",
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "relic-growth-tide",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You left a Water-type to guard a dying reef.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "The reef glows, and the grudge rises out of the coral at you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "cursola",
+        "corsola-galar"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "spell-tag",
+          "reaper-cloth"
+         ]
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You leave the reef to its grudge. The cold voice follows you all the way to the shore.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "cursola-reef-healed",
+   "name": "The Healed Reef",
+   "group": "Wild Scenes",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "water"
+   ],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cursola-reef-guard",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "cursola-reef-back",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a4f5c",
+    "effect": "none"
+   },
+   "intro": "You come back to the reef a region later. It is pink. It is alive. Fish everywhere. And out of the coral, faster than you have ever seen it swim, comes the Pokémon you left behind.",
+   "choices": [
+    {
+     "label": "Welcome it home.",
+     "success": {
+      "text": "It crashes into you and does not let go. It is stronger: the reef taught it things. The Cursola, beside it, is the soft pink of a healthy Corsola now. It leaves a piece of the reef in your hand.",
+      "effects": [
+       {
+        "kind": "bringBack",
+        "key": "cursola-reef-guard",
+        "levels": 3,
+        "friendship": 20
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cursola-reef-back",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Pokémon came home from the reef, stronger.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

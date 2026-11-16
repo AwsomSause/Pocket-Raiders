@@ -1,0 +1,610 @@
+{
+ "category": "singles",
+ "flags": [
+  {
+   "key": "berrytree-left",
+   "setBy": "berry-tree (Take a few, leave the rest.)",
+   "readBy": "berry-tree-pell"
+  },
+  {
+   "key": "berrytree-pell-met",
+   "setBy": "berry-tree-pell",
+   "readBy": "berry-tree-pell (once per run)"
+  },
+  {
+   "key": "center-nurse-asked",
+   "setBy": "pokemon-center (Heal, and ask how she is.)",
+   "readBy": "pokemon-center (free Revive on the next visit)"
+  },
+  {
+   "key": "center-nurse-revive",
+   "setBy": "pokemon-center (Take the free Revive.)",
+   "readBy": "pokemon-center (the Revive is given once)"
+  },
+  {
+   "key": "cache-tanner-found",
+   "setBy": "treasure-cache (Find R. Tanner.)",
+   "readBy": "later singles batches (road people)"
+  },
+  {
+   "key": "hideout-noted",
+   "setBy": "villain-hideout (Note it and leave.)",
+   "readBy": "the Files step (evil-story thread)"
+  },
+  {
+   "key": "torn-page",
+   "setBy": "mr-story-page-a/b/c, keep the page (SF75, families-c; the old pages already set it)",
+   "readBy": "ev-hidden-dungeon"
+  },
+  {
+   "key": "cave-echo-heard",
+   "setBy": "w4-cave-echo (Clap.)",
+   "readBy": "w4-cave-echo"
+  },
+  {
+   "key": "calmed-alpha",
+   "setBy": "w4-tracks-deep (Wake it gently.), pack flag calmed.alpha",
+   "readBy": "Noble Frenzy finale, Alpha of Alphas (legends thread)"
+  },
+  {
+   "key": "tracks-hollow-saved",
+   "setBy": "w4-tracks-deep (Look at it.)",
+   "readBy": "w4-tracks-deep"
+  },
+  {
+   "key": "directions-asked",
+   "setBy": "ask-directions (Who's asking?)",
+   "readBy": "ask-directions"
+  },
+  {
+   "key": "freed-sudowoodo",
+   "setBy": "r145-bonsly-railings",
+   "readBy": "later singles batches"
+  },
+  {
+   "key": "rep",
+   "setBy": "treasure-cache, field-trip, field-trip-chaperone, childs-drawing-toy: the pack's Reputation +1 (STANDARDS.md)",
+   "readBy": "families-c Reputation (record condition)"
+  },
+  {
+   "key": "rep-lost",
+   "setBy": "glove-duel (refuse): the pack's Reputation -1 (STANDARDS.md)",
+   "readBy": "families-c Reputation (record condition)"
+  },
+  {
+   "key": "birthday-kid-battled",
+   "setBy": "birthday-party-crash",
+   "readBy": "birthday-kid-returns"
+  },
+  {
+   "key": "wingman-pokemon-talk",
+   "setBy": "blind-date-wingman",
+   "readBy": "blind-date-callback"
+  },
+  {
+   "key": "gorm-tagged",
+   "setBy": "borrowed-ally",
+   "readBy": "borrowed-ally-cheer"
+  },
+  {
+   "key": "derby-raced",
+   "setBy": "soap-box-derby",
+   "readBy": "soap-box-derby-shop"
+  },
+  {
+   "key": "wedding-signed",
+   "setBy": "wedding-guestbook",
+   "readBy": "wedding-callback"
+  },
+  {
+   "key": "rec-fire",
+   "setBy": "recommend-team",
+   "readBy": "recommend-returns-fire"
+  },
+  {
+   "key": "rec-water",
+   "setBy": "recommend-team",
+   "readBy": "recommend-returns-water"
+  },
+  {
+   "key": "rec-grass",
+   "setBy": "recommend-team",
+   "readBy": "recommend-returns-grass"
+  },
+  {
+   "key": "dancer-met",
+   "setBy": "dance-off",
+   "readBy": "markets thread (the dancer's later scenes)"
+  },
+  {
+   "key": "magician-met",
+   "setBy": "street-magician",
+   "readBy": "markets thread (the magician's later scenes)"
+  },
+  {
+   "key": "tournament-registered",
+   "setBy": "registration-desk",
+   "readBy": "families-a (the tournament)"
+  },
+  {
+   "key": "lab-request-delta",
+   "setBy": "professors-lab",
+   "readBy": "legends thread (Delta Episode request)"
+  },
+  {
+   "key": "lab-request-z",
+   "setBy": "professors-lab",
+   "readBy": "legends thread (Z-Crystal request)"
+  },
+  {
+   "key": "lab-request-mega",
+   "setBy": "professors-lab",
+   "readBy": "legends thread (Mega request)"
+  },
+  {
+   "key": "h-graveyard",
+   "setBy": "eventsHelpers.json (helper at the graveyard)",
+   "readBy": "graveyard-ghost-helps"
+  },
+  {
+   "key": "sign-articuno",
+   "setBy": "wx-aurora-night",
+   "readBy": "legends thread (Signs and Tellings, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "sign-ho-oh",
+   "setBy": "wx-rainbow-after-rain",
+   "readBy": "legends thread (Signs and Tellings, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "sign-lugia",
+   "setBy": "wx-bioluminescent-bay",
+   "readBy": "legends thread (Signs and Tellings, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "sign-shaymin",
+   "setBy": "wx-blossom-storm",
+   "readBy": "legends thread (Signs and Tellings, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "telling-manaphy",
+   "setBy": "wx-bioluminescent-bay",
+   "readBy": "legends thread (Signs and Tellings, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "chansey-lucky-egg",
+   "setBy": "r180-lucky-charm-chansey",
+   "readBy": "r180-lucky-charm-chansey (the Lucky Egg is given once per run)"
+  },
+  {
+   "key": "shed-skin-badge",
+   "setBy": "r128-shed-skin-garden",
+   "readBy": "shed-skin-badge-return"
+  },
+  {
+   "key": "staryu-thrown-back",
+   "setBy": "r160-starfall-beach",
+   "readBy": "r160-staryu-returns"
+  },
+  {
+   "key": "uncommon-breed-left",
+   "setBy": "uncommon-breed",
+   "readBy": "uncommon-breed-returns"
+  },
+  {
+   "key": "birthday-kid-returns-seen",
+   "setBy": "birthday-kid-returns",
+   "readBy": "birthday-kid-returns (once per run)"
+  },
+  {
+   "key": "blind-date-callback-seen",
+   "setBy": "blind-date-callback",
+   "readBy": "blind-date-callback (once per run)"
+  },
+  {
+   "key": "borrowed-ally-cheer-seen",
+   "setBy": "borrowed-ally-cheer",
+   "readBy": "borrowed-ally-cheer (once per run)"
+  },
+  {
+   "key": "r160-staryu-returns-seen",
+   "setBy": "r160-staryu-returns",
+   "readBy": "r160-staryu-returns (once per run)"
+  },
+  {
+   "key": "shed-skin-badge-return-seen",
+   "setBy": "shed-skin-badge-return",
+   "readBy": "shed-skin-badge-return (once per run)"
+  },
+  {
+   "key": "soap-box-derby-shop-seen",
+   "setBy": "soap-box-derby-shop",
+   "readBy": "soap-box-derby-shop (once per run)"
+  },
+  {
+   "key": "uncommon-breed-returns-seen",
+   "setBy": "uncommon-breed-returns",
+   "readBy": "uncommon-breed-returns (once per run)"
+  },
+  {
+   "key": "wedding-callback-seen",
+   "setBy": "wedding-callback",
+   "readBy": "wedding-callback (once per run)"
+  },
+  {
+   "key": "lore-egg-song",
+   "setBy": "wedding-guestbook (either Sign choice), as the old event did",
+   "readBy": "npcStory lore fragment egg-song"
+  },
+  {
+   "key": "mirage-sailed",
+   "setBy": "mirage-island (either choice)",
+   "readBy": "mirage-island (once per run; the doc says once per save, but nothing carries between runs)"
+  },
+  {
+   "key": "sign-latias",
+   "setBy": "mirage-island",
+   "readBy": "legends thread (Signs, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "sign-dialga",
+   "setBy": "mr-clockwork-crypt",
+   "readBy": "legends thread (Signs, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "sign-dragon",
+   "setBy": "mr-dragon-skeleton (a Sign for the run's Dragon Legendary: a group flag)",
+   "readBy": "legends thread (Signs, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "memory-fog",
+   "setBy": "mr-memory-fog; cleared by mr-memory-fog-clears",
+   "readBy": "mr-memory-fog-clears (a stage later, flagAge 1)"
+  },
+  {
+   "key": "vault-key",
+   "setBy": "mr-vault-key-a/b/c; spent by mr-sealed-vault",
+   "readBy": "mr-sealed-vault (needs 3)"
+  },
+  {
+   "key": "telling-shrine",
+   "setBy": "shrine-maiden (either choice): a Telling, mythical chosen by the legends rules",
+   "readBy": "legends thread (Tellings, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "hollow-lantern-seen",
+   "setBy": "spooky-festival (Join the parade)",
+   "readBy": "families-a SF16 The Hollow Lantern (can start)"
+  },
+  {
+   "key": "poacher-camp-freed",
+   "setBy": "boss-rush-poachers (win)",
+   "readBy": "places thread (SF129 poacher camp)"
+  },
+  {
+   "key": "ranger-outpost",
+   "setBy": "eco-ranger-test (pass)",
+   "readBy": "the Ranger outpost (people/places); an outpost heal stop opens now"
+  },
+  {
+   "key": "moot-points",
+   "setBy": "moot-court-1/2/3 (a right answer)",
+   "readBy": "moot-court-verdict (spent there)"
+  },
+  {
+   "key": "type-specialist-hired",
+   "setBy": "type-specialist (win)",
+   "readBy": "next Gym (the specialist waves; text only for now)"
+  },
+  {
+   "key": "sign-region",
+   "setBy": "final-sale-banner (the skit about the region's Legendary)",
+   "readBy": "legends thread (Signs, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "gift-sent",
+   "setBy": "gift-wrap-station (the pack's gift.sent)",
+   "readBy": "gift-wrap-receiver"
+  },
+  {
+   "key": "evil-key",
+   "setBy": "evil-story thread (SF132, a key from the evil team)",
+   "readBy": "vt-contraband-detector (the arch beeps)"
+  },
+  {
+   "key": "evil-trail-lost",
+   "setBy": "vt-gadget-sabotage (knock it down)",
+   "readBy": "evil-story thread (the team loses your trail)"
+  },
+  {
+   "key": "evil-knows-lead",
+   "setBy": "vt-gadget-sabotage (wave)",
+   "readBy": "evil-story thread (the next ambush knows your lead)"
+  },
+  {
+   "key": "rescued",
+   "setBy": "vt-mind-control-helmet (either way); older rescue events",
+   "readBy": "rescued-callback"
+  },
+  {
+   "key": "final-reunion-rescued",
+   "setBy": "rescued-callback",
+   "readBy": "the Final Reunion (families-a)"
+  },
+  {
+   "key": "bingo-card",
+   "setBy": "rf-bingo-1",
+   "readBy": "rf-bingo-2/3 (opened by laterEvent)"
+  },
+  {
+   "key": "trivia-right",
+   "setBy": "rf-move-trivia-1/2/3 (a right answer)",
+   "readBy": "rf-move-trivia-3 (three right: a TM; spent there)"
+  },
+  {
+   "key": "pinball-lane",
+   "setBy": "rf-pinball-ball (the left ramp)",
+   "readBy": "nobody yet: the bonus lane is the left ramp, every time"
+  },
+  {
+   "key": "scales-right",
+   "setBy": "rf-weighted-scales (Two against two.)",
+   "readBy": "rf-scales-2 (One against one. finds the Shiny Stone; spent there)"
+  },
+  {
+   "key": "sign-own",
+   "setBy": "rf-rune-tiles (the legend's name)",
+   "readBy": "legends row (a Sign for the Legendary that blesses this run)"
+  },
+  {
+   "key": "silhouette-right",
+   "setBy": "rf-silhouette-1/2/3 (a right answer)",
+   "readBy": "rf-silhouette-3 (three right: a Rare Candy; spent there)"
+  },
+  {
+   "key": "star-chart",
+   "setBy": "rf-star-chart (the Clefairy)",
+   "readBy": "rf-star-chart (you know it now)"
+  },
+  {
+   "key": "tide-right",
+   "setBy": "rf-tide-gauge, rf-tide-2 (Lower.)",
+   "readBy": "rf-tide-3 (Raise. levels it; spent there)"
+  },
+  {
+   "key": "whistle-right",
+   "setBy": "rf-slide-whistle-safe (Low.), rf-whistle-2 (Middle.)",
+   "readBy": "rf-whistle-3 (High. opens it; spent there)"
+  },
+  {
+   "key": "ace-loan",
+   "setBy": "face-ace-scouting (Take the loan.)",
+   "readBy": "face-ace-scouting-return (spent there)"
+  },
+  {
+   "key": "chant-real",
+   "setBy": "face-announcer (My real name.)",
+   "readBy": "nobody yet: for crowd lines this region"
+  },
+  {
+   "key": "chant-nickname",
+   "setBy": "face-announcer (A nickname.)",
+   "readBy": "nobody yet: for crowd lines this region"
+  },
+  {
+   "key": "dex-habitat",
+   "setBy": "file-data-card (Hand it over.)",
+   "readBy": "nobody yet: the Dex habitat view"
+  },
+  {
+   "key": "gym-secret",
+   "setBy": "face-badge-collector (Tell me.)",
+   "readBy": "nobody yet: a Gym bonus for winning without the lead fainting"
+  },
+  {
+   "key": "jenny-raid",
+   "setBy": "face-jenny-key (Tell her everything.)",
+   "readBy": "evil-story row (SF13 step 7 is easier)"
+  },
+  {
+   "key": "pace-fast",
+   "setBy": "milestone-* (Fast.)",
+   "readBy": "nobody yet"
+  },
+  {
+   "key": "pace-careful",
+   "setBy": "milestone-* (Careful.)",
+   "readBy": "nobody yet"
+  },
+  {
+   "key": "pace-rich",
+   "setBy": "milestone-* (Rich.)",
+   "readBy": "nobody yet"
+  },
+  {
+   "key": "press-heart",
+   "setBy": "face-journalist (+2, +3): kind answers",
+   "readBy": "rivals row (one rival line next region)"
+  },
+  {
+   "key": "press-bold",
+   "setBy": "face-journalist (+2, +3): bold answers",
+   "readBy": "rivals row (one rival line next region)"
+  },
+  {
+   "key": "press-light",
+   "setBy": "face-journalist (+2): light answers",
+   "readBy": "rivals row (one rival line next region)"
+  },
+  {
+   "key": "professor-pet",
+   "setBy": "face-professor-pet (Take it.), stamped with the region",
+   "readBy": "face-professor-checkin (a region later)"
+  },
+  {
+   "key": "professor-checkin-seen",
+   "setBy": "face-professor-checkin",
+   "readBy": "face-professor-checkin (once per run)"
+  },
+  {
+   "key": "quiet-pair",
+   "setBy": "quiet-bond (Leave them be.)",
+   "readBy": "nobody yet"
+  },
+  {
+   "key": "safari-pass",
+   "setBy": "return-gold-teeth (Give them back.)",
+   "readBy": "the Safari row (SF113): free entry"
+  },
+  {
+   "key": "closet-candy",
+   "setBy": "rk-pocket-closet (Leave a Rare Candy.)",
+   "readBy": "rk-pocket-closet-return (gives it back; spent there)"
+  },
+  {
+   "key": "closet-nugget",
+   "setBy": "rk-pocket-closet (Leave a Nugget.)",
+   "readBy": "rk-pocket-closet-return-2 (gives it back; spent there)"
+  },
+  {
+   "key": "closet-star",
+   "setBy": "rk-pocket-closet (Leave a Star Piece.)",
+   "readBy": "rk-pocket-closet-return-3 (gives it back; spent there)"
+  },
+  {
+   "key": "bug-contest-won",
+   "setBy": "bug-contest (Enter.), stamped with the region",
+   "readBy": "bug-contest (the judge remembers you a region later)"
+  },
+  {
+   "key": "egg-that-listened",
+   "setBy": "spring-egg-hunt (Hunt.)",
+   "readBy": "the row that builds SF122 The Egg That Listened"
+  },
+  {
+   "key": "kindness",
+   "setBy": "sleeping-npc (Leave a blanket.), earth-week-cleanup (Join.)",
+   "readBy": "the Kindness Ledger (SF128)"
+  },
+  {
+   "key": "parrot-phrase",
+   "setBy": "parrot-teacher (any word)",
+   "readBy": "parrot-repeats (placement: it only appears after)"
+  },
+  {
+   "key": "parrot-hello",
+   "setBy": "parrot-teacher (that word)",
+   "readBy": "parrot-repeats (says it back)"
+  },
+  {
+   "key": "parrot-never-give-up",
+   "setBy": "parrot-teacher (that word)",
+   "readBy": "parrot-repeats (says it back)"
+  },
+  {
+   "key": "parrot-good-luck",
+   "setBy": "parrot-teacher (that word)",
+   "readBy": "parrot-repeats (says it back)"
+  },
+  {
+   "key": "parrot-thank-you",
+   "setBy": "parrot-teacher (that word)",
+   "readBy": "parrot-repeats (says it back)"
+  },
+  {
+   "key": "rival-plan-heard",
+   "setBy": "sleeping-npc (Lean in.)",
+   "readBy": "nobody yet: the rivals row"
+  },
+  {
+   "key": "telling-deoxys",
+   "setBy": "stargazing-meteor-watch (Follow where it fell.)",
+   "readBy": "legends row (a Telling of Deoxys)"
+  },
+  {
+   "key": "telling-mew",
+   "setBy": "hide-and-seek (Up in the branches.)",
+   "readBy": "legends row (a Telling of Mew)"
+  },
+  {
+   "key": "tib-seen",
+   "setBy": "passing-caravan",
+   "readBy": "the Apprentice row (SF2): Tib, before meeting the player"
+  },
+  {
+   "key": "tib-name-heard",
+   "setBy": "passing-caravan (Call out.)",
+   "readBy": "the Apprentice row (SF2): the player hears the name again"
+  },
+  {
+   "key": "spooky-costume",
+   "setBy": "spooky-season (Wear a costume.)",
+   "readBy": "the Pumpkin King and Midnight Parade line (SF16): you came in costume"
+  },
+  {
+   "key": "harvest-moon",
+   "setBy": "autumn-harvest-moon",
+   "readBy": "later harvest and Ghost-night events this region: the moon was seen"
+  },
+  {
+   "key": "roster-trust",
+   "setBy": "thanksgiving-feast (Bring someone.)",
+   "readBy": "the people row (Road Roster): Trust +1 with a roster trainer"
+  },
+  {
+   "key": "telling-darkrai",
+   "setBy": "winter-solstice (Walk in the dark.), new-moon-night (Go out.)",
+   "readBy": "the legends row: a Darkrai Telling"
+  },
+  {
+   "key": "sign-light",
+   "setBy": "spring-equinox",
+   "readBy": "the legends row: a Solgaleo or Lunala Sign"
+  },
+  {
+   "key": "sign-cresselia",
+   "setBy": "full-moon-rise",
+   "readBy": "the legends row: a Cresselia Sign"
+  },
+  {
+   "key": "lantern-sea-open",
+   "setBy": "day-of-the-dead",
+   "readBy": "the places row: the Lantern Sea opens"
+  },
+  {
+   "key": "farmer-forgets-met",
+   "setBy": "harvest-festival (Help.)",
+   "readBy": "the Farmer Who Forgets line (SF3): it can start, or Abner is at the fair"
+  },
+  {
+   "key": "mirror-week",
+   "setBy": "palindrome-date",
+   "readBy": "Mirror matches (SF41.7): they can appear"
+  },
+  {
+   "key": "bankrupt-shop-kept",
+   "setBy": "bankruptcy-sale (Pay full price.), stamped with the region",
+   "readBy": "wk-bankrupt-shop-open: next region, he is still open"
+  },
+  {
+   "key": "bankrupt-shop-seen",
+   "setBy": "wk-bankrupt-shop-open",
+   "readBy": "wk-bankrupt-shop-open: once only"
+  },
+  {
+   "key": "honest-trade-week",
+   "setBy": "trade-in-week",
+   "readBy": "the markets row (Honest Trade Card): trades this region are shown in full"
+  },
+  {
+   "key": "lost-island-lead",
+   "setBy": "ruins-expedition",
+   "readBy": "the places row (SF116 Lost Island): a lead to the island"
+  },
+  {
+   "key": "sunken-city-open",
+   "setBy": "sunken-ship-dive",
+   "readBy": "the places row (SF41.1 Sunken City): it can be reached"
+  }
+ ]
+}

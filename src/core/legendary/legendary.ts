@@ -8,6 +8,7 @@ import { timeOfDay } from '../arenaStyle';
 import { getTheme } from '../themes';
 import { hashSeed, Rng } from '../rng';
 import { maxHp } from '../pokemon';
+import { blessingLegend, presenceChance } from '../legends/signs';
 import type { ArchetypeModifier, Content } from '../contentSchema';
 import type { BattleState, ExpeditionState, LegendaryRecord, RunState } from '../state';
 import type { ExpeditionDef, LegendaryBlock, LegendaryEnv } from '../expedition/schema';
@@ -15,9 +16,22 @@ import type { ExpeditionDef, LegendaryBlock, LegendaryEnv } from '../expedition/
 export const LEGEND_RARITY_FACTOR: Record<LegendaryBlock['rarity'], number> = { uncommon: 1, rare: 0.5, veryRare: 0.2 };
 
 type Focus = Extract<ArchetypeModifier, { kind: 'legendaryFocus' }>;
-/** The Legendary-week modifiers on this run (event editions put them in `perkEffects`). */
-const focusOf = (run: Pick<RunState, 'perkEffects'>): Focus[] => (run.perkEffects ?? []).filter((m): m is Focus => m.kind === 'legendaryFocus');
-const focusFor = (run: Pick<RunState, 'perkEffects'>, species: string): Focus | undefined => focusOf(run).find((m) => m.species.includes(species));
+/** Regular stages in a region: the Presence chance is per region, the gate rolls once a stage. */
+const STAGES_PER_REGION = 8;
+/**
+ * Catalog Overhaul (legends), the Influence ladder's Presence (LEGENDARY_BLESSINGS.md section 4): the run's blessing Legendary is a
+ * focus whose chance per region grows with Influence (4% to 65%). Only with a blessing, so runs without one roll exactly as before.
+ */
+export const presenceFocus = (run: Pick<RunState, 'expansion'>): Focus[] => {
+  const legend = blessingLegend(run);
+  const state = run.expansion?.blessing;
+  if (!legend || !state) return [];
+  const perStage = 1 - Math.pow(1 - presenceChance(state.influence), 1 / STAGES_PER_REGION);
+  return [{ kind: 'legendaryFocus', species: [legend], weight: 2, gateChance: perStage }];
+};
+/** The Legendary-week modifiers on this run (event editions put them in `perkEffects`), and the blessing's Presence. */
+const focusOf = (run: Pick<RunState, 'perkEffects' | 'expansion'>): Focus[] => [...(run.perkEffects ?? []).filter((m): m is Focus => m.kind === 'legendaryFocus'), ...presenceFocus(run)];
+const focusFor = (run: Pick<RunState, 'perkEffects' | 'expansion'>, species: string): Focus | undefined => focusOf(run).find((m) => m.species.includes(species));
 
 export function legendaryRecord(run: RunState): LegendaryRecord {
   run.legendary ??= { offered: [], completed: [], failed: [], extracted: [], placed: {}, outcomes: [] };
@@ -37,6 +51,7 @@ export function legendaryProblem(content: Content, run: RunState, def: Expeditio
   // A Legendary is faced once per run, in either its duel or its Raid version.
   if (rec?.completed.some((id) => content.expeditions.expeditions.find((e) => e.id === id)?.legendary?.species === l.species)) return 'already completed this run';
   if (!content.species.has(l.species)) return 'unknown species';
+  if (l.replacedBy) return `its stage is the ${l.replacedBy} encounter now`;
   const t = l.trigger;
   if (run.regionIndex < t.minRegion) return `needs region ${t.minRegion + 1}+`;
   if (t.maxRegion !== null && run.regionIndex > t.maxRegion) return 'region too late';

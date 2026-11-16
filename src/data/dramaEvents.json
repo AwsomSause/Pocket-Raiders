@@ -9,6 +9,7 @@
    "cooldownBattles": 2,
    "chance": 100,
    "records": true,
+   "heated": true,
    "requires": "Enemy Pokémon has a Hyper moment (existing story rules apply the effect)",
    "lines": [
     "{name} holds on... and so do I!",
@@ -25,9 +26,11 @@
    "records": false,
    "requires": "A willful Pokémon (autonomy 60+) that distrusts you (trust 35 or less) refuses a reckless command (one that would faint it), once per battle. Foreshadowed by the 'wary' mood",
    "lines": [
-    "Your {foe} would not follow that order. It doesn't trust you to ask that of it.",
-    "Did your {foe} just refuse you? That kind of order costs trust."
-   ]
+    "{foe} won't do it. It trusts you less than it trusts its own instinct.",
+    "{foe} plants its feet and looks back at you. It won't do it. It trusts you less than it trusts its own instinct."
+   ],
+   "narrate": "foe",
+   "after": "moment-refusal"
   },
   {
    "id": "newMove",
@@ -37,6 +40,7 @@
    "cooldownBattles": 1,
    "chance": 100,
    "records": true,
+   "heated": true,
    "requires": "A Pokémon at half HP reveals the strongest valid learnset move it doesn't know (yours: trust 70+ and sync 60+; a rival's: a confident Pokémon)",
    "lines": [
     "Where did that move come from? It was keeping it hidden!",
@@ -54,8 +58,8 @@
    "records": true,
    "requires": "You really used the same move 3 times in this battle",
    "lines": [
-    "You keep leaning on {foeMove}. I see the pattern now.",
-    "That is the third {foeMove}. I know what you are doing."
+    "Again? I see you.",
+    "Again? {foeMove}, again? I see you."
    ],
    "classes": [
     "gym",
@@ -75,8 +79,8 @@
    "records": false,
    "requires": "Enemy Pokémon falls below the low-HP line for the first time",
    "lines": [
-    "Don't give up, {name}! I believe in you!",
-    "Get up, {name}! We're not done!"
+    "Not yet. Not yet!",
+    "{name}, get up. Not yet. Not yet!"
    ],
    "voices": [
     "gentle",
@@ -93,8 +97,8 @@
    "records": true,
    "requires": "Final Pokémon of a team of 3+ is sent out",
    "lines": [
-    "This is my ace. {name}, show them everything!",
-    "I saved the best for last. Go, {name}!"
+    "This is the one.",
+    "This is the one. {name}, show them everything."
    ],
    "classes": [
     "gym",
@@ -110,7 +114,23 @@
    "cooldownBattles": 1,
    "chance": 100,
    "records": false,
-   "requires": "A practiced pair (open Bond relationship, sync 50+ each) hands over after a faint: the partner starts with +1 in its attacking stat, once per pair per battle",
+   "requires": "Your practiced pair (open Bond relationship, sync 50+ each) hands over after a faint: the partner starts with +1 in its attacking stat, once per pair per battle",
+   "lines": [
+    "{foe} steps in, angry. It starts with +1 in its {stat} stat.",
+    "{foe} saw its partner fall. It steps in, angry, and starts with +1 in its {stat} stat."
+   ],
+   "narrate": "foe",
+   "after": "moment-combo"
+  },
+  {
+   "id": "foeCombination",
+   "name": "The Foe's Combination",
+   "status": "limited",
+   "severity": "major",
+   "cooldownBattles": 1,
+   "chance": 100,
+   "records": false,
+   "requires": "The trainer's practiced pair hands over after a faint: the partner starts with +1 in its attacking stat",
    "lines": [
     "That hand-over was practiced. They moved as one!",
     "A coordinated switch, and it was not for show."
@@ -126,8 +146,8 @@
    "records": true,
    "requires": "A signature move of the enemy misses",
    "lines": [
-    "It missed! We still need more practice.",
-    "Not yet... we'll get it right next time."
+    "That never misses!",
+    "That never misses! That NEVER misses!"
    ],
    "classes": [
     "gym",
@@ -144,6 +164,7 @@
    "cooldownBattles": 5,
    "chance": 100,
    "records": true,
+   "heated": true,
    "requires": "One of your Pokémon has an Overdrive or Hyper moment this turn",
    "lines": [
     "That glow... that's Overdrive!",
@@ -161,9 +182,8 @@
    "records": true,
    "requires": "The enemy's Overdrive is calmed or broken this turn",
    "lines": [
-    "No! {name}, focus! Don't lose it now!",
-    "It slipped away... steady, {name}.",
-    "Too wild, too fast. {name}, breathe!"
+    "...Calm down. Calm down.",
+    "{name}... calm down. Calm down. I'm right here."
    ]
   },
   {
@@ -176,8 +196,8 @@
    "records": false,
    "requires": "Turn 4+, the enemy has lost a Pokémon and you have not lost one",
    "lines": [
-    "Hm. My opening plan is not working. Time to change it.",
-    "All right, new approach."
+    "All right. New plan.",
+    "All right. All right. New plan."
    ],
    "classes": [
     "gym",
@@ -195,9 +215,10 @@
    "records": false,
    "requires": "The trainer swaps out a Pokémon that did not faint",
    "lines": [
-    "Come back! Someone else has a better answer!",
-    "Hold on, {name}. I have a different idea."
-   ]
+    "The {who} looks back at its trainer as it's recalled.",
+    "The {who} looks back at its trainer as it's recalled, as if to say sorry."
+   ],
+   "narrate": "name"
   },
   {
    "id": "rivalInterruption",
@@ -240,8 +261,8 @@
    "records": true,
    "requires": "Kind trainer; your Pokémon is nearly down",
    "lines": [
-    "I won't press that. You've fought hard.",
-    "...Let's end this fairly, you and I."
+    "You can stop. I won't think less of you.",
+    "Your {foe} has nothing left. You can stop. I won't think less of you."
    ],
    "voices": [
     "gentle"
@@ -256,7 +277,8 @@
     "empathy": 10,
     "vindictiveness": -10
    },
-   "shiftText": "changed their training philosophy"
+   "shiftText": "changed their training philosophy",
+   "after": "moment-mercy"
   },
   {
    "id": "breakingPoint",
@@ -268,8 +290,8 @@
    "records": false,
    "requires": "Enemy lost half its team and you lost none",
    "lines": [
-    "This can't be happening!",
-    "No... no, I can't lose like this!"
+    "...How?",
+    "...How? How are you doing this?"
    ],
    "voices": [
     "brash",
@@ -287,8 +309,8 @@
    "records": false,
    "requires": "Last enemy Pokémon is out on turn 3+ and the trainer is calm or grim",
    "lines": [
-    "...",
-    "(The trainer says nothing and watches closely.)"
+    "Last one. Let's make it good.",
+    "Last one, {name}. Let's make it good."
    ],
    "voices": [
     "calm",
@@ -305,9 +327,11 @@
    "records": false,
    "requires": "A Pokémon with sync 70+ and trust 60+ swaps a command that cannot hurt the foe for its best move that can, in the same turn, once per battle",
    "lines": [
-    "Your {foe} did not wait to be told. It changed the move itself!",
-    "They don't even need orders. That Pokémon read the situation."
-   ]
+    "{foe} knew better, and trusted you'd understand.",
+    "{foe} ignores the order and does the right thing instead. It knew better, and trusted you'd understand."
+   ],
+   "narrate": "foe",
+   "after": "moment-initiative"
   },
   {
    "id": "rematchReversal",
@@ -337,8 +361,8 @@
    "records": true,
    "requires": "The enemy's ace falls",
    "lines": [
-    "Impressive. That Pokémon is truly strong.",
-    "I have to respect that."
+    "...That was good. That was really good.",
+    "...That was good. That was really good. Thank you, {foe}."
    ],
    "voices": [
     "gentle",
@@ -369,7 +393,23 @@
    "cooldownBattles": 1,
    "chance": 100,
    "records": true,
-   "requires": "A Pokémon felt the same thing three times in this battle (determination, bravery, perseverance, justice or patience)",
+   "requires": "One of your Pokémon felt the same thing three times in this battle (determination, bravery, perseverance, justice or patience)",
+   "lines": [
+    "{foe} has found its {foeMove}.",
+    "Something settles in {foe}'s eyes. It has found its {foeMove}."
+   ],
+   "narrate": "foe",
+   "after": "moment-turning"
+  },
+  {
+   "id": "foeTurningPoint",
+   "name": "The Foe's Turning Point",
+   "status": "limited",
+   "severity": "major",
+   "cooldownBattles": 1,
+   "chance": 100,
+   "records": true,
+   "requires": "The trainer's Pokémon felt the same thing three times in this battle (determination, bravery, perseverance, justice or patience)",
    "lines": [
     "Something changed in {name}. It's a different Pokémon now!",
     "{name}, I can see it in your eyes!"
@@ -384,6 +424,7 @@
    "cooldownBattles": 0,
    "chance": 100,
    "records": true,
+   "heated": true,
    "requires": "A rival's training Pokémon (brought in a stage below its final form, already at its evolution level) evolves at a turn boundary after turn 3 or at half HP",
    "lines": [
     "{name}... you've evolved! I knew you could!",
