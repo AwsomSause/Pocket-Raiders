@@ -3431,5 +3431,113 @@
    "Reunion"
   ],
   "tags": []
+ },
+ "gn-new-05-daycare": {
+  "gn": "gn.new.05",
+  "shape": "Region-long",
+  "earliest": "A1",
+  "home": 5,
+  "window": [
+   4,
+   6
+  ],
+  "sits": "must-see",
+  "attaches": "town",
+  "stages": [
+   1
+  ],
+  "level": "None",
+  "often": "region",
+  "dressing": {
+   "kanto": "The Egg That Listened",
+   "elsewhere": "The Egg That Listened"
+  },
+  "beats": [
+   {
+    "beat": "The gift (must-see; fallback Step 15)",
+    "event": "gn-new-05-daycare",
+    "stage": "S1",
+    "home": 5,
+    "window": [
+     4,
+     15
+    ]
+   },
+   {
+    "beat": "The word, at each rest",
+    "event": "gn-new-05-rest",
+    "stage": "S1-S7",
+    "home": 10,
+    "window": [
+     8,
+     12
+    ]
+   },
+   {
+    "beat": "The hatch",
+    "event": "gn-new-05-hatch",
+    "stage": "S8",
+    "home": 19,
+    "window": [
+     17,
+     20
+    ]
+   }
+  ],
+  "note": "Once per region. Given at Step 5 of the region's Stage 1 at a day-care (fallback Step 15); rocks at the heal node nearest Step 10 each stage; hatches at Stage 8, Step 19.",
+  "kinds": [
+   "Region-long"
+  ],
+  "tags": []
+ },
+ "gn-new-05-rest": {
+  "gn": "gn.new.05",
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "stages": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "level": "None",
+  "often": "region",
+  "note": "Once per stage while the egg is carried: the heal node nearest Step 10, or Step 10 itself.",
+  "kinds": [
+   "Region-long"
+  ],
+  "tags": []
+ },
+ "gn-new-05-hatch": {
+  "gn": "gn.new.05",
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 19,
+  "window": [
+   17,
+   20
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "stages": [
+   8
+  ],
+  "level": "None",
+  "often": "region",
+  "note": "Stage 8, Step 19: the egg hatches (SF122).",
+  "kinds": [
+   "Region-long"
+  ],
+  "tags": []
  }
 }

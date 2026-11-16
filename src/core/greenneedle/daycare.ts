@@ -8,6 +8,7 @@
 import type { Content } from '../contentSchema';
 import type { Egg, PokemonInstance, RunState } from '../state';
 import { NATURE_IDS } from '../natures';
+import { listenedShape } from './listened';
 
 export const DAYCARE_MARK = 'daycare';
 /** The flag stamp: the run stage (counted from 1) the pair was left at. */
@@ -129,6 +130,7 @@ export function shapeHatchling(content: Content, run: RunState, egg: Egg, mon: P
       teach('earth-power');
       teach('megahorn');
     }
+    listenedShape(content, mon, s, friendlyAt, teach, mark);
     if (s === 'habit-daycare') mark('looks for the Old Dog in every town');
   }
   // A day-care egg remembers who it came from (Bronwen's "any Pokémon and its own parent").

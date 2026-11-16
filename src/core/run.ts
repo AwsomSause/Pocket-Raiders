@@ -25,6 +25,7 @@ import { unflinchingStart } from './greenneedle/daycare';
 import { gavelStart } from './greenneedle/auction';
 import { lessonAfterstory } from './greenneedle/champion';
 import { allstarRecord, allstarTurn } from './greenneedle/allstar';
+import { listenedPass, listenedTurn, listenedWin } from './greenneedle/listened';
 import { draftRecord } from './greenneedle/draft';
 import { exRipple } from './greenneedle/exhibition';
 import { snorlaxForgives, snorlaxGym, snorlaxRest } from './greenneedle/snorlax';
@@ -1086,6 +1087,7 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   else if (mode && modeItem && (mode !== 'machBike' || node.kind === 'wild')) markUsedThisStage(run, modeItem);
   // Saffron canon: walking away from a Tournament bout or the Labyrinth brings the whole party back.
   leaveCanonStash(run);
+  if (stage.current) listenedPass(run, findNode(stage.map, stage.current).sides); // gn.new.05: people walked past
   stage.current = nodeId;
   stage.visited.push(nodeId);
   tickChainTimers(run.story.flags);
@@ -3259,6 +3261,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const nerves = pondShape(content, run, bonded.action);
   // Greenneedle events: a named fight rule may answer the command (the Samurai's Pinsir waits out a guard).
   const gn = gnShape(content, run, nerves.action);
+  listenedTurn(content, run, gn.action); // gn.new.05: the egg that listens hears what you do
   const shaped = { action: gn.action, events: [...bonded.events, ...nerves.events, ...gn.events] as typeof bonded.events };
   const wasForced = battle.needsSwitch;
   const outgoing = run.party[battle.activeIndex]?.uid;
@@ -3775,6 +3778,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (battle.transform?.used.player.includes('zmove') && !run.story.flags['ev:z-move-used']) run.story.flags['ev:z-move-used'] = 1;
   // Greenneedle gn.46: every trainer met this run, and how it went (the All-Star Tournament draws from it).
   allstarRecord(run);
+  listenedWin(run); // gn.new.05: a quick win
   // Greenneedle gn.48: what each drafted Pokémon did this battle, kept on it for the win's Bond.
   draftRecord(run);
   // Nuzlocke: the fallen are lost for good.

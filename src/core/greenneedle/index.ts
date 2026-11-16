@@ -22,6 +22,7 @@ import { lightning } from './ridge';
 import { labCast, labForm } from './lab';
 import { marketArrive, marketBuy, marketOffer, marketUndercut } from './market';
 import { museumArrive } from './museum';
+import { listenedHatch, listenedTake, listenedWord } from './listened';
 import { daycareLeave, daycareReturn, eggShape, parentAndChild } from './daycare';
 import { eggMoveOptions, familyId } from '../mastery';
 import { pairBondLevel } from '../bond';
@@ -506,6 +507,14 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     }
     case 'eggShape':
       return eggShape(run, e.key!);
+    // gn.new.05 The Egg That Listened (listened.ts).
+    case 'eggTake':
+      return listenedTake(content, run);
+    case 'eggWord':
+      listenedWord(content, run);
+      return '';
+    case 'eggHatch':
+      return listenedHatch(content, run, e.n === 1);
     case 'museumArrive':
       return museumArrive(run, host.region);
     // gn.42 The Battle Frontier (frontier.ts).
