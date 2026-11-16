@@ -1940,5 +1940,31 @@
   "tags": [
    "storm|high"
   ]
+ },
+ "gn-36-door": {
+  "gn": "gn.36",
+  "shape": "Door",
+  "earliest": "A8",
+  "home": 10,
+  "window": [
+   8,
+   13
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A+1; the Flygon A+2",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Great Desert",
+   "elsewhere": "The Great Desert"
+  },
+  "note": "Badge: a dune. Eight nodes, three oases, and the traveller's story through it. Water 4, one less a node, refilled at oases; at none, fights start at 90% HP.",
+  "kinds": [
+   "Pseudo Stage"
+  ],
+  "tags": [
+   "hot"
+  ]
  }
 }

@@ -183,6 +183,15 @@
    "start": "opened"
   },
   {
+   "id": "ps_gn_desert",
+   "name": "The Great Desert",
+   "entry": "gn-36-door",
+   "themeId": "fire-ground",
+   "tint": "#c79a52",
+   "mood": "desert",
+   "start": "opened"
+  },
+  {
    "id": "ps_gn_ridge",
    "name": "Thunderstorm Ridge",
    "entry": "gn-35-door",

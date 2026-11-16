@@ -240,3 +240,133 @@ describe('gn.35 battle rules and Grounded Heart', () => {
     expect(ctx.battle.playerStages.spe).toBe(1);
   });
 });
+
+describe('gn.36 The Great Desert', () => {
+  const enter = (seed: string, setup: (run: RunState) => void = () => {}): RunState => {
+    const run = gnRun(seed);
+    setup(run);
+    open(run, 'gn-36-door');
+    return choose(run, 'gn-36-door', 'Walk into the desert.').run;
+  };
+  const toDunes = (run: RunState): RunState => choose(run, 'gn-36-well', 'Fill the flasks, and go.').run;
+  /** A mirage at the dunes, fixed: seen 1 pool, 2 chest, 3 figure; real or not. */
+  const mirage = (run0: RunState, seen: number, real: boolean): RunState => {
+    const run = structuredClone(run0);
+    setFlag(run, 'desert-seen', seen);
+    setFlag(run, 'desert-real', real ? 1 : 0);
+    return choose(run, 'gn-36-dunes', 'Look at the shimmer.').run;
+  };
+  const toOasis1 = (seed: string, setup?: (run: RunState) => void): RunState => win(choose(toDunes(enter(seed, setup)), 'gn-36-dunes', 'Walk on.').run);
+
+  it('a door at step 10 needing heat, A8; the Last Well fills the water to 4, and each node takes one', () => {
+    expect(content.coPlacement!.get('gn-36-door')).toMatchObject({ home: 10, window: [8, 13], sits: 'optional', attaches: 'instead', earliest: 8, tags: ['hot'] });
+    const run = enter('t36-door');
+    expect(scene(run, 'gn-36-well').intro).toMatch(/If you see a fourth, it isn't\./);
+    const r = choose(run, 'gn-36-well', 'Fill the flasks, and go.');
+    expect(flagOf(r.run, 'desert-water')).toBe(3);
+    expect(said(r)).toMatch(/Water: 3 left\./);
+  });
+
+  it('at no water, each fight starts at 90% HP', () => {
+    const run = toDunes(enter('t36-dry'));
+    setFlag(run, 'desert-water', 0);
+    const fight = choose(run, 'gn-36-dunes', 'Walk on.').run;
+    const mon = fight.party[fight.battle!.activeIndex]!;
+    expect(mon.hp).toBeLessThan(maxHp(content, mon));
+    const wet = choose(toDunes(enter('t36-dry')), 'gn-36-dunes', 'Walk on.').run;
+    const m2 = wet.party[wet.battle!.activeIndex]!;
+    expect(m2.hp).toBe(maxHp(content, m2));
+  });
+
+  it('mirages have a tell for those who look: palms without shadows are Cacturne; with a drinking bird, a real spring (+1 water)', () => {
+    const dunes = toDunes(enter('t36-mirage'));
+    const fake = mirage(dunes, 1, false);
+    const looked = choose(fake, 'gn-36-pool', 'Look closer.');
+    expect(said(looked)).toMatch(/cast no shadows/);
+    expect(flagOf(looked.run, 'desert-mirages-read')).toBe(1);
+    expect(choose(looked.run, 'gn-36-pool', 'Go to it.').run.battle!.enemyTeam[0]!.speciesId).toBe('cacturne');
+    const real = choose(choose(mirage(dunes, 1, true), 'gn-36-pool', 'Look closer.').run, 'gn-36-pool', 'Go to it.');
+    expect(flagOf(real.run, 'desert-water')).toBe(4);
+    expect(scene(real.run, 'gn-36-dunes').labels).toEqual(['Walk on.']);
+  });
+
+  it('a chest with footprints in and none out is a Sandile pit; a figure waving the same way again and again is a Sigilyph', () => {
+    const dunes = toDunes(enter('t36-mirage2'));
+    expect(said(choose(mirage(dunes, 2, false), 'gn-36-chest', 'Look closer.'))).toMatch(/None lead away/);
+    expect(choose(mirage(dunes, 2, false), 'gn-36-chest', 'Go to it.').run.battle!.enemyTeam[0]!.speciesId).toBe('sandile');
+    expect(said(choose(mirage(dunes, 3, false), 'gn-36-figure', 'Look closer.'))).toMatch(/to the inch/);
+    expect(choose(mirage(dunes, 3, false), 'gn-36-figure', 'Go to it.').run.battle!.enemyTeam[0]!.speciesId).toBe('sigilyph');
+  });
+
+  it('the first oasis: Idris, lost; the doc\'s three choices; water given is one less (free if you helped the savanna herd)', () => {
+    const run = toOasis1('t36-oasis');
+    expect(scene(run, 'gn-36-oasis-1').labels).toEqual(['Where are you going?', 'Walk with me.', 'Here, take some water.']);
+    const before = flagOf(run, 'desert-water');
+    const gave = choose(run, 'gn-36-oasis-1', 'Here, take some water.').run;
+    expect(flagOf(gave, 'desert-water')).toBe(before - 1);
+    expect(flagOf(gave, 'desert-gave-water')).toBe(1);
+    const herd = toOasis1('t36-herd', (r) => setFlag(r, 'savanna-helped'));
+    expect(scene(herd, 'gn-36-oasis-1').intro).toMatch(/Everyone's heard/);
+    expect(flagOf(choose(herd, 'gn-36-oasis-1', 'Here, take some water.').run, 'desert-water')).toBe(flagOf(herd, 'desert-water'));
+  });
+
+  it('the storm hides what\'s ahead; a Flying-type sent up, or Safety Goggles, shows it', () => {
+    const storm = choose(toOasis1('t36-storm'), 'gn-36-oasis-1', 'Walk with me.').run;
+    expect(flagOf(storm, 'desert-water')).toBe(3);
+    expect(scene(storm, 'gn-36-storm').intro).not.toMatch(/A second oasis/);
+    const goggled = toOasis1('t36-goggles', (r) => (r.party[0]!.held = { 'safety-goggles': 1 }));
+    expect(scene(choose(goggled, 'gn-36-oasis-1', 'Walk with me.').run, 'gn-36-storm').intro).toMatch(/A second oasis/);
+  });
+
+  /** On to the third oasis by the robbed traveller's choice. */
+  const toOasis3 = (seed: string, robbed: string): RunState => {
+    let run = choose(toOasis1(seed), 'gn-36-oasis-1', 'Walk with me.').run;
+    run = choose(run, 'gn-36-storm', 'Walk on.').run;
+    expect(scene(run, 'gn-36-oasis-2').labels).toEqual(['I\'ll get your things back.', 'Take my spare.', 'You should turn back.']);
+    run = choose(run, 'gn-36-oasis-2', robbed).run;
+    if (robbed === 'I\'ll get your things back.') {
+      run = choose(run, 'gn-36-den', 'Trade them some water.').run;
+      expect(scene(run, 'gn-36-pack').intro).toMatch(/on the back of something with wings/);
+      run = choose(run, 'gn-36-pack', 'Take them back to Idris.').run;
+    }
+    return choose(run, 'gn-36-ruin', 'Walk on.').run;
+  };
+
+  it('the buried ruin: dig by hand (a node of time) or with a Ground move, up to three times', () => {
+    let run = choose(toOasis1('t36-dig'), 'gn-36-oasis-1', 'Walk with me.').run;
+    run = choose(choose(run, 'gn-36-storm', 'Walk on.').run, 'gn-36-oasis-2', 'Take my spare.').run;
+    for (let i = 0; i < 3; i++) run = choose(run, 'gn-36-ruin', 'Dig by hand.').run;
+    expect(flagOf(run, 'desert-dug')).toBe(3);
+    expect(scene(run, 'gn-36-ruin').labels).toEqual(['Walk on.']);
+  });
+
+  it('with Idris beside you, no battle: the Flygon lowers one wing; its Trapinch has Desert Guide', () => {
+    const run = toOasis3('t36-with', 'I\'ll get your things back.');
+    expect(flagOf(run, 'desert-pack')).toBe(1);
+    expect(scene(run, 'gn-36-oasis-3').labels).toEqual(['Come with me. We\'ll find it.', 'I\'ll tell it for you.', 'Good luck.']);
+    const hidden = choose(run, 'gn-36-oasis-3', 'Come with me. We\'ll find it.').run;
+    expect(scene(hidden, 'gn-36-hidden').labels).toEqual(['Wait.']);
+    const r = choose(hidden, 'gn-36-hidden', 'Wait.');
+    expect(said(r)).toMatch(/I'm sorry it took so long\. I got lost\./);
+    const done = choose(r.run, 'gn-36-after', 'Take the one it nudges forward.').run;
+    const trap = [...done.party, ...done.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].find((m) => m.speciesId === 'trapinch' || m.fixedAbility === 'desert-guide');
+    expect(trap?.fixedAbility).toBe('desert-guide');
+    expect(flagOf(done, 'desert-done')).toBe(1);
+  });
+
+  it('with the drawing, no battle; with neither, the Flygon fights from its rock with the doc\'s four moves and can\'t be caught', () => {
+    const drawing = choose(toOasis3('t36-draw', 'Take my spare.'), 'gn-36-oasis-3', 'I\'ll tell it for you.').run;
+    expect(scene(drawing, 'gn-36-hidden').labels).toEqual(['Hold out the drawing.']);
+    const neither = choose(toOasis3('t36-none', 'You should turn back.'), 'gn-36-oasis-3', 'Good luck.').run;
+    const fight = choose(neither, 'gn-36-hidden', 'Battle the Flygon.').run;
+    expect(fight.battle!.enemyTeam[0]!.moves.map((m) => m.id)).toEqual(['earthquake', 'dragon-claw', 'sandstorm', 'roost']);
+    expect(fight.battle!.eventRule).toMatchObject({ noCatch: true });
+    const after = win(fight);
+    expect(flagOf(after, 'desert-flygon')).toBe(2);
+    expect(scene(after, 'gn-36-after').intro).toMatch(/nothing on the rock/);
+  });
+
+  it('afterstory: a postcard a region later, only if Idris reached the Flygon', () => {
+    expect(content.events.get('gn-36-postcard')!.intro).toMatch(/a pair of boots, side by side/);
+  });
+});

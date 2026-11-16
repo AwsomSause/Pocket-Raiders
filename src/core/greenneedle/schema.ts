@@ -110,7 +110,7 @@ export type GnEffect = z.infer<typeof GnEffectSchema>;
  *  - `noMoveType`: no party Pokémon knows a move of any of `types` (the mine's pickaxe is for a party with no Fighting, Steel or Ground move).
  *  - `hurtLead`: the first party Pokémon able to fight is at half its HP or less (gn.16: a win from behind).
  */
-export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'moveType', 'cutter', 'holdsBerry', 'notRegion', 'thisRegion', 'lookAtLevel', 'hurtLead', 'heavy', 'markDown', 'hasMark', 'holdsItem', 'oldCatch', 'strength', 'lowTide', 'highTide']), key: Key.optional(), /** gn.27 strength: percent of the `key` Pokémon's Attack to beat. */ n: z.number().int().min(1).max(200).optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
+export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'moveType', 'cutter', 'holdsBerry', 'notRegion', 'thisRegion', 'lookAtLevel', 'hurtLead', 'heavy', 'markDown', 'hasMark', 'holdsItem', 'oldCatch', 'strength', 'lowTide', 'highTide', 'holds', 'hasAbility']), key: Key.optional(), /** gn.27 strength: percent of the `key` Pokémon's Attack to beat. */ n: z.number().int().min(1).max(200).optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
   .refine((c) => (c.test === 'noMoveType' || c.test === 'moveType' || c.test === 'notRegion' ? !!c.types : c.test === 'lookAtLevel' ? !!c.types && !!c.key : c.test === 'cutter' || c.test === 'holdsBerry' || c.test === 'hurtLead' || c.test === 'heavy' || c.test === 'holdsItem' || c.test === 'oldCatch' || c.test === 'lowTide' || c.test === 'highTide' ? true : !!c.key), { message: 'noMoveType and notRegion need `types` (move types / region ids), the others need `key`' });
 export type GnCond = z.infer<typeof GnCondSchema>;
 
@@ -123,7 +123,7 @@ export type GnCond = z.infer<typeof GnCondSchema>;
  *  - `damian`: Damian himself (gn.05). His last Pokémon is the ace he actually trained: `ace` levels higher, a held item that fits its type,
  *    and two moves that cover its weaknesses.
  */
-export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame', 'hawlucha', 'final', 'lastExchange', 'pipes', 'sludge', 'furnace', 'core', 'savanna', 'herd', 'jungle', 'tsareena', 'slowking', 'forest', 'golem', 'ridge', 'overcharged', 'earthing'] as const;
+export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame', 'hawlucha', 'final', 'lastExchange', 'pipes', 'sludge', 'furnace', 'core', 'savanna', 'herd', 'jungle', 'tsareena', 'slowking', 'forest', 'golem', 'ridge', 'overcharged', 'earthing', 'desert'] as const;
 export const GnRuleSchema = z.enum(GN_RULES);
 export type GnRule = z.infer<typeof GnRuleSchema>;
 

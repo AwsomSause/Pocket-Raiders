@@ -6,7 +6,7 @@ import type { Content } from '../contentSchema';
 import type { PlayerAction } from '../battle/engine';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import type { GnCond, GnEffect } from './schema';
-import { addLevels, calcStats, createPokemon, getSpecies, isUsableMove, maxHp } from '../pokemon';
+import { abilityOf, addLevels, calcStats, createPokemon, getSpecies, isUsableMove, maxHp } from '../pokemon';
 import { levelScale } from '../encounters';
 import { getCampaign } from '../regions';
 import { addItem } from '../items';
@@ -137,6 +137,9 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
     const bar = (calcStats(content, createPokemon(content, c.key!, level, 'gn-bar')).atk * (c.n ?? 100)) / 100;
     return run.party.some((m) => m.hp > 0 && calcStats(content, m).atk > bar);
   }
+  // gn.36: a party Pokémon holds item `key` (Safety Goggles see through a sandstorm); one has ability `key` (Desert Guide).
+  if (c.test === 'holds') return run.party.some((m) => (m.held?.[c.key!] ?? 0) > 0);
+  if (c.test === 'hasAbility') return run.party.some((m) => m.fixedAbility === c.key || abilityOf(content, m) === c.key);
   if (c.test === 'holdsItem') return run.party.some((m) => Object.entries(m.held ?? {}).some(([id, n]) => n > 0 && !id.endsWith('-berry')));
   if (c.test === 'hasMark') return run.party.some((m) => m.gn?.includes(c.key!));
   if (c.test === 'markDown') return !run.party.some((m) => m.gn?.includes(c.key!) && m.hp > 0);
@@ -496,6 +499,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
     if (gnFlag(run, 'savanna-water') <= 0) for (const m of run.party) if (m.hp > 0) m.hp = Math.min(m.hp, Math.max(1, Math.floor(maxHp(content, m) * 0.9)));
     if (rule === 'herd') battle.storyEffects.push(`${FOE_WAITS}A Donphan from the herd steps in front of your Pokémon and takes the blow meant for it.`);
   }
+  // The Great Desert (gn.36): with the water gone, the party enters each battle at 90% HP.
+  if (rule === 'desert' && gnFlag(run, 'desert-water') <= 0) for (const m of run.party) if (m.hp > 0) m.hp = Math.min(m.hp, Math.max(1, Math.floor(maxHp(content, m) * 0.9)));
   // The Lush Jungle's Tsareena (gn.20): Trop Kick, High Jump Kick, U-turn.
   if (rule === 'tsareena' && battle.enemyTeam[0]) setMoves(content, battle.enemyTeam[0], ['trop-kick', 'high-jump-kick', 'u-turn']);
   // The Lush Jungle (gn.20): who was already down when the fight began (only a knockout in this fight pulls the ladder up, run.ts).

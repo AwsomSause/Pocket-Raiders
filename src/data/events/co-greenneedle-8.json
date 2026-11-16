@@ -2497,6 +2497,5358 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-36-door",
+   "name": "The Great Desert",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "ground"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "desert-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "desert-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "trapinch",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "The road ends where the sand begins. Past it, dunes, and heat that bends the air like water.\n\nA sign, half buried: LAST WELL. An arrow points in.",
+   "choices": [
+    {
+     "label": "Walk into the desert.",
+     "success": {
+      "text": "The sand takes your footprints, and smooths them, and forgets you were there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "desert-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-water",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-gave-water",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "desert-region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-36-well"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You keep to the road. The heat follows you for a while, and gives up.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-36-well",
+   "name": "The Great Desert: The Last Well",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    },
+    {
+     "id": "water-n",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: you check the flasks. Enough, for now."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.lady"
+    ],
+    "pokemon": "hippopotas",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "A village at the desert's edge: six houses, a well, a goat that judges you.\n\nA guide sits by the well, very old, with eyes like she's still looking at the horizon. Old Hadiza-Nour.\n\nHadiza-Nour: \"Three oases. Count them. If you see a fourth, it isn't.\"",
+   "choices": [
+    {
+     "label": "Ask about the fourth.",
+     "success": {
+      "text": "She smiles, and doesn't answer, and then does.\n\n\"My grandmother said there was one. Where the wind stops. Nobody's found it. Nobody who was looking.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "desert-asked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-36-well"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-asked",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Fill the flasks, and go.",
+     "success": {
+      "text": "The well water's cold enough to hurt your teeth.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-water",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-at",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-looked",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-mirage-done",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "desert-seen",
+        "weights": [
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "desert-real",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-36-dunes"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-36-dunes",
+   "name": "The Great Desert: The First Dunes",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    },
+    {
+     "id": "water-n",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: you check the flasks. Enough, for now."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sandile",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "Dunes like slow waves. Things move under the sand, and stop when you stop.\n\nOn the far side of the next dune, something shimmers.",
+   "choices": [
+    {
+     "label": "Look at the shimmer.",
+     "success": {
+      "text": "You shade your eyes, and look.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-seen",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-pool"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-seen",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-chest"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-seen",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-figure"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-mirage-done",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The sand ahead bulges, and bursts.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sandile",
+        "cacnea",
+        "trapinch",
+        "vibrava",
+        "hippopotas",
+        "numel",
+        "baltoy",
+        "dwebble",
+        "silicobra",
+        "sandshrew",
+        "larvesta"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "desert-water",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "desert-water",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "desert-water",
+           "n": 2
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "desert-water",
+           "n": 3
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "desert-water",
+           "n": 4
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 0,
+         "max": 0,
+         "then": [],
+         "text": "Water: none left. Your party starts each fight at 90% HP."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 1,
+         "max": 1,
+         "then": [],
+         "text": "Water: 1 left."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 2,
+         "max": 2,
+         "then": [],
+         "text": "Water: 2 left."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 3,
+         "max": 3,
+         "then": [],
+         "text": "Water: 3 left."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 4,
+         "max": 4,
+         "then": [],
+         "text": "Water: 4 left."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 5,
+         "max": 5,
+         "then": [],
+         "text": "Water: 5 left."
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-36-oasis-1"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "desert-water",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "desert-water",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "desert-water",
+           "n": 2
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "desert-water",
+           "n": 3
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "desert-water",
+           "n": 4
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 0,
+         "max": 0,
+         "then": [],
+         "text": "Water: none left. Your party starts each fight at 90% HP."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 1,
+         "max": 1,
+         "then": [],
+         "text": "Water: 1 left."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 2,
+         "max": 2,
+         "then": [],
+         "text": "Water: 2 left."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 3,
+         "max": 3,
+         "then": [],
+         "text": "Water: 3 left."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 4,
+         "max": 4,
+         "then": [],
+         "text": "Water: 4 left."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 5,
+         "max": 5,
+         "then": [],
+         "text": "Water: 5 left."
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-36-oasis-1"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "desert-water",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "desert-water",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "desert-water",
+           "n": 2
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "desert-water",
+           "n": 3
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "desert-water",
+           "n": 4
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 0,
+         "max": 0,
+         "then": [],
+         "text": "Water: none left. Your party starts each fight at 90% HP."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 1,
+         "max": 1,
+         "then": [],
+         "text": "Water: 1 left."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 2,
+         "max": 2,
+         "then": [],
+         "text": "Water: 2 left."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 3,
+         "max": 3,
+         "then": [],
+         "text": "Water: 3 left."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 4,
+         "max": 4,
+         "then": [],
+         "text": "Water: 4 left."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 5,
+         "max": 5,
+         "then": [],
+         "text": "Water: 5 left."
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-36-oasis-1"
+        }
+       ],
+       "rule": {
+        "gn": "desert"
+       },
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-36-pool",
+   "name": "The Great Desert: A Pool with Palm Trees",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    },
+    {
+     "id": "water-n",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: you check the flasks. Enough, for now."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cacnea",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "A pool, blue as glass, with palm trees leaning over it. It looks cool. It looks close.",
+   "choices": [
+    {
+     "label": "Look closer.",
+     "success": {
+      "text": "You stand still, and make yourself really look.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-real",
+        "min": 1,
+        "then": [],
+        "text": "The palms have shadows. A bird is drinking at the edge, and the water ripples where it drinks."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-real",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Look at the palms. The sun is high and hard, and they cast no shadows at all."
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-looked",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "desert-mirages-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-36-pool"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-looked",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go to it.",
+     "success": {
+      "text": "It's real. Cool, and sweet, and real. Not an oasis, but enough. Water +1 (flasks hold four).",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-mirage-done",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-at",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-dunes"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-at",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-storm"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-real",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Go to it.",
+     "success": {
+      "text": "The palms turn round. They have faces.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "cacturne"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "desert-mirage-done",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-dunes"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-storm"
+          }
+         ]
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "desert-mirage-done",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-dunes"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-storm"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "desert-mirage-done",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-dunes"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-storm"
+          }
+         ]
+        }
+       ],
+       "rule": {
+        "gn": "desert"
+       },
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-real",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You turn away. When you look back, it's still there. Or it isn't.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-mirage-done",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-at",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-dunes"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-at",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-storm"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-36-chest",
+   "name": "The Great Desert: A Chest on a Dune",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    },
+    {
+     "id": "water-n",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: you check the flasks. Enough, for now."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sandile",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "A chest, half out of the sand on the crest of a dune, its lock rusted open.",
+   "choices": [
+    {
+     "label": "Look closer.",
+     "success": {
+      "text": "You stand still, and make yourself really look.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-real",
+        "min": 1,
+        "then": [],
+        "text": "The sand round it's smooth. Nobody's been near it in years. The wind has."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-real",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Footprints lead up to it. None lead away."
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-looked",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "desert-mirages-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-36-chest"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-looked",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go to it.",
+     "success": {
+      "text": "It's old, and real, and full of sand, and at the bottom something the sand kept safe.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "relic-copper",
+         "relic-silver",
+         "rare-bone",
+         "light-clay",
+         "sun-stone"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-mirage-done",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-at",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-dunes"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-at",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-storm"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-real",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Go to it.",
+     "success": {
+      "text": "The dune gives way. It was a pit all along, and the Sandile at the bottom have been waiting.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 2,
+       "species": [
+        "sandile",
+        "krokorok"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "desert-mirage-done",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-dunes"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-storm"
+          }
+         ]
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "desert-mirage-done",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-dunes"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-storm"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "desert-mirage-done",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-dunes"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-storm"
+          }
+         ]
+        }
+       ],
+       "rule": {
+        "gn": "desert"
+       },
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-real",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You turn away. When you look back, it's still there. Or it isn't.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-mirage-done",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-at",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-dunes"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-at",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-storm"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-36-figure",
+   "name": "The Great Desert: A Figure, Waving",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    },
+    {
+     "id": "water-n",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: you check the flasks. Enough, for now."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sigilyph",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "A figure on a far dune, waving to you. Both arms, over its head. Waving.",
+   "choices": [
+    {
+     "label": "Look closer.",
+     "success": {
+      "text": "You stand still, and make yourself really look.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-real",
+        "min": 1,
+        "then": [],
+        "text": "It stops waving, and sits down in the sand, and puts its head in its hands. A person. Tired."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-real",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "It waves exactly the same way. And again. The same way, to the inch."
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-looked",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "desert-mirages-read",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-36-figure"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-looked",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go to it.",
+     "success": {
+      "text": "By the time you get there, they've gone on ahead. Only a dip in the sand where somebody sat, and a dropped map, upside down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "desert-saw-idris",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-mirage-done",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-at",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-dunes"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-at",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-storm"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-real",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Go to it.",
+     "success": {
+      "text": "The figure folds its arms into wings. It was never waving. It was guarding: behind it, the top of a buried ruin.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sigilyph"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "relic-copper",
+          "relic-silver",
+          "rare-bone",
+          "light-clay",
+          "sun-stone"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "desert-sigilyph-ruin",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "desert-mirage-done",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-dunes"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-storm"
+          }
+         ]
+        }
+       ],
+       "caught": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "relic-copper",
+          "relic-silver",
+          "rare-bone",
+          "light-clay",
+          "sun-stone"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "desert-sigilyph-ruin",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "desert-mirage-done",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-dunes"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-storm"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "relic-copper",
+          "relic-silver",
+          "rare-bone",
+          "light-clay",
+          "sun-stone"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "desert-sigilyph-ruin",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "desert-mirage-done",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-dunes"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-at",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-36-storm"
+          }
+         ]
+        }
+       ],
+       "rule": {
+        "gn": "desert"
+       },
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-real",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You turn away. When you look back, it's still there. Or it isn't.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-mirage-done",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-at",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-dunes"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-at",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-storm"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-36-oasis-1",
+   "name": "The Great Desert: The First Oasis",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "herd",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Idris: \"Wait. The Deep Savanna, the Donphan? That was you? Everyone's heard. Keep your water. I've got some.\""
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    },
+    {
+     "id": "water-n",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: you check the flasks. Enough, for now."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "cacnea",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "Water. Real water, and real palms, and real shade. You've never been so glad of shade.\n\n*Someone's sitting under a palm with a map held upside down.*\n\nThe traveller, Idris Calloway: \"Don't tell me. I'll get it. ...It's the other way up, isn't it.\"\n\nIdris: \"I've been here before. Thirty years ago. You'd think I'd remember a thing like a desert.\"",
+   "choices": [
+    {
+     "label": "Where are you going?",
+     "success": {
+      "text": "Idris: \"To see someone. If they're still there. They might not remember me either.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "desert-where",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-36-oasis-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-where",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Walk with me.",
+     "success": {
+      "text": "Idris folds the map the right way up, and walks with you to the edge of the shade. \"I walk slow. Go on. I'll catch you up.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-water",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "You fill every flask to the brim. Water: 4."
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-sight",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "desert-goggles",
+        "if": [
+         {
+          "kind": "gn",
+          "test": "holds",
+          "key": "safety-goggles"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-goggles",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-sight",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "desert-guided",
+        "if": [
+         {
+          "kind": "gn",
+          "test": "hasAbility",
+          "key": "desert-guide"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-guided",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-sight",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-at",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-looked",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-mirage-done",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "desert-seen",
+        "weights": [
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "desert-real",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-36-storm"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Here, take some water.",
+     "success": {
+      "text": "Idris drinks like someone who'd stopped hoping. \"Thank you. I mean it.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-gave-water",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-36-oasis-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-gave-water",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "savanna-helped",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Here, take some water.",
+     "success": {
+      "text": "Idris waves it away, then takes a sip anyway, to be polite. It costs you nothing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-gave-water",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-36-oasis-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-gave-water",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "savanna-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-36-storm",
+   "name": "The Great Desert: The Storm",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "sight",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-sight",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Through the sand, you can make out what's ahead: palms. A second oasis.*"
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    },
+    {
+     "id": "water-n",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: you check the flasks. Enough, for now."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "hippowdon",
+    "tint": "#c79a52",
+    "effect": "fog"
+   },
+   "intro": "A sandstorm, a wall of it, brown to the sky. You walk into it with your eyes shut.\n\nThe next stretch is gone: no shape, no sound, nothing you could put a name to.",
+   "choices": [
+    {
+     "label": "Look at the shimmer.",
+     "success": {
+      "text": "You shade your eyes, and look.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-seen",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-pool"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-seen",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-chest"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-seen",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-36-figure"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-mirage-done",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Send a Flying-type up.",
+     "success": {
+      "text": "Your Flying-type climbs out of the storm, and circles, and comes back down to the left. Palms, that way. Water.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-sight",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-36-storm"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "flying"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "desert-sight",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Head down, one foot in front of the other.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-36-oasis-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-36-oasis-2",
+   "name": "The Great Desert: The Second Oasis",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    },
+    {
+     "id": "water-n",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: you check the flasks. Enough, for now."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "sandile",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "The second oasis. Smaller, muddier, and yours.\n\n*Idris, sitting in the same way, with no pack, no boots and no map.*\n\nIdris: \"Sandile. A whole family. Very organised. They took the boots *first.* I respect that.\"",
+   "choices": [
+    {
+     "label": "I'll get your things back.",
+     "success": {
+      "text": "Idris points, with a bare foot, at a line of very small, very proud tracks. \"That way. Mind the little one. It bites.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-water",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "You fill every flask to the brim. Water: 4."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-36-den"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take my spare.",
+     "success": {
+      "text": "You hand over your spare pair of socks and your second flask. It isn't boots. Idris treats it like it's more than boots.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-water",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "You fill every flask to the brim. Water: 4."
+       },
+       {
+        "kind": "flag",
+        "key": "desert-spare",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-36-ruin"
+       }
+      ]
+     }
+    },
+    {
+     "label": "You should turn back.",
+     "success": {
+      "text": "Idris: \"No. I've turned back from this four times in thirty years. Not again.\"\n\nThey say it gently, and they don't look at you while they say it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-water",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "You fill every flask to the brim. Water: 4."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-36-ruin"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-36-den",
+   "name": "The Great Desert: The Sandile Den",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    },
+    {
+     "id": "water-n",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: you check the flasks. Enough, for now."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "krookodile",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "A hollow in the dune, very tidy. A pair of boots, side by side, the way you'd leave them at a door.\n\nA family of Sandile is sitting on the pack. The biggest one looks at you over sunglasses it can't possibly own.",
+   "choices": [
+    {
+     "label": "Battle them for it.",
+     "success": {
+      "text": "The family rises as one. Very organised.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 3,
+       "species": [
+        "sandile",
+        "krokorok",
+        "krookodile"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-36-pack"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-36-pack"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-36-pack-lost"
+        }
+       ],
+       "rule": {
+        "gn": "desert"
+       },
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Trade them some water.",
+     "success": {
+      "text": "You pour a flask into a hollow in the rock. They consider it. Then they get off the pack, one by one, and drink.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-36-pack"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-36-pack",
+   "name": "The Great Desert: The Pack",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    },
+    {
+     "id": "water-n",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: you check the flasks. Enough, for now."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sandile",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "The pack, the boots, the map. At the bottom of the pack, folded small, a child's drawing, very old.\n\nA small figure on the back of something with wings.",
+   "choices": [
+    {
+     "label": "Take them back to Idris.",
+     "success": {
+      "text": "Idris puts the boots on first. Then they see the drawing's been looked at, and go quiet, and fold it away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "desert-pack",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-36-ruin"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-36-pack-lost",
+   "name": "The Great Desert: Very Organised",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    },
+    {
+     "id": "water-n",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: you check the flasks. Enough, for now."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sandile",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "The Sandile family sits back down on the pack. You were outnumbered, and they were organised.",
+   "choices": [
+    {
+     "label": "Go back without it.",
+     "success": {
+      "text": "Idris laughs when they see your face. \"I told you. Very organised.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-36-ruin"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-36-ruin",
+   "name": "The Great Desert: The Buried Ruin",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    },
+    {
+     "id": "water-n",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: you check the flasks. Enough, for now."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "baltoy",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "Pillars in the sand, tops only, like the masts of a buried ship. Baltoy turn slowly between them, humming.\n\nThree places look dug-at: by the leaning pillar, by the broken arch, by the step that goes down into nothing.",
+   "choices": [
+    {
+     "label": "Dig with a Ground move.",
+     "success": {
+      "text": "Your Pokémon digs like it was made for it, and it was. Something old comes up with the sand.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "relic-copper",
+         "relic-silver",
+         "rare-bone",
+         "light-clay",
+         "sun-stone"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "desert-dug",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-36-ruin"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-dug",
+       "atLeast": 0,
+       "atMost": 2
+      },
+      {
+       "kind": "gn",
+       "test": "moveType",
+       "types": [
+        "ground"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Dig by hand.",
+     "success": {
+      "text": "It takes a long time. The sun moves. Your flasks get lighter. Then: something old, in your hands.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "relic-copper",
+         "relic-silver",
+         "rare-bone",
+         "light-clay",
+         "sun-stone"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "desert-dug",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-36-ruin"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-dug",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The Baltoy watch you go. One of them stops turning, for a moment.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-36-oasis-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-36-oasis-3",
+   "name": "The Great Desert: The Third Oasis",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    },
+    {
+     "id": "water-n",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: you check the flasks. Enough, for now."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "vibrava",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "*Idris is lying on their back in the shallows, laughing at the sky.*\n\nIdris: \"I remembered. I remembered which way. It was never on the map. It's where the wind *stops.*\"\n\nIdris: \"I was six. I wandered off from the caravan. Two days. I don't remember being frightened; I remember being tired.\"\n\nIdris: \"And then something landed. It didn't ask me anything. It let me climb on. It flew me to the Last Well and it left before anyone came out.\"\n\nIdris: \"I never said thank you. I was six. I've been trying to get back and say it ever since.\"",
+   "choices": [
+    {
+     "label": "Come with me. We'll find it.",
+     "success": {
+      "text": "Idris gets up, dripping, and laughs again. \"We. All right. We.\" They carry their own water.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-water",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "You fill every flask to the brim. Water: 4."
+       },
+       {
+        "kind": "flag",
+        "key": "desert-traveller-with",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-36-hidden"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'll tell it for you.",
+     "success": {
+      "text": "Idris looks at you for a long moment. Then they unfold the drawing and put it in your hands.\n\n\"Tell it I got lost. Tell it I was trying.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-water",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "You fill every flask to the brim. Water: 4."
+       },
+       {
+        "kind": "flag",
+        "key": "desert-drawing",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-36-hidden"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Good luck.",
+     "success": {
+      "text": "Idris raises a hand from the water. \"You too.\" When you look back, they're still lying there, looking at the sky.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-water",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "You fill every flask to the brim. Water: 4."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Water: 4 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-36-hidden"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-36-hidden",
+   "name": "The Great Desert: The Hidden Oasis",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "idris",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-traveller-with",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Idris stops beside you. Their hand is shaking.*"
+    },
+    {
+     "id": "drawing",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-drawing",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*The drawing's in your pocket. You can feel the fold of it.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "flygon",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "*The wind stops.*\n\n*Green. A deep pool. Trapinch in the sand at the edge, dozens, small.*\n\n*On a rock over the water, something old, with red lenses gone pale, and wings with pieces missing.*",
+   "choices": [
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "*Idris stops. The Flygon lifts its head. It looks for a long time.*\n\n*Then it gets down off the rock, and lowers one wing, the way it did thirty years ago.*\n\nIdris: \"...Thank you. I'm sorry it took so long. I got lost.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-flygon",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "desert-flygon-met",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "At the hidden oasis, an old Flygon lowered one wing for someone it had carried thirty years before.",
+        "importance": 90
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-36-after"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-traveller-with",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Hold out the drawing.",
+     "success": {
+      "text": "It comes down off the rock. It sniffs the drawing, for a long time.\n\nIt makes a sound you've never heard a Pokémon make. Then it steps aside, and lets you drink.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-flygon",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "desert-flygon-met",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-36-after"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-traveller-with",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "desert-drawing",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Battle the Flygon.",
+     "success": {
+      "text": "It doesn't leave the rock. It doesn't need to.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "flygon"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "desert-flygon",
+         "n": 2
+        },
+        {
+         "kind": "flag",
+         "key": "desert-flygon-fought",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-36-after"
+        }
+       ],
+       "exact": true,
+       "foeMoves": [
+        "earthquake",
+        "dragon-claw",
+        "sandstorm",
+        "roost"
+       ],
+       "rule": {
+        "gn": "desert",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-36-turned"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-traveller-with",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "desert-drawing",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-36-after",
+   "name": "The Great Desert: Where the Wind Stops",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "together",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-traveller-with",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*They sit together by the water. Idris is talking. The Flygon's eyes are closed. You're not needed.*"
+    },
+    {
+     "id": "empty",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-flygon",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "*Later, Idris arrives at the oasis. There's nothing on the rock. They sit down. That's the last you see of them.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "trapinch",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "The pool is cold and deep. Trapinch watch you from the sand at its edge, dozens of them, small.",
+   "choices": [
+    {
+     "label": "Take the one it nudges forward.",
+     "success": {
+      "text": "The Flygon puts its nose to one Trapinch, and pushes, gently, toward you. It trots over as if it knows the way.\n\nYou leave the two of them by the water.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "trapinch"
+        ],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1,
+        "ability": "desert-guide"
+       },
+       {
+        "kind": "item",
+        "id": "soft-sand",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "desert-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-traveller-with",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Take a Trapinch from the oasis.",
+     "success": {
+      "text": "One Trapinch follows you to the edge of the green, and over it, and keeps following.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "trapinch"
+        ],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "soft-sand",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "desert-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-traveller-with",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-36-turned",
+   "name": "The Great Desert: Turned Away",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "remembers": [
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    },
+    {
+     "id": "water-n",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: you check the flasks. Enough, for now."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "flygon",
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "Its wings beat once, and the sand stands up, and you're walking back the way you came with your eyes shut.",
+   "choices": [
+    {
+     "label": "Walk back.",
+     "success": {
+      "text": "When the sand settles, there's no oasis behind you. There never was, the sand says.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soft-sand",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "desert-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-36-postcard",
+   "name": "A Postcard",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Survival"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "desert-flygon",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "flag",
+     "key": "desert-traveller-with",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "desert-region"
+    },
+    {
+     "kind": "flag",
+     "key": "desert-postcard",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#c79a52",
+    "effect": "none"
+   },
+   "intro": "A postcard, waiting for you, sent care of the Pokémon Center. No message. Just a photograph.\n\nAn old Flygon, asleep in the shade of a palm. Beside it, a pair of boots, side by side, the way you'd leave them at a door.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You put it somewhere you'll see it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "desert-postcard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

@@ -1600,6 +1600,11 @@
   "description": "It can't be forced to switch out, and it takes 10% less damage from super-effective hits."
  },
  {
+  "id": "desert-guide",
+  "name": "Desert Guide",
+  "description": "Out of battle: while it's in the party, sandstorms don't hide the next node."
+ },
+ {
   "id": "grounded-heart",
   "name": "Grounded Heart",
   "description": "Once per battle, when it or its partner would be paralysed, they aren't, and it gains +1 Speed."
