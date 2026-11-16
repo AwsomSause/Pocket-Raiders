@@ -277,7 +277,7 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     case 'barterHas':
     case 'bagHas':
     case 'keptGoods':
-    case 'hasEgg':
+    case 'eggOf':
       return coConditionMet(content, run, c);
     case 'partyBlissful':
       return run.party.some((m) => m.blissful);
@@ -522,7 +522,7 @@ export function conditionText(content: Content, c: EventCondition): string {
     case 'barterHas':
     case 'bagHas':
     case 'keptGoods':
-    case 'hasEgg':
+    case 'eggOf':
       return coConditionText(c);
     case 'partyBlissful':
       return 'Needs a Blissful Pokémon in your party';

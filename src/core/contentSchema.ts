@@ -2972,7 +2972,7 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** Catalog Overhaul (families-c): the player kept stolen or found goods (any `honest-kept-*` flag). */
   z.object({ kind: z.literal('keptGoods') }),
   /** Catalog Overhaul SF59: the player still carries an unhatched Egg of this species. */
-  z.object({ kind: z.literal('hasEgg'), species: z.string().min(1) }),
+  z.object({ kind: z.literal('eggOf'), species: z.string().min(1) }),
   z.object({ kind: z.literal('barterHas'), tier: z.enum(['common', 'uncommon', 'rare']), berry: z.boolean().default(false) }),
   /** Catalog Overhaul (families-c): the bag holds `count` of these items (or of any item ending in `suffix`, like "-berry"). */
   z.object({ kind: z.literal('bagHas'), ids: z.array(z.string()).default([]), suffix: z.string().optional(), count: z.number().int().min(1).default(1), label: z.string().optional() }),

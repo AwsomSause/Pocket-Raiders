@@ -222,7 +222,7 @@ const SF58: Json[] = [
 // ---------- SF59 The Taken Egg ----------
 
 const EGG_SPECIES = 'starly';
-const HAS_EGG: Json = { kind: 'hasEgg', species: EGG_SPECIES };
+const HAS_EGG: Json = { kind: 'eggOf', species: EGG_SPECIES };
 const GIVE_EGG: Json = { kind: 'returnEgg', species: EGG_SPECIES };
 const SF59: Json[] = [
   {

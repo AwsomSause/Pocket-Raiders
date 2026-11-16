@@ -173,12 +173,12 @@ export function coRegionPick(run: Pick<Run, 'seed' | 'regionIndex' | 'stage'>, t
 
 // ---------- conditions and effects ----------
 
-export type CoCondition = Extract<EventCondition, { kind: 'record' | 'barterHas' | 'bagHas' | 'keptGoods' | 'hasEgg' }>;
+export type CoCondition = Extract<EventCondition, { kind: 'record' | 'barterHas' | 'bagHas' | 'keptGoods' | 'eggOf' }>;
 export function coConditionMet(content: Content, run: Run, c: CoCondition): boolean {
   switch (c.kind) {
     case 'record': return recordOf(run) === c.is;
     case 'keptGoods': return keptGoods(run);
-    case 'hasEgg': return hasEgg(run, c.species);
+    case 'eggOf': return hasEgg(run, c.species);
     case 'barterHas': return barterHas(content, run, c.tier, c.berry);
     case 'bagHas': return bagCount(run, c.ids, c.suffix) >= c.count;
   }
@@ -187,7 +187,7 @@ export function coConditionText(c: CoCondition): string {
   switch (c.kind) {
     case 'record': return c.is === 'low' ? 'Only if the road thinks badly of you' : c.is === 'high' ? 'Needs a good name on this road' : 'Needs an ordinary name on this road';
     case 'keptGoods': return 'Only if you kept something that was not yours';
-    case 'hasEgg': return 'Needs the Egg';
+    case 'eggOf': return 'Needs the Egg';
     case 'barterHas': return `Needs a${c.tier === 'uncommon' ? 'n Uncommon' : c.tier === 'rare' ? ' Rare' : ' Common'} item to trade${c.berry ? ', and a Berry' : ''}`;
     case 'bagHas': return `Needs ${c.label ?? (c.suffix === '-berry' ? 'a Berry' : 'the right item')}${c.count > 1 ? ` (${c.count})` : ''}`;
   }

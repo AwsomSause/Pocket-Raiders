@@ -2212,7 +2212,7 @@
      "label": "I have it.",
      "requires": [
       {
-       "kind": "hasEgg",
+       "kind": "eggOf",
        "species": "starly"
       }
      ],
@@ -2371,7 +2371,7 @@
      "label": "Give the egg back.",
      "requires": [
       {
-       "kind": "hasEgg",
+       "kind": "eggOf",
        "species": "starly"
       }
      ],
@@ -2509,7 +2509,7 @@
      "label": "Give the egg back.",
      "requires": [
       {
-       "kind": "hasEgg",
+       "kind": "eggOf",
        "species": "starly"
       }
      ],
@@ -2621,7 +2621,7 @@
      "label": "Watch it hatch.",
      "requires": [
       {
-       "kind": "hasEgg",
+       "kind": "eggOf",
        "species": "starly"
       }
      ],
@@ -2759,7 +2759,7 @@
      "id": "kept",
      "when": [
       {
-       "kind": "hasEgg",
+       "kind": "eggOf",
        "species": "starly"
       }
      ],
