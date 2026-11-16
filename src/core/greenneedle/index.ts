@@ -229,6 +229,9 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'duelistLeft') return gnFlag(run, 'duelist-left') > 0;
   const stamped = gnFlag(run, c.key!);
   if (c.test === 'laterStage') return stamped > 0 && stamped < stage;
+  // Exactly (`stageGap`) or at least (`stageGapMin`) `n` stages after the stamp (gn.new.02's S(n+1) and S(n+2); gn.new.03's 16 stages on).
+  if (c.test === 'stageGap') return stamped > 0 && stage - stamped === (c.n ?? 1);
+  if (c.test === 'stageGapMin') return stamped > 0 && stage - stamped >= (c.n ?? 1);
   if (c.test === 'sameStage') return stamped === stage;
   if (c.test === 'notThisStage') return stamped !== stage;
   if (c.test === 'notThisRegion') return stamped !== run.regionIndex + 1;

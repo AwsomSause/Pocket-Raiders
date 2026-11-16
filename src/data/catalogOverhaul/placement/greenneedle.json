@@ -4134,11 +4134,11 @@
  },
  "gn-new-02-platform": {
   "gn": "gn.new.02",
-  "shape": "Chain",
   "earliest": "A2",
   "level": "No battles",
   "often": "run",
   "badge": "own",
+  "chain": "gn.new.02",
   "beats": [
    {
     "beat": "The platform (must-see)",
@@ -4146,8 +4146,8 @@
     "stage": "S(n)",
     "home": 5,
     "window": [
-     3,
-     8
+     5,
+     15
     ]
    },
    {
@@ -4156,8 +4156,8 @@
     "stage": "S(n)",
     "home": 8,
     "window": [
-     6,
-     11
+     8,
+     12
     ]
    },
    {
@@ -4166,8 +4166,8 @@
     "stage": "S(n+1)",
     "home": 7,
     "window": [
-     5,
-     10
+     7,
+     15
     ]
    },
    {
@@ -4176,7 +4176,7 @@
     "stage": "S(n+2)",
     "home": 12,
     "window": [
-     10,
+     12,
      15
     ]
    },
@@ -4191,12 +4191,14 @@
     ]
    }
   ],
+  "shape": "Chain",
+  "beat": 1,
   "sits": "must-see",
   "attaches": "before",
   "home": 5,
   "window": [
-   3,
-   8
+   5,
+   15
   ],
   "note": "Badge: a small bowl. Needs a city stage; falls back to step 15. Once a run (the doc says once per save; no memory across runs).",
   "kinds": [
@@ -4209,11 +4211,11 @@
  },
  "gn-new-02-porter": {
   "gn": "gn.new.02",
-  "shape": "Chain",
   "earliest": "A2",
   "level": "No battles",
   "often": "run",
   "badge": "own",
+  "chain": "gn.new.02",
   "beats": [
    {
     "beat": "The platform (must-see)",
@@ -4221,8 +4223,8 @@
     "stage": "S(n)",
     "home": 5,
     "window": [
-     3,
-     8
+     5,
+     15
     ]
    },
    {
@@ -4231,8 +4233,8 @@
     "stage": "S(n)",
     "home": 8,
     "window": [
-     6,
-     11
+     8,
+     12
     ]
    },
    {
@@ -4241,8 +4243,8 @@
     "stage": "S(n+1)",
     "home": 7,
     "window": [
-     5,
-     10
+     7,
+     15
     ]
    },
    {
@@ -4251,7 +4253,7 @@
     "stage": "S(n+2)",
     "home": 12,
     "window": [
-     10,
+     12,
      15
     ]
    },
@@ -4266,28 +4268,28 @@
     ]
    }
   ],
+  "shape": "World Event",
+  "beat": 2,
   "sits": "optional",
   "attaches": "after",
   "home": 8,
   "window": [
-   6,
-   11
+   8,
+   12
   ],
   "kinds": [
    "Miniature Episode",
    "Companion Story"
   ],
-  "tags": [
-   "city"
-  ]
+  "tags": []
  },
  "gn-new-02-landlady": {
   "gn": "gn.new.02",
-  "shape": "Chain",
   "earliest": "A2",
   "level": "No battles",
   "often": "run",
   "badge": "own",
+  "chain": "gn.new.02",
   "beats": [
    {
     "beat": "The platform (must-see)",
@@ -4295,8 +4297,8 @@
     "stage": "S(n)",
     "home": 5,
     "window": [
-     3,
-     8
+     5,
+     15
     ]
    },
    {
@@ -4305,8 +4307,8 @@
     "stage": "S(n)",
     "home": 8,
     "window": [
-     6,
-     11
+     8,
+     12
     ]
    },
    {
@@ -4315,8 +4317,8 @@
     "stage": "S(n+1)",
     "home": 7,
     "window": [
-     5,
-     10
+     7,
+     15
     ]
    },
    {
@@ -4325,7 +4327,7 @@
     "stage": "S(n+2)",
     "home": 12,
     "window": [
-     10,
+     12,
      15
     ]
    },
@@ -4340,102 +4342,28 @@
     ]
    }
   ],
+  "shape": "Companion",
+  "beat": 3,
   "sits": "optional",
   "attaches": "after",
   "home": 7,
   "window": [
-   5,
-   10
-  ],
-  "kinds": [
-   "Miniature Episode",
-   "Companion Story"
-  ],
-  "tags": [
-   "city"
-  ]
- },
- "gn-new-02-clinic": {
-  "gn": "gn.new.02",
-  "shape": "Chain",
-  "earliest": "A2",
-  "level": "No battles",
-  "often": "run",
-  "badge": "own",
-  "beats": [
-   {
-    "beat": "The platform (must-see)",
-    "event": "gn-new-02-platform",
-    "stage": "S(n)",
-    "home": 5,
-    "window": [
-     3,
-     8
-    ]
-   },
-   {
-    "beat": "Errand 1: the porter's story (optional)",
-    "event": "gn-new-02-porter",
-    "stage": "S(n)",
-    "home": 8,
-    "window": [
-     6,
-     11
-    ]
-   },
-   {
-    "beat": "Errand 2: the landlady's story (optional)",
-    "event": "gn-new-02-landlady",
-    "stage": "S(n+1)",
-    "home": 7,
-    "window": [
-     5,
-     10
-    ]
-   },
-   {
-    "beat": "Errand 3: the clinic (optional)",
-    "event": "gn-new-02-clinic",
-    "stage": "S(n+2)",
-    "home": 12,
-    "window": [
-     10,
-     15
-    ]
-   },
-   {
-    "beat": "The last visit (must-see)",
-    "event": "gn-new-02-last",
-    "stage": "S(n+2)",
-    "home": 19,
-    "window": [
-     17,
-     19
-    ]
-   }
-  ],
-  "sits": "optional",
-  "attaches": "after",
-  "home": 12,
-  "window": [
-   10,
+   7,
    15
   ],
   "kinds": [
    "Miniature Episode",
    "Companion Story"
   ],
-  "tags": [
-   "city"
-  ]
+  "tags": []
  },
- "gn-new-02-last": {
+ "gn-new-02-clinic": {
   "gn": "gn.new.02",
-  "shape": "Chain",
   "earliest": "A2",
   "level": "No battles",
   "often": "run",
   "badge": "own",
+  "chain": "gn.new.02",
   "beats": [
    {
     "beat": "The platform (must-see)",
@@ -4443,8 +4371,8 @@
     "stage": "S(n)",
     "home": 5,
     "window": [
-     3,
-     8
+     5,
+     15
     ]
    },
    {
@@ -4453,8 +4381,8 @@
     "stage": "S(n)",
     "home": 8,
     "window": [
-     6,
-     11
+     8,
+     12
     ]
    },
    {
@@ -4463,8 +4391,8 @@
     "stage": "S(n+1)",
     "home": 7,
     "window": [
-     5,
-     10
+     7,
+     15
     ]
    },
    {
@@ -4473,7 +4401,7 @@
     "stage": "S(n+2)",
     "home": 12,
     "window": [
-     10,
+     12,
      15
     ]
    },
@@ -4488,6 +4416,82 @@
     ]
    }
   ],
+  "shape": "Companion",
+  "beat": 4,
+  "sits": "optional",
+  "attaches": "after",
+  "home": 12,
+  "window": [
+   12,
+   15
+  ],
+  "kinds": [
+   "Miniature Episode",
+   "Companion Story"
+  ],
+  "tags": []
+ },
+ "gn-new-02-last": {
+  "gn": "gn.new.02",
+  "earliest": "A2",
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.02",
+  "beats": [
+   {
+    "beat": "The platform (must-see)",
+    "event": "gn-new-02-platform",
+    "stage": "S(n)",
+    "home": 5,
+    "window": [
+     5,
+     15
+    ]
+   },
+   {
+    "beat": "Errand 1: the porter's story (optional)",
+    "event": "gn-new-02-porter",
+    "stage": "S(n)",
+    "home": 8,
+    "window": [
+     8,
+     12
+    ]
+   },
+   {
+    "beat": "Errand 2: the landlady's story (optional)",
+    "event": "gn-new-02-landlady",
+    "stage": "S(n+1)",
+    "home": 7,
+    "window": [
+     7,
+     15
+    ]
+   },
+   {
+    "beat": "Errand 3: the clinic (optional)",
+    "event": "gn-new-02-clinic",
+    "stage": "S(n+2)",
+    "home": 12,
+    "window": [
+     12,
+     15
+    ]
+   },
+   {
+    "beat": "The last visit (must-see)",
+    "event": "gn-new-02-last",
+    "stage": "S(n+2)",
+    "home": 19,
+    "window": [
+     17,
+     19
+    ]
+   }
+  ],
+  "shape": "Companion",
+  "beat": 5,
   "sits": "must-see",
   "attaches": "before",
   "home": 19,
@@ -4499,9 +4503,82 @@
    "Miniature Episode",
    "Companion Story"
   ],
-  "tags": [
-   "city"
-  ]
+  "tags": []
+ },
+ "gn-new-02-last-sit": {
+  "gn": "gn.new.02",
+  "earliest": "A2",
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.new.02",
+  "beats": [
+   {
+    "beat": "The platform (must-see)",
+    "event": "gn-new-02-platform",
+    "stage": "S(n)",
+    "home": 5,
+    "window": [
+     5,
+     15
+    ]
+   },
+   {
+    "beat": "Errand 1: the porter's story (optional)",
+    "event": "gn-new-02-porter",
+    "stage": "S(n)",
+    "home": 8,
+    "window": [
+     8,
+     12
+    ]
+   },
+   {
+    "beat": "Errand 2: the landlady's story (optional)",
+    "event": "gn-new-02-landlady",
+    "stage": "S(n+1)",
+    "home": 7,
+    "window": [
+     7,
+     15
+    ]
+   },
+   {
+    "beat": "Errand 3: the clinic (optional)",
+    "event": "gn-new-02-clinic",
+    "stage": "S(n+2)",
+    "home": 12,
+    "window": [
+     12,
+     15
+    ]
+   },
+   {
+    "beat": "The last visit (must-see)",
+    "event": "gn-new-02-last",
+    "stage": "S(n+2)",
+    "home": 19,
+    "window": [
+     17,
+     19
+    ]
+   }
+  ],
+  "shape": "Companion",
+  "beat": 5,
+  "sits": "must-see",
+  "attaches": "before",
+  "home": 19,
+  "window": [
+   17,
+   19
+  ],
+  "note": "Only ever sat: the last visit is on the platform (\"Sit one more time.\").",
+  "kinds": [
+   "Miniature Episode",
+   "Companion Story"
+  ],
+  "tags": []
  },
  "gn-new-02-holiday": {
   "gn": "gn.new.02",
@@ -4517,7 +4594,7 @@
   "level": "None",
   "often": "run",
   "badge": "own",
-  "note": "Afterstory: the clerk on holiday, met at a step 5 town in the next region.",
+  "note": "Afterstory (if reunited): the clerk on holiday, met at a step 5 town in the next region.",
   "kinds": [
    "Reunion Episode"
   ],
