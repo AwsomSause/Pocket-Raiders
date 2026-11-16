@@ -2557,6 +2557,406 @@
      }
     }
    ]
+  },
+  {
+   "id": "plush-workshop-blue",
+   "name": "Plush Workshop: Blue Pals",
+   "group": "Plush Workshop",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A stall hung with stitched Canari Pals, every one a little different. **Seamstress, Mrs. Brisby**, looks up over her half-moon glasses, a needle in her teeth.\n\n**Mrs. Brisby:** \"Bring me a blue one, the colour of deep water. I'll sew it up a level. Thread costs money; love is free.\"\n\nA card on the counter, in neat stitching: up to three levels, one Pal of each colour.",
+   "choices": [
+    {
+     "label": "Sew it up a level (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      },
+      {
+       "kind": "itemAny",
+       "ids": [
+        "blue-canari-pal-1",
+        "blue-canari-pal-2"
+       ]
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "item",
+         "id": "blue-canari-pal-2"
+        }
+       ],
+       "text": "She turns your Lv.2 Pal over twice, then reaches for a spool of gold thread she keeps in a tin.\n\n**Mrs. Brisby:** \"Gold at the seams. That's level three, as high as they go.\" She hands it back. \"Look after it. It's looked after you.\"",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -100
+        },
+        {
+         "kind": "loseItem",
+         "id": "blue-canari-pal-2"
+        },
+        {
+         "kind": "item",
+         "id": "blue-canari-pal-3",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She takes your Lv.1 Pal in both hands as if it might wake up. New stitching, a bigger bow, and a careful little patch where the old seam was thin.\n\n**Mrs. Brisby:** \"There. Level two. It looks happier already. Don't tell it I said so.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "loseItem",
+        "id": "blue-canari-pal-1"
+       },
+       {
+        "kind": "item",
+        "id": "blue-canari-pal-2",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "**Mrs. Brisby:** \"Come back with one when you're ready, dear. I'm not going anywhere. My knees saw to that.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "plush-workshop-gold",
+   "name": "Plush Workshop: Gold Pals",
+   "group": "Plush Workshop",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A stall hung with stitched Canari Pals, every one a little different. **Seamstress, Mrs. Brisby**, looks up over her half-moon glasses, a needle in her teeth.\n\n**Mrs. Brisby:** \"Bring me a gold one, the colour of a Nugget in the sun. I'll sew it up a level. Thread costs money; love is free.\"\n\nA card on the counter, in neat stitching: up to three levels, one Pal of each colour.",
+   "choices": [
+    {
+     "label": "Sew it up a level (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      },
+      {
+       "kind": "itemAny",
+       "ids": [
+        "gold-canari-pal-1",
+        "gold-canari-pal-2"
+       ]
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "item",
+         "id": "gold-canari-pal-2"
+        }
+       ],
+       "text": "She turns your Lv.2 Pal over twice, then reaches for a spool of gold thread she keeps in a tin.\n\n**Mrs. Brisby:** \"Gold at the seams. That's level three, as high as they go.\" She hands it back. \"Look after it. It's looked after you.\"",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -100
+        },
+        {
+         "kind": "loseItem",
+         "id": "gold-canari-pal-2"
+        },
+        {
+         "kind": "item",
+         "id": "gold-canari-pal-3",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She takes your Lv.1 Pal in both hands as if it might wake up. New stitching, a bigger bow, and a careful little patch where the old seam was thin.\n\n**Mrs. Brisby:** \"There. Level two. It looks happier already. Don't tell it I said so.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "loseItem",
+        "id": "gold-canari-pal-1"
+       },
+       {
+        "kind": "item",
+        "id": "gold-canari-pal-2",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "**Mrs. Brisby:** \"Come back with one when you're ready, dear. I'm not going anywhere. My knees saw to that.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "plush-workshop-green",
+   "name": "Plush Workshop: Green Pals",
+   "group": "Plush Workshop",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A stall hung with stitched Canari Pals, every one a little different. **Seamstress, Mrs. Brisby**, looks up over her half-moon glasses, a needle in her teeth.\n\n**Mrs. Brisby:** \"Bring me a green one, the colour of new leaves. I'll sew it up a level. Thread costs money; love is free.\"\n\nA card on the counter, in neat stitching: up to three levels, one Pal of each colour.",
+   "choices": [
+    {
+     "label": "Sew it up a level (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      },
+      {
+       "kind": "itemAny",
+       "ids": [
+        "green-canari-pal-1",
+        "green-canari-pal-2"
+       ]
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "item",
+         "id": "green-canari-pal-2"
+        }
+       ],
+       "text": "She turns your Lv.2 Pal over twice, then reaches for a spool of gold thread she keeps in a tin.\n\n**Mrs. Brisby:** \"Gold at the seams. That's level three, as high as they go.\" She hands it back. \"Look after it. It's looked after you.\"",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -100
+        },
+        {
+         "kind": "loseItem",
+         "id": "green-canari-pal-2"
+        },
+        {
+         "kind": "item",
+         "id": "green-canari-pal-3",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She takes your Lv.1 Pal in both hands as if it might wake up. New stitching, a bigger bow, and a careful little patch where the old seam was thin.\n\n**Mrs. Brisby:** \"There. Level two. It looks happier already. Don't tell it I said so.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "loseItem",
+        "id": "green-canari-pal-1"
+       },
+       {
+        "kind": "item",
+        "id": "green-canari-pal-2",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "**Mrs. Brisby:** \"Come back with one when you're ready, dear. I'm not going anywhere. My knees saw to that.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "plush-workshop-pink",
+   "name": "Plush Workshop: Pink Pals",
+   "group": "Plush Workshop",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A stall hung with stitched Canari Pals, every one a little different. **Seamstress, Mrs. Brisby**, looks up over her half-moon glasses, a needle in her teeth.\n\n**Mrs. Brisby:** \"Bring me a pink one, the colour of a Pecha Berry. I'll sew it up a level. Thread costs money; love is free.\"\n\nA card on the counter, in neat stitching: up to three levels, one Pal of each colour.",
+   "choices": [
+    {
+     "label": "Sew it up a level (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      },
+      {
+       "kind": "itemAny",
+       "ids": [
+        "pink-canari-pal-1",
+        "pink-canari-pal-2"
+       ]
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "item",
+         "id": "pink-canari-pal-2"
+        }
+       ],
+       "text": "She turns your Lv.2 Pal over twice, then reaches for a spool of gold thread she keeps in a tin.\n\n**Mrs. Brisby:** \"Gold at the seams. That's level three, as high as they go.\" She hands it back. \"Look after it. It's looked after you.\"",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -100
+        },
+        {
+         "kind": "loseItem",
+         "id": "pink-canari-pal-2"
+        },
+        {
+         "kind": "item",
+         "id": "pink-canari-pal-3",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She takes your Lv.1 Pal in both hands as if it might wake up. New stitching, a bigger bow, and a careful little patch where the old seam was thin.\n\n**Mrs. Brisby:** \"There. Level two. It looks happier already. Don't tell it I said so.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "loseItem",
+        "id": "pink-canari-pal-1"
+       },
+       {
+        "kind": "item",
+        "id": "pink-canari-pal-2",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "**Mrs. Brisby:** \"Come back with one when you're ready, dear. I'm not going anywhere. My knees saw to that.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "plush-workshop-red",
+   "name": "Plush Workshop: Red Pals",
+   "group": "Plush Workshop",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A stall hung with stitched Canari Pals, every one a little different. **Seamstress, Mrs. Brisby**, looks up over her half-moon glasses, a needle in her teeth.\n\n**Mrs. Brisby:** \"Bring me a red one, the colour of a Cheri Berry. I'll sew it up a level. Thread costs money; love is free.\"\n\nA card on the counter, in neat stitching: up to three levels, one Pal of each colour.",
+   "choices": [
+    {
+     "label": "Sew it up a level (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      },
+      {
+       "kind": "itemAny",
+       "ids": [
+        "red-canari-pal-1",
+        "red-canari-pal-2"
+       ]
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "item",
+         "id": "red-canari-pal-2"
+        }
+       ],
+       "text": "She turns your Lv.2 Pal over twice, then reaches for a spool of gold thread she keeps in a tin.\n\n**Mrs. Brisby:** \"Gold at the seams. That's level three, as high as they go.\" She hands it back. \"Look after it. It's looked after you.\"",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -100
+        },
+        {
+         "kind": "loseItem",
+         "id": "red-canari-pal-2"
+        },
+        {
+         "kind": "item",
+         "id": "red-canari-pal-3",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She takes your Lv.1 Pal in both hands as if it might wake up. New stitching, a bigger bow, and a careful little patch where the old seam was thin.\n\n**Mrs. Brisby:** \"There. Level two. It looks happier already. Don't tell it I said so.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "loseItem",
+        "id": "red-canari-pal-1"
+       },
+       {
+        "kind": "item",
+        "id": "red-canari-pal-2",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "**Mrs. Brisby:** \"Come back with one when you're ready, dear. I'm not going anywhere. My knees saw to that.\"",
+      "effects": []
+     }
+    }
+   ]
   }
  ]
 }
