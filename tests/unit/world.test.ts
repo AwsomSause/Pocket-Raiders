@@ -305,7 +305,7 @@ describe('landmarks and dungeons', () => {
         continue;
       }
       for (const ch of [...e.choices, ...e.remembers.flatMap((v) => v.addChoices)]) {
-        const lists = [...[ch.success, ch.failure].flatMap((o) => [o?.effects ?? [], o?.battle?.win ?? [], o?.battle?.lose ?? []]), ...(ch.branches ?? []).map((b) => b.effects)];
+        const lists = [...[ch.success, ch.failure].flatMap((o) => [o?.effects ?? [], o?.battle?.win ?? [], o?.battle?.lose ?? [], (o?.battle && 'caught' in o.battle ? o.battle.caught : undefined) ?? []]), ...(ch.branches ?? []).map((b) => b.effects)];
         // A Greenneedle effect (`gn`) holds more effects: a `when`'s `then`, and a `route`'s `to` (an addEventFrom); a `scene` opens room `key`.
         const flat = (efs: Effect[]): Effect[] => efs.flatMap((ef) => (ef.kind === 'gn' ? [ef, ...flat([...(ef.then ?? []), ...(ef.to ? [ef.to] : [])] as Effect[])] : [ef]));
         for (const ef of flat(lists.flat())) {
@@ -365,6 +365,9 @@ describe('landmarks and dungeons', () => {
     for (const id of content.coPlacement?.keys() ?? []) opened.add(id);
     // gn.29: the lake opens when the Snake game ends (core/greenneedle/snakeEnd.ts psyduckFinish).
     opened.add('gn-29-lake');
+    // gn.51: the rescued Pokémon's scene opens beside a rest stop (core/greenneedle/smuggling.ts smuggleRest); gn.53: the siege's rescued Pokémon (citysiege.ts sgRest).
+    opened.add('gn-51-rest');
+    opened.add('gn-53-waiting');
     // Damian's "Go again." (gn.05) opens his next meeting, an ordinary drawn event, at once; anything else opened must be a room.
     const drawnToo = new Set(['gn-05-barn', 'gn-05-hall', 'gn-05-gym']);
     // Row 17: a rest moment opens its camp scene beside the stop (core/moments/runMoments.ts openEvent).

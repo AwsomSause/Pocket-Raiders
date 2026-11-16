@@ -29,7 +29,8 @@ function duel(o: Opts) {
 const ok = (n: number) => Number.isFinite(n) && n >= 0;
 const BATTLE_DIR = 'src/core/battle';
 const battleSource = readdirSync(BATTLE_DIR).map((f) => readFileSync(`${BATTLE_DIR}/${f}`, 'utf8')).join('\n');
-const extraSource = ['src/core/pokemon.ts', 'src/core/run.ts'].map((f) => readFileSync(f, 'utf8')).join('\n');
+// Greenneedle gn.51: Far From Home is a stat boost kept up to date at each new region (core/greenneedle/smuggling.ts).
+const extraSource = ['src/core/pokemon.ts', 'src/core/run.ts', 'src/core/greenneedle/smuggling.ts'].map((f) => readFileSync(f, 'utf8')).join('\n');
 
 describe('Eelevate (Mega Eelektross)', () => {
   it('is immune to Ground moves, Earthquake included (plain Levitate too)', () => {
