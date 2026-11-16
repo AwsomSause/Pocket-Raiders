@@ -273,9 +273,8 @@
       "text": "You tuck it inside your coat, against your chest, where it is warmest. It knocks twice. You knock back, once, on the shell, and keep going. Three ridges to go.",
       "effects": [
        {
-        "kind": "laterEvent",
-        "eventId": "aq18-climb-2",
-        "nodes": 1
+        "kind": "addEvent",
+        "eventId": "aq18-climb-2"
        }
       ]
      }
@@ -314,9 +313,8 @@
         "amount": 1
        },
        {
-        "kind": "laterEvent",
-        "eventId": "aq18-climb-3",
-        "nodes": 1
+        "kind": "addEvent",
+        "eventId": "aq18-climb-3"
        }
       ]
      }
@@ -332,9 +330,8 @@
         "amount": 1
        },
        {
-        "kind": "laterEvent",
-        "eventId": "aq18-climb-3",
-        "nodes": 1
+        "kind": "addEvent",
+        "eventId": "aq18-climb-3"
        }
       ]
      }
@@ -372,9 +369,8 @@
       "text": "You put your back to the wall and edge across with your arms round it while the stones go past like rain. Not one touches it. On the far side it looks up at you, and for the first time it is not screaming. One ridge left.",
       "effects": [
        {
-        "kind": "laterEvent",
-        "eventId": "aq18-the-top",
-        "nodes": 1
+        "kind": "addEvent",
+        "eventId": "aq18-the-top"
        }
       ]
      },
@@ -386,9 +382,8 @@
         "share": 0.15
        },
        {
-        "kind": "laterEvent",
-        "eventId": "aq18-the-top",
-        "nodes": 1
+        "kind": "addEvent",
+        "eventId": "aq18-the-top"
        }
       ]
      }

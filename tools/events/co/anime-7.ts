@@ -34,7 +34,7 @@ export const NOT_A_BUTTON: Record<string, Record<string, string>> = {};
 
 export const LIMITS: Record<string, string[]> = {
   AQ18: [
-    'The turning point "is a door": built as four scenes on the next four nodes of the map (the climb), not a chain pseudo-stage; this batch has no pseudo-stage file.',
+    'The turning point is a door: the climb is a chain pseudo-stage (ps_aq18_climb) that opens a node after the meeting; the ridge, the hatching, the ledge and the top are its rooms.',
     'The Tyranitar "comes once, in the last region": the game has no "last region" condition, so it comes once in any later region.',
     'The short script has no small scenes for the Larvitar; none are built.',
   ],
@@ -103,19 +103,19 @@ export const EVENTS: Json[] = [
   ev('aq18-climb-1', 'The First Ridge', AQ, { room: true, requires: [flagIs('aq-larv-carried')], pokemon: 'larvitar', tint: '#2a2620', effect: 'none' },
     'The first ridge. The path is loose scree, and every step slides back half a step. The egg is heavier than it was at the bottom; eggs do not get heavier, so it is your arms. The wind comes over the top cold enough to make your eyes run. Inside the shell, something turns over.',
     [
-      ch('Keep climbing.', out('You tuck it inside your coat, against your chest, where it is warmest. It knocks twice. You knock back, once, on the shell, and keep going. Three ridges to go.', later('aq18-climb-2', 1))),
+      ch('Keep climbing.', out('You tuck it inside your coat, against your chest, where it is warmest. It knocks twice. You knock back, once, on the shell, and keep going. Three ridges to go.', room('aq18-climb-2'))),
     ]),
   ev('aq18-climb-2', 'It Hatches on the Way', AQ, { room: true, requires: [flagIs('aq-larv-carried')], pokemon: 'larvitar', tint: '#2a2620', effect: 'rattle' },
     'Halfway up, it will not wait any longer. The shell cracks inside your coat and you feel it before you see it: a hard little head pushing against your ribs. Out comes a Larvitar, eyes screwed shut. It opens them. The first thing it ever sees is the drop below the path, and the wind, and a stranger. It screams. It is scared of everything, all at once, exactly as the Ranger said.',
     [
-      ch('Hold it close.', out('You fold your arms round it and turn your back to the drop so it cannot see. It screams into your coat until it runs out of scream. Then it only shakes, and holds a fold of your sleeve in its mouth, and lets itself be carried.', flag('aq18-held-close'), later('aq18-climb-3', 1))),
-      ch('Let it look at the mountain.', out('You hold it up, slowly, so it can see where it is. It goes rigid. It stares at the peaks, the sky, the long fall of stone, every bit of it too big. But it looks. It does not close its eyes again. When you tuck it back in your coat it keeps its head out, watching the path go by.', flag('aq18-saw-mountain'), later('aq18-climb-3', 1))),
+      ch('Hold it close.', out('You fold your arms round it and turn your back to the drop so it cannot see. It screams into your coat until it runs out of scream. Then it only shakes, and holds a fold of your sleeve in its mouth, and lets itself be carried.', flag('aq18-held-close'), room('aq18-climb-3'))),
+      ch('Let it look at the mountain.', out('You hold it up, slowly, so it can see where it is. It goes rigid. It stares at the peaks, the sky, the long fall of stone, every bit of it too big. But it looks. It does not close its eyes again. When you tuck it back in your coat it keeps its head out, watching the path go by.', flag('aq18-saw-mountain'), room('aq18-climb-3'))),
     ]),
   ev('aq18-climb-3', 'The Narrow Ledge', AQ, { room: true, requires: [flagIs('aq-larv-carried')], pokemon: 'larvitar', tint: '#2a2620', effect: 'shake' },
     'The third ridge is a ledge with a wall on one side and nothing on the other. A rumble starts somewhere above, and small stones begin to come down, then bigger ones. The Larvitar presses itself flat against you, shaking so hard you can feel its heartbeat through your coat. There is no going back down with it now.',
     [
-      ch('Brace and cross.', out('You put your back to the wall and edge across with your arms round it while the stones go past like rain. Not one touches it. On the far side it looks up at you, and for the first time it is not screaming. One ridge left.', later('aq18-the-top', 1)),
-        { prompt: { id: 'brace-hold', needs: 'ok' }, fail: out('A stone catches your shoulder, then another. You curl round it and take every one. Your Pokémon scramble across after you, bruised. On the far side the Larvitar looks up at you with its whole face, and for the first time it is not screaming. One ridge left.', hurt(0.15), later('aq18-the-top', 1)) }),
+      ch('Brace and cross.', out('You put your back to the wall and edge across with your arms round it while the stones go past like rain. Not one touches it. On the far side it looks up at you, and for the first time it is not screaming. One ridge left.', room('aq18-the-top')),
+        { prompt: { id: 'brace-hold', needs: 'ok' }, fail: out('A stone catches your shoulder, then another. You curl round it and take every one. Your Pokémon scramble across after you, bruised. On the far side the Larvitar looks up at you with its whole face, and for the first time it is not screaming. One ridge left.', hurt(0.15), room('aq18-the-top')) }),
     ]),
   ev('aq18-the-top', 'Carried Home', AQ, { room: true, requires: [flagIs('aq-larv-carried')], cast: ['trainer.pr/ranger_m'], pokemon: 'larvitar', tint: '#2a2620', effect: 'none',
     remembers: [
