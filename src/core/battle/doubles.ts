@@ -327,6 +327,7 @@ export function startDoubles(ctx: BattleContext): BattleEvent[] {
   battle.pendingEntry = [];
   const field = new Field(ctx);
   for (const c of field.alive()) S.enterField(ctx, c);
+  for (const c of field.alive()) if (c.side === 'player') S.quirkEntry(ctx, c, events);
   runEntries(ctx, field, field.alive(), events);
   settle(ctx, field, events);
   rest(ctx, events);

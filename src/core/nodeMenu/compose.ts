@@ -113,6 +113,8 @@ export function composeNodeMenu(content: Content, run: RunState, node: MapNode):
   const picks = Math.min(optional, plaza || isGymEve(run, node) || entries.length >= 5 ? data.picks.bonus : data.picks.base);
   const menu: NodeMenu = { nodeId: node.id, entries: [encounterEntry(node), ...entries], picks, picked: [], dropped, closed: false };
   for (const h of nodeMenuHooks()) h.addEntries?.(menu, { content, run, node, rng });
+  // A hook's card (a special entry) is optional too: a node whose own entries are all kept still gets a pick for it.
+  if (menu.picks === 0) menu.picks = Math.min(menu.entries.filter((e) => e.kind !== 'encounter' && !e.keep && !e.required).length, data.picks.base);
   return menu;
 }
 

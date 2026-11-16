@@ -1,0 +1,732 @@
+{
+ "category": "rivals",
+ "note": "Run flags (ev:<key>) the rival questlines set and read. Same run only: nothing here carries to another run.",
+ "flags": [
+  {
+   "key": "apprentice-lie",
+   "setBy": [
+    "rq-r12-confession"
+   ],
+   "readBy": [
+    "rq-r12-night",
+    "rq-r12-nurse"
+   ]
+  },
+  {
+   "key": "apprentice-silent",
+   "setBy": [
+    "rq-r12-confession"
+   ],
+   "readBy": [
+    "rq-r12-third"
+   ]
+  },
+  {
+   "key": "apprentice-truth",
+   "setBy": [
+    "rq-r12-confession"
+   ],
+   "readBy": [
+    "rq-r12-night"
+   ]
+  },
+  {
+   "key": "circuit-entered",
+   "setBy": [
+    "rival-gauntlet-entry",
+    "rq-circuit-late"
+   ],
+   "readBy": [
+    "rq-circuit-late",
+    "ev-rival-rematch",
+    "rival-one-turn-duel",
+    "rq-circuit-blackout",
+    "rq-circuit-cup",
+    "rq-circuit-cup-ahead",
+    "rq-circuit-watch"
+   ]
+  },
+  {
+   "key": "circuit-late",
+   "setBy": [
+    "rival-gauntlet-entry"
+   ],
+   "readBy": [
+    "rq-circuit-late",
+    "rq-circuit-cup",
+    "rq-circuit-cup-ahead"
+   ]
+  },
+  {
+   "key": "feud-mend",
+   "setBy": [
+    "rq-r11-bench",
+    "rq-r11-outside"
+   ],
+   "readBy": [
+    "rq-r11-finale"
+   ]
+  },
+  {
+   "key": "feud-neutral",
+   "setBy": [
+    "rival-feud"
+   ],
+   "readBy": [
+    "rq-r11-end"
+   ]
+  },
+  {
+   "key": "feud-sided-main",
+   "setBy": [
+    "rival-feud"
+   ],
+   "readBy": [
+    "rq-r11-end"
+   ]
+  },
+  {
+   "key": "feud-sided-second",
+   "setBy": [
+    "rival-feud"
+   ],
+   "readBy": [
+    "rq-r11-end"
+   ]
+  },
+  {
+   "key": "feud-watch-winner",
+   "setBy": [],
+   "readBy": [
+    "rq-r11-after"
+   ]
+  },
+  {
+   "key": "follower-answer",
+   "setBy": [
+    "rq-r13-question"
+   ],
+   "readBy": [
+    "rq-r13-rival"
+   ]
+  },
+  {
+   "key": "follower-battled",
+   "setBy": [
+    "rq-r13-meet"
+   ],
+   "readBy": [
+    "rq-r13-question"
+   ]
+  },
+  {
+   "key": "follower-stopped",
+   "setBy": [
+    "rq-r13-meet"
+   ],
+   "readBy": [
+    "rq-r13-question"
+   ]
+  },
+  {
+   "key": "follower-walked",
+   "setBy": [
+    "rq-r13-meet"
+   ],
+   "readBy": [
+    "w4-wanderer-visit"
+   ]
+  },
+  {
+   "key": "kieran-helped",
+   "setBy": [
+    "rq-kieran-1",
+    "rq-kieran-2",
+    "rq-kieran-3"
+   ],
+   "readBy": [
+    "rq-kieran-finale"
+   ]
+  },
+  {
+   "key": "kieran-lost-to",
+   "setBy": [
+    "rq-r16-wander"
+   ],
+   "readBy": [
+    "rq-r16-better"
+   ]
+  },
+  {
+   "key": "kieran-swore",
+   "setBy": [
+    "rq-r16-swears"
+   ],
+   "readBy": [
+    "rq-r16-again"
+   ]
+  },
+  {
+   "key": "rep",
+   "setBy": [
+    "rq-circuit-blackout"
+   ],
+   "readBy": []
+  },
+  {
+   "key": "rival-abandoned",
+   "setBy": [
+    "living-rival-rescue",
+    "ev-rival-emergency"
+   ],
+   "readBy": [
+    "rival-asks-help-grudge",
+    "rq-r2-finale",
+    "ev-rival-emergency"
+   ]
+  },
+  {
+   "key": "rival-anonymous",
+   "setBy": [
+    "living-rival-rescue"
+   ],
+   "readBy": [
+    "rq-r2-anonymous"
+   ]
+  },
+  {
+   "key": "rival-bait-seen",
+   "setBy": [
+    "rival-mind-games"
+   ],
+   "readBy": [
+    "rq-r8-last"
+   ]
+  },
+  {
+   "key": "rival-bait-taken",
+   "setBy": [
+    "rival-mind-games"
+   ],
+   "readBy": [
+    "core/rivals/questlines.ts planRivalTeam"
+   ]
+  },
+  {
+   "key": "rival-colours-kept",
+   "setBy": [
+    "rival-swap",
+    "rq-r7-lost"
+   ],
+   "readBy": [
+    "rq-r10-album"
+   ]
+  },
+  {
+   "key": "rival-colours-ok",
+   "setBy": [
+    "rival-cosplay"
+   ],
+   "readBy": [
+    "rival-swap"
+   ]
+  },
+  {
+   "key": "rival-colours-swap",
+   "setBy": [
+    "rival-cosplay"
+   ],
+   "readBy": [
+    "rq-r7-won",
+    "rq-r7-lost"
+   ]
+  },
+  {
+   "key": "rival-colours-won",
+   "setBy": [
+    "rq-r7-won"
+   ],
+   "readBy": [
+    "rq-r10-album"
+   ]
+  },
+  {
+   "key": "rival-gift-asked",
+   "setBy": [
+    "rival-trap-gift"
+   ],
+   "readBy": [
+    "rq-r15-sponsor"
+   ]
+  },
+  {
+   "key": "rival-gift-found",
+   "setBy": [
+    "rival-trap-gift"
+   ],
+   "readBy": [
+    "rq-r15-sponsor"
+   ]
+  },
+  {
+   "key": "rival-gift-turned",
+   "setBy": [
+    "rival-trap-gift"
+   ],
+   "readBy": [
+    "rq-r15-decoy"
+   ]
+  },
+  {
+   "key": "rival-gift-used",
+   "setBy": [
+    "rival-trap-gift"
+   ],
+   "readBy": [
+    "rq-r15-ambush"
+   ]
+  },
+  {
+   "key": "rival-grief-shared",
+   "setBy": [],
+   "readBy": [
+    "rival-memorial"
+   ]
+  },
+  {
+   "key": "rival-heard-apology",
+   "setBy": [
+    "rq-r7-trainer"
+   ],
+   "readBy": [
+    "rival-swap"
+   ]
+  },
+  {
+   "key": "rival-helped",
+   "setBy": [
+    "living-rival-rescue",
+    "ev-rival-emergency"
+   ],
+   "readBy": [
+    "living-rival-returns-favor",
+    "rq-r2-finale"
+   ]
+  },
+  {
+   "key": "rival-knows-lost",
+   "setBy": [],
+   "readBy": [
+    "rival-memorial"
+   ]
+  },
+  {
+   "key": "rival-memorial-charm",
+   "setBy": [
+    "rival-memorial"
+   ],
+   "readBy": [
+    "rq-r4-cautious"
+   ]
+  },
+  {
+   "key": "rival-memorial-flowers",
+   "setBy": [
+    "rival-memorial"
+   ],
+   "readBy": [
+    "rq-r4-cautious"
+   ]
+  },
+  {
+   "key": "rival-memorial-waited",
+   "setBy": [
+    "rival-memorial"
+   ],
+   "readBy": [
+    "rq-r4-cautious",
+    "rq-r4-name"
+   ]
+  },
+  {
+   "key": "rival-mentor-apology",
+   "setBy": [
+    "rq-r5-apology"
+   ],
+   "readBy": [
+    "rq-r5-sorry"
+   ]
+  },
+  {
+   "key": "rival-mentor-ask",
+   "setBy": [],
+   "readBy": [
+    "rq-r5-apology",
+    "rq-r5-train"
+   ]
+  },
+  {
+   "key": "rival-mentor-lesson",
+   "setBy": [
+    "rq-r5-lesson"
+   ],
+   "readBy": [
+    "rq-r12-camp"
+   ]
+  },
+  {
+   "key": "rival-mentor-trained",
+   "setBy": [
+    "rq-r5-train"
+   ],
+   "readBy": [
+    "rq-r5-walk"
+   ]
+  },
+  {
+   "key": "rival-name-known",
+   "setBy": [
+    "living-rival-acknowledges"
+   ],
+   "readBy": [
+    "core/rivals/questlines.ts calledName"
+   ]
+  },
+  {
+   "key": "rival-notes-read",
+   "setBy": [
+    "rq-r6-finale"
+   ],
+   "readBy": [
+    "rival-mind-games"
+   ]
+  },
+  {
+   "key": "rival-postmortem-gave",
+   "setBy": [
+    "rival-asks-advice"
+   ],
+   "readBy": [
+    "rival-text-support",
+    "rival-text-taunt"
+   ]
+  },
+  {
+   "key": "rival-postmortem-took",
+   "setBy": [
+    "rival-coaching"
+   ],
+   "readBy": [
+    "rival-text-support",
+    "rival-text-taunt"
+   ]
+  },
+  {
+   "key": "rival-promise-broken",
+   "setBy": [
+    "rival-map-note"
+   ],
+   "readBy": []
+  },
+  {
+   "key": "rival-promise-kept",
+   "setBy": [
+    "living-rival-promise-kept"
+   ],
+   "readBy": []
+  },
+  {
+   "key": "rival-promise-made",
+   "setBy": [
+    "living-rival-promise"
+   ],
+   "readBy": []
+  },
+  {
+   "key": "rival-promise-open",
+   "setBy": [
+    "living-rival-promise"
+   ],
+   "readBy": [
+    "living-rival-promise-kept"
+   ]
+  },
+  {
+   "key": "rival-promise-second",
+   "setBy": [
+    "living-rival-promise-kept"
+   ],
+   "readBy": [
+    "living-rival-promise-kept"
+   ]
+  },
+  {
+   "key": "rival-rain-battle",
+   "setBy": [
+    "living-rival-bad-day"
+   ],
+   "readBy": [
+    "rq-r9-photo"
+   ]
+  },
+  {
+   "key": "rival-read-letter",
+   "setBy": [
+    "living-rival-bad-day"
+   ],
+   "readBy": [
+    "rq-r5-apology",
+    "rq-r5-train",
+    "rq-r5-lesson"
+   ]
+  },
+  {
+   "key": "rival-report-seen",
+   "setBy": [
+    "rival-eavesdrop"
+   ],
+   "readBy": [
+    "rq-r8-last"
+   ]
+  },
+  {
+   "key": "rival-sat-in-rain",
+   "setBy": [
+    "living-rival-bad-day"
+   ],
+   "readBy": [
+    "rq-r9-photo"
+   ]
+  },
+  {
+   "key": "rival-shelves-let",
+   "setBy": [
+    "rq-r14-camp"
+   ],
+   "readBy": [
+    "rival-care-package"
+   ]
+  },
+  {
+   "key": "rival-shelves-shared",
+   "setBy": [
+    "rq-r14-camp"
+   ],
+   "readBy": [
+    "rival-trap-gift"
+   ]
+  },
+  {
+   "key": "rival-shelves-won",
+   "setBy": [
+    "rq-r14-camp"
+   ],
+   "readBy": [
+    "rq-r14-never"
+   ]
+  },
+  {
+   "key": "rival-sign-seen",
+   "setBy": [
+    "rq-r8-signpost",
+    "rq-r8-note"
+   ],
+   "readBy": [
+    "rq-r8-last"
+   ]
+  },
+  {
+   "key": "rival-sponsor-denied",
+   "setBy": [
+    "rq-r15-sponsor"
+   ],
+   "readBy": [
+    "Evil Team climax (evil-story)"
+   ]
+  },
+  {
+   "key": "rival-sponsor-known",
+   "setBy": [
+    "rq-r15-decoy"
+   ],
+   "readBy": [
+    "Evil Team climax (evil-story)"
+   ]
+  },
+  {
+   "key": "rival-sponsor-silent",
+   "setBy": [
+    "rq-r15-sponsor"
+   ],
+   "readBy": [
+    "Evil Team climax (evil-story)"
+   ]
+  },
+  {
+   "key": "rival-told-sponsor",
+   "setBy": [
+    "rq-r15-sponsor"
+   ],
+   "readBy": [
+    "Evil Team climax (evil-story)"
+   ]
+  },
+  {
+   "key": "rival-watched",
+   "setBy": [
+    "living-rival-rescue"
+   ],
+   "readBy": [
+    "rq-r2-finale"
+   ]
+  },
+  {
+   "key": "rq-drink-owed",
+   "setBy": [
+    "rival-shared-drink",
+    "core/rivals/questlines.ts recordPackMarks"
+   ],
+   "readBy": [
+    "rival-shared-drink"
+   ]
+  },
+  {
+   "key": "rq-drinks",
+   "setBy": [
+    "rival-shared-drink"
+   ],
+   "readBy": [
+    "rival-shared-drink",
+    "rq-r22-last"
+   ]
+  },
+  {
+   "key": "rq-lost-at",
+   "setBy": [
+    "core/rivals/questlines.ts notePlayerLoss"
+   ],
+   "readBy": [
+    "rival-coaching"
+   ]
+  },
+  {
+   "key": "rq-lost-kind",
+   "setBy": [
+    "core/rivals/questlines.ts notePlayerLoss"
+   ],
+   "readBy": [
+    "rival-coaching"
+   ]
+  },
+  {
+   "key": "rq-r10-arm",
+   "setBy": [
+    "living-rival-photo-rival",
+    "living-rival-photo-between",
+    "living-rival-photo-friend"
+   ],
+   "readBy": [
+    "rq-r10-album"
+   ]
+  },
+  {
+   "key": "rq-r10-count",
+   "setBy": [
+    "living-rival-photo-rival",
+    "living-rival-photo-between",
+    "living-rival-photo-friend"
+   ],
+   "readBy": [
+    "living-rival-photo-rival",
+    "living-rival-photo-between",
+    "living-rival-photo-friend",
+    "rq-r10-album"
+   ]
+  },
+  {
+   "key": "rq-r11-cheer",
+   "setBy": [
+    "rq-r11-watch"
+   ],
+   "readBy": []
+  },
+  {
+   "key": "rq-r16-calm",
+   "setBy": [
+    "core/rivals/questlines.ts noteCalm (Wants to Stop meter)"
+   ],
+   "readBy": [
+    "rq-r16-sat"
+   ]
+  },
+  {
+   "key": "rq-r23-beat",
+   "setBy": [
+    "rq-r23-fence",
+    "rq-r23-grass",
+    "rq-r23-level",
+    "rq-r23-trainer",
+    "rq-r23-hill"
+   ],
+   "readBy": [
+    "rq-r23-first"
+   ]
+  },
+  {
+   "key": "rq-r3-start",
+   "setBy": [
+    "living-rival-promise-kept"
+   ],
+   "readBy": []
+  },
+  {
+   "key": "rq-r4-name",
+   "setBy": [
+    "rq-r4-name"
+   ],
+   "readBy": []
+  },
+  {
+   "key": "rq-r6-scout",
+   "setBy": [
+    "rival-coaching"
+   ],
+   "readBy": []
+  },
+  {
+   "key": "rq-r6-true",
+   "setBy": [],
+   "readBy": [
+    "rival-asks-advice"
+   ]
+  },
+  {
+   "key": "rq-starter-rivalry",
+   "setBy": [
+    "rival-mon-greeting",
+    "rq-r20-game",
+    "rq-r20-gift",
+    "rq-r20-last"
+   ],
+   "readBy": [
+    "core/rivals/questlines.ts starterRivalryStages"
+   ]
+  },
+  {
+   "key": "rq-thread",
+   "setBy": [
+    "core/rivals/questlines.ts recordPackMarks (By a Thread)"
+   ],
+   "readBy": []
+  },
+  {
+   "key": "rq-thread-won",
+   "setBy": [
+    "core/rivals/questlines.ts recordPackMarks"
+   ],
+   "readBy": [
+    "rival-shared-drink"
+   ]
+  }
+ ]
+}

@@ -7,6 +7,8 @@ import { CanonSpacesFileSchema } from '../../core/expansion/canonSpaces';
 import { CanonRoutesFileSchema } from '../../core/expansion/canonEnds';
 import canonSpacesKanto from './canonSpacesKanto.json';
 import canonRoutes from './canonRoutesKanto.json';
+import canonPlaced from './canonKantoPlaced.json';
+import { CanonPlacedFileSchema } from '../../core/expansion/canonKantoPlaced';
 import apex from './apex.json';
 import characters from './characters.json';
 import climaxExtended from './climax_extended.json';
@@ -38,3 +40,6 @@ export const canonKanto = CanonSpacesFileSchema.parse(canonSpacesKanto);
 
 /** Workstream 18: the road events between Kanto towns (anime and game moments, the roaming cast's cameos). */
 export const canonRoutesKanto = CanonRoutesFileSchema.parse(canonRoutes);
+
+/** Catalog overhaul: follow-up scenes and road spaces of the rebuilt Kanto Canon Spaces (built by `npm run co:kanto-canon`). */
+export const canonKantoPlaced = CanonPlacedFileSchema.parse(canonPlaced);

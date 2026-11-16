@@ -11,8 +11,8 @@ import { content } from './helpers';
 const begin = (seed: string) => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', expansion: { kantoCanon: true } }), 0);
 const P = 'cs-kanto-vermilion-';
 const room = (id: string) => content.events.get(id)!;
-const targets = (id: string) => room(id).choices.flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? [])])
-  .flatMap((e) => (e.kind === 'addEvent' ? [e.eventId] : e.kind === 'addEventFrom' ? e.ids : []));
+const targets = (id: string) => room(id).choices.flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])])
+  .flatMap((e) => (e.kind === 'addEvent' || e.kind === 'laterEvent' ? [e.eventId] : e.kind === 'addEventFrom' ? e.ids : []));
 
 describe('Vermilion canon: the event graph', () => {
   it('every target exists and every room opens from a gate', () => {
@@ -20,7 +20,8 @@ describe('Vermilion canon: the event graph', () => {
     // The Kaiju space is now an event too (gn.11), so it is a gate.
     const ids = [...content.events.values()].filter((e) => e.id.startsWith(P) && !e.disabled).map((e) => e.id);
     for (const id of ids) for (const t of targets(id)) expect(content.events.has(t), `${id} -> ${t}`).toBe(true);
-    const gates = ['flight', 'market', 'fishclub', 'maiden', 'ssanne', 'kaiju'].map((g) => P + g);
+    // Every entry event (it carries a catalog id) is a gate; Volume II (KANTO_PLACED_3) adds more.
+    const gates = [...['flight', 'market', 'fishclub', 'maiden', 'ssanne', 'site-again', 'kaiju'].map((g) => P + g), ...ids.filter((id) => room(id).canon)];
     const reach = new Set<string>(gates);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) if (!reach.has(t)) { reach.add(t); again = true; } }
     expect([...reach].filter((id) => id.startsWith(P)).sort()).toEqual(ids.sort());
@@ -197,14 +198,22 @@ describe('Kaiju, the market and the Fan Club', () => {
     expect(content.moves.get(gift.moves[0]!)).toBeDefined();
     expect(content.species.get(gift.species)!.abilities.normal.concat(content.species.get(gift.species)!.abilities.hidden ?? [])).not.toContain('huge-power');
   });
-  it('the Hero\'s stock opens only after the Kaiju flag', () => {
-    expect(room(`${P}market`).choices[1]!.requires).toEqual([{ kind: 'flag', key: 'kanto-kaiju-won', atLeast: 1, atMost: 99 }]);
+  it('the Harbor Market sells the S.S. Anne Ticket for ₽2,000, and is shut (shutters down) after a lost Kaiju raid', () => {
+    expect(room(`${P}market-ticket`).choices[0]!.label).toContain('₽2,000');
+    expect(room(`${P}market-ticket`).choices[0]!.success.effects).toContainEqual({ kind: 'item', id: 'ss-ticket', count: 1 });
+    const shut = room(`${P}market`).remembers.find((v) => v.id === 'shut')!;
+    expect(shut.when).toEqual([{ kind: 'flag', key: 'kanto-kaiju-lost', atLeast: 1, atMost: 99 }]);
+    expect(shut.hide).toEqual([0, 1, 2]);
   });
-  it('the Fan Club teaches fishing for a Good Rod', () => {
-    const e = room(`${P}fishclub`).choices[0]!;
-    expect(e.prompt).toEqual({ id: 'shout-tap', needs: 'good' });
-    expect(e.success.effects).toContainEqual({ kind: 'item', id: 'good-rod', count: 1 });
-    expect(e.failure!.effects).toContainEqual({ kind: 'item', id: 'good-rod', count: 1 });
+  it('the Fan Club teaches fishing in three casts for a Good Rod and a Basculin or Corphish', () => {
+    expect(targets(`${P}fishclub-cast1`)).toEqual([`${P}fishclub-cast2`]);
+    expect(targets(`${P}fishclub-cast2`)).toEqual([`${P}fishclub-cast3`]);
+    const e = room(`${P}fishclub-cast3`).choices[0]!;
+    expect(e.prompt).toEqual({ id: 'shout-tap', needs: 'ok' });
+    for (const o of [e.success, e.failure!]) {
+      expect(o.effects).toContainEqual({ kind: 'item', id: 'good-rod', count: 1 });
+      expect(o.effects).toContainEqual(expect.objectContaining({ kind: 'join', species: ['basculin', 'corphish'] }));
+    }
   });
 });
 
@@ -216,12 +225,10 @@ describe('Kaiju raid hooks', () => {
     expect(run.expansion!.canon!.flags).toContain('kanto.kaiju.won');
     expect(run.story.flags['ev:kanto-kaiju-won']).toBe(1);
   });
-  it('losing shuts the Harbor Market stop for the stage', () => {
+  it('losing shuts the Harbor Market for the stage: its stop shows the shutters and the sign', () => {
     const run = begin('KR2');
-    const node = run.stage!.map.nodes[0]!;
-    node.sides.push({ id: 'm', kind: 'event', used: false, eventId: `${P}market` });
     failCanonRaid(content, run, 'cs.kanto.vermilion.kaiju');
-    expect(node.sides.find((sd) => sd.id === 'm')!.used).toBe(true);
+    expect(run.story.flags['ev:kanto-kaiju-lost']).toBe(1);
   });
   it('the Kaiju den is never drawn as an ordinary raid', () => {
     for (let i = 0; i < 200; i++) expect(pickRaidFor(content, { seed: `k${i}`, regionIndex: 0 }, `${i}`).id).not.toBe('kaiju-tentacruel');

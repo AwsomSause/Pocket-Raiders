@@ -1,0 +1,1745 @@
+{
+ "catalogOverhaul": "rivals",
+ "override": true,
+ "remove": [
+  "rival-pair-setup",
+  "rq-album",
+  "rq-badge-photo",
+  "rq-echo-apprentice-lesson",
+  "rq-echo-apprentice-lie",
+  "rq-echo-apprentice-silent",
+  "rq-echo-apprentice-truth",
+  "rq-fellow-apprentice",
+  "rq-final-lesson",
+  "rq-photograph"
+ ],
+ "events": [
+  {
+   "id": "living-rival-photo-rival",
+   "name": "A Photo Neither Wants",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "line": "R10",
+     "stageOfRegion": 4,
+     "freshRegion": "rq-r10-at"
+    },
+    {
+     "kind": "flag",
+     "key": "rq-r10-count",
+     "atLeast": 0,
+     "atMost": 2
+    },
+    {
+     "kind": "rivalQuest",
+     "feeling": {
+      "who": "main",
+      "key": "friendship",
+      "atMost": 5
+     }
+    },
+    {
+     "kind": "rivalQuest",
+     "feeling": {
+      "who": "main",
+      "key": "respect",
+      "atMost": 4
+     }
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2a2a2a",
+    "effect": "glint"
+   },
+   "callback": true,
+   "intro": "A street photographer with a box camera steps into your path, beaming. {rival} is already standing beside him, arms folded.\n\nMr. Marchbanks: \"The famous two! In one frame!\"\nMr. Marchbanks: \"Don't move. Don't BE like that. Closer. I've a wide lens, but I haven't a miracle.\"\n\nOne arm span apart. He counts to three.\nOn two, you both look away, in opposite directions, at exactly the same moment.\n\n{rival}: \"Just take it.\"\nMr. Marchbanks: \"Marvellous. Identical. I'll call it \"Twins.\"\"",
+   "choices": [
+    {
+     "label": "Smile.",
+     "success": {
+      "text": "You smile at the very last second. They do not. It is somehow the best photo of the three he takes.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r10-at",
+        "again": [
+         "living-rival-photo-rival",
+         "living-rival-photo-between",
+         "living-rival-photo-friend"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rq-r10-count",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r10-arm",
+         "value": 0
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull a face.",
+     "success": {
+      "text": "You pull a face. Out of the corner of your eye, so do they. Neither of you will ever admit it.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r10-at",
+        "again": [
+         "living-rival-photo-rival",
+         "living-rival-photo-between",
+         "living-rival-photo-friend"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rq-r10-count",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r10-arm",
+         "value": 0
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put an arm round them.",
+     "requires": [
+      {
+       "kind": "rivalQuest",
+       "feeling": {
+        "who": "main",
+        "key": "friendship",
+        "atLeast": 5
+       }
+      }
+     ],
+     "success": {
+      "text": "You put an arm round them. They go rigid, and then, very slightly, they do not.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r10-at",
+        "again": [
+         "living-rival-photo-rival",
+         "living-rival-photo-between",
+         "living-rival-photo-friend"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rq-r10-count",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r10-arm",
+         "value": 1
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "living-rival-photo-between",
+   "name": "A Photo, Awkwardly",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "line": "R10",
+     "stageOfRegion": 4,
+     "freshRegion": "rq-r10-at"
+    },
+    {
+     "kind": "flag",
+     "key": "rq-r10-count",
+     "atLeast": 0,
+     "atMost": 2
+    },
+    {
+     "kind": "rivalQuest",
+     "feeling": {
+      "who": "main",
+      "key": "friendship",
+      "atMost": 5
+     }
+    },
+    {
+     "kind": "rivalQuest",
+     "feeling": {
+      "who": "main",
+      "key": "respect",
+      "atLeast": 5
+     }
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2a2a2a",
+    "effect": "glint"
+   },
+   "callback": true,
+   "intro": "A street photographer with a box camera steps into your path, beaming. {rival} is already standing beside him, not sure where to stand.\n\nMr. Marchbanks: \"The famous two! In one frame!\"\nMr. Marchbanks: \"Don't move. Don't BE like that. Closer. I've a wide lens, but I haven't a miracle.\"\n\nHands in odd places. Elbows in the way. Both of you nearly smiling.\n\n{rival}: \"Don't put your hand there. No. Not there either.\"\n{rival}: \"Where do people PUT hands?\"",
+   "choices": [
+    {
+     "label": "Smile.",
+     "success": {
+      "text": "You smile. They nearly do. The flash catches the nearly.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r10-at",
+        "again": [
+         "living-rival-photo-rival",
+         "living-rival-photo-between",
+         "living-rival-photo-friend"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rq-r10-count",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r10-arm",
+         "value": 0
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull a face.",
+     "success": {
+      "text": "You pull a face. They laugh before they can stop it, and that is the photo.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r10-at",
+        "again": [
+         "living-rival-photo-rival",
+         "living-rival-photo-between",
+         "living-rival-photo-friend"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rq-r10-count",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r10-arm",
+         "value": 0
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put an arm round them.",
+     "requires": [
+      {
+       "kind": "rivalQuest",
+       "feeling": {
+        "who": "main",
+        "key": "friendship",
+        "atLeast": 5
+       }
+      }
+     ],
+     "success": {
+      "text": "You put an arm round them. That solves the hands. They do not say so, but it does.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r10-at",
+        "again": [
+         "living-rival-photo-rival",
+         "living-rival-photo-between",
+         "living-rival-photo-friend"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rq-r10-count",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r10-arm",
+         "value": 1
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "living-rival-photo-friend",
+   "name": "A Photo With a Friend",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "line": "R10",
+     "stageOfRegion": 4,
+     "freshRegion": "rq-r10-at"
+    },
+    {
+     "kind": "flag",
+     "key": "rq-r10-count",
+     "atLeast": 0,
+     "atMost": 2
+    },
+    {
+     "kind": "rivalQuest",
+     "feeling": {
+      "who": "main",
+      "key": "friendship",
+      "atLeast": 6
+     }
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2a2a2a",
+    "effect": "hearts"
+   },
+   "callback": true,
+   "intro": "A street photographer with a box camera steps into your path, beaming.\n\nMr. Marchbanks: \"The famous two! In one frame!\"\nMr. Marchbanks: \"Don't move. Don't BE like that. Closer. I've a wide lens, but I haven't a miracle.\"\n\n{rival} has you by the sleeve before he has finished asking.\n\n{rival}: \"Come on. Before I change my mind.\"\n{rival}: \"Before I remember I'm meant to hate this.\"",
+   "choices": [
+    {
+     "label": "Smile.",
+     "success": {
+      "text": "You both smile. It is the easiest photo either of you has ever had taken.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r10-at",
+        "again": [
+         "living-rival-photo-rival",
+         "living-rival-photo-between",
+         "living-rival-photo-friend"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rq-r10-count",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r10-arm",
+         "value": 0
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull a face.",
+     "success": {
+      "text": "You pull a face. So do they, worse, on purpose, to win.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r10-at",
+        "again": [
+         "living-rival-photo-rival",
+         "living-rival-photo-between",
+         "living-rival-photo-friend"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rq-r10-count",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r10-arm",
+         "value": 0
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put an arm round them.",
+     "requires": [
+      {
+       "kind": "rivalQuest",
+       "feeling": {
+        "who": "main",
+        "key": "friendship",
+        "atLeast": 5
+       }
+      }
+     ],
+     "success": {
+      "text": "You put an arm round them. They put one round you. Marchbanks has to wipe his eye before he can press the button.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r10-at",
+        "again": [
+         "living-rival-photo-rival",
+         "living-rival-photo-between",
+         "living-rival-photo-friend"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rq-r10-count",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r10-arm",
+         "value": 1
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r10-album",
+   "name": "Three Photographs: The Album",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "line": "R10",
+     "leagueEve": true
+    },
+    {
+     "kind": "flag",
+     "key": "rq-r10-count",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "arm",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rq-r10-arm",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nThey get to the last page and stop. They turn back to it. Twice."
+    },
+    {
+     "id": "jacket",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-colours-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nIn one of the photos you are wearing two jackets of the same colour, one over the other. They laugh until they have to sit down."
+    },
+    {
+     "id": "collar",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-colours-kept",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nIn one of the photos they are in your jacket, done up to the collar. They tap it, once, and say nothing."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2a2a2a",
+    "effect": "sparkle"
+   },
+   "intro": "The night before the League. Mr. Marchbanks finds you both at the Center and hands each of you an album.\n\nA page for every region. He has written the dates in. Under the last, in pencil:\n\"They got closer. I only do the lens.\"\n\n{rival} turns the pages slowly.\n{rival}: \"{say champion}\"",
+   "choices": [
+    {
+     "label": "Keep the album.",
+     "success": {
+      "text": "You put it at the very bottom of your bag, where nothing can bend it.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R10.album"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rival-feud",
+   "name": "Two Rivals, One Argument",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 7,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "second": true
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R11.open"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#33241d",
+    "effect": "shake"
+   },
+   "callback": true,
+   "intro": "Shouting, up ahead in the road. {rival} and {rival2}, nose to nose, a small crowd pretending not to listen.\n\n{rival}: \"Winning is the point. That's the whole point!\"\n{rival2}: \"It's not if you're miserable doing it!\"\n\nThey both turn to you at exactly the same moment.\nBoth: \"Tell them.\"",
+   "choices": [
+    {
+     "label": "Side with {rival}.",
+     "success": {
+      "text": "{rival} throws their arms up in triumph. {rival2} goes very quiet, and then very loud, and then leaves.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "who": "second",
+        "feelings": {
+         "friendship": -2
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "feud-sided-main",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R11.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Side with {rival2}.",
+     "success": {
+      "text": "{rival2} looks at you as if you have handed them something precious. {rival} stares, then walks off without a word.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": -2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "who": "second",
+        "feelings": {
+         "friendship": 2
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "feud-sided-second",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R11.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Neither.\"",
+     "success": {
+      "text": "Both of them glare at you. Then, grudgingly, both of them look a little impressed.\nBoth: \"...Coward.\"\nThey do not mean it.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "who": "second",
+        "feelings": {
+         "respect": 1
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "feud-neutral",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R11.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Settle it with a battle between you.\"",
+     "success": {
+      "text": "They stare at you. Then at each other. Then, slowly, they both reach for a Poké Ball.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R11.open"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r11-watch"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r11-watch",
+   "name": "Two Rivals, One Argument: Ringside",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#33241d",
+    "effect": "confetti"
+   },
+   "intro": "They square up in the road. You get the best seat on the fence.\nThe crowd stops pretending not to listen.",
+   "choices": [
+    {
+     "label": "Cheer for {rival}.",
+     "success": {
+      "text": "You shout their name. {rival} grins without looking round.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r11-cheer",
+         "value": 1
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "quest": {
+        "watch": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r11-after"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r11-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Cheer for {rival2}.",
+     "success": {
+      "text": "You shout their name. {rival2} stands a little straighter.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r11-cheer",
+         "value": 2
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "quest": {
+        "watch": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r11-after"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r11-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Just watch.",
+     "success": {
+      "text": "You keep quiet. Somebody has to be the referee.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r11-cheer",
+         "value": 0
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "quest": {
+        "watch": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r11-after"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r11-after"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r11-after",
+   "name": "Two Rivals, One Argument: After",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "remembers": [
+    {
+     "id": "second",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "feud-watch-winner",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "intro": "{rival2} stands over the result, breathing hard, and does not look as happy as they expected.\n{rival2}: \"There. I won. Can we stop now?\"\n{rival} does not answer. But they do not walk away."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#33241d",
+    "effect": "none"
+   },
+   "intro": "{rival} stands over the result, breathing hard.\n{rival}: \"There. Winning. That's the point.\"\n{rival2} is already laughing at something their Pokémon did. {rival} watches them do it, and frowns, and keeps watching.",
+   "choices": [
+    {
+     "label": "Climb down off the fence.",
+     "success": {
+      "text": "Nothing is settled. Something has moved, though.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": []
+  },
+  {
+   "id": "rq-r11-bench",
+   "name": "Two Rivals, One Argument: One Bench",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 8,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "second": true
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R11.bench"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#33241d",
+    "effect": "none"
+   },
+   "intro": "A Center. They are at opposite ends of the same bench, as far apart as a bench allows.\n\n{rival2}, to you, loudly, for the other's benefit:\n{rival2}: \"Tell THEM I'm not miserable. Tell them I had a lovely day.\"\n\n{rival}: \"Tell THEM a lovely day isn't a badge.\"",
+   "choices": [
+    {
+     "label": "\"I'm not passing notes.\"",
+     "success": {
+      "text": "You sit in the middle. Neither of them speaks. You read a leaflet about Poké Balls, very slowly.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R11.bench"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Pass the note.)",
+     "success": {
+      "text": "You pass it. They read it. They write back. You pass that too.\nIt goes on for some time. Nobody gets any happier.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R11.bench"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Have you eaten? Either of you?\"",
+     "success": {
+      "text": "Neither has. You fetch three of everything. They eat.\nIt is very quiet. It is a little better.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "feud-mend",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R11.bench"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r11-outside",
+   "name": "Two Rivals, One Argument: Outside",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 9,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "second": true
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R11.outside"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#33241d",
+    "effect": "rain"
+   },
+   "intro": "{rival} lost a battle that mattered today. Everyone knows. {rival2} is outside the Center, not going in.\n\n{rival2}: \"I was right. They're miserable. I've won the argument.\"\n{rival2}: \"I hate it. Go in. They'll want you. They won't want me.\"",
+   "choices": [
+    {
+     "label": "\"Come in with me.\"",
+     "success": {
+      "text": "You hold the door. They hesitate a long time. Then they go in ahead of you.\n\nYou stay out of the way. Through the glass, you see {rival} look up, and not look away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "feud-mend",
+        "amount": 2
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R11.outside"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll tell them you came.\"",
+     "success": {
+      "text": "You tell them. {rival} says nothing for a while.\n{rival}: \"...They came? Here?\"\nThey look at the door for the rest of the evening.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "feud-mend",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R11.outside"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You should go in alone.\"",
+     "success": {
+      "text": "They look at you. Then at the door.\n{rival2}: \"...Yeah. Yeah, I should.\"\nThey go in alone. You find somewhere else to be.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "feud-mend",
+        "amount": 2
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R11.outside"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r11-finale",
+   "name": "Two Rivals, One Argument: The Last Word",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 10,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "second": true
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R11.finale"
+    }
+   ],
+   "priority": 80,
+   "remembers": [
+    {
+     "id": "mended",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "feud-mend",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "intro": "{rival} and {rival2} are waiting together. Actually together, on the same side of the road.\n\n{rival}: \"We talked.\"\n{rival2}: \"We shouted, and then we talked.\"\nBoth: \"Now you.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Take them both on.",
+       "success": {
+        "text": "They send out together. They call each other's moves by mistake, twice, and both times it works.",
+        "effects": [
+         {
+          "kind": "rivalQuest",
+          "done": "R11.finale"
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "name": "Rival",
+         "rival": true,
+         "size": 6,
+         "types": [],
+         "levelBonus": 2,
+         "quest": {
+          "pair": true,
+          "full": true
+         },
+         "format": "doubles",
+         "win": [
+          {
+           "kind": "addEvent",
+           "eventId": "rq-r11-end"
+          }
+         ],
+         "lose": [
+          {
+           "kind": "addEvent",
+           "eventId": "rq-r11-end"
+          }
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#33241d",
+    "effect": "confetti"
+   },
+   "intro": "{rival} is waiting in a field. {rival2} is sitting on the fence behind them, not leaving.\n\n{rival}: \"Me first. Then them. Back to back.\"\n{rival2}: \"I'll be watching. Obviously.\"",
+   "choices": [
+    {
+     "label": "One at a time, then.",
+     "success": {
+      "text": "{rival} goes first. {rival2} watches every turn from the fence, and winces when they make the mistake you both knew they would.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R11.finale"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r11-next"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r11-next"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Not today.\"",
+     "success": {
+      "text": "They shrug, in exactly the same way, at exactly the same moment. Neither of them notices.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R11.finale"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rq-r11-next",
+   "name": "Two Rivals, One Argument: Back to Back",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#33241d",
+    "effect": "none"
+   },
+   "intro": "{rival} climbs onto the fence. {rival2} climbs off it.\n{rival2}: \"My turn. Don't go easy because I'm nice.\"",
+   "choices": [
+    {
+     "label": "Battle {rival2}.",
+     "success": {
+      "text": "Behind them, {rival} watches from the fence and, once, shouts advice. To the wrong side.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "quest": {
+        "second": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r11-end"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r11-end"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r11-end",
+   "name": "Two Rivals, One Argument: Remembered",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "remembers": [
+    {
+     "id": "main",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "feud-sided-main",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "{rival2}: \"You sided with them, that day in the road. I remember.\"\n{rival}: \"So do I. ...Thanks.\"\n{rival2}: \"I'm still right, mind.\""
+    },
+    {
+     "id": "second",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "feud-sided-second",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "{rival}: \"You sided with them, that day in the road. I remember.\"\n{rival2}: \"So do I. ...Thanks.\"\n{rival}: \"I'm still right, mind.\""
+    },
+    {
+     "id": "neutral",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "feud-neutral",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Both: \"You never picked a side.\"\nThey glance at each other.\nBoth: \"...Probably for the best.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#33241d",
+    "effect": "none"
+   },
+   "intro": "They walk off together, still arguing. It sounds different now. It sounds like the kind that never ends because neither of them wants it to.",
+   "choices": [
+    {
+     "label": "Let them go.",
+     "success": {
+      "text": "You watch them argue all the way to the next town.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": []
+  },
+  {
+   "id": "rq-r12-camp",
+   "name": "The Fellow Apprentice",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "mentor"
+    },
+    {
+     "kind": "rivalQuest",
+     "line": "R12",
+     "mentorLessons": 2
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R12.open"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "waiting",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-mentor-lesson",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nYou catch yourself watching their Pokémon that is not fighting. They notice.\n{fellow}: \"\"Look at the one that's waiting\"? Who taught you that? That's the oldest lesson there is.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#24301d",
+    "effect": "none"
+   },
+   "intro": "{mentor}'s camp. Somebody else is already there, sweeping.\n\n{fellow}: \"Oh! You're the other one. They talk about you.\"\n{fellow}: \"I'm— I do the sweeping. And the breathing thing. I'm quite good at the breathing thing.\"\n\nThey are very good at the breathing thing. It is the one thing you have never got.",
+   "choices": [
+    {
+     "label": "\"Show me the breathing thing.\"",
+     "success": {
+      "text": "They show you. In for four, hold for four, out for eight. You lose count at six.\n{fellow}: \"Everyone does! It took me a year.\"\n\nIt did not take them a year. You can tell.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R12.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help them sweep.",
+     "success": {
+      "text": "You sweep together. They talk the whole time, nervously, and you learn more about {mentor} in ten minutes than in a whole region.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R12.open"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rq-r12-confession",
+   "name": "The Fellow Apprentice: A Rare Talent",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "mentor"
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R12.confession"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#141a2a",
+    "effect": "none"
+   },
+   "intro": "Night at the camp. {fellow} is sitting up by the dead fire, knees to their chin.\n\n{fellow}: \"The mentor says I'm a once-in-a-generation talent.\"\n{fellow}: \"I can't sleep. What if they're wrong? What if they're right?\"",
+   "choices": [
+    {
+     "label": "\"You are better. That's all right.\"",
+     "success": {
+      "text": "They breathe out. All of it, as if they had been holding it since the day they arrived.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "apprentice-truth",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R12.confession"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r12-night"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You're not that good. Relax.\"",
+     "success": {
+      "text": "They laugh, relieved. And something in them goes quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "apprentice-lie",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R12.confession"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r12-night"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "They nod and look at the ground for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "apprentice-silent",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R12.confession"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r12-night"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r12-night",
+   "name": "The Fellow Apprentice: The Night After",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "remembers": [
+    {
+     "id": "truth",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "apprentice-truth",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Later. They are asleep, properly, for the first time since you met them.\n{mentor} is watching them sleep. Then {mentor} turns to you.\n{mentor}: \"What did you say to them?\""
+    },
+    {
+     "id": "lie",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "apprentice-lie",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Later. They are laughing with the others by the fire, louder than anyone.\n{mentor} is not watching them. {mentor} is watching you."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#141a2a",
+    "effect": "none"
+   },
+   "intro": "Later. They are up before dawn, drilling, alone at the edge of the camp.\nThey do not look round when you pass.",
+   "choices": [
+    {
+     "label": "Go to bed.",
+     "success": {
+      "text": "You lie awake a while anyway.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": []
+  },
+  {
+   "id": "rq-r12-final",
+   "name": "The Fellow Apprentice: The Final Lesson",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "mentor"
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R12.finale"
+    }
+   ],
+   "priority": 70,
+   "scene": {
+    "cast": [],
+    "tint": "#24301d",
+    "effect": "glint"
+   },
+   "intro": "{mentor} is waiting in the clearing with four Poké Balls. {fellow} is already beside you, breathing the way they breathe.\n\n{mentor}: \"The last lesson. Both of you. Against me.\"\n{mentor}: \"If you win, there is nothing left I can teach you. That is the lesson.\"",
+   "choices": [
+    {
+     "label": "Side by side.",
+     "success": {
+      "text": "You and {fellow} step forward together. Their breathing slows. So, for once, does yours.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R12.finale"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Mentor",
+       "friendly": true,
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "ally": "fellow",
+       "quest": {
+        "mentor": true
+       },
+       "win": [],
+       "lose": []
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r12-nurse",
+   "name": "The Fellow Apprentice: At the Center",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 5,
+   "stop": "heal",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "apprentice-lie",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R12.nurse"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d24",
+    "effect": "hearts"
+   },
+   "intro": "The nurse at this Center looks familiar. It is {fellow}, in the uniform, humming.\n{fellow}: \"I stopped training. I'm good at this. I'm happy. ...I am, you know.\"\n\nThey heal your team themselves, very carefully, and do the breathing thing while they do it.",
+   "choices": [
+    {
+     "label": "\"You look happy.\"",
+     "success": {
+      "text": "They do. You are almost sure of it.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R12.nurse"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r12-third",
+   "name": "The Fellow Apprentice: A Third Rival",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "apprentice-silent",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R12.third"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#24301d",
+    "effect": "shake"
+   },
+   "intro": "{fellow} is waiting on the road with their team out, and they do not look nervous at all.\n{fellow}: \"You didn't say anything, that night. So I decided for myself.\"\n{fellow}: \"I'm better. Let's find out by how much.\"",
+   "choices": [
+    {
+     "label": "Battle {fellow}.",
+     "success": {
+      "text": "They breathe in for four. Then they do not hold anything back.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R12.third"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Fellow apprentice",
+       "apprentice": true,
+       "friendly": true,
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [],
+       "lose": []
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  }
+ ]
+}

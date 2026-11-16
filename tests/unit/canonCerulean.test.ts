@@ -17,10 +17,11 @@ const P = 'cs-kanto-cerulean-';
 
 describe('Cerulean canon: the event graph', () => {
   it('every room opens from a gate, and every addEvent / addEventFrom target exists', () => {
-    const ids = [...content.events.values()].filter((e) => e.id.startsWith(P) && !e.disabled).map((e) => e.id);
-    const targets = (id: string) => room(id).choices.flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).flatMap((e) => (e.kind === 'addEvent' ? [e.eventId] : e.kind === 'addEventFrom' ? e.ids : []));
+    // The Day-Care's collection scene is a follow-up placed at the next stage (core/expansion/canonKantoPlaced.ts), not a room of a gate.
+    const ids = [...content.events.values()].filter((e) => e.id.startsWith(P) && !e.disabled && e.id !== `${P}daycare-back`).map((e) => e.id);
+    const targets = (id: string) => room(id).choices.flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).flatMap((e) => (e.kind === 'addEvent' || e.kind === 'laterEvent' ? [e.eventId] : e.kind === 'addEventFrom' ? e.ids : []));
     for (const id of ids) for (const t of targets(id)) expect(content.events.has(t), `${id} -> ${t}`).toBe(true);
-    const reach = new Set<string>([`${P}bridge`, `${P}squad`, `${P}damian`, `${P}burglary`, `${P}rain`, `${P}bill`, `${P}daycare`]);
+    const reach = new Set<string>([`${P}bridge`, `${P}squad`, `${P}damian`, `${P}burglary`, `${P}rain`, `${P}bill`, `${P}daycare`, `${P}cave`, ...ids.filter((id) => room(id).canon)]);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) if (!reach.has(t)) { reach.add(t); again = true; } }
     expect([...reach].filter((id) => id.startsWith(P)).sort()).toEqual(ids.sort());
   });
@@ -74,10 +75,15 @@ describe("Damian's gym and the Burglary", () => {
     expect(win).toContainEqual(expect.objectContaining({ kind: 'teachMove', move: 'water-pulse' }));
     expect(content.catalog.get('unofficial-badge')).toBeTruthy();
   });
-  it('the Burglary pays Dig and cools Rocket heat', () => {
-    const win = room(`${P}burglary`).choices[0]!.success.battle!.win;
-    expect(win).toContainEqual(expect.objectContaining({ kind: 'teachMove', move: 'dig' }));
-    expect(win).toContainEqual(expect.objectContaining({ kind: 'evil', heat: -1 }));
+  it('the Burglary is one Grunt fight (Machop, Drowzee) that cools Rocket heat, then TM Dig: keep it, or give it back for Kindness', () => {
+    for (const c of room(`${P}burglary`).choices) {
+      expect(c.success.battle).toMatchObject({ kind: 'trainer', team: ['machop', 'drowzee'] });
+      expect(c.success.battle!.win).toContainEqual(expect.objectContaining({ kind: 'evil', heat: -1 }));
+    }
+    const [keep, give] = room(`${P}burglary-after`).choices;
+    expect(keep!.success.effects).toContainEqual(expect.objectContaining({ kind: 'teachMove', move: 'dig' }));
+    expect(give!.success.effects).toContainEqual(expect.objectContaining({ kind: 'teachMove', move: 'dig' }));
+    expect(give!.success.effects).toContainEqual({ kind: 'attribute', key: 'goodEvil', amount: 1 });
   });
 });
 
@@ -114,13 +120,16 @@ describe("Bill's Lighthouse (Kanto gate) and the Day-Care", () => {
     finishCanonSpace(canonKanto, run, 'cs.kanto.cerulean.bill', ['kanto.bill.pc']);
     expect(run.expansion.canon).toEqual({ flags: ['kanto.bill.pc'], completed: ['cs.kanto.cerulean.bill'], menus: {} });
   });
-  it('the Day-Care trains the weakest for 150 and sells an Egg for 300', () => {
+  it('the Day-Care keeps one Pokémon for a stage (two for an Egg) and gives it back three levels up', () => {
     const base = begin('DC');
-    base.money = 1000;
-    const weakest = Math.min(...base.party.map((m) => m.level));
+    base.party.push({ ...structuredClone(base.party[0]!), uid: 'dc-second' });
+    const level = base.party[1]!.level;
     const { run, sideId } = debugForceEvent(content, structuredClone(base), `${P}daycare`);
-    const out = chooseEvent(content, run, sideId, 0).run;
-    expect(out.money).toBe(850);
-    expect(Math.min(...out.party.map((m) => m.level))).toBeGreaterThanOrEqual(weakest + 1);
+    const left = chooseEvent(content, run, sideId, 0).run;
+    expect(left.party).toHaveLength(1);
+    const back = debugForceEvent(content, left, `${P}daycare-back`);
+    const out = chooseEvent(content, back.run, back.sideId, 0).run;
+    expect(out.party).toHaveLength(2);
+    expect(out.party[1]!.level).toBeGreaterThan(level);
   });
 });

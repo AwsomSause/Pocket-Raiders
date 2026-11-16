@@ -43,7 +43,11 @@ export class MainMenuScene extends Phaser.Scene {
       this.scene.start('Prologue');
       return;
     }
-    if (data?.afterSplash && session.savedRun.status !== 'corrupt' && session.savedRun.status !== 'incompatible') {
+    // Phaser hands a scene its last start data again when it is started without any, so the flag is used once:
+    // otherwise every later return to the title (from the hub, Settings, the tutorial) would bounce back into the hub.
+    const afterSplash = Boolean(data?.afterSplash);
+    if (data) data.afterSplash = false;
+    if (afterSplash && session.savedRun.status !== 'corrupt' && session.savedRun.status !== 'incompatible') {
       // Update splash just ended: skip the menu, resume the latest run or enter the hub.
       if (session.latestRunSlot() !== null) this.continueRun();
       else this.scene.start('Hub');

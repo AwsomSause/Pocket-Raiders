@@ -29,6 +29,7 @@ import { hasPerk } from '../core/mapItems';
 import Phaser from 'phaser';
 import { wildBehavior } from '../core/wildBehavior';
 import { enemyIntent, foePreviewIntent, trainerTaunt } from '../core/battle/intent';
+import { nextSwitchLine } from '../core/rivals/questlines';
 import { explainMoment, explanationText, FAMILY_NAMES, unseenKeys } from '../core/story/hyperRules';
 import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
 import { armFeat, featCharged } from '../core/story2/feats';
@@ -121,6 +122,9 @@ import { battleView, panelOf, splitChoice, type BattleBox, type BattleEvolve, ty
 import { artOf, monFile } from '../ui/redux/game';
 import { moveTipOf, ownAbilityCard, seenFact } from '../ui/redux/tips';
 import { versusView, type VersusModel } from '../ui/redux/screens/versus';
+import type { CutModel } from '../ui/redux/screens/cut';
+import type { Art } from '../ui/redux/templates';
+import { playCutMoment } from '../ui/redux/moment';
 import { rxFileOf } from '../ui/redux/assets';
 import type { AssetManifest } from '../assets/catalog';
 import { screenStyleOf } from '../core/presentation/screenStyles';
@@ -314,6 +318,8 @@ export class BattleScene extends Phaser.Scene {
   private skinHud: BattleHud | null = null;
   /** New UI: the mock-ups' HUD drawn over the canvas (default look only). The canvas HUD stays built but is not drawn. */
   private rx: ReduxView | null = null;
+  /** New UI: the foe Trainer's picture for cutscene cards, kept from the intro. */
+  private rxCast: Art | null = null;
   private rxData: BattleModel | null = null;
   private rxSig = '';
   private rxHidden = new WeakSet<object>();
@@ -646,6 +652,7 @@ export class BattleScene extends Phaser.Scene {
     onInputAction(this, (a) => this.handleInput(a));
     this.input.on('pointerdown', () => this.advance?.());
     this.rx = null;
+    this.rxCast = null;
     this.rxData = null;
     this.rxSig = '';
     this.rxInfo = '';
@@ -2684,7 +2691,7 @@ export class BattleScene extends Phaser.Scene {
       view.destroy();
       finish();
     };
-    const view = mountRedux(this, { render: (c) => versusView(c, model), acts: { next: end } });
+    const view = mountRedux(this, { render: (c) => versusView(c, model), acts: { next: end }, card: true });
     this.time.delayedCall(plain ? 1500 : this.motion === 'off' ? 1500 : 2600, end);
     return { done, skip: end };
   }
@@ -2701,6 +2708,20 @@ export class BattleScene extends Phaser.Scene {
     const foeName = this.boss()?.title ?? this.trainerTitle() ?? (battle.trainer ? 'The trainer' : this.speciesName(battle.enemyTeam[0]!));
     const recap = introRecap(kind, foeName);
     // New UI: every Trainer fight opens on the mock-ups' versus card (it stands in for the wipe and the VS screen).
+    // Kept for the moments after the battle (a win clears the battle from the run before its last scenes play).
+    this.rxCast = this.rx && art ? artOf(this, art.assetId) : null;
+    const rxBoss = this.rx && battle.trainer ? this.boss() : null;
+    if (rxBoss && !st.skippedIntros.includes(rxBoss.title)) {
+      // New UI: a boss enters on the mock-ups' cutscene card (Gym Leader, Elite Four or Champion intro), then the
+      // versus card. It stands in for the canvas entrance and title cards; skipping it once is remembered for this boss.
+      const intro = bossIntroMoment({ role: rxBoss.role === 'elite' ? 'e4' : rxBoss.role });
+      const plate = rxBoss.role === 'champion' ? 'Champion' : rxBoss.role === 'elite' ? 'Elite Four' : 'Gym Leader';
+      const types = rxBoss.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ');
+      await this.bigMoment(intro, `${intro}.${rxBoss.title}`, plate, rxBoss.title, false, { name: battle.rivalId ? battle.trainer!.name : rxBoss.name, role: plate, line: this.openingLine() || (types ? `${types} specialist.` : '') }, () => {
+        const s = services().session.settings;
+        if (!s.skippedIntros.includes(rxBoss.title)) services().session.saveSettings({ ...s, skippedIntros: [...s.skippedIntros, rxBoss.title] });
+      });
+    }
     const card = this.rx && battle.trainer ? this.rxVersus(kind === 'trainer') : null;
     if (card) await this.playBeat(card, recap);
     if (kind === 'trainer' || kind === 'wild' || kind === 'wild-dark') {
@@ -2712,6 +2733,12 @@ export class BattleScene extends Phaser.Scene {
     // Bosses and rivals get a title card: who they are and what they specialise in.
     const boss = this.boss();
     const title = this.trainerTitle();
+    if (rxBoss) {
+      // New UI: the cutscene card and the versus card already named the boss.
+      await this.playContextMoment();
+      await this.stadiumIntro();
+      return;
+    }
     const cinematic = !!boss && !!battle.trainer && this.motion !== 'off' && !services().session.settings.skippedIntros.includes(boss.title);
     if (boss && battle.trainer && !services().session.settings.skippedIntros.includes(boss.title)) {
       // A genuine boss entrance; skipping it once remembers the choice for this boss.
@@ -2731,6 +2758,12 @@ export class BattleScene extends Phaser.Scene {
     if (boss && !cinematic) {
       const types = boss.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ');
       await this.playBeat(titleCard(this, boss.title, types ? `${types} specialist` : '', ROLE_RIMS[boss.role], this.motion));
+    } else if (title && this.rx && battle.trainer && (isUltimateBattle(this.run) || battle.rivalId || battle.rival)) {
+      // New UI: a rival's entrance is the cutscene card. The Ultimate Rival gets the long one; a first meeting gets
+      // the "Rival" card here, and a later meeting gets its rematch / revenge / reunion card just below.
+      const rid = battle.rivalId ?? 'rival';
+      if (isUltimateBattle(this.run)) await this.bigMoment('rivalRevenge', `ultimate.${rid}`, 'Final Rival Battle', title, true, { name: battle.trainer.name, role: 'Final Rival Battle', line: this.openingLine() });
+      else if (!battle.rivalId || this.rivalMomentKind(battle.rivalId) === 'rivalFirst') await this.bigMoment('rivalFirst', `rivalFirst.${rid}`, 'Rival', title, false, { name: battle.trainer.name, role: 'Rival', line: this.openingLine() });
     } else if (title && isUltimateBattle(this.run)) {
       await this.playBeat(titleCard(this, `${ULTIMATE_EMBLEM} ULTIMATE RIVAL ${ULTIMATE_EMBLEM}`, title, ROLE_RIMS.ultimate, this.motion));
     } else if (title && (battle.rivalId || battle.rival)) {
@@ -2743,17 +2776,52 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** Beta 0.5 M7: a big-moment card through the cinematic framework. Presentation only; any failure is ignored. */
-  private async bigMoment(kind: MomentKind, id: string, title: string, subtitle: string, longer = false): Promise<void> {
+  private async bigMoment(kind: MomentKind, id: string, title: string, subtitle: string, longer = false, cut: Partial<CutModel> = {}, onSkip?: () => void): Promise<void> {
     try {
       const st = services().session.settings;
       const spec = defaultMoment(kind, id, 'enemy');
       if (longer) spec.phases = { situation: 400, anticipation: 700, moment: 900, reaction: 500, transition: 400 };
       const plan = planMoment(spec, { reduceMotion: this.motion === 'reduced', disableAnimations: this.motion === 'off' || st.disableAllAnimations, seen: SEEN_MOMENTS });
-      await playMoment(this, spec, plan, { title, subtitle });
+      // New UI: the moment is the mock-ups' cutscene card (who, their plate, what is said, the five-beat strip).
+      if (this.rx) await playCutMoment(this, plan, this.rxCut(kind, title, subtitle, cut), { onSkip });
+      else await playMoment(this, spec, plan, { title, subtitle, onSkip });
       SEEN_MOMENTS.add(id);
     } catch {
       // never block the battle
     }
+  }
+
+  /** The foe Trainer's opening line (the same one the battle text and the versus card use), or '' when there is none. */
+  private openingLine(): string {
+    try {
+      const { content, settings } = services().session;
+      return battleOpening(content, this.run, settings.dialogueFrequency).drama[0]?.text ?? '';
+    } catch {
+      return '';
+    }
+  }
+
+  /**
+   * New UI: what a moment's cutscene card shows. By default the card names the moment's subject (`subtitle`) under
+   * the moment's own words (`title`) as the plate, with the foe Trainer's picture; `cut` overrides any part.
+   */
+  private rxCut(kind: MomentKind, title: string, subtitle: string, cut: Partial<CutModel>): Omit<CutModel, 'beat' | 'skip'> {
+    const { content } = services().session;
+    const battle = this.run.battle;
+    const words = title.toLowerCase().replace(/(^|[\s-])\S/g, (c) => c.toUpperCase());
+    const foe = this.shown.enemy ?? battle?.enemyTeam[0];
+    const showsMon = kind === 'aceEntrance' || kind === 'raidIntro' || kind === 'raidDefeat';
+    return {
+      name: subtitle,
+      role: words,
+      line: '',
+      cast: battle?.trainer ? artOf(this, this.trainerArt()?.assetId) : this.rxCast,
+      mon: showsMon && foe ? ((f) => (f ? { file: f, atlas: true } : null))(monFile(this, foe.speciesId, 'front', !!foe.shiny)) : null,
+      player: artOf(this, content.archetypes.get(this.run.archetypeId)?.spriteAssetId),
+      backdrop: this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null,
+      evil: kind === 'evilTeam' || kind === 'evilBetrayal',
+      ...cut,
+    };
   }
 
   /** True when the trainer just beaten is the Evil Team's leader (the Betrayal scene follows). */
@@ -2762,27 +2830,52 @@ export class BattleScene extends Phaser.Scene {
     return Boolean(team && name && team.ranks.leader.name === name);
   }
 
+  /** New UI: the player's own picture for a cutscene card: the back view when the Trainer has one (as the mock-ups draw it), else the usual picture. */
+  private rxMe(): Art | null {
+    const id = this.playerArt();
+    return id ? artOf(this, bossBackId(id)) ?? artOf(this, id) : null;
+  }
+
+  /** Which rival scene fits this meeting, from the wins and losses against them so far this run. */
+  private rivalMomentKind(rid: string): ReturnType<typeof rivalMoment> {
+    const w = Number(this.run.story.flags[`rivalW:${rid}`] ?? 0);
+    const l = Number(this.run.story.flags[`rivalL:${rid}`] ?? 0);
+    return rivalMoment({ fights: w + l, lastResult: w + l === 0 ? undefined : l > 0 && w === 0 ? 'playerLost' : 'playerWon', playerStreak: l > 0 ? 0 : w });
+  }
+
   /** Raid, evil-team and returning-rival scenes picked from the battle and the encounter history. */
   private async playContextMoment(): Promise<void> {
     const battle = this.run.battle!;
     const { content } = services().session;
     if (battle.raid) {
-      await this.bigMoment(bossIntroMoment({ role: 'raid' }), `raid.${battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID BOSS', this.speciesName(battle.enemyTeam[0]!));
+      await this.bigMoment(bossIntroMoment({ role: 'raid' }), `raid.${battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID BOSS', this.speciesName(battle.enemyTeam[0]!), false, { cast: this.rxMe(), role: 'Raid Boss', line: 'The den glows red.' });
       return;
     }
-    if (!battle.trainer) return;
+    if (!battle.trainer) {
+      // New UI: a wild Legendary or Mythical Pokémon is revealed on the cutscene card.
+      const foe = battle.enemyTeam[0];
+      const tags = foe ? content.species.get(foe.speciesId)?.tags ?? [] : [];
+      const rank = tags.includes('mythical') ? 'Mythical' : tags.includes('legendary') ? 'Legendary' : null;
+      if (this.rx && foe && rank) {
+        const legend = this.run.expedition && battle.expedition ? content.expeditions.expeditions.find((e) => e.id === this.run.expedition!.id)?.legendary : undefined;
+        const epithet = legend && legend.species === foe.speciesId ? legend.epithet : '';
+        await this.bigMoment('aceEntrance', `legend.${foe.speciesId}`, `${rank} Pokémon`, this.speciesName(foe), true, { cast: this.rxMe(), role: epithet || `${rank} Pokémon`, line: `A ${rank} Pokémon stands before you.` });
+      }
+      return;
+    }
     const rid = battle.rivalId;
     if (rid) {
       const w = Number(this.run.story.flags[`rivalW:${rid}`] ?? 0);
       const l = Number(this.run.story.flags[`rivalL:${rid}`] ?? 0);
-      const kind = rivalMoment({ fights: w + l, lastResult: w + l === 0 ? undefined : l > 0 && w === 0 ? 'playerLost' : 'playerWon', playerStreak: l > 0 ? 0 : w });
-      if (kind === 'rivalFirst') return;
+      const kind = this.rivalMomentKind(rid);
+      // The Ultimate Rival's card already played (New UI); a first meeting has no returning scene.
+      if (kind === 'rivalFirst' || (this.rx && isUltimateBattle(this.run))) return;
       const label = kind === 'rivalRevenge' ? 'REVENGE' : kind === 'rivalReunion' ? 'REUNION' : 'REMATCH';
-      await this.bigMoment(kind, `${kind}.${rid}.${w}.${l}`, label, this.trainerTitle() ?? battle.trainer.name);
+      await this.bigMoment(kind, `${kind}.${rid}.${w}.${l}`, label, this.trainerTitle() ?? battle.trainer.name, false, { name: battle.trainer.name, role: 'Rival', line: this.openingLine() });
       return;
     }
     const team = evilTeam(content, this.run);
-    if (team && Object.values(team.ranks).some((r) => r.name === battle.trainer!.name)) await this.bigMoment(bossIntroMoment({ role: 'evil' }), `evil.${team.id}.${battle.trainer.name}`, team.name ?? battle.trainer.name, battle.trainer.name);
+    if (team && Object.values(team.ranks).some((r) => r.name === battle.trainer!.name)) await this.bigMoment(bossIntroMoment({ role: 'evil' }), `evil.${team.id}.${battle.trainer.name}`, team.name ?? battle.trainer.name, battle.trainer.name, false, { role: team.name ?? 'Evil Team', line: this.openingLine() });
   }
 
   /** Galar Gym Challenge: the stadium director for this battle (null in every other battle). */
@@ -2793,6 +2886,9 @@ export class BattleScene extends Phaser.Scene {
       if (!isGalarStadiumBattle(content, this.run)) return null;
       const st = session.settings;
       const alive = (team: readonly { hp: number }[]): number => team.filter((m) => m.hp > 0).length;
+      const rxOn = (): boolean => this.rx !== null;
+      const rxCard: NonNullable<StadiumHooks['card']> = (plan, cut) =>
+        playCutMoment(this, plan, this.rxCut('stadiumCut', cut.role, cut.name, { name: cut.name, role: cut.role, line: cut.line, cast: cut.castId ? artOf(this, cut.castId) : null })).then(() => undefined);
       return new StadiumDirector(this, {
         runSeed: this.run.seed,
         battleId: `${this.run.seed}:${this.run.badges.length}:${this.run.log.battlesWon}`,
@@ -2820,6 +2916,10 @@ export class BattleScene extends Phaser.Scene {
         say: (text) => this.say(text),
         announce: (text) => this.speakWithArt('Reporter', INTERVIEWERS_SPRITE, text, 'crowd'),
         opponentSays: (name, assetId, text) => this.speakWithArt(name, assetId, text, 'crowd'),
+        // Read when a moment plays (the New layer is mounted after this director is made).
+        get card() {
+          return rxOn() ? rxCard : undefined;
+        },
         portrait: (id, x, y) => {
           // Fit the picture to the card so no character is cropped, whatever size its sprite is.
           const v = trainerVisual(this, id, 'Trainer', x, y, 2) as unknown as { height: number; setScale: (n: number) => unknown };
@@ -3469,6 +3569,8 @@ export class BattleScene extends Phaser.Scene {
     // Boss intent (#117): bosses, raids and totems telegraph the move they value most.
     // Mentor lesson Foe Move Preview: on turn one the foe's chosen move is shown instead.
     const intent = this.run.battle && !this.run.battle.doubles ? (foePreviewIntent(content, this.run.battle) ?? enemyIntent(content, this.run.battle, this.activeMon(), this.run.party) ?? trainerTaunt(content, this.run.battle, this.activeMon(), this.run.party)) : null;
+    // R5 the mentor's lesson: "look at the one that's waiting" (the enemy Pokémon that comes in next, for the rest of the region).
+    const waiting = this.run.battle ? nextSwitchLine(content, this.run, this.run.battle) : null;
     const battleNow = this.run.battle!;
     const canRally = !this.duo && rallyProblem(content, battleNow) === null;
     if (!canRally) this.rallyChoice = false;
@@ -3481,7 +3583,7 @@ export class BattleScene extends Phaser.Scene {
     // A Shadow's preview adds lines: shrink the text so the box never clips (restored for every other prompt).
     this.msgBaseSize ??= String(this.message.style.fontSize);
     this.message.setFontSize(shadow ? '20px' : this.msgBaseSize);
-    this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${featLine}${shadow ? `${shadowPreviewLine((id) => content.moves.get(id)?.name ?? id, this.activeMon(), battleNow.turn, this.run.rng.battle, heartStage(content, shadow.heart))}\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
+    this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${waiting ? `${waiting}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${featLine}${shadow ? `${shadowPreviewLine((id) => content.moves.get(id)?.name ?? id, this.activeMon(), battleNow.turn, this.run.rng.battle, heartStage(content, shadow.heart))}\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
     const options = [{ label: 'Fight' }, { label: 'Bag' }, { label: 'Pokémon' }];
     const label = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z', dynamax: 'Max', mega: 'Mega' })[c.kind];
     const onLabel = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z-Move', dynamax: 'Dynamax', mega: 'Mega Evolution' })[c.kind];
@@ -3609,7 +3711,11 @@ export class BattleScene extends Phaser.Scene {
     const ps = content.species.get(mon.speciesId)!;
     const move = content.moves.get(offer.moveId)!;
     try {
-      await playMoment(this, spec, plan, {
+      // New UI: the mentor's help is the mock-ups' cutscene card, the mentor beside the Pokémon it helps.
+      if (this.rx) {
+        const art = (m: PokemonInstance): Art | null => { const f = monFile(this, m.speciesId, 'front', !!m.shiny); return f ? { file: f, atlas: true } : null; };
+        await playCutMoment(this, plan, { name: ms.name, role: 'Mentor', line: `${ms.name} lends ${ps.name} ${move.name}.`, cast: art(mentor), mon: art(mon), backdrop: null });
+      } else await playMoment(this, spec, plan, {
         title: "Mentor's help",
         subtitle: `${ms.name} lends ${ps.name} ${move.name}`,
         inner: () => this.playBeat(mentorScene(this, { mode: 'assist', makeMentor: (x, y) => pokemonVisual(this, ms, 'front', x, y, PIXEL_SCALE * 1.4, mentor.shiny), makeProte: (x, y) => pokemonVisual(this, ps, 'front', x, y, PIXEL_SCALE * 1.4, mon.shiny), caption: lines[1] ?? '', speed: 1 / animationTimeScale(services().session.settings) })),
@@ -4182,13 +4288,20 @@ export class BattleScene extends Phaser.Scene {
       await this.say(`You defeated ${trainer}!`);
     }
     // M7: a raid boss falling and a Champion's defeat each get a framework card (presentation only).
-    if (end.outcome === 'win' && this.run.battle?.raid) await this.bigMoment('raidDefeat', `raidDefeat.${this.run.battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID CLEARED', this.speciesName(this.run.battle.enemyTeam[0]!));
+    if (end.outcome === 'win' && this.run.battle?.raid) await this.bigMoment('raidDefeat', `raidDefeat.${this.run.battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID CLEARED', this.speciesName(this.run.battle.enemyTeam[0]!), false, { cast: this.rxMe(), role: 'Raid cleared', line: 'The storm above the den breaks apart.' });
     else if (end.outcome === 'win' && !bossWin && this.evilLeaderBeaten(trainer ?? undefined)) {
       // The Betrayal: with the leader beaten, the Legendary they chased turns on them. The catch is the team's 'A Legend Stirs' stop.
       const team = evilTeam(services().session.content, this.run);
-      await this.bigMoment('evilBetrayal', `evilBetrayal.${team?.id ?? 'team'}`, 'THE BETRAYAL', `The Legendary turns on ${trainer}`, true);
+      await this.bigMoment('evilBetrayal', `evilBetrayal.${team?.id ?? 'team'}`, 'THE BETRAYAL', `The Legendary turns on ${trainer}`, true, { name: trainer ?? 'The Leader', role: 'The Betrayal', line: `The Legendary turns on ${trainer}.` });
     }
-    else if (end.outcome === 'win' && bossWin) await this.bigMoment('bossDefeat', `bossDefeat.${bossWin.boss.title}`, bossWin.boss.role === 'champion' ? 'CHAMPION DEFEATED' : bossWin.boss.role === 'elite' ? 'ELITE FOUR DEFEATED' : 'LEADER DEFEATED', bossWin.boss.title);
+    else if (end.outcome === 'win' && bossWin) await this.bigMoment('bossDefeat', `bossDefeat.${bossWin.boss.title}`, bossWin.boss.role === 'champion' ? 'CHAMPION DEFEATED' : bossWin.boss.role === 'elite' ? 'ELITE FOUR DEFEATED' : 'LEADER DEFEATED', bossWin.boss.title, false, { name: bossWin.boss.name, role: 'Defeated', cast: artOf(this, bossWin.art?.assetId), line: [...(result.drama ?? [])].reverse().find((d) => d.category === 'defeat')?.text ?? '' });
+    // New UI: beating a Champion puts the player in the Hall of Fame (the mock-ups' last important moment).
+    if (this.rx && end.outcome === 'win' && bossWin?.boss.role === 'champion') {
+      const { content } = services().session;
+      const v2 = this.run.story.v2;
+      const me = content.archetypes.get(this.run.archetypeId);
+      await this.bigMoment('bossDefeat', `hallOfFame.${this.run.seed}.${this.run.regionIndex}`, 'Champion', 'Hall of Fame', true, { name: v2?.protagonist?.name || me?.name || 'You', role: 'Champion', line: 'Your name goes on the wall.', cast: this.rxMe() });
+    }
     if (end.outcome === 'win' && this.assistAfter) {
       await this.say(this.assistAfter);
       this.assistAfter = null;
@@ -4778,8 +4891,8 @@ export class BattleScene extends Phaser.Scene {
                   this.playingTrack = finalTrack;
                   playMusicLazy(this, finalTrack, finalTrack);
                 }
-                await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'FINAL POKÉMON', this.speciesName(this.shown.enemy), true);
-              } else if (bossNow) await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'ACE!', `${bossNow.title}: ${this.speciesName(this.shown.enemy)}`);
+                await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'FINAL POKÉMON', this.speciesName(this.shown.enemy), true, { name: bossNow.name, role: 'Final Battle', line: 'Last Pokémon. Make it count.' });
+              } else if (bossNow) await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'ACE!', `${bossNow.title}: ${this.speciesName(this.shown.enemy)}`, false, { name: this.speciesName(this.shown.enemy), role: `${bossNow.role === 'elite' ? 'Elite Four' : 'Gym Leader'}’s Ace`, line: `${this.speciesName(this.shown.enemy)}. It is time.` });
               else await this.playBeat(stamp(this, 'ACE!', this.speciesName(this.shown.enemy), this.foeRim(), this.motion));
             }
           }
@@ -4966,6 +5079,11 @@ export class BattleScene extends Phaser.Scene {
           }
           this.applyTeraTint(e.side, mon!);
           await this.refreshInfoBox(box, mon!, false);
+          // New UI: the player's first Mega Evolution of the run gets the mock-ups' cutscene card.
+          if (this.rx && e.kind === 'mega' && e.side === 'player' && mon && !SEEN_MOMENTS.has(`megaFirst.${this.run.seed}`)) {
+            const file = monFile(this, e.to, 'front', !!mon.shiny);
+            await this.bigMoment('mega', `megaFirst.${this.run.seed}`, 'Mega Evolution', content.species.get(e.to)?.name ?? this.speciesName(mon), false, { role: 'Mega Evolution', line: 'The stone answers the bracelet.', cast: this.rxMe(), mon: file ? { file, atlas: true } : null });
+          }
           break;
         }
         case 'ball':

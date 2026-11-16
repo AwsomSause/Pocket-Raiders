@@ -20,14 +20,18 @@ const withParty = (seed: string, species: string[]) => {
   run.party = species.map((s, i) => { const m = createPokemon(content, s, 30, `t${i}`); m.hp = 999; return m; });
   return run;
 };
-const targets = (id: string): string[] => room(id).choices.flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).flatMap((x) => (x.kind === 'addEvent' ? [x.eventId] : x.kind === 'addEventFrom' ? x.ids : []));
+const targets = (id: string): string[] => [...room(id).choices, ...room(id).remembers.flatMap((v) => v.addChoices)].flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).flatMap((x) => (x.kind === 'addEvent' || x.kind === 'laterEvent' ? [x.eventId] : x.kind === 'addEventFrom' ? x.ids : []));
 
 describe('Saffron canon: the event graph', () => {
   it('every addEvent target exists, and every room is reached from a gate', () => {
     // The Labyrinth (gn.14), Route 25 (gn.15) and the Tournament (gn.16) moved to Greenneedle (the old rooms are retired, kept for saved runs).
-    const ids = [...content.events.values()].filter((e) => e.id.startsWith(P) && !e.disabled).map((e) => e.id.slice(P.length));
-    const gates = ['r25', 'tournament', 'dojo', 'copycat', 'silph', 'train', 'labyrinth'];
-    const reach = new Set<string>(gates);
+    const ids = [...content.events.keys()].filter((id) => id.startsWith(P) && !content.events.get(id)!.disabled).map((id) => id.slice(P.length));
+    // train-arrive is the Magnet Train's follow-up, placed at the start of the next stage.
+    // lament-flash is Sabrina's Lament (KANTO_PLACED_2), a follow-up after the Labyrinth.
+    // KANTO_PLACED_4 adds Mr. Psychic, the House of Imitation, the Admissions Exam, the Teleport Girl, the Seam and Pidgey Post.
+    const gates = ['r25', 'tournament', 'dojo', 'copycat', 'silph', 'train', 'train-arrive', 'lament-flash', 'labyrinth', 'return-shuppet', 'return-duskull', 'return-drifloon', 'return-gastly', 'rival-return', 'mrpsychic', 'imite', 'exam', 'teleport', 'seam', 'post'];
+    // Greenneedle retired some of these with the rooms they rebuilt (gn.14's ghost returns, gn.16's rival return): a retired gate opens nothing.
+    const reach = new Set<string>(gates.filter((g) => ids.includes(g)));
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) { expect(content.events.has(t), `${id} -> ${t}`).toBe(true); if (t.startsWith(P) && !reach.has(t.slice(P.length))) { reach.add(t.slice(P.length)); again = true; } } }
     expect([...reach].sort()).toEqual(ids.sort());
   });
@@ -195,34 +199,42 @@ describe('Heat-of-battle evolution', () => {
   });
 });
 
-describe('Fighting Dojo, Copycat, Silph Lobby, Magnet Train', () => {
-  it('the Dojo offers Hitmontop as a third choice 3 times in 20 (15%)', () => {
-    const ids = (room('dojo').choices[0]!.success.battle as { win: { ids: string[] }[] }).win[0]!.ids;
-    expect(ids.filter((i) => i === `${P}dojo-three`)).toHaveLength(3);
-    expect(ids).toHaveLength(20);
-    expect(room('dojo-two').choices.map((c) => c.success.effects[0])).toEqual([expect.objectContaining({ species: ['hitmonlee'] }), expect.objectContaining({ species: ['hitmonchan'] })]);
-    expect(room('dojo-three').choices).toHaveLength(3);
+describe('Fighting Dojo, Copycat, Silph Lobby, Magnet Train (KANTO_PLACED_2)', () => {
+  it('the Dojo is a one-on-one with his Machamp at A+1; Hitmonlee or Hitmonchan, and 15%: Hitmontop as a third', () => {
+    const b = room('dojo').choices[0]!.success.battle as { team: string[]; size: number; levelBonus: number; win: unknown[] };
+    expect(b.team).toEqual(['machamp']);
+    expect(b.size).toBe(1);
+    expect(b.levelBonus).toBe(1);
+    expect(b.win).toContainEqual({ kind: 'addEvent', eventId: `${P}dojo-prize` });
+    expect(room('dojo-prize').choices[2]!.chance).toBe(0.15);
+    expect(room('dojo-prize2').choices.map((c) => c.success.effects[0])).toEqual([expect.objectContaining({ species: ['hitmonlee'] }), expect.objectContaining({ species: ['hitmonchan'] })]);
+    expect(room('dojo-top').choices).toHaveLength(3);
+    expect(room('dojo').choices[2]!.requires).toEqual([{ kind: 'partyType', type: 'psychic' }]);
   });
-  it('the Copycat game is four claps and pays Mimic', () => {
+  it('the Copycat game is four rounds and pays Mimic, with one more try', () => {
     const c = room('copycat').choices[0]!;
     expect(c.prompt).toEqual({ id: 'copycat-claps', needs: 'good' });
     expect(c.success.effects).toContainEqual({ kind: 'teachMove', move: 'mimic' });
+    expect(c.failure!.effects).toContainEqual({ kind: 'addEvent', eventId: `${P}copycat-again` });
     const { run, sideId } = debugForceEvent(content, structuredClone(begin('CC')), `${P}copycat`);
     const out = chooseEvent(content, run, sideId, 0, undefined, 'perfect').run;
     expect(out.party[0]!.moves.some((m) => m.id === 'mimic')).toBe(true);
   });
-  it('Silph: a Lapras below 40 heat, none above', () => {
+  it('Silph: a Lapras below 40 heat, none above (it is owed after the takeover)', () => {
     const run = begin('SI');
     expect(conditionMet(content, run, { kind: 'evil', heatBelow: 40 })).toBe(true);
     const hunted = structuredClone(run);
     hunted.story.evil = { ...(hunted.story.evil ?? {}), teamId: 'rocket', heat: 60 } as never;
     expect(conditionMet(content, hunted, { kind: 'evil', heatBelow: 40 })).toBe(false);
-    const { run: r2, sideId } = debugForceEvent(content, structuredClone(run), `${P}silph`);
+    const { run: r2, sideId } = debugForceEvent(content, structuredClone(run), `${P}silph-gift`);
     const out = chooseEvent(content, r2, sideId, 0).run;
-    expect(out.pending.some((p) => p.kind === 'caught' && p.mon.speciesId === 'lapras')).toBe(true);
+    expect(out.pending.some((p) => p.kind === 'caught' && p.mon.speciesId === 'lapras') || out.party.some((m) => m.speciesId === 'lapras')).toBe(true);
+    expect(room('silph-gift').choices[1]!.requires).toEqual([{ kind: 'evil', heat: 40 }]);
   });
-  it('the Magnet Train jumps ahead and can be refused', () => {
-    expect(room('train').choices[0]!.success.effects).toEqual([{ kind: 'skipAhead' }]);
+  it('the Magnet Train: ride and arrive further into the next stage, or walk', () => {
+    expect(room('train').choices[0]!.success.effects).toEqual([{ kind: 'flag', key: 'kanto-train-ride', amount: 1 }]);
+    expect(room('train-arrive').requires).toEqual([{ kind: 'flag', key: 'kanto-train-ride', atLeast: 1, atMost: 99 }]);
+    expect(room('train-arrive').choices[0]!.success.effects).toEqual([{ kind: 'express' }]);
     expect(room('train').choices).toHaveLength(2);
   });
 });

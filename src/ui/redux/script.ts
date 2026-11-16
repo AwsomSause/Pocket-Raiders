@@ -55,16 +55,24 @@ export function scriptPages(text: string, max = 240): ScriptPage[] {
   const pages: ScriptPage[] = [];
   for (const para of text.replace(/\r/g, '').split(/\n[ \t]*\n+/)) {
     const lines = para.split('\n').map((l) => l.trim()).filter(Boolean).map(scriptLine);
-    if (!lines.length) continue;
-    if (size(lines) <= limit) { pages.push(lines); continue; }
-    let cur: ScriptPage = [];
-    for (const piece of lines.flatMap((l) => cutLine(l, limit))) {
-      if (cur.length && size([...cur, piece]) > limit) { pages.push(cur); cur = []; }
-      cur.push(piece);
-    }
-    if (cur.length) pages.push(cur);
+    pages.push(...pageLines(lines, limit));
   }
   return pages.length ? pages : [[{ who: null, text: '' }]];
+}
+
+/** Lines that are already split into speaker and words, laid out on pages of at most `max` characters (no page when there are no lines). */
+export function pageLines(lines: readonly ScriptLine[], max = 240): ScriptPage[] {
+  const limit = Math.max(40, max);
+  if (!lines.length) return [];
+  if (size([...lines]) <= limit) return [[...lines]];
+  const pages: ScriptPage[] = [];
+  let cur: ScriptPage = [];
+  for (const piece of lines.flatMap((l) => cutLine(l, limit))) {
+    if (cur.length && size([...cur, piece]) > limit) { pages.push(cur); cur = []; }
+    cur.push(piece);
+  }
+  if (cur.length) pages.push(cur);
+  return pages;
 }
 
 /** The name for the plate: the page's speaker when exactly one person speaks on it, else null (the caller's default). */

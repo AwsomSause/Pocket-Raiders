@@ -33,7 +33,7 @@ const PATH_BLURB: Record<MentorPath, string> = {
   challenger: 'facing stronger opponents head on',
   bonded: 'fighting beside a specific teammate',
 };
-import type { MoveSlot, PokemonInstance } from '../core/state';
+import type { MoveSlot, PendingDecision, PokemonInstance } from '../core/state';
 import { services } from '../game/services';
 import { playMusic, playSfx, playMusicLazy } from '../ui/audio';
 import { raidCaptureTrack } from '../core/presentation/battleMusic';
@@ -51,6 +51,7 @@ import { artOf, monFile, partyChips } from '../ui/redux/game';
 import { mountConfirm } from '../ui/redux/confirm';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { decisionView, type DecisionModel, type DecisionOption } from '../ui/redux/screens/decision';
+import { counterView } from '../ui/redux/screens/ops';
 
 /** The EBDX art the Egg hatch uses (loaded only when an Egg is hatching). */
 const HATCH_ASSETS = ['pack.ebdx.egg', 'pack.ebdx.eggCracks', 'pack.ebdx.hatch.hatchbg', 'pack.ebdx.hatch.line', 'pack.ebdx.hatch.overlay', 'pack.ebdx.hatch.shine6', 'pack.ebdx.hatch.shine7', 'se.egg_get'];
@@ -122,6 +123,7 @@ export class DecisionScene extends Phaser.Scene {
     this.rxSpec = null;
     this.rxMore = false;
     this.rxResult = null;
+    this.doorKey = null;
     // A beaten raid boss asking to join plays that tier's capture jingle (Raid Battles pack).
     const tier = this.raidTier();
     if (tier) playMusic(this, raidCaptureTrack(tier));
@@ -136,7 +138,7 @@ export class DecisionScene extends Phaser.Scene {
     else if (decision.kind === 'signature') this.buildSignature(decision.title, decision.options);
     else if (decision.kind === 'mutator') this.buildMutator(decision.choices);
     else if (decision.kind === 'circuit') this.buildCircuit(decision.title, decision.options);
-    else if (decision.kind === 'leagueDoor') this.buildSignature(decision.title, decision.options, 'circuit');
+    else if (decision.kind === 'leagueDoor') reduxOn() ? this.buildLeagueDoor(decision) : this.buildSignature(decision.title, decision.options, 'circuit');
     else if (decision.kind === 'mythicalVisit') this.buildSignature(decision.title, decision.options, 'circuit');
     else if (decision.kind === 'mentorship') this.buildMentorship(decision.mentorUid, decision.proteUid, decision.path, decision.types);
     else if (decision.kind === 'askLead') this.buildAskLead(decision.uid, decision.reason);
@@ -145,6 +147,8 @@ export class DecisionScene extends Phaser.Scene {
   }
 
   private dismiss: (() => void) | null = null;
+  /** New UI: the League door page takes the keys itself (it has a list and two buttons, not one menu). */
+  private doorKey: ((a: InputAction) => void) | null = null;
   private compareStep?: (d: number) => void;
 
   /** New UI: draws this decision with the mock-up screen (the first call mounts it; later calls swap what it shows). */
@@ -189,6 +193,7 @@ export class DecisionScene extends Phaser.Scene {
       return;
     }
     if (this.hatching) return;
+    if (this.doorKey) return this.doorKey(action);
     if (!this.confirmMenu && !this.picker && (action === 'left' || action === 'right')) this.compareStep?.(action === 'left' ? -1 : 1);
     if (this.confirmMenu) this.confirmMenu.handle(action);
     else if (this.picker) this.picker.handle(action);
@@ -370,6 +375,59 @@ export class DecisionScene extends Phaser.Scene {
       party: null,
       text: title,
     }));
+  }
+
+  /** New UI: the League door as the mock-up counter-pick page: the registered party, the boxed Pokémon and two buttons. */
+  private buildLeagueDoor(d: Extract<PendingDecision, { kind: 'leagueDoor' }>): void {
+    const { session } = services();
+    const run = session.run!, content = session.content;
+    const nameOf = (speciesId: string): string => content.species.get(speciesId)?.name ?? speciesId;
+    const registered = new Set(run.expansion?.league?.registered ?? []);
+    const out = run.party.find((m) => m.uid === d.outUid);
+    const outName = out ? nameOf(out.speciesId) : 'it';
+    // The page is read once: after a swap the party has changed, and the result line is about the team that was registered.
+    const party = run.party.map((m) => ({ name: nameOf(m.speciesId), file: monFile(this, m.speciesId, 'front', !!m.shiny), types: content.species.get(m.speciesId)?.types ?? [], state: m.uid === d.outUid ? ('answer' as const) : registered.has(m.uid) ? ('registered' as const) : ('out' as const) }));
+    const bench = d.swapIns.map((uid) => run.box.find((m) => m.uid === uid)).map((m) => (m ? { name: nameOf(m.speciesId), file: monFile(this, m.speciesId, 'front', !!m.shiny), sub: `Lv ${m.level}` } : { name: '???', file: null, sub: '' }));
+    const n = bench.length;
+    // The cursor starts on the swap button with the first boxed Pokémon marked, as on the mock-up.
+    let pick = 0, at = n, moved = false;
+    const choose = (): void => {
+      if (at < n) {
+        pick = at;
+        at = n;
+        this.rx?.refresh();
+      } else this.resolve({ kind: 'circuit', optionIndex: at === n ? pick + 1 : 0 });
+    };
+    const go = (k: number): void => {
+      if (this.done || !(k >= 0 && k <= n + 1) || k === at) return;
+      at = k;
+      moved = true;
+      this.rx?.refresh();
+    };
+    this.doorKey = (a) => {
+      if (a === 'confirm') return choose();
+      if (a === 'back') return go(n + 1);
+      go(at + (a === 'up' || a === 'left' ? -1 : 1));
+    };
+    this.rx = mountRedux(this, {
+      render: (c) => counterView(c, {
+        party, bench, pick, at,
+        swap: `Swap ${outName} out`,
+        keep: d.options[0]?.label ?? 'Keep my team',
+        who: 'Registrar',
+        text: !moved ? `Your party is registered. The League has studied ${outName} most. You may swap that one before the doors close.` : (d.options[at === n + 1 ? 0 : (at < n ? at : pick) + 1]?.description ?? ''),
+        result: this.rxResult,
+      }),
+      acts: {
+        pick: (k) => {
+          if (this.done) return;
+          go(Number(k));
+          choose();
+        },
+        done: () => this.dismiss?.(),
+      },
+      overs: { over: (k) => go(Number(k)) },
+    });
   }
 
   /** The Circuit's Fork Gate and Rematch Day: the menu with each Leader's portrait beside their row. */

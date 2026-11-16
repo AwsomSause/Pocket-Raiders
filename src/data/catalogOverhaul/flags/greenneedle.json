@@ -1,0 +1,21 @@
+{
+ "category": "greenneedle",
+ "note": "Catalog row 15 (Greenneedle). `external`: flags a Greenneedle event reads that another set (or a Greenneedle event not built yet) will write; remove each as its writer lands. `flags` with `rule`: flags code writes, not an event effect.",
+ "external": {
+  "abandoned-mon": "gn.new.03 The Ball That Wouldn't Open",
+  "gn-new-06-won": "gn.new.06",
+  "littlecup-cancelled": "gn.new.27",
+  "eevee-stayed": "gn.new.01",
+  "dog-sat": "gn.new.02",
+  "little-league-losing": "SF134.2 Little League",
+  "starter-home": "a starter's visit home (gn.new)",
+  "border-united": "new-events row, NE73 The Border Dispute (united both sides)",
+  "team-raid-moon-won": "Evil Team row: the Mt. Moon raid (read by gn.04)",
+  "team-raid-moon-lost": "Evil Team row: the Mt. Moon raid (read by gn.04)"
+ },
+ "flags": [
+  { "key": "safari-photo-best", "rule": "core/greenneedle/safariEnd.ts (gn.18 Safari Land)" },
+  { "key": "partner-was-ball", "rule": "core/greenneedle gn op `partner` (gn.24)" },
+  { "key": "pidgey-backed-spearow", "rule": "core/sky/spectate.ts (gn.02 Sky finale)" }
+ ]
+}
