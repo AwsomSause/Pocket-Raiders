@@ -1,442 +1,472 @@
 [
-  {
-    "id": "moon-shard",
-    "name": "Moon Stone Shard",
-    "family": "Valuables",
-    "description": "A sliver of Moon Stone the Clefairy left behind on the cave floor. Too small to evolve anything. Sell for ₽400",
-    "rarity": "uncommon",
-    "stacksOn": "player",
-    "max": null,
-    "how": "use",
-    "icon": "library/starshard1",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "money",
-      "amount": 400,
-      "changes": {}
-    }
-  },
-  {
-    "id": "bottle-cap-badge",
-    "name": "Bottle-Cap Badge",
-    "family": "Charms",
-    "description": "Damian made it himself. It counts for nothing and you keep it anyway: +5% prize money from trainers",
-    "rarity": "rare",
-    "stacksOn": "player",
-    "max": 1,
-    "how": "passive",
-    "icon": "library/bottlecap",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "passive",
-      "passive": "trainerMoney",
-      "percent": 5
-    }
-  },
-  {
-    "id": "damian-badge",
-    "name": "Damian's Badge",
-    "family": "Charms",
-    "description": "A real badge from an inspected Gym, with a certificate behind it: another +5% prize money from trainers",
-    "rarity": "epic",
-    "stacksOn": "player",
-    "max": 1,
-    "how": "passive",
-    "icon": "library/surgebadge",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "passive",
-      "passive": "trainerMoney",
-      "percent": 5
-    }
-  },
-  {
-    "id": "bills-pc",
-    "name": "Bill's PC",
-    "family": "Key items: gadgets",
-    "description": "Bill patched you into his storage system. You can store Pokémon in a PC on the road, at any node.",
-    "rarity": "epic",
-    "stacksOn": "player",
-    "max": 1,
-    "how": "passive",
-    "icon": "library/remotepc",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "perk",
-      "lasts": {
-        "for": "run"
-      },
-      "perks": [
-        {
-          "perk": "runModifier",
-          "modifiers": [
-            {
-              "kind": "boxCapacity",
-              "slots": 6
+    {
+        "id": "moon-shard",
+        "name": "Moon Stone Shard",
+        "family": "Valuables",
+        "description": "A sliver of Moon Stone the Clefairy left behind on the cave floor. Too small to evolve anything. Sell for ₽400",
+        "rarity": "uncommon",
+        "stacksOn": "player",
+        "max": null,
+        "how": "use",
+        "icon": "library/starshard1",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "money",
+            "amount": 400,
+            "changes": {}
+        }
+    },
+    {
+        "id": "bottle-cap-badge",
+        "name": "Bottle-Cap Badge",
+        "family": "Charms",
+        "description": "Damian made it himself. It counts for nothing and you keep it anyway: +5% prize money from trainers",
+        "rarity": "rare",
+        "stacksOn": "player",
+        "max": 1,
+        "how": "passive",
+        "icon": "library/bottlecap",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "passive",
+            "passive": "trainerMoney",
+            "percent": 5
+        }
+    },
+    {
+        "id": "damian-badge",
+        "name": "Damian's Badge",
+        "family": "Charms",
+        "description": "A real badge from an inspected Gym, with a certificate behind it: another +5% prize money from trainers",
+        "rarity": "epic",
+        "stacksOn": "player",
+        "max": 1,
+        "how": "passive",
+        "icon": "library/surgebadge",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "passive",
+            "passive": "trainerMoney",
+            "percent": 5
+        }
+    },
+    {
+        "id": "bills-pc",
+        "name": "Bill's PC",
+        "family": "Key items: gadgets",
+        "description": "Bill patched you into his storage system. You can store Pokémon in a PC on the road, at any node.",
+        "rarity": "epic",
+        "stacksOn": "player",
+        "max": 1,
+        "how": "passive",
+        "icon": "library/remotepc",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "perk",
+            "lasts": {
+                "for": "run"
+            },
+            "perks": [
+                {
+                    "perk": "runModifier",
+                    "modifiers": [
+                        {
+                            "kind": "boxCapacity",
+                            "slots": 6
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "id": "bills-recorder",
+        "name": "Bill's Recorder",
+        "family": "Key items: gadgets",
+        "description": "It picks up what the ear can't. One hidden stop on each stage shows what it is.",
+        "rarity": "epic",
+        "stacksOn": "player",
+        "max": 1,
+        "how": "passive",
+        "icon": "vs-recorder",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "perk",
+            "lasts": {
+                "for": "run"
+            },
+            "perks": [
+                {
+                    "perk": "revealOne"
+                }
+            ]
+        }
+    },
+    {
+        "id": "captains-compass",
+        "name": "Captain's Compass",
+        "family": "Key items: gadgets",
+        "description": "Captain Winslow's compass. It has never once pointed north. For your next stage, you see the wild Pokémon ahead before you meet them.",
+        "rarity": "epic",
+        "stacksOn": "player",
+        "max": 1,
+        "how": "passive",
+        "icon": "library/pokescanner",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "perk",
+            "lasts": {
+                "for": "nextStage"
+            },
+            "perks": [
+                {
+                    "perk": "preview",
+                    "what": "wild"
+                }
+            ]
+        }
+    },
+    {
+        "id": "roux-wild",
+        "name": "Madame Roux's Reading (Wild)",
+        "family": "Key items: gadgets",
+        "description": "One true thing about your next stage: you see its wild Pokémon before you meet them.",
+        "rarity": "rare",
+        "stacksOn": "player",
+        "max": 1,
+        "how": "passive",
+        "icon": "library/pokescanner",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "perk",
+            "lasts": {
+                "for": "nextStage"
+            },
+            "perks": [
+                {
+                    "perk": "preview",
+                    "what": "wild"
+                }
+            ]
+        }
+    },
+    {
+        "id": "roux-trainers",
+        "name": "Madame Roux's Reading (Trainers)",
+        "family": "Key items: gadgets",
+        "description": "One true thing about your next stage: you see its trainers' Pokémon before you fight them.",
+        "rarity": "rare",
+        "stacksOn": "player",
+        "max": 1,
+        "how": "passive",
+        "icon": "library/pokescanner",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "perk",
+            "lasts": {
+                "for": "nextStage"
+            },
+            "perks": [
+                {
+                    "perk": "preview",
+                    "what": "trainers"
+                }
+            ]
+        }
+    },
+    {
+        "id": "roux-gym",
+        "name": "Madame Roux's Reading (Gym)",
+        "family": "Key items: gadgets",
+        "description": "One true thing about your next stage: you see the Gym Leader's ace before the Gym.",
+        "rarity": "rare",
+        "stacksOn": "player",
+        "max": 1,
+        "how": "passive",
+        "icon": "library/pokescanner",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "perk",
+            "lasts": {
+                "for": "nextStage"
+            },
+            "perks": [
+                {
+                    "perk": "preview",
+                    "what": "gymAce"
+                }
+            ]
+        }
+    },
+    {
+        "id": "hm-dazzling-gleam",
+        "name": "HM Dazzling Gleam",
+        "family": "TMs and HMs",
+        "description": "The Lady's gift. Teaches Dazzling Gleam to a Pokémon that can learn it.",
+        "rarity": "epic",
+        "stacksOn": "pokemon",
+        "max": null,
+        "how": "use",
+        "icon": "library/machine-fairy",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "teachMove",
+            "type": "fairy",
+            "mode": "hm",
+            "move": "dazzling-gleam"
+        }
+    },
+    {
+        "id": "hm-play-rough",
+        "name": "HM Play Rough",
+        "family": "TMs and HMs",
+        "description": "The Lady's gift. Teaches Play Rough to a Pokémon that can learn it.",
+        "rarity": "epic",
+        "stacksOn": "pokemon",
+        "max": null,
+        "how": "use",
+        "icon": "library/machine-fairy",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "teachMove",
+            "type": "fairy",
+            "mode": "hm",
+            "move": "play-rough"
+        }
+    },
+    {
+        "id": "hm-moonblast",
+        "name": "HM Moonblast",
+        "family": "TMs and HMs",
+        "description": "The Lady's gift. Teaches Moonblast to a Pokémon that can learn it.",
+        "rarity": "epic",
+        "stacksOn": "pokemon",
+        "max": null,
+        "how": "use",
+        "icon": "library/machine-fairy",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "teachMove",
+            "type": "fairy",
+            "mode": "hm",
+            "move": "moonblast"
+        }
+    },
+    {
+        "id": "giants-mark",
+        "name": "Giant's Mark",
+        "family": "Held items",
+        "description": "Pressed into it by something very large. The holder's max HP is 25% higher, and its Speed 15% lower.",
+        "rarity": "epic",
+        "stacksOn": "pokemon",
+        "max": 1,
+        "how": "held",
+        "icon": "library/commonstone",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "held",
+            "hooks": [
+                {
+                    "hook": "maxHp",
+                    "percent": 25
+                },
+                {
+                    "hook": "stat",
+                    "stat": "spe",
+                    "multiplier": 0.85
+                }
+            ]
+        }
+    },
+    {
+        "id": "cavern-red-crystal",
+        "name": "Red Cavern Crystal",
+        "family": "Held items",
+        "description": "A crystal from the Golem, still warm. Moves of the holder's own type hit 5% harder.",
+        "rarity": "rare",
+        "stacksOn": "pokemon",
+        "max": 1,
+        "how": "held",
+        "icon": "library/commonstone",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "held",
+            "hooks": [
+                {
+                    "hook": "ownTypePower",
+                    "percent": 5
+                }
+            ]
+        }
+    },
+    {
+        "id": "cavern-blue-crystal",
+        "name": "Blue Cavern Crystal",
+        "family": "Held items",
+        "description": "A crystal from the Golem, cool as pool water. The holder takes 10% less from super-effective hits.",
+        "rarity": "rare",
+        "stacksOn": "pokemon",
+        "max": 1,
+        "how": "held",
+        "icon": "library/commonstone",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "held",
+            "hooks": [
+                {
+                    "hook": "damageTaken",
+                    "percent": -10,
+                    "superEffective": true
+                }
+            ]
+        }
+    },
+    {
+        "id": "cavern-green-crystal",
+        "name": "Green Cavern Crystal",
+        "family": "Held items",
+        "description": "A crystal from the Golem, with something growing in it. Heals 1/16 of the holder's max HP each turn.",
+        "rarity": "rare",
+        "stacksOn": "pokemon",
+        "max": 1,
+        "how": "held",
+        "icon": "library/commonstone",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "held",
+            "hooks": [
+                {
+                    "hook": "endTurn",
+                    "fraction": 0.0625
+                }
+            ]
+        }
+    },
+    {
+        "id": "cavern-white-crystal",
+        "name": "White Cavern Crystal",
+        "family": "Held items",
+        "description": "A crystal from the Golem, full of light. The holder's moves are 10% more accurate.",
+        "rarity": "rare",
+        "stacksOn": "pokemon",
+        "max": 1,
+        "how": "held",
+        "icon": "library/commonstone",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "held",
+            "hooks": [
+                {
+                    "hook": "accuracy",
+                    "percent": 10
+                }
+            ]
+        }
+    },
+    {
+        "id": "cavern-black-crystal",
+        "name": "Black Cavern Crystal",
+        "family": "Held items",
+        "description": "A crystal from the Golem, cold to hold. 10% chance to make the target flinch.",
+        "rarity": "rare",
+        "stacksOn": "pokemon",
+        "max": 1,
+        "how": "held",
+        "icon": "library/commonstone",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "held",
+            "hooks": [
+                {
+                    "hook": "flinch",
+                    "percent": 10
+                }
+            ]
+        }
+    },
+    {
+        "id": "summit-ability-capsule",
+        "name": "Summit Ability Capsule",
+        "family": "IV and ability items",
+        "description": "Found in the glass on Thunderstorm Ridge's summit. Gives a Pokémon its hidden ability.",
+        "rarity": "rare",
+        "stacksOn": "pokemon",
+        "max": 1,
+        "how": "use",
+        "icon": "library/abilityvial",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "ability",
+            "mode": "hidden"
+        }
+    },
+    {
+        "id": "fresh-milk",
+        "name": "Fresh Milk",
+        "family": "Healing and status items",
+        "description": "Heals 60 HP, +1 Love. From the ranch you gave water to",
+        "rarity": "uncommon",
+        "stacksOn": "pokemon",
+        "max": null,
+        "how": "use",
+        "icon": "moomoo-milk",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "care",
+            "heal": 60,
+            "changes": {
+                "love": 1
             }
-          ]
         }
-      ]
-    }
-  },
-  {
-    "id": "bills-recorder",
-    "name": "Bill's Recorder",
-    "family": "Key items: gadgets",
-    "description": "It picks up what the ear can't. One hidden stop on each stage shows what it is.",
-    "rarity": "epic",
-    "stacksOn": "player",
-    "max": 1,
-    "how": "passive",
-    "icon": "vs-recorder",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "perk",
-      "lasts": {
-        "for": "run"
-      },
-      "perks": [
-        {
-          "perk": "revealOne"
+    },
+    {
+        "id": "thundermark",
+        "name": "Thundermark",
+        "family": "Held items",
+        "description": "A paw print burned into a scrap of bark by something walking through your camp at night. The holder's Electric moves hit 20% harder, and its Speed is 10% higher.",
+        "rarity": "epic",
+        "stacksOn": "pokemon",
+        "max": 1,
+        "how": "held",
+        "icon": "library/commonstone",
+        "status": "supported",
+        "giftOnly": true,
+        "effect": {
+            "kind": "held",
+            "hooks": [
+                {
+                    "hook": "typePower",
+                    "types": [
+                        "electric"
+                    ],
+                    "percent": 20
+                },
+                {
+                    "hook": "stat",
+                    "stat": "spe",
+                    "multiplier": 1.1
+                }
+            ]
         }
-      ]
     }
-  },
-  {
-    "id": "captains-compass",
-    "name": "Captain's Compass",
-    "family": "Key items: gadgets",
-    "description": "Captain Winslow's compass. It has never once pointed north. For your next stage, you see the wild Pokémon ahead before you meet them.",
-    "rarity": "epic",
-    "stacksOn": "player",
-    "max": 1,
-    "how": "passive",
-    "icon": "library/pokescanner",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "perk",
-      "lasts": {
-        "for": "nextStage"
-      },
-      "perks": [
-        {
-          "perk": "preview",
-          "what": "wild"
-        }
-      ]
-    }
-  },
-  {
-    "id": "roux-wild",
-    "name": "Madame Roux's Reading (Wild)",
-    "family": "Key items: gadgets",
-    "description": "One true thing about your next stage: you see its wild Pokémon before you meet them.",
-    "rarity": "rare",
-    "stacksOn": "player",
-    "max": 1,
-    "how": "passive",
-    "icon": "library/pokescanner",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "perk",
-      "lasts": {
-        "for": "nextStage"
-      },
-      "perks": [
-        {
-          "perk": "preview",
-          "what": "wild"
-        }
-      ]
-    }
-  },
-  {
-    "id": "roux-trainers",
-    "name": "Madame Roux's Reading (Trainers)",
-    "family": "Key items: gadgets",
-    "description": "One true thing about your next stage: you see its trainers' Pokémon before you fight them.",
-    "rarity": "rare",
-    "stacksOn": "player",
-    "max": 1,
-    "how": "passive",
-    "icon": "library/pokescanner",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "perk",
-      "lasts": {
-        "for": "nextStage"
-      },
-      "perks": [
-        {
-          "perk": "preview",
-          "what": "trainers"
-        }
-      ]
-    }
-  },
-  {
-    "id": "roux-gym",
-    "name": "Madame Roux's Reading (Gym)",
-    "family": "Key items: gadgets",
-    "description": "One true thing about your next stage: you see the Gym Leader's ace before the Gym.",
-    "rarity": "rare",
-    "stacksOn": "player",
-    "max": 1,
-    "how": "passive",
-    "icon": "library/pokescanner",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "perk",
-      "lasts": {
-        "for": "nextStage"
-      },
-      "perks": [
-        {
-          "perk": "preview",
-          "what": "gymAce"
-        }
-      ]
-    }
-  },
-  {
-    "id": "hm-dazzling-gleam",
-    "name": "HM Dazzling Gleam",
-    "family": "TMs and HMs",
-    "description": "The Lady's gift. Teaches Dazzling Gleam to a Pokémon that can learn it.",
-    "rarity": "epic",
-    "stacksOn": "pokemon",
-    "max": null,
-    "how": "use",
-    "icon": "library/machine-fairy",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "teachMove",
-      "type": "fairy",
-      "mode": "hm",
-      "move": "dazzling-gleam"
-    }
-  },
-  {
-    "id": "hm-play-rough",
-    "name": "HM Play Rough",
-    "family": "TMs and HMs",
-    "description": "The Lady's gift. Teaches Play Rough to a Pokémon that can learn it.",
-    "rarity": "epic",
-    "stacksOn": "pokemon",
-    "max": null,
-    "how": "use",
-    "icon": "library/machine-fairy",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "teachMove",
-      "type": "fairy",
-      "mode": "hm",
-      "move": "play-rough"
-    }
-  },
-  {
-    "id": "hm-moonblast",
-    "name": "HM Moonblast",
-    "family": "TMs and HMs",
-    "description": "The Lady's gift. Teaches Moonblast to a Pokémon that can learn it.",
-    "rarity": "epic",
-    "stacksOn": "pokemon",
-    "max": null,
-    "how": "use",
-    "icon": "library/machine-fairy",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "teachMove",
-      "type": "fairy",
-      "mode": "hm",
-      "move": "moonblast"
-    }
-  },
-  {
-    "id": "giants-mark",
-    "name": "Giant's Mark",
-    "family": "Held items",
-    "description": "Pressed into it by something very large. The holder's max HP is 25% higher, and its Speed 15% lower.",
-    "rarity": "epic",
-    "stacksOn": "pokemon",
-    "max": 1,
-    "how": "held",
-    "icon": "library/commonstone",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "held",
-      "hooks": [
-        {
-          "hook": "maxHp",
-          "percent": 25
-        },
-        {
-          "hook": "stat",
-          "stat": "spe",
-          "multiplier": 0.85
-        }
-      ]
-    }
-  },
-  {
-    "id": "cavern-red-crystal",
-    "name": "Red Cavern Crystal",
-    "family": "Held items",
-    "description": "A crystal from the Golem, still warm. Moves of the holder's own type hit 5% harder.",
-    "rarity": "rare",
-    "stacksOn": "pokemon",
-    "max": 1,
-    "how": "held",
-    "icon": "library/commonstone",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "held",
-      "hooks": [
-        {
-          "hook": "ownTypePower",
-          "percent": 5
-        }
-      ]
-    }
-  },
-  {
-    "id": "cavern-blue-crystal",
-    "name": "Blue Cavern Crystal",
-    "family": "Held items",
-    "description": "A crystal from the Golem, cool as pool water. The holder takes 10% less from super-effective hits.",
-    "rarity": "rare",
-    "stacksOn": "pokemon",
-    "max": 1,
-    "how": "held",
-    "icon": "library/commonstone",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "held",
-      "hooks": [
-        {
-          "hook": "damageTaken",
-          "percent": -10,
-          "superEffective": true
-        }
-      ]
-    }
-  },
-  {
-    "id": "cavern-green-crystal",
-    "name": "Green Cavern Crystal",
-    "family": "Held items",
-    "description": "A crystal from the Golem, with something growing in it. Heals 1/16 of the holder's max HP each turn.",
-    "rarity": "rare",
-    "stacksOn": "pokemon",
-    "max": 1,
-    "how": "held",
-    "icon": "library/commonstone",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "held",
-      "hooks": [
-        {
-          "hook": "endTurn",
-          "fraction": 0.0625
-        }
-      ]
-    }
-  },
-  {
-    "id": "cavern-white-crystal",
-    "name": "White Cavern Crystal",
-    "family": "Held items",
-    "description": "A crystal from the Golem, full of light. The holder's moves are 10% more accurate.",
-    "rarity": "rare",
-    "stacksOn": "pokemon",
-    "max": 1,
-    "how": "held",
-    "icon": "library/commonstone",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "held",
-      "hooks": [
-        {
-          "hook": "accuracy",
-          "percent": 10
-        }
-      ]
-    }
-  },
-  {
-    "id": "cavern-black-crystal",
-    "name": "Black Cavern Crystal",
-    "family": "Held items",
-    "description": "A crystal from the Golem, cold to hold. 10% chance to make the target flinch.",
-    "rarity": "rare",
-    "stacksOn": "pokemon",
-    "max": 1,
-    "how": "held",
-    "icon": "library/commonstone",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "held",
-      "hooks": [
-        {
-          "hook": "flinch",
-          "percent": 10
-        }
-      ]
-    }
-  },
-  {
-    "id": "summit-ability-capsule",
-    "name": "Summit Ability Capsule",
-    "family": "IV and ability items",
-    "description": "Found in the glass on Thunderstorm Ridge's summit. Gives a Pokémon its hidden ability.",
-    "rarity": "rare",
-    "stacksOn": "pokemon",
-    "max": 1,
-    "how": "use",
-    "icon": "library/abilityvial",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "ability",
-      "mode": "hidden"
-    }
-  },
-  {
-    "id": "fresh-milk",
-    "name": "Fresh Milk",
-    "family": "Healing and status items",
-    "description": "Heals 60 HP, +1 Love. From the ranch you gave water to",
-    "rarity": "uncommon",
-    "stacksOn": "pokemon",
-    "max": null,
-    "how": "use",
-    "icon": "moomoo-milk",
-    "status": "supported",
-    "giftOnly": true,
-    "effect": {
-      "kind": "care",
-      "heal": 60,
-      "changes": {
-        "love": 1
-      }
-    }
-  }
 ]
