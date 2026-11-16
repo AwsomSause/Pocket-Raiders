@@ -143,3 +143,13 @@ describe('gn.61 afterstories from other events', () => {
     expect(scene(go(both, 'gn-61-hub', 'Walk among them and talk.'), 'gn-61-walk').intro).toContain('cheering in time');
   });
 });
+
+describe('gn.61 Road Roster trainers', () => {
+  it('trainers met twice come, by name', () => {
+    const run = arrived('l', [['roster-joey-m2', 1], ['roster-joey-done', 1], ['roster-nell-m1', 1]]);
+    const ids = gathering(run)!.att.map((a) => a.id);
+    expect(ids).toContain('road-joey');
+    expect(ids).not.toContain('road-nell');
+    expect(scene(go(run, 'gn-61-hub', 'Walk among them and talk.'), 'gn-61-walk').intro).toContain('Joey');
+  });
+});

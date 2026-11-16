@@ -107,6 +107,13 @@ export function reunionArrive(content: Content, run: RunState): string {
     const line = (good ? p.line[0] : p.line[1]).replace('{walls}', walls === 1 ? 'one wall' : `${walls} walls`);
     att.push({ id: p.id, name: p.name, group: p.group, kind: p.kind, score: GROUP_BASE[p.group] + came + (good ? 2 : 0), good, far, line });
   }
+  // Road Roster trainers with Trust 2 or more: met twice (`roster-<key>-m2`), and more when their arc ended (`roster-<key>-done`).
+  const roster = Object.keys(run.story.flags).map((k) => /^ev:roster-([a-z0-9-]+)-m2$/.exec(k)?.[1]).filter((k): k is string => !!k && f(run, `roster-${k}-m2`) > 0);
+  for (const key of roster.slice(0, 6)) {
+    const done = f(run, `roster-${key}-done`) > 0;
+    const name = key.split('-').map((w) => w[0]!.toUpperCase() + w.slice(1)).join(' ');
+    att.push({ id: `road-${key}`, name, group: 'trainer', kind: 'ace', score: GROUP_BASE.trainer + 2 + (done ? 2 : 0), good: done, far: false, line: done ? `**${name}**, off the road for one night: "Told you we'd see each other again. I never said where."` : `**${name}** raises a hand from the back of the crowd. You have only met twice. It was enough to be asked.` });
+  }
   // The three with the longest history are offered; the Slowpoke Agency always arrives by itself on turn six if it is among them.
   const near = att.filter((a) => !a.far && a.group !== 'thing');
   const top = [...near].sort((a, b) => b.score - a.score || att.indexOf(a) - att.indexOf(b)).slice(0, 3);
