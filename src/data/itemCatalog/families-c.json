@@ -465,5 +465,28 @@
       "kind": "care",
       "heal": 999
     }
+  },
+  {
+    "id": "first-badge",
+    "name": "First Badge",
+    "family": "Gifts from people",
+    "description": "The badge of the first Gym, from a forgotten crypt. All stats +5%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "hard-stone",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "stat",
+          "stat": "all",
+          "multiplier": 1.05
+        }
+      ]
+    }
   }
 ]

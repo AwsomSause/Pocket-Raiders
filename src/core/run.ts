@@ -4018,7 +4018,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (run.log.starterUid && run.party.some((m) => m.uid === run.log.starterUid)) count(run, 'regionsClearedWithStarter');
     if (run.regionIndex + 1 >= run.regionOrder.length && !extendEndless(run)) run.victory = true;
   }
-  coBattleEnd(run, battle);
+  coBattleEnd(content, run, battle);
   run.battle = null;
   delete run.recorder;
   if ((run.itemCounters?.['squirt-exp'] ?? 0) > 0) run.itemCounters = { ...run.itemCounters, 'squirt-exp': 0 };

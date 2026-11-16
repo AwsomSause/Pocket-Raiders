@@ -9,7 +9,7 @@ import { typeEffectiveness } from '../battle/damage';
 import { getSpecies, maxHp } from '../pokemon';
 import { hashSeed, Rng } from '../rng';
 import type { BattleEvent } from '../battle/engine';
-import { bagCount, barter, boxBond, hereGymType, hasEgg, returnEgg, barterGive, barterHas, barterStock, copyHeld, helpedReturn, noteHelped, notePicked, noted, rejoin, sideBattleBegin, spendFromBag, takeSoon } from './coHelpers';
+import { bagCount, barter, boxBond, hereGymType, oathSpeedStart, rangerRescue, hasEgg, returnEgg, barterGive, barterHas, barterStock, copyHeld, helpedReturn, noteHelped, notePicked, noted, rejoin, sideBattleBegin, spendFromBag, takeSoon } from './coHelpers';
 import type { PokemonInstance, RunState } from '../state';
 
 const RULES: { multiplier: { veryBad: number; bad: number; even: number; favours: number }; words: Record<string, string> } = data.rules;
@@ -277,12 +277,13 @@ export function coBattleBegin(content: Content, run: Run): void {
 
 /** The battle has started (after entry abilities). SF62's Ditto, SF58.4's angry valley, and SF63's helped Pokémon arriving at the worst moment. */
 export function coBattleStarted(content: Content, run: Run): BattleEvent[] {
-  return [...sideBattleBegin(content, run), ...helpedReturn(content, run)];
+  return [...sideBattleBegin(content, run), ...helpedReturn(content, run), ...oathSpeedStart(run)];
 }
 
 /** The battle is over (the battle state is about to go). Roofer Jax: a knockout in the opening turns pays the bonus. */
-export function coBattleEnd(run: Run, battle: NonNullable<Run['battle']>): void {
+export function coBattleEnd(content: Content, run: Run, battle: NonNullable<Run['battle']>): void {
   put(run, 'co-early-ko', battle.storyEffects.includes('co-early-ko') ? 1 : 0);
+  rangerRescue(content, run, battle.outcome === 'lose');
 }
 
 /** A healing stop was used (`before` = HP before it). SF74, Curse 5: it heals 25% less. SF85: a second rest in one stage breaks the Oath of Speed. */

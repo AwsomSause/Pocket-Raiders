@@ -1,0 +1,3233 @@
+{
+ "catalogOverhaul": "families-c",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "dz-clockwork",
+   "name": "The Clockwork Vault",
+   "group": "Dungeon Puzzles",
+   "stop": "dungeon",
+   "rarity": "rare",
+   "types": [
+    "steel",
+    "electric"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "klink",
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A hall of gears under a stone dome. Three levers must be pulled for the middle door to open. The floor is full of traps. A brass plate: \"MADE FOR SOMEONE WHO WILL KNOW WHAT IT IS FOR.\"",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "The gears turn as you step inside, slowly, like something breathing in its sleep.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-lever-cold",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "vault-lever-pit",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "vault-lever-sparks",
+        "amount": -99
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave the gears to their ticking.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-clockwork-hall",
+   "name": "The Hall of Gears",
+   "group": "Dungeon Puzzles",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "klink",
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Three passages, and a round door in the middle with three empty slots.",
+   "choices": [
+    {
+     "label": "Left passage (sparks).",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "vault-lever-sparks",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You take the left passage. The air smells of hot metal.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-sparks"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Right passage (pit).",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "vault-lever-pit",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You take the right passage. The floor drops away ahead.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-pit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Centre (two levers).",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "vault-lever-cold",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You take the centre passage. It's very cold.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-lever"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The gear door.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "vault-lever-cold",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "vault-lever-pit",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "vault-lever-sparks",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Three levers down. The gears in the round door start to turn, one inside another, and it rolls open.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-door"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-clockwork-lever",
+   "name": "The Cold Lever",
+   "group": "Dungeon Puzzles",
+   "rarity": "rare",
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "klink",
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Two levers. One is right. One drops a blade. A plate: \"The cold lever is the true one.\"",
+   "choices": [
+    {
+     "label": "Touch both first.",
+     "success": {
+      "text": "The left one is warm. The right one is cold as a stone in a river. You pull the right. Somewhere, a gear drops into place.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-lever-cold",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the left.",
+     "success": {
+      "text": "A blade drops from the ceiling. Your Pokémon pulls you back, and takes the cut instead. Then you pull the right one.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "vault-lever-cold",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the right.",
+     "success": {
+      "text": "It's cold under your hand. A gear drops into place. Safe.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-lever-cold",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-hall"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-clockwork-pit",
+   "name": "The Pit",
+   "group": "Dungeon Puzzles",
+   "rarity": "rare",
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "klink",
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A spiked pit, a lever on the far side, a narrow beam.",
+   "choices": [
+    {
+     "label": "Walk the beam.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "One foot, the other foot. You don't look down. You pull the lever on the far side.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-lever-pit",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-hall"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Halfway across, you wobble. Your lead catches you, and catches a spike for it. You make it, and pull the lever.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "vault-lever-pit",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fly a Pokémon across.",
+     "pick": {
+      "types": [
+       "flying"
+      ]
+     },
+     "success": {
+      "text": "Your Flying-type carries you over and sets you down by the lever. Easy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-lever-pit",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw something at the lever.",
+     "pick": {
+      "types": [
+       "psychic"
+      ]
+     },
+     "success": {
+      "text": "Your Psychic-type closes its eyes. The lever pulls itself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-lever-pit",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-hall"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-clockwork-sparks",
+   "name": "The Sparks",
+   "group": "Dungeon Puzzles",
+   "rarity": "rare",
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "klink",
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Live wires across the floor. A lever in a cage of arcs.",
+   "choices": [
+    {
+     "label": "Ground it with a Ground-type.",
+     "pick": {
+      "types": [
+       "ground"
+      ]
+     },
+     "success": {
+      "text": "Your Ground-type puts one foot on the wires. The arcs die. You walk in and pull the lever.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-lever-sparks",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let an Electric-type absorb it.",
+     "pick": {
+      "types": [
+       "electric"
+      ]
+     },
+     "success": {
+      "text": "Your Electric-type drinks the sparks down, delighted, glowing. You pull the lever.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-lever-sparks",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Reach through.",
+     "success": {
+      "text": "You reach through. It hurts. You pull the lever anyway. Your lead takes the jolt with you, and its legs are still twitching.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "paralysis",
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "vault-lever-sparks",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-hall"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-clockwork-door",
+   "name": "The Gear Door",
+   "group": "Dungeon Puzzles",
+   "rarity": "rare",
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "klink",
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Inside: a ticking heart-shaped box on a cushion, and a note in old handwriting: \"When she is ready.\"",
+   "choices": [
+    {
+     "label": "Open the box.",
+     "success": {
+      "text": "It's empty. But it's warm, as if something was just here. As if something will be.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-magearna",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it ticking on its cushion. The vault closes behind you.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Wind it.",
+     "success": {
+      "text": "You turn the little key. It ticks faster, happier. Somewhere, something hears it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-magearna",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "vault-wound",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-crypt",
+   "name": "The Trapped Crypt",
+   "group": "Dungeon Puzzles",
+   "stop": "dungeon",
+   "rarity": "rare",
+   "types": [
+    "rock",
+    "ghost"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1a22",
+    "effect": "fog"
+   },
+   "intro": "Stone stairs down to a crypt of three trapped chambers. Whoever built it didn't want visitors, and left a lot of gold. A carving: THE FIRST GYM'S LEADERS REST HERE.",
+   "choices": [
+    {
+     "label": "Go down.",
+     "success": {
+      "text": "The stairs are worn in the middle by a lot of feet, a long time ago.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-darts"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay respects and leave.",
+     "success": {
+      "text": "You bow your head at the top of the stairs. On the top step, someone has left a Cleanse Tag. It's for you, you think.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cleanse-tag",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look for another way in.",
+     "success": {
+      "text": "There isn't one. There's only down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-darts"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-crypt-darts",
+   "name": "The Darts",
+   "group": "Dungeon Puzzles",
+   "rarity": "rare",
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1a22",
+    "effect": "fog"
+   },
+   "intro": "Walls pocked with holes. A pressure plate every few steps.",
+   "choices": [
+    {
+     "label": "Step carefully.",
+     "success": {
+      "text": "Slowly. Very slowly. Nothing fires.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-pit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Steel-type ahead.",
+     "pick": {
+      "types": [
+       "steel"
+      ]
+     },
+     "success": {
+      "text": "The darts bounce off your Steel-type like rain off a roof.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-pit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run.",
+     "success": {
+      "text": "You run. Something stings. One of your Pokémon is poisoned.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison",
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-pit"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-crypt-pit",
+   "name": "The Pit",
+   "group": "Dungeon Puzzles",
+   "rarity": "rare",
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1a22",
+    "effect": "fog"
+   },
+   "intro": "The floor ends in a spiked pit. A thin ledge runs round the wall.",
+   "choices": [
+    {
+     "label": "Edge along.",
+     "success": {
+      "text": "Back to the wall, inch by inch. You make it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-guardian"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bridge it with a Grass- or Ice-type.",
+     "pick": {
+      "types": [
+       "grass",
+       "ice"
+      ]
+     },
+     "success": {
+      "text": "Vines, or ice, laid straight across. You walk over it like a road.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-guardian"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Jump.",
+     "success": {
+      "text": "You jump. You make it, mostly. Your lead takes the landing.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-guardian"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-crypt-guardian",
+   "name": "The Last Guardian",
+   "group": "Dungeon Puzzles",
+   "rarity": "rare",
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1a22",
+    "effect": "fog"
+   },
+   "intro": "A stone door, and the crypt's last guardian: an old woman in a faded Gym uniform, three ancient Pokémon at her feet. Guardian, Aeda: \"I kept the door when the Gym fell. I've kept it since. They're sleeping. All the first Leaders.\" Aeda: \"The gold's for whoever proves they aren't here for gold.\"",
+   "choices": [
+    {
+     "label": "I'm not.",
+     "success": {
+      "text": "Aeda: \"Prove it.\" She holds out a bag of old gold. It is very heavy.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-gold"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle for it.",
+     "success": {
+      "text": "Aeda: \"Then wake up, old friends.\" Fire, Water, Grass: ancient, slow, and very strong.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [],
+       "team": [
+        "arcanine",
+        "kingdra",
+        "meganium"
+       ],
+       "name": "Aeda",
+       "classId": "veteran",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 2000
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Who were they?",
+     "success": {
+      "text": "She names them, one by one, slowly, like she is waking them. Then she waits.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-names"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "keepers",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forgotten-badge",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your three old badges glint. The stone door opens by itself. Aeda puts her hands over her face and weeps. She is the last keeper. You know her name already.",
+     "addChoices": [
+      {
+       "label": "Sit with her.",
+       "success": {
+        "text": "You sit with her until she can talk. Then she gives you the First Badge, and goes in to sleep beside them.",
+        "effects": [
+         {
+          "kind": "item",
+          "id": "first-badge",
+          "count": 1
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dz-crypt-names",
+   "name": "The Last Guardian",
+   "group": "Dungeon Puzzles",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1a22",
+    "effect": "fog"
+   },
+   "intro": "Aeda finishes the last name and folds her hands.",
+   "choices": [
+    {
+     "label": "I'm not here for gold.",
+     "success": {
+      "text": "Aeda: \"Prove it.\" She holds out the gold.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-gold"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle for it.",
+     "success": {
+      "text": "Aeda: \"Then wake up, old friends.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [],
+       "team": [
+        "arcanine",
+        "kingdra",
+        "meganium"
+       ],
+       "name": "Aeda",
+       "classId": "veteran",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 2000
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-crypt-gold",
+   "name": "The Gold",
+   "group": "Dungeon Puzzles",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1a22",
+    "effect": "fog"
+   },
+   "intro": "The bag of gold sits in Aeda's old hands.",
+   "choices": [
+    {
+     "label": "Refuse it.",
+     "success": {
+      "text": "You close her fingers back around it. Aeda looks at you for a long time. Then she takes a small badge from her own collar: the First Badge. Aeda: \"Then you're the one.\" She sits down by the door, and closes her eyes, and finally rests.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "first-badge",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You take it. Aeda nods. She is not surprised. She is a little sad.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 2000
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "faction-rangers-low",
+   "name": "The Stuck Gate",
+   "group": "Story and characters",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "faction-rangers",
+     "atLeast": 0,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.ranger"
+    ],
+    "tint": "#1e2a1a",
+    "effect": "none"
+   },
+   "intro": "A short-handed Ranger outpost. Ranger Basil: \"Gate's stuck and the herd's on the wrong side. Hand?\"",
+   "choices": [
+    {
+     "label": "Push it.",
+     "success": {
+      "text": "You set your shoulder to it with Basil. It gives. The herd pours through, and Basil laughs out loud.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faction-rangers",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Pokémon.",
+     "pick": {},
+     "success": {
+      "text": "Your Pokémon leans on the gate and it swings wide. The herd crosses. Basil writes your name in the outpost book.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faction-rangers",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Busy.",
+     "success": {
+      "text": "Basil waves you on. \"Another time.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "faction-rangers-high",
+   "name": "One of Ours, Nearly",
+   "group": "Story and characters",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "faction-rangers",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ranger-favour-given",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.ranger"
+    ],
+    "tint": "#1e2a1a",
+    "effect": "none"
+   },
+   "intro": "Basil, at the outpost gate, with something wrapped in a Ranger's scarf. Basil: \"One of ours, nearly. Take this.\"",
+   "choices": [
+    {
+     "label": "Thanks.",
+     "success": {
+      "text": "A Ranger's whistle. Basil: \"Blow it once. If one of yours goes down in a fight you lose, we'll carry them out, and they'll be on their feet.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ranger-favour",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ranger-favour-given",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it to the outpost.",
+     "success": {
+      "text": "Basil shakes his head, smiling, and hangs it back on your neck anyway. \"The outpost says keep it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ranger-favour",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "faction-rangers",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ranger-favour-given",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's it for?",
+     "success": {
+      "text": "Basil: \"A rescue. One. Any of yours, any fight you lose. We'll get them out.\" He presses it into your hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ranger-favour",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ranger-favour-given",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "faction-scholars-low",
+   "name": "Spare Eyes",
+   "group": "Story and characters",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "faction-scholars",
+     "atLeast": 0,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.scientist"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "Scholars cataloguing local Pokémon. Scholar Ines-Marie: \"We need a spare pair of eyes. Count the Wurmple, would you?\"",
+   "choices": [
+    {
+     "label": "Count carefully (a node).",
+     "success": {
+      "text": "Forty-one. You count twice. Ines-Marie checks. Forty-one. She looks at you with new respect.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "faction-scholars",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Guess.",
+     "success": {
+      "text": "\"About thirty?\" Ines-Marie looks at you over her glasses. She noticed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faction-scholars",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Ines-Marie goes back to counting, lips moving.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "faction-scholars-high",
+   "name": "One of Ours, Nearly",
+   "group": "Story and characters",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "faction-scholars",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "scholars-favour-given",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.scientist"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "Ines-Marie, with a thick folder under her arm. Ines-Marie: \"One of ours, nearly. Take this.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "Field notes on every wild Pokémon in {nextRegion}: what they know, what they can do. Pages and pages of it.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 30
+       },
+       {
+        "kind": "flag",
+        "key": "scholars-favour-given",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "faction-syndicate-low",
+   "name": "Look the Other Way",
+   "group": "Story and characters",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "faction-syndicate",
+     "atLeast": 0,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1a1420",
+    "effect": "none"
+   },
+   "intro": "A shady crew in an alley. Crew boss, Lark: \"Need someone to look the other way for a minute.\"",
+   "choices": [
+    {
+     "label": "Look away.",
+     "success": {
+      "text": "You study a very interesting brick. Something heavy is carried past behind you. Lark: \"Appreciated.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faction-syndicate",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "faction-rangers",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's happening?",
+     "success": {
+      "text": "Lark: \"A crate. Not Pokémon. I promise.\" He means it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "faction-syndicate-ask"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Lark shrugs. \"Your call.\" The crew finds someone else.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faction-syndicate",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "faction-syndicate-ask",
+   "name": "Look the Other Way",
+   "group": "Story and characters",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1a1420",
+    "effect": "none"
+   },
+   "intro": "Lark waits. The crate waits.",
+   "choices": [
+    {
+     "label": "Look away.",
+     "success": {
+      "text": "You look away. Lark: \"Appreciated.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faction-syndicate",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "faction-rangers",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Lark shrugs. \"Your call.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faction-syndicate",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "faction-syndicate-high",
+   "name": "One of Ours, Nearly",
+   "group": "Story and characters",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "faction-syndicate",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "syndicate-favour-given",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1a1420",
+    "effect": "none"
+   },
+   "intro": "Lark, leaning on a wall like he owns it. Lark: \"Take this. And one day I'll ask a favour back.\"",
+   "choices": [
+    {
+     "label": "Deal.",
+     "success": {
+      "text": "A coin with a hole in it. Lark: \"Show that to any team's guards, once. They've been paid.\" He smiles. \"And one day, I'll ask.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "syndicate-owed",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "evil-skip",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "syndicate-favour-given",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No strings.",
+     "success": {
+      "text": "Lark laughs, a real laugh. \"Nobody gets no strings.\" He pockets the coin again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "syndicate-favour-given",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What favour?",
+     "success": {
+      "text": "Lark: \"You'll know.\" He holds the coin out, and waits.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "faction-syndicate-coin"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "faction-syndicate-coin",
+   "name": "One of Ours, Nearly",
+   "group": "Story and characters",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1a1420",
+    "effect": "none"
+   },
+   "intro": "The coin with the hole in it.",
+   "choices": [
+    {
+     "label": "Deal.",
+     "success": {
+      "text": "Lark: \"Good.\" The coin goes in your pocket.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "syndicate-owed",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "evil-skip",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "syndicate-favour-given",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No strings.",
+     "success": {
+      "text": "Lark laughs. \"Nobody gets no strings.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "syndicate-favour-given",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "syndicate-price",
+   "name": "The Price",
+   "group": "Story and characters",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "syndicate-owed",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "syndicate-paid",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1a1420",
+    "effect": "none"
+   },
+   "intro": "A region later, Lark falls into step beside you. He has a sealed package under his arm. Lark: \"That favour. Carry this past the Ranger checkpoint. Don't open it.\"",
+   "choices": [
+    {
+     "label": "Carry it.",
+     "success": {
+      "text": "The Rangers search it. Inside: letters. Lark's love letters, years of them, to someone across the border. Completely legal. Deeply embarrassing. The Rangers look at you differently after that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faction-rangers",
+        "amount": -2
+       },
+       {
+        "kind": "flag",
+        "key": "syndicate-paid",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "Lark looks at you for a long moment. He isn't angry. He's hurt, which is worse. \"Right,\" he says. \"Right.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faction-syndicate",
+        "amount": -3
+       },
+       {
+        "kind": "flag",
+        "key": "syndicate-paid",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "guide-offer",
+   "name": "No Charge",
+   "group": "Story and characters",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "guide-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A weathered guide offers you a shortcut. Guide, Mosley: \"No charge. I just like company.\" If you look closely: his boots are new. He checks your bag twice. His \"shortcut\" adds distance on the map.",
+   "choices": [
+    {
+     "label": "Lead on.",
+     "success": {
+      "text": "The shortcut is real, more or less. He chats the whole way. You notice him writing something in a little book.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guide-followed",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "guide-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your boots are new.",
+     "success": {
+      "text": "Mosley looks down at them. \"...Gift.\" He leaves quickly, and doesn't look back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guide-met",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No thanks.",
+     "success": {
+      "text": "Mosley shrugs and waits for the next traveller.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "guide-betrayal",
+   "name": "The Crossing",
+   "group": "Story and characters",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "guide-followed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "guide-crossed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "callback": true,
+   "intro": "Mosley at the crossing, too relaxed. Two strangers behind him. Mosley: \"Hand over your coins.\"",
+   "choices": [
+    {
+     "label": "Battle all three.",
+     "success": {
+      "text": "Mosley sighs. \"Have it your way.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "guide-crossed",
+         "amount": 1
+        }
+       ],
+       "chain": 3,
+       "name": "Bandits",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nugget",
+          "big-pearl",
+          "star-piece"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "silk-scarf",
+          "charcoal",
+          "mystic-water"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "pecha-berry"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "guide-crossed",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "I told the Rangers you'd be here.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "faction-rangers",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The trees move. Rangers step out on every side. Mosley closes his eyes. \"Of course you did.\" No battle. He goes quietly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guide-crossed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "You hand over half of what you have. Mosley counts it twice. Word gets around.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "guide-crossed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "a-quiet-hello",
+   "name": "A Quiet Hello",
+   "group": "Overdrive unusual events",
+   "stop": "wild",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#1a2420",
+    "effect": "none"
+   },
+   "intro": "A wild Pokémon watches your team from a distance. Not afraid, not angry. Waiting.",
+   "choices": [
+    {
+     "label": "Sit down.",
+     "success": {
+      "text": "You sit. It watches. Then it comes a little closer, and a little closer, and stops just out of reach. Then it leaves.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Hold out a hand.",
+     "success": {
+      "text": "You hold out a hand. It comes closer, sniffs the air, and goes.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "high",
+     "when": [
+      {
+       "kind": "record",
+       "is": "high"
+      }
+     ],
+     "notice": "It looks at you like it already knows you.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Sit down.",
+       "success": {
+        "text": "You sit. It walks straight to you and sits too. When you stand, it comes with you. No battle. It just decided.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 30,
+          "who": "newest"
+         }
+        ]
+       }
+      },
+      {
+       "label": "Hold out a hand.",
+       "success": {
+        "text": "It presses its head into your hand, and then follows you. It has decided.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 30,
+          "who": "newest"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "low",
+     "when": [
+      {
+       "kind": "record",
+       "is": "low"
+      }
+     ],
+     "notice": "It looks at you, and its fur rises.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Sit down.",
+       "success": {
+        "text": "It backs away, then turns and runs, crying out. All along the road, wild Pokémon go quiet. They've been warned.",
+        "effects": []
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "doesnt-want-to-fight",
+   "name": "It Doesn't Want to Fight",
+   "group": "Overdrive unusual events",
+   "stop": "wild",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#1a2420",
+    "effect": "none"
+   },
+   "intro": "A wild Pokémon trembles in the grass. Frightened, or guarding something.",
+   "choices": [
+    {
+     "label": "Back away.",
+     "success": {
+      "text": "You back away slowly. It stops trembling.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Look past it.",
+     "success": {
+      "text": "Behind it, in a hollow: eggs. It watches you look, and lets you. Then it settles back over them.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It fights like it has no choice. It doesn't.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rep-lost",
+         "amount": 1
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "rep-lost",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "high",
+     "when": [
+      {
+       "kind": "record",
+       "is": "high"
+      }
+     ],
+     "notice": "It knows you. You can see it decide.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Back away.",
+       "success": {
+        "text": "You back away. It stops trembling. Later, on the road, you hear small feet behind you. It followed.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 20,
+          "who": "newest"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "it-saw-what-you-did",
+   "name": "It Saw What You Did",
+   "group": "Overdrive unusual events",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#1a2420",
+    "effect": "none"
+   },
+   "intro": "A Pokémon at the edge of the path has been watching for a long time. It saw how you treated others on this road. It holds something in its mouth: something you dropped.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It drops it in your hand. A Berry, a little chewed.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank it.",
+     "success": {
+      "text": "It nods, once, and is gone.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Say sorry.",
+     "requires": [
+      {
+       "kind": "record",
+       "is": "low"
+      }
+     ],
+     "success": {
+      "text": "It considers you for a long time. Then it puts the thing at your feet and walks away, not hurried. Somewhere, the road's opinion of you shifts a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "high",
+     "when": [
+      {
+       "kind": "record",
+       "is": "high"
+      }
+     ],
+     "notice": "It drops the thing and steps closer. It liked what it saw.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Thank it.",
+       "success": {
+        "text": "It looks at you for a long moment, then falls into step beside you. It joins you.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 20,
+          "who": "newest"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "fed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fed-poochyena",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In its mouth: the very Berry you gave the starving Poochyena. It was watching then too.",
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "this-place-remembers",
+   "name": "This Place Remembers",
+   "group": "Overdrive unusual events",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#1a2420",
+    "effect": "none"
+   },
+   "intro": "A place that seems familiar. The ground, the air and the old stones seem to remember the battles fought here. Faint shapes of Pokémon battling, fading.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "The shapes fight, and fade, and fight again. One of them is a {starter}. Yours watches it a long time.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "starter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call to them.",
+     "success": {
+      "text": "You call out. One shape stops, and turns its head toward you. Then it's gone.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk through.",
+     "success": {
+      "text": "You walk through. The shapes part around you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dragon-shrine",
+   "name": "The Dragon's Question",
+   "group": "One event for every type",
+   "types": [
+    "dragon"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.veteran"
+    ],
+    "pokemon": "dragonair",
+    "tint": "#1a2440",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "dragon-asked",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A shrine on a lake. An elder of the dragon clan sits on the steps. Elder Ryuen: \"I'll ask three questions. There are no right answers. There are true ones. I'll know.\"",
+   "choices": [
+    {
+     "label": "Ask.",
+     "success": {
+      "text": "Ryuen: \"What matters most in battle?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dragon-true",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "dragon-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dragon-q1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Ryuen nods. The lake is very still.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dragon-q1",
+   "name": "The Dragon's Question",
+   "group": "One event for every type",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.veteran"
+    ],
+    "pokemon": "dragonair",
+    "tint": "#1a2440",
+    "effect": "none"
+   },
+   "intro": "Ryuen: \"What matters most in battle?\"",
+   "choices": [
+    {
+     "label": "\"Winning.\"",
+     "success": {
+      "text": "Ryuen: \"Hm.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dragon-q2"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "left-fainted",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Ryuen: \"Yes. That is true of you.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "dragon-true",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dragon-q2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "\"My Pokémon.\"",
+     "success": {
+      "text": "Ryuen looks at your team for a long time. \"Hm.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dragon-q2"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "left-fainted",
+         "atLeast": 0,
+         "atMost": 0
+        }
+       ],
+       "text": "Ryuen: \"Yes. You have never left one of them lying at a rest.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "dragon-true",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dragon-q2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "\"Learning.\"",
+     "success": {
+      "text": "Ryuen: \"Everyone is learning. True.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dragon-true",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dragon-q2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dragon-q2",
+   "name": "The Dragon's Question",
+   "group": "One event for every type",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.veteran"
+    ],
+    "pokemon": "dragonair",
+    "tint": "#1a2440",
+    "effect": "none"
+   },
+   "intro": "Ryuen: \"Which of your Pokémon have you used least?\"",
+   "choices": [
+    {
+     "label": "Point to one.",
+     "pick": {},
+     "success": {
+      "text": "Ryuen looks at the one you chose, then at you.",
+      "effects": [
+       {
+        "kind": "pickTest",
+        "test": "leastUsed",
+        "pass": "dragon-true",
+        "fail": "dragon-q2-wrong",
+        "sulk": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dragon-q3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dragon-q3",
+   "name": "The Dragon's Question",
+   "group": "One event for every type",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.veteran"
+    ],
+    "pokemon": "dragonair",
+    "tint": "#1a2440",
+    "effect": "none"
+   },
+   "intro": "Ryuen: \"Have you ever been unkind to a Pokémon?\"",
+   "choices": [
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Ryuen: \"True.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dragon-true",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dragon-answer"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "keptGoods"
+        }
+       ],
+       "text": "Ryuen says nothing for a long time. The lake says nothing either.",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "dragon-answer"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "apprentice-copy-caught-weak",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Ryuen says nothing for a long time. The lake says nothing either.",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "dragon-answer"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "dark-dealt",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Ryuen says nothing for a long time. The lake says nothing either.",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "dragon-answer"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "Ryuen: \"Hm. I don't think you have.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dragon-answer"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "keptGoods"
+        }
+       ],
+       "text": "Ryuen: \"True. Thank you for saying it.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "dragon-true",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dragon-answer"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "apprentice-copy-caught-weak",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Ryuen: \"True. Thank you for saying it.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "dragon-true",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dragon-answer"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "dark-dealt",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Ryuen: \"True. Thank you for saying it.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "dragon-true",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dragon-answer"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "\"I don't know.\"",
+     "success": {
+      "text": "Ryuen: \"You do know. You were kind.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dragon-answer"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "keptGoods"
+        }
+       ],
+       "text": "Ryuen: \"True. Most people don't.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "dragon-true",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dragon-answer"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "apprentice-copy-caught-weak",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Ryuen: \"True. Most people don't.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "dragon-true",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dragon-answer"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "dark-dealt",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Ryuen: \"True. Most people don't.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "dragon-true",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dragon-answer"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dragon-answer",
+   "name": "The Dragon's Question",
+   "group": "One event for every type",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.veteran"
+    ],
+    "pokemon": "dragonair",
+    "tint": "#1a2440",
+    "effect": "none"
+   },
+   "intro": "Ryuen stands, and looks out over the lake.",
+   "choices": [
+    {
+     "label": "Three true answers.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "dragon-true",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Something rises from the lake: a Dratini, already knowing a move it shouldn't. Ryuen: \"It chose you. Be worth it.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "dratini"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "extreme-speed",
+        "who": "newest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Two true answers.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "dragon-true",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "success": {
+      "text": "A Dratini rises from the lake and swims to your feet. Ryuen: \"Close enough. It thinks so, anyway.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "dratini"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not enough.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "dragon-true",
+       "atLeast": 0,
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "Ryuen: \"Come back when you know yourself better.\" The shrine stays where it is.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "dragon-shrine"
+       },
+       {
+        "kind": "flag",
+        "key": "dragon-asked",
+        "amount": -99
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "oath-shrine",
+   "name": "The Oath Stone",
+   "group": "Set Pieces",
+   "stop": "shrine",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.veteran"
+    ],
+    "tint": "#22201a",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "oath-taken",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "blessing-zekrom",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "An old stone with three hand-shaped hollows. Shrine keeper, Brother Osk: \"Swear an oath, and the road will ask you to keep it. Keep it and you're paid.\"",
+   "choices": [
+    {
+     "label": "Steel.",
+     "success": {
+      "text": "You put your hand in the first hollow. Steel: never flee a battle. The stone is cold, and then warm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "oath-steel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "oath-taken",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Mercy.",
+     "success": {
+      "text": "You put your hand in the second hollow. Mercy: never knock out a wild Pokémon you could have caught or calmed. The stone is warm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "oath-mercy",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "oath-taken",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Speed.",
+     "success": {
+      "text": "You put your hand in the third hollow. Speed: never rest at more than one rest stop in a stage. The stone hums.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "oath-speed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "oath-taken",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No oath.",
+     "success": {
+      "text": "Osk: \"Wise, maybe.\" He goes back to sweeping the stone.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "oath-reckoning",
+   "name": "Reckoning: Steel",
+   "group": "Set Pieces",
+   "stop": "shrine",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "oath-steel",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "flag",
+     "key": "oath-reckoned",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "trainer.veteran"
+    ],
+    "tint": "#22201a",
+    "effect": "none"
+   },
+   "intro": "Osk at a crossroads, waiting. Osk: \"You swore Steel. Have you held to it?\"",
+   "choices": [
+    {
+     "label": "I have.",
+     "success": {
+      "text": "Osk: \"...No.\" He turns away. Word of it gets around.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "oath-reckoned",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "oath-broken",
+         "atLeast": 0,
+         "atMost": 0
+        }
+       ],
+       "text": "Osk: \"You have.\" He puts his hand on your lead's shoulder. It stands a little straighter, for good.",
+       "effects": [
+        {
+         "kind": "statBoost",
+         "stat": "def",
+         "percent": 5,
+         "who": "lead",
+         "until": "run"
+        },
+        {
+         "kind": "flag",
+         "key": "oath-reckoned",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "I broke it.",
+     "success": {
+      "text": "Osk: \"No, you didn't. But honesty's worth something.\" He gives you nothing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "oath-reckoned",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "oath-broken",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Osk: \"Honest. That's worth something.\" A smaller pay: a Hard Stone from his pocket.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "hard-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "oath-reckoned",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "oath-reckoning-mercy",
+   "name": "Reckoning: Mercy",
+   "group": "Set Pieces",
+   "stop": "shrine",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "oath-mercy",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "flag",
+     "key": "oath-reckoned",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "trainer.lass"
+    ],
+    "tint": "#22201a",
+    "effect": "none"
+   },
+   "intro": "A child runs up with a thank-you flower. Child: \"The shrine said you kept your mercy!\"",
+   "choices": [
+    {
+     "label": "Take the flower.",
+     "success": {
+      "text": "In your hand the flower wilts. The child looks at it, confused, then at you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "oath-reckoned",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "oath-broken",
+         "atLeast": 0,
+         "atMost": 0
+        }
+       ],
+       "text": "The flower stays bright. The pay: your whole team is gentler with every Pokémon they meet.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        },
+        {
+         "kind": "flag",
+         "key": "oath-reckoned",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "I'm not sure I did.",
+     "success": {
+      "text": "Osk steps out of the crowd. Osk: \"You didn't.\" The child's flower droops.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "oath-reckoned",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "oath-broken",
+         "atLeast": 0,
+         "atMost": 0
+        }
+       ],
+       "text": "Osk steps out of the crowd. Osk: \"You did.\" The pay, and the child hugs every one of your Pokémon.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        },
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        },
+        {
+         "kind": "flag",
+         "key": "oath-reckoned",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "oath-reckoning-speed",
+   "name": "Reckoning: Speed",
+   "group": "Set Pieces",
+   "stop": "shrine",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "oath-speed",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "flag",
+     "key": "oath-reckoned",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#22201a",
+    "effect": "fog"
+   },
+   "intro": "Wind at a bend in the road. The oath sits lightly on your shoulder.",
+   "choices": [
+    {
+     "label": "Run with it.",
+     "success": {
+      "text": "You run. The oath slips off somewhere along the way. Nothing comes of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "oath-reckoned",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "oath-broken",
+         "atLeast": 0,
+         "atMost": 0
+        }
+       ],
+       "text": "You run, and the wind runs with you. The pay: your lead starts every battle a step faster, for the rest of the run.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "oath-speed-paid",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "oath-reckoned",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Stop and let it go.",
+     "success": {
+      "text": "You stop. The wind goes on without you. The oath is over. No pay, no penalty.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "oath-reckoned",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "prophecy-friend",
+   "name": "A Friend in Need",
+   "group": "Set Pieces",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "prophecy-friend",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster"
+    ],
+    "tint": "#1e2030",
+    "effect": "none"
+   },
+   "intro": "A young trainer trips and spills their Poké Balls. The Oracle's words come back to you. Three Balls roll toward a river.",
+   "choices": [
+    {
+     "label": "Catch the Balls.",
+     "success": {
+      "text": "You catch two. The third goes in the river. It floats. They find it downstream, laughing with relief.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "prophecy-friend",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help the trainer up.",
+     "success": {
+      "text": "You help them up first. The Balls are gone for a while, all three, and then found, one by one, in the reeds.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "prophecy-friend",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Pokémon for the river one.",
+     "pick": {},
+     "success": {
+      "text": "Your Pokémon dives and comes up with the third Ball in its mouth. All three saved. The trainer won't stop thanking you. \"If you ever need a hand in a fight...\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "prophecy-friend",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "prophecy-loss",
+   "name": "A Loss",
+   "group": "Set Pieces",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "prophecy-loss",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1e2030",
+    "effect": "none"
+   },
+   "intro": "You reach into your bag. Something is gone. The Oracle's words come back to you.",
+   "choices": [
+    {
+     "label": "Retrace my steps.",
+     "success": {
+      "text": "A whole node of walking back. You find it, broken, in a ditch. Half its worth, in money.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "money",
+        "amount": 400
+       },
+       {
+        "kind": "flag",
+        "key": "prophecy-loss",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You let it go. Somewhere, an old woman with closed eyes nods: \"You let it go. That was the soft way.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "prophecy-loss",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the party.",
+     "success": {
+      "text": "One of your Pokémon looks very guilty. It was playing with it. It gives it back, a little chewed.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "prophecy-loss",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "prophecy-win",
+   "name": "A Win That Matters",
+   "group": "Set Pieces",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "prophecy-win",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "tint": "#1e2030",
+    "effect": "none"
+   },
+   "intro": "A challenger calls you out. The Oracle's words come back to you. Challenger: \"You! I've heard you can't be beaten.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "This one matters. You can feel it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "prophecy-win",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [],
+       "name": "Challenger",
+       "classId": "ace-trainer",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Who told you that?",
+     "success": {
+      "text": "Challenger: \"An old woman with closed eyes.\" Then they send out their first.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "prophecy-win",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [],
+       "name": "Challenger",
+       "classId": "ace-trainer",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "I can be beaten.",
+     "success": {
+      "text": "Challenger: \"Prove it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "prophecy-win",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [],
+       "name": "Challenger",
+       "classId": "ace-trainer",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

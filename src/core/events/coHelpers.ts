@@ -246,3 +246,25 @@ export function hereGymType(content: Content, run: Run, beatenOnly: boolean): st
   const id = beaten ?? (beatenOnly ? undefined : leaders.find((l) => !run.usedLeaders.includes(l)) ?? leaders[0]);
   return id ? (content.bosses.get(id)!.types[0] ?? null) : null;
 }
+
+// ---------- SF85 / SF81: run-long pays and favours ----------
+
+/** SF85, the Oath of Speed kept and paid: the lead starts every battle at +1 Speed. */
+export function oathSpeedStart(run: Run): BattleEvent[] {
+  if (num(run, 'oath-speed-paid') <= 0 || !run.battle) return [];
+  const before = run.battle.playerStages.spe ?? 0;
+  const after = Math.min(6, before + 1);
+  if (after === before) return [];
+  run.battle.playerStages.spe = after;
+  return [{ type: 'stat', side: 'player', stat: 'spe', change: after - before } as BattleEvent];
+}
+
+/** SF81, the Rangers' favour: once, a Pokémon that fainted in a lost battle is carried to safety at full HP. Returns its name, or ''. */
+export function rangerRescue(content: Content, run: Run, lost: boolean): string {
+  if (!lost || num(run, 'ranger-favour') <= 0) return '';
+  const mon = run.party.find((m) => m.hp <= 0);
+  if (!mon) return '';
+  mon.hp = maxHp(content, mon);
+  put(run, 'ranger-favour', 0);
+  return speciesName(content, mon.speciesId);
+}

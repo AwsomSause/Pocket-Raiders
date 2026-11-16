@@ -261,6 +261,31 @@
    "key": "estate-uncle-named",
    "setBy": "estate-owner",
    "readBy": "people GL9 (his name goes into the bracket)"
+  },
+  {
+   "key": "vault-magearna",
+   "setBy": "dz-clockwork-door (SF79)",
+   "readBy": "legends (MY18 Magearna)"
+  },
+  {
+   "key": "vault-wound",
+   "setBy": "dz-clockwork-door (SF79)",
+   "readBy": "legends (MY18 Magearna)"
+  },
+  {
+   "key": "evil-skip",
+   "setBy": "faction-syndicate-high, faction-syndicate-coin (SF81)",
+   "readBy": "evil-story (one guard fight skipped)"
+  },
+  {
+   "key": "ranger-favour",
+   "setBy": "faction-rangers-high (SF81)",
+   "readBy": "engine: coBattleEnd rangerRescue (one fainted Pokémon back after a lost fight)"
+  },
+  {
+   "key": "oath-speed-paid",
+   "setBy": "oath-reckoning-speed (SF85)",
+   "readBy": "engine: coBattleStarted oathSpeedStart (+1 Speed at battle start)"
   }
  ]
 }
