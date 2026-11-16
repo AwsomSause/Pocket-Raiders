@@ -3150,5 +3150,45 @@
    "Reunion Episode"
   ],
   "tags": []
+ },
+ "gn-new-14-cabinet": {
+  "gn": "gn.new.14",
+  "shape": "Single, three minigames",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   18
+  ],
+  "sits": "must-see",
+  "attaches": "town",
+  "level": "No battles",
+  "often": "run",
+  "badge": "own",
+  "note": "Badge: an arcade cabinet. In the back of a shop (a Town stop once towns exist); fallback step 5 of the next stage. Once a run. The three games are choices (mash the buttons panics, time finds shortcuts); the Porygon joins with Debug when all three are cleared. Sold as is: arcade-sold.",
+  "kinds": [
+   "Miniature Episode"
+  ],
+  "tags": []
+ },
+ "gn-new-14-board": {
+  "gn": "gn.new.14",
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 5,
+  "window": [
+   2,
+   10
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: every later arcade in the same run (first place THX, your initials second; or HELP, still, if sold).",
+  "kinds": [
+   "Miniature Episode"
+  ],
+  "tags": []
  }
 }

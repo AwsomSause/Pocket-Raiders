@@ -1,0 +1,555 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-14-cabinet",
+   "name": "The Arcade Cabinet",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "arcade-walked",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "arcade-sold",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "board",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "arcade-sold",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The cabinet is gone from the corner. In its place, a pale rectangle on the floor, and the faint smell of hot dust."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "porygon",
+    "tint": "#2d1f4f",
+    "effect": "none"
+   },
+   "intro": "*An arcade machine in the back of a shop. Unplugged, with the cord coiled on the floor beside it, and running anyway.*\n\n*One high score on the screen. The initials: HELP.*\n\n**Shopkeeper, Mr. Vandersloot:** \"Came with the building. I'd give you fifty for someone to take it. Or I'll take two hundred from you, as is.\"\n\n*On the screen, a small blocky bird looks out at you and taps the glass.*",
+   "choices": [
+    {
+     "label": "Play.",
+     "success": {
+      "text": "A coin you don't remember putting in drops into the slot. The bird straightens up. It has waited a long time for this.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "arcade-played",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "arcade-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-14-maze"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sell it for him.",
+     "success": {
+      "text": "Mr. Vandersloot counts out fifty into your hand, gratefully, and finds you a buyer by the end of the afternoon. As is.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 50
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "arcade-sold",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "arcade-stage"
+       },
+       {
+        "kind": "moment",
+        "text": "Sold an arcade cabinet as is. The bird on the screen watched you leave.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you, something small taps the glass, once, then goes quiet.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "arcade-walked",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-14-maze",
+   "name": "The Arcade Cabinet: The Maze",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "porygon",
+    "tint": "#2d1f4f",
+    "effect": "none"
+   },
+   "intro": "Game one. A maze, green lines on black, and one small blocky bird at the entrance, waiting to be told where to go.\n\n*It looks out of the screen at you, and taps the glass twice. Your move.*",
+   "choices": [
+    {
+     "label": "Mash the buttons.",
+     "success": {
+      "text": "You hammer the buttons. The bird bolts left, then right, then straight into a wall. It bumps every wall it meets, panicking, and the timer runs out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-14-maze-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it time.",
+     "success": {
+      "text": "You wait. The bird stops, looks, and tries the wall. The wall opens: a shortcut the maze never showed anyone. It trots through, and out the exit.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "arcade-cleared-games",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-14-stacker"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-14-stacker",
+   "name": "The Arcade Cabinet: The Block-Stacker",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "porygon",
+    "tint": "#2d1f4f",
+    "effect": "none"
+   },
+   "intro": "Game two. Coloured blocks tumble down a narrow well. The bird stands at the bottom, holding the whole pile up with both wings.\n\nIt has already stopped looking at the blocks. It is looking at you.",
+   "choices": [
+    {
+     "label": "Mash the buttons.",
+     "success": {
+      "text": "You rush it. The blocks pile up crooked, and the bird flaps in a circle, dropping them everywhere. The well fills to the top.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-14-stacker-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it time.",
+     "success": {
+      "text": "You give it time. It turns each block twice, slots it flush, and clears four lines at once. Then it clears four more. It does not seem surprised.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "arcade-cleared-games",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-14-shooter"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-14-shooter",
+   "name": "The Arcade Cabinet: The Shooter",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "porygon",
+    "tint": "#2d1f4f",
+    "effect": "none"
+   },
+   "intro": "Game three. One screen, one little ship, and a wall of descending squares. The bird flies the ship. It has never looked so nervous.\n\nIn the corner, the high score reads HELP. It has not changed in years.",
+   "choices": [
+    {
+     "label": "Mash the buttons.",
+     "success": {
+      "text": "You mash fire. The ship sprays shots at nothing, and the squares come down faster. It panics, then freezes, then the ship is gone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-14-shooter-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it time.",
+     "success": {
+      "text": "You let it breathe. It finds the gap between two columns, tucks in, and picks the squares off one by one. The wall thins. The wall is gone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "arcade-cleared-games",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-14-clear"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-14-maze-lost",
+   "name": "The Arcade Cabinet: The Maze, Game Over",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "porygon",
+    "tint": "#2d1f4f",
+    "effect": "none"
+   },
+   "intro": "GAME OVER, in red, across the whole screen. The bird sits very still in the middle of it.\n\nIts last life slides back across the screen at you. It does not look away. It waits, very patiently, for you to take it.",
+   "choices": [
+    {
+     "label": "Take the life.",
+     "success": {
+      "text": "You press the button. The life goes back into the bird, and it exhales, as if it had been holding its breath. The game starts again, slower.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-14-maze"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "You step back from the glass. The bird watches you go. The screen keeps running behind you, and nobody has plugged it in.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "arcade-walked",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-14-stacker-lost",
+   "name": "The Arcade Cabinet: The Block-Stacker, Game Over",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "porygon",
+    "tint": "#2d1f4f",
+    "effect": "none"
+   },
+   "intro": "GAME OVER, in red, across the whole screen. The bird sits very still in the middle of it.\n\nThe last life drifts back across the screen to you, small and bright, and stops at the edge of the glass. It waits.",
+   "choices": [
+    {
+     "label": "Take the life.",
+     "success": {
+      "text": "You press the button. The life goes back into the bird, and it exhales, as if it had been holding its breath. The game starts again, slower.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-14-stacker"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "You step back from the glass. The bird watches you go. The screen keeps running behind you, and nobody has plugged it in.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "arcade-walked",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-14-shooter-lost",
+   "name": "The Arcade Cabinet: The Shooter, Game Over",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "porygon",
+    "tint": "#2d1f4f",
+    "effect": "none"
+   },
+   "intro": "GAME OVER, in red, across the whole screen. The bird sits very still in the middle of it.\n\nIt nudges its last life across the screen toward you, the way you would slide a coin over a table. Then it waits.",
+   "choices": [
+    {
+     "label": "Take the life.",
+     "success": {
+      "text": "You press the button. The life goes back into the bird, and it exhales, as if it had been holding its breath. The game starts again, slower.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-14-shooter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "You step back from the glass. The bird watches you go. The screen keeps running behind you, and nobody has plugged it in.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "arcade-walked",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-14-clear",
+   "name": "The Arcade Cabinet: All Three Cleared",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "porygon",
+    "tint": "#2d1f4f",
+    "effect": "none"
+   },
+   "intro": "The last square falls. The screen goes white, and then, for the first time in years, it goes quiet.\n\n*The bird steps out of the screen. One polygon at a time: a wing, a beak, a leg, until it is standing on the shop floor, blinking, entirely pink and blue.*\n\n**Mr. Vandersloot:** \"Well. I've had that thing a decade. Nobody mentioned it did that.\"",
+   "choices": [
+    {
+     "label": "Say hello.",
+     "success": {
+      "text": "It is a Porygon. It looks at its own feet, then at yours, and decides it is going with you. On the cabinet, the high score reads HELP. Then it reads nothing at all.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "porygon"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "asIs": true,
+        "ability": "debug",
+        "mark": "arcade-porygon"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "arcade-cleared",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Cleared three games, and a Porygon stepped out of the screen.",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-14-board",
+   "name": "The Arcade Cabinet: The Score Table",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "arcade-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "arcade-board",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sold",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "arcade-sold",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The high-score table reads HELP. Still. It is exactly as you remember it, and it is looking at you."
+    },
+    {
+     "id": "cleared",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "arcade-cleared",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "First place: THX. Second place: your initials. A small blocky bird is on the cabinet, in the corner of the screen, waving."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "porygon",
+    "tint": "#2d1f4f",
+    "effect": "none"
+   },
+   "intro": "*Another arcade, in another back room. A row of machines, humming, with a score table glowing on each of them.*\n\nYou read the nearest table before you can stop yourself.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "You stand there a moment, and then you go on.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "arcade-board",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
