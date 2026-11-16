@@ -30,6 +30,8 @@ import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWa
 import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorStart, defectorTokens, defectorTrust, guestOf } from './defector';
 import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
+import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
+import { bidoofJoin, bidoofStart } from './bidoof';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -70,6 +72,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   // gn.51: the Smuggling Ring.
   if (text.includes('{smuggle:')) text = smuggleTokens(content, run, text);
   if (text.includes('{siege:')) text = siegeTokens(content, run, text);
+  if (text.includes('{karp:')) text = karpTokens(run, text);
   // gn.47: the Exhibition.
   if (text.includes('{ex:')) text = exTokens(content, run, text);
   // gn.46: the All-Star bracket.
@@ -211,6 +214,9 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'defectorGuest') return !!guestOf(run);
   // gn.51: rests of patience enough for it to climb in by itself.
   if (c.test === 'rehabDone') return gnFlag(run, 'smuggle-rehab') >= restsNeeded(run);
+  if (c.test === 'kcNotch') return notchRises(run);
+  if (c.test === 'kcMine') return mineRises(run);
+  if (c.test === 'kcRegular') return regularRises(run);
   if (c.test === 'sgWaiting') return waiting(run) >= 0;
   if (c.test === 'sgOrdered') return waiting(run) < 0;
   if (c.test === 'rehabWaiting') return gnFlag(run, 'smuggle-rehab') > 0 && gnFlag(run, 'smuggle-rehab') < restsNeeded(run);
@@ -626,6 +632,14 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return sgEnd(content, run, e.n ?? 0, host.stage);
     case 'sgJoin':
       return sgJoin(run, host);
+    case 'kcArrive':
+      return kcArrive(run, host.float);
+    case 'kcJump':
+      return kcJump(run, e.n ?? 5);
+    case 'kcEvolve':
+      return kcEvolve(run);
+    case 'bidoofJoin':
+      return bidoofJoin(content, run, host);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
@@ -769,6 +783,10 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (rule === 'snorlax') snorlaxStart(content, battle);
   // gn.53: the siege's commander, as strong as the clock let them be.
   if (rule === 'siege-commander') sgCommanderStart(run, battle, FOE_WAITS);
+  // gn.54: the serious man's six Magikarp (seven, once he's been beaten).
+  // gn.55: the Angry Bidoof, tripled.
+  if (rule === 'bidoof') bidoofStart(content, run, battle);
+  if (rule === 'quillfeather') quillfeatherStart(content, run, battle, makeFull(content));
   if (rule === 'draft') draftBattleStart(content, run, battle, battle.eventRule?.slot, makeFull(content));
   if (rule === 'allstar-final') {
     if (gnFlag(run, 'allstar-shake') > 0) battle.storyEffects.push('allstar-shake');

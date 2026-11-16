@@ -1,7 +1,7 @@
 // Greenneedle, part 11: gn.44 The 1v1 Championship (doc GREENNEEDLE_REWORKED_PLACED_10.md).
 // Build: npm run co:build -- greenneedle-11   then   npm run co:gn
-import { $, any, anyType, br, ch, egg, fight, flag, heal, item, join, money, out, scout, takeNode, trainer, wild, type Json } from '../dsl.ts';
-import { bond, chIf, exactly, gev, gn, is, laterStage, moment, not, notThisRegion, rm, roll, route, say, scene, setTo, stampRegion, stampStage, when, type Placement } from './_gn.ts';
+import { $, any, anyType, br, ch, egg, fight, flag, fr, heal, item, join, money, out, scout, takeNode, trainer, wild, type Json } from '../dsl.ts';
+import { bond, chIf, exactly, gev, gn, is, laterStage, moment, not, notThisRegion, rm, roll, route, say, scene, setTo, stampRegion, stampStage, teach, when, type Placement } from './_gn.ts';
 import { evil, foe, rivalTrust } from './_evil-story-kit.ts';
 
 export { CATEGORY } from './_gn.ts';
@@ -1065,7 +1065,192 @@ const gn53: Json[] = [
   ), [ch('Listen to the end.', out('You listen to the end. Your name isn\'t on it. You don\'t mind. You know whose should be.', setTo('sg-plaque', 1)))]),
 ];
 
-export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46, ...gn47, ...gn48, ...gn49, KANTO_SNORLAX, ...gn50, ...gn51, ...gn52, ...gn53];
+// ---------- gn.54 The Magikarp Convention (doc 12, lines 8–92) ----------
+const KARPCON_TINT = '#6aa8d8';
+const karpcon = (o: Json = {}): Json => ({ tint: KARPCON_TINT, pokemon: 'magikarp', tags: ['Pokémon', 'Story'], effect: 'none', ...o });
+const toHub = scene('gn-54-hub');
+const kc = (test: string): Json => ({ kind: 'gn', test });
+/** After the jump (or just watching): the secret, if one of them evolves this year; else the band. */
+const afterJump: Json[] = [gn('kcEvolve'), when('kc-star', { min: 1 }, [scene('gn-54-secret')]), when('kc-star', { min: 0, max: 0 }, [scene('gn-54-end')])];
+const prize: Json[] = [
+  when('kc-place', { min: 1, max: 1 }, [item('mystic-water')]),
+  when('kc-place', { min: 2, max: 2 }, [item('rare-candy')]),
+  when('kc-place', { min: 3 }, [gn('markLead', { text: 'wears a hand-knitted Magikarp hat' })]),
+];
+const NOTCH_GYARADOS: Json[] = [
+  when('karp-raced', { min: 3 }, [{ ...join({ species: ['gyarados'] }), ability: 'impossible-leap', boost: { stat: 'spe', percent: 5 }, mark: 'karp-notch' }], 'It learned to be quick from you: Speed +1, for good.'),
+  when('karp-raced', { min: 0, max: 2 }, [{ ...join({ species: ['gyarados'] }), ability: 'impossible-leap', mark: 'karp-notch' }]),
+];
+const gn54: Json[] = [
+  gev('gn-54-lake', 'The Magikarp Convention', karpcon({ stop: 'event', rarity: 'uncommon', requires: [notThisRegion('kc-at')], remembers: [
+    { id: 'again', when: [is('kc-visits')], notice: 'The same banner, a year older. The same band. Mr. Tiddlethorpe sees you and waves both arms, megaphone and all.' },
+  ] }), say(
+    '*A lake with bunting. A banner: 14TH ANNUAL MAGIKARP CONVENTION. "THEY TRY."*',
+    '*A brass band playing something heroic, slowly.*',
+    '**Convention chair, Mr. Ferdinand Tiddlethorpe:** "People laugh. Let them. No other Pokémon in the world fails this hard and comes back."',
+    '"That\'s not nothing. That\'s the whole thing."',
+  ), [
+    ch('Go in.', out('You go in under the bunting. A child hands you a paper flag with a fish on it. You hold it.', gn('kcArrive'), stampRegion('kc-at'), toHub)),
+    ch('Walk on.', out('You walk on. Behind you, the band hits a high note, and misses it, and keeps going.')),
+  ]),
+  rm('gn-54-hub', 'The Magikarp Convention: The Lake', karpcon(), say(
+    'Stalls round the water. Twelve Magikarp in a roped-off pool. A painted pole. A serious man with six Poké Balls, polishing them.',
+    'A board by the gate keeps every year\'s scores, this run:',
+    '{karp:board}',
+  ), [
+    chIf([not('kc-watched')], 'Watch the synchronised jumping.', out(say(
+      'Twelve Magikarp, in formation. They jump on the beat, mostly. Two collide. Nobody minds.',
+      'It\'s not graceful. It\'s sincere. Your Water-types watch without blinking.',
+    ), fr(5, { types: ['water'] }), setTo('kc-watched', 1), toHub)),
+    chIf([not('kc-merch')], 'Browse the merchandise.', out('Hats. Flags. A plush that Splashes when squeezed. A book: *Splash: A Life.*', scene('gn-54-merch'))),
+    chIf([not('kc-quill-met')], 'Talk to the serious man.', out('He doesn\'t look up from his polishing until you\'re right in front of him.', scene('gn-54-quill'))),
+    ch('Go to the jumping contest.', out('A megaphone squeals. Everyone drifts toward the pole.', scene('gn-54-contest'))),
+  ]),
+  rm('gn-54-merch', 'The Magikarp Convention: Merchandise', karpcon({ remembers: [
+    { id: 'pettigrew', when: [is('karp-bought')], notice: 'One stall\'s Mr. Pettigrew\'s. A sign: EVERYTHING HERE IS EXACTLY WHAT I SAY IT IS. It is. People keep looking at it, confused.' },
+  ] }), say(
+    'Hats with fins. Flags. A plush that Splashes when squeezed, which a child is doing, over and over.',
+    'A stack of *Splash: A Life,* by Ferdinand Tiddlethorpe. Signed. All of them.',
+  ), [
+    ch('A Magikarp-print bandana (₽300).', out('Your lead wears it at once, at a jaunty angle. It looks ready to try very hard.', $(-300), gn('markLead', { text: 'wears a Magikarp-print bandana' }), setTo('kc-merch', 1), toHub), { requires: [money(300)] }),
+    ch('A hat with fins (₽200).', out('It fits your lead badly. Your lead won\'t take it off.', $(-200), gn('markLead', { text: 'wears a Magikarp hat with fins' }), setTo('kc-merch', 1), toHub), { requires: [money(200)] }),
+    ch('The book (₽100).', out('You open it at random. Chapter Nine: *"And Then It Splashed Again."* It\'s better than it should be.', $(-100), setTo('kc-merch', 1), toHub), { requires: [money(100)] }),
+    ch('Just look.', out('You just look. The plush Splashes at you as you go. It feels personal.', setTo('kc-merch', 1), toHub)),
+  ]),
+  rm('gn-54-quill', 'The Magikarp Convention: The Serious Man', karpcon({ cast: ['trainer.ace-trainer'], remembers: [
+    { id: 'seven', when: [is('kc-quill')], notice: 'He has seven now. "One more, since you. I\'m not bitter. I\'m *thorough.*"' },
+  ] }), say(
+    '**Ace Trainer Barnabas Quillfeather:** "Six. Bred for jump height, generation on generation."',
+    '"People say, \'Why not evolve them?\' I say, \'Why climb a mountain and then *knock it down?*\'"',
+  ), [
+    ch('Battle.', fight('"Six on six. They know Splash, Tackle, Flail and Bounce." He doesn\'t smile. "Flail hurts."', {
+      ...trainer('Barnabas Quillfeather', { cls: 'ace-trainer', size: 6, team: ['magikarp', 'magikarp', 'magikarp', 'magikarp', 'magikarp', 'magikarp'], lv: -2, friendly: true, rule: { gn: 'quillfeather' },
+        win: [flag('kc-quill'), setTo('kc-quill-met', 1), scene('gn-54-respect')], lose: [setTo('kc-quill-met', 1), scene('gn-54-gracious')] }) })),
+    ch('Not today.', out('"Nobody ever says yes," he tells his Balls, and goes back to polishing.', setTo('kc-quill-met', 1), toHub)),
+  ]),
+  rm('gn-54-respect', 'The Magikarp Convention: Respect', karpcon({ cast: ['trainer.ace-trainer'] }), say(
+    'The last one went out at one HP, holding a Sash, and almost did it. He knew it would. That was the point.',
+    'He looks at you for a long time. Then he holds out a disc. "Bounce. You\'ve earned the right to jump."',
+  ), [ch('Take it.', out('He shakes your hand, once, firmly, like a man closing a gate.', teach('bounce'), toHub))]),
+  rm('gn-54-gracious', 'The Magikarp Convention: Gracious', karpcon({ cast: ['trainer.ace-trainer'] }), say(
+    '"Well fought." He means it. He helps your Pokémon up, one by one, and tells each of them something kind.',
+    'He\'s gracious about it. Somehow that\'s worse.',
+  ), [ch('Back to the lake.', out('You go back to the lake. Behind you, he\'s telling his six they did well. They did.', toHub))]),
+  rm('gn-54-contest', 'The Magikarp Convention: The Contest', karpcon({ remembers: [
+    { id: 'notch', when: [is('karp-1'), not('karp-end')], notice: 'Fifth in line: a Magikarp with a notch in its tail fin. *That notch.* It\'s the one from the river. It keeps trying after the whistle.' },
+  ] }), say(
+    '**Mr. Tiddlethorpe, with a megaphone:** "ONE jump. Height at the top of the arc. Judges\' decision is final, and the judges are *moved easily.*"',
+    'The regulars line up. Old Reliable. Lady Splendour, waiting for the band. Chips, jumping crooked. The Admiral, refusing to be measured. Notch.',
+  ), [
+    chIf([is('kc-own')], 'Enter your Magikarp.', out('You give its name to the judges. Somebody writes it on the board in chalk. Your Magikarp looks at the pole like it\'s personal.', setTo('kc-mine', 1), scene('gn-54-jump'))),
+    ch('Borrow one.', out('A volunteer hands you a Magikarp in a bucket. "This is Keith. Keith tries."', scene('gn-54-jump'))),
+    ch('Just watch.', out(say(
+      'Old Reliable: 3 ft 2 in, to the inch, again. Lady Splendour waits for the band, then flies. Chips jumps crooked. The crowd roars for Chips.',
+      'The Admiral jumps when nobody\'s looking. "About four," says a child.',
+    ), ...afterJump)),
+  ]),
+  rm('gn-54-jump', 'The Magikarp Convention: The Jump', karpcon(), say(
+    'Your turn at the pole. It\'s taller up close. The band stops to watch.',
+    'The best a Magikarp can do is good. Not great. Good.',
+  ), [
+    ch('Go on, you can do it.', out('It jumps. It\'s a good jump. It\'s the best it\'s got.', gn('kcJump', { n: 1 }), ...prize, ...afterJump), {
+      prompt: { id: 'gauge-hold', needs: 'ok' },
+      fail: out('It jumps a beat early. Still a jump. Still trying.', gn('kcJump', { n: 2 }), ...prize, ...afterJump),
+    }),
+    ch('Beat Lady Splendour.', out('It jumps like it heard you. It clears her mark by an inch. Lady Splendour looks away, offended.', gn('kcJump', { n: 3 }), ...prize, ...afterJump), {
+      prompt: { id: 'gauge-hold', needs: 'good' },
+      fail: out('It tries too hard. It jumps too early, and too sideways, and lands in the reeds, very pleased.', gn('kcJump', { n: 4 }), ...prize, ...afterJump),
+    }),
+    ch('Just have fun.', out('It does. That\'s all it does. It has the best time anyone\'s ever had.', gn('kcJump', { n: 5 }), ...prize, ...afterJump)),
+  ]),
+  rm('gn-54-secret', 'The Magikarp Convention: The Secret', karpcon({ pokemon: 'gyarados', remembers: [
+    { id: 'notch', when: [kc('kcNotch')], notice: '*It turns its head, above the whole lake, slowly, along the bank, until it finds the right face.* It has a notch in its tail.' },
+    { id: 'mine', when: [kc('kcMine')], notice: 'It\'s yours. Your own Magikarp, the one you entered. It looks down at you as if to ask: *did that count?*' },
+  ] }), say(
+    '*A jump. Higher than the pole. Higher than the bunting.* It\'s {karp:star}.',
+    '*It doesn\'t come down the same shape.* The crowd goes silent. The band stops, one instrument at a time. The tuba\'s last.',
+    '*Then the crowd goes wild.* Hats in the air. Mr. Tiddlethorpe\'s crying into his megaphone, and it\'s amplifying it.',
+    '**Barnabas Quillfeather, very quietly, to his six:** "Don\'t look. Don\'t any of you look at that."',
+  ), [
+    chIf([kc('kcNotch')], 'Hold out your hand.', out('It comes down out of the sky, and lowers its great head to your hand, in front of everyone.',
+      ...NOTCH_GYARADOS, flag('karp-falls'), setTo('karp-end', 1), moment('The notched Magikarp evolved at the Magikarp Convention, and looked for you.', 90), scene('gn-54-end'))),
+    chIf([kc('kcNotch')], 'Let it go free.', out('It roars once at the sky, and is gone upriver. The children talk about nothing else.', flag('karp-falls'), setTo('karp-end', 1), scene('gn-54-end'))),
+    chIf([kc('kcMine')], 'Welcome it back.', out('It\'s entered on the board for ever, under your name, with a small drawn star.',
+      { kind: 'formChange', from: 'magikarp', to: 'gyarados' }, moment('Your Magikarp evolved at the Magikarp Convention, in front of everyone.', 85), scene('gn-54-end'))),
+    chIf([kc('kcRegular')], 'Watch it go.', out('It circles the lake once, and goes down the river. Its row on the board ends with a small drawn star.', scene('gn-54-end'))),
+  ]),
+  rm('gn-54-end', 'The Magikarp Convention: The Band', karpcon({ remembers: [
+    { id: 'evolved', when: [is('kc-evolved')], notice: 'Next year, the others will jump a little higher. They always do, after.' },
+  ] }), say(
+    'The band plays the heroic thing again, slowly. The board, chalked up for this year:',
+    '{karp:board}',
+  ), [ch('Go home.', out('You go home with a paper flag, and a feeling you can\'t quite name. It might be hope. It smells of lake.', moment('Went to the Magikarp Convention. They tried.', 40)))]),
+  gev('gn-54-poster', 'The Magikarp Convention: The Poster', karpcon({ stop: 'event', rarity: 'uncommon', tags: ['Story'], requires: [is('kc-evolved'), notThisRegion('kc-at'), notThisRegion('kc-poster')] }), say(
+    'A poster on a noticeboard: the Magikarp Convention, next year, all welcome.',
+    'In one corner, in crayon, a small Gyarados. Drawn by a child. It\'s smiling.',
+  ), [ch('Smile back.', out('You smile back at it. Nobody sees. That\'s fine.', stampRegion('kc-poster')))]),
+];
+
+// ---------- gn.55 The Angry Bidoof (doc 12, lines 93–172) ----------
+const bidoofTint = (o: Json = {}): Json => ({ tint: '#b08a5a', pokemon: 'bidoof', tags: ['Pokémon', 'Combat'], effect: 'none', cast: ['trainer.gentleman'], ...o });
+const LEAD_BOND_3: Json = { kind: 'bondLevel', atLeast: 3, who: 'lead' };
+const bidoofFight = (text: string): Json => fight(text, {
+  ...wild({ species: ['bidoof'], lv: 2, win: [gn('bidoofJoin'), scene('gn-55-foot')] }), exact: true, friendly: true, rule: { gn: 'bidoof', noCatch: true }, lose: [scene('gn-55-sorry')],
+});
+const gn55: Json[] = [
+  gev('gn-55-bidoof', 'The Angry Bidoof', bidoofTint({ stop: 'event', rarity: 'rare', requires: [not('bidoof-insulted')], remembers: [
+    { id: 'dam', when: [is('bibarel-dam-broken')], notice: 'Its eyes go to you, and narrow. It knows about the dam. Whatever you say now, it\'s already decided.' },
+    { id: 'gym', when: [is('future-gym-normal')], notice: '**Mr. Applewhite:** "Your friend\'s new Gym has a Bidoof, doesn\'t it? Its cousin. You can tell by the eyebrows." Nobody\'s surprised.' },
+  ] }), say(
+    '*A boy with an expensive belt is doubled over, laughing, pointing.*',
+    '**The boy, Lucan Fairweather:** "A *Bidoof!* He\'s sending out a *Bidoof!* Oh, that\'s— hang on, I can\'t— a *Bidoof!*"',
+    '*The Bidoof is looking at him. It isn\'t blinking. Behind him, his Pokémon is already on the ground. One hit. He hasn\'t looked round yet.*',
+    '**Its trainer, Mr. Horace Applewhite, mildly:** "I do wish people wouldn\'t. It takes it so much to heart."',
+    '*The Bidoof turns its head toward you.* "Oh, dear. It\'s seen you smile. Were you smiling? You\'d best not have been smiling."',
+  ), [
+    ch('I wasn\'t laughing.', out('It considers. It considers for a long time. It decides you were.', setTo('bidoof-insulted', 1), setTo('bidoof-mood', 1), stampStage('bidoof-stage'), scene('gn-55-fight'))),
+    ch('It\'s a Bidoof.', out('Its fur stands up, all at once, the whole length of it. Mr. Applewhite takes a step back. "Oh, you shouldn\'t have."', setTo('bidoof-insulted', 1), setTo('bidoof-mood', 2), stampStage('bidoof-stage'), scene('gn-55-fight'))),
+    ch('Sorry. It\'s a very fine Bidoof.', out('It considers for longer. Its eyes go past you, to your lead.',
+      setTo('bidoof-insulted', 1), setTo('bidoof-mood', 3), stampStage('bidoof-stage'),
+      gn('check', { key: 'bidoof-bow', if: [LEAD_BOND_3] }),
+      when('bidoof-bow', { min: 1 }, [scene('gn-55-bow')]),
+      when('bidoof-bow', { min: 0, max: 0 }, [scene('gn-55-bows-first')]))),
+  ]),
+  rm('gn-55-fight', 'The Angry Bidoof', bidoofTint(), say(
+    'It walks into the middle of the road. It sits. It waits for you to choose.',
+    '**Mr. Applewhite:** "It\'s a perfectly ordinary Bidoof. They\'re simply misunderstood."',
+  ), [ch('Battle.', bidoofFight('It doesn\'t look away from you. Not once. Not between turns. Not ever.'))]),
+  rm('gn-55-bows-first', 'The Angry Bidoof', bidoofTint(), say(
+    'Your lead hangs back. It isn\'t sure of itself yet, and the Bidoof can tell.',
+    'So the Bidoof bows first. Formally. Deeply. Then it straightens up, and the bow is over.',
+  ), [ch('Bow back, and battle.', bidoofFight('You bow back. It nods, as if that settles the manners, and comes at you like a landslide.'))]),
+  rm('gn-55-bow', 'The Angry Bidoof: Respect', bidoofTint({ tags: ['Pokémon', 'Relationship'] }), say(
+    'Your lead steps forward, and bows. Low, and slow, and meaning it.',
+    '*The Bidoof walks a slow circle round your lead. It nods, once.*',
+    'Then it trots off into the long grass, and comes back with something in its teeth.',
+  ), [ch('Take it.', out('A Silk Scarf, a little damp. It doesn\'t join you. It doesn\'t need to. Every Bidoof on the road will hear about this.',
+    item('silk-scarf'), setTo('bidoof-end', 2), bond(1), moment('Bowed to the Angry Bidoof, and it bowed back.', 70)))]),
+  rm('gn-55-foot', 'The Angry Bidoof: It\'s Taken to You', bidoofTint({ tags: ['Pokémon', 'Relationship'] }), say(
+    '*It\'s on its back. It looks at the sky a while. It gets up. It walks over. It sits down on your foot.*',
+    '**Mr. Applewhite:** "Oh. Oh, it\'s taken to you. It never takes to anyone. I\'ll miss it. Shall I? I think I shall."',
+    '"It ate my sofa."',
+  ), [ch('Let it stay on your foot.', out('It stays on your foot for a long time. When you finally walk, it walks too, exactly beside you.', moment('Beat the Angry Bidoof. It sat on your foot, and stayed.', 75)))]),
+  rm('gn-55-sorry', 'The Angry Bidoof: Mr. Applewhite Apologises', bidoofTint(), say(
+    '**Mr. Applewhite:** "Oh, I\'m so sorry. I\'m so terribly sorry. It\'s normally very gentle. It likes turnips."',
+    'He apologises for some time. He gives your Pokémon a turnip each. Nothing\'s taken. The Bidoof is still sitting in the road.',
+  ), [
+    ch('Try again.', bidoofFight('It gets up again. So do you. It looks, very slightly, pleased.')),
+    ch('Walk on.', out('You walk on, round the Bidoof. It watches you all the way to the bend.', setTo('bidoof-end', 3))),
+  ]),
+  gev('gn-55-lucan', 'The Angry Bidoof: The Boy Who Laughed', bidoofTint({ stop: 'event', rarity: 'uncommon', tags: ['Story'], requires: [is('bidoof-insulted'), laterStage('bidoof-stage'), not('bidoof-lucan')], remembers: [
+    { id: 'two', when: [{ kind: 'gn', test: 'hasMark', key: 'just-a-bidoof' }], notice: 'Then he sees what\'s walking beside you, and crosses a second road, and is gone.' },
+  ] }), say(
+    'A boy with an expensive belt, coming the other way. Lucan Fairweather. He sees you.',
+    'He crosses the road.',
+  ), [ch('Walk on.', out('You walk on. Somewhere, a Bidoof is sitting very still, and looking pleased with itself.', setTo('bidoof-lucan', 1)))]),
+];
+
+export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46, ...gn47, ...gn48, ...gn49, KANTO_SNORLAX, ...gn50, ...gn51, ...gn52, ...gn53, ...gn54, ...gn55];
 export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
@@ -1150,6 +1335,18 @@ export const PLACEMENT: Record<string, Placement> = {
     note: 'Badge: a burning tower. Only at the evil team\'s climax, or the stage before. Eight turns in rooms; the result shapes the next stage\'s shops and Center (run.ts). The rescued Pokémon waits at the next rest (gn-53-waiting); gn-53-plaque is the afterstory in a later region.',
   },
   'gn-53-plaque': { gn: 'gn.53', shape: 'Single', earliest: 'A6', home: 6, window: [2, 12], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: the plaque with the names of the allies who held (a later region of the same run).' },
+  'gn-54-lake': {
+    gn: 'gn.54', shape: 'Hub', earliest: 'A4', home: 10, window: [8, 13], sits: 'optional', attaches: 'town', tags: ['Community Episode'], needs: ['water'],
+    level: 'The six-Magikarp trainer: A-2', often: 'region', badge: 'own',
+    note: 'Badge: a fish with a ribbon. The town, once towns exist. Three attractions, five regulars and a secret. The board keeps every convention of this run (no memory across runs). gn-54-poster is the afterstory, once in each later region.',
+  },
+  'gn-54-poster': { gn: 'gn.54', shape: 'Single', earliest: 'A5', home: 6, window: [2, 14], sits: 'optional', attaches: 'town', tags: ['Community Episode'], level: 'None', often: 'region', badge: 'own', note: 'Afterstory: only once one of them has evolved at a convention.' },
+  'gn-55-bidoof': {
+    gn: 'gn.55', shape: 'Single', earliest: 'A4', home: 6, window: [4, 9], sits: 'optional', attaches: 'instead', tags: ['Miniature Episode'],
+    level: 'A+2, and then some (a Bidoof\'s stats, tripled)', often: 'run', badge: 'own',
+    note: 'Badge: a "!". It is the node\'s harder wild battle. Once a run (the doc\'s "once per save"). gn-55-lucan is the afterstory: the boy who laughed crosses the road (two, with the Bidoof in the party).',
+  },
+  'gn-55-lucan': { gn: 'gn.55', shape: 'Single', earliest: 'A5', home: 8, window: [2, 16], sits: 'optional', attaches: 'after', tags: ['Miniature Episode'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: a later stage of the same run.' },
   'gn-45-field': {
     gn: 'gn.45', shape: 'Single', earliest: 'A10', home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', tags: ['Companion Story'],
     level: 'The lesson A−1 (three Pokémon); the exam A+2 (six)', often: 'run', badge: 'own',

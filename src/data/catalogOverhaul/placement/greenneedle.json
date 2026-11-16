@@ -651,6 +651,88 @@
   ],
   "tags": []
  },
+ "gn-54-lake": {
+  "gn": "gn.54",
+  "shape": "Hub",
+  "earliest": "A4",
+  "home": 10,
+  "window": [
+   8,
+   13
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "The six-Magikarp trainer: A-2",
+  "often": "region",
+  "badge": "own",
+  "note": "Badge: a fish with a ribbon. The town, once towns exist. Three attractions, five regulars and a secret. The board keeps every convention of this run (no memory across runs). gn-54-poster is the afterstory, once in each later region.",
+  "kinds": [
+   "Community Episode"
+  ],
+  "tags": [
+   "water"
+  ]
+ },
+ "gn-54-poster": {
+  "gn": "gn.54",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 6,
+  "window": [
+   2,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "None",
+  "often": "region",
+  "badge": "own",
+  "note": "Afterstory: only once one of them has evolved at a convention.",
+  "kinds": [
+   "Community Episode"
+  ],
+  "tags": []
+ },
+ "gn-55-bidoof": {
+  "gn": "gn.55",
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 6,
+  "window": [
+   4,
+   9
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A+2, and then some (a Bidoof's stats, tripled)",
+  "often": "run",
+  "badge": "own",
+  "note": "Badge: a \"!\". It is the node's harder wild battle. Once a run (the doc's \"once per save\"). gn-55-lucan is the afterstory: the boy who laughed crosses the road (two, with the Bidoof in the party).",
+  "kinds": [
+   "Miniature Episode"
+  ],
+  "tags": []
+ },
+ "gn-55-lucan": {
+  "gn": "gn.55",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 8,
+  "window": [
+   2,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: a later stage of the same run.",
+  "kinds": [
+   "Miniature Episode"
+  ],
+  "tags": []
+ },
  "gn-45-field": {
   "gn": "gn.45",
   "shape": "Single",

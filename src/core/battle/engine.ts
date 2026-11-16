@@ -24,6 +24,7 @@ import { gavelFirst, gavelSpent } from '../greenneedle/auction';
 import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
 import { draftTurn } from '../greenneedle/draft';
 import { snorlaxTurn } from '../greenneedle/snorlax';
+import { bidoofTurn, NO_FLINCH } from '../greenneedle/bidoof';
 import { champPower, lessonTurn, seenItFirst, seenItSpend, summitSaves } from '../greenneedle/champion';
 import { earthLine, overchargeSelfHurt } from '../greenneedle/ridge';
 import { foresightBegin } from './foresight';
@@ -1172,6 +1173,8 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
       return;
     }
   }
+  // The Angry Bidoof (gn.55): its trainer explains, throughout, that it's a perfectly ordinary Bidoof.
+  if (rule.gn === 'bidoof' && content) bidoofTurn(content, battle, party, events as Parameters<typeof bidoofTurn>[3], (text) => events.push({ type: 'raid', tone: 'info', text }));
   // The Polluted Factory (gn.17): burst pipes, the Molten Sludge, the splitting Magmuk and the burning floor.
   if (content && rule.gn && FACTORY_RULES.has(rule.gn)) factoryTurnEnd(content, battle, mine, events);
   if (rule.thinLight && content && battle.turn > 0 && battle.turn % 3 === 0) {
@@ -1733,7 +1736,7 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
     if (special !== undefined) return special;
     if (ctx.battle.kind !== 'wild') return "You can't catch another trainer's Pokémon!";
     if (ctx.catchBlocked) return ctx.catchBlocked;
-    if (ctx.battle.eventRule?.noCatch) return FACTORY_RULES.has(ctx.battle.eventRule.gn ?? '') ? "It can't be caught. It's barely holding itself together." : "It won't be caught. It fights for its Squad.";
+    if (ctx.battle.eventRule?.noCatch) return FACTORY_RULES.has(ctx.battle.eventRule.gn ?? '') ? "It can't be caught. It's barely holding itself together." : ctx.battle.eventRule.gn === 'bidoof' ? "It won't be caught. It wants to be beaten, fair and square." : "It won't be caught. It fights for its Squad.";
     if (ctx.battle.totem) return "A Totem can't be caught mid-fight. Beat it and something rare may follow!";
     if (ctx.battle.raid) {
       // S409 Boss Pokémon Capture: some bosses can be caught once they are worn down (not a called minion).
@@ -5010,7 +5013,7 @@ function foeMissLesson(ctx: BattleContext, target: Combatant, events: BattleEven
 
 /** Makes the target flinch, unless Inner Focus stops it or it is Dynamaxed. */
 function flinch(ctx: BattleContext, user: Combatant, target: Combatant): void {
-  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed && !momentNoFlinch(ctx, target) && !revivalNoFlinch(target) && !(target.side === 'player' && unflinching(target.mon))) target.flinched = true;
+  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed && !momentNoFlinch(ctx, target) && !ctx.battle.storyEffects.includes(`${NO_FLINCH}${target.mon.uid}`) && !revivalNoFlinch(target) && !(target.side === 'player' && unflinching(target.mon))) target.flinched = true;
 }
 
 /** Greenneedle gn.38 Self-Made: once per battle, when an opponent's ability would affect it, it isn't. True when it stepped in. */

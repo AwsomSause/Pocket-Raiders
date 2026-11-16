@@ -18,7 +18,8 @@ import { finishSpectate } from './sky/spectate';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
-import { gnAfterTurn, gnShape } from './greenneedle';
+import { FOE_WAITS, gnAfterTurn, gnShape } from './greenneedle';
+import { bidoofPeace } from './greenneedle/bidoof';
 import { ridgeCatch } from './greenneedle/ridge';
 import { unflinchingStart } from './greenneedle/daycare';
 import { gavelStart } from './greenneedle/auction';
@@ -3173,6 +3174,8 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   // Greenneedle gn.49: the Snorlax that followed your bag sits down at the Gym door.
   const gymDoor = snorlaxGym(run, stageNumber(content, run));
   kantoSweetAir(content, run);
+  // Greenneedle gn.55: after the Angry Bidoof's bow, no wild Bidoof or Bibarel attacks first.
+  bidoofPeace(run, FOE_WAITS);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   if (afterstory) events.push({ type: 'raid', tone: 'info', text: afterstory });
   if (ripple) events.push({ type: 'raid', tone: 'info', text: ripple });

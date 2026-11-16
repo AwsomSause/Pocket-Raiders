@@ -1432,3 +1432,209 @@ describe('gn.53 The Region Under Siege', () => {
     expect(scene(joined, 'gn-53-plaque').intro).toContain('Damian');
   });
 });
+
+// ---- gn.54 The Magikarp Convention ----
+import { boardOf, quillfeatherStart } from '../../src/core/greenneedle/karpcon';
+
+const lake = (seed: string, prep?: (run: RunState) => void): RunState => {
+  const run = gnRun(seed);
+  prep?.(run);
+  open(run, 'gn-54-lake');
+  return choose(run, 'gn-54-lake', 'Go in.').run;
+};
+/** A convention with no secret this year (or with one, if `star` is given: 1-5 the regulars, 6 the player's own). */
+const fixStar = (run: RunState, star: number): RunState => {
+  setFlag(run, 'kc-star', star);
+  return run;
+};
+
+describe('gn.54 The Magikarp Convention', () => {
+  it('the hub: three attractions and the contest; watching gives Water-types Bond +1; the board shows the five regulars', () => {
+    const run = lake('t54-hub', (r) => { r.party = [createPokemon(content, 'squirtle', 20, 'w-1'), createPokemon(content, 'pidgey', 20, 'p-1')]; });
+    expect(scene(run, 'gn-54-hub').labels).toEqual(['Watch the synchronised jumping.', 'Browse the merchandise.', 'Talk to the serious man.', 'Go to the jumping contest.']);
+    const intro = scene(run, 'gn-54-hub').intro;
+    for (const n of ['Old Reliable', 'Lady Splendour', 'Chips', 'The Admiral', 'Notch']) expect(intro).toContain(n);
+    expect(intro).toContain('3 ft 2 in');
+    const before = run.party.map((m) => m.friendship);
+    const after = choose(run, 'gn-54-hub', 'Watch the synchronised jumping.').run;
+    expect(after.party[0]!.friendship).toBeGreaterThan(before[0]!);
+    expect(after.party[1]!.friendship).toBe(before[1]);
+    expect(scene(after, 'gn-54-hub').labels).not.toContain('Watch the synchronised jumping.');
+  });
+
+  it('the bandana is worn; Mr. Pettigrew has a stall if you bought his Magikarp', () => {
+    const run = lake('t54-merch', (r) => { setFlag(r, 'karp-bought'); r.money = 1000; });
+    const m = choose(run, 'gn-54-hub', 'Browse the merchandise.').run;
+    expect(scene(m, 'gn-54-merch').intro).toContain('EXACTLY WHAT I SAY IT IS');
+    const worn = choose(m, 'gn-54-merch', 'A Magikarp-print bandana (₽300).').run;
+    expect(worn.party[0]!.marks).toContain('wears a Magikarp-print bandana');
+  });
+
+  it('the serious man: six Magikarp at A-2 knowing Splash, Tackle, Flail, Bounce, the last at 1 HP with a Sash; beaten, Bounce, and seven next time', () => {
+    const run = lake('t54-quill');
+    const q = choose(choose(run, 'gn-54-hub', 'Talk to the serious man.').run, 'gn-54-quill', 'Battle.').run;
+    const team = q.battle!.enemyTeam;
+    expect(team).toHaveLength(6);
+    expect(team.every((m) => m.speciesId === 'magikarp')).toBe(true);
+    expect(team[0]!.moves.map((x) => x.id)).toEqual(['splash', 'tackle', 'flail', 'bounce']);
+    expect(team[5]!.hp).toBe(1);
+    expect(team[5]!.held).toEqual({ 'focus-sash': 1 });
+    const won = win(q);
+    expect(flagOf(won, 'kc-quill')).toBe(1);
+    expect(opened(won, 'gn-54-respect')).toBe(true);
+    const seven = { enemyTeam: [createPokemon(content, 'magikarp', 10, 'q-0')], storyEffects: [] } as unknown as NonNullable<RunState['battle']>;
+    quillfeatherStart(content, won, seven, (sp, lv, uid) => createPokemon(content, sp, lv, uid));
+    expect(seven.enemyTeam).toHaveLength(7);
+    expect(scene(won, 'gn-54-quill').intro).toContain('He has seven now');
+  });
+
+  it('the contest: enter your own or borrow one; "Just have fun" lands on the judges\' table for the crowd\'s prize (the hat)', () => {
+    const run = fixStar(lake('t54-fun', (r) => { r.party = [createPokemon(content, 'magikarp', 15, 'k-1'), ...r.party]; }), 0);
+    const c = choose(run, 'gn-54-hub', 'Go to the jumping contest.').run;
+    expect(scene(c, 'gn-54-contest').labels).toEqual(['Enter your Magikarp.', 'Borrow one.', 'Just watch.']);
+    const j = choose(c, 'gn-54-contest', 'Enter your Magikarp.').run;
+    expect(scene(j, 'gn-54-jump').labels).toEqual(['Go on, you can do it.', 'Beat Lady Splendour.', 'Just have fun.']);
+    const r = choose(j, 'gn-54-jump', 'Just have fun.');
+    expect(said(r)).toContain('judges\' table');
+    expect(flagOf(r.run, 'kc-place')).toBe(4);
+    expect(r.run.party[0]!.marks).toContain('wears a hand-knitted Magikarp hat');
+    expect(boardOf(r.run).at(-1)!.yours).toBe(true);
+    expect(opened(r.run, 'gn-54-end')).toBe(true);
+    const borrowed = choose(choose(lake('t54-borrow'), 'gn-54-hub', 'Go to the jumping contest.').run, 'gn-54-contest', 'Borrow one.').run;
+    expect(scene(borrowed, 'gn-54-contest').labels).toEqual(['Borrow one.', 'Just watch.']);
+  });
+
+  it('the secret: Notch for certain if you encouraged it three times in gn.23; it looks for you, and joins as the story\'s ending', () => {
+    const run = lake('t54-notch', (r) => { setFlag(r, 'karp-1'); setFlag(r, 'karp-encouraged', 3); });
+    expect(flagOf(run, 'kc-star')).toBe(5);
+    const s = choose(choose(run, 'gn-54-hub', 'Go to the jumping contest.').run, 'gn-54-contest', 'Just watch.').run;
+    expect(scene(s, 'gn-54-secret').intro).toContain('finds the right face');
+    expect(scene(s, 'gn-54-secret').labels).toEqual(['Hold out your hand.', 'Let it go free.']);
+    const before = s.party.length + s.box.length;
+    const joined = choose(s, 'gn-54-secret', 'Hold out your hand.').run;
+    expect(joined.party.length + joined.box.length + joined.pending.length).toBeGreaterThan(before);
+    expect(flagOf(joined, 'karp-end')).toBe(1);
+    expect(boardOf(joined).at(-1)!.star).toBe(4);
+  });
+
+  it('a regular evolves: it goes down the river with a star; next convention it\'s gone and the others jump higher; the poster later', () => {
+    let run = fixStar(lake('t54-reg'), 3);
+    run = choose(choose(run, 'gn-54-hub', 'Go to the jumping contest.').run, 'gn-54-contest', 'Just watch.').run;
+    expect(scene(run, 'gn-54-secret').intro).toContain('It\'s Chips.');
+    expect(scene(run, 'gn-54-secret').labels).toEqual(['Watch it go.']);
+    run = choose(choose(run, 'gn-54-secret', 'Watch it go.').run, 'gn-54-end', 'Go home.').run;
+    const first = boardOf(run)[0]!;
+    run.regionIndex += 1;
+    open(run, 'gn-54-poster');
+    expect(scene(run, 'gn-54-poster').intro).toContain('small Gyarados');
+    open(run, 'gn-54-lake');
+    run = choose(run, 'gn-54-lake', 'Go in.').run;
+    const second = boardOf(run)[1]!;
+    expect(second.s[2]).toBe(0);
+    expect(second.s[0]).toBe(first.s[0]);
+    expect(scene(run, 'gn-54-hub').intro).toContain('★');
+  });
+
+  it('your own Magikarp evolves: it changes in your party and goes on the board under your name', () => {
+    let run = fixStar(lake('t54-mine', (r) => { r.party = [createPokemon(content, 'magikarp', 15, 'k-1'), ...r.party]; }), 6);
+    run = choose(choose(run, 'gn-54-hub', 'Go to the jumping contest.').run, 'gn-54-contest', 'Enter your Magikarp.').run;
+    run = choose(run, 'gn-54-jump', 'Just have fun.').run;
+    expect(scene(run, 'gn-54-secret').labels).toEqual(['Welcome it back.']);
+    run = choose(run, 'gn-54-secret', 'Welcome it back.').run;
+    expect(run.party[0]!.speciesId).toBe('gyarados');
+    expect(boardOf(run).at(-1)!.star).toBe(-2);
+  });
+});
+
+// ---- gn.55 The Angry Bidoof ----
+import { bidoofTurn } from '../../src/core/greenneedle/bidoof';
+import { bidoofPeace } from '../../src/core/greenneedle/bidoof';
+
+const road = (seed: string, prep?: (run: RunState) => void): RunState => {
+  const run = gnRun(seed);
+  prep?.(run);
+  open(run, 'gn-55-bidoof');
+  return run;
+};
+const bidoofIn = (run: RunState) => run.battle!.enemyTeam[0]!;
+
+describe('gn.55 The Angry Bidoof', () => {
+  it('the doc\'s three answers; "It\'s a Bidoof" starts it at +1 Attack; tripled stats, its four moves, Simple, full-power Return', () => {
+    const run = road('t55-insult');
+    expect(scene(run, 'gn-55-bidoof').labels).toEqual(['I wasn\'t laughing.', 'It\'s a Bidoof.', 'Sorry. It\'s a very fine Bidoof.']);
+    const b = choose(choose(run, 'gn-55-bidoof', 'It\'s a Bidoof.').run, 'gn-55-fight', 'Battle.').run;
+    const foe = bidoofIn(b);
+    expect(foe.speciesId).toBe('bidoof');
+    expect(foe.moves.map((m) => m.id)).toEqual(['superpower', 'aqua-tail', 'return', 'curse']);
+    expect(foe.fixedAbility).toBe('simple');
+    expect(foe.friendship).toBe(255);
+    expect(b.battle!.enemyStages.atk).toBe(1);
+    const plain = createPokemon(content, 'bidoof', foe.level, 'plain');
+    expect(calcStats(content, foe).atk).toBeGreaterThanOrEqual(calcStats(content, plain).atk * 3 - 3);
+    expect(b.battle!.eventRule).toMatchObject({ gn: 'bidoof', noCatch: true });
+    const calm = choose(choose(road('t55-calm'), 'gn-55-bidoof', 'I wasn\'t laughing.').run, 'gn-55-fight', 'Battle.').run;
+    expect(calm.battle!.enemyStages.atk).toBe(0);
+    // It knows about the Bibarel dam: +2 whatever you say.
+    const dam = road('t55-dam', (r) => setFlag(r, 'bibarel-dam-broken'));
+    expect(scene(dam, 'gn-55-bidoof').intro).toContain('It knows about the dam');
+    expect(choose(choose(dam, 'gn-55-bidoof', 'I wasn\'t laughing.').run, 'gn-55-fight', 'Battle.').run.battle!.enemyStages.atk).toBe(2);
+  });
+
+  it('Mr. Applewhite explains, throughout: a first faint, Curse, a super-effective hit survived, a second faint, winning, losing', () => {
+    const run = choose(choose(road('t55-talk'), 'gn-55-bidoof', 'I wasn\'t laughing.').run, 'gn-55-fight', 'Battle.').run;
+    const lines: string[] = [];
+    const battle = run.battle!;
+    const party = [createPokemon(content, 'pidgey', 20, 'a'), createPokemon(content, 'pidgey', 20, 'b'), createPokemon(content, 'pidgey', 20, 'c')];
+    party[0]!.hp = 0;
+    bidoofTurn(content, battle, party, [{ type: 'move', side: 'enemy', moveId: 'curse' }, { type: 'damage', side: 'enemy', effectiveness: 2 }], (t) => lines.push(t));
+    expect(lines.join(' ')).toContain('rodents are terribly determined');
+    expect(lines.join(' ')).toContain('homebodies');
+    expect(lines.join(' ')).toContain('teeth never stop growing');
+    party[1]!.hp = 0;
+    battle.enemyTeam[0]!.hp = 1;
+    bidoofTurn(content, battle, party, [], (t) => lines.push(t));
+    expect(lines.join(' ')).toContain('bought it at a fair');
+    expect(lines.join(' ')).toContain('now you\'ve upset it');
+    expect(lines.join(' ')).toContain('It likes turnips');
+    const n = lines.length;
+    bidoofTurn(content, battle, party, [{ type: 'move', side: 'enemy', moveId: 'curse' }], (t) => lines.push(t));
+    expect(lines).toHaveLength(n);
+  });
+
+  it('beaten, it sits on your foot and joins: Unbothered, a fixed +30%; lose and nothing\'s taken, and you can try again', () => {
+    const run = choose(choose(road('t55-win'), 'gn-55-bidoof', 'I wasn\'t laughing.').run, 'gn-55-fight', 'Battle.').run;
+    const lost = lose(run);
+    expect(opened(lost, 'gn-55-sorry')).toBe(true);
+    expect(scene(lost, 'gn-55-sorry').labels).toEqual(['Try again.', 'Walk on.']);
+    const won = win(run);
+    const mon = [...won.party, ...won.box].find((m) => m.gn?.includes('just-a-bidoof'))!;
+    expect(mon.fixedAbility).toBe('unbothered');
+    expect(mon.eventBoosts?.atk).toBe(30);
+    expect(opened(won, 'gn-55-foot')).toBe(true);
+    expect(scene(won, 'gn-55-foot').intro).toContain('It ate my sofa.');
+  });
+
+  it('"a very fine Bidoof" with a Bond 3 lead: the bow, a Silk Scarf, and no wild Bidoof or Bibarel attacks first; without, it bows first and fights', () => {
+    const low = choose(road('t55-low'), 'gn-55-bidoof', 'Sorry. It\'s a very fine Bidoof.').run;
+    expect(opened(low, 'gn-55-bows-first')).toBe(true);
+    const won0 = choose(low, 'gn-55-bows-first', 'Bow back, and battle.').run;
+    const run = road('t55-bow', (r) => { r.party[0]!.friendship = 255; });
+    const bowed = choose(choose(run, 'gn-55-bidoof', 'Sorry. It\'s a very fine Bidoof.').run, 'gn-55-bow', 'Take it.').run;
+    expect(flagOf(bowed, 'bidoof-end')).toBe(2);
+    expect((bowed.inventory['silk-scarf'] ?? 0) + bowed.party.reduce((n, m) => n + (m.held?.['silk-scarf'] ?? 0), 0)).toBe(1);
+    // A wild Bidoof waits its first turn.
+    const peace = structuredClone(bowed);
+    peace.phase = 'battle';
+    peace.battle = { ...structuredClone(won0.battle!), enemyTeam: [createPokemon(content, 'bibarel', 20, 'wild-bib')], enemyIndex: 0, storyEffects: [] } as NonNullable<RunState['battle']>;
+    expect(peace.battle.kind).toBe('wild');
+    bidoofPeace(peace, FOE_WAITS);
+    expect(peace.battle.storyEffects.join(' ')).toContain('won\'t be the one to start this');
+  });
+
+  it('later, the boy who laughed crosses the road; two roads if the Bidoof\'s with you', () => {
+    const won = win(choose(choose(road('t55-lucan'), 'gn-55-bidoof', 'I wasn\'t laughing.').run, 'gn-55-fight', 'Battle.').run);
+    won.stage!.index += 1;
+    open(won, 'gn-55-lucan');
+    expect(scene(won, 'gn-55-lucan').intro).toContain('crosses a second road');
+  });
+});

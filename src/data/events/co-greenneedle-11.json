@@ -11734,6 +11734,1907 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-54-lake",
+   "name": "The Magikarp Convention",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "kc-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kc-visits",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The same banner, a year older. The same band. Mr. Tiddlethorpe sees you and waves both arms, megaphone and all."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#6aa8d8",
+    "effect": "none"
+   },
+   "intro": "*A lake with bunting. A banner: 14TH ANNUAL MAGIKARP CONVENTION. \"THEY TRY.\"*\n\n*A brass band playing something heroic, slowly.*\n\n**Convention chair, Mr. Ferdinand Tiddlethorpe:** \"People laugh. Let them. No other Pokémon in the world fails this hard and comes back.\"\n\n\"That's not nothing. That's the whole thing.\"",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You go in under the bunting. A child hands you a paper flag with a fish on it. You hold it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "kcArrive"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "kc-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-hub"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you, the band hits a high note, and misses it, and keeps going.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-54-hub",
+   "name": "The Magikarp Convention: The Lake",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#6aa8d8",
+    "effect": "none"
+   },
+   "intro": "Stalls round the water. Twelve Magikarp in a roped-off pool. A painted pole. A serious man with six Poké Balls, polishing them.\n\nA board by the gate keeps every year's scores, this run:\n\n{karp:board}",
+   "choices": [
+    {
+     "label": "Watch the synchronised jumping.",
+     "success": {
+      "text": "Twelve Magikarp, in formation. They jump on the beat, mostly. Two collide. Nobody minds.\n\nIt's not graceful. It's sincere. Your Water-types watch without blinking.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "kc-watched",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-hub"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kc-watched",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Browse the merchandise.",
+     "success": {
+      "text": "Hats. Flags. A plush that Splashes when squeezed. A book: *Splash: A Life.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-merch"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kc-merch",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Talk to the serious man.",
+     "success": {
+      "text": "He doesn't look up from his polishing until you're right in front of him.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-quill"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kc-quill-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go to the jumping contest.",
+     "success": {
+      "text": "A megaphone squeals. Everyone drifts toward the pole.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-contest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-54-merch",
+   "name": "The Magikarp Convention: Merchandise",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "pettigrew",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "karp-bought",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "One stall's Mr. Pettigrew's. A sign: EVERYTHING HERE IS EXACTLY WHAT I SAY IT IS. It is. People keep looking at it, confused."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#6aa8d8",
+    "effect": "none"
+   },
+   "intro": "Hats with fins. Flags. A plush that Splashes when squeezed, which a child is doing, over and over.\n\nA stack of *Splash: A Life,* by Ferdinand Tiddlethorpe. Signed. All of them.",
+   "choices": [
+    {
+     "label": "A Magikarp-print bandana (₽300).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "Your lead wears it at once, at a jaunty angle. It looks ready to try very hard.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "gn",
+        "op": "markLead",
+        "text": "wears a Magikarp-print bandana"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "kc-merch",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-hub"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A hat with fins (₽200).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "It fits your lead badly. Your lead won't take it off.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "gn",
+        "op": "markLead",
+        "text": "wears a Magikarp hat with fins"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "kc-merch",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-hub"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The book (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You open it at random. Chapter Nine: *\"And Then It Splashed Again.\"* It's better than it should be.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "kc-merch",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-hub"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just look.",
+     "success": {
+      "text": "You just look. The plush Splashes at you as you go. It feels personal.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "kc-merch",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-54-quill",
+   "name": "The Magikarp Convention: The Serious Man",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "seven",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kc-quill",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He has seven now. \"One more, since you. I'm not bitter. I'm *thorough.*\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "pokemon": "magikarp",
+    "tint": "#6aa8d8",
+    "effect": "none"
+   },
+   "intro": "**Ace Trainer Barnabas Quillfeather:** \"Six. Bred for jump height, generation on generation.\"\n\n\"People say, 'Why not evolve them?' I say, 'Why climb a mountain and then *knock it down?*'\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"Six on six. They know Splash, Tackle, Flail and Bounce.\" He doesn't smile. \"Flail hurts.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "kc-quill-met",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-54-gracious"
+        }
+       ],
+       "rule": {
+        "gn": "quillfeather"
+       },
+       "team": [
+        "magikarp",
+        "magikarp",
+        "magikarp",
+        "magikarp",
+        "magikarp",
+        "magikarp"
+       ],
+       "name": "Barnabas Quillfeather",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kc-quill",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "kc-quill-met",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-54-respect"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "\"Nobody ever says yes,\" he tells his Balls, and goes back to polishing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "kc-quill-met",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-54-respect",
+   "name": "The Magikarp Convention: Respect",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "pokemon": "magikarp",
+    "tint": "#6aa8d8",
+    "effect": "none"
+   },
+   "intro": "The last one went out at one HP, holding a Sash, and almost did it. He knew it would. That was the point.\n\nHe looks at you for a long time. Then he holds out a disc. \"Bounce. You've earned the right to jump.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "He shakes your hand, once, firmly, like a man closing a gate.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "bounce"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-54-gracious",
+   "name": "The Magikarp Convention: Gracious",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "pokemon": "magikarp",
+    "tint": "#6aa8d8",
+    "effect": "none"
+   },
+   "intro": "\"Well fought.\" He means it. He helps your Pokémon up, one by one, and tells each of them something kind.\n\nHe's gracious about it. Somehow that's worse.",
+   "choices": [
+    {
+     "label": "Back to the lake.",
+     "success": {
+      "text": "You go back to the lake. Behind you, he's telling his six they did well. They did.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-54-contest",
+   "name": "The Magikarp Convention: The Contest",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "notch",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "karp-1",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "karp-end",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Fifth in line: a Magikarp with a notch in its tail fin. *That notch.* It's the one from the river. It keeps trying after the whistle."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#6aa8d8",
+    "effect": "none"
+   },
+   "intro": "**Mr. Tiddlethorpe, with a megaphone:** \"ONE jump. Height at the top of the arc. Judges' decision is final, and the judges are *moved easily.*\"\n\nThe regulars line up. Old Reliable. Lady Splendour, waiting for the band. Chips, jumping crooked. The Admiral, refusing to be measured. Notch.",
+   "choices": [
+    {
+     "label": "Enter your Magikarp.",
+     "success": {
+      "text": "You give its name to the judges. Somebody writes it on the board in chalk. Your Magikarp looks at the pole like it's personal.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "kc-mine",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-jump"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kc-own",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Borrow one.",
+     "success": {
+      "text": "A volunteer hands you a Magikarp in a bucket. \"This is Keith. Keith tries.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-jump"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just watch.",
+     "success": {
+      "text": "Old Reliable: 3 ft 2 in, to the inch, again. Lady Splendour waits for the band, then flies. Chips jumps crooked. The crowd roars for Chips.\n\nThe Admiral jumps when nobody's looking. \"About four,\" says a child.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "kcEvolve"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-star",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-54-secret"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-star",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-54-end"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-54-jump",
+   "name": "The Magikarp Convention: The Jump",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#6aa8d8",
+    "effect": "none"
+   },
+   "intro": "Your turn at the pole. It's taller up close. The band stops to watch.\n\nThe best a Magikarp can do is good. Not great. Good.",
+   "choices": [
+    {
+     "label": "Go on, you can do it.",
+     "prompt": {
+      "id": "gauge-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "It jumps. It's a good jump. It's the best it's got.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "kcJump",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-place",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "item",
+          "id": "mystic-water",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-place",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "item",
+          "id": "rare-candy",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-place",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "markLead",
+          "text": "wears a hand-knitted Magikarp hat"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "kcEvolve"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-star",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-54-secret"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-star",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-54-end"
+         }
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "It jumps a beat early. Still a jump. Still trying.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "kcJump",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-place",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "item",
+          "id": "mystic-water",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-place",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "item",
+          "id": "rare-candy",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-place",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "markLead",
+          "text": "wears a hand-knitted Magikarp hat"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "kcEvolve"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-star",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-54-secret"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-star",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-54-end"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Beat Lady Splendour.",
+     "prompt": {
+      "id": "gauge-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "It jumps like it heard you. It clears her mark by an inch. Lady Splendour looks away, offended.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "kcJump",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-place",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "item",
+          "id": "mystic-water",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-place",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "item",
+          "id": "rare-candy",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-place",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "markLead",
+          "text": "wears a hand-knitted Magikarp hat"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "kcEvolve"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-star",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-54-secret"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-star",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-54-end"
+         }
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "It tries too hard. It jumps too early, and too sideways, and lands in the reeds, very pleased.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "kcJump",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-place",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "item",
+          "id": "mystic-water",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-place",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "item",
+          "id": "rare-candy",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-place",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "markLead",
+          "text": "wears a hand-knitted Magikarp hat"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "kcEvolve"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-star",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-54-secret"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-star",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-54-end"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just have fun.",
+     "success": {
+      "text": "It does. That's all it does. It has the best time anyone's ever had.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "kcJump",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-place",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "item",
+          "id": "mystic-water",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-place",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "item",
+          "id": "rare-candy",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-place",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "markLead",
+          "text": "wears a hand-knitted Magikarp hat"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "kcEvolve"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-star",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-54-secret"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kc-star",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-54-end"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-54-secret",
+   "name": "The Magikarp Convention: The Secret",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "notch",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "kcNotch"
+      }
+     ],
+     "notice": "*It turns its head, above the whole lake, slowly, along the bank, until it finds the right face.* It has a notch in its tail."
+    },
+    {
+     "id": "mine",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "kcMine"
+      }
+     ],
+     "notice": "It's yours. Your own Magikarp, the one you entered. It looks down at you as if to ask: *did that count?*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gyarados",
+    "tint": "#6aa8d8",
+    "effect": "none"
+   },
+   "intro": "*A jump. Higher than the pole. Higher than the bunting.* It's {karp:star}.\n\n*It doesn't come down the same shape.* The crowd goes silent. The band stops, one instrument at a time. The tuba's last.\n\n*Then the crowd goes wild.* Hats in the air. Mr. Tiddlethorpe's crying into his megaphone, and it's amplifying it.\n\n**Barnabas Quillfeather, very quietly, to his six:** \"Don't look. Don't any of you look at that.\"",
+   "choices": [
+    {
+     "label": "Hold out your hand.",
+     "success": {
+      "text": "It comes down out of the sky, and lowers its great head to your hand, in front of everyone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "karp-raced",
+        "min": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "gyarados"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "impossible-leap",
+          "boost": {
+           "stat": "spe",
+           "percent": 5
+          },
+          "mark": "karp-notch"
+         }
+        ],
+        "text": "It learned to be quick from you: Speed +1, for good."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "karp-raced",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "gyarados"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "impossible-leap",
+          "mark": "karp-notch"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "karp-falls",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The notched Magikarp evolved at the Magikarp Convention, and looked for you.",
+        "importance": 90
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-end"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "kcNotch"
+      }
+     ]
+    },
+    {
+     "label": "Let it go free.",
+     "success": {
+      "text": "It roars once at the sky, and is gone upriver. The children talk about nothing else.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-falls",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-end"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "kcNotch"
+      }
+     ]
+    },
+    {
+     "label": "Welcome it back.",
+     "success": {
+      "text": "It's entered on the board for ever, under your name, with a small drawn star.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "magikarp",
+        "to": "gyarados"
+       },
+       {
+        "kind": "moment",
+        "text": "Your Magikarp evolved at the Magikarp Convention, in front of everyone.",
+        "importance": 85
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-end"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "kcMine"
+      }
+     ]
+    },
+    {
+     "label": "Watch it go.",
+     "success": {
+      "text": "It circles the lake once, and goes down the river. Its row on the board ends with a small drawn star.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-54-end"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "kcRegular"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-54-end",
+   "name": "The Magikarp Convention: The Band",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "evolved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kc-evolved",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Next year, the others will jump a little higher. They always do, after."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#6aa8d8",
+    "effect": "none"
+   },
+   "intro": "The band plays the heroic thing again, slowly. The board, chalked up for this year:\n\n{karp:board}",
+   "choices": [
+    {
+     "label": "Go home.",
+     "success": {
+      "text": "You go home with a paper flag, and a feeling you can't quite name. It might be hope. It smells of lake.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Went to the Magikarp Convention. They tried.",
+        "importance": 40
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-54-poster",
+   "name": "The Magikarp Convention: The Poster",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kc-evolved",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "kc-at"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "kc-poster"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#6aa8d8",
+    "effect": "none"
+   },
+   "intro": "A poster on a noticeboard: the Magikarp Convention, next year, all welcome.\n\nIn one corner, in crayon, a small Gyarados. Drawn by a child. It's smiling.",
+   "choices": [
+    {
+     "label": "Smile back.",
+     "success": {
+      "text": "You smile back at it. Nobody sees. That's fine.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "kc-poster"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-55-bidoof",
+   "name": "The Angry Bidoof",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "bidoof-insulted",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "dam",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "bibarel-dam-broken",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Its eyes go to you, and narrow. It knows about the dam. Whatever you say now, it's already decided."
+    },
+    {
+     "id": "gym",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "future-gym-normal",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**Mr. Applewhite:** \"Your friend's new Gym has a Bidoof, doesn't it? Its cousin. You can tell by the eyebrows.\" Nobody's surprised."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "bidoof",
+    "tint": "#b08a5a",
+    "effect": "none"
+   },
+   "intro": "*A boy with an expensive belt is doubled over, laughing, pointing.*\n\n**The boy, Lucan Fairweather:** \"A *Bidoof!* He's sending out a *Bidoof!* Oh, that's— hang on, I can't— a *Bidoof!*\"\n\n*The Bidoof is looking at him. It isn't blinking. Behind him, his Pokémon is already on the ground. One hit. He hasn't looked round yet.*\n\n**Its trainer, Mr. Horace Applewhite, mildly:** \"I do wish people wouldn't. It takes it so much to heart.\"\n\n*The Bidoof turns its head toward you.* \"Oh, dear. It's seen you smile. Were you smiling? You'd best not have been smiling.\"",
+   "choices": [
+    {
+     "label": "I wasn't laughing.",
+     "success": {
+      "text": "It considers. It considers for a long time. It decides you were.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "bidoof-insulted",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "bidoof-mood",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "bidoof-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-55-fight"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's a Bidoof.",
+     "success": {
+      "text": "Its fur stands up, all at once, the whole length of it. Mr. Applewhite takes a step back. \"Oh, you shouldn't have.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "bidoof-insulted",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "bidoof-mood",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "bidoof-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-55-fight"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sorry. It's a very fine Bidoof.",
+     "success": {
+      "text": "It considers for longer. Its eyes go past you, to your lead.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "bidoof-insulted",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "bidoof-mood",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "bidoof-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "bidoof-bow",
+        "if": [
+         {
+          "kind": "bondLevel",
+          "atLeast": 3,
+          "who": "lead"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "bidoof-bow",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-55-bow"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "bidoof-bow",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-55-bows-first"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-55-fight",
+   "name": "The Angry Bidoof",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "bidoof",
+    "tint": "#b08a5a",
+    "effect": "none"
+   },
+   "intro": "It walks into the middle of the road. It sits. It waits for you to choose.\n\n**Mr. Applewhite:** \"It's a perfectly ordinary Bidoof. They're simply misunderstood.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It doesn't look away from you. Not once. Not between turns. Not ever.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "bidoof"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "bidoofJoin"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-55-foot"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "rule": {
+        "gn": "bidoof",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-55-sorry"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-55-bows-first",
+   "name": "The Angry Bidoof",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "bidoof",
+    "tint": "#b08a5a",
+    "effect": "none"
+   },
+   "intro": "Your lead hangs back. It isn't sure of itself yet, and the Bidoof can tell.\n\nSo the Bidoof bows first. Formally. Deeply. Then it straightens up, and the bow is over.",
+   "choices": [
+    {
+     "label": "Bow back, and battle.",
+     "success": {
+      "text": "You bow back. It nods, as if that settles the manners, and comes at you like a landslide.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "bidoof"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "bidoofJoin"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-55-foot"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "rule": {
+        "gn": "bidoof",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-55-sorry"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-55-bow",
+   "name": "The Angry Bidoof: Respect",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "bidoof",
+    "tint": "#b08a5a",
+    "effect": "none"
+   },
+   "intro": "Your lead steps forward, and bows. Low, and slow, and meaning it.\n\n*The Bidoof walks a slow circle round your lead. It nods, once.*\n\nThen it trots off into the long grass, and comes back with something in its teeth.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "A Silk Scarf, a little damp. It doesn't join you. It doesn't need to. Every Bidoof on the road will hear about this.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "silk-scarf",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "bidoof-end",
+        "n": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "Bowed to the Angry Bidoof, and it bowed back.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-55-foot",
+   "name": "The Angry Bidoof: It's Taken to You",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "bidoof",
+    "tint": "#b08a5a",
+    "effect": "none"
+   },
+   "intro": "*It's on its back. It looks at the sky a while. It gets up. It walks over. It sits down on your foot.*\n\n**Mr. Applewhite:** \"Oh. Oh, it's taken to you. It never takes to anyone. I'll miss it. Shall I? I think I shall.\"\n\n\"It ate my sofa.\"",
+   "choices": [
+    {
+     "label": "Let it stay on your foot.",
+     "success": {
+      "text": "It stays on your foot for a long time. When you finally walk, it walks too, exactly beside you.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Beat the Angry Bidoof. It sat on your foot, and stayed.",
+        "importance": 75
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-55-sorry",
+   "name": "The Angry Bidoof: Mr. Applewhite Apologises",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "bidoof",
+    "tint": "#b08a5a",
+    "effect": "none"
+   },
+   "intro": "**Mr. Applewhite:** \"Oh, I'm so sorry. I'm so terribly sorry. It's normally very gentle. It likes turnips.\"\n\nHe apologises for some time. He gives your Pokémon a turnip each. Nothing's taken. The Bidoof is still sitting in the road.",
+   "choices": [
+    {
+     "label": "Try again.",
+     "success": {
+      "text": "It gets up again. So do you. It looks, very slightly, pleased.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "bidoof"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "bidoofJoin"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-55-foot"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "rule": {
+        "gn": "bidoof",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-55-sorry"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on, round the Bidoof. It watches you all the way to the bend.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "bidoof-end",
+        "n": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-55-lucan",
+   "name": "The Angry Bidoof: The Boy Who Laughed",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "bidoof-insulted",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "bidoof-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "bidoof-lucan",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "two",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "hasMark",
+       "key": "just-a-bidoof"
+      }
+     ],
+     "notice": "Then he sees what's walking beside you, and crosses a second road, and is gone."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "bidoof",
+    "tint": "#b08a5a",
+    "effect": "none"
+   },
+   "intro": "A boy with an expensive belt, coming the other way. Lucan Fairweather. He sees you.\n\nHe crosses the road.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Somewhere, a Bidoof is sitting very still, and looking pleased with itself.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "bidoof-lucan",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }
