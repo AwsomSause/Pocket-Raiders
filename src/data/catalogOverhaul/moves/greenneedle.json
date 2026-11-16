@@ -1,118 +1,134 @@
 [
- {
-  "id": "welcome-home",
-  "name": "Welcome Home",
-  "type": "ghost",
-  "category": "physical",
-  "power": 70,
-  "accuracy": 100,
-  "pp": 10,
-  "priority": 0,
-  "critStage": 0,
-  "target": "enemy",
-  "flags": [
-   "contact"
-  ],
-  "effects": {
-   "trapNext": true
+  {
+    "id": "welcome-home",
+    "name": "Welcome Home",
+    "type": "ghost",
+    "category": "physical",
+    "power": 70,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0,
+    "critStage": 0,
+    "target": "enemy",
+    "flags": [
+      "contact"
+    ],
+    "effects": {
+      "trapNext": true
+    }
+  },
+  {
+    "id": "summit",
+    "name": "Summit",
+    "type": "normal",
+    "category": "physical",
+    "power": 85,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0,
+    "critStage": 0,
+    "target": "enemy",
+    "flags": [
+      "contact"
+    ],
+    "effects": {
+      "attackFrom": "best",
+      "champMove": "summit"
+    }
+  },
+  {
+    "id": "the-long-game",
+    "name": "The Long Game",
+    "type": "normal",
+    "category": "physical",
+    "power": 85,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0,
+    "critStage": 0,
+    "target": "enemy",
+    "flags": [
+      "contact"
+    ],
+    "effects": {
+      "attackFrom": "best",
+      "champMove": "the-long-game"
+    }
+  },
+  {
+    "id": "with-you",
+    "name": "With You",
+    "type": "normal",
+    "category": "physical",
+    "power": 85,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0,
+    "critStage": 0,
+    "target": "enemy",
+    "flags": [
+      "contact"
+    ],
+    "effects": {
+      "attackFrom": "best",
+      "champMove": "with-you"
+    }
+  },
+  {
+    "id": "seen-it",
+    "name": "Seen It",
+    "type": "normal",
+    "category": "physical",
+    "power": 85,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0,
+    "critStage": 0,
+    "target": "enemy",
+    "flags": [
+      "contact"
+    ],
+    "effects": {
+      "attackFrom": "best",
+      "champMove": "seen-it"
+    }
+  },
+  {
+    "id": "three-schools",
+    "name": "Three Schools",
+    "type": "fighting",
+    "category": "physical",
+    "power": 30,
+    "accuracy": 95,
+    "pp": 10,
+    "priority": 0,
+    "critStage": 0,
+    "target": "enemy",
+    "flags": [
+      "contact"
+    ],
+    "effects": {
+      "hits": [
+        3,
+        3
+      ],
+      "powerRule": "perHit"
+    }
+  },
+  {
+    "id": "house-call",
+    "name": "House Call",
+    "type": "electric",
+    "category": "status",
+    "power": null,
+    "accuracy": null,
+    "pp": 5,
+    "priority": 0,
+    "critStage": 0,
+    "target": "self",
+    "flags": [],
+    "effects": {
+      "heal": 0.5
+    }
   }
- },
- {
-  "id": "summit",
-  "name": "Summit",
-  "type": "normal",
-  "category": "physical",
-  "power": 85,
-  "accuracy": 90,
-  "pp": 10,
-  "priority": 0,
-  "critStage": 0,
-  "target": "enemy",
-  "flags": [
-   "contact"
-  ],
-  "effects": {
-   "attackFrom": "best",
-   "champMove": "summit"
-  }
- },
- {
-  "id": "the-long-game",
-  "name": "The Long Game",
-  "type": "normal",
-  "category": "physical",
-  "power": 85,
-  "accuracy": 100,
-  "pp": 10,
-  "priority": 0,
-  "critStage": 0,
-  "target": "enemy",
-  "flags": [
-   "contact"
-  ],
-  "effects": {
-   "attackFrom": "best",
-   "champMove": "the-long-game"
-  }
- },
- {
-  "id": "with-you",
-  "name": "With You",
-  "type": "normal",
-  "category": "physical",
-  "power": 85,
-  "accuracy": 100,
-  "pp": 10,
-  "priority": 0,
-  "critStage": 0,
-  "target": "enemy",
-  "flags": [
-   "contact"
-  ],
-  "effects": {
-   "attackFrom": "best",
-   "champMove": "with-you"
-  }
- },
- {
-  "id": "seen-it",
-  "name": "Seen It",
-  "type": "normal",
-  "category": "physical",
-  "power": 85,
-  "accuracy": 100,
-  "pp": 10,
-  "priority": 0,
-  "critStage": 0,
-  "target": "enemy",
-  "flags": [
-   "contact"
-  ],
-  "effects": {
-   "attackFrom": "best",
-   "champMove": "seen-it"
-  }
- },
- {
-  "id": "three-schools",
-  "name": "Three Schools",
-  "type": "fighting",
-  "category": "physical",
-  "power": 30,
-  "accuracy": 95,
-  "pp": 10,
-  "priority": 0,
-  "critStage": 0,
-  "target": "enemy",
-  "flags": [
-   "contact"
-  ],
-  "effects": {
-   "hits": [
-    3,
-    3
-   ],
-   "powerRule": "perHit"
-  }
- }
 ]

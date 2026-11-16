@@ -36,6 +36,7 @@ import { insideTeam, prDo, prEnd, prEnter, prFree, prNext, prStart, prStep, prSt
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { duelDue, duelEnd, duelEnter, duelName, duelWorthy, duelistStart, worthyStart } from './duelist';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
+import { applianceRepair } from './appliance';
 import { bidoofJoin, bidoofStart } from './bidoof';
 import { alleyStart } from './alley';
 import { leftFates, leftHas, leftTake, leftTokens } from './left';
@@ -739,6 +740,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return tyrResult(run);
     case 'tyrEvolve':
       return tyrEvolve(content, run, e.key!);
+    case 'applianceRepair':
+      return applianceRepair(run, host.picked);
     case 'bidoofJoin':
       return bidoofJoin(content, run, host);
     case 'leftTake':
