@@ -315,6 +315,7 @@ describe('landmarks and dungeons', () => {
           if (ef.kind === 'addEvent' && (ef.eventId === e.id || e.id === 'game-corner') && !content.events.get(ef.eventId)?.room) continue;
           if (ef.kind === 'addEvent' && ef.eventId !== e.id) opened.add(ef.eventId);
           if (ef.kind === 'gn' && ef.op === 'scene' && (ef.key !== e.id || content.events.get(ef.key!)?.room)) opened.add(ef.key!); // a scene beside the current node
+          if (ef.kind === 'gn' && ef.op === 'ahead' && ef.key) opened.add(ef.key); // a stop on the nodes just ahead (gn.new.26)
           if (ef.kind === 'laterEvent') queued.add(ef.eventId);
           // Catalog Overhaul markets: a prize row that needs its own scene opens it (core/market.ts prize).
           if (ef.kind === 'market') for (const row of ef.table ?? []) if (row.event) opened.add(row.event);
@@ -370,6 +371,11 @@ describe('landmarks and dungeons', () => {
     // gn.51: the rescued Pokémon's scene opens beside a rest stop (core/greenneedle/smuggling.ts smuggleRest); gn.53: the siege's rescued Pokémon (citysiege.ts sgRest).
     opened.add('gn-51-rest');
     opened.add('gn-53-waiting');
+    // gn.62: the prison moves you between its rooms from code (core/greenneedle/prison.ts prNext).
+    // gn.new.03: the Poké Ball's rest and hatch scenes open beside a rest from code (core/greenneedle/ball.ts).
+    opened.add('gn-new-03-rest');
+    opened.add('gn-new-03-hatch');
+    for (const id of ['gn-62-hub', 'gn-62-warden', 'gn-62-warden-bare', 'gn-62-caught', 'gn-62-wing', 'gn-62-cell-room']) opened.add(id);
     // Damian's "Go again." (gn.05) opens his next meeting, an ordinary drawn event, at once; anything else opened must be a room.
     const drawnToo = new Set(['gn-05-barn', 'gn-05-hall', 'gn-05-gym']);
     // Row 17: a rest moment opens its camp scene beside the stop (core/moments/runMoments.ts openEvent).

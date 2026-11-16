@@ -13,7 +13,8 @@ const room = (id: string): Json => ({ kind: 'addEvent', eventId: id });
 const HUB = 'gn-61-hub';
 const PLACE: Json = { kind: 'runPlace', regionEnd: true, lastRegion: true };
 
-const ask = (n: number): Json[] => [
+// After the third ask there is no fourth helper: go straight to the ending.
+const ask = (n: number): Json[] => n >= 3 ? [room('gn-61-end')] : [
   when('reunion-offers', { min: n + 1 }, [room(`gn-61-help-${n + 1}`)]),
   when('reunion-offers', { min: 0, max: n }, [room('gn-61-end')]),
 ];

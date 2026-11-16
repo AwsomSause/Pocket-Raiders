@@ -810,29 +810,8 @@
         "n": 1
        },
        {
-        "kind": "gn",
-        "op": "when",
-        "key": "reunion-offers",
-        "min": 4,
-        "then": [
-         {
-          "kind": "addEvent",
-          "eventId": "gn-61-help-4"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "reunion-offers",
-        "min": 0,
-        "max": 3,
-        "then": [
-         {
-          "kind": "addEvent",
-          "eventId": "gn-61-end"
-         }
-        ]
+        "kind": "addEvent",
+        "eventId": "gn-61-end"
        }
       ]
      }
@@ -849,29 +828,8 @@
         "n": 0
        },
        {
-        "kind": "gn",
-        "op": "when",
-        "key": "reunion-offers",
-        "min": 4,
-        "then": [
-         {
-          "kind": "addEvent",
-          "eventId": "gn-61-help-4"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "reunion-offers",
-        "min": 0,
-        "max": 3,
-        "then": [
-         {
-          "kind": "addEvent",
-          "eventId": "gn-61-end"
-         }
-        ]
+        "kind": "addEvent",
+        "eventId": "gn-61-end"
        }
       ]
      }

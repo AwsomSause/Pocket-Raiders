@@ -336,14 +336,42 @@
       "text": "You lift the hat from under the eggs. The Murkrow screams and lunges at you, then thinks better of it.\n\nThe mayor will get her hat, and the Murkrow will get a very long grudge. It follows you out of town, and joins you, scowling.",
       "effects": [
        {
-        "kind": "join",
-        "shadow": false,
-        "species": [
-         "murkrow"
-        ],
-        "types": [],
-        "levelBonus": 0,
-        "shinyMultiplier": 1
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "murkrow"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "held": "scope-lens"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "murkrow"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
        },
        {
         "kind": "attribute",
@@ -366,22 +394,8 @@
         "op": "when",
         "key": "slowpoke-read",
         "min": 3,
-        "then": [
-         {
-          "kind": "itemFrom",
-          "ids": [
-           "leftovers",
-           "focus-sash",
-           "choice-band",
-           "choice-specs",
-           "choice-scarf",
-           "life-orb",
-           "eviolite",
-           "rocky-helmet"
-          ]
-         }
-        ],
-        "text": "**Miss Hartigan:** \"You'd be wasted here.\" She slides a small parcel across the desk. A held item, for the rare find."
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
        },
        {
         "kind": "gn",
@@ -440,22 +454,8 @@
         "op": "when",
         "key": "slowpoke-read",
         "min": 3,
-        "then": [
-         {
-          "kind": "itemFrom",
-          "ids": [
-           "leftovers",
-           "focus-sash",
-           "choice-band",
-           "choice-specs",
-           "choice-scarf",
-           "life-orb",
-           "eviolite",
-           "rocky-helmet"
-          ]
-         }
-        ],
-        "text": "**Miss Hartigan:** \"You'd be wasted here.\" She slides a small parcel across the desk. A held item, for the rare find."
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
        },
        {
         "kind": "gn",
@@ -481,14 +481,42 @@
       "text": "The Murkrow tilts its head. You explain: a parade, a mayor, one hat. It considers.\n\nThen it pushes the hat off the ledge to you with its beak, and hops onto your shoulder. A bargain, between professionals.",
       "effects": [
        {
-        "kind": "join",
-        "shadow": false,
-        "species": [
-         "murkrow"
-        ],
-        "types": [],
-        "levelBonus": 0,
-        "shinyMultiplier": 1
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "murkrow"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "held": "scope-lens"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "murkrow"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
        },
        {
         "kind": "friendship",
@@ -511,22 +539,8 @@
         "op": "when",
         "key": "slowpoke-read",
         "min": 3,
-        "then": [
-         {
-          "kind": "itemFrom",
-          "ids": [
-           "leftovers",
-           "focus-sash",
-           "choice-band",
-           "choice-specs",
-           "choice-scarf",
-           "life-orb",
-           "eviolite",
-           "rocky-helmet"
-          ]
-         }
-        ],
-        "text": "**Miss Hartigan:** \"You'd be wasted here.\" She slides a small parcel across the desk. A held item, for the rare find."
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
        },
        {
         "kind": "gn",
@@ -1420,14 +1434,42 @@
       "text": "You hold out a hand. The Dratini looks at the stones, at the crate, and at you.\n\nThen it winds round your arm, cold and smooth and certain. It has been very lonely under these docks.",
       "effects": [
        {
-        "kind": "join",
-        "shadow": false,
-        "species": [
-         "dratini"
-        ],
-        "types": [],
-        "levelBonus": 0,
-        "shinyMultiplier": 1
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "dratini"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "held": "dragon-fang"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "dratini"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
        },
        {
         "kind": "flag",
@@ -1445,22 +1487,8 @@
         "op": "when",
         "key": "slowpoke-read",
         "min": 3,
-        "then": [
-         {
-          "kind": "itemFrom",
-          "ids": [
-           "leftovers",
-           "focus-sash",
-           "choice-band",
-           "choice-specs",
-           "choice-scarf",
-           "life-orb",
-           "eviolite",
-           "rocky-helmet"
-          ]
-         }
-        ],
-        "text": "**Miss Hartigan:** \"You'd be wasted here.\" She slides a small parcel across the desk. A held item, for the rare find."
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
        },
        {
         "kind": "gn",
@@ -1511,22 +1539,8 @@
         "op": "when",
         "key": "slowpoke-read",
         "min": 3,
-        "then": [
-         {
-          "kind": "itemFrom",
-          "ids": [
-           "leftovers",
-           "focus-sash",
-           "choice-band",
-           "choice-specs",
-           "choice-scarf",
-           "life-orb",
-           "eviolite",
-           "rocky-helmet"
-          ]
-         }
-        ],
-        "text": "**Miss Hartigan:** \"You'd be wasted here.\" She slides a small parcel across the desk. A held item, for the rare find."
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
        },
        {
         "kind": "gn",
@@ -1552,14 +1566,42 @@
       "text": "The Sleeper opens one eye. Closes it. A smile, you think, at the corner of its mouth.\n\nThe Dratini has gone shy, but when you offer a hand it comes anyway, curious, and wraps round your wrist.",
       "effects": [
        {
-        "kind": "join",
-        "shadow": false,
-        "species": [
-         "dratini"
-        ],
-        "types": [],
-        "levelBonus": 0,
-        "shinyMultiplier": 1
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "dratini"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "held": "dragon-fang"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "dratini"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
        },
        {
         "kind": "flag",
@@ -1582,22 +1624,8 @@
         "op": "when",
         "key": "slowpoke-read",
         "min": 3,
-        "then": [
-         {
-          "kind": "itemFrom",
-          "ids": [
-           "leftovers",
-           "focus-sash",
-           "choice-band",
-           "choice-specs",
-           "choice-scarf",
-           "life-orb",
-           "eviolite",
-           "rocky-helmet"
-          ]
-         }
-        ],
-        "text": "**Miss Hartigan:** \"You'd be wasted here.\" She slides a small parcel across the desk. A held item, for the rare find."
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
        },
        {
         "kind": "gn",
@@ -2497,14 +2525,42 @@
       "text": "You thank it, properly, with a bow. It nods once and looks at the old man.\n\nIt follows him home, slowly, and then, at the gate, turns round and follows you.",
       "effects": [
        {
-        "kind": "join",
-        "shadow": false,
-        "species": [
-         "ursaring"
-        ],
-        "types": [],
-        "levelBonus": 0,
-        "shinyMultiplier": 1
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "ursaring"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "held": "quick-claw"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "ursaring"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
        },
        {
         "kind": "attribute",
@@ -2538,22 +2594,8 @@
         "op": "when",
         "key": "slowpoke-read",
         "min": 3,
-        "then": [
-         {
-          "kind": "itemFrom",
-          "ids": [
-           "leftovers",
-           "focus-sash",
-           "choice-band",
-           "choice-specs",
-           "choice-scarf",
-           "life-orb",
-           "eviolite",
-           "rocky-helmet"
-          ]
-         }
-        ],
-        "text": "**Miss Hartigan:** \"You'd be wasted here.\" She slides a small parcel across the desk. A held item, for the rare find."
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
        },
        {
         "kind": "gn",
@@ -2623,22 +2665,8 @@
         "op": "when",
         "key": "slowpoke-read",
         "min": 3,
-        "then": [
-         {
-          "kind": "itemFrom",
-          "ids": [
-           "leftovers",
-           "focus-sash",
-           "choice-band",
-           "choice-specs",
-           "choice-scarf",
-           "life-orb",
-           "eviolite",
-           "rocky-helmet"
-          ]
-         }
-        ],
-        "text": "**Miss Hartigan:** \"You'd be wasted here.\" She slides a small parcel across the desk. A held item, for the rare find."
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
        },
        {
         "kind": "gn",
@@ -2664,14 +2692,42 @@
       "text": "The Chief looks at you. Four minutes pass. It yawns. Miss Hartigan, arriving late, translates: \"It says it didn't. It says it wasn't sure it should.\"\n\nThe Ursaring, listening, decides to follow you home.",
       "effects": [
        {
-        "kind": "join",
-        "shadow": false,
-        "species": [
-         "ursaring"
-        ],
-        "types": [],
-        "levelBonus": 0,
-        "shinyMultiplier": 1
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "ursaring"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "held": "quick-claw"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "slowpoke-read",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "ursaring"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
        },
        {
         "kind": "flag",
@@ -2705,22 +2761,8 @@
         "op": "when",
         "key": "slowpoke-read",
         "min": 3,
-        "then": [
-         {
-          "kind": "itemFrom",
-          "ids": [
-           "leftovers",
-           "focus-sash",
-           "choice-band",
-           "choice-specs",
-           "choice-scarf",
-           "life-orb",
-           "eviolite",
-           "rocky-helmet"
-          ]
-         }
-        ],
-        "text": "**Miss Hartigan:** \"You'd be wasted here.\" She slides a small parcel across the desk. A held item, for the rare find."
+        "then": [],
+        "text": "**Miss Hartigan:** \"You'd be wasted here.\""
        },
        {
         "kind": "gn",

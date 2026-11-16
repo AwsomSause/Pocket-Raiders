@@ -1,6 +1,6 @@
 // Greenneedle gn.59, The Former Champion (doc GREENNEEDLE_REWORKED_PLACED_13.md lines 9–108).
 // Build: npm run co:build -- greenneedle-59   then   npm run co:gn
-import { any, ch, fight, item, join, out, trainer, wild, type Json } from '../dsl.ts';
+import { any, ch, fight, HELD, item, join, out, trainer, wild, type Json } from '../dsl.ts';
 import { bond, chIf, exactly, gev, gn, is, not, notThisRegion, rm, route, say, scene, setTo, stampRegion, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
@@ -104,7 +104,7 @@ const gn59: Json[] = [
     '*Fog, thick as wool. You can\'t see your own boots. Something is out there. You can hear it breathing.*',
     'An old voice comes back to you, dry and patient, from a fire some way behind: *When you can\'t see, stop. Don\'t guess.*',
   ), [
-    ch('Stop.', out('You stand perfectly still. The fog thins, a little, the way it does for people who wait. Something has been left in the road, plain as day. Free.', setTo('ferris-stop', 1), any('leftovers', 'focus-sash', 'expert-belt', 'assault-vest'), bond(1))),
+    ch('Stop.', out('You stand perfectly still. The fog thins, a little, the way it does for people who wait. Something has been left in the road, plain as day. Free.', setTo('ferris-stop', 1), any(...HELD), bond(1))),
     ch('Keep walking.', out('You pick your way through. Whatever was hiding stays hidden. Behind you, the fog closes up like a door.', setTo('ferris-stop', 1))),
   ]),
 ];

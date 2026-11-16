@@ -22,12 +22,12 @@ export function cheerBattleStart(run: RunState, battle: BattleState, stage: numb
 
 /** Percent bonus to the active Pokémon's Attack (Plusle) and Defence (Minun) this turn: 0 when they aren't cheering. */
 export function cheerPercents(battle: Pick<BattleState, 'storyEffects'>): { atk: number; def: number } {
-  return battle.storyEffects.includes(CHEER_TAG) ? { atk: 5, def: 5 } : { atk: 0, def: 0 };
+  return battle.storyEffects?.includes(CHEER_TAG) ? { atk: 5, def: 5 } : { atk: 0, def: 0 };
 }
 
 /** Turn-end line, once per turn: "Plusle cheers!" "Minun cheers!". */
 export function cheerTurn(battle: BattleState, push: (text: string) => void): void {
-  if (!battle.storyEffects.includes(CHEER_TAG)) return;
+  if (!battle.storyEffects?.includes(CHEER_TAG)) return;
   push('Plusle cheers! Minun cheers! A leaf pom-pom shakes at each side of the field.');
 }
 

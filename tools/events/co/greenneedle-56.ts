@@ -343,11 +343,17 @@ const CASES: Case[] = [
   },
 ];
 
-/** Reward tier by clues read right (of the three real): 3 = a held item and Hartigan's line; 0 = "one of them". */
+/** Reward tier by clues read right (of the three real): 3 = the rare Pokémon comes with a held item (doc table) and Hartigan's line; 0 = "one of them". */
 const tier = (): Json[] => [
-  when('slowpoke-read', { min: 3 }, [any(...RARE_HELD)], '**Miss Hartigan:** "You\'d be wasted here." She slides a small parcel across the desk. A held item, for the rare find.'),
+  when('slowpoke-read', { min: 3 }, [], '**Miss Hartigan:** "You\'d be wasted here."'),
   when('slowpoke-read', { min: 0, max: 0 }, [bond(1)], 'The Chief looks at you, nods slowly, and moves its hat a little to make room. The Slowpoke consider you one of them.'),
 ];
+/** The rare Pokémon at the end of a case: with every real clue read right it comes holding `held` (doc: "comes with a held item"). */
+const rareJoin = (species: string, held: string): Json[] => [
+  when('slowpoke-read', { min: 3 }, [{ ...join({ species: [species], lv: 0 }), held }]),
+  when('slowpoke-read', { min: 0, max: 2 }, [join({ species: [species], lv: 0 })]),
+];
+const HELD_BY: Record<string, string> = { murkrow: 'scope-lens', dratini: 'dragon-fang', ursaring: 'quick-claw' };
 const done = (n: number): Json[] => [flag('slowpoke-case'), setTo(`slowpoke-case-${n}`, 1), ...tier()];
 
 function clueRoom(c: number, place: Place, k: Clue, pokemon?: string): Json {
@@ -376,22 +382,22 @@ function truthChoices(c: Case): Json[] {
   const d = done(c.n);
   if (c.n === 1) {
     return [
-      ch('Take the hat.', out('You lift the hat from under the eggs. The Murkrow screams and lunges at you, then thinks better of it. The mayor will get her hat, and the Murkrow will get a very long grudge. It follows you out of town, and joins you, scowling.', join({ species: ['murkrow'], lv: 0 }), kindness(0), ...d)),
+      ch('Take the hat.', out('You lift the hat from under the eggs. The Murkrow screams and lunges at you, then thinks better of it. The mayor will get her hat, and the Murkrow will get a very long grudge. It follows you out of town, and joins you, scowling.', ...rareJoin('murkrow', HELD_BY['murkrow']!), kindness(0), ...d)),
       ch('Leave the hat. Find her another.', out('You leave the hat with the eggs. The Murkrow watches you, wary, as you slide a shiny hairpin out of the nest and put it in your pocket. A good trade. The mayor gets a new hat, the Murkrow keeps its nest, and you carry the rarest thing in the lining.', any(...RARE_HELD), kindness(1), ...d)),
-      ch('Ask the Murkrow.', out('The Murkrow tilts its head. You explain: a parade, a mayor, one hat. It considers. Then it pushes the hat off the ledge to you with its beak, and hops onto your shoulder. A bargain, between professionals.', join({ species: ['murkrow'], lv: 0 }), bond(1), ...d)),
+      ch('Ask the Murkrow.', out('The Murkrow tilts its head. You explain: a parade, a mayor, one hat. It considers. Then it pushes the hat off the ledge to you with its beak, and hops onto your shoulder. A bargain, between professionals.', ...rareJoin('murkrow', HELD_BY['murkrow']!), bond(1), ...d)),
     ];
   }
   if (c.n === 2) {
     return [
-      ch('Take the Dratini.', out('You hold out a hand. The Dratini looks at the stones, at the crate, and at you. Then it winds round your arm, cold and smooth and certain. It has been very lonely under these docks.', join({ species: ['dratini'], lv: 0 }), ...d)),
+      ch('Take the Dratini.', out('You hold out a hand. The Dratini looks at the stones, at the crate, and at you. Then it winds round your arm, cold and smooth and certain. It has been very lonely under these docks.', ...rareJoin('dratini', HELD_BY['dratini']!), ...d)),
       ch('Take the Dragon Scale, and leave it be.', out('Behind the stones, polished and cold: a Dragon Scale the Dratini shed. It lets you take it, but watches. You leave the crate for the aquarium, and the Dratini lets you leave.', item('dragon-scale'), kindness(1), ...d)),
-      ch('Ask the Sleeper how it knew.', out('The Sleeper opens one eye. Closes it. A smile, you think, at the corner of its mouth. The Dratini has gone shy, but when you offer a hand it comes anyway, curious, and wraps round your wrist.', join({ species: ['dratini'], lv: 0 }), intel(1), ...d)),
+      ch('Ask the Sleeper how it knew.', out('The Sleeper opens one eye. Closes it. A smile, you think, at the corner of its mouth. The Dratini has gone shy, but when you offer a hand it comes anyway, curious, and wraps round your wrist.', ...rareJoin('dratini', HELD_BY['dratini']!), intel(1), ...d)),
     ];
   }
   return [
-    ch('Thank the Ursaring.', out('You thank it, properly, with a bow. It nods once and looks at the old man. It follows him home, slowly, and then, at the gate, turns round and follows you.', join({ species: ['ursaring'], lv: 0 }), kindness(1), setTo('slowpoke-honorary', 1), moment('Found a missing grandfather by walking the wrong way with the Slowpoke Detective Agency.', 70), ...d)),
+    ch('Thank the Ursaring.', out('You thank it, properly, with a bow. It nods once and looks at the old man. It follows him home, slowly, and then, at the gate, turns round and follows you.', ...rareJoin('ursaring', HELD_BY['ursaring']!), kindness(1), setTo('slowpoke-honorary', 1), moment('Found a missing grandfather by walking the wrong way with the Slowpoke Detective Agency.', 70), ...d)),
     ch('Carry him home.', out('You take the old man\'s weight on your shoulder, and the Ursaring takes the other. Between you, you carry him home. The Ursaring stays at the gate all night, to see he\'s fed, and leaves a gift on the step.', any(...RARE_HELD), kindness(1), setTo('slowpoke-honorary', 1), moment('Found a missing grandfather by walking the wrong way with the Slowpoke Detective Agency.', 70), ...d)),
-    ch('Ask the Slowpoke how they knew.', out('The Chief looks at you. Four minutes pass. It yawns. Miss Hartigan, arriving late, translates: "It says it didn\'t. It says it wasn\'t sure it should." The Ursaring, listening, decides to follow you home.', join({ species: ['ursaring'], lv: 0 }), intel(1), setTo('slowpoke-honorary', 1), moment('Found a missing grandfather by walking the wrong way with the Slowpoke Detective Agency.', 70), ...d)),
+    ch('Ask the Slowpoke how they knew.', out('The Chief looks at you. Four minutes pass. It yawns. Miss Hartigan, arriving late, translates: "It says it didn\'t. It says it wasn\'t sure it should." The Ursaring, listening, decides to follow you home.', ...rareJoin('ursaring', HELD_BY['ursaring']!), intel(1), setTo('slowpoke-honorary', 1), moment('Found a missing grandfather by walking the wrong way with the Slowpoke Detective Agency.', 70), ...d)),
   ];
 }
 
