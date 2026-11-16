@@ -5,7 +5,6 @@
   "abandoned-mon": "gn.new.03 The Ball That Wouldn't Open",
   "gn-new-06-won": "gn.new.06",
   "littlecup-cancelled": "gn.new.27",
-  "eevee-stayed": "gn.new.01",
   "dog-sat": "gn.new.02",
   "little-league-losing": "SF134.2 Little League",
   "starter-home": "a starter's visit home (gn.new)",
@@ -645,6 +644,26 @@
   {
    "key": "kc-star",
    "rule": "core/greenneedle/karpcon.ts (gn.54 The Magikarp Convention)"
+  },
+  {
+   "key": "eevee-on",
+   "rule": "core/greenneedle/eevee.ts (gn.new.01 The Eevee Who Couldn't Choose)"
+  },
+  {
+   "key": "eevee-done",
+   "rule": "core/greenneedle/eevee.ts (gn.new.01 The Eevee Who Couldn't Choose)"
+  },
+  {
+   "key": "eevee-form",
+   "rule": "core/greenneedle/eevee.ts (gn.new.01 The Eevee Who Couldn't Choose)"
+  },
+  {
+   "key": "eevee-stayed",
+   "rule": "core/greenneedle/eevee.ts (gn.new.01 The Eevee Who Couldn't Choose)"
+  },
+  {
+   "key": "eevee-fainted",
+   "rule": "core/greenneedle/eevee.ts (gn.new.01 The Eevee Who Couldn't Choose)"
   }
  ]
 }

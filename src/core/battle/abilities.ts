@@ -194,7 +194,7 @@ export const ABILITY_FORMS = new Set<string>([
 /** Abilities the battle engine runs. */
 const SUPPORTED = new Set<string>([
   'cute-charm', 'rivalry', 'wise-eye', 'eye-of-the-gale', 'grid-surfer',
-  'dread-jaws', 'storm-talons', 'clinging-dust', 'sovereign-plumage', 'coral-veil', 'eyespot-glare', 'dynamo-down', 'gem-orbit', 'tailwind-rider', 'rune-sigil', 'twin-maw', 'silent-cloak', 'champions-fury', 'champions-entrance', 'stopgap', 'unwavering', 'inherited-strength', 'impossible-leap', 'heavy-sleeper', 'far-from-home', 'wary', 'remembers-the-cage', 'unbothered', 'truce', 'headache', 'old-growth', 'deep-roots', 'forests-memory', 'grounded-heart', 'borrowed-face', 'self-made', 'specification',
+  'dread-jaws', 'storm-talons', 'clinging-dust', 'sovereign-plumage', 'coral-veil', 'eyespot-glare', 'dynamo-down', 'gem-orbit', 'tailwind-rider', 'rune-sigil', 'twin-maw', 'silent-cloak', 'champions-fury', 'champions-entrance', 'stopgap', 'unwavering', 'open-road', 'inherited-strength', 'impossible-leap', 'heavy-sleeper', 'far-from-home', 'wary', 'remembers-the-cage', 'unbothered', 'truce', 'headache', 'old-growth', 'deep-roots', 'forests-memory', 'grounded-heart', 'borrowed-face', 'self-made', 'specification',
   'thorn-ballad', 'encore-amp', 'adaptive-plating', 'plague-bulwark', 'soul-kindling', 'neon-circuit',
   // Catalog Overhaul legends (Alphas): the Hushed One's Hush, the Unwelcome Guest's Three Faces (engine.ts).
   'hush', 'three-faces', 'pack-call',

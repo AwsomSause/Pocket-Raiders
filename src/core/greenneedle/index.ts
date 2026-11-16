@@ -37,6 +37,7 @@ import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorl
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
 import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
 import { CHAMPION_NAME, onevoneChampion, onevoneEnd, onevoneEnter, onevoneStart, entrantOf } from './onevone';
+import { eeveeEnd, eeveeStart } from './eevee';
 import { GAVEL, auctionArrive, auctionOpen, auctionReturn, auctionRound, lotToken } from './auction';
 import { aceHere, bagBack, bagLeave, bench, brainRecord, brainStart, bring, frontierClear, leadInitiative, palaceShape, rent, swapIn, unbench } from './frontier';
 
@@ -640,6 +641,12 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return kcEvolve(run);
     case 'bidoofJoin':
       return bidoofJoin(content, run, host);
+    case 'eeveeStart':
+      eeveeStart(run);
+      return '';
+    case 'eeveeEnd':
+      eeveeEnd(content, run);
+      return '';
     case 'exDraw':
       return exDraw(run);
     case 'exBack':

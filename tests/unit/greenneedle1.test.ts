@@ -288,7 +288,7 @@ describe("gn.05 Damian's Unofficial Gym", () => {
     expect(flagOf(run, 'damian-lost-once')).toBe(1);
     expect(scene(run, 'gn-05-lost').intro).toMatch(/Losing's just winning that hasn't finished yet/);
     run = choose(run, 'gn-05-lost', 'Go again.').run;
-    expect(openSide(run)?.eventId).toBe('gn-05-barn');
+    expect(run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.sides.some((x) => !x.used && x.eventId === 'gn-05-barn')).toBe(true);
     expect(scene(run, 'gn-05-barn').intro).toMatch(/You came back! Nobody comes back!/);
   });
   it('he comes back in the next region, not this one; "Closed. Thinking." if the rain came first', () => {

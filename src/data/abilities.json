@@ -1675,6 +1675,11 @@
   "description": "Attack +1 whenever an ally faints, up to +2 in a battle."
  },
  {
+  "id": "open-road",
+  "name": "Open Road",
+  "description": "The first move it uses each time it enters battle gains the same-type bonus, whatever its type. Once per switch-in."
+ },
+ {
   "id": "unwavering",
   "name": "Unwavering",
   "description": "Every stat +25% while this Pokémon could still evolve. It never evolves. It doesn't stack with Eviolite: the larger bonus applies."
