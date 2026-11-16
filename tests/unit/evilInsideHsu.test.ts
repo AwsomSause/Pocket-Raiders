@@ -5,7 +5,7 @@ import { chooseEvent, conditionMet } from '../../src/core/events';
 import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { applyEvilEffect, evilOf, evilStageStart, evilSummary } from '../../src/core/evil/teams';
-import { rankOf, routeOf } from '../../src/core/evil/inside';
+import { rankOf, routeOf, suspicionOf } from '../../src/core/evil/inside';
 import { chainRooms, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
 import { content } from './helpers';
 
@@ -87,6 +87,49 @@ describe('Team Galactic from inside (Volume III, Sinnoh)', () => {
 
   it('each ending, the lab and Lantern have their own map, entered on the room the choice opened', () => {
     mapsStartOn([['ps_gx_lab', 'gx-act3-glass'], ['ps_gx_plan', 'gx-plan-looker'], ['ps_gx_turn', 'gx-turn-slack'], ['ps_gx_charon', 'gx-charon-meeting'], ['ps_gx_own', 'gx-own-mars'], ['ps_lantern_families', 'lantern-door-1'], ['ps_lantern_climax', 'lantern-ridge']]);
+  });
+});
+
+describe('Team Plasma from inside (Volume III, Unova)', () => {
+  it("N's Offer: yes starts the Acts as a Listener; Act 4 needs Rank 3 and night", () => {
+    const run = offered('plasma', 'unova', 0, 'hsu-p1');
+    evilOf(run).nextAt = 0;
+    expect(open(run, 'px-act1')).toBe(true);
+    expect(evilSummary(content, run)!.lines.some((l) => l.startsWith('Inside Team Plasma: Listener (Rank 1)'))).toBe(true);
+    evilOf(run).beat = 5;
+    expect(content.events.get('px-act4')!.requires.filter((c) => c.kind !== 'period').every((c) => conditionMet(content, run, c))).toBe(false);
+    fx(run, { rank: 3 });
+    expect(content.events.get('px-act4')!.requires.filter((c) => c.kind !== 'period').every((c) => conditionMet(content, run, c))).toBe(true);
+    const out = offered('plasma', 'unova', 1, 'hsu-p2');
+    evilOf(out).nextAt = 0;
+    expect(open(out, 'px-act1')).toBe(false);
+    expect(flagOf(out, 'plasma-offer-refused')).toBe(1);
+  });
+
+  it('Sitting in the seventh chair confirms Rank 4 and lowers Suspicion by 3', () => {
+    const run = offered('plasma', 'unova', 0, 'hsu-p3');
+    evilOf(run).nextAt = 0;
+    evilOf(run).beat = 6;
+    fx(run, { suspicion: 4 });
+    const r = choose(run, 'px-act5', 3).run; // (Sit.)
+    expect(rankOf(r, 'plasma')).toBeGreaterThanOrEqual(4);
+    expect(flagOf(r, 'plasma-seat-sat')).toBe(1);
+    expect(suspicionOf(r, 'plasma')).toBe(1);
+  });
+
+  it('Team Open Hand needs the Offer refused, the seat refused and "Where do they go?" asked', () => {
+    const run = offered('plasma', 'unova', 1, 'hsu-p4');
+    evilOf(run).nextAt = 0;
+    evilOf(run).beat = 4;
+    const met = () => content.events.get('openhand-founding')!.requires.every((c) => conditionMet(content, run, c));
+    expect(met()).toBe(false);
+    run.story.flags['ev:plasma-seat-refused'] = 1;
+    run.story.flags['ev:plasma-asked-where'] = 1;
+    expect(met()).toBe(true);
+  });
+
+  it('each ending, the Dreamyard and Open Hand have their own map', () => {
+    mapsStartOn([['ps_px_dreamyard', 'px-act3-floor'], ['ps_px_asking', 'px-asking-kings'], ['ps_px_turn', 'px-turn-box'], ['ps_px_ghetsis', 'px-ghetsis-warn'], ['ps_px_own', 'px-own-throne'], ['ps_openhand_insp1', 'openhand-house-1'], ['ps_openhand_night', 'openhand-dragon']]);
   });
 });
 

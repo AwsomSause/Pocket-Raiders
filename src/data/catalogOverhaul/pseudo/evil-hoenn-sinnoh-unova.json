@@ -196,6 +196,197 @@
      "lantern-cold"
     ]
    ]
+  },
+  {
+   "id": "ps_px_dreamyard",
+   "name": "The Dreamyard",
+   "entry": "px-act3",
+   "themeId": "ghost-dark",
+   "tint": "#5a3a50",
+   "mood": "pink mist at ankle height",
+   "team": "plasma",
+   "start": "opened",
+   "layout": [
+    [
+     "px-act3-floor"
+    ],
+    [
+     "px-act3-ledger"
+    ],
+    [
+     "px-act3-giallo",
+     "px-act3-mist"
+    ]
+   ]
+  },
+  {
+   "id": "ps_px_asking",
+   "name": "The Coronation: The Asking",
+   "entry": "px-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2a48",
+   "mood": "ten thousand candles, and a ship overhead",
+   "team": "plasma",
+   "start": "opened",
+   "layout": [
+    [
+     "px-asking-kings"
+    ],
+    [
+     "px-asking-aldith"
+    ],
+    [
+     "px-asking-bronius"
+    ],
+    [
+     "px-asking-breaker"
+    ],
+    [
+     "px-asking-question"
+    ],
+    [
+     "px-asking-ghetsis"
+    ],
+    [
+     "px-asking-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_px_turn",
+   "name": "The Coronation: Where Do They Go",
+   "entry": "px-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2a48",
+   "mood": "a thin tune, and six hundred people asking",
+   "team": "plasma",
+   "start": "opened",
+   "layout": [
+    [
+     "px-turn-box"
+    ],
+    [
+     "px-turn-vigil"
+    ],
+    [
+     "px-turn-chasm"
+    ],
+    [
+     "px-turn-where"
+    ],
+    [
+     "px-turn-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_px_ghetsis",
+   "name": "The Coronation: The Second Half",
+   "entry": "px-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2a48",
+   "mood": "snow in summer, and every light going up",
+   "team": "plasma",
+   "start": "opened",
+   "layout": [
+    [
+     "px-ghetsis-warn"
+    ],
+    [
+     "px-ghetsis-warn-2"
+    ],
+    [
+     "px-ghetsis-bow"
+    ],
+    [
+     "px-ghetsis-wedge"
+    ],
+    [
+     "px-ghetsis-seal"
+    ],
+    [
+     "px-ghetsis-sealed",
+     "px-ghetsis-late"
+    ],
+    [
+     "px-ghetsis-late-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_px_own",
+   "name": "The Coronation: The Other Four Hundred",
+   "entry": "px-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2a48",
+   "mood": "a throne nobody sits on",
+   "team": "plasma",
+   "start": "opened",
+   "layout": [
+    [
+     "px-own-throne"
+    ],
+    [
+     "px-own-d1"
+    ],
+    [
+     "px-own-d2"
+    ],
+    [
+     "px-own-d3"
+    ],
+    [
+     "px-own-d4"
+    ],
+    [
+     "px-own-bronius"
+    ]
+   ]
+  },
+  {
+   "id": "ps_openhand_insp1",
+   "name": "Inspection 1: Number Nine",
+   "entry": "openhand-insp1",
+   "themeId": "ghost-dark",
+   "tint": "#4a3a28",
+   "mood": "three doors, and a tea towel in each",
+   "team": "plasma",
+   "start": "opened",
+   "layout": [
+    [
+     "openhand-house-1"
+    ],
+    [
+     "openhand-house-2"
+    ],
+    [
+     "openhand-house-3"
+    ],
+    [
+     "openhand-house-3-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_openhand_night",
+   "name": "All Night",
+   "entry": "openhand-climax",
+   "themeId": "ghost-dark",
+   "tint": "#2a2a48",
+   "mood": "a lamp on the castle steps till dawn",
+   "team": "plasma",
+   "start": "opened",
+   "layout": [
+    [
+     "openhand-dragon"
+    ],
+    [
+     "openhand-dawn"
+    ],
+    [
+     "openhand-after"
+    ]
+   ]
   }
  ]
 }

@@ -111,7 +111,7 @@ const ROUTES: Record<string, { region: string; ranks: string[] }[]> = {
   ],
   // Row 9 (evil-hoenn-sinnoh-unova): Volume III A and B, HOENN_TEAMS 2.1 to 2.5.
   galactic: [{ region: 'sinnoh', ranks: ['Applicant', 'Grunt', 'Technician', 'Adjutant', 'Commander (the fifth)', 'Witness'] }],
-  plasma: [{ region: 'unova', ranks: ['Listener', 'Knight', 'Liberator', "Sage's Hand", "Keeper of the King's Room", "The King's Friend"] }],
+  plasma: [{ region: 'unova', ranks: ['Listener', 'Knight', 'Liberator', 'The Seventh Seat', "Keeper of the King's Room", "The King's Friend"] }],
   magma: [{ region: 'hoenn', ranks: ['Recruit', 'Grunt', 'Surveyor', 'Foreman', 'Admin', 'The Right Hand'], steps: [3, 8, 15, 25], max: 60, test: 6, out: 9 }],
   aqua: [{ region: 'hoenn', ranks: ['Deckhand', 'Grunt', 'Diver', 'Bosun', 'Admin', 'The First Mate'], steps: [3, 8, 15, 25], max: 60, test: 6, out: 9 }],
 };
