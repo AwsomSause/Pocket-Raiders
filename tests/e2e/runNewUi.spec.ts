@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { view, waitForScene, watch, start, toMap, addSide, open } from './helpers/newUi';
 
 // The New UI (Settings > UI style: New, the default for players): the run's last-pass pages: node event menu, Department Store, Tools, code entry, Preparation Desk, Honest Trade Card.
@@ -215,22 +215,26 @@ test('New UI: the hub Trainer Card is the mock-up card page (picture, name and r
   expect(errors).toEqual([]);
 });
 
-test('New UI: the Tools pages follow the mock-ups (number tiles for My stats and the Speedrun timer, berry pictures, Content status bars, a typed bracket, the save check form)', async ({ page }) => {
+/** Opens the hub's Tools & Community room and picks a row by name (the list scrolls: step down until the row is lit). */
+const toolsRow = (page: Page) => async (row: string): Promise<void> => {
+  const hub = view(page, 'Hub').last();
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').enter('tools'));
+  await expect(hub.locator('.hd')).toContainText('Tools & Community');
+  await page.waitForTimeout(250);
+  for (let k = 0; k < 30 && !(await hub.locator('.btn.on', { hasText: row }).count()); k++) { await page.keyboard.press('ArrowDown'); await page.waitForTimeout(60); }
+  await expect(hub.locator('.btn.on')).toContainText(row);
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(250);
+};
+
+// The Tools pages are checked in two tests: all of them in one ran out of its two minutes on a slow test machine.
+test('New UI: the Tools pages follow the mock-ups (number tiles for My stats and the Speedrun timer, berry pictures, Content status bars)', async ({ page }) => {
   const errors = watch(page);
   await start(page, 'ui=new&seed=newui-tools');
   await open(page, 'Hub');
   await page.waitForTimeout(500);
   const hub = view(page, 'Hub').last();
-  const tools = async (row: string) => {
-    await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').enter('tools'));
-    await expect(hub.locator('.hd')).toContainText('Tools & Community');
-    await page.waitForTimeout(250);
-    // The list scrolls: step down until the row is the lit one, then open it.
-    for (let k = 0; k < 30 && !(await hub.locator('.btn.on', { hasText: row }).count()); k++) { await page.keyboard.press('ArrowDown'); await page.waitForTimeout(60); }
-    await expect(hub.locator('.btn.on')).toContainText(row);
-    await page.keyboard.press('Enter');
-    await page.waitForTimeout(250);
-  };
+  const tools = toolsRow(page);
   const band = () => hub.locator('.hd').getAttribute('style');
 
   // My stats: eight number tiles, no list.
@@ -271,6 +275,15 @@ test('New UI: the Tools pages follow the mock-ups (number tiles for My stats and
   await expect(hub.locator('[data-act="pick"]').first().locator('.tg')).toHaveText(/OK|Check/);
   await page.keyboard.press('Escape');
   await page.waitForTimeout(250);
+  expect(errors).toEqual([]);
+});
+
+test('New UI: the Tools forms follow the mock-ups (a typed tournament bracket, the save check form)', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-tools');
+  await open(page, 'Hub');
+  await page.waitForTimeout(500);
+  const tools = toolsRow(page);
 
   // Tournament bracket: two form pages (names, seed), then the bracket page with groups as chips.
   await tools('Tournament bracket');
