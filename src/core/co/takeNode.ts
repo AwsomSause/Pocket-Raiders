@@ -28,7 +28,11 @@ export function nodeProtected(content: Content, run: RunState, node: MapNode, ex
   return node.sides.some((s) => {
     if (s.used || s.kind !== 'event' || !s.eventId) return false;
     const e = content.events.get(s.eventId);
-    return !!e && (e.forced || e.pseudo || e.callback || (e.priority ?? 0) >= 70 || e.id.startsWith('xe.'));
+    if (!e) return false;
+    // The placer's own marks: a must-see stop and a door ("instead" of the node) are never spent.
+    const placed = content.coPlacement?.get(e.id);
+    if (placed && (placed.sits === 'must-see' || placed.attaches === 'instead')) return true;
+    return !!(e.forced || e.pseudo || e.callback || (e.priority ?? 0) >= 70 || e.id.startsWith('xe.'));
   });
 }
 

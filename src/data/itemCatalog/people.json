@@ -1,0 +1,15 @@
+[
+  {
+    "id": "ravis-bell",
+    "name": "Ravi's Bell",
+    "family": "Battle held items",
+    "description": "The holder's first move each battle can't miss",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "clear-bell",
+    "status": "supported",
+    "effect": { "kind": "held", "hooks": [{ "hook": "firstMoveSure" }] }
+  }
+]

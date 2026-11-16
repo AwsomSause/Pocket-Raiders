@@ -25,11 +25,13 @@ export function rescueArchetype(run: RunState): Archetype | null {
   return main ? (RESCUE.personalityArchetype[main.personality] ?? null) : null;
 }
 
-/** What the plan formula and the plan menu read. Intel, Operational Strength, insiders and trade items belong to other systems; until they exist they read as none. */
+/** What the plan formula and the plan menu read. Intel comes from the run flag `intel`; a Defector of the region's team is someone inside. Operational Strength and trade items belong to other systems and read as none. */
 export function rescueCtxFor(run: RunState): RescueCtx | null {
   const archetype = rescueArchetype(run);
   if (!archetype) return null;
-  return { archetype, money: run.money, intel: 0, os: 0, insider: false, tradeItem: false };
+  const intel = Math.min(100, Math.max(0, Number(run.story.flags['ev:intel'] ?? 0)) * RESCUE.tuning.intelPerPoint);
+  const defector = !!run.story.evil?.defector;
+  return { archetype, money: run.money, intel, os: 0, insider: defector, defector, tradeItem: false };
 }
 
 /** The offer to show on the map right now (a quiet moment: no pending battle), with the context to show it. */

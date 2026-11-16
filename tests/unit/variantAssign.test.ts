@@ -86,11 +86,11 @@ describe('in a run', () => {
     const back = BattleStateSchema.parse(JSON.parse(JSON.stringify(run.battle)));
     expect(Object.keys(back.extra.variants)).toHaveLength(1);
   });
-  it("choosing Chant along at the Yell Blockade gives Marnie's League Card, and Loud then loses its first turn", () => {
+  it("telling the Yell Blockade Marnie would hate it gives Marnie's League Card, and Loud then loses its first turn", () => {
     const run = evilRun('yell', 7);
     expect(holdsMarnieCard(run)).toBe(false);
     const ev = content.events.get('yell-blockade')!;
-    const index = ev.choices.findIndex((c) => c.label === 'Chant along');
+    const index = ev.choices.findIndex((c) => c.label === '"Marnie would hate this."');
     const node = run.stage!.map.nodes[0]!;
     run.stage!.current = node.id;
     run.stage!.visited = [node.id];

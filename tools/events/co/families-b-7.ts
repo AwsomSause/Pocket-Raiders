@@ -386,5 +386,18 @@ export const EVENTS: Json[] = [
   ...DANCE_EDGE, ...WELL_SONG, ...LONG_NIGHT, ...LAST_TRAIN,
 ];
 // The ledger folds the old three-step Last Train into the single FE8 scene (MERGE).
-export const MERGED: Record<string, string> = { 'ovc-last-train-s2': 'ovc-last-train-s1', 'ovc-last-train-s3': 'ovc-last-train-s1' };
-export const REMOVE: string[] = Object.keys(MERGED);
+export const MERGED: Record<string, string> = {
+  'ovc-last-train-s2': 'ovc-last-train-s1', 'ovc-last-train-s3': 'ovc-last-train-s1',
+  // Rival beats (rivals thread, Rival questlines R3 and R15).
+  'ovc-rival-note-s1': 'rival-map-note', 'ovc-rival-note-s2': 'rival-map-note',
+  'ovc-rival-gift-s1': 'rival-trap-gift', 'ovc-rival-gift-s2': 'rival-trap-gift',
+};
+// Old chains the ledger hands to the legends systems (legends thread, PR #1326): retired, the rule that covers them.
+const LEGEND_CHAINS = ['lugia-shrine', 'hooh-pursuit', 'birds-trial', 'mewtwo-crisis', 'beasts-pursuit', 'weather-crisis', 'eon-pursuit', 'regis-shrine', 'time-space-trial', 'giratina-shrine', 'lake-trial', 'ideals-calling', 'aura-crisis', 'sun-moon-shrine', 'sword-shield-calling', 'ruin-quartet-shrine', 'guardians-trial', 'justice-trial', 'necrozma-crisis', 'eternal-crisis'];
+const TELLINGS = ['strange-researcher', 'fallen-star', 'wishing-comet', 'star-compass', 'sky-whale'];
+const steps = (k: string) => [1, 2, 3].map((n) => `ovc-${k}-s${n}`);
+export const RULED: Record<string, string> = Object.fromEntries([
+  ...LEGEND_CHAINS.flatMap((c) => steps(`legend-${c}`)).map((id) => [id, 'Blessing ladder: Trial and Recognition scenes (legends)']),
+  ...TELLINGS.flatMap(steps).map((id) => [id, 'Mythical Tellings and Ultra Static (legends)']),
+]);
+export const REMOVE: string[] = [...Object.keys(MERGED), ...Object.keys(RULED)];

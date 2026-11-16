@@ -1078,6 +1078,7 @@
       "effects": [
        {
         "kind": "join",
+        "recall": true,
         "shadow": false,
         "species": [],
         "types": [],
@@ -1136,6 +1137,7 @@
        "effects": [
         {
          "kind": "join",
+         "recall": true,
          "shadow": false,
          "species": [],
          "types": [],

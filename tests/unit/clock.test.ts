@@ -133,7 +133,8 @@ describe('seasons and NPC schedules', () => {
   });
 
   it('every NPC trainer meeting keeps hours', () => {
-    const npcs = [...content.events.values()].filter((e) => e.id.startsWith('npc-meet-'));
+    // Side scenes (`room`) open straight from a meeting that already kept its hours, so only the meetings themselves are checked.
+    const npcs = [...content.events.values()].filter((e) => e.id.startsWith('npc-meet-') && !e.room);
     expect(npcs.length).toBeGreaterThan(0);
     for (const e of npcs) expect(e.requires.some((r) => r.kind === 'period')).toBe(true);
     const run = newRun();

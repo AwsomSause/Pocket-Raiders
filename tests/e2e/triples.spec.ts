@@ -52,6 +52,7 @@ async function startTriple(page: Page, seed: string) {
     }
     const node = run.stage.map.nodes.find((n: any) => n.column === 1);
     node.kind = 'trainer';
+    node.sides = []; // a plain fight: no event (Kanto's attached ones) opens before it
     session.chooseNode(node.id);
     const battle = session.run.battle;
     while (battle.enemyTeam.length < 3) {

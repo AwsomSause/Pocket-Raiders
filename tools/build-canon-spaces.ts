@@ -3,7 +3,7 @@
 // Reads each town's space table (kind, appears), the spec block under every `cs.kanto.*` heading (level, length, flags)
 // and the route events in section 13.1. Never edit the generated JSON by hand.
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { CanonSpacesFileSchema, canonSpaceGaps } from '../src/core/expansion/canonSpaces.ts';
 import type { CanonSpace, CanonSpacesFile } from '../src/core/expansion/canonSpaces.ts';
@@ -123,11 +123,28 @@ for (const f of found.filter((x) => x.id.startsWith('cs.kanto.route.'))) push(f.
 const forced = spaces.find((s) => s.id === 'cs.kanto.cerulean.cave');
 if (forced) forced.appears = 'locked';
 
+// 4. Catalog overhaul (KANTO_PLACED_*.md): the rebuilt and new spaces declared in tools/events/co/kanto-canon-*.ts replace
+// the row of the same id (placement, flags, level) and add the spaces Volume II and the placed docs introduce.
+const coDir = join(root, 'tools', 'events', 'co');
+for (const f of readdirSync(coDir).filter((x) => /^kanto-canon-.*\.ts$/.test(x)).sort()) await import(join(coDir, f));
+const { SPACES: PLACED_ROWS } = (await import(join(coDir, '_kc.ts'))) as { SPACES: (Partial<CanonSpace> & { id: string; ps?: unknown; placed: NonNullable<CanonSpace['placed']> })[] };
+for (const { ps: _ps, ...row } of PLACED_ROWS) {
+  const at = spaces.findIndex((x) => x.id === row.id);
+  const full: CanonSpace = {
+    parent: null, uniqueRewardFlag: null, length: null, flags: [], ...(at >= 0 ? spaces[at]! : {}), ...row,
+    requires: { flags: row.requires?.flags ?? (at >= 0 ? spaces[at]!.requires.flags : []), spaces: row.requires?.spaces ?? (at >= 0 ? spaces[at]!.requires.spaces : []) },
+    level: row.placed.level === null ? null : { mode: 'relative', offset: row.placed.level },
+  } as CanonSpace;
+  if (at >= 0) spaces[at] = full; else spaces.push(full);
+}
+const EXTRA_TOWNS = [...new Set(spaces.map((x) => x.town))].filter((t) => t !== 'route' && !TOWNS.some(([, id]) => id === t));
+const TOWN_NAMES: Record<string, string> = { sevii: 'The Sevii Islands' };
+
 const file: CanonSpacesFile = {
   region: 'kanto',
   townRoll: { early: 2, late: 3, maxPseudoStages: 2 },
-  towns: TOWNS.map(([, id, name]) => ({ id, name })),
-  slots: SLOTS.map(([slot, town, stage]) => ({ slot, town, stage, always: slot === 'stage-8' ? ['cs.kanto.viridian.route22'] : null })),
+  towns: [...TOWNS.map(([, id, name]) => ({ id, name })), ...EXTRA_TOWNS.map((id) => ({ id, name: TOWN_NAMES[id] ?? id }))],
+  slots: SLOTS.map(([slot, town, stage]) => ({ slot, town, stage, always: slot === 'stage-8' ? ['cs.kanto.viridian.route22', 'cs.kanto.viridian.oldman', 'cs.kanto.route.badge-check', 'cs.kanto.viridian.nightmarket'] : null })),
   spaces,
 };
 const parsed = CanonSpacesFileSchema.safeParse(file);

@@ -32,8 +32,12 @@ export interface ReduxOptions {
   acts?: Record<string, (arg: string) => void>;
   /** Pointer-over handlers by name (`data-over="name"`), for moving the cursor with the mouse. */
   overs?: Record<string, (arg: string) => void>;
+  /** Tooltips: called with the `data-tip` value the pointer rests on, and with null once it is on none. */
+  tip?: (arg: string | null) => void;
   /** No backdrop and clicks fall through to the canvas except on `[data-act]` (a HUD over the Phaser picture). */
   clear?: boolean;
+  /** A full-screen card (a versus card, a cutscene card): notifications and toasts wait until it leaves. */
+  card?: boolean;
 }
 
 const FONT_FILES: [string, number, string][] = [
@@ -48,12 +52,27 @@ const FONT_FILES: [string, number, string][] = [
 let host: HTMLDivElement | null = null;
 let canvas: HTMLCanvasElement | null = null;
 const views = new Set<{ redraw: () => void }>();
+/** How many full-screen cards are up (see `ReduxOptions.card`). */
+let cards = 0;
+/** A full-screen card is up: the overlay keeps its notifications back. */
+export const reduxCardUp = (): boolean => cards > 0;
 let lastBox = '';
 /** The scene whose view was last removed, and when: the same screen redrawing itself does not fade in again. */
 let gone = { key: '', at: 0 };
 
 /** True while the New UI is chosen (Settings > Display > UI style). */
-export const reduxOn = (): boolean => services().session.settings.uiStyle === 'new';
+/**
+ * `?ui=new` or `?ui=old` in the address picks the style for this page load, over the saved setting (handy for
+ * comparing the two). A browser driven by automation (the Playwright tests) gets Old unless it asks for New:
+ * the older browser tests click and read the canvas, which the New UI layer covers. New has its own specs.
+ */
+const forced: 'new' | 'old' | null = (() => {
+  if (typeof location === 'undefined') return null;
+  const q = new URLSearchParams(location.search).get('ui');
+  if (q === 'new' || q === 'old') return q;
+  return typeof navigator !== 'undefined' && navigator.webdriver ? 'old' : null;
+})();
+export const reduxOn = (): boolean => (forced ?? services().session.settings.uiStyle) === 'new';
 
 function skinCss(): string {
   return REDUX_SKINS.map((s, i) => {
@@ -70,13 +89,21 @@ export const skinClass = (k: number): string => {
 function place(): void {
   if (!host || !canvas) return;
   const r = canvas.getBoundingClientRect();
-  const box = `${r.left}|${r.top}|${r.width}|${canvas.style.filter}`;
+  const box = `${r.left}|${r.top}|${r.width}|${r.height}|${canvas.style.filter}|${document.body.className}|${reduxOn()}`;
   if (box === lastBox) return;
   lastBox = box;
-  host.style.left = `${r.left}px`;
+  // A phone held upright turns the game a quarter turn (ui/portraitRotate.ts): the layer turns with it, about the
+  // canvas's own top-left corner, which then sits at the top right of the box on screen.
+  const turned = document.body.classList.contains('rot-portrait');
+  host.style.left = `${turned ? r.right : r.left}px`;
   host.style.top = `${r.top}px`;
-  host.style.setProperty('--s', String(r.width / 960));
+  host.style.transformOrigin = '0 0';
+  host.style.transform = turned ? 'rotate(90deg)' : '';
+  host.style.setProperty('--s', String((turned ? r.height : r.width) / 960));
   host.style.filter = canvas.style.filter;
+  // The on-screen pad lies over the game on a phone held sideways; it must stay above the layer to be pressed.
+  document.body.classList.toggle('rx-on', reduxOn());
+  document.body.style.setProperty('--rxs', String((turned ? r.height : r.width) / 960));
 }
 
 function ensureHost(game: Phaser.Game): HTMLDivElement {
@@ -110,7 +137,86 @@ function ensureHost(game: Phaser.Game): HTMLDivElement {
   return host;
 }
 
+
+// A press that began on the layer (it ends with the release, wherever that lands).
+let pressOnLayer = false;
+let pressWatch = false;
+
+/**
+ * Keeps a press on the layer from also pressing the canvas under it. Phaser listens on the window for presses and
+ * releases outside its canvas (so a drag can end anywhere) and would press whatever canvas button lies at that spot:
+ * a click on the log window over the title used to choose a title entry too. A release is only kept back when its
+ * press began on the layer, so a drag that began on the canvas still ends.
+ */
+function shield(el: HTMLElement): void {
+  if (!pressWatch && typeof window !== 'undefined') {
+    pressWatch = true;
+    // Capture runs first; the flag drops after the release has been handled by the layer.
+    for (const ev of ['mouseup', 'touchend', 'touchcancel'] as const) window.addEventListener(ev, () => setTimeout(() => { pressOnLayer = false; }, 0), true);
+  }
+  for (const ev of ['pointerdown', 'mousedown', 'touchstart'] as const) el.addEventListener(ev, (e) => { pressOnLayer = true; e.stopPropagation(); });
+  for (const ev of ['mouseup', 'touchend'] as const) el.addEventListener(ev, (e) => { if (pressOnLayer) e.stopPropagation(); });
+}
+
+/**
+ * One layer over every scene's view, for what belongs to no screen: notifications, toasts, the interaction log.
+ * It lives as long as the game, wears the current look, takes clicks only on `[data-act]`, and draws nothing in Old.
+ */
+export function mountOverlay(game: Phaser.Game, o: Pick<ReduxOptions, 'render' | 'acts'>): { refresh(): void; readonly el: HTMLElement } {
+  const root = ensureHost(game);
+  const el = document.createElement('div');
+  el.dataset.scene = 'overlay';
+  el.style.zIndex = '60';
+  el.style.display = 'none';
+  root.append(el);
+  let last = '';
+  const redraw = (): void => {
+    const k = reduxSkinIndex(services().session.settings.reduxSkin);
+    el.className = `${skinClass(k)} clear noin`;
+    const html = reduxOn() ? o.render({ k, skin: REDUX_SKINS[k]!, v: (n) => reduxLayout(k, n) }) : '';
+    if (html === last) return;
+    last = html;
+    el.innerHTML = html;
+    el.style.display = html ? '' : 'none';
+  };
+  el.addEventListener('click', (e) => {
+    const t = (e.target as HTMLElement).closest<HTMLElement>('[data-act]');
+    const fn = t && el.contains(t) ? o.acts?.[t.dataset.act!] : undefined;
+    if (fn) fn(t!.dataset.arg ?? '');
+  });
+  shield(el);
+  views.add({ redraw });
+  lastBox = '';
+  place();
+  redraw();
+  return { refresh: redraw, el };
+}
+
+/**
+ * An empty see-through layer over every view, for a tool that builds its own DOM (the debug panel's form). It lives as
+ * long as the game and wears the current look; only its `.hit` children and `[data-act]` take the pointer.
+ */
+export function mountTool(game: Phaser.Game, name: string): HTMLElement {
+  const root = ensureHost(game);
+  const el = document.createElement('div');
+  el.dataset.scene = name;
+  el.style.zIndex = '70';
+  root.append(el);
+  const redraw = (): void => {
+    el.className = `${skinClass(reduxSkinIndex(services().session.settings.reduxSkin))} clear noin`;
+  };
+  shield(el);
+  views.add({ redraw });
+  lastBox = '';
+  place();
+  redraw();
+  return el;
+}
+
 /** Draws a scene's New UI view over the canvas until the scene shuts down. Call only when `reduxOn()`. */
+/** Where the pointer was at the last hover any view took (shared, so a view opening under a resting pointer does not count either). */
+let overAt = '';
+
 export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
   const root = ensureHost(scene.game);
   const el = document.createElement('div');
@@ -151,9 +257,25 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     if (fn) fn(t.dataset.arg ?? '');
   };
   el.addEventListener('click', (e) => pick(e, 'act', o.acts));
-  el.addEventListener('pointerover', (e) => pick(e, 'over', o.overs));
-  // A press on the stage must not also reach whatever page element sits under it.
-  el.addEventListener('pointerdown', (e) => e.stopPropagation());
+  el.addEventListener('pointerover', (e) => {
+    // A redraw puts a new element under a pointer that is resting; only a pointer that moved is a hover, or the
+    // cursor would snap back to the mouse on every key press.
+    const at = `${e.clientX},${e.clientY}`;
+    if (at === overAt) return;
+    overAt = at;
+    pick(e, 'over', o.overs);
+  });
+  // Tooltips follow the pointer anywhere on the page, so leaving an element (onto the canvas too) is noticed.
+  let tipAt: string | null = null;
+  const onTip = (e: PointerEvent): void => {
+    const t = e.target instanceof Element ? e.target.closest<HTMLElement>('[data-tip]') : null;
+    const now = t && el.contains(t) ? t.dataset.tip ?? null : null;
+    if (now === tipAt) return;
+    tipAt = now;
+    o.tip?.(now);
+  };
+  if (o.tip) window.addEventListener('pointermove', onTip);
+  shield(el);
 
   const hide = (): void => { el.style.display = 'none'; };
   const show = (): void => { el.style.display = ''; };
@@ -161,7 +283,12 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     if (dead) return;
     dead = true;
     views.delete(view);
+    if (o.card) {
+      cards -= 1;
+      views.forEach((v) => v.redraw());
+    }
     gone = { key: scene.scene.key, at: performance.now() };
+    window.removeEventListener('pointermove', onTip);
     el.remove();
     scene.events.off('shutdown', destroy);
     scene.events.off('destroy', destroy);
@@ -173,7 +300,10 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
   scene.events.on('sleep', hide);
   scene.events.on('wake', show);
   views.add(view);
-  redraw();
+  if (o.card) {
+    cards += 1;
+    views.forEach((v) => v.redraw());
+  } else redraw();
   return {
     el,
     destroy,

@@ -169,6 +169,8 @@ function hookText(hook: HeldHook, copies: number): HookText {
       return { text: `While it leads the party, wild Pokémon are ${Math.abs(hook.amount)} level${Math.abs(hook.amount) === 1 ? '' : 's'} ${hook.amount < 0 ? 'lower' : 'higher'} (per copy).` };
     case 'dodgeFirst':
       return { text: 'Dodges the first hit of a battle.', once: true, when: 'first hit' };
+    case 'firstMoveSure':
+      return { text: "Its first move each battle can't miss.", when: 'first move' };
     case 'statusShield':
       return { text: `Cuts the chance of being afflicted by ${pct(hook.percent)}.` };
     case 'weatherImmune':

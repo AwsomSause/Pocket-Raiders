@@ -129,6 +129,11 @@ export const PokemonInstanceSchema = z.object({
   held: z.record(z.string(), z.number().int().min(1)).optional(),
   /** Small permanent stat boosts per stat (Wings): copies taken, each worth its catalog percent. */
   statBoosts: z.partialRecord(StatNameSchema, z.number().int().min(0)).optional(),
+  /** Catalog Overhaul: stat boosts in percent given by event scenes ("+1 to a stat" is 5%), capped per stat; `eventBoostsRegion` is the share that ends with the region. */
+  eventBoosts: z.partialRecord(StatNameSchema, z.number().int().min(0)).optional(),
+  eventBoostsRegion: z.partialRecord(StatNameSchema, z.number().int().min(0)).optional(),
+  /** Fenwick's lesson (`declinedEvolutionBoost`): percent added to every stat for evolutions it was held back from; cleared when it evolves (core/mentorWorld.ts). Optional, so older saves load as they are. */
+  evoDeclineBoost: z.number().int().min(0).optional(),
   /** Max HP bonus in percent from the trainer's HP perks (core/trainerPerks.ts syncHpPerks keeps it current). */
   perkHp: z.number().int().optional(),
   /** Hatched from an Egg this run (core/eggs.ts; Elm's perk gives these more experience). */
@@ -167,6 +172,14 @@ export const PokemonInstanceSchema = z.object({
   bondWith: z.string().optional(),
   /** Beta 0.5 M1: moves this Pokémon has mastered (trainer-side move mastery; core/trainerWorld). */
   mastered: z.array(z.string()).optional(),
+  /** Catalog Overhaul (run v44): a quirk id (core/co/quirks.ts), e.g. a homesick Poipole or a traded Pokémon's habit. */
+  quirk: z.string().optional(),
+  /** Catalog Overhaul (run v44): marks it carries from its story ("alpha", "traded"...); shown on its summary. */
+  marks: z.array(z.string()).max(8).optional(),
+  /** Catalog Overhaul (run v44): its original trainer's name when it came from someone else (a trade). */
+  ot: z.string().optional(),
+  /** Catalog Overhaul (run v44): one line about where its quirk came from. */
+  quirkNote: z.string().optional(),
 });
 export type PokemonInstance = z.infer<typeof PokemonInstanceSchema>;
 
@@ -950,6 +963,13 @@ export const BattleStateSchema = z.object({
   spectacle: SpectacleBattleSchema.optional(),
   /** Auto-Battle (spec §32): the Pokémon chose at least one action this battle by themselves, so its EXP is reduced (core/run.ts awardExperience). Never cleared mid-battle. */
   autoUsed: z.boolean().optional(),
+  /**
+   * Mentor lessons (trainerPerks.ts mentorLessons): once-per-battle marks and the foe's previewed first move.
+   * `koTurnOne`: your side knocked a foe out on turn one; `koSpeedUsed`: the Speed boost was given; `missUsed`: a foe's miss
+   * already paid out; `foeMove`: the foe lead's turn-one move (Foe Move Preview); `xp`: experience each of your Pokémon (uid) earned
+   * this battle while a Lost Battle lesson waits (run.ts awardExperience). Optional, no save bump.
+   */
+  lesson: z.object({ koTurnOne: z.boolean().optional(), koSpeedUsed: z.boolean().optional(), missUsed: z.boolean().optional(), foeMove: z.string().optional(), xp: z.record(z.string(), z.number().int().min(0)).optional() }).optional(),
   /** Pidgey's Resolve (core/sky/spectate.ts): a CPU-versus-CPU fight the player only watches. `cheerAt`: the share of the player-side Pokémon's HP under which the player is asked who to cheer for (once); `cheered` is the answer. Nothing counts: the real party and Bag are put back. */
   spectate: z.object({ kind: z.enum(['duel', 'finale']), cheerAt: z.number().min(0).max(1).optional(), cheered: z.enum(['pidgeot', 'fearow', 'none']).optional() }).optional(),
   /** The wild Pokémon is an Alpha: oversized, stronger, better prize (ideas W1). */
@@ -1114,6 +1134,8 @@ export const StageStateSchema = z.object({
   foresight: z.number().int().min(0).default(0),
   /** Fronts that rolled in during the stage (an event's `front` effect); the stage's own come from its seed (core/world.ts). */
   extraFronts: z.array(z.object({ weather: WeatherSchema, from: z.number().int().min(1), to: z.number().int().min(1) })).default([]),
+  /** Catalog Overhaul (new events, NE9): the storm was waited out, so no weather front for the rest of this stage. */
+  clearSky: z.boolean().optional(),
   /** Roaming Legendaries on this map: where each is now and whether it is still roaming. */
   roamers: z.array(z.object({ species: z.string(), nodeId: z.string().nullable(), status: z.enum(['roaming', 'done', 'gone']) })).default([]),
   /** Ideas W4 traversal (run v34): obstacles on this map, node id → obstacle id (src/data/traversal.json). A crossed one is removed. */
@@ -1472,7 +1494,7 @@ export const RunStateSchema = z.object({
   /** Encore! Hype carried between battles (reset after a boss battle). */
   hype: z.number().int().min(0).default(0),
   /** Signature effects that run out: they leave `perkEffects` after `battles` more battles (of the `until` kind). */
-  tempEffects: z.array(z.object({ effects: z.array(ArchetypeModifierSchema), battles: z.number().int().min(1), until: z.enum(['battle', 'boss', 'wild']) })).default([]),
+  tempEffects: z.array(z.object({ effects: z.array(ArchetypeModifierSchema), battles: z.number().int().min(1), until: z.enum(['battle', 'boss', 'wild', 'region']) })).default([]),
   signatureApplied: z.record(z.string(), z.array(ArchetypeModifierSchema)).default({}),
   /** Mode, difficulty, modifiers and their reward multiplier (core/rules.ts). */
   rules: RunRulesSchema,

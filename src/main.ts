@@ -64,7 +64,8 @@ import { installPointerFx } from './ui/pointerFx';
 import { installGamepad } from './ui/gamepad';
 import { installShareTools } from './ui/shareCard';
 import { interactionLog } from './core/presentation/uiPrefs';
-import { installOverlays } from './ui/overlays';
+import { installOverlays, notify } from './ui/overlays';
+import { showAchievementToasts } from './ui/achievementToast';
 import { enterTransition } from './ui/transitions';
 import { installErrorLog, packStore, registerOffline, watchForUpdates } from './game/deviceTools';
 import { loadStoredPacks } from './core/tools/modPacks';
@@ -213,6 +214,13 @@ function start(): void {
     reaction: (id: string, x = 480, y = 270) => {
       const s = game.scene.getScenes(true)[0];
       return s ? playReaction(s, session.settings, id, x, y) : Promise.resolve();
+    },
+    /** Shows a notification bubble (browser tests and the debug panel). */
+    notify: (text: string) => notify(text),
+    /** Shows the toast for the first achievements in the list, as when they are earned (browser tests and the debug panel). */
+    achievementToast: (count = 1) => {
+      const s = game.scene.getScenes(true)[0];
+      if (s) showAchievementToasts(s, [...session.content.achievements.values()].slice(0, count), 'off');
     },
     /** Plays one rule-mask wipe over the active scene (browser tests and the debug panel). */
     wipe: (mask: WipeMask, ms = 520) => {

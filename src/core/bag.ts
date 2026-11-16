@@ -72,6 +72,9 @@ const ITEM_POCKET: Record<string, BagEntry['pocket']> = {
   attribute: 'other',
 };
 
+/** The pocket an item of this category sits in. */
+export const itemPocket = (category: string): BagEntry['pocket'] => ITEM_POCKET[category] ?? 'other';
+
 function catalogPocket(entry: CatalogEntry): BagEntry['pocket'] {
   const kind = entry.effect?.kind;
   if (kind === 'held') return entry.stacksOn === 'pokemon' ? 'held' : 'battle';

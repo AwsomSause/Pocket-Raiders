@@ -50,6 +50,8 @@ export function isRewardEligible(content: Content, run: RunState, reward: Reward
   if (reward.effect.kind === 'addItem' && noRevives(run.rules) && content.items.get(reward.effect.item)?.category === 'revive') return false;
   if (reward.effect.kind === 'catalog') {
     const entry = getCatalogEntry(content, reward.effect.entry);
+    // Gifts from people (Marigold's Shell, Tobias's Satchel...) only come from their events.
+    if (entry.giftOnly) return false;
     return isFreeReroll(content, run, entry) || isCatalogUseful(content, run, entry);
   }
   if (reward.effect.kind === 'vitamin') {

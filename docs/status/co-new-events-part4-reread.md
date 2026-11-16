@@ -1,0 +1,11 @@
+# Part 4 re-read (NE76 to NE100), 2026-11-15
+
+Built in `tools/events/co/new-events-4.ts` (53 scenes). Checked every choice, Remembers, reward and Afterstory against NEW_EVENTS_4.md.
+Old ids kept and overridden (other code reads their flags): `camp-one-who-wont-eat` (NE81), `camp-the-argument` (NE82), `camp-the-bath` (NE83), `camp-nightmare-watch` (NE84), `camp-photograph-nobody-posed` (NE85); flags `fog-named` (hazards.ts), `bridge-tuned`, `orchard-planted`, `lighthouse-marked`, `snow-stopped`, `snow-trainer-climbed`, `camp-pair`, `camp-argument`, `camp-photo`, `camp-photo-home`. Old variants not in the doc dropped: `bridge-song`, `orchard-green`, `the-pair-is-here`, `the-two-in-the-photo`.
+
+Fixed in this pass: tags the schema doesn't know (Puzzle, Training, Comedy, Festival) swapped for real ones; NE83 Bond is +1 for all and −1 for Fire- and Rock-types (was raw friendship); NE93 "my team" names the lowest-Bond Pokémon (new `{lowestBond}` token) and why; NE80 rescue hut heal removed (not in the doc); NE90 sentence split.
+
+All built, except (needs engine or item, not faked):
+- NE77 the map hidden in fog and the fog using the false name all stage; NE80 "Whiteout" stage header; NE81 the Resolute afterstory trigger; NE82/NE83 Bond for exactly the two/the volunteers (one picked Pokémon gets it, plus the camp bond); NE84 flinch immunity next battle; NE85 the photo at the Long Table; NE86 the Gym lock (flag `tuesday-gym-key`); NE87 `freed-caged` (nobody sets it yet); NE89 a lost item coming back; NE93 "the machine was wrong, this once"; NE95 Contest appeal, new look, NPC comments; NE96 First Catch ribbon (needs an item), moments +5%, `lost.<name>` variant; NE97 skipping one flag's worst callback (midpoint gated to the end of region 5); NE98 per-region Kindness count (uses the run's Kindness); NE99 the solstice-week trigger and the final battle's safe first turn; NE100 the after-final-battle hook (built as a room) and the "run lost" variant.
+- Cross-run (left out by Kice's rule): NE77 later-run fog name, NE85 photo on the wall, NE97 lines from other runs, NE98 `border.left` table, NE100 carry-over to the next run.
+- Needs art: Winifred, Benedicta, Philomena, Mrs. Thackeray, Hildegard, Constable Peverell, Mr. Montague-Stokes, Aurelius, Guinevere.

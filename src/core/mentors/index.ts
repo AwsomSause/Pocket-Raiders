@@ -81,6 +81,9 @@ const MentorSchema = z.object({
   graduation: z.object({ title: z.string(), text: z.string() }),
   /** The mentor's personal storyline (an event once trust is 45): the telling, and the two ways to answer. */
   story: z.object({ intro: z.string(), listen: z.string(), share: z.string() }),
+  /** Catalog Overhaul (STORY_FAMILIES_5.md): the name the mentor goes by in scenes ({mentor}), and the Training Session's third drill ({mentorDrill}). */
+  short: z.string().min(1).optional(),
+  drill: z.string().min(1).optional(),
 });
 export type Mentor = z.infer<typeof MentorSchema>;
 
@@ -182,6 +185,9 @@ const tierRank = (id: string) => Math.max(0, CFG.tiers.findIndex((t) => t.id ===
 
 // ---------- the fellow apprentice ----------
 
+/** The fellow apprentice of the Catalog Overhaul mentor scenes (STORY_FAMILIES_5.md). */
+export const FELLOW_NAME = 'Ressa';
+
 export function makeFellow(seed: string, mentor: Mentor, bond: MentorBond): Apprentice {
   const rng = new Rng(hashSeed(`${seed}::mentor-fellow::${mentor.id}`));
   const pool = MENTOR_DATA.apprentices;
@@ -195,8 +201,10 @@ export function makeFellow(seed: string, mentor: Mentor, bond: MentorBond): Appr
   const types = new Set<string>();
   if (mentor.leans.length > 0) types.add(rng.pick(mentor.leans));
   while (types.size < 2) types.add(rng.pick([...TYPE_NAMES]));
+  rng.pick(pool.names); // kept so the rolls after it stay the same
   return {
-    name: rng.pick(pool.names),
+    // STORY_FAMILIES_5.md: the fellow apprentice under every mentor is Ressa.
+    name: FELLOW_NAME,
     potential: prodigy ? 5 : rng.int(1, 5),
     personality: rng.pick(pool.personalities).id,
     strength: rng.pick(pool.strengths),

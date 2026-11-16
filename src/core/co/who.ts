@@ -18,6 +18,11 @@ export function bondLevelFriendship(content: Content, level: number): number {
   return level >= MAX_BOND_LEVEL ? max : Math.min(max, Math.max(0, level) * content.balance.co.bondLevelStep);
 }
 
+/** The friendship for the pack's "+N Bond": `bondFriendship` a point on one Pokémon, `bondFriendshipParty` each for the whole party. */
+export function bondFriendship(content: Content, points: number, who: CoWho): number {
+  return points * (who === 'party' ? content.balance.co.bondFriendshipParty : content.balance.co.bondFriendship);
+}
+
 /** A Pokémon's Bond level, 0 to 5. */
 export function bondLevel(content: Content, mon: Pick<PokemonInstance, 'friendship'>): number {
   if (mon.friendship >= content.balance.friendship.max) return MAX_BOND_LEVEL;
