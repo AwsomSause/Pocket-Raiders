@@ -8039,319 +8039,57 @@
    ]
   }
  ],
- "external": [
-  {
-   "key": "aq26-real-scalchop-found",
-   "readBy": [
-    "aq26-both-scalchops"
-   ]
-  },
-  {
-   "key": "birds-trial-moltres",
-   "readBy": [
-    "an16-ember-pilgrim",
-    "an16-regions-end"
-   ]
-  },
-  {
-   "key": "blessing-silvally",
-   "readBy": [
-    "aq57-the-mask"
-   ]
-  },
-  {
-   "key": "captains-chest-dived",
-   "readBy": [
-    "an09-the-storm"
-   ]
-  },
-  {
-   "key": "caverns-o-mighty-done",
-   "readBy": [
-    "an31-cards-in-the-book",
-    "an31-the-book-read"
-   ]
-  },
-  {
-   "key": "cooking-circuit-won",
-   "readBy": [
-    "an15-berry-stew"
-   ]
-  },
-  {
-   "key": "factory-shutdown",
-   "readBy": [
-    "an01-tub"
-   ]
-  },
-  {
-   "key": "festival-stall-ate",
-   "readBy": [
-    "an01-bathhouse"
-   ]
-  },
-  {
-   "key": "fighting-tournament-hawlucha",
-   "readBy": [
-    "aq33-luchador"
-   ]
-  },
-  {
-   "key": "fire-gym-beaten",
-   "readBy": [
-    "brock-cooking"
-   ]
-  },
-  {
-   "key": "flare-mine-running",
-   "readBy": [
-    "aq56-listens",
-    "aq56-mega-ace"
-   ]
-  },
-  {
-   "key": "flare-mine-shut",
-   "readBy": [
-    "aq56-mega-ace"
-   ]
-  },
-  {
-   "key": "flare-stones-taken",
-   "readBy": [
-    "aq56-the-truth"
-   ]
-  },
-  {
-   "key": "fog-named",
-   "readBy": [
-    "an02-spore-doctor"
-   ]
-  },
-  {
-   "key": "frost-warmed",
-   "readBy": [
-    "an13-ice-library"
-   ]
-  },
-  {
-   "key": "guest-meltan",
-   "readBy": [
-    "aq39-it-follows"
-   ]
-  },
-  {
-   "key": "kanto-factory-cleared",
-   "readBy": [
-    "aq09-muk-that-hugs"
-   ]
-  },
-  {
-   "key": "kanto-hidden-bulbasaur",
-   "readBy": [
-    "aq04-keeper-of-the-hidden-village"
-   ]
-  },
-  {
-   "key": "kanto-pidgeotto-ally",
-   "readBy": [
-    "aq03-flock-leaders-promise"
-   ]
-  },
-  {
-   "key": "kanto-route-egg-hatched",
-   "readBy": [
-    "aq44-togepi-leads"
-   ]
-  },
-  {
-   "key": "kanto-sabrina-labyrinth-done",
-   "readBy": [
-    "aq13-the-laugh"
-   ]
-  },
-  {
-   "key": "kind-gave-money",
-   "readBy": [
-    "an18-friend-you-didnt-make"
-   ]
-  },
-  {
-   "key": "kind-helped-stranger",
-   "readBy": [
-    "an28-votes-day-three"
-   ]
-  },
-  {
-   "key": "kind-walked-past",
-   "readBy": [
-    "aq40-it-looks-back"
-   ]
-  },
-  {
-   "key": "l12-altars-done",
-   "readBy": [
-    "aq57-took-off-its-mask"
-   ]
-  },
-  {
-   "key": "lantern-sea-visited",
-   "readBy": [
-    "an14-lantern-night"
-   ]
-  },
-  {
-   "key": "mairin-helped",
-   "readBy": [
-    "aq56-mega-ace"
-   ]
-  },
-  {
-   "key": "nebby-chose",
-   "readBy": [
-    "lillie-nebby"
-   ]
-  },
-  {
-   "key": "nebby-trust",
-   "readBy": [
-    "lillie-nebby"
-   ]
-  },
-  {
-   "key": "old-courier-delivered",
-   "readBy": [
-    "aq42-dragonite-stopped-delivering"
-   ]
-  },
-  {
-   "key": "paper-crane-done",
-   "readBy": [
-    "an12-the-folder"
-   ]
-  },
-  {
-   "key": "psyduck-joined",
-   "readBy": [
-    "aq45-the-headache"
-   ]
-  },
-  {
-   "key": "reggie-met",
-   "readBy": [
-    "aq55-rival-who-changed"
-   ]
-  },
-  {
-   "key": "rep",
-   "readBy": [
-    "an28-the-vote"
-   ]
-  },
-  {
-   "key": "rival-has-eeveelution",
-   "readBy": [
-    "aq54-eevee-chose-night"
-   ]
-  },
-  {
-   "key": "rocket-ambush-beaten",
-   "readBy": [
-    "aq58-after-the-poachers"
-   ]
-  },
-  {
-   "key": "shadow-purified",
-   "readBy": [
-    "aq57-the-mask"
-   ]
-  },
-  {
-   "key": "shedinja-accepted",
-   "readBy": [
-    "an24-dawn",
-    "an24-who-she-is"
-   ]
-  },
-  {
-   "key": "sleeping-snorlax-done",
-   "readBy": [
-    "aq12-snorlax-and-the-melons"
-   ]
-  },
-  {
-   "key": "smuggling-ring-done",
-   "readBy": [
-    "an21-bounty-crew"
-   ]
-  },
-  {
-   "key": "stranding-peaceful",
-   "readBy": [
-    "an33-the-leader"
-   ]
-  },
-  {
-   "key": "telling-deoxys",
-   "readBy": [
-    "an19-body-swap"
-   ]
-  },
-  {
-   "key": "telling-jirachi",
-   "readBy": [
-    "an19-body-swap"
-   ]
-  },
-  {
-   "key": "three-tatsugiri-done",
-   "readBy": [
-    "an35-far-shore",
-    "an35-flooded-camp",
-    "an35-the-ride"
-   ]
-  },
-  {
-   "key": "trial-fire-started",
-   "readBy": [
-    "aq52-the-turtle-who-exploded"
-   ]
-  },
-  {
-   "key": "trio-rep",
-   "readBy": [
-    "aq58-ones-they-let-go"
-   ]
-  },
-  {
-   "key": "u2-lusamine-done",
-   "readBy": [
-    "aq57-took-off-its-mask"
-   ]
-  },
-  {
-   "key": "umbrella-shared",
-   "readBy": [
-    "an29-spirit-bus-stop"
-   ]
-  },
-  {
-   "key": "understudy-helped",
-   "readBy": [
-    "an30-the-gig",
-    "an30-the-gig-curtain"
-   ]
-  },
-  {
-   "key": "unwavering-joined",
-   "readBy": [
-    "aq21-ice-wouldnt-break"
-   ]
-  },
-  {
-   "key": "zygarde-cells-found",
-   "readBy": [
-    "an22-forest-god"
-   ]
-  }
- ]
+ "external": {
+  "aq26-real-scalchop-found": "read by aq26-both-scalchops; set by another thread's event",
+  "birds-trial-moltres": "read by an16-ember-pilgrim, an16-regions-end; set by another thread's event",
+  "blessing-silvally": "read by aq57-the-mask; set by another thread's event",
+  "captains-chest-dived": "read by an09-the-storm; set by another thread's event",
+  "caverns-o-mighty-done": "read by an31-cards-in-the-book, an31-the-book-read; set by another thread's event",
+  "cooking-circuit-won": "read by an15-berry-stew; set by another thread's event",
+  "factory-shutdown": "read by an01-tub; set by another thread's event",
+  "festival-stall-ate": "read by an01-bathhouse; set by another thread's event",
+  "fighting-tournament-hawlucha": "read by aq33-luchador; set by another thread's event",
+  "fire-gym-beaten": "read by brock-cooking; set by another thread's event",
+  "flare-mine-running": "read by aq56-listens, aq56-mega-ace; set by another thread's event",
+  "flare-mine-shut": "read by aq56-mega-ace; set by another thread's event",
+  "flare-stones-taken": "read by aq56-the-truth; set by another thread's event",
+  "fog-named": "read by an02-spore-doctor; set by another thread's event",
+  "frost-warmed": "read by an13-ice-library; set by another thread's event",
+  "guest-meltan": "read by aq39-it-follows; set by another thread's event",
+  "kanto-factory-cleared": "read by aq09-muk-that-hugs; set by another thread's event",
+  "kanto-hidden-bulbasaur": "read by aq04-keeper-of-the-hidden-village; set by another thread's event",
+  "kanto-pidgeotto-ally": "read by aq03-flock-leaders-promise; set by another thread's event",
+  "kanto-route-egg-hatched": "read by aq44-togepi-leads; set by another thread's event",
+  "kanto-sabrina-labyrinth-done": "read by aq13-the-laugh; set by another thread's event",
+  "kind-gave-money": "read by an18-friend-you-didnt-make; set by another thread's event",
+  "kind-helped-stranger": "read by an28-votes-day-three; set by another thread's event",
+  "kind-walked-past": "read by aq40-it-looks-back; set by another thread's event",
+  "l12-altars-done": "read by aq57-took-off-its-mask; set by another thread's event",
+  "lantern-sea-visited": "read by an14-lantern-night; set by another thread's event",
+  "mairin-helped": "read by aq56-mega-ace; set by another thread's event",
+  "nebby-chose": "read by lillie-nebby; set by another thread's event",
+  "nebby-trust": "read by lillie-nebby; set by another thread's event",
+  "old-courier-delivered": "read by aq42-dragonite-stopped-delivering; set by another thread's event",
+  "paper-crane-done": "read by an12-the-folder; set by another thread's event",
+  "psyduck-joined": "read by aq45-the-headache; set by another thread's event",
+  "reggie-met": "read by aq55-rival-who-changed; set by another thread's event",
+  "rep": "read by an28-the-vote; set by another thread's event",
+  "rival-has-eeveelution": "read by aq54-eevee-chose-night; set by another thread's event",
+  "rocket-ambush-beaten": "read by aq58-after-the-poachers; set by another thread's event",
+  "shadow-purified": "read by aq57-the-mask; set by another thread's event",
+  "shedinja-accepted": "read by an24-dawn, an24-who-she-is; set by another thread's event",
+  "sleeping-snorlax-done": "read by aq12-snorlax-and-the-melons; set by another thread's event",
+  "smuggling-ring-done": "read by an21-bounty-crew; set by another thread's event",
+  "stranding-peaceful": "read by an33-the-leader; set by another thread's event",
+  "telling-deoxys": "read by an19-body-swap; set by another thread's event",
+  "telling-jirachi": "read by an19-body-swap; set by another thread's event",
+  "three-tatsugiri-done": "read by an35-far-shore, an35-flooded-camp, an35-the-ride; set by another thread's event",
+  "trial-fire-started": "read by aq52-the-turtle-who-exploded; set by another thread's event",
+  "trio-rep": "read by aq58-ones-they-let-go; set by another thread's event",
+  "u2-lusamine-done": "read by aq57-took-off-its-mask; set by another thread's event",
+  "umbrella-shared": "read by an29-spirit-bus-stop; set by another thread's event",
+  "understudy-helped": "read by an30-the-gig, an30-the-gig-curtain; set by another thread's event",
+  "unwavering-joined": "read by aq21-ice-wouldnt-break; set by another thread's event",
+  "zygarde-cells-found": "read by an22-forest-god; set by another thread's event"
+ }
 }

@@ -1,23 +1,24 @@
 [
- {
-  "id": "donphan-leaders-tusk",
-  "name": "Donphan Leader’s Tusk",
-  "family": "Questline rewards (anime)",
-  "description": "Left at the ford by a herd's new leader. Accuracy +12%: Rollout and Ice Ball no longer miss",
-  "rarity": "rare",
-  "stacksOn": "pokemon",
-  "max": 1,
-  "how": "held",
-  "icon": "rare-bone",
-  "status": "supported",
-  "effect": {
-   "kind": "held",
-   "hooks": [
-    {
-     "hook": "accuracy",
-     "percent": 12
+  {
+    "id": "donphan-leaders-tusk",
+    "giftOnly": true,
+    "name": "Donphan Leader’s Tusk",
+    "family": "Questline rewards (anime)",
+    "description": "Left at the ford by a herd's new leader. Accuracy +12%: Rollout and Ice Ball no longer miss",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "rare-bone",
+    "status": "supported",
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "accuracy",
+          "percent": 12
+        }
+      ]
     }
-   ]
   }
- }
 ]

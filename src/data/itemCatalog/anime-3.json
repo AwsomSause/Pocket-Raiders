@@ -1,24 +1,25 @@
 [
- {
-  "id": "standing-shadow",
-  "name": "The Standing Shadow",
-  "family": "Questline rewards (anime)",
-  "description": "A Duskull keeps watch behind whoever holds this. Defense +5%",
-  "rarity": "uncommon",
-  "stacksOn": "pokemon",
-  "max": 1,
-  "how": "held",
-  "icon": "spell-tag",
-  "status": "supported",
-  "effect": {
-   "kind": "held",
-   "hooks": [
-    {
-     "hook": "stat",
-     "stat": "def",
-     "multiplier": 1.05
+  {
+    "id": "standing-shadow",
+    "giftOnly": true,
+    "name": "The Standing Shadow",
+    "family": "Questline rewards (anime)",
+    "description": "A Duskull keeps watch behind whoever holds this. Defense +5%",
+    "rarity": "uncommon",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "spell-tag",
+    "status": "supported",
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "stat",
+          "stat": "def",
+          "multiplier": 1.05
+        }
+      ]
     }
-   ]
   }
- }
 ]

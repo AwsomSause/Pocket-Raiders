@@ -21,7 +21,7 @@ const content = getContent();
 const events: EventDef[] = builtIds.map((id) => content.events.get(id)!);
 const status = report<{ built: Record<string, string>; extra: Record<string, string> }>('src/data/catalogOverhaul/status/anime.json');
 const placement = report<Record<string, { shape: string; earliest: string; beats?: string[] }>>('src/data/catalogOverhaul/placement/anime.json');
-const flagsFile = report<{ flags: { key: string; setBy: string[]; readBy: string[] }[]; external: { key: string; readBy: string[] }[] }>('src/data/catalogOverhaul/flags/anime.json');
+const flagsFile = report<{ flags: { key: string; setBy: string[]; readBy: string[] }[]; external: Record<string, string> }>('src/data/catalogOverhaul/flags/anime.json');
 const doc = fixture.questlines as Record<string, { title: string; choices: string[] }>;
 
 /** The catalog ids of this category live inside these questlines. */
@@ -153,7 +153,7 @@ describe('anime questlines: the game\'s rules', () => {
       for (const c of allConditions(e)) if (c.kind === 'flag' || c.kind === 'flagAge') read.add(c.key);
     }
     expect(flagsFile.flags.map((f) => f.key).sort()).toEqual([...set].sort());
-    expect(flagsFile.external.map((f) => f.key).sort()).toEqual([...read].filter((k) => !set.has(k)).sort());
+    expect(Object.keys(flagsFile.external).sort()).toEqual([...read].filter((k) => !set.has(k)).sort());
     // A flagAge can only read a flag one of these events stamps.
     for (const e of events) for (const c of allConditions(e)) if (c.kind === 'flagAge') expect(set.has(c.key), `${e.id}: flagAge reads ${c.key}, which nothing here sets`).toBe(true);
   });

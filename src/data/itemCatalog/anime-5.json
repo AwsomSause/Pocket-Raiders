@@ -1,39 +1,53 @@
 [
- {
-  "id": "keepers-vine",
-  "name": "Keeper’s Vine",
-  "family": "Questline rewards (anime)",
-  "description": "A Hidden Village guard’s vine. Grass moves +10%; the holder heals 1/16 of its HP each turn",
-  "rarity": "rare",
-  "stacksOn": "pokemon",
-  "max": 1,
-  "how": "held",
-  "icon": "miracle-seed",
-  "status": "supported",
-  "effect": {
-   "kind": "held",
-   "hooks": [
-    { "hook": "typePower", "types": ["grass"], "percent": 10 },
-    { "hook": "endTurn", "fraction": 0.0625 }
-   ]
+  {
+    "id": "keepers-vine",
+    "giftOnly": true,
+    "name": "Keeper’s Vine",
+    "family": "Questline rewards (anime)",
+    "description": "A Hidden Village guard’s vine. Grass moves +10%; the holder heals 1/16 of its HP each turn",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "miracle-seed",
+    "status": "supported",
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "grass"
+          ],
+          "percent": 10
+        },
+        {
+          "hook": "endTurn",
+          "fraction": 0.0625
+        }
+      ]
+    }
+  },
+  {
+    "id": "earned-flame",
+    "giftOnly": true,
+    "name": "Earned Flame",
+    "family": "Questline rewards (anime)",
+    "description": "A Charizard’s respect, won the hard way. The holder’s moves are 20% more accurate",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "flame-orb",
+    "status": "supported",
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "accuracy",
+          "percent": 20
+        }
+      ]
+    }
   }
- },
- {
-  "id": "earned-flame",
-  "name": "Earned Flame",
-  "family": "Questline rewards (anime)",
-  "description": "A Charizard’s respect, won the hard way. The holder’s moves are 20% more accurate",
-  "rarity": "rare",
-  "stacksOn": "pokemon",
-  "max": 1,
-  "how": "held",
-  "icon": "flame-orb",
-  "status": "supported",
-  "effect": {
-   "kind": "held",
-   "hooks": [
-    { "hook": "accuracy", "percent": 20 }
-   ]
-  }
- }
 ]

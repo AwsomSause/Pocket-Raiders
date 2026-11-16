@@ -977,7 +977,7 @@ export function giveBossItems(content: Content, team: PokemonInstance[], role: '
   for (let n = 0; n < count; n++) {
     const mon = team[team.length - 1 - n]!;
     const pool = [...content.catalog.values()].filter((entry) => {
-      if (entry.status !== 'supported' || entry.effect?.kind !== 'held' || entry.stacksOn !== 'pokemon') return false;
+      if (entry.giftOnly || entry.status !== 'supported' || entry.effect?.kind !== 'held' || entry.stacksOn !== 'pokemon') return false;
       if (!entry.effect.hooks.every((h) => BOSS_HOOKS.has(h.hook))) return false;
       return entry.effect.hooks.every((h) => !('species' in h) || !h.species || speciesMatches(content, mon.speciesId, h.species));
     });

@@ -1,148 +1,154 @@
 [
- {
-  "id": "silt-pellet",
-  "name": "Clean Silt Pellet",
-  "family": "Questline rewards (anime)",
-  "description": "A river spirit’s thanks. Cures any status or confusion once, then crumbles",
-  "rarity": "rare",
-  "stacksOn": "pokemon",
-  "max": 1,
-  "how": "held",
-  "icon": "soft-sand",
-  "status": "supported",
-  "effect": {
-   "kind": "held",
-   "hooks": [
-    {
-     "hook": "berryCure",
-     "statuses": [
-      "par",
-      "slp",
-      "psn",
-      "brn",
-      "frz"
-     ],
-     "confusion": true
+  {
+    "id": "silt-pellet",
+    "giftOnly": true,
+    "name": "Clean Silt Pellet",
+    "family": "Questline rewards (anime)",
+    "description": "A river spirit’s thanks. Cures any status or confusion once, then crumbles",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "soft-sand",
+    "status": "supported",
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "berryCure",
+          "statuses": [
+            "par",
+            "slp",
+            "psn",
+            "brn",
+            "frz"
+          ],
+          "confusion": true
+        }
+      ]
     }
-   ]
-  }
- },
- {
-  "id": "boys-sword",
-  "name": "The Boy’s Sword",
-  "family": "Questline rewards (anime)",
-  "description": "A hunter’s short blade. Bug moves +10%",
-  "rarity": "uncommon",
-  "stacksOn": "pokemon",
-  "max": 1,
-  "how": "held",
-  "icon": "silverpowder",
-  "status": "supported",
-  "effect": {
-   "kind": "held",
-   "hooks": [
-    {
-     "hook": "typePower",
-     "types": [
-      "bug"
-     ],
-     "percent": 10
+  },
+  {
+    "id": "boys-sword",
+    "giftOnly": true,
+    "name": "The Boy’s Sword",
+    "family": "Questline rewards (anime)",
+    "description": "A hunter’s short blade. Bug moves +10%",
+    "rarity": "uncommon",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "silverpowder",
+    "status": "supported",
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "bug"
+          ],
+          "percent": 10
+        }
+      ]
     }
-   ]
-  }
- },
- {
-  "id": "leaf-scarf",
-  "name": "Leaf Scarf",
-  "family": "Questline rewards (anime)",
-  "description": "Sewn by a Leavanny. Sp. Def +5%",
-  "rarity": "uncommon",
-  "stacksOn": "pokemon",
-  "max": 1,
-  "how": "held",
-  "icon": "silk-scarf",
-  "status": "supported",
-  "effect": {
-   "kind": "held",
-   "hooks": [
-    {
-     "hook": "stat",
-     "stat": "spd",
-     "multiplier": 1.05
+  },
+  {
+    "id": "leaf-scarf",
+    "giftOnly": true,
+    "name": "Leaf Scarf",
+    "family": "Questline rewards (anime)",
+    "description": "Sewn by a Leavanny. Sp. Def +5%",
+    "rarity": "uncommon",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "silk-scarf",
+    "status": "supported",
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "stat",
+          "stat": "spd",
+          "multiplier": 1.05
+        }
+      ]
     }
-   ]
-  }
- },
- {
-  "id": "house-call-whistle",
-  "name": "House Call",
-  "family": "Questline rewards (anime)",
-  "description": "Whistle and the walking house comes. From the map, 1 trip: ride two columns ahead to any stop",
-  "rarity": "rare",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "use",
-  "icon": "library/ridepager",
-  "status": "supported",
-  "effect": {
-   "kind": "perk",
-   "lasts": {
-    "for": "manual",
-    "count": 1
-   },
-   "perks": [
-    {
-     "perk": "airship"
+  },
+  {
+    "id": "house-call-whistle",
+    "giftOnly": true,
+    "name": "House Call",
+    "family": "Questline rewards (anime)",
+    "description": "Whistle and the walking house comes. From the map, 1 trip: ride two columns ahead to any stop",
+    "rarity": "rare",
+    "stacksOn": "player",
+    "max": 1,
+    "how": "use",
+    "icon": "library/ridepager",
+    "status": "supported",
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "manual",
+        "count": 1
+      },
+      "perks": [
+        {
+          "perk": "airship"
+        }
+      ]
     }
-   ]
-  }
- },
- {
-  "id": "cyclizar-ride",
-  "name": "Cyclizar Ride",
-  "family": "Questline rewards (anime)",
-  "description": "Nico’s Cyclizar. From the map, 2 trips: ride two columns ahead to any stop",
-  "rarity": "epic",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "use",
-  "icon": "library/ridepager",
-  "status": "supported",
-  "effect": {
-   "kind": "perk",
-   "lasts": {
-    "for": "manual",
-    "count": 2
-   },
-   "perks": [
-    {
-     "perk": "airship"
+  },
+  {
+    "id": "cyclizar-ride",
+    "giftOnly": true,
+    "name": "Cyclizar Ride",
+    "family": "Questline rewards (anime)",
+    "description": "Nico’s Cyclizar. From the map, 2 trips: ride two columns ahead to any stop",
+    "rarity": "epic",
+    "stacksOn": "player",
+    "max": 1,
+    "how": "use",
+    "icon": "library/ridepager",
+    "status": "supported",
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "manual",
+        "count": 2
+      },
+      "perks": [
+        {
+          "perk": "airship"
+        }
+      ]
     }
-   ]
-  }
- },
- {
-  "id": "grand-prix-belt",
-  "name": "Grand Prix Belt",
-  "family": "Questline rewards (anime)",
-  "description": "The P1 Grand Prix champion’s belt. Fighting moves +20%",
-  "rarity": "rare",
-  "stacksOn": "pokemon",
-  "max": 1,
-  "how": "held",
-  "icon": "black-belt",
-  "status": "supported",
-  "effect": {
-   "kind": "held",
-   "hooks": [
-    {
-     "hook": "typePower",
-     "types": [
-      "fighting"
-     ],
-     "percent": 20
+  },
+  {
+    "id": "grand-prix-belt",
+    "giftOnly": true,
+    "name": "Grand Prix Belt",
+    "family": "Questline rewards (anime)",
+    "description": "The P1 Grand Prix champion’s belt. Fighting moves +20%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "black-belt",
+    "status": "supported",
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "fighting"
+          ],
+          "percent": 20
+        }
+      ]
     }
-   ]
   }
- }
 ]
