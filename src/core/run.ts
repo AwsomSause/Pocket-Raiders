@@ -20,6 +20,7 @@ import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { FOE_WAITS, gnAfterTurn, gnShape } from './greenneedle';
 import { bidoofPeace } from './greenneedle/bidoof';
+import { aceBows } from './greenneedle/missingAce';
 import { ridgeCatch } from './greenneedle/ridge';
 import { unflinchingStart } from './greenneedle/daycare';
 import { gavelStart } from './greenneedle/auction';
@@ -2488,6 +2489,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     if (rivalBack) {
       run.battle.rivalId = rivalBack.id;
       beginRivalBrain(content, run, rivalBack.id);
+      aceBows(content, run, run.battle, rivalBack.name, rivalBack.ace);
       const bankLines = rivalBattleLines(content, run, rivalBack.id, node.kind, activeIndex);
       if (bankLines.length > 0) run.battle.rivalNote = [run.battle.rivalNote, ...bankLines.map((l) => `${rivalBack.name}: "${l}"`)].filter(Boolean).join(' ');
       if (rivalNote) run.battle.rivalNote = [rivalNote, run.battle.rivalNote].filter(Boolean).join(' ');

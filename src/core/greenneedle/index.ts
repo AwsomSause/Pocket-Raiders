@@ -28,6 +28,7 @@ import { pairBondLevel } from '../bond';
 import { draftAldhelm, draftBattleStart, draftEnd, draftFriend, draftLetter, draftPick, draftRecruit, draftStart, draftTokens, draftWon } from './draft';
 import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
 import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorStart, defectorTokens, defectorTrust, guestOf } from './defector';
+import { rivalBeatenOnce } from './missingAce';
 import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
@@ -203,6 +204,8 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   // gn.45: a rival is well ahead of you (Lead +2 or more).
   if (c.test === 'allstarReady') return allstarReady(run);
   if (c.test === 'allstarUnbeaten') return allstarUnbeaten(run);
+  // gn.new.26: the rival has lost to the player at least once.
+  if (c.test === 'rivalBeaten') return rivalBeatenOnce(run);
   if (c.test === 'rivalTrustMax') return rivalTrustMax(run);
   if (c.test === 'rivalTrustBelow') return !rivalTrustMax(run);
   if (c.test === 'exKnown') return exKnown(run);
