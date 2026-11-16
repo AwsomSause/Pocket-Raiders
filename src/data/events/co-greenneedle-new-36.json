@@ -1,0 +1,645 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-36-sea",
+   "name": "The Lantern Sea",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "ls-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ls-visits",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The same bay, the same lights from below. On the shore, one more paper boat than the town can account for. Nobody will say who made it."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "lanturn",
+    "tint": "#2f5f8f",
+    "effect": "none"
+   },
+   "intro": "At night, the bay lights up from below.\n\n*Chinchou and Lanturn, hundreds of them, in the shallows. On the shore, paper boats, each with a candle.*\n\n**Boat-maker, Aunt Brigid:** \"One for each who didn't come home. Yours is free. Everyone's first one's free.\"",
+   "choices": [
+    {
+     "label": "Go down to the shore.",
+     "success": {
+      "text": "You go down to the water. The light moves under your feet, slowly, like breathing. Nobody here is in a hurry.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lsArrive"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "ls-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-hub"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you the bay goes on glowing, for anyone who wants it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-36-hub",
+   "name": "The Lantern Sea: The Shore",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lanturn",
+    "tint": "#2f5f8f",
+    "effect": "none"
+   },
+   "intro": "The shore, lit from underneath. People move along it quietly, in twos and threes, speaking low.\n\nThe boat-makers sit at a long trestle with the paper, the brushes and the candles. A diver stands knee-deep in the shallows, dripping and content. A child searches the reeds.\n\nAt the end of the jetty, a Lanturn is waiting. It has been waiting a long time.",
+   "choices": [
+    {
+     "label": "The boat-makers.",
+     "success": {
+      "text": "You walk along the trestle to Aunt Brigid's end.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-boats"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The diver, Caspar-Wyn.",
+     "success": {
+      "text": "You wade out to him. The water is warm, and everywhere it's lit.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-diver"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ls-pearl",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "The child in the reeds.",
+     "success": {
+      "text": "She's looking along the bank, bent over, very serious. She hasn't noticed you yet.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-child"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ls-child",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "The Lanturn at the jetty.",
+     "success": {
+      "text": "You walk out along the boards. The Lanturn turns one slow light towards you, and then away again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-jetty"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-36-boats",
+   "name": "The Lantern Sea: The Boat-makers",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lanturn",
+    "tint": "#2f5f8f",
+    "effect": "none"
+   },
+   "intro": "Aunt Brigid has paper to the elbows. Small boats stand in rows, each folded exactly the same, each with a stub of candle.\n\n**Aunt Brigid:** \"The brush is for a name. Write it however you like. The water can read.\"\n\nShe holds one out to you, and a brush, wet with ink.",
+   "choices": [
+    {
+     "label": "Take a boat and a brush.",
+     "success": {
+      "text": "She presses it into your hands. It weighs almost nothing. You find you're holding it very carefully.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ls-boat",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-hub"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ls-boat",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Ask who the boats are for.",
+     "success": {
+      "text": "**Aunt Brigid:** \"For anyone. The one who didn't come back, the one who left, the one who never got a chance. Doesn't matter. We don't check.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-hub"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ls-boat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Back to the shore.",
+     "success": {
+      "text": "You nod your thanks. She's already folding the next one.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-36-diver",
+   "name": "The Lantern Sea: The Diver",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lanturn",
+    "tint": "#2f5f8f",
+    "effect": "none"
+   },
+   "intro": "**Caspar-Wyn:** \"I trade for stories. Doesn't have to be big. Has to be *true.*\" He holds up a pearl, white as the inside of a shell.\n\n\"Tell me one thing that happened to you out there. I'll know if you're being clever.\"\n\n*What happened to you, this run:*\n\n**First:** {lsea:s1}\n\n**Second:** {lsea:s2}\n\n**Third:** {lsea:s3}",
+   "choices": [
+    {
+     "label": "Tell him the first.",
+     "success": {
+      "text": "You tell it plainly, the whole way through. He doesn't interrupt once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lsPearl",
+        "n": 1
+       },
+       {
+        "kind": "item",
+        "id": "pearl",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Traded a true story for a pearl at the Lantern Sea.",
+        "importance": 50
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-hub"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lsStory",
+       "n": 1
+      }
+     ]
+    },
+    {
+     "label": "Tell him the second.",
+     "success": {
+      "text": "You tell it. Halfway through, he stops smiling, and just listens.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lsPearl",
+        "n": 2
+       },
+       {
+        "kind": "item",
+        "id": "pearl",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Traded a true story for a pearl at the Lantern Sea.",
+        "importance": 50
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-hub"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lsStory",
+       "n": 2
+      }
+     ]
+    },
+    {
+     "label": "Tell him the third.",
+     "success": {
+      "text": "You tell it, quietly. When you're done, the water around you is very still.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lsPearl",
+        "n": 3
+       },
+       {
+        "kind": "item",
+        "id": "pearl",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Traded a true story for a pearl at the Lantern Sea.",
+        "importance": 50
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-hub"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lsStory",
+       "n": 3
+      }
+     ]
+    },
+    {
+     "label": "Keep it to yourself.",
+     "success": {
+      "text": "\"Fair enough,\" says Caspar-Wyn, and means it. \"Some you don't spend.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-36-child",
+   "name": "The Lantern Sea: The Child in the Reeds",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lanturn",
+    "tint": "#2f5f8f",
+    "effect": "none"
+   },
+   "intro": "She's about seven. Her sleeves are soaked to the shoulder.\n\n\"I had a boat,\" she says, without looking up. \"I put it down for one second.\"",
+   "choices": [
+    {
+     "label": "Help her look.",
+     "success": {
+      "text": "You wade in beside her and part the reeds, one handful at a time. It takes a long while. You find it caught on a root, upside down, the candle still in it. She holds it against her chest.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ls-child",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-hub"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Make her a new one.",
+     "success": {
+      "text": "You sit on the bank and fold one from your own paper, badly. She watches every crease. \"It's lopsided,\" she says, and takes it as if it were made of glass.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ls-child",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-36-jetty",
+   "name": "The Lantern Sea: The Jetty",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lanturn",
+    "tint": "#2f5f8f",
+    "effect": "none"
+   },
+   "intro": "The Lanturn waits at the end of the boards, light low, facing the open water.\n\nIt's waiting for one boat in particular. Nobody knows whose.",
+   "choices": [
+    {
+     "label": "Float a boat.",
+     "success": {
+      "text": "You crouch at the edge, the paper boat in your hands. The brush is wet. You think about whose name goes on it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-name"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ls-boat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Just watch.",
+     "success": {
+      "text": "You sit at the end of the jetty and watch the others go. One by one the little lights leave the shore. The Lanturn follows none of them. It waits. Eventually you get up, and go.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Watched the boats go out on the Lantern Sea.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the shore.",
+     "success": {
+      "text": "You leave it waiting.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-36-name",
+   "name": "The Lantern Sea: A Name",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lanturn",
+    "tint": "#2f5f8f",
+    "effect": "none"
+   },
+   "intro": "The ink pools at the nib. The boat is very small.\n\nWhose name goes on it?",
+   "choices": [
+    {
+     "label": "Write the name of one you lost.",
+     "success": {
+      "text": "You write it slowly, the whole name, the way they were called. The letters spread a little in the paper. You don't wipe your eyes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-float"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lsLost"
+      }
+     ]
+    },
+    {
+     "label": "Write the name of one you let go.",
+     "success": {
+      "text": "You write it. It looks smaller on paper than it was. You hope wherever they are, they're warm.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-float"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lsLetGo"
+      }
+     ]
+    },
+    {
+     "label": "Write a name nobody else will read.",
+     "success": {
+      "text": "You write a name that isn't a Pokémon's. You fold the paper over it before anyone can see.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-36-float"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-36-float",
+   "name": "The Lantern Sea: The Boat",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lanturn",
+    "tint": "#2f5f8f",
+    "effect": "none"
+   },
+   "intro": "You light the candle from the one beside you. You set the boat on the water, and push, very gently.\n\nThe Lanturn at the jetty turns. It slides after the boat without a sound, and its light goes on ahead, wide and warm, down the dark water, so the boat has somewhere to go.\n\nUnder it, all across the bay, the Chinchou lights flicker once, together. Like a nod.",
+   "choices": [
+    {
+     "label": "Watch it all the way out.",
+     "success": {
+      "text": "You watch until the boat is a spark, and then not even that. Something small bumps your ankle: a Chinchou, fat and pleased with itself. It liked your boat. It follows you back up the shore.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "chinchou"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "guiding-light",
+        "mark": "lantern-chinchou"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lantern-boat",
+        "n": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Floated a boat for someone lost, on the Lantern Sea. The Lanturn lit its way.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

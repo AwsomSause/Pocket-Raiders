@@ -1655,6 +1655,11 @@
   "description": "Its stats can't be lowered by opponents."
  },
  {
+  "id": "guiding-light",
+  "name": "Guiding Light",
+  "description": "Its moves are 20% more accurate."
+ },
+ {
   "id": "far-from-home",
   "name": "Far From Home",
   "description": "Its stats are 10% higher in any region that isn't its own."
