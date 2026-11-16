@@ -1,0 +1,1257 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [
+  "pp-rematch-exceptional"
+ ],
+ "events": [
+  {
+   "id": "pp-cold-open",
+   "name": "Poli-Pond: The Little Pokémon That Could",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 2,
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pp-begun",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "pp-walked",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "poliwag",
+    "tint": "#1f4a63",
+    "effect": "rain"
+   },
+   "intro": "The reeds shake. A Poliwag is shoved out of them, skids across the mud, and stops at your feet. It is small, even for a Poliwag.\n\nIt hides behind your legs. Five heads rise out of the water.\n\n*Burl slaps the surface with his palm. The other three slap it too, late.*\n\n*The Poliwag presses its face into the back of your knee.*\n\n*The fifth head, at the back, sinks lower, until only its eyes show.*",
+   "choices": [
+    {
+     "label": "Stand in front of it.",
+     "success": {
+      "text": "You do not raise your voice. You only move, and stop being someone walking past and become a wall. Burl squirts water at your shoes, and goes under. The others follow him down. Behind you, the Poliwag lets out a breath it has been holding a very long time. When you walk on, it follows you.",
+      "effects": [
+       {
+        "kind": "pond",
+        "action": "begin"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "pp-stage"
+       },
+       {
+        "kind": "flag",
+        "key": "poli-joined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Step aside.",
+     "success": {
+      "text": "You step aside. It is not your pond. Webbed hands reach out of the reeds and drag the Poliwag back in, and it does not even cry out. It looks at the ground the whole way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pp-walked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-walked-past",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "pp-walked-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick it up.",
+     "success": {
+      "text": "You scoop it up. It goes rigid, then limp. It weighs nothing. It weighs nothing at all. Out on the water, the five heads watch you carry it away. When you set it down at the end of the bank, it follows you.",
+      "effects": [
+       {
+        "kind": "pond",
+        "action": "begin",
+        "gentle": true
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "pp-stage"
+       },
+       {
+        "kind": "flag",
+        "key": "poli-joined",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pp-walked-past",
+   "name": "A Poliwag Doing Well",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pp-walked",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "pp-walked-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "pp-walked-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "poliwag",
+    "tint": "#1f4a63",
+    "effect": "none"
+   },
+   "intro": "A trainer by the road is drilling a Poliwag. Small, even for a Poliwag. You know it at once.\n\nIt hits the target, every time. Its trainer cheers every time. It looks up, not at the ground.\n\nSomeone else stood in front of it. It's doing well.",
+   "choices": [
+    {
+     "label": "Watch a while, then walk on.",
+     "success": {
+      "text": "It does not see you. That is all right. You walk on lighter than you came, and a little heavier, both at once.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pp-walked-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pp-lesson-aim",
+   "name": "Lesson: Aim",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "rest",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pp-begun",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "sameStage",
+     "key": "pp-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "pp-lesson-aim",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "pp-ending-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "poliwag",
+    "tint": "#1f4a63",
+    "effect": "float"
+   },
+   "intro": "You set three Berries on a log and step back. It spits water at them.\n\nThe first shot hits you. Square in the face.\n\nThe Poliwag freezes. Its whole face is already apologising. It knows exactly how this goes: someone shouts, and then it is on the ground.",
+   "choices": [
+    {
+     "label": "Laugh.",
+     "success": {
+      "text": "You laugh. You can't help it, dripping. It stares at you. Then it starts laughing too, a startled wheezing sound. It misses again, and laughs again, and on the second retry the middle Berry rolls off the log.",
+      "effects": [
+       {
+        "kind": "pond",
+        "action": "lesson",
+        "lesson": "aim",
+        "bond": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Try again, slower.",
+     "success": {
+      "text": "You crouch beside it, wipe your face, and say: slower. Eyes open. It takes a breath. The next jet clips the middle Berry, and it tips off the log. The Poliwag turns to you with its whole body.",
+      "effects": [
+       {
+        "kind": "pond",
+        "action": "lesson",
+        "lesson": "aim",
+        "firstTry": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move the log closer.",
+     "success": {
+      "text": "You move the log closer. Much closer. It hits the Berry. It hits it again. It is very pleased. You are not sure it would hit anything from where it started.",
+      "effects": [
+       {
+        "kind": "pond",
+        "action": "lesson",
+        "lesson": "aim",
+        "weak": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pp-lesson-footing",
+   "name": "Lesson: Footing",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "rest",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pp-begun",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "sameStage",
+     "key": "pp-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "pp-lesson-footing",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "pp-ending-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "poliwag",
+    "tint": "#1f4a63",
+    "effect": "float"
+   },
+   "intro": "Your lead pushes it, gently. It is meant to hold.\n\nIt rolls all the way down the bank and into the mud at the bottom, and lies there with its eyes shut.\n\nIt has spent so long being pushed that the world has become a series of shoves.",
+   "choices": [
+    {
+     "label": "Go and get it.",
+     "success": {
+      "text": "You go down the bank and pick it out of the mud and wipe its face. It goes down twice more. Each time you go and get it. On the second retry it holds, and looks down at its own feet as if it has never met them.",
+      "effects": [
+       {
+        "kind": "pond",
+        "action": "lesson",
+        "lesson": "footing",
+        "bond": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for it to climb back.",
+     "success": {
+      "text": "You wait at the top. It climbs back on its own, muddy to the eyes, and plants its feet without being told. The next push, it holds. It doesn't even blink.",
+      "effects": [
+       {
+        "kind": "pond",
+        "action": "lesson",
+        "lesson": "footing",
+        "firstTry": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show it how you stand.",
+     "success": {
+      "text": "You show it: feet apart, knees soft. It copies you exactly, and holds, and looks proud. It holds when it is thinking about it. You hope it will be thinking about it.",
+      "effects": [
+       {
+        "kind": "pond",
+        "action": "lesson",
+        "lesson": "footing",
+        "weak": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pp-lesson-stand",
+   "name": "Lesson: Standing Its Ground",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "rest",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pp-begun",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "sameStage",
+     "key": "pp-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "pp-lesson-stand",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "pp-ending-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "poliwag",
+    "tint": "#1f4a63",
+    "effect": "float"
+   },
+   "intro": "Without warning, you clap. Loudly.\n\nIt bolts into the reeds.\n\nYou see the shape of what the pond has taught it all along: when something big makes a noise, you run.",
+   "choices": [
+    {
+     "label": "Don't chase. Sit down.",
+     "success": {
+      "text": "You don't chase. You sit down in the grass, small, and wait. A long time later it comes out and sits beside you. When you clap again, it flinches, and stays.",
+      "effects": [
+       {
+        "kind": "pond",
+        "action": "lesson",
+        "lesson": "stand",
+        "firstTry": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call its name.",
+     "success": {
+      "text": "You call its name. Nothing. You call again, softer. A pair of eyes in the reeds. On the second retry it stays where it is when you clap, shaking, and doesn't run.",
+      "effects": [
+       {
+        "kind": "pond",
+        "action": "lesson",
+        "lesson": "stand",
+        "bond": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Clap again, softer.",
+     "success": {
+      "text": "You clap again, softer. And softer. It stays for the soft ones. You are not sure what it will do when someone claps hard.",
+      "effects": [
+       {
+        "kind": "pond",
+        "action": "lesson",
+        "lesson": "stand",
+        "weak": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pp-pond-visit",
+   "name": "The One Who Hangs Back",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pp-begun",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "pp-ending-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "pp-guilty",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "poliwhirl",
+    "tint": "#1f4a63",
+    "effect": "fog"
+   },
+   "intro": "Back at the pond. The fifth Poliwhirl is alone on the bank.\n\n*It sees the Poliwag on your shoulder. It looks away.*\n\n*In the mud by its feet, an old stake with a rope: this was a guard post, once. The rope's chewed through.*",
+   "choices": [
+    {
+     "label": "Sit down next to it.",
+     "success": {
+      "text": "You sit down next to it, and say nothing. After a while it scratches a picture in the mud with one finger.\n\nTrainers with nets. Then the pond. Then five Poliwhirl in a line in front of the pond.\n\nThen, smaller, the same five, in a ring around something little.\n\nIt rubs the last one out with its foot.",
+      "effects": [
+       {
+        "kind": "pond",
+        "action": "guilty"
+       },
+       {
+        "kind": "flag",
+        "key": "poli-guilty-found",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask it why.",
+     "success": {
+      "text": "You ask it why. It looks at the stake, and the chewed rope, and then at the water for a long time. It doesn't answer. Maybe it doesn't know how to.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it on the bank with its back to the water. It doesn't watch you go. It's watching the Poliwag.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "pp-rematch",
+   "name": "The Rematch at the Pond",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "callback": true,
+   "minStage": 3,
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pp-begun",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "pp-stage"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "pp-lost-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "pp-ending-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "pp-rematch-won",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pp-lost-stage",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Burl is waiting again, arms folded. The Poliwag looks at him. Then it looks at you, and walks out to the water by itself."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "poliwhirl",
+    "tint": "#1f4a63",
+    "effect": "rain"
+   },
+   "intro": "Back at the pond. The five are waiting in a half circle, and Burl steps out of the reeds with his arms folded. Burl is two levels above the Poliwag. He always has been.\n\nOne on one. The Poliwag against Burl. He has three tricks. You taught it three things.\n\nThe Poliwag is shaking. It steps out in front of you anyway.",
+   "choices": [
+    {
+     "label": "Let it step forward.",
+     "success": {
+      "text": "You step back. It is the hardest thing you have done all stage.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "poliwhirl"
+       ],
+       "name": "Burl",
+       "classId": "roughneck",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "pond",
+         "action": "rematchWon"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "pp-ending"
+        }
+       ],
+       "spritePokemon": "poliwhirl",
+       "pseudo": true,
+       "rule": {
+        "pondDuel": true,
+        "noSwitch": true,
+        "matchLead": true
+       },
+       "lose": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "pp-lost-stage"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "pp-rematch-lost"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pp-exceptional",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Let it step forward.",
+     "success": {
+      "text": "You step back. The Poliwag doesn't look at you for permission. It looks at Burl.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "poliwhirl"
+       ],
+       "name": "Burl",
+       "classId": "roughneck",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "pond",
+         "action": "rematchWon"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "pp-ending"
+        }
+       ],
+       "spritePokemon": "poliwhirl",
+       "pseudo": true,
+       "rule": {
+        "pondDuel": true,
+        "noSwitch": true,
+        "matchLead": true,
+        "evolveMid": true
+       },
+       "lose": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "pp-lost-stage"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "pp-rematch-lost"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pp-exceptional",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "pp-rematch-lost",
+   "name": "It Gets Up",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "poliwag",
+    "tint": "#1f4a63",
+    "effect": "rain"
+   },
+   "intro": "It gets up.\n\nIt bows to Burl. Then it turns and walks back to you, and stands by your boot, and looks at the pond.\n\nIt isn't over. There will be another pond, another day, at the next water.",
+   "choices": [
+    {
+     "label": "Walk on together.",
+     "success": {
+      "text": "It walks beside you. It doesn't look at the ground.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "The Poliwag lost to Burl, got up, and bowed. It will try again at the next water.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pp-ending",
+   "name": "After the Pond",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "poliwag",
+    "tint": "#1f4a63",
+    "effect": "sparkle"
+   },
+   "intro": "It is very quiet after. Burl is sitting in the shallows with his head down. The other four have gone silent.\n\nThe Poliwag stands in front of you, dripping, out of breath, unbelievably proud. Nobody has ever hit it back before.\n\nIt turns from the pond to you.",
+   "choices": [
+    {
+     "label": "Come with me.",
+     "success": {
+      "text": "You hold out a hand. It looks at it as if it might disappear. Then it puts a damp palm on yours. When it steps aside for a friend now, the friend goes first. It learned that from someone.",
+      "effects": [
+       {
+        "kind": "pond",
+        "action": "keep"
+       },
+       {
+        "kind": "flag",
+        "key": "poli-ending-keep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "This is your pond now.",
+     "success": {
+      "text": "It looks at the water. It looks back at you. It understands before you finish.\n\nIt stays at the edge with its chin up. By the time you reach the road, small Poliwag are lining up in front of it.",
+      "effects": [
+       {
+        "kind": "pond",
+        "action": "release"
+       },
+       {
+        "kind": "flag",
+        "key": "pp-pond-founded",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "poli-ending-release",
+        "amount": 1
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pp-guilty",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "This is your pond now.",
+     "success": {
+      "text": "The guilty one walks out of the reeds and stands beside the Poliwag.\n\nThen Burl does. He doesn't apologise. He holds the reeds back for it.\n\nBy the time you reach the road, small Poliwag are lining up in front of all of them.",
+      "effects": [
+       {
+        "kind": "pond",
+        "action": "reconcile"
+       },
+       {
+        "kind": "flag",
+        "key": "pp-pond-founded",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "poli-ending-reconcile",
+        "amount": 1
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pp-guilty",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sky.opening",
+   "name": "Pidgey's Resolve",
+   "group": "Rival episodes",
+   "tags": [
+    "Story",
+    "Rival",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "sky",
+     "when": "opening"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgey",
+    "tint": "#31404f",
+    "effect": "glint"
+   },
+   "intro": "A Pidgey and a Spearow are fighting over one branch. Feathers on the ground, brown and speckled, more of them brown.\n\nIt is only a branch. Neither of them will say why it matters. That is how you know it does.\n\nThen they both stop, and look at you. As if you were the one who decides.",
+   "choices": [
+    {
+     "label": "Back the Pidgey.",
+     "success": {
+      "text": "You say it quietly: come on, little one. The Pidgey hears. The branch shakes. It begins.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "duel",
+        "side": "pidgey"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Back the Spearow.",
+     "success": {
+      "text": "You say it plainly, because it is the bigger bird and the louder. The Pidgey hears that too. The branch shakes. It begins.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "duel",
+        "side": "spearow"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky.meet",
+   "name": "A Shape on a Fence Post",
+   "group": "Rival episodes",
+   "tags": [
+    "Story",
+    "Rival",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "sky",
+     "when": "meet"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "nest",
+     "when": [
+      {
+       "kind": "sky",
+       "when": "nest"
+      }
+     ],
+     "notice": "Behind it, in the fork of the fence, is its nest. It is lined with everything you ever gave it: every one, kept, tucked in, the way you keep letters."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgey",
+    "tint": "#2a3b52",
+    "effect": "glint"
+   },
+   "intro": "*A shape on a fence post. It's bigger than last time.*\n\nIt does not chirp a greeting. It stands very straight and looks at you the way you look at a door you are going to walk through someday.\n\nSomewhere above the clouds, a larger shape turns without a sound. It does not look up. That is how you know it knows.",
+   "choices": [
+    {
+     "label": "Spar with it.",
+     "success": {
+      "text": "It bows its head, one small, formal dip. Whatever beats it, it will carry an answer to next time.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "meetSpar"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Pidgey",
+       "team": [
+        "pidgey"
+       ],
+       "size": 1,
+       "pseudo": true,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "sky",
+         "act": "sparWon"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "sky",
+         "act": "sparLost"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Give it something.",
+     "requires": [
+      {
+       "kind": "sky",
+       "when": "giftAny"
+      }
+     ],
+     "success": {
+      "text": "You hold it out. It does not take it at first. Nobody has ever just given it something.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "giftAny"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just watch.",
+     "success": {
+      "text": "You lean on the fence and say nothing at all.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "watch"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky.alone",
+   "name": "Training Alone",
+   "group": "Rival episodes",
+   "tags": [
+    "Story",
+    "Rival",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "sky",
+     "when": "alone"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgey",
+    "tint": "#27384a",
+    "effect": "glint"
+   },
+   "intro": "*It's diving at a rock, pulling up, diving again. It doesn't notice you.*\n\n*There's a Fearow feather stuck in the rock. It's been aiming at that.*\n\nThe grass is flattened in a ring where it has fallen a hundred times. Nobody watching. Nobody keeping score.",
+   "choices": [
+    {
+     "label": "Leave quietly.",
+     "success": {
+      "text": "You back away, one step at a time, until the rock is behind the hill.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "aloneLeave"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call out.",
+     "success": {
+      "text": "You call its name.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "aloneCall"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky.finale",
+   "name": "The Cliff in High Wind",
+   "group": "Rival episodes",
+   "tags": [
+    "Story",
+    "Rival",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "epic",
+   "forced": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "sky",
+     "when": "finale"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "backed-spearow",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pidgey-backed-spearow",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Before it begins, Pidgeot looks at you. Then it looks away. It has not forgotten which bird you backed, on the first day, at the branch."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgeot",
+    "tint": "#1d2a3d",
+    "effect": "glint"
+   },
+   "intro": "A cliff. High wind. Wild Pokémon on every ledge, watching: they felt it coming, the way a field feels rain.\n\nPidgeot on the high rock with its crest into the gale. Across the gap, Fearow lands with its wings half-folded, and says nothing.\n\n*They circle once. Neither is the bird from the branch.*",
+   "choices": [
+    {
+     "label": "Climb to the ridge and watch.",
+     "success": {
+      "text": "You climb to the ridge above them, and the wind takes your breath, and you do not look away.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "fearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Give Pidgeot a last Berry before it begins.",
+     "requires": [
+      {
+       "kind": "sky",
+       "when": "giftBerry"
+      }
+     ],
+     "success": {
+      "text": "You hold it up. Pidgeot lowers its great head and takes it, and does not need to say anything. Then you climb the ridge.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "finaleGiftBerry"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "fearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Give Pidgeot something to hold before it begins.",
+     "requires": [
+      {
+       "kind": "sky",
+       "when": "giftItem"
+      }
+     ],
+     "success": {
+      "text": "You press it into its claws and step back. It will carry it into the wind. It will keep it to the end.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "finaleGiftItem"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "fearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky.rematch",
+   "name": "One More Fight",
+   "group": "Rival episodes",
+   "tags": [
+    "Story",
+    "Rival",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "epic",
+   "forced": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "sky",
+     "when": "rematch"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgeot",
+    "tint": "#2a2230",
+    "effect": "glint"
+   },
+   "intro": "Pidgeot is waiting on the road, as if it had been waiting since the cliff. It does not look at you.\n\nIt did not leave the road, either. It is standing exactly where you will have to pass.\n\nIt wants one more fight. Under the anger, you see now, is only a question: did you mean it?",
+   "choices": [
+    {
+     "label": "Fight it.",
+     "success": {
+      "text": "You step up. It meets your eye for the first time since the cliff.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Pidgeot",
+       "team": [
+        "pidgeot"
+       ],
+       "size": 1,
+       "pseudo": true,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "sky",
+         "act": "rematchWon"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "sky",
+         "act": "rematchLost"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

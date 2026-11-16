@@ -23054,6 +23054,54 @@
       "hitStopMs": 68,
       "telegraph": "normal"
     },
+    "shades-down": {
+      "anim": "dark-pulse",
+      "source": "type",
+      "shake": 2,
+      "flash": null,
+      "hitStopMs": 67,
+      "telegraph": "normal"
+    },
+    "tidal-surge": {
+      "anim": "surf",
+      "source": "type",
+      "shake": 2,
+      "flash": "#6890f0",
+      "hitStopMs": 70,
+      "telegraph": "normal"
+    },
+    "proof": {
+      "anim": "mega-punch",
+      "source": "type",
+      "shake": 2,
+      "flash": null,
+      "hitStopMs": 63,
+      "telegraph": "normal"
+    },
+    "two-trainers": {
+      "anim": "double-hit",
+      "source": "type",
+      "shake": 2,
+      "flash": null,
+      "hitStopMs": 60,
+      "telegraph": "normal"
+    },
+    "foster-wing": {
+      "anim": "wing-attack",
+      "source": "type",
+      "shake": 2,
+      "flash": null,
+      "hitStopMs": 60,
+      "telegraph": "normal"
+    },
+    "stamp": {
+      "anim": "stomp",
+      "source": "type",
+      "shake": 3,
+      "flash": null,
+      "hitStopMs": 70,
+      "telegraph": "normal"
+    },
     "keepers-lamp": {
       "anim": "oceanic-operetta",
       "source": "type",
@@ -23070,6 +23118,78 @@
       "hitStopMs": 87,
       "telegraph": "strong",
       "chargeAnim": "ice-burn-charging"
+    },
+    "last-stop": {
+      "anim": "shadow-ball",
+      "source": "type",
+      "shake": 2,
+      "flash": null,
+      "hitStopMs": 65,
+      "telegraph": "normal"
+    },
+    "welcome-home": {
+      "anim": "lick",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705898",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "summit": {
+      "anim": "explosion",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8a878",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "the-long-game": {
+      "anim": "explosion",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8a878",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "with-you": {
+      "anim": "explosion",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8a878",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "seen-it": {
+      "anim": "explosion",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8a878",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "three-schools": {
+      "anim": "focus-punch",
+      "source": "type",
+      "shake": 3,
+      "flash": "#c03028",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "house-call": {
+      "anim": "charge",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "encore-performance": {
+      "anim": "defend-order",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
     }
   },
   "commonPack": {

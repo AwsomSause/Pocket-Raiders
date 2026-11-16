@@ -40,6 +40,7 @@ import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { tourneyHome, tourneyPage, tourneyRounds } from '../ui/redux/screens/bracket';
 import { eventView as rxEventView } from '../ui/redux/screens/event';
 import type { HonestModel, HonestSide } from '../ui/redux/screens/stops';
+import type { TeamModel } from '../ui/redux/screens/team';
 
 
 const BOTTOM_H = 168;
@@ -79,6 +80,9 @@ export class EventScene extends Phaser.Scene {
   private pickSure: string | null = null;
   /** New UI: the event's trade card is open to read (T), before a choice is made. */
   private rxCard = false;
+  /** New UI, rival scenes after The Borrowed Team: the rival's team page is open. */
+  private rxTeam = false;
+  private toggleTeam: (() => void) | null = null;
   /** New UI, Honest Trade Card page: the cursor is on Trade (0) or Back (1). */
   private pickFocus: 0 | 1 = 0;
   private result: EventResult | null = null;
@@ -115,6 +119,8 @@ export class EventScene extends Phaser.Scene {
     this.picker = null;
     this.pickSure = null;
     this.rxCard = false;
+    this.rxTeam = false;
+    this.toggleTeam = null;
     this.result = null;
     this.leaving = false;
     this.fullLayer = null;
@@ -260,6 +266,16 @@ export class EventScene extends Phaser.Scene {
       // The job offer's chip says what joining is worth, as on the mock-up.
       const groupTag = `${view.event.group} · ${view.event.rarity.charAt(0).toUpperCase()}${view.event.rarity.slice(1)}`;
       const tag = view.event.id === 'stand-with-recruiter' && !standWithOf(run) ? `Reputation +${STAND.joinRep} if you join` : groupTag;
+      const teamPage = (): TeamModel | null => (view.team && this.rxTeam && this.phase === 'choose' ? { rival: view.team.rival, cards: view.team.mons.map((m) => ({ name: m.name, file: monFile(this, m.speciesId, 'icon'), level: m.level, types: m.types, moves: m.moves })) } : null);
+      if (view.team) {
+        this.toggleTeam = (): void => {
+          if (this.phase !== 'choose' || this.rxBracket !== null || this.rxCard) return;
+          this.rxTeam = !this.rxTeam;
+          playSfx(this, 'ui.select', 0.4);
+          this.rx?.refresh();
+        };
+        this.input.keyboard?.on('keydown-R', this.toggleTeam);
+      }
       // A department store floor: the directory, and who each good on the shelf helps (a stone that evolves it, medicine for the hurt).
       const store = storeOf(view.event.id);
       const helps = (live: typeof run): string[][] => view.event.choices.map((ch) => {
@@ -306,6 +322,8 @@ export class EventScene extends Phaser.Scene {
               const card = joined ? codeNameCard(r.run, content.evilTeams.teams.find((t) => t.id === joined.team)?.name ?? joined.team, content.regions.get(joined.region)?.name ?? joined.region) : null;
               return card ? { name: card.alias, rank: card.rank, facts: card.facts, trainer: bossArt(card.givenBy), badges: r.run.badges.length } : null;
             })(),
+            team: teamPage(),
+            teamHint: !!view.team && this.phase === 'choose' && !out,
             cardHint: eventCard !== null && this.phase === 'choose' && !out,
             bracket: tv && this.rxBracket !== null ? tourneyPage(tv, (sp) => monFile(this, sp), this.rxBracket, 'Saffron Fighting Tournament') : null,
             title: champion ? 'CHAMPION' : null,
@@ -320,9 +338,10 @@ export class EventScene extends Phaser.Scene {
           next: () => this.advanceOutcome(),
           trade: (k) => { if (!this.picker?.picks[Number(k)]) return; this.pickAt(Number(k)); this.tryTrade(); },
           card: () => this.toggleCard?.(),
+          team: () => this.toggleTeam?.(),
+          back: () => (this.rxTeam ? this.toggleTeam?.() : this.rxCard ? this.toggleCard?.() : this.handlePick('back')),
           // The Honest Trade Card page: Trade, Back, and the arrows that step through the player's fitting Pokémon.
           accept: () => this.tryTrade(),
-          back: () => (this.rxCard ? this.toggleCard?.() : this.handlePick('back')),
           step: (k) => { const pk = this.picker; if (pk) this.pickAt((pk.at + Number(k) + pk.picks.length) % pk.picks.length); },
         },
         overs: { over: (k) => this.focus(Number(k)), tradeOver: (k) => this.pickAt(Number(k)), acc: () => this.pickFocusAt(0), dec: () => this.pickFocusAt(1) },
@@ -436,6 +455,10 @@ export class EventScene extends Phaser.Scene {
       else this.rxBracket = null;
       playSfx(this, 'ui.select', 0.3);
       this.rx?.refresh();
+      return;
+    }
+    if (this.rxTeam) {
+      if (action === 'confirm' || action === 'back') this.toggleTeam?.();
       return;
     }
     if (this.rxCard) {

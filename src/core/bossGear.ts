@@ -31,6 +31,9 @@ function itemPlan(content: Content, m: PlannedMember, isLead: boolean, isAce: bo
   return [...new Set(out)];
 }
 
+/** gn.42: the item a Frontier Brain's Pokémon holds at Gold rank and above (the first that fits it). */
+export const heldPick = (content: Content, m: PlannedMember, isLead: boolean, isAce: boolean): string | undefined => itemPlan(content, m, isLead, isAce)[0];
+
 export function gearMember(content: Content, m: PlannedMember, tier: GearTier, isLead: boolean, isAce: boolean, itemsPer: number): PlannedMember {
   const t = TIERS[tier];
   const s = getSpecies(content, m.speciesId).baseStats;

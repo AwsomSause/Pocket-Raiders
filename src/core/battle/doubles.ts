@@ -17,6 +17,7 @@
 // Costar, Receiver, Power of Alchemy, Commander, Dancer, Symbiosis; the
 // damage and status ones are in engine.ts). Uses only the battle stream.
 
+import { callNote } from '../greenneedle/cheer';
 import targetsJson from '../../data/moveTargets.json';
 import type { BoostStat, Move } from '../contentSchema';
 import { abilityOf, calcStats, getSpecies } from '../pokemon';
@@ -764,7 +765,10 @@ function enemyChoice(ctx: BattleContext, field: Field, foe: Combatant, events: B
     if (kind !== 'single' && kind !== 'random') return { score: value(players[0]!) };
     // A single target: the one it hurts most.
     const defOf = (p: Combatant) => { const st = calcStats(content, p.mon); return move.category === 'special' ? st.spd : st.def; };
-    const best = battle.eventRule?.sniper ? players.reduce((b, p) => (defOf(p) < defOf(b) ? p : b)) : players.reduce((b, p) => (value(p) > value(b) ? p : b));
+    // Greenneedle gn.22: the foes go for the marked Pokémon while it stands (the birds and the Cubone).
+    const mark = battle.eventRule?.aimMark;
+    const marked = mark ? players.find((p) => p.mon.gn?.includes(mark)) : undefined;
+    const best = marked ?? (battle.eventRule?.sniper ? players.reduce((b, p) => (defOf(p) < defOf(b) ? p : b)) : players.reduce((b, p) => (value(p) > value(b) ? p : b)));
     return { score: value(best), target: { side: 'player', spot: field.spotOf(best)! } };
   };
   const usable = foe.mon.moves.map((m, i) => ({ m, i })).filter((x) => x.m.pp > 0);
@@ -842,6 +846,8 @@ function runPlanned(ctx: BattleContext, field: Field, turn: TurnState, p: Planne
   // Dancer: other dancers copy a dance move that worked.
   const used = events.slice(mark).some((e) => e.type === 'move' && e.side === user.side && e.moveId === move.id);
   if (used && DANCES.has(move.id)) dancers(ctx, field, turn, user, move, events);
+  // Call and Response (gn.new.30): a status move from one of the pair gives the other +1 priority next turn.
+  if (used && user.side === 'player') callNote(ctx.battle, user.mon, field.alive('player').find((c) => c !== user)?.mon, move.category === 'status');
   symbiosis(ctx, field, heldBefore, events);
   field.on(user, events);
 }

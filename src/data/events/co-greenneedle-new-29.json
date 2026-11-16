@@ -1,0 +1,195 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-29-hats",
+   "name": "The Borrowed Team",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "borrow-met",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "rivalTrust",
+     "n": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#46506a",
+    "effect": "none"
+   },
+   "intro": "A referee holds out two hats. One is yours. One is theirs. Nobody has told the Pokémon yet.\n\n**Referee:** \"Exhibition rules. You wear theirs. They wear yours. So do the Pokémon.\"\n\n**{borrow:name}:** {borrow:dont}\n\n*Your lead looks from the rival to you, and back again. It has never been asked to trust a stranger before.*",
+   "choices": [
+    {
+     "label": "Swap.",
+     "success": {
+      "text": "You put on their hat. It is a size too big, and warm, and smells faintly of their bag. The Pokémon are led across the ring.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "borrowStart"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-29-fight"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "You hand the hat back. The referee shrugs; the rival laughs, a little relieved. Your Pokémon lean against your legs.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "borrow-met",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-29-fight",
+   "name": "The Borrowed Team: The Match",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#46506a",
+    "effect": "none"
+   },
+   "intro": "You stand at the edge of the ring with their team at your feet. Their moves. Their habits. Their quiet, particular ways of waiting.\n\nAcross from you, {borrow:name} holds **your** team. Your {borrow:mine} is in front, looking over its shoulder at you.\n\n*Behind you, {borrow:theirs} looks across the ring at its trainer, then at you. It has not decided what to do about this.*",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The referee drops his hand. Each Pokémon glances over its shoulder first, then obeys.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "borrowEnd",
+         "n": 0
+        },
+        {
+         "kind": "moment",
+         "text": "Lost an exhibition with the rival's team, while the rival used yours.",
+         "importance": 55
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-29-after"
+        }
+       ],
+       "rule": {
+        "gn": "borrowed"
+       },
+       "name": "Exhibition",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "borrowEnd",
+         "n": 1
+        },
+        {
+         "kind": "item",
+         "id": "lucky-egg",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Won an exhibition with the rival's team, while the rival used yours.",
+         "importance": 70
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-29-after"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-29-after",
+   "name": "The Borrowed Team: Hats Off",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "won",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "borrow-result",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "*The referee raises your arm. It was the rival's team that did the winning, and the rival is trying hard not to look proud of them.*"
+    },
+    {
+     "id": "lost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "borrow-result",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "*The referee raises the rival's arm. Your own team did that, without you. They keep looking back at you to see if you mind.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#46506a",
+    "effect": "none"
+   },
+   "intro": "The hats come off. Each Pokémon goes home, slowly, and not in a straight line.\n\nOne of theirs, {borrow:theirs}, lingers at your knee a moment longer than it needs to. Across the ring, your {borrow:mine} has stopped beside {borrow:name} and will not be moved.\n\n**{borrow:name}:** {borrow:after}\n\n*You know their team now: every move, every habit. They know yours. Neither of you says so.*",
+   "choices": [
+    {
+     "label": "Hand back the hats.",
+     "success": {
+      "text": "The referee collects both hats and folds them over one arm. For a moment you and the rival just stand there, knowing each other a little too well.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,226 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-26-door",
+   "name": "The Rival's Missing Ace",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "rivalBeaten"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.rival"
+    ],
+    "tint": "#6a7a55",
+    "effect": "none"
+   },
+   "intro": "{rival} is in the road, turning out their bag onto the stones. Berries, Balls, a map, a broken clasp. They don't pretend to be fine.\n\n{say ace-missing||bitter-challenger::\"It's not stolen. I checked. It left.\" They don't look up.||prodigy::\"It isn't stolen. I checked everywhere. It *left*.\" They say it like a ruling, and the ruling hurts.||enthusiast::\"It's not stolen! I checked. It, um. It left.\" The grin they try for doesn't hold.||idealist::\"It's not stolen. I checked. It left. I think it had a reason, and I don't know the reason.\"||strategist::\"It's not stolen. I checked. It left. I have no theory for that, and I always have a theory.\"||protector::\"It's not stolen. I checked. It left. I should have seen it coming. I always see it coming.\"||underdog::\"It's not stolen. I checked. It left. Everyone leaves, sooner or later. I just thought it was different.\"||champion-chaser::\"It's not stolen. I checked. It left. A champion's ace doesn't leave. So what does that make me?\"}\n\n*Some rivals can't ask. Those ones just stand there. They are standing there now, and they are not asking.*",
+   "choices": [
+    {
+     "label": "I'll help you look.",
+     "success": {
+      "text": "You crouch down and start putting their things back in the bag. They let you. That alone says a lot.\n\n**{rival}:** \"It was my first. Before I was any good.\"\n\nThey walk beside you after that, close, scanning every bush. The road ahead bends toward the trees.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "rival-searching",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "ahead",
+        "key": "gn-new-26-s2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It'll come back.",
+     "success": {
+      "text": "You mean it kindly. It lands like a door closing.\n\n**{rival}:** \"Sure. It'll come back.\" They say it flat, the way you say a thing you've decided not to believe.\n\nThey gather the bag, and go alone. You hear them calling a name, down the road, until you can't.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1
+        }
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "rival-wasnt-there",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not my problem.",
+     "success": {
+      "text": "They look at you for a long moment. They don't argue. That is worse.\n\n**{rival}:** \"Right. Of course.\"\n\nThey pick up the bag, and walk the other way. Later, much later, you hear them finding it alone.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        }
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "rival-wasnt-there",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-26-s2",
+   "name": "The Rival's Missing Ace: The Second Step",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6a7a55",
+    "effect": "none"
+   },
+   "intro": "You search the roadside together: the ditch, the hollow log, the mouth of a drainage pipe. {rival} calls its name, over and over, less loudly each time.\n\n**{rival}:** \"I shouted at it. After the loss. I've never done that.\"\n\nThey don't look at you when they say it. They look at the ground, where a small set of tracks leads off the road.",
+   "choices": [
+    {
+     "label": "Follow the tracks.",
+     "success": {
+      "text": "The tracks are small and careful, a Pokémon that didn't want to be followed and didn't quite try to hide. You go on, together.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ahead",
+        "key": "gn-new-26-s3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-26-s3",
+   "name": "The Rival's Missing Ace: The Third Step",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6a7a55",
+    "effect": "none"
+   },
+   "intro": "The tracks cross a stream and climb a bank. {rival} stops at the top, hands on their knees. They're not out of breath.\n\n**{rival}:** \"If it's gone, I don't think I do this any more.\"\n\nYou have never heard them say anything that large. A long way off, on the wind, you hear a sound: something striking something, again and again.",
+   "choices": [
+    {
+     "label": "Follow the sound.",
+     "success": {
+      "text": "You push through the last of the brush. The sound gets louder, and then it gets very steady.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-26-found"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-26-found",
+   "name": "The Rival's Missing Ace: The Clearing",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6a7a55",
+    "effect": "none"
+   },
+   "intro": "A clearing. The ace is there, alone, in the middle of it, practising the move that failed. Over and over. The same motion, the same stumble, the same start again.\n\nIt hasn't eaten. It hasn't rested. It hasn't noticed you. {rival} has stopped breathing, a little, beside you.",
+   "choices": [
+    {
+     "label": "Stay.",
+     "success": {
+      "text": "**{rival}:** \"I'm sorry. It wasn't you. It was me.\"\n\nThe ace turns. It looks at {rival} for a long time, then walks over, and stands against their leg like it never left. They don't say anything else, and neither do you.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        }
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "rival-ace-found",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Helped the rival find the ace that walked away, and stayed to see it come home.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Step away.",
+     "success": {
+      "text": "You step back through the brush, until the clearing is only light between leaves. Someone is speaking, low, a long way off. You don't hear what's said.\n\nYou wait on the bank until {rival} comes up the path, eyes red, the ace walking at their heel. They nod to you once. That's all. It's enough.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 3
+        }
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "rival-ace-found",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "rival-gave-space",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Helped the rival find the ace that walked away, and gave them space to say sorry.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

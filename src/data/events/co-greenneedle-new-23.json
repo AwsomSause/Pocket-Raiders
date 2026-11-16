@@ -1,0 +1,1207 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-23-shop",
+   "name": "The Appliance Shop",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "appliance-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "appliance-open",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5a6670",
+    "effect": "none"
+   },
+   "intro": "*A repair shop with a crooked sign. In the window: a fan, a fridge, an oven, a washing machine and a lawnmower. They are all arguing, very faintly, in static.*\n\n**Repairman, Old Mr. Dufresne:** \"It's one of 'em. Gets about. I talk to each differently, and it likes all five chats.\"\n\n**Dufresne:** \"I'm closing Friday. It has to pick. Or not.\"",
+   "choices": [
+    {
+     "label": "Hear him out.",
+     "success": {
+      "text": "He gives you the first errand with a list, a pencil and a small, hopeful nod. \"Go on. It will be watching.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "appliance-open",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "appliance-hum",
+        "weights": [
+         1,
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-23-errand-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Behind you, the window argues on in static, a little quieter.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-23-errand-1",
+   "name": "The Appliance Shop: The Fan",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a6670",
+    "effect": "none"
+   },
+   "intro": "A neighbour's washing hangs on a line across the yard: sheets, small shirts, a good tablecloth. The sky to the west is going slate.\n\n**Dufresne:** \"Rain in the hour. She's a widow, that one. Those were her husband's shirts. Dry them, if you can.\"",
+   "choices": [
+    {
+     "label": "Point the fan at the washing.",
+     "success": {
+      "text": "It whirrs, and the sheets lift and billow. The last shirt is dry as the first drop falls. The neighbour waves from her door, hand over her mouth.\n\n*The light in the casing flickers, a different brightness for each.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "The little light in the casing goes steady, warm, and bright."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-23-errand-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-23-errand-2",
+   "name": "The Appliance Shop: The Fridge",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a6670",
+    "effect": "none"
+   },
+   "intro": "A fishmonger sets a crate of silver mackerel on the counter. His own ice machine broke at dawn, and the crate is already sweating.\n\n**Dufresne:** \"An hour, that's all he needs. Then it's his problem again. Don't let them go soft.\"",
+   "choices": [
+    {
+     "label": "Put the catch in the fridge.",
+     "success": {
+      "text": "The door clunks shut. Frost draws a fern across the glass. An hour later every fish is as bright as the morning sea. The fishmonger pays with a handshake and one cold mackerel.\n\n*The light in the casing flickers, a different brightness for each.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "The little light in the casing glows a clear, cold blue, and hums."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-23-errand-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-23-errand-3",
+   "name": "The Appliance Shop: The Oven",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a6670",
+    "effect": "none"
+   },
+   "intro": "A baker in a floury apron stands in the doorway, near tears. Her oven is cold, forty loaves are proved, and the bell on the shop door has not stopped.\n\n**Dufresne:** \"Bread rises once. Nobody should have to tell a town it can't have breakfast.\"",
+   "choices": [
+    {
+     "label": "Bake the bakery's bread.",
+     "success": {
+      "text": "The oven roars. The smell fills the street and it brings the whole street, one by one. Forty loaves, golden. The baker presses the first into your hands, too hot to hold, and doesn't let go till you do.\n\n*The light in the casing flickers, a different brightness for each.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "The little light in the casing burns a deep amber. It hums the whole time the bread is rising."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-23-errand-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-23-errand-4",
+   "name": "The Appliance Shop: The Washer",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a6670",
+    "effect": "none"
+   },
+   "intro": "Forty white uniforms, folded in four tall piles. The dojo's tournament is tomorrow, and every one has a belt-stain that has been there since last year.\n\n**Dufresne:** \"Forty. They're proud of those uniforms. Do them like they're yours.\"",
+   "choices": [
+    {
+     "label": "Wash the dojo's forty uniforms.",
+     "success": {
+      "text": "The drum thunders round and round, and the water goes grey, then clear. Forty uniforms, white as the day they were folded. A small girl in a belt too big for her bows to the machine.\n\n*The light in the casing flickers, a different brightness for each.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "The little light in the casing sloshes and glitters. For a moment, it hums in time with the drum."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-23-errand-5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-23-errand-5",
+   "name": "The Appliance Shop: The Mower",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a6670",
+    "effect": "none"
+   },
+   "intro": "The school field has gone to seed over the holidays. Grass up to a child's knees. The first day back is tomorrow, and the teachers are out with scissors.\n\n**Dufresne:** \"Back and forth. Back and forth. It likes lines. I think that's the whole secret of it.\"",
+   "choices": [
+    {
+     "label": "Cut the school field.",
+     "success": {
+      "text": "Row after row, straight as a ruled page. The grass smells green and sweet. By dusk the field is a stripe-pattern of two greens, and the teachers put their scissors down and clap.\n\n*The light in the casing flickers, a different brightness for each.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "The little light in the casing spins and whirs with the blades, steady and bright."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-23-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-23-after",
+   "name": "The Appliance Shop: After the Errands",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a6670",
+    "effect": "none"
+   },
+   "intro": "Five errands, and the shop is quiet. The Rotom hangs between the appliances, one light on, and looks at you.\n\n**Dufresne:** \"Now. Say it, if you know it. Or don't. It's a fine thing either way.\"",
+   "choices": [
+    {
+     "label": "\"You liked that one.\"",
+     "success": {
+      "text": "You think back over the day. Which one did it hum through?",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-23-name-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You don't have to pick.\"",
+     "success": {
+      "text": "It lets the shop be. It steps out of the tangle of wires, plain, one little light, with Mr. Dufresne's old radio carried under one arm. The radio crackles. Somewhere it is playing a song. It knows the words.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rotom"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "house-call",
+        "species": "rotom"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "appliance-done",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Rotom left an appliance shop plain, carrying a radio.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-23-name-1",
+   "name": "The Appliance Shop: Name It",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a6670",
+    "effect": "none"
+   },
+   "intro": "You look at the five of them. It waits, very still, light low.",
+   "choices": [
+    {
+     "label": "The fan.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "appliance-hum",
+         "atLeast": 1,
+         "atMost": 1
+        }
+       ],
+       "text": "You say it. The light jumps, like a held breath let go. It settles into the fan, and the fan settles around it. It stays.",
+       "effects": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "rotom-fan"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "appliance-done",
+         "n": 1
+        },
+        {
+         "kind": "moment",
+         "text": "A Rotom chose its form in an appliance shop, and it was the one it loved.",
+         "importance": 70
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It tries the one you named. It is fine. It is not right. It looks at you, a little sorry, and goes back, then finds the one that hummed and takes that for itself.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-fan"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-frost"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-heat"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-wash"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-mow"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "appliance-done",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Rotom chose its form in an appliance shop.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "The fridge.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "appliance-hum",
+         "atLeast": 2,
+         "atMost": 2
+        }
+       ],
+       "text": "You say it. The light jumps, like a held breath let go. It settles into the fridge, and the fridge settles around it. It stays.",
+       "effects": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "rotom-frost"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "appliance-done",
+         "n": 1
+        },
+        {
+         "kind": "moment",
+         "text": "A Rotom chose its form in an appliance shop, and it was the one it loved.",
+         "importance": 70
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It tries the one you named. It is fine. It is not right. It looks at you, a little sorry, and goes back, then finds the one that hummed and takes that for itself.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-fan"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-frost"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-heat"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-wash"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-mow"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "appliance-done",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Rotom chose its form in an appliance shop.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "The oven.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "appliance-hum",
+         "atLeast": 3,
+         "atMost": 3
+        }
+       ],
+       "text": "You say it. The light jumps, like a held breath let go. It settles into the oven, and the oven settles around it. It stays.",
+       "effects": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "rotom-heat"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "appliance-done",
+         "n": 1
+        },
+        {
+         "kind": "moment",
+         "text": "A Rotom chose its form in an appliance shop, and it was the one it loved.",
+         "importance": 70
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It tries the one you named. It is fine. It is not right. It looks at you, a little sorry, and goes back, then finds the one that hummed and takes that for itself.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-fan"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-frost"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-heat"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-wash"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-mow"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "appliance-done",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Rotom chose its form in an appliance shop.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Another one.",
+     "success": {
+      "text": "You say you need to think again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-23-name-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-23-name-2",
+   "name": "The Appliance Shop: Name It",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a6670",
+    "effect": "none"
+   },
+   "intro": "The washer, or the mower. It holds its light very still.",
+   "choices": [
+    {
+     "label": "The washer.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "appliance-hum",
+         "atLeast": 4,
+         "atMost": 4
+        }
+       ],
+       "text": "You say it. The light jumps, like a held breath let go. It settles into the washer, and the washer settles around it. It stays.",
+       "effects": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "rotom-wash"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "appliance-done",
+         "n": 1
+        },
+        {
+         "kind": "moment",
+         "text": "A Rotom chose its form in an appliance shop, and it was the one it loved.",
+         "importance": 70
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It tries the one you named. It is fine. It is not right. It looks at you, a little sorry, and goes back, then finds the one that hummed and takes that for itself.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-fan"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-frost"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-heat"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-wash"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-mow"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "appliance-done",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Rotom chose its form in an appliance shop.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "The mower.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "appliance-hum",
+         "atLeast": 5,
+         "atMost": 5
+        }
+       ],
+       "text": "You say it. The light jumps, like a held breath let go. It settles into the mower, and the mower settles around it. It stays.",
+       "effects": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "rotom-mow"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "appliance-done",
+         "n": 1
+        },
+        {
+         "kind": "moment",
+         "text": "A Rotom chose its form in an appliance shop, and it was the one it loved.",
+         "importance": 70
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It tries the one you named. It is fine. It is not right. It looks at you, a little sorry, and goes back, then finds the one that hummed and takes that for itself.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-fan"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-frost"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-heat"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-wash"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "appliance-hum",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rotom-mow"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "appliance-done",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Rotom chose its form in an appliance shop.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-23-hub",
+   "name": "The Appliance Shop, Again",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "stop": "event",
+   "callback": true,
+   "rarity": "common",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "appliance-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "appliance-hub-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5a6670",
+    "effect": "none"
+   },
+   "intro": "*The same crooked sign, in a different town. Somehow the shop has come with you.*\n\n**Mr. Dufresne:** \"Closed Friday, I said. I lied. Hand over whatever's worn out. No charge.\"",
+   "choices": [
+    {
+     "label": "Mend a held item.",
+     "pick": {},
+     "success": {
+      "text": "He takes it in his old hands, and turns it to the light.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "appliance-hub-at"
+       },
+       {
+        "kind": "gn",
+        "op": "applianceRepair"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "holdsBerry"
+      }
+     ]
+    },
+    {
+     "label": "Just visiting.",
+     "success": {
+      "text": "You say hello. He pours you tea from a kettle that was, you think, once a toaster.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

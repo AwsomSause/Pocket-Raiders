@@ -1,0 +1,2346 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-06-d1",
+   "name": "The Duelist",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "duelDue",
+     "n": 1
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "duelist-last"
+    },
+    {
+     "kind": "gn",
+     "test": "sameStage",
+     "key": "duelist-at"
+    },
+    {
+     "kind": "flag",
+     "key": "duelist-late",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "practised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-wins",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's been practising.* New scuffs ring the leek, and a groove in the dirt where it has bowed and risen a hundred times."
+    },
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-late",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It waited exactly where it said it would. A leaf has landed on the leek, and been left there."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "A Farfetch'd plants its leek in the road like a sword, and points it. Not at you. At the one that landed the hit.\n\n*It bows. It waits. It will wait all day.*",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what it wants.",
+     "success": {
+      "text": "It does not answer. It points the tip of its leek at the scar on {duelist}, then at a scar of its own, in the same place.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-ask-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-d1n",
+   "name": "The Duelist",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "duelDue",
+     "n": 1
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "duelist-last"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "duelist-at"
+    },
+    {
+     "kind": "flag",
+     "key": "duelist-late",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "practised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-wins",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's been practising.* New scuffs ring the leek, and a groove in the dirt where it has bowed and risen a hundred times."
+    },
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-late",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It waited exactly where it said it would. A leaf has landed on the leek, and been left there."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "A Farfetch'd plants its leek in the road like a sword, and points it. Not at you. At the one that landed the hit.\n\n*It bows. It waits. It will wait all day.*",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what it wants.",
+     "success": {
+      "text": "It does not answer. It points the tip of its leek at the scar on {duelist}, then at a scar of its own, in the same place.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-ask-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-d2",
+   "name": "The Duelist",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "duelDue",
+     "n": 2
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "duelist-last"
+    },
+    {
+     "kind": "flag",
+     "key": "duelist-late",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "practised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-wins",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's been practising.* New scuffs ring the leek, and a groove in the dirt where it has bowed and risen a hundred times."
+    },
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-late",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It waited exactly where it said it would. A leaf has landed on the leek, and been left there."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The leek is in the road again, point first. The Farfetch'd stands behind it as if it never left.\n\n*It bows. It waits.*",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what it wants.",
+     "success": {
+      "text": "It does not answer. It points the tip of its leek at the scar on {duelist}, then at a scar of its own, in the same place.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-ask-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-d3",
+   "name": "The Duelist",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "duelDue",
+     "n": 3
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "duelist-last"
+    },
+    {
+     "kind": "flag",
+     "key": "duelist-late",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "practised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-wins",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's been practising.* New scuffs ring the leek, and a groove in the dirt where it has bowed and risen a hundred times."
+    },
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-late",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It waited exactly where it said it would. A leaf has landed on the leek, and been left there."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The leek is in the road again, point first. The Farfetch'd stands behind it as if it never left.\n\n*It bows. It waits.*",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what it wants.",
+     "success": {
+      "text": "It does not answer. It points the tip of its leek at the scar on {duelist}, then at a scar of its own, in the same place.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-ask-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-d4",
+   "name": "The Duelist",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "duelDue",
+     "n": 4
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "duelist-last"
+    },
+    {
+     "kind": "flag",
+     "key": "duelist-late",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "practised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-wins",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's been practising.* New scuffs ring the leek, and a groove in the dirt where it has bowed and risen a hundred times."
+    },
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-late",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It waited exactly where it said it would. A leaf has landed on the leek, and been left there."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The leek is in the road again, point first. The Farfetch'd stands behind it as if it never left.\n\n*It bows. It waits.*",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what it wants.",
+     "success": {
+      "text": "It does not answer. It points the tip of its leek at the scar on {duelist}, then at a scar of its own, in the same place.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-ask-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-d5",
+   "name": "The Duelist",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "duelDue",
+     "n": 5
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "duelist-last"
+    },
+    {
+     "kind": "flag",
+     "key": "duelist-late",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "practised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-wins",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's been practising.* New scuffs ring the leek, and a groove in the dirt where it has bowed and risen a hundred times."
+    },
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-late",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It waited exactly where it said it would. A leaf has landed on the leek, and been left there."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The leek is in the road again, point first. The Farfetch'd stands behind it as if it never left.\n\n*It bows. It waits.*",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what it wants.",
+     "success": {
+      "text": "It does not answer. It points the tip of its leek at the scar on {duelist}, then at a scar of its own, in the same place.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-ask-5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-d1-late",
+   "name": "The Duelist",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "duelDue",
+     "n": 1
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "duelist-last"
+    },
+    {
+     "kind": "flag",
+     "key": "duelist-late",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "practised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-wins",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's been practising.* New scuffs ring the leek, and a groove in the dirt where it has bowed and risen a hundred times."
+    },
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-late",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It waited exactly where it said it would. A leaf has landed on the leek, and been left there."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "A Farfetch'd plants its leek in the road like a sword, and points it. Not at you. At the one that landed the hit.\n\n*It bows. It waits. It will wait all day.*",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what it wants.",
+     "success": {
+      "text": "It does not answer. It points the tip of its leek at the scar on {duelist}, then at a scar of its own, in the same place.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-ask-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-d2-late",
+   "name": "The Duelist",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "duelDue",
+     "n": 2
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "duelist-last"
+    },
+    {
+     "kind": "flag",
+     "key": "duelist-late",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "practised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-wins",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's been practising.* New scuffs ring the leek, and a groove in the dirt where it has bowed and risen a hundred times."
+    },
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-late",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It waited exactly where it said it would. A leaf has landed on the leek, and been left there."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The leek is in the road again, point first. The Farfetch'd stands behind it as if it never left.\n\n*It bows. It waits.*",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what it wants.",
+     "success": {
+      "text": "It does not answer. It points the tip of its leek at the scar on {duelist}, then at a scar of its own, in the same place.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-ask-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-d3-late",
+   "name": "The Duelist",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "duelDue",
+     "n": 3
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "duelist-last"
+    },
+    {
+     "kind": "flag",
+     "key": "duelist-late",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "practised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-wins",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's been practising.* New scuffs ring the leek, and a groove in the dirt where it has bowed and risen a hundred times."
+    },
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-late",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It waited exactly where it said it would. A leaf has landed on the leek, and been left there."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The leek is in the road again, point first. The Farfetch'd stands behind it as if it never left.\n\n*It bows. It waits.*",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what it wants.",
+     "success": {
+      "text": "It does not answer. It points the tip of its leek at the scar on {duelist}, then at a scar of its own, in the same place.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-ask-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-d4-late",
+   "name": "The Duelist",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "duelDue",
+     "n": 4
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "duelist-last"
+    },
+    {
+     "kind": "flag",
+     "key": "duelist-late",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "practised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-wins",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's been practising.* New scuffs ring the leek, and a groove in the dirt where it has bowed and risen a hundred times."
+    },
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-late",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It waited exactly where it said it would. A leaf has landed on the leek, and been left there."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The leek is in the road again, point first. The Farfetch'd stands behind it as if it never left.\n\n*It bows. It waits.*",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what it wants.",
+     "success": {
+      "text": "It does not answer. It points the tip of its leek at the scar on {duelist}, then at a scar of its own, in the same place.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-ask-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-d5-late",
+   "name": "The Duelist",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "duelDue",
+     "n": 5
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "duelist-last"
+    },
+    {
+     "kind": "flag",
+     "key": "duelist-late",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "practised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-wins",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It's been practising.* New scuffs ring the leek, and a groove in the dirt where it has bowed and risen a hundred times."
+    },
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "duelist-late",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It waited exactly where it said it would. A leaf has landed on the leek, and been left there."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The leek is in the road again, point first. The Farfetch'd stands behind it as if it never left.\n\n*It bows. It waits.*",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what it wants.",
+     "success": {
+      "text": "It does not answer. It points the tip of its leek at the scar on {duelist}, then at a scar of its own, in the same place.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-ask-5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-ask-1",
+   "name": "The Duelist: The Scar",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The scar is thin and old and exactly where the hit landed. The Farfetch'd holds very still while you look.\n\nWhatever it wants, it has wanted it since the moment of that hit.",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-fight-1",
+   "name": "The Duelist: Duel 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "{duelist} walks out to the leek and stops one pace from it. The Farfetch'd does not look at you once.\n\nOne on one. No switching. It bows before, and it will bow after.",
+   "choices": [
+    {
+     "label": "Begin.",
+     "success": {
+      "text": "The Farfetch'd bows. {duelist} bows back. The leek comes up.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "farfetchd"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "duelWin",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-wins",
+         "min": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-kneel"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-wins",
+         "min": 0,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-won-1"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "rule": {
+        "gn": "duelist",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "duelLoss",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-losses",
+         "min": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-gone"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-losses",
+         "min": 0,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-lost-1"
+          }
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-won-1",
+   "name": "The Duelist: After Duel 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The Farfetch'd lowers its leek, and bows again, lower than before. It looks at {duelist}, and then at its own wings.\n\nIt is already thinking about the move that beat it. It will be somewhere on the road ahead, practising.",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "{duelist} bows back. The Farfetch'd gathers its leek and goes, quietly, up the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-lost-1",
+   "name": "The Duelist: After Duel 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The Farfetch'd bows. It does not crow. It waits until {duelist} is on its feet, and bows again.\n\nIt picks up its leek, and goes. It has not finished yet, and neither, you think, has {duelist}.",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "{duelist} bows back, unsteady. It watches the road long after the Farfetch'd has left it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-ask-2",
+   "name": "The Duelist: The Scar",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The scar is thin and old and exactly where the hit landed. The Farfetch'd holds very still while you look.\n\nWhatever it wants, it has wanted it since the moment of that hit.",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-fight-2",
+   "name": "The Duelist: Duel 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "{duelist} lifts its head. It remembers the hit. It wants to be worthy of it.\n\nOne on one. No switching. It bows before, and it will bow after.",
+   "choices": [
+    {
+     "label": "Begin.",
+     "success": {
+      "text": "The Farfetch'd bows. {duelist} bows back. The leek comes up.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "farfetchd"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "duelWin",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-wins",
+         "min": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-kneel"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-wins",
+         "min": 0,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-won-2"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "rule": {
+        "gn": "duelist",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "duelLoss",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-losses",
+         "min": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-gone"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-losses",
+         "min": 0,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-lost-2"
+          }
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-won-2",
+   "name": "The Duelist: After Duel 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The Farfetch'd lowers its leek, and bows again, lower than before. It looks at {duelist}, and then at its own wings.\n\nIt is already thinking about the move that beat it. It will be somewhere on the road ahead, practising.",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "{duelist} bows back. The Farfetch'd gathers its leek and goes, quietly, up the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-lost-2",
+   "name": "The Duelist: After Duel 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The Farfetch'd bows. It does not crow. It waits until {duelist} is on its feet, and bows again.\n\nIt picks up its leek, and goes. It has not finished yet, and neither, you think, has {duelist}.",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "{duelist} bows back, unsteady. It watches the road long after the Farfetch'd has left it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-ask-3",
+   "name": "The Duelist: The Scar",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The scar is thin and old and exactly where the hit landed. The Farfetch'd holds very still while you look.\n\nWhatever it wants, it has wanted it since the moment of that hit.",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-fight-3",
+   "name": "The Duelist: Duel 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "{duelist} is tired, and standing straighter than it was. The Farfetch'd takes up its leek.\n\nOne on one. No switching. It bows before, and it will bow after.",
+   "choices": [
+    {
+     "label": "Begin.",
+     "success": {
+      "text": "The Farfetch'd bows. {duelist} bows back. The leek comes up.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "farfetchd"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "duelWin",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-wins",
+         "min": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-kneel"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-wins",
+         "min": 0,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-won-3"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "rule": {
+        "gn": "duelist",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "duelLoss",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-losses",
+         "min": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-gone"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-losses",
+         "min": 0,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-lost-3"
+          }
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-won-3",
+   "name": "The Duelist: After Duel 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The Farfetch'd lowers its leek, and bows again, lower than before. It looks at {duelist}, and then at its own wings.\n\nIt is already thinking about the move that beat it. It will be somewhere on the road ahead, practising.",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "{duelist} bows back. The Farfetch'd gathers its leek and goes, quietly, up the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-lost-3",
+   "name": "The Duelist: After Duel 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The Farfetch'd bows. It does not crow. It waits until {duelist} is on its feet, and bows again.\n\nIt picks up its leek, and goes. It has not finished yet, and neither, you think, has {duelist}.",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "{duelist} bows back, unsteady. It watches the road long after the Farfetch'd has left it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-ask-4",
+   "name": "The Duelist: The Scar",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The scar is thin and old and exactly where the hit landed. The Farfetch'd holds very still while you look.\n\nWhatever it wants, it has wanted it since the moment of that hit.",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 4
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-fight-4",
+   "name": "The Duelist: Duel 4",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "Neither of them blinks. The leek and {duelist}'s guard rise together.\n\nOne on one. No switching. It bows before, and it will bow after.",
+   "choices": [
+    {
+     "label": "Begin.",
+     "success": {
+      "text": "The Farfetch'd bows. {duelist} bows back. The leek comes up.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "farfetchd"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "duelWin",
+         "n": 4
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-wins",
+         "min": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-kneel"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-wins",
+         "min": 0,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-won-4"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "rule": {
+        "gn": "duelist",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "duelLoss",
+         "n": 4
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-losses",
+         "min": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-gone"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-losses",
+         "min": 0,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-lost-4"
+          }
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-won-4",
+   "name": "The Duelist: After Duel 4",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The Farfetch'd lowers its leek, and bows again, lower than before. It looks at {duelist}, and then at its own wings.\n\nIt is already thinking about the move that beat it. It will be somewhere on the road ahead, practising.",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "{duelist} bows back. The Farfetch'd gathers its leek and goes, quietly, up the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-lost-4",
+   "name": "The Duelist: After Duel 4",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The Farfetch'd bows. It does not crow. It waits until {duelist} is on its feet, and bows again.\n\nIt picks up its leek, and goes. It has not finished yet, and neither, you think, has {duelist}.",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "{duelist} bows back, unsteady. It watches the road long after the Farfetch'd has left it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-ask-5",
+   "name": "The Duelist: The Scar",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The scar is thin and old and exactly where the hit landed. The Farfetch'd holds very still while you look.\n\nWhatever it wants, it has wanted it since the moment of that hit.",
+   "choices": [
+    {
+     "label": "Accept the duel.",
+     "success": {
+      "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-06-fight-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "The Farfetch'd looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelPass",
+        "n": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-fight-5",
+   "name": "The Duelist: Duel 5",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The last duel. They have stopped looking at each other's weapons, and look only at each other's eyes.\n\nOne on one. No switching. It bows before, and it will bow after.",
+   "choices": [
+    {
+     "label": "Begin.",
+     "success": {
+      "text": "The Farfetch'd bows. {duelist} bows back. The leek comes up.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "farfetchd"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "duelWin",
+         "n": 5
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-wins",
+         "min": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-kneel"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-wins",
+         "min": 0,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-won-5"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "rule": {
+        "gn": "duelist",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "duelLoss",
+         "n": 5
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-losses",
+         "min": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-gone"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "duelist-losses",
+         "min": 0,
+         "max": 2,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-new-06-lost-5"
+          }
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-won-5",
+   "name": "The Duelist: After Duel 5",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The Farfetch'd lowers its leek, and bows again, lower than before. It looks at {duelist}, and then at its own wings.\n\nIt is already thinking about the move that beat it. It will be somewhere on the road ahead, practising.",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "{duelist} bows back. The Farfetch'd gathers its leek and goes, quietly, up the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-lost-5",
+   "name": "The Duelist: After Duel 5",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The Farfetch'd bows. It does not crow. It waits until {duelist} is on its feet, and bows again.\n\nIt picks up its leek, and goes. It has not finished yet, and neither, you think, has {duelist}.",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "{duelist} bows back, unsteady. It watches the road long after the Farfetch'd has left it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-kneel",
+   "name": "The Duelist: The Leek",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The Duelist kneels, and holds out its leek with both wings. It has not once looked at the leek. It looks at {duelist}.\n\nYou understand what it is offering. You are not sure which of you it is offering it to.",
+   "choices": [
+    {
+     "label": "Come with us.",
+     "success": {
+      "text": "It rises slowly. It takes its place at the edge of your party, and bows to each of you in turn.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "farfetchd"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "duelist-joined",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Won a best of five against a Farfetch'd that came for a duel, and kept it as a friend.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the leek with my Pokémon.",
+     "success": {
+      "text": "{duelist} takes the leek in its mouth, carefully, as if it were made of glass. The Farfetch'd bows, deeply, and goes. It does not look back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "duelWorthy"
+       },
+       {
+        "kind": "moment",
+        "text": "Was given a Farfetch'd's leek by a worthy opponent.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-06-gone",
+   "name": "The Duelist: The Bow",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#7a8a4a",
+    "effect": "none"
+   },
+   "intro": "The Duelist bows, deeply, with the leek flat across both wings, and goes up the road without once looking back.\n\n{duelist} stares after it for a long time. A node, at least. It does not seem to mind losing. It seems to mind it going.",
+   "choices": [
+    {
+     "label": "Watch it go.",
+     "success": {
+      "text": "The road is empty. {duelist} keeps looking at it anyway. Then, slowly, it bows to the empty road.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Lost a best of five to a Farfetch'd, and bowed to it as it left.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

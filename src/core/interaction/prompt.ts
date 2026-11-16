@@ -162,6 +162,8 @@ export const PROMPTS: readonly PromptDef[] = [
   { id: 'brace-hold', kind: 'hold', label: 'Hold steady', hint: 'Hold, then let go when the ring is full.', targetMs: 1200, windowsMs: W(90, 180, 320) },
   { id: 'echo-rhythm', kind: 'rhythm', label: 'Echo the beat', hint: 'Press on each beat.', beatsMs: [600, 1100, 1600, 2300], windowsMs: W(80, 160, 280) },
   // Ideas W4 set pieces (map events with a `prompt` choice).
+  // Greenneedle gn.23: race the Magikarp up the bank (win or lose, it's delighted).
+  { id: 'bank-race', kind: 'timing', label: 'Race it!', hint: 'Press as the ring closes: jump the last rock as it jumps.', landMs: 1000, windowsMs: W(80, 160, 300) },
   { id: 'zip-line', kind: 'timing', label: 'Let go!', hint: 'Press as the ring closes: let go of the zip-line at the platform.', landMs: 1300, windowsMs: W(80, 160, 300) },
   { id: 'climb-rhythm', kind: 'rhythm', label: 'Climb!', hint: 'Press on each beat to reach for the next hold.', beatsMs: [500, 1000, 1500, 2000, 2500], windowsMs: W(90, 170, 300) },
   { id: 'dodge-tap', kind: 'tap', label: 'Dodge!', hint: 'Press the moment the mark appears to dodge the snow.', windowsMs: W(200, 340, 560), expireMs: 1100 },
@@ -177,10 +179,27 @@ export const PROMPTS: readonly PromptDef[] = [
   { id: 'copycat-claps', kind: 'rhythm', label: 'Copy her claps', hint: 'She claps four times. Press on each beat to copy her.', beatsMs: [500, 950, 1500, 1950], windowsMs: W(100, 180, 320) },
   // Beta 0.7: the first screen that uses the microphone (Sleeping Snorlax).
   { id: 'snorlax-shout', kind: 'shout', label: 'Wake the Snorlax!', hint: 'Shout, or press the button, to wake it.', listenMs: 5000 },
+  { id: 'breath-walk', kind: 'rhythm', label: 'Walk with its breath', hint: 'Press on each breath to step across its shoulders.', beatsMs: [900, 1800, 2700, 3600], windowsMs: W(100, 190, 330) },
+  { id: 'trench-dash', kind: 'timing', label: 'Run!', hint: 'Press as the ring closes: run while it turns at the far end.', landMs: 1200, windowsMs: W(80, 160, 300) },
+  { id: 'track-jumps', kind: 'rhythm', label: 'Jump!', hint: 'Press on each beat to clear the three jumps.', beatsMs: [700, 1400, 2100], windowsMs: W(90, 170, 300) },
+  { id: 'juggle-three', kind: 'rhythm', label: 'Keep the beat', hint: 'Press on each beat while three Aipom juggle.', beatsMs: [600, 1200, 1800], windowsMs: W(100, 180, 320) },
+  { id: 'juggle-five', kind: 'rhythm', label: 'Keep the beat', hint: 'Press on each beat while five Aipom juggle.', beatsMs: [500, 1000, 1500, 2000, 2500], windowsMs: W(90, 170, 300) },
+  { id: 'juggle-seven', kind: 'rhythm', label: 'Keep the beat', hint: 'Press on each beat while seven Aipom juggle.', beatsMs: [450, 900, 1350, 1800, 2250, 2700, 3150], windowsMs: W(80, 160, 280) },
   { id: 'pull-hold', kind: 'hold', label: 'Pull together', hint: 'Hold, and let go as the ring fills to pull them free.', targetMs: 1100, windowsMs: W(90, 180, 320) },
   // Catalog Overhaul markets (SF91, SF92): the Game Corner's skill games.
   { id: 'claw-drag', kind: 'drag', label: 'Steer the claw', hint: 'Drag the claw over the prize and let go.', from: [20, 25], to: [70, 70], windowsPx: W(6, 12, 22), maxMs: 4000 },
   { id: 'shell-tap', kind: 'tap', label: 'Follow the Ball', hint: 'Press the moment her hands stop over the shell with the Ball.', windowsMs: W(180, 300, 480), expireMs: 1000 },
+  // Greenneedle gn.35, Thunderstorm Ridge: the Counting Path (cross in the long gap) and the Iron Bridge (cross while it's dark).
+  { id: 'ridge-gap', kind: 'timing', label: 'Go!', hint: 'Long, short, short. Press as the ring closes: go in the long gap.', landMs: 1400, windowsMs: W(80, 160, 300) },
+  { id: 'bridge-dark', kind: 'timing', label: 'Cross!', hint: 'Press as the ring closes: cross while the bridge is dark.', landMs: 1200, windowsMs: W(80, 160, 300) },
+  // Greenneedle gn.59: Ferris's throw, steadied together.
+  { id: 'ferris-steady', kind: 'timing', label: 'Steady!', hint: 'Press as the ring closes: throw with Ferris.', landMs: 1500, windowsMs: W(120, 220, 380) },
+  { id: 'museum-jigsaw', kind: 'rhythm', label: 'Fit the pieces', hint: 'Twelve pieces. Press as each one turns to fit: early or late, and it is forced.', beatsMs: [500, 900, 1300, 1700, 2100, 2500, 2900, 3300, 3700, 4100, 4500, 4900], windowsMs: W(90, 170, 300) },
+  // Greenneedle gn.new.21: the Orchestra's four sections, entering one at a time (more beats each time).
+  { id: 'orchestra-drones', kind: 'rhythm', label: 'Bring in the drones', hint: 'Press on each beat to bring in the low drones.', beatsMs: [700, 1400, 2100], windowsMs: W(100, 180, 320) },
+  { id: 'orchestra-chirps', kind: 'rhythm', label: 'Bring in the chirps', hint: 'Press on each beat to bring in the chirps.', beatsMs: [600, 1200, 1800, 2400], windowsMs: W(95, 175, 310) },
+  { id: 'orchestra-trills', kind: 'rhythm', label: 'Bring in the trills', hint: 'Press on each beat to bring in the trills.', beatsMs: [500, 1000, 1500, 2000, 2500], windowsMs: W(90, 170, 300) },
+  { id: 'orchestra-tutti', kind: 'rhythm', label: 'All together', hint: 'Press on each beat to bring in the whole meadow.', beatsMs: [450, 900, 1350, 1800, 2250, 2700], windowsMs: W(80, 160, 280) },
 ];
 
 export const promptById = (id: string): PromptDef => {

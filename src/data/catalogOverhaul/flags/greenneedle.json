@@ -1,0 +1,1006 @@
+{
+ "category": "greenneedle",
+ "note": "Catalog row 15 (Greenneedle). `external`: flags a Greenneedle event reads that another set (or a Greenneedle event not built yet) will write; remove each as its writer lands. `flags` with `rule`: flags code writes, not an event effect.",
+ "external": {
+  "dog-sat": "gn.new.02",
+  "little-league-losing": "SF134.2 Little League",
+  "starter-home": "a starter's visit home (gn.new)",
+  "border-united": "new-events row, NE73 The Border Dispute (united both sides)",
+  "team-raid-moon-won": "Evil Team row: the Mt. Moon raid (read by gn.04)",
+  "team-raid-moon-lost": "Evil Team row: the Mt. Moon raid (read by gn.04)",
+  "roux-met": "SF92 Madame Roux (side-content row; read by gn.27's bill)",
+  "magician-met": "SF138 The Magician (side-content row; read by gn.27's bill)",
+  "pink-stone-planted": "the Pink Fruit stone (no stone to plant yet in gn.30; read by gn.31)",
+  "aqua-flooded": "Evil Team row: helped Aqua flood something, or carried out the plan in Hoenn (read by gn.33's high-water marks)",
+  "hoenn-took-all": "Evil Team row: chose \"Take it all\" in Hoenn (read by gn.38's researchers)",
+  "called-it-for-us": "Evil Team row: chose \"Call it for us\" (read by gn.38's researchers)",
+  "sunken-bell": "SF41.1 The Sunken City, the ovc-sunken-bell chain (overhaul/event_chains.json; read by gn.33)",
+  "museum-relics-returned": "SF129 \"Return to the Museum\" (the museum's relics returned; read by gn.41)",
+  "ranch-dug": "gn.new.20 The Bibarel Dam: dug a channel (read by gn.new.38 Long Table)",
+  "ranch-moved": "gn.new.20 The Bibarel Dam: moved the colony (read by gn.new.38 Long Table)",
+  "well-lifted": "gn.new.16 The Thing in the Well: lifted the Feebas out (read by gn.new.38 Long Table)",
+  "lantern-boat-floated": "gn.new.36 (the Lantern Sea boat)",
+  "lost-mon": "another row's permanent-loss scene (read by gn.59: the first catch is lost)",
+  "ffion-pier": "Captain Ffion's pier (the Hoenn/water row; read by gn.61)",
+  "ffion-pier-gap": "Captain Ffion: the gap in the pier (read by gn.61)",
+  "ferris-belt": "Ferris and the belt (read by gn.61)",
+  "ferris-six": "Ferris, six on the belt (read by gn.61)",
+  "tamsel-out": "Granny Tamsel out of the gorge (read by gn.61)",
+  "holloways-ok": "The Holloways (read by gn.61)",
+  "wicker-ok": "Old Wicker (read by gn.61)",
+  "oldfriend-parted": "gn.58 Old Friend Returns: parted well (read by gn.61)",
+  "slowpoke-agency-solved": "gn.56 The Slowpoke Detective Agency (read by gn.61)",
+  "well-pebble": "the well with a pebble (read by gn.61)",
+  "storm-grey-coat": "The Storm-Grey Coat (read by gn.61)",
+  "robbed-trainer": "a robbery scene (read by gn.61 far edge)",
+  "cubone-trusted-stayed": "gn.22 Cubone ending (read by gn.61)",
+  "psyduck-hat": "gn.29 (set there; read by gn.61)",
+  "mural-walls": "gn.new.25 The Mural: walls painted (read by gn.61; PR #1360)",
+  "impersonator-joined": "gn.57 The Impersonator joined (read by gn.61; PR #1351)",
+  "cheer-split": "gn.new.30 The Cheer Squad: one joined (read by gn.61; PR #1363)",
+  "cheer-both": "gn.new.30 (read by gn.61; PR #1363)",
+  "cheer-truth": "gn.new.30 (read by gn.61; PR #1363)"
+ },
+ "flags": [
+  {
+   "key": "left-took",
+   "rule": "core/greenneedle/left.ts (gn.new.13 The Ones You Left: the number of the Ball taken)"
+  },
+  {
+   "key": "safari-photo-best",
+   "rule": "core/greenneedle/safariEnd.ts (gn.18 Safari Land)"
+  },
+  {
+   "key": "partner-was-ball",
+   "rule": "core/greenneedle gn op `partner` (gn.24)"
+  },
+  {
+   "key": "pidgey-backed-spearow",
+   "rule": "core/sky/spectate.ts (gn.02 Sky finale)"
+  },
+  {
+   "key": "partner-story",
+   "rule": "core/greenneedle gn op `partner` (gn.24: the story by the partner's nature)"
+  },
+  {
+   "key": "market-visits",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-stock",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-story",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-rivals-run",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-rivals-this",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-rivals-caught",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-rivals-played",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-carmela-bought",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-carmela-out",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-carmela-banned",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-carmela-low",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-carmela-lowballed",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-tanager-bought",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-tanager-out",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-tanager-banned",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-tanager-low",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-tanager-lowballed",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-dace-bought",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-dace-out",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-dace-banned",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-dace-low",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-dace-lowballed",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-ivo-bought",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-ivo-out",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-ivo-banned",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-ivo-low",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-ivo-lowballed",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-nan-bought",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-nan-out",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-nan-banned",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-nan-low",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-nan-lowballed",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-hooded-bought",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-hooded-out",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-hooded-banned",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-hooded-low",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-hooded-lowballed",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-josune-bought",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-josune-out",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-josune-banned",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-josune-low",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "market-josune-lowballed",
+   "rule": "core/greenneedle/market.ts (gn.39 The Travelling Pokémon Market)"
+  },
+  {
+   "key": "daycare-held",
+   "rule": "core/greenneedle/daycare.ts (gn.40 The Pokémon Day-Care Village)"
+  },
+  {
+   "key": "daycare-at",
+   "rule": "core/greenneedle/daycare.ts (gn.40 The Pokémon Day-Care Village)"
+  },
+  {
+   "key": "museum-region",
+   "rule": "core/greenneedle/museum.ts (gn.41 The Pokémon Museum)"
+  },
+  {
+   "key": "museum-wrong",
+   "rule": "core/greenneedle/museum.ts (gn.41 The Pokémon Museum)"
+  },
+  {
+   "key": "frontier-cleared",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-rank",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-cleared-tower",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-cleared-factory",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-cleared-arena",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-cleared-pike",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-cleared-dome",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-cleared-palace",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-cleared-pyramid",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "brain-tower-met",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-factory-met",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-arena-met",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-pike-met",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-dome-met",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-palace-met",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-pyramid-met",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-tower-won",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-factory-won",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-arena-won",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-pike-won",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-dome-won",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-palace-won",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-pyramid-won",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-arena-marks",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42 Arena)"
+  },
+  {
+   "key": "dome-picked",
+   "rule": "core/greenneedle/frontier.ts bring (gn.42 Dome)"
+  },
+  {
+   "key": "auction-visits",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-quayle",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-stolen",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-odd",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-suspect",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-bought-stolen",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-paid-stolen",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-won",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-wins",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-done",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-lot",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-price",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-high",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-prev",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-prev-price",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-in-player",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-silent",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-silent-visit",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-snub",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-snubbed",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-quayle-gift",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-returned",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-fair-1",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-fair-2",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-fair-3",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-fair-4",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-fair-5",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-fair-6",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-sold-1",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-sold-2",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-sold-3",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-sold-4",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-sold-5",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-sold-6",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-in-2",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-in-3",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-in-4",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-in-5",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-roundell-cap",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "onevone-visits",
+   "rule": "core/greenneedle/onevone.ts (gn.44)"
+  },
+  {
+   "key": "onevone-met",
+   "rule": "core/greenneedle/onevone.ts (gn.44)"
+  },
+  {
+   "key": "onevone-same",
+   "rule": "core/greenneedle/onevone.ts (gn.44)"
+  },
+  {
+   "key": "onevone-again",
+   "rule": "core/greenneedle/onevone.ts (gn.44)"
+  },
+  {
+   "key": "onevone-round",
+   "rule": "core/greenneedle/onevone.ts (gn.44)"
+  },
+  {
+   "key": "onevone-champion-at",
+   "rule": "core/greenneedle/onevone.ts (gn.44)"
+  },
+  {
+   "key": "champ-lesson",
+   "rule": "core/greenneedle/champion.ts (gn.45)"
+  },
+  {
+   "key": "champ-exam-passed",
+   "rule": "core/greenneedle/champion.ts (gn.45)"
+  },
+  {
+   "key": "lesson-why",
+   "rule": "core/greenneedle/champion.ts (gn.45)"
+  },
+  {
+   "key": "allstar-round",
+   "rule": "core/greenneedle/allstar.ts (gn.46)"
+  },
+  {
+   "key": "allstar-damian",
+   "rule": "core/greenneedle/allstar.ts (gn.46)"
+  },
+  {
+   "key": "allstar-samurai",
+   "rule": "core/greenneedle/allstar.ts (gn.46)"
+  },
+  {
+   "key": "allstar-champion",
+   "rule": "core/greenneedle/allstar.ts (gn.46)"
+  },
+  {
+   "key": "ex-backed",
+   "rule": "core/greenneedle/exhibition.ts (gn.47)"
+  },
+  {
+   "key": "ex-again",
+   "rule": "core/greenneedle/exhibition.ts (gn.47)"
+  },
+  {
+   "key": "ex-watched",
+   "rule": "core/greenneedle/exhibition.ts (gn.47)"
+  },
+  {
+   "key": "ex-outcome",
+   "rule": "core/greenneedle/exhibition.ts (gn.47)"
+  },
+  {
+   "key": "ex-winner",
+   "rule": "core/greenneedle/exhibition.ts (gn.47)"
+  },
+  {
+   "key": "ex-ripple",
+   "rule": "core/greenneedle/exhibition.ts (gn.47)"
+  },
+  {
+   "key": "ex-ripple-done",
+   "rule": "core/greenneedle/exhibition.ts (gn.47)"
+  },
+  {
+   "key": "draft-round",
+   "rule": "core/greenneedle/draft.ts (gn.48)"
+  },
+  {
+   "key": "draft-misused",
+   "rule": "core/greenneedle/draft.ts (gn.48)"
+  },
+  {
+   "key": "draft-result",
+   "rule": "core/greenneedle/draft.ts (gn.48)"
+  },
+  {
+   "key": "draft-asked",
+   "rule": "core/greenneedle/draft.ts (gn.48)"
+  },
+  {
+   "key": "defector-m1",
+   "rule": "core/greenneedle/defector.ts (gn.50 The Evil Team's Betrayal)"
+  },
+  {
+   "key": "defector-m2",
+   "rule": "core/greenneedle/defector.ts (gn.50 The Evil Team's Betrayal)"
+  },
+  {
+   "key": "defector-trust",
+   "rule": "core/greenneedle/defector.ts (gn.50 The Evil Team's Betrayal)"
+  },
+  {
+   "key": "defector-end",
+   "rule": "core/greenneedle/defector.ts (gn.50 The Evil Team's Betrayal)"
+  },
+  {
+   "key": "ring-finished",
+   "rule": "core/greenneedle/smuggling.ts (gn.51 The Pokémon Smuggling Ring)"
+  },
+  {
+   "key": "smuggle-rehab",
+   "rule": "core/greenneedle/smuggling.ts (gn.51 The Pokémon Smuggling Ring)"
+  },
+  {
+   "key": "defector",
+   "rule": "core/greenneedle/defector.ts (gn.50 The Evil Team's Betrayal)"
+  },
+  {
+   "key": "sg-reinforced",
+   "rule": "core/greenneedle/citysiege.ts (gn.53 The Region Under Siege)"
+  },
+  {
+   "key": "sg-rangers",
+   "rule": "core/greenneedle/citysiege.ts (gn.53 The Region Under Siege)"
+  },
+  {
+   "key": "sg-result",
+   "rule": "core/greenneedle/citysiege.ts (gn.53 The Region Under Siege)"
+  },
+  {
+   "key": "sg-fell",
+   "rule": "core/greenneedle/citysiege.ts (gn.53 The Region Under Siege)"
+  },
+  {
+   "key": "sg-turn",
+   "rule": "core/greenneedle/citysiege.ts (gn.53 The Region Under Siege)"
+  },
+  {
+   "key": "sg-pokemon",
+   "rule": "core/greenneedle/citysiege.ts (gn.53 The Region Under Siege)"
+  },
+  {
+   "key": "kc-visits",
+   "rule": "core/greenneedle/karpcon.ts (gn.54 The Magikarp Convention)"
+  },
+  {
+   "key": "kc-evolved",
+   "rule": "core/greenneedle/karpcon.ts (gn.54 The Magikarp Convention)"
+  },
+  {
+   "key": "kc-star",
+   "rule": "core/greenneedle/karpcon.ts (gn.54 The Magikarp Convention)"
+  },
+  {
+   "key": "egg-listened-hatched",
+   "rule": "core/greenneedle/listened.ts (gn.new.05; read by gn.40)"
+  },
+  {
+   "key": "lt-slot-0",
+   "rule": "core/greenneedle/longtable.ts (gn.new.38 The Long Table)"
+  },
+  {
+   "key": "lt-slot-1",
+   "rule": "core/greenneedle/longtable.ts (gn.new.38 The Long Table)"
+  },
+  {
+   "key": "lt-slot-2",
+   "rule": "core/greenneedle/longtable.ts (gn.new.38 The Long Table)"
+  },
+  {
+   "key": "lt-more",
+   "rule": "core/greenneedle/longtable.ts (gn.new.38 The Long Table)"
+  },
+  {
+   "key": "lt-two",
+   "rule": "core/greenneedle/longtable.ts (gn.new.38 The Long Table)"
+  },
+  {
+   "key": "lt-done",
+   "rule": "core/greenneedle/longtable.ts (gn.new.38 The Long Table)"
+  },
+  {
+   "key": "lt-n1",
+   "rule": "core/greenneedle/longtable.ts (gn.new.38 The Long Table)"
+  },
+  {
+   "key": "lt-n2",
+   "rule": "core/greenneedle/longtable.ts (gn.new.38 The Long Table)"
+  },
+  {
+   "key": "lt-seats",
+   "rule": "core/greenneedle/longtable.ts (gn.new.38 The Long Table)"
+  },
+  {
+   "key": "lt-filled",
+   "rule": "core/greenneedle/longtable.ts (gn.new.38 The Long Table)"
+  },
+  {
+   "key": "lt-bonus",
+   "rule": "core/greenneedle/longtable.ts (gn.new.38 The Long Table)"
+  },
+  {
+   "key": "lt-page",
+   "rule": "core/greenneedle/longtable.ts (gn.new.38 The Long Table)"
+  },
+  {
+   "key": "shedinja-answered",
+   "rule": "core/greenneedle/shedinja.ts (gn.new.07: the Shedinja joined; read by gn.14)"
+  },
+  {
+   "key": "gn-new-06-won",
+   "rule": "core/greenneedle/duelist.ts (gn.new.06 The Duelist)"
+  },
+  {
+   "key": "duelist-wins",
+   "rule": "core/greenneedle/duelist.ts (gn.new.06 The Duelist)"
+  },
+  {
+   "key": "duelist-late",
+   "rule": "core/greenneedle/duelist.ts (gn.new.06 The Duelist)"
+  },
+  {
+   "key": "duelist-last",
+   "rule": "core/greenneedle/duelist.ts (gn.new.06 The Duelist)"
+  },
+  {
+   "key": "duelist-at",
+   "rule": "core/greenneedle/duelist.ts (gn.new.06 The Duelist)"
+  },
+  {
+   "key": "duelist-joined",
+   "rule": "core/greenneedle/duelist.ts (gn.new.06 The Duelist)"
+  },
+  {
+   "key": "tyr-on",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
+  },
+  {
+   "key": "tyr-kick",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
+  },
+  {
+   "key": "tyr-punch",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
+  },
+  {
+   "key": "tyr-stand",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
+  },
+  {
+   "key": "tyr-picked",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
+  },
+  {
+   "key": "tyr-result",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
+  },
+  {
+   "key": "tyr-region",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
+  },
+  {
+   "key": "tyr-stage",
+   "rule": "core/greenneedle/tyrogue.ts (gn.new.04 The Tyrogue Who Wanted All Three)"
+  },
+  {
+   "key": "bibarel-dam-broken",
+   "rule": "tools/events/co/greenneedle-new-20.ts (gn.new.20: the dam is broken)"
+  },
+  {
+   "key": "cheer-rival-used",
+   "rule": "core/greenneedle/cheer.ts (gn.new.30: the one left on the road cheers for the rival once)"
+  },
+  {
+   "key": "smuggle-joined",
+   "rule": "core/greenneedle/smuggling.ts (gn.51: the smuggled one climbed in)"
+  },
+  {
+   "key": "pr-loc",
+   "rule": "core/greenneedle/prison.ts (gn.62: the wing the player is in)"
+  },
+  {
+   "key": "pr-out",
+   "rule": "core/greenneedle/prison.ts (gn.62: the clock ran out)"
+  },
+  {
+   "key": "prison-strangers-open",
+   "rule": "core/greenneedle/prison.ts (gn.62: strangers' Pokémon opened)"
+  },
+  {
+   "key": "prison-signal",
+   "rule": "core/greenneedle/prison.ts (gn.62: strangers told to wait for the signal)"
+  },
+  {
+   "key": "prison-left",
+   "rule": "core/greenneedle/prison.ts (gn.62: Pokémon left behind)"
+  },
+  {
+   "key": "of-why",
+   "rule": "core/greenneedle/oldfriend.ts (gn.58 Old Friend Returns)"
+  },
+  {
+   "key": "of-trainer",
+   "rule": "core/greenneedle/oldfriend.ts (gn.58 Old Friend Returns)"
+  },
+  {
+   "key": "of-fond",
+   "rule": "core/greenneedle/oldfriend.ts (gn.58 Old Friend Returns)"
+  },
+  {
+   "key": "of-free",
+   "rule": "core/greenneedle/oldfriend.ts (gn.58 Old Friend Returns)"
+  },
+  {
+   "key": "of-help",
+   "rule": "core/greenneedle/oldfriend.ts (gn.58 Old Friend Returns)"
+  },
+  {
+   "key": "of-many",
+   "rule": "core/greenneedle/oldfriend.ts (gn.58 Old Friend Returns)"
+  },
+  {
+   "key": "of-told",
+   "rule": "core/greenneedle/oldfriend.ts (gn.58 Old Friend Returns)"
+  },
+  {
+   "key": "night-shift-sneasel",
+   "rule": "tools/events/co/greenneedle-new-24.ts (gn.new.24 The Night Shift: the Sneasel stayed; read by gn.40)"
+  },
+  {
+   "key": "eevee-on",
+   "rule": "core/greenneedle/eevee.ts (gn.new.01 The Eevee Who Couldn't Choose)"
+  },
+  {
+   "key": "eevee-done",
+   "rule": "core/greenneedle/eevee.ts (gn.new.01 The Eevee Who Couldn't Choose)"
+  },
+  {
+   "key": "eevee-form",
+   "rule": "core/greenneedle/eevee.ts (gn.new.01 The Eevee Who Couldn't Choose)"
+  },
+  {
+   "key": "eevee-stayed",
+   "rule": "core/greenneedle/eevee.ts (gn.new.01 The Eevee Who Couldn't Choose)"
+  },
+  {
+   "key": "eevee-fainted",
+   "rule": "core/greenneedle/eevee.ts (gn.new.01 The Eevee Who Couldn't Choose)"
+  },
+  {
+   "key": "borrow-result",
+   "rule": "core/greenneedle/borrowed.ts (gn.new.29 The Borrowed Team)"
+  },
+  {
+   "key": "borrow-knows",
+   "rule": "core/greenneedle/borrowed.ts (gn.new.29 The Borrowed Team)"
+  },
+  {
+   "key": "borrow-specific",
+   "rule": "core/greenneedle/borrowed.ts (gn.new.29 The Borrowed Team)"
+  },
+  {
+   "key": "borrow-bonus",
+   "rule": "core/greenneedle/borrowed.ts (gn.new.29 The Borrowed Team)"
+  },
+  {
+   "key": "followed-species",
+   "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
+  },
+  {
+   "key": "followed-regions",
+   "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
+  },
+  {
+   "key": "followed-revealed",
+   "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
+  },
+  {
+   "key": "followed-kind-act",
+   "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
+  },
+  {
+   "key": "followed-at-road",
+   "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
+  },
+  {
+   "key": "xatu-prophecy",
+   "rule": "core/greenneedle/cartographer.ts (gn.new.12: 1 a place, 2 a silhouette, 3 a number)"
+  },
+  {
+   "key": "xatu-changed",
+   "rule": "core/greenneedle/cartographer.ts (gn.new.12: the second draw after Communion)"
+  },
+  {
+   "key": "abandoned-mon",
+   "rule": "core/greenneedle/ball.ts (gn.new.03: the Pokémon that came out of the Ball)"
+  },
+  {
+   "key": "ball-waited",
+   "rule": "core/greenneedle/ball.ts (gn.new.03: you waited it out; gn.51 needs one rest fewer)"
+  },
+  {
+   "key": "reunion-count",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-offers",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-fartotal",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-farleft",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-farvisit",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-done",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-sat",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-pair-1",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-pair-2",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-pair-3",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-introduced-1",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-introduced-2",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-introduced-3",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-gave-hat",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-gave-ibuprofen",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-help-1",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-help-2",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-help-3",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-offer-1",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-offer-2",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-offer-3",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "ls-visits",
+   "rule": "core/greenneedle/lantern.ts (gn.new.36 The Lantern Sea: visits this run)"
+  },
+  {
+   "key": "littlecup-cancelled",
+   "rule": "core/greenneedle/littlecup.ts (gn.new.27 The Little Cup: an entrant cancelled its evolution)"
+  }
+ ]
+}

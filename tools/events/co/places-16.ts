@@ -83,7 +83,7 @@ export const EVENTS: Json[] = [
     ch('Watch.', out('You watch from the hedge until the last lantern has gone by.', fr(2, { types: ['ghost'] }))),
   ]),
   E('w4-lightning-rod', 'An iron rod on a hilltop, black against storm clouds that are piling up fast. Thunderstorm Ridge. The hair on your arms stands up.', [
-    ch('Wait for the strike.', out('You wait well back. The lightning hits the rod with a sound like the sky tearing, and in the flash, for an instant, you see wings of yellow fire. When you can see again, there is a gem at the foot of the rod, still crackling.', flag('sign-zapdos'), item('electric-gem'))),
+    ch('Wait for the strike.', out('You wait well back. The lightning hits the rod with a sound like the sky tearing, and in the flash, for an instant, you see wings of yellow fire. When you can see again, there is a gem at the foot of the rod, still crackling. A length of the rod has broken off. It hums. You take it.', flag('sign-zapdos'), item('electric-gem'), flag('hilltop-rod'))),
     ch('Climb it.', out('You climb a few feet and every hair on your body stands up and you climb down again very fast. Your lead is laughing at you.', hurtLead(0.05))),
   ]),
   E('w4-low-tide', 'Rock pools at low tide, each one a little world: anemones, crabs, a starfish, things glinting in the weed.', [

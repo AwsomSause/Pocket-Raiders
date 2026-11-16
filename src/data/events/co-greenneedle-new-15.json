@@ -1,0 +1,1787 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-15-door",
+   "name": "The Weather Station",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ws-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ws-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "castform",
+    "tint": "#6c8aa6",
+    "effect": "none"
+   },
+   "intro": "*A mountain weather station with four doors. Snow is coming out of one. Heat-haze is coming out of another.*\n\n*A Castform shoots out, turns from snow to sun to rain in the space of the porch, and wails.*\n\n*It tugs your sleeve toward the doors, and won't let go.*",
+   "choices": [
+    {
+     "label": "Follow it in.",
+     "success": {
+      "text": "You let it lead you up the steps. Its shape changes under your hand with every pace, and it doesn't stop crying.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ws-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-from",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-archive",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-generator",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-shed",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-radio",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-up",
+        "n": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-15-porch"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you, a small voice is still crying, rain, then sun, then snow, then rain.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-15-porch",
+   "name": "The Weather Station: The Porch",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "castform",
+    "tint": "#6c8aa6",
+    "effect": "none"
+   },
+   "intro": "The porch smells of wet dust and warm metal. The log book by the door has been open to the same page for days. The last entry says only: *all four, at once.*\n\nCastform pulls at you, then at the doors, then at you. It is frightened for someone, and it can't say who.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You step inside. The floor plan is the first thing you see.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-15-hall"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-15-hall",
+   "name": "The Weather Station: The Floor Plan",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "form-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ws-from",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Castform is in its rainy form, damp and silver-blue, still dripping from the archive."
+    },
+    {
+     "id": "form-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ws-from",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "Castform is in its sunny form, warm and flushed, still glowing from the generator."
+    },
+    {
+     "id": "form-3",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ws-from",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "notice": "Castform is in its snowy form, pale and frosted, still shivering from the shed."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "castform",
+    "tint": "#6c8aa6",
+    "effect": "none"
+   },
+   "intro": "*The station's floor plan is on the wall, in pencil, with the doors numbered. Someone has underlined every room's weather twice.*\n\n**Archive: rain. Generator: sun. Balloon shed: snow. Radio room: fog.** Beneath the shed, in a different hand: *C. goes the colour of wherever it was.*\n\nFour doors. Castform dithers between them, changing shape every time it turns.",
+   "choices": [
+    {
+     "label": "The archive.",
+     "success": {
+      "text": "You open the first door. The sound of rain comes out to meet you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-right",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-from",
+          "atLeast": 2,
+          "atMost": 2
+         },
+         {
+          "kind": "flag",
+          "key": "ws-archive",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-wrong",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-archive",
+          "atLeast": 0,
+          "atMost": 0
+         },
+         {
+          "kind": "flag",
+          "key": "ws-right",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-15-archive"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The generator.",
+     "success": {
+      "text": "You open the second door. A wall of heat comes out to meet you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-right",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-from",
+          "atLeast": 1,
+          "atMost": 1
+         },
+         {
+          "kind": "flag",
+          "key": "ws-generator",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-wrong",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-generator",
+          "atLeast": 0,
+          "atMost": 0
+         },
+         {
+          "kind": "flag",
+          "key": "ws-right",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-15-generator"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The balloon shed.",
+     "success": {
+      "text": "You open the third door. The cold comes out like a held breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-right",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-from",
+          "atLeast": 2,
+          "atMost": 2
+         },
+         {
+          "kind": "flag",
+          "key": "ws-shed",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-wrong",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-shed",
+          "atLeast": 0,
+          "atMost": 0
+         },
+         {
+          "kind": "flag",
+          "key": "ws-right",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-15-shed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The radio room.",
+     "success": {
+      "text": "You open the fourth door. Fog pours across your boots.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-right",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-from",
+          "atLeast": 1,
+          "atMost": 1
+         },
+         {
+          "kind": "flag",
+          "key": "ws-radio",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-wrong",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-radio",
+          "atLeast": 0,
+          "atMost": 0
+         },
+         {
+          "kind": "flag",
+          "key": "ws-right",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-15-radio"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-15-archive",
+   "name": "The Weather Station: The Archive",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "castform",
+    "tint": "#6c8aa6",
+    "effect": "none"
+   },
+   "intro": "The archive. Rain is falling from the ceiling, steadily, as if it had been told to. A hundred years of charts have gone to grey paste on the shelves.\n\nCastform paddles in ahead of you and looks back. It wants this room to be dry. So do you.",
+   "choices": [
+    {
+     "label": "Let Castform dry the charts.",
+     "success": {
+      "text": "Castform steps over the threshold sunny-faced, warm as a lamp. Light spreads along the shelves.\n\nThe paper lifts and curls and dries. A chart peels free, and the numbers on it are still there.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-archive",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-from",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-a",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-archive",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-generator",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-b",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-shed",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-radio",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-up",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-all",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-half-a",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-half-b",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ws-up",
+          "n": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-new-15-tower"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-15-hall"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ws-right",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Let Castform try.",
+     "success": {
+      "text": "Castform comes in the wrong shape and the rain gets into it. It wails, high and helpless. Something that lives in the wet wakes up and comes to see.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "wooper",
+        "psyduck",
+        "poliwag"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ws-from",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-15-hall"
+        }
+       ],
+       "friendly": true,
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ws-from",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-15-hall"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ws-wrong",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Pass through.",
+     "success": {
+      "text": "The charts are dry now. Castform walks through, and the doorway changes it again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-from",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-a",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-archive",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-generator",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-b",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-shed",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-radio",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-up",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-all",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-half-a",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-half-b",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ws-up",
+          "n": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-new-15-tower"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-15-hall"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ws-archive",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-15-generator",
+   "name": "The Weather Station: The Generator",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "castform",
+    "tint": "#6c8aa6",
+    "effect": "none"
+   },
+   "intro": "The generator room. The air shimmers. The old machine is glowing at the seams, and the dial next to it has gone past the red.\n\nIt wants cooling, badly. Castform stops in the doorway and looks at it, and then at you.",
+   "choices": [
+    {
+     "label": "Let Castform cool it.",
+     "success": {
+      "text": "Castform comes in rainy and shivering with it. A thin rain falls on the casing, hissing.\n\nThe glow fades from orange to red to nothing. The dial sinks back. The machine lets out one long, grateful breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-generator",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-from",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-a",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-archive",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-generator",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-b",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-shed",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-radio",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-up",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-all",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-half-a",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-half-b",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ws-up",
+          "n": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-new-15-tower"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-15-hall"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ws-right",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Let Castform try.",
+     "success": {
+      "text": "Castform comes in the wrong shape and the heat finds it at once. It wails. Something that likes the heat pads out of the haze, interested.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "numel",
+        "vulpix",
+        "growlithe"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ws-from",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-15-hall"
+        }
+       ],
+       "friendly": true,
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ws-from",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-15-hall"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ws-wrong",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Pass through.",
+     "success": {
+      "text": "The generator hums, cool and steady. Castform walks through, and the doorway changes it again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-from",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-a",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-archive",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-generator",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-b",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-shed",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-radio",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-up",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-all",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-half-a",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-half-b",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ws-up",
+          "n": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-new-15-tower"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-15-hall"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ws-generator",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-15-shed",
+   "name": "The Weather Station: The Balloon Shed",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "castform",
+    "tint": "#6c8aa6",
+    "effect": "none"
+   },
+   "intro": "The balloon shed. Snow, indoors, drifting across a patched and folded balloon. The winch that raises it is wrapped in ice.\n\nCastform shakes frost off itself and looks at the winch. The balloon is the only way up to the tower.",
+   "choices": [
+    {
+     "label": "Let Castform thaw the winch.",
+     "success": {
+      "text": "Castform comes in sunny and bright. Warmth rolls across the floor and the ice on the winch begins to drip.\n\nThe crank turns, stiffly, then freely. Above you, the balloon sighs and starts to fill.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-shed",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-from",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-a",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-archive",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-generator",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-b",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-shed",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-radio",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-up",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-all",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-half-a",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-half-b",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ws-up",
+          "n": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-new-15-tower"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-15-hall"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ws-right",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Let Castform try.",
+     "success": {
+      "text": "Castform comes in the wrong shape and the cold takes hold of it. It wails. Something white and small slides out of the drift to look.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "snover",
+        "swinub",
+        "snorunt"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ws-from",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-15-hall"
+        }
+       ],
+       "friendly": true,
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ws-from",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-15-hall"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ws-wrong",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Pass through.",
+     "success": {
+      "text": "The winch is free. Castform walks through, and the doorway changes it again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-from",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-a",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-archive",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-generator",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-b",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-shed",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-radio",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-up",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-all",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-half-a",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-half-b",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ws-up",
+          "n": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-new-15-tower"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-15-hall"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ws-shed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-15-radio",
+   "name": "The Weather Station: The Radio Room",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "castform",
+    "tint": "#6c8aa6",
+    "effect": "none"
+   },
+   "intro": "The radio room. Fog hangs between the dials, so thick that the desk is only a shape. The big lens on the antenna is streaked grey.\n\nSomewhere in the static there is a voice. It cuts out whenever you lean closer.",
+   "choices": [
+    {
+     "label": "Let Castform wash the lens.",
+     "success": {
+      "text": "Castform comes in rainy, and rain comes with it. It runs down the lens in clean, bright lines.\n\nThe fog thins and the dials come up out of it one by one. The static clears, and a weather report is already running on a loop.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-radio",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-from",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-a",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-archive",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-generator",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-b",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-shed",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-radio",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-up",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-all",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-half-a",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-half-b",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ws-up",
+          "n": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-new-15-tower"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-15-hall"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ws-right",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Let Castform try.",
+     "success": {
+      "text": "Castform comes in the wrong shape and the fog closes round it. It wails. Something in the fog has noticed the noise, and drifts closer.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "gastly",
+        "duskull",
+        "misdreavus"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ws-from",
+         "n": 4
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-15-hall"
+        }
+       ],
+       "friendly": true,
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ws-from",
+         "n": 4
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-15-hall"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ws-wrong",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Pass through.",
+     "success": {
+      "text": "The lens is clean. Castform walks through, and the doorway changes it again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ws-from",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-a",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-archive",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-generator",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-half-b",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-shed",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-radio",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-up",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ws-all",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "ws-half-a",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "ws-half-b",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ws-up",
+          "n": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-new-15-tower"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ws-all",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-15-hall"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ws-radio",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-15-tower",
+   "name": "The Weather Station: The Tower",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "castform",
+    "tint": "#6c8aa6",
+    "effect": "none"
+   },
+   "intro": "The last stair opens onto a round room full of glass and brass. At the centre, among a hundred needles, a woman sits on the floor with her head in her hands.\n\n**Forecaster, Nimbus Hart:** \"I seeded a cloud. One. And now this. It's mine. I have to stop it.\"\n\n*Castform trots across to the instruments and cycles through all four forms in front of them: rain, sun, snow, fog. The needles shiver, and settle.*\n\n**Nimbus:** \"...It isn't mine. It was coming anyway. Oh. Oh, thank goodness. Oh, that's worse.\"",
+   "choices": [
+    {
+     "label": "\"It'll pass.\"",
+     "success": {
+      "text": "**Nimbus:** \"Yes. Yes, it will. It's a front. You read a front. You don't stop it.\" She laughs, wetly, for the first time in days.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "castform"
+        ],
+        "types": [],
+        "levelBonus": -1,
+        "shinyMultiplier": 1,
+        "ability": "forecast-ahead",
+        "mark": "ws-castform"
+       },
+       {
+        "kind": "flag",
+        "key": "ws-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Read a storm with a Castform instead of stopping it. It asked to see real weather.",
+        "importance": 55
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You couldn't have known.\"",
+     "success": {
+      "text": "She looks up at you for a long time. Then she nods, once, the way people nod when they have been given something they didn't expect.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "castform"
+        ],
+        "types": [],
+        "levelBonus": -1,
+        "shinyMultiplier": 1,
+        "ability": "forecast-ahead",
+        "mark": "ws-castform"
+       },
+       {
+        "kind": "flag",
+        "key": "ws-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Read a storm with a Castform instead of stopping it. It asked to see real weather.",
+        "importance": 55
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let's read it together.\"",
+     "success": {
+      "text": "You kneel beside her, and she shows you how the needles lean. By the third pass you can both see where the storm goes, and it goes round.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "castform"
+        ],
+        "types": [],
+        "levelBonus": -1,
+        "shinyMultiplier": 1,
+        "ability": "forecast-ahead",
+        "mark": "ws-castform"
+       },
+       {
+        "kind": "flag",
+        "key": "ws-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Read a storm with a Castform instead of stopping it. It asked to see real weather.",
+        "importance": 55
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -164,7 +164,7 @@ const MANSION: Json[] = [
     intro: 'On your way out, by the front door, a salesman in a floppy hat with a tray of odds and ends. "Souvenir? Everything\'s a bargain." His shadow on the wall behind him has big pointed ears, and a little crooked smile.',
     choices: [
       ch('Buy.', out('You buy a charm from his tray. He is very pleased, and bows exactly the way the Mimikyu in the ballroom bowed.', $(-200), any('cleanse-tag', 'spell-tag')), { requires: [money(200)] }),
-      ch('Point out the shadow.', out('"Oh," he says, in a much smaller voice, and the hat slips, and it is the Mimikyu, practising being a person. It gives you the charm for free, and makes you promise not to tell.', any('cleanse-tag', 'spell-tag'), ...kind())),
+      ch('Point out the shadow.', out('"Oh," he says, in a much smaller voice, and the hat slips, and it is the Mimikyu, practising being a person. It gives you the charm for free, and makes you promise not to tell.', any('cleanse-tag', 'spell-tag'), flag('sock-puppet-shadow'), ...kind())),
     ],
   }),
 ];

@@ -3,6 +3,7 @@
 // count (no stage index, badge or region clear). Each map node plays a room event (compile.ts). Rules: a Leave option before the first
 // fight, caps and bans, one reward item, and a loss ejects back to the parent stage.
 
+import { endCrystals } from '../greenneedle/crystals';
 import { z } from 'zod';
 import json from '../../data/pseudoStages.json';
 import type { Content, EventDef } from '../contentSchema';
@@ -133,6 +134,7 @@ export function enterPseudoStage(_content: Content, run: RunState, id: string): 
 /** Back to the parent stage, standing on the node the pseudo-stage was opened from. A no-op when no pseudo-stage is being played. */
 export function leavePseudoStage(run: RunState): void {
   if (!run.stage?.pseudo || !run.pseudoParent) return;
+  endCrystals(run);
   run.stage = run.pseudoParent;
   delete run.pseudoParent;
 }
@@ -150,6 +152,8 @@ export function opensNext(event: Pick<EventDef, 'choices'>, team?: string): stri
     for (const v of Object.values(x)) walk(v);
   };
   walk(event.choices);
+  // A remembered variant's added choices can open rooms too (Greenneedle).
+  walk((event as { remembers?: unknown }).remembers);
   return [...new Set(out.flatMap((id) => (id.includes('{teamId}') ? (team ? [id.replaceAll('{teamId}', team)] : []) : [id])))];
 }
 
@@ -173,14 +177,17 @@ export function chainRooms(content: Content, chain: PseudoChain): { event: strin
   }
   const depth = new Map<string, number>();
   const order: string[] = [];
-  let level = opensNext(entry, chain.team).filter((id) => content.events.has(id) && !chainOfEntry(id));
+  // A room is never another chain's entry, nor a canon space's gate (a gate stands on the map: Route 25's last rooms open the Tournament's).
+  // A canon event that is itself a room (the Sevii network's islands) is a room.
+  const stops = (id: string): boolean => !!chainOfEntry(id) || (!!content.events.get(id)?.canon && !content.events.get(id)?.room);
+  let level = opensNext(entry, chain.team).filter((id) => content.events.has(id) && !stops(id));
   for (let d = 1; level.length > 0; d++) {
     const nextLevel: string[] = [];
     for (const id of level) {
       if (depth.has(id)) continue;
       depth.set(id, d);
       order.push(id);
-      nextLevel.push(...opensNext(content.events.get(id)!, chain.team).filter((x) => content.events.has(x) && !chainOfEntry(x) && !depth.has(x)));
+      nextLevel.push(...opensNext(content.events.get(id)!, chain.team).filter((x) => content.events.has(x) && !stops(x) && !depth.has(x)));
     }
     level = nextLevel;
   }

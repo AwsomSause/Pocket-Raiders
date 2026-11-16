@@ -1,0 +1,527 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-17-beach",
+   "name": "The Stranding",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "stranding-helped",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "stranding-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "early",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "factory-left-running",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The bay still runs the colour of the factory's last night. The water's going out early: you have seven turns, not eight."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wailord",
+    "tint": "#3b7a9c",
+    "effect": "none"
+   },
+   "intro": "*A whole beach town, running in one direction. Down toward the sand, where the sea has left something enormous behind.*\n\nA Wailord, on its side, on the beach. Its eye is the size of a cartwheel, and it is looking at the sky.\n\n**Harbourmaster, Captain Ffion:** \"Eight hours to the turn! Wet, shade, dig, calm, crowd, tide! Who've you got?\"",
+   "choices": [
+    {
+     "label": "Report to Captain Ffion.",
+     "success": {
+      "text": "\"Right. Everyone on a job. Nobody stands about.\" She hands you a bucket, which is how you know she means it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stStart"
+       },
+       {
+        "kind": "flag",
+        "key": "stranding-seen",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "stranding-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-17-work"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-17-work",
+   "name": "The Stranding: The Sand",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "wailord",
+    "tint": "#3b7a9c",
+    "effect": "none"
+   },
+   "intro": "Turn {stranding:turn} of {stranding:turns}. The tide is still going out.\n\n{stranding:bars}\n\nWaiting for a job: {stranding:next}. Each Pokémon does one thing a turn. What you leave, the townspeople cover, less well.",
+   "choices": [
+    {
+     "label": "Keep it wet.",
+     "success": {
+      "text": "",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stAssign",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "st-more",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-new-17-resolve",
+          "gn-new-17-work"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shade it.",
+     "success": {
+      "text": "",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stAssign",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "st-more",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-new-17-resolve",
+          "gn-new-17-work"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig a channel.",
+     "success": {
+      "text": "",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stAssign",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "st-more",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-new-17-resolve",
+          "gn-new-17-work"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "More tasks.",
+     "success": {
+      "text": "You look down the list again: three more.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-17-more"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-17-more",
+   "name": "The Stranding: The Rest of the List",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "wailord",
+    "tint": "#3b7a9c",
+    "effect": "none"
+   },
+   "intro": "Turn {stranding:turn} of {stranding:turns}. {stranding:next} is waiting.\n\n{stranding:bars}",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stAssign",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "st-more",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-new-17-resolve",
+          "gn-new-17-work"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold the crowd.",
+     "success": {
+      "text": "",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stAssign",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "st-more",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-new-17-resolve",
+          "gn-new-17-work"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Guide the tide.",
+     "success": {
+      "text": "",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stAssign",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "st-more",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-new-17-resolve",
+          "gn-new-17-work"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "The first three, then.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-17-work"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-17-resolve",
+   "name": "The Stranding: The Hours Pass",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "wailord",
+    "tint": "#3b7a9c",
+    "effect": "none"
+   },
+   "intro": "Everyone has a job. Buckets, shovels, voices, one long wet sheet passed hand to hand.\n\n{stranding:bars}\n\nThe sun moves. The sea doesn't, yet.",
+   "choices": [
+    {
+     "label": "Let the hour pass.",
+     "success": {
+      "text": "An hour goes by in a single breath, and the Wailord breathes out with it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stEnd"
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "st-state",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-new-17-work",
+          "gn-new-17-lifted",
+          "gn-new-17-dragged"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-17-lifted",
+   "name": "The Stranding: The Tide Lifts It",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "wailord",
+    "tint": "#3b7a9c",
+    "effect": "none"
+   },
+   "intro": "Turn {stranding:turns}. {stranding:kept} of six jobs held. The whole beach is holding its breath.\n\n*The tide lifts it. It rolls once. It goes.*\n\nIt leaves a trench the shape of a Wailord, and a town of people sitting down in the wet sand, laughing and shaking.",
+   "choices": [
+    {
+     "label": "Watch it go.",
+     "success": {
+      "text": "Out past the harbour wall, a spout goes up, and keeps going up. Captain Ffion takes off her cap and doesn't put it back.\n\nBehind the party's boat, something small and round surfaces. A Wailmer. It follows you all the way to the dock.\n\n\"The next crossing,\" Ffion says, \"the harbour'll shave a step off. A boat's a small thing to give. It's what we've got.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "wailmer"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "stranding-helped",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "stranding-gratitude"
+       },
+       {
+        "kind": "moment",
+        "text": "A beach town held a Wailord up until the tide came back for it.",
+        "importance": 80
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-17-dragged",
+   "name": "The Stranding: The Second Wailord",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "wailord",
+    "tint": "#3b7a9c",
+    "effect": "none"
+   },
+   "intro": "Turn {stranding:turns}. {stranding:kept} of six jobs held. It wasn't enough, and everyone on the sand knows it.\n\n*Offshore, a second Wailord calls. The first drags itself the last metres. It lives, hurt.*\n\nIt leaves a long scar in the sand, and something low and answering in the water that you feel in your feet.",
+   "choices": [
+    {
+     "label": "Watch it go.",
+     "success": {
+      "text": "It slides into the surf, slowly, and sinks. Then, a long way out, two spouts, side by side.\n\nBehind the party's boat, something small and round surfaces. A Wailmer. It follows you all the way to the dock.\n\n\"Hurt, not lost,\" says Ffion. \"You gave it the hours it needed. Next crossing, a step off. Don't argue.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "wailmer"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "stranding-helped",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "stranding-gratitude"
+       },
+       {
+        "kind": "moment",
+        "text": "A beach town held a Wailord up until the tide came back for it.",
+        "importance": 80
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-17-festival",
+   "name": "The Stranding: The Festival",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "stranding-helped",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "stranding-at"
+    },
+    {
+     "kind": "flag",
+     "key": "stranding-festival",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wailord",
+    "tint": "#3b7a9c",
+    "effect": "none"
+   },
+   "intro": "*A beach town with every flag it owns out. On the harbour wall, a banner the length of a Wailord.*\n\nPainted on it, huge and a little crooked: {stranding:calmer}. Underneath, in a child's lettering: THE ONE WHO STAYED.\n\nCaptain Ffion is on a crate, shouting the story to people who were there.",
+   "choices": [
+    {
+     "label": "Join the festival.",
+     "success": {
+      "text": "You eat something fried on a stick. Somebody puts a paper crown on your lead. The Wailmer spins in the shallows, delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stranding-festival",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it to them.",
+     "success": {
+      "text": "You leave it to them, which is its own kind of present. The banner follows you down the road for a while.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stranding-festival",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -10,7 +10,7 @@ import { LANDMARK_STOP, TRAVERSAL } from '../../src/core/traversal';
 import { TREASURE_DIG_EVENT } from '../../src/core/run';
 import { DRAMA_LIBRARY } from '../../src/core/drama/schema';
 import { describe, expect, it } from 'vitest';
-import type { Content } from '../../src/core/contentSchema';
+import type { Content, EventEffect as Effect } from '../../src/core/contentSchema';
 import { addEventStops, chooseEvent, eligibleEvents, stopIsHidden } from '../../src/core/events';
 import { findNode, nextChoices } from '../../src/core/map';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
@@ -307,12 +307,20 @@ describe('landmarks and dungeons', () => {
     // Stops queued some nodes on (`laterEvent`: the Fossil Rush's egg) or placed by code need not be rooms, but they do reach the rooms they are.
     const queued = new Set<string>();
     const questOpened = new Set<string>();
+    const retiredOpened = new Set<string>();
     // Openers: outcome effects, a battle's win and lose effects (a friendly fight's loss still opens its room), choice branches,
     // and the choices a Remembers variant adds.
     for (const e of content.events.values()) {
+      // A retired event (kept for saved runs) isn't checked, but a room it opens still counts as reached (an old save can open it).
+      if (e.disabled) {
+        for (const ch of e.choices) for (const o of [ch.success, ch.failure]) for (const ef of o?.effects ?? []) if (ef.kind === 'addEvent') retiredOpened.add(ef.eventId);
+        continue;
+      }
       for (const ch of [...e.choices, ...e.remembers.flatMap((v) => v.addChoices)]) {
-        const lists = [...[ch.success, ch.failure].flatMap((o) => [o?.effects ?? [], o?.battle?.win ?? [], o?.battle?.lose ?? []]), ...(ch.branches ?? []).map((b) => b.effects)];
-        for (const ef of lists.flat()) {
+        const lists = [...[ch.success, ch.failure].flatMap((o) => [o?.effects ?? [], o?.battle?.win ?? [], o?.battle?.lose ?? [], (o?.battle && 'caught' in o.battle ? o.battle.caught : undefined) ?? []]), ...(ch.branches ?? []).map((b) => b.effects)];
+        // A Greenneedle effect (`gn`) holds more effects: a `when`'s `then`, and a `route`'s `to` (an addEventFrom); a `scene` opens room `key`.
+        const flat = (efs: Effect[]): Effect[] => efs.flatMap((ef) => (ef.kind === 'gn' ? [ef, ...flat([...(ef.then ?? []), ...(ef.to ? [ef.to] : [])] as Effect[])] : [ef]));
+        for (const ef of flat(lists.flat())) {
           // Catalog Overhaul markets: a stall that stays open after a question opens itself again (not a room: it is drawn on its own
           // too), and the Game Corner opens its games, which are also drawn on their own (SF91).
           // An event that opens itself again ("Read it again.", "What's on?") re-shows the same stop; that is not a room.
@@ -322,6 +330,8 @@ describe('landmarks and dungeons', () => {
             const [head, tail] = ef.eventId.split('{region}') as [string, string];
             for (const id of content.events.keys()) if (id.startsWith(head) && id.endsWith(tail)) opened.add(id);
           } else if (ef.kind === 'addEvent' && ef.eventId !== e.id) opened.add(ef.eventId);
+          if (ef.kind === 'gn' && ef.op === 'scene' && (ef.key !== e.id || content.events.get(ef.key!)?.room)) opened.add(ef.key!); // a scene beside the current node
+          if (ef.kind === 'gn' && ef.op === 'ahead' && ef.key) opened.add(ef.key); // a stop on the nodes just ahead (gn.new.26)
           if (ef.kind === 'laterEvent') queued.add(ef.eventId);
           // Catalog Overhaul markets: a prize row that needs its own scene opens it (core/market.ts prize).
           if (ef.kind === 'market') for (const row of ef.table ?? []) if (row.event) opened.add(row.event);
@@ -368,11 +378,31 @@ describe('landmarks and dungeons', () => {
     for (const id of content.events.keys()) if (id.startsWith('ultra-tear-')) opened.add(id);
     // Beta 0.7: Pidgey's Resolve places its join rooms from code (core/sky/story.ts pushRoom).
     for (const id of content.events.keys()) if (id.startsWith('sky.join.')) opened.add(id);
+    // gn.14: the Labyrinth ghost's return is placed by code (core/expansion/canonRun.ts addGhostReturnStop).
+    opened.add('gn-14-return');
+    // gn.16: the Tournament rival's return is placed by code too (addRivalReturnStop).
+    opened.add('gn-16-rival-return');
+    // gn.60: the Pokémon that followed you walks in beside a rest (core/greenneedle/followed.ts followedRest).
+    opened.add('gn-60-reveal');
+    // Catalog Overhaul: a placed event (core/co/placement.ts) is put on the map at its home step, room or not.
+    for (const id of content.coPlacement?.keys() ?? []) opened.add(id);
+    // gn.29: the lake opens when the Snake game ends (core/greenneedle/snakeEnd.ts psyduckFinish).
+    opened.add('gn-29-lake');
+    // gn.51: the rescued Pokémon's scene opens beside a rest stop (core/greenneedle/smuggling.ts smuggleRest); gn.53: the siege's rescued Pokémon (citysiege.ts sgRest).
+    opened.add('gn-51-rest');
+    opened.add('gn-53-waiting');
+    // gn.62: the prison moves you between its rooms from code (core/greenneedle/prison.ts prNext).
+    // gn.new.03: the Poké Ball's rest and hatch scenes open beside a rest from code (core/greenneedle/ball.ts).
+    opened.add('gn-new-03-rest');
+    opened.add('gn-new-03-hatch');
+    for (const id of ['gn-62-hub', 'gn-62-warden', 'gn-62-warden-bare', 'gn-62-caught', 'gn-62-wing', 'gn-62-cell-room']) opened.add(id);
+    // Damian's "Go again." (gn.05) opens his next meeting, an ordinary drawn event, at once; anything else opened must be a room.
+    const drawnToo = new Set(['gn-05-barn', 'gn-05-hall', 'gn-05-gym']);
     // Row 17: a rest moment opens its camp scene beside the stop (core/moments/runMoments.ts openEvent).
     for (const m of POKEMON_MOMENTS) if (m.effect?.openEvent) opened.add(m.effect.openEvent);
-    for (const id of opened) expect(content.events.get(id)?.room, id).toBe(true);
+    for (const id of opened) if (!content.coPlacement?.has(id) && !drawnToo.has(id)) expect(content.events.get(id)?.room, id).toBe(true);
     // A retired room (Catalog Overhaul REMOVE: kept for saved runs, never drawn) need not be reachable.
-    for (const e of content.events.values()) if (e.room && !e.disabled) expect(opened.has(e.id) || viaMentor.has(e.id) || queued.has(e.id) || questOpened.has(e.id), e.id).toBe(true);
+    for (const e of content.events.values()) if (e.room && !e.disabled) expect(opened.has(e.id) || retiredOpened.has(e.id) || viaMentor.has(e.id) || queued.has(e.id) || questOpened.has(e.id), e.id).toBe(true);
   });
 
   it('a Mystery Dungeon floor picks its next room from the floor below', () => {

@@ -1,0 +1,9076 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-26-door",
+   "name": "The Island of Giant Pokémon",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "giants-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "giants-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "slowbro",
+    "tint": "#5f7f6a",
+    "effect": "none"
+   },
+   "intro": "A boat pulled up on the shingle, and a ferryman asleep in it.\n\nOut past the breakers there's an island, green and high. Something on it is moving. Something very big.",
+   "choices": [
+    {
+     "label": "Wake the ferryman.",
+     "success": {
+      "text": "**Ferryman:** \"Out there? Hm. Mind your feet. Everything there's bigger than you.\" He rows without looking round.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giants-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-solved",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "stranding-helped",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-calm",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kaiju-freed",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-calm",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-26-beach"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you, out at sea, something very large sighs.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-26-beach",
+   "name": "Island of Giants: The Beach",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "calm",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "giants-calm",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*You've been calm around big ones before. It shows.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowbro",
+    "tint": "#5f7f6a",
+    "effect": "none"
+   },
+   "intro": "The boat grounds. The sand is full of prints the size of the boat.\n\n*A Slowbro's head comes up out of the surf.* *It keeps coming up.*\n\nIt looks down at you, and at your lead, with enormous, gentle interest.",
+   "choices": [
+    {
+     "label": "Hold still.",
+     "success": {
+      "text": "It picks your lead up, the way you'd pick up a shell. It turns it over. It sets it down, gently.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giants-held-still",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-calm",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "The wrong way up. It wanders off, pleased with itself."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-calm",
+        "min": 1,
+        "then": [],
+        "text": "The right way up. It looks at you as if to say: you're calm around big ones. Then it wanders off."
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-river"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run.",
+     "success": {
+      "text": "You run. It follows you up the beach in three slow, curious strides, and the wave it makes knocks you flat.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-river"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Recall my lead.",
+     "success": {
+      "text": "Your lead vanishes into its Ball. The Slowbro stares at the place it was, for a long time. Then it sinks, disappointed.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-river"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-26-river",
+   "name": "Island of Giants: The Dry River",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#5f7f6a",
+    "effect": "none"
+   },
+   "intro": "Small Pokémon at a cracked riverbed, licking the stones.\n\nUpstream, a hill that's breathing. A giant Snorlax lies across the river. It has dammed it by lying down. Above it, a lake.\n\nIt isn't doing it on purpose. It's asleep.",
+   "choices": [
+    {
+     "label": "Tickle its foot.",
+     "success": {
+      "text": "A feather, or a vine, along the sole of a foot the size of a door.\n\nIt giggles in its sleep. It rolls over. The river finds its way round it, and the small Pokémon cheer in high, tiny voices.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giants-river",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giants-solved",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-stack"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "flying",
+        "grass"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Dig a channel past it.",
+     "success": {
+      "text": "It takes the rest of the day. Your Ground-type digs, and digs, and the Snorlax snores on.\n\nAt sunset the water finds the channel, and goes round. Nobody woke anybody.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giants-river",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giants-solved",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-stack"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Attack it.",
+     "success": {
+      "text": "It wakes. It isn't pleased. When it stands, the lake comes down all at once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-snorlax-attacked",
+        "n": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "snorlax"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "giants-snorlax-attacked",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "giants-threat",
+         "n": 0
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "giants-weak",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "giants-solved",
+           "atLeast": 0,
+           "atMost": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-weak",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "giants-threat",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-snorlax-attacked",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "giants-threat",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-back",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-26-high"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-back",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-26-stack"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "rule": {
+        "giant": true,
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "giants-snorlax-attacked",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "giants-threat",
+         "n": 0
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "giants-weak",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "giants-solved",
+           "atLeast": 0,
+           "atMost": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-weak",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "giants-threat",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-snorlax-attacked",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "giants-threat",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-back",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-26-high"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-back",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-26-stack"
+          }
+         ]
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Leave it sleeping.",
+     "success": {
+      "text": "You leave it. The small Pokémon watch you go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-stack"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-26-stack",
+   "name": "Island of Giants: The Sea Stack",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgeot",
+    "tint": "#5f7f6a",
+    "effect": "none"
+   },
+   "intro": "A giant Pidgeot, sitting on a sea stack. Small Flying-types nest on its back, in the hollow between its shoulders.\n\nOne nest has slid to the very edge. The chicks in it are crying.\n\nThe Pidgeot lowers a wing, gently, so you can look.",
+   "choices": [
+    {
+     "label": "Hold still.",
+     "success": {
+      "text": "You hold still. It looks at you a long time. Then the wing stays down, like a ramp.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-26-climb"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Pokémon up alone.",
+     "success": {
+      "text": "The small birds mob it at once, a storm of beaks and wings. It comes back down fast, and a little bald.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-trench"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the nest.",
+     "success": {
+      "text": "You leave it. The crying follows you a long way.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-trench"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-26-climb",
+   "name": "Island of Giants: The Climb",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgeot",
+    "tint": "#5f7f6a",
+    "effect": "none"
+   },
+   "intro": "You climb. Its shoulders rise and fall under you as it breathes, slow as a tide.\n\nThe nest is right at the edge.",
+   "choices": [
+    {
+     "label": "Slide the nest back.",
+     "prompt": {
+      "id": "breath-walk",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "In, out. You move with its breath. You get both hands on the nest, and slide it home.\n\nThe small birds go quiet. One of them sits on your head.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giants-nest",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giants-solved",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-trench"
+         }
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "It breathes out as you breathe in. You slide down its wing into soft feathers, and the nest stays where it was.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-trench"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-26-trench",
+   "name": "Island of Giants: The Trench",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rhydon",
+    "tint": "#5f7f6a",
+    "effect": "none"
+   },
+   "intro": "A giant Rhydon walks a border, back and forth, wearing a trench. The path crosses it.\n\nIt charges anything inside the trench.",
+   "choices": [
+    {
+     "label": "Fight it.",
+     "success": {
+      "text": "You step in. It lowers its horn.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "rhydon"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "giants-threat",
+         "n": 0
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "giants-weak",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "giants-solved",
+           "atLeast": 0,
+           "atMost": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-weak",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "giants-threat",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-snorlax-attacked",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "giants-threat",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-back",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-26-high"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-back",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-26-clearing"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "rule": {
+        "giant": true,
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "giants-threat",
+         "n": 0
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "giants-weak",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "giants-solved",
+           "atLeast": 0,
+           "atMost": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-weak",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "giants-threat",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-snorlax-attacked",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "giants-threat",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-back",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-26-high"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-back",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-26-clearing"
+          }
+         ]
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Go the long way round.",
+     "success": {
+      "text": "It costs you time, but the Rhydon never sees you.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-clearing"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for it to reach the far end.",
+     "prompt": {
+      "id": "trench-dash",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "It turns at the far end. You run, and you're across before it's turned back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-clearing"
+         }
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Too soon. It sees you, and it comes.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "rhydon"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "giants-threat",
+         "n": 0
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "giants-weak",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "giants-solved",
+           "atLeast": 0,
+           "atMost": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-weak",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "giants-threat",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-snorlax-attacked",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "giants-threat",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-back",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-26-high"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-back",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-26-clearing"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "rule": {
+        "giant": true,
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "giants-threat",
+         "n": 0
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "giants-weak",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "giants-solved",
+           "atLeast": 0,
+           "atMost": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-weak",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "giants-threat",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-snorlax-attacked",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "giants-threat",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-back",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-26-high"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-back",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-26-clearing"
+          }
+         ]
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-26-clearing",
+   "name": "Island of Giants: The Clearing",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tangela",
+    "tint": "#5f7f6a",
+    "effect": "none"
+   },
+   "intro": "A giant Kabutops and a giant Tangela face each other across a clearing. Neither has moved in a day.\n\nThey're quarrelling over a nest site. It's too small for either of them.",
+   "choices": [
+    {
+     "label": "Show them.",
+     "success": {
+      "text": "You walk into the clearing, and call out your whole party, and stand them in it.\n\nIt's full. Six small Pokémon, and there's no more room.\n\nThe giants look. They look at each other. They leave, in opposite directions.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giants-quarrel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giants-solved",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-high"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Side with the Kabutops.",
+     "success": {
+      "text": "The Tangela sulks. It will sulk in the clearing for a week.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giants-sided",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-high"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Side with the Tangela.",
+     "success": {
+      "text": "The Kabutops sulks. It will sulk in the clearing for a week.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giants-sided",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-high"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to it.",
+     "success": {
+      "text": "You leave them. Neither notices.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-threat",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "giants-weak",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "giants-solved",
+          "atLeast": 0,
+          "atMost": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-weak",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-snorlax-attacked",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "giants-threat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-26-high"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-26-high"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-26-high",
+   "name": "Island of Giants: The High Ground",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "snorlax",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "giants-snorlax-attacked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It doesn't wait. It's already on its way down the hill.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "nidoking",
+    "tint": "#5f7f6a",
+    "effect": "none"
+   },
+   "intro": "*A giant Nidoking. It's the size of a church. It's been watching you the whole way up.*\n\n*It doesn't roar. It lowers its head until one eye is level with you, and it waits.*",
+   "choices": [
+    {
+     "label": "Wait with it.",
+     "success": {
+      "text": "It steps aside. Then it follows you down to the beach, to see you off.\n\n*It puts one claw in the surf, and pushes the boat out.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-guardian",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You helped the island, and its guardian saw you off.",
+        "importance": 85
+       },
+       {
+        "kind": "item",
+        "id": "giants-mark",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giants-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "giants-at"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-river",
+        "min": 1,
+        "then": [
+         {
+          "kind": "item",
+          "id": "leftovers",
+          "count": 1
+         }
+        ],
+        "text": "Where the Snorlax was lying: a Leftovers."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-nest",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "giants-feather",
+          "amount": 1
+         },
+         {
+          "kind": "egg",
+          "species": [],
+          "types": [
+           "flying"
+          ],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "left": 3,
+          "unit": "battle"
+         }
+        ],
+        "text": "From the Pidgeot: a feather the size of an oar, too big to carry far. From the small birds: an Egg."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-quarrel",
+        "min": 1,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "root-fossil",
+           "claw-fossil"
+          ]
+         }
+        ],
+        "text": "From the empty clearing: a fossil."
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "giants-solved",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Wait with it.",
+     "success": {
+      "text": "It steps aside, slowly. It doesn't see you off.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "giants-guardian",
+        "n": 1
+       },
+       {
+        "kind": "item",
+        "id": "giants-mark",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giants-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "giants-at"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-river",
+        "min": 1,
+        "then": [
+         {
+          "kind": "item",
+          "id": "leftovers",
+          "count": 1
+         }
+        ],
+        "text": "Where the Snorlax was lying: a Leftovers."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-nest",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "giants-feather",
+          "amount": 1
+         },
+         {
+          "kind": "egg",
+          "species": [],
+          "types": [
+           "flying"
+          ],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "left": 3,
+          "unit": "battle"
+         }
+        ],
+        "text": "From the Pidgeot: a feather the size of an oar, too big to carry far. From the small birds: an Egg."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "giants-quarrel",
+        "min": 1,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "root-fossil",
+           "claw-fossil"
+          ]
+         }
+        ],
+        "text": "From the empty clearing: a fossil."
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "giants-solved",
+       "atLeast": 2,
+       "atMost": 2
+      },
+      {
+       "kind": "flag",
+       "key": "giants-threat",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Fight it.",
+     "success": {
+      "text": "It rises. The ground rises with it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "nidoking"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "giants-guardian",
+         "n": 2
+        },
+        {
+         "kind": "item",
+         "id": "giants-mark",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "giants-done",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "giants-at"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-river",
+         "min": 1,
+         "then": [
+          {
+           "kind": "item",
+           "id": "leftovers",
+           "count": 1
+          }
+         ],
+         "text": "Where the Snorlax was lying: a Leftovers."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-nest",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "giants-feather",
+           "amount": 1
+          },
+          {
+           "kind": "egg",
+           "species": [],
+           "types": [
+            "flying"
+           ],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "left": 3,
+           "unit": "battle"
+          }
+         ],
+         "text": "From the Pidgeot: a feather the size of an oar, too big to carry far. From the small birds: an Egg."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-quarrel",
+         "min": 1,
+         "then": [
+          {
+           "kind": "itemFrom",
+           "ids": [
+            "root-fossil",
+            "claw-fossil"
+           ]
+          }
+         ],
+         "text": "From the empty clearing: a fossil."
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "rule": {
+        "giant": true,
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "giants-guardian",
+         "n": 2
+        },
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "flag",
+         "key": "giants-lost",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "giants-mark",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "giants-done",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "giants-at"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-river",
+         "min": 1,
+         "then": [
+          {
+           "kind": "item",
+           "id": "leftovers",
+           "count": 1
+          }
+         ],
+         "text": "Where the Snorlax was lying: a Leftovers."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-nest",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "giants-feather",
+           "amount": 1
+          },
+          {
+           "kind": "egg",
+           "species": [],
+           "types": [
+            "flying"
+           ],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "left": 3,
+           "unit": "battle"
+          }
+         ],
+         "text": "From the Pidgeot: a feather the size of an oar, too big to carry far. From the small birds: an Egg."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "giants-quarrel",
+         "min": 1,
+         "then": [
+          {
+           "kind": "itemFrom",
+           "ids": [
+            "root-fossil",
+            "claw-fossil"
+           ]
+          }
+         ],
+         "text": "From the empty clearing: a fossil."
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ],
+       "foeMoves": [
+        "earthquake",
+        "megahorn",
+        "stamp"
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "giants-threat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Go back and help.",
+     "success": {
+      "text": "It watches you go back down the hill. It will still be here.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giants-back",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-26-help"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "giants-threat",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "giants-snorlax-attacked",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "giants-back",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-26-help",
+   "name": "Island of Giants: Going Back",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5f7f6a",
+    "effect": "none"
+   },
+   "intro": "Which one?",
+   "choices": [
+    {
+     "label": "The river.",
+     "success": {
+      "text": "Back down to the dry river.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-26-river"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "giants-river",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "The nest.",
+     "success": {
+      "text": "Back to the sea stack.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-26-stack"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "giants-nest",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "The quarrel.",
+     "success": {
+      "text": "Back to the clearing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-26-clearing"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "giants-quarrel",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-26-print",
+   "name": "A Footprint",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "giants-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "giants-at"
+    },
+    {
+     "kind": "flag",
+     "key": "giants-print",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5f7f6a",
+    "effect": "none"
+   },
+   "intro": "A single enormous footprint, pressed into a field.\n\nNobody comments on it.",
+   "choices": [
+    {
+     "label": "Nor do you.",
+     "success": {
+      "text": "You step round it, and walk on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giants-print",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-gate",
+   "name": "The Pokémon Circus",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "circus-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "season",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "circus-season",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Your season ticket gets a bow from the man at the gate. Every ride is free tonight.*"
+    },
+    {
+     "id": "again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "circus-visits",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*New posters. New acts. The same band, and the same smell of sugar.*"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "*A tent, red and gold, where there was a field yesterday. A band. A smell of sugar.*\n\n**Signor Fontaine:** \"Six wonders! One night only! Possibly two! Step up, step up, the clever ones win things!\"",
+   "choices": [
+    {
+     "label": "Step up.",
+     "success": {
+      "text": "Three tickets, free at the gate. More are ₽100 at the booth inside.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-visits",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "circus-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "circus-tickets",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-season",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "circus-tickets",
+          "n": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "cast",
+        "key": "circus-shy",
+        "species": [
+         "mime-jr",
+         "pachirisu",
+         "kirlia"
+        ],
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "circus-shy-today",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The band follows you down the road for a while, then gives up.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "circus-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-top",
+   "name": "The Pokémon Circus: The Big Top",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "remembers": [
+    {
+     "id": "star",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "circus-shy-helped",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "circus-visits",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Top of the bill on every poster: Tumble, by name. Mid-routine, it stops. It has seen someone in row four. It finishes the routine facing that way.*"
+    },
+    {
+     "id": "bill",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roux-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Lower down the bill, in smaller letters: Madame Roux, Fortunes.*"
+    },
+    {
+     "id": "magician",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "magician-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*And: The Magician. Somebody has drawn a rabbit on the poster.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "Sawdust, lanterns, a ring in the middle and booths all round it.\n\nA board by the entrance: Illusions. Strength. The Track. The Jugglers. The Arena. The Mystery Tent.",
+   "choices": [
+    {
+     "label": "See the attractions.",
+     "success": {
+      "text": "Six booths, and a barker at each.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-acts"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk round behind the tent.",
+     "success": {
+      "text": "Away from the crowd, a practice ring under a single lamp.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-shy-met",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-shy"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The final act.",
+     "success": {
+      "text": "The lights dim. The band stops.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-visits",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-final-3"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-visits",
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-final"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the circus.",
+     "success": {
+      "text": "Outside, the night is very quiet after the band.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-acts",
+   "name": "The Pokémon Circus: The Booths",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "Mr. Mime's Illusions. Machamp's Strength Contest. Rapidash's Track.",
+   "choices": [
+    {
+     "label": "Mr. Mime's Illusions.",
+     "success": {
+      "text": "Three Mr. Mime, side by side, each leaning on an invisible wall.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-mime"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Machamp's Strength Contest.",
+     "success": {
+      "text": "A Machamp on a box, two arms folded behind its back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-machamp"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rapidash's Track.",
+     "success": {
+      "text": "A short sandy track and three jumps.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-track"
+       }
+      ]
+     }
+    },
+    {
+     "label": "More booths.",
+     "success": {
+      "text": "Further round the ring.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-acts-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-acts-2",
+   "name": "The Pokémon Circus: The Booths",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "The Jugglers. The Arena. The Mystery Tent.",
+   "choices": [
+    {
+     "label": "The Jugglers.",
+     "success": {
+      "text": "Aipom on a bench, tails twitching.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-juggle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Arena.",
+     "success": {
+      "text": "A sawdust ring and three trainers in sequins.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-arena"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Mystery Tent.",
+     "success": {
+      "text": "A small black tent with a small black curtain.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-mystery"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Further round.",
+     "success": {
+      "text": "The last booths, by the exit.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-acts-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-acts-3",
+   "name": "The Pokémon Circus: New This Year",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "The newest acts, still smelling of paint.",
+   "choices": [
+    {
+     "label": "The Ambipom trapeze.",
+     "success": {
+      "text": "High overhead, Ambipom swing from bar to bar by their tails, and catch each other every time. Nearly every time.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-visits",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "The fire-eater.",
+     "success": {
+      "text": "A Magmar eats a torch, and looks at you as if to say: your turn. You decline.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-fire",
+        "amount": 1
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-visits",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "The water show.",
+     "success": {
+      "text": "A Dewgong and three Lumineon in a glass tank, turning in slow rings. The crowd goes quiet.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-visits",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Back to the Big Top.",
+     "success": {
+      "text": "Back under the big top. The band hasn't stopped once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-mime",
+   "name": "Mr. Mime's Illusions",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "mr-mime",
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "Three Mr. Mime. Two are illusions. Only the real one's wall will hold your weight.\n\nOne ticket, and you may lean once.",
+   "choices": [
+    {
+     "label": "Lean on a wall.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "circus-tickets",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You pick one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "circus-mime",
+        "weights": [
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-mime-lean"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a ticket (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "A striped ticket, still warm from the machine.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-mime"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Big Top.",
+     "success": {
+      "text": "Back under the big top. The band hasn't stopped once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-mime-lean",
+   "name": "Mr. Mime's Illusions",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "mr-mime",
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "Left, middle or right?",
+   "choices": [
+    {
+     "label": "The left one.",
+     "success": {
+      "text": "You lean on the left one.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-mime",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "focus-sash",
+           "choice-band",
+           "choice-specs",
+           "choice-scarf",
+           "life-orb",
+           "eviolite",
+           "rocky-helmet"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "circus-mime-won",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-mime"
+         }
+        ],
+        "text": "It holds. The real Mr. Mime bows, and hands you a prize from behind its back."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-mime",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-mime"
+         }
+        ],
+        "text": "You fall straight through it into the sawdust. The crowd loves it."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-mime",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-mime"
+         }
+        ],
+        "text": "You fall straight through it into the sawdust. The crowd loves it."
+       }
+      ]
+     }
+    },
+    {
+     "label": "The middle one.",
+     "success": {
+      "text": "You lean on the middle one.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-mime",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "focus-sash",
+           "choice-band",
+           "choice-specs",
+           "choice-scarf",
+           "life-orb",
+           "eviolite",
+           "rocky-helmet"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "circus-mime-won",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-mime"
+         }
+        ],
+        "text": "It holds. The real Mr. Mime bows, and hands you a prize from behind its back."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-mime",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-mime"
+         }
+        ],
+        "text": "You fall straight through it into the sawdust. The crowd loves it."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-mime",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-mime"
+         }
+        ],
+        "text": "You fall straight through it into the sawdust. The crowd loves it."
+       }
+      ]
+     }
+    },
+    {
+     "label": "The right one.",
+     "success": {
+      "text": "You lean on the right one.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-mime",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "focus-sash",
+           "choice-band",
+           "choice-specs",
+           "choice-scarf",
+           "life-orb",
+           "eviolite",
+           "rocky-helmet"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "circus-mime-won",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-mime"
+         }
+        ],
+        "text": "It holds. The real Mr. Mime bows, and hands you a prize from behind its back."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-mime",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-mime"
+         }
+        ],
+        "text": "You fall straight through it into the sawdust. The crowd loves it."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-mime",
+        "min": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-mime"
+         }
+        ],
+        "text": "You fall straight through it into the sawdust. The crowd loves it."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-machamp",
+   "name": "Machamp's Strength Contest",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "machamp",
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "Enter one Pokémon. Attack decides.\n\nThe Machamp uses only two of its four arms, to be fair.",
+   "choices": [
+    {
+     "label": "Enter your strongest.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "circus-tickets",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Your strongest steps up and takes the Machamp's two hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "circus-strong",
+        "if": [
+         {
+          "kind": "gn",
+          "test": "strength",
+          "key": "machamp",
+          "n": 50
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-strong",
+        "min": 1,
+        "then": [
+         {
+          "kind": "item",
+          "id": "protein",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "circus-strength-won",
+          "amount": 1
+         }
+        ],
+        "text": "Slowly, slowly, the Machamp's arms go down. It laughs, and lets go, and hands over a Protein."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-strong",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "The Machamp holds it there, politely, with two arms. It doesn't even need the other two."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-machamp"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a ticket (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "A striped ticket, still warm from the machine.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-machamp"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Big Top.",
+     "success": {
+      "text": "Back under the big top. The band hasn't stopped once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-track",
+   "name": "Rapidash's Track",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "rapidash",
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "A short race beside a Rapidash. Three jumps.\n\nSpeed, and timing.",
+   "choices": [
+    {
+     "label": "Race.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "circus-tickets",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "prompt": {
+      "id": "track-jumps",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Three jumps, and three clean landings. The Rapidash nods to you at the finish.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": -1
+       },
+       {
+        "kind": "money",
+        "amount": 600
+       },
+       {
+        "kind": "flag",
+        "key": "circus-track-won",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-track"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You clip the last jump. The Rapidash waits for you at the finish, which is somehow worse.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-track"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a ticket (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "A striped ticket, still warm from the machine.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-track"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Big Top.",
+     "success": {
+      "text": "Back under the big top. The band hasn't stopped once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-juggle",
+   "name": "The Jugglers",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "aipom",
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "Keep the beat while the Aipom juggle.\n\nThree Aipom, then five, then seven.",
+   "choices": [
+    {
+     "label": "Keep the beat.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "circus-tickets",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "prompt": {
+      "id": "juggle-three",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Three Aipom, three balls. Easy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-juggle-5"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A ball goes into the crowd. So does an Aipom.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-juggle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a ticket (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "A striped ticket, still warm from the machine.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-juggle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Big Top.",
+     "success": {
+      "text": "Back under the big top. The band hasn't stopped once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-juggle-5",
+   "name": "The Jugglers",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "aipom",
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "Five Aipom now.",
+   "choices": [
+    {
+     "label": "Keep the beat.",
+     "prompt": {
+      "id": "juggle-five",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Five. The crowd starts clapping along.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-juggle-7"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The fifth Aipom catches a ball with its face.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-juggle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-juggle-7",
+   "name": "The Jugglers",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "aipom",
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "Seven Aipom. The balls are a blur.",
+   "choices": [
+    {
+     "label": "Keep the beat.",
+     "prompt": {
+      "id": "juggle-seven",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Seven, and not one dropped. The Aipom pile on you in celebration, and leave you a bundle of Berries.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "lum-berry",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "circus-juggle-won",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-juggle"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Ball six and ball seven meet in the middle.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-juggle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-arena",
+   "name": "The Arena",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "machoke",
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "Three battles, one after another. One Pokémon. No switching.\n\nWin all three and a TM is yours.",
+   "choices": [
+    {
+     "label": "Send in your strongest.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "circus-tickets",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The bell rings.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": -1
+       },
+       {
+        "kind": "canon",
+        "action": "solo",
+        "species": []
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-27-arena"
+        }
+       ],
+       "chain": 3,
+       "name": "Arena Performers",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "gn",
+         "op": "pick",
+         "key": "circus-tm",
+         "weights": [
+          1,
+          1,
+          1,
+          1
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-tm",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "teachMove",
+           "move": "body-slam"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-tm",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "teachMove",
+           "move": "brick-break"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-tm",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "teachMove",
+           "move": "shadow-ball"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-tm",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "teachMove",
+           "move": "ice-beam"
+          }
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "circus-arena-won",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-27-arena"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Buy a ticket (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "A striped ticket, still warm from the machine.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-arena"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Big Top.",
+     "success": {
+      "text": "Back under the big top. The band hasn't stopped once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-mystery",
+   "name": "The Mystery Tent",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "remembers": [
+    {
+     "id": "two",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "circus-visits",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "*This year there is a second curtain.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "A curtain. A silhouette behind it. A price on a card.\n\nIts tier is shown. Its species isn't.",
+   "choices": [
+    {
+     "label": "Draw back the card.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "circus-tickets",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The card turns over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "circus-tier",
+        "weights": [
+         3,
+         2,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-mystery-offer"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a ticket (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "A striped ticket, still warm from the machine.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-mystery"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the Big Top.",
+     "success": {
+      "text": "Back under the big top. The band hasn't stopped once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-mystery-offer",
+   "name": "The Mystery Tent",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "Behind the curtain, something shifts its weight.",
+   "choices": [
+    {
+     "label": "Pay ₽500 (Common).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The curtain goes back.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "eevee",
+         "pikachu",
+         "growlithe",
+         "vulpix",
+         "ponyta",
+         "abra",
+         "magnemite",
+         "shellder"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-mystery-bought",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-tier",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Pay ₽1,500 (Rare).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "The curtain goes back.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "dratini",
+         "larvitar",
+         "bagon",
+         "gible",
+         "beldum",
+         "riolu",
+         "scyther",
+         "togepi"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-mystery-bought",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-tier",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Pay ₽4,000 (Very rare).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 4000
+      }
+     ],
+     "success": {
+      "text": "The curtain goes back.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -4000
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "lapras",
+         "snorlax",
+         "chansey",
+         "aerodactyl",
+         "porygon",
+         "kangaskhan"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-mystery-bought",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-tier",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The silhouette sits down. You will never know.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-shy",
+   "name": "The Pokémon Circus: The Practice Ring",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "remembers": [
+    {
+     "id": "understudy",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "understudy-went-on",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*The Mime Jr. from the Understudy is here too, practising beside it. They seem to be friends.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "*Behind the tent, at the practice ring, something is doing a perfect routine to nobody.*\n\n*It sees you. It drops everything.*\n\n**A stagehand, Clover Pye:** \"That's Tumble. Best we've got. Goes on, sees the faces, and can't move. Three seasons now.\"",
+   "choices": [
+    {
+     "label": "Rehearse with it, in the empty tent.",
+     "success": {
+      "text": "You sit in the front row of the empty tent. Then your lead sits beside you. Then the whole party.\n\nSix in the audience. It gets all the way through the routine.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-rehearsed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "circus-help-count",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-rehearsed",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "circus-help-count",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-wings",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "circus-help-count",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-on-stage",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "circus-help-count",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-help-count",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "circus-shy-helped",
+          "n": 1
+         }
+        ],
+        "text": "*Two of the three, and tonight it finishes its act to a standing crowd. It bows, falls over, and stays down, laughing.*"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-rehearsed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Stand in the wings tonight.",
+     "success": {
+      "text": "During the show, it looks to the side, and you're there.\n\nIt keeps looking. It keeps going.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-wings",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "circus-help-count",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-rehearsed",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "circus-help-count",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-wings",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "circus-help-count",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-on-stage",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "circus-help-count",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-help-count",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "circus-shy-helped",
+          "n": 1
+         }
+        ],
+        "text": "*Two of the three, and tonight it finishes its act to a standing crowd. It bows, falls over, and stays down, laughing.*"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-wings",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go on with it.",
+     "success": {
+      "text": "You walk on beside it. It goes badly for you and wonderfully for it.\n\nThe crowd assumes it's a clown act. The applause is enormous.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-on-stage",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "circus-help-count",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-rehearsed",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "circus-help-count",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-wings",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "circus-help-count",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-on-stage",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "circus-help-count",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-help-count",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "circus-shy-helped",
+          "n": 1
+         }
+        ],
+        "text": "*Two of the three, and tonight it finishes its act to a standing crowd. It bows, falls over, and stays down, laughing.*"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-on-stage",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave it be.",
+     "success": {
+      "text": "It isn't on the bill tonight.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-final",
+   "name": "The Pokémon Circus: The Final Act",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "remembers": [
+    {
+     "id": "shy",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "circus-shy-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Last into the ring: Tumble. It waves at you first.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "**Signor Fontaine:** \"And NOW! The management itself! A battle! My company against your… what do you call yours? Your *friends!* How sweet! Places!\"",
+   "choices": [
+    {
+     "label": "Places!",
+     "success": {
+      "text": "The ringmaster sweeps his hat at the band. \"Marvellous!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "circus-owner-lost",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-owner-lost",
+         "min": 1,
+         "then": [],
+         "text": "**Signor Fontaine:** \"Marvellous! They *nearly!* Again tomorrow!\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-27-top"
+        }
+       ],
+       "sprite": "gentleman",
+       "team": [
+        "mr-mime",
+        "machamp",
+        "rapidash",
+        "aipom"
+       ],
+       "name": "Signor Fontaine",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "circus-season",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "circus-owner-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf",
+          "life-orb",
+          "eviolite",
+          "rocky-helmet"
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-owner-beaten",
+         "min": 1,
+         "then": [],
+         "text": "Fontaine sweeps off his hat. **Signor Fontaine:** \"Bravo! A season ticket: every circus after this is free. And a little something from the prop box.\""
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "circus-asks",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "circus-shy-helped",
+           "atLeast": 1,
+           "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-visits",
+           "atLeast": 2,
+           "atMost": 99
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-asks",
+         "min": 1,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-27-after"
+          }
+         ]
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-shy-helped",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Places!",
+     "success": {
+      "text": "The ringmaster sweeps his hat at the band. Tumble is last in line, and proud.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "circus-owner-lost",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-owner-lost",
+         "min": 1,
+         "then": [],
+         "text": "**Signor Fontaine:** \"Marvellous! They *nearly!* Again tomorrow!\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-27-top"
+        }
+       ],
+       "sprite": "gentleman",
+       "team": [
+        "mr-mime",
+        "machamp",
+        "rapidash",
+        "aipom",
+        "@circus-shy"
+       ],
+       "name": "Signor Fontaine",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "circus-season",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "circus-owner-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf",
+          "life-orb",
+          "eviolite",
+          "rocky-helmet"
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-owner-beaten",
+         "min": 1,
+         "then": [],
+         "text": "Fontaine sweeps off his hat. **Signor Fontaine:** \"Bravo! A season ticket: every circus after this is free. And a little something from the prop box.\""
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "circus-asks",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "circus-shy-helped",
+           "atLeast": 1,
+           "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-visits",
+           "atLeast": 2,
+           "atMost": 99
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-asks",
+         "min": 1,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-27-after"
+          }
+         ]
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-shy-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Not tonight.",
+     "success": {
+      "text": "\"Tomorrow, then! Or the next day! We are always here, until we aren't!\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-final-3",
+   "name": "The Pokémon Circus: The Final Act",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "remembers": [
+    {
+     "id": "shy",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "circus-shy-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Last into the ring: Tumble. It waves at you first.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "**Signor Fontaine:** \"And NOW! The management itself! And my Ambipom, who has grown since last we met! Places!\"",
+   "choices": [
+    {
+     "label": "Places!",
+     "success": {
+      "text": "The ringmaster sweeps his hat at the band. \"Marvellous!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "circus-owner-lost",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-owner-lost",
+         "min": 1,
+         "then": [],
+         "text": "**Signor Fontaine:** \"Marvellous! They *nearly!* Again tomorrow!\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-27-top"
+        }
+       ],
+       "sprite": "gentleman",
+       "team": [
+        "mr-mime",
+        "machamp",
+        "rapidash",
+        "ambipom"
+       ],
+       "name": "Signor Fontaine",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "circus-season",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "circus-owner-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf",
+          "life-orb",
+          "eviolite",
+          "rocky-helmet"
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-owner-beaten",
+         "min": 1,
+         "then": [],
+         "text": "Fontaine sweeps off his hat. **Signor Fontaine:** \"Bravo! A season ticket: every circus after this is free. And a little something from the prop box.\""
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "circus-asks",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "circus-shy-helped",
+           "atLeast": 1,
+           "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-visits",
+           "atLeast": 2,
+           "atMost": 99
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-asks",
+         "min": 1,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-27-after"
+          }
+         ]
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-shy-helped",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Places!",
+     "success": {
+      "text": "The ringmaster sweeps his hat at the band. Tumble is last in line, and proud.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "circus-owner-lost",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-owner-lost",
+         "min": 1,
+         "then": [],
+         "text": "**Signor Fontaine:** \"Marvellous! They *nearly!* Again tomorrow!\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-27-top"
+        }
+       ],
+       "sprite": "gentleman",
+       "team": [
+        "mr-mime",
+        "machamp",
+        "rapidash",
+        "ambipom",
+        "@circus-shy"
+       ],
+       "name": "Signor Fontaine",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "circus-season",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "circus-owner-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf",
+          "life-orb",
+          "eviolite",
+          "rocky-helmet"
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-owner-beaten",
+         "min": 1,
+         "then": [],
+         "text": "Fontaine sweeps off his hat. **Signor Fontaine:** \"Bravo! A season ticket: every circus after this is free. And a little something from the prop box.\""
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "circus-asks",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "circus-shy-helped",
+           "atLeast": 1,
+           "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-visits",
+           "atLeast": 2,
+           "atMost": 99
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-asks",
+         "min": 1,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-27-after"
+          }
+         ]
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-shy-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Not tonight.",
+     "success": {
+      "text": "\"Tomorrow, then! Or the next day! We are always here, until we aren't!\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-after",
+   "name": "The Pokémon Circus",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "After the show, the tent empties. Tumble comes out of the wings and stands at your feet.\n\nIt's holding the end of a ribbon from its act. It holds it out.",
+   "choices": [
+    {
+     "label": "Come with us.",
+     "success": {
+      "text": "It takes the ribbon in its teeth, and comes. It brings a move from its act.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "circus-act",
+        "weights": [
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-act",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "@circus-shy"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "moves": [
+           "baton-pass"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-act",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "@circus-shy"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "moves": [
+           "teeter-dance"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-act",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "@circus-shy"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "moves": [
+           "encore"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "circus-shy-joined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay. They need you here.",
+     "success": {
+      "text": "It nods. It goes back to the ring and does the whole routine again, just for you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-door",
+   "name": "The {team} Hideout",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "evil",
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "hideout-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "hideout-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "A shuttered {front} building on the edge of town. No sign on the door.\n\nA {grunt} is smoking by the bins. He doesn't see you. Behind him, the door is propped open with a fire extinguisher.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You step over the extinguisher. Inside it smells of floor polish and burnt coffee.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-alert",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-loop",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "hideout-looped",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "amount": -1
+         }
+        ],
+        "text": "The camera's red light stays off. The loop is still running."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-alert",
+          "amount": 2
+         },
+         {
+          "kind": "gn",
+          "op": "capFlag",
+          "key": "hideout-alert",
+          "n": 10
+         }
+        ],
+        "text": "A camera turns, slowly, to follow you. (Alert +2)"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-28-offices"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you the {grunt} finishes his cigarette, kicks the extinguisher, and the door swings shut.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-offices",
+   "name": "{team} Hideout: The Offices",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "bored",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 0,
+       "atMost": 4
+      }
+     ],
+     "notice": "*Alert low: the office is bored. Some of them could be talked past.*"
+    },
+    {
+     "id": "patrol",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 5,
+       "atMost": 9
+      }
+     ],
+     "notice": "*Alert: patrols. Torches sweep the office. Nobody's talking their way past anyone now.*"
+    },
+    {
+     "id": "full",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 10,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Alert 10. Every alarm in the building is going. Every Grunt left has called up one more Pokémon.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "Desks. A canteen with a broken kettle. Two {grunt}s arguing over a stapler.\n\nOn the staff noticeboard: *LOST: one Meowth, answers to nothing.*",
+   "choices": [
+    {
+     "label": "Search the filing cabinet.",
+     "success": {
+      "text": "Third drawer down, under a lunch order: a File. Names, dates, a map with red pins in it.\n\nYou fold it into your jacket. The drawer squeaks shut.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-file",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "files"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "hideout-looped",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "amount": -1
+         }
+        ],
+        "text": "The camera's red light stays off. The loop is still running."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-alert",
+          "amount": 2
+         },
+         {
+          "kind": "gn",
+          "op": "capFlag",
+          "key": "hideout-alert",
+          "n": 10
+         }
+        ],
+        "text": "A camera turns, slowly, to follow you. (Alert +2)"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-offices"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-file",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Slip behind the canteen.",
+     "success": {
+      "text": "Past the fridge, a door marked STAFF ONLY. Somebody has written *REALLY* under it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-back"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Talk your way past.",
+     "success": {
+      "text": "\"New starter,\" you say. \"They sent me down to Labs.\" The {grunt}s shrug. Neither of them wants the stapler that much.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "hideout-looped",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "amount": -1
+         }
+        ],
+        "text": "The camera's red light stays off. The loop is still running."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-alert",
+          "amount": 2
+         },
+         {
+          "kind": "gn",
+          "op": "capFlag",
+          "key": "hideout-alert",
+          "n": 10
+         }
+        ],
+        "text": "A camera turns, slowly, to follow you. (Alert +2)"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-28-labs"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 0,
+       "atMost": 4
+      }
+     ]
+    },
+    {
+     "label": "Fight your way through.",
+     "success": {
+      "text": "The stapler goes flying. Both of them reach for their Balls.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "{grunt}",
+       "size": 2,
+       "levelBonus": 0,
+       "pseudo": true,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "hideout-looped",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "hideout-loop",
+           "atLeast": 1,
+           "atMost": 99
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "hideout-looped",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "hideout-loop",
+           "amount": -1
+          }
+         ],
+         "text": "The camera's red light stays off. The loop is still running."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "hideout-looped",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "hideout-alert",
+           "amount": 2
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "hideout-alert",
+           "n": 10
+          }
+         ],
+         "text": "A camera turns, slowly, to follow you. (Alert +2)"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-28-labs"
+        }
+       ],
+       "moreIf": {
+        "key": "hideout-alert",
+        "at": 10
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-back",
+   "name": "{team} Hideout: Behind the Canteen",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "A cupboard full of mops. Behind the mops, a cash box. Beside it, a wall of little monitors.\n\nA tape deck under the desk, labelled *LOOP*.",
+   "choices": [
+    {
+     "label": "Take the petty cash.",
+     "success": {
+      "text": "Notes, coins, a voucher for a free noodle bowl. The team's petty cash. (₽1,200)",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 1200
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-cash",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-back"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-cash",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Put the loop on.",
+     "success": {
+      "text": "The monitors flicker, and show an empty corridor, over and over. The next two cameras see nothing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-loop",
+        "n": 2
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-tapes",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-back"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-tapes",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Smash the monitors.",
+     "success": {
+      "text": "Glass everywhere. Somewhere upstairs, a bell starts ringing. Boots on the stairs. (Alert +3)",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-alert",
+        "amount": 3
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "hideout-alert",
+        "n": 10
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-tapes",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "{grunt}",
+       "size": 2,
+       "levelBonus": 0,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-28-offices"
+        }
+       ],
+       "moreIf": {
+        "key": "hideout-alert",
+        "at": 10
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-tapes",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the offices.",
+     "success": {
+      "text": "You put the mops back the way they were.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-offices"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-labs",
+   "name": "{team} Hideout: The Labs",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "known",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-lab-known",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Through the frosted glass of the locked lab, the lights are still on.*"
+    },
+    {
+     "id": "patrol",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 5,
+       "atMost": 9
+      }
+     ],
+     "notice": "*Alert: patrols. Torches sweep the lab floor. Nobody's talking their way past anyone now.*"
+    },
+    {
+     "id": "full",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 10,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Alert 10. Every alarm in the building is going. Every Grunt left has called up one more Pokémon.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "porygon",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "Glass. Machines that hum. Scientists in white coats who don't look up.\n\nAt the end of the floor, one laboratory is locked. Beside it, one scientist is standing at a window, not working.",
+   "choices": [
+    {
+     "label": "Talk to the scientist at the window.",
+     "success": {
+      "text": "He doesn't turn round. He's been waiting for somebody, and it might as well be you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-scientist"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-scientist",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Unlock the laboratory.",
+     "success": {
+      "text": "The key turns. The door hisses.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-lab-open",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-lab"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-lab-key",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "hideout-lab-open",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Take the stairs down.",
+     "success": {
+      "text": "The stairs go down to a floor that smells of straw.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "hideout-looped",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "amount": -1
+         }
+        ],
+        "text": "The camera's red light stays off. The loop is still running."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-alert",
+          "amount": 2
+         },
+         {
+          "kind": "gn",
+          "op": "capFlag",
+          "key": "hideout-alert",
+          "n": 10
+         }
+        ],
+        "text": "A camera turns, slowly, to follow you. (Alert +2)"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-28-holding"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight the patrol.",
+     "success": {
+      "text": "A patrol comes round the corner. They've been looking for you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "{grunt}",
+       "size": 2,
+       "levelBonus": 0,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-28-labs"
+        }
+       ],
+       "moreIf": {
+        "key": "hideout-alert",
+        "at": 10
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-28-scientist",
+   "name": "{team} Hideout: Dr. Emmerich Aldersey",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "porygon",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "**Dr. Emmerich Aldersey:** \"You're not staff. Good. I've been hoping someone who isn't staff would come.\"\n\n**Dr. Emmerich Aldersey:** \"I signed on for the research. I didn't ask what it was for. I've started asking.\"",
+   "choices": [
+    {
+     "label": "Give me the key.",
+     "success": {
+      "text": "He takes a key off a string round his neck and holds it out. He doesn't follow you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-lab-key",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-scientist",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-labs"
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's in the locked lab?",
+     "success": {
+      "text": "**Dr. Emmerich Aldersey:** \"The ones that didn't take. They're still alive.\"\n\n\"Nobody's switched the lights off. That's how I know someone here still feels something.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-lab-known",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-scientist"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-lab-known",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Come with me.",
+     "success": {
+      "text": "He looks at you for a long moment. Then he takes off his badge, and goes down the floor opening every door.\n\n**Dr. Emmerich Aldersey:** \"Next region. Look under a rock. I'll find you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-lab-key",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-scientist",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-scientist-turned",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-turned-region"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-loop",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-labs"
+       }
+      ]
+     }
+    },
+    {
+     "label": "You knew. You stayed.",
+     "success": {
+      "text": "**Dr. Emmerich Aldersey:** \"Yes.\" He gives you the key. He goes back to his window.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-lab-key",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-scientist",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-scientist-judged",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-labs"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-lab",
+   "name": "{team} Hideout: The Locked Laboratory",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "known",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-lab-known",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*He was right. The lights are on. Someone kept them on.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "porygon",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "Tanks. In them, Pokémon mid-way through something. They turn their heads to follow you.\n\nOne tank glows a dark, wrong purple. The Pokémon inside it is a Shadow Pokémon. It presses one paw to the glass.",
+   "choices": [
+    {
+     "label": "Open its tank.",
+     "success": {
+      "text": "The glass slides up. It steps out into the cold air and stands very close to you.\n\nIt doesn't trust you. It doesn't trust anyone. It comes anyway.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": true,
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-shadow-freed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-labs"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them sleeping.",
+     "success": {
+      "text": "You leave the lights on.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-labs"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-holding",
+   "name": "{team} Hideout: Holding",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "kind",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kind-total",
+       "atLeast": 10,
+       "atMost": 99
+      }
+     ],
+     "notice": "*One of them knows your lead. A kindness you did on some road, a long time ago. It comes to the bars first.*"
+    },
+    {
+     "id": "patrol",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 5,
+       "atMost": 9
+      }
+     ],
+     "notice": "*Alert: patrols. Torches sweep the pen. Nobody's talking their way past anyone now.*"
+    },
+    {
+     "id": "full",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 10,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Alert 10. Every alarm in the building is going. Every Grunt left has called up one more Pokémon.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "chansey",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "Cages, stacked three high, labelled for shipping. A Chansey in the nearest one is trying to look after all of them through the bars.\n\nThe pen keeper, a tired {grunt} with a bucket of feed, steps in front of them. \"Don't. I just feed them. Don't.\"",
+   "choices": [
+    {
+     "label": "Open every cage.",
+     "success": {
+      "text": "You open every cage. She drops the bucket and reaches for a Ball.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-pen-fought",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "{grunt}",
+       "size": 2,
+       "levelBonus": 0,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "freed-caged",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "hideout-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "hideout-region"
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "hideout-looped",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "hideout-loop",
+           "atLeast": 1,
+           "atMost": 99
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "hideout-looped",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "hideout-loop",
+           "amount": -1
+          }
+         ],
+         "text": "The camera's red light stays off. The loop is still running."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "hideout-looped",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "hideout-alert",
+           "amount": 2
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "hideout-alert",
+           "n": 10
+          }
+         ],
+         "text": "A camera turns, slowly, to follow you. (Alert +2)"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-28-vault"
+        }
+       ],
+       "moreIf": {
+        "key": "hideout-alert",
+        "at": 10
+       }
+      }
+     }
+    },
+    {
+     "label": "Ask the keeper to help.",
+     "success": {
+      "text": "She looks at you for a long time. \"...They bite the boss. They never bite me.\"\n\nShe hands you the keys, folds her jacket on the bucket, and helps you open every cage. Then she walks out with them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-keeper-quit",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "freed-caged",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "hideout-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-region"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "hideout-looped",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-loop",
+          "amount": -1
+         }
+        ],
+        "text": "The camera's red light stays off. The loop is still running."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-looped",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "hideout-alert",
+          "amount": 2
+         },
+         {
+          "kind": "gn",
+          "op": "capFlag",
+          "key": "hideout-alert",
+          "n": 10
+         }
+        ],
+        "text": "A camera turns, slowly, to follow you. (Alert +2)"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-28-vault"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 0,
+       "atMost": 4
+      }
+     ]
+    },
+    {
+     "label": "Ask the keeper to help.",
+     "success": {
+      "text": "\"Not with the alarms going,\" she says. \"They'll know it was me.\" She puts the bucket down, and reaches for a Ball.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "{grunt}",
+       "size": 2,
+       "levelBonus": 0,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "freed-caged",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "hideout-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "hideout-region"
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "hideout-looped",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "hideout-loop",
+           "atLeast": 1,
+           "atMost": 99
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "hideout-looped",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "hideout-loop",
+           "amount": -1
+          }
+         ],
+         "text": "The camera's red light stays off. The loop is still running."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "hideout-looped",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "hideout-alert",
+           "amount": 2
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "hideout-alert",
+           "n": 10
+          }
+         ],
+         "text": "A camera turns, slowly, to follow you. (Alert +2)"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-28-vault"
+        }
+       ],
+       "moreIf": {
+        "key": "hideout-alert",
+        "at": 10
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-28-vault",
+   "name": "{team} Hideout: The Vault",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "persian",
+    "tint": "#2a1f24",
+    "effect": "shake"
+   },
+   "intro": "A round steel door, open. Inside, gold-coloured shelves and a desk. Behind the desk, {lt}.\n\n**{lt}:** \"You've cost us a floor of salaries. Do you know what a {grunt} *costs?* The hats alone.\"",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "{lt} stands, and straightens their cuffs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-exec",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "{lt}",
+       "size": 3,
+       "levelBonus": 2,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hideout-exec-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-28-reward"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "hideout-thrown-out",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hideout-done",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 0,
+       "atMost": 9
+      }
+     ]
+    },
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "{lt} snaps their fingers. Two {grunt}s step out from behind the shelves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-exec",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "{grunt}",
+       "size": 2,
+       "levelBonus": 0,
+       "pseudo": true,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-28-vault-2"
+        }
+       ],
+       "moreIf": {
+        "key": "hideout-alert",
+        "at": 10
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 10,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-28-vault-2",
+   "name": "{team} Hideout: The Vault",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "persian",
+    "tint": "#2a1f24",
+    "effect": "shake"
+   },
+   "intro": "The two {grunt}s are down. {lt} hasn't moved from behind the desk.\n\n**{lt}:** \"Fine. I'll do it myself. I always do.\"",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "{lt} stands.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "{lt}",
+       "size": 3,
+       "levelBonus": 2,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hideout-exec-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-28-reward"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "hideout-thrown-out",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hideout-done",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-reward",
+   "name": "{team} Hideout: The Vault Shelves",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "persian",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "{lt} is gone, out a back door you didn't see. The shelves are full of things the team took.\n\nYou can carry one. Anything more and you won't make the stairs.",
+   "choices": [
+    {
+     "label": "A Shadow Pokémon.",
+     "success": {
+      "text": "A Poké Ball in a velvet box, cold to the touch. It never asked to be like this. It comes with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": true,
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-reward",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-reward-shadow",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-done-region"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A stolen evolution item.",
+     "success": {
+      "text": "A stone with a luggage label tied to it. A name and an address, in a child's writing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-28-stone"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A rare egg.",
+     "success": {
+      "text": "An Egg in a padded crate stamped FRAGILE. Nobody has written what it is.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "dratini",
+         "larvitar",
+         "bagon",
+         "beldum",
+         "gible",
+         "deino",
+         "goomy",
+         "jangmo-o",
+         "riolu",
+         "axew"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-reward",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-reward-egg",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-done-region"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A pass to the black market.",
+     "success": {
+      "text": "A plastic card with a red R on it. For the rest of the region, the night market will treat you as one of theirs.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-pass"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-reward",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-reward-pass",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-done-region"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-stone",
+   "name": "{team} Hideout: The Luggage Label",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "persian",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "The label says who it belongs to. They live two towns back.",
+   "choices": [
+    {
+     "label": "Return it to its owner.",
+     "success": {
+      "text": "You post it back with a note. A week later a drawing finds you: you, a stone, and a very big smile.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-reward",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-reward-stone-returned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-done-region"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You untie the label and put it in your pocket. The stone is yours now.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-stone",
+         "water-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "moon-stone",
+         "sun-stone",
+         "dusk-stone",
+         "dawn-stone",
+         "shiny-stone",
+         "ice-stone"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "hideout-reward",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-reward-stone",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-done-region"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-nod",
+   "name": "Someone You Freed",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "freed-caged",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "hideout-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "A wild Pokémon steps onto the path. It doesn't raise its hackles. It doesn't run.\n\nIt looks at you, and it nods, once. You were the one who opened the cage.",
+   "choices": [
+    {
+     "label": "Nod back.",
+     "success": {
+      "text": "It turns, and goes back into the long grass. It knows where you are now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-nods",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-asks",
+   "name": "Someone You Freed, Again",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "freed-caged",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "hideout-region"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "hideout-asked"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "One of the Pokémon from the Hideout cages has been following you for a whole stage.\n\nIt finally comes close enough to touch. It sits down at your feet and waits.",
+   "choices": [
+    {
+     "label": "Come with us.",
+     "success": {
+      "text": "It comes. It already knows your voice. (Bond +1)",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 50
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-asked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on. You're free.",
+     "success": {
+      "text": "It stays a moment longer. Then it goes, light-footed, the way free things go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "hideout-asked"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-centre",
+   "name": "The Rescue Centre",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "freed-caged",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "hideout-region"
+    },
+    {
+     "kind": "flag",
+     "key": "hideout-centre",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "chansey",
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "A hand-painted sign by the road: *RESCUE CENTRE. ALL WELCOME. NO TEAMS.*\n\nThe nurse is a Chansey. You know her. She was in the nearest cage, looking after everyone through the bars.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "She looks after your whole team, and won't take a thing for it. The ones you freed built the place themselves.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-centre",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-28-note",
+   "name": "A Note Under a Rock",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "hideout-scientist-turned",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "hideout-turned-region"
+    },
+    {
+     "kind": "flag",
+     "key": "hideout-note",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "evil",
+     "ends": [
+      "none"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f24",
+    "effect": "none"
+   },
+   "intro": "A flat stone on a fence post, with a corner of paper sticking out from under it.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "Folded small. It's signed E.A.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "nextOp"
+       },
+       {
+        "kind": "flag",
+        "key": "hideout-note",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-29-town",
+   "name": "The Psyduck Migration",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Region"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "psyduck-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bridge",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-bridge-fell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**Mrs. Quimby:** \"The bridge is out. Some fool went through it last week.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "psyduck",
+    "tint": "#d9b84a",
+    "effect": "none"
+   },
+   "intro": "*Psyduck in the road. Psyduck in the fountain. A Psyduck on a roof, with no clear idea how.*\n\n*A bench slides three feet to the left by itself. A lamp post bends, politely.*\n\n**Mayor, Mrs. Quimby:** \"They come through every year, on the way to the lake. They've always gone *round.* This year the bridge is out, so they've come *through,* and they've all got headaches.\"\n\n**Mrs. Quimby:** \"They'll follow anything that walks in a straight line. We haven't got anyone who can.\"",
+   "choices": [
+    {
+     "label": "I'll lead them.",
+     "success": {
+      "text": "Mrs. Quimby claps her hands once. \"Splendid. Mind the flower pots.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "psyduck-at"
+       },
+       {
+        "kind": "flag",
+        "key": "psyduck-led",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "minigame",
+        "key": "gn-psyduck"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why do they have headaches?",
+     "success": {
+      "text": "**Mrs. Quimby:** \"They always have headaches, dear. It's what they *are.*\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "psyduck-why",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-29-town"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "psyduck-why",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Not my ducks.",
+     "success": {
+      "text": "You walk on. Behind you, a lamp post bends to let a Psyduck past.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "psyduck-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-29-lake",
+   "name": "The Lake",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Region"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "psyduck",
+    "tint": "#d9b84a",
+    "effect": "none"
+   },
+   "intro": "*The line reaches the water. One by one, they walk in. The headaches go.*\n\n*Thirty Psyduck float, perfectly still, facing the same way.*\n\n*One doesn't go in. It's the one that was at the very back. It's looking at you, and holding its head.*",
+   "choices": [
+    {
+     "label": "Kneel down to it.",
+     "success": {
+      "text": "It walks into your arms and leans its whole head against you. It still hurts. It doesn't seem to mind so much now.\n\nMrs. Quimby presses a bottle of Ibuprofen into your hand. \"For the little one. It isn't medicine, dear. It's a *gesture.*\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "psyduck"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "headache",
+        "mark": "psyduck-headache"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "psyduck-joined",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "psyduck-ibuprofen",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "psyduck-knocked",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "focus-sash",
+           "choice-band",
+           "choice-specs",
+           "choice-scarf",
+           "life-orb",
+           "eviolite",
+           "rocky-helmet"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "psyduck-hat",
+          "amount": 1
+         }
+        ],
+        "text": "Nothing knocked over. Mrs. Quimby gives you a Rare item from the town hall, and her own hat. It doesn't fit. She insists."
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "psyduck-few",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "psyduck-knocked",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "psyduck-cake",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "psyduck-few",
+        "min": 1,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry",
+           "persim-berry"
+          ]
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry",
+           "persim-berry"
+          ]
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry",
+           "persim-berry"
+          ]
+         }
+        ],
+        "text": "A few things knocked over. The town gives you a Berry bundle anyway, a little stiffly."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "psyduck-cake",
+        "min": 1,
+        "then": [],
+        "text": "The wedding cake. Nothing extra. The couple are laughing about it, eventually."
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "psyduck-rounds",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Let it find its own way in.",
+     "success": {
+      "text": "It looks at the water. It looks at you. In the end, it walks in backwards, still holding its head.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "psyduck-knocked",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "focus-sash",
+           "choice-band",
+           "choice-specs",
+           "choice-scarf",
+           "life-orb",
+           "eviolite",
+           "rocky-helmet"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "psyduck-hat",
+          "amount": 1
+         }
+        ],
+        "text": "Nothing knocked over. Mrs. Quimby gives you a Rare item from the town hall, and her own hat. It doesn't fit. She insists."
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "psyduck-few",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "psyduck-knocked",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "psyduck-cake",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "psyduck-few",
+        "min": 1,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry",
+           "persim-berry"
+          ]
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry",
+           "persim-berry"
+          ]
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry",
+           "persim-berry"
+          ]
+         }
+        ],
+        "text": "A few things knocked over. The town gives you a Berry bundle anyway, a little stiffly."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "psyduck-cake",
+        "min": 1,
+        "then": [],
+        "text": "The wedding cake. Nothing extra. The couple are laughing about it, eventually."
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "psyduck-rounds",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Leave them at the edge of town.",
+     "success": {
+      "text": "They sit down where you left them. The town walks them the rest of the way, slowly, one Psyduck at a time.",
+      "effects": []
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "psyduck-rounds",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-30-door",
+   "name": "The Island of Pink Pokémon",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pink-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "pink-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "Out past the point, an island. From here, the whole of it looks faintly pink.\n\nA fisherman mending nets shrugs. \"The fruit,\" he says, as if that explained it. \"I'll row you, if you like.\"",
+   "choices": [
+    {
+     "label": "Row across.",
+     "success": {
+      "text": "The water goes clear, then pale, then pink over the sand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "pink-calm",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "safari-quiet",
+          "atLeast": 7,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "jungle-village",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "pink-calm",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-30-landing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. The island stays pink on the horizon all afternoon.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-landing",
+   "name": "Island of Pink Pokémon: The Landing",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "A beach of pale pink sand. A pink Rhyhorn watches the boat come in.\n\nIt decides you aren't food, and goes back to eating.",
+   "choices": [
+    {
+     "label": "Look at the sand.",
+     "success": {
+      "text": "You crouch. The sand's pink too, all the way down. It isn't just the animals.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-saw-sand",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pink-noticed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-landing"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pink-saw-sand",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Walk up the beach.",
+     "success": {
+      "text": "The Rhyhorn doesn't look up.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-30-orchard"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle the Rhyhorn.",
+     "success": {
+      "text": "They don't understand at first. Then they do.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-battled",
+        "n": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "rhyhorn"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-orchard"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-orchard"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-orchard",
+   "name": "Island of Pink Pokémon: The Orchard",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "away",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pink-battled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*The islanders watch you from further off now. Nobody comes to sniff the bag.*"
+    },
+    {
+     "id": "rider",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pink-calm",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "pink-battled",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*A small pink Paras has climbed into your hood. It rides there, quite happy, eating.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "nidoran-f",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "Low trees with round pink fruit. Underneath, a Rhyhorn, two Nidoran, a Paras and a Mareep, all pink, eating together.\n\nThey've never seen a trainer. They walk right up and sniff your bag.",
+   "choices": [
+    {
+     "label": "Offer an Oran Berry.",
+     "success": {
+      "text": "A pink Nidoran sniffs your Oran Berry, and turns its nose up. They only eat the fruit.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-saw-fruit",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pink-noticed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-orchard"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pink-saw-fruit",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "They follow you to the edge of the trees, and stop there.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-30-stream"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle them.",
+     "success": {
+      "text": "They don't understand at first. Then they do.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-battled",
+        "n": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "nidoran-f",
+        "paras",
+        "mareep"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-stream"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-stream"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-stream",
+   "name": "Island of Pink Pokémon: The Stream",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "away",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pink-battled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*The islanders watch you from further off now. Nobody comes to sniff the bag.*"
+    },
+    {
+     "id": "rider",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pink-calm",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "pink-battled",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*A small pink Paras has climbed into your hood. It rides there, quite happy, eating.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "Clear water over pink stones. Pink Pokémon drink upstream.\n\nDownstream, at the mouth, a few Pokémon of ordinary colours.",
+   "choices": [
+    {
+     "label": "Watch the young ones.",
+     "success": {
+      "text": "A grey-pink Rhyhorn calf, still drinking milk. The young ones are paler.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-saw-young",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pink-noticed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-stream"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pink-saw-young",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Follow the stream to the sea.",
+     "success": {
+      "text": "The stones get smaller toward the sea, until they're sand. Pink sand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-saw-stones",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pink-noticed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-stream"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pink-saw-stones",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The path climbs into big, old trees.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-30-grove"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle them.",
+     "success": {
+      "text": "They don't understand at first. Then they do.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-battled",
+        "n": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "rhyhorn",
+        "slowpoke"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-grove"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-grove"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-grove",
+   "name": "Island of Pink Pokémon: The Old Grove",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "kangaskhan",
+    "tint": "#e48fb4",
+    "effect": "shake"
+   },
+   "intro": "Huge trees, the oldest on the island. Three pink Nidoking and a pink Kangaskhan stand across the path.\n\n*They don't charge. They stand. The Kangaskhan's young one looks out of the pouch, holding a fruit in both hands.*",
+   "choices": [
+    {
+     "label": "Battle through.",
+     "success": {
+      "text": "The Nidoking come first, one after another.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-grove",
+        "n": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "nidoking"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-30-grove-2"
+        }
+       ],
+       "exact": true,
+       "chain": 3,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-high"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Put down my own food, and step back.",
+     "success": {
+      "text": "They sniff it. They don't want it. But the offer's understood.\n\nThe Kangaskhan steps aside. Its young one leans out of the pouch and holds out a fruit. Then two more.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-grove",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-fruit",
+        "n": 3
+       },
+       {
+        "kind": "moment",
+        "text": "A pink Kangaskhan's young one gave you three fruit.",
+        "importance": 70
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-30-high"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go round.",
+     "success": {
+      "text": "Along the cliffs. It takes the rest of the day.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-grove",
+        "n": 3
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-30-high"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-grove-2",
+   "name": "Island of Pink Pokémon: The Old Grove",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "kangaskhan",
+    "tint": "#e48fb4",
+    "effect": "shake"
+   },
+   "intro": "The last Nidoking backs off. The Kangaskhan puts its young one down behind a root, and comes forward.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It fights the way mothers fight.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "kangaskhan"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-high"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-high"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-high",
+   "name": "Island of Pink Pokémon: The Hilltop",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "trampled",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pink-battled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**The Slowking:** \"You have *trampled* across my study.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowking",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "*A flat rock. A pink Slowking, writing on a shell with a stick dipped in fruit juice. It looks up, some time after you arrive.*\n\n**The Slowking, slowly, and very well:** \"A visitor. You have walked across my study. I have three questions. They are things you could have seen.\"\n\n\"Then, if you like, we shall fight. I am told that is customary.\"",
+   "choices": [
+    {
+     "label": "Answer its questions.",
+     "success": {
+      "text": "It turns to a clean part of the shell.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-quiz",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-q1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-q1",
+   "name": "Island of Pink Pokémon: The Hilltop",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowking",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "**The Slowking:** \"Why are they pink?\"",
+   "choices": [
+    {
+     "label": "The fruit.",
+     "success": {
+      "text": "It writes something on its shell, slowly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-quiz",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-q2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The water.",
+     "success": {
+      "text": "It writes something on its shell, slowly, and then crosses it out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-q2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "They're born that way.",
+     "success": {
+      "text": "It looks at you for some time. Then it writes something down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-q2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-q2",
+   "name": "Island of Pink Pokémon: The Hilltop",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowking",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "**The Slowking:** \"Why is the sand pink?\"",
+   "choices": [
+    {
+     "label": "The fruit's stones, ground down.",
+     "success": {
+      "text": "It writes something on its shell, slowly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-quiz",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-q3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Coral.",
+     "success": {
+      "text": "It writes something on its shell, slowly, and then crosses it out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-q3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The sunsets.",
+     "success": {
+      "text": "It looks at you for some time. Then it writes something down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-q3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-q3",
+   "name": "Island of Pink Pokémon: The Hilltop",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowking",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "**The Slowking:** \"Are the young ones pink?\"",
+   "choices": [
+    {
+     "label": "Not yet. It takes time.",
+     "success": {
+      "text": "It writes something on its shell, slowly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-quiz",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Yes, from the egg.",
+     "success": {
+      "text": "It writes something on its shell, slowly, and then crosses it out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Only the old ones.",
+     "success": {
+      "text": "It looks at you for some time. Then it writes something down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-after",
+   "name": "Island of Pink Pokémon: The Hilltop",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "three",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pink-quiz",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "**The Slowking:** \"You looked. So few look. They arrive, and they say 'how odd,' and they leave. Sit. I shall tell you what I think it is *for.*\" *It has eleven theories. It tells you four of them before it loses its thread.*"
+    },
+    {
+     "id": "some",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pink-quiz",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ],
+     "notice": "**The Slowking:** \"Hm. You saw some of it.\" *It underlines something twice.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowking",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "A pink Slowbro and a pink Exeggutor wander up the hill and stand beside it.",
+   "choices": [
+    {
+     "label": "Fight, as is customary.",
+     "success": {
+      "text": "**The Slowking:** \"For the exercise, then.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "slowking",
+        "slowbro",
+        "exeggutor"
+       ],
+       "name": "The Pink Slowking",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-30-gift"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "gn": "slowking"
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-30-gift"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Decline, politely.",
+     "success": {
+      "text": "**The Slowking:** \"Very sensible.\" It goes back to its shell.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-gift"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-gift",
+   "name": "Island of Pink Pokémon: Leaving",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mareep",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "The boat is where you left it. The islanders have come down to the beach to watch you go.",
+   "choices": [
+    {
+     "label": "A pink islander comes with you.",
+     "success": {
+      "text": "One of them walks down the sand and gets into the boat, and that is that.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rhyhorn",
+         "nidoran-f",
+         "nidoran-m",
+         "paras",
+         "mareep",
+         "slowpoke",
+         "exeggcute"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "marks": [
+         "pink from the island fruit"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-reward",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pink-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "pink-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your lead try the fruit.",
+     "success": {
+      "text": "It eats the fruit for a day. By evening it's a very pale pink, and very pleased with itself.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "markLead",
+        "text": "pink from the island fruit"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-reward",
+        "n": 2
+       },
+       {
+        "kind": "flag",
+        "key": "pink-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "pink-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -70,9 +70,12 @@ describe('Pidgey\'s Resolve: data', () => {
 
 describe('Pidgey\'s Resolve: the opening', () => {
   it('is offered on the first stage of a run with story events on, and not without them', () => {
+    // gn.02: the opening is placed on its own step of S1 (home step 2), never drawn at random.
+    const placed = (r: RunState) => r.stage!.map.nodes.some((n) => n.sides.some((x) => x.eventId === 'sky.opening'));
+    expect(placed(newRun())).toBe(true);
     expect(eligibleEvents(content, newRun()).some((e) => e.id === 'sky.opening')).toBe(true);
     const plain = chooseStarter(content, createRun(content, { runId: 'p', seed: 'p', archetypeId: 'red' }), 0);
-    expect(eligibleEvents(content, plain).some((e) => e.id === 'sky.opening')).toBe(false);
+    expect(placed(plain)).toBe(false);
   });
 
   it('is a watched fight on the real engine: your team and Bag are set aside, both sides are birds, and nothing counts', () => {
@@ -108,9 +111,14 @@ describe('Pidgey\'s Resolve: the opening', () => {
           expect(sky).toMatchObject({ phase: 'done', ending: 'hm' });
           expect(done.run.inventory['hm-fly']).toBe(1);
           expect(done.lines.join(' ')).toContain('Flying HM');
+        } else if (sky.backed === 'spearow' && sky.duelWinner === 'pidgey') {
+          // gn.02: "Spearow loses: nothing. It leaves." The story never begins.
+          expect(sky).toMatchObject({ phase: 'done', ending: 'spearow-lost' });
+          expect(done.run.inventory['hm-fly']).toBeUndefined();
         } else {
           expect(sky.phase).toBe('rivalry');
           expect(done.run.inventory['hm-fly']).toBeUndefined();
+          if (sky.backed === 'spearow') expect(done.run.story.flags['ev:pidgey-backed-spearow']).toBe(1);
         }
       }
     }
@@ -134,13 +142,18 @@ describe('Pidgey\'s Resolve: through the region', () => {
   it('Pidgey appears once per stage, and Fearow learns a move at each meeting', () => {
     const run = started();
     const sky = skyOf(run)!;
-    expect(fearowMoves(sky)).toEqual(['peck', 'leer']);
-    expect(meetingIsAlone(run, sky)).toBe(false); // never the first meeting
+    run.stage!.index = 0;
+    expect(fearowMoves(1)).toEqual(['peck', 'fury-attack']);
+    expect(meetingIsAlone(run, sky)).toBe(false); // stage 1 is a meeting
+    run.stage!.index = 2;
+    expect(meetingIsAlone(run, sky)).toBe(true); // stage 3: it is alone
+    run.stage!.index = 0;
     expect(conditionMet(content, run, { kind: 'sky', when: 'meet' })).toBe(true);
     applySky(content, run, { kind: 'sky', act: 'meetSpar' });
     expect(sky.meets).toBe(1);
     expect(conditionMet(content, run, { kind: 'sky', when: 'meet' })).toBe(false); // same stage: no second meeting
-    expect(fearowMoves(sky)).toEqual(['peck', 'leer', 'pursuit']);
+    expect(fearowMoves(2)).toEqual(['peck', 'fury-attack', 'aerial-ace']);
+    expect(fearowMoves(6)).toEqual(['agility', 'drill-peck', 'roost', 'mirror-move']);
   });
 
   it('a meeting clears the "seen" mark so the scene comes back on the next stage', () => {
@@ -227,7 +240,7 @@ describe('Pidgey\'s Resolve: the cliff', () => {
     expect(started.party[0]!.held).toEqual({ 'oran-berry': 1 });
     expect(started.party[0]!.fixedAbility).toBe('scrappy');
     expect(started.battle!.enemyTeam[0]!.speciesId).toBe('fearow');
-    expect(started.battle!.enemyTeam[0]!.moves.map((m) => m.id)).toEqual(fearowMoves(skyOf(started)!));
+    expect(started.battle!.enemyTeam[0]!.moves.map((m) => m.id)).toEqual(fearowMoves((started.stage?.index ?? 0) + 1));
   });
 
   it('across 30 seeds the player is usually asked, and the answer decides between real outcomes', () => {
@@ -265,9 +278,14 @@ describe('Pidgey\'s Resolve: the cliff', () => {
           expect(sky.finale.cheer).toBeUndefined();
           expect(sky.ending).toBe(sky.finale.winner === 'pidgeot' ? 'pidgeot-alone' : 'fearow-alone');
         } else if (sky.finale.winner === 'pidgeot' && cheer === 'pidgeot') expect(here).toContain('sky.join.pidgeot');
-        else if (sky.finale.winner === 'pidgeot') expect(sky.ending).toBe('pidgeot-left');
+        else if (sky.finale.winner === 'pidgeot') expect(sky.ending).toBe(cheer === 'fearow' ? 'pidgeot-left' : 'pidgeot-alone');
         else if (cheer === 'fearow') expect(here).toContain('sky.join.fearow');
-        else expect(sky.ending).toBe('fearow-alone');
+        else if (cheer === undefined) expect(sky.ending).toBe('fearow-alone');
+        else {
+          // gn.02: "Fearow wins, Pidgeot cheered: nothing now. Next region, the story continues from S1, one stage wiser."
+          expect(sky.ending).toBeUndefined();
+          expect(sky).toMatchObject({ phase: 'rivalry', wiser: 1, region: run.regionIndex + 1 });
+        }
         seen.add(`${sky.finale.winner}/${cheer ?? 'none'}/${sky.ending ?? 'open'}`);
       }
     }
@@ -375,9 +393,15 @@ describe('Pidgey\'s Resolve: the afterstory', () => {
     const run = after('pidgeot-left');
     expect(conditionMet(content, run, { kind: 'sky', when: 'overhead' })).toBe(false);
     expect(conditionMet(content, run, { kind: 'sky', when: 'rematch' })).toBe(true);
+    run.stage!.current = run.stage!.map.nodes[0]!.id;
+    const lost = structuredClone(run);
+    // gn.02: "Win that, and it'll listen": a won rematch opens the join scene.
     applySky(content, run, { kind: 'sky', act: 'rematchWon' });
-    expect(skyOf(run)!.ending).toBe('rematch-done');
+    expect(run.stage!.map.nodes.flatMap((n) => n.sides).map((x) => x.eventId)).toContain('sky.join.pidgeot');
     expect(conditionMet(content, run, { kind: 'sky', when: 'rematch' })).toBe(false);
+    applySky(content, lost, { kind: 'sky', act: 'rematchLost' });
+    expect(skyOf(lost)!.ending).toBe('rematch-done');
+    expect(conditionMet(content, lost, { kind: 'sky', when: 'rematch' })).toBe(false);
   });
 });
 

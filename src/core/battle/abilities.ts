@@ -85,6 +85,10 @@ export const DROP_GUARD: Record<string, BoostStat | 'all'> = {
   'wise-eye': 'acc',
   'minds-eye': 'acc',
   'big-pecks': 'def',
+  // Greenneedle gn.55: the Angry Bidoof, once it's yours.
+  unbothered: 'all',
+  // Greenneedle gn.new.14: the Arcade Cabinet's Porygon.
+  debug: 'all',
 };
 
 /** Abilities that also stop Intimidate (Gen 8+). */
@@ -192,10 +196,12 @@ export const ABILITY_FORMS = new Set<string>([
 /** Abilities the battle engine runs. */
 const SUPPORTED = new Set<string>([
   'cute-charm', 'rivalry', 'wise-eye', 'eye-of-the-gale', 'grid-surfer',
-  'dread-jaws', 'storm-talons', 'clinging-dust', 'sovereign-plumage', 'coral-veil', 'eyespot-glare', 'dynamo-down', 'gem-orbit', 'tailwind-rider', 'rune-sigil', 'twin-maw', 'silent-cloak', 'champions-fury', 'champions-entrance',
+  'dread-jaws', 'storm-talons', 'clinging-dust', 'sovereign-plumage', 'coral-veil', 'eyespot-glare', 'dynamo-down', 'gem-orbit', 'tailwind-rider', 'rune-sigil', 'twin-maw', 'silent-cloak', 'champions-fury', 'champions-entrance', 'stopgap', 'thousand-year-promise', 'forecast-ahead', 'unwavering', 'open-road', 'inherited-strength', 'unlooked-for', 'impossible-leap', 'heavy-sleeper', 'far-from-home', 'wary', 'remembers-the-cage', 'unbothered', 'debug', 'curtain-call', 'trust-earned', 'guiding-light', 'truce', 'fair-share', 'headache', 'vigil', 'old-growth', 'deep-roots', 'forests-memory', 'grounded-heart', 'borrowed-face', 'self-made', 'specification', 'second-self',
   'thorn-ballad', 'encore-amp', 'adaptive-plating', 'plague-bulwark', 'soul-kindling', 'neon-circuit',
   // Catalog Overhaul legends (Alphas): the Hushed One's Hush, the Unwelcome Guest's Three Faces (engine.ts).
   'hush', 'three-faces', 'pack-call',
+  // Greenneedle gn.57: the Impersonator's Many Faces (engine.ts entryAbility).
+  'many-faces', 'before-the-fall',
   // Beta 0.7 batch (Galarian lines).
   'basalt-shell', 'scavenger', 'parcel-guard', 'landfill', 'kitchen-heat', 'neon-camouflage', 'ripe-bloom', 'thunderhead', 'venom-jaws', 'foam-shell', 'royal-disdain', 'hoop-focus',
   ...Object.keys(PINCH),

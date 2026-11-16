@@ -5,6 +5,9 @@ import type { SkyEnding, SkySide } from './state';
 
 /** Fearow's moves, in the order it learns them: it gets one more at every meeting (it also grows between them). */
 export const FEAROW_TRACK: readonly string[] = ['peck', 'leer', 'pursuit', 'fury-attack', 'aerial-ace', 'agility', 'drill-peck', 'drill-run', 'sky-attack'];
+/** gn.02: what Fearow gains each stage of its region, so the finale is fair: S2 Aerial Ace, S3 Agility, S4 Drill Peck, S5 Roost, S6 Mirror Move, S7 Drill Run. */
+export const FEAROW_BY_STAGE: readonly string[] = ['aerial-ace', 'agility', 'drill-peck', 'roost', 'mirror-move', 'drill-run'];
+export const FEAROW_START: readonly string[] = ['peck', 'fury-attack'];
 
 /** What Fearow shows the first time it is seen with each new move (one line per meeting; index = how many it has learned minus the two it starts with). */
 export const FEAROW_GROWTH: readonly string[] = [
@@ -54,6 +57,7 @@ export function duelResult(backed: SkySide, winner: SkySide): string[] {
     return [
       'Spearow loses, and for a moment nobody moves. The bigger bird looks at its own wing as if it had been lied to. Then it wipes its beak on the branch and leaves, and it does not look at you either.',
       'Nothing happens. That is the worst part. Nothing happens, and the Pidgey sits on the branch it won and looks at the empty sky, and you realise you had your answer ready for a bird that did not need it.',
+      'It leaves too, in the end. The story never begins.',
     ];
   }
   return [
@@ -98,7 +102,7 @@ export const FINALE_SETUP = [
   'Pidgeot stands on the high rock with its crest into the gale. Fearow lands across the gap from it. For a long moment they only look at each other. Then Fearow speaks, in the only way it ever has: it takes a step forward.',
 ];
 
-export const FINALE_ASK = 'Pidgeot is on one wing, and the whole cliff holds its breath. The Pokémon along the rocks look to you. You have been there since the beginning. It is yours to say. Who do you cheer for?';
+export const FINALE_ASK = 'Pidgeot is on one wing, and the whole cliff holds its breath. The Pokémon along the rocks look to you. You have been there since the beginning. It is yours to say. Who are you cheering for?';
 
 export const CHEER_PIDGEOT_LINE = "Pidgeot's resolve is unwavering!";
 
@@ -167,6 +171,7 @@ export function endingLine(ending: SkyEnding): string {
     case 'fearow-joined': return 'Fearow joined you. It still flies a little faster than everybody else. It has learned to slow down.';
     case 'fearow-free': return 'You let Fearow go. It will be overhead again.';
     case 'fearow-alone': return 'Both birds went their own way.';
+    case 'spearow-lost': return 'The Spearow you backed lost the branch, and left. Nothing began.';
   }
 }
 

@@ -5,9 +5,11 @@ import { getSpecies } from '../pokemon';
 import type { PokemonInstance } from '../state';
 
 /** The Pokémon's own types: its species' types, with the second one replaced by its shift (a single-typed one gains it as a second). */
-export function ownTypes(content: Content, mon: Pick<PokemonInstance, 'speciesId' | 'shiftType'>): readonly TypeName[] {
+export function ownTypes(content: Content, mon: Pick<PokemonInstance, 'speciesId' | 'shiftType' | 'crystal'>): readonly TypeName[] {
   const base = getSpecies(content, mon.speciesId).types;
-  if (!mon.shiftType) return base;
+  // Greenneedle gn.32: a carried Blue crystal changes the second type while it is carried.
+  const shift = mon.crystal?.blue ?? mon.shiftType;
+  if (!shift) return base;
   const first = base[0]!;
-  return first === mon.shiftType ? [first] : [first, mon.shiftType];
+  return first === shift ? [first] : [first, shift];
 }

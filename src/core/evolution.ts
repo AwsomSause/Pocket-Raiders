@@ -97,6 +97,8 @@ export function evolve(content: Content, mon: PokemonInstance, to: string): Evol
   mon.speciesId = to;
   // Fenwick's lesson: the bonus for holding back lasts only until it evolves.
   delete mon.evoDeclineBoost;
+  // gn.new.16: the Feebas from the well evolving brings the villagers to look.
+  if (from === 'feebas' && mon.gn?.includes('well-feebas') && !mon.gn.includes('well-evolved')) mon.gn = [...mon.gn, 'well-evolved'];
   mon.hp = Math.min(maxHp(content, mon), mon.hp + (maxHp(content, mon) - oldMax));
   const learnedMoves: string[] = [];
   const wantsToLearn: string[] = [];

@@ -20,6 +20,34 @@ import { finishSpectate } from './sky/spectate';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
+import { FOE_WAITS, gnAfterTurn, gnShape } from './greenneedle';
+import { bidoofPeace } from './greenneedle/bidoof';
+import { aceBows } from './greenneedle/missingAce';
+import { ofAssist, ofGuestLeaves, ofShadow, recordRelease } from './greenneedle/oldfriend';
+import { ferrisBossMark, ferrisCatch, ferrisFree, ferrisFreeEnd } from './greenneedle/ferris';
+import { followedRest, followedRival, followedRoad, followedShop, followedStage, followedStep, longJourney } from './greenneedle/followed';
+import { ballBattle, ballRest } from './greenneedle/ball';
+import { ridgeCatch } from './greenneedle/ridge';
+import { noteLeft } from './greenneedle/left';
+import { unflinchingStart } from './greenneedle/daycare';
+import { gavelStart } from './greenneedle/auction';
+import { reunionBattleStart } from './greenneedle/reunion';
+import { lessonAfterstory } from './greenneedle/champion';
+import { allstarRecord, allstarTurn } from './greenneedle/allstar';
+import { listenedPass, listenedTurn, listenedWin } from './greenneedle/listened';
+import { duelAfterstory, duelistMark } from './greenneedle/duelist';
+import { tyrogueTurn } from './greenneedle/tyrogue';
+import { mirrorRecord } from './greenneedle/mirror';
+import { eeveeHealed, eeveeTurn } from './greenneedle/eevee';
+import { draftRecord } from './greenneedle/draft';
+import { exRipple } from './greenneedle/exhibition';
+import { snorlaxForgives, snorlaxGym, snorlaxRest } from './greenneedle/snorlax';
+import { farFromHome, smuggleRest } from './greenneedle/smuggling';
+import { standingWelcome } from './greenneedle/welcome';
+import { ranchRest } from './greenneedle/ranch';
+import { pinLine } from './greenneedle/weather';
+import { CENTER_SHUT, SHOP_SHUT, sgCenterLine, sgCenterShut, sgHealShare, sgPriceFactor, sgRest } from './greenneedle/citysiege';
+import { taRoomsAfraid } from './greenneedle/teamauction';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
 import { revivalFee } from './battle/revivalStatus';
@@ -64,7 +92,7 @@ import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBat
 import { createBattle, itemProblem, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
 import { autoCommands, canBeDoubles, makeDoubles, primarySpot, resolveDoublesTurn, startDoubles } from './battle/doubles';
 import { canBeTriples, makeTriples } from './battle/triples';
-import { endBattle as endHeldBattle, expMultiplier, giveBossItems, growthOnLevelUp } from './battle/held';
+import { endBattle as endHeldBattle, expLevelShift, expMultiplier, giveBossItems, growthOnLevelUp } from './battle/held';
 import { gimmickSlots, planBossGimmicks } from './battle/bossGimmicks';
 import { revertTransformations } from './battle/transform';
 import { RARITIES, TYPE_NAMES, type AttributeKey, type Content, type TypeName } from './contentSchema';
@@ -116,7 +144,7 @@ import { spendTakenNode } from './co/takeNode';
 import { partnerOwed, quietWildWeight, spendPartner } from './co/neRules';
 import { quirkBadgeBond } from './co/quirks';
 import { attachBlocker, holdNodeBattle, releaseNodeBattle, takeNodeLevelShift } from './co/attach';
-import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
+import { addEventStops, placeEarnedCoBeats, stageNumber, BETRAYAL_FLAG, continueEventChain, eventBattleCaught, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -128,6 +156,8 @@ import { count, countShiny, discover } from './progress';
 import { effectiveMax, passivePercent, teachableMoves, TM_CHOICES } from './catalog';
 import { rollField } from './overhaul/field';
 import { modifierBanner, modifierWildWeight } from './runModifiers';
+import { factoryWildWeight } from './greenneedle/factory';
+import { xatuWildWeight } from './greenneedle/cartographer';
 import { quirkReaction } from './overhaul/personality';
 import { momentAllowed, noteMoments } from './story/momentDirector';
 import { closeWinScene, countedScene, finisherScene, partyNarration } from './overhaul/partyNarration';
@@ -726,6 +756,7 @@ function forceFirstRivalColumn(content: Content, run: RunState, index: number, m
 
 /** Starts a stage (mutates `run`): picks a fresh theme and gym leader, generates the map, and shows it. */
 function enterStage(content: Content, run: RunState, index: number): void {
+  ofGuestLeaves(content, run);
   // Swap Day (NE39) never outlasts its stage.
   if (swapRunning(run)) endSwap(content, run, partyCapacity(content, run));
   settleSky(content, run);
@@ -754,6 +785,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   ultraStageTick(content, run, run.regionIndex * campaign.stagesPerRegion + index + 1, false);
   startStageEffects(run);
   coStageStart(run);
+  followedStage(content, run);
   clearRecentPurchases(run);
   applyWealthTax(content, run);
   hatchEggs(content, run);
@@ -972,6 +1004,8 @@ function enterNextRegion(content: Content, run: RunState): void {
   }
   run.regionIndex += 1;
   run.log.charmUsedInRegion = false;
+  snorlaxForgives(run);
+  for (const m of [...run.party, ...run.box]) { farFromHome(run, m); longJourney(run, m); }
   endRegionTempEffects(run);
   endRegionStatBoosts(content, [...run.party, ...run.box]);
   shiftPartyLevels(content, run, regionLevelOffset(runArchetype(content, run).modifiers));
@@ -1036,6 +1070,8 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   const stage = run.stage!;
   // Swap Day (NE39): the Gym, the Elite Four and the Champion are never fought with the rival's team.
   if (['gym', 'elite', 'champion'].includes(findNode(stage.map, nodeId).kind) && swapRunning(run)) endSwap(content, run, partyCapacity(content, run));
+  // Greenneedle gn.58: a friend walking with you for the stage stops at the Gym door.
+  if (findNode(stage.map, nodeId).kind === 'gym') ofGuestLeaves(content, run);
   // The Orrery Circuit's Gym Fork: entering a gym asks for a door (or a pass) first; the move happens when the node is chosen again.
   if (findNode(stage.map, nodeId).kind === 'gym') {
     const fork = forkDecision(content, run, run.regionIndex, stage.index);
@@ -1078,11 +1114,13 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   else if (mode && modeItem && (mode !== 'machBike' || node.kind === 'wild')) markUsedThisStage(run, modeItem);
   // Saffron canon: walking away from a Tournament bout or the Labyrinth brings the whole party back.
   leaveCanonStash(run);
+  if (stage.current) listenedPass(run, findNode(stage.map, stage.current).sides); // gn.new.05: people walked past
   stage.current = nodeId;
   stage.visited.push(nodeId);
   tickChainTimers(run.story.flags);
   stepClock(content, run);
   coStep(content, run);
+  followedStep(content, run);
   // Bridge Mail adds a stop beside the node the player reaches.
   addBridgeStops(content, run, nodeId);
   // Roaming Legendaries move on as you do.
@@ -1701,6 +1739,7 @@ export function startRaidBattle(content: Content, run: RunState, baseDef: RaidDe
   // S401 cards and S402 talk: what you prepared with before going in (a bad id is refused; story raids take none).
   const prep = parseRaidPrep(content, baseDef, opts.prep);
   boss.statBoosts = { ...boss.statBoosts, hp: Math.max(0, (boss.statBoosts?.hp ?? 0) + (approach?.hpDeltaPercent ?? 0) + (opts.returning ? RETURNING_HP_PERCENT : 0) + (prep.card?.hpDeltaPercent ?? 0) + (prep.talk?.hpPercent ?? 0) + (prep.coop ? content.raids.coop.hpPercent : 0)) };
+  if (def.moves) boss.moves = def.moves.filter((id) => content.moves.has(id)).map((id) => ({ id, pp: content.moves.get(id)!.pp }));
   for (const id of def.extraMoves) {
     const mv = content.moves.get(id);
     if (mv && !boss.moves.some((m) => m.id === id)) boss.moves.push({ id, pp: mv.pp });
@@ -2113,7 +2152,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       const [lo, hi] = content.balance.difficulty.harderBonus;
       const bonus = (node.harder ? r.int(lo, hi) : 0) + wildLevelBonus(content, run, mods);
       const shiny = runAttributeEffects(content, run).shinyChance * wildShinyMultiplier(content, run, mods);
-      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * modifierWildWeight(content, run, id) * recentWild(familyId(content, id)) * dampen(id) * quietWildWeight(content, run, id));
+      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * modifierWildWeight(content, run, id) * factoryWildWeight(content, run, theme.types, id) * xatuWildWeight(run, id) * recentWild(familyId(content, id)) * dampen(id) * quietWildWeight(content, run, id));
     });
     let speciesId = lockSpecies(content, run, wildSpeciesWithItems(content, run, theme, plan.speciesId, mapItemRng(run, node.id), mods), `wild:${node.id}`);
     const legendary = rollLegendaryWild(content, new Rng(hashSeed(`${run.seed}:legendary:${run.encountersCompleted}:${node.id}`)), run.regionIndex, encounterWeightPerk(archetype.modifiers, 'legendary'));
@@ -2197,7 +2236,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const doublesCfg = content.balance.doubles;
     const pairRng = new Rng(hashSeed(`${run.seed}::wild-doubles::${run.regionIndex}::${stage.index}::${node.id}::${run.encountersCompleted}`));
     if (!legendary && !mrBack && !run.battle.mapItems && stageNumber >= doublesCfg.fromStage && run.party.filter((m) => m.hp > 0).length >= 2 && (doublesOnly(run.rules) || pairRng.chance(doublesCfg.wildChance))) {
-      const second = planWild(content, archetype, theme, scale, 0, pairRng, run.regionOrder[run.regionIndex], runAttributeEffects(content, run).shinyChance, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * recentWild(familyId(content, id)) * dampen(id) * quietWildWeight(content, run, id));
+      const second = planWild(content, archetype, theme, scale, 0, pairRng, run.regionOrder[run.regionIndex], runAttributeEffects(content, run).shinyChance, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * factoryWildWeight(content, run, theme.types, id) * xatuWildWeight(run, id) * recentWild(familyId(content, id)) * dampen(id) * quietWildWeight(content, run, id));
       const partner = newMon(content, run, lockSpecies(content, run, second.speciesId, `wild2:${node.id}`), Math.min(second.level, enemy.level + 2), 'e');
       partner.shiny = second.shiny;
       if (partner.shiny) countShiny(run, partner.speciesId);
@@ -2480,12 +2519,14 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     if (rivalBack) {
       run.battle.rivalId = rivalBack.id;
       beginRivalBrain(content, run, rivalBack.id);
+      aceBows(content, run, run.battle, rivalBack.name, rivalBack.ace);
       const bankLines = rivalBattleLines(content, run, rivalBack.id, node.kind, activeIndex);
       if (bankLines.length > 0) run.battle.rivalNote = [run.battle.rivalNote, ...bankLines.map((l) => `${rivalBack.name}: "${l}"`)].filter(Boolean).join(' ');
       if (rivalNote) run.battle.rivalNote = [rivalNote, run.battle.rivalNote].filter(Boolean).join(' ');
       if (narrativeDef) run.battle.narrative = { id: narrativeDef.id, maxTurns: narrativeDef.maxTurns };
     }
     const role = node.kind === 'gym' || node.kind === 'elite' || node.kind === 'champion' ? node.kind : null;
+    if (role) ferrisBossMark(run, role);
     // Bosses hold items, from their own generator so no other roll changes.
     if (role) giveBossItems(content, team, role, run.regionIndex, new Rng(hashSeed(`${run.seed}::boss-items::${run.regionIndex}::${stage.index}::${node.id}`)));
     // Gym number counted from the start of the run (1 = the first gym).
@@ -2681,17 +2722,39 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   const runSide = findNode(run.stage!.map, stage.current).sides.find((s) => s.id === sideId)!;
   if (side.kind === 'heal' && noHealStops(run.rules)) return { run: current, message: 'Your No Rest contract forbids healing stops.' };
   if (side.kind === 'heal' && healStopShut(content, run, sideId)) return { run: current, message: 'The Pokémon Center is shut for the night: the Ledger says so. Try again in the morning.' };
+  // Greenneedle gn.53: the stage after a siege. A fallen Market leaves no Center; an occupied city keeps its shutters down.
+  if (side.kind === 'heal' && sgCenterShut(run, stageNumber(content, run))) return { run: current, message: CENTER_SHUT };
+  if (side.kind === 'shop' && sgPriceFactor(run, stageNumber(content, run)) === null) return { run: current, message: SHOP_SHUT };
   if (side.kind === 'heal') {
     const before = run.party.map((m) => m.hp);
     healParty(content, run);
     coHealStop(content, run, before);
+    eeveeHealed(content, run, before);
     // Kalos step 3 (Members First): the Center gives back only part of each Pokémon's HP.
     const share = trackHealShare(content, run);
     if (share < 1) run.party.forEach((m, i) => { m.hp = Math.min(m.hp, Math.max(before[i] ?? 0, Math.ceil(maxHp(content, m) * share))); });
     // Sinnoh's Brownout: the Pokémon Center only restores part of each Pokémon's HP.
     const centerHeal = trackEffects(content, run).centerHeal;
     if (centerHeal < 1) for (const mon of run.party) mon.hp = Math.max(1, Math.min(mon.hp, Math.floor(maxHp(content, mon) * centerHeal)));
+    // gn.53: a city in repair heals half.
+    const siegeShare = sgHealShare(run, stageNumber(content, run));
+    if (siegeShare < 1) run.party.forEach((m, i) => { m.hp = Math.min(m.hp, Math.max(before[i] ?? 0, Math.ceil(maxHp(content, m) * siegeShare))); });
+    const siegeLine = sgCenterLine(run, stageNumber(content, run));
+    sgRest(content, run);
     careRest(run, content);
+    const snorlaxLine = snorlaxRest(run, stageNumber(content, run));
+    // Greenneedle gn.52: the auction's rare Pokémon is afraid of rooms for a stage: it waits outside the Center.
+    const afraidLine = taRoomsAfraid(content, run, before, stageNumber(content, run));
+    // Greenneedle gn.51: the rescued Pokémon that won't go in a Ball comes a little closer at each rest.
+    smuggleRest(content, run);
+    // Greenneedle gn.new.18: Standing Welcome, the first Center heal of the region gives back one Revive.
+    const welcomeLine = standingWelcome(run, content.balance.itemCaps.revivesPerBattle);
+    // Greenneedle gn.new.20: the ranch's second channel sends a Fresh Milk to every rest this region.
+    const milkLine = ranchRest(content, run);
+    // Greenneedle gn.60: what the camp notices, and the Pokémon that follows you walks into the light.
+    const followedLine = followedRest(content, run, before);
+    // Greenneedle gn.new.03: the Ball that wouldn't open has a scene at every rest.
+    ballRest(content, run);
     partyLifeCamp(run);
     const comboLine = [partyLifeCombos(content, run), ...assignGrowthPaths(content, run.party, run.story.histories)].filter(Boolean).join(' ');
     runSide.used = true;
@@ -2711,7 +2774,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const camp = campQuirkLine(run.party, campMoment(content, run), campKey, nameOf) ?? quirkReaction(run.party, 'rest_node', campKey, nameOf) ?? partyNarration(run.party, 'rest_node', campKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
     // Pokémon moments (Beta 0.6): a party member's rest moment can add a line.
     const momentLine = restMoments(content, run).join(' ');
-    return { run, message: `Your Pokémon were fully healed!${momentLine ? ` ${momentLine}` : ''}${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}` };
+    return { run, message: `Your Pokémon were fully healed!${momentLine ? ` ${momentLine}` : ''}${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${welcomeLine ? ` ${welcomeLine}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}${snorlaxLine ? ` ${snorlaxLine}` : ''}${afraidLine ? ` ${afraidLine}` : ''}${followedLine ? ` ${followedLine}` : ''}${siegeLine ? ` ${siegeLine}` : ''}${milkLine ? ` ${milkLine}` : ''}` };
   }
   run.phase = 'shop';
   noteMapGrowth(content, run, run.party[0]?.uid, 'shopVisit');
@@ -2721,7 +2784,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   const galarLeagueShop = stage.kind === 'league' && currentRegion(content, run).id === 'galar';
   const visit = Math.max(0, Math.floor(findNode(stage.map, stage.current).column / 2) - 1);
   if (galarLeagueShop) run.shop = { type: 'ballguy', place, visit, sold: {} };
-  else run.shop = { type: shopTypeAt({ seed: run.seed, regionIndex: run.regionIndex, stageIndex: stage.index, nodeId: stage.current, period: periodOf(run), blackMarket: blackMarketMarkup(runPerks(content, run)) !== null }), place };
+  else run.shop = { type: shopTypeAt({ seed: run.seed, regionIndex: run.regionIndex, stageIndex: stage.index, nodeId: stage.current, period: periodOf(run), blackMarket: marketMarkup(content, run) !== null }), place };
   // A Bike Voucher is traded for its bike (or money, if the player already has one).
   const voucher = voucherOf(content, run);
   if (voucher) {
@@ -2737,7 +2800,8 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     count(run, 'moneyEarned', voucher.refund);
     return { run, message: `Welcome to the shop! You already have a ${entry.name}, so the voucher was worth ₽${voucher.refund}.` };
   }
-  return { run, message: 'Welcome to the shop!' };
+  const shopNotice = followedShop(content, run);
+  return { run, message: `Welcome to the shop!${shopNotice ? ` ${shopNotice}` : ''}` };
 }
 
 /** The lines Pokémon moments add when a caught Pokémon joins the party (a legendary heals the team, Ditto rolls a talent). */
@@ -2775,7 +2839,7 @@ export function shopStock(content: Content, run: Pick<RunState, 'badges' | 'arch
     .slice(0, shopEarlyRareStockPerk(runPerks(content, run)));
   early.push(...earlyRare);
   // Rocket Boss Giovanni's Black Market sells everything, locked stock at a markup (shopPrice).
-  const black = blackMarketMarkup(runPerks(content, run)) !== null;
+  const black = marketMarkup(content, run) !== null;
   const modeStock = (content.balance.modeShops[run.rules?.modeId ?? ''] ?? []).filter((x) => content.items.has(x.item) && !content.shop.some((e) => e.item === x.item));
   const secret = secretTierEntries(content, run.story).filter((x) => !content.shop.some((e) => e.item === x.item) && !modeStock.some((e) => e.item === x.item));
   const stock = [...content.shop, ...bankShopEntries(content, run.licenses).filter((x) => !content.shop.some((e) => e.item === x.item)), ...modeStock, ...secret];
@@ -2786,9 +2850,15 @@ export function shopStock(content: Content, run: Pick<RunState, 'badges' | 'arch
   return trackForgetStock(content, run as Partial<RunState>, typedStock(content, run, selling, locked) as Content['shop']) as Content['shop'];
 }
 
+/** Giovanni's Black Market (a perk), or the Hideout's black-market pass for the region it was won in (Greenneedle gn.28). */
+function marketMarkup(content: Content, run: Pick<RunState, 'badges' | 'archetypeId'> & Partial<Pick<RunState, 'perkEffects' | 'story' | 'regionIndex'>>): number | null {
+  const pass = Number(run.story?.flags['ev:hideout-pass'] ?? 0) === (run.regionIndex ?? -2) + 1;
+  return blackMarketMarkup(runPerks(content, run)) ?? (pass ? content.balance.co.hideoutPassMarkup : null);
+}
+
 /** Whether an entry is on sale only through the Black Market (your badges haven't opened it). */
-export function isBlackMarket(content: Content, run: Pick<RunState, 'badges' | 'archetypeId'> & Partial<Pick<RunState, 'perkEffects'>>, entry: Content['shop'][number]): boolean {
-  return blackMarketMarkup(runPerks(content, run)) !== null && run.badges.length < shopBadgesNeeded(content, run, entry);
+export function isBlackMarket(content: Content, run: Pick<RunState, 'badges' | 'archetypeId'> & Partial<Pick<RunState, 'perkEffects' | 'story' | 'regionIndex'>>, entry: Content['shop'][number]): boolean {
+  return marketMarkup(content, run) !== null && run.badges.length < shopBadgesNeeded(content, run, entry);
 }
 
 /** Key items, Mega Stones and Z-Crystals last the whole run, so you only ever need one. */
@@ -2822,9 +2892,9 @@ export function shopSaleItem(content: Content, run: RunState): string | null {
 
 export function shopPrice(content: Content, run: RunState, entry: Content['shop'][number]): number {
   // Coupons lower the price; a full Point Card makes it free.
-  const markup = isBlackMarket(content, run, entry) ? blackMarketMarkup(runPerks(content, run))! : 1;
+  const markup = isBlackMarket(content, run, entry) ? marketMarkup(content, run)! : 1;
   const deal = currentShopType(run) === 'pokenet' ? pokenetDeal(content, run, shopStock(content, run), shopSaleItem(content, run)) : null;
-  return Math.round(entry.price * markup * buildPriceFactor(content, run.party, entry.item) * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story) * dynamicPriceFactor(content, run, entry.item) * trackShopFactor(content, run) * blessingShopFactor(run) * shopDealFactor(content, run, entry.item));
+  return Math.round(entry.price * markup * buildPriceFactor(content, run.party, entry.item) * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story) * dynamicPriceFactor(content, run, entry.item) * trackShopFactor(content, run) * blessingShopFactor(run) * shopDealFactor(content, run, entry.item) * (sgPriceFactor(run, stageNumber(content, run)) ?? 1));
 }
 
 /** Tobias's lesson: this shop's one deal item and its price factor, or null without the lesson (core/mentorWorld.ts). */
@@ -3094,7 +3164,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     rng: eliteDuelist(run.rules) ? Rng.steady(rng.state) : rng,
     captureRng,
     speciesCaught: run.log.speciesCaught,
-    catchMultiplier: captureMultiplier(archetype) * attributes.catchRate * throwMultiplier(content, run, currentEnemy(run.battle!)) * wildCatchMultiplier(content, run) * mutatorCatch(run),
+    catchMultiplier: captureMultiplier(archetype) * attributes.catchRate * throwMultiplier(content, run, currentEnemy(run.battle!)) * wildCatchMultiplier(content, run) * mutatorCatch(run) * (run.battle!.eventRule?.catchTimes ?? 1) * ridgeCatch(run, run.battle!) * ferrisCatch(content, run, run.battle!),
     healMultiplier: healingMultiplier(archetype) * attributes.healing,
     typeModifiers: typeModifiers(archetype, badgeTypesOf(content, run.badges), content.balance.badgePower),
     perks: blessingPerks(run).length > 0 ? [...archetype.modifiers, ...blessingPerks(run)] : archetype.modifiers,
@@ -3137,9 +3207,33 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   const ctx = battleContext(content, run, rng, new Rng(run.rng.capture));
   ultraMarkBattle(run);
   coBattleBegin(content, run);
+  // Greenneedle gn.40: a hatchling that saw you weren't afraid can't be made to flinch in its first battle.
+  unflinchingStart(run);
+  gavelStart(run);
+  // Greenneedle gn.61: the helpers called at the Final Reunion stand ready in the last region's final battle.
+  reunionBattleStart(run);
+  // Greenneedle gn.45: the Champion who taught your ace a move opens with it.
+  const afterstory = lessonAfterstory(content, run) || duelAfterstory(run);
+  // Greenneedle gn.47: a trainer of a later stage talks about the Exhibition, and copied a move from it.
+  const ripple = exRipple(content, run);
+  // Greenneedle gn.49: the Snorlax that followed your bag sits down at the Gym door.
+  const gymDoor = snorlaxGym(run, stageNumber(content, run));
+  // Greenneedle gn.new.15: the Weather Station's hand-written forecast, pinned up at step 1 of each later stage.
+  const pinned = pinLine(content, run);
+  // Greenneedle gn.58: a friend let go for its own good steps in for one turn.
+  const friendHelp = [ofAssist(content, run, run.battle!), ofShadow(run, run.battle!)].filter(Boolean).join(' ');
   kantoSweetAir(content, run);
+  // Greenneedle gn.55: after the Angry Bidoof's bow, no wild Bidoof or Bibarel attacks first.
+  bidoofPeace(run, FOE_WAITS);
+  const rivalNotice = followedRival(content, run);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   events.push(...coBattleStarted(content, run));
+  if (afterstory) events.push({ type: 'raid', tone: 'info', text: afterstory });
+  if (ripple) events.push({ type: 'raid', tone: 'info', text: ripple });
+  if (friendHelp) events.push({ type: 'raid', tone: 'info', text: friendHelp });
+  if (gymDoor) events.push({ type: 'raid', tone: 'info', text: gymDoor });
+  if (pinned) events.push({ type: 'raid', tone: 'info', text: pinned });
+  if (rivalNotice) events.push({ type: 'raid', tone: 'info', text: rivalNotice });
   run.rng.battle = rng.state;
   noteBattle(content, run);
   wildBehaviorEffect(content, run, events);
@@ -3214,7 +3308,10 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const bonded = shapeAction(content, run, action);
   // Poli-Pond: the Poliwag's nerves (or the bully's tricks in the rematch) can change the command before it is played.
   const nerves = pondShape(content, run, bonded.action);
-  const shaped = { action: nerves.action, events: [...bonded.events, ...nerves.events] as typeof bonded.events };
+  // Greenneedle events: a named fight rule may answer the command (the Samurai's Pinsir waits out a guard).
+  const gn = gnShape(content, run, nerves.action);
+  listenedTurn(content, run, gn.action); // gn.new.05: the egg that listens hears what you do
+  const shaped = { action: gn.action, events: [...bonded.events, ...nerves.events, ...gn.events] as typeof bonded.events };
   const wasForced = battle.needsSwitch;
   const outgoing = run.party[battle.activeIndex]?.uid;
   const enemyBefore = battle.enemyIndex;
@@ -3285,6 +3382,12 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   events.push(...ruleEvolution(content, run));
   // Poli-Pond: shyness ends after the first battle, the rematch is a duel, and the pond's return (Release or Reconcile) strikes.
   events.push(...(pondAfterTurn(content, run) as typeof events));
+  // Greenneedle events: stories that count fights (the forest duelist) take their count once the fight is won.
+  events.push(...(gnAfterTurn(content, run) as typeof events));
+  allstarTurn(run.battle, engineEvents);
+  tyrogueTurn(run, engineEvents);
+  // Greenneedle gn.new.01: what the player does in a fight (Fire moves, quick wins, night, water) decides what the Eevee becomes.
+  eeveeTurn(content, run, engineEvents);
   // A one-on-one duel (new events, NE23): when the duellist goes down, the fight is over.
   if (battle.eventRule?.oneOnOne && !battle.outcome && (run.party[battle.activeIndex]?.hp ?? 0) <= 0) battle.outcome = 'lose';
   noteCalm(run);
@@ -3417,6 +3520,10 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   }
   // R6 The Post-Mortem: a loss to anyone but the rival is remembered (what went wrong, and to whom) for the rival's notebook.
   if (battle.outcome === 'lose') notePlayerLoss(content, run, battle, run.party[0]);
+  // Greenneedle gn.46: a trainer who beat you is remembered too.
+  if (battle.outcome === 'lose') allstarRecord(run);
+  // Greenneedle gn.new.10: a lost or nearly lost fight is remembered as a team (the Mirror Lake).
+  mirrorRecord(run, battle);
   if (battle.outcome === 'lose' && battle.expedition && run.expedition) {
     buryFallen(content, run, battleCause(content, battle));
     run.expedition.battleResult = 'lose';
@@ -3464,6 +3571,13 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     narrativeDefeatEnd(content, run, def);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, narrativeDefeat: { id: def.id, defeatLine: def.defeatLine, victoryLine: def.victoryLine } };
+  }
+  // Greenneedle gn.59: Ferris's 4th-region advice: the region's hardest battle, lost, costs nothing.
+  if (battle.outcome === 'lose' && ferrisFree(battle)) {
+    ferrisFreeEnd(run);
+    softLossEnd(content, run, false);
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, storyLoss: true };
   }
   if (battle.outcome === 'lose' && storyLossApplies(run, battle, content, Boolean(battle.event) && isStoryEventBattle(content, battle.event!))) {
     // A rival questline fight lost: its `lose` effects apply too (the story goes on with the loss).
@@ -3514,6 +3628,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
       return { run, events, end: null, defeated: false, cues, drama, secondChance: { lines: sc.lines, partner: sc.companion.name, silhouette: sc.companion.silhouette } };
     }
     freeHandedOverRival(run);
+    followedRoad(content, run);
     run.phase = 'over';
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: true, cues, drama };
@@ -3579,6 +3694,8 @@ function countAttributeGrowth(content: Content, run: RunState, events: BattleEve
  */
 function awardExperience(content: Content, run: RunState, events: BattleEvent[]): RunEvent[] {
   const battle = run.battle!;
+  // gn.new.27: nobody earns experience in the Little Cup.
+  if (battle.eventRule?.gn === 'littlecup') return [];
   const effects = runAttributeEffects(content, run);
   const archetype = runArchetype(content, run);
   const bossBattle = isBossClass(battle.trainer?.classId);
@@ -3612,7 +3729,7 @@ function awardExperience(content: Content, run: RunState, events: BattleEvent[])
       // Macho Brace: more EXP for its holder.
       const monSpecies = getSpecies(content, mon.speciesId);
       const perkXp = xpPerk(archetype.modifiers, { types: monSpecies.types, baseSpeed: monSpecies.baseStats.spe, isStarter: run.log.starterUid === mon.uid, isBossBattle: bossBattle, ultraBeast: isUltraBeast(mon.speciesId), isHatched: mon.hatched === true, isDoubles: battle.doubles !== undefined });
-      const full = xpForDefeat(baseExp, defeated.level, mon.level, multiplier * underdog * perkXp * (1 + catchUp / 100) * expMultiplier(content, mon));
+      const full = xpForDefeat(baseExp, defeated.level, Math.max(1, mon.level - expLevelShift(content, mon)), multiplier * underdog * perkXp * (1 + catchUp / 100) * expMultiplier(content, mon));
       const squirt = mon === run.party[0] && (run.itemCounters?.['squirt-exp'] ?? 0) > 0 ? 1 + (perksOf(activePerks(content, run), 'squirt')[0]?.perk.percent ?? 5) / 100 : 1;
       const amount = Math.floor((participants.includes(uid) ? full : Math.floor((full * Math.min(100, share)) / 100)) * squirt * xpPolicyMultiplier(run, uid));
       // W5 EVs: everyone who shares the experience also gets the defeated species' EV yield (core/ivs.ts).
@@ -3723,6 +3840,15 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   }
   // Catalog Overhaul (new events): the run's first Z-Move is remembered (NE8's old man in the crowd waits for it).
   if (battle.transform?.used.player.includes('zmove') && !run.story.flags['ev:z-move-used']) run.story.flags['ev:z-move-used'] = 1;
+  // Greenneedle gn.46: every trainer met this run, and how it went (the All-Star Tournament draws from it).
+  allstarRecord(run);
+  listenedWin(run); // gn.new.05: a quick win
+  // Greenneedle gn.new.06: the first critical hit a party Pokémon lands marks the chosen one for the Duelist.
+  if (duelistMark(content, run, stageNumber(content, run))) placeEarnedCoBeats(content, run);
+  // Greenneedle gn.48: what each drafted Pokémon did this battle, kept on it for the win's Bond.
+  draftRecord(run);
+  // Greenneedle gn.new.03: the Ball held through this battle answers.
+  ballBattle(run);
   // Nuzlocke: the fallen are lost for good.
   buryFallen(content, run, battleCause(content, battle));
   const archetype = runArchetype(content, run);
@@ -4100,9 +4226,18 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (returnOffer) run.pending.push({ kind: 'returnProtege', mon: returningPokemon(content, run, returnOffer, nextUid(run, 'p')), mentorUid: returnOffer.mentorUid, reason: returnOffer.reason });
   const leadAsk = !run.victory && battle.outcome === 'win' && !mentorOffer ? planAskLead(content, run) : null;
   if (leadAsk) run.pending.push({ kind: 'askLead', ...leadAsk });
+  // gn.16: the tournament final paused for the last exchange (the win effects read this flag).
+  if (battle.event && battle.eventRule?.gn === 'final') run.story.flags['ev:tc-last-exchange'] = battle.storyEffects.includes('gn-last-exchange') ? 1 : 0;
+  // The Lush Jungle (gn.20): a knockout on either side, the player's or the wild one's, and the canopy village pulls its ladder up.
+  // The Forgotten Forest (gn.31): a wild Pokémon knocked out (not caught, calmed or fled from). Nothing in the game says so.
+  if (battle.event && battle.eventRule?.gn === 'forest' && battle.enemyTeam.some((m) => m.hp <= 0)) run.story.flags['ev:forest-harmed'] = 1;
+  if (battle.event && battle.eventRule?.gn === 'jungle') {
+    const down = (battle.storyEffects.find((x) => x.startsWith('gn-jungle-down:')) ?? 'gn-jungle-down:').slice('gn-jungle-down:'.length).split(',');
+    if (battle.enemyTeam.some((m) => m.hp <= 0) || run.party.some((m) => m.hp <= 0 && !down.includes(m.uid))) run.story.flags['ev:jungle-harmed'] = 1;
+  }
   // An event battle you won pays its own rewards.
   const chained = outcome === 'win' && !!battle.event && eventChainNext(content, run, battle.event);
-  const eventRewards = outcome === 'win' && battle.event && !chained ? (battle.event.eventId === 'plaza:club' ? plazaClubWon(content, run) : eventBattleWon(content, run, battle.event, battle.turn - 1, battle.calm?.done === true)) : [];
+  const eventRewards = outcome === 'win' && battle.event && !chained ? (battle.event.eventId === 'plaza:club' ? plazaClubWon(content, run) : eventBattleWon(content, run, battle.event, battle.turn - 1, battle.calm?.done === true)) : outcome === 'caught' && battle.event ? eventBattleCaught(content, run, battle.event) : [];
   // The Betrayal: beating an Evil Team's leader sends you straight into a catchable fight with the Legendary they chased.
   const evilT = outcome === 'win' && battle.trainer ? evilTeam(content, run) : null;
   const betrayal = !!evilT && battle.trainer?.name === evilT.ranks.leader.name && run.story.flags[BETRAYAL_FLAG] === undefined && (run.story.evil?.end === 'defeated' || run.story.evil?.end === 'exposed');
@@ -4281,7 +4416,7 @@ export type DecisionChoice =
   | { kind: 'skipMove' }
   | { kind: 'addToParty' }
   | { kind: 'replace'; partyIndex: number }
-  | { kind: 'release' }
+  | { kind: 'release'; reason?: 1 | 2 | 3 | 4 }
   | { kind: 'sendToBox' }
   | { kind: 'signature'; optionIndex: number }
   | { kind: 'mutator'; optionIndex: number }
@@ -4384,6 +4519,9 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       message = `${name} was released. You got ${candies} cand${candies === 1 ? 'y' : 'ies'}. ${markDecided(run, caught, false)}`.trim();
       recordReleased(content, run, caught);
       noteReleased(run, caught);
+      noteLeft(run, caught);
+      // Greenneedle gn.58: who, where and why; the friend turns up again two or more stages on.
+      recordRelease(content, run, caught, choice.reason, stageNumber(content, run));
     } else {
       throw new Error('Choose what to do with the caught Pokémon');
     }

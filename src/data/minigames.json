@@ -3158,6 +3158,119 @@
         "slowFactor": 1,
         "noTimerOption": false
       }
+    },
+    {
+      "id": "gn-safari",
+      "name": "Safari Land",
+      "category": "resource",
+      "blurb": "A wildlife documentary, with Balls.",
+      "instructions": "30 Safari Balls, 500 steps, no battles. Walk, wait and watch: the quieter you are, the more you see. In each encounter throw a Ball, bait or a rock, or leave. Every chance is shown.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "visit",
+          "label": "Visit",
+          "params": {
+            "steps": 500,
+            "balls": 30
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 1,
+      "scoringRules": "What you catch is yours. The warden buys good photographs and judges how quiet you were.",
+      "medals": {
+        "bronze": 0.1,
+        "silver": 0.2,
+        "gold": 0.3
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "gold": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        }
+      },
+      "failureOutcome": "Nothing is lost. The park is still there.",
+      "replayRules": "Once a region (a second free visit when the warden says so).",
+      "uiConfiguration": {
+        "layout": "choices",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": true
+      },
+      "eventOnly": true
+    },
+    {
+      "id": "gn-psyduck",
+      "name": "The Psyduck Migration",
+      "category": "skill",
+      "blurb": "Snake, with Psyduck.",
+      "instructions": "You're the head of the line. Walk onto each Psyduck and it joins the line, following exactly where you walked. Don't walk into the line or off the street: they all sit down and you start the round again. Things the line knocks over cost the town's thanks. When a Psyduck glows, a bench is about to slide into the path. A Golduck in your party keeps the tail from drifting on corners.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "walk",
+          "label": "Walk",
+          "params": {
+            "golduck": 0
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 1,
+      "scoringRules": "Three rounds: the High Street (6 Psyduck), the Market Square (10), the Lake Road (15). The town's thanks depend on what was knocked over.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.6,
+        "gold": 1
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "gold": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        }
+      },
+      "failureOutcome": "The Psyduck sit down where they are. The town walks them the rest of the way, slowly.",
+      "replayRules": "Once a region.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 250
+      },
+      "accessibilityOptions": {
+        "slowFactor": 3,
+        "noTimerOption": true
+      },
+      "eventOnly": true
     }
   ]
 }

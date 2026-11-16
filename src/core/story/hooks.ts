@@ -3,6 +3,8 @@
 // really happened and never decides an outcome itself (Hyper moments are
 // decided by the battle engine; this file only tells their story).
 
+import { cheerBattleStart } from '../greenneedle/cheer';
+import { stageNumber } from '../events';
 import { evolveMoments, noteCocoon } from '../moments/runMoments';
 import { spendRivalSpoils } from '../nodeMenu/special';
 import { endRivalBrain } from '../rivals/brainSetup';
@@ -88,6 +90,7 @@ export function recordBattleStarted(content: Content, run: RunState): void {
   run.story.majorCuesThisBattle = 0;
   // Story S7d: the partner's signature moves join it for this battle.
   grantSignatureMoves(content, run);
+  cheerBattleStart(run, battle, stageNumber(content, run));
   const lead = run.party[battle.activeIndex]!;
   noteFought(run, lead.uid);
   emit(content, run, 'battleStarted', {
@@ -741,7 +744,8 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
     recordPackMarks(content, run, rivalBack.id, packFacts(rivalBack));
     spendRivalSpoils(run, rivalBack.id);
     endRivalBrain(run, rivalBack.id);
-    rivalBack.memory.lastBattle = { eventId: ended.id, result: result === 'win' ? 'win' : 'lose', hpLeftShare: hpShare, turns: battle.turn - 1, team: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.speciesId), foes: fought };
+    // Moves: the rival's own sets (a move lent for the battle, a Hyper or Mega signature slot is not part of its team).
+    rivalBack.memory.lastBattle = { eventId: ended.id, result: result === 'win' ? 'win' : 'lose', hpLeftShare: hpShare, turns: battle.turn - 1, team: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.speciesId), levels: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.level), moves: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.moves.filter((x) => !x.lent && !x.hyper && !x.megaSig).map((x) => x.id)), foes: fought };
     recordSeenMoves(content, rivalBack, battle.playerMovesSeen, ended.id);
     // W2: everything else it watched (setup, switches, your lead, a sweep, a legend...) for its adaptation triggers.
     const leadUid = run.story.events.find((e) => e.type === 'battleStarted' && e.where.battle === index)?.actors[0];

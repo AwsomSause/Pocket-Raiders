@@ -11,6 +11,7 @@ import { gimmickContext } from '../core/gimmicks';
 import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog, TOOLTIP_DELAY_MS } from '../core/presentation/uiPrefs';
 import { fitBlock, fitLine } from '../ui/fitText';
 import { cheerDue } from '../core/sky/spectate';
+import { helperButtons } from '../core/greenneedle/reunion';
 import { FINALE_ASK, chunkLines } from '../core/sky/text';
 import { HazardFloor, bossCinematic, critFreeze, critLetterbox, runScan, tossArc, weaknessesOf } from '../ui/battleFx/skillMoments';
 import { defaultMoveIndex } from '../core/battle/rememberChoice';
@@ -62,6 +63,8 @@ import { currentEnemy, type BattleState, type PokemonInstance, type RunState } f
 import { isBossClass } from '../core/trainerPerks';
 import { arenaFor, getTheme } from '../core/themes';
 import { shinyCatchBurst, targetReticle } from '../ui/battleFx/arenaLife';
+import { addFollowedCue } from '../ui/battleFx/followedCue';
+import { followedCue } from '../core/greenneedle/followed';
 import { addContactShadows, addParallax, addVignette, ArenaLight, dressArena, type ShadowTarget } from '../ui/battleFx/arenaLife';
 import { pickUieArena } from '../core/arenaStyle';
 import { pokemonAssetIds, bossAnimId, bossBackId, uieArenaId, VS_SHARED, vsCardFor } from '../assets/catalog';
@@ -584,6 +587,8 @@ export class BattleScene extends Phaser.Scene {
     this.arenaPhase = 0;
     // A battle style's floor, tint or whole backdrop, under the Pokémon.
     this.skin?.backdrop?.(this, this.field, this.frameInfo());
+    // Greenneedle gn.60: what follows the player shows in the scenery, if it shows at all.
+    addFollowedCue(this, this.field, followedCue(run), this.motion, PLAYER_POS);
     addContactShadows(this, this.field, () => this.shadowTargets());
     this.fieldBase = this.field.length;
     this.setupTrainerActor(Boolean(battle.doubles));
@@ -2325,11 +2330,11 @@ export class BattleScene extends Phaser.Scene {
     this.message.setText(chunkLines([FINALE_ASK])[0] ?? '');
     void this.readAloud([FINALE_ASK]).then(() => {
       this.commandWindow.setVisible(true);
-      this.message.setText('Who do you cheer for?');
+      this.message.setText('Who are you cheering for?');
       this.menu = new Menu(this, {
         x: COMMAND_X + 24,
         y: MESSAGE_Y + 26,
-        options: [{ label: 'Cheer for Pidgeot' }, { label: 'Cheer for Fearow' }],
+        options: [{ label: 'Pidgeot!' }, { label: 'Fearow!' }],
         columns: 1,
         itemWidth: 300,
         itemHeight: 50,
@@ -2370,6 +2375,29 @@ export class BattleScene extends Phaser.Scene {
       onSelect: (i) => {
         this.commands = [];
         void this.act({ kind: 'deal', accept: i === 0 });
+      },
+      onBack: () => this.showRootMenu(),
+    });
+  }
+
+  /** Greenneedle gn.59: the Leader's weight has shifted. Will they switch? (No turn used.) */
+  private showPredictMenu(): void {
+    this.clearMenus();
+    this.message.setText('Their weight has gone onto the back foot. Are they about to switch?');
+    this.commandWindow.setVisible(true);
+    this.menu = new Menu(this, {
+      x: COMMAND_X + 24,
+      y: MESSAGE_Y + 26,
+      options: [{ label: 'They\'re switching' }, { label: 'They\'re staying' }],
+      columns: 2,
+      itemWidth: 170,
+      itemHeight: 50,
+      fontSize: 22,
+      color: this.btnText,
+      glass: { paint: this.skin?.pill, tints: [0x1f9a52, 0xc8303c], motion: this.motion },
+      onSelect: (i) => {
+        this.commands = [];
+        void this.act({ kind: 'predict', yes: i === 0 });
       },
       onBack: () => this.showRootMenu(),
     });
@@ -3696,6 +3724,10 @@ export class BattleScene extends Phaser.Scene {
     const cheerAt = raid && raid.cheersLeft > 0 && !this.duo ? options.length : -1;
     if (cheerAt >= 0) options.push({ label: `Cheer ×${raid!.coop ? raid!.coop.cheers[coopOwner(raid!, this.activeMon().uid)] : raid!.cheersLeft}` });
     // S397 Boss Weak Spots: choose where to aim (the exposed zone takes the bonus).
+    // Greenneedle gn.61: each helper from the Final Reunion, once ("[Name]!").
+    const helperAt = options.length;
+    const helpers = this.duo ? [] : helperButtons(this.run.battle!);
+    for (const h of helpers) options.push({ label: `${h.name}!` });
     const aimAt = raid && !this.duo && raidDef(content, raid).modifiers.weakSpots ? options.length : -1;
     if (aimAt >= 0) options.push({ label: `Aim: ${(raid!.aim ?? 'auto').toUpperCase()}` });
     const rallyAt = canRally ? options.length : -1;
@@ -3707,6 +3739,8 @@ export class BattleScene extends Phaser.Scene {
     const stake = foeStake(content, battleNow);
     const dealAt = (!this.duo || this.cmdSpot === 0) && dealOffer(content, battleNow, stake.hp, stake.max) ? options.length : -1;
     if (dealAt >= 0) options.push({ label: 'Deal?' });
+    const predictAt = !this.duo && battleNow.storyEffects.includes('ferris-ask') ? options.length : -1;
+    if (predictAt >= 0) options.push({ label: 'Predict' });
     // Triple battles: an edge Pokémon can Shift to the centre (it uses the turn and goes before any move).
     const shiftAt = this.duo?.size === 3 && shiftOptionProblem(battleNow, this.cmdSpot, this.commands) === null ? options.length : -1;
     if (shiftAt >= 0) options.push({ label: 'Shift' });
@@ -3753,7 +3787,8 @@ export class BattleScene extends Phaser.Scene {
           return;
         }
         const i = k > 0 ? pick - k + 1 : pick;
-        if (i === dealAt) this.showDealMenu();
+        if (i === predictAt) this.showPredictMenu();
+        else if (i === dealAt) this.showDealMenu();
         else if (i === aimAt) {
           const r = this.run.battle!.raid!;
           r.aim = r.aim === null ? 'body' : r.aim === 'body' ? 'core' : null;
@@ -3772,7 +3807,8 @@ export class BattleScene extends Phaser.Scene {
         } else if (i === featAt) {
           armFeat(this.run);
           this.showRootMenu();
-        } else if (i === cheerAt) this.showCheerMenu();
+        } else if (helpers.length > 0 && i >= helperAt && i < helperAt + helpers.length) this.submit({ kind: 'helper', slot: helpers[i - helperAt]!.slot });
+        else if (i === cheerAt) this.showCheerMenu();
         else if (i === 0) this.showMoveMenu();
         else if (i === 1) this.openBag();
         else if (i === 2) this.openPartyPicker(false);

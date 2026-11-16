@@ -1,0 +1,5906 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-19-door",
+   "name": "The Deep Savanna",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "ground"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "savanna-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "donphan",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "The fence stops. The grass is the colour of straw, and it goes on to the edge of the world.\n\n*No warden's voice out here.*\n\nIt hasn't rained. You carry three flasks of water. Every dry crossing costs one.",
+   "choices": [
+    {
+     "label": "Walk in.",
+     "success": {
+      "text": "You step past the last fence post. Nobody is counting your steps now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "savanna-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "savanna-region"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-water",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-night",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crowned-calf-calmed",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "savanna-hippo",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "alphas-second-channel",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "savanna-hippo",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-thirsty"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back.",
+     "success": {
+      "text": "You turn back to the fence. The grass hisses behind you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-19-far",
+   "name": "The Deep Savanna",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "ground"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "savanna-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "donphan",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "**Warden:** \"Beyond here, it isn't a park. Nobody's counting your steps. Nobody's coming to fetch you, either.\"\n\nThe fence stops. The grass is the colour of straw, and it goes on to the edge of the world.\n\n*No warden's voice out here.*\n\nIt hasn't rained. You carry three flasks of water. Every dry crossing costs one.",
+   "choices": [
+    {
+     "label": "Walk in.",
+     "success": {
+      "text": "You step past the last fence post. Nobody is counting your steps now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "savanna-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "savanna-region"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-water",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-night",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "crowned-calf-calmed",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "savanna-hippo",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "alphas-second-channel",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "savanna-hippo",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-thirsty"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back.",
+     "success": {
+      "text": "You turn back to the fence. The grass hisses behind you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-19-thirsty",
+   "name": "The Deep Savanna: The Edge",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Water: one flask left."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sandile",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "A Sandile has followed you since the fence. It isn't hunting. It's looking at your flask.\n\nOut here, water is worth more than anything you carry.",
+   "choices": [
+    {
+     "label": "Trade a flask for what it's carrying.",
+     "success": {
+      "text": "It drinks, and drops a smooth stone at your feet. It was carrying it in its mouth all this way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-water",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 9
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Your flasks are empty. Until a refill, your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "item",
+        "id": "smooth-rock",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-cross"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Trade a flask, and let it come along.",
+     "success": {
+      "text": "It drinks, then trots at your heel as if it always had.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-water",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 9
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Your flasks are empty. Until a refill, your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "sandile"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-cross"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Trade a flask for the way.",
+     "success": {
+      "text": "It drinks, then leads you a little way and stops, nose pointing: round the dust, not through it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-water",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 9
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Your flasks are empty. Until a refill, your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-path",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-cross"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Keep your water.",
+     "success": {
+      "text": "You keep your flask. The Sandile watches you go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-cross"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-19-cross",
+   "name": "The Deep Savanna: The Edge",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Water: one flask left."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "trapinch",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "Dry ground between here and the first waterhole. The sun is a hand on the back of your neck.",
+   "choices": [
+    {
+     "label": "Cross (one flask).",
+     "success": {
+      "text": "Halfway across, the sand opens.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-water",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 9
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Your flasks are empty. Until a refill, your party starts each fight at 90% HP."
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sandshrew",
+        "trapinch",
+        "hippopotas",
+        "diglett",
+        "cacnea",
+        "maractus",
+        "gible",
+        "larvitar",
+        "rhyhorn",
+        "tauros",
+        "helioptile",
+        "dunsparce",
+        "stunfisk",
+        "sandygast",
+        "phanpy"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-19-waterhole"
+        }
+       ],
+       "rule": {
+        "gn": "savanna"
+       },
+       "caught": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-19-waterhole"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-19-waterhole",
+   "name": "The Deep Savanna: The First Waterhole",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Water: one flask left."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "hippowdon",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "The first waterhole. A Hippowdon lies in the middle of it, and doesn't move.\n\nIt isn't guarding the water from you. It's guarding it from the sun.",
+   "choices": [
+    {
+     "label": "Walk to the water.",
+     "success": {
+      "text": "The Hippowdon shifts over without being asked, as if it had heard about you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-water",
+        "n": 3
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-19-watch"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-hippo",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Wait until it sleeps.",
+     "success": {
+      "text": "You wait. The sun moves. At last its eyes close, and you fill your flasks without a sound.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-water",
+        "n": 3
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-19-watch"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer it shade (a large Pokémon stands by it).",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "heavy"
+      }
+     ],
+     "success": {
+      "text": "Your biggest Pokémon stands between it and the sun. The Hippowdon sighs, a long, sandy sigh, and lets you drink.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-water",
+        "n": 3
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-19-watch"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It heaves itself up, streaming water.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "hippowdon"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "savanna-water",
+         "n": 3
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-19-watch"
+        }
+       ],
+       "rule": {
+        "gn": "savanna"
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "savanna-water",
+         "n": 3
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-19-watch"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-19-watch",
+   "name": "The Deep Savanna: The Watching Place",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Water: one flask left."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "phanpy",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "A ridge over a plain. Nothing attacks here.\n\nBelow, a herd of Phanpy and Donphan moves slowly, in a line, trunk to tail.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You sit. Your team sits with you. You watch for a long time.\n\nThen you see it: the herd has stopped moving.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-night",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-19-herd"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move on.",
+     "success": {
+      "text": "You move on. The sun goes down behind you, fast, the way it does out here.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-night",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-19-herd"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-19-herd",
+   "name": "The Deep Savanna: Night",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Water: one flask left."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "krokorok",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "It's night. The predators come out: Sandile and Krokorok hunt, and the grazers bunch up.\n\nA herd is crossing your path, nose to tail. It will take a while.",
+   "choices": [
+    {
+     "label": "Wait for the herd to pass.",
+     "success": {
+      "text": "You wait in the dark. Something else is waiting too.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sandile",
+        "krokorok"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-19-devil"
+        }
+       ],
+       "rule": {
+        "gn": "savanna"
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-19-devil"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Go round (one flask).",
+     "success": {
+      "text": "You go the long way round the herd, in the dark.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-water",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 9
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Your flasks are empty. Until a refill, your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-devil"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-19-devil",
+   "name": "The Deep Savanna: The Dust Devil",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Water: one flask left."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "diglett",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "A dust devil, spinning across the path. It doesn't go away. It doesn't go anywhere.\n\nThrough it, the lead will lose an eighth of its HP and a step of Speed. A Ground-type would walk through untouched.",
+   "choices": [
+    {
+     "label": "Go the way the Sandile showed you.",
+     "success": {
+      "text": "Round the dust, not through it. Exactly as it pointed.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "savanna-oasis",
+        "n": 10
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-oasis",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-19-oasis"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-oasis",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-19-on"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-path",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Walk through it.",
+     "success": {
+      "text": "You put your head down and go through.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.125,
+        "who": "lead",
+        "except": [
+         "ground"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "savanna-ground-lead",
+        "if": [
+         {
+          "kind": "leadType",
+          "type": "ground"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-ground-lead",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "leadBoost",
+          "type": "spe",
+          "n": -1
+         }
+        ],
+        "text": "Your lead comes out coughing, slower for it."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-ground-lead",
+        "min": 1,
+        "then": [],
+        "text": "Your Ground-type walks through as if it were a breeze."
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "savanna-oasis",
+        "n": 10
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-oasis",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-19-oasis"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-oasis",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-19-on"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-19-oasis",
+   "name": "The Deep Savanna: An Oasis",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Water: one flask left."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "diglett",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "Behind the dust devil: an oasis. Palms, and clear water, and a ring of little heads.\n\nA Diglett group lives here. The sand slides off them like water.",
+   "choices": [
+    {
+     "label": "Fill your flasks.",
+     "success": {
+      "text": "Cold water. You drink until it hurts.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-water",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-on"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Diglett come along.",
+     "success": {
+      "text": "One of them pops up by your boot and doesn't go back down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-water",
+        "n": 3
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "diglett"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "sand-veil"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-on"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-19-on",
+   "name": "The Deep Savanna: The Dust Devil",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Water: one flask left."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "donphan",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "Beyond the dust, a dry stretch, and then a sound: a herd, calling, not moving.",
+   "choices": [
+    {
+     "label": "Cross (one flask).",
+     "success": {
+      "text": "You follow the sound across the dark.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-water",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 9
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Your flasks are empty. Until a refill, your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-19-ring"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-19-ring",
+   "name": "The Deep Savanna: The Wounded Leader",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Water: one flask left."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "donphan",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "*The herd's in a ring. In the middle, the biggest Donphan you have seen, lying on its side. One leg's wrong.*\n\n*The herd won't leave it. They haven't drunk in two days.*\n\n*On the ridge, eyes. A lot of them.*",
+   "choices": [
+    {
+     "label": "Guard it through the night.",
+     "success": {
+      "text": "You stand at the edge of the ring, facing out. The herd closes up behind you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sandile",
+        "krokorok"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-19-guard2"
+        }
+       ],
+       "rule": {
+        "gn": "herd"
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-19-guard2"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Treat it.",
+     "success": {
+      "text": "You kneel by the leg. It will take two flasks, and one more thing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-treat"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Lead the herd on without it.",
+     "success": {
+      "text": "Your lead walks to the front. The herd looks at the leader.\n\nThe leader lifts its trunk, once, and puts it down.\n\nThey follow you to water. It stays.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-led-on",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-19-dawn"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past.",
+     "success": {
+      "text": "You walk round the ring and on. Behind you, nobody moves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-walked-past",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-19-dawn"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-19-ring-2",
+   "name": "The Deep Savanna: The Wounded Leader",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Water: one flask left."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "donphan",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "The herd stays in its ring round the leader. The eyes on the ridge are still there, but fewer.",
+   "choices": [
+    {
+     "label": "Guard it through the night.",
+     "success": {
+      "text": "You stand at the edge of the ring, facing out. The herd closes up behind you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sandile",
+        "krokorok"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-19-guard2"
+        }
+       ],
+       "rule": {
+        "gn": "herd"
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-19-guard2"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-guarded",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Treat it.",
+     "success": {
+      "text": "You kneel by the leg. It will take two flasks, and one more thing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-treat"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-treated",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Go on to the water.",
+     "success": {
+      "text": "At first light the herd moves, slowly, all together, and the leader with it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-19-dawn"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-19-guard2",
+   "name": "The Deep Savanna: The Second Wave",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Water: one flask left."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "krokorok",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "They come again, low and fast. A Donphan swings round to stand by your lead.",
+   "choices": [
+    {
+     "label": "Hold.",
+     "success": {
+      "text": "Teeth in the dark.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sandile",
+        "krokorok"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-19-guard3"
+        }
+       ],
+       "rule": {
+        "gn": "herd"
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-19-guard3"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-19-guard3",
+   "name": "The Deep Savanna: The Third Wave",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Water: one flask left."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "krokorok",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "The last of them, and the biggest. Behind you, the herd stamps the ground.",
+   "choices": [
+    {
+     "label": "Hold.",
+     "success": {
+      "text": "It goes for your lead. A trunk swings out of the dark.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "krokorok"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "savanna-guarded",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "savanna-helped",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You stood guard over a wounded Donphan all night, and the herd stood with you.",
+         "importance": 75
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-19-ring-2"
+        }
+       ],
+       "rule": {
+        "gn": "herd"
+       },
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "savanna-guarded",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "savanna-helped",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You stood guard over a wounded Donphan all night, and the herd stood with you.",
+         "importance": 75
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-19-ring-2"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-19-treat",
+   "name": "The Deep Savanna: Treating It",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Water: one flask left."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "donphan",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "Two flasks to clean it and cool it. And one of: a Grass-type's help, a Berry, or your own time.",
+   "choices": [
+    {
+     "label": "With a Grass-type's help.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "grass"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Grass-type binds the leg with vines, tight and careful. By dawn it stands, on three legs and stubbornness.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-water",
+        "amount": -2
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 9
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Your flasks are empty. Until a refill, your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "flag",
+        "key": "savanna-treated",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "savanna-helped",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You treated the herd leader's leg, and by dawn it stood.",
+        "importance": 70
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-ring-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "With a Berry.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "holdsBerry"
+      }
+     ],
+     "success": {
+      "text": "You crush a Berry into the wound. It flinches, then leans on you. By dawn it stands, on three legs and stubbornness.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "payBerry"
+       },
+       {
+        "kind": "flag",
+        "key": "savanna-water",
+        "amount": -2
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 9
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Your flasks are empty. Until a refill, your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "flag",
+        "key": "savanna-treated",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "savanna-helped",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You treated the herd leader's leg, and by dawn it stood.",
+        "importance": 70
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-ring-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "With your own time.",
+     "success": {
+      "text": "You sit with it, hour after hour, and keep the flies off. The clock moves on into the night. By dawn it stands, on three legs and stubbornness.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-night",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "savanna-water",
+        "amount": -2
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 9
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Your flasks are empty. Until a refill, your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "flag",
+        "key": "savanna-treated",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "savanna-helped",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You treated the herd leader's leg, and by dawn it stood.",
+        "importance": 70
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-ring-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-19-dawn",
+   "name": "The Deep Savanna: The Second Waterhole",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Water: one flask left."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    },
+    {
+     "id": "led-on",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-led-on",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*At the second waterhole, the herd drinks. A calf keeps looking back the way they came.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "phanpy",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "Dawn, at the second waterhole. Nothing attacks here.\n\n*Predators and grazers, side by side, for the length of one sunrise. Nobody explains it.*",
+   "choices": [
+    {
+     "label": "Take the calf.",
+     "success": {
+      "text": "The leader pushes a Phanpy forward with its trunk. It stumbles to you and stays.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "phanpy"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "soft-sand",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "savanna-both",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "savanna-guarded",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "savanna-treated",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-both",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "fossil",
+          "key": "local"
+         }
+        ],
+        "text": "Then the whole herd turns and leads you to a place where the ground is soft. Buried there: a fossil."
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-water",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-prize"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Follow the herd.",
+     "success": {
+      "text": "The herd leads you away from the water to a place where the ground is soft. Buried there: a fossil.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "fossil",
+        "key": "local"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-water",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-prize"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-led-on",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Watch them drink.",
+     "success": {
+      "text": "Nothing but a long look, across the water, from the herd you walked past.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-water",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-prize"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-walked-past",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-19-prize",
+   "name": "The Deep Savanna: Out",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Water: one flask left."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gible",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "The savanna's edge, and a fence post. Something to take with you.",
+   "choices": [
+    {
+     "label": "Soft Sand",
+     "success": {
+      "text": "A pouch of fine, warm sand.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soft-sand",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-water",
+        "n": 0
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Smooth Rock",
+     "success": {
+      "text": "A rock worn smooth by a thousand sandstorms.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "smooth-rock",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-water",
+        "n": 0
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Gible with Rough Skin",
+     "success": {
+      "text": "A Gible chews on your boot, then decides to stay.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "gible"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "rough-skin"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-water",
+        "n": 0
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Trapinch",
+     "success": {
+      "text": "A Trapinch follows you out of its pit.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "trapinch"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-water",
+        "n": 0
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-19-lone",
+   "name": "A Lone Donphan",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "savanna-led-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "savanna-region"
+    },
+    {
+     "kind": "flag",
+     "key": "savanna-lone-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "donphan",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "On a hill, a lone Donphan. It's limping. It's alive.\n\nIt lifts its trunk, once, and puts it down.",
+   "choices": [
+    {
+     "label": "Lift a hand.",
+     "success": {
+      "text": "You lift your hand. It watches you go, from the top of its hill.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-lone-seen",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Donphan you left behind is alive, on a hill, a region later.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-door",
+   "name": "The Lush Jungle",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "grass"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "jungle-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "bounsweet",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "The fence ends in leaves.\n\n*It's darker in here than it should be at noon.*\n\nThe air is thick and wet. Grass moves hit harder in here; fire comes out weak.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You part the leaves. They close behind you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "jungle-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "jungle-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "jungle-unharmed",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "jungle-harmed",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "safari-quiet",
+        "min": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "jungle-ladder-sent",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "jungle-watched",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "egg-taken",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "egg-returned",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-wall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back.",
+     "success": {
+      "text": "You let the leaves fall back. The dark stays where it is.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-far",
+   "name": "The Lush Jungle",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "grass"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "jungle-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "bounsweet",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "**Warden:** \"Beyond here, it isn't a park. Nobody's counting your steps. Nobody's coming to fetch you, either.\"\n\nThe fence ends in leaves.\n\n*It's darker in here than it should be at noon.*\n\nThe air is thick and wet. Grass moves hit harder in here; fire comes out weak.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You part the leaves. They close behind you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "jungle-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "jungle-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "jungle-unharmed",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "jungle-harmed",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "safari-quiet",
+        "min": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "jungle-ladder-sent",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "jungle-watched",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "egg-taken",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "egg-returned",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-wall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back.",
+     "success": {
+      "text": "You let the leaves fall back. The dark stays where it is.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-wall",
+   "name": "The Lush Jungle: The Green Wall",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    },
+    {
+     "id": "watched",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-watched",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The nests in these trees can't be looked at. The parents are already watching you. They know about the egg."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bellsprout",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "The Green Wall. Every tree has a nest in it, if you look up.\n\nNothing here has fainted yet. Somewhere above, someone is keeping count.",
+   "choices": [
+    {
+     "label": "Look up.",
+     "success": {
+      "text": "Nests in every tree: woven, stuck, hung, and one made entirely of string.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-nest"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "jungle-watched",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You keep your eyes on the path.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-20-bright"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-nest",
+   "name": "The Lush Jungle: Nests",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "spinarak",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "A nest at arm's height, with something in it. A parent is out hunting. For now.",
+   "choices": [
+    {
+     "label": "Disturb a nest.",
+     "success": {
+      "text": "The parent comes back. Fast.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "oddish",
+        "bellsprout",
+        "paras",
+        "exeggcute",
+        "tangela",
+        "venonat",
+        "ledian",
+        "foongus",
+        "bounsweet",
+        "roselia",
+        "budew",
+        "seedot",
+        "lotad",
+        "petilil",
+        "spinarak"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-20-bright"
+        }
+       ],
+       "rule": {
+        "gn": "jungle"
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-20-bright"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Leave them be.",
+     "success": {
+      "text": "You leave the nests to their owners.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-20-bright"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-bright",
+   "name": "The Lush Jungle: The Bright Path",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "oddish",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "The Bright Path. The plants along it are lovely colours, and careless with what they spray.\n\nThe first one leans across the path.",
+   "choices": [
+    {
+     "label": "Push through.",
+     "success": {
+      "text": "You push through. The bright leaves brush your lead, and it starts to shiver.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison",
+        "who": "lead",
+        "except": [
+         "poison",
+         "steel"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-bright-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go round (the long way).",
+     "success": {
+      "text": "The long way: roots, mud, and a lot of ducking. Everyone is tired by the end of it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-bright-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Poison- or Grass-type first.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "poison",
+        "grass"
+       ]
+      }
+     ],
+     "success": {
+      "text": "It walks through the bright plants as if they were grass. The plants don't even notice.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-bright-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-bright-2",
+   "name": "The Lush Jungle: The Bright Path",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "oddish",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "A second bright plant, bigger, its leaves beaded with something that isn't water.",
+   "choices": [
+    {
+     "label": "Push through.",
+     "success": {
+      "text": "You push through. The bright leaves brush your lead, and it starts to shiver.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison",
+        "who": "lead",
+        "except": [
+         "poison",
+         "steel"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-bright-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go round (the long way).",
+     "success": {
+      "text": "The long way: roots, mud, and a lot of ducking. Everyone is tired by the end of it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-bright-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Poison- or Grass-type first.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "poison",
+        "grass"
+       ]
+      }
+     ],
+     "success": {
+      "text": "It walks through the bright plants as if they were grass. The plants don't even notice.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-bright-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-bright-3",
+   "name": "The Lush Jungle: The Bright Path",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "oddish",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "The third: a whole bank of them, either side of the path.",
+   "choices": [
+    {
+     "label": "Push through.",
+     "success": {
+      "text": "You push through. The bright leaves brush your lead, and it starts to shiver.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison",
+        "who": "lead",
+        "except": [
+         "poison",
+         "steel"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-vines"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go round (the long way).",
+     "success": {
+      "text": "The long way: roots, mud, and a lot of ducking. Everyone is tired by the end of it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-vines"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Poison- or Grass-type first.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "poison",
+        "grass"
+       ]
+      }
+     ],
+     "success": {
+      "text": "It walks through the bright plants as if they were grass. The plants don't even notice.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-vines"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-vines",
+   "name": "The Lush Jungle: The Vine Tangle",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tangela",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "A vine tangle across the path, waist-high, alive. It will catch your lead's legs in the next fight.\n\nA slicing move would clear it.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You push into the vines. They let you through, and follow.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "jungle-vines",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-20-flooded"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-flooded",
+   "name": "The Lush Jungle: The Flooded Trail",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "ledian",
+    "tint": "#1e5a2a",
+    "effect": "rain"
+   },
+   "intro": "The first storm. Rain like a dropped bucket. The path is a river now.\n\nUnder one big leaf, two Ledian are sheltering, pressed together. There is room for one more.",
+   "choices": [
+    {
+     "label": "Share the shelter.",
+     "success": {
+      "text": "You duck in beside them. They shuffle over. When the rain stops, they lead you a little way, round a bright plant you would have walked into.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "jungle-guided",
+        "n": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-river"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catch one.",
+     "success": {
+      "text": "They fight together, two against one.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ledian"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-20-river"
+        }
+       ],
+       "rule": {
+        "gn": "jungle"
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "jungle-pair-caught",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-20-river"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-river",
+   "name": "The Lush Jungle: The Storm",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lotad",
+    "tint": "#1e5a2a",
+    "effect": "rain"
+   },
+   "intro": "The river where the path was. It's fast and brown, and it wasn't here an hour ago.",
+   "choices": [
+    {
+     "label": "Ride across on a Water-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Water-type swims the new river with everyone hanging on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-20-hill"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the long way.",
+     "success": {
+      "text": "Round, and round, and up, and down, and wet to the knees.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-longway"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-longway",
+   "name": "The Lush Jungle: The Long Way",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "oddish",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "The long way goes past another bright plant.",
+   "choices": [
+    {
+     "label": "Follow the Ledian.",
+     "success": {
+      "text": "The two Ledian you sheltered with zip ahead and lead you round it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-20-hill"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "jungle-guided",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Push through.",
+     "success": {
+      "text": "You push through. Your lead starts to shiver.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison",
+        "who": "lead",
+        "except": [
+         "poison",
+         "steel"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-20-hill"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "jungle-guided",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go round it.",
+     "success": {
+      "text": "Round again. Everyone is very tired of round.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-20-hill"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "jungle-guided",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-20-hill",
+   "name": "The Lush Jungle: The Hill That Hums",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "venonat",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "A hill that hums. It's a Bug-type colony, thousands strong. It isn't hostile, unless you step on the trails.\n\nA path of stepping stones crosses it. Listen to the hum before each step.",
+   "choices": [
+    {
+     "label": "Start across.",
+     "success": {
+      "text": "You put one foot on the first stone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-stone1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn to the other Ledian.",
+     "success": {
+      "text": "The other Ledian has followed you all this way. It won't leave its pair.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-pair"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "jungle-pair-caught",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "jungle-pair-done",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-20-pair",
+   "name": "The Lush Jungle: The Other One",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "ledian",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "It hovers at your shoulder, looking at the Ball its pair went into. It will follow you until it's caught too, or the first is let go.",
+   "choices": [
+    {
+     "label": "Catch it too.",
+     "success": {
+      "text": "It goes into a Ball of its own without a fight. The two Balls click together in your bag.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "ledian"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "jungle-pair-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-hill"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the first one go.",
+     "success": {
+      "text": "You open the first Ball. The two of them fly off together, and don't look back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "releaseLast",
+        "species": [
+         "ledian"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "jungle-pair-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-hill"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-stone1",
+   "name": "The Lush Jungle: The Hill That Hums",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "spinarak",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "The first stone. The hum is rising, louder and louder.",
+   "choices": [
+    {
+     "label": "Step now.",
+     "success": {
+      "text": "Your foot comes down on a trail. The hum stops. Then the hill gets up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "jungle-slipped",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-wave1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for the hum to drop.",
+     "success": {
+      "text": "You wait. The hum drops low, and you step across in the quiet.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-stone2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-stone2",
+   "name": "The Lush Jungle: The Hill That Hums",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "spinarak",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "The second stone. The hum drops away to almost nothing.",
+   "choices": [
+    {
+     "label": "Step now.",
+     "success": {
+      "text": "Your foot lands. The hum doesn't change.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-stone3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for the hum to drop.",
+     "success": {
+      "text": "You wait. The hum rises instead, and the stone you were standing on tips. You slip onto a trail.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "jungle-slipped",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-wave1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-stone3",
+   "name": "The Lush Jungle: The Hill That Hums",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "spinarak",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "The last stone. The hum is climbing again, fast.",
+   "choices": [
+    {
+     "label": "Step now.",
+     "success": {
+      "text": "Your foot comes down on a trail. The hum stops. Then the hill gets up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "jungle-slipped",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-wave1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for the hum to drop.",
+     "success": {
+      "text": "You wait. The hum drops low, and you step across in the quiet.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-river2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-wave1",
+   "name": "The Lush Jungle: The Colony (wave 1 of 3)",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "venonat",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "Bug-types pour off the hill, thousands of them, and some of them are big.",
+   "choices": [
+    {
+     "label": "Fight them off.",
+     "success": {
+      "text": "They come at you out of the leaves.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "venonat",
+        "spinarak",
+        "paras",
+        "ledian"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-20-wave2"
+        }
+       ],
+       "rule": {
+        "gn": "jungle"
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-20-wave2"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-wave2",
+   "name": "The Lush Jungle: The Colony (wave 2 of 3)",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "venonat",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "Another wave. The hill is still humming.",
+   "choices": [
+    {
+     "label": "Fight them off.",
+     "success": {
+      "text": "They come at you out of the leaves.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "venonat",
+        "spinarak",
+        "paras",
+        "ledian"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-20-wave3"
+        }
+       ],
+       "rule": {
+        "gn": "jungle"
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-20-wave3"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-wave3",
+   "name": "The Lush Jungle: The Colony (wave 3 of 3)",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "venonat",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "The last wave. Behind it, the hum is settling again.",
+   "choices": [
+    {
+     "label": "Fight them off.",
+     "success": {
+      "text": "They come at you out of the leaves.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "venonat",
+        "spinarak",
+        "paras",
+        "ledian"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-20-river2"
+        }
+       ],
+       "rule": {
+        "gn": "jungle"
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-20-river2"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-river2",
+   "name": "The Lush Jungle: The Storm",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lotad",
+    "tint": "#1e5a2a",
+    "effect": "rain"
+   },
+   "intro": "The second storm. The stream below the hill has burst its banks.",
+   "choices": [
+    {
+     "label": "Ride across on a Water-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Water-type swims the new river with everyone hanging on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-20-clearing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the long way.",
+     "success": {
+      "text": "Round, and round, and up, and down, and wet to the knees.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-20-clearing"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-clearing",
+   "name": "The Lush Jungle: The Clearing",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tsareena",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "*A clearing. In the middle, a Bounsweet, fast asleep in a patch of sun.*\n\n*At the edge, a Tsareena, standing on one leg, with the other drawn back.*\n\n*It isn't looking at you. It's looking at the space between you and the Bounsweet.*",
+   "choices": [
+    {
+     "label": "Back out.",
+     "success": {
+      "text": "You back out the way you came. It lowers its leg. The long way round, to the far side.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "jungle-tsareena",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "jungle-venusaur",
+        "n": 15
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "jungle-venusaur",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-20-venusaur"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "jungle-venusaur",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "jungle-unharmed",
+          "min": 1,
+          "then": [
+           {
+            "kind": "addEvent",
+            "eventId": "gn-20-ladder"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "jungle-unharmed",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "jungle-ladder-sent",
+            "min": 1,
+            "then": [
+             {
+              "kind": "addEvent",
+              "eventId": "gn-20-ladder"
+             }
+            ]
+           },
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "jungle-ladder-sent",
+            "min": 0,
+            "max": 0,
+            "then": [
+             {
+              "kind": "addEvent",
+              "eventId": "gn-20-treehouse"
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk round the edge.",
+     "success": {
+      "text": "You walk round the edge of the clearing. It turns to keep itself between you and the Bounsweet.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "jungle-bond3",
+        "if": [
+         {
+          "kind": "bondLevel",
+          "atLeast": 3,
+          "who": "lead"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "jungle-bond3",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "jungle-tsareena",
+          "n": 2
+         },
+         {
+          "kind": "gn",
+          "op": "roll",
+          "key": "jungle-venusaur",
+          "n": 15
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "jungle-venusaur",
+          "min": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-20-venusaur"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "jungle-venusaur",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "jungle-unharmed",
+            "min": 1,
+            "then": [
+             {
+              "kind": "addEvent",
+              "eventId": "gn-20-ladder"
+             }
+            ]
+           },
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "jungle-unharmed",
+            "min": 0,
+            "max": 0,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "when",
+              "key": "jungle-ladder-sent",
+              "min": 1,
+              "then": [
+               {
+                "kind": "addEvent",
+                "eventId": "gn-20-ladder"
+               }
+              ]
+             },
+             {
+              "kind": "gn",
+              "op": "when",
+              "key": "jungle-ladder-sent",
+              "min": 0,
+              "max": 0,
+              "then": [
+               {
+                "kind": "addEvent",
+                "eventId": "gn-20-treehouse"
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "text": "Your lead walks on the far side of you, away from the Bounsweet. The Tsareena allows it.\n\n*The Bounsweet wakes. It sees you. It waves. The Tsareena closes its eyes, the way a parent does.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "jungle-bond3",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-20-standoff"
+         }
+        ],
+        "text": "Its leg stays drawn back. It won't let you pass on that side."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Step forward.",
+     "success": {
+      "text": "You step forward. The leg comes down like an axe.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "jungle-unharmed",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "jungle-unharmed",
+          "n": 0
+         }
+        ],
+        "text": "*Somewhere above, a ladder is pulled up.*"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "tsareena"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "jungle-tsareena",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "roll",
+         "key": "jungle-venusaur",
+         "n": 15
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-venusaur",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-20-venusaur"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-venusaur",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "addEvent",
+             "eventId": "gn-20-ladder"
+            }
+           ]
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 0,
+           "max": 0,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "when",
+             "key": "jungle-ladder-sent",
+             "min": 1,
+             "then": [
+              {
+               "kind": "addEvent",
+               "eventId": "gn-20-ladder"
+              }
+             ]
+            },
+            {
+             "kind": "gn",
+             "op": "when",
+             "key": "jungle-ladder-sent",
+             "min": 0,
+             "max": 0,
+             "then": [
+              {
+               "kind": "addEvent",
+               "eventId": "gn-20-treehouse"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rule": {
+        "gn": "tsareena",
+        "spare": true,
+        "noCatch": true
+       },
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-standoff",
+   "name": "The Lush Jungle: The Clearing",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tsareena",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "The Tsareena hasn't moved. The Bounsweet sleeps on.",
+   "choices": [
+    {
+     "label": "Back out.",
+     "success": {
+      "text": "You back out. It lowers its leg.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "jungle-tsareena",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "jungle-venusaur",
+        "n": 15
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "jungle-venusaur",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-20-venusaur"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "jungle-venusaur",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "jungle-unharmed",
+          "min": 1,
+          "then": [
+           {
+            "kind": "addEvent",
+            "eventId": "gn-20-ladder"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "jungle-unharmed",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "jungle-ladder-sent",
+            "min": 1,
+            "then": [
+             {
+              "kind": "addEvent",
+              "eventId": "gn-20-ladder"
+             }
+            ]
+           },
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "jungle-ladder-sent",
+            "min": 0,
+            "max": 0,
+            "then": [
+             {
+              "kind": "addEvent",
+              "eventId": "gn-20-treehouse"
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Step forward.",
+     "success": {
+      "text": "You step forward. The leg comes down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "jungle-unharmed",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "jungle-unharmed",
+          "n": 0
+         }
+        ],
+        "text": "*Somewhere above, a ladder is pulled up.*"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "tsareena"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "jungle-tsareena",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "roll",
+         "key": "jungle-venusaur",
+         "n": 15
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-venusaur",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-20-venusaur"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-venusaur",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "addEvent",
+             "eventId": "gn-20-ladder"
+            }
+           ]
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 0,
+           "max": 0,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "when",
+             "key": "jungle-ladder-sent",
+             "min": 1,
+             "then": [
+              {
+               "kind": "addEvent",
+               "eventId": "gn-20-ladder"
+              }
+             ]
+            },
+            {
+             "kind": "gn",
+             "op": "when",
+             "key": "jungle-ladder-sent",
+             "min": 0,
+             "max": 0,
+             "then": [
+              {
+               "kind": "addEvent",
+               "eventId": "gn-20-treehouse"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rule": {
+        "gn": "tsareena",
+        "spare": true,
+        "noCatch": true
+       },
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-venusaur",
+   "name": "The Lush Jungle: The Heart",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "venusaur",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "At the heart of the jungle, under the biggest tree: a Venusaur, asleep. The flower on its back opens and closes as it breathes.",
+   "choices": [
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It wakes slowly, and it is very large.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "venusaur"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-unharmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-20-ladder"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-unharmed",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-ladder-sent",
+           "min": 1,
+           "then": [
+            {
+             "kind": "addEvent",
+             "eventId": "gn-20-ladder"
+            }
+           ]
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-ladder-sent",
+           "min": 0,
+           "max": 0,
+           "then": [
+            {
+             "kind": "addEvent",
+             "eventId": "gn-20-treehouse"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rule": {
+        "gn": "jungle"
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-unharmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-20-ladder"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-unharmed",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-ladder-sent",
+           "min": 1,
+           "then": [
+            {
+             "kind": "addEvent",
+             "eventId": "gn-20-ladder"
+            }
+           ]
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-ladder-sent",
+           "min": 0,
+           "max": 0,
+           "then": [
+            {
+             "kind": "addEvent",
+             "eventId": "gn-20-treehouse"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it sleeping. You walk very quietly for a long way.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "jungle-unharmed",
+        "min": 1,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-20-ladder"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "jungle-unharmed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "jungle-ladder-sent",
+          "min": 1,
+          "then": [
+           {
+            "kind": "addEvent",
+            "eventId": "gn-20-ladder"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "jungle-ladder-sent",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "addEvent",
+            "eventId": "gn-20-treehouse"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-ladder",
+   "name": "The Lush Jungle: The Ladder",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    },
+    {
+     "id": "sent",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-ladder-sent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**Old Liana:** \"The warden sent word. By bird.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bounsweet",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "*A rope ladder comes down out of the leaves, without a sound, and stops at the height of your hand.*\n\nWalkways. Lanterns in gourds. People who've never seen the ground.\n\n**Village elder, Old Liana:** \"You came through without hurting anything. We watch. We've watched people for two hundred years. You're the ninth.\"",
+   "choices": [
+    {
+     "label": "Climb up.",
+     "success": {
+      "text": "A hammock, and a full heal. Somebody brings you tea in a nutshell.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "jungle-village",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A village in the canopy lowered its ladder for you.",
+        "importance": 80
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-tutor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-tutor",
+   "name": "The Lush Jungle: The Canopy Village",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bounsweet",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "**Old Liana:** \"We teach one thing, to one Pokémon, free. Grass, or Poison. The jungle's two tongues.\"",
+   "choices": [
+    {
+     "label": "A Grass move.",
+     "success": {
+      "text": "An old woman hanging upside down from a branch teaches it to you, to pass on to one Pokémon of your choice.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "hm-grass",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-nestling"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Poison move.",
+     "success": {
+      "text": "A child who is very proud of knowing it teaches it to you, to pass on to one Pokémon of your choice.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "hm-poison",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-nestling"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-nestling",
+   "name": "The Lush Jungle: The Nest-Fallen",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "petilil",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "A Pokémon the village has raised since it fell out of a nest. It has never been on the ground.\n\nIt looks at you, and at the ladder, and at you again.",
+   "choices": [
+    {
+     "label": "Take it down with me.",
+     "success": {
+      "text": "It holds your sleeve the whole way down the ladder.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "tangela",
+         "foongus",
+         "petilil",
+         "bounsweet",
+         "ledian",
+         "roselia"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "jungle-nestling",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "jungle-lantern",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It belongs up here.",
+     "success": {
+      "text": "It waves you off from the top of the ladder, holding on with both hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "jungle-lantern",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-treehouse",
+   "name": "The Lush Jungle: The Treehouse",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bellsprout",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "No ladder comes down. Instead: a ruined treehouse, low enough to climb. A rest.\n\nCarved in the wall: three seeds, a sun, a raindrop, and a missing fourth picture.",
+   "choices": [
+    {
+     "label": "A sun.",
+     "success": {
+      "text": "You carve a sun. Wrong: there is one already. Nothing happens.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-treehouse-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A seedling.",
+     "success": {
+      "text": "Seed, sun, rain, seedling. A panel slides open. Inside: a Miracle Seed.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-treehouse-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A raindrop.",
+     "success": {
+      "text": "You carve a raindrop. Nothing happens, except that you feel a bit silly.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-treehouse-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-treehouse-2",
+   "name": "The Lush Jungle: The Treehouse",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "foongus",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "Before you go, something from the jungle to take with you.",
+   "choices": [
+    {
+     "label": "Miracle Seed",
+     "success": {
+      "text": "A seed that hums faintly.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "jungle-lantern",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Black Sludge",
+     "success": {
+      "text": "A lump of it, sealed in a leaf.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "black-sludge",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "jungle-lantern",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Tangela with Chlorophyll",
+     "success": {
+      "text": "A Tangela unwinds from a branch and drops onto your shoulder.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "tangela"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "chlorophyll"
+       },
+       {
+        "kind": "flag",
+        "key": "jungle-lantern",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Foongus with Regenerator",
+     "success": {
+      "text": "A Foongus that was pretending to be a Poké Ball follows you out.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "foongus"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "regenerator"
+       },
+       {
+        "kind": "flag",
+        "key": "jungle-lantern",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

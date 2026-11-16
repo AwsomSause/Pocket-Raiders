@@ -15,8 +15,8 @@ export function changeFriendship(content: Content, mon: PokemonInstance, amount:
   const { max } = content.balance.friendship;
   // Catalog Overhaul (SF102 Bond Ceremony): a vowed Pokémon's friendship never falls.
   if (mon.vowed && amount < 0) return mon.friendship;
-  // A Prism Scale makes its holder warm up faster.
-  const delta = amount > 0 ? Math.round(amount * gainMultiplier * friendshipMultiplier(content, mon) * (mon.scars?.includes('kept-promise') ? shadow2Data.keptPromiseFriendship : 1) * quirkGainFactor(content, mon)) : amount;
+  // A Prism Scale makes its holder warm up faster. Greenneedle gn.49: a Snorlax caught angry warms up at half speed for a region.
+  const delta = amount > 0 ? Math.round(amount * gainMultiplier * friendshipMultiplier(content, mon) * (mon.scars?.includes('kept-promise') ? shadow2Data.keptPromiseFriendship : 1) * quirkGainFactor(content, mon) * (mon.gn?.includes('snorlax-grudge') ? 0.5 : 1)) : amount;
   mon.friendship = Math.max(0, Math.min(max, mon.friendship + delta));
   return mon.friendship;
 }

@@ -24,8 +24,12 @@ import { fieldHintId, licenseName, licenseNote } from '../core/license';
 import { SERVICES } from '../core/services/schema';
 import { stopIsHidden } from '../core/events';
 import { leadChatter } from '../core/leadChatter';
+import { xatuBlur } from '../core/greenneedle/cartographer';
 import { forecast, foggedAt, frontAt, isFogged, sightRange, visibleColumn } from '../core/world';
 import Phaser from 'phaser';
+
+/** gn.new.12: when the Xatu's map first went on show (kept across scene restarts; 0 = not running). */
+const peekClock = { key: '', at: 0 };
 import { pinnedObjective } from '../core/objectives';
 import { rerollRunQuest } from '../core/quests';
 import { regionDim } from '../ui/battleFx/transitions';
@@ -876,6 +880,20 @@ export class MapScene extends Phaser.Scene {
     const choiceIds = new Set(choices.map((n) => n.id));
     const mapLayer = this.add.container(0, 0);
     this.mapLayer = mapLayer;
+    // gn.new.12: the Xatu's map is on show for ten seconds (counted across scenes), then it blurs and the fog comes back.
+    if (stage.peekFrom !== undefined) {
+      if (peekClock.key !== `${run.runId}:${stage.index}` || peekClock.at === 0) { peekClock.key = `${run.runId}:${stage.index}`; peekClock.at = Date.now(); }
+      const left = Math.max(0, 10000 - (Date.now() - peekClock.at));
+      this.time.delayedCall(left, () => {
+        const { session: sv } = services();
+        xatuBlur(sv.run!);
+        sv.saveRunNow();
+        peekClock.at = 0;
+        const fade = this.motion === 'off' ? 0 : 900;
+        if (fade) this.tweens.add({ targets: mapLayer, alpha: 0.25, duration: fade, onComplete: () => this.scene.restart({ notice: 'The map blurs, the way a dream does on waking. The Xatu was right about the ten seconds.', focus: this.index }) });
+        else this.scene.restart({ notice: 'The map blurs, the way a dream does on waking. The Xatu was right about the ten seconds.', focus: this.index });
+      });
+    }
     this.nodePos = new Map();
     const colSpacing = league ? Math.min(200, (GAME_WIDTH - MAP_LEFT * 2 - 40) / Math.max(1, stage.map.columns - 1)) : COL_SPACING;
     this.colSpacing = colSpacing;

@@ -1,0 +1,375 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-13-door",
+   "name": "The Ones You Left",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "leftHas",
+     "n": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3b3a4e",
+    "effect": "none"
+   },
+   "intro": "A cold fire. A bedroll, still rolled. Poké Balls in a row on a log, and beside them, a notebook in your own handwriting.\n\nThe last page lists every Pokémon you let go, boxed or lost on this road, by name. Under it, in a hurry: \"Tomorrow, the Gym.\"\n\nThe Balls open by themselves. They have been waiting. They look at you the way a Pokémon looks at someone it remembers losing with.",
+   "choices": [
+    {
+     "label": "Take one.",
+     "success": {
+      "text": "You kneel by the log. Nobody asks you to hurry. The Balls wait for you to choose, and they do not look away.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "leftFreeze"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-13-pick-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take none. Bury the notebook.",
+     "success": {
+      "text": "You dig a hole beside the fire, with your hands, and it takes longer than it should.\n\nThe notebook goes in. Your Pokémon stand around the little grave and watch, the way you watch a friend do something hard. Nobody says anything.\n\nWhen you stand, they stand closer. Something is different, and none of you could say what.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "left-buried",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "leftFreeze"
+       },
+       {
+        "kind": "gn",
+        "op": "leftFates"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-13-goodbye"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-13-pick-a",
+   "name": "The Ones You Left: The Balls",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b3a4e",
+    "effect": "none"
+   },
+   "intro": "The notebook says who they were. The Balls say who they still are.\n\nThe first three, on the left of the log: {left:1}, {left:2}, {left:3}.",
+   "choices": [
+    {
+     "label": "The first Ball: {left:1}.",
+     "success": {
+      "text": "You lift the Ball. It is warm, as if someone has been holding it. It opens in your hand, and the one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "leftTake",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "leftFates"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-13-goodbye"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "leftHas",
+       "n": 1
+      }
+     ]
+    },
+    {
+     "label": "The second Ball: {left:2}.",
+     "success": {
+      "text": "You lift the Ball. It is warm, as if someone has been holding it. It opens in your hand, and the one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "leftTake",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "leftFates"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-13-goodbye"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "leftHas",
+       "n": 2
+      }
+     ]
+    },
+    {
+     "label": "The third Ball: {left:3}.",
+     "success": {
+      "text": "You lift the Ball. It is warm, as if someone has been holding it. It opens in your hand, and the one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "leftTake",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "leftFates"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-13-goodbye"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "leftHas",
+       "n": 3
+      }
+     ]
+    },
+    {
+     "label": "Look at the others.",
+     "success": {
+      "text": "You move down the log, past the cold fire.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-13-pick-b"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-13-pick-b",
+   "name": "The Ones You Left: The Other Balls",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b3a4e",
+    "effect": "none"
+   },
+   "intro": "The three on the right of the log. One of them is already looking toward the trees.\n\nThe last three: {left:4}, {left:5}, {left:6}.",
+   "choices": [
+    {
+     "label": "The fourth Ball: {left:4}.",
+     "success": {
+      "text": "You lift the Ball. It is warm, as if someone has been holding it. It opens in your hand, and the one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "leftTake",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "leftFates"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-13-goodbye"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "leftHas",
+       "n": 4
+      }
+     ]
+    },
+    {
+     "label": "The fifth Ball: {left:5}.",
+     "success": {
+      "text": "You lift the Ball. It is warm, as if someone has been holding it. It opens in your hand, and the one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "leftTake",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "leftFates"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-13-goodbye"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "leftHas",
+       "n": 5
+      }
+     ]
+    },
+    {
+     "label": "The sixth Ball: {left:6}.",
+     "success": {
+      "text": "You lift the Ball. It is warm, as if someone has been holding it. It opens in your hand, and the one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "leftTake",
+        "n": 6
+       },
+       {
+        "kind": "gn",
+        "op": "leftFates"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-13-goodbye"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "leftHas",
+       "n": 6
+      }
+     ]
+    },
+    {
+     "label": "Look at the first three.",
+     "success": {
+      "text": "You move back along the log.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-13-pick-a"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-13-goodbye",
+   "name": "The Ones You Left: Morning",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "remembers": [
+    {
+     "id": "took",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "left-took",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The one you took walks beside you, a little behind, the way it used to. It looks back once, at the rest, and then ahead."
+    },
+    {
+     "id": "buried",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "left-buried",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The fresh earth is the only thing left to look at. Your Pokémon walk past it slowly, one at a time, and touch it."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b3a4e",
+    "effect": "none"
+   },
+   "intro": "The others decide for themselves, and you do not get a vote. That is the whole of it.\n\nTwo go with a passing trainer, who calls out, \"Good ones, these. I'll look after them.\" Two stay at the camp. They will keep the fire going.\n\nOne walks into the woods, {left:woods}, and does not look back. You watch the trees until you cannot tell which one it was.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You put out the last of the fire. The camp stays where it is. You do not turn around, because the one in the woods would not want you to.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Met the team I lost, and let them choose.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
