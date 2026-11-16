@@ -4,9 +4,12 @@
 import type Phaser from 'phaser';
 import type { Content } from '../core/contentSchema';
 import { FOOTPRINT_COLS, FOOTPRINT_SIZE, footprintCell } from '../core/presentation/footprints';
-import { dexDataPage, dexPage } from '../core/presentation/dexInfo';
+import { dexCard, dexDataPage, dexPage } from '../core/presentation/dexInfo';
 import type { Profile } from '../core/state';
 import { loadAssets } from './lazyAssets';
+import { monFile } from './redux/game';
+import { dexView } from './redux/screens/dex';
+import { mountRedux, reduxOn, type ReduxView } from './redux/stage';
 import { pokemonVisual } from './sprites';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from './theme';
 
@@ -19,10 +22,22 @@ export class DexInfo {
   private closed = false;
   private pageNo = 0;
   private readonly draw: () => void;
+  /** The New UI's picture of the page (the mock-ups' `dex` page); the canvas page is not drawn then. */
+  private rx: ReduxView | null = null;
 
   constructor(private readonly scene: Phaser.Scene, content: Content, profile: Profile, speciesId: string, private readonly onClose: () => void) {
     const page = dexPage(content, profile, speciesId);
     this.root = scene.add.container(0, 0).setDepth(120).setName('dex-info');
+    if (reduxOn()) {
+      const card = dexCard(content, profile, speciesId), data = dexDataPage(content, profile, speciesId);
+      const art = monFile(scene, speciesId, 'front'), line = card.line.map((e) => monFile(scene, e.id, 'front'));
+      this.rx = mountRedux(scene, {
+        render: (c) => dexView(c, { card, data, page: this.pageNo as 0 | 1, art, line }),
+        acts: { back: () => this.close(), flip: () => this.flip() },
+      });
+      this.draw = () => this.rx?.refresh();
+      return;
+    }
     this.root.add(scene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.7).setOrigin(0).setInteractive());
     const draw = (): void => {
       if (this.closed) return;
@@ -76,6 +91,7 @@ export class DexInfo {
   close(): void {
     if (this.closed) return;
     this.closed = true;
+    this.rx?.destroy();
     this.root.destroy();
     this.onClose();
   }

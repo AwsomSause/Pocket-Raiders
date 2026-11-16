@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { content } from './helpers';
-import { buyTier, claimBankMilestones, exchange, presetSlotCount, scavengerBonus, bankShopEntries, claimRegionAccounts, vaultDeposit, vaultTake, loanDue, runBankFlags, fortuneBias, tierProblem } from '../../src/core/bank';
+import { buyTier, claimBankMilestones, exchange, exchangeProblem, presetSlotCount, scavengerBonus, bankShopEntries, claimRegionAccounts, vaultDeposit, vaultTake, loanDue, runBankFlags, fortuneBias, tierProblem } from '../../src/core/bank';
 import { buyLicense, licenseProblem } from '../../src/core/runPrep';
 import { createProfile } from '../../src/core/profile';
 import { shopStock } from '../../src/core/run';
@@ -42,6 +42,22 @@ describe('Exchange Counter', () => {
     const b = exchange(content, p, 'toCredits');
     expect([b.bankCredits, b.researchPoints]).toEqual([20010, 10]);
     expect(() => exchange(content, rich({ bankTier: 3 }), 'toCredits')).toThrow(/Research Points/);
+  });
+  it('five lots at once are all or nothing', () => {
+    const p = rich({ bankTier: 3, researchPoints: 260 });
+    const a = exchange(content, p, 'toPoints', 5);
+    expect([a.bankCredits, a.researchPoints]).toEqual([19500, 385]);
+    const b = exchange(content, p, 'toCredits', 5);
+    expect([b.bankCredits, b.researchPoints]).toEqual([20050, 10]);
+    // 249 points cover four lots, not five: nothing moves and the reason names the whole price.
+    const short = rich({ bankTier: 3, researchPoints: 249 });
+    expect(exchangeProblem(content, short, 'toCredits', 4)).toBeNull();
+    expect(exchangeProblem(content, short, 'toCredits', 5)).toBe('You need 250 Research Points (you have 249).');
+    expect(() => exchange(content, short, 'toCredits', 5)).toThrow(/250 Research Points/);
+    expect(exchangeProblem(content, rich({ bankTier: 3, bankCredits: 499 }), 'toPoints', 5)).toBe('You need 500 Bank Credits (you have 499).');
+    // The tier gate comes first, and a lot count that is not a whole number of at least one is refused.
+    expect(exchangeProblem(content, rich(), 'toPoints', 5)).toMatch(/tier 3/);
+    for (const lots of [0, -1, 1.5]) expect(() => exchange(content, p, 'toPoints', lots)).toThrow(/whole number/);
   });
 });
 

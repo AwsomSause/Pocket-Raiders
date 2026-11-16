@@ -11,6 +11,8 @@ export interface GameModel {
   title: string;
   /** "Score 12", "Round 2/5"... shown as the mock-ups' label / value windows. */
   hud: string[];
+  /** The run's best medal in this minigame ("Gold", or "None yet"): the mock-up's third window, "Best". Left out when null. */
+  best?: string | null;
   prompt: string;
   /** The outcome's medal ("gold", "silver", "bronze", "none"), or null while playing. */
   medal: string | null;
@@ -23,10 +25,17 @@ export interface GameModel {
 }
 
 const MEDAL: Record<string, string> = { gold: '#f5c842', silver: '#d0d8e0', bronze: '#d08848', none: '#707080' };
-/** "Score: 12" / "Round 2/5" -> ["Score", "12"]; a line with no number stays whole. */
-function stat(t: string): readonly [string, string] {
-  const cut = /^(.*?)[:\s]+([^\s:]*\d[^\s]*)$/.exec(t.trim());
+/** "Score: 12" / "Round 2/5" -> ["Score", "12"]; "Wanted: Spicy 2, Dry 0" -> ["Wanted", "Spicy 2, Dry 0"]; a line with no number stays whole. */
+export function hudStat(t: string): readonly [string, string] {
+  const said = /^([^:\d]+):\s*(.+)$/.exec(t.trim());
+  if (said) return [said[1]!.trim(), said[2]!.trim()];
+  const cut = /^(.*?)\s+([^\s]*\d[^\s]*)$/.exec(t.trim());
   return cut ? [cut[1]!, cut[2]!] : [t, ''];
+}
+
+/** The New minigame screen's "Best" window: the run's best medal in this game. */
+export function bestMedalWord(medal: string | undefined): string {
+  return !medal || medal === 'none' ? 'None yet' : `${medal[0]!.toUpperCase()}${medal.slice(1)}`;
 }
 
 export function gameView(_c: ReduxCtx, d: GameModel): string {
@@ -35,8 +44,10 @@ export function gameView(_c: ReduxCtx, d: GameModel): string {
   const rowH = Math.max(22, Math.min(46, Math.floor((230 - (rows - 1) * 8) / rows)));
   const gridH = rows * rowH + (rows - 1) * 8;
   const fieldH = 540 - 66 - gridH - 12 - 122;
-  const hud = d.hud.filter(Boolean).map(stat);
-  const stats = `<div class="abs row" style="left:24px;right:24px;top:66px;gap:${hud.length > 4 ? 8 : 16}px">${hud.map(([a, b]) => W(`<span class="sm grow" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis${hud.length > 4 ? ';font-size:12px' : ''}">${esc(a)}</span>${b ? `<b${hud.length > 4 ? ' style="font-size:14px"' : ''}>${esc(b)}</b>` : ''}`, `flex:1;display:flex;gap:6px;padding:7px ${hud.length > 4 ? 8 : 12}px;min-width:0`)).join('')}</div>`;
+  const hud = [...d.hud.filter(Boolean).map(hudStat), ...(d.best ? [['Best', d.best] as const] : [])];
+  // A long window (an order to match) takes the room the short ones (a count, the best medal) don't need.
+  const anyLong = hud.some(([a, b]) => a.length + b.length > 22);
+  const stats = `<div class="abs row" style="left:24px;right:24px;top:66px;gap:${hud.length > 4 ? 8 : 16}px">${hud.map(([a, b]) => W(`<span class="sm" style="flex:1 0 auto;white-space:nowrap${hud.length > 4 ? ';font-size:12px' : ''}">${esc(a)}</span>${b ? `<b style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0${b.length > 34 ? ';font-size:11px;letter-spacing:-.2px' : b.length > 22 ? ';font-size:12px' : hud.length > 4 || b.length > 14 ? ';font-size:13px' : ''}">${esc(b)}</b>` : ''}`, `flex:${!anyLong ? '1 1 0' : a.length + b.length > 22 ? '1 1 0' : '0 0 auto'};display:flex;gap:6px;padding:7px ${hud.length > 4 ? 8 : 12}px;min-width:0`)).join('')}</div>`;
   const k = fieldH > 220 ? 2.4 : fieldH > 150 ? 1.6 : 1;
   const crowd = d.party.slice(0, 3).map((f, i, a) => foot(((i + 1) * 912) / (a.length + 1), fieldH - 20, mon(f, k, '', true))).join('');
   const long = d.prompt.length;

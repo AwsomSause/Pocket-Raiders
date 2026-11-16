@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { tourneyBracket } from '../../src/core/expansion/tourney';
-import { bracketView, galarHome, galarPage, tourneyHome, tourneyPage, tourneyRounds } from '../../src/ui/redux/screens/bracket';
+import { bracketView, friendsPage, friendsPages, galarHome, galarPage, tourneyHome, tourneyPage, tourneyRounds } from '../../src/ui/redux/screens/bracket';
+import { makeBracket } from '../../src/core/tools/bracket';
 import { bracketTree } from '../../src/core/galarTournament';
 import { chooseStarter, createRun, debugJumpToLeague } from '../../src/core/run';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
@@ -98,6 +99,9 @@ describe("New UI bracket for Galar's Champion Tournament", () => {
     expect(tree.wins).toBe(2);
     expect(tree.lines.map((l) => l.length)).toEqual([32, 16, 8]);
     for (const line of tree.lines) expect(line[0]).toMatchObject({ you: true, name: 'You' });
+    // The player's slot shows their lead Pokémon; everyone else their best-known one.
+    expect(tree.lines[0]![0]!.ace).toBe(league(2).party[0]!.speciesId);
+    expect(tree.lines[0]!.slice(1).some((e) => e.ace !== null)).toBe(true);
     expect(new Set(tree.lines[0]!.map((e) => e.id)).size).toBe(32);
     expect(bracketTree(content, league(5)).lines.map((l) => l.length)).toEqual([32, 16, 8, 4, 2, 1]);
   });
@@ -140,5 +144,56 @@ describe("New UI bracket for Galar's Champion Tournament", () => {
     expect(html).toContain('data-act="bracketWatch"');
     expect(html.split('data-act="bracketPage"').length - 1).toBe(5);
     expect(html).toContain('bottom:136px');
+  });
+});
+
+// Tools > Tournament bracket: names typed by the player. Nothing is played, so only round one and the byes show.
+describe('New UI bracket from typed names', () => {
+  const made = (n: number) => { const r = makeBracket(Array.from({ length: n }, (_, i) => `P${i + 1}`), 'seed'); if (!r.ok) throw new Error(r.reason); return r; };
+  const names = (m: ReturnType<typeof friendsPage>, col: number) => m.columns[col]!.slots.map((s) => s?.name ?? '?');
+
+  it('eight names fit on one page of 8, 4, 2 and 1 slots with no page chips', () => {
+    const r = made(8), m = friendsPage(r.rounds, 0, 'text');
+    expect(friendsPages(8)).toEqual([]);
+    expect(m.columns.map((c) => c.slots.length)).toEqual([8, 4, 2, 1]);
+    expect(m.columns.map((c) => c.name)).toEqual(['Quarterfinal', 'Semifinal', 'Final', 'Winner']);
+    expect([...names(m, 0)].sort()).toEqual([...r.names].sort());
+    expect(names(m, 1)).toEqual(['?', '?', '?', '?']);
+    expect(bracketView(ctx, m)).not.toContain('data-act="bracketPage"');
+    expect(m.hints).toEqual([['Enter', 'copy'], ['Esc', 'back']]);
+  });
+  it('two names are one match and a winner', () => {
+    const m = friendsPage(made(2).rounds, 0, '');
+    expect(m.columns.map((c) => c.slots.length)).toEqual([2, 1]);
+    expect(m.columns.map((c) => c.name)).toEqual(['Final', 'Winner']);
+  });
+  it('a bye shows as "(bye)" and its player is already through', () => {
+    const r = made(5), m = friendsPage(r.rounds, 0, '');
+    expect(m.columns.map((c) => c.slots.length)).toEqual([8, 4, 2, 1]);
+    expect(names(m, 0).filter((n) => n === '(bye)')).toHaveLength(3);
+    expect(m.columns[0]!.slots.filter((s) => s?.out).map((s) => s!.name)).toEqual(['(bye)', '(bye)', '(bye)']);
+    // The three players with a bye stand in the next column; the fourth slot waits for its match.
+    expect(names(m, 1).filter((n) => n !== '?')).toHaveLength(3);
+    expect(names(m, 1).filter((n) => n === '?')).toHaveLength(1);
+  });
+  it('32 names: four groups of eight and the finals, every name listed once', () => {
+    const r = made(32);
+    expect(friendsPages(32)).toEqual(['Group A', 'Group B', 'Group C', 'Group D', 'Finals']);
+    const seen = [0, 1, 2, 3].flatMap((p) => names(friendsPage(r.rounds, p, ''), 0));
+    expect([...seen].sort()).toEqual([...r.names].sort());
+    const finals = friendsPage(r.rounds, 4, '');
+    expect(finals.columns.map((c) => c.slots.length)).toEqual([4, 2, 1]);
+    expect(finals.columns.map((c) => c.name)).toEqual(['Semifinal', 'Final', 'Winner']);
+    expect(finals.columns.every((c) => c.slots.every((s) => s === null))).toBe(true);
+    expect(bracketView(ctx, finals).split('data-act="bracketPage"').length - 1).toBe(5);
+    expect(finals.hints?.[0]).toEqual(['◀ ▶', 'group']);
+  });
+  it('16 names: two groups and the finals; a page out of range is clamped', () => {
+    const r = made(16);
+    expect(friendsPages(16)).toEqual(['Group A', 'Group B', 'Finals']);
+    expect(friendsPage(r.rounds, 0, '').columns.map((c) => c.name)).toEqual(['Round of 16', 'Quarterfinal', 'Semifinal', 'Final']);
+    expect(friendsPage(r.rounds, 99, '').page).toBe(2);
+    expect(friendsPage(r.rounds, -3, '').page).toBe(0);
+    expect(friendsPage(r.rounds, 2, '').columns.map((c) => c.slots.length)).toEqual([2, 1]);
   });
 });

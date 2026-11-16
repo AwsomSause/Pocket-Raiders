@@ -86,3 +86,86 @@ describe('New UI event screen', () => {
     });
   }
 });
+
+describe('New UI event screen: a department store floor (mock-up `store`)', () => {
+  const chip = (name: string) => ({ name, file: null, hp: 100, level: 20, fainted: false });
+  const store = (over: Partial<NonNullable<EventModel['store']>> = {}): NonNullable<EventModel['store']> => ({
+    title: 'Celadon Dept. Store', clerk: 'Clerk',
+    floors: [{ tag: '5F', name: 'Evolution Stones', on: true }, { tag: '4F', name: 'The Wise Man', on: false }, { tag: '1F', name: 'Lift and service', on: false }],
+    party: [chip('Eevee'), chip('Pidgey')], notes: [['Can evolve', ''], ['', ''], ['', '']], ...over,
+  });
+  const goods = [choice('Fire Stone (₽3,000)'), { ...choice('Water Stone (₽3,000)'), locked: true, sub: 'Needs ₽3,000' }, choice('Back to the lift.')];
+  const floor = (over: Partial<EventModel> = {}): EventModel => model({ name: 'Celadon Department Store: Evolution Stones', lines: [{ who: null, text: 'Fifth floor: one of each Kanto stone on velvet.' }], choices: goods, store: store(), ...over });
+
+  it('shows the store header, the coins, every floor with this one lit, and each good with its price at the right', () => {
+    for (const layout of [0, 1, 2, 3]) {
+      const html = eventView(ctx(layout), floor());
+      expect(html).toContain('Celadon Dept. Store');
+      expect(html).toContain('₽ 2,450');
+      for (const t of ['5F', 'Evolution Stones', '4F', 'The Wise Man', '1F', 'Lift and service']) expect(html).toContain(t);
+      expect(count(html, 'class="btn on" style="height:44px;cursor:default"')).toBe(1);
+      expect(html).toContain('>Fire Stone</span><span>₽ 3,000</span>');
+      expect(html).not.toContain('(₽3,000)');
+      expect(html).toContain('Back to the lift.');
+      expect(count(html, 'data-act="pick"')).toBe(3);
+      expect(html).toContain('<span class="nm">Clerk</span>');
+      expect(html).toContain('Fifth floor: one of each Kanto stone on velvet.');
+    }
+  });
+  it('the party strip says who the good under the cursor helps', () => {
+    expect(eventView(ctx(0), floor({ index: 0 }))).toContain('Can evolve');
+    expect(eventView(ctx(0), floor({ index: 2 }))).not.toContain('Can evolve');
+    for (const n of ['Eevee', 'Pidgey']) expect(eventView(ctx(0), floor())).toContain(n);
+  });
+  it('a good the player cannot pay for is dimmed, and the text box says why while the cursor is on it', () => {
+    const html = eventView(ctx(0), floor({ index: 1 }));
+    expect(count(html, 'opacity:.5')).toBe(1);
+    expect(html).toContain('Needs ₽3,000');
+    expect(eventView(ctx(0), floor({ index: 0 }))).not.toContain('Needs ₽3,000');
+  });
+  it('the goods wait for the last page of text; a speaker on the page takes the name tab', () => {
+    const html = eventView(ctx(0), floor({ page: { at: 0, of: 2 }, lines: [{ who: 'Miss Philippa Stott', text: 'Fifth! Rocks at silly prices.' }], speaker: 'Miss Philippa Stott' }));
+    expect(html).not.toContain('Fire Stone');
+    expect(html).toContain('data-act="page"');
+    expect(html).toContain('<span class="nm">Miss Philippa Stott</span>');
+    expect(html).toContain('1/2');
+  });
+  it('after buying, one Continue row stands where the goods were, and the changes show once the text is read', () => {
+    const text = eventView(ctx(0), floor({ outcome: { step: 'text', ok: true, changes: ['−₽3,000', 'Fire Stone ×1'], next: 'Continue' }, lines: [{ who: null, text: 'It glows a little in the shade of your hand.' }] }));
+    expect(text).not.toContain('Water Stone');
+    expect(text).toContain('Continue');
+    expect(text).not.toContain('>Outcome<');
+    expect(text).not.toContain('Can evolve');
+    const rewards = eventView(ctx(0), floor({ outcome: { step: 'rewards', ok: true, changes: ['−₽3,000', 'Fire Stone ×1'], next: 'Continue' } }));
+    expect(rewards).toContain('>Outcome<');
+    expect(rewards).toContain('Fire Stone');
+  });
+  it('seven floors and seven choices still fit (shorter rows)', () => {
+    const many = eventView(ctx(0), floor({ choices: Array.from({ length: 7 }, (_, k) => choice(`Good ${k} (₽${k}00)`)), store: store({ floors: Array.from({ length: 7 }, (_, k) => ({ tag: `${k}F`, name: `Floor ${k}`, on: k === 0 })), notes: [] }) }));
+    expect(count(many, 'height:38px;cursor:default')).toBe(7);
+    expect(count(many, 'height:36px;')).toBe(7);
+  });
+  it('never injects text as HTML', () => {
+    const html = eventView(ctx(0), floor({ choices: [choice('<b>x</b> (₽100)')], store: store({ title: '<i>t</i>', clerk: '<u>c</u>', floors: [{ tag: '<s>f</s>', name: '<em>n</em>', on: true }], party: [chip('<p>m</p>')], notes: [['<q>z</q>']] }) }));
+    for (const bit of ['<b>x</b>', '<i>t</i>', '<u>c</u>', '<s>f</s>', '<em>n</em>', '<p>m</p>', '<q>z</q>']) expect(html).not.toContain(bit);
+  });
+  it('an event with no store draws as before', () => {
+    expect(eventView(ctx(0), model())).not.toContain('Dept. Store');
+    expect(eventView(ctx(0), model({ store: null }))).toBe(eventView(ctx(0), model()));
+  });
+});
+
+describe('Stand With Them code-name card', () => {
+  const card = { name: 'House Card', rank: 'Specialist', facts: [['Code name', 'Provisional Agent 000'], ['Team', 'Team Rocket, Kanto']] as [string, string][], trainer: null, badges: 2 };
+  const out = (step: 'text' | 'rewards') => ({ step, ok: true, changes: ['Joined Team Rocket'], next: 'Continue' });
+  it('the joining outcome is read on the card, and a click turns it like the outcome page', () => {
+    const html = eventView(ctx(0), model({ codeCard: card, outcome: out('text'), lines: [{ who: null, text: 'Giovanni names you Provisional Agent 000.' }] }));
+    for (const bit of ['Code Name', 'House Card', 'Specialist', 'Provisional Agent 000', 'Team Rocket, Kanto', 'Giovanni names you']) expect(html).toContain(bit);
+    expect(html).toContain('data-act="next"');
+    expect(html).not.toContain('data-act="back"');
+  });
+  it('the rewards step and the choices are the plain event page', () => {
+    expect(eventView(ctx(0), model({ codeCard: card, outcome: out('rewards') }))).not.toContain('House Card');
+    expect(eventView(ctx(0), model({ codeCard: card }))).not.toContain('House Card');
+  });
+});

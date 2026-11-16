@@ -20,7 +20,7 @@ All 199 catalog ids in the markets category are built (`npm run co:status`: mark
 - `tradeBack` effect (Ivo's trade-back service). TradeWant: `types`, `notTypes`, `natures`, `bond`, `moveFlag`, `shiny`, `minTier`, `regional`.
 - `market` actions (`core/market.ts`): stash, stolen, payItem, rent, returnRent, brew, advise best; pawn remembers a Berry. Condition `holdsAny`.
 - The quirk fields (quirk, marks, ot; run save 44) are the new-events thread's commit 397ad1cb3, cherry-picked unchanged.
-- The UI thread draws the card on the event screen (asked 2026-11-15; their reply: in progress).
+- The UI thread draws the card on the event screen: New look, `src/ui/redux/screens/stops.ts honestView` (the mock-ups' Trade page; T reads the card before choosing; a worse deal is asked once more in both looks). Done 2026-11-15, PR #1333.
 
 ## Tests
 `tests/unit/coMarkets.test.ts` (content rules), `coMarketActions.test.ts` (market actions), `coTradeCard.test.ts` (the card, pools, gifts, warnings, trade-back); `tests/e2e/coMarkets.spec.ts` (Bank with reload, Toll Bridge, New UI).

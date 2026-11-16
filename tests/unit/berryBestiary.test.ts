@@ -14,4 +14,8 @@ describe('Berry Bestiary (S422)', () => {
     expect(list.find((b) => b.id === 'oran-berry')?.crossBred).toBe(false);
     for (const b of list) expect(berryLines(b).length).toBe(4);
   });
+  it('gives each berry its icon by asset id', () => {
+    expect(list.find((b) => b.id === 'oran-berry')?.icon).toBe('item.gen5/oran-berry');
+    for (const b of list) expect(b.icon === null || b.icon.startsWith('item.')).toBe(true);
+  });
 });

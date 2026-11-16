@@ -30,6 +30,7 @@ import Phaser from 'phaser';
 import { wildBehavior } from '../core/wildBehavior';
 import { enemyIntent, foePreviewIntent, trainerTaunt } from '../core/battle/intent';
 import { nextSwitchLine } from '../core/rivals/questlines';
+import { winConditionLine } from '../core/rivals/tier5';
 import { explainMoment, explanationText, FAMILY_NAMES, unseenKeys } from '../core/story/hyperRules';
 import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
 import { armFeat, featCharged } from '../core/story2/feats';
@@ -44,6 +45,8 @@ import { runPerks } from '../core/archetypes';
 import { abilityOf, calcStats, maxHp, getSpecies, lookSpecies, maxPp, xpForLevel } from '../core/pokemon';
 import { heartStage } from '../core/shadow';
 import { shadowPreviewLine } from '../core/shadow2';
+import { foresightOn } from '../core/battle/foresight';
+import { foresightRule, keepsCallout, rallyLine, shadowLines, traitLine, type CalloutEvent } from '../ui/redux/battleCallouts';
 import { formIntro } from '../core/presentation/sceneEffects';
 import { finalRivalArenaTheme } from '../core/story/highHype';
 import { ultimateRival } from '../core/rivals/ultimate';
@@ -51,6 +54,7 @@ import { bossRoleForClass } from '../core/encounters';
 import { findNode } from '../core/map';
 import { bossInfo, currentRegion, type BossInfo } from '../core/regions';
 import { isFinalBoss, type RunEvent, type TurnResult } from '../core/run';
+import { secondShotNotice, type ShotNotice } from '../core/arc/climaxExtended';
 import { battleContent, noBattleItems, tagPilot } from '../core/rules';
 import { isHardcore, nuzlockeCatchProblem } from '../core/nuzlocke';
 import type { PresentationCue } from '../core/story/queue';
@@ -122,7 +126,8 @@ import { battleView, panelOf, splitChoice, type BattleBox, type BattleEvolve, ty
 import { artOf, monFile } from '../ui/redux/game';
 import { moveTipOf, ownAbilityCard, seenFact } from '../ui/redux/tips';
 import { versusView, type VersusModel } from '../ui/redux/screens/versus';
-import type { CutModel } from '../ui/redux/screens/cut';
+import { eventView } from '../ui/redux/screens/event';
+import { shortestSentence, type CutModel } from '../ui/redux/screens/cut';
 import type { Art } from '../ui/redux/templates';
 import { playCutMoment } from '../ui/redux/moment';
 import { rxFileOf } from '../ui/redux/assets';
@@ -330,6 +335,15 @@ export class BattleScene extends Phaser.Scene {
   private rxPanelAt: 'left' | 'tip' = 'left';
   /** New UI: the transformations the move menu offers now (the mock-ups' row of buttons). */
   private rxGim: { choices: TransformRequest[]; tera: string } | null = null;
+  /** New UI: the callout of the event being played (a boss's Rally brace, a signature trait going off). */
+  private rxCall: { rally?: string; trait?: { file: string; name: string; text: string } } | null = null;
+  /** New UI: the Shadow line of the Pokémon that is choosing (its tier, and what the shadow will do this turn). */
+  private rxShadow: { head: string; plan: string } | null = null;
+  /** New UI: foes whose variant ring was already pointed out, and the one being pointed out at this prompt. */
+  private rxRingTold = new Set<string>();
+  private rxRing: string | null = null;
+  /** New UI: the open Item window (the item budget shows beside it). */
+  private rxBag: Picker | null = null;
   /** New UI: where the target menu is aiming (the mock-ups' TARGET tag), and the Exp each Pokémon just earned. */
   private rxAim: { x: number; y: number } | null = null;
   /** New UI: what the pointer rests on ("move:1", "foe:0", "mine:0") and since when; and the box whose card is pinned. */
@@ -340,6 +354,8 @@ export class BattleScene extends Phaser.Scene {
   private rxLevel: BattleLevel | null = null;
   private rxLevels = new Map<string, number>();
   private rxEvolve: BattleEvolve | null = null;
+  /** New UI: a notice box over the field that waits for an input (the Second Shot). */
+  private rxNotice: ShotNotice | null = null;
   /** New UI: the Item window's open pocket. */
   private rxPocket = 0;
   private playerBox!: InfoBox;
@@ -494,7 +510,13 @@ export class BattleScene extends Phaser.Scene {
     // S256: emote stickers (Settings > Sticker reactions).
     if (services().session.settings.stickers) addStickerRow(this, () => TRAINER_POS, this.motion);
     this.menu = null;
+    this.rxNotice = null;
     this.picker = null;
+    this.rxCall = null;
+    this.rxShadow = null;
+    this.rxRing = null;
+    this.rxBag = null;
+    this.rxRingTold = new Set();
     this.advance = null;
     this.busy = true;
     this.riledUid = Object.entries(battle.hyper?.rage ?? {}).find(([, r]) => r.state === 'warned')?.[0] ?? null;
@@ -1665,6 +1687,7 @@ export class BattleScene extends Phaser.Scene {
       render: (c) => (this.rxData ? battleView(c, this.rxData) : ''),
       acts: {
         pick: (i) => { if (!this.picker && !this.infoPanel && !this.autoRunning) this.menu?.press(Number(i)); },
+        confirm: () => { if (this.rxNotice) this.advance?.(); },
         tab: (i) => this.tabs.press(Number(i)),
         auto: () => this.toggleAuto(),
         info: () => { if (this.infoPanel) this.closePanel(); },
@@ -1757,12 +1780,46 @@ export class BattleScene extends Phaser.Scene {
       tip,
       card,
       log: this.historyView ? { tabs: LOG_TABS.map((t) => t.label), index: LOG_TABS.findIndex((t) => t.id === this.logTab), lines: filterLog(this.history, this.logTab).slice(-12) } : null,
+      fx: this.rxFx(!!menu, list),
+      notice: this.rxNotice,
     };
     const sig = JSON.stringify(data);
     if (sig === this.rxSig) return;
     this.rxSig = sig;
     this.rxData = data;
     this.rx.refresh();
+  }
+
+  /** New UI: the Beta 0.6 pieces over the field (item budget, Rally, Foresight Tax, variant hint, signature trait, Shadow line). */
+  private rxFx(menu: boolean, list: Picker | null): BattleModel['fx'] {
+    const battle = this.run.battle;
+    if (!battle || battle.outcome) return null;
+    const caps = services().session.content.balance.itemCaps;
+    const choosing = menu && !list;
+    const fx: NonNullable<BattleModel['fx']> = {
+      // The Item window: what this battle still allows.
+      ...(list && list === this.rxBag ? { budget: { heals: [battle.healsUsed ?? 0, caps.healsPerBattle] as const, revives: [battle.revivesUsed ?? 0, caps.revivesPerBattle] as const } } : {}),
+      ...(!menu && !list && this.rxCall?.rally ? { rally: this.rxCall.rally } : {}),
+      ...(!menu && !list && this.rxCall?.trait ? { trait: this.rxCall.trait } : {}),
+      ...(choosing && foresightOn(battle) ? { rule: foresightRule(true, battle.trainer?.name)! } : {}),
+      ...(choosing && this.rxRing && this.rxRing === this.shown.enemy.uid && !this.infoPanel ? { variant: true } : {}),
+      ...(choosing && this.rxShadow && !this.duo && this.activeMon().shadow ? { shadow: this.rxShadow } : {}),
+    };
+    return Object.keys(fx).length ? fx : null;
+  }
+
+  /** New UI: the callout for one of the turn's events, or null. Reads the finished turn only. */
+  private calloutOf(events: readonly RunEvent[], index: number): BattleScene['rxCall'] {
+    const e = events[index]!;
+    const rally = rallyLine(events as readonly CalloutEvent[], index);
+    if (rally) return { rally };
+    if (e.type !== 'raid') return null;
+    const trait = traitLine(e.text);
+    if (!trait) return null;
+    // The trait belongs to a foe: the one on the field carries it (your own freed special Pokémon keep theirs too).
+    const traits = this.run.battle?.extra?.traits ?? {};
+    const holder = traits[this.shown.enemy.uid] ? this.shown.enemy : traits[this.shown.player.uid] ? this.shown.player : this.shown.enemy;
+    return { trait: { file: monFile(this, holder.speciesId, 'front', !!holder.shiny) ?? '', ...trait } };
   }
 
   /** At a quarter of its HP or less, a box gets a gentle red pulse behind it (still with reduced motion). */
@@ -1985,6 +2042,24 @@ export class BattleScene extends Phaser.Scene {
       // While the text is still being typed, the first press shows the rest of it.
       this.time.delayedCall(120, () => (this.advance = () => (this.finishTyping() ? undefined : done())));
     });
+  }
+
+  /** A notice that waits for an input: the mock-ups' confirm box over the field in the New look, two text lines in the Old one. */
+  private async tellNotice(n: ShotNotice): Promise<void> {
+    if (!this.rx) {
+      await this.say(`${n.title}.`);
+      await this.say(n.body);
+      return;
+    }
+    this.rxNotice = n;
+    await new Promise<void>((resolve) => {
+      // Ignore the key press that closed the last message.
+      this.time.delayedCall(250, () => (this.advance = () => {
+        this.advance = null;
+        resolve();
+      }));
+    });
+    this.rxNotice = null;
   }
 
   /** A damage number that floats up from the Pokémon that was hit (Settings > Damage numbers). */
@@ -2671,7 +2746,8 @@ export class BattleScene extends Phaser.Scene {
     }
     const model: VersusModel = {
       name: boss && !standIn ? boss.name : trainer.name,
-      role: boss ? boss.title.replace(boss.name, '').trim() : battle.rivalId || battle.rival ? 'Rival' : cls?.name ?? '',
+      // A tier-5 rival names its win condition before the fight (the mock-up's "Rival · plans to sweep").
+      role: boss ? boss.title.replace(boss.name, '').trim() : battle.rivalId || battle.rival ? (battle.rivalBrain ? `Rival · ${winConditionLine(battle.rivalBrain.winCondition)}` : 'Rival') : cls?.name ?? '',
       cast: artOf(this, this.trainerArt()?.assetId),
       line,
       evil: !!team && Object.values(team.ranks).some((r) => r.name === trainer.name),
@@ -2848,7 +2924,24 @@ export class BattleScene extends Phaser.Scene {
     const battle = this.run.battle!;
     const { content } = services().session;
     if (battle.raid) {
+      // A Colossus raid (`ss-<team>-<apex>`) is an Apex: the team's leader stands with it on the card, as on the mock-up's Apex record.
+      const apexTeam = battle.raid.id.startsWith('ss-') ? content.evilTeams.teams.find((t) => t.id === battle.raid!.id.split('-')[1]) : undefined;
+      const apexDef = apexTeam ? content.raids.raids.find((r) => r.id === battle.raid!.id) : undefined;
+      if (apexTeam && apexDef) {
+        const leader = artOf(this, apexTeam.ranks.leader.sprite);
+        await this.bigMoment(bossIntroMoment({ role: 'raid' }), `raid.${battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'APEX', apexDef.name, false, { cast: leader ?? this.rxMe(), role: `Apex · ${apexTeam.name}`, line: shortestSentence(apexDef.blurb), evil: true });
+        return;
+      }
       await this.bigMoment(bossIntroMoment({ role: 'raid' }), `raid.${battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID BOSS', this.speciesName(battle.enemyTeam[0]!), false, { cast: this.rxMe(), role: 'Raid Boss', line: 'The den glows red.' });
+      return;
+    }
+    if (battle.totem) {
+      // New UI: a Totem Pokémon is revealed on the cutscene card (the mock-up's Totem boss card), with its aura as the line.
+      if (this.rx) {
+        const tdef = content.totems.totems.find((x) => x.id === battle.totem!.id);
+        const calls = tdef?.ally ? ' It calls for help.' : '';
+        await this.bigMoment(bossIntroMoment({ role: 'raid' }), `totem.${battle.totem.id}`, 'TOTEM POKÉMON', tdef?.name ?? `Totem ${this.speciesName(battle.enemyTeam[0]!)}`, false, { cast: this.rxMe(), role: 'Totem Pokémon', line: `${(tdef?.aura?.text ?? 'Its aura flares.').split(/(?<=\.)\s/)[0]}${calls}` });
+      }
       return;
     }
     if (!battle.trainer) {
@@ -2916,6 +3009,7 @@ export class BattleScene extends Phaser.Scene {
         say: (text) => this.say(text),
         announce: (text) => this.speakWithArt('Reporter', INTERVIEWERS_SPRITE, text, 'crowd'),
         opponentSays: (name, assetId, text) => this.speakWithArt(name, assetId, text, 'crowd'),
+        tag: (text) => { this.rxAirTag = text; },
         // Read when a moment plays (the New layer is mounted after this director is made).
         get card() {
           return rxOn() ? rxCard : undefined;
@@ -3192,15 +3286,16 @@ export class BattleScene extends Phaser.Scene {
     this.menu = new Menu(this, {
       x: COMMAND_X + 24,
       y: MESSAGE_Y + 26,
-      options: choices.map((c) => ({ label: c.label })),
+      // New UI: the mock-up's target picker ends on a Back button (Esc does the same in both looks).
+      options: [...choices.map((c) => ({ label: c.label })), ...(this.rx ? [{ label: 'Back' }] : [])],
       columns: 1,
       itemWidth: 340,
       itemHeight: 46,
       fontSize: 26,
       color: this.btnText,
-      glass: { paint: this.skin?.pill, tints: choices.map((c) => mixColor(c.tint, 0x000000, 0.3)), motion: this.motion },
-      onFocus: aim,
-      onSelect: (i) => this.submit(action, choices[i]!.target),
+      glass: { paint: this.skin?.pill, tints: [...choices.map((c) => mixColor(c.tint, 0x000000, 0.3)), ...(this.rx ? [0x303848] : [])], motion: this.motion },
+      onFocus: (i) => { if (i < choices.length) aim(i); },
+      onSelect: (i) => (i < choices.length ? this.submit(action, choices[i]!.target) : this.showMoveMenu()),
       onBack: () => this.showMoveMenu(),
     });
   }
@@ -3582,8 +3677,15 @@ export class BattleScene extends Phaser.Scene {
     const coopRaid = this.run.battle?.raid?.coop ? coopOwner(this.run.battle.raid, this.activeMon().uid) + 1 : 0;
     // A Shadow's preview adds lines: shrink the text so the box never clips (restored for every other prompt).
     this.msgBaseSize ??= String(this.message.style.fontSize);
-    this.message.setFontSize(shadow ? '20px' : this.msgBaseSize);
-    this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${waiting ? `${waiting}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${featLine}${shadow ? `${shadowPreviewLine((id) => content.moves.get(id)?.name ?? id, this.activeMon(), battleNow.turn, this.run.rng.battle, heartStage(content, shadow.heart))}\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
+    const preview = shadow ? shadowPreviewLine((id) => content.moves.get(id)?.name ?? id, this.activeMon(), battleNow.turn, this.run.rng.battle, heartStage(content, shadow.heart)) : null;
+    // New UI: the Shadow line has its own window over the text box (the mock-up's), so the prompt keeps its size and words.
+    this.rxShadow = this.rx ? shadowLines(preview) : null;
+    this.message.setFontSize(shadow && !this.rx ? '20px' : this.msgBaseSize);
+    // New UI: a foe's variant ring is pointed out once, at the first prompt it is on the field for.
+    const ringed = this.rx && !this.duo && battleNow.extra?.variants?.[this.shown.enemy.uid] ? this.shown.enemy.uid : null;
+    this.rxRing = ringed && !this.rxRingTold.has(ringed) ? ringed : null;
+    if (ringed) this.rxRingTold.add(ringed);
+    this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${waiting ? `${waiting}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${featLine}${preview && !this.rx ? `${preview}\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
     const options = [{ label: 'Fight' }, { label: 'Bag' }, { label: 'Pokémon' }];
     const label = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z', dynamax: 'Max', mega: 'Mega' })[c.kind];
     const onLabel = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z-Move', dynamax: 'Dynamax', mega: 'Mega Evolution' })[c.kind];
@@ -4053,6 +4155,7 @@ export class BattleScene extends Phaser.Scene {
       },
       onBack: () => this.showRootMenu(),
     });
+    this.rxBag = this.picker;
     this.showTabs('item');
   }
 
@@ -4195,6 +4298,9 @@ export class BattleScene extends Phaser.Scene {
     if (this.role === 'rival' && (result.narrativeDefeat || result.wiped || result.defeated)) await this.fx.flourish('enemy', 'rival.win', ENEMY_POS);
     if (result.storyLoss) {
       await this.say('You lost this one, but the story goes on. Your team is patched up.');
+      // Extended Cut: a lost climax battle spends the Second Shot; the player is told what that means before the screen leaves.
+      const shot = secondShotNotice(before, result.run);
+      if (shot) await this.tellNotice(shot);
       await exitWipe(this, this.motion, this.wipeMask());
       this.scene.start(sceneForRun(result.run));
       return;
@@ -4604,6 +4710,45 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
+  /** New UI: the broadcast page's tag while an interview plays (set by the stadium director), else null. */
+  private rxAirTag: string | null = null;
+
+  /**
+   * New UI: one stadium broadcast line as the mock-ups' talk page over the field (the Galar interview): the stadium
+   * behind, the speaker's picture, their name on the plate and the line in the text box. A key, a click or the
+   * auto-advance timer goes on. Presentation only.
+   */
+  private rxBroadcast(speaker: string, text: string, artId: string | null): Promise<void> {
+    const settings = services().session.settings;
+    const backdrop = this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null;
+    const cast = artOf(this, artId);
+    const tag = this.rxAirTag ?? 'Live from the stadium';
+    return new Promise<void>((resolve) => {
+      let over = false;
+      const end = (): void => {
+        if (over) return;
+        over = true;
+        auto?.remove(false);
+        if (this.advance === end) this.advance = null;
+        view.destroy();
+        resolve();
+      };
+      const view = mountRedux(this, {
+        render: (c) => eventView(c, {
+          name: 'Stadium broadcast', tag, lines: [{ who: speaker, text }], speaker, page: { at: 0, of: 1 },
+          art: backdrop, tint: null, fx: null, cast, mon: null,
+          choices: [{ label: 'Go on', sub: '', chance: '', locked: false }], index: 0,
+          money: null, outcome: null, pick: null, countdown: '', timer: null,
+        }),
+        acts: { pick: end, page: end, next: end },
+        card: true,
+      });
+      const auto = settings.autoAdvance ? this.time.delayedCall(MESSAGE_DELAYS[settings.messageDelay] + text.length * LETTER_MS[settings.speechSpeed] * 1.4, end) : null;
+      // A press that closed the line before must not close this one too.
+      this.time.delayedCall(120, () => { if (!over) this.advance = end; });
+    });
+  }
+
   private async speak(speaker: string, text: string, voice: SpeechVoice = 'calm', shout = false, artOverride?: { assetId: string; look?: 'crowd' | 'champion' }): Promise<void> {
     const settings = services().session.settings;
     const content = services().session.content;
@@ -4627,6 +4772,8 @@ export class BattleScene extends Phaser.Scene {
       void hop(this, this.enemySprite, this.motion);
     };
     const look = artOverride?.look ?? (this.stadium && (isFoe ? boss?.role === 'champion' : Boolean(this.hostArtFor(speaker))) ? 'champion' : undefined);
+    // New UI: a stadium broadcast line (the reporter, a guest in the stands, a round's opponent) is the mock-ups' talk page.
+    if (this.rx && this.stadium && (artOverride?.look === 'crowd' || speaker === 'Reporter')) return this.rxBroadcast(speaker, plain, artOverride?.assetId ?? this.hostArtFor(speaker));
     const line = storyLine(this, {
       speaker,
       role,
@@ -4668,6 +4815,8 @@ export class BattleScene extends Phaser.Scene {
     this.rxPin = null;
 
     for (const [index, e] of events.entries()) {
+      // New UI: a Rally brace or a signature trait gets its callout for its own line and the stat lines that belong to it.
+      if (this.rx) this.rxCall = this.calloutOf(events, index) ?? (keepsCallout(e) ? this.rxCall : null);
       // New UI: the level-up window stays through that Pokémon's level and move lines, then leaves.
       if (this.rxLevel && e.type !== 'levelUp' && e.type !== 'learnedMove' && e.type !== 'wantsMove') this.rxLevel = null;
       // "Charmander used Ember!" goes up before its animation; other messages follow theirs.

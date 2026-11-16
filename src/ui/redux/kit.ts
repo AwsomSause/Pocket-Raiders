@@ -52,6 +52,8 @@ export const keys = (list: readonly (readonly [string, string])[]): string => li
 /** Header band with the key hints at the top right. */
 export const H = (title: string, area: Area = 'sys', hints: readonly (readonly [string, string])[] = [['Enter', 'choose'], ['Esc', 'back']]): string =>
   `<div class="hd" style="--c:${AREA[area]}"><i class="dot"></i>${esc(title)}</div><div class="keys">${keys(hints)}</div>`;
+/** Where the chips beside a header band start: past the title, which grows with its length (about 15 px a letter). */
+export const chipsLeft = (title: string): number => Math.max(350, 60 + Math.round(title.length * 15));
 /** The text box along the bottom, with an optional speaker name tab. `t` is HTML. */
 export const TX = (t: string, name = '', st = ''): string => `<div class="abs txt" style="left:20px;right:20px;bottom:16px;${st}">${name ? `<span class="nm">${esc(name)}</span>` : ''}${t}</div>`;
 /** A window. `h` is HTML. */
@@ -73,3 +75,6 @@ const NODE_KINDS: Record<string, readonly [string, string]> = {
 };
 export const nodeStyle = (kind: string): readonly [string, string] => NODE_KINDS[kind] ?? ['#8a8a7a', kind.charAt(0).toUpperCase()];
 export const nodeDot = (kind: string, x: number, y: number, cur = false, off = false, attr = ''): string => { const [c, ch] = nodeStyle(kind); return `<div class="nd${off ? ' off' : ''}" style="left:${x}px;top:${y}px;--c:${c}"${attr}>${ch}${cur ? '<u></u>' : ''}</div>`; };
+
+/** The words a picture's stand-in shows while its file is still loading (ui/sprites.ts placeholder): never part of a row's text. */
+export const isArtPlaceholder = (text: string): boolean => /\(art missing\)\s*$/.test(text);

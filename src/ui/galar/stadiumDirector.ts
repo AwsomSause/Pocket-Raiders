@@ -44,6 +44,8 @@ export interface StadiumHooks {
   announce?: (text: string) => Promise<void>;
   /** The opponent's own words as trainer text with their picture. */
   opponentSays?: (name: string, assetId: string, text: string) => Promise<void>;
+  /** New UI: what the broadcast page's tag says while these lines play ("Pregame interview"); null puts the usual tag back. */
+  tag?: (text: string | null) => void;
   /** Hype moments and the favour bar (Galar only). */
   hype?: {
     flags?: () => ReadonlySet<string>;
@@ -428,6 +430,7 @@ export class StadiumDirector {
       this.guests.push(who.name);
       this.h.crowdSound?.('crowd.swell', 2);
       this.showBanner(kind === 'pre' ? 'PREGAME INTERVIEW' : 'POSTGAME INTERVIEW', 3);
+      this.h.tag?.(kind === 'pre' ? 'Pregame interview' : 'Postgame interview');
       try {
         layer = drawCutArt(this.scene, 'speaker', seed, 120000, !this.h.reduceMotion(), { ...(this.kit() ?? { sprite: () => null, host: '', opponent: '', rival: '' }), speaker: who.assetId });
       } catch {
@@ -439,6 +442,7 @@ export class StadiumDirector {
     } catch {
       // presentation only
     } finally {
+      this.h.tag?.(null);
       const l = layer;
       if (l) this.scene.tweens.add({ targets: l, alpha: 0, duration: 220, onComplete: () => l.destroy() });
     }

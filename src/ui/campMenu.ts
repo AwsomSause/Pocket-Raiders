@@ -20,6 +20,8 @@ import { textStyle } from './theme';
 import { itemVisual } from './sprites';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { CAMP_SKINS } from './dSkins';
+import { monFile } from './redux/game';
+import { reduxOn } from './redux/stage';
 
 const GROUPS = [['gadgets', 'Gadgets'], ['kitchen', 'Kitchen'], ['workshop', 'Workshop'], ['market', 'Market'], ['camp', 'Camp']] as const;
 const VIEWS: Record<string, { name: string; desc: string; group: string }> = {
@@ -86,14 +88,66 @@ function choose(host: FieldMenuHost, title: string, items: Choice[], onPick: (i:
   host.setPicker(picker);
 }
 
-export function openCampMenu(host: FieldMenuHost, group = 0, note = ''): void {
+/** What each part of camp is for, on the New UI's front page: the words at the row's right and the detail card's line. */
+const FRONT: Record<(typeof GROUPS)[number][0], { name: string; note: string; detail: string }> = {
+  gadgets: { name: 'Gadgets', note: '', detail: 'Small tools that help on the road.' },
+  kitchen: { name: 'Kitchen', note: 'Cook a meal', detail: 'Cook, mix and combine what is in the Bag.' },
+  workshop: { name: 'Workshop', note: 'Craft items', detail: 'Craft, forge and tidy your items.' },
+  market: { name: 'Market', note: 'Camp traders', detail: 'Set up a stall or buy from the traders at camp.' },
+  camp: { name: 'Campsite', note: 'Train and explore', detail: 'Mentors, the Nursery, training and the odd finds around the fire.' },
+};
+
+/**
+ * New UI: Camp's front page, the mock-up's five rows (Gadgets, Kitchen, Workshop, Market and the campsite). A row
+ * opens that part of camp; Back from there returns here.
+ */
+function openCampFront(host: FieldMenuHost, at: number, note: string): void {
+  const { session } = services();
+  const run = session.run!;
+  const owned = CAMP.actions.filter((a) => a.group === 'gadgets' && a.gadget && hasGadget(run, a.gadget)).length;
+  const lead = run.party[0];
+  const sprite = lead ? monFile(host.scene, lead.speciesId, 'front', lead.shiny) : null;
+  const tokens = campOf(run).tokens;
+  const rows: PickerRow[] = GROUPS.map(([g]) => {
+    const f = FRONT[g], right = g === 'gadgets' ? `${owned} owned` : f.note;
+    return {
+      problem: null,
+      hint: note || 'Camp opens between stops.',
+      menu: { label: f.name, note: right, detail: f.detail, sprite },
+      draw: (scene, box, w) => {
+        box.add(scene.add.text(16, 6, f.name, textStyle(20)));
+        box.add(scene.add.text(w - 16, 8, right, textStyle(14, '#d8d0e0')).setOrigin(1, 0));
+      },
+    };
+  });
+  const picker: Picker = new Picker(host.scene, {
+    glass: true,
+    title: `Camp${tokens > 0 ? ` · ${tokens} tokens` : ''}`,
+    columns: 1,
+    rowHeight: 64,
+    rows,
+    start: at,
+    onSelect: (i) => { picker.close(); host.setPicker(null); openCampMenu(host, i, ''); },
+    onBack: () => { picker.close(); host.setPicker(null); host.changed(note); },
+  });
+  host.setPicker(picker);
+}
+
+/** Opens Camp. With no `group`, the New UI opens its front page and the Old look its first tab. */
+export function openCampMenu(host: FieldMenuHost, group: number | null = null, note = ''): void {
+  if (group === null) {
+    if (reduxOn()) return openCampFront(host, 0, note);
+    group = 0;
+  }
+  const at = group, rx = reduxOn();
   const { session } = services();
   const run = session.run!;
   const content = session.content;
   const g = GROUPS[group]![0];
   const defs = [...CAMP.actions.filter((a) => a.group === g), ...Object.entries(VIEWS).filter(([, v]) => v.group === g).map(([id, v]) => ({ id, name: v.name, desc: v.desc }))];
-  const reopen = (msg: string) => openCampMenu(host, group, msg);
-  const leave = () => host.changed(note);
+  const reopen = (msg: string) => openCampMenu(host, at, msg);
+  // New UI: Back goes to Camp's front page (with what just happened in its text box); the Old look leaves Camp.
+  const leave = () => (rx ? openCampFront(host, at, note) : host.changed(note));
   const items: Choice[] = defs.map((d) => {
     const real = getAction(d.id);
     const used = real ? usedHere(run, real) : 0;
@@ -101,7 +155,8 @@ export function openCampMenu(host: FieldMenuHost, group = 0, note = ''): void {
     return { label: d.name, desc: `${d.desc}${wearText}${used > 0 ? ' · done' : ''}`, problem: real ? campProblem(content, run, d.id) : null, group: g };
   });
   const tokens = campOf(run).tokens;
-  choose(host, `Camp${note ? ` · ${note.slice(0, 70)}` : ''}${tokens > 0 ? ` · ${tokens} tokens` : ''}`, items, (i) => runAction(host, defs[i]!.id, group, reopen), leave, {
+  // New UI: the part of camp is a chip beside the name and there is no tab row (the front page picks the part).
+  choose(host, `Camp${rx ? ` · ${FRONT[g].name}` : ''}${note ? ` · ${note.slice(0, 70)}` : ''}${tokens > 0 ? ` · ${tokens} tokens` : ''}`, items, (i) => runAction(host, defs[i]!.id, at, reopen), leave, rx ? undefined : {
     labels: GROUPS.map((x) => x[1]),
     index: group,
     onChange: (to) => { host.setPicker(null); openCampMenu(host, to, note); },

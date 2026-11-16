@@ -79,6 +79,15 @@ export function showCaption(text: string, ms = 2200): void {
 
 let logView: Phaser.GameObjects.Container | null = null;
 let rxLogOpen = false;
+/**
+ * A screen that uses L for something of its own says so here (the map's Legend in the New look, where the log's window
+ * would lie over the legend). While it answers true, L does not open the log; L still closes an open one, and
+ * Shift+L opens it anywhere.
+ */
+let logKeyTaken: (() => boolean) | null = null;
+export function setLogKeyTaken(fn: (() => boolean) | null): void {
+  logKeyTaken = fn;
+}
 function toggleLog(): void {
   if (game && (rxLogOpen || reduxOn())) {
     rxLogOpen = !rxLogOpen && reduxOn();
@@ -113,7 +122,16 @@ export function installOverlays(g: Phaser.Game, get: () => Settings): void {
     touch();
     const t = e.target as HTMLElement | null;
     if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
-    if (e.code === 'KeyL' && activeScene()?.scene.key !== 'Settings') toggleLog();
+    if (e.code === 'KeyL' && activeScene()?.scene.key !== 'Settings') {
+      const open = rxLogOpen || Boolean(logView?.active);
+      let taken = false;
+      try {
+        taken = !open && !e.shiftKey && Boolean(logKeyTaken?.());
+      } catch {
+        taken = false;
+      }
+      if (!taken) toggleLog();
+    }
   });
   window.addEventListener('pointerdown', touch);
   // Idle hints (I479): a tip after a long quiet moment, never twice in a minute, never during a battle.

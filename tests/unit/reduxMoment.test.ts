@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { MOMENT_PHASES, defaultMoment, planMoment } from '../../src/core/cinematic/moments';
 import { cutTimes } from '../../src/ui/redux/moment';
-import { cutView, type CutModel } from '../../src/ui/redux/screens/cut';
+import { cutView, type CutModel, shortestSentence } from '../../src/ui/redux/screens/cut';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 
 // New UI: an important moment played as the mock-ups' cutscene card. `cutTimes` decides how long each of the five
@@ -67,5 +67,12 @@ describe('cutscene card as a moment', () => {
     expect(px('Cynthia')).toBe(60);
     expect(px('Gigantamax Pikachu')).toBe(45);
     expect(px('The commentators react')).toBe(30);
+  });
+});
+
+describe('the Apex card line', () => {
+  it('is the blurb\'s shortest sentence, so it clears the figures', () => {
+    expect(shortestSentence('Project M2 (XD002), kneeling on the Silph helipad. The helicopter lifts it away when the timer runs out. It cannot be caught.')).toBe('It cannot be caught.');
+    expect(shortestSentence('One sentence only')).toBe('One sentence only');
   });
 });

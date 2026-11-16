@@ -65,7 +65,7 @@ import { storyRegionTrack } from '../core/presentation/storyMusic';
 import { isStoryCampaign } from '../core/campaign/circuit';
 import { badgeIconId } from '../assets/storyIcons';
 import { storyIcon } from '../ui/storyIcon';
-import { notify } from '../ui/overlays';
+import { notify, setLogKeyTaken } from '../ui/overlays';
 import { mapTrack, storyRegionMusic } from '../core/presentation/battleMusic';
 import { openBondMenu } from '../ui/bondMenu';
 import { openPartyScene, openScrapbook } from '../ui/partyLifeUi';
@@ -107,7 +107,7 @@ import { townRollPages } from '../core/expansion/townRoll';
 import { trackPage } from '../core/expansion/trackView';
 import { FIELD_TABS, FIELD_TAB_NAMES, fieldNotesView } from '../core/expansion/fieldNotes';
 import { drawFieldNotes, type FieldNotesPage } from '../ui/fieldNotesPage';
-import { drawNodeMenu, type NodeMenuPanel } from '../ui/nodeMenuPanel';
+import { CATEGORY_LOOK, drawNodeMenu, status as menuStatus, type NodeMenuPanel } from '../ui/nodeMenuPanel';
 import { menuBlocker, menuSideIds, type MenuEntryView } from '../core/nodeMenu/flow';
 import { nodeMenuData } from '../core/nodeMenu/data';
 import { drawTrackPage } from '../ui/trackPage';
@@ -116,11 +116,13 @@ import { dossierFolders } from '../core/expansion/cast/dossier';
 import { pokemonAssetIds, type AssetManifest } from '../assets/catalog';
 import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { askText } from '../ui/redux/ask';
 import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
 import type { BattlePanel } from '../ui/redux/screens/battle';
 import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../ui/redux/screens/map';
+import { bestMedalWord } from '../ui/redux/screens/minigame';
 import { confirmBox } from '../ui/redux/screens/saves';
-import { bookRows, bookView, dossierView, pauseView, reportView, rollView, trackView } from '../ui/redux/screens/popups';
+import { bookRows, bookView, dossierView, nodeMenuView, pauseView, reportView, rollView, trackView, type NodeMenuCard } from '../ui/redux/screens/popups';
 import { bracketView as rxBracketView, galarHome, galarPage } from '../ui/redux/screens/bracket';
 import { artOf, monFile, rivalArt } from '../ui/redux/game';
 import { nodeStyle } from '../ui/redux/kit';
@@ -244,6 +246,8 @@ export class MapScene extends Phaser.Scene {
   private rxPop: MapPop | null = null;
   /** New UI: the pause menu (Esc on the map) and its cursor; `ask` is the cursor of the "End this run?" box while it is open. */
   private rxPause: { index: number; ask: number | null } | null = null;
+  /** New UI: the node event menu while it is open (the cards, the cursor, and what a pick does). */
+  private rxMenu: { header: string; cards: NodeMenuCard[]; index: number; pick: (k: number) => void } | null = null;
   /** New UI: a tournament match is being watched (drawn on the canvas, so the layer steps aside). */
   private rxWatching = false;
   /** New UI: when a pop-up last opened or closed. Its key can also be a direction (D is "right"), and that same press must not move anything. */
@@ -643,8 +647,14 @@ export class MapScene extends Phaser.Scene {
       const cur = run.stage?.current;
       const node = run.stage?.map.nodes.find((x) => x.id === cur);
       if (!node || typeof window === 'undefined' || typeof window.prompt !== 'function') return;
-      const text = window.prompt('Name this place (up to 24 letters, empty clears):', node.name ?? '');
-      if (text === null) return;
+      // The New look asks on the mock-ups' entry page; the Old look in the browser's own box.
+      if (reduxOn()) void askText(this, { title: 'Name this place', area: 'run', heading: 'Name this place', text: 'Up to 24 letters. Leave it empty to clear the name.', value: node.name ?? '' }).then((text) => { if (text !== null) named(node, text); });
+      else {
+        const text = window.prompt('Name this place (up to 24 letters, empty clears):', node.name ?? '');
+        if (text !== null) named(node, text);
+      }
+    };
+    const named = (node: NonNullable<typeof run.stage>['map']['nodes'][number], text: string): void => {
       const renamed = renameNode(run, node.id, text);
       node.name = renamed.stage!.map.nodes.find((x) => x.id === node.id)!.name;
       const names = { ...(session.profile.nook?.nodeNames ?? {}) };
@@ -1193,6 +1203,7 @@ export class MapScene extends Phaser.Scene {
     this.rxLegend = null;
     this.rxPop = null;
     this.rxPause = null;
+    this.rxMenu = null;
     this.rxWatching = false;
     if (reduxOn() && !mapSkin) {
       const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
@@ -1216,7 +1227,7 @@ export class MapScene extends Phaser.Scene {
       };
       const keyActs: Record<string, () => void> = { C: doCry, H: doHand, N: doName, R: () => this.toggleRivalReport(), T: () => this.toggleTrackPage(), D: () => this.toggleDossier(), F: () => this.toggleFieldNotes(), O: () => this.popToggle('roll') };
       this.rxView = mountRedux(this, {
-        render: (c) => this.rxPop ? this.popView(c, this.rxPop) : mapView(c, { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() }) + this.pauseHtml(),
+        render: (c) => this.rxPop ? this.popView(c, this.rxPop) : mapView(c, { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() }) + this.pauseHtml() + (this.rxMenu ? nodeMenuView(this.rxMenu) : ''),
         acts: {
           pick: (i) => { if (this.busy || this.picker) return; if (Number(i) !== this.index) this.focus(Number(i)); this.activate(Number(i)); },
           go: () => { if (!this.busy && !this.picker) this.activate(this.index); },
@@ -1224,6 +1235,7 @@ export class MapScene extends Phaser.Scene {
           legend: () => this.toggleLegend(),
           pop: () => this.popClose(),
           pause: (k) => this.pausePick(Number(k)),
+          menu: (k) => this.menuPick(Number(k)),
           confirm: (k) => this.pauseAsk(Number(k)),
           popTab: (i) => this.popPick('tab', Number(i)),
           popPick: (i) => this.popPick('pick', Number(i)),
@@ -1231,7 +1243,7 @@ export class MapScene extends Phaser.Scene {
           bracketPage: (i) => { if (this.rxPop?.kind === 'bracket') { this.rxPop.page = Math.max(0, Math.min(4, Number(i) || 0)); this.rxView?.refresh(); } },
           bracketWatch: () => this.watchLast(),
         },
-        overs: { over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && k >= 0 && k !== p.index) { p.index = k; this.rxView?.refresh(); } }, confirmOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask !== null && (k === 0 || k === 1) && k !== p.ask) { p.ask = k; this.rxView?.refresh(); } } },
+        overs: { menuOver: (i) => this.menuFocus(Number(i)), over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && k >= 0 && k !== p.index) { p.index = k; this.rxView?.refresh(); } }, confirmOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask !== null && (k === 0 || k === 1) && k !== p.ask) { p.ask = k; this.rxView?.refresh(); } } },
         // Resting the pointer on a party Pokémon shows its Ability card (the mock-ups' Pokémon info card).
         tip: hoverTips((key) => { if (this.rxPop) return; this.rxCard = key; this.rxView?.refresh(); }),
       });
@@ -1246,6 +1258,7 @@ export class MapScene extends Phaser.Scene {
     onInputAction(this, (action) => {
       if (this.rxView && this.time.now === this.rxPopAt && action !== 'back' && action !== 'confirm') return;
       if (this.rxPause) return this.pauseInput(action);
+      if (this.rxMenu) return this.menuInput(action);
       if (this.rxPop) {
         if (!this.rxWatching) this.popInput(action);
         return;
@@ -1290,6 +1303,9 @@ export class MapScene extends Phaser.Scene {
 
     // Ideas W4: Legend (L) explains every icon on the map.
     this.input.keyboard?.on('keydown-L', () => this.toggleLegend());
+    // New UI: on the map L is the Legend alone (the interaction log's window would lie over it); Shift+L opens the log.
+    setLogKeyTaken(() => reduxOn() && this.scene.isActive() && (Boolean(this.legend) || (!this.busy && !this.picker)));
+    this.events.once('shutdown', () => setLogKeyTaken(null));
     const legendTag = this.add.text(GAME_WIDTH - 24, 402, 'L: map legend', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('legend-tag');
     legendTag.on('pointerdown', () => this.toggleLegend());
     // Beta 0.6 R7: R opens the Rival Report pop-up (only once a rival has been met).
@@ -1859,13 +1875,26 @@ export class MapScene extends Phaser.Scene {
   private openMinigame(sideId: string): void {
     const { session } = services();
     const pv = minigamePreview(session.content, session.run!, sideId, session.settings.expansion.minigamesDifficulty);
+    // New look: the card's picture is your lead Pokémon, as the mock-up puts one beside the tier.
+    const lead = session.run!.party[0];
     const picker: Picker = new Picker(this, {
-      title: `${pv.name} - ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left`,
+      // New look: the game's name in the band and the attempts as a chip; the tier list is a menu on the run's teal (a game called "Memory" is not a board).
+      title: reduxOn() ? `${pv.name} · ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left` : `${pv.name} - ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left`,
+      kind: 'menu',
+      area: 'run',
       columns: 1,
       rowHeight: 120,
       rows: pv.tiers.map((t) => ({
         problem: pv.attemptsLeft > 0 ? null : 'No attempts left',
-        hint: `${pv.instructions} ${pv.scoring}`,
+        hint: reduxOn() ? pv.blurb : `${pv.instructions} ${pv.scoring}`,
+        // New look: the mock-up's tier list (the tier, what it pays) with the medals and the best on the card.
+        menu: {
+          label: `${t.label}${t.index === pv.recommendedTier ? ' (your setting)' : ''}`,
+          note: `×${t.money} money`,
+          detail: `${pv.instructions} ${pv.scoring}`,
+          sprite: lead ? monFile(this, lead.speciesId, 'front', lead.shiny) : null,
+          facts: [['Kind', pv.category], ['Tiers', pv.tiers.map((x) => x.label).join(', ')], ['Pays', `×${t.money} money${t.items ? ' and maybe an item' : ''}`], ['Medals', pv.medals], ['Best', bestMedalWord(pv.best)]],
+        },
         draw: (scene, box, w) => {
           box.add(scene.add.text(16, 8, `${pv.name}  ·  ${t.label}${t.index === pv.recommendedTier ? '  (your setting)' : ''}`, textStyle(22)));
           box.add(scene.add.text(16, 40, `${pv.instructions} ${pv.scoring}`, textStyle(15, '#ffd0a0', { wordWrap: { width: w - 32 } })));
@@ -2162,9 +2191,12 @@ export class MapScene extends Phaser.Scene {
     const { session } = services();
     const content = session.content;
     const offer = fishingOffer(content, session.run!, sideId);
+    // New UI: the mock-up's fishing window over the map ("! A bite !"), the bites listed in it.
+    const rxOn = reduxOn();
     const picker: Picker = new Picker(this, {
       glass: true,
-      title: 'Something is biting! Which one?',
+      title: rxOn ? 'Which one do you reel in?' : 'Something is biting! Which one?',
+      ...(rxOn ? { dock: true, window: { top: 160, center: true, lead: '! A bite !' } } : {}),
       columns: 1,
       rowHeight: 64,
       rows: offer.map((o) => {
@@ -2173,6 +2205,7 @@ export class MapScene extends Phaser.Scene {
         return {
           ...row,
           hint: `${row.hint}  ·  Lv${o.level}`,
+          ...(rxOn ? { menu: { label: species.name, note: `Lv${o.level}`, detail: `${row.hint}  ·  Lv${o.level}`, sprite: monFile(this, o.speciesId, 'front') } } : {}),
           draw: (scene, box, w, h) => {
             row.draw(scene, box, w, h);
             box.add(scene.add.text(w - 16, h / 2, `Lv${o.level}`, textStyle(22)).setOrigin(1, 0.5));
@@ -2269,6 +2302,12 @@ export class MapScene extends Phaser.Scene {
       this.busy = false;
       return;
     }
+    if (this.rxMenu) {
+      this.rxMenu = null;
+      this.busy = false;
+      this.rxView?.refresh();
+      return;
+    }
     if (this.report || this.busy || this.picker || this.legend || this.fieldNotes) return;
     const { session } = services();
     const view = session.nodeMenu();
@@ -2306,8 +2345,47 @@ export class MapScene extends Phaser.Scene {
       }
       this.scene.restart({ notice: res.text ?? undefined, focus: this.index });
     };
-    this.nodeMenuPanel = drawNodeMenu(this, view, label, blurb, pick, () => this.toggleNodeMenu());
     this.busy = true;
+    if (this.rxView) {
+      // New UI: the same cards, drawn by the New layer over the map.
+      const header = view.entries.find((v) => v.entry.kind === 'encounter');
+      const cards = view.entries.filter((v) => v.entry.kind !== 'encounter');
+      this.rxCard = null;
+      this.rxMenu = {
+        header: header?.entry.label ?? '',
+        cards: cards.map((v) => ({ kind: CATEGORY_LOOK[v.entry.category].word, color: `#${CATEGORY_LOOK[v.entry.category].color.toString(16).padStart(6, '0')}`, name: label(v), text: blurb(v), status: menuStatus(v), off: v.done || v.locked, must: !!v.entry.required })),
+        index: Math.max(0, cards.findIndex((v) => !v.done && !v.locked)),
+        pick: (k) => { const v = cards[k]; if (v && !v.done && !v.locked) pick(v); },
+      };
+      this.rxView.refresh();
+      return;
+    }
+    this.nodeMenuPanel = drawNodeMenu(this, view, label, blurb, pick, () => this.toggleNodeMenu());
+  }
+
+  private menuFocus(k: number): void {
+    const m = this.rxMenu;
+    if (!m || !(k >= 0 && k < m.cards.length) || k === m.index) return;
+    m.index = k;
+    this.rxView?.refresh();
+  }
+
+  /** A click: a card picks its stop (a done or locked one only takes the cursor); beside the cards closes the menu. */
+  private menuPick(k: number): void {
+    const m = this.rxMenu;
+    if (!m) return;
+    if (k < 0) return this.toggleNodeMenu();
+    this.menuFocus(k);
+    m.pick(k);
+  }
+
+  private menuInput(action: InputAction): void {
+    const m = this.rxMenu;
+    if (!m) return;
+    if (action === 'back') return this.toggleNodeMenu();
+    if (action === 'confirm') return m.pick(m.index);
+    const n = Math.max(1, m.cards.length);
+    this.menuFocus((m.index + (action === 'left' || action === 'up' ? n - 1 : 1)) % n);
   }
   private bracket: Phaser.GameObjects.Container | null = null;
 

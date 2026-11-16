@@ -29,8 +29,9 @@ import { paintBackdrop, type Skin as DSkin } from './dSkins';
 
 const DEPTH = 100;
 
-import { reduxOn } from './redux/stage';
-import { mountPickerView, type PickerView } from './redux/pickerView';
+import { reduxOn, type ReduxCtx } from './redux/stage';
+import { mountPickerView, type PickerKind, type PickerView } from './redux/pickerView';
+import type { Area } from './redux/kit';
 
 export interface PickerRow {
   /** Draws the row's contents inside a w×h box at (0, 0) of `container`. */
@@ -44,10 +45,23 @@ export interface PickerRow {
   /** A Pokémon row: its look, its HP left (0 to 1) and a short mark ("IN BATTLE", "FNT"). The New UI's battle window draws these. */
   mon?: { speciesId: string; shiny: boolean; hp: number; mark: string };
   /** A board row said outright (the New UI's Bond screen): the line under the name, a bar (0 to 100) and a tag. */
-  board?: { title: string; sub: string; pct: number; tag: string };
+  board?: { title: string; sub: string; pct: number | null; tag: string };
+  /** A menu row said outright (the New UI's Camp): the words at the row's right, the detail card's text and its picture (atlas file). */
+  menu?: { label: string; note: string; detail: string; sprite?: string | null; facts?: readonly (readonly [string, string])[] };
+  /** A grid cell said outright (the New UI's Pokédex): its picture (atlas file) and the detail card's title and line. `off` is a "?" cell, `sil` a shadow. */
+  cell?: { file: string | null; title: string; body: string; off?: boolean; sil?: boolean };
+  /** The row's picture by asset id, for a row that draws none (the New UI's grid cells show it). */
+  art?: string;
 }
 
 export interface PickerConfig {
+  /** New UI: the room's own page, drawn in place of the rows (the Old look still draws the rows). */
+  page?: (c: ReduxCtx, index: number) => string;
+  /** New UI: how many columns the cursor moves across on the room's own page (1 unless said). */
+  pageCols?: number;
+  /** New UI: the template and header colour when the title alone would pick the wrong ones (a minigame called "Memory" is not a board). */
+  kind?: PickerKind;
+  area?: Area;
   /** Draw depth; scenes with lively layers (the Plaza crowd) put the menu above them. */
   depth?: number;
   title: string;
@@ -76,7 +90,7 @@ export interface PickerConfig {
   /** Battle: draw the list only inside the bottom bar (no full-screen panel), so the arena, sprites and HP boxes stay visible. */
   dock?: boolean;
   /** New UI battle look: with `dock`, the list shows as the mock-ups' small window over the field (at `top`) and the canvas dock is left out of the picture. */
-  window?: { top?: number };
+  window?: { top?: number; center?: boolean; lead?: string };
   /** Screens redesign: the screen this list belongs to; it draws in that screen's picked look (original look when none). */
   screen?: ScreenId;
   /** A redesigned look (screens redesign): the backdrop, frame and row colours. Leave out for the original look. */
@@ -277,17 +291,25 @@ export class Picker implements PickerLike {
         problem: (i) => config.rows[i]?.problem ?? null,
         hint: (i) => config.rows[i]?.hint ?? '',
         item: (i) => config.rows[i]?.item,
+        art: (i) => config.rows[i]?.art,
         mon: (i) => config.rows[i]?.mon,
         board: (i) => config.rows[i]?.board,
+        menu: (i) => config.rows[i]?.menu,
+        cell: (i) => config.rows[i]?.cell,
         top: win?.top,
+        center: win?.center,
+        lead: win?.lead,
         tabs: config.tabs,
         canBack: Boolean(config.onBack),
         backLabel: config.backLabel,
+        page: config.page,
+        pageCols: config.pageCols,
+        area: config.area,
         summary: () => (this.summary && config.inspect ? config.inspect(this.index) : null),
         pick: (i) => { if (this.closed) return; this.focus(i); this.confirm(); },
         hover: (i) => { if (!this.closed && !this.summary && i !== this.index && !config.rows[i]?.problem) this.focus(i, false); },
         back: () => this.handle('back'),
-      }, win ? 'window' : undefined);
+      }, win ? 'window' : config.kind);
     }
   }
 
@@ -453,6 +475,7 @@ export class Picker implements PickerLike {
   }
 
   close(): void {
+    if (this.closed) return;
     this.closed = true;
     this.rx?.destroy();
     this.rx = null;
