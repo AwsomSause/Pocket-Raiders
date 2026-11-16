@@ -53,7 +53,7 @@ import { mirrorReady, mirrorStart } from './mirror';
 import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, ofSpecial, oldfriendTokens, releases, specialDue } from './oldfriend';
 import { ferrisArrive, ferrisBest, ferrisHand, ferrisShape, ferrisStart, ferrisTurn } from './ferris';
 import { followedJoin } from './followed';
-import { ballFind, ballForce, ballHatched, ballHold, ballKind, ballTokens } from './ball';
+import { ballAnswer, ballFind, ballForce, ballHatched, ballHold, ballKind, ballTokens } from './ball';
 import { reunionArrive, reunionFar, reunionTokens } from './reunion';
 import { giveDearest } from './fox';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
@@ -1260,7 +1260,10 @@ function countForest(content: Content, run: RunState, battle: BattleState): void
 /** After a turn: once a fight is won, the stories that count fights take their count (once per fight). */
 export function gnAfterTurn(content: Content, run: RunState): Cue[] {
   const battle = run.battle;
-  const seen = ferrisTurn(content, run);
+  const seen = [...ferrisTurn(content, run)];
+  // gn.new.03: the Ball held through this battle answers as soon as it is decided.
+  const ball = battle ? ballAnswer(run, battle) : '';
+  if (ball) seen.push(cue('player', ball));
   if (!battle || (battle.outcome !== 'win' && battle.outcome !== 'caught') || battle.storyEffects.includes('gn-counted')) return seen;
   battle.storyEffects.push('gn-counted');
   countForest(content, run, battle);

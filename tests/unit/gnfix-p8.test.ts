@@ -4,6 +4,8 @@ import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
 import { addEventStops, stageNumber } from '../../src/core/events';
 import { choose, flagOf, gnRun, open, scene, setFlag } from './helpers/gnPlay';
+import { conditionMet } from '../../src/core/events';
+import { ballAnswer } from '../../src/core/greenneedle/ball';
 
 const said = (r: { text: string; changes: string[] }): string => [r.text, ...r.changes].join(' ');
 const at = (seed: string, eventId: string, flags: Record<string, number> = {}): RunState => {
@@ -80,5 +82,44 @@ describe('gn.new.02 The Dog at the Station (fixes)', () => {
     expect(JSON.stringify(content.events.get('gn-new-02-holiday')!.requires)).toMatch(/dog-reunited/);
     const r = choose(at('dogfix-holiday', 'gn-new-02-holiday', { 'dog-reunited': 1 }), 'gn-new-02-holiday', 'Sit with him.');
     expect(said(r)).toMatch(/Habit/);
+  });
+});
+
+describe('gn.new.01 The Eevee Who Couldn\'t Choose (fixes)', () => {
+  it('each "admirer, later" scene is placed at a step 5 town', () => {
+    for (const id of ['fisherman', 'magician', 'electrician', 'nurse', 'gardener', 'guide', 'ribbon']) {
+      const p = placement(`gn-new-01-after-${id}`);
+      expect(p, id).toBeTruthy();
+      expect([p.home, p.attaches, p.sits]).toEqual([5, 'town', 'optional']);
+    }
+  });
+});
+
+describe('gn.new.03 The Ball That Wouldn\'t Open (fixes)', () => {
+  const again = () => content.events.get('gn-new-03-again')!;
+  it('the bolted Pokémon is met 16 stages later, not before (boundary 15 / 16)', () => {
+    const run = atStage('ballfix-gap', 20);
+    setFlag(run, 'ball-bolted', 1);
+    setFlag(run, 'ball-bolt-stage', 5);
+    expect(again().requires.every((c) => conditionMet(content, run, c))).toBe(false);
+    setFlag(run, 'ball-bolt-stage', 4);
+    expect(again().requires.every((c) => conditionMet(content, run, c))).toBe(true);
+    setFlag(run, 'ball-bolt-stage', 0);
+    expect(again().requires.every((c) => conditionMet(content, run, c))).toBe(false);
+    expect(JSON.stringify(again())).not.toMatch(/"levelBonus":16/);
+  });
+  it('the find has no refuse choice', () => {
+    expect(scene(gnRun('ballfix-find'), 'gn-new-03-find').labels).toEqual(['Pick it up.']);
+  });
+  it('a held Ball answers as soon as the battle is decided, once', () => {
+    for (const [outcome, line] of [['win', /warm/], ['lose', /rocks once/]] as const) {
+      const run = gnRun(`ballfix-held-${outcome}`);
+      setFlag(run, 'ball-found', 1); setFlag(run, 'ball-held', 1);
+      const battle = { outcome, storyEffects: [] } as never;
+      expect(ballAnswer(run, battle)).toMatch(line);
+      expect(ballAnswer(run, battle)).toBe('');
+      expect(ballAnswer(run, { outcome: null, storyEffects: [] } as never)).toBe('');
+    }
+    expect(ballAnswer(gnRun('ballfix-not-held'), { outcome: 'win', storyEffects: [] } as never)).toBe('');
   });
 });

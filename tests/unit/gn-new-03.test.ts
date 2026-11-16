@@ -19,6 +19,7 @@ function found(seed: string): RunState {
 }
 /** One rest: its scene opens, and one choice is picked. */
 function rest(run: RunState, label: string): RunState {
+  setFlag(run, 'ball-rest-stage', 0); // each helper rest stands for a rest on a new stage
   ballRest(content, run);
   const id = opened(run, 'gn-new-03-hatch') ? 'gn-new-03-hatch' : 'gn-new-03-rest';
   return choose(run, id, label).run;
@@ -30,15 +31,18 @@ describe('gn.new.03 The Ball That Wouldn\'t Open', () => {
     expect(flagOf(run, 'ball-found')).toBe(1);
     expect(flagOf(run, 'ball-kind')).toBe(0);
     expect(content.species.has(castMon(run))).toBe(true);
-    expect(scene(gnRun('x'), 'gn-new-03-find').labels).toEqual(['Pick it up.', 'Leave it in the mud.']);
+    expect(scene(gnRun('x'), 'gn-new-03-find').labels).toEqual(['Pick it up.']);
   });
-  it('leaving it in the mud leaves no Ball', () => {
-    let run = gnRun('gn-ball-2');
-    open(run, 'gn-new-03-find');
-    run = choose(run, 'gn-new-03-find', 'Leave it in the mud.').run;
-    expect(flagOf(run, 'ball-found')).toBe(0);
+  it('opens one scene a stage: a second rest on the same stage is quiet, the next stage opens it again', () => {
+    const run = found('gn-ball-2');
+    ballRest(content, run);
+    expect(opened(run, 'gn-new-03-rest')).toBe(true);
+    here(run).sides.forEach((x) => (x.used = true));
     ballRest(content, run);
     expect(opened(run, 'gn-new-03-rest')).toBe(false);
+    run.stage!.index += 1;
+    ballRest(content, run);
+    expect(opened(run, 'gn-new-03-rest')).toBe(true);
   });
   it('opens a scene at every rest, with the doc\'s four choices', () => {
     const run = found('gn-ball-3');
@@ -67,10 +71,12 @@ describe('gn.new.03 The Ball That Wouldn\'t Open', () => {
       run.battle = null;
       expect(flagOf(run, 'ball-held')).toBe(0);
       here(run).sides = here(run).sides.filter((s) => s.used);
+      setFlag(run, 'ball-rest-stage', 0);
       ballRest(content, run);
       expect(gnTokens(content, run, scene(run, 'gn-new-03-rest').intro)).toContain(line);
       // Only that rest: the next one is quiet again.
       here(run).sides.forEach((s) => (s.used = true));
+      setFlag(run, 'ball-rest-stage', 0);
       ballRest(content, run);
       expect(gnTokens(content, run, scene(run, 'gn-new-03-rest').intro)).not.toContain(line);
     }
@@ -145,8 +151,8 @@ describe('gn.new.03 The Ball That Wouldn\'t Open', () => {
       expect(fought.battle).toBe(true);
       expect(fought.run.battle!.eventRule?.noCatch).toBe(true);
       expect(fought.run.battle!.enemyTeam[0]!.speciesId).toBe(castMon(run));
-      // At A+16 it is far above the starter: the foe is made weak here so the test decides the winner.
-      expect(fought.run.battle!.enemyTeam[0]!.level).toBeGreaterThanOrEqual(fought.run.party[0]!.level + 8);
+      // Met at the stage's own level (the doc's A+16 is sixteen stages on, not sixteen levels up).
+      expect(fought.run.battle!.enemyTeam[0]!.level).toBeLessThan(fought.run.party[0]!.level + 8);
       const weak = structuredClone(fought.run);
       weak.battle!.enemyTeam[0]!.level = 2;
       const after = win(weak);
@@ -156,7 +162,8 @@ describe('gn.new.03 The Ball That Wouldn\'t Open', () => {
       const run = found('gn-ball-11');
       const e = content.events.get('gn-new-03-again')!;
       expect(JSON.stringify(e.requires)).toContain('ball-bolted');
-      expect(JSON.stringify(e.requires)).toContain('laterStage');
+      expect(JSON.stringify(e.requires)).toContain('"stageGapMin"');
+      expect(JSON.stringify(e.requires)).toContain('"n":16');
     });
     it('keeping it shut ends the offer and keeps the Ball', () => {
       let run = found('gn-ball-12');
