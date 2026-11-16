@@ -26,6 +26,8 @@ import { onInputAction, type InputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, textStyle } from '../ui/theme';
 import { AERO, paintGlass } from '../ui/aero';
 import { eventBackdrop, eventStyleOf } from '../core/presentation/eventStyles';
+import { castInText, choiceVisual, eventVisual, lineVisual, namedInText, shotOf } from '../core/presentation/eventVisuals';
+import { catalogIconId } from '../core/contentSchema';
 import { layoutFor } from '../ui/eventStyles';
 import type { ChoiceWidget, EventCtx, EventLayoutHandles, Rect } from '../ui/eventStyles/types';
 import { sceneForRun } from './routing';
@@ -38,7 +40,7 @@ import { maxHp } from '../core/pokemon';
 import { pageSpeaker, scriptPages, type ScriptPage } from '../ui/redux/script';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { tourneyHome, tourneyPage, tourneyRounds } from '../ui/redux/screens/bracket';
-import { eventView as rxEventView } from '../ui/redux/screens/event';
+import { eventView as rxEventView, type EventLook } from '../ui/redux/screens/event';
 import type { HonestModel, HonestSide } from '../ui/redux/screens/stops';
 import type { TeamModel } from '../ui/redux/screens/team';
 import { briefingView, finalView, rankUpView, resultView, tableView } from '../ui/redux/screens/evilLooks';
@@ -297,6 +299,39 @@ export class EventScene extends Phaser.Scene {
       const look = (this.rxLook = evilLook(content, run, view.event.id));
       const fileOf = (id: string) => artOf(this, id);
       const lookFiles = look?.kind === 'final' ? look.faces.map((f) => fileOf(f.sprite)) : look?.kind === 'table' ? look.seats.map((x) => fileOf(x.sprite)) : [];
+      // The remade event screen: the event director reads this event's own words and data and decides its picture
+      // (place, hour, mood, weather), and the screen stages whoever the event names. Presentation only.
+      const kinds = view.choices.map((x) => x.kind);
+      const vis = eventVisual(view.event, { period: periodOf(run), stageTypes: (theme?.types ?? []).map((t) => t.toLowerCase()), kinds });
+      const said = `${view.event.name}. ${view.event.intro}`;
+      const listed = ctx.castIds.map((id) => ({ id, art: artOf(this, id) })).filter((x): x is { id: string; art: NonNullable<typeof cast> } => x.art !== null).slice(0, 3);
+      // An event that pictures nobody still shows the people its text names by their trade ("a Hiker blocks the path").
+      const named = listed.length || partyStar || giverArt ? [] : castInText(said).map((id) => ({ id, art: artOf(this, id) })).filter((x): x is { id: string; art: NonNullable<typeof cast> } => x.art !== null);
+      const people = partyStar ? (youArt ? [{ id: 'you', art: youArt }] : []) : listed.length ? listed : giverArt ? [{ id: 'giver', art: giverArt }] : named;
+      const speciesByName = new Map<string, string>();
+      for (const sp of content.species.values()) if (!speciesByName.has(sp.name.toLowerCase())) speciesByName.set(sp.name.toLowerCase(), sp.id);
+      const starId = champion ?? ctx.species?.id ?? mine ?? null;
+      const monFiles = [star, ...namedInText(said, speciesByName, 3).filter((id) => id !== starId).map((id) => monFile(this, id))].filter((f): f is string => !!f).filter((f, i, all) => all.indexOf(f) === i).slice(0, 2);
+      const itemsByName = new Map<string, string>();
+      for (const it of content.items.values()) if (it.name.length > 3) itemsByName.set(it.name.toLowerCase(), it.iconAssetId);
+      for (const it of content.catalog.values()) if (it.name.length > 3 && !itemsByName.has(it.name.toLowerCase())) itemsByName.set(it.name.toLowerCase(), catalogIconId(it.icon));
+      const props = namedInText(said, itemsByName, 3).map((id) => artOf(this, id)).filter((a): a is NonNullable<typeof cast> => a !== null && !a.atlas).map((a) => a.file);
+      const pic = vis.pictures.map((id) => artOf(this, id)?.file).find((f) => !!f) ?? null;
+      // A scene with nobody in it: the lead Pokémon looks on from the near corner, as it does from the player's side of a battle.
+      const lead = run.party.find((m) => m.hp > 0) ?? run.party[0];
+      const buddy = !people.length && !monFiles.length && lead ? monFile(this, lead.speciesId, 'back', !!lead.shiny) : null;
+      const eventLook: Omit<EventLook, 'speaking' | 'emote'> = {
+        scene: { set: vis.set, place: vis.place, inside: vis.inside, time: vis.time, mood: vis.mood, weather: vis.weather, motes: vis.motes, seed: vis.seed, pic, tint: scene.tint ?? null, still: this.calm },
+        shot: shotOf(vis, people.length, monFiles.length > 0, kinds), stir: vis.stir, sigil: vis.sigil, cast: people.map((x) => x.art), mons: monFiles, props, buddy,
+        choices: view.choices.map((x) => choiceVisual({ label: x.label, kind: x.kind, locked: x.locked !== null, chance: x.chance })),
+      };
+      /** Which pictured person is speaking: matched by name, or the only one there. */
+      const speakingOf = (who: string | null): number => {
+        if (!who || !people.length) return -1;
+        const key = who.toLowerCase().split(/\s+/).filter((w) => w.length > 2).pop();
+        const at = key ? people.findIndex((x) => x.id.toLowerCase().includes(key)) : -1;
+        return at >= 0 ? at : people.length === 1 && !partyStar ? 0 : -1;
+      };
       this.rx = mountRedux(this, {
         render: (c) => {
           const r = this.result;
@@ -332,6 +367,7 @@ export class EventScene extends Phaser.Scene {
             fx: this.calm ? null : scene.effect,
             cast: castOf(speaker),
             mon: star,
+            look: { ...eventLook, speaking: speakingOf(speaker), emote: (() => { const e = pages[at]!.map((l) => lineVisual(l.text).emote).find((x) => x !== null); return e ? artOf(this, `icon.emote.${e}`)?.file ?? null : null; })() },
             choices: view.choices.map((x) => ({ label: x.label, sub: sub(x), chance: pct(x), locked: x.locked !== null })),
             index: this.index,
             money: (r?.run ?? run).money,

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { bootView, creditsRows, creditsView, type BootModel, type CreditsModel } from '../../src/ui/redux/screens/boot';
-import { eventView, type EventModel } from '../../src/ui/redux/screens/event';
+import type { EventModel } from '../../src/ui/redux/screens/event';
+// The welcome log and the tutorial use the mock-ups' talk page (the event screen itself was remade as a stage).
+import { talkView as eventView } from '../../src/ui/redux/screens/talk';
 import { FORM_KEYS, beatTag, formView, typeKey, vanceLine, type FormModel } from '../../src/ui/redux/screens/prologue';
 import { DESK_ROWS, deskItems, type DeskInput } from '../../src/ui/redux/screens/run';
 import { pageLines } from '../../src/ui/redux/script';

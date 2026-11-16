@@ -10,7 +10,7 @@ import { onInputAction, type InputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { sceneForRun } from './routing';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
-import { eventView } from '../ui/redux/screens/event';
+import { talkView } from '../ui/redux/screens/talk';
 import { playerPortrait } from '../ui/redux/templates';
 
 /** New UI: the backdrop behind a story scene (the mock-up's mountain lake). */
@@ -61,7 +61,7 @@ export class StoryScene extends Phaser.Scene {
       this.rx = mountRedux(this, {
         render: (c) => {
           const n = Math.max(1, view.lines.length), at = Math.min(this.page, n - 1), line = view.lines[at], last = at >= n - 1;
-          return eventView(c, {
+          return talkView(c, {
             name: view.kicker,
             tag: n > 1 ? `${view.kicker} ${at + 1}/${n}` : view.kicker,
             lines: [{ who: line?.speaker ?? null, text: line?.text ?? '' }],

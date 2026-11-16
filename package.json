@@ -107,6 +107,7 @@
     "data:game-events": "node tools/build-game-events.ts",
     "report:levels": "node tools/report-levels.ts",
     "report:rivals": "node tools/report-rivals.ts",
+    "report:event-visuals": "node tools/report-event-visuals.ts",
     "sim:mass": "node tools/mass-sim.ts",
     "sim:mass-report": "node tools/mass-report.ts"
   },

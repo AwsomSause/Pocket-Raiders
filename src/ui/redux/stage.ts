@@ -240,6 +240,11 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
   place();
 
   let last = '', queued = false, dead = false;
+  // Animations keep their place across redraws (every redraw replaces the view's HTML): a looping one runs on the
+  // view's own clock (--now, a negative delay since the view opened), and a one-shot marked data-once="key" runs from
+  // when that key first showed (--t0). A key that leaves the view and comes back plays again.
+  const born = performance.now();
+  let firstSeen = new Map<string, number>();
   const redraw = (): void => {
     queued = false;
     if (dead) return;
@@ -247,7 +252,17 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     const html = o.render(ctx);
     if (html === last) return;
     last = html;
+    const now = performance.now();
+    el.style.setProperty('--now', `${Math.round(born - now)}ms`);
     el.innerHTML = html;
+    if (!html.includes('data-once="')) { firstSeen.clear(); return; }
+    const seen = new Map<string, number>();
+    el.querySelectorAll<HTMLElement>('[data-once]').forEach((n) => {
+      const key = n.dataset.once!, t = firstSeen.get(key) ?? now;
+      seen.set(key, t);
+      if (t < now) n.style.setProperty('--t0', `${Math.round(t - now)}ms`);
+    });
+    firstSeen = seen;
   };
   const view = { redraw };
   const pick = (e: Event, attr: 'act' | 'over', table?: Record<string, (arg: string) => void>): void => {
