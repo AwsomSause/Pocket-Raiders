@@ -1,0 +1,5939 @@
+{
+ "catalogOverhaul": "families-b",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "ovc-roadside-stand-s1",
+   "name": "The Roadside Stand",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "pokemon": "skiddo",
+    "tint": "#3a4a24",
+    "effect": "none"
+   },
+   "types": [
+    "grass"
+   ],
+   "intro": "A crate by the road, a hand-painted sign: BERRIES, 100. Behind it sits a girl of about eight, and a Skiddo chewing the sign. You hold out a 500 note. Her face falls. She has 60 in change.",
+   "choices": [
+    {
+     "label": "\"Keep the change.\"",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "Her eyes go round. \"All of it?\" She counts the berries into your hands twice, very carefully, so you get your money's worth. The Skiddo watches you leave like you are a hero.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rs-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-roadside-stand-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-roadside-stand-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait while she makes change.",
+     "success": {
+      "text": "She runs to a farmhouse and back, twice. The Skiddo keeps you company and eats a corner of your map. In the end she hands you exactly 400, damp, and one extra berry \"for waiting.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rs-waited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-roadside-stand-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-roadside-stand-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer one of your berries in trade.",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "oran-berry",
+        "sitrus-berry",
+        "lum-berry",
+        "pecha-berry",
+        "cheri-berry",
+        "chesto-berry",
+        "rawst-berry",
+        "aspear-berry",
+        "leppa-berry"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You trade a berry from your bag for one of hers. She holds yours up to the light like a jewel. \"I've never seen this kind. I'm going to plant it.\" She means it.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "from": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "chesto-berry",
+         "rawst-berry",
+         "aspear-berry",
+         "leppa-berry"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rs-seed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-roadside-stand-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-roadside-stand-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-roadside-stand-s2",
+   "name": "The Roadside Stand",
+   "group": "Overhaul chains",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-roadside-stand-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-roadside-stand-s1",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "skiddo",
+    "tint": "#3a4a24",
+    "effect": "none"
+   },
+   "types": [
+    "grass"
+   ],
+   "intro": "A rest stop, a new crate, a new sign: JAM. It's the berry girl. Her Skiddo has a ribbon now. She spots you and waves with both arms.",
+   "choices": [
+    {
+     "label": "Buy a jar.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "It is sticky, lumpy and very good. Your team shares it at the next fire, licking it off their noses. For a while nobody is tired.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask how business is.",
+     "success": {
+      "text": "\"Good! A Ranger bought six jars.\" She lowers her voice. \"I'm saving for a Poké Ball. For Skiddo, so it's official.\" She gives you a jar for listening, and won't take money.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look at the shoot.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rs-seed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "It has two leaves and a third coming. She has written your name on the pot in crayon. \"When it fruits, the first one's yours. Even if you're far away. I'll keep it.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "A girl at a roadside stand is growing a berry plant from the berry you traded her. Your name is on the pot.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "roadside-stand-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rs-kept",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "It's the berry girl, with a new sign: JAM. \"You!\" she shouts. \"Your change bought the jars. I'm in business!\" Her Skiddo bleats like it agrees.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "roadside-stand-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rs-waited",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "It's the berry girl, with a new sign: JAM. \"I have change now,\" she says proudly, and rattles a whole tin of coins at you.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "roadside-stand-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rs-seed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "It's the berry girl, with a new sign: JAM. Beside the jars is a pot, and in the pot is a green shoot. \"That's yours,\" she says. \"It's growing.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-lost-hat-s1",
+   "name": "The Lost Hat",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "tint": "#4a5a6a",
+    "effect": "float"
+   },
+   "types": [
+    "flying"
+   ],
+   "intro": "A gust comes off the hill and a straw hat sails past your head, over the path and into the tall grass. Up the road, a trainer is running, one hand on his head where the hat was.",
+   "choices": [
+    {
+     "label": "Send a Pokémon after it.",
+     "success": {
+      "text": "Your lead plunges into the grass and comes back proud, the hat in its mouth, only a little chewed. The trainer laughs so hard he has to sit down. \"My dad's hat,\" he says. \"Thank you.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "hat-returned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-lost-hat-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-lost-hat-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wade in yourself.",
+     "success": {
+      "text": "Grass to your waist, burrs in your socks. You find the hat on a Bellsprout, which is wearing it. Getting it back takes a berry and an apology. The trainer has already gone on, but you keep it safe.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hat-kept-safe",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-lost-hat-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-lost-hat-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the wind have it.",
+     "success": {
+      "text": "The hat lifts again, higher, and is gone over the hill. The trainer stops, watches it go, and shrugs. It looks like a shrug that costs him something.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hat-gone",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-lost-hat-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-lost-hat-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-lost-hat-s2",
+   "name": "The Lost Hat",
+   "group": "Overhaul chains",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-lost-hat-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-lost-hat-s1",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a5a6a",
+    "effect": "none"
+   },
+   "types": [
+    "flying"
+   ],
+   "intro": "A rest stop by a well. A trainer sits on the wall, bareheaded, squinting into the sun. You know him: the one who lost his hat.",
+   "choices": [
+    {
+     "label": "Give him back his hat.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hat-kept-safe",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He turns it over in his hands, finds the Bellsprout's tooth marks, and goes quiet. \"Dad wore this up every mountain in the region.\" He puts it on. He gives you the only thing in his pockets of any value.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "silk-scarf",
+         "black-belt",
+         "sharp-beak",
+         "soft-sand",
+         "hard-stone",
+         "spell-tag",
+         "metal-coat",
+         "charcoal",
+         "mystic-water",
+         "miracle-seed",
+         "magnet",
+         "dragon-fang"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with him a while.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hat-returned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He tells you about his dad, who walked these roads with a Pidgeotto and that hat. Your team naps in the shade. When you stand to go, everyone feels lighter.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lend him something for the sun.",
+     "success": {
+      "text": "You give him a cloth and he ties it on like a bandana. He looks ridiculous and happy. \"I'll walk with my head up,\" he says. \"Dad would like that better than a hat, anyway.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle him for old times' sake.",
+     "success": {
+      "text": "\"Sure,\" he says, standing. \"Dad always said a battle tells you more than talk.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hatless Trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lost-hat-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hat-returned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A rest stop by a well. A trainer in a slightly chewed straw hat waves you over. \"My lucky hat's rescuer!\" He is already reaching into his bag.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "lost-hat-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hat-kept-safe",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A rest stop by a well. A trainer sits on the wall, bareheaded, squinting into the sun. In your pack, you still have his hat.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "lost-hat-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hat-gone",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A rest stop by a well. A trainer sits on the wall, bareheaded and sunburned. He sees you and smiles anyway. \"Hey. The hat person.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-fisherman-tip-s1",
+   "name": "The Fisherman's Tip",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#24445a",
+    "effect": "none"
+   },
+   "types": [
+    "water"
+   ],
+   "intro": "An old man on a pier, rod out, bucket empty. \"Nothing's biting,\" he says without turning round. \"Forty years on this pier. Never this quiet.\" He sounds less angry than afraid.",
+   "choices": [
+    {
+     "label": "Let a Water-type look under the pier.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon slips into the water and comes back up tangled in old netting. Under the pier, a wall of it, and fish trapped behind. You cut it free together. The bay breathes again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fish-net",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-fisherman-tip-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-fisherman-tip-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share some bait.",
+     "success": {
+      "text": "You give him half a sandwich for bait. He gives you a long look and a short lesson: cast past the weeds, wait for the pull, not the nibble. \"Thought nobody listened any more.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fish-bait",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-fisherman-tip-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-fisherman-tip-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him the fish will come back.",
+     "success": {
+      "text": "\"Maybe,\" he says. \"Maybe they will.\" He keeps watching the water. You leave him there, the line still, his hands very steady.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fish-hope",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-fisherman-tip-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-fisherman-tip-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-fisherman-tip-s2",
+   "name": "The Fisherman's Tip",
+   "group": "Overhaul chains",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-fisherman-tip-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-fisherman-tip-s1",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#24445a",
+    "effect": "none"
+   },
+   "types": [
+    "water"
+   ],
+   "intro": "Out on the water, a little boat. A man is standing up in it, waving both arms at you, something huge and shining held up in one of them.",
+   "choices": [
+    {
+     "label": "Wave back.",
+     "success": {
+      "text": "He rows over and presses a wrapped package into your hands: a lure he made himself, and a small heavy pearl he found in the catch. \"For the luck,\" he says. \"You brought some.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pearl",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fish-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask him to teach you.",
+     "success": {
+      "text": "An hour in the boat. He talks about the bay like an old friend. When you climb out, one of your Pokémon has caught something too, and is very proud.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what he will do now.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "fish-net",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "\"Fish,\" he says. \"Teach my granddaughter. Keep the pier clean.\" He looks at the water a long time. \"Thought I'd outlived it. Turns out I didn't.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "item",
+        "id": "net-ball",
+        "count": 2
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "fisherman-tip-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fish-net",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The old fisherman stands up in his boat and waves. In his hand is a fish as long as his arm. \"The net!\" he shouts across the water. \"Whole bay's come back!\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "fisherman-tip-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fish-bait",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The old fisherman stands up in his boat, holding up a fat, shining catch. \"Past the weeds!\" he shouts. \"Wait for the pull!\" He is laughing.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "fisherman-tip-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fish-hope",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The old fisherman stands up in his boat, holding up a catch. \"You were right!\" he calls. He looks younger than he did.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-lost-child-s1",
+   "name": "The Lost Child",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "pokemon": "pichu",
+    "tint": "#4a4030",
+    "effect": "none"
+   },
+   "intro": "A small boy in a big coat stands in the middle of the road, holding a Pichu so tight it squeaks. He isn't crying. He's trying very hard not to. \"I lost my mum,\" he says. \"Pichu lost her too.\"",
+   "choices": [
+    {
+     "label": "Walk him back the way he came.",
+     "success": {
+      "text": "He holds your sleeve the whole way. Two hills back, a woman is running down the road calling his name. She grabs him up so hard the Pichu squeaks again. She doesn't get your name.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "child-walked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-lost-child-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-lost-child-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your Pokémon find her by scent.",
+     "success": {
+      "text": "Your lead sniffs the Pichu, then the boy's coat, then the wind. It sets off at a trot. Ten minutes later it's sitting at the feet of a frantic woman, very pleased with itself.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "child-tracked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-lost-child-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-lost-child-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point him to the next town.",
+     "success": {
+      "text": "\"The Pokémon Center will find her,\" you tell him. He nods, very serious, and walks off with his Pichu. You watch him until he is small. It is a long road for small legs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kind-walked-past",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "child-pointed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-lost-child-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-lost-child-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-lost-child-s2",
+   "name": "The Lost Child",
+   "group": "Overhaul chains",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-lost-child-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-lost-child-s1",
+     "atLeast": 4,
+     "atMost": 8
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "pichu",
+    "tint": "#4a4030",
+    "effect": "none"
+   },
+   "intro": "A courier's Pidgey lands on your pack, a little envelope tied to its leg. Inside: a note in careful grown-up writing, and a drawing in crayon.",
+   "choices": [
+    {
+     "label": "Open the rest of the parcel.",
+     "success": {
+      "text": "Wrapped in tissue: a rare berry from their family tree, and a line at the bottom of the note: \"He's going to be a trainer. Like you.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "leppa-berry",
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "lum-berry",
+         "leppa-berry"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Write back.",
+     "success": {
+      "text": "You write a short letter for the Pidgey to carry home: a tip about Pichu, and that you're glad he's safe. The Pidgey takes it like a medal.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lost-child-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "child-walked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A courier's Pidgey lands on your pack with an envelope. A note: \"You walked him home and didn't stay to be thanked. So we're thanking you anyway.\" And a crayon drawing of you, very tall.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "lost-child-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "child-tracked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A courier's Pidgey lands on your pack with an envelope. In crayon: your lead, drawn huge, with a cape. Underneath, in a mother's hand: \"He says it's a superhero now.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "lost-child-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "child-pointed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A courier's Pidgey lands on your pack with an envelope. A note: \"He found us at the Pokémon Center. He said a trainer told him where to go. He was so brave.\" No drawing. Just that.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-tinkering-kid-s1",
+   "name": "The Tinkering Kid",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "pokemon": "magnemite",
+    "tint": "#3a3a4a",
+    "effect": "glint"
+   },
+   "types": [
+    "electric",
+    "steel"
+   ],
+   "intro": "A boy with oil on his nose is waving a box of wires at passers-by. \"It's a Pokémon detector!\" It beeps, sparks, and a Magnemite floats over to see. \"It works on Magnemite, anyway.\"",
+   "choices": [
+    {
+     "label": "Help him fix it.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "electric"
+      }
+     ],
+     "success": {
+      "text": "You hold the torch, your Electric-type steadies the current, and he solders. The box gives one clean beep, then another. He looks at you like you hung the moon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tinker-fixed",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "electric"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-tinkering-kid-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-tinkering-kid-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him it's brilliant.",
+     "success": {
+      "text": "\"Really?\" He holds it up and it sparks at him. \"Really really?\" He puts it back in his bag like it's made of glass. \"I'm going to make it better. Wait and see.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tinker-praised",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-tinkering-kid-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-tinkering-kid-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him the truth: it doesn't work.",
+     "success": {
+      "text": "His face does something complicated. Then he nods. \"Yeah. I know.\" He takes the back off it right there in the road and starts again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tinker-honest",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-tinkering-kid-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-tinkering-kid-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-tinkering-kid-s2",
+   "name": "The Tinkering Kid",
+   "group": "Overhaul chains",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-tinkering-kid-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-tinkering-kid-s1",
+     "atLeast": 4,
+     "atMost": 8
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magnemite",
+    "tint": "#3a3a4a",
+    "effect": "none"
+   },
+   "types": [
+    "electric",
+    "steel"
+   ],
+   "intro": "A beeping comes up the road, steady as a heartbeat. The boy with oil on his nose has a new box. This one has a dial and a little screen.",
+   "choices": [
+    {
+     "label": "Try the new gadget.",
+     "success": {
+      "text": "He straps it to your wrist. It hums, and on the little screen are dots: the wild Pokémon in the grass ahead. \"It'll last a stage,\" he says. \"Then it needs a new battery. I'm working on that.\"",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 2
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Gadget scanner",
+        "effects": [
+         {
+          "kind": "preview",
+          "what": "wild"
+         }
+        ],
+        "battles": 4,
+        "until": "wild"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what he will build next.",
+     "success": {
+      "text": "He talks for twenty minutes. A Pokédex for blind trainers. A boat that Magnemite can pull. A light that doesn't scare Zubat. You give him a few spare parts from your bag.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 20
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tinkering-kid-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tinker-fixed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The tinkering boy runs up holding a new box. \"Your fix! I built the whole new one round it.\" It beeps, clean as a bell.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "tinkering-kid-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tinker-praised",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The tinkering boy runs up with a new box, shiny and humming. \"You said it was brilliant. So I made it actually brilliant.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "tinkering-kid-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tinker-honest",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The tinkering boy comes up the road with a new box. \"You said it didn't work,\" he says. \"You were right. This one does.\" He's grinning.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-herb-gatherer-s1",
+   "name": "The Herb Gatherer",
+   "group": "Overhaul chains",
+   "scene": {
+    "cast": [],
+    "pokemon": "bellossom",
+    "tint": "#2e4a2a",
+    "effect": "none"
+   },
+   "types": [
+    "grass"
+   ],
+   "intro": "An old woman with a basket on her back and a Bellossom on her hat is trying to reach a plant on a ledge. \"Young legs,\" she says when she sees you. \"I'll trade you a handful of herbs for one.\"",
+   "choices": [
+    {
+     "label": "Climb up for her.",
+     "success": {
+      "text": "You get the plant and scrape both knees. She binds them with something green that stings, then stops hurting completely. \"Mint and moss,\" she says. \"And bad language. That helps.\"",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "herb-climbed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-herb-gatherer-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-herb-gatherer-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Pokémon up.",
+     "success": {
+      "text": "Your nimblest teammate is up and down in seconds. She claps. \"Well. That one's a natural.\" She tucks a sprig behind its ear, and it is unbearably smug.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "herb-pokemon",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-herb-gatherer-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-herb-gatherer-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help her carry the basket instead.",
+     "success": {
+      "text": "You carry it a mile to her house. She talks the whole way: which root calms a fever, which leaf a Pokémon will chew when it's sad. You remember more than you expect.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "herb-carried",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-herb-gatherer-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-herb-gatherer-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-herb-gatherer-s2",
+   "name": "The Herb Gatherer",
+   "group": "Overhaul chains",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-herb-gatherer-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-herb-gatherer-s1",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bellossom",
+    "tint": "#2e4a2a",
+    "effect": "none"
+   },
+   "types": [
+    "grass"
+   ],
+   "intro": "A rest stop with a low wall, and on the wall a row of clay pots, all green. The herb gatherer is planting them. She has made a little garden for travellers.",
+   "choices": [
+    {
+     "label": "Help plant.",
+     "success": {
+      "text": "An hour with your hands in soil. Your team rolls in it. When you finish, there is a little garden by the road that anyone can pick from. She sends you off with full pockets.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pecha-berry",
+         "cheri-berry",
+         "chesto-berry",
+         "rawst-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for a remedy for your team.",
+     "success": {
+      "text": "She looks at each of your Pokémon in turn, slowly, like a doctor. Then she mixes something bitter in a cup. Everyone drinks it. Everyone sulks. Everyone feels better.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "herb-gatherer-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "herb-climbed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The herb gatherer is planting pots on a wall at the rest stop. She looks at your knees first. \"Healed clean. Good. Come and help me plant, climbing child.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "herb-gatherer-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "herb-pokemon",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The herb gatherer is planting pots on a wall at the rest stop. Her Bellossom sees your teammate and runs over, delighted. They know each other now.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "herb-gatherer-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "herb-carried",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The herb gatherer is planting pots on a wall at the rest stop. \"My basket-carrier! Come. You know which leaf is which now. Prove it.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-abandoned-backpack-s1",
+   "name": "The Abandoned Backpack",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A backpack by the trail, rain-stained, half open. Inside: a water bottle, a bag of Poké Balls, and a letter that stops mid-sentence. \"Dear Sana, I am sorry I left without telling you why. The truth is\"",
+   "choices": [
+    {
+     "label": "Keep it safe for its owner.",
+     "success": {
+      "text": "You zip it shut, letter and all, and carry it. It isn't heavy. It feels heavy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pack-kept",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-abandoned-backpack-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-abandoned-backpack-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the rest of the letter.",
+     "success": {
+      "text": "There isn't a rest. Just the next page, blank, and a pressed flower. You put it back exactly how it was. You carry the pack. You know a little too much now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pack-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-abandoned-backpack-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-abandoned-backpack-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the Poké Balls and leave the pack.",
+     "success": {
+      "text": "Somebody isn't coming back for them, probably. You take the balls and leave the letter where it lay, open to the rain.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 3
+       },
+       {
+        "kind": "flag",
+        "key": "pack-took",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-abandoned-backpack-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-abandoned-backpack-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-abandoned-backpack-s2",
+   "name": "The Abandoned Backpack",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-abandoned-backpack-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-abandoned-backpack-s1",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A young man is walking the road slowly, looking in every bush. He has the face of someone who has looked in a lot of bushes.",
+   "choices": [
+    {
+     "label": "Hand it over.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "pack-kept",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He opens it right there, takes out the letter, and holds it against his chest. \"I never sent it. I lost my nerve, then I lost the bag. I thought that was the answer.\" He takes a breath. \"It wasn't.\" He gives you the Poké Balls.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 3
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him you read it.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "pack-read",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You hand him the pack and tell him the truth. He laughs, wet-eyed. \"Then you know I have to finish it.\" He sits down on the verge and starts writing. You leave him with the flower and the pen.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "moment",
+        "text": "You found a young man's unfinished letter to someone called Sana. He finished it by the roadside.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him where you saw it.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "pack-took",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You walk him back to the place. The pack is still there, soaked. The letter is pulp. He kneels, takes the pressed flower out of the mess, and stays kneeling. \"It's fine,\" he says. \"I'll say it to her face.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "abandoned-backpack-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pack-kept",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A young man is searching the roadside, slow and hopeless. Then he sees what you're carrying, and stops dead. \"That's... that's mine.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "abandoned-backpack-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pack-read",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A young man is searching the roadside. He sees his pack on your back and runs. Then he sees your face, and slows. \"You read it,\" he says. It isn't angry.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "abandoned-backpack-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pack-took",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A young man is searching the roadside. \"Have you seen a backpack?\" he asks. \"There's a letter in it. That's all I care about. The letter.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-mysterious-merchant-s1",
+   "name": "The Mysterious Merchant",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2238",
+    "effect": "flicker"
+   },
+   "intro": "A hooded merchant steps out from behind a signpost and opens a small velvet case without a word. Three things inside, on black cloth. A price on each, in neat silver writing.",
+   "choices": [
+    {
+     "label": "Buy the dull grey stone (500).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "It's an Everstone. Nothing more, nothing less. The merchant nods, as if you passed a test you didn't know you were taking.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "item",
+        "id": "everstone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "merch-honest",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-mysterious-merchant-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-mysterious-merchant-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy the glowing shard (1500).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "It glows in your hand, then stops. A Star Piece. Worth what you paid, maybe a little less. The merchant's hood tips, unreadable.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "item",
+        "id": "star-piece",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "merch-paid",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-mysterious-merchant-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-mysterious-merchant-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Haggle.",
+     "success": {
+      "text": "You name half. The hood shakes. You name more. The hood shakes. The case closes with a soft click. \"Later,\" says a voice, very quiet. The merchant is gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "merch-haggled",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-mysterious-merchant-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-mysterious-merchant-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The case closes. When you look back, the signpost stands alone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "merch-left",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-mysterious-merchant-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-mysterious-merchant-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-mysterious-merchant-s2",
+   "name": "The Mysterious Merchant",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-mysterious-merchant-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-mysterious-merchant-s1",
+     "atLeast": 4,
+     "atMost": 8
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2238",
+    "effect": "none"
+   },
+   "intro": "Behind a signpost, a hood, a velvet case. The merchant again. The case opens. This time there is one thing in it, and no price.",
+   "choices": [
+    {
+     "label": "Look at what is in the case.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "A small charm, warm to the touch. The note says: Lucky Egg. The merchant takes what you can spare, and not a coin more. When you look up, the hood is already walking away.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "item",
+        "id": "lucky-egg",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask who they are.",
+     "success": {
+      "text": "The hood turns toward you. For a moment you think you will see a face. Then a Banette's zipper grin flickers in the dark of it, and the case shuts, and there is just the road.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "merch-banette",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "mysterious-merchant-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "merch-honest",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The hooded merchant again. The case opens on one thing. A note beside it, silver ink: \"For the one who wanted only what they needed. Half price.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "mysterious-merchant-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "merch-haggled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The hooded merchant again. The case opens on one thing. A note in silver: \"You argued. Most don't. Name your price.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "mysterious-merchant-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "merch-paid",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The hooded merchant again. The case opens. A note in silver: \"You paid full price for a pretty thing. Here is a useful one, for less.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-dig-up-s1",
+   "name": "The Dig",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "pokemon": "diglett",
+    "tint": "#4a3a24",
+    "effect": "shake"
+   },
+   "types": [
+    "ground"
+   ],
+   "intro": "Your team stops for water and one of them won't stop digging. Paws going, dirt flying, the hole getting deeper and deeper. It has found something. Or it thinks it has.",
+   "choices": [
+    {
+     "label": "Help dig.",
+     "success": {
+      "text": "You get down in the dirt with it. Three feet down: a tin box with a child's things inside. A marble, a badge, a photo of a Diglett. Your teammate looks at you like it knew all along.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "ground"
+         ]
+        }
+       },
+       {
+        "kind": "item",
+        "id": "nugget",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dig-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-dig-up-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-dig-up-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it dig alone.",
+     "success": {
+      "text": "You sit and watch. It digs until it is nothing but a tail. Then it curls up in the hole and sleeps, happy. You don't have the heart to wake it for an hour.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "dig-let",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-dig-up-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-dig-up-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call it out and fill it in.",
+     "success": {
+      "text": "It comes when called, sulking, dirt on its nose. You fill the hole in. It looks back at the spot three times before you're out of sight.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dig-filled",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-dig-up-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-dig-up-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-dig-up-s2",
+   "name": "The Dig",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-dig-up-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-dig-up-s1",
+     "atLeast": 2,
+     "atMost": 5
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "diglett",
+    "tint": "#4a3a24",
+    "effect": "none"
+   },
+   "types": [
+    "ground"
+   ],
+   "intro": "The same road, coming back round. Where your teammate dug, the ground has changed.",
+   "choices": [
+    {
+     "label": "Let your teammate say hello.",
+     "success": {
+      "text": "It goes nose to nose with the den's new owner. They chitter. When your teammate trots back it is carrying a gift: something round and gleaming from deep underground.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "hard-stone",
+         "soft-sand",
+         "star-piece"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Invite the den's owner along.",
+     "success": {
+      "text": "It thinks about it for a long time, head out of the hole. Then it climbs out and shakes the dirt off and follows. It knows these tunnels. Maybe it wants to know others.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [
+         "ground"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it its home.",
+     "success": {
+      "text": "You leave a berry at the door. Your teammate looks back once. You are fairly sure the den will be there next time you pass, if there is a next time.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "dig-up-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "dig-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Where you dug together, the hole has become a burrow. A Diglett pokes its head out, sees your teammate, and pops up again and again, like a hello.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "dig-up-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "dig-let",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Where your teammate slept in its hole, there is a den now. Fresh dirt, a little doorway. Something has moved in, and it smells your teammate and comes out to look.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "dig-up-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "dig-filled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Where you filled the hole in, the earth has been dug out again. Not by you. Small claw marks. Something wanted it open.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-researcher-request-s1",
+   "name": "The Researcher's Request",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#30404a",
+    "effect": "none"
+   },
+   "intro": "A researcher with a cracked camera and a deadline. \"I need a photo of a wild Pokémon of one type, in the wild, behaving naturally. My professor wants it by tonight. Please. I'll pay.\"",
+   "choices": [
+    {
+     "label": "Take the camera.",
+     "success": {
+      "text": "You crouch in the grass for an hour. You get the shot: a Pokémon in the evening light, mid-yawn. It's the best photo you've ever taken. The researcher has gone to meet her professor. You still have the camera.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "photo-good",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-researcher-request-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-researcher-request-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lend your own Pokémon for the photo.",
+     "success": {
+      "text": "\"It has to be wild,\" she says, then sees your teammate posing. She laughs and takes the picture anyway. \"For me. Not the professor.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "photo-pet",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-researcher-request-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-researcher-request-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say you are too busy.",
+     "success": {
+      "text": "She nods, already turning to the next traveller. The road takes you on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "photo-no",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-researcher-request-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-researcher-request-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-researcher-request-s2",
+   "name": "The Researcher's Request",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-researcher-request-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-researcher-request-s1",
+     "atLeast": 5,
+     "atMost": 9
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#30404a",
+    "effect": "none"
+   },
+   "intro": "A tent by the road, papers pinned everywhere with stones. The researcher with the cracked camera, writing fast.",
+   "choices": [
+    {
+     "label": "Let her pay you.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "photo-good",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "She pays more than she said, and adds a page from her notes: where the type nests on this road, and when. \"You'll use it better than I will.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 600
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about her work.",
+     "success": {
+      "text": "She talks about migration, about which types follow which rivers. She is so happy to be listened to. You leave with a head full of maps.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 20
+       },
+       {
+        "kind": "scout",
+        "columns": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for a copy of the photo.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "photo-pet",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "She prints it on a little machine and hands it over. Your teammate looks at itself a very long time.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 8,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "researcher-request-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "photo-good",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The researcher sees you and jumps up. \"You! The camera!\" She takes it, looks at the picture, and is silent. \"This is the cover of the paper. This. Your photo.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "researcher-request-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "photo-pet",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The researcher waves. Pinned to her tent pole: your Pokémon's portrait. \"Best thing I took all trip. The professor hated it. I don't care.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "researcher-request-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "photo-no",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The researcher looks up, tired. \"Oh. You.\" Then a smile. \"It's fine. Someone helped in the end. I got my photo.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-stray-trainer-s1",
+   "name": "The Stray Trainer",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#38343a",
+    "effect": "none"
+   },
+   "intro": "A girl with a trainer's cap and no Poké Balls on her belt. \"I'm a trainer,\" she says, before you can ask. \"I just don't have a Pokémon yet. Can I battle with you? Just once. Just to know what it's like.\"",
+   "choices": [
+    {
+     "label": "Let her command your lead.",
+     "success": {
+      "text": "She calls the moves. She calls them wrong at first, then less wrong, then right. Your lead listens to her. When it ends she is shaking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ovc-stray-trainer-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-stray-trainer-s1",
+        "amount": 0
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "stray-commanded",
+         "amount": 1
+        },
+        {
+         "kind": "friendship",
+         "amount": 5,
+         "who": "lead"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Battle beside her, side by side.",
+     "success": {
+      "text": "You call; she shouts encouragement and points at every move the wild Pokémon makes before it makes it. She sees things.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ovc-stray-trainer-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-stray-trainer-s1",
+        "amount": 0
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "stray-beside",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 10
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Tell her to find her own first.",
+     "success": {
+      "text": "She nods hard. \"I will.\" You can tell she's going to cry the moment you've gone. You can also tell she means it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stray-told",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-stray-trainer-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-stray-trainer-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-stray-trainer-s2",
+   "name": "The Stray Trainer",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-stray-trainer-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-stray-trainer-s1",
+     "atLeast": 4,
+     "atMost": 8
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#38343a",
+    "effect": "none"
+   },
+   "intro": "A girl in a trainer's cap is standing in the middle of the road, chin up, a Poké Ball held out in front of her like a sword.",
+   "choices": [
+    {
+     "label": "Accept.",
+     "success": {
+      "text": "Her one Pokémon against yours. She has studied. She is not good yet. She is going to be.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "New Trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "stray-done",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 200
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Give her some Poké Balls instead.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "poke-ball"
+      }
+     ],
+     "success": {
+      "text": "She stares at them. \"For the next one,\" you say. She puts them on her belt one at a time, very carefully, and stands up straighter with each one.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "poke-ball"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "A girl who once had no Pokémon battled her first trainer battle. You gave her Poké Balls for the next one.",
+        "importance": 50
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "stray-trainer-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "stray-commanded",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The girl in the trainer's cap. A Poké Ball on her belt now, and her hand on it. \"I caught one. I remembered how your Pokémon listened. Battle me. Properly.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "stray-trainer-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "stray-beside",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The girl in the trainer's cap. A Poké Ball on her belt. \"I saw things,\" she says. \"When we battled together. I still see them. Battle me?\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "stray-trainer-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "stray-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The girl in the trainer's cap. A Poké Ball on her belt. \"I found my own.\" Her voice shakes, just once. \"Battle me.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-whispering-tree-s1",
+   "name": "The Whispering Tree",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#22302a",
+    "effect": "fog"
+   },
+   "types": [
+    "grass",
+    "ghost"
+   ],
+   "intro": "An oak older than the road. When the wind moves through it, it sounds like a voice, saying something almost too quiet. Your Pokémon have all gone still and are listening.",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You stand with your hand on the bark and listen. You almost hear words. Something about waiting. Something about a long time. Your Grass-type is crying, quietly, and won't say why.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tree-listened",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "grass"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-whispering-tree-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-whispering-tree-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Answer it.",
+     "success": {
+      "text": "You say hello, feeling foolish. The wind stops. Every leaf goes still. Then, very gently, a single acorn drops onto your boot.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tree-answered",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-whispering-tree-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-whispering-tree-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move on quickly.",
+     "success": {
+      "text": "Your team doesn't want to go. You call them, twice, three times. They come, but they keep looking back at the oak until the road bends.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tree-left",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-whispering-tree-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-whispering-tree-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-whispering-tree-s2",
+   "name": "The Whispering Tree",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-whispering-tree-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-whispering-tree-s1",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#22302a",
+    "effect": "none"
+   },
+   "types": [
+    "grass",
+    "ghost"
+   ],
+   "intro": "Further on, another oak. No. The same oak. Somehow the road has curved back to it. It isn't whispering now. It is waiting.",
+   "choices": [
+    {
+     "label": "Take the seed.",
+     "success": {
+      "text": "It's warm and smells green. Inside it, if you hold it to your ear, the wind is still whispering. Whatever it says, your Grass-types understand.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "grass"
+         ],
+         "every": true
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit under it a while.",
+     "success": {
+      "text": "Your team sleeps in its roots. You might sleep too. You wake with leaves on you, rested all the way down, and the oak quiet above.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "whispering-tree-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tree-listened",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The whispering oak, again. The wind is still. As you come near, a single seed drops from a high branch, falls slowly, and lands in your open hand. You listened. It remembers.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "whispering-tree-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tree-answered",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The whispering oak, again. When you come near, the wind rises, and the leaves all say one word together. You think it's your name.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "whispering-tree-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tree-left",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The whispering oak, again. The wind moves through it and sounds, very clearly this time, like a sigh.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-traveling-tailor-s1",
+   "name": "The Traveling Tailor",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3040",
+    "effect": "sparkle"
+   },
+   "intro": "A cart painted every colour, and a man with pins in his mouth. \"Scarves! Ribbons! Collars for any Pokémon! I stitch while you wait.\" He looks your team over with an expert eye. \"Ah. That one needs blue.\"",
+   "choices": [
+    {
+     "label": "Let him make something for your lead.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "He measures it with a ribbon, pins, cuts, stitches, and in ten minutes your lead is wearing a scarf that fits exactly. It keeps walking past puddles to look at itself.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "tailor-made",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-traveling-tailor-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-traveling-tailor-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask him to mend your bag instead.",
+     "success": {
+      "text": "He clicks his tongue at the state of it, and mends it for free, with a fancy blue lining, \"because I couldn't bear it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tailor-mended",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-traveling-tailor-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-traveling-tailor-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your team pick the colours.",
+     "success": {
+      "text": "They argue. Loudly. He laughs until the pins fall out of his mouth, and promises to make something they'll all agree on. \"Next time,\" he says. \"I need to think.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tailor-asked",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-traveling-tailor-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-traveling-tailor-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-traveling-tailor-s2",
+   "name": "The Traveling Tailor",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-traveling-tailor-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-traveling-tailor-s1",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3040",
+    "effect": "none"
+   },
+   "intro": "The painted cart again, and the tailor waving a new sample book over his head. \"I have a NEW design!\"",
+   "choices": [
+    {
+     "label": "See the new design.",
+     "success": {
+      "text": "Matching bands in your team's colours, one for each, all different and somehow all the same. They wear them proudly. You are a team, and now it shows.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "A travelling tailor made your team matching bands.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Commission a silk scarf.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "He works the silk like water. \"For a Normal-type, it brings out the best.\" He won't say how. It does.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "item",
+        "id": "silk-scarf",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "traveling-tailor-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tailor-made",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The painted cart again. The tailor sees your lead in its scarf and nearly weeps. \"Still wearing it! A sign. I've made a matching set, for the whole team.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "traveling-tailor-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tailor-mended",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The painted cart again. \"How's the lining?\" he asks first, and checks it. Satisfied, he flips his sample book open. \"Now. The team.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "traveling-tailor-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tailor-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The painted cart again. \"I thought about it,\" says the tailor. \"I thought about it for a week. I have the design your team will ALL agree on.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-mountain-shrine-s1",
+   "name": "The Mountain Shrine",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#3a3a44",
+    "effect": "snow"
+   },
+   "intro": "A tiny shrine on a mountain path, half buried in snow. A cup, a bell, a wooden plaque worn smooth. Someone has swept the step, but not for a long time.",
+   "choices": [
+    {
+     "label": "Sweep the step and ring the bell.",
+     "success": {
+      "text": "You clear the snow, straighten the plaque, and ring the bell once. It sounds much bigger than it is. Somewhere far up the mountain, something rings back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shrine-swept",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-mountain-shrine-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-mountain-shrine-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave an offering.",
+     "success": {
+      "text": "You leave a berry in the cup. Your lead adds something of its own: a pebble, carefully placed. You bow. It bows, a moment after you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shrine-offered",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-mountain-shrine-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-mountain-shrine-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pass by.",
+     "success": {
+      "text": "The bell stays silent. The snow keeps falling on the step.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shrine-passed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-mountain-shrine-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-mountain-shrine-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-mountain-shrine-s2",
+   "name": "The Mountain Shrine",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-mountain-shrine-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-mountain-shrine-s1",
+     "atLeast": 4,
+     "atMost": 8
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3a44",
+    "effect": "none"
+   },
+   "intro": "A small house on a mountain path, a lamp in the window, and an old man at the door in a keeper's coat.",
+   "choices": [
+    {
+     "label": "Accept his thanks.",
+     "success": {
+      "text": "He gives you tea by his fire and a small charm from the shrine: a bell on a red cord. \"It rings when you need it to,\" he says. \"That's all I know about it.\"",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "item",
+        "id": "cleanse-tag",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer to sweep it for him.",
+     "success": {
+      "text": "You walk back up together and sweep it clean. He rings the bell. Far away, something rings back, and he laughs like a boy. \"There. Now we both heard it.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "rest"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "mountain-shrine-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "shrine-swept",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "An old shrine keeper waits at his door. \"Someone rang my bell,\" he says. \"First time in eleven years. I came down from the high house to see who.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "mountain-shrine-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "shrine-offered",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "An old shrine keeper waits at his door, holding a pebble. \"A Pokémon left this at my shrine,\" he says. \"Next to a berry. I wanted to meet it.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "mountain-shrine-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "shrine-passed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "An old shrine keeper waits at his door. \"Did you pass my shrine?\" he asks gently. \"It's hard to see, in the snow. I'm too old to sweep it now.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-ranger-patrol-s1",
+   "name": "The Ranger's Patrol",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "pokemon": "ponyta",
+    "tint": "#3a4a2a",
+    "effect": "none"
+   },
+   "intro": "A Pokémon Ranger kneels by a Ponyta caught in a rusted fence, its leg tangled, its mane flaring hot every time she reaches for it. \"It won't let me close. Can you help me keep it calm?\"",
+   "choices": [
+    {
+     "label": "Calm it while she cuts the wire.",
+     "success": {
+      "text": "You talk to it, low and steady, and don't move. The Ranger cuts, wire by wire. When it's free it stands shaking, then puts its nose against your shoulder before it bolts.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "ranger-calmed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-ranger-patrol-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-ranger-patrol-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Water-type cool its fire.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "A gentle mist, not a blast. The flames die down. The Ponyta stops fighting. The Ranger works fast, and it's free, and gone in a flash of hooves.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ranger-water",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-ranger-patrol-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-ranger-patrol-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold it down.",
+     "success": {
+      "text": "It works, but it's ugly. The Ponyta screams, burns your sleeve, kicks the Ranger. When it's free it runs and doesn't look back.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "ranger-held",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-ranger-patrol-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-ranger-patrol-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-ranger-patrol-s2",
+   "name": "The Ranger's Patrol",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-ranger-patrol-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-ranger-patrol-s1",
+     "atLeast": 4,
+     "atMost": 8
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "ponyta",
+    "tint": "#3a4a2a",
+    "effect": "none"
+   },
+   "intro": "A Ranger on a Ponyta trots up the road, and the Ponyta stops dead when it sees you.",
+   "choices": [
+    {
+     "label": "Accept the Ranger's reward.",
+     "success": {
+      "text": "\"The Ranger Union pays for help,\" she says, and hands you an envelope. \"And I pay for good help.\" She adds a handful of Great Balls from her own belt.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask to ride with her a while.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "ranger-held",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "An hour on the road, the Ponyta's warm flank under your hand. She shows you the paths the wild ones use. It's the fastest you've ever covered ground.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 2
+       },
+       {
+        "kind": "flag",
+        "key": "ranger-rode",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "ranger-patrol-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ranger-calmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The Ranger rides up on a Ponyta. The Ponyta stops, nickers, and walks the last few steps to you to put its nose on your shoulder, exactly like before.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "ranger-patrol-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ranger-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The Ranger rides up on a Ponyta. It stops and looks for your Water-type, then snorts a little cloud of steam at it, friendly.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "ranger-patrol-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ranger-held",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The Ranger rides up. Her Ponyta stamps and backs away from you. \"It's all right,\" she tells it, and you. \"It remembers. It'll get over it.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-lost-pokemon-s1",
+   "name": "The Lost Pokémon",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "pokemon": "growlithe",
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A Growlithe in a red collar sits at a crossroads, looking up each road in turn. Its tail goes up whenever someone comes, then down when it isn't them. It has been here a while.",
+   "choices": [
+    {
+     "label": "Read the tag on its collar.",
+     "success": {
+      "text": "A name, \"Biscuit,\" and a town two routes away. You walk it there. The house is shut. Biscuit lies down on the step to wait, and won't come with you. You leave a note in the door.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lost-tag",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-lost-pokemon-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-lost-pokemon-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it walk with you for a while.",
+     "success": {
+      "text": "It trots beside your team, sniffing every traveller who passes. Your Pokémon share their food. At the next town it catches a scent and is gone, barking.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "lost-walked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-lost-pokemon-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-lost-pokemon-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it waiting.",
+     "success": {
+      "text": "It watches you go. Then it turns its head back to the crossroads, and waits.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lost-left",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-lost-pokemon-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-lost-pokemon-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-lost-pokemon-s2",
+   "name": "The Lost Pokémon",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-lost-pokemon-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-lost-pokemon-s1",
+     "atLeast": 2,
+     "atMost": 5
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "growlithe",
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A young woman with a red lead in her hand and a Growlithe at her heel. She sees you and her whole face changes.",
+   "choices": [
+    {
+     "label": "Say you're glad they found each other.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "lost-left",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "She hugs Biscuit, then you, then Biscuit. She gives you what she has: a tin of homemade treats your team devours, and her father's old Quick Claw.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "quick-claw",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Scratch Biscuit's ears.",
+     "success": {
+      "text": "Biscuit flops over for belly rubs. It's the happiest Pokémon you have ever seen. That's the reward.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lost-pokemon-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lost-tag",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A young woman with a Growlithe at her heel runs up holding your note. \"You walked Biscuit home. I was gone three days looking for him and he was on my step the whole time.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "lost-pokemon-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lost-walked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A young woman with a Growlithe at her heel. Biscuit sees your team and goes mad with joy. \"He found me in town,\" she says. \"He smelled of your Pokémon. I had to find you.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "lost-pokemon-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lost-left",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A young woman with a Growlithe at her heel. \"Did you see him?\" she asks, smiling. \"At the crossroads? A Ranger brought him home. He waited there two days.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-snowed-in-inn-s1",
+   "name": "The Snowed-In Inn",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#38485a",
+    "effect": "snow"
+   },
+   "intro": "A blizzard closes the pass in an hour. The inn at the foot of it is full of stuck travellers: a cartographer, a family, a grumpy old Ice-type trainer, and a fire in the grate. You'll be here till morning.",
+   "choices": [
+    {
+     "label": "Share your food around.",
+     "success": {
+      "text": "You put what you have on the big table. Others add theirs. It becomes a feast, then a party. The cartographer tells stories about roads that aren't on any map.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "inn-shared",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-snowed-in-inn-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-snowed-in-inn-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle the Ice-type trainer for the warmest seat.",
+     "success": {
+      "text": "\"The seat by the fire is MINE,\" says the old trainer. \"Unless you take it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ovc-snowed-in-inn-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-snowed-in-inn-s1",
+        "amount": 0
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grumpy Skier",
+       "size": 2,
+       "types": [
+        "ice"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "inn-battled",
+         "amount": 1
+        },
+        {
+         "kind": "rest"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Keep to yourself.",
+     "success": {
+      "text": "You take a corner, curl up with your team, and sleep through the noise. You wake rested. The others are asleep in a heap by the fire.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "inn-quiet",
+        "amount": 1
+       },
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-snowed-in-inn-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-snowed-in-inn-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-snowed-in-inn-s2",
+   "name": "The Snowed-In Inn",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "types": [
+    "ice"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-snowed-in-inn-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-snowed-in-inn-s1",
+     "atLeast": 2,
+     "atMost": 5
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#38485a",
+    "effect": "none"
+   },
+   "intro": "Morning. The pass is open and white. As you lace your boots, the cartographer comes over with a rolled-up map.",
+   "choices": [
+    {
+     "label": "Take the map.",
+     "success": {
+      "text": "It shows the road ahead in her small, neat hand: every hollow and every nest. \"Don't sell it,\" she says. \"Use it.\"",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade her a story for it.",
+     "success": {
+      "text": "You tell her about the strangest place you've been. She writes it in the margin of the map, and hands you the map. \"Now it's a better one.\"",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "snowed-in-inn-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "inn-shared",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Morning. The cartographer finds you at the door. \"You fed half the inn last night,\" she says. \"I make maps. Here's one that no one else has.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "snowed-in-inn-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "inn-battled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Morning. The grumpy Ice-type trainer and the cartographer are both waiting at the door. The old man grunts. \"She has a map for you. I told her to.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "snowed-in-inn-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "inn-quiet",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Morning. The cartographer stops you at the door. \"You missed a good night,\" she says. \"But I saw you looked tired. Take this. It's a shortcut.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-runaway-egg-s1",
+   "name": "The Runaway Egg",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#4a4430",
+    "effect": "none"
+   },
+   "intro": "Something white and speckled comes rolling down the hill, bouncing off stones, picking up speed. An egg. It's heading straight for the river.",
+   "choices": [
+    {
+     "label": "Dive and catch it.",
+     "success": {
+      "text": "You land face-first in the mud and catch it an inch from the water. It's warm. Something inside it knocks, once, very softly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "egg-caught",
+        "amount": 1
+       },
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-runaway-egg-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-runaway-egg-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Have a Pokémon block it.",
+     "success": {
+      "text": "Your fastest Pokémon gets ahead of it and stops it with its body, gently. It holds the egg like it's the most important thing in the world.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "egg-blocked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-runaway-egg-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-runaway-egg-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "It hits the water with a soft splash. For a second it bobs, then the current takes it. Something up the hill cries out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "egg-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-runaway-egg-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-runaway-egg-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-runaway-egg-s2",
+   "name": "The Runaway Egg",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-runaway-egg-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-runaway-egg-s1",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a4430",
+    "effect": "none"
+   },
+   "intro": "A huge, frantic Pokémon is searching the hillside, nose to the ground, making a sound like grief.",
+   "choices": [
+    {
+     "label": "Give the egg back.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "egg-lost",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "It nudges the egg into the curl of its body and makes a deep, rumbling sound. Then it nudges something else toward you: a second egg, smaller. It wants you to have it.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay with it.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "egg-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You sit on the riverbank beside it. You can't fix it. You stay until it stops crying and walks back up the hill. Your team is very quiet that night.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "moment",
+        "text": "A wild Pokémon lost its egg to the river while you watched. You stayed with it afterward.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back away carefully.",
+     "success": {
+      "text": "It watches you leave, then turns back to what it was doing.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "runaway-egg-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "egg-caught",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A big wild Pokémon comes crashing down the hillside, frantic, searching. Then it smells the egg you've kept warm all this way, and stops dead.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "runaway-egg-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "egg-blocked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A big wild Pokémon comes down the hillside searching. It smells its egg on your teammate, and the two of them look at each other a very long time.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "runaway-egg-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "egg-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A big wild Pokémon is pacing the riverbank, nosing the water, crying. You know what it's looking for. It isn't going to find it.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-rain-dance-festival-s1",
+   "name": "The Rain Dance Festival",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "pokemon": "politoed",
+    "tint": "#4a4a30",
+    "effect": "confetti"
+   },
+   "types": [
+    "water"
+   ],
+   "intro": "A dry village, a dry square, and everyone in it dancing. Drums. A Politoed on a little stage, conducting. \"Dance with us!\" someone shouts. \"The more feet, the more rain!\"",
+   "choices": [
+    {
+     "label": "Dance.",
+     "success": {
+      "text": "You are a terrible dancer. It doesn't matter at all. Your team joins in. By the end even the grandmothers are cheering. The sky stays blue, but it looks thoughtful.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rain-danced",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-rain-dance-festival-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-rain-dance-festival-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Water-type use Rain Dance.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "The square goes silent. Your Pokémon lifts its head and calls, and the clouds roll in. Three drops. Then a hundred. Then everyone is soaked and screaming with joy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rain-called",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 8,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-rain-dance-festival-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-rain-dance-festival-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch from the edge.",
+     "success": {
+      "text": "You clap along from the shade. A little girl gives you a paper flower. The drums go on long after you've gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rain-watched",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-rain-dance-festival-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-rain-dance-festival-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-rain-dance-festival-s2",
+   "name": "The Rain Dance Festival",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-rain-dance-festival-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-rain-dance-festival-s1",
+     "atLeast": 2,
+     "atMost": 5
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "politoed",
+    "tint": "#4a4a30",
+    "effect": "none"
+   },
+   "types": [
+    "water"
+   ],
+   "intro": "The sky over the next battlefield is grey, and getting greyer, and the first drops are falling. Behind you on the wind, very faint: drums.",
+   "choices": [
+    {
+     "label": "Let it rain.",
+     "success": {
+      "text": "It pours. Your team stands in it, faces up. Somewhere a village is dancing in mud.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send thanks back to the village.",
+     "success": {
+      "text": "You tie a ribbon to a branch facing back down the road. It's a silly thing to do. It feels right.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rain-dance-festival-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rain-danced",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Clouds come in fast over your next battle. On the wind, drums. You danced. Apparently it counted.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "rain-dance-festival-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rain-called",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Clouds pile in over your next battle, black and heavy. Your Water-type looks up and makes a small, smug sound.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "rain-dance-festival-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rain-watched",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Clouds come in over your next battle. On the wind, very far behind you, drums and singing.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-tree-house-s1",
+   "name": "The Tree House",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a2a",
+    "effect": "none"
+   },
+   "intro": "A tree house, badly built and gloriously big, with a rope ladder and a sign: TRAINERS ONLY. Four kids lean out of the window. \"You can rest here if you want,\" says one. \"There's a password.\" Another: \"There isn't.\"",
+   "choices": [
+    {
+     "label": "Climb up and rest.",
+     "success": {
+      "text": "They give you the best cushion and a cup of something purple. They show you their Pokémon cards, then their real Pokémon, a Caterpie and a Rattata. You sleep for an hour, safe as anything.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "treehouse-rested",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-tree-house-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-tree-house-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help them fix the roof.",
+     "success": {
+      "text": "It leaks in three places. You fix two. They decide you're the best trainer who ever lived.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "treehouse-fixed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-tree-house-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-tree-house-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them you're busy.",
+     "success": {
+      "text": "\"Okay,\" says the smallest one, and the shutters close. You hear them arguing about whether you were a real trainer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "treehouse-passed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-tree-house-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-tree-house-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-tree-house-s2",
+   "name": "The Tree House",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-tree-house-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-tree-house-s1",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a2a",
+    "effect": "none"
+   },
+   "intro": "Four kids come running down the road toward you, all talking at once, all carrying Poké Balls. It's the tree house gang.",
+   "choices": [
+    {
+     "label": "Battle all four.",
+     "success": {
+      "text": "Two at a time, swapping. Their Caterpie has evolved. They cheer for you and for themselves.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Tree House Gang",
+       "size": 4,
+       "types": [],
+       "levelBonus": -3,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "flag",
+         "key": "treehouse-won",
+         "amount": 1
+        },
+        {
+         "kind": "friendship",
+         "amount": 3,
+         "who": "party"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Teach them instead.",
+     "success": {
+      "text": "You show them how to read a type matchup, how to tell when a Pokémon is tired. They take notes in crayon. When you leave, they're battling each other, properly.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tree-house-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "treehouse-rested",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The tree house gang comes running. \"We've been training! Since you stayed over! Battle us!\" They all talk at once.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "tree-house-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "treehouse-fixed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The tree house gang comes running. \"Roof's still dry!\" shouts the oldest. \"We want a rematch for the roof!\" There was no first match.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "tree-house-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "treehouse-passed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The tree house gang comes running. \"We trained,\" the smallest says. \"So you can't be too busy now.\" They look very serious.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-shipwreck-find-s1",
+   "name": "The Shipwreck Find",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a44",
+    "effect": "none"
+   },
+   "intro": "A broken ship on the beach, rib-bones of wood in the foam. In the wreck: a sealed chest, a ship's bell, and in the sand by it, fresh tracks of something with claws.",
+   "choices": [
+    {
+     "label": "Open the chest.",
+     "success": {
+      "text": "Inside, wrapped in oilcloth: a captain's logbook and a little bag of pearls. The last log entry says, \"If found, please tell my daughter we tried.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pearl",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "wreck-log",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-shipwreck-find-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-shipwreck-find-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ring the bell.",
+     "success": {
+      "text": "It rings out over the water, cracked and clear. The claw-tracks belong to a Corphish, which pops out of the hull, alarmed, and scuttles off.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wreck-bell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-shipwreck-find-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-shipwreck-find-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the wreck alone.",
+     "success": {
+      "text": "It's someone's grave, maybe. You don't touch it. The tide is coming, and it will do what tides do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wreck-left",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-shipwreck-find-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-shipwreck-find-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-shipwreck-find-s2",
+   "name": "The Shipwreck Find",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "types": [
+    "water"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-shipwreck-find-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-shipwreck-find-s1",
+     "atLeast": 3,
+     "atMost": 7
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a44",
+    "effect": "none"
+   },
+   "intro": "A diver in a patched suit comes up the beach from the sea, mask pushed back. \"That wreck down the coast,\" she says. \"Did you see it?\"",
+   "choices": [
+    {
+     "label": "Give her the logbook.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "wreck-log",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "She reads the last entry and sits down in the sand. \"We tried,\" she reads aloud. She stays there a long time. When she gets up she gives you her father's diving charm.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You gave a diver her father's last logbook. He wrote that they tried.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell her what you saw.",
+     "success": {
+      "text": "You tell her everything: the chest, the bell, the tracks. She listens to every word. \"Thank you,\" she says. \"I'll dive tomorrow.\" She gives you Dive Balls she won't need.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "dive-ball",
+        "count": 3
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "shipwreck-find-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "wreck-log",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A diver comes up the beach. \"That wreck down the coast. I've been looking for it for six years.\" Then she sees the logbook sticking out of your pack.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "shipwreck-find-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "wreck-bell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A diver comes up the beach. \"Was it you? Ringing the bell?\" Her voice catches. \"I heard it from the water. My father's bell.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "shipwreck-find-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "wreck-left",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A diver comes up the beach. \"There's a wreck down the coast. Did anyone disturb it?\" When you shake your head, she lets out a long breath.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-midnight-singer-s1",
+   "name": "The Midnight Singer",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1a1a30",
+    "effect": "none"
+   },
+   "intro": "Midnight, a sleeping town, and from somewhere on the rooftops, a voice singing. No words. Just a long, slow tune that makes your chest ache. Your Pokémon are all awake and listening.",
+   "choices": [
+    {
+     "label": "Follow the voice.",
+     "success": {
+      "text": "Over a wall, up some stairs, onto a roof. Nobody there. Just a warm spot on the tiles, and the tune still hanging in the air. Then it stops.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "singer-followed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-midnight-singer-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-midnight-singer-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sing back.",
+     "success": {
+      "text": "You hum the tune back, badly. Silence. Then the voice starts again, and this time it sings your part with you. Your Pokémon join in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "singer-sang",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-midnight-singer-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-midnight-singer-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Listen until it ends.",
+     "success": {
+      "text": "You sit on the fountain's edge and listen to all of it. When it ends you notice your face is wet. Your team leans against you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "singer-listened",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-midnight-singer-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-midnight-singer-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-midnight-singer-s2",
+   "name": "The Midnight Singer",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-midnight-singer-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-midnight-singer-s1",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "jigglypuff",
+    "tint": "#1a1a30",
+    "effect": "none"
+   },
+   "intro": "Another night, another town, and the same tune. This time it's coming from the next street, at ground level.",
+   "choices": [
+    {
+     "label": "Ask about the song.",
+     "success": {
+      "text": "\"Her first trainer wrote it,\" the woman says. \"My brother. He's gone. She sings it every night so she won't forget it.\" The Jigglypuff sings it once more, for you.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "moment",
+        "text": "A Jigglypuff sings its late trainer's song every night so it won't forget. It sang it for you.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sing it with them.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "singer-sang",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "All three of you, and then your team, on a doorstep at midnight. Windows open up and down the street. Nobody complains.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "midnight-singer-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "singer-followed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The same tune, from the next street. You turn the corner and the singer is sitting on a step: a Jigglypuff, and a woman with its old trainer's hat. \"You followed us,\" she says.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "midnight-singer-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "singer-sang",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The same tune, and this time a second voice with it, low and human. You turn the corner: a woman and a Jigglypuff. \"You sang back,\" she says, smiling. \"We've been hoping you'd come.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "midnight-singer-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "singer-listened",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The same tune. You turn the corner: a woman and a Jigglypuff on a step. \"You stayed for all of it,\" she says. \"Nobody does. It's a long song.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-bakery-queue-s1",
+   "name": "The Bakery Queue",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A queue out the door and round the corner. A famous bakery, the smell of it enough to make your team whine. At the very back, an old man with a cane is about to give up.",
+   "choices": [
+    {
+     "label": "Give the old man your place.",
+     "success": {
+      "text": "You've queued for an hour. You give it to him. He argues, then doesn't. You get nothing but his surprised face. It's enough.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bakery-gave",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-bakery-queue-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-bakery-queue-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Queue the whole time.",
+     "success": {
+      "text": "Two hours. It's worth it. The bun is soft and sweet and your team fights over the crumbs.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "flag",
+        "key": "bakery-queued",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-bakery-queue-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-bakery-queue-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip it.",
+     "success": {
+      "text": "Your team looks at you like you've betrayed them. You walk on, the smell following you for a mile.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bakery-skipped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-bakery-queue-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-bakery-queue-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-bakery-queue-s2",
+   "name": "The Bakery Queue",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-bakery-queue-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-bakery-queue-s1",
+     "atLeast": 2,
+     "atMost": 4
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A bakery van by the road, a woman in flour leaning out. \"You!\" she calls. \"You're the one from the queue!\"",
+   "choices": [
+    {
+     "label": "Accept a free basket.",
+     "success": {
+      "text": "Warm bread, sweet buns, one for each of your team with their name on it in icing. Somehow she knew the names.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for the recipe.",
+     "success": {
+      "text": "She laughs and says no. Then she tells you one secret, just one: patience. You aren't sure if that's the recipe or advice.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bakery-queue-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "bakery-gave",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The baker leans out of her van. \"You gave my father your place in my queue,\" she says. \"He told me all about you. I've been watching for you since.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "bakery-queue-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "bakery-queued",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The baker leans out of her van. \"Two hours you stood there! I remember your team. They pressed their noses on my window.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "bakery-queue-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "bakery-skipped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The baker leans out of her van. \"You walked away from my queue,\" she says, mock-offended. \"Nobody walks away. Come here.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-scarecrow-trial-s1",
+   "name": "The Scarecrow Trial",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "pokemon": "pumpkaboo",
+    "tint": "#4a4024",
+    "effect": "none"
+   },
+   "types": [
+    "grass",
+    "ghost"
+   ],
+   "intro": "A scarecrow in a field, arms out. As you pass, its head turns. \"HALT,\" it says, in a voice like dry straw. \"None pass my field without a TRIAL.\" A Pumpkaboo is sitting on its shoulder, grinning.",
+   "choices": [
+    {
+     "label": "Accept the trial.",
+     "success": {
+      "text": "\"PROVE YOURSELF,\" says the scarecrow, and the field rustles. Things that were hiding in the corn come out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ovc-scarecrow-trial-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-scarecrow-trial-s1",
+        "amount": 0
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [],
+       "types": [
+        "grass",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "scare-won",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Laugh at it.",
+     "success": {
+      "text": "The scarecrow goes very still. \"RUDE,\" it says. The Pumpkaboo laughs too. Then the scarecrow does. You all laugh, in a field, at nothing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "scare-laughed",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-scarecrow-trial-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-scarecrow-trial-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look behind it.",
+     "success": {
+      "text": "A boy with a megaphone, crouched in the corn, red-faced. \"Don't tell anyone,\" he whispers. The Pumpkaboo is his.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "scare-found",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-scarecrow-trial-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-scarecrow-trial-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-scarecrow-trial-s2",
+   "name": "The Scarecrow Trial",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-scarecrow-trial-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-scarecrow-trial-s1",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "pumpkaboo",
+    "tint": "#4a4024",
+    "effect": "none"
+   },
+   "types": [
+    "grass",
+    "ghost"
+   ],
+   "intro": "The scarecrow again, in a different field, the Pumpkaboo on its shoulder. \"YOU,\" it says. \"I have been WAITING.\"",
+   "choices": [
+    {
+     "label": "Take the prize.",
+     "success": {
+      "text": "It's a Spell Tag, made by hand, and a little bag of candy for your team. \"THE FIELD REMEMBERS YOU,\" booms the scarecrow, and then, more quietly: \"Thanks.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "spell-tag",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the Pumpkaboo come along.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "scare-laughed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The boy hesitates. \"She's always wanted to see further than the field.\" The Pumpkaboo hops onto your shoulder. The boy waves until you're gone.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "pumpkaboo"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "scarecrow-trial-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "scare-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The scarecrow again. \"YOU PASSED MY TRIAL,\" it booms. \"NONE HAVE BEFORE. I OWE YOU A PRIZE.\" The Pumpkaboo holds out something.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "scarecrow-trial-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "scare-laughed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The scarecrow again. \"YOU LAUGHED,\" it booms. \"IT WAS... NICE.\" A pause. \"I HAVE A PRIZE FOR LAUGHING.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "scarecrow-trial-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "scare-found",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The scarecrow again, and the boy is sitting openly at its feet with his megaphone. \"You didn't tell,\" he says. \"So I owe you.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-sleepy-lighthouse-s1",
+   "name": "The Sleepy Lighthouse",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "types": [
+    "electric"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ampharos",
+    "tint": "#2a3448",
+    "effect": "none"
+   },
+   "intro": "Dusk at a lighthouse, and no light. In the lamp room, the keeper is asleep in a chair with his mouth open, a sleeping Ampharos beside him. Out at sea, a boat is coming in blind.",
+   "choices": [
+    {
+     "label": "Wake the keeper.",
+     "success": {
+      "text": "He jolts awake, sees the dark, and goes white. \"Ampharos! Light!\" It wakes, glows, and the beam swings out. The boat turns, just in time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lamp-woke",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-sleepy-lighthouse-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-sleepy-lighthouse-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Light the lamp yourself.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "electric"
+      }
+     ],
+     "success": {
+      "text": "Your Electric-type climbs into the lamp housing and lights it. The beam goes out over the water. The keeper and Ampharos sleep on, snoring, and never know.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lamp-lit",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 8,
+        "who": {
+         "types": [
+          "electric"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-sleepy-lighthouse-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-sleepy-lighthouse-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them sleeping.",
+     "success": {
+      "text": "It isn't your lighthouse. You go on down the path. Behind you the sea is dark.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lamp-left",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-sleepy-lighthouse-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-sleepy-lighthouse-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-sleepy-lighthouse-s2",
+   "name": "The Sleepy Lighthouse",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "types": [
+    "electric"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-sleepy-lighthouse-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-sleepy-lighthouse-s1",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "ampharos",
+    "tint": "#2a3448",
+    "effect": "none"
+   },
+   "intro": "Daylight at the lighthouse. The old keeper is sitting outside on the step with his Ampharos, wide awake, and he stands when he sees you.",
+   "choices": [
+    {
+     "label": "Accept his thanks.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "lamp-left",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "He gives you his old keeper's lamp-glass, a lens that catches light like a prism, and a handshake that doesn't let go. \"Thank you. That's all. Thank you.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "wide-lens",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay to keep watch with him tonight.",
+     "success": {
+      "text": "You sit up all night with him and the Ampharos. He tells you about the ships. At dawn he says he's not retiring after all.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sleepy-lighthouse-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lamp-woke",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The keeper is waiting on the lighthouse step. \"You woke me,\" he says. \"Forty years and I've never slept on watch. That boat had my grandson on it.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "sleepy-lighthouse-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lamp-lit",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The keeper is waiting on the step, his Ampharos beside him. \"Someone lit my lamp while I slept. A Pokémon's charge, not mine. Was it yours?\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "sleepy-lighthouse-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lamp-left",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The keeper is on the step, very pale. \"The boat made it,\" he tells you, unasked. \"Barely. I slept through it. I'm retiring.\" His Ampharos leans on him.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-collector-request-s1",
+   "name": "The Collector's Request",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#38304a",
+    "effect": "none"
+   },
+   "intro": "A woman with a fancy camera on a tripod. \"I collect portraits of Pokémon,\" she says. \"One of every type. I'm missing one. Would you let one of yours sit for me?\"",
+   "choices": [
+    {
+     "label": "Let your lead sit for her.",
+     "success": {
+      "text": "She spends an hour on lighting. Your lead poses like a star. When she shows you the shot on the little screen, you see your Pokémon the way she does: brave, and beautiful.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 8,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "collector-sat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-collector-request-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-collector-request-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what she'll do with them.",
+     "success": {
+      "text": "\"A book,\" she says. \"So people can see every kind of Pokémon at its best.\" She seems honest. You let her take two pictures.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "collector-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-collector-request-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-collector-request-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline.",
+     "success": {
+      "text": "She nods, a little disappointed, and packs up the tripod. \"I'll find one,\" she says.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "collector-no",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-collector-request-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-collector-request-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-collector-request-s2",
+   "name": "The Collector's Request",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-collector-request-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-collector-request-s1",
+     "atLeast": 4,
+     "atMost": 8
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#38304a",
+    "effect": "none"
+   },
+   "intro": "The portrait collector, with a book under her arm and a different look in her eye. \"I want to make you an offer.\"",
+   "choices": [
+    {
+     "label": "Hear the offer.",
+     "success": {
+      "text": "She wants nothing but a copy of the book signed by your Pokémon, a paw print. In return, she pays for \"modelling\" and gives you a Luxury Ball from her own collection.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "item",
+        "id": "luxury-ball",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask her to photograph your whole team.",
+     "success": {
+      "text": "An afternoon of it. Everyone gets a turn. She gives you the print, and it's the first time you've seen all of you together in one picture.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "A portrait collector took a picture of your whole team together.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "collector-request-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "collector-sat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The portrait collector, holding a printed proof. Your lead is on the cover. \"It's the best one in the book,\" she says. \"Now I want to make an offer.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "collector-request-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "collector-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The portrait collector, with a proof of her book. Two pages are yours. \"I want to make an offer,\" she says. \"A fair one.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "collector-request-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "collector-no",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The portrait collector. \"I found my last type,\" she says. \"But I kept thinking about your team. I'd like to make an offer.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  }
+ ]
+}

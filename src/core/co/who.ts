@@ -9,7 +9,7 @@ export const CO_WHO_NAMES = ['lead', 'party', 'picked', 'starter', 'top', 'first
 export const MOMENT_MON_FLAG = 'moment-mon';
 export const CO_MOVE_FLAGS = ['sound', 'wind', 'punch', 'bite', 'pulse', 'bullet', 'slicing', 'powder'] as const;
 /** The first party Pokémon able to fight that fits every given part (types: any one of them). */
-export interface CoMatch { types?: TypeName[]; moveFlag?: (typeof CO_MOVE_FLAGS)[number]; species?: string[] }
+export interface CoMatch { types?: TypeName[]; moveFlag?: (typeof CO_MOVE_FLAGS)[number]; species?: string[]; /** Every able Pokémon that fits (families-b), not just the first. */ every?: boolean }
 export type CoWho = (typeof CO_WHO_NAMES)[number] | 'weakest' | CoMatch;
 
 export const MAX_BOND_LEVEL = 5;
@@ -50,6 +50,7 @@ export function whoOf(content: Content, run: RunState, who: CoWho, pickedUid?: s
   const party = run.party;
   const able = party.filter((m) => m.hp > 0);
   const one = (m: PokemonInstance | undefined): PokemonInstance[] => (m ? [m] : []);
+  if (typeof who !== 'string' && who.every) return able.filter((m) => fitsMatch(content, m, who));
   if (typeof who !== 'string') return one(able.find((m) => fitsMatch(content, m, who)) ?? party.find((m) => fitsMatch(content, m, who)));
   switch (who) {
     case 'party':

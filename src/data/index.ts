@@ -806,6 +806,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
     for (const f of effects) {
       if (f.kind === 'item' && !knownItem(f.id)) problems.push(`${where} gives unknown item "${f.id}"`);
       if (f.kind === 'loseItem' && f.id && !knownItem(f.id)) problems.push(`${where} uses unknown item "${f.id}"`);
+      if (f.kind === 'loseItem' && f.from) for (const id of f.from) if (!knownItem(id)) problems.push(`${where} uses unknown item "${id}"`);
       if (f.kind === 'itemFrom') for (const id of f.ids) if (!knownItem(id)) problems.push(`${where} gives unknown item "${id}"`);
       if (f.kind === 'recruit' && !content.archetypes.has(f.trainer)) problems.push(`${where} recruits unknown trainer "${f.trainer}"`);
       if (f.kind === 'join') for (const id of f.species) if (!content.species.has(id)) problems.push(`${where} offers unknown species "${id}"`);
@@ -829,7 +830,10 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
         if (b?.kind === 'trainer' && b.bossId && !content.bosses.has(b.bossId)) problems.push(`${where} battles unknown boss "${b.bossId}"`);
         if (b?.kind === 'trainer' && b.classId && !content.trainers.has(b.classId)) problems.push(`${where} battles unknown trainer class "${b.classId}"`);
       }
-      for (const r of [...c.requires, ...e.requires]) if (r.kind === 'item' && !knownItem(r.id)) problems.push(`${where} needs unknown item "${r.id}"`);
+      for (const r of [...c.requires, ...e.requires]) {
+        if (r.kind === 'item' && !knownItem(r.id)) problems.push(`${where} needs unknown item "${r.id}"`);
+        if (r.kind === 'itemAny') for (const id of r.ids) if (!knownItem(id)) problems.push(`${where} needs unknown item "${id}"`);
+      }
     }
     if (e.keyItem && !knownItem(e.keyItem)) problems.push(`${where} needs unknown key item "${e.keyItem}"`);
     if (e.scene.pokemon && !content.species.has(e.scene.pokemon)) problems.push(`${where} shows unknown species "${e.scene.pokemon}"`);

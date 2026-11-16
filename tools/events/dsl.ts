@@ -37,6 +37,10 @@ export function ch(label: string, success: Json, o: { requires?: Json[]; check?:
 }
 /** A branch of a choice (`ch(..., { branches: [...] })`): when every condition holds, these words and effects replace the outcome (its battle stays). First match wins. */
 export const br = (when: Json[], text: string, ...effects: Json[]): Json => ({ when, text, effects });
+/** You hold one of these items. */
+export const hasAny = (...ids: string[]): Json => ({ kind: 'itemAny', ids });
+/** One of these that you hold is given up. */
+export const loseOne = (...ids: string[]): Json => ({ kind: 'loseItem', from: ids });
 /** The lead (the first Pokémon able to fight) is of this type. */
 export const leadIs = (type: string): Json => ({ kind: 'leadType', type });
 /** The Pokémon the last pick choice named (remembered for the run) is one of these types / is the starter. */
@@ -63,7 +67,7 @@ export const statusLead = (s: 'poison' | 'burn' | 'paralysis' | 'sleep'): Json =
 export const cure = (): Json => ({ kind: 'cure' });
 export const status = (s: 'poison' | 'burn' | 'paralysis' | 'sleep'): Json => ({ kind: 'status', status: s });
 /** Catalog Overhaul: which Pokémon an effect lands on (core/co/who.ts). An object is the first able Pokémon that fits. */
-export type Who = 'lead' | 'party' | 'picked' | 'starter' | 'top' | 'firstCatch' | 'newest' | 'moment' | { types?: string[]; moveFlag?: string; species?: string[] };
+export type Who = 'lead' | 'party' | 'picked' | 'starter' | 'top' | 'firstCatch' | 'newest' | 'moment' | { types?: string[]; moveFlag?: string; species?: string[]; every?: boolean };
 export const fr = (amount: number, who: Who = 'party'): Json => ({ kind: 'friendship', amount, who });
 /** The pack's "+N Bond": +5 friendship per point on one Pokémon, +3 each for the whole party (balance.co). */
 /** The pack's "+N Bond": the friendship comes from balance.co at play time (5 a point on one Pokémon, 3 each for the party). */
@@ -85,8 +89,10 @@ export const rp = (amount: number): Json => ({ kind: 'research', amount });
 export const lv = (amount: number, who: Who | 'weakest' = 'lead'): Json => ({ kind: 'levels', amount, who });
 /** "+1 to a stat" for a Pokémon (5% per point, capped at 15% per stat; `best` = its highest stat). `region: true` = "for the region". */
 export const stat = (which: 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe' | 'best' | 'all', o: { points?: number; who?: Who | 'weakest'; region?: boolean } = {}): Json => ({ kind: 'statBoost', stat: which, percent: 5 * (o.points ?? 1), who: o.who ?? 'lead', until: o.region ? 'region' : 'run' });
-export const join = (o: { species?: string[]; types?: string[]; lv?: number; shiny?: number; shadow?: boolean } = {}): Json => ({
+export const join = (o: { species?: string[]; types?: string[]; lv?: number; shiny?: number; shadow?: boolean; recall?: boolean; uncaught?: boolean } = {}): Json => ({
   kind: 'join',
+  ...(o.recall ? { recall: true } : {}),
+  ...(o.uncaught ? { uncaught: true } : {}),
   shadow: o.shadow ?? false,
   species: o.species ?? [],
   types: o.types ?? [],
@@ -165,8 +171,9 @@ export const wild = (o: { format?: 'doubles' | 'triples'; species?: string[]; ty
   shinyMultiplier: o.shiny ?? 1,
   win: o.win ?? [],
 });
-export const trainer = (name: string, o: { format?: 'doubles' | 'triples'; cls?: string; boss?: string; size?: number; types?: string[]; lv?: number; win?: Json[]; ghost?: boolean; retired?: boolean; rival?: boolean; ally?: string; chain?: number; mirror?: boolean; team?: string[]; special?: string; friendly?: boolean; lose?: Json[]; foeMoves?: string[]; rule?: Json; sprite?: string; apprentice?: boolean; chainHeal?: number; counter?: Json } = {}): Json => ({
+export const trainer = (name: string, o: { format?: 'doubles' | 'triples'; cls?: string; boss?: string; size?: number; types?: string[]; lv?: number; win?: Json[]; ghost?: boolean; retired?: boolean; rival?: boolean; ally?: string; chain?: number; mirror?: boolean; team?: string[]; special?: string; friendly?: boolean; lose?: Json[]; foeMoves?: string[]; rule?: Json; sprite?: string; apprentice?: boolean; chainHeal?: number; counter?: Json; uncaught?: boolean } = {}): Json => ({
   kind: 'trainer',
+  ...(o.uncaught ? { uncaught: true } : {}),
   ...(o.friendly ? { friendly: true } : {}),
   ...(o.lose ? { lose: o.lose } : {}),
   ...(o.foeMoves ? { foeMoves: o.foeMoves } : {}),

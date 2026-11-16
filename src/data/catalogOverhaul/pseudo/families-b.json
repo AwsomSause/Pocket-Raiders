@@ -1,0 +1,12 @@
+{
+  "category": "families-b",
+  "note": "STORY_FAMILIES_6 Doors (STORY_FAMILIES_PLACED: SF31, SF34, SF36, SF37, SF39, SF40). Each is drawn as a stage map from its entry event's rooms.",
+  "chains": [
+    { "id": "ps_lost_expedition", "name": "The Lost Expedition", "entry": "ev-abandoned-expedition", "themeId": "ice-rock", "tint": "#2a2a24", "mood": "cold ridge" },
+    { "id": "ps_sunken_lighthouse", "name": "The Sunken Lighthouse", "entry": "lighthouse-entrance", "themeId": "water-ghost", "tint": "#14242c", "mood": "tide and lamp" },
+    { "id": "ps_old_quarry", "name": "The Old Quarry", "entry": "quarry-entrance", "themeId": "ground-rock", "tint": "#3a3226", "mood": "silent cranes" },
+    { "id": "ps_captains_chest", "name": "The Captain's Chest", "entry": "w4-dive", "themeId": "water-ghost", "tint": "#0c1c30", "mood": "deep water" },
+    { "id": "ps_whispering_grove", "name": "The Whispering Grove", "entry": "whispering-grove-entrance", "themeId": "grass-fairy", "tint": "#1f3a2a", "mood": "whispering leaves" },
+    { "id": "ps_windswept_spire", "name": "The Windswept Spire", "entry": "windswept-spire-entrance", "themeId": "flying-rock", "tint": "#3a4658", "mood": "wind and stone" }
+  ]
+}

@@ -3,7 +3,7 @@ import { buildContent, RAW_CONTENT } from '../../src/data';
 import { buildPools, chainEvents, LEGEND_SPECIES, mapOutcome, tickChainTimers, type PoolItem } from '../../src/core/overhaul/chains';
 import { conditionMet } from '../../src/core/events';
 import { createRun } from '../../src/core/run';
-import type { EventCondition } from '../../src/core/contentSchema';
+import { EventConditionSchema, type EventCondition } from '../../src/core/contentSchema';
 import { overhaulCatalogs } from '../../src/core/overhaul/catalogs';
 import species from '../../src/data/species.json';
 
@@ -36,8 +36,12 @@ describe('overhaul event chains', () => {
 
   it('can be switched off', () => {
     const off = buildContent({ ...RAW_CONTENT, balance: { ...(RAW_CONTENT.balance as object), overhaulChains: { enabled: false, legendaryMinStage: 7 } } });
-    expect(off.events.has('ovc-roadside-stand-s1')).toBe(false);
-    expect(buildContent().events.has('ovc-roadside-stand-s1')).toBe(true);
+    // A chain stage a Catalog Overhaul co file rebuilt is hand-written content now and stays; the switch covers the generated ones.
+    const coBuilt = new Set(Object.values(import.meta.glob<{ events?: { id: string }[] }>('../../src/data/events/co-*.json', { eager: true, import: 'default' })).flatMap((f) => (f.events ?? []).map((e) => e.id)));
+    const generated = chainEvents(items).events.map((e) => e.id as string).find((id) => !coBuilt.has(id))!;
+    expect(generated).toBeDefined();
+    expect(off.events.has(generated)).toBe(false);
+    expect(buildContent().events.has(generated)).toBe(true);
   });
 
   it('maps outcomes to real effects', () => {
@@ -109,11 +113,13 @@ describe('overhaul event chains', () => {
   it('some later choices only show after the matching earlier choice', () => {
     const content = buildContent();
     const run = createRun(content, { runId: 'chain-n', seed: 'chain-n', archetypeId: 'red' });
-    const jam = content.events.get('ovc-roadside-stand-s2')!.choices[0]!;
-    expect(jam.requires).toEqual([{ kind: 'flag', key: 'ovp-stand-patron', atLeast: 1, atMost: 99 }]);
-    expect(jam.requires.every((c) => conditionMet(content, run, c))).toBe(false);
+    // The generator's own version (the co file families-b-4 rebuilt the loaded Roadside Stand).
+    const jam = (chainEvents(items).events.find((e) => e.id === 'ovc-roadside-stand-s2')!.choices as { requires: unknown[] }[])[0]!;
+    const needs: EventCondition[] = jam.requires.map((c) => EventConditionSchema.parse(c));
+    expect(needs).toEqual([{ kind: 'flag', key: 'ovp-stand-patron', atLeast: 1, atMost: 99 }]);
+    expect(needs.every((c) => conditionMet(content, run, c))).toBe(false);
     run.story.flags['ev:ovp-stand-patron'] = 1;
-    expect(jam.requires.every((c) => conditionMet(content, run, c))).toBe(true);
+    expect(needs.every((c) => conditionMet(content, run, c))).toBe(true);
     // Every stage keeps at least one choice open to everyone.
     for (const ch of overhaulCatalogs().event_chains.entries) for (const s of ch.stages) expect(s.options.some((o) => !o.needs), s.id).toBe(true);
     expect(overhaulCatalogs().event_chains.entries.flatMap((c) => c.stages.flatMap((s) => s.options)).filter((o) => o.needs).length).toBe(17);
