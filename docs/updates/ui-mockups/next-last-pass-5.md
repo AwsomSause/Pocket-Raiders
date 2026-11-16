@@ -21,6 +21,7 @@
 - **Stand With Them:** the job offer shows the team's leader and the chip "Reputation +30 if you join". Joining shows the mock-up's code-name card (your code name, team, reputation, uniform and standing) while the welcome line is read.
 - **Rival battles:** a rival with a plan says it on the versus card ("Rival · plans to sweep", "set the weather" or "stall").
 - **Minigame stops:** the difficulty list is the mock-up's tier list: the game's name in the band with the attempts left beside it, each tier with the money it pays, and a card with your lead Pokémon, how to play, the game's kind, its tiers, the pay, the medals and your best.
+- **Settings:** the tabs carry each category's whole name, as the mock-up does ("Animations & Effects", "Text & Dialogue", "Save & Data").
 - **Minigame score windows:** a long window (a berry or cooking order to match, a contest's conditions) takes the room it needs and is no longer cut off.
 - **Research Tree (hub):** the mock-up's tree page: a row for each branch (Field Craft, Archive, Command), bought nodes plain, the cursor lit, the rest dimmed; the card says what the node does, its cost and what you have, over Unlock. The arrows walk the tree; Enter researches.
 - **Strange Merchant (hub):** each ware shows its price (or Sold out) at the right of its row.
@@ -30,6 +31,7 @@
 
 **Limits:**
 - The game's camp has no "Rest" that heals the party, so the fifth Camp row is the Campsite (mentors, the Nursery, training and odd finds) where the mock-up shows Rest.
+- Settings: the text box says what the lit setting does (the mock-up repeats the tab's one-line summary), and the game has more settings than the mock-up's 82 rows, so pages scroll further.
 - The Album has no fixed number of pages; it shows 18 and grows by rows of six.
 - The Rivals board has a bar only for a rival with a quest; the mock-up draws one on every row.
 - The battle has no Run command (the game has no running away); the cut cards show your trainer's front picture (there are no back pictures); the shop shows no stock count; the reward draft keeps Party and Bag where the mock-up has Reroll and Skip; the fishing bar is decoration (the game's fishing is a pick of bites). These follow the game's rules.
