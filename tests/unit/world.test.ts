@@ -361,6 +361,8 @@ describe('landmarks and dungeons', () => {
     opened.add('gn-14-return');
     // gn.16: the Tournament rival's return is placed by code too (addRivalReturnStop).
     opened.add('gn-16-rival-return');
+    // gn.60: the Pokémon that followed you walks in beside a rest (core/greenneedle/followed.ts followedRest).
+    opened.add('gn-60-reveal');
     // Catalog Overhaul: a placed event (core/co/placement.ts) is put on the map at its home step, room or not.
     for (const id of content.coPlacement?.keys() ?? []) opened.add(id);
     // gn.29: the lake opens when the Snake game ends (core/greenneedle/snakeEnd.ts psyduckFinish).

@@ -645,6 +645,26 @@
   {
    "key": "kc-star",
    "rule": "core/greenneedle/karpcon.ts (gn.54 The Magikarp Convention)"
+  },
+  {
+   "key": "followed-species",
+   "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
+  },
+  {
+   "key": "followed-regions",
+   "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
+  },
+  {
+   "key": "followed-revealed",
+   "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
+  },
+  {
+   "key": "followed-kind-act",
+   "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
+  },
+  {
+   "key": "followed-at-road",
+   "rule": "core/greenneedle/followed.ts (gn.60 The Pokémon That Followed You Home)"
   }
  ]
 }

@@ -1650,6 +1650,11 @@
   "description": "Restores 1/8 of its HP at the end of any turn in which it didn't use a damaging move."
  },
  {
+  "id": "long-journey",
+  "name": "Long Journey",
+  "description": "All its stats rise 3% for each region completed, up to 12%."
+ },
+ {
   "id": "unbothered",
   "name": "Unbothered",
   "description": "Its stats can't be lowered by opponents."
