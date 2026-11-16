@@ -63,6 +63,9 @@ import { askText, type AskOptions } from '../ui/redux/ask';
 import { runCardView } from '../ui/redux/screens/over';
 import { playerPortrait } from '../ui/redux/templates';
 import { dockView, type DockFigure } from '../ui/redux/screens/hub';
+import { rxFileOf } from '../ui/redux/assets';
+import { counterView } from '../ui/redux/screens/counter';
+import type { AssetManifest } from '../assets/catalog';
 import { monFile } from '../ui/redux/game';
 import { boughtToday, buyFromMerchant, merchantProblem, merchantStock } from '../core/hubTown/merchant';
 import { cardBackground, localDay } from '../core/town';
@@ -1672,6 +1675,61 @@ export class HubScene extends Phaser.Scene {
     this.archiveOpen = true;
   }
 
+  /**
+   * New UI: the Bank's Exchange Counter as the mock-up counter page: two offers (credits for Research Points and back),
+   * one lot or five at a time. The cursor stops on each button of each offer; the clerk's box says why a button is shut.
+   */
+  private openExchange(at = 0, notice = ''): void {
+    const { session } = services();
+    const { content } = session, p = session.profile, x = content.balance.bank.exchange;
+    const LOTS = [1, 5];
+    const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
+    const offers = [
+      { dir: 'toPoints' as const, name: 'Research Points', give: x.credits, giveName: 'credits', get: x.points, getName: 'Research Points', art: 'item.scanner', have: `You have ${p.researchPoints} Research Points` },
+      { dir: 'toCredits' as const, name: 'Bank Credits', give: x.backPoints, giveName: 'Research Points', get: x.backCredits, getName: 'credits', art: 'item.coin_case', have: `You have ${p.bankCredits} Bank Credits` },
+    ];
+    const stops = offers.flatMap((o) => LOTS.map((lots) => ({ o, lots, problem: exchangeProblem(content, p, o.dir, lots), line: `${o.give * lots} ${o.giveName} for ${o.get * lots} ${o.getName}` })));
+    const rows: PickerRow[] = stops.map((s) => ({
+      problem: null,
+      hint: s.problem ?? `${s.line}. Enter: exchange.`,
+      draw: (scene, box) => box.add(scene.add.text(12, 12, `${s.o.name} × ${s.lots}: ${s.line}`, textStyle(20))),
+    }));
+    this.closePicker();
+    this.openPicker({
+      title: 'Exchange Counter',
+      rows,
+      columns: 1,
+      rowHeight: 48,
+      start: Math.min(at, rows.length - 1),
+      pageCols: LOTS.length,
+      page: (c, index) => counterView(c, {
+        title: 'Exchange Counter',
+        clerk: 'Counter clerk',
+        chips: [`${p.bankCredits} credits`, `${p.researchPoints} Research`],
+        offers: offers.map((o, k) => ({ name: o.name, price: `${o.give} ${o.giveName}`, art: rxFileOf(manifest, o.art), have: o.have, text: `${o.give} ${o.giveName} buy ${o.get} ${o.getName} a lot.`, problems: LOTS.map((_, j) => stops[k * LOTS.length + j]!.problem) })),
+        buttons: LOTS.map((n) => `Exchange ${n}`),
+        index,
+        text: (index === at && notice) || stops[index]?.problem || 'Trade Bank Credits and Research Points, one lot or five at a time.',
+      }),
+      onSelect: (i) => {
+        const s = stops[i]!;
+        if (s.problem) {
+          // The clerk says why, in place of the last exchange's line.
+          playSfx(this, 'ui.error', 0.5);
+          if (notice) this.openExchange(i, s.problem);
+          return;
+        }
+        session.exchangeAtBank(s.o.dir, s.lots);
+        playSfx(this, 'se.exp', 0.6);
+        this.openExchange(i, `Exchanged ${s.line}.`);
+      },
+      onBack: () => {
+        this.closePicker();
+        this.openLicenses();
+      },
+    });
+  }
+
   private openLicenses(): void {
     const { session } = services();
     const p = session.profile;
@@ -1680,12 +1738,17 @@ export class HubScene extends Phaser.Scene {
     const x = content.balance.bank.exchange;
     const next = nextTier(content, p);
     // First the Bank's own services (tier, Exchange Counter), then the licenses.
-    const bankServices: { label: string; sub: string; right: string; problem: string | null; run: () => void; notice: string }[] = [
+    // New UI: the Exchange Counter is a page of its own (the mock-up's counter with a clerk), one row here.
+    const counter = reduxOn();
+    const bankServices: { label: string; sub: string; right: string; problem: string | null; run: () => void; notice: string; open?: () => void }[] = [
       next
         ? { label: `Bank tier ${bankTier(p)} → ${next.tier}: ${next.name}`, sub: next.blurb, right: `${next.cost} credits`, problem: tierProblem(content, p), run: () => session.buyBankTier(), notice: `The Bank is now tier ${next.tier}: ${next.name}.` }
         : { label: `Bank tier ${bankTier(p)}: top tier`, sub: 'Every Bank service is open.', right: '', problem: 'The Bank is already at its top tier.', run: () => undefined, notice: '' },
+      ...(counter ? [{ label: 'Exchange Counter', sub: 'Trade Bank Credits and Research Points.', right: bankTier(p) >= 3 ? '' : 'Tier 3', problem: null, run: () => undefined, notice: '', open: () => this.openExchange() }] : []),
+      ...(counter ? [] : [
       { label: 'Exchange Counter: credits → Research', sub: `${x.credits} credits for ${x.points} Research Points.`, right: bankTier(p) >= 3 ? '' : 'Tier 3', problem: exchangeProblem(content, p, 'toPoints'), run: () => session.exchangeAtBank('toPoints'), notice: `Exchanged ${x.credits} credits for ${x.points} Research Points.` },
       { label: 'Exchange Counter: Research → credits', sub: `${x.backPoints} Research Points for ${x.backCredits} credits.`, right: bankTier(p) >= 3 ? '' : 'Tier 3', problem: exchangeProblem(content, p, 'toCredits'), run: () => session.exchangeAtBank('toCredits'), notice: `Exchanged ${x.backPoints} Research Points for ${x.backCredits} credits.` },
+      ]),
       ...content.balance.candyShop.map((perk) => ({ label: `Candy Shop: ${perk.name}`, sub: perk.description, right: p.candyPerks.includes(perk.id) ? 'Owned' : `${perk.cost} candies`, problem: candyPerkProblem(content, p, perk.id), run: () => session.buyCandyPerk(perk.id), notice: `You bought the ${perk.name}.` })),
     ];
     const serviceRows: PickerRow[] = bankServices.map((s) => ({
@@ -1718,6 +1781,7 @@ export class HubScene extends Phaser.Scene {
       onSelect: (i) => {
         if (i < bankServices.length) {
           const s = bankServices[i]!;
+          if (s.open) return s.open();
           if (s.problem) {
             playSfx(this, 'ui.error', 0.5);
             return;

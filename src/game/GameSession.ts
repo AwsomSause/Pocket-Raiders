@@ -1159,8 +1159,8 @@ export class GameSession {
   }
 
   /** One lot at the Bank's Exchange Counter. */
-  exchangeAtBank(dir: ExchangeDirection): void {
-    this.profile = exchange(this.content, this.profile, dir);
+  exchangeAtBank(dir: ExchangeDirection, lots = 1): void {
+    this.profile = exchange(this.content, this.profile, dir, lots);
     this.checkSave(this.saves.saveProfile(this.profile));
     this.changed();
   }

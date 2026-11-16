@@ -53,7 +53,9 @@ export interface PickerRow {
 
 export interface PickerConfig {
   /** New UI: the room's own page, drawn in place of the rows (the Old look still draws the rows). */
-  page?: (c: ReduxCtx) => string;
+  page?: (c: ReduxCtx, index: number) => string;
+  /** New UI: how many columns the cursor moves across on the room's own page (1 unless said). */
+  pageCols?: number;
   /** Draw depth; scenes with lively layers (the Plaza crowd) put the menu above them. */
   depth?: number;
   title: string;
@@ -292,6 +294,7 @@ export class Picker implements PickerLike {
         canBack: Boolean(config.onBack),
         backLabel: config.backLabel,
         page: config.page,
+        pageCols: config.pageCols,
         summary: () => (this.summary && config.inspect ? config.inspect(this.index) : null),
         pick: (i) => { if (this.closed) return; this.focus(i); this.confirm(); },
         hover: (i) => { if (!this.closed && !this.summary && i !== this.index && !config.rows[i]?.problem) this.focus(i, false); },

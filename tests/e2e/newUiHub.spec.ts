@@ -1,8 +1,9 @@
 import { expect, test } from '@playwright/test';
 import { view, watch, start, open } from './helpers/newUi';
 
-// The New UI's Pokédex (mock-up pieces "Pokédex: set browser" and "Pokédex: species info"): a wall of species
-// pictures with filter tabs, and the species page with its stat bars and evolution line.
+// The New UI's hub pages from the last pass: the Pokédex (mock-up pieces "Pokédex: set browser" and "Pokédex: species
+// info": a wall of species pictures with filter tabs, and the species page with its stat bars and evolution line) and
+// the Bank's Exchange Counter (the mock-up counter page with a clerk).
 
 test('New UI: a Pokédex set is a wall of species pictures with filter tabs, and a species opens the mock-up species page (facts, six stat bars, evolution line, a second page of data)', async ({ page }) => {
   const errors = watch(page);
@@ -117,5 +118,94 @@ test('New UI: a Pokédex set is a wall of species pictures with filter tabs, and
   await page.keyboard.press('Escape');
   await expect(page.locator('#rx .stage[data-scene="Hub"]').last().locator('.hd')).toContainText('Research Room');
   await expect(page.locator('#rx .tabs .on', { hasText: 'All' })).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test('New UI: the Bank\'s Exchange Counter is the mock-up counter page: two offers, one lot or five, the clerk says what happened or why not, and the totals follow', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-counter');
+  await open(page, 'Hub');
+  await page.waitForTimeout(500);
+  const seed = (bankTier: number) => page.evaluate((bankTier) => {
+    const pkr = (window as any).__pkr;
+    pkr.session.changeProfile((q: any) => ({ ...q, bankTier, bankCredits: 650, lifetimeBankCredits: 650, researchPoints: 60 }));
+    pkr.game.scene.getScene('Hub').enter('bank');
+  }, bankTier);
+  const totals = () => page.evaluate(() => { const p = (window as any).__pkr.session.profile; return [p.bankCredits, p.researchPoints]; });
+  const top = () => page.locator('#rx .stage[data-scene="Hub"]').last();
+  const toCounter = async () => {
+    await expect(top().locator('.hd')).toContainText('Bank');
+    // One row for the counter in the New look (the Old look keeps its two exchange rows in the Bank list).
+    await expect(top().locator('[data-act="pick"]', { hasText: 'Exchange Counter' })).toHaveCount(1);
+    await expect(top()).not.toContainText('credits → Research');
+    await top().locator('[data-act="pick"]', { hasText: 'Exchange Counter' }).click();
+    if (!(await top().locator('.hd', { hasText: 'Exchange Counter' }).count())) await page.keyboard.press('Enter');
+    await expect(top().locator('.hd')).toContainText('Exchange Counter');
+    await page.waitForTimeout(250);
+  };
+  const text = () => top().locator('.txt');
+  const lit = () => top().locator('.win .btn.on');
+
+  // Below Bank tier 3 the counter is shut: every button says why and nothing moves.
+  await seed(1);
+  await toCounter();
+  await expect(text()).toContainText('The Exchange Counter opens at Bank tier 3.');
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(300);
+  expect(await totals()).toEqual([650, 60]);
+  await page.keyboard.press('Escape');
+  await expect(top().locator('.hd')).toContainText('Bank');
+
+  // At tier 3: the page, its chips and the clerk.
+  await seed(3);
+  await page.waitForTimeout(500);
+  await toCounter();
+  await expect(text().locator('.nm')).toHaveText('Counter clerk');
+  await expect(text()).toContainText('one lot or five at a time');
+  await expect(top().locator('.tg').first()).toHaveText('650 credits');
+  await expect(top().locator('.tg').nth(1)).toHaveText('60 Research');
+  await expect(top().locator('.btn', { hasText: 'Research Points' }).first()).toContainText('100 credits');
+  await expect(top().locator('.btn', { hasText: 'Bank Credits' }).first()).toContainText('50 Research Points');
+  await expect(top().locator('.win')).toContainText('You have 60 Research Points');
+  await expect(lit()).toHaveText('Exchange 1');
+  await page.screenshot({ path: 'test-results/newui-exchange-counter.png' });
+
+  // One lot, then five lots with Right.
+  await page.keyboard.press('Enter');
+  await expect(text()).toContainText('Exchanged 100 credits for 25 Research Points.');
+  expect(await totals()).toEqual([550, 85]);
+  await expect(top().locator('.tg').first()).toHaveText('550 credits');
+  await page.waitForTimeout(250);
+  await page.keyboard.press('ArrowRight');
+  await expect(lit()).toHaveText('Exchange 5');
+  await page.keyboard.press('Enter');
+  await expect(text()).toContainText('Exchanged 500 credits for 125 Research Points.');
+  expect(await totals()).toEqual([50, 210]);
+  // Five more lots cost 500 credits: the clerk says so, and nothing moves.
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Enter');
+  await expect(text()).toContainText('You need 500 Bank Credits (you have 50).');
+  expect(await totals()).toEqual([50, 210]);
+
+  // The other way: five lots need 250 Research Points, one lot goes through.
+  await page.keyboard.press('ArrowDown');
+  await expect(top().locator('.win')).toContainText('You have 50 Bank Credits');
+  await expect(lit()).toHaveText('Exchange 5');
+  await expect(text()).toContainText('You need 250 Research Points (you have 210).');
+  await page.keyboard.press('ArrowLeft');
+  await expect(lit()).toHaveText('Exchange 1');
+  await page.keyboard.press('Enter');
+  await expect(text()).toContainText('Exchanged 50 Research Points for 10 credits.');
+  expect(await totals()).toEqual([60, 160]);
+  // A click on a button works like the keys.
+  await page.waitForTimeout(250);
+  await top().locator('.win .btn', { hasText: 'Exchange 1' }).click();
+  await expect.poll(totals).toEqual([70, 110]);
+
+  // Esc goes back to the Bank, which shows the new totals.
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await expect(top().locator('.hd')).toContainText('Bank');
+  await expect(top()).toContainText('70 credits');
   expect(errors).toEqual([]);
 });

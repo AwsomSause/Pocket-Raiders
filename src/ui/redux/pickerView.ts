@@ -37,7 +37,9 @@ export interface PickerBridge {
   canBack: boolean;
   backLabel?: string;
   /** The room's own page, drawn in place of the rows (the Trainer Card). Its `back` clicks close the room. */
-  page?: (c: ReduxCtx) => string;
+  page?: (c: ReduxCtx, index: number) => string;
+  /** Columns the cursor moves across on the room's own page (1 unless said). */
+  pageCols?: number;
   /** The battle window's top edge, when it is not the usual one. */
   top?: number;
   /** The quick-summary text while it is open (I), else null. */
@@ -137,7 +139,7 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
     const cur = said ? null : row(index), found = Array.from({ length: n }, (_, i) => on(i)).filter(Boolean).length;
     const artOf = (file: string | null): { file: string; atlas: boolean } | null => (file ? { file, atlas: true } : null);
     const detail = said ? { title: said.title, body: said.body, art: said.off ? null : artOf(said.file) } : { title: cur!.label, body: cur!.note, facts: cur!.tag ? [['', cur!.tag] as const] : [], art: cur!.art };
-    body = gridView(c, { title: name, area, hints, n, cell: (i) => { const x = p.cell?.(i); if (x) return { art: artOf(x.file), label: '', off: x.off, sil: x.sil }; const r = row(i); return { art: r.art, label: r.label, off: p.problem(i) !== null }; }, index, detail, found, total: n, text });
+    body = gridView(c, { title: name, area, hints, n, cell: (i) => { const x = p.cell?.(i); if (x) return { art: artOf(x.file), label: x.off ? '' : x.title, off: x.off, sil: x.sil }; const r = row(i); return { art: r.art, label: r.label, off: p.problem(i) !== null }; }, index, detail, found, total: n, text });
   } else if (kind === 'bag') {
     const strip = services().session.run ? partyStrip(partyChips(scene), 'left:24px;right:24px;bottom:100px', bagNotes(p.item?.(index))) : '';
     body = bagView(c, { title: name, hints, pockets: p.tabs ? { labels: p.tabs.labels, index: p.tabs.index } : null, n, item: (i) => ({ ...row(i), off: p.problem(i) !== null }), index, strip, text });
@@ -175,8 +177,8 @@ export function mountPickerView(scene: Phaser.Scene, p: PickerBridge, kind: Pick
   const view = mountRedux(scene, {
     render: (c) => {
       // A room's own page has no list to steer across: the cursor steps one row at a time.
-      cols = p.page ? 1 : pickerCols(kind, c);
-      return p.page ? p.page(c) + (p.canBack ? BACK_HIT : '') : render(c, scene, p, kind);
+      cols = p.page ? p.pageCols ?? 1 : pickerCols(kind, c);
+      return p.page ? p.page(c, p.index()) + (p.canBack ? BACK_HIT : '') : render(c, scene, p, kind);
     },
     acts: { pick: (i) => p.pick(Number(i)), tab, bracketPage: tab, back: () => p.back() },
     overs: { over: (i) => p.hover(Number(i)) },
