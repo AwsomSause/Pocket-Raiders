@@ -17,7 +17,7 @@ export const teamJson = (id: string): TeamJson => DATA.teams.find((t) => t.id ==
 
 const say = (who: string, line: string): string => `${who}: "${line}"`;
 /** Teams with a Volume III inside route (their Offer comes after The Files). */
-const OFFERS = ['rocket', 'galactic', 'plasma'];
+const OFFERS = ['rocket', 'galactic', 'plasma', 'magma', 'aqua'];
 const gate = (t: TeamStory, o: Json): Json => ({ kind: 'evil', team: t.id, ...o });
 const mark = (m: string): Json => story({ mark: m });
 const has = (m: string): Json => ({ kind: 'evil', has: m });

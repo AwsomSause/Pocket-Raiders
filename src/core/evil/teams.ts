@@ -26,7 +26,7 @@ import { evilConfig, HIDEOUT_AT_LEAGUE } from '../campaign/circuit';
 import { recordChoice } from './choices';
 import { beatTeamLeaders } from '../expansion/cast/dossier';
 import { trackOnClimax, trackOnOperation } from '../expansion/trackRun';
-import { applyInside, clearInside, insideLine, insideMet, insideOn, replacedByInside, routeOf } from './inside';
+import { applyInside, clearInside, crossInside, insideLine, insideMet, insideOn, replacedByInside, routeOf } from './inside';
 import { freshEvil, type EvilRank, type EvilState, type EvilTeam, type VillainRecord } from './schema';
 
 type EvilCondition = Extract<EventCondition, { kind: 'evil' }>;
@@ -221,6 +221,17 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
   const team = evilTeam(content, run);
   const s = evilOf(run);
   if (!team) return '';
+  // Hoenn: the Offer and the Counter-Offer move the player to the region's other team. Its story goes on from the same
+  // beat; the Operations running here become the new team's (one for one), so nothing is lost or doubled.
+  if (e.side && e.side !== team.id) {
+    const to = content.evilTeams.teams.find((t) => t.id === e.side);
+    if (!to) return '';
+    const region = run.regionOrder[run.regionIndex];
+    crossInside(run, team, to, region, !!e.demote);
+    s.ops.filter((o) => o.region === run.regionIndex).forEach((o, i) => { o.id = to.ops[i % to.ops.length]!.id; });
+    s.teamId = to.id;
+    return `You're ${to.name} now.`;
+  }
   const words: string[] = [];
   if (e.talk) words.push(`${team.ranks[e.talk].name}: ${villainLine(team, e.talk, s.villains[e.talk])}`);
   if (e.beat && s.beat < 7) {
@@ -270,6 +281,7 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
     });
   }
   if (e.mark) bump(run, `team-${team.id}-${e.mark}`);
+  if (e.leave) { clearInside(run, team.id); bump(run, `team-${team.id}-left`); }
   if (e.standing || e.suspicion || e.rank) words.push(...applyInside(run, team, run.regionOrder[run.regionIndex], e));
   if (e.pen) {
     const node = rescueNode(content, run);

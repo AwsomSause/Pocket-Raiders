@@ -3473,6 +3473,11 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     pen: z.boolean().optional(),
     /** SF130: the region's team takes this many party Pokémon (from the back, never below two) to its Holding Pen. Teams without a holding site take none. */
     steal: z.number().int().min(1).max(3).optional(),
+    /** Hoenn (HOENN_TEAMS 1.1, 3.9): the player joins this team, which becomes the region's team; with `demote` the inside route crosses one rank lower. */
+    side: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
+    demote: z.boolean().optional(),
+    /** Hoenn 2.5: the player hands in the uniform (or is marked): the inside route's meters go, a `left` mark stays, and the outside story resumes. */
+    leave: z.boolean().optional(),
     /** SF130: run modifiers that last only while the run is in this region (like an Operation's lasting effect), with the words that say so. */
     mods: z.array(ArchetypeModifierSchema).min(1).max(3).optional(),
     modsText: z.string().min(1).optional(),

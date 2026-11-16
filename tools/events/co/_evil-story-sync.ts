@@ -104,7 +104,7 @@ const LASTING: Record<string, Json> = {
 };
 
 // Volume III: the inside route's six rank titles, per region (core/evil/inside.ts).
-const ROUTES: Record<string, { region: string; ranks: string[] }[]> = {
+const ROUTES: Record<string, { region: string; ranks: string[]; steps?: number[]; max?: number; test?: number; out?: number }[]> = {
   rocket: [
     { region: 'kanto', ranks: ['Recruit', 'Grunt', 'Field Agent', 'Section Chief', 'Executive', `The Boss's Right Hand`] },
     { region: 'johto', ranks: ['Hopeful', 'Grunt', 'Operative', 'Cell Leader', 'Executive (the fifth)', 'The Voice'] },

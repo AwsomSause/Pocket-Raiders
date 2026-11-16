@@ -1,0 +1,5651 @@
+{
+ "catalogOverhaul": "evil-hoenn-sinnoh-unova",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "evil-magma-offer-hoenn",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m",
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#4a3a40",
+    "effect": "none"
+   },
+   "intro": "Rain on one side of the road and ash on the other. Two recruiters have set up on opposite verges. Both have seen you battle. Magma recruiter, Foreman Varrick: \"You fight like someone who plans. We need planners. The land's running out, and nobody's doing the maths.\" Aqua recruiter, Bosun Calla: \"You fight like someone with a heart. The sea made every living thing. We're just giving it room.\" Varrick: \"Pay's weekly. The hood's warm.\" Calla: \"Ours comes with a boat.\" Both hold out a uniform. Between them, the road goes on, empty.",
+   "choices": [
+    {
+     "label": "Take the red hood.",
+     "success": {
+      "text": "You join Team Magma as a Recruit. Calla spits. Calla: \"We'll remember your face.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "side": "magma"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-side-magma",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-offered",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the blue bandana.",
+     "success": {
+      "text": "You join Team Aqua as a Deckhand. Varrick writes something down.",
+      "effects": [
+       {
+        "kind": "evil",
+        "side": "aqua"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-side-aqua",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-offered",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk between them.",
+     "success": {
+      "text": "Both watch you go. The road goes on, and so does Hoenn's story, from the outside.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-side-none",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask each of them one question.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hoenn-asked-both",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "To Varrick: \"What happens to the people on the coast?\" Varrick: \"Relocation. It's costed.\" To Calla: \"What happens to the people inland?\" Calla: \"They'll learn to swim.\" Both recruiters are a little less sure of themselves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-asked-both",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-magma-offer-hoenn-2"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rep",
+     "when": [
+      {
+       "kind": "rep",
+       "category": "champion",
+       "atLeast": "known"
+      }
+     ],
+     "notice": "Both use your name. \"The League likes you. That's worth something to us.\""
+    },
+    {
+     "id": "rival",
+     "when": [
+      {
+       "kind": "rivalState",
+       "feeling": {
+        "key": "trust",
+        "atLeast": 3
+       }
+      }
+     ],
+     "notice": "Your rival watches from the trees, and says nothing yet."
+    }
+   ]
+  },
+  {
+   "id": "evil-magma-offer-hoenn-2",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m",
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#4a3a40",
+    "effect": "none"
+   },
+   "intro": "Both uniforms are still held out.",
+   "choices": [
+    {
+     "label": "Take the red hood.",
+     "success": {
+      "text": "You join Team Magma as a Recruit, for asking good questions.",
+      "effects": [
+       {
+        "kind": "evil",
+        "side": "magma"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-side-magma",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-offered",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the blue bandana.",
+     "success": {
+      "text": "You join Team Aqua as a Deckhand, for asking good questions.",
+      "effects": [
+       {
+        "kind": "evil",
+        "side": "aqua"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-side-aqua",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-offered",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk between them.",
+     "success": {
+      "text": "Both watch you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-side-none",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "evil-aqua-offer-hoenn",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m",
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#4a3a40",
+    "effect": "none"
+   },
+   "intro": "Rain on one side of the road and ash on the other. Two recruiters have set up on opposite verges. Both have seen you battle. Magma recruiter, Foreman Varrick: \"You fight like someone who plans. We need planners. The land's running out, and nobody's doing the maths.\" Aqua recruiter, Bosun Calla: \"You fight like someone with a heart. The sea made every living thing. We're just giving it room.\" Varrick: \"Pay's weekly. The hood's warm.\" Calla: \"Ours comes with a boat.\" Both hold out a uniform. Between them, the road goes on, empty.",
+   "choices": [
+    {
+     "label": "Take the red hood.",
+     "success": {
+      "text": "You join Team Magma as a Recruit. Calla spits. Calla: \"We'll remember your face.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "side": "magma"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-side-magma",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-offered",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the blue bandana.",
+     "success": {
+      "text": "You join Team Aqua as a Deckhand. Varrick writes something down.",
+      "effects": [
+       {
+        "kind": "evil",
+        "side": "aqua"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-side-aqua",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-offered",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk between them.",
+     "success": {
+      "text": "Both watch you go. The road goes on, and so does Hoenn's story, from the outside.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-side-none",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask each of them one question.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hoenn-asked-both",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "To Varrick: \"What happens to the people on the coast?\" Varrick: \"Relocation. It's costed.\" To Calla: \"What happens to the people inland?\" Calla: \"They'll learn to swim.\" Both recruiters are a little less sure of themselves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-asked-both",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-aqua-offer-hoenn-2"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rep",
+     "when": [
+      {
+       "kind": "rep",
+       "category": "champion",
+       "atLeast": "known"
+      }
+     ],
+     "notice": "Both use your name. \"The League likes you. That's worth something to us.\""
+    },
+    {
+     "id": "rival",
+     "when": [
+      {
+       "kind": "rivalState",
+       "feeling": {
+        "key": "trust",
+        "atLeast": 3
+       }
+      }
+     ],
+     "notice": "Your rival watches from the trees, and says nothing yet."
+    }
+   ]
+  },
+  {
+   "id": "evil-aqua-offer-hoenn-2",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m",
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#4a3a40",
+    "effect": "none"
+   },
+   "intro": "Both uniforms are still held out.",
+   "choices": [
+    {
+     "label": "Take the red hood.",
+     "success": {
+      "text": "You join Team Magma as a Recruit, for asking good questions.",
+      "effects": [
+       {
+        "kind": "evil",
+        "side": "magma"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-side-magma",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-offered",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the blue bandana.",
+     "success": {
+      "text": "You join Team Aqua as a Deckhand, for asking good questions.",
+      "effects": [
+       {
+        "kind": "evil",
+        "side": "aqua"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-side-aqua",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-offered",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk between them.",
+     "success": {
+      "text": "Both watch you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-side-none",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-act1",
+   "name": "Initiation",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "beat": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6",
+     "boss.tabitha"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "The base smells of hot stone. A hundred people in the same colour turn round at once. Tabitha: \"Hoo hah! Fresh one. Line up. The leader speaks.\" Maxie, on a gantry, with a pointer: \"Sixty-one per cent of this region is water. Useless to anything with feet. I intend to correct the figure.\" Maxie: \"You are not here to believe me. You are here to check my working. Then you'll believe me.\" He looks at you a moment longer than the rest.",
+   "choices": [
+    {
+     "label": "Salute.",
+     "success": {
+      "text": "You salute.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-bunkmate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask a question.",
+     "success": {
+      "text": "\"What's the margin of error?\" Maxie is delighted.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-asked-leader",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-bunkmate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "The grunt beside you whispers: \"First day's the worst. Stick with me.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-bunkmate",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-bunkmate"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-bunkmate",
+   "name": "The Bunkmate",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "pokemon": "numel",
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "Every recruit gets one. Yours is Grunt Ottoway: a farm boy from a flooded valley. He joined after the river took his family's land. He carries a Numel he's had since it was tiny. Ottoway: \"I don't hate water. I hate what it did. Mr. Maxie says there's a difference.\"",
+   "choices": [
+    {
+     "label": "(Shake hands.)",
+     "success": {
+      "text": "The Numel watches you do it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-bunkmate",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-errand"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-errand",
+   "name": "First Mission: The Errand",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "The briefing: carry a sealed case across one stage to a team site. Don't open it.",
+   "choices": [
+    {
+     "label": "By the Book: deliver it.",
+     "success": {
+      "text": "Delivered, sealed. A stamp on your card.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: open it at a rest, then reseal it. (20% chance it's noticed)",
+     "chance": 0.8,
+     "success": {
+      "text": "Inside: core samples, and a heartbeat graph from under Mt. Chimney. You reseal it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-case",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     },
+     "failure": {
+      "text": "Inside: core samples, and a heartbeat graph from under Mt. Chimney. You reseal it. The seal's crooked. Somebody notices.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-case",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse: \"I don't carry what I can't see.\"",
+     "success": {
+      "text": "Somebody else carries it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-refused-1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-act2",
+   "name": "The Hot Spring Fence",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "beat": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "pokemon": "numel",
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "The briefing: close the Lavaridge hot spring to the public. Magma needs the heat readings. An old woman at the gate, Granny Sato-Brennan: \"I've bathed my knees here fifty years. You going to stop me, dear? In that hat?\" Ottoway, quietly: \"My gran's knees were bad too.\"",
+   "choices": [
+    {
+     "label": "By the Book.",
+     "success": {
+      "text": "The fence goes up. Ottoway goes quiet.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 4
+       },
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-buddy-quiet",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-prize"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly. (25% chance it's noticed)",
+     "chance": 0.75,
+     "success": {
+      "text": "The fence has a gate, and Granny gets the key.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-bunkmate-trust",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-prize"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The fence has a gate, and Granny gets the key. Somebody counts the takings.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-bunkmate-trust",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-prize"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse: \"Find someone else.\"",
+     "success": {
+      "text": "Ottoway does it instead, badly, and is ashamed.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-buddy-ashamed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-prize"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-prize",
+   "name": "The Meteorite",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "The briefing: take the meteorite from Professor Cozmo at Meteor Falls. Professor Cozmo, holding it to his chest: \"It isn't a fuel cell! It's four billion years old! It's the oldest thing any of us will ever touch!\" Courtney, flat: \"Analysing. He's stalling. Take it.\"",
+   "choices": [
+    {
+     "label": "By the Book.",
+     "success": {
+      "text": "The prize is taken.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.npc_scientist",
+       "team": [
+        "solrock",
+        "lunatone",
+        "bagon"
+       ],
+       "name": "Cozmo's assistant",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "evil",
+         "standing": 5
+        },
+        {
+         "kind": "flag",
+         "key": "hoenn-prize-taken",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mg-spy"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "evil",
+         "standing": 3
+        },
+        {
+         "kind": "flag",
+         "key": "hoenn-prize-taken",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mg-spy"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Quietly. (30% chance it's noticed)",
+     "chance": 0.7,
+     "success": {
+      "text": "You swap it for a painted rock, and give Cozmo the real one to hide.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 4
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-prize-quiet",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-spy"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You swap it for a painted rock, and give Cozmo the real one to hide. The paint's still wet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-prize-quiet",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-spy"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "Courtney does it, and hurts someone. You hear about it after.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-spy"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-spy",
+   "name": "The Other Side's Grunt",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m",
+     "boss.tabitha"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "The briefing: a grunt from the opposing team has been caught spying. Interrogate them. A storeroom. A grunt in the wrong colour, tied to a chair, very young, trying to look brave. Aqua's Grunt Tolliver: \"I won't talk. ...Is there water? I mean, I don't need it.\" Tabitha, at the door: \"Find out where they're digging. I don't care how.\"",
+   "choices": [
+    {
+     "label": "Scare them.",
+     "success": {
+      "text": "They talk. They cry after. Ottoway leaves the room.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 4
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-cruel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-promote-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give them the water, and talk.",
+     "success": {
+      "text": "They tell you half. It's enough.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-promote-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them go.",
+     "success": {
+      "text": "A window, a nod. You blame a broken lock.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-freed-spy",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-promote-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask why they joined.",
+     "success": {
+      "text": "It's Ottoway's story, in the other colour. a dead harbour.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-same-story",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-promote-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-promote-2",
+   "name": "Promotion",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "Maxie: \"Your results are within tolerance. Surveyor. Don't thank me; thank the data.\"",
+   "choices": [
+    {
+     "label": "(Take the stripes.)",
+     "success": {
+      "text": "Rank 3.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-act3",
+   "name": "The Rival Finds Out",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "beat": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "You come round a corner in uniform. Your rival is standing there with a sandwich. Your rival: \"...No.\" Your rival: \"That's a costume. Tell me that's a costume.\" Ottoway steps back to give you room.",
+   "choices": [
+    {
+     "label": "\"I'm on the inside. Trust me.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "rivalState",
+         "feeling": {
+          "key": "trust",
+          "atLeast": 3
+         }
+        }
+       ],
+       "text": "Your rival: \"...Fine. But I'm watching you.\" They're your contact outside now.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "hoenn-rival-contact",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mg-norman"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your rival: \"Sure you are.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1
+        }
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-norman"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"They're not wrong about everything.\"",
+     "success": {
+      "text": "They listen to the whole case. Your rival: \"And the people in the way?\" They think about it.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-rival-heard",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-norman"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's none of your business.\"",
+     "success": {
+      "text": "They fight angry.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -3
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "hoenn-rival-broken",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mg-norman"
+        }
+       ],
+       "name": "Your rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hoenn-rival-broken",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mg-norman"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-norman",
+   "name": "Norman",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.norman"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "The Petalburg Gym. You walk in wearing the colours. The trainers stop mid-battle. Norman: \"Take the hood off or leave it on. I'll battle you either way. That's my job.\" Norman: \"But I'll ask what I'd ask my own kid. Is it what you believe, or is it somewhere to belong?\"",
+   "choices": [
+    {
+     "label": "\"I believe it.\"",
+     "success": {
+      "text": "Norman: \"Then be ready to see what it costs.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-norman-believe",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-counter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's somewhere to belong.\"",
+     "success": {
+      "text": "Norman: \"Then come to dinner. That's somewhere too.\" There's a free rest at Petalburg for you, for the run.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-norman-belong",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-counter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm still working it out.\"",
+     "success": {
+      "text": "Norman: \"Honest. Good. Don't take too long.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-norman-honest",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-counter"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-counter",
+   "name": "The Counter-Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.shelly"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "A note in your locker in the wrong colour ink. A meeting place. Shelly is waiting alone. Shelly: \"Tolliver says you gave him water. Or let him go. Depends who's telling it.\" Shelly: \"Maxie's going to boil the sea. You've seen the graph. Come over. Or stay, and tell me things.\"",
+   "choices": [
+    {
+     "label": "\"I'll cross.\"",
+     "success": {
+      "text": "You change teams, one rank lower. Team Magma is hostile now. Ottoway watches you go.",
+      "effects": [
+       {
+        "kind": "evil",
+        "side": "aqua",
+        "demote": true
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-turncoat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-side-aqua",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-counter-heard",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-weather"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll stay, and report to you.\"",
+     "success": {
+      "text": "Each mission now has a fourth way: tip them off. Suspicion will come faster.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-double-agent",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-counter-heard",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-weather"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll stay, and report you.\"",
+     "success": {
+      "text": "Shelly is nearly caught, and knows who did it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-reported-lt",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-counter-heard",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-weather"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Nothing.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mg-weather"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-weather",
+   "name": "The Weather Institute",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_scientist"
+    ],
+    "pokemon": "castform",
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "The briefing: the Weather Institute has a Castform and thirty years of climate records. The leader wants both. The director, Dr. Cirra Hart: \"You want the records? Read them. Every model ends the same. You can't hold the weather still at one setting. It breaks.\" Your leader, by radio: \"Bring the data. Leave the opinions.\"",
+   "choices": [
+    {
+     "label": "By the Book: take both.",
+     "success": {
+      "text": "The Castform cries in its case.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 5
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-promote-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: take the records, leave the Castform, read the last page. (20% chance it's noticed)",
+     "chance": 0.8,
+     "success": {
+      "text": "The Castform stays under a desk. On the way back you read the last page. The plan fails. Every model says so.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 4
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-read-models",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-promote-4"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Castform stays under a desk. On the way back you read the last page. The plan fails. Every model says so. Somebody saw the empty case.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-read-models",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-promote-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "Somebody else goes.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-promote-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-promote-4",
+   "name": "Promotion",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m",
+     "trainer.pr/magma_grunt_m",
+     "trainer.pr/magma_grunt_m"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "You get a squad: Ottoway and two grunts, Corwen and Quince. They look at you the way you looked at Tabitha on day one.",
+   "choices": [
+    {
+     "label": "(Take the squad.)",
+     "success": {
+      "text": "Rank 4: Foreman.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 4
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-squad"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-squad",
+   "name": "The Squad Goes Too Far",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m",
+     "trainer.pr/magma_grunt_m"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "Your own squad has done a job without orders, to impress you. Quince, proud: \"We got the spring shut like you didn't. Proper this time. No gate.\" Ottoway, not looking up: \"I told them not to.\"",
+   "choices": [
+    {
+     "label": "\"Undo it. Now.\"",
+     "success": {
+      "text": "They do, confused. Ottoway looks at you properly for the first time in a while.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-squad-decent",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Well done.\"",
+     "success": {
+      "text": "The squad learns what you reward.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-squad-hard",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why did you think I wanted that?\"",
+     "success": {
+      "text": "Quince: \"Because that's what gets people promoted.\" You have no answer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-squad-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-act4",
+   "name": "Mt. Pyre",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "beat": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman",
+     "boss.npc_lady"
+    ],
+    "tint": "#c03018",
+    "effect": "fog"
+   },
+   "intro": "The briefing: two orbs sit at the top of Mt. Pyre, guarded by an old couple. The leader needs one. Fog, gravestones, and Pokémon mourning at them. The climb goes past people leaving flowers. At the summit, two very old people sit on a bench with a table between them, and an orb in each lap. The old man: \"Sixty years on this bench. We've turned away kings.\" The old woman: \"You've a kind face under that. They always send a kind face.\" The old man: \"Take one orb and you wake one. Then somebody has to take the other, to stop it. That's the trick of it. They come as a pair, like us.\"",
+   "choices": [
+    {
+     "label": "Take the orb.",
+     "success": {
+      "text": "They don't fight. The old woman wraps the Red Orb in her scarf, \"so it doesn't get cold.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 6,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the wrong orb on purpose.",
+     "success": {
+      "text": "The Blue Orb, in a red hood's hands. The plan will go wrong in the leader's hands, and somebody will be hurt by it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 6,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with them a while first.",
+     "success": {
+      "text": "They tell you what the last awakening did, from the stories. The old man: \"Whatever you pick, come back and tell us.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-pyre-story",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-act4-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "Tabitha takes it instead, roughly. The old man falls. He's all right; you hear it after.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -3,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-act4-2",
+   "name": "Mt. Pyre",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman",
+     "boss.npc_lady"
+    ],
+    "tint": "#c03018",
+    "effect": "fog"
+   },
+   "intro": "The fog's thinner. The orbs are still in their laps.",
+   "choices": [
+    {
+     "label": "Take the orb.",
+     "success": {
+      "text": "The old woman wraps the Red Orb in her scarf, \"so it doesn't get cold.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 6,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the wrong orb on purpose.",
+     "success": {
+      "text": "The plan will go wrong in the leader's hands.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 6,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "Tabitha takes it instead, roughly. The old man falls. He's all right; you hear it after.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -3,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-confides",
+   "name": "The Leader Confides",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "after": 5,
+     "standing": 40,
+     "lacks": "confided",
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "His office. Maps. A cold cup of tea. For once, no pointer. Maxie: \"I grew up in Lilycove. A wave took my street when I was nine. I was told it was nobody's fault.\" Maxie: \"I decided it would be somebody's fault if it happened again. Mine, if I did nothing.\" Maxie: \"I've checked the working four hundred times. Tell me you've checked it too. Tell me it holds.\"",
+   "choices": [
+    {
+     "label": "\"You're right.\"",
+     "success": {
+      "text": "He breathes out. You're the Right Hand.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 6
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-leader-reassured",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You're wrong, and here's why.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hoenn-read-models",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He listens. He doesn't change the plan. He promotes you anyway: \"I need one person who'll say that.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 6
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-leader-warned",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I don't know. Neither do you.\"",
+     "success": {
+      "text": "A long silence. \"...No. I suppose I don't.\" He promotes you. He doesn't sleep that night.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 6
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-leader-doubt",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pyre",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-pyre-story",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "hoenn-read-models",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "You've Mt. Pyre's story in your head, and you can say why.",
+     "addChoices": [
+      {
+       "label": "\"You're wrong, and here's why.\"",
+       "success": {
+        "text": "He listens. He doesn't change the plan. He promotes you anyway: \"I need one person who'll say that.\"",
+        "effects": [
+         {
+          "kind": "evil",
+          "rank": 6
+         },
+         {
+          "kind": "evil",
+          "mark": "confided"
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-leader-warned",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mg-request",
+   "name": "The Bunkmate's Request",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "beat": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "pokemon": "numel",
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "The night before the awakening. Ottoway is packing, then unpacking. Ottoway: \"If the sea boils, the valley floods first. My valley. Nobody's told me that. I worked it out.\" Ottoway: \"You're the Right Hand now. Tell me to stay and I'll stay.\"",
+   "choices": [
+    {
+     "label": "\"Stay.\"",
+     "success": {
+      "text": "They do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-bunkmate-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go home tonight.\"",
+     "success": {
+      "text": "They leave the hood on the bunk. They're safe, whatever happens.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-bunkmate-left",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stay near me tomorrow, and do what I do.\"",
+     "success": {
+      "text": "They nod.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-bunkmate-follows",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-direct-question",
+   "name": "The Direct Question",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "suspicion": 6,
+     "suspicionBelow": 9,
+     "lacks": "loyalty-test"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.tabitha"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "Tabitha: \"Hoo... I'll ask once. That drill didn't jam by itself. Did it?\"",
+   "choices": [
+    {
+     "label": "\"I did.\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "team": "magma",
+       "trouble": true
+      }
+     ],
+     "success": {
+      "text": "A long silence. Then: Tabitha: \"...Good. Don't tell me again.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -3
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-lt-knows",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I did.\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "team": "magma",
+       "trouble": false
+      }
+     ],
+     "success": {
+      "text": "A long silence. Tabitha writes it down. You're a step lower in the morning.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -5,
+        "suspicion": 2
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-lt-knows",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I don't know what you mean.\"",
+     "success": {
+      "text": "Suspicion stays where it is. The lie is recorded.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "honest-lied",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Would you have left them?\"",
+     "success": {
+      "text": "Tabitha doesn't answer. Their doubts move forward a step.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-lt-doubt",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-marked",
+   "name": "Marked",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "suspicion": 9,
+     "lacks": "found-out"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6",
+     "boss.tabitha"
+    ],
+    "tint": "#c03018",
+    "effect": "glint"
+   },
+   "intro": "Maxie: \"I calculated a use for you. I was wrong. Leave the hood.\"",
+   "choices": [
+    {
+     "label": "(Leave the uniform.)",
+     "success": {
+      "text": "You're out. You keep your Pokémon and your money. Team Magma is hostile from now on, and Hoenn's story goes on from the outside.",
+      "effects": [
+       {
+        "kind": "evil",
+        "leave": true
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-left-team",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-marked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-hand-in",
+   "name": "Hand In the Uniform",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "after": 3,
+     "suspicionBelow": 9,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "hoenn-inside-act4",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "mg-hand-in",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "Your locker. The uniform's folded on the shelf. You could hand it in today, before the orbs.",
+   "choices": [
+    {
+     "label": "Hand it in.",
+     "success": {
+      "text": "Maxie: \"I calculated a use for you. I was wrong. Leave the hood.\" You're out. Hoenn's story goes on from the outside.",
+      "effects": [
+       {
+        "kind": "evil",
+        "leave": true
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-left-team",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mg-hand-in",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it on.",
+     "success": {
+      "text": "You put it back on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mg-hand-in",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-act1",
+   "name": "Initiation",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "beat": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.archie-gen6",
+     "boss.shelly"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "The base smells of brine. A hundred people in the same colour turn round at once. Shelly: \"Ahaha! New fish. Stand up straight; you're on a deck.\" Archie, on the prow of a moored ship, arms wide: \"Every one of you came out of the sea! Your blood's salt! And what did we do? Paved the shore and called it progress!\" Archie: \"I don't want followers. I want a crew. A crew pulls together or it drowns together.\" He points at you. Archie: \"You. You've got sea eyes. I like you already.\"",
+   "choices": [
+    {
+     "label": "Salute.",
+     "success": {
+      "text": "You salute.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-bunkmate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask a question.",
+     "success": {
+      "text": "\"What about the people on land?\" Archie laughs, a second too long.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-asked-leader",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-bunkmate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "The grunt beside you whispers: \"First day's the worst. Stick with me.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-bunkmate",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-bunkmate"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-bunkmate",
+   "name": "The Bunkmate",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "pokemon": "carvanha",
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "Every recruit gets one. Yours is Grunt Marisca: a fisherman's daughter from a harbour the factories poisoned. She joined to get the sea back. She carries a Carvanha that bites everyone but her. Marisca: \"My dad's nets came up empty for three years. Archie's the first who said it wasn't our fault.\"",
+   "choices": [
+    {
+     "label": "(Shake hands.)",
+     "success": {
+      "text": "The Carvanha watches you do it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-bunkmate",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-errand"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-errand",
+   "name": "First Mission: The Errand",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "The briefing: carry a sealed case across one stage to a team site. Don't open it.",
+   "choices": [
+    {
+     "label": "By the Book: deliver it.",
+     "success": {
+      "text": "Delivered, sealed. A stamp on your card.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: open it at a rest, then reseal it. (20% chance it's noticed)",
+     "chance": 0.8,
+     "success": {
+      "text": "Inside: tide charts, and a sonar picture of something enormous, asleep. You reseal it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-case",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     },
+     "failure": {
+      "text": "Inside: tide charts, and a sonar picture of something enormous, asleep. You reseal it. The seal's crooked. Somebody notices.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-case",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse: \"I don't carry what I can't see.\"",
+     "success": {
+      "text": "Somebody else carries it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-refused-1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-act2",
+   "name": "The Harbour Toll",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "beat": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "pokemon": "carvanha",
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "The briefing: collect \"the sea's tax\" from every boat in Slateport harbour. A ferry captain, Mo: \"Five hundred? I carry schoolchildren. I'll have to stop the run.\" Marisca, quietly: \"That's what the factories did to us. Charged us out.\"",
+   "choices": [
+    {
+     "label": "By the Book.",
+     "success": {
+      "text": "The toll is taken. Marisca goes quiet.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 4
+       },
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-buddy-quiet",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-prize"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly. (25% chance it's noticed)",
+     "chance": 0.75,
+     "success": {
+      "text": "You pay the school ferry's toll out of your own wages and write it up as collected.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-bunkmate-trust",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-prize"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You pay the school ferry's toll out of your own wages and write it up as collected. Somebody counts the takings.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-bunkmate-trust",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-prize"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse: \"Find someone else.\"",
+     "success": {
+      "text": "Marisca does it instead, badly, and is ashamed.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-buddy-ashamed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-prize"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-prize",
+   "name": "The Submarine",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "The briefing: take the submarine Explorer 1 from Captain Stern's dock. Captain Stern: \"She's a research vessel. Thirty years of my life. You'll take her to wake a monster.\" Matt, grinning: \"Bro! It's got a periscope! Grab the keys!\"",
+   "choices": [
+    {
+     "label": "By the Book.",
+     "success": {
+      "text": "The prize is taken.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.npc_sailor",
+       "team": [
+        "wingull",
+        "wailmer",
+        "machoke"
+       ],
+       "name": "Stern's crew",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "evil",
+         "standing": 5
+        },
+        {
+         "kind": "flag",
+         "key": "hoenn-prize-taken",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq-spy"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "evil",
+         "standing": 3
+        },
+        {
+         "kind": "flag",
+         "key": "hoenn-prize-taken",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq-spy"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Quietly. (30% chance it's noticed)",
+     "chance": 0.7,
+     "success": {
+      "text": "You take the sub, but leave Stern the depth-lock key, so it can't dive past the trench without him.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 4
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-prize-quiet",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-spy"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You take the sub, but leave Stern the depth-lock key, so it can't dive past the trench without him. The paint's still wet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-prize-quiet",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-spy"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "Matt does it, and hurts someone. You hear about it after.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-spy"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-spy",
+   "name": "The Other Side's Grunt",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m",
+     "boss.shelly"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "The briefing: a grunt from the opposing team has been caught spying. Interrogate them. A storeroom. A grunt in the wrong colour, tied to a chair, very young, trying to look brave. Magma's Grunt Ashlyn: \"I won't talk. ...Is there water? I mean, I don't need it.\" Shelly, at the door: \"Find out where they're digging. I don't care how.\"",
+   "choices": [
+    {
+     "label": "Scare them.",
+     "success": {
+      "text": "They talk. They cry after. Marisca leaves the room.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 4
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-cruel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-promote-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give them the water, and talk.",
+     "success": {
+      "text": "They tell you half. It's enough.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-promote-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them go.",
+     "success": {
+      "text": "A window, a nod. You blame a broken lock.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-freed-spy",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-promote-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask why they joined.",
+     "success": {
+      "text": "It's Marisca's story, in the other colour. a flooded farm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-same-story",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-promote-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-promote-2",
+   "name": "Promotion",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.archie-gen6"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "Archie: \"Ha! You'll do. Diver's stripes. First round's on Matt.\"",
+   "choices": [
+    {
+     "label": "(Take the stripes.)",
+     "success": {
+      "text": "Rank 3.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-act3",
+   "name": "The Rival Finds Out",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "beat": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "You come round a corner in uniform. Your rival is standing there with a sandwich. Your rival: \"...No.\" Your rival: \"That's a costume. Tell me that's a costume.\" Marisca steps back to give you room.",
+   "choices": [
+    {
+     "label": "\"I'm on the inside. Trust me.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "rivalState",
+         "feeling": {
+          "key": "trust",
+          "atLeast": 3
+         }
+        }
+       ],
+       "text": "Your rival: \"...Fine. But I'm watching you.\" They're your contact outside now.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "hoenn-rival-contact",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq-norman"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your rival: \"Sure you are.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1
+        }
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-norman"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"They're not wrong about everything.\"",
+     "success": {
+      "text": "They listen to the whole case. Your rival: \"And the people in the way?\" They think about it.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-rival-heard",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-norman"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's none of your business.\"",
+     "success": {
+      "text": "They fight angry.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -3
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "hoenn-rival-broken",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq-norman"
+        }
+       ],
+       "name": "Your rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hoenn-rival-broken",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq-norman"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-norman",
+   "name": "Norman",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.norman"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "The Petalburg Gym. You walk in wearing the colours. The trainers stop mid-battle. Norman: \"Take the hood off or leave it on. I'll battle you either way. That's my job.\" Norman: \"But I'll ask what I'd ask my own kid. Is it what you believe, or is it somewhere to belong?\"",
+   "choices": [
+    {
+     "label": "\"I believe it.\"",
+     "success": {
+      "text": "Norman: \"Then be ready to see what it costs.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-norman-believe",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-counter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's somewhere to belong.\"",
+     "success": {
+      "text": "Norman: \"Then come to dinner. That's somewhere too.\" There's a free rest at Petalburg for you, for the run.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-norman-belong",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-counter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm still working it out.\"",
+     "success": {
+      "text": "Norman: \"Honest. Good. Don't take too long.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-norman-honest",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-counter"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-counter",
+   "name": "The Counter-Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.tabitha"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "A note in your locker in the wrong colour ink. A meeting place. Tabitha is waiting alone. Tabitha: \"Hoo... Ashlyn says you're decent. I don't meet many.\" Tabitha: \"Archie's going to drown half the map. Cross over. Or stay put, and pass me what you hear.\"",
+   "choices": [
+    {
+     "label": "\"I'll cross.\"",
+     "success": {
+      "text": "You change teams, one rank lower. Team Aqua is hostile now. Marisca watches you go.",
+      "effects": [
+       {
+        "kind": "evil",
+        "side": "magma",
+        "demote": true
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-turncoat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-side-magma",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-counter-heard",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-weather"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll stay, and report to you.\"",
+     "success": {
+      "text": "Each mission now has a fourth way: tip them off. Suspicion will come faster.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-double-agent",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-counter-heard",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-weather"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll stay, and report you.\"",
+     "success": {
+      "text": "Tabitha is nearly caught, and knows who did it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-reported-lt",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-counter-heard",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-weather"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Nothing.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq-weather"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-weather",
+   "name": "The Weather Institute",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_scientist"
+    ],
+    "pokemon": "castform",
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "The briefing: the Weather Institute has a Castform and thirty years of climate records. The leader wants both. The director, Dr. Cirra Hart: \"You want the records? Read them. Every model ends the same. You can't hold the weather still at one setting. It breaks.\" Your leader, by radio: \"Bring the data. Leave the opinions.\"",
+   "choices": [
+    {
+     "label": "By the Book: take both.",
+     "success": {
+      "text": "The Castform cries in its case.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 5
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-promote-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: take the records, leave the Castform, read the last page. (20% chance it's noticed)",
+     "chance": 0.8,
+     "success": {
+      "text": "The Castform stays under a desk. On the way back you read the last page. The plan fails. Every model says so.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 4
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-read-models",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-promote-4"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Castform stays under a desk. On the way back you read the last page. The plan fails. Every model says so. Somebody saw the empty case.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-read-models",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-promote-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "Somebody else goes.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-promote-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-promote-4",
+   "name": "Promotion",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m",
+     "trainer.pr/aqua_grunt_m",
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "You get a squad: Marisca and two grunts, Corwen and Quince. They look at you the way you looked at Shelly on day one.",
+   "choices": [
+    {
+     "label": "(Take the squad.)",
+     "success": {
+      "text": "Rank 4: Bosun.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 4
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-squad"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-squad",
+   "name": "The Squad Goes Too Far",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m",
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "Your own squad has done a job without orders, to impress you. Quince, proud: \"We collected from the school ferry. Double. For the back pay.\" Marisca, not looking up: \"I told them not to.\"",
+   "choices": [
+    {
+     "label": "\"Undo it. Now.\"",
+     "success": {
+      "text": "They do, confused. Marisca looks at you properly for the first time in a while.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-squad-decent",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Well done.\"",
+     "success": {
+      "text": "The squad learns what you reward.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-squad-hard",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why did you think I wanted that?\"",
+     "success": {
+      "text": "Quince: \"Because that's what gets people promoted.\" You have no answer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-squad-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-act4",
+   "name": "Mt. Pyre",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "beat": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman",
+     "boss.npc_lady"
+    ],
+    "tint": "#1060c0",
+    "effect": "fog"
+   },
+   "intro": "The briefing: two orbs sit at the top of Mt. Pyre, guarded by an old couple. The leader needs one. Fog, gravestones, and Pokémon mourning at them. The climb goes past people leaving flowers. At the summit, two very old people sit on a bench with a table between them, and an orb in each lap. The old man: \"Sixty years on this bench. We've turned away kings.\" The old woman: \"You've a kind face under that. They always send a kind face.\" The old man: \"Take one orb and you wake one. Then somebody has to take the other, to stop it. That's the trick of it. They come as a pair, like us.\"",
+   "choices": [
+    {
+     "label": "Take the orb.",
+     "success": {
+      "text": "They don't fight. The old woman wraps the Blue Orb in her scarf, \"so it doesn't get cold.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 6,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the wrong orb on purpose.",
+     "success": {
+      "text": "The Red Orb, in a blue bandana's hands. The plan will go wrong in the leader's hands, and somebody will be hurt by it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 6,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with them a while first.",
+     "success": {
+      "text": "They tell you what the last awakening did, from the stories. The old man: \"Whatever you pick, come back and tell us.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-pyre-story",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-act4-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "Shelly takes it instead, roughly. The old man falls. He's all right; you hear it after.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -3,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-act4-2",
+   "name": "Mt. Pyre",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman",
+     "boss.npc_lady"
+    ],
+    "tint": "#1060c0",
+    "effect": "fog"
+   },
+   "intro": "The fog's thinner. The orbs are still in their laps.",
+   "choices": [
+    {
+     "label": "Take the orb.",
+     "success": {
+      "text": "The old woman wraps the Blue Orb in her scarf, \"so it doesn't get cold.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 6,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the wrong orb on purpose.",
+     "success": {
+      "text": "The plan will go wrong in the leader's hands.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 6,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "Shelly takes it instead, roughly. The old man falls. He's all right; you hear it after.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -3,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-confides",
+   "name": "The Leader Confides",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "after": 5,
+     "standing": 40,
+     "lacks": "confided",
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.archie-gen6"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "The ship's cabin. A bottle. A photograph turned face down. Archie: \"There was a kid. Lilycove. I couldn't save a Pokémon she loved, because some suit wanted his launch on schedule.\" Archie: \"I made her a promise the world'd be different. The sea'd be let back in, where people can't wreck it.\" Archie: \"You're the only one who doesn't just say \"aye.\" So say it straight. Am I right?\"",
+   "choices": [
+    {
+     "label": "\"You're right.\"",
+     "success": {
+      "text": "He breathes out. You're the First Mate.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 6
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-leader-reassured",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You're wrong, and here's why.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hoenn-read-models",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He listens. He doesn't change the plan. He promotes you anyway: \"I need one person who'll say that.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 6
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-leader-warned",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I don't know. Neither do you.\"",
+     "success": {
+      "text": "A long silence. \"...No. I suppose I don't.\" He promotes you. He doesn't sleep that night.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 6
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-leader-doubt",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pyre",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-pyre-story",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "hoenn-read-models",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "You've Mt. Pyre's story in your head, and you can say why.",
+     "addChoices": [
+      {
+       "label": "\"You're wrong, and here's why.\"",
+       "success": {
+        "text": "He listens. He doesn't change the plan. He promotes you anyway: \"I need one person who'll say that.\"",
+        "effects": [
+         {
+          "kind": "evil",
+          "rank": 6
+         },
+         {
+          "kind": "evil",
+          "mark": "confided"
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-leader-warned",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "aq-request",
+   "name": "The Bunkmate's Request",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "beat": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "pokemon": "carvanha",
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "The night before the awakening. Marisca is packing, then unpacking. Marisca: \"If the sea rises, our harbour's forty feet down. Dad's boat. The house. Was that always the plan?\" Marisca: \"You're the First Mate now. Tell me to stay and I'll stay.\"",
+   "choices": [
+    {
+     "label": "\"Stay.\"",
+     "success": {
+      "text": "They do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-bunkmate-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go home tonight.\"",
+     "success": {
+      "text": "They leave the hood on the bunk. They're safe, whatever happens.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-bunkmate-left",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stay near me tomorrow, and do what I do.\"",
+     "success": {
+      "text": "They nod.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-bunkmate-follows",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-direct-question",
+   "name": "The Direct Question",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "suspicion": 6,
+     "suspicionBelow": 9,
+     "lacks": "loyalty-test"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.shelly"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "Shelly: \"Look at me. The nests got moved before the dig. Who moved them?\"",
+   "choices": [
+    {
+     "label": "\"I did.\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "team": "aqua",
+       "trouble": true
+      }
+     ],
+     "success": {
+      "text": "A long silence. Then: Shelly: \"...Good. Don't tell me again.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -3
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-lt-knows",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I did.\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "team": "aqua",
+       "trouble": false
+      }
+     ],
+     "success": {
+      "text": "A long silence. Shelly writes it down. You're a step lower in the morning.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -5,
+        "suspicion": 2
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-lt-knows",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I don't know what you mean.\"",
+     "success": {
+      "text": "Suspicion stays where it is. The lie is recorded.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "honest-lied",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Would you have left them?\"",
+     "success": {
+      "text": "Shelly doesn't answer. Their doubts move forward a step.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-lt-doubt",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-marked",
+   "name": "Marked",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "suspicion": 9,
+     "lacks": "found-out"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.archie-gen6",
+     "boss.shelly"
+    ],
+    "tint": "#1060c0",
+    "effect": "glint"
+   },
+   "intro": "Archie: \"The sea's got no room for half-hearts. Off my boat.\"",
+   "choices": [
+    {
+     "label": "(Leave the uniform.)",
+     "success": {
+      "text": "You're out. You keep your Pokémon and your money. Team Aqua is hostile from now on, and Hoenn's story goes on from the outside.",
+      "effects": [
+       {
+        "kind": "evil",
+        "leave": true
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-left-team",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-marked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-hand-in",
+   "name": "Hand In the Uniform",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "after": 3,
+     "suspicionBelow": 9,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "hoenn-inside-act4",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "aq-hand-in",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.archie-gen6"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "Your locker. The uniform's folded on the shelf. You could hand it in today, before the orbs.",
+   "choices": [
+    {
+     "label": "Hand it in.",
+     "success": {
+      "text": "Archie: \"The sea's got no room for half-hearts. Off my boat.\" You're out. Hoenn's story goes on from the outside.",
+      "effects": [
+       {
+        "kind": "evil",
+        "leave": true
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-left-team",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-hand-in",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it on.",
+     "success": {
+      "text": "You put it back on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-hand-in",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-op-weather-vane",
+   "name": "Operation: The Weather Vane",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "pokemon": "castform",
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "The order: misreport a forecast, so a town doesn't batten down.",
+   "choices": [
+    {
+     "label": "By the Book: misreport it.",
+     "success": {
+      "text": "It's done the team's way.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3,
+        "suspicion": -1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: correct it. (25% chance it's noticed)",
+     "chance": 0.75,
+     "success": {
+      "text": "The job looks done. The harm isn't.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The job looks done. The harm isn't. Somebody checks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "You say no.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-op-dive-bell",
+   "name": "Operation: The Dive Bell",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "after": 3,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "pokemon": "relicanth",
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "The order: salvage a wreck off Route 124.",
+   "choices": [
+    {
+     "label": "By the Book: salvage it.",
+     "success": {
+      "text": "It's done the team's way.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3,
+        "suspicion": -1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: mark it as a grave. (25% chance it's noticed)",
+     "chance": 0.75,
+     "success": {
+      "text": "The job looks done. The harm isn't.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The job looks done. The harm isn't. Somebody checks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "You say no.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-op-ash-round",
+   "name": "Operation: The Ash Round",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "after": 3,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "pokemon": "spinda",
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "The order: sweep Fallarbor's ash, by the sack, for the team.",
+   "choices": [
+    {
+     "label": "By the Book: sweep it for the team.",
+     "success": {
+      "text": "It's done the team's way.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3,
+        "suspicion": -1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: sweep it for the glassblower. (25% chance it's noticed)",
+     "chance": 0.75,
+     "success": {
+      "text": "The job looks done. The harm isn't.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The job looks done. The harm isn't. Somebody checks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "You say no.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-op-ferry-dues",
+   "name": "Operation: The Ferry Dues",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "after": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "pokemon": "wingull",
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "The order: collect the dues from Slateport's boats.",
+   "choices": [
+    {
+     "label": "By the Book: collect them.",
+     "success": {
+      "text": "It's done the team's way.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3,
+        "suspicion": -1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: mend one instead. (25% chance it's noticed)",
+     "chance": 0.75,
+     "success": {
+      "text": "The job looks done. The harm isn't.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The job looks done. The harm isn't. Somebody checks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "You say no.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-op-meteor-shard",
+   "name": "Operation: The Meteor Shard",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "after": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "pokemon": "lunatone",
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "The order: carry a shard from Meteor Falls to the base.",
+   "choices": [
+    {
+     "label": "By the Book: carry it.",
+     "success": {
+      "text": "It's done the team's way.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3,
+        "suspicion": -1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: drop it back in the falls. (25% chance it's noticed)",
+     "chance": 0.75,
+     "success": {
+      "text": "The job looks done. The harm isn't.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The job looks done. The harm isn't. Somebody checks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "You say no.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-op-recruiting",
+   "name": "Operation: The Recruiting Drive",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "after": 5,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "The order: sign up Lilycove's bored.",
+   "choices": [
+    {
+     "label": "By the Book: sign them up.",
+     "success": {
+      "text": "It's done the team's way.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3,
+        "suspicion": -1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: tell them the last page. (25% chance it's noticed)",
+     "chance": 0.75,
+     "success": {
+      "text": "The job looks done. The harm isn't.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The job looks done. The harm isn't. Somebody checks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-magma",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "You say no.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-op-weather-vane",
+   "name": "Operation: The Weather Vane",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "pokemon": "castform",
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "The order: misreport a forecast, so a town doesn't batten down.",
+   "choices": [
+    {
+     "label": "By the Book: misreport it.",
+     "success": {
+      "text": "It's done the team's way.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3,
+        "suspicion": -1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: correct it. (25% chance it's noticed)",
+     "chance": 0.75,
+     "success": {
+      "text": "The job looks done. The harm isn't.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The job looks done. The harm isn't. Somebody checks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "You say no.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-op-dive-bell",
+   "name": "Operation: The Dive Bell",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "after": 3,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "pokemon": "relicanth",
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "The order: salvage a wreck off Route 124.",
+   "choices": [
+    {
+     "label": "By the Book: salvage it.",
+     "success": {
+      "text": "It's done the team's way.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3,
+        "suspicion": -1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: mark it as a grave. (25% chance it's noticed)",
+     "chance": 0.75,
+     "success": {
+      "text": "The job looks done. The harm isn't.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The job looks done. The harm isn't. Somebody checks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "You say no.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-op-ash-round",
+   "name": "Operation: The Ash Round",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "after": 3,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "pokemon": "spinda",
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "The order: sweep Fallarbor's ash, by the sack, for the team.",
+   "choices": [
+    {
+     "label": "By the Book: sweep it for the team.",
+     "success": {
+      "text": "It's done the team's way.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3,
+        "suspicion": -1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: sweep it for the glassblower. (25% chance it's noticed)",
+     "chance": 0.75,
+     "success": {
+      "text": "The job looks done. The harm isn't.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The job looks done. The harm isn't. Somebody checks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "You say no.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-op-ferry-dues",
+   "name": "Operation: The Ferry Dues",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "after": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "pokemon": "wingull",
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "The order: collect the dues from Slateport's boats.",
+   "choices": [
+    {
+     "label": "By the Book: collect them.",
+     "success": {
+      "text": "It's done the team's way.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3,
+        "suspicion": -1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: mend one instead. (25% chance it's noticed)",
+     "chance": 0.75,
+     "success": {
+      "text": "The job looks done. The harm isn't.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The job looks done. The harm isn't. Somebody checks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "You say no.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-op-meteor-shard",
+   "name": "Operation: The Meteor Shard",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "after": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "pokemon": "lunatone",
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "The order: carry a shard from Meteor Falls to the base.",
+   "choices": [
+    {
+     "label": "By the Book: carry it.",
+     "success": {
+      "text": "It's done the team's way.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3,
+        "suspicion": -1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: drop it back in the falls. (25% chance it's noticed)",
+     "chance": 0.75,
+     "success": {
+      "text": "The job looks done. The harm isn't.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The job looks done. The harm isn't. Somebody checks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "You say no.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-op-recruiting",
+   "name": "Operation: The Recruiting Drive",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "after": 5,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "The order: sign up Lilycove's bored.",
+   "choices": [
+    {
+     "label": "By the Book: sign them up.",
+     "success": {
+      "text": "It's done the team's way.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 3,
+        "suspicion": -1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quietly: tell them the last page. (25% chance it's noticed)",
+     "chance": 0.75,
+     "success": {
+      "text": "The job looks done. The harm isn't.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The job looks done. The harm isn't. Somebody checks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-saw-aqua",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "You say no.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": -2
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

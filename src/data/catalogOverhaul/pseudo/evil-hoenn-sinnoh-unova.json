@@ -305,10 +305,10 @@
      "px-ghetsis-seal"
     ],
     [
-     "px-ghetsis-sealed",
      "px-ghetsis-late"
     ],
     [
+     "px-ghetsis-sealed",
      "px-ghetsis-late-after"
     ]
    ]
@@ -387,6 +387,197 @@
      "openhand-after"
     ]
    ]
+  },
+  {
+   "id": "ps_mg_plan",
+   "name": "The Seafloor Cavern: Carry Out the Plan",
+   "entry": "mg-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "black water, and a wall that breathes",
+   "team": "magma",
+   "start": "opened",
+   "layout": [
+    [
+     "mg-plan-wake"
+    ],
+    [
+     "mg-plan-cost"
+    ],
+    [
+     "mg-plan-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_mg_turn",
+   "name": "The Seafloor Cavern: Turn On the Team",
+   "entry": "mg-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "two orbs, and a long climb home",
+   "team": "magma",
+   "start": "opened",
+   "layout": [
+    [
+     "mg-turn-lines"
+    ],
+    [
+     "mg-turn-battle"
+    ],
+    [
+     "mg-turn-other"
+    ],
+    [
+     "mg-turn-pyre"
+    ]
+   ]
+  },
+  {
+   "id": "ps_mg_cross",
+   "name": "The Seafloor Cavern: Side With the Other Team",
+   "entry": "mg-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "the other colour, all the way up",
+   "team": "magma",
+   "start": "opened",
+   "layout": [
+    [
+     "mg-cross-run"
+    ],
+    [
+     "mg-cross-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_mg_all",
+   "name": "The Seafloor Cavern: Take It All",
+   "entry": "mg-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "both colours, looking up",
+   "team": "magma",
+   "start": "opened",
+   "layout": [
+    [
+     "mg-all-battle"
+    ],
+    [
+     "mg-all-gantry"
+    ]
+   ]
+  },
+  {
+   "id": "ps_aq_plan",
+   "name": "The Seafloor Cavern: Carry Out the Plan",
+   "entry": "aq-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "black water, and a wall that breathes",
+   "team": "aqua",
+   "start": "opened",
+   "layout": [
+    [
+     "aq-plan-wake"
+    ],
+    [
+     "aq-plan-cost"
+    ],
+    [
+     "aq-plan-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_aq_turn",
+   "name": "The Seafloor Cavern: Turn On the Team",
+   "entry": "aq-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "two orbs, and a long climb home",
+   "team": "aqua",
+   "start": "opened",
+   "layout": [
+    [
+     "aq-turn-lines"
+    ],
+    [
+     "aq-turn-battle"
+    ],
+    [
+     "aq-turn-other"
+    ],
+    [
+     "aq-turn-pyre"
+    ]
+   ]
+  },
+  {
+   "id": "ps_aq_cross",
+   "name": "The Seafloor Cavern: Side With the Other Team",
+   "entry": "aq-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "the other colour, all the way up",
+   "team": "aqua",
+   "start": "opened",
+   "layout": [
+    [
+     "aq-cross-run"
+    ],
+    [
+     "aq-cross-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_aq_all",
+   "name": "The Seafloor Cavern: Take It All",
+   "entry": "aq-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "both colours, looking up",
+   "team": "aqua",
+   "start": "opened",
+   "layout": [
+    [
+     "aq-all-battle"
+    ],
+    [
+     "aq-all-gantry"
+    ]
+   ]
+  },
+  {
+   "id": "ps_sky_pyre",
+   "name": "Mt. Pyre, From the Other Side",
+   "entry": "sky-pyre",
+   "themeId": "ghost-dark",
+   "tint": "#3a3a48",
+   "mood": "fog, and two columns climbing",
+   "start": "opened",
+   "layout": [
+    [
+     "sky-pyre-tabitha"
+    ],
+    [
+     "sky-pyre-shelly"
+    ],
+    [
+     "sky-pyre-held"
+    ]
+   ]
+  },
+  {
+   "id": "ps_sky_choice",
+   "name": "The Sky's Choice",
+   "entry": "sky-climax",
+   "themeId": "ghost-dark",
+   "tint": "#3a2a48",
+   "mood": "a sky the colour of a bruise",
+   "start": "opened"
   }
  ]
 }

@@ -133,6 +133,48 @@ describe('Team Plasma from inside (Volume III, Unova)', () => {
   });
 });
 
+describe('Team Magma and Team Aqua from inside (HOENN_TEAMS), and Team Sky', () => {
+  it('both recruiters are on the road: the other uniform makes it the region\'s team; walking between stays outside', () => {
+    const red = offered('aqua', 'hoenn', 0, 'hsu-h1'); // drawn Aqua, took the red hood
+    expect(evilOf(red).teamId).toBe('magma');
+    evilOf(red).nextAt = 0;
+    expect(open(red, 'mg-act1')).toBe(true);
+    expect(open(red, 'aq-act1')).toBe(false);
+    expect(evilSummary(content, red)!.lines.some((l) => l.startsWith('Inside Team Magma: Recruit (Rank 1)'))).toBe(true);
+    const blue = offered('aqua', 'hoenn', 1, 'hsu-h2');
+    expect(evilOf(blue).teamId).toBe('aqua');
+    expect(open(blue, 'aq-act1') || evilOf(blue).nextAt !== 0).toBe(true);
+    const out = offered('magma', 'hoenn', 2, 'hsu-h3');
+    expect(flagOf(out, 'hoenn-side-none')).toBe(1);
+    expect(open(out, 'mg-act1')).toBe(false);
+  });
+
+  it('Hoenn ranks rise at Standing 3, 8, 15 and 25; crossing at the Counter-Offer is one rank lower', () => {
+    const run = offered('magma', 'hoenn', 0, 'hsu-h4');
+    fx(run, { standing: 15 });
+    expect(rankOf(run, 'magma', routeOf(content.evilTeams.teams.find((t) => t.id === 'magma'), 'hoenn'))).toBe(4);
+    fx(run, { side: 'aqua', demote: true });
+    expect(evilOf(run).teamId).toBe('aqua');
+    const aqua = routeOf(content.evilTeams.teams.find((t) => t.id === 'aqua'), 'hoenn');
+    expect(rankOf(run, 'aqua', aqua)).toBe(3);
+    expect(rankOf(run, 'magma')).toBe(1);
+  });
+
+  it('handing in the uniform ends the inside route and opens the first door to Team Sky', () => {
+    const run = offered('magma', 'hoenn', 0, 'hsu-h5');
+    fx(run, { leave: true });
+    expect(open(run, 'mg-act1')).toBe(false);
+    run.story.flags['ev:hoenn-left-team'] = 1;
+    evilOf(run).beat = 4;
+    run.itemCounters = { ...(run.itemCounters ?? {}), 'event-seen:sky-pillar': 1 };
+    expect(open(run, 'sky-draconid')).toBe(true);
+  });
+
+  it('the endings and Team Sky have their own maps', () => {
+    mapsStartOn([['ps_mg_plan', 'mg-plan-wake'], ['ps_aq_turn', 'aq-turn-lines'], ['ps_mg_cross', 'mg-cross-run'], ['ps_aq_all', 'aq-all-battle'], ['ps_sky_pyre', 'sky-pyre-tabitha']]);
+  });
+});
+
 describe('the inside route reads its region (core/evil/inside.ts)', () => {
   it('Rocket keeps 2, 4, 6, 8 and 10; a route may set its own steps', () => {
     const rocket = content.evilTeams.teams.find((t) => t.id === 'rocket')!;

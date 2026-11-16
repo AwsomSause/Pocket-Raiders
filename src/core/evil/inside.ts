@@ -70,6 +70,23 @@ export function insideLine(run: RunState, team: EvilTeam, region: string | undef
   return `Inside ${team.name}: ${rankTitle(team, region, rank)} (Rank ${rank}). Standing ${standingOf(run, team.id)}/${route?.max ?? 10}, Suspicion ${suspicionOf(run, team.id)}/10.${man}`;
 }
 
+/**
+ * Hoenn (HOENN_TEAMS 1.1, 3.9): the player joins the region's other team. At the Offer nothing is carried; at the
+ * Counter-Offer (`demote`) the inside route crosses with them one rank lower, with Standing at that rank's step and no
+ * Suspicion yet. The old team's marks are cleared.
+ */
+export function crossInside(run: RunState, from: EvilTeam, to: EvilTeam, region: string | undefined, demote: boolean): void {
+  if (demote && insideOn(run, from.id)) {
+    const rank = Math.max(1, rankOf(run, from.id, routeOf(from, region)) - 1);
+    const steps = routeOf(to, region)?.steps ?? STEPS;
+    run.story.flags[key(to.id, 'inside')] = 1;
+    run.story.flags[key(to.id, 'rank')] = rank;
+    run.story.flags[key(to.id, 'standing')] = rank > 1 ? steps[rank - 2]! : 0;
+    for (const m of ['third', 'confided'] as const) if (read(run, key(from.id, m)) > 0) run.story.flags[key(to.id, m)] = 1;
+  }
+  clearInside(run, from.id);
+}
+
 /** The region's story is over: the inside route's meters and marks go with it. */
 export function clearInside(run: RunState, teamId: string): void {
   for (const m of INSIDE_MARKS) delete run.story.flags[key(teamId, m)];
