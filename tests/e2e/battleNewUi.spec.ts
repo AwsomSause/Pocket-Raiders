@@ -340,6 +340,7 @@ test('New UI: the map shows a party Pokémon\'s info card on hover; Bonds is the
   await expect(card).toHaveCount(0);
   await map.locator('[data-tip="mon:0"]').hover();
   await expect(card).toBeVisible();
+  await page.screenshot({ path: 'test-results/newui-info-card.png' });
   const names = await page.evaluate(() => [...(window as any).__pkr.session.content.abilities.values()].map((a: any) => a.name as string));
   expect(names).toContain((await card.locator('b.acc').textContent()) ?? '');
   await page.mouse.move(2, 2);
@@ -353,6 +354,7 @@ test('New UI: the map shows a party Pokémon\'s info card on hover; Bonds is the
   await expect(rows.first()).toContainText(/Trust \d+/);
   await expect(rows.first().locator('.hp')).toHaveCount(1);
   await expect(top().locator('.txt')).toContainText(/Affection \d+ · Respect \d+/);
+  await page.screenshot({ path: 'test-results/newui-bonds.png' });
   await page.waitForTimeout(250);
   await page.keyboard.press('Escape');
   await expect(view(page, 'Map')).toHaveCount(1);
@@ -368,6 +370,7 @@ test('New UI: the map shows a party Pokémon\'s info card on hover; Bonds is the
   await top().locator('[data-tip="move:0"]').hover();
   await expect(tip).toBeVisible();
   await expect(tip).toContainText('Category');
+  await page.screenshot({ path: 'test-results/newui-move-tip.png' });
   // (The top-left corner is clear of every chip at any window size.)
   await page.mouse.move(2, 2);
   await expect(tip).toHaveCount(0);

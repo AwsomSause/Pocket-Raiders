@@ -266,16 +266,20 @@ test('New UI: Party opens as the mock-up page; Enter opens the Summary with its 
   const top = () => view(page, 'Map').last();
   await expect(top().locator('.hd')).toContainText('Party');
   await expect(top().locator('[data-act="pick"]')).toHaveCount(2);
+  await page.screenshot({ path: 'test-results/newui-party.png' });
   // The second card opens its Summary; the seven tabs are there and a click turns the page.
   await page.waitForTimeout(250);
   await top().locator('[data-act="pick"]').nth(1).click();
   await expect(top().locator('.hd')).toContainText('Summary');
   await expect(top()).toContainText('Lv 9');
   await expect(top().locator('[data-act="tab"]')).toHaveCount(8);
+  await page.screenshot({ path: 'test-results/newui-summary.png' });
   await top().locator('[data-act="tab"]', { hasText: 'Stats' }).click();
   await expect(top()).toContainText('EV');
+  await page.screenshot({ path: 'test-results/newui-summary-stats.png' });
   await top().locator('[data-act="tab"]', { hasText: 'Moves' }).click();
   await expect(top().locator('[data-act="cursor"]').first()).toBeVisible();
+  await page.screenshot({ path: 'test-results/newui-summary-moves.png' });
   // Enter opens the action menu; "Make lead" moves the second Pokémon to the front of the party.
   await page.waitForTimeout(250);
   await page.keyboard.press('Enter');
@@ -317,6 +321,7 @@ test('New UI: the Bag shows its pockets, the item window and who the item helps;
   await expect(top()).toContainText('Restores 20 HP');
   await expect(top()).toContainText('Can use');
   await expect(top()).toContainText('No effect');
+  await page.screenshot({ path: 'test-results/newui-bag.png' });
   // The second pocket still lists the Potion; the first tab goes back.
   await page.waitForTimeout(250);
   await top().locator('[data-act="tab"]').nth(1).click();
@@ -373,12 +378,14 @@ test('New UI: a lost run ends on the mock-up page; Witness the Rest, the report,
   await expect(end).toContainText('Payouts');
   await expect(end.locator('[data-act="pick"]')).toHaveCount(3);
   await expect(end.locator('.btn.on')).toContainText('Witness the rest');
+  await page.screenshot({ path: 'test-results/newui-end-defeat.png' });
   // The page ignores keys for a moment, so a press meant for the battle does not skip it.
   await page.waitForTimeout(600);
   // Witness the Rest: one card per rival, then the Champion and the last card, then back to this page.
   await page.keyboard.press('Enter');
   await expect(end.locator('.bars')).toHaveCount(2);
   await expect(end).toContainText('Joey');
+  await page.screenshot({ path: 'test-results/newui-end-witness.png' });
   const seen: string[] = [];
   for (let i = 0; i < 8 && (await end.locator('.bars').count()) > 0; i++) {
     seen.push((await end.textContent()) ?? '');
@@ -392,6 +399,7 @@ test('New UI: a lost run ends on the mock-up page; Witness the Rest, the report,
   await page.keyboard.press('Tab');
   await expect(end).toContainText('Full report');
   await expect(end).toContainText('Seed code');
+  await page.screenshot({ path: 'test-results/newui-end-report.png' });
   await page.keyboard.press('Escape');
   await expect(end.locator('[data-act="page"]')).toHaveCount(0);
   // F: the final team as the Party page.
@@ -406,6 +414,7 @@ test('New UI: a lost run ends on the mock-up page; Witness the Rest, the report,
   await end.locator('[data-act="pick"]', { hasText: 'Run card' }).click();
   await expect(end.locator('.hd')).toContainText('Run card');
   await expect(end).toContainText('Result');
+  await page.screenshot({ path: 'test-results/newui-end-card.png' });
   await page.keyboard.press('Escape');
   await expect(end).toContainText('RUN OVER');
   // Back to Hub leaves the run end.
