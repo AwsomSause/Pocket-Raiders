@@ -569,20 +569,22 @@ describe('gn.25 The Unlikely Friendship', () => {
     expect(scene(run, 'gn-25-heap').intro).toMatch(/aren't afraid of you/);
   });
 
-  it('watching: three beats, then the pack: two double battles with the Zangoose, then the Seviper, beside you', () => {
+  it('watching: three beats, then the pack: one double battle, six Mightyena, with both of the pair on your side', () => {
     const watched = choose(heap('t25-pack'), 'gn-25-heap', 'Watch.');
     expect(watched.text).toMatch(/bigger half/);
     expect(watched.text).toMatch(/collide/);
-    const first = choose(watched.run, 'gn-25-pack', 'Fight beside them.').run;
-    expect(first.battle!.doubles).toBeTruthy();
-    expect(first.party.some((m) => m.speciesId === 'zangoose')).toBe(true);
-    expect(first.battle!.enemyTeam.every((m) => m.speciesId === 'mightyena')).toBe(true);
-    const between = win(first);
-    expect(between.party.some((m) => m.speciesId === 'zangoose')).toBe(false); // the ally goes home after the fight
-    const second = choose(between, 'gn-25-pack-2', 'Hold together.').run;
-    expect(second.party.some((m) => m.speciesId === 'seviper')).toBe(true);
-    const after = win(second);
+    const fight = choose(watched.run, 'gn-25-pack', 'Fight beside them.').run;
+    expect(fight.battle!.doubles).toBeTruthy();
+    expect(fight.battle!.eventRule?.gn).toBe('truce');
+    // The Zangoose stands beside you (the fight's ally); the Seviper is right behind it, in the party for this fight.
+    expect(fight.party.find((m) => m.speciesId === 'zangoose')?.uid).toBe(fight.battle!.loaner);
+    expect(fight.party.find((m) => m.speciesId === 'seviper')?.gn).toContain('truce-guest');
+    expect(fight.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(Array(6).fill('mightyena'));
+    const after = win(fight);
+    // Both go back to each other when it is over: neither stays in the party unless you ask.
+    expect(after.party.some((m) => m.speciesId === 'zangoose' || m.speciesId === 'seviper')).toBe(false);
     expect(scene(after, 'gn-25-after').labels).toEqual(['Come with me.', 'Both of you.', 'Stay together. Good luck.']);
+    expect(content.events.has('gn-25-pack-2')).toBe(false);
   });
 
   it('losing to the pack ends nothing: the pair finish it, and the story goes on', () => {
@@ -590,11 +592,11 @@ describe('gn.25 The Unlikely Friendship', () => {
     const after = lose(fight);
     expect(after.phase).toBe('map');
     expect(flagOf(after, 'truce-pack-lost')).toBe(1);
+    expect(after.party.some((m) => m.speciesId === 'zangoose' || m.speciesId === 'seviper')).toBe(false);
   });
 
   const afterPack = (seed: string): RunState => {
-    const a = win(choose(choose(heap(seed), 'gn-25-heap', 'Step closer.').run, 'gn-25-pack', 'Fight beside them.').run);
-    return win(choose(a, 'gn-25-pack-2', 'Hold together.').run);
+    return win(choose(choose(heap(seed), 'gn-25-heap', 'Step closer.').run, 'gn-25-pack', 'Fight beside them.').run);
   };
 
   it('both of you: they take two Balls, and both have Truce', () => {
@@ -603,8 +605,15 @@ describe('gn.25 The Unlikely Friendship', () => {
     expect(joined).toEqual(['seviper', 'zangoose']);
   });
 
-  it('leave them together: a Berry on the path, split in two', () => {
-    const run = choose(afterPack('t25-left'), 'gn-25-after', 'Stay together. Good luck.').run;
+  it('leave them together: a Rare Berry on the path, split in two', () => {
+    const before = afterPack('t25-left');
+    const rare = ['liechi-berry', 'ganlon-berry', 'salac-berry', 'petaya-berry', 'apicot-berry'];
+    const count = (r: RunState): number => rare.reduce((n, id) => n + (r.inventory[id] ?? 0), 0);
+    const had = count(before);
+    const out = choose(before, 'gn-25-after', 'Stay together. Good luck.');
+    const run = out.run;
+    expect(out.text).toMatch(/Rare Berry, split neatly in two/);
+    expect(count(run)).toBe(had + 1);
     expect(flagOf(run, 'truce-left')).toBe(1);
   });
 

@@ -3698,7 +3698,7 @@ export const EventRuleSchema = z.object({
   accuracyTurns: z.number().int().min(1).max(10).optional(),
   noSwitchFirstTurn: z.boolean().optional(),
   /** Beta 0.7 Route 25: the foe stands guard and does not attack for this many turns (the fifth Mankey, in front of the other four). */
-  foeStands: z.number().int().min(1).max(3).optional(),
+  foeStands: z.number().int().min(1).max(99).optional(),
   /** Greenneedle gn.26 (Island of Giants): the foes have grown, not Dynamaxed: double HP, three-quarter Speed. */
   giant: z.boolean().optional(),
   /** Catalog Overhaul new events: the foe has lost every move with this flag (the Alpha that lost its voice: no sound moves). */

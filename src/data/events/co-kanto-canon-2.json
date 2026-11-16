@@ -780,7 +780,19 @@
    "types": [],
    "minStage": 1,
    "requires": [],
-   "remembers": [],
+   "remembers": [
+    {
+     "id": "lonely-cubone",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "hasMark",
+       "key": "cubone-friend"
+      }
+     ],
+     "notice": "The ghost sees your Cubone, the one from the woods. The club is already coming down, slowly. It doesn't need to be asked."
+    }
+   ],
    "callback": false,
    "forced": false,
    "scene": {

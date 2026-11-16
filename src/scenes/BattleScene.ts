@@ -118,6 +118,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import { throwKind, throwTint } from '../core/archetypeTint';
+import { islanderTint, pinkTint } from '../core/greenneedle/part3';
 import { PlayerTrainerActor, playerLookForBattle, preloadPlayerTrainer } from '../ui/playerTrainer';
 import { addMarks } from '../ui/battleFx/markAura';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
@@ -1296,6 +1297,11 @@ export class BattleScene extends Phaser.Scene {
     return visual;
   }
 
+  /** Greenneedle gn.30: a pink Pokémon (the island's fruit) is drawn pink; the colour is cosmetic and fades by shade. */
+  private wearPink(visual: Visual, tint: number | null): void {
+    if (tint !== null && visual instanceof Phaser.GameObjects.Sprite) visual.setTint(tint);
+  }
+
   private showSpriteBody(side: 'player' | 'enemy', mon: PokemonInstance, species: ReturnType<typeof getSpecies>, cry: boolean, grow: number): Visual {
     if (side === 'player') {
       this.dropSprite(this.playerSprite);
@@ -1307,6 +1313,7 @@ export class BattleScene extends Phaser.Scene {
       // never drawn over the bar, even a see-through one. Styles with no bar (Ring, Cinematic, Ink) show it whole.
       if (!this.skin || this.skin.layout.bar) this.playerSprite.setMask(this.standMask());
       this.skin?.sprite?.(this.playerSprite);
+      this.wearPink(this.playerSprite, pinkTint(mon));
       this.prefetchMoves(mon);
       this.liven(this.playerSprite, cry);
       return this.playerSprite;
@@ -1320,6 +1327,7 @@ export class BattleScene extends Phaser.Scene {
     this.field.addAt(this.enemySprite, this.fieldBase);
     this.fitFoeInFrame(this.enemySprite);
     this.skin?.sprite?.(this.enemySprite);
+    this.wearPink(this.enemySprite, pinkTint(mon) ?? islanderTint(this.run.battle?.event?.eventId));
     // A boss's last Pokémon turns the arena light a warning red.
     const b = this.run.battle;
     if (b && this.boss() && b.enemyTeam.length > 1 && b.enemyIndex >= b.enemyTeam.length - 1) this.arenaLight?.set(Math.max(this.arenaPhase, 1), 0xff5030);
@@ -1601,7 +1609,10 @@ export class BattleScene extends Phaser.Scene {
     box.level.setText(this.foeHidden(mon) ? 'Lv?' : `Lv${mon.level}`);
     if (box === this.enemyBox && this.enemySprite instanceof Phaser.GameObjects.Sprite) {
       if (this.foeHidden(mon)) this.enemySprite.setTintFill(0x000000);
-      else this.enemySprite.clearTint();
+      else {
+        this.enemySprite.clearTint();
+        this.wearPink(this.enemySprite, pinkTint(mon) ?? islanderTint(this.run.battle?.event?.eventId));
+      }
     }
     // A long name stops short of the level and the form symbol instead of running under them.
     if (!spec || spec.level !== 'inline') fitLine(box.name, box.level.x - box.level.width - box.name.x - (spec ? 12 : 40));

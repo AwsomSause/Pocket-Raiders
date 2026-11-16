@@ -22,6 +22,8 @@ interface Person {
   kind: Kind;
   /** They come when any of these run flags is set. */
   flags: string[];
+  /** They stay away when any of these is set (gn.21: Linus, when the Pokémon left him). */
+  not?: string[];
   /** It went well when any of these is set. */
   good?: string[];
   /** They are at the far edge when any of these is set (and not coming closer). */
@@ -45,7 +47,11 @@ export const PEOPLE: Person[] = [
   { id: 'ferris', name: 'Ferris', group: 'after', kind: 'ace', flags: ['ferris-belt'], good: ['ferris-six'], line: [T('**Ferris** has six on the belt, asleep in a folding chair. The new one is in their lap.'), T('**Ferris** has five on the belt, and counts them twice.')] },
   { id: 'samurai', name: 'The Samurai', group: 'after', kind: 'ace', flags: ['kanto-forest-samurai-won'], good: ['kanto-forest-samurai-won'], line: [T('**The Samurai** stands very straight at the edge of the lantern light, and bows when you look.'), T('**The Samurai** stands very straight at the edge of the lantern light, and bows when you look.')] },
   { id: 'duelist', name: 'The Duelist', group: 'trainer', kind: 'ace', flags: ['allstar-samurai', 'allstar-damian'], good: ['allstar-respect'], line: [T('**The Duelist** has found someone to practise against, and is losing, cheerfully.'), T('**The Duelist** has found someone to practise against, and is losing, cheerfully.')] },
-  { id: 'linus', name: 'Linus and the stone', group: 'after', kind: 'guard', flags: ['wontevolve-linus-gone'], good: ['wontevolve-linus-gone'], line: [T('**Linus** has the stone in his pocket, and a Pokémon beside him who has decided, again, not to.'), T('**Linus** has the stone in his pocket, and a Pokémon beside him who has decided, again, not to.')] },
+  { id: 'linus', name: 'Linus and the stone', group: 'after', kind: 'guard', flags: ['wontevolve-done'], not: ['wontevolve-linus-gone'], good: ['wontevolve-stayed'], line: [T('**Linus** has the stone in his pocket, and a Pokémon beside him who has decided, again, not to.'), T('**Linus** has the stone on a string round his neck, unused. He taps it when he sees you. "Keeps me honest."')] },
+  // gn.24: Rosabel Verey, on a folding chair; if it went home, it is on her lap, and it waves.
+  { id: 'rosabel', name: 'Rosabel Verey', group: 'after', kind: 'food', flags: ['partner-met'], not: ['partner-refused'], good: ['partner-went-home'], line: [T('**Rosabel Verey**, on a folding chair. Your old friend is on her lap. It sees you, and it waves.'), T('**Rosabel Verey**, on a folding chair, with her stick across her knees. She is looking for someone in your team, and finds it, and smiles.')] },
+  // gn.25: the one you recruited and never let the other in: they find each other here (see `truceMeets`).
+  { id: 'truce', name: 'The Zangoose and the Seviper', group: 'released', kind: 'guard', flags: ['truce-apart'], good: ['truce-apart'], line: [T('*At the edge of the field, a Zangoose and a Seviper find each other. Yours goes. It looks back at you, once, and then it does not look back again.*'), T('*At the edge of the field, a Zangoose and a Seviper find each other.*')] },
   { id: 'idris', name: 'Idris and a pair of boots', group: 'after', kind: 'guard', flags: ['desert-saw-idris'], good: ['desert-saw-idris'], line: [T('**Idris** has brought the boots. Both of them. He holds one up so you can see it is the right one.'), T('**Idris** has brought the boots. Both of them. He holds one up so you can see it is the right one.')] },
   { id: 'tamsel', name: 'Granny Tamsel', group: 'friend', kind: 'food', flags: ['tamsel-out'], good: ['tamsel-out'], line: [T('**Granny Tamsel**, who shouldn\'t be out of the gorge, and is: "Don\'t look at me like that. I walked."'), T('**Granny Tamsel**, who shouldn\'t be out of the gorge, and is: "Don\'t look at me like that. I walked."')] },
   { id: 'holloways', name: 'The Holloways', group: 'friend', kind: 'food', flags: ['holloways-ok'], good: ['holloways-ok'], line: [T('**The Holloways** have brought the whole kitchen. There is a pie for you, and a second pie in case you forget the first.'), T('**The Holloways** have brought the whole kitchen. There is a pie for you, and a second pie in case you forget the first.')] },
@@ -82,6 +88,23 @@ export function gathering(run: Pick<RunState, 'story'>): Gathering | null {
 /** "Damian" met twice or more (a flag that isn't there: counted as met once, so the plain good flag also holds). */
 const wentWell = (run: RunState, p: Person): boolean => (p.good ?? []).some((k) => (k.endsWith('-2') ? f(run, k.slice(0, -2)) >= 2 : f(run, k) > 0));
 
+/**
+ * gn.25 "Remembers": one of the pair was recruited and the other was never let in (the third sighting never happened). At the
+ * Final Reunion they find each other, and the recruited one goes: it leaves the party (never the last Pokémon). Runs once.
+ */
+export function truceMeets(run: RunState): void {
+  const one = f(run, 'truce-one');
+  if (!one || f(run, 'truce-reunited') > 0 || f(run, 'truce-apart') > 0) return;
+  const species = one === 1 ? 'zangoose' : 'seviper';
+  const here = [...run.party, ...run.box].find((m) => m.speciesId === species && m.fixedAbility === 'truce');
+  if (!here) return;
+  if (run.party.includes(here)) {
+    if (run.party.length <= 1) return;
+    run.party = run.party.filter((m) => m !== here);
+  } else run.box = run.box.filter((m) => m !== here);
+  put(run, 'truce-apart', 1);
+}
+
 /** Walks the run's flags and calls each one that ended well enough to come. Stores who, how well it went, and the three best friends. */
 export function reunionArrive(content: Content, run: RunState): string {
   if (gathering(run)) return '';
@@ -98,9 +121,10 @@ export function reunionArrive(content: Content, run: RunState): string {
     att.push({ id: `leader-${id}`, name, group: 'leader', kind: 'field', score: GROUP_BASE.leader + (i + 1) / 100, good: true, far: false, line: `**${name}** is here, off duty, and not wearing the badge. They keep looking at yours.`, boss: id });
   }
   // Everyone else the flags call.
+  truceMeets(run);
   for (const p of PEOPLE) {
     const came = any(run, p.flags);
-    if (!came) continue;
+    if (!came || (p.not && any(run, p.not) > 0)) continue;
     const good = wentWell(run, p);
     const far = !!p.far && any(run, p.far) > 0;
     const walls = f(run, 'mural-walls');
