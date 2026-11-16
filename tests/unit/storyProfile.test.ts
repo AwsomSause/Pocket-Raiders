@@ -8,7 +8,7 @@ describe('character profile view', () => {
   it('a fresh profile has no name yet and sensible defaults', () => {
     const v = characterProfile(profile());
     expect(v.named).toBe(false);
-    expect(Object.fromEntries(v.lines.map((l) => [l.label, l.value]))).toMatchObject({ Name: 'Not chosen yet', Pronouns: 'they/them', Look: 'Look A', 'Vance speaks': 'Not decided yet', Prologue: 'Not played yet', 'Story Runs told': '0' });
+    expect(Object.fromEntries(v.lines.map((l) => [l.label, l.value]))).toMatchObject({ Name: 'Not chosen yet', Pronouns: 'they/them', Look: 'Hilda', 'Vance speaks': 'Not decided yet', Prologue: 'Not played yet', 'Story Runs told': '0' });
   });
   it('shows a chosen name, tone, totals (no Look B line)', () => {
     const p = profile();
