@@ -2759,5 +2759,54 @@
    "Mystery Episode"
   ],
   "tags": []
+ },
+ "gn-new-24": {
+  "gn": "gn.new.24",
+  "shape": "Interrupting",
+  "earliest": "A5",
+  "home": 10,
+  "window": [
+   10,
+   19
+  ],
+  "sits": "must-see",
+  "level": "A-1 Sneasel; A+0 Weavile",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Night Shift at the Day-Care",
+   "elsewhere": "The Night Shift at the Day-Care"
+  },
+  "note": "Fallback step 19. Five waves. A wave lost: one egg is taken (found hatched at step 7 of a later stage, optional: gn-new-24-found).",
+  "kinds": [
+   "Interrupting Episode"
+  ],
+  "tags": [
+   "night"
+  ]
+ },
+ "gn-new-24-found": {
+  "gn": "gn.new.24",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 7,
+  "window": [
+   5,
+   10
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Egg That Was Taken",
+   "elsewhere": "The Egg That Was Taken"
+  },
+  "note": "Only after a wave was lost, a later stage.",
+  "kinds": [
+   "Interrupting Episode"
+  ],
+  "tags": []
  }
 }

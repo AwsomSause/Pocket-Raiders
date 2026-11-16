@@ -22,7 +22,6 @@
   "called-it-for-us": "Evil Team row: chose \"Call it for us\" (read by gn.38's researchers)",
   "lantern-boat": "gn.new.36 The Lantern Sea (read by gn.33)",
   "sunken-bell": "SF41.1 The Sunken City, the ovc-sunken-bell chain (overhaul/event_chains.json; read by gn.33)",
-  "night-shift-sneasel": "gn.new.24 The Night Shift (the Sneasel stayed; read by gn.40)",
   "egg-listened-hatched": "gn.new.05 The Egg That Listened (it hatched for you; read by gn.40)",
   "museum-relics-returned": "SF129 \"Return to the Museum\" (the museum's relics returned; read by gn.41)",
   "ball-waited": "gn.new.03 The Ball That Wouldn't Open (waited it out)",
@@ -645,6 +644,10 @@
   {
    "key": "kc-star",
    "rule": "core/greenneedle/karpcon.ts (gn.54 The Magikarp Convention)"
+  },
+  {
+   "key": "night-shift-sneasel",
+   "rule": "tools/events/co/greenneedle-new-24.ts (gn.new.24 The Night Shift: the Sneasel stayed; read by gn.40)"
   }
  ]
 }

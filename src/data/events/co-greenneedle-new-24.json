@@ -1,0 +1,2260 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-24",
+   "name": "The Night Shift at the Day-Care",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "night-shift-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.oldman"
+    ],
+    "tint": "#1f2a44",
+    "effect": "none"
+   },
+   "intro": "It is midnight. The day-care couple stand in their garden holding a frying pan and a broom, and they are not joking.\n\n**Mr. Holloway:** \"Three day-cares this week. Eggs gone. We've forty in the shed.\"\n\n**Mrs. Holloway:** \"We're not as quick as we were. Would you?\"",
+   "choices": [
+    {
+     "label": "Take the night shift.",
+     "success": {
+      "text": "Mrs. Holloway presses the broom into your hand. It is warm from hers. Mr. Holloway locks the shed, and checks it twice.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-sent-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not tonight.",
+     "success": {
+      "text": "Mr. Holloway nods like he expected it. The shed light stays on behind you for a long time.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-24-sent-1",
+   "name": "The Night Shift: Sentries 1",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a44",
+    "effect": "none"
+   },
+   "intro": "Wave 1 of five. The wind turns, and the garden goes quiet on one side. Where do the two sentries stand?\n\n*North, south, east, west. Two of your Pokémon, one pair of sides. The raiders won't say which way they're coming.*",
+   "choices": [
+    {
+     "label": "North and south.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "East and west.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "North and east.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "South and west.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-24-sent-2",
+   "name": "The Night Shift: Sentries 2",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a44",
+    "effect": "none"
+   },
+   "intro": "Wave 2 of five. The wind turns, and the garden goes quiet on one side. Where do the two sentries stand?\n\n*North, south, east, west. Two of your Pokémon, one pair of sides. The raiders won't say which way they're coming.*",
+   "choices": [
+    {
+     "label": "North and south.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "East and west.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "North and east.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "South and west.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-24-sent-3",
+   "name": "The Night Shift: Sentries 3",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a44",
+    "effect": "none"
+   },
+   "intro": "Wave 3 of five. The wind turns, and the garden goes quiet on one side. Where do the two sentries stand?\n\n*North, south, east, west. Two of your Pokémon, one pair of sides. The raiders won't say which way they're coming.*",
+   "choices": [
+    {
+     "label": "North and south.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "East and west.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "North and east.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "South and west.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-24-sent-4",
+   "name": "The Night Shift: Sentries 4",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a44",
+    "effect": "none"
+   },
+   "intro": "Wave 4 of five. The wind turns, and the garden goes quiet on one side. Where do the two sentries stand?\n\n*North, south, east, west. Two of your Pokémon, one pair of sides. The raiders won't say which way they're coming.*",
+   "choices": [
+    {
+     "label": "North and south.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "East and west.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "North and east.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "South and west.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-24-sent-5",
+   "name": "The Night Shift: Sentries 5",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a44",
+    "effect": "none"
+   },
+   "intro": "Wave 5 of five. The wind turns, and the garden goes quiet on one side. Where do the two sentries stand?\n\n*North, south, east, west. Two of your Pokémon, one pair of sides. The raiders won't say which way they're coming.*",
+   "choices": [
+    {
+     "label": "North and south.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "East and west.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "North and east.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "South and west.",
+     "success": {
+      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ns-side",
+        "weights": [
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-cover",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-side",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ns-cover",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-w5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-24-w1",
+   "name": "The Night Shift: Wave 1",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a44",
+    "effect": "none"
+   },
+   "intro": "Something small and quick comes over the fence with a sack already open. A Sneasel, thin as a coat hanger.\n\n*From one of the four sides.*",
+   "choices": [
+    {
+     "label": "Hold the fence.",
+     "success": {
+      "text": "It comes in from the side where your sentries stand, and meets them first. It stumbles, surprised.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sneasel"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-sent-2"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "daycare-egg-taken",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "ns-at"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-sent-2"
+        }
+       ],
+       "rule": {
+        "noCatch": true,
+        "foeStages": {
+         "atk": -1,
+         "spe": -1
+        }
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ns-cover",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Run to the open side.",
+     "success": {
+      "text": "It comes in from the side nobody is guarding, and you run for it across the wet grass.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sneasel"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-sent-2"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "daycare-egg-taken",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "ns-at"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-sent-2"
+        }
+       ],
+       "rule": {
+        "noCatch": true
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ns-cover",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-24-w2",
+   "name": "The Night Shift: Wave 2",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a44",
+    "effect": "none"
+   },
+   "intro": "The second one has learned from the first. It stays low, and goes for the shed door.\n\n*From one of the four sides.*",
+   "choices": [
+    {
+     "label": "Hold the fence.",
+     "success": {
+      "text": "It comes in from the side where your sentries stand, and meets them first. It stumbles, surprised.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sneasel"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-food"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "daycare-egg-taken",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "ns-at"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-food"
+        }
+       ],
+       "rule": {
+        "noCatch": true,
+        "foeStages": {
+         "atk": -1,
+         "spe": -1
+        }
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ns-cover",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Run to the open side.",
+     "success": {
+      "text": "It comes in from the side nobody is guarding, and you run for it across the wet grass.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sneasel"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-food"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "daycare-egg-taken",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "ns-at"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-food"
+        }
+       ],
+       "rule": {
+        "noCatch": true
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ns-cover",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-24-w3",
+   "name": "The Night Shift: Wave 3",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a44",
+    "effect": "none"
+   },
+   "intro": "The third raider doesn't even look at you. It looks at the shed, at the forty eggs in it, the way you look at supper.\n\n*From one of the four sides.*",
+   "choices": [
+    {
+     "label": "Hold the fence.",
+     "success": {
+      "text": "It comes in from the side where your sentries stand, and meets them first. It stumbles, surprised.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sneasel"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-sent-4"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "daycare-egg-taken",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "ns-at"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-sent-4"
+        }
+       ],
+       "rule": {
+        "noCatch": true,
+        "foeStages": {
+         "atk": -1,
+         "spe": -1
+        }
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ns-cover",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Run to the open side.",
+     "success": {
+      "text": "It comes in from the side nobody is guarding, and you run for it across the wet grass.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sneasel"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-sent-4"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "daycare-egg-taken",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "ns-at"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-sent-4"
+        }
+       ],
+       "rule": {
+        "noCatch": true
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ns-cover",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-24-w4",
+   "name": "The Night Shift: Wave 4",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a44",
+    "effect": "none"
+   },
+   "intro": "The fourth is the thinnest of all, and the fastest. Mrs. Holloway bangs the pan. It doesn't stop.\n\n*From one of the four sides.*",
+   "choices": [
+    {
+     "label": "Hold the fence.",
+     "success": {
+      "text": "It comes in from the side where your sentries stand, and meets them first. It stumbles, surprised.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sneasel"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-sent-5"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "daycare-egg-taken",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "ns-at"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-sent-5"
+        }
+       ],
+       "rule": {
+        "noCatch": true,
+        "foeStages": {
+         "atk": -1,
+         "spe": -1
+        }
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ns-cover",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Run to the open side.",
+     "success": {
+      "text": "It comes in from the side nobody is guarding, and you run for it across the wet grass.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sneasel"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-sent-5"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "daycare-egg-taken",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "ns-at"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-sent-5"
+        }
+       ],
+       "rule": {
+        "noCatch": true
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ns-cover",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-24-w5",
+   "name": "The Night Shift: Wave 5",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a44",
+    "effect": "none"
+   },
+   "intro": "The Weavile with the torn ear comes over the wall last, slowly. It isn't hungry for the eggs. It looks like it hasn't been warm in years.\n\n*They aren't a team. Four thin Sneasel, and a Weavile with a torn ear.*",
+   "choices": [
+    {
+     "label": "Hold the fence.",
+     "success": {
+      "text": "It comes in from the side where your sentries stand, and meets them first. It stumbles, surprised.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "weavile"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-end"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "daycare-egg-taken",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "ns-at"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-end"
+        }
+       ],
+       "rule": {
+        "noCatch": true,
+        "foeStages": {
+         "atk": -1,
+         "spe": -1
+        }
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ns-cover",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Run to the open side.",
+     "success": {
+      "text": "It comes in from the side nobody is guarding, and you run for it across the wet grass.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "weavile"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-end"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "daycare-egg-taken",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "ns-at"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-24-end"
+        }
+       ],
+       "rule": {
+        "noCatch": true
+       }
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ns-cover",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-24-food",
+   "name": "The Night Shift: The Fence",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a44",
+    "effect": "none"
+   },
+   "intro": "Two waves down. The garden is quiet, and the quiet has weight. In the dark by the fence, something is sitting very still.\n\n*They aren't a team. They are hungry, and they are not stupid.*",
+   "choices": [
+    {
+     "label": "Leave food at the fence.",
+     "success": {
+      "text": "You set down a bowl of Mrs. Holloway's stew, and step back, and say nothing. The raids stop. The night goes quiet.\n\nAt dawn the Weavile with the torn ear comes to the gate. It looks at you through the bars for a long, long time. Then it goes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "daycare-fed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "night-shift-sneasel",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold the garden.",
+     "success": {
+      "text": "You shake out the broom. Three waves to go. Behind you, the shed door rattles, and holds.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-24-sent-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-24-end",
+   "name": "The Night Shift: Morning",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "rare",
+   "room": true,
+   "remembers": [
+    {
+     "id": "fed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "daycare-fed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Mrs. Holloway has left a second bowl at the fence. The Weavile's tracks go up to it, and stop."
+    },
+    {
+     "id": "taken",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "daycare-egg-taken",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The shed is one egg short. Mr. Holloway counts it three times, and doesn't say anything. His hands say it."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a44",
+    "effect": "none"
+   },
+   "intro": "The sun comes up over a flattened garden, and a shed full of eggs, and a couple who have not sat down all night.\n\n**Mrs. Holloway:** \"Take one. Please. We'd only worry that it was the wrong one anyway.\"\n\nThree eggs sit on the table, each in a different knit cosy.",
+   "choices": [
+    {
+     "label": "The speckled one.",
+     "success": {
+      "text": "It is warm, and heavier than it looks.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-egg-taken",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "daycare-defended",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "night-shift-done",
+        "n": 1
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [
+         "normal",
+         "fairy"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The mossy one.",
+     "success": {
+      "text": "It smells of rain and garden. Something inside it shifts when you laugh.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-egg-taken",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "daycare-defended",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "night-shift-done",
+        "n": 1
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [
+         "water",
+         "bug",
+         "grass"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The warm red one.",
+     "success": {
+      "text": "It is hot as a stone from a campfire, and it ticks, softly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "daycare-egg-taken",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "daycare-defended",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "night-shift-done",
+        "n": 1
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [
+         "fire",
+         "electric",
+         "fighting"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-24-found",
+   "name": "The Night Shift: The Egg That Was Taken",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "daycare-egg-taken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "ns-at"
+    },
+    {
+     "kind": "flag",
+     "key": "ns-found",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.oldman"
+    ],
+    "tint": "#1f2a44",
+    "effect": "none"
+   },
+   "intro": "Behind a collapsed barn, in a nest of coats and dry leaves, a hatchling is asleep. Four thin Sneasel sit around it, taking turns to keep watch.\n\nIt hatched here. It has their way of tucking its chin. A hatchling raised by Sneasel has a nature no day-care would ever have given it.",
+   "choices": [
+    {
+     "label": "Take it home.",
+     "success": {
+      "text": "The Sneasel watch you lift it. The thinnest one steps aside, and doesn't make a sound.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "sneasel"
+        ],
+        "types": [],
+        "levelBonus": -3,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-found",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Found the stolen egg, hatched and raised by the Sneasel who took it.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it with them.",
+     "success": {
+      "text": "The hatchling yawns. The Sneasel look at you as if you had finally said something sensible.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ns-found",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
