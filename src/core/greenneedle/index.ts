@@ -28,6 +28,7 @@ import { pairBondLevel } from '../bond';
 import { draftAldhelm, draftBattleStart, draftEnd, draftFriend, draftLetter, draftPick, draftRecruit, draftStart, draftTokens, draftWon } from './draft';
 import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
 import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorStart, defectorTokens, defectorTrust, guestOf } from './defector';
+import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
 import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
@@ -64,6 +65,8 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{draft:')) text = draftTokens(content, run, text);
   // gn.50: the defector.
   if (text.includes('{defector:')) text = defectorTokens(content, run, text);
+  // gn.51: the Smuggling Ring.
+  if (text.includes('{smuggle:')) text = smuggleTokens(content, run, text);
   // gn.47: the Exhibition.
   if (text.includes('{ex:')) text = exTokens(content, run, text);
   // gn.46: the All-Star bracket.
@@ -203,6 +206,9 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'fluteReady') return fluteReady(run, run.regionOrder[run.regionIndex] ?? '') || gnFlag(run, 'exploud-healed') > 0;
   if (c.test === 'foodReady') return foodReady(run);
   if (c.test === 'defectorGuest') return !!guestOf(run);
+  // gn.51: rests of patience enough for it to climb in by itself.
+  if (c.test === 'rehabDone') return gnFlag(run, 'smuggle-rehab') >= restsNeeded(run);
+  if (c.test === 'rehabWaiting') return gnFlag(run, 'smuggle-rehab') > 0 && gnFlag(run, 'smuggle-rehab') < restsNeeded(run);
   if (c.test === 'rivalAhead') return run.story.rivals.some((r) => (r.world?.lead ?? 0) >= 2);
   if (c.test === 'eggMoveKnown') return run.party.some((m) => { const egg = new Set(eggMoveOptions(content, familyId(content, m.speciesId)).map((o) => o.id)); return m.moves.some((mv) => egg.has(mv.id)); });
   if (c.test === 'natureIs') return run.party.some((m) => m.nature === c.key);
@@ -581,6 +587,14 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return defectorReturn(run, (e.n ?? 0) > 0);
     case 'defectorEnd':
       return defectorEnd(run);
+    case 'smuggleCages':
+      return smuggleCages(content, run, host.float);
+    case 'smuggleRehab':
+      return smuggleRehab(run, e.n ?? 1);
+    case 'smuggleJoin':
+      return smuggleJoin(content, run, host);
+    case 'smugglePostcard':
+      return smugglePostcard(run);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':

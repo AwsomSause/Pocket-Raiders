@@ -697,6 +697,23 @@ function choiceLock(battle: BattleState, mon: PokemonInstance | undefined): stri
   return id && mon!.moves.some((m) => m.id === id && m.pp > 0) ? id : null;
 }
 
+/**
+ * Greenneedle gn.51, the Smuggling Ring's rescued Pokémon. Wary: it can't be trapped or bound. Remembers the Cage: the first time
+ * each battle it would be bound or held in place, it breaks free and gains +1 Speed. True when the hold doesn't take.
+ */
+function cageFree(ctx: BattleContext, c: Combatant, events: BattleEvent[]): boolean {
+  const ability = abilityIn(ctx, c);
+  if (ability === 'wary') return true;
+  if (ability !== 'remembers-the-cage') return false;
+  const tag = `cage-broken:${c.mon.uid}`;
+  if (ctx.battle.storyEffects.includes(tag)) return false;
+  ctx.battle.storyEffects.push(tag);
+  events.push({ type: 'ability', side: c.side, ability: 'remembers-the-cage' });
+  events.push(say(c.side, 'arena', `${nameOf(ctx, c.mon)} has been held before. Not again. It breaks free.`, c.mon.uid));
+  applyStageChange(ctx, c, 'spe', 1, events);
+  return true;
+}
+
 /** Why the player can't switch to this party slot, or null if they can. */
 export function switchProblem(ctx: Pick<BattleContext, 'battle' | 'party'> & Partial<Pick<BattleContext, 'content' | 'teamItems' | 'setStyle'>>, partyIndex: number): string | null {
   const mon = ctx.party[partyIndex];
@@ -707,7 +724,8 @@ export function switchProblem(ctx: Pick<BattleContext, 'battle' | 'party'> & Par
   if (ctx.setStyle && ctx.battle.kind === 'trainer' && !ctx.battle.needsSwitch) return 'Set style: no switching in trainer battles.';
   if (mon.hp <= 0) return 'That Pokémon has fainted.';
   const active = ctx.party[ctx.battle.activeIndex];
-  const shedShell = active && 'content' in ctx ? Held.canAlwaysSwitch(ctx as Pick<BattleContext, 'content' | 'teamItems'>, active, 'player') : false;
+  // Greenneedle gn.51: a Wary Pokémon can always switch out.
+  const shedShell = active && 'content' in ctx ? Held.canAlwaysSwitch(ctx as Pick<BattleContext, 'content' | 'teamItems'>, active, 'player') || (!!ctx.content && abilityOf(ctx.content, active) === 'wary') : false;
   if (!ctx.battle.needsSwitch && !shedShell && (ctx.battle.playerVolatile?.bound ?? 0) > 0) return "Your Pokémon is bound and can't escape!";
   if (!ctx.battle.needsSwitch && forcedMoveId(ctx.battle.playerVolatile)) return 'Your Pokémon is in the middle of a move!';
   if (!ctx.battle.needsSwitch && ctx.battle.extra?.fairyLock === ctx.battle.turn) return "Fairy Lock keeps your Pokémon from switching out!";
@@ -4826,9 +4844,9 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   }
   if (fx.koBoost && target.mon.hp <= 0 && user.mon.hp > 0) applyStageChange(ctx, user, fx.koBoost.stat, fx.koBoost.stages, events);
   if (landed > 0 && fx.forceSwitch) forceOut(ctx, target, events);
-  if (landed > 0 && fx.trap) target.vol.trapped = true;
+  if (landed > 0 && fx.trap && !target.vol.trapped && !cageFree(ctx, target, events)) target.vol.trapped = true;
   // Greenneedle gn.37 Welcome Home: the target can't switch out next turn.
-  if (landed > 0 && fx.trapNext && target.mon.hp > 0 && !target.vol.trapped) {
+  if (landed > 0 && fx.trapNext && target.mon.hp > 0 && !target.vol.trapped && !cageFree(ctx, target, events)) {
     target.vol.trapped = true;
     ctx.battle.storyEffects.push(`untrap:${target.side}:${ctx.battle.turn + 1}`);
   }
@@ -4881,7 +4899,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       events.push({ type: 'selfState', side: target.side, state: 'haunted' });
     }
   }
-  if (target.mon.hp > 0 && fx.bind && target.vol.bound === 0) {
+  if (target.mon.hp > 0 && fx.bind && target.vol.bound === 0 && !cageFree(ctx, target, events)) {
     target.vol.bound = rng.int(4, 5) + growthExtraTurn(ctx, user, 'trapper');
     target.vol.boundBy = move.id;
     events.push({ type: 'bound', side: target.side, moveId: move.id });
@@ -6000,6 +6018,7 @@ function applyStateEffects(ctx: BattleContext, user: Combatant, target: Combatan
   }
   if (fx.octolock) {
     if (target.vol.octolock) return false;
+    if (cageFree(ctx, target, events)) return true;
     target.vol.octolock = true;
     target.vol.trapped = true;
     state(target, 'trapped');
@@ -6639,6 +6658,7 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
   }
   if (fx.trap) {
     if (target.vol.trapped) events.push({ type: 'fail', side: user.side });
+    else if (cageFree(ctx, target, events)) return;
     else {
       target.vol.trapped = true;
       events.push({ type: 'selfState', side: target.side, state: 'trapped' });

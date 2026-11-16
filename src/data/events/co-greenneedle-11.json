@@ -6673,6 +6673,836 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-51-yard",
+   "name": "The Pokémon Smuggling Ring",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Combat"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "smuggle-freed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#232a33",
+    "effect": "none"
+   },
+   "intro": "*A warehouse with its lights off and its doors open. Lorries, engines running.*\n\n*Inside, cages, stacked four high. Tags on each: a region, a number, a price.*\n\nAlolan, Galarian, Hisuian, Paldean: regional forms, taken from where they live, to be sold where they're rare.\n\nFour guards with strong Pokémon. A foreman with a clipboard, counting.",
+   "choices": [
+    {
+     "label": "Go in through the front.",
+     "success": {
+      "text": "You walk in through the open doors like you belong. For about four steps, you do.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "smuggle-entry",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-guard-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go in through the roof.",
+     "success": {
+      "text": "A drainpipe, a skylight, the rafters. Below, the guards' torches swing back and forth.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "smuggle-entry",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-rafters"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the air out of the lorries' tyres first.",
+     "success": {
+      "text": "You crawl from lorry to lorry in the dark, a valve at a time. It takes ages. The hiss sounds like the whole night breathing out.\n\nWhatever happens inside now, nobody drives off with a full lorry.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "smuggle-tyres",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-flat"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fetch the Rangers.",
+     "success": {
+      "text": "You run for the Ranger post. They come, in a node, three jeeps with the lights off. The guards are theirs.\n\nThe head Ranger hands you a crowbar. \"The cages are yours. You found them.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "smuggle-entry",
+        "n": 4
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-cages"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-51-flat",
+   "name": "The Pokémon Smuggling Ring: Flat Tyres",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#232a33",
+    "effect": "none"
+   },
+   "intro": "Every lorry in the yard sits on its rims. A driver kicks a wheel and swears, and goes inside to tell someone.\n\nNow. Before they work out why.",
+   "choices": [
+    {
+     "label": "Go in through the front.",
+     "success": {
+      "text": "You walk in through the open doors like you belong. For about four steps, you do.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "smuggle-entry",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-guard-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go in through the roof.",
+     "success": {
+      "text": "A drainpipe, a skylight, the rafters. Below, the guards' torches swing back and forth.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "smuggle-entry",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-rafters"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fetch the Rangers.",
+     "success": {
+      "text": "You run for the Ranger post. They come, in a node, three jeeps with the lights off. The guards are theirs.\n\nThe head Ranger hands you a crowbar. \"The cages are yours. You found them.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "smuggle-entry",
+        "n": 4
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-cages"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-51-rafters",
+   "name": "The Pokémon Smuggling Ring: The Rafters",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#232a33",
+    "effect": "none"
+   },
+   "intro": "A beam as wide as your foot. Below, the cages, and the tops of the guards' heads. One of them is humming.\n\nHalfway along, there's a gap where a beam has rotted out.",
+   "choices": [
+    {
+     "label": "Let your Pokémon carry you over.",
+     "success": {
+      "text": "It takes you across the gap without a sound. Two guards never see you pass over their heads.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-guard-3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "flying",
+        "ghost"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Jump the gap.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You land soft. Two guards never see you pass over their heads.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-guard-3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You land. The beam doesn't like it. Dust sifts down onto a guard's cap. He looks up. Still, one guard skipped.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-guard-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-51-guard-1",
+   "name": "The Smuggling Ring: Guard Hollis",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#232a33",
+    "effect": "none"
+   },
+   "intro": "*Inside, cages, stacked four high. Tags on each: a region, a number, a price.*\n\nThe first guard looks up from a crossword. \"You're not the lorry driver.\" He sighs, and stands.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "His Pokémon are strong. Somebody pays for strong.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-51-lorries"
+        }
+       ],
+       "name": "Guard Hollis",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-51-guard-2"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-51-guard-2",
+   "name": "The Smuggling Ring: Guard Pruett",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#232a33",
+    "effect": "none"
+   },
+   "intro": "Further in. The cages go on, row after row. Nothing in them makes a sound.\n\nThe second guard was asleep on the cages. He's awake now, and embarrassed about it, which makes him angrier.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "His Pokémon are strong. Somebody pays for strong.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-51-lorries"
+        }
+       ],
+       "name": "Guard Pruett",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-51-guard-3"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-51-guard-3",
+   "name": "The Smuggling Ring: Guard Venn",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#232a33",
+    "effect": "none"
+   },
+   "intro": "Further in. The cages go on, row after row. Nothing in them makes a sound.\n\nThe third guard doesn't say anything. He just takes off his watch, very carefully, and puts it in his pocket.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "His Pokémon are strong. Somebody pays for strong.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-51-lorries"
+        }
+       ],
+       "name": "Guard Venn",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-51-guard-4"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-51-guard-4",
+   "name": "The Smuggling Ring: Foreman Dace",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#232a33",
+    "effect": "none"
+   },
+   "intro": "Further in. The cages go on, row after row. Nothing in them makes a sound.\n\n**Foreman Dace:** \"Do you know what one of these fetches, three regions over? More than you'll see this year. Step away.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "His Pokémon are strong. Somebody pays for strong.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-51-lorries"
+        }
+       ],
+       "name": "Foreman Dace",
+       "classId": "veteran",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 2500
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nugget",
+          "big-pearl",
+          "star-piece",
+          "comet-shard"
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-51-cages"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-51-lorries",
+   "name": "The Pokémon Smuggling Ring: The Lorries",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Combat"
+   ],
+   "remembers": [
+    {
+     "id": "tyres",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "smuggle-tyres",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Engines roar. Then they whine, and stop. Every lorry in the yard is sitting on its rims. Nobody's driving anywhere. By morning, the Rangers have the lot."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#232a33",
+    "effect": "none"
+   },
+   "intro": "You come round on the warehouse floor. The guards have gone, and so have two of the lorries, and whatever was in them.\n\nBut the cages here are still here. Still full. Still quiet.",
+   "choices": [
+    {
+     "label": "Get up.",
+     "success": {
+      "text": "You get up. You find the keys on a hook by the door, where somebody always leaves keys.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "smuggle-lost",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-cages"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-51-cages",
+   "name": "The Pokémon Smuggling Ring: The Cages",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#232a33",
+    "effect": "none"
+   },
+   "intro": "Each cage has a Pokémon, and each has been in it long enough to stop making a noise.\n\n*You open the first one. Nothing comes out.*\n\n*It's pressed against the back. It's looking at the open door as if it's a trick.*",
+   "choices": [
+    {
+     "label": "Reach in.",
+     "success": {
+      "text": "It goes flatter. It goes smaller than it should be able to. You take your hand away, slowly, and it watches the hand all the way out.\n\nYou step back. Much later, when you look, the cage is empty.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "smuggleCages"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-door"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Step back, and wait.",
+     "success": {
+      "text": "A while. Then a nose. Then all of it, at once, past you and under a lorry.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "smuggleCages"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-door"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Open all the others first.",
+     "success": {
+      "text": "Cage after cage. When it sees the rest go, it goes. It doesn't look back. None of them do.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "smuggleCages"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-door"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-51-door",
+   "name": "The Pokémon Smuggling Ring: The Door",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "ring",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ring-finished",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The tags match the crates in the S.S. Anne's engine room, and the ones under the bridge. That was all of it. The ring's finished."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#232a33",
+    "effect": "none"
+   },
+   "intro": "The Rangers take most of them home, region by region. The head Ranger reads you the list, and ticks each one off on the bonnet of her jeep:\n\n{smuggle:list}\n\nOne of the freed ones doesn't leave. It sits by the open warehouse door, between the dark inside and the dark outside. A {smuggle:rescue}, a long way from home.",
+   "choices": [
+    {
+     "label": "Hold out a Ball.",
+     "success": {
+      "text": "*You hold out a Ball. It's across the yard before the button's pressed.*\n\nBut when you walk away, it follows. Not close. It won't go inside a Ball. It will walk beside you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "smuggleRehab",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "smuggle-at"
+       },
+       {
+        "kind": "moment",
+        "text": "Opened the cages of a smuggling ring. One of them followed, at a distance.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-51-rest",
+   "name": "The One That Stayed",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Recovery"
+   ],
+   "remembers": [
+    {
+     "id": "caged",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "hasMark",
+       "key": "freed-caged"
+      }
+     ],
+     "notice": "Your other Pokémon that once knew a cage walks over and lies down beside it, on the outside. Neither of them moves."
+    },
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ball-waited",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The one whose Ball wouldn't open sits with it, the way somebody once sat with them."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#232a33",
+    "effect": "none"
+   },
+   "intro": "The {smuggle:rescue} from the warehouse is still with you. It takes no place in your team, and nothing can touch it: it stays back.\n\n{smuggle:rest}",
+   "choices": [
+    {
+     "label": "Pick up the Ball.",
+     "success": {
+      "text": "It's in there. It climbed in by itself. Its Bond starts high. *It chose the door, this time.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "smuggleJoin"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "smuggle-joined",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "gn",
+       "test": "rehabDone"
+      }
+     ]
+    },
+    {
+     "label": "Leave food where it can reach.",
+     "success": {
+      "text": "You put it down and walk away. In the morning the dish is clean, and it's a little closer.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "smuggleRehab",
+        "n": 1
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "rehabWaiting"
+      }
+     ]
+    },
+    {
+     "label": "Leave a Ball open on the ground, and ignore it.",
+     "success": {
+      "text": "You leave the Ball open on the grass and don't look at it once. That's the hard part.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "smuggleRehab",
+        "n": 1
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "rehabWaiting"
+      }
+     ]
+    },
+    {
+     "label": "Try the Ball again",
+     "success": {
+      "text": "It's gone before you've finished reaching. Back to where it started. *It's not ready. It'll tell you.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "smuggleRehab",
+        "n": -1
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "rehabWaiting"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-51-postcard",
+   "name": "The Smuggling Ring: A Postcard",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "smuggle-freed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "smuggle-at"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "smuggle-card-at"
+    },
+    {
+     "kind": "flag",
+     "key": "smuggle-cards",
+     "atLeast": 0,
+     "atMost": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#232a33",
+    "effect": "none"
+   },
+   "intro": "A postcard from the Rangers. A photograph of the {smuggle:card}: where it belongs, not looking at the camera.",
+   "choices": [
+    {
+     "label": "Pin it up.",
+     "success": {
+      "text": "You pin it up. On the list, one more tick.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "smugglePostcard"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "smuggle-card-at"
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

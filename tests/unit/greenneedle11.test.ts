@@ -965,3 +965,148 @@ describe('gn.50 The Evil Team\'s Betrayal', () => {
     expect(battle.enemyVolatile.trapped).toBe(false);
   });
 });
+
+// ---- gn.51 The Pokémon Smuggling Ring ----
+import { CARGO, farFromHome, homeOf, smuggleRest } from '../../src/core/greenneedle/smuggling';
+import { castOf as castOfGn } from '../../src/core/greenneedle';
+import { switchProblem } from '../../src/core/battle/engine';
+
+const yard = (seed: string): RunState => {
+  const run = gnRun(seed);
+  open(run, 'gn-51-yard');
+  return run;
+};
+const throughCages = (run: RunState, how = 'Step back, and wait.'): RunState => choose(run, 'gn-51-cages', how).run;
+const rescued = (run: RunState) => [...run.party, ...run.box].find((m) => m.gn?.includes('freed-caged'));
+/** A rest stop on the node the player stands on. */
+const rest = (run: RunState): void => {
+  smuggleRest(content, run);
+};
+
+describe('gn.51 The Pokémon Smuggling Ring', () => {
+  it('the yard: the doc\'s four ways in; the front is four guard battles at A+1, the last the foreman', () => {
+    const run = yard('t51-front');
+    expect(scene(run, 'gn-51-yard').labels).toEqual(['Go in through the front.', 'Go in through the roof.', 'Let the air out of the lorries\' tyres first.', 'Fetch the Rangers.']);
+    let r = choose(run, 'gn-51-yard', 'Go in through the front.').run;
+    for (let i = 1; i <= 4; i += 1) {
+      const b = choose(r, `gn-51-guard-${i}`, 'Battle.').run;
+      expect(b.battle!.enemyTeam[0]!.level).toBeGreaterThan(0);
+      r = win(b);
+    }
+    expect(opened(r, 'gn-51-cages')).toBe(true);
+    expect(flagOf(r, 'smuggle-entry')).toBe(1);
+  });
+
+  it('the roof skips two guards; the tyres cost a node and nobody drives off; the Rangers: no battles, Reputation +2', () => {
+    const roof = choose(yard('t51-roof'), 'gn-51-yard', 'Go in through the roof.').run;
+    roof.party = [...roof.party, createPokemon(content, 'gastly', 20, 'p-gastly')];
+    expect(opened(choose(roof, 'gn-51-rafters', 'Let your Pokémon carry you over.').run, 'gn-51-guard-3')).toBe(true);
+    const tyres = choose(yard('t51-tyres'), 'gn-51-yard', 'Let the air out of the lorries\' tyres first.');
+    expect(said(tyres)).toContain('nobody drives off');
+    expect(scene(tyres.run, 'gn-51-flat').labels).toEqual(['Go in through the front.', 'Go in through the roof.', 'Fetch the Rangers.']);
+    const front = choose(tyres.run, 'gn-51-flat', 'Go in through the front.').run;
+    const lost = lose(choose(front, 'gn-51-guard-1', 'Battle.').run);
+    expect(lost.phase).toBe('map');
+    expect(scene(lost, 'gn-51-lorries').intro).toContain('sitting on its rims');
+    const rangers = choose(yard('t51-rangers'), 'gn-51-yard', 'Fetch the Rangers.').run;
+    expect(flagOf(rangers, 'rep')).toBe(2);
+    expect(opened(rangers, 'gn-51-cages')).toBe(true);
+  });
+
+  it('the cages: the doc\'s three choices; four go home on a list, one stays by the door, a form from another region with a special ability', () => {
+    const run = choose(yard('t51-cages'), 'gn-51-yard', 'Fetch the Rangers.').run;
+    expect(scene(run, 'gn-51-cages').labels).toEqual(['Reach in.', 'Step back, and wait.', 'Open all the others first.']);
+    const r = throughCages(run);
+    const stays = castOfGn(r, 'smuggle-rescue')!;
+    expect(CARGO).toContain(stays);
+    expect(homeOf(stays)).not.toBe(r.regionOrder[r.regionIndex]);
+    const door = scene(r, 'gn-51-door').intro;
+    expect(door.match(/☐/g)).toHaveLength(4);
+    expect(door).toContain(content.species.get(stays)!.name);
+  });
+
+  it('rehabilitation: it walks beside you (no party slot); at each rest it comes closer; "Try the Ball again" sets it back; after three it climbs in, Bond high', () => {
+    let run = throughCages(choose(yard('t51-rehab'), 'gn-51-yard', 'Fetch the Rangers.').run);
+    const size = run.party.length;
+    run = choose(run, 'gn-51-door', 'Hold out a Ball.').run;
+    expect(run.party.length).toBe(size);
+    rest(run);
+    expect(scene(run, 'gn-51-rest').labels).toEqual(['Leave food where it can reach.', 'Leave a Ball open on the ground, and ignore it.', 'Try the Ball again']);
+    expect(scene(run, 'gn-51-rest').intro).toContain('outside the firelight');
+    run = choose(run, 'gn-51-rest', 'Leave food where it can reach.').run;
+    rest(run);
+    expect(scene(run, 'gn-51-rest').intro).toContain('edge of the light');
+    const back = choose(run, 'gn-51-rest', 'Try the Ball again');
+    expect(said(back)).toContain('It\'s not ready. It\'ll tell you.');
+    expect(flagOf(back.run, 'smuggle-rehab')).toBe(1);
+    run = choose(run, 'gn-51-rest', 'Leave a Ball open on the ground, and ignore it.').run;
+    rest(run);
+    expect(scene(run, 'gn-51-rest').labels).toEqual(['Pick up the Ball.']);
+    const joined = choose(run, 'gn-51-rest', 'Pick up the Ball.');
+    expect(said(joined)).toContain('It chose the door, this time.');
+    const mon = rescued(joined.run)!;
+    expect(['far-from-home', 'wary', 'remembers-the-cage']).toContain(mon.fixedAbility);
+    expect(mon.friendship).toBeGreaterThanOrEqual(3 * content.balance.co.bondLevelStep);
+    rest(joined.run);
+    expect(opened(joined.run, 'gn-51-rest')).toBe(false);
+  });
+
+  it('waited out the Ball That Wouldn\'t Open (gn.new.03): two rests, not three', () => {
+    let run = throughCages(choose(yard('t51-two'), 'gn-51-yard', 'Fetch the Rangers.').run);
+    setFlag(run, 'ball-waited');
+    run = choose(run, 'gn-51-door', 'Hold out a Ball.').run;
+    rest(run);
+    run = choose(run, 'gn-51-rest', 'Leave food where it can reach.').run;
+    rest(run);
+    expect(scene(run, 'gn-51-rest').labels).toEqual(['Pick up the Ball.']);
+  });
+
+  it('Far From Home: +10% outside its own region, back to normal at home; Wary can always switch; Remembers the Cage breaks the first hold', () => {
+    const run = gnRun('t51-abilities');
+    const mon = createPokemon(content, 'vulpix-alola', 20, 'p-vulpix');
+    mon.fixedAbility = 'far-from-home';
+    mon.gn = ['home:alola'];
+    run.regionOrder[run.regionIndex] = 'kanto';
+    farFromHome(run, mon);
+    expect(mon.eventBoosts?.atk).toBe(10);
+    run.regionOrder[run.regionIndex] = 'alola';
+    farFromHome(run, mon);
+    expect(mon.eventBoosts?.atk).toBe(0);
+  });
+
+  it('Remembers the Cage breaks free of the first hold (+1 Speed), not the second; Wary can always switch out', () => {
+    let run = choose(snorlaxRun('t51-cage'), 'gn-49-hill', 'Battle it.').run;
+    run = structuredClone(run);
+    const foe = run.battle!.enemyTeam[0]!;
+    foe.moves = [{ id: 'mean-look', pp: 5 }];
+    foe.status = null;
+    run.battle!.storyEffects = [];
+    const lead = run.party[run.battle!.activeIndex]!;
+    lead.fixedAbility = 'remembers-the-cage';
+    lead.moves = [{ id: 'growl', pp: 40 }];
+    const t1 = takeTurn(content, run, { kind: 'move', index: 0 });
+    expect(t1.events.some((e) => e.type === 'ability' && 'ability' in e && e.ability === 'remembers-the-cage')).toBe(true);
+    expect(t1.run.battle!.playerVolatile.trapped).toBe(false);
+    expect(t1.run.battle!.playerStages.spe).toBe(1);
+    const t2 = takeTurn(content, t1.run, { kind: 'move', index: 0 });
+    expect(t2.run.battle!.playerVolatile.trapped).toBe(true);
+    const wary = structuredClone(run);
+    wary.party[wary.battle!.activeIndex]!.fixedAbility = 'wary';
+    wary.battle!.playerVolatile.trapped = true;
+    wary.party.push(createPokemon(content, 'pidgey', 10, 'p-spare'));
+    expect(switchProblem({ battle: wary.battle!, party: wary.party, content }, wary.party.length - 1)).toBeNull();
+    wary.party[wary.battle!.activeIndex]!.fixedAbility = undefined;
+    expect(switchProblem({ battle: wary.battle!, party: wary.party, content }, wary.party.length - 1)).toContain('can\'t be switched out');
+  });
+
+  it('postcards: one a region afterwards, ticking the list', () => {
+    let run = throughCages(choose(yard('t51-cards'), 'gn-51-yard', 'Fetch the Rangers.').run);
+    run = choose(run, 'gn-51-door', 'Hold out a Ball.').run;
+    run.regionIndex += 1;
+    open(run, 'gn-51-postcard');
+    run = choose(run, 'gn-51-postcard', 'Pin it up.').run;
+    expect(flagOf(run, 'smuggle-cards')).toBe(1);
+    open(run, 'gn-51-door');
+    expect(scene(run, 'gn-51-door').intro.match(/☑/g)).toHaveLength(1);
+  });
+});

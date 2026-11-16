@@ -499,6 +499,50 @@
   ],
   "tags": []
  },
+ "gn-51-yard": {
+  "gn": "gn.51",
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 14,
+  "window": [
+   12,
+   17
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "level": "Guards A+1",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Pokémon Smuggling Ring",
+   "elsewhere": "The Pokémon Smuggling Ring"
+  },
+  "note": "Badge: a crate. Better at night. The rescued Pokémon walks beside the player and opens its own scene at each rest stop (run.ts) until it climbs in. Postcards (gn-51-postcard) come one a region afterwards.",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-51-postcard": {
+  "gn": "gn.51",
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 4,
+  "window": [
+   1,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "level": "None",
+  "often": "region",
+  "badge": "own",
+  "note": "Afterstory: one postcard a region, until all four are home.",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
  "gn-45-field": {
   "gn": "gn.45",
   "shape": "Single",

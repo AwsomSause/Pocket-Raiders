@@ -27,6 +27,7 @@ import { allstarRecord, allstarTurn } from './greenneedle/allstar';
 import { draftRecord } from './greenneedle/draft';
 import { exRipple } from './greenneedle/exhibition';
 import { snorlaxForgives, snorlaxGym, snorlaxRest } from './greenneedle/snorlax';
+import { farFromHome, smuggleRest } from './greenneedle/smuggling';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
 import { revivalFee } from './battle/revivalStatus';
@@ -980,6 +981,7 @@ function enterNextRegion(content: Content, run: RunState): void {
   run.regionIndex += 1;
   run.log.charmUsedInRegion = false;
   snorlaxForgives(run);
+  for (const m of [...run.party, ...run.box]) farFromHome(run, m);
   endRegionTempEffects(run);
   endRegionStatBoosts(content, [...run.party, ...run.box]);
   shiftPartyLevels(content, run, regionLevelOffset(runArchetype(content, run).modifiers));
@@ -2696,6 +2698,8 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     if (centerHeal < 1) for (const mon of run.party) mon.hp = Math.max(1, Math.min(mon.hp, Math.floor(maxHp(content, mon) * centerHeal)));
     careRest(run, content);
     const snorlaxLine = snorlaxRest(run, stageNumber(content, run));
+    // Greenneedle gn.51: the rescued Pokémon that won't go in a Ball comes a little closer at each rest.
+    smuggleRest(content, run);
     partyLifeCamp(run);
     const comboLine = [partyLifeCombos(content, run), ...assignGrowthPaths(content, run.party, run.story.histories)].filter(Boolean).join(' ');
     runSide.used = true;

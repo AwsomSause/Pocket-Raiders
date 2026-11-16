@@ -1,6 +1,6 @@
 // Greenneedle, part 11: gn.44 The 1v1 Championship (doc GREENNEEDLE_REWORKED_PLACED_10.md).
 // Build: npm run co:build -- greenneedle-11   then   npm run co:gn
-import { $, any, br, ch, fight, flag, heal, item, join, out, scout, takeNode, trainer, wild, type Json } from '../dsl.ts';
+import { $, any, anyType, br, ch, fight, flag, heal, item, join, out, scout, takeNode, trainer, wild, type Json } from '../dsl.ts';
 import { bond, chIf, exactly, gev, gn, is, laterStage, moment, not, notThisRegion, rm, roll, say, scene, setTo, stampRegion, stampStage, when, type Placement } from './_gn.ts';
 import { evil, foe } from './_evil-story-kit.ts';
 
@@ -682,7 +682,114 @@ const gn50: Json[] = [
   ), [ch('Keep it.', out('You keep it. You couldn\'t say which part they meant.', setTo('defector-postcard', 1)))]),
 ];
 
-export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46, ...gn47, ...gn48, ...gn49, KANTO_SNORLAX, ...gn50];
+// =====================================================================================================================
+// gn.51  THE POKÉMON SMUGGLING RING  (step 14, side branch, window 12–17, better at night; instead of the battle; once per run, A6).
+// Four guards at A+1 (the last is the foreman); the roof skips two; the tyres cost a node; the Rangers do it for you. The cages,
+// the list of who goes home, and the one that stays: afraid of Balls, three rests of patience (core/greenneedle/smuggling.ts).
+// =====================================================================================================================
+const CRATE_TINT = '#232a33';
+const crate = (o: Json = {}): Json => ({ tint: CRATE_TINT, tags: ['Evil Team', 'Combat'], effect: 'none', ...o });
+const GUARDS = [
+  { name: 'Guard Hollis', line: 'The first guard looks up from a crossword. "You\'re not the lorry driver." He sighs, and stands.' },
+  { name: 'Guard Pruett', line: 'The second guard was asleep on the cages. He\'s awake now, and embarrassed about it, which makes him angrier.' },
+  { name: 'Guard Venn', line: 'The third guard doesn\'t say anything. He just takes off his watch, very carefully, and puts it in his pocket.' },
+  { name: 'Foreman Dace', line: '**Foreman Dace:** "Do you know what one of these fetches, three regions over? More than you\'ll see this year. Step away."' },
+];
+const guardRoom = (i: number): Json => rm(`gn-51-guard-${i + 1}`, `The Smuggling Ring: ${GUARDS[i]!.name}`, crate(), say(
+  i === 0 ? '*Inside, cages, stacked four high. Tags on each: a region, a number, a price.*' : 'Further in. The cages go on, row after row. Nothing in them makes a sound.',
+  GUARDS[i]!.line,
+), [
+  ch('Battle.', fight('His Pokémon are strong. Somebody pays for strong.', {
+    ...trainer(GUARDS[i]!.name, { cls: i === 3 ? 'veteran' : 'roughneck', size: i === 3 ? 4 : 3, lv: 1, friendly: true,
+      win: i === 3 ? [$(2500), any(...TREASURE_ITEMS), scene('gn-51-cages')] : [scene(`gn-51-guard-${i + 2}`)],
+      lose: [scene('gn-51-lorries')] }) })),
+]);
+const TREASURE_ITEMS = ['nugget', 'big-pearl', 'star-piece', 'comet-shard'];
+const ENTRY = (o: { tyres?: boolean } = {}): Json[] => [
+  ch('Go in through the front.', out('You walk in through the open doors like you belong. For about four steps, you do.', setTo('smuggle-entry', o.tyres ? 3 : 1), scene('gn-51-guard-1'))),
+  ch('Go in through the roof.', out('A drainpipe, a skylight, the rafters. Below, the guards\' torches swing back and forth.', setTo('smuggle-entry', o.tyres ? 3 : 2), scene('gn-51-rafters'))),
+  ...(o.tyres ? [] : [ch('Let the air out of the lorries\' tyres first.', out(say(
+    'You crawl from lorry to lorry in the dark, a valve at a time. It takes ages. The hiss sounds like the whole night breathing out.',
+    'Whatever happens inside now, nobody drives off with a full lorry.',
+  ), takeNode(1), setTo('smuggle-tyres', 1), scene('gn-51-flat')))]),
+  ch('Fetch the Rangers.', out(say(
+    'You run for the Ranger post. They come, in a node, three jeeps with the lights off. The guards are theirs.',
+    'The head Ranger hands you a crowbar. "The cages are yours. You found them."',
+  ), takeNode(1), setTo('smuggle-entry', 4), flag('rep', 2), scene('gn-51-cages'))),
+];
+
+const gn51: Json[] = [
+  gev('gn-51-yard', 'The Pokémon Smuggling Ring', crate({ stop: 'event', rarity: 'rare', requires: [not('smuggle-freed')] }), say(
+    '*A warehouse with its lights off and its doors open. Lorries, engines running.*',
+    '*Inside, cages, stacked four high. Tags on each: a region, a number, a price.*',
+    'Alolan, Galarian, Hisuian, Paldean: regional forms, taken from where they live, to be sold where they\'re rare.',
+    'Four guards with strong Pokémon. A foreman with a clipboard, counting.',
+  ), ENTRY()),
+  rm('gn-51-flat', 'The Pokémon Smuggling Ring: Flat Tyres', crate(), say(
+    'Every lorry in the yard sits on its rims. A driver kicks a wheel and swears, and goes inside to tell someone.',
+    'Now. Before they work out why.',
+  ), ENTRY({ tyres: true })),
+  rm('gn-51-rafters', 'The Pokémon Smuggling Ring: The Rafters', crate({ tags: ['Evil Team', 'Exploration'] }), say(
+    'A beam as wide as your foot. Below, the cages, and the tops of the guards\' heads. One of them is humming.',
+    'Halfway along, there\'s a gap where a beam has rotted out.',
+  ), [
+    chIf([anyType('flying', 'ghost')], 'Let your Pokémon carry you over.', out('It takes you across the gap without a sound. Two guards never see you pass over their heads.', scene('gn-51-guard-3'))),
+    ch('Jump the gap.', out('You land soft. Two guards never see you pass over their heads.', scene('gn-51-guard-3')), {
+      prompt: { id: 'brace-hold', needs: 'ok' },
+      fail: out('You land. The beam doesn\'t like it. Dust sifts down onto a guard\'s cap. He looks up. Still, one guard skipped.', scene('gn-51-guard-2')),
+    }),
+  ]),
+  ...GUARDS.map((_, i) => guardRoom(i)),
+  rm('gn-51-lorries', 'The Pokémon Smuggling Ring: The Lorries', crate({ remembers: [
+    { id: 'tyres', when: [is('smuggle-tyres')], notice: 'Engines roar. Then they whine, and stop. Every lorry in the yard is sitting on its rims. Nobody\'s driving anywhere. By morning, the Rangers have the lot.' },
+  ] }), say(
+    'You come round on the warehouse floor. The guards have gone, and so have two of the lorries, and whatever was in them.',
+    'But the cages here are still here. Still full. Still quiet.',
+  ), [ch('Get up.', out('You get up. You find the keys on a hook by the door, where somebody always leaves keys.', setTo('smuggle-lost', 1), scene('gn-51-cages')))]),
+  rm('gn-51-cages', 'The Pokémon Smuggling Ring: The Cages', crate({ tags: ['Evil Team', 'Pokémon'] }), say(
+    'Each cage has a Pokémon, and each has been in it long enough to stop making a noise.',
+    '*You open the first one. Nothing comes out.*',
+    '*It\'s pressed against the back. It\'s looking at the open door as if it\'s a trick.*',
+  ), [
+    ch('Reach in.', out(say(
+      'It goes flatter. It goes smaller than it should be able to. You take your hand away, slowly, and it watches the hand all the way out.',
+      'You step back. Much later, when you look, the cage is empty.',
+    ), gn('smuggleCages'), scene('gn-51-door'))),
+    ch('Step back, and wait.', out('A while. Then a nose. Then all of it, at once, past you and under a lorry.', gn('smuggleCages'), scene('gn-51-door'))),
+    ch('Open all the others first.', out('Cage after cage. When it sees the rest go, it goes. It doesn\'t look back. None of them do.', gn('smuggleCages'), scene('gn-51-door'))),
+  ]),
+  rm('gn-51-door', 'The Pokémon Smuggling Ring: The Door', crate({ tags: ['Pokémon', 'Story'], remembers: [
+    { id: 'ring', when: [is('ring-finished')], notice: 'The tags match the crates in the S.S. Anne\'s engine room, and the ones under the bridge. That was all of it. The ring\'s finished.' },
+  ] }), say(
+    'The Rangers take most of them home, region by region. The head Ranger reads you the list, and ticks each one off on the bonnet of her jeep:',
+    '{smuggle:list}',
+    'One of the freed ones doesn\'t leave. It sits by the open warehouse door, between the dark inside and the dark outside. A {smuggle:rescue}, a long way from home.',
+  ), [
+    ch('Hold out a Ball.', out(say(
+      '*You hold out a Ball. It\'s across the yard before the button\'s pressed.*',
+      'But when you walk away, it follows. Not close. It won\'t go inside a Ball. It will walk beside you.',
+    ), gn('smuggleRehab', { n: 0 }), stampRegion('smuggle-at'), moment('Opened the cages of a smuggling ring. One of them followed, at a distance.', 70))),
+  ]),
+  // ---- Rehabilitation: it comes a little closer at each rest (the rest stop opens this beside it) ----
+  rm('gn-51-rest', 'The One That Stayed', crate({ tags: ['Pokémon', 'Recovery'], remembers: [
+    { id: 'caged', when: [gnc('hasMark', { key: 'freed-caged' })], notice: 'Your other Pokémon that once knew a cage walks over and lies down beside it, on the outside. Neither of them moves.' },
+    { id: 'waited', when: [is('ball-waited')], notice: 'The one whose Ball wouldn\'t open sits with it, the way somebody once sat with them.' },
+  ] }), say(
+    'The {smuggle:rescue} from the warehouse is still with you. It takes no place in your team, and nothing can touch it: it stays back.',
+    '{smuggle:rest}',
+  ), [
+    chIf([not('smuggle-joined'), { kind: 'gn', test: 'rehabDone' }], 'Pick up the Ball.', out('It\'s in there. It climbed in by itself. Its Bond starts high. *It chose the door, this time.*', gn('smuggleJoin'))),
+    chIf([{ kind: 'gn', test: 'rehabWaiting' }], 'Leave food where it can reach.', out('You put it down and walk away. In the morning the dish is clean, and it\'s a little closer.', gn('smuggleRehab', { n: 1 }))),
+    chIf([{ kind: 'gn', test: 'rehabWaiting' }], 'Leave a Ball open on the ground, and ignore it.', out('You leave the Ball open on the grass and don\'t look at it once. That\'s the hard part.', gn('smuggleRehab', { n: 1 }))),
+    chIf([{ kind: 'gn', test: 'rehabWaiting' }], 'Try the Ball again', out('It\'s gone before you\'ve finished reaching. Back to where it started. *It\'s not ready. It\'ll tell you.*', gn('smuggleRehab', { n: -1 }))),
+  ]),
+  // ---- Afterstory: a postcard from each region one of them went home to ----
+  gev('gn-51-postcard', 'The Smuggling Ring: A Postcard', crate({ stop: 'event', rarity: 'rare', tags: ['Story'], requires: [is('smuggle-freed'), notThisRegion('smuggle-at'), notThisRegion('smuggle-card-at'), is('smuggle-cards', 0, 3)] }), say(
+    'A postcard from the Rangers. A photograph of the {smuggle:card}: where it belongs, not looking at the camera.',
+  ), [ch('Pin it up.', out('You pin it up. On the list, one more tick.', gn('smugglePostcard'), stampRegion('smuggle-card-at')))]),
+];
+
+export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46, ...gn47, ...gn48, ...gn49, KANTO_SNORLAX, ...gn50, ...gn51];
 export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
@@ -745,6 +852,13 @@ export const PLACEMENT: Record<string, Placement> = {
   'gn-50-word-town': { gn: 'gn.50', shape: 'Single', earliest: 'A5', home: 10, window: [2, 18], sits: 'optional', attaches: 'town', tags: ['Evil Team'], stages: [4, 5, 6], level: 'None', often: 'region', badge: 'own', note: 'A town NPC. Badge: a folded note.' },
   'gn-50-word-radio': { gn: 'gn.50', shape: 'Single', earliest: 'A5', home: 10, window: [2, 18], sits: 'optional', attaches: 'rest', tags: ['Evil Team'], stages: [4, 5, 6], level: 'None', often: 'region', badge: 'own', note: 'The team\'s radio chatter. Badge: a folded note.' },
   'gn-50-postcard': { gn: 'gn.50', shape: 'Single', earliest: 'A6', home: 4, window: [1, 8], sits: 'optional', attaches: 'rest', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory of the 0-2 Trust ending, in a later region.' },
+  'gn-51-yard': {
+    gn: 'gn.51', shape: 'Single', earliest: 'A6', home: 14, window: [12, 17], sits: 'side-branch', attaches: 'instead', tags: ['Evil Team'],
+    level: 'Guards A+1', often: 'run', badge: 'own',
+    dressing: { kanto: 'The Pokémon Smuggling Ring', elsewhere: 'The Pokémon Smuggling Ring' },
+    note: 'Badge: a crate. Better at night. The rescued Pokémon walks beside the player and opens its own scene at each rest stop (run.ts) until it climbs in. Postcards (gn-51-postcard) come one a region afterwards.',
+  },
+  'gn-51-postcard': { gn: 'gn.51', shape: 'Single', earliest: 'A7', home: 4, window: [1, 8], sits: 'optional', attaches: 'rest', tags: ['Evil Team'], level: 'None', often: 'region', badge: 'own', note: 'Afterstory: one postcard a region, until all four are home.' },
   'gn-45-field': {
     gn: 'gn.45', shape: 'Single', earliest: 'A10', home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', tags: ['Companion Story'],
     level: 'The lesson A−1 (three Pokémon); the exam A+2 (six)', often: 'run', badge: 'own',
