@@ -3,9 +3,13 @@
 //   AN2 The Spore Doctor                   (Stage-Three; script: QUESTLINES_ANIME_INSPIRED.md "AN2")
 //   AN3 The Book of Names                  (Run-Long;    script: QUESTLINES_ANIME_INSPIRED.md "AN3")
 //   AN4 The Witch's Courier                (Region;      script: QUESTLINES_ANIME_INSPIRED.md "AN4")
+//   AN5 The Walking House                  (Single;      script: QUESTLINES_DEEPENED_1.md "AN5", which replaces the short one)
+//   AN6 The Long-Lived Traveller           (Region;      script: QUESTLINES_ANIME_INSPIRED.md "AN6")
+//   AN7 The Letter Writer                  (Stage-Three; script: QUESTLINES_ANIME_INSPIRED.md "AN7")
+//   AN8 Soul in Armour                     (Region;      script: QUESTLINES_ANIME_INSPIRED.md "AN8")
 // Build: npm run co:build -- anime-1
-import { $, anyType, ch, egg, ev, fight, flag, flagAgo, flagAt, flagIs, fr, heal, hurtLead, item, out, room, takeNode, type Json } from '../dsl.ts';
-import { AN, age, bondLine, gain, later, line, moment, monDuel, notYet, seen, stageOf, tagTypes, temp, type Place } from './_animeKit.ts';
+import { $, anyType, bondIs, bondUp, ch, egg, ev, evil, ferry, fight, flag, flagAgo, flagAt, flagIs, fr, good, heal, hurtLead, item, out, rest, room, roomFrom, takeNode, type Json } from '../dsl.ts';
+import { AN, age, bondLine, duel, gain, later, line, moment, monDuel, notYet, seen, stageOf, tagTypes, teach, temp, type Place } from './_animeKit.ts';
 
 export { CATEGORY } from './_animeKit.ts';
 
@@ -14,6 +18,10 @@ export const QUESTLINES: Record<string, string> = {
   AN2: 'an02-spore-doctor',
   AN3: 'an03-book-of-names',
   AN4: 'an04-witchs-courier',
+  AN5: 'an05-walking-house',
+  AN6: 'an06-long-lived-traveller',
+  AN7: 'an07-letter-writer',
+  AN8: 'an08-soul-in-armour',
 };
 
 export const PLACEMENT: Record<string, Place> = {
@@ -21,6 +29,10 @@ export const PLACEMENT: Record<string, Place> = {
   'an02-spore-doctor': { shape: 'Stage-Three', earliest: 'A3', home: 6, tags: ['forest'], beats: ['an02-far-road', 'an02-last-road'], note: 'Steps 6, 12, 17. "Move it." adds the cave three nodes on; the far road comes five nodes after the village either way.' },
   'an03-book-of-names': { shape: 'Run-Long', earliest: 'A3', home: 'each region\'s Stage 3', tags: ['eerie'], beats: ['an03-second-name', 'an03-third-name', 'an03-fourth-name', 'an03-everyone'], note: 'A + node at Night. One spirit per region after the Shuppet (flagAt / flagAgo); Spiritomb comes on a later stage once three names are back.' },
   'an04-witchs-courier': { shape: 'Region', earliest: 'A2', home: 'stages 2, 5, 8', attaches: 'town', tags: ['city'], beats: ['an04-the-tower', 'an04-the-storm'], note: 'Stages 2, 5, 8, at the Town node. The three deliveries are rooms one node apart after the meeting.' },
+  'an05-walking-house': { shape: 'Single', earliest: 'A4', home: 10, window: [7, 13], sits: 'optional', attaches: 'before', beats: ['an05-aboard'], note: 'Single: two nodes. It walks across the node, before the battle; it is seen on the horizon from Step 5. Node 2 (aboard) is the same node after Ride (the house has walked) or the next node after the dial.' },
+  'an06-long-lived-traveller': { shape: 'Region', earliest: 'A6', home: 10, beats: ['an06-second-thing', 'an06-third-thing', 'an06-fourth-thing'], note: 'Four meetings on a region\'s Stages 2, 4, 6, 8, at Step 10. The first of the route\'s four places is a room one node after the grave; the dog\'s grave is a room after the fourth.' },
+  'an07-letter-writer': { shape: 'Stage-Three', earliest: 'A3', home: 'town', attaches: 'town', tags: ['city'], beats: ['an07-replies', 'an07-her-own'], note: 'The town; then steps 12 and 17 (five nodes apart). Your letter and her three clients are rooms off the desk, in any order, in the town.' },
+  'an08-soul-in-armour': { shape: 'Region', earliest: 'A6', home: 'stages 2, 5, 8', beats: ['an08-second-fake', 'an08-third-fake'], note: 'Stage 2: the meeting, and the first rumour three nodes on. Stage 5: the second rumour. Stage 8: the third rumour, then the real stone.' },
 };
 
 export const NOT_A_BUTTON: Record<string, Record<string, string>> = {};
@@ -42,12 +54,34 @@ export const LIMITS: Record<string, string[]> = {
     'Spirits come one per region (QUESTLINES_PLACED.md: each region\'s Stage 3), not one per stage as the script says.',
     'The Odd Keystone filling (the Story ledger\'s Spiritomb form change) is not built here; the finale gives the Spiritomb itself.',
   ],
+  AN5: [
+    '"Ride" uses the game\'s skip-ahead (the ferry): the house sets you down on a node next to this stage\'s gym, picked by the game. The doc\'s exact two-node skip, with both paths shown first and their events put back in the pool, has no engine piece.',
+    '"Turn the dial" cannot play an optional single from another region\'s pool (rooms open only their own questline): the door opens on one of three scenes of its own (a snowy market, a desert well, a harbour), picked at random.',
+    'The reward "one free node skip per region" is the House Call whistle: one trip, flying two columns ahead. It is not refilled in each region.',
+    'Remembers "befriended a Litwick at the Weeping Lantern" reads the Weeping Lantern event (seen story-alpha-weeping-lantern) plus a Litwick in the party; legends must keep that id when it rebuilds A11, or tell anime the new one.',
+    '"It\'s seen on the horizon from Step 5" has no scenery piece; it is in the placement note only.',
+  ],
+  AN6: ['Remembers "a Pokémon at maximum Bond" reads Bond 5 (friendship 250 or more); maximum is 255.'],
+  AN7: [
+    'Remembers "the letter is to the rival: the rival\'s next line in the dialogue bank is a reply" sets flag an07-to-rival; the rivals thread owns the dialogue bank and must read it for the reply line. Here the replies scene only says the rival will answer in person.',
+    'The addressee "a released Pokémon\'s new trainer" is always offered: the game does not record released Pokémon.',
+    'The Chatot\'s word "once per battle, the opponent flinches" is Fake Out (it flinches on the Chatot\'s first turn out); the word itself is in the text only.',
+  ],
+  AN8: [
+    'The alchemy circle (held: once per battle, swaps the holder\'s two stats) has no held-item hook; instead the Golett from the same clay knows Power Trick, which swaps its own Attack and Defense when used. The circle itself is in the text.',
+    'The "evil team" is a nameless team of grunts (men in black); it is not tied to a region\'s Evil Team story.',
+  ],
 };
 
-export const CHECKED: Record<string, string> = { AN1: '2026-11-15', AN2: '2026-11-15', AN3: '2026-11-15' };
+export const CHECKED: Record<string, string> = { AN1: '2026-11-15', AN2: '2026-11-15', AN3: '2026-11-15', AN4: '2026-11-15', AN5: '2026-11-15', AN6: '2026-11-15', AN7: '2026-11-15', AN8: '2026-11-15' };
 
 const BATH = { pokemon: 'indeedee-female', tint: '#1e2238' };
 const EERIE = tagTypes('eerie');
+const HOUSE = { pokemon: 'golurk', tint: '#2a2420' };
+const ELF = { cast: ['trainer.pr/backpacker_f'], tint: '#22262a' };
+const PEN = { cast: ['trainer.pr/artist'], pokemon: 'chatot', tint: '#262230' };
+const ARMOUR = { cast: ['trainer.youngster_m'], pokemon: 'golett', tint: '#2a2622' };
+const GRUNTS = { cast: ['boss.npc_teamrocket_m'], tint: '#221a1e' };
 const WITCH = { cast: ['trainer.fairy_tale_girl'], pokemon: 'wattrel', tint: '#24202e' };
 
 export const EVENTS: Json[] = [
@@ -261,6 +295,245 @@ export const EVENTS: Json[] = [
       ch('You can do it.', out('She grits her teeth and kicks off. She flies crooked and terrified, because you told her she could. She catches Tobin by the sleeve as he lets go, and they crash together into the baker\'s awning, both alive. Later, wrapped in a blanket, she says: "I flew because you said so. I\'ll need my own reason. But thank you." She gives you an egg from the Wattrel\'s nest, and cake.', egg({ species: ['wattrel'] }), item('straw-cake'), fr(2), flag('an04-cheered'))),
       ch('Use my Flying-type.', out('Your Flying-type is up before the girl can move. It takes Tobin by the overalls as his fingers slip and brings him down hard and safe into the street. She runs to him. She does not fly. Later, she thanks you with an egg from the Wattrel\'s nest and a whole cake, and asks, very quietly, whether you think it will ever come back.', egg({ species: ['wattrel'] }), item('straw-cake'), fr(3, { types: ['flying'] }), flag('an04-flyer-caught')), { requires: [anyType('flying')] }),
       ch('Say nothing.', out('You say nothing. She waits for somebody to tell her she can. Nobody does. She kicks off anyway, and the broom drops like a stone after three metres. The Wattrel goes for Tobin\'s collar and your lead goes for her, and all of them land in the fountain, soaked and alive. She sits in the water and laughs until she cries. "Not yet," she says. "Not yet." She gives you an egg from the Wattrel\'s nest, and cake.', egg({ species: ['wattrel'] }), item('straw-cake'), flag('an04-silent'))),
+    ]),
+  // ---------------- AN5. The Walking House (Single: two nodes; deepened script) ----------------
+  ev('an05-walking-house', 'The Walking House', AN, { rarity: 'rare', minStage: stageOf('A4'), ...HOUSE, effect: 'shake' },
+    'A house on four stone legs crosses the route, smoke curling from its chimney. It is three houses really, stacked by somebody in a hurry. It steps over the hedge. A door opens in its side at knee height, and a rope ladder falls out. The floor rumbles: the legs are a Golurk. "Passengers. Or cargo. Which?" In the hearth sits a Litwick with a kettle on its head. "I keep it going. It keeps me going. That\'s the deal. Don\'t sit there, that\'s the egg chair, it\'s not for sitting." A young man who will not stop moving the furniture looks up from a coat stand. "Mr. Wystan Fothergill. Don\'t touch the door dial." By the front door is a dial, in four colours.',
+    [
+      ch('Ride along.', out('You climb the ladder. The house takes a step, and the whole route swings below the window like a map somebody is folding. At a fork it stops, and you can see both paths, and the Golurk rumbles while it thinks. Then it picks one, the one you would not have, and walks on. "It goes where it likes," says Mr. Fothergill, sliding a chair a little to the left. "It is very rarely wrong."', flag('house-rode'), ferry(), room('an05-aboard'))),
+      ch('Turn the dial.', out('"Don\'t," says Mr. Fothergill, a fraction too late. The dial clicks round to a colour. The front door swings open, and on the other side of it is not the route at all, but somewhere else: another region\'s light, another region\'s air. "Well," he says. "Go on, then. It\'ll only wait so long."', flag('an05-dial-turned'), roomFrom('an05-door-snow', 'an05-door-sand', 'an05-door-harbour'))),
+      ch('Why the legs?', out('Mr. Fothergill stops moving the coat stand for the first time. "Someone was looking for me. Easier to move the whole house." He says it lightly, the way people say things they have practised. Then he starts moving the coat stand again.', flag('an05-asked-why'), room('an05-house-again'))),
+    ]),
+  ev('an05-house-again', 'The Walking House', AN, { room: true, ...HOUSE, effect: 'none' },
+    'The house shifts its weight from leg to leg, patient as a horse at a gate. The Litwick watches you over the rim of its kettle. Mr. Fothergill has moved the coat stand back where it started. "Well? It doesn\'t wait all day. It has places to be. It just never tells me where."',
+    [
+      ch('Ride along.', out('You climb the ladder. The house takes a step, and the route swings below the window. At a fork it stops, you see both paths, the Golurk rumbles while it thinks, and it picks the one you would not have. "It goes where it likes," says Mr. Fothergill. "It is very rarely wrong."', flag('house-rode'), ferry(), room('an05-aboard'))),
+      ch('Turn the dial.', out('You turn it before he can say "don\'t". The front door swings open onto another region\'s light and another region\'s air. "Well," he sighs. "Go on, then."', flag('an05-dial-turned'), roomFrom('an05-door-snow', 'an05-door-sand', 'an05-door-harbour'))),
+      ch('Wave it on.', out('You wave. The ladder is pulled up. The house steps back over the hedge, very carefully, and walks off down the route with its chimney smoking, and somewhere inside, faintly, you hear furniture being moved.')),
+    ]),
+  // Behind the door: one place from another region, picked by the dial. Then the dial turns itself back.
+  ev('an05-door-snow', 'A Door Onto Snow', AN, { room: true, requires: [flagIs('an05-dial-turned')], pokemon: 'snom', tint: '#1e2a36', effect: 'snow' },
+    'Through the door: a snowy market square in a region you have never been to. Lanterns, steam from a soup stall, a brass band playing slightly too slowly. A Snom is stuck to the outside of the door frame, eating the frost off it, and looks at you as though you are the strange one. Behind you, the dial is already ticking slowly back toward its first colour.',
+    [
+      ch('Buy soup and come back.', out('The soup is hot and very peppery and the stall-holder gives you an extra ladle for your team because you look, she says, like somebody who came through a door. You get back over the threshold just as the dial clicks home. The snow on your boots melts on the house\'s floor.', heal(0.5), flag('an05-door-done'), later('an05-aboard', 1))),
+      ch('Help the Snom off the frame.', out('It does not want to come off. Then it does, all at once, into your hands, cold as a window. You set it down in a snowdrift, where it is plainly happier. On your way back in, a child in a bobble hat presses a snowball into your hand for luck: a proper one, packed hard. The dial clicks home behind you.', item('snowball'), flag('an05-door-done'), later('an05-aboard', 1))),
+    ]),
+  ev('an05-door-sand', 'A Door Onto Sand', AN, { room: true, requires: [flagIs('an05-dial-turned')], pokemon: 'sandile', tint: '#3a2a16', effect: 'none' },
+    'Through the door: a desert well at noon, in a region you have never been to. The air is so hot it hums. A Sandile sits in the shade of the well wall with its mouth open, waiting for the bucket to come up. Nobody is pulling it. Behind you, the dial is already ticking slowly back toward its first colour.',
+    [
+      ch('Pull the bucket up.', out('It is heavy and the rope is hot, but it comes. The Sandile drinks, and drinks, and then sits back and blinks at you with deep satisfaction. In the bottom of the bucket, where the water was, something glints: an old coin from a market you will never see. You are back over the threshold as the dial clicks home.', $(400), flag('an05-door-done'), later('an05-aboard', 1))),
+      ch('Look, and step back.', out('You stand in the doorway of another region for one long minute and just look: the white sky, the far dunes, a caravan on the horizon. Then the dial clicks home and the door is only a door again. Your team, who were looking too, are quiet for a long while.', fr(2), flag('an05-door-done'), later('an05-aboard', 1))),
+    ]),
+  ev('an05-door-harbour', 'A Door Onto a Harbour', AN, { room: true, requires: [flagIs('an05-dial-turned')], pokemon: 'wingull', tint: '#1e2e3a', effect: 'none' },
+    'Through the door: a harbour at dawn in a region you have never been to, a fish auction in full cry. A Wingull lands on the doorstep, looks into the house, looks at you, and very clearly decides the house is the more interesting place. Behind you, the dial is already ticking slowly back toward its first colour.',
+    [
+      ch('Bid on something.', out('You do not know the language of the auction, so you raise your hand at the wrong moment and win a crate of something. It turns out to be very good: dried berries, a whole crate. You haul it over the threshold as the dial clicks home. The Wingull comes too, briefly, and then thinks better of it.', item('oran-berry', 3), flag('an05-door-done'), later('an05-aboard', 1))),
+      ch('Shoo the Wingull home.', out('It argues. You win. It flaps back out over the harbour, complaining. Just before the dial clicks home a fisherman tosses you something for your trouble, laughing: a little pearl, the kind they find in the nets on a good day.', item('pearl'), flag('an05-door-done'), later('an05-aboard', 1))),
+    ]),
+  // Node 2: aboard, while it walks. Three small things, in any order.
+  ev('an05-aboard', 'Aboard', AN, { room: true, ...HOUSE, effect: 'float',
+    remembers: [{ id: 'litwick-siblings', when: [seen('story-alpha-weeping-lantern'), line('litwick')], notice: 'Your Litwick, the one from the Weeping Lantern, goes straight to the hearth. The two Litwick stare at each other through the steam. They are siblings: you can tell from the way they both pretend not to care. Then they lean together and compare flames, one blue, one a little bluer, for a long and serious time.' }] },
+    'The house walks. Every step is a long, slow sway, like a ship that has learned to climb. Cups rattle on their hooks. Outside, the route goes by at the speed of a stroll. Inside there is always something: the Litwick in the hearth is peering into its empty log basket, Mr. Fothergill is looking at a wardrobe in a way that means he is going to move it, and at the back window, the curtain is twitching in a draught.',
+    [
+      ch('Feed the hearth.', out('The Litwick wants feeding: anything burnable. You give it a broken chair leg, a bundle of twigs and an old map with the wrong roads on it, and it eats the map with special pleasure. The hearth roars. The heat soaks into every one of your team, down to the bones, until they are asleep in a heap on the rug. You sleep too, a little. You wake up rested.', rest(), heal(1), flag('an05-hearth'), room('an05-aboard')), { requires: [notYet('an05-hearth')] }),
+      ch('Hold one end of the wardrobe.', out('He takes the other. You move it to the window. Then the door. Then the stairs. Then the corner by the egg chair. It moves four times, and ends exactly where it started. Mr. Fothergill steps back and looks at it with deep relief. "There. That\'s better." You are not sure anything is different. He is.', fr(2), flag('an05-wardrobe'), room('an05-aboard')), { requires: [notYet('an05-wardrobe')] }),
+      ch('Look out of the window.', out('You pull the curtain back and look down the road behind.', flag('an05-looked'), room('an05-window')), { requires: [notYet('an05-window')] }),
+      ch('Climb down the ladder.', out('The house stops for you, and bends its knees so the ladder reaches. Mr. Fothergill hands you a small tin whistle. "If you need us, whistle. It comes when whistled. Once in a while." The Golurk rumbles, which is the house saying goodbye. You stand in the road and watch it walk away over the hill, smoke from its chimney, furniture moving somewhere inside.', item('house-call-whistle'), moment('You rode a while in a walking house, and you have its whistle.', 60))),
+    ]),
+  ev('an05-window', 'The Figure on the Road', AN, { room: true, ...HOUSE, cast: ['trainer.pr/rich_kid_m'], effect: 'none' },
+    'Somebody is on the road behind. Far off. Walking. Always the same distance, however the house turns. A small figure with something in its hand. Mr. Fothergill comes and stands behind you, and you can feel him not looking.',
+    [
+      ch('Who is that?', out('He does not answer for a while. Then: "Someone I left." He goes back to the coat stand and moves it, and moves it again. The figure on the road keeps walking, always the same distance.', flag('an05-asked-who'), room('an05-window')), { requires: [notYet('an05-asked-who')] }),
+      ch('They don\'t look angry.', out('He comes to the window. He looks for a long time, his hands still for once. "...No. They don\'t, do they." His voice has gone strange. "They never did. I just assumed." He does not move any furniture for the rest of the morning.', flag('an05-not-angry'), flag('an05-window'), fr(2), room('an05-aboard'))),
+      ch('Stop the house.', out('"Don\'t," he says, but the Golurk has already stopped. The figure walks up, at the same patient pace, and reaches the ladder. It is an old woman with a lunch tin. She looks up at him. "You left without it. Eleven years ago. It\'ll have gone off." He climbs down. She climbs up. They sit together on the doorstep, and neither of them says anything for a long time, and that seems to be all right.', flag('house-stopped'), flag('an05-window'), fr(3), moment('A walking house stopped, and a man who had been running for eleven years took his lunch tin back.', 65), room('an05-aboard'))),
+    ]),
+  // ---------------- AN6. The Long-Lived Traveller (Region: four meetings, stages 2, 4, 6, 8) ----------------
+  ev('an06-long-lived-traveller', 'The Long-Lived Traveller', AN, { rarity: 'rare', minStage: stageOf('A6'), ...ELF, effect: 'none' },
+    'A hill above the road, and a grave on it: a plain stone, moss in the letters. A woman stands beside it, leaning on a walking staff worn smooth at the grip. She looks twenty. Her eyes do not. "I travelled with him for ten years. That\'s nothing, for me. A long afternoon." She brushes moss out of one letter with her thumb. "He died eighty years ago. I\'ve started to wonder what he was like." She looks at you, and then down at the road you came up. "Will you walk his route with me? I want to see what he saw."',
+    [
+      ch('Walk with her.', out('She smiles, the small careful smile of somebody who has not asked anyone for anything in a long time. "His route runs through this whole region. Four places. I walked it beside him and I didn\'t look at anything." She picks up her staff. "The first one is just down the road."', flag('an06-walking'), later('an06-first-thing', 1))),
+      ch('Why now?', out('"Because I forgot his voice last spring." She says it very evenly. "I was making tea and I tried to hear him say my name and there was nothing there. Eighty years. It takes eighty years, for us. Then it goes all at once."', flag('an06-asked-why'), room('an06-traveller-again'))),
+      ch('Who was he?', out('"A Trainer. Not a famous one. He had a dog, a Greavard, the ugliest thing you ever saw, and he loved it more than he loved anything." She looks at the stone. "He was kind in ways I thought were a waste of time. That\'s all I know. That\'s the trouble."', flag('an06-asked-who'), room('an06-traveller-again'))),
+    ]),
+  ev('an06-traveller-again', 'The Long-Lived Traveller', AN, { room: true, ...ELF, effect: 'none' },
+    'The woman with the staff waits beside the grave. The wind moves the grass on the hill and does not move her. "I won\'t ask twice," she says, not unkindly. "I\'ve learned not to. But I would like the company. Will you walk his route with me?"',
+    [
+      ch('Walk with her.', out('"Thank you." She picks up her staff. "Four places in this region. I walked them all beside him and I didn\'t look at anything. The first one is just down the road."', flag('an06-walking'), later('an06-first-thing', 1))),
+      ch('Not this time.', out('She nods. "Then I\'ll go alone. I\'m good at that." When you look back from the road she is still on the hill, one hand on the stone, as if she is listening for something.')),
+    ]),
+  ev('an06-first-thing', 'The First Place: the Cart', AN, { room: true, requires: [flagIs('an06-walking')], ...ELF, effect: 'none' },
+    'Down the road, at a bend, a farmer is stuck with a cart in a ditch. The traveller stops dead. "Here. Right here. He stopped to help a man with a cart, and we missed the ferry, and I was furious." She laughs, a little shakily. "He did it every time. Every cart. Every stranger. We were late for everything for ten years. I thought it was a waste of time." She looks at the farmer, at the wheel sunk to its hub.',
+    [
+      ch('Help the farmer with her.', out('You put your shoulders to it, both of you and your whole team, and the cart comes up out of the ditch with a sucking noise. The farmer thanks you twice and gives you apples. The traveller stands in the road holding one, not eating it. "Oh," she says. "It feels like this. I never knew it felt like this." You both miss nothing at all; there is no ferry today. But she says she would have missed it gladly.', fr(3), flag('an06-thing-1'), flag('an06-helped-cart'))),
+      ch('Ask what she thinks now.', out('"I think he wasn\'t late," she says slowly. "I think he was exactly on time, for the man with the cart." She goes down into the ditch in her good boots and helps lift the wheel. When it comes free she is smiling with her whole face, and mud to the knees.', fr(2), flag('an06-thing-1'))),
+    ]),
+  ev('an06-second-thing', 'The Second Place: the Flowers', AN, { callback: true, requires: [flagIs('an06-thing-1'), age('an06-thing-1', 2)], ...ELF, effect: 'none' },
+    'Two stages on, the traveller is waiting for you at a crossroads, exactly where she said she would be. There is a village graveyard by the road. "He always picked a flower for a grave here," she says. "Strangers\' graves. People he never met. I asked him why once and he said someone should. I said nobody would know." She is quiet. "I know now. Eighty years later. I know he did it."',
+    [
+      ch('Pick a flower for a stranger.', out('You pick two from the verge, one each, and lay them on the oldest stone you can find, where the name has worn away. She stands over it a long time. "Someone should," she says, in a voice that is almost his, she tells you later. It came back to her just then: how he said it.', fr(2), flag('an06-thing-2'), flag('an06-voice-came-back'))),
+      ch('Pick one for his grave too.', out('She takes it from you and holds it all the way to the next village, carefully, the way you hold something you are going to bring back. "I\'ll take it to him on my way home," she says. "He would laugh at me. He\'d be pleased."', fr(2), flag('an06-thing-2'))),
+    ]),
+  ev('an06-third-thing', 'The Third Place: the Joke', AN, { callback: true, requires: [flagIs('an06-thing-2'), age('an06-thing-2', 2)], ...ELF, effect: 'none' },
+    'Two stages on, an inn on the road. She has taken a table by the fire. "He told a joke here. A bad one, about a Slowpoke and a bell. He started laughing before he got to the end, and he never got to the end, and everyone in the room was laughing at him laughing." She turns her cup round. "I didn\'t laugh. I didn\'t see the point of a joke with no end. I\'ve thought about that joke for eighty years. I don\'t know how it ends."',
+    [
+      ch('Make up an ending.', out('You make up an ending. It is terrible. She stares at you, and then something in her face gives way and she laughs, properly, out loud, until she has to hold the table. Half the inn turns round. Somebody at the bar starts laughing too, at her laughing. "That\'s it," she gasps. "That\'s what it was. It was never the joke."', fr(3), flag('an06-thing-3'), flag('an06-laughed'))),
+      ch('Tell her it didn\'t need one.', out('She thinks about that. Then she smiles into her cup. "No," she says. "It didn\'t. He just liked the start of things." She is quiet for a while, and then, without warning, she starts laughing at nothing at all, and does not stop for a long time.', fr(2), flag('an06-thing-3'))),
+    ]),
+  ev('an06-fourth-thing', 'The Fourth Place: the Dog', AN, { callback: true, requires: [flagIs('an06-thing-3'), age('an06-thing-3', 2)], ...ELF, effect: 'fog' },
+    'Two stages on, at the end of his route, the road climbs to a hill with a single bent tree on it. The traveller stops at the bottom. "The last thing. Before he died he asked me to visit the dog. His Greavard. It\'s buried up there under the tree. I said I would." Her hand tightens on the staff. "I never went. I didn\'t understand why you\'d visit a dog that was gone. That was eighty years ago. I\'ve walked past this hill a hundred times."',
+    [
+      ch('Go up the hill with her.', out('She takes a breath you can hear, and you climb together. Under the bent tree there is a small mound with a stone on it, and on the stone, in a careful, clumsy hand, one word: GOOD.', flag('an06-thing-4'), room('an06-dogs-grave'))),
+    ]),
+  ev('an06-dogs-grave', 'Older Than Anyone', AN, { room: true, ...ELF, pokemon: 'houndstone', effect: 'glint',
+    remembers: [{ id: 'max-bond', when: [bondIs(5)], notice: 'Then she turns, and she watches your {most} for a long, long time, the way it leans on you without thinking. "That one loves you the way he loved his dog," she says. "What will you do when it is gone?"', addChoices: [
+      ch('Tell her the truth.', out('You tell her you don\'t know. That you will miss it every day. That you would not give back one hour of it to miss it less. She listens with her eyes shut. "He said that," she says. "Nearly that. I thought it was foolish. It\'s the only sensible thing anyone has ever said to me." The Houndstone settles down by its stone, content. A Greavard pup, all ears, comes out from among the roots and sits between your feet and hers, and will not choose.', gain('greavard', { bond: 20 }), bondUp(2, 'top'), flag('an06-greavard'), flag('an06-told-truth'), moment('A woman who would outlive everyone walked her old friend\'s road with you, and asked what you would do when your Pokémon was gone.', 80))),
+    ] }] },
+    'The earth on the mound stirs. Something rises out of it, slow and pale and wagging: a Houndstone, a ghost of a dog, older than anyone, with a candle-flame of a tail that goes round and round. It walks straight past you to the traveller. It sits down at her feet. It looks up at her as if she has been gone an afternoon. She makes a sound you have never heard a person make.',
+    [
+      ch('It remembers you.', out('She kneels. It puts its great pale head in her lap, and she puts her face in its neck, and she cries, at last, for him: eighty years of it, all at once. When she sits up, she is laughing. "It remembers him in me. It smells him on me still." The Houndstone settles back down by its stone, content. A Greavard pup, all ears, crawls out from among the roots and sits between your feet and hers, and will not choose.', gain('greavard', { bond: 20 }), flag('an06-greavard'), flag('an06-remembered'), moment('A woman who would outlive everyone walked her old friend\'s road with you, and his dog remembered her.', 75))),
+      ch('Let it go.', out('"You can rest," she tells it. "He\'s not coming. I am sorry I took so long." The Houndstone licks her hand, once, with a cold tongue, and lies back down on the mound, and sinks, wagging, into the earth. She stays on her knees a while. When she gets up, a Greavard pup has come out from among the roots, all ears, and is sitting between your feet and hers, and will not choose.', gain('greavard', { bond: 10 }), fr(3), flag('an06-greavard'), flag('an06-let-go'), moment('A woman who would outlive everyone walked her old friend\'s road with you, and said goodbye to his dog.', 70))),
+      ch('Take it with you.', out('She looks at you, startled. Then at the Houndstone. "Would you come?" It is already on its feet. They will walk together now, the woman who does not age and the dog that already has. A Greavard pup comes out from among the roots and trots after them, then back to you, then after them, all ears. "It\'s yours," she says. "And mine. We\'ll meet on the road. It can visit." It goes with you, and keeps looking back.', gain('greavard', { bond: 15 }), flag('an06-greavard'), flag('an06-took-it'), moment('A woman who would outlive everyone walked her old friend\'s road with you, and took his dog home.', 75))),
+    ]),
+  // ---------------- AN7. The Letter Writer (Stage-Three: the town, then steps 12 and 17) ----------------
+  ev('an07-letter-writer', 'The Letter Writer', AN, { rarity: 'uncommon', minStage: stageOf('A3'), types: tagTypes('city'), stop: 'event', ...PEN, effect: 'none' },
+    'In a corner of the town square, under a hand-painted sign that says LETTERS WRITTEN, a woman sits at a folding desk with ink on her fingers. A Chatot rides on her shoulder, preening. "People come to me when they can\'t say it themselves," she says. "I write what they mean, not what they say. Chatot reads it back to them." The Chatot tilts its head at you, opens its beak, and says "Hello" in your own voice, exactly. It is a very strange thing, to be greeted by yourself.',
+    [
+      ch('Write one for me.', out('She dips her pen. "Who to?" She does not hurry you. Nobody who sits at this desk ever knows the answer straight away.', flag('an07-writing'), room('an07-to-whom'))),
+      ch('Who\'s it for?', out('She nods past you. On the bench by the fountain three people are waiting their turn, each holding a scrap of paper they have not managed to write on: an old soldier, a small girl, and a very old man. "All of them, today. Will you help me? Sometimes they talk easier to a stranger."', room('an07-soldier'))),
+      ch('Do you write your own?', out('She puts the pen down. "I had one to write. I never knew what it said." The Chatot goes quiet on her shoulder. She picks the pen up again, briskly. "Well. Never mind me."', flag('an07-asked-own'), room('an07-desk'))),
+    ]),
+  ev('an07-desk', 'The Letter Writer\'s Desk', AN, { room: true, ...PEN, effect: 'none' },
+    'The letter writer blots a page and sets it to dry in the sun with the others, a whole row of them along the edge of the desk, each held down with a pebble. The Chatot hops from pebble to pebble, checking them. "Anything else? I\'m here till the light goes."',
+    [
+      ch('Write one for me.', out('She dips her pen. "Who to?"', flag('an07-writing'), room('an07-to-whom')), { requires: [notYet('an07-letter-sent')] }),
+      ch('Who\'s it for?', out('She nods at the bench by the fountain: an old soldier, a small girl and a very old man, each with a blank scrap of paper. "Help me with them? They talk easier to a stranger."', room('an07-soldier')), { requires: [notYet('an07-clients-helped')] }),
+      ch('Do you write your own?', out('She puts the pen down. "I had one to write. I never knew what it said." The Chatot goes quiet on her shoulder.', flag('an07-asked-own'), room('an07-desk')), { requires: [notYet('an07-asked-own')] }),
+      ch('Go on your way.', out('"Come back past," she says, already bent over the next page. "Replies come, you know. Not always. But they come." The Chatot says goodbye in your voice. You do not quite get used to it.', flag('an07-desk-left'), later('an07-replies', 5))),
+    ]),
+  // Your own letter: someone met this run, and three things to say.
+  ev('an07-to-whom', 'Who To?', AN, { room: true, ...PEN, effect: 'none' },
+    'She waits with the pen over the paper. "Someone you met on this road. Someone you left behind at the start of it. Anyone. It doesn\'t have to be someone who\'ll read it kindly. It only has to be someone you mean it for."',
+    [
+      ch('My rival.', out('She writes their name at the top, and underlines it, and does not ask why your face did that.', flag('an07-to-rival'), room('an07-first-thing')), { requires: [{ kind: 'rivalMet', atLeast: 1 }] }),
+      ch('Mom.', out('She smiles and writes it at the top. "Everyone\'s first letter. Everyone\'s last one too, usually."', flag('an07-to-mom'), room('an07-first-thing'))),
+      ch('Whoever looks after a Pokémon I let go.', out('She writes "To whoever has them now" at the top, very carefully, and looks at you for a moment with great kindness. "Those are the hardest. And the best."', flag('an07-to-new-trainer'), room('an07-first-thing'))),
+    ]),
+  ev('an07-first-thing', 'The First Thing', AN, { room: true, ...PEN, effect: 'none' },
+    '"Three things," she says. "Nobody can carry more than three in one letter. What\'s the first?" She has already written something, before you speak: you can see the pen moving. She says that is how it works. She writes what you mean a little before you say it.',
+    [
+      ch('I\'m all right.', out('She writes it. Then she writes a little more round it, and you read upside down that it says: I am all right, and I am not just saying that.', flag('an07-said-all-right'), room('an07-second-thing'))),
+      ch('I\'m sorry.', out('She writes it. Then she writes a little more round it, and you read upside down that it says: I am sorry, and I know that it does not fix it.', flag('an07-said-sorry'), room('an07-second-thing'))),
+      ch('Thank you.', out('She writes it. Then she writes a little more round it, and you read upside down that it says: Thank you, for the part I never said thank you for.', flag('an07-said-thanks'), room('an07-second-thing'))),
+    ]),
+  ev('an07-second-thing', 'The Second Thing', AN, { room: true, ...PEN, effect: 'none' },
+    'The Chatot has come down off her shoulder to stand on the edge of the page and watch the words appear, its head going side to side like someone reading. "The second thing," she says, "is usually the one people came to say."',
+    [
+      ch('I miss you.', out('The pen does not stop. You did not know you meant it that much until you see how much ink it takes.', flag('an07-said-miss'), room('an07-third-thing'))),
+      ch('I\'m proud of you.', out('She writes it slowly. "People hardly ever write that one," she says. "They think it\'s understood. It never is."', flag('an07-said-proud'), room('an07-third-thing'))),
+      ch('I think about you.', out('She writes it, and adds a small place and a time you had not mentioned, which is exactly right, and you do not ask how she knew.', flag('an07-said-think'), room('an07-third-thing'))),
+    ]),
+  ev('an07-third-thing', 'The Third Thing', AN, { room: true, ...PEN, effect: 'none' },
+    '"And the last." She lifts the pen and waits. The last thing in a letter, she says, is the thing the other person will read twice.',
+    [
+      ch('Wait for me.', out('She writes it, and a promise under it that you did not quite say and do quite mean.', flag('an07-said-wait'), room('an07-read-back'))),
+      ch('Don\'t wait for me.', out('She writes it very gently. Somehow, in her hand, it reads as the kindest thing in the letter.', flag('an07-said-dont-wait'), room('an07-read-back'))),
+      ch('Write back.', out('She writes it and underlines it twice and says that is the bravest last line there is, because it asks.', flag('an07-said-write-back'), room('an07-read-back'))),
+    ]),
+  ev('an07-read-back', 'In Your Own Voice', AN, { room: true, ...PEN, pokemon: 'chatot', effect: 'none',
+    remembers: [
+      { id: 'to-rival', when: [flagIs('an07-to-rival')], notice: 'Hearing your rival\'s name in your own voice is the worst part, and then, by the second line, it is not. It sounds like something you should have said at the start.' },
+      { id: 'to-mom', when: [flagIs('an07-to-mom')], notice: 'At "Mom," the Chatot\'s voice, your voice, goes a little younger. You did not know it could do that. Neither, from the look on its face, did it.' },
+      { id: 'to-new-trainer', when: [flagIs('an07-to-new-trainer')], notice: 'At "whoever has them now," the Chatot pauses, the way you would, and the letter writer puts her hand flat on the desk beside yours.' },
+    ] },
+    'She blows on the ink, folds the page once, and hands it to the Chatot. It holds it open in its feet and reads it aloud in your voice: not what you said, but what you meant, all of it, plainly, the way you would have said it if you could have. You did not know your voice could sound like that. The square has gone quiet. Even the fountain seems to be listening.',
+    [
+      ch('Post it.', out('She addresses it in her round, careful hand and drops it in the box on the corner herself. "It\'ll get there," she says. "They always get there. It\'s the coming back that takes a while." You feel lighter by exactly one letter.', flag('an07-letter-sent'), fr(3), moment('A letter writer in a town square wrote down what you meant, and her Chatot read it back in your own voice.', 60), room('an07-desk'))),
+    ]),
+  // Her three clients: an old soldier, a small girl, a very old man.
+  ev('an07-soldier', 'The Old Soldier', AN, { room: true, cast: ['trainer.pr/veteran_m'], pokemon: 'chatot', tint: '#2a2a22', effect: 'none' },
+    'The old soldier sits down very straight. He wants to write to the family of a man he served with, a long time ago, who did not come home. He has tried every year. "I tell them he was brave. That\'s what you say." His hands are shaking on his knees. "He wasn\'t, much. He was funny. He sang off-key. He was the only one of us who could make the cook laugh."',
+    [
+      ch('Tell them he was funny.', out('The letter writer writes about the singing and the cook and the jokes. The old soldier reads it and laughs, then covers his eyes. "That\'s him. That\'s him. They\'ll know him from that." He signs it with a flourish. He walks away a little less straight, and a little lighter.', flag('an07-client-soldier'), room('an07-child'))),
+      ch('Tell them he was brave, and funny.', out('"Both," the letter writer agrees, and writes both. "Funny is a kind of brave, out there." The old soldier reads it three times, nods once, and signs it. He salutes the Chatot on his way out. It salutes back, badly.', flag('an07-client-soldier'), room('an07-child'))),
+    ]),
+  ev('an07-child', 'The Small Girl', AN, { room: true, cast: ['trainer.pr/preschooler_f'], pokemon: 'chatot', tint: '#2a2230', effect: 'none' },
+    'The small girl climbs up onto the chair and sits on her hands. She wants to write to her Skitty, which ran away in the summer and has not come back. "It doesn\'t know how to read," she says. "But I want it to know it wasn\'t in trouble." She looks at you seriously. "Is that stupid?"',
+    [
+      ch('"It isn\'t stupid."', out('The letter writer writes it in big letters, with a drawing of a Skitty at the bottom that the girl corrects twice. "We\'ll pin it up by the bins behind the bakery," the letter writer says. "That\'s where all the cats read their post." The girl nods as if this is well known. She holds the letter all the way out of the square.', flag('an07-client-child'), room('an07-old-man'))),
+      ch('Let the Chatot say it for her.', out('The Chatot listens to her say "you\'re not in trouble, come home" once, and then says it back in her exact voice, loud and clear, and again, and again, so it can say it from the rooftops tonight. The girl stares, delighted and a little frightened. "It sounds like me." It does. Somewhere, a Skitty might hear.', flag('an07-client-child'), room('an07-old-man'))),
+    ]),
+  ev('an07-old-man', 'The Very Old Man', AN, { room: true, cast: ['trainer.pr/rich_m'], pokemon: 'chatot', tint: '#26221e', effect: 'none' },
+    'The very old man takes a long time to sit. He wants to write to his wife. She is in the home up the hill and does not always know him now. "Some days she thinks I\'m her brother. Some days she\'s cross with me for being late." He smiles. "I want to write her something she can read on any of those days."',
+    [
+      ch('Write that he is always coming.', out('The letter writer writes: I am on my way. I am always on my way. Whoever you think I am today, I am coming up the hill. He reads it and nods for a long time. "That\'s true on every day," he says. "That\'s the one." He tucks it in his coat.', flag('an07-client-old-man'), flag('an07-clients-helped'), fr(3), room('an07-desk'))),
+      ch('Ask him how they met.', out('He tells you: a dance, a broken shoe, a long walk home. The letter writer writes it all down, just the story, no message. "She knows that one even on the bad days," he says, wondering. "Even when she doesn\'t know me. She knows the shoe." He goes up the hill with it straight away.', flag('an07-client-old-man'), flag('an07-clients-helped'), fr(3), room('an07-desk'))),
+    ]),
+  // Step 12: the replies.
+  ev('an07-replies', 'Replies', AN, { room: true, ...PEN, effect: 'none',
+    remembers: [
+      { id: 'mom-wrote-back', when: [flagIs('an07-to-mom')], notice: 'There is one with your name on it, in handwriting you would know anywhere. Mom wrote back. The letter writer slides it across the desk and looks away politely while you read it, which takes a long time, because you read it twice.' },
+      { id: 'clients-wrote-back', when: [flagIs('an07-clients-helped')], notice: 'There are three for her clients. The soldier\'s friend\'s sister wrote back, and she remembers the singing. The Skitty came home; the girl has sent a drawing. And the old man\'s wife, on a good day, wrote one line under his: I know. I always know the shoe.' },
+      { id: 'rival-letter', when: [flagIs('an07-to-rival')], notice: 'There is nothing for you from your rival, not yet. "Rivals answer in person," the letter writer says. "Usually at the worst moment. Watch for it."' },
+    ] },
+    'Five nodes on, in another town, there is the same folding desk under the same hand-painted sign. The letter writer looks up as if she had been expecting you. "I move with the post," she says. "Some days there are no replies. I write anyway." She has a small bundle tied with string. The Chatot is sorting it, very importantly, one envelope at a time.',
+    [
+      ch('Read them with her.', out('You sit on the edge of the desk and read them together, out loud, in your own voices, which is different from hearing them in the Chatot\'s. She is quiet afterwards. "I give everybody\'s letters away," she says. "I never get to keep one." She looks at the bundle. Then she ties it up again with great care, and does not say what she is thinking.', fr(2), flag('an07-read-replies'), later('an07-her-own', 5))),
+      ch('Let the Chatot read them.', out('It reads each one in the voice of whoever wrote it, which it has never heard, and gets them all exactly right. It cannot possibly. It does. The letter writer watches it with an odd expression. "It\'s always done that," she says. "I\'ve never asked how." She looks at her own empty hands for a long moment.', fr(2), flag('an07-read-replies'), later('an07-her-own', 5))),
+    ]),
+  // Step 17: her own letter.
+  ev('an07-her-own', 'The Letter She Never Wrote', AN, { room: true, ...PEN, effect: 'sparkle' },
+    'Five nodes on, she is waiting by the road with no desk at all, only a single folded page in her hands. "I had one to write. I never knew what it said." She unfolds it. It is blank, and very old. "To my mother. She taught me my letters, and then she was gone, and I never wrote to her once. I didn\'t know what to say." The Chatot hops down onto the blank page. It looks at her for a long time. Then it says, in a woman\'s voice none of you have heard in forty years: "Hello, love." She sits down in the road.',
+    [
+      ch('Write "Hello" back.', out('You hold the page while she writes it, one word, in a hand that shakes and then steadies: Hello. That was the whole letter. It always was. She laughs and cries at once. Then she lifts the Chatot off the page and puts it in your hands. "It learned every voice I ever loved. Teach it yours. I don\'t need it to say things for me any more." It climbs onto your shoulder and says, in your voice, "Hello."', gain('chatot', { bond: 20 }), teach('fake-out', { species: 'chatot' }), flag('an07-chatot'), flag('an07-hello'), moment('A letter writer who wrote everyone\'s letters finally wrote her own, and it said hello. Her Chatot came with you.', 75))),
+      ch('Teach the Chatot your name.', out('"Say it again," she whispers, and it does: Hello, love. Then she writes it down, the one word, and folds the page and keeps it. She puts the Chatot in your hands. "Teach it something of yours." So you teach it your name. It says it back, perfectly, and then it says it in her mother\'s voice too, softly, as if trying it on. It rides on your shoulder. It will say it in battle, sharp as a slap, whenever it wants a foe to flinch.', gain('chatot', { bond: 20 }), teach('fake-out', { species: 'chatot' }), flag('an07-chatot'), flag('an07-taught-name'), moment('A letter writer who wrote everyone\'s letters finally wrote her own, and gave you her Chatot.', 75))),
+      ch('Teach the Chatot "Now!"', out('She writes her one word, Hello, and folds the page into her coat over her heart. Then she gives you the Chatot. "Teach it a word of yours." You teach it "Now!" and it shouts it, in your voice, so loudly that a Pidgey falls off a fence. She laughs until she cries again. It will shout it in battle, whenever it likes, and the foe will flinch.', gain('chatot', { bond: 20 }), teach('fake-out', { species: 'chatot' }), flag('an07-chatot'), flag('an07-taught-now'), moment('A letter writer who wrote everyone\'s letters finally wrote her own, and gave you her Chatot.', 75))),
+    ]),
+  // ---------------- AN8. Soul in Armour (Region: stages 2, 5, 8) ----------------
+  ev('an08-soul-in-armour', 'Soul in Armour', AN, { rarity: 'rare', minStage: stageOf('A6'), ...ARMOUR, effect: 'none' },
+    'Two figures come down the road toward you: a boy with a mechanical arm that clicks when he swings it, and beside him an enormous suit of armour, taller than a door, that walks with a slow clank and stops when he stops. The armour bends down to look at you. Its eyes are two small lights, deep inside. It speaks, in a boy\'s voice that echoes. "I\'m his brother. I\'m in here." The boy with the arm does not smile. "We tried to bring Mum back. It cost us." He looks at you hard. "We\'re looking for a way to get him out. Have you seen a red stone?"',
+    [
+      ch('I\'ll help look.', out('The boy lets out a breath he has been holding for a long time. "There are rumours. Three, in this region. Somebody always says they saw one." The armour straightens with a long creak. "There\'s one at a market three hops on," it says. "We\'ll meet you there." The lights in its eyes look, for a moment, almost hopeful.', flag('an08-looking'), later('an08-first-fake', 3))),
+      ch('Is he in pain?', out('The armour answers before his brother can. "No. I don\'t feel anything. Not the rain. Not his hand on my arm." It is quiet. "That\'s worse, I think. I\'d take pain." The boy puts his metal hand on the armour\'s arm anyway, the way you would, and leaves it there.', flag('an08-asked-pain'), room('an08-armour-again'))),
+      ch('What did it cost you?', out('"My arm," says the boy. "His whole body." He says it flatly, like a sum. "And she didn\'t come back. What came back wasn\'t her. It didn\'t even look at us." The armour puts a huge hand on his shoulder, very gently, the way you would hold a bird.', flag('an08-asked-cost'), room('an08-armour-again'))),
+    ]),
+  ev('an08-armour-again', 'Soul in Armour', AN, { room: true, ...ARMOUR, effect: 'none' },
+    'The brothers wait on the road, the boy with his metal arm folded and the armour standing behind him like a wall. Neither of them begs. They have the look of people who have been told no in every town in the region. "Well?" says the boy. "Have you seen one?"',
+    [
+      ch('I\'ll help look.', out('"There are three rumours in this region," the boy says. "There\'s one at a market three hops on." The armour creaks as it straightens. "We\'ll meet you there."', flag('an08-looking'), later('an08-first-fake', 3))),
+      ch('I haven\'t. I\'m sorry.', out('"Nobody has," the boy says, without blame. They clank on down the road together, the small one and the big one, and the big one ducks under every branch the small one walks beneath.')),
+    ]),
+  // Three rumours of the stone; each a fake made by the Team from captured Pokémon.
+  ev('an08-first-fake', 'The First Rumour: the Market', AN, { room: true, requires: [flagIs('an08-looking')], ...GRUNTS, pokemon: 'ralts', effect: 'glint' },
+    'The market three hops on has a stall nobody else goes near. A sign reads GENUINE RED STONE, ONE ONLY. Two men in matching black stand behind it, and on a velvet cloth sits a stone like a drop of blood. The boy goes white. Then the armour leans down and looks at it, and says quietly: "It\'s warm. It\'s crying." Behind the stall, under a tarpaulin, are crates. In the crates are Ralts, very still, very pale. The stone is made of what is being drained out of them.',
+    [
+      ch('Fight them for the crates.', fight('The men in black step out from behind the stall. The boy\'s metal arm locks into a fist. The armour stands between them and the crates.', duel('Team Grunts', { cls: 'roughneck', size: 2, format: 'doubles', types: ['dark', 'poison'], win: [flag('an08-fake-1'), flag('freed-caged')] }, { lose: [flag('an08-fake-1'), flag('freed-caged')] }))),
+      ch('Let the armour take the stall apart.', out('The armour does not hurry. It takes the stall in both hands and folds it like a letter. The men in black look at it, then at each other, then run. The boy smashes the fake stone with his metal fist; it is red glass, and something sad goes out of it like steam. You open the crates together. The Ralts come out blinking, colour seeping back into them, and scatter into the long grass.', flag('an08-fake-1'), flag('freed-caged'), fr(2))),
+    ]),
+  ev('an08-second-fake', 'The Second Rumour: the Pens', AN, { callback: true, requires: [flagIs('an08-looking'), age('an08-looking', 3)], ...GRUNTS, pokemon: 'chansey', effect: 'glint' },
+    'Three stages on, the brothers find you. "Second rumour. A warehouse by the river. They say a scientist makes red stones there." The warehouse is guarded by men in black. Inside, through a high window, you see pens: rows and rows of Chansey, each hooked to a pipe, and at the end of the pipes, in a glass dish, a red stone slowly growing. The boy watches through the window for a long time. "It\'s another fake," he says at last. "It has to be. They wouldn\'t need so many if it were real."',
+    [
+      ch('Fight your way in.', fight('You go in through the front. The armour goes in through the wall.', duel('Team Grunts', { cls: 'roughneck', size: 3, types: ['dark', 'poison'], win: [flag('an08-fake-2'), flag('freed-caged')] }, { lose: [flag('an08-fake-2'), flag('freed-caged')] }))),
+      ch('Open the pens quietly.', out('You go in round the back while the armour stands very still in the shadows, pretending, quite well, to be a suit of armour. Pen by pen, pipe by pipe, you unhook them. The Chansey follow you out in a long pink line, holding each other\'s tails. By the time the men in black notice, the warehouse is empty, and the dish holds only red glass.', flag('an08-fake-2'), flag('freed-caged'), fr(3)),
+        { prompt: { id: 'dodge-tap', needs: 'ok' }, fail: fight('A pipe clangs. Every light in the warehouse comes on. The men in black come running, and the armour steps out of the shadows to stand beside you.', duel('Team Grunts', { cls: 'roughneck', size: 3, types: ['dark', 'poison'], win: [flag('an08-fake-2'), flag('freed-caged')] }, { lose: [flag('an08-fake-2'), flag('freed-caged')] })) }),
+    ]),
+  ev('an08-third-fake', 'The Third Rumour: the Offer', AN, { callback: true, requires: [flagIs('an08-fake-2'), age('an08-fake-2', 3)], ...GRUNTS, effect: 'none' },
+    'Three stages on, a man in black is waiting for the brothers in the road, alone, with his hands open to show they are empty. He is the one in charge of the others; you can tell by his coat. He holds out a red stone. "For the boy in the armour. No charge. Call it an apology." The boy reaches for it. The armour does not move. "It\'s cold," it says. "That one\'s cold. It\'s a fake too. It\'s made of one Pokémon, a small one. I can hear it." The man shrugs, as if a Pokémon were small change. Then he smiles. "Clever. Then you\'ll want to see the real one."',
+    [
+      ch('Fight him for it.', fight('He sighs, as if this is tiresome, and steps back to let his Pokémon out.', duel('Team Lieutenant', { cls: 'roughneck', size: 3, types: ['dark', 'poison'], lv: 1, win: [flag('an08-fake-3'), room('an08-real-stone')] }, { lose: [flag('an08-fake-3'), room('an08-real-stone')] }))),
+      ch('Let the brother speak to him.', out('The armour walks up to the man until it blots out the sun, and says, in its echoing boy\'s voice: "You have one. A real one. I can hear it from here. Show me." The man looks up, a long way up, and for the first time he is not smiling. He leads you to a door in the hillside without another word.', flag('an08-fake-3'), room('an08-real-stone'))),
+    ]),
+  ev('an08-real-stone', 'Made of Lives', AN, { room: true, ...ARMOUR, effect: 'flicker' },
+    'Behind the door, in a vault cut into the hill, on a plain stone shelf, is the real one. It is small, smaller than the fakes, and so red it is nearly black, and it is warm from across the room. You can hear it, faintly: not one voice but hundreds, very far off, all talking at once. It is made of lives. The boy takes one step toward it, then stops. The armour stands behind him with its great hands at its sides. The boy\'s metal arm is shaking.',
+    [
+      ch('Use it.', out('The boy picks it up and presses it to his brother\'s breastplate. Light pours out of the stone, and the hundreds of voices in it rise to a scream and then go out, one by one, like candles. For one long moment there is warmth in the armour, and a heartbeat, and the boy cries out. Then the stone is a grey pebble, spent, and the armour is armour, and the lights in its eyes are still there, small and sad. It did not work. Stones like that only ever take. The boy sits down in the dust. His brother sits down beside him. Neither of them says anything for a long time.', flag('an08-stone-used'), evil(1), room('an08-same-clay'))),
+      ch('Destroy it.', out('You bring it down on the stone shelf before anyone can stop you. It cracks like ice, and the hundreds of voices come out of it all at once, a long rushing sigh, and go up through the hill and away. The boy is on his knees, staring at the pieces. Then he looks up at the armour. "They were people," he says. "Pokémon. They were all somebody." The armour puts its hand on his head. "I know. We\'ll find another way. A good one."', flag('an08-stone-destroyed'), flag('freed-caged'), good(1), room('an08-same-clay'))),
+      ch('Ask the brother.', out('You turn to the armour and ask him. Not the boy: him. It is quiet for a long time, listening to the voices in the stone. Then it says: "Not like that." The boy closes his eyes. "No," he says. "Not like that." They lift it together, the metal hand and the huge one, and break it together, and the hundreds of voices rush out and away through the hill. The Golett stays a Golett. He is fine with it. "I\'d rather be in here," he says, "than out there, made of them."', flag('an08-asked-brother'), flag('an08-stone-destroyed'), flag('freed-caged'), good(1), fr(3), room('an08-same-clay'))),
+    ]),
+  ev('an08-same-clay', 'From the Same Clay', AN, { room: true, ...ARMOUR, pokemon: 'golett', effect: 'none',
+    remembers: [{ id: 'asked-brother', when: [flagIs('an08-asked-brother')], notice: 'The armour walks lighter than it did. It ducks under the doorframe and, for the first time since you met it, it laughs: a big, echoing, boy\'s laugh. "We\'re still looking," it says. "But I\'m not in a hurry any more."' }] },
+    'Outside the hill, in the evening, the boy kneels and takes a handful of the same pale clay the armour was made from, from a bank by the road. He shapes it with his metal hand, quick and sure, and draws a circle on its chest with one finger, an alchemy circle, the only one he still trusts. The clay sits up. It is a Golett, small and solemn, with two tiny lights for eyes. "For you," the boy says. "For helping. The circle on it swaps what\'s strong for what\'s steady, when you need it." The armour nods. "It\'s a good one. I watched."',
+    [
+      ch('Take the Golett.', out('It walks to you, stiffly, the way the armour walks, and stands at your knee. When you look down, it looks up. The brothers go on down the road together: the small one and the big one, still looking, still in no hurry. The little Golett watches them go until the road bends, and then it turns and follows you.', gain('golett', { bond: 20 }), teach('power-trick', { species: 'golett' }), flag('an08-golett'), moment('Two brothers, one of them a suit of armour, looked for a red stone made of lives, and chose not to use it. They gave you a Golett from the same clay.', 75))),
     ]),
 ];
 

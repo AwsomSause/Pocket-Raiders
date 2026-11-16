@@ -2536,6 +2536,2672 @@
      }
     }
    ]
+  },
+  {
+   "id": "an05-walking-house",
+   "name": "The Walking House",
+   "group": "Anime-inspired questlines",
+   "rarity": "rare",
+   "minStage": 4,
+   "scene": {
+    "cast": [],
+    "pokemon": "golurk",
+    "tint": "#2a2420",
+    "effect": "shake"
+   },
+   "intro": "A house on four stone legs crosses the route, smoke curling from its chimney. It is three houses really, stacked by somebody in a hurry. It steps over the hedge. A door opens in its side at knee height, and a rope ladder falls out. The floor rumbles: the legs are a Golurk. \"Passengers. Or cargo. Which?\" In the hearth sits a Litwick with a kettle on its head. \"I keep it going. It keeps me going. That's the deal. Don't sit there, that's the egg chair, it's not for sitting.\" A young man who will not stop moving the furniture looks up from a coat stand. \"Mr. Wystan Fothergill. Don't touch the door dial.\" By the front door is a dial, in four colours.",
+   "choices": [
+    {
+     "label": "Ride along.",
+     "success": {
+      "text": "You climb the ladder. The house takes a step, and the whole route swings below the window like a map somebody is folding. At a fork it stops, and you can see both paths, and the Golurk rumbles while it thinks. Then it picks one, the one you would not have, and walks on. \"It goes where it likes,\" says Mr. Fothergill, sliding a chair a little to the left. \"It is very rarely wrong.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "house-rode",
+        "amount": 1
+       },
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an05-aboard"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn the dial.",
+     "success": {
+      "text": "\"Don't,\" says Mr. Fothergill, a fraction too late. The dial clicks round to a colour. The front door swings open, and on the other side of it is not the route at all, but somewhere else: another region's light, another region's air. \"Well,\" he says. \"Go on, then. It'll only wait so long.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an05-dial-turned",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "an05-door-snow",
+         "an05-door-sand",
+         "an05-door-harbour"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why the legs?",
+     "success": {
+      "text": "Mr. Fothergill stops moving the coat stand for the first time. \"Someone was looking for me. Easier to move the whole house.\" He says it lightly, the way people say things they have practised. Then he starts moving the coat stand again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an05-asked-why",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an05-house-again"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an05-house-again",
+   "name": "The Walking House",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "golurk",
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "The house shifts its weight from leg to leg, patient as a horse at a gate. The Litwick watches you over the rim of its kettle. Mr. Fothergill has moved the coat stand back where it started. \"Well? It doesn't wait all day. It has places to be. It just never tells me where.\"",
+   "choices": [
+    {
+     "label": "Ride along.",
+     "success": {
+      "text": "You climb the ladder. The house takes a step, and the route swings below the window. At a fork it stops, you see both paths, the Golurk rumbles while it thinks, and it picks the one you would not have. \"It goes where it likes,\" says Mr. Fothergill. \"It is very rarely wrong.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "house-rode",
+        "amount": 1
+       },
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an05-aboard"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn the dial.",
+     "success": {
+      "text": "You turn it before he can say \"don't\". The front door swings open onto another region's light and another region's air. \"Well,\" he sighs. \"Go on, then.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an05-dial-turned",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "an05-door-snow",
+         "an05-door-sand",
+         "an05-door-harbour"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave it on.",
+     "success": {
+      "text": "You wave. The ladder is pulled up. The house steps back over the hedge, very carefully, and walks off down the route with its chimney smoking, and somewhere inside, faintly, you hear furniture being moved.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "an05-door-snow",
+   "name": "A Door Onto Snow",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an05-dial-turned",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "snom",
+    "tint": "#1e2a36",
+    "effect": "snow"
+   },
+   "intro": "Through the door: a snowy market square in a region you have never been to. Lanterns, steam from a soup stall, a brass band playing slightly too slowly. A Snom is stuck to the outside of the door frame, eating the frost off it, and looks at you as though you are the strange one. Behind you, the dial is already ticking slowly back toward its first colour.",
+   "choices": [
+    {
+     "label": "Buy soup and come back.",
+     "success": {
+      "text": "The soup is hot and very peppery and the stall-holder gives you an extra ladle for your team because you look, she says, like somebody who came through a door. You get back over the threshold just as the dial clicks home. The snow on your boots melts on the house's floor.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "an05-door-done",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an05-aboard",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help the Snom off the frame.",
+     "success": {
+      "text": "It does not want to come off. Then it does, all at once, into your hands, cold as a window. You set it down in a snowdrift, where it is plainly happier. On your way back in, a child in a bobble hat presses a snowball into your hand for luck: a proper one, packed hard. The dial clicks home behind you.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "snowball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an05-door-done",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an05-aboard",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an05-door-sand",
+   "name": "A Door Onto Sand",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an05-dial-turned",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sandile",
+    "tint": "#3a2a16",
+    "effect": "none"
+   },
+   "intro": "Through the door: a desert well at noon, in a region you have never been to. The air is so hot it hums. A Sandile sits in the shade of the well wall with its mouth open, waiting for the bucket to come up. Nobody is pulling it. Behind you, the dial is already ticking slowly back toward its first colour.",
+   "choices": [
+    {
+     "label": "Pull the bucket up.",
+     "success": {
+      "text": "It is heavy and the rope is hot, but it comes. The Sandile drinks, and drinks, and then sits back and blinks at you with deep satisfaction. In the bottom of the bucket, where the water was, something glints: an old coin from a market you will never see. You are back over the threshold as the dial clicks home.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 400
+       },
+       {
+        "kind": "flag",
+        "key": "an05-door-done",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an05-aboard",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look, and step back.",
+     "success": {
+      "text": "You stand in the doorway of another region for one long minute and just look: the white sky, the far dunes, a caravan on the horizon. Then the dial clicks home and the door is only a door again. Your team, who were looking too, are quiet for a long while.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an05-door-done",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an05-aboard",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an05-door-harbour",
+   "name": "A Door Onto a Harbour",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an05-dial-turned",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wingull",
+    "tint": "#1e2e3a",
+    "effect": "none"
+   },
+   "intro": "Through the door: a harbour at dawn in a region you have never been to, a fish auction in full cry. A Wingull lands on the doorstep, looks into the house, looks at you, and very clearly decides the house is the more interesting place. Behind you, the dial is already ticking slowly back toward its first colour.",
+   "choices": [
+    {
+     "label": "Bid on something.",
+     "success": {
+      "text": "You do not know the language of the auction, so you raise your hand at the wrong moment and win a crate of something. It turns out to be very good: dried berries, a whole crate. You haul it over the threshold as the dial clicks home. The Wingull comes too, briefly, and then thinks better of it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 3
+       },
+       {
+        "kind": "flag",
+        "key": "an05-door-done",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an05-aboard",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shoo the Wingull home.",
+     "success": {
+      "text": "It argues. You win. It flaps back out over the harbour, complaining. Just before the dial clicks home a fisherman tosses you something for your trouble, laughing: a little pearl, the kind they find in the nets on a good day.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pearl",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an05-door-done",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an05-aboard",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an05-aboard",
+   "name": "Aboard",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "litwick-siblings",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "story-alpha-weeping-lantern"
+      },
+      {
+       "kind": "partyLine",
+       "species": "litwick",
+       "bond": 0
+      }
+     ],
+     "notice": "Your Litwick, the one from the Weeping Lantern, goes straight to the hearth. The two Litwick stare at each other through the steam. They are siblings: you can tell from the way they both pretend not to care. Then they lean together and compare flames, one blue, one a little bluer, for a long and serious time."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "golurk",
+    "tint": "#2a2420",
+    "effect": "float"
+   },
+   "intro": "The house walks. Every step is a long, slow sway, like a ship that has learned to climb. Cups rattle on their hooks. Outside, the route goes by at the speed of a stroll. Inside there is always something: the Litwick in the hearth is peering into its empty log basket, Mr. Fothergill is looking at a wardrobe in a way that means he is going to move it, and at the back window, the curtain is twitching in a draught.",
+   "choices": [
+    {
+     "label": "Feed the hearth.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "an05-hearth",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The Litwick wants feeding: anything burnable. You give it a broken chair leg, a bundle of twigs and an old map with the wrong roads on it, and it eats the map with special pleasure. The hearth roars. The heat soaks into every one of your team, down to the bones, until they are asleep in a heap on the rug. You sleep too, a little. You wake up rested.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an05-hearth",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an05-aboard"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold one end of the wardrobe.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "an05-wardrobe",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "He takes the other. You move it to the window. Then the door. Then the stairs. Then the corner by the egg chair. It moves four times, and ends exactly where it started. Mr. Fothergill steps back and looks at it with deep relief. \"There. That's better.\" You are not sure anything is different. He is.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an05-wardrobe",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an05-aboard"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look out of the window.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "an05-window",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You pull the curtain back and look down the road behind.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an05-looked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an05-window"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Climb down the ladder.",
+     "success": {
+      "text": "The house stops for you, and bends its knees so the ladder reaches. Mr. Fothergill hands you a small tin whistle. \"If you need us, whistle. It comes when whistled. Once in a while.\" The Golurk rumbles, which is the house saying goodbye. You stand in the road and watch it walk away over the hill, smoke from its chimney, furniture moving somewhere inside.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "house-call-whistle",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You rode a while in a walking house, and you have its whistle.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an05-window",
+   "name": "The Figure on the Road",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_kid_m"
+    ],
+    "pokemon": "golurk",
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Somebody is on the road behind. Far off. Walking. Always the same distance, however the house turns. A small figure with something in its hand. Mr. Fothergill comes and stands behind you, and you can feel him not looking.",
+   "choices": [
+    {
+     "label": "Who is that?",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "an05-asked-who",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "He does not answer for a while. Then: \"Someone I left.\" He goes back to the coat stand and moves it, and moves it again. The figure on the road keeps walking, always the same distance.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an05-asked-who",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an05-window"
+       }
+      ]
+     }
+    },
+    {
+     "label": "They don't look angry.",
+     "success": {
+      "text": "He comes to the window. He looks for a long time, his hands still for once. \"...No. They don't, do they.\" His voice has gone strange. \"They never did. I just assumed.\" He does not move any furniture for the rest of the morning.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an05-not-angry",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an05-window",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an05-aboard"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stop the house.",
+     "success": {
+      "text": "\"Don't,\" he says, but the Golurk has already stopped. The figure walks up, at the same patient pace, and reaches the ladder. It is an old woman with a lunch tin. She looks up at him. \"You left without it. Eleven years ago. It'll have gone off.\" He climbs down. She climbs up. They sit together on the doorstep, and neither of them says anything for a long time, and that seems to be all right.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "house-stopped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an05-window",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "A walking house stopped, and a man who had been running for eleven years took his lunch tin back.",
+        "importance": 65
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an05-aboard"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an06-long-lived-traveller",
+   "name": "The Long-Lived Traveller",
+   "group": "Anime-inspired questlines",
+   "rarity": "rare",
+   "minStage": 6,
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_f"
+    ],
+    "tint": "#22262a",
+    "effect": "none"
+   },
+   "intro": "A hill above the road, and a grave on it: a plain stone, moss in the letters. A woman stands beside it, leaning on a walking staff worn smooth at the grip. She looks twenty. Her eyes do not. \"I travelled with him for ten years. That's nothing, for me. A long afternoon.\" She brushes moss out of one letter with her thumb. \"He died eighty years ago. I've started to wonder what he was like.\" She looks at you, and then down at the road you came up. \"Will you walk his route with me? I want to see what he saw.\"",
+   "choices": [
+    {
+     "label": "Walk with her.",
+     "success": {
+      "text": "She smiles, the small careful smile of somebody who has not asked anyone for anything in a long time. \"His route runs through this whole region. Four places. I walked it beside him and I didn't look at anything.\" She picks up her staff. \"The first one is just down the road.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an06-walking",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an06-first-thing",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why now?",
+     "success": {
+      "text": "\"Because I forgot his voice last spring.\" She says it very evenly. \"I was making tea and I tried to hear him say my name and there was nothing there. Eighty years. It takes eighty years, for us. Then it goes all at once.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an06-asked-why",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an06-traveller-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Who was he?",
+     "success": {
+      "text": "\"A Trainer. Not a famous one. He had a dog, a Greavard, the ugliest thing you ever saw, and he loved it more than he loved anything.\" She looks at the stone. \"He was kind in ways I thought were a waste of time. That's all I know. That's the trouble.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an06-asked-who",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an06-traveller-again"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an06-traveller-again",
+   "name": "The Long-Lived Traveller",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_f"
+    ],
+    "tint": "#22262a",
+    "effect": "none"
+   },
+   "intro": "The woman with the staff waits beside the grave. The wind moves the grass on the hill and does not move her. \"I won't ask twice,\" she says, not unkindly. \"I've learned not to. But I would like the company. Will you walk his route with me?\"",
+   "choices": [
+    {
+     "label": "Walk with her.",
+     "success": {
+      "text": "\"Thank you.\" She picks up her staff. \"Four places in this region. I walked them all beside him and I didn't look at anything. The first one is just down the road.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an06-walking",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an06-first-thing",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this time.",
+     "success": {
+      "text": "She nods. \"Then I'll go alone. I'm good at that.\" When you look back from the road she is still on the hill, one hand on the stone, as if she is listening for something.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "an06-first-thing",
+   "name": "The First Place: the Cart",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an06-walking",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_f"
+    ],
+    "tint": "#22262a",
+    "effect": "none"
+   },
+   "intro": "Down the road, at a bend, a farmer is stuck with a cart in a ditch. The traveller stops dead. \"Here. Right here. He stopped to help a man with a cart, and we missed the ferry, and I was furious.\" She laughs, a little shakily. \"He did it every time. Every cart. Every stranger. We were late for everything for ten years. I thought it was a waste of time.\" She looks at the farmer, at the wheel sunk to its hub.",
+   "choices": [
+    {
+     "label": "Help the farmer with her.",
+     "success": {
+      "text": "You put your shoulders to it, both of you and your whole team, and the cart comes up out of the ditch with a sucking noise. The farmer thanks you twice and gives you apples. The traveller stands in the road holding one, not eating it. \"Oh,\" she says. \"It feels like this. I never knew it felt like this.\" You both miss nothing at all; there is no ferry today. But she says she would have missed it gladly.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an06-thing-1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an06-helped-cart",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what she thinks now.",
+     "success": {
+      "text": "\"I think he wasn't late,\" she says slowly. \"I think he was exactly on time, for the man with the cart.\" She goes down into the ditch in her good boots and helps lift the wheel. When it comes free she is smiling with her whole face, and mud to the knees.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an06-thing-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an06-second-thing",
+   "name": "The Second Place: the Flowers",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an06-thing-1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "an06-thing-1",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_f"
+    ],
+    "tint": "#22262a",
+    "effect": "none"
+   },
+   "intro": "Two stages on, the traveller is waiting for you at a crossroads, exactly where she said she would be. There is a village graveyard by the road. \"He always picked a flower for a grave here,\" she says. \"Strangers' graves. People he never met. I asked him why once and he said someone should. I said nobody would know.\" She is quiet. \"I know now. Eighty years later. I know he did it.\"",
+   "choices": [
+    {
+     "label": "Pick a flower for a stranger.",
+     "success": {
+      "text": "You pick two from the verge, one each, and lay them on the oldest stone you can find, where the name has worn away. She stands over it a long time. \"Someone should,\" she says, in a voice that is almost his, she tells you later. It came back to her just then: how he said it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an06-thing-2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an06-voice-came-back",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick one for his grave too.",
+     "success": {
+      "text": "She takes it from you and holds it all the way to the next village, carefully, the way you hold something you are going to bring back. \"I'll take it to him on my way home,\" she says. \"He would laugh at me. He'd be pleased.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an06-thing-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an06-third-thing",
+   "name": "The Third Place: the Joke",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an06-thing-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "an06-thing-2",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_f"
+    ],
+    "tint": "#22262a",
+    "effect": "none"
+   },
+   "intro": "Two stages on, an inn on the road. She has taken a table by the fire. \"He told a joke here. A bad one, about a Slowpoke and a bell. He started laughing before he got to the end, and he never got to the end, and everyone in the room was laughing at him laughing.\" She turns her cup round. \"I didn't laugh. I didn't see the point of a joke with no end. I've thought about that joke for eighty years. I don't know how it ends.\"",
+   "choices": [
+    {
+     "label": "Make up an ending.",
+     "success": {
+      "text": "You make up an ending. It is terrible. She stares at you, and then something in her face gives way and she laughs, properly, out loud, until she has to hold the table. Half the inn turns round. Somebody at the bar starts laughing too, at her laughing. \"That's it,\" she gasps. \"That's what it was. It was never the joke.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an06-thing-3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an06-laughed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell her it didn't need one.",
+     "success": {
+      "text": "She thinks about that. Then she smiles into her cup. \"No,\" she says. \"It didn't. He just liked the start of things.\" She is quiet for a while, and then, without warning, she starts laughing at nothing at all, and does not stop for a long time.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an06-thing-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an06-fourth-thing",
+   "name": "The Fourth Place: the Dog",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an06-thing-3",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "an06-thing-3",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_f"
+    ],
+    "tint": "#22262a",
+    "effect": "fog"
+   },
+   "intro": "Two stages on, at the end of his route, the road climbs to a hill with a single bent tree on it. The traveller stops at the bottom. \"The last thing. Before he died he asked me to visit the dog. His Greavard. It's buried up there under the tree. I said I would.\" Her hand tightens on the staff. \"I never went. I didn't understand why you'd visit a dog that was gone. That was eighty years ago. I've walked past this hill a hundred times.\"",
+   "choices": [
+    {
+     "label": "Go up the hill with her.",
+     "success": {
+      "text": "She takes a breath you can hear, and you climb together. Under the bent tree there is a small mound with a stone on it, and on the stone, in a careful, clumsy hand, one word: GOOD.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an06-thing-4",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an06-dogs-grave"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an06-dogs-grave",
+   "name": "Older Than Anyone",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "max-bond",
+     "when": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 5,
+       "who": "any"
+      }
+     ],
+     "notice": "Then she turns, and she watches your {most} for a long, long time, the way it leans on you without thinking. \"That one loves you the way he loved his dog,\" she says. \"What will you do when it is gone?\"",
+     "addChoices": [
+      {
+       "label": "Tell her the truth.",
+       "success": {
+        "text": "You tell her you don't know. That you will miss it every day. That you would not give back one hour of it to miss it less. She listens with her eyes shut. \"He said that,\" she says. \"Nearly that. I thought it was foolish. It's the only sensible thing anyone has ever said to me.\" The Houndstone settles down by its stone, content. A Greavard pup, all ears, comes out from among the roots and sits between your feet and hers, and will not choose.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "greavard"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 20
+         },
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": "top"
+         },
+         {
+          "kind": "flag",
+          "key": "an06-greavard",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "an06-told-truth",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "A woman who would outlive everyone walked her old friend's road with you, and asked what you would do when your Pokémon was gone.",
+          "importance": 80
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_f"
+    ],
+    "pokemon": "houndstone",
+    "tint": "#22262a",
+    "effect": "glint"
+   },
+   "intro": "The earth on the mound stirs. Something rises out of it, slow and pale and wagging: a Houndstone, a ghost of a dog, older than anyone, with a candle-flame of a tail that goes round and round. It walks straight past you to the traveller. It sits down at her feet. It looks up at her as if she has been gone an afternoon. She makes a sound you have never heard a person make.",
+   "choices": [
+    {
+     "label": "It remembers you.",
+     "success": {
+      "text": "She kneels. It puts its great pale head in her lap, and she puts her face in its neck, and she cries, at last, for him: eighty years of it, all at once. When she sits up, she is laughing. \"It remembers him in me. It smells him on me still.\" The Houndstone settles back down by its stone, content. A Greavard pup, all ears, crawls out from among the roots and sits between your feet and hers, and will not choose.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "greavard"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "flag",
+        "key": "an06-greavard",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an06-remembered",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A woman who would outlive everyone walked her old friend's road with you, and his dog remembered her.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "\"You can rest,\" she tells it. \"He's not coming. I am sorry I took so long.\" The Houndstone licks her hand, once, with a cold tongue, and lies back down on the mound, and sinks, wagging, into the earth. She stays on her knees a while. When she gets up, a Greavard pup has come out from among the roots, all ears, and is sitting between your feet and hers, and will not choose.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "greavard"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an06-greavard",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an06-let-go",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A woman who would outlive everyone walked her old friend's road with you, and said goodbye to his dog.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it with you.",
+     "success": {
+      "text": "She looks at you, startled. Then at the Houndstone. \"Would you come?\" It is already on its feet. They will walk together now, the woman who does not age and the dog that already has. A Greavard pup comes out from among the roots and trots after them, then back to you, then after them, all ears. \"It's yours,\" she says. \"And mine. We'll meet on the road. It can visit.\" It goes with you, and keeps looking back.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "greavard"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 15
+       },
+       {
+        "kind": "flag",
+        "key": "an06-greavard",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an06-took-it",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A woman who would outlive everyone walked her old friend's road with you, and took his dog home.",
+        "importance": 75
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an07-letter-writer",
+   "name": "The Letter Writer",
+   "group": "Anime-inspired questlines",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [
+    "normal",
+    "electric",
+    "steel"
+   ],
+   "stop": "event",
+   "scene": {
+    "cast": [
+     "trainer.pr/artist"
+    ],
+    "pokemon": "chatot",
+    "tint": "#262230",
+    "effect": "none"
+   },
+   "intro": "In a corner of the town square, under a hand-painted sign that says LETTERS WRITTEN, a woman sits at a folding desk with ink on her fingers. A Chatot rides on her shoulder, preening. \"People come to me when they can't say it themselves,\" she says. \"I write what they mean, not what they say. Chatot reads it back to them.\" The Chatot tilts its head at you, opens its beak, and says \"Hello\" in your own voice, exactly. It is a very strange thing, to be greeted by yourself.",
+   "choices": [
+    {
+     "label": "Write one for me.",
+     "success": {
+      "text": "She dips her pen. \"Who to?\" She does not hurry you. Nobody who sits at this desk ever knows the answer straight away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-writing",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-to-whom"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Who's it for?",
+     "success": {
+      "text": "She nods past you. On the bench by the fountain three people are waiting their turn, each holding a scrap of paper they have not managed to write on: an old soldier, a small girl, and a very old man. \"All of them, today. Will you help me? Sometimes they talk easier to a stranger.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "an07-soldier"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do you write your own?",
+     "success": {
+      "text": "She puts the pen down. \"I had one to write. I never knew what it said.\" The Chatot goes quiet on her shoulder. She picks the pen up again, briskly. \"Well. Never mind me.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-asked-own",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-desk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an07-desk",
+   "name": "The Letter Writer's Desk",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/artist"
+    ],
+    "pokemon": "chatot",
+    "tint": "#262230",
+    "effect": "none"
+   },
+   "intro": "The letter writer blots a page and sets it to dry in the sun with the others, a whole row of them along the edge of the desk, each held down with a pebble. The Chatot hops from pebble to pebble, checking them. \"Anything else? I'm here till the light goes.\"",
+   "choices": [
+    {
+     "label": "Write one for me.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "an07-letter-sent",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "She dips her pen. \"Who to?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-writing",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-to-whom"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Who's it for?",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "an07-clients-helped",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "She nods at the bench by the fountain: an old soldier, a small girl and a very old man, each with a blank scrap of paper. \"Help me with them? They talk easier to a stranger.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "an07-soldier"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do you write your own?",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "an07-asked-own",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "She puts the pen down. \"I had one to write. I never knew what it said.\" The Chatot goes quiet on her shoulder.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-asked-own",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-desk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on your way.",
+     "success": {
+      "text": "\"Come back past,\" she says, already bent over the next page. \"Replies come, you know. Not always. But they come.\" The Chatot says goodbye in your voice. You do not quite get used to it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-desk-left",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an07-replies",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an07-to-whom",
+   "name": "Who To?",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/artist"
+    ],
+    "pokemon": "chatot",
+    "tint": "#262230",
+    "effect": "none"
+   },
+   "intro": "She waits with the pen over the paper. \"Someone you met on this road. Someone you left behind at the start of it. Anyone. It doesn't have to be someone who'll read it kindly. It only has to be someone you mean it for.\"",
+   "choices": [
+    {
+     "label": "My rival.",
+     "requires": [
+      {
+       "kind": "rivalMet",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "She writes their name at the top, and underlines it, and does not ask why your face did that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-to-rival",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-first-thing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Mom.",
+     "success": {
+      "text": "She smiles and writes it at the top. \"Everyone's first letter. Everyone's last one too, usually.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-to-mom",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-first-thing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Whoever looks after a Pokémon I let go.",
+     "success": {
+      "text": "She writes \"To whoever has them now\" at the top, very carefully, and looks at you for a moment with great kindness. \"Those are the hardest. And the best.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-to-new-trainer",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-first-thing"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an07-first-thing",
+   "name": "The First Thing",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/artist"
+    ],
+    "pokemon": "chatot",
+    "tint": "#262230",
+    "effect": "none"
+   },
+   "intro": "\"Three things,\" she says. \"Nobody can carry more than three in one letter. What's the first?\" She has already written something, before you speak: you can see the pen moving. She says that is how it works. She writes what you mean a little before you say it.",
+   "choices": [
+    {
+     "label": "I'm all right.",
+     "success": {
+      "text": "She writes it. Then she writes a little more round it, and you read upside down that it says: I am all right, and I am not just saying that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-said-all-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-second-thing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'm sorry.",
+     "success": {
+      "text": "She writes it. Then she writes a little more round it, and you read upside down that it says: I am sorry, and I know that it does not fix it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-said-sorry",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-second-thing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank you.",
+     "success": {
+      "text": "She writes it. Then she writes a little more round it, and you read upside down that it says: Thank you, for the part I never said thank you for.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-said-thanks",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-second-thing"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an07-second-thing",
+   "name": "The Second Thing",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/artist"
+    ],
+    "pokemon": "chatot",
+    "tint": "#262230",
+    "effect": "none"
+   },
+   "intro": "The Chatot has come down off her shoulder to stand on the edge of the page and watch the words appear, its head going side to side like someone reading. \"The second thing,\" she says, \"is usually the one people came to say.\"",
+   "choices": [
+    {
+     "label": "I miss you.",
+     "success": {
+      "text": "The pen does not stop. You did not know you meant it that much until you see how much ink it takes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-said-miss",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-third-thing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'm proud of you.",
+     "success": {
+      "text": "She writes it slowly. \"People hardly ever write that one,\" she says. \"They think it's understood. It never is.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-said-proud",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-third-thing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I think about you.",
+     "success": {
+      "text": "She writes it, and adds a small place and a time you had not mentioned, which is exactly right, and you do not ask how she knew.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-said-think",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-third-thing"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an07-third-thing",
+   "name": "The Third Thing",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/artist"
+    ],
+    "pokemon": "chatot",
+    "tint": "#262230",
+    "effect": "none"
+   },
+   "intro": "\"And the last.\" She lifts the pen and waits. The last thing in a letter, she says, is the thing the other person will read twice.",
+   "choices": [
+    {
+     "label": "Wait for me.",
+     "success": {
+      "text": "She writes it, and a promise under it that you did not quite say and do quite mean.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-said-wait",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-read-back"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Don't wait for me.",
+     "success": {
+      "text": "She writes it very gently. Somehow, in her hand, it reads as the kindest thing in the letter.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-said-dont-wait",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-read-back"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Write back.",
+     "success": {
+      "text": "She writes it and underlines it twice and says that is the bravest last line there is, because it asks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-said-write-back",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-read-back"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an07-read-back",
+   "name": "In Your Own Voice",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "to-rival",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an07-to-rival",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Hearing your rival's name in your own voice is the worst part, and then, by the second line, it is not. It sounds like something you should have said at the start."
+    },
+    {
+     "id": "to-mom",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an07-to-mom",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "At \"Mom,\" the Chatot's voice, your voice, goes a little younger. You did not know it could do that. Neither, from the look on its face, did it."
+    },
+    {
+     "id": "to-new-trainer",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an07-to-new-trainer",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "At \"whoever has them now,\" the Chatot pauses, the way you would, and the letter writer puts her hand flat on the desk beside yours."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/artist"
+    ],
+    "pokemon": "chatot",
+    "tint": "#262230",
+    "effect": "none"
+   },
+   "intro": "She blows on the ink, folds the page once, and hands it to the Chatot. It holds it open in its feet and reads it aloud in your voice: not what you said, but what you meant, all of it, plainly, the way you would have said it if you could have. You did not know your voice could sound like that. The square has gone quiet. Even the fountain seems to be listening.",
+   "choices": [
+    {
+     "label": "Post it.",
+     "success": {
+      "text": "She addresses it in her round, careful hand and drops it in the box on the corner herself. \"It'll get there,\" she says. \"They always get there. It's the coming back that takes a while.\" You feel lighter by exactly one letter.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-letter-sent",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "A letter writer in a town square wrote down what you meant, and her Chatot read it back in your own voice.",
+        "importance": 60
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-desk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an07-soldier",
+   "name": "The Old Soldier",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_m"
+    ],
+    "pokemon": "chatot",
+    "tint": "#2a2a22",
+    "effect": "none"
+   },
+   "intro": "The old soldier sits down very straight. He wants to write to the family of a man he served with, a long time ago, who did not come home. He has tried every year. \"I tell them he was brave. That's what you say.\" His hands are shaking on his knees. \"He wasn't, much. He was funny. He sang off-key. He was the only one of us who could make the cook laugh.\"",
+   "choices": [
+    {
+     "label": "Tell them he was funny.",
+     "success": {
+      "text": "The letter writer writes about the singing and the cook and the jokes. The old soldier reads it and laughs, then covers his eyes. \"That's him. That's him. They'll know him from that.\" He signs it with a flourish. He walks away a little less straight, and a little lighter.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-client-soldier",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-child"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them he was brave, and funny.",
+     "success": {
+      "text": "\"Both,\" the letter writer agrees, and writes both. \"Funny is a kind of brave, out there.\" The old soldier reads it three times, nods once, and signs it. He salutes the Chatot on his way out. It salutes back, badly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-client-soldier",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-child"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an07-child",
+   "name": "The Small Girl",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/preschooler_f"
+    ],
+    "pokemon": "chatot",
+    "tint": "#2a2230",
+    "effect": "none"
+   },
+   "intro": "The small girl climbs up onto the chair and sits on her hands. She wants to write to her Skitty, which ran away in the summer and has not come back. \"It doesn't know how to read,\" she says. \"But I want it to know it wasn't in trouble.\" She looks at you seriously. \"Is that stupid?\"",
+   "choices": [
+    {
+     "label": "\"It isn't stupid.\"",
+     "success": {
+      "text": "The letter writer writes it in big letters, with a drawing of a Skitty at the bottom that the girl corrects twice. \"We'll pin it up by the bins behind the bakery,\" the letter writer says. \"That's where all the cats read their post.\" The girl nods as if this is well known. She holds the letter all the way out of the square.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-client-child",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-old-man"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the Chatot say it for her.",
+     "success": {
+      "text": "The Chatot listens to her say \"you're not in trouble, come home\" once, and then says it back in her exact voice, loud and clear, and again, and again, so it can say it from the rooftops tonight. The girl stares, delighted and a little frightened. \"It sounds like me.\" It does. Somewhere, a Skitty might hear.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-client-child",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-old-man"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an07-old-man",
+   "name": "The Very Old Man",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_m"
+    ],
+    "pokemon": "chatot",
+    "tint": "#26221e",
+    "effect": "none"
+   },
+   "intro": "The very old man takes a long time to sit. He wants to write to his wife. She is in the home up the hill and does not always know him now. \"Some days she thinks I'm her brother. Some days she's cross with me for being late.\" He smiles. \"I want to write her something she can read on any of those days.\"",
+   "choices": [
+    {
+     "label": "Write that he is always coming.",
+     "success": {
+      "text": "The letter writer writes: I am on my way. I am always on my way. Whoever you think I am today, I am coming up the hill. He reads it and nods for a long time. \"That's true on every day,\" he says. \"That's the one.\" He tucks it in his coat.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-client-old-man",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an07-clients-helped",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-desk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask him how they met.",
+     "success": {
+      "text": "He tells you: a dance, a broken shoe, a long walk home. The letter writer writes it all down, just the story, no message. \"She knows that one even on the bad days,\" he says, wondering. \"Even when she doesn't know me. She knows the shoe.\" He goes up the hill with it straight away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an07-client-old-man",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an07-clients-helped",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an07-desk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an07-replies",
+   "name": "Replies",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "mom-wrote-back",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an07-to-mom",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "There is one with your name on it, in handwriting you would know anywhere. Mom wrote back. The letter writer slides it across the desk and looks away politely while you read it, which takes a long time, because you read it twice."
+    },
+    {
+     "id": "clients-wrote-back",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an07-clients-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "There are three for her clients. The soldier's friend's sister wrote back, and she remembers the singing. The Skitty came home; the girl has sent a drawing. And the old man's wife, on a good day, wrote one line under his: I know. I always know the shoe."
+    },
+    {
+     "id": "rival-letter",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an07-to-rival",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "There is nothing for you from your rival, not yet. \"Rivals answer in person,\" the letter writer says. \"Usually at the worst moment. Watch for it.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/artist"
+    ],
+    "pokemon": "chatot",
+    "tint": "#262230",
+    "effect": "none"
+   },
+   "intro": "Five nodes on, in another town, there is the same folding desk under the same hand-painted sign. The letter writer looks up as if she had been expecting you. \"I move with the post,\" she says. \"Some days there are no replies. I write anyway.\" She has a small bundle tied with string. The Chatot is sorting it, very importantly, one envelope at a time.",
+   "choices": [
+    {
+     "label": "Read them with her.",
+     "success": {
+      "text": "You sit on the edge of the desk and read them together, out loud, in your own voices, which is different from hearing them in the Chatot's. She is quiet afterwards. \"I give everybody's letters away,\" she says. \"I never get to keep one.\" She looks at the bundle. Then she ties it up again with great care, and does not say what she is thinking.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an07-read-replies",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an07-her-own",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the Chatot read them.",
+     "success": {
+      "text": "It reads each one in the voice of whoever wrote it, which it has never heard, and gets them all exactly right. It cannot possibly. It does. The letter writer watches it with an odd expression. \"It's always done that,\" she says. \"I've never asked how.\" She looks at her own empty hands for a long moment.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an07-read-replies",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an07-her-own",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an07-her-own",
+   "name": "The Letter She Never Wrote",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/artist"
+    ],
+    "pokemon": "chatot",
+    "tint": "#262230",
+    "effect": "sparkle"
+   },
+   "intro": "Five nodes on, she is waiting by the road with no desk at all, only a single folded page in her hands. \"I had one to write. I never knew what it said.\" She unfolds it. It is blank, and very old. \"To my mother. She taught me my letters, and then she was gone, and I never wrote to her once. I didn't know what to say.\" The Chatot hops down onto the blank page. It looks at her for a long time. Then it says, in a woman's voice none of you have heard in forty years: \"Hello, love.\" She sits down in the road.",
+   "choices": [
+    {
+     "label": "Write \"Hello\" back.",
+     "success": {
+      "text": "You hold the page while she writes it, one word, in a hand that shakes and then steadies: Hello. That was the whole letter. It always was. She laughs and cries at once. Then she lifts the Chatot off the page and puts it in your hands. \"It learned every voice I ever loved. Teach it yours. I don't need it to say things for me any more.\" It climbs onto your shoulder and says, in your voice, \"Hello.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "chatot"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "teachMove",
+        "move": "fake-out",
+        "species": "chatot"
+       },
+       {
+        "kind": "flag",
+        "key": "an07-chatot",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an07-hello",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A letter writer who wrote everyone's letters finally wrote her own, and it said hello. Her Chatot came with you.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Teach the Chatot your name.",
+     "success": {
+      "text": "\"Say it again,\" she whispers, and it does: Hello, love. Then she writes it down, the one word, and folds the page and keeps it. She puts the Chatot in your hands. \"Teach it something of yours.\" So you teach it your name. It says it back, perfectly, and then it says it in her mother's voice too, softly, as if trying it on. It rides on your shoulder. It will say it in battle, sharp as a slap, whenever it wants a foe to flinch.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "chatot"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "teachMove",
+        "move": "fake-out",
+        "species": "chatot"
+       },
+       {
+        "kind": "flag",
+        "key": "an07-chatot",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an07-taught-name",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A letter writer who wrote everyone's letters finally wrote her own, and gave you her Chatot.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Teach the Chatot \"Now!\"",
+     "success": {
+      "text": "She writes her one word, Hello, and folds the page into her coat over her heart. Then she gives you the Chatot. \"Teach it a word of yours.\" You teach it \"Now!\" and it shouts it, in your voice, so loudly that a Pidgey falls off a fence. She laughs until she cries again. It will shout it in battle, whenever it likes, and the foe will flinch.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "chatot"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "teachMove",
+        "move": "fake-out",
+        "species": "chatot"
+       },
+       {
+        "kind": "flag",
+        "key": "an07-chatot",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an07-taught-now",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A letter writer who wrote everyone's letters finally wrote her own, and gave you her Chatot.",
+        "importance": 75
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an08-soul-in-armour",
+   "name": "Soul in Armour",
+   "group": "Anime-inspired questlines",
+   "rarity": "rare",
+   "minStage": 6,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "golett",
+    "tint": "#2a2622",
+    "effect": "none"
+   },
+   "intro": "Two figures come down the road toward you: a boy with a mechanical arm that clicks when he swings it, and beside him an enormous suit of armour, taller than a door, that walks with a slow clank and stops when he stops. The armour bends down to look at you. Its eyes are two small lights, deep inside. It speaks, in a boy's voice that echoes. \"I'm his brother. I'm in here.\" The boy with the arm does not smile. \"We tried to bring Mum back. It cost us.\" He looks at you hard. \"We're looking for a way to get him out. Have you seen a red stone?\"",
+   "choices": [
+    {
+     "label": "I'll help look.",
+     "success": {
+      "text": "The boy lets out a breath he has been holding for a long time. \"There are rumours. Three, in this region. Somebody always says they saw one.\" The armour straightens with a long creak. \"There's one at a market three hops on,\" it says. \"We'll meet you there.\" The lights in its eyes look, for a moment, almost hopeful.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an08-looking",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an08-first-fake",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Is he in pain?",
+     "success": {
+      "text": "The armour answers before his brother can. \"No. I don't feel anything. Not the rain. Not his hand on my arm.\" It is quiet. \"That's worse, I think. I'd take pain.\" The boy puts his metal hand on the armour's arm anyway, the way you would, and leaves it there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an08-asked-pain",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an08-armour-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "What did it cost you?",
+     "success": {
+      "text": "\"My arm,\" says the boy. \"His whole body.\" He says it flatly, like a sum. \"And she didn't come back. What came back wasn't her. It didn't even look at us.\" The armour puts a huge hand on his shoulder, very gently, the way you would hold a bird.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an08-asked-cost",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an08-armour-again"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an08-armour-again",
+   "name": "Soul in Armour",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "golett",
+    "tint": "#2a2622",
+    "effect": "none"
+   },
+   "intro": "The brothers wait on the road, the boy with his metal arm folded and the armour standing behind him like a wall. Neither of them begs. They have the look of people who have been told no in every town in the region. \"Well?\" says the boy. \"Have you seen one?\"",
+   "choices": [
+    {
+     "label": "I'll help look.",
+     "success": {
+      "text": "\"There are three rumours in this region,\" the boy says. \"There's one at a market three hops on.\" The armour creaks as it straightens. \"We'll meet you there.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an08-looking",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an08-first-fake",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "I haven't. I'm sorry.",
+     "success": {
+      "text": "\"Nobody has,\" the boy says, without blame. They clank on down the road together, the small one and the big one, and the big one ducks under every branch the small one walks beneath.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "an08-first-fake",
+   "name": "The First Rumour: the Market",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an08-looking",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_teamrocket_m"
+    ],
+    "pokemon": "ralts",
+    "tint": "#221a1e",
+    "effect": "glint"
+   },
+   "intro": "The market three hops on has a stall nobody else goes near. A sign reads GENUINE RED STONE, ONE ONLY. Two men in matching black stand behind it, and on a velvet cloth sits a stone like a drop of blood. The boy goes white. Then the armour leans down and looks at it, and says quietly: \"It's warm. It's crying.\" Behind the stall, under a tarpaulin, are crates. In the crates are Ralts, very still, very pale. The stone is made of what is being drained out of them.",
+   "choices": [
+    {
+     "label": "Fight them for the crates.",
+     "success": {
+      "text": "The men in black step out from behind the stall. The boy's metal arm locks into a fist. The armour stands between them and the crates.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Team Grunts",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [
+        "dark",
+        "poison"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "an08-fake-1",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "freed-caged",
+         "amount": 1
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "an08-fake-1",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "freed-caged",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let the armour take the stall apart.",
+     "success": {
+      "text": "The armour does not hurry. It takes the stall in both hands and folds it like a letter. The men in black look at it, then at each other, then run. The boy smashes the fake stone with his metal fist; it is red glass, and something sad goes out of it like steam. You open the crates together. The Ralts come out blinking, colour seeping back into them, and scatter into the long grass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an08-fake-1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "freed-caged",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an08-second-fake",
+   "name": "The Second Rumour: the Pens",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an08-looking",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "an08-looking",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_teamrocket_m"
+    ],
+    "pokemon": "chansey",
+    "tint": "#221a1e",
+    "effect": "glint"
+   },
+   "intro": "Three stages on, the brothers find you. \"Second rumour. A warehouse by the river. They say a scientist makes red stones there.\" The warehouse is guarded by men in black. Inside, through a high window, you see pens: rows and rows of Chansey, each hooked to a pipe, and at the end of the pipes, in a glass dish, a red stone slowly growing. The boy watches through the window for a long time. \"It's another fake,\" he says at last. \"It has to be. They wouldn't need so many if it were real.\"",
+   "choices": [
+    {
+     "label": "Fight your way in.",
+     "success": {
+      "text": "You go in through the front. The armour goes in through the wall.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Team Grunts",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [
+        "dark",
+        "poison"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "an08-fake-2",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "freed-caged",
+         "amount": 1
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "an08-fake-2",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "freed-caged",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Open the pens quietly.",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You go in round the back while the armour stands very still in the shadows, pretending, quite well, to be a suit of armour. Pen by pen, pipe by pipe, you unhook them. The Chansey follow you out in a long pink line, holding each other's tails. By the time the men in black notice, the warehouse is empty, and the dish holds only red glass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an08-fake-2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "freed-caged",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A pipe clangs. Every light in the warehouse comes on. The men in black come running, and the armour steps out of the shadows to stand beside you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Team Grunts",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [
+        "dark",
+        "poison"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "an08-fake-2",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "freed-caged",
+         "amount": 1
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "an08-fake-2",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "freed-caged",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "an08-third-fake",
+   "name": "The Third Rumour: the Offer",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an08-fake-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "an08-fake-2",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_teamrocket_m"
+    ],
+    "tint": "#221a1e",
+    "effect": "none"
+   },
+   "intro": "Three stages on, a man in black is waiting for the brothers in the road, alone, with his hands open to show they are empty. He is the one in charge of the others; you can tell by his coat. He holds out a red stone. \"For the boy in the armour. No charge. Call it an apology.\" The boy reaches for it. The armour does not move. \"It's cold,\" it says. \"That one's cold. It's a fake too. It's made of one Pokémon, a small one. I can hear it.\" The man shrugs, as if a Pokémon were small change. Then he smiles. \"Clever. Then you'll want to see the real one.\"",
+   "choices": [
+    {
+     "label": "Fight him for it.",
+     "success": {
+      "text": "He sighs, as if this is tiresome, and steps back to let his Pokémon out.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Team Lieutenant",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [
+        "dark",
+        "poison"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "an08-fake-3",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an08-real-stone"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "an08-fake-3",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an08-real-stone"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let the brother speak to him.",
+     "success": {
+      "text": "The armour walks up to the man until it blots out the sun, and says, in its echoing boy's voice: \"You have one. A real one. I can hear it from here. Show me.\" The man looks up, a long way up, and for the first time he is not smiling. He leads you to a door in the hillside without another word.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an08-fake-3",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an08-real-stone"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an08-real-stone",
+   "name": "Made of Lives",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "golett",
+    "tint": "#2a2622",
+    "effect": "flicker"
+   },
+   "intro": "Behind the door, in a vault cut into the hill, on a plain stone shelf, is the real one. It is small, smaller than the fakes, and so red it is nearly black, and it is warm from across the room. You can hear it, faintly: not one voice but hundreds, very far off, all talking at once. It is made of lives. The boy takes one step toward it, then stops. The armour stands behind him with its great hands at its sides. The boy's metal arm is shaking.",
+   "choices": [
+    {
+     "label": "Use it.",
+     "success": {
+      "text": "The boy picks it up and presses it to his brother's breastplate. Light pours out of the stone, and the hundreds of voices in it rise to a scream and then go out, one by one, like candles. For one long moment there is warmth in the armour, and a heartbeat, and the boy cries out. Then the stone is a grey pebble, spent, and the armour is armour, and the lights in its eyes are still there, small and sad. It did not work. Stones like that only ever take. The boy sits down in the dust. His brother sits down beside him. Neither of them says anything for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an08-stone-used",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an08-same-clay"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Destroy it.",
+     "success": {
+      "text": "You bring it down on the stone shelf before anyone can stop you. It cracks like ice, and the hundreds of voices come out of it all at once, a long rushing sigh, and go up through the hill and away. The boy is on his knees, staring at the pieces. Then he looks up at the armour. \"They were people,\" he says. \"Pokémon. They were all somebody.\" The armour puts its hand on his head. \"I know. We'll find another way. A good one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an08-stone-destroyed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "freed-caged",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an08-same-clay"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the brother.",
+     "success": {
+      "text": "You turn to the armour and ask him. Not the boy: him. It is quiet for a long time, listening to the voices in the stone. Then it says: \"Not like that.\" The boy closes his eyes. \"No,\" he says. \"Not like that.\" They lift it together, the metal hand and the huge one, and break it together, and the hundreds of voices rush out and away through the hill. The Golett stays a Golett. He is fine with it. \"I'd rather be in here,\" he says, \"than out there, made of them.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an08-asked-brother",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an08-stone-destroyed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "freed-caged",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an08-same-clay"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an08-same-clay",
+   "name": "From the Same Clay",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "asked-brother",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an08-asked-brother",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The armour walks lighter than it did. It ducks under the doorframe and, for the first time since you met it, it laughs: a big, echoing, boy's laugh. \"We're still looking,\" it says. \"But I'm not in a hurry any more.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "golett",
+    "tint": "#2a2622",
+    "effect": "none"
+   },
+   "intro": "Outside the hill, in the evening, the boy kneels and takes a handful of the same pale clay the armour was made from, from a bank by the road. He shapes it with his metal hand, quick and sure, and draws a circle on its chest with one finger, an alchemy circle, the only one he still trusts. The clay sits up. It is a Golett, small and solemn, with two tiny lights for eyes. \"For you,\" the boy says. \"For helping. The circle on it swaps what's strong for what's steady, when you need it.\" The armour nods. \"It's a good one. I watched.\"",
+   "choices": [
+    {
+     "label": "Take the Golett.",
+     "success": {
+      "text": "It walks to you, stiffly, the way the armour walks, and stands at your knee. When you look down, it looks up. The brothers go on down the road together: the small one and the big one, still looking, still in no hurry. The little Golett watches them go until the road bends, and then it turns and follows you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "golett"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "teachMove",
+        "move": "power-trick",
+        "species": "golett"
+       },
+       {
+        "kind": "flag",
+        "key": "an08-golett",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Two brothers, one of them a suit of armour, looked for a red stone made of lives, and chose not to use it. They gave you a Golett from the same clay.",
+        "importance": 75
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }
