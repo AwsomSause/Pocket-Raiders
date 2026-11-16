@@ -351,13 +351,6 @@ export class EventScene extends Phaser.Scene {
             })(),
             team: teamPage(),
             teamHint: !!view.team && this.phase === 'choose' && !out,
-            codeCard: (() => {
-              // Joining shows the code-name card while the welcome line is read.
-              if (view.event.id !== 'stand-with-recruiter' || !r?.success) return null;
-              const joined = standWithOf(r.run);
-              const card = joined ? codeNameCard(r.run, content.evilTeams.teams.find((t) => t.id === joined.team)?.name ?? joined.team, content.regions.get(joined.region)?.name ?? joined.region) : null;
-              return card ? { name: card.alias, rank: card.rank, facts: card.facts, trainer: bossArt(card.givenBy), badges: r.run.badges.length } : null;
-            })(),
             cardHint: eventCard !== null && this.phase === 'choose' && !out,
             bracket: tv && this.rxBracket !== null ? tourneyPage(tv, (sp) => monFile(this, sp), this.rxBracket, 'Saffron Fighting Tournament') : null,
             title: champion ? 'CHAMPION' : null,
