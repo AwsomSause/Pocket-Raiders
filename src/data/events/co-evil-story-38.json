@@ -1,0 +1,1335 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "ga-r-and-b",
+   "name": "R. & B.",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_m"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "A green steel box at the end of a Spikemuth street, humming, under eight years of fly-posters. An old man with a scraper and a tin of polish. Mr. Talbot Oldroyd: \"Substation. I ran it thirty year. I'm retired. Nobody's come to replace me, so I keep an eye. There's a plate under this lot. I do it every spring.\" He scrapes. Gig posters. A lost-Meowth notice. Under them: brass. R. & B., LAMPS. LAID BY HAND. Mr. Oldroyd: \"I never knew who they were. Two lads with a winch, me dad said. Come down the coast wi' a drum o' cable on a cart. Lit the whole street in a week and wouldn't take owt but their dinner.\" Mr. Oldroyd: \"Oldest live cable in Galar, that. It's not on the modern map; they draw the map from Power Spots now. So far as Wyndon's concerned, this box doesn't exist. It only works.\"",
+   "choices": [
+    {
+     "label": "\"Why's it flicker?\"",
+     "success": {
+      "text": "Mr. Oldroyd: \"Somebody upstream's drawin' hard. Nights. Tuesdays, mostly. Oldest line goes first; it's the thinnest. I've rung. They've no record of a customer at this address.\" He gives you a rubbing of the plate, on the back of a gig poster.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "yell-spur-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-plate-rubbing",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who'd know who R and B were?\"",
+     "success": {
+      "text": "Mr. Oldroyd: \"Somebody old. Somebody who were there. There's not many left as were.\" He gives you a rubbing of the plate, on the back of a gig poster.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "yell-spur-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-plate-rubbing",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Can I polish it?\"",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "A cloth, a circle. The brass comes up. There's a second line, smaller, under the first, that even he's not seen: \"SO NOBODY'S LEFT DARK.\" Mr. Oldroyd: \"...Well. They meant it, whoever they were.\" He gives you a rubbing of the plate, on the back of a gig poster.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "yell-spur-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-plate-rubbing",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-plate-polished",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A cloth, a circle. It takes a while. The brass comes up, and there's a second line, smaller, under the first: \"SO NOBODY'S LEFT DARK.\" Mr. Oldroyd: \"...Well. They meant it, whoever they were.\" He gives you a rubbing of the plate.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "yell-spur-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-plate-rubbing",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-plate-polished",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-whos-the-league",
+   "name": "Who's the League",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-woman"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Rose Tower's lobby. A reception desk a cricket pitch long. A young woman with a headset. A sticky note on her monitor, curled with age: \"WHO'S THE LEAGUE? — man w/ towel, 4 hrs, v. polite.\" Miss Enid Fairbairn: \"Welcome to Macro Cosmos! How can I direct you?\" She sees you reading the note. Miss Fairbairn: \"Oh. That. I keep meaning to bin it. A gentleman came, two years back. Black and pink scarf. He wanted to know who'd decided his town couldn't be on television. I said it's in the League's contract. He said, 'Who's the League?'\" Miss Fairbairn: \"I didn't know. I work here. I rang up. Legal said Sponsorship. Sponsorship said Energy. Energy said it's a League matter. I went round three times. He waited four hours. I gave him a leaflet.\" Miss Fairbairn: \"I've asked since. On my own time. I've got as far as floor forty-four. Nobody decided. There's a clause, and everybody thinks it's somebody else's clause.\"",
+   "choices": [
+    {
+     "label": "\"What was on the leaflet?\"",
+     "success": {
+      "text": "Miss Fairbairn: \"'Macro Cosmos: We're Everywhere You Are.'\" She hears it. Miss Fairbairn: \"I gave that to a man from a town we'd cut off.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-lore-lobby",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"How far up does it go?\"",
+     "success": {
+      "text": "Miss Fairbairn: \"Fifty. Everything does. But I don't think he knows either. That's what I can't get past. I think if you asked the Chairman who the League is, he'd have to stop and think.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-lore-lobby",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll take the note.\"",
+     "success": {
+      "text": "She peels it off the monitor and gives it to you. Miss Fairbairn: \"Mind it doesn't curl.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-lore-lobby",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-league-note",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-league-note-rose",
+   "name": "\"Who's the League?\"",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-league-note",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "galar-league-note-given",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rose"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Rose's desk, for a moment unattended. You've a curled sticky note in your pocket.",
+   "choices": [
+    {
+     "label": "Put the note on his desk.",
+     "success": {
+      "text": "Rose: \"'Who's the League.'\" He reads it twice. Rose: \"...It's Sponsorship. Which is Energy. Which is—\" He stops. Rose: \"It's me. Four hours. He waited four hours and it was me.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-league-note-given",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rose-knows-league",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You keep it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-hook-forty-one",
+   "name": "Hook Forty-One",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-mom"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A small museum by the old pit line in Motostoke. A lamp room, rebuilt behind glass. A wall of numbered hooks. Forty brass lamps. One hook empty. Mrs. Mavis Arkwright: \"Number Two's lamp room, as it was. The company gave us the lot; the Chairman's own. He was most particular: 'Every one on its own hook. They knew their own.'\" Mrs. Arkwright: \"A man took his lamp down, he hung a brass tally in its place. Came up, swapped them back. End of shift, you looked at the wall. Any tally still up: a man still down.\" Mrs. Arkwright: \"Forty-one's never been here. I asked. He said, 'That one's out on loan.' I said, to whom? He said, 'To the last man up.' I don't know what he meant. I've put a card: 'On loan.'\"",
+   "choices": [
+    {
+     "label": "\"Is there a tally on the hook?\"",
+     "success": {
+      "text": "There is. Brass. A number, and a name punched in by hand: THACKRAY. Mrs. Arkwright: \"It's still up. By the rule of the room, that means he's not come back. It's been up forty-five years.\" A pause. Mrs. Arkwright: \"He's alive, you know. Mr. Thackray. He comes in Thursdays. He stands and looks at his own tally and he laughs.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-lore-lamps",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who was forty-one?\"",
+     "success": {
+      "text": "Mrs. Arkwright: \"A lad called Thackray. He's not a lad now.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-lore-lamps",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happened on the last day?\"",
+     "success": {
+      "text": "Mrs. Arkwright: \"They came up at four. The lad who counted them counted forty, and then stood. Four minutes. They say he'd gone grey by the time the forty-first came up the cage. He'd stopped for a pit pony.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-lore-lamps",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-never-on-charity",
+   "name": "Never on Charity",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-mom",
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#2a2428",
+    "effect": "none"
+   },
+   "intro": "A front room on a terrace in a mill town. Curtains half drawn. A woman in black. A man in a grey suit with a briefcase, standing, because he's not been asked to sit. Mr. Cedric Lomax, of Macro Cosmos Life: \"Mrs. Illingworth. I'm so sorry. I'll not keep you. It's all in order. Mr. Illingworth never missed a week. Forty years.\" He puts an envelope on the mantelpiece. He doesn't hand it to her. It's done that way. Mrs. Illingworth: \"I've not filled in owt.\" Mr. Lomax: \"There's nothing to fill in. That's the Chairman's rule. It's the oldest one in the firm. 'No forms at a funeral. Nobody's put in the ground on charity.' We pay on the day and we sort the paper after.\" Mrs. Illingworth, to you, when he's gone: \"Everybody's got a word to say against that company. Too big. Into everything. Aye. And they've buried every man on this street decent for forty year and never once quibbled. You tell me which is true.\"",
+   "choices": [
+    {
+     "label": "\"Both.\"",
+     "success": {
+      "text": "Mrs. Illingworth: \"Aye. That's what I think. Both.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "galar-lore-club",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What was he like? Mr. Illingworth.\"",
+     "success": {
+      "text": "She tells you. It takes a while, and she smiles twice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-lore-club",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Where'd the rule come from?\"",
+     "success": {
+      "text": "Mrs. Illingworth: \"A pit village. The club went bust the year the seam did. There were a man buried by the parish. The Chairman were a lad; he carried the box. He said never again.\" She straightens the envelope. Mrs. Illingworth: \"He's kept that one. I'll say that for him. He's kept that one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "galar-lore-club",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-which-ones-dad",
+   "name": "Which One's Dad",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.ballguy",
+     "trainer.pr/youngster_f"
+    ],
+    "tint": "#3a3a44",
+    "effect": "none"
+   },
+   "intro": "A city square, at lunchtime. Three Ball Guys, on a break, on a bench, heads on. A girl of six in a school coat, standing in front of them with a lunchbox, frowning. The girl: \"I've brought Dad's sandwiches. He forgot. Mum says he's the one in the middle. But they moved.\" Ball Guy, left: \"Heya, kiddo! Have a ball!\" Ball Guy, middle: \"Heya, kiddo! Have a ball!\" Ball Guy, right: \"Heya, kiddo! Have a ball!\" Same voice. Same pitch. They're not allowed to break it. It's in the contract. The girl, to you: \"They all say that. Can you tell?\"",
+   "choices": [
+    {
+     "label": "Watch the three.",
+     "success": {
+      "text": "One taps a foot. One sits very straight. One's got a hand flat on the bench, and the thumb's going: tap, tap-tap, tap.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ga-which-ones-dad-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-which-ones-dad-2",
+   "name": "Which One's Dad",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ballguy",
+     "trainer.pr/youngster_f"
+    ],
+    "tint": "#3a3a44",
+    "effect": "none"
+   },
+   "intro": "The girl: \"That's how he does the door. When he's home late. So I know it's him.\" She walks up to the one on the right. She holds out the lunchbox. The head tilts. A hand takes it. Very carefully. The thumb goes: tap, tap-tap, tap. Ball Guy, right, same pitch, same cheer: \"Heya, kiddo! Thanks!\" It's the only word in six years that wasn't in the script.",
+   "choices": [
+    {
+     "label": "(Say nothing.)",
+     "success": {
+      "text": "She goes back to school.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ballguy-derek",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Does he ever take it off?\"",
+     "success": {
+      "text": "The girl: \"At home.\" As if it were obvious.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ballguy-derek",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's his name?\"",
+     "success": {
+      "text": "The girl: \"Dad.\" Then, as to someone slow: The girl: \"Derek.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ballguy-derek",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-four-lines",
+   "name": "Four Lines",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-gentleman"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "The League's offices in Wyndon. A small tidy office. A man with a fountain pen and a contract the thickness of a brick. Mr. Wilfred Ackroyd, the League's solicitor: \"Clause thirty-one? Good heavens. Nobody asks about thirty-one. It's a safety clause.\" He finds it. \"Televised fixtures shall take place at venues with Dynamax capability.\" Mr. Ackroyd: \"The sponsor wanted the bands on screen; fair enough; they'd paid. I thought: if we're to show Dynamax, we'd better show it somewhere it's contained. A Power Spot's stable. So: capability. Four lines. I was rather pleased with it.\" Mr. Ackroyd: \"Why? Has there been a difficulty?\"",
+   "choices": [
+    {
+     "label": "\"There's a Gym with no Power Spot.\"",
+     "success": {
+      "text": "Mr. Ackroyd: \"Is there? I'd understood they all— which?\" \"Spikemuth.\" He looks it up. He goes quite still. Mr. Ackroyd: \"It's a League Gym. It's on the roll. It's— I've drafted a town off the air. I never saw it. I'd a list of stadiums. Spikemuth's not a stadium. It's a street.\" He drafts an amendment. One line: \"or at venues of historic standing.\" It needs a sponsor's signature. It's on Oleana's desk by the next stage; she's not signed it; she's not binned it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "galar-clause",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Did you check which venues it'd cut?\"",
+     "success": {
+      "text": "Mr. Ackroyd: \"I— no. I checked which it'd keep.\" He drafts an amendment. One line: \"or at venues of historic standing.\" It's on Oleana's desk by the next stage; she's not signed it; she's not binned it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "galar-clause",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's a 'fixture'?\"",
+     "success": {
+      "text": "Mr. Ackroyd: \"A League match, naturally. It doesn't say that, I grant. It's undefined.\" A pause. He's a lawyer; he sees it at once. Mr. Ackroyd: \"...It's undefined. Anything could be a fixture. Or nothing need be.\" He drafts an amendment anyway. It's on Oleana's desk by the next stage.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "galar-clause",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-fixture",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-never-not-arrived",
+   "name": "Never Not Arrived",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "A hill on a Galar road. A coach, black and pink, steam coming out of it. Forty people on the verge. A very large man with his head in the engine. Big Daz: \"She does this. Every hill. She's forty-one years old. She were a works bus. I'll have her goin' in ten minutes or two hours.\" Gaz: \"We've a match at three!\" Big Daz: \"An' we'll be at it. We've never once been on time an' we've never once not got there.\" On the dash: a logbook. Every away day for eight years. Destination. Miles. \"Arrived:\" a time, always late. And a last column, in a different hand each week: \"Worth it?\" Every entry says the same. Aye.",
+   "choices": [
+    {
+     "label": "(Push.)",
+     "success": {
+      "text": "Forty people and you, a coach, a hill. Your party helps. Something large leans on the back. Something small sits on the bonnet and encourages. She catches. A bang. Black smoke. A cheer that's heard in the next valley. Shaz: \"One, two, three—\" Forty people: \"BIG DAZ! BIG DAZ!\" Big Daz, crimson: Big Daz: \"Give over.\" They give you a lift. This week, the logbook's last column is yours to fill in.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-coach",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Where'd she come from?\"",
+     "success": {
+      "text": "Big Daz: \"Pit bus. Number Two. Took the day shift up from Motostoke. When it shut, she sat in a field twenty year. I bought her for the scrap price an' a crate o' ale.\" He pats the wing. Big Daz: \"She's still got the hooks inside. For lamps.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "yell-coach-history",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who writes 'aye'?\"",
+     "success": {
+      "text": "Big Daz: \"Whoever's in seat one. Different every week. It's the only rule: you can't write it till you're on the way home.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-a-bedsheet",
+   "name": "A Bedsheet",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "A shut chip shop in Spikemuth. A dark window. A fryer under a cloth. On the back wall, pinned up, a bedsheet with letters in emulsion paint: SPIKEMUTH'S STILL HERE. The S's are backwards. A Yeller, with a key: \"First banner. Night the cameras went. Seven of us in here. Somebody said, well, that's that. Somebody else said, is it. An' Gaz's mam took the sheet off her own bed.\" Seven names, in biro, in the corner. Six are crossed through with a little pink star: still going. \"That one's not. Moved to Wyndon. Got a job at the stadium. Home end. We don't— we've not fallen out. She just had to eat.\"",
+   "choices": [
+    {
+     "label": "\"Does she still come?\"",
+     "success": {
+      "text": "\"She's in the home end. In the uniform. She can't cheer; she's staff.\" A pause. \"Every match we've been to at Wyndon, there's a steward by block J who looks the wrong way for ninety minutes. We've never been searched. We've never been moved. I've never seen her face. I know it's her.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "yell-seventh",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why's it in a shut shop?\"",
+     "success": {
+      "text": "\"Where else? It were the last place open.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "yell-seventh",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who painted the S's?\"",
+     "success": {
+      "text": "\"Gaz. He were nine.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "yell-seventh",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-a-bedsheet-steward",
+   "name": "Block J",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "yell-seventh",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "yell-seventh-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-leaguestaff-man"
+    ],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "Wyndon Stadium. A steward, by block J. She's got a pink star, very small, pinned inside her lapel. Miss Beryl Dearden, not looking at you: \"I can't talk. I'm working. Tell Beck his banner's too long for the rail. He wants to fold the last foot under. I've been wanting to say for six years.\"",
+   "choices": [
+    {
+     "label": "\"I'll tell him.\"",
+     "success": {
+      "text": "She looks the wrong way, very carefully.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "yell-seventh-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-forget-who-they-are",
+   "name": "They Forget Who They Are",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.marnie-masters4"
+    ],
+    "pokemon": "morpeko",
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "A yard behind the Spikemuth Gym. A chalk square. A girl in a leather jacket, practising, alone, very quietly. She doesn't shout moves. She says a name first. Every time. Marnie: \"Hangry. Bullet Seed.\" It goes. Marnie: \"Grim. Snarl.\" It goes. Marnie, not turning: \"You're wonderin' why I say it. Everybody does. Wastes half a second.\" Marnie: \"They get lost. In a big match. All that noise; none of it for them. They stop bein' Hangry an' start bein' 'the Morpeko.' An' 'the Morpeko' doesn't know what I want. Hangry does.\" Marnie: \"It's worse when they go big. Dynamax. I'll not do it. He gets up there an' he doesn't know which way's down. I've seen 'em. They forget who they are when they're that big.\"",
+   "choices": [
+    {
+     "label": "\"Teach me.\"",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "A short drill: you say each of your Pokémon's names before a move, in time. Your lead knows who it is now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-x-chant",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-lead-knows",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A short drill: you say each name before a move. You're slow; she makes you do it again, and again, until it's in time. Your lead knows who it is now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-x-chant",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-lead-knows",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Is that why Yell knows the names?\"",
+     "success": {
+      "text": "Marnie: \"That were me. I were eight. I made 'em learn. I'd not let anybody shout 'come on, Linoone' at our Stripes. It's rude.\" One eyebrow. Marnie: \"I didn't know it did owt. I just thought it were manners.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "marnie-names",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What d'you say when it's you that's lost?\"",
+     "success": {
+      "text": "A long pause. Marnie: \"...Me brother says it. From the side. 'Marnie.' Just that. Flat. Like he's askin' me to pass the salt.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-very-nice-site",
+   "name": "A Very Nice Site",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-leaguestaff-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "A planning office in Wyndon. A model, under perspex. A stadium. Tiny trees. A tiny car park. A label: WYNDON EAST — PROPOSED. A League development officer, Mr. Clarence Midgley, very pleased: \"It's a lovely site. Power Spot; rail link; forty thousand seats. And it's his, if he'll take it. The singer. We've offered three times. I went up myself. I thought I was bringing good news.\" Mr. Midgley: \"He looked at the model. He said, 'Where's the chip shop?' I said, there'll be concessions. He said, 'Where's Mrs. Gallowglass's front step?' I didn't follow. I said, it's a new build; there aren't steps.\" Mr. Midgley: \"He said no. Three times. I can't fathom it. We're offering him everything Spikemuth hasn't got.\"",
+   "choices": [
+    {
+     "label": "\"That's why.\"",
+     "success": {
+      "text": "He looks at the model a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 4
+       },
+       {
+        "kind": "flag",
+        "key": "galar-wyndon-east",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "midgley-went",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Did you go to Spikemuth?\"",
+     "success": {
+      "text": "Mr. Midgley: \"To the gate. It was shut. I rang him from outside.\" A pause. Mr. Midgley: \"I've been trying to give a man a new town and I've never been in the old one.\" He goes. To Spikemuth. He's let in. He has chips. He comes back and takes the tiny trees off the model, one at a time, and can't say why.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 4
+       },
+       {
+        "kind": "flag",
+        "key": "galar-wyndon-east",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "midgley-went",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens to the site if he won't?\"",
+     "success": {
+      "text": "Mr. Midgley: \"It'll be built regardless. The Chairman likes it. It only wants a tenant.\" He taps the perspex. Mr. Midgley: \"Somebody suggested— not seriously— that if the Gym won't come to the site, one might bring the site to the Gym. There's a Power Spot under Spikemuth, apparently. Capped. Nobody's looked.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 4
+       },
+       {
+        "kind": "flag",
+        "key": "galar-wyndon-east",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-send-him-home",
+   "name": "Send Him Home",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ally-zane",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-mom"
+    ],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A sitting room in a Galar suburb. Flowers on every surface: a great many, some past their best. A woman in a dressing gown with a card in her hand. Mrs. Muriel Ingleby: \"He sends them himself. The Chairman. Every fortnight since I was ill. Look: it's his own writing. 'With every good wish for your recovery. — R.' I'm recovered. I've been recovered a year. I've not the heart to tell him.\" Mrs. Ingleby: \"It's kind. I'll not say it isn't. He rang, once. Himself. He asked after my chest. He knew which hospital.\" Mrs. Ingleby: \"I've not seen my son in daylight in three years. He comes Sundays, and sleeps on that sofa, sitting up, with his shoes on. I'd swap every flower in this room for one Tuesday.\"",
+   "choices": [
+    {
+     "label": "\"Shall I tell the Chairman?\"",
+     "success": {
+      "text": "Mrs. Ingleby: \"Would you? Only— nicely. He means well.\" She writes it on a card. She uses one of his. \"Dear Chairman. Thank you for the flowers. Please send my son instead. — M. Ingleby (Mrs.)\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-ingleby-card",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's Zane like, when he's rested?\"",
+     "success": {
+      "text": "Mrs. Ingleby: \"Funny. He's funny. He does voices. He did the whole of the news as a Wooloo once. I've not heard a voice since he got the mug.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Write it on a card.\"",
+     "success": {
+      "text": "She does. She uses one of his. \"Dear Chairman. Thank you for the flowers. Please send my son instead. — M. Ingleby (Mrs.)\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-ingleby-card",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-ingleby-card-rose",
+   "name": "A Card",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-ingleby-card",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "zane-home",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rose"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Rose's desk. The lamp on it. You've a card in your pocket, in his own stationery.",
+   "choices": [
+    {
+     "label": "Put the card on his desk.",
+     "success": {
+      "text": "Rose: \"...Ingleby's mother.\" He reads it again. Rose: \"I sent flowers. Every fortnight. I thought that was—\" He puts it down, very carefully, next to the lamp. Rose: \"I kept him till midnight and sent his mother flowers to make up for it. That's a pit owner's trick. I've had that done to me.\" Zane's sent home at five, from the next stage. He doesn't know what to do. He goes home. He does the news as a Wooloo.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "zane-home",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You keep it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-other-chip-shop-1",
+   "name": "The Other Chip Shop",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "When a town goes, the chip shops go third. When one comes back, they're first. The shut shop. The fryer under a cloth. Kaya: \"It works. I tried it. There's no leccy for it; it'd take the whole street's.\"",
+   "choices": [
+    {
+     "label": "Find a generator.",
+     "success": {
+      "text": "Mrs. Sowerby's, from the Hammerlocke road. It comes on the back of a coach.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spikemuth-chips-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use the wall socket.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "spur-live",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The spur's been rerouted. The fryer hums.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spikemuth-chips-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-other-chip-shop-2",
+   "name": "The Other Chip Shop",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "spikemuth-chips-1",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-pokemon-breeder-man"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "The fryer's hot. There's nothing to fry. Beck: \"Nearest spuds are a farm past Route 9. He stopped deliverin' when we stopped orderin'.\"",
+   "choices": [
+    {
+     "label": "Fetch them.",
+     "success": {
+      "text": "A sack. It's heavy. The farmer: \"Spikemuth? I thought you'd all gone.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spikemuth-chips-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ga-other-chip-shop-3",
+   "name": "The Other Chip Shop",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 5,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "spikemuth-chips-2",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.piers",
+     "boss.drive/galarian-swsh-mom"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "A queue. Eleven people. Then twenty. The window's steamed. Somebody's chalked a board: OPEN. Piers, in the queue, with his hood up, as if nobody'd know him: Piers: \"I've not had chips on this street in five year.\" Gaz's mam, behind the counter, who took the sheet off her own bed: \"Salt an' vinegar, love?\" Piers: \"...Aye.\"",
+   "choices": [
+    {
+     "label": "Have chips.",
+     "success": {
+      "text": "He eats them on the Gym step. He doesn't say anything. He writes a song. It's the first one in eight years that's in a major key, and he's furious about it. The first away coach in five years turns up the following week. Eleven people from Circhester. They'd heard there were chips.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "spikemuth-chips",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-power-east",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

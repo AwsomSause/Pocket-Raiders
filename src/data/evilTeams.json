@@ -1833,7 +1833,19 @@
     "op": "route-chant",
     "half": false
    },
-   "routes": []
+   "routes": [
+    {
+     "region": "galar",
+     "ranks": [
+      "Supporter",
+      "Yeller",
+      "Road Crew",
+      "Head of the Queue",
+      "Marnie's Corner",
+      "Piers's Opening Act"
+     ]
+    }
+   ]
   },
   {
    "id": "star",

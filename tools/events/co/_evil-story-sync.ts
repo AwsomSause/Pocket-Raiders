@@ -112,6 +112,7 @@ const ROUTES: Record<string, { region: string; ranks: string[] }[]> = {
   flare: [{ region: 'kalos', ranks: ['Subscriber', 'Member', 'Stylist', 'Patron', 'Chosen', 'The Last Guest'] }],
   skull: [{ region: 'alola', ranks: ['Numbskull', 'Grunt', 'Big Sib', 'Enforcer', 'Admin', `Guzma's Second`] }],
   aether: [{ region: 'alola', ranks: ['Volunteer', 'Employee', 'Researcher', 'Branch Deputy', 'Branch Chief', `The President's Favourite`] }],
+  yell: [{ region: 'galar', ranks: ['Supporter', 'Yeller', 'Road Crew', 'Head of the Queue', `Marnie's Corner`, `Piers's Opening Act`] }],
 };
 
 const COUNTERS: Record<string, string> = {
@@ -221,5 +222,21 @@ alola('ps_ae_case', 'aether', 'Case by Case', 'ae-final-choice', [['al-case-key'
 alola('ps_sk_placed', 'skull', 'Placed', 'sk-placed-warn-2', [['al-placed-list'], ['al-placed-plumeria'], ['al-placed-ledger'], ['al-placed-gate']], 'A list of forty names, a white boat, and a ledger.', '#3a3428');
 alola('ps_tp_entries', undefined as never, 'Three Open Entries', 'tp-return-1', [['tp-r1-rockruff'], ['tp-r1-cutiefly'], ['tp-r1-mudbray']], 'The Borrow Book: three not brought back.', '#1e3a40');
 alola('ps_tp_still', undefined as never, 'Still Here', 'tp-still-here', [['tp-still-two'], ['tp-still-corsola'], ['tp-still-pelago'], ['tp-still-close'], ['tp-still-faba']], 'The upper deck, the gate, and a lot of stairs.');
+
+// Volume III, Galar (evil-story-36/37): Galar's team is Yell; both inside routes (Macro Cosmos, Yell) run on its meters.
+const galar = (id: string, name: string, entry: string, layout: string[][], mood: string, tint = '#1e2430'): void =>
+  void chains.push({ id, name, entry, themeId: 'ghost-dark', tint, mood, team: 'yell', start: 'opened', layout } as never);
+galar('ps_mc_flicker', 'The Flicker', 'mc-act3', [['mc-flicker-plant'], ['mc-flicker-board'], ['mc-flicker-hollis']], 'Under Hammerlocke: a cage of light, and a board of feeders.', '#2a1420');
+galar('ps_mc_plan', 'Launch Day', 'mc-final-choice', [['mc-plan-hop'], ['mc-plan-sonia'], ['mc-plan-leon'], ['mc-plan-relays'], ['mc-plan-switch'], ['mc-plan-roof']], 'Rose Tower, and a red wind on the roof.', '#3a1418');
+galar('ps_mc_turn', `There's Time`, 'mc-final-choice', [['mc-turn-breaker'], ['mc-turn-ballguy'], ['mc-turn-hollis'], ['mc-turn-pryce'], ['mc-turn-thirtyone'], ['mc-turn-oleana'], ['mc-turn-fifty']], 'The Tower Climb, from the bottom, with a lanyard.');
+galar('ps_mc_lift', 'Sixty in a Lift', 'mc-final-choice', [['mc-lift-feeder'], ['mc-lift-lift'], ['mc-lift-fifty']], 'A brass lever, and sixty people in a lift rated for twelve.');
+galar('ps_mc_own', 'A Thousand Years', 'mc-final-choice', [['mc-own-roof'], ['gl-own-rose'], ['gl-own-mug'], ['gl-own-map'], ['gl-own-cage'], ['gl-own-yell'], ['gl-own-oleana']], 'The roof, the Chair, and the first hour.');
+galar('ps_yl_plan', 'Is This On?', 'yl-final-choice', [['yl-plan-feed'], ['yl-plan-truck'], ['yl-plan-aux'], ['yl-plan-chant'], ['yl-plan-rounds'], ['yl-plan-above']], 'The stands, the concourse, the truck, and five stadiums chanting.', '#3a1418');
+galar('ps_yl_turn', 'Go Home and Eat', 'yl-final-choice', [['yl-turn-coach'], ['yl-turn-final'], ['yl-turn-red'], ['yl-turn-after']], 'Block J, empty, and a towel on a seat.', '#3a1418');
+galar('ps_yl_bought', 'Bought', 'yl-bought-warn-2', [['yl-bought-gate'], ['yl-bought-beck'], ['yl-bought-offer']], 'A key, a shutter, and a contract four lines long.', '#1a141c');
+galar('ps_yl_own', 'A Thousand Years', 'yl-final-choice', [['yl-own-blockj'], ['gl-own-rose'], ['gl-own-mug'], ['gl-own-map'], ['gl-own-cage'], ['gl-own-yell'], ['gl-own-oleana']], 'Block J, the roof, the Chair, and the first hour.');
+galar('ps_enc_quarry', 'Away Day: The Quarry', 'enc-away-1', [['enc-q-road'], ['enc-q-pitch'], ['enc-q-match']], 'A coach that does not fit, a generator, and floodlights that come on with a clunk.', '#2a2418');
+galar('ps_enc_island', 'Away Day: The Island', 'enc-away-2', [['enc-i-beach'], ['enc-i-match']], 'An island with one house, and one trainer.', '#1e3a40');
+galar('ps_enc_12k', 'Twelve Thousand', 'enc-twelve-thousand', [['enc-12k-street'], ['enc-12k-sky'], ['enc-12k-chairman'], ['enc-12k-brothers']], 'Spikemuth, with the shutters up.', '#1a141c');
 writeFileSync(pseudoFile, JSON.stringify({ category: 'evil-story', note: 'Evil Team Hideouts (STORY_FAMILIES_13 A8, STORY_FAMILIES_18 SF131 to SF133) and the Plasma Holding Camp (SF130). Written by tools/events/co/_evil-story-sync.ts.', chains }, null, 1) + '\n');
 console.log(`pseudo/evil-story.json: ${chains.length} Hideouts`);
