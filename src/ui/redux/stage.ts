@@ -36,6 +36,8 @@ export interface ReduxOptions {
   tip?: (arg: string | null) => void;
   /** No backdrop and clicks fall through to the canvas except on `[data-act]` (a HUD over the Phaser picture). */
   clear?: boolean;
+  /** A full-screen card (a versus card, a cutscene card): notifications and toasts wait until it leaves. */
+  card?: boolean;
 }
 
 const FONT_FILES: [string, number, string][] = [
@@ -50,6 +52,10 @@ const FONT_FILES: [string, number, string][] = [
 let host: HTMLDivElement | null = null;
 let canvas: HTMLCanvasElement | null = null;
 const views = new Set<{ redraw: () => void }>();
+/** How many full-screen cards are up (see `ReduxOptions.card`). */
+let cards = 0;
+/** A full-screen card is up: the overlay keeps its notifications back. */
+export const reduxCardUp = (): boolean => cards > 0;
 let lastBox = '';
 /** The scene whose view was last removed, and when: the same screen redrawing itself does not fade in again. */
 let gone = { key: '', at: 0 };
@@ -186,6 +192,27 @@ export function mountOverlay(game: Phaser.Game, o: Pick<ReduxOptions, 'render' |
   return { refresh: redraw, el };
 }
 
+/**
+ * An empty see-through layer over every view, for a tool that builds its own DOM (the debug panel's form). It lives as
+ * long as the game and wears the current look; only its `.hit` children and `[data-act]` take the pointer.
+ */
+export function mountTool(game: Phaser.Game, name: string): HTMLElement {
+  const root = ensureHost(game);
+  const el = document.createElement('div');
+  el.dataset.scene = name;
+  el.style.zIndex = '70';
+  root.append(el);
+  const redraw = (): void => {
+    el.className = `${skinClass(reduxSkinIndex(services().session.settings.reduxSkin))} clear noin`;
+  };
+  shield(el);
+  views.add({ redraw });
+  lastBox = '';
+  place();
+  redraw();
+  return el;
+}
+
 /** Draws a scene's New UI view over the canvas until the scene shuts down. Call only when `reduxOn()`. */
 /** Where the pointer was at the last hover any view took (shared, so a view opening under a resting pointer does not count either). */
 let overAt = '';
@@ -256,6 +283,10 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     if (dead) return;
     dead = true;
     views.delete(view);
+    if (o.card) {
+      cards -= 1;
+      views.forEach((v) => v.redraw());
+    }
     gone = { key: scene.scene.key, at: performance.now() };
     window.removeEventListener('pointermove', onTip);
     el.remove();
@@ -269,7 +300,10 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
   scene.events.on('sleep', hide);
   scene.events.on('wake', show);
   views.add(view);
-  redraw();
+  if (o.card) {
+    cards += 1;
+    views.forEach((v) => v.redraw());
+  } else redraw();
   return {
     el,
     destroy,

@@ -19,7 +19,7 @@
 
 **Limits:**
 - The mock-up's "turn your phone sideways" notice is not built: the game turns itself on an upright phone instead.
-- The mock-up's pause menu is not built yet (the game has no pause menu; the map's own buttons do the same jobs).
+- The mock-up's pause menu came later in this update (see `1324-pause-menu.md`).
 - In New the Bond screen shows Trust as the bar; the other six values are text, not bars (Old still draws all the bars).
 - "Seen in" on the info card counts earlier runs, not this one.
 - Song captions in New are plain text at the bottom (no mock-up for them).

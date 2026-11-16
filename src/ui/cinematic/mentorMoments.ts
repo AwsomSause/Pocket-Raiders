@@ -11,6 +11,10 @@ import { PIXEL_SCALE } from '../theme';
 import { pokemonVisual } from '../sprites';
 import { animationTimeScale } from '../../core/accessibility';
 import { playMoment } from './momentPlayer';
+import { reduxOn } from '../redux/stage';
+import { playCutMoment } from '../redux/moment';
+import { monFile } from '../redux/game';
+import type { Art } from '../redux/templates';
 
 export async function playMentorMoment(scene: Phaser.Scene, content: Content, kind: MentorMomentKind, mentor: PokemonInstance, prote: PokemonInstance, text: { title: string; subtitle: string; caption: string }): Promise<void> {
   const settings = services().session.settings;
@@ -20,6 +24,16 @@ export async function playMentorMoment(scene: Phaser.Scene, content: Content, ki
   const ps = content.species.get(prote.speciesId);
   if (!ms || !ps) return;
   const mode = kind === 'mentorAssist' ? 'assist' : kind === 'mentorGraduation' ? 'graduation' : 'return';
+  if (reduxOn()) {
+    // New UI: the mock-ups' cutscene card, with the mentor beside its protégé.
+    try {
+      const art = (m: PokemonInstance): Art | null => { const f = monFile(scene, m.speciesId, 'front', !!m.shiny); return f ? { file: f, atlas: true } : null; };
+      await playCutMoment(scene, plan, { name: text.subtitle, role: kind === 'mentorAssist' ? 'Mentor' : kind === 'mentorGraduation' ? 'Graduation' : 'Your Protégé', line: text.caption, cast: art(mentor), mon: art(prote), backdrop: null });
+    } catch {
+      /* presentation failure never blocks the game */
+    }
+    return;
+  }
   try {
     await playMoment(scene, spec, plan, {
       title: text.title,

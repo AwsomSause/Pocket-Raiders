@@ -12,6 +12,8 @@ export { SPLASH_ID, readSplashEnv, splashDue } from './updateSplashGate';
 export interface SplashHandle {
   /** Resolves once the splash has finished fading out (hold ended or skipped). */
   ended: Promise<void>;
+  /** Ends the splash now, as a click or a key does (the New UI's layer covers the canvas, so its click comes through here). */
+  skip: () => void;
 }
 
 /** Loads the picture and birdsong, then shows the splash over everything in `scene`. Never throws: a missing file just shortens it. */
@@ -43,6 +45,7 @@ export async function playUpdateSplash(scene: Phaser.Scene, audio: { muted: bool
   }
   const setBirds = (k: number): void => (birds as (Phaser.Sound.BaseSound & { setVolume?: (v: number) => void }) | null)?.setVolume?.(0.5 * audio.sfxVolume * k);
 
+  let skip: () => void = () => undefined;
   const ended = new Promise<void>((resolve) => {
     let leaving = false;
     const fadeOut = (): void => {
@@ -71,6 +74,7 @@ export async function playUpdateSplash(scene: Phaser.Scene, audio: { muted: bool
     scene.time.delayedCall(SPLASH_TIMING.total - SPLASH_TIMING.fadeOut, fadeOut);
     scene.input.on('pointerdown', fadeOut);
     scene.input.keyboard?.on('keydown', fadeOut);
+    skip = fadeOut;
   });
-  return { ended };
+  return { ended, skip: () => skip() };
 }
