@@ -573,7 +573,7 @@ const gn37: Json[] = [
     'It goes back to the window. Then it comes to you, and takes your Pokémon\'s paw, or hand, or fin, and holds on.',
     'The way the house holds on.',
   ), [
-    ch('Let it teach one of yours.', out('It shows your Pokémon how to hold on to someone at the door. Welcome Home.', teach('welcome-home', { who: 'picked' }), ...MANSION_LEAVE), { pick: { types: [] } }),
+    ch('Let it teach one of yours.', out('It shows your Pokémon how to hold on to someone at the door. Welcome Home.', teach('welcome-home', { who: 'picked' }), gn('ofSpecial', { key: 'mimikyu' }), ...MANSION_LEAVE), { pick: { types: [] } }),
   ]),
   floor('gn-37-won', 'The Haunted Mansion: The Coat', { pokemon: 'mimikyu' }, say(
     'It goes down, and gets up, and goes to the coat on the floor, and puts it back on.',
@@ -718,7 +718,7 @@ const gn38: Json[] = [
     ch('Shut the facility down.', out(say(
       'Power off. Every door opens at once. The escaped ones in the greenhouse go out through the walls, into the green.',
       'It watches them go. Then it follows the last one out, without looking back.',
-    ), setTo('lab-end', 4), flag('lab-end-shutdown'), stampStage('lab-free-at'), ...LAB_DONE)),
+    ), setTo('lab-end', 4), flag('lab-end-shutdown'), stampStage('lab-free-at'), gn('ofSpecial', { key: 'made' }), ...LAB_DONE)),
   ]),
   // ---- Afterstory: shut down, it's met later, wild, and doing well ----
   gev('gn-38-wild', 'Something You Know', vines({ stop: 'event', rarity: 'uncommon', callback: true, effect: 'none', requires: [is('lab-end', 4, 4), laterStage('lab-free-at'), not('lab-wild-seen')] }), say(

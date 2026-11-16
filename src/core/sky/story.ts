@@ -13,6 +13,7 @@ import { Rng, hashSeed } from '../rng';
 import { getCampaign, levelCap } from '../regions';
 import { newMon } from '../run';
 import { stageKey } from '../mapItems';
+import { ofShadowMark } from '../greenneedle/oldfriend';
 import { count, discover } from '../progress';
 import type { PokemonInstance, RunState } from '../state';
 import { cpuDuel, type DuelResult, type Duelist } from './sim';
@@ -378,6 +379,8 @@ export function applySky(content: Content, run: RunState, e: SkyEffect): string 
       sky.afterDone = true;
       // The bird that did not join: Fearow only when it was freed; otherwise it is Pidgeot who is still training.
       const bird = sky.ending === 'fearow-free' ? 'fearow' : 'pidgeot';
+      // Greenneedle gn.58: a bird let go is overhead; in a hard battle this stage its shadow crosses the field.
+      if (sky.ending === 'pidgeot-free' || sky.ending === 'fearow-free') ofShadowMark(run);
       return say(new Rng(hashSeed(`${run.seed}::sky::overhead`)).pick([...OVERHEAD[bird]]));
     }
     case 'rematchWon': {

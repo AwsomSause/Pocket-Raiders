@@ -9535,6 +9535,11 @@
        },
        {
         "kind": "gn",
+        "op": "ofSpecial",
+        "key": "mimikyu"
+       },
+       {
+        "kind": "gn",
         "op": "when",
         "key": "mansion-lamps",
         "min": 3,
@@ -10953,6 +10958,11 @@
         "kind": "gn",
         "op": "stampStage",
         "key": "lab-free-at"
+       },
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "made"
        },
        {
         "kind": "flag",

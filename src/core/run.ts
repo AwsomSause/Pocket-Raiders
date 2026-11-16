@@ -20,7 +20,7 @@ import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { FOE_WAITS, gnAfterTurn, gnShape } from './greenneedle';
 import { bidoofPeace } from './greenneedle/bidoof';
-import { ofAssist, ofGuestLeaves, recordRelease } from './greenneedle/oldfriend';
+import { ofAssist, ofGuestLeaves, ofShadow, recordRelease } from './greenneedle/oldfriend';
 import { ridgeCatch } from './greenneedle/ridge';
 import { unflinchingStart } from './greenneedle/daycare';
 import { gavelStart } from './greenneedle/auction';
@@ -3178,7 +3178,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   // Greenneedle gn.49: the Snorlax that followed your bag sits down at the Gym door.
   const gymDoor = snorlaxGym(run, stageNumber(content, run));
   // Greenneedle gn.58: a friend let go for its own good steps in for one turn.
-  const friendHelp = ofAssist(content, run, run.battle!);
+  const friendHelp = [ofAssist(content, run, run.battle!), ofShadow(run, run.battle!)].filter(Boolean).join(' ');
   kantoSweetAir(content, run);
   // Greenneedle gn.55: after the Angry Bidoof's bow, no wild Bidoof or Bibarel attacks first.
   bidoofPeace(run, FOE_WAITS);

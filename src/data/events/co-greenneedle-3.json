@@ -6928,6 +6928,11 @@
         "amount": 1
        },
        {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "bug"
+       },
+       {
         "kind": "moment",
         "text": "A small Bug-type saved your whole team, then flew north.",
         "importance": 85

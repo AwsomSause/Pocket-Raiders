@@ -1149,6 +1149,11 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     if (v) v.trapped = false;
     battle.storyEffects.splice(battle.storyEffects.indexOf(tag), 1);
   }
+  // Greenneedle gn.58: the shadow of a bird let go costs the foe's aim for one turn only.
+  if (battle.storyEffects.includes('of-shadow') && battle.turn >= 2) {
+    battle.storyEffects.splice(battle.storyEffects.indexOf('of-shadow'), 1);
+    battle.enemyStages.acc = Math.min(6, (battle.enemyStages.acc ?? 0) + 1);
+  }
   eventRuleEnd(battle, events, ctx.party, ctx.content);
   if (raidTimeout && !battle.outcome) battle.outcome = 'lose';
   // A narrative fight that drags on ends as the story loss (the rival cannot be beaten, so it must end).

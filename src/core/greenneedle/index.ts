@@ -32,7 +32,7 @@ import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
-import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, oldfriendTokens, releases } from './oldfriend';
+import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, ofSpecial, oldfriendTokens, releases, specialDue } from './oldfriend';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -205,6 +205,7 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'entrantCameBack') return !!entrantOf(run)?.gn?.includes('came-back');
   // gn.58: a released Pokémon is due to turn up; a great many were let go.
   if (c.test === 'ofDue') return dueFriend(content, run, stage) >= 0;
+  if (c.test === 'ofSp') return specialDue(run, c.key!, stage);
   if (c.test === 'ofMany') return releases(run).length >= MANY;
   // gn.45: a rival is well ahead of you (Lead +2 or more).
   if (c.test === 'allstarReady') return allstarReady(run);
@@ -655,6 +656,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return ofGuest(content, run, host);
     case 'ofReplacer':
       return ofReplacer(content, run);
+    case 'ofSpecial':
+      return ofSpecial(run, e.key!, e.n === 1, host.stage);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
