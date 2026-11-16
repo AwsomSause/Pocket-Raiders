@@ -1,4 +1,4 @@
-# Evil Teams Volume III, row 10: Kalos, Alola, Galar and Paldea from inside (Flare; Skull and Aether; Macro Cosmos and Yell; Star), their third options, and 58 open scenes.
+# Evil Teams Volume III, row 10: Kalos, Alola, Galar and Paldea from inside (Flare; Skull and Aether; Macro Cosmos and Yell; Star), their third options, and twelve open scenes per region.
 
 Catalog Overhaul row 10. Sources: `TEAM_FLARE_KALOS_FULL_1-3`, `TEAM_SKULL_AETHER_ALOLA_FULL_1-3`, `MACRO_COSMOS_YELL_GALAR_FULL_1-3`, `TEAM_STAR_PALDEA_FULL_1-3` and their parts of `EVIL_TEAMS_VOLUME_3_A-D` (pack `/mnt/project-files/catalog_overhaul_pack/catalog_overhaul/`). Built on the inside-route engine from #1336 (`core/evil/inside.ts`, see `co-evil-story.md`). No engine, save or schema changes.
 
