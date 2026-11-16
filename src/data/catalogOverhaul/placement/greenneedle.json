@@ -2759,5 +2759,29 @@
    "Mystery Episode"
   ],
   "tags": []
+ },
+ "gn-new-29-hats": {
+  "gn": "gn.new.29",
+  "shape": "Single",
+  "earliest": "A9",
+  "home": 15,
+  "window": [
+   13,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "level": "Both real teams, as they are",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Borrowed Team",
+   "elsewhere": "The Borrowed Team"
+  },
+  "note": "Badge: two hats. Needs Rival Trust 2 or more (the second region or later). Step 15 must-see, fallback step 19. Once per run (declining counts). Rules in core/greenneedle/borrowed.ts: you command the rival's last team, they command yours; the winner gets a Lucky Egg; both learn the other's team and moves; one lingerer each gives a one-battle bonus (+1 Attack to each lead) at the next meeting.",
+  "kinds": [
+   "Rival Episode"
+  ],
+  "tags": []
  }
 }

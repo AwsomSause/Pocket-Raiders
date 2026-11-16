@@ -645,6 +645,22 @@
   {
    "key": "kc-star",
    "rule": "core/greenneedle/karpcon.ts (gn.54 The Magikarp Convention)"
+  },
+  {
+   "key": "borrow-result",
+   "rule": "core/greenneedle/borrowed.ts (gn.new.29 The Borrowed Team)"
+  },
+  {
+   "key": "borrow-knows",
+   "rule": "core/greenneedle/borrowed.ts (gn.new.29 The Borrowed Team)"
+  },
+  {
+   "key": "borrow-specific",
+   "rule": "core/greenneedle/borrowed.ts (gn.new.29 The Borrowed Team)"
+  },
+  {
+   "key": "borrow-bonus",
+   "rule": "core/greenneedle/borrowed.ts (gn.new.29 The Borrowed Team)"
   }
  ]
 }
