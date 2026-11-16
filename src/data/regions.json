@@ -23,6 +23,14 @@
   "grand": false,
   "generations": [
    1
+  ],
+  "wildSpecies": [
+   "sprigfetch",
+   "kangakid",
+   "scythling",
+   "pinchit",
+   "calfros",
+   "lapling"
   ]
  },
  {
@@ -49,6 +57,11 @@
   "grand": false,
   "generations": [
    2
+  ],
+  "wildSpecies": [
+   "pebuckle",
+   "hercub",
+   "calflet"
   ]
  },
  {
@@ -193,6 +206,10 @@
   "grand": false,
   "generations": [
    7
+  ],
+  "wildSpecies": [
+   "alolan-trapinch",
+   "alolan-dratini"
   ]
  },
  {
@@ -278,6 +295,9 @@
    "dunsparce",
    "tinkatink",
    "bramblin"
+  ],
+  "wildSpecies": [
+   "paldean-golett"
   ]
  },
  {

@@ -95,6 +95,7 @@ import raidsJson from './raids.json';
 import totemsJson from './totems.json';
 import shadowWorldJson from './shadowWorld.json';
 import evilTeamsJson from './evilTeams.json';
+import jetTeamSwapsJson from './jetTeamSwaps.json';
 import { EvilFileSchema } from '../core/evil/schema';
 import { expandEvilEvents } from '../core/evil/content';
 import { ShadowWorldFileSchema } from '../core/shadowWorld/schema';
@@ -175,6 +176,8 @@ export interface RawContent {
   trainers: unknown;
   bosses: unknown;
   bossTeams: unknown;
+  /** Beta 0.7: Jet Pokédex species laid over bossTeams / evilTeams (jetTeamSwaps.json). Optional: old-seed fixtures leave it out. */
+  jetTeamSwaps?: unknown;
   regions: unknown;
   themes: unknown;
   shop: unknown;
@@ -325,6 +328,7 @@ export const RAW_CONTENT: RawContent = {
   trainers: [...trainersJson, ...trainersDriveJson],
   bosses: bossesJson,
   bossTeams: bossTeamsJson,
+  jetTeamSwaps: jetTeamSwapsJson,
   regions: regionsJson,
   themes: themesJson,
   shop: shopJson,
@@ -389,6 +393,31 @@ function emptyStory(): Record<string, unknown> {
   return { characters: [], events: [], arcs: [], themes: [], remembrances: [], moveMoments: [], dialogue: [], lore: [], news: [], interactables: [], backstories: [], quiz: [], blueprintRules: {}, text: {}, hash: '' };
 }
 
+const TeamSwapsSchema = z.object({
+  boss: z.record(z.string(), z.record(z.string(), z.record(z.string(), z.string()))).default({}),
+  evil: z.record(z.string(), z.record(z.string(), z.record(z.string(), z.string()))).default({}),
+});
+
+/** Lays jetTeamSwaps.json over the boss teams ("<team>.<member>": member text) and the Evil Team rank lists, on copies. */
+function applyTeamSwaps(bossTeams: unknown, evilTeams: unknown, swapsRaw: unknown): { bossTeams: unknown; evilTeams: unknown } {
+  const parsed = TeamSwapsSchema.safeParse(swapsRaw ?? {});
+  if (!parsed.success) return { bossTeams, evilTeams };
+  const swaps = parsed.data;
+  const boss = structuredClone(bossTeams) as Record<string, Record<string, { members: string[] }[]>>;
+  for (const [id, roles] of Object.entries(swaps.boss))
+    for (const [role, edits] of Object.entries(roles))
+      for (const [key, text] of Object.entries(edits)) {
+        const [ti, mi] = key.split('.').map(Number);
+        const members = boss[id]?.[role]?.[ti!]?.members;
+        if (members && mi! < members.length) members[mi!] = text;
+      }
+  const evil = structuredClone(evilTeams) as { teams: { id: string; ranks: Record<string, { species: string[] }> }[] };
+  for (const team of evil.teams ?? [])
+    for (const [rank, edits] of Object.entries(swaps.evil[team.id] ?? {}))
+      for (const [slot, species] of Object.entries(edits)) if (team.ranks[rank]?.species[Number(slot)] !== undefined) team.ranks[rank]!.species[Number(slot)] = species;
+  return { bossTeams: boss, evilTeams: evil };
+}
+
 export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const problems: string[] = [];
   const species = parse(z.array(SpeciesSchema), raw.species, 'species.json', problems);
@@ -422,7 +451,8 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const learnables = parse(z.record(z.string(), z.object({ egg: z.array(z.string()), other: z.array(z.string()) })), raw.learnables, 'learnables.json', problems);
   const trainers = parse(z.array(TrainerClassSchema), raw.trainers, 'trainers.json', problems);
   const bossProfiles = parse(z.array(BossProfileSchema), raw.bosses, 'bosses.json', problems);
-  const bossTeams = parse(BossTeamsFileSchema, raw.bossTeams, 'bossTeams.json', problems);
+  const swapped = applyTeamSwaps(raw.bossTeams, raw.evilTeams, raw.jetTeamSwaps);
+  const bossTeams = parse(BossTeamsFileSchema, swapped.bossTeams, 'bossTeams.json', problems);
   const regions = parse(z.array(RegionSchema), raw.regions, 'regions.json', problems);
   const themes = parse(ThemesFileSchema, raw.themes, 'themes.json', problems);
   const shop = parse(z.array(ShopEntrySchema), raw.shop, 'shop.json', problems);
@@ -433,7 +463,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const baseRaids = parse(RaidFileSchema, raw.raids, 'raids.json', problems);
   const baseTotems = parse(TotemFileSchema, raw.totems, 'totems.json', problems);
   const shadowWorld = parse(ShadowWorldFileSchema, raw.shadowWorld, 'shadowWorld.json', problems);
-  const evilTeams = parse(EvilFileSchema, raw.evilTeams, 'evilTeams.json', problems);
+  const evilTeams = parse(EvilFileSchema, swapped.evilTeams, 'evilTeams.json', problems);
   // Evil Team storyline and operation stops are expanded from templates into ordinary events (core/evil/content.ts).
   const w5Events = [...((raw.eventsW5 as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsHelpers as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsWeather as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMysteries as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsTraining as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsCanonKanto as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsCanonFuchsia as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsCanonSaffron as { events?: unknown[] } | undefined)?.events ?? []), ...(((raw.itemCatalog as unknown[] | undefined) ?? []).length > 0 ? (raw.eventsCanonVermilion as { events?: unknown[] } | undefined)?.events ?? [] : [])];
   const storyEvents = [...((raw.eventsStory as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsFaces as { events?: unknown[] } | undefined)?.events ?? [])];

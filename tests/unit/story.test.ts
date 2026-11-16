@@ -28,6 +28,7 @@ import { content, toBattle } from './helpers';
 
 // The 39 Beta 0.7 Jet-batch Pokémon (Galarian lines, Magmuk, Neocleon, Hoopno) join the wild pools too, so old seeds leave them out.
 const JET_BATCH_3 = ['galarian-grimer', 'galarian-muk', 'magmuk', 'galarian-spearow', 'galarian-fearow', 'galarian-azurill', 'galarian-marill', 'galarian-azumarill', 'galarian-trubbish', 'galarian-garbodor', 'galarian-lotad', 'galarian-lombre', 'galarian-ludicolo', 'neocleon', 'galarian-magnemite', 'galarian-magneton', 'galarian-magnezone', 'galarian-tangela', 'galarian-tangrowth', 'galarian-chikorita', 'galarian-bayleef', 'galarian-meganium', 'galarian-cyndaquil', 'galarian-quilava', 'galarian-typhlosion', 'galarian-totodile', 'galarian-croconaw', 'galarian-feraligatr', 'galarian-larvitar', 'galarian-pupitar', 'galarian-tyranitar', 'galarian-onix', 'galarian-steelix', 'galarian-slugma', 'galarian-magcargo', 'galarian-snivy', 'galarian-servine', 'galarian-serperior', 'hoopno'];
+const JET_BATCH_5_WILD = new Set(['sprigfetch', 'kangakid', 'scythling', 'pinchit', 'calfros', 'lapling', 'pebuckle', 'hercub', 'calflet', 'alolan-trapinch', 'alolan-dratini', 'paldean-golett']);
 const STORY_SPECIES = new Set(['tuftin', 'oracowl', 'oracowl-day', 'tempestwing', 'megawattrel', 'equinar', 'hollow-shepherd', 'brinecrown', 'veinheart', 'lumeria', 'verdelis', ...JET_BATCH_3]);
 // The Google Drive pack's items (tools/drive/build-items.py) came later too.
 import DRIVE_ITEMS from '../../tools/drive/items.json';
@@ -107,6 +108,7 @@ describe('story foundation: random streams', () => {
   const NO_W1 = { resonance: { minParty: 3, bonus: 1 }, bleed: { maxStacks: 1, perStack: 0, moves: ['none'] }, curse: { bonus: 1, followUpTypes: ['ghost'] }, hazardBurst: { fraction: 0 }, luck: { meterBonus: 0, meterCap: 1, chainBonus: 0, chainCap: 1, alphaChance: 0, alphaLevels: 0, alphaMoney: 1 }, bench: { minFriendship: 255 }, play: { combo: { bonus: 1 }, aim: { moves: ['none'], accuracy: { miss: 1, ok: 1, good: 1, perfect: 1 } }, shout: { damage: { miss: 1, ok: 1, good: 1, perfect: 1 } }, throw: { catch: { miss: 1, ok: 1, good: 1, perfect: 1 }, weakenedBelow: 0 }, deal: { below: 0, money: 1, classes: [] }, mindRead: { types: ['none'] }, grudge: { boost: {} }, spectator: { chance: 0, boost: {}, names: ['x'] }, arena: { every: 99, fraction: 0, interact: 0, types: {} } }, underdog: { levels: 99, xpBonus: 1 } };
   const noHyper = buildContent({
     ...structuredClone(RAW_CONTENT),
+    jetTeamSwaps: {}, // Jet Pokédex species in boss and Evil Team lists came later too
     // The ten Story Overhaul species (S15) join the wild pools and would change old seeds' encounters.
     species: (RAW_CONTENT.species as { id: string; evolutions?: { to: string }[]; evolvesFrom?: string | null }[])
       .filter((sp) => !STORY_SPECIES.has(sp.id))
@@ -132,7 +134,7 @@ describe('story foundation: random streams', () => {
     // The nemesis system (left-out plan 1.3) came later too.
     story: { ...structuredClone(RAW_CONTENT.story as object), definitions: [], nemesis: { ...(RAW_CONTENT.story as { nemesis: object }).nemesis, enabled: false } },
     // The custom regions (left-out plan 1.7) change the region order an old seed draws; the party-strength correction (1.6) came later too.
-    regions: (RAW_CONTENT.regions as { custom?: boolean }[]).filter((r) => !r.custom),
+    regions: (RAW_CONTENT.regions as { id: string; custom?: boolean; wildSpecies?: string[] }[]).filter((r) => !r.custom).map((r) => ({ ...r, wildSpecies: r.wildSpecies?.filter((id) => !JET_BATCH_5_WILD.has(id)) })), // the Jet batch 5 wild-pool restorations came later too
     // The Major Update §1 rarity audit changed these items' rarity and stack limit; old seeds use the old values.
     itemCatalog: catalog.filter((e) => (!eventItem(e) || e.id === 'key-charm' || e.id === 'torch' || e.id === 'dungeon-key') && !CO_ITEMS.includes(e.id) && e.id !== 'adrenaline-orb' && e.id !== 'streak-lens' && e.id !== 'exp-charm' && e.id !== 'airship-pass' && e.id !== 'hm-fly' && !String(e.id).endsWith('-lure') && !NEW_FOSSILS.test(String(e.id)) && !LATE_ITEMS.has(e.id as string) && (e as { family?: string }).family !== 'Crests (species held)').map((e) => (e.id === 'key-charm' || e.id === 'torch' || e.id === 'dungeon-key' ? { ...e, status: 'pending', effect: undefined, needs: ['events'] } : PRE_AUDIT[e.id as string] ? { ...e, ...PRE_AUDIT[e.id as string] } : e)).map((e) => (!PRE_AUDIT[e.id as string] && (PRE_ITEM_REWORK.catalogRarity as Record<string, string>)[e.id as string] ? { ...e, rarity: (PRE_ITEM_REWORK.catalogRarity as Record<string, string>)[e.id as string] } : e)),
     // The draft deals (bundles, bargains, a risk) join the reward pool, which would change old seeds' drafts.
