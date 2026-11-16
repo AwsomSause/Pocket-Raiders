@@ -41,7 +41,7 @@ const SF31: Json[] = [
   },
   {
     id: 'lost-expedition-camp', name: 'The Lost Expedition: The Camp', ...ROOM, minStage: 1,
-    intro: 'Torn tents, a cold fire, a leather journal weighed down with a stone. The explorers who made this camp did not pack up. The last entry reads: "Day 41. Found it. The valley is real. Pokémon there we have no names for. Ilse says we can\'t tell anyone. Bram says we must. We\'ll vote in the morning." There is no Day 42.',
+    intro: 'Torn tents, a cold fire, a leather journal weighed down with a stone. The explorers who made this camp did not pack up. The last entry reads: "Day 41. Found it. The valley is real. Pokémon there we have no names for." The next line, in another hand: "Ilse says we can\'t tell anyone. Bram says we must. We\'ll vote in the morning." There is no Day 42.',
     choices: [
       ch('Read the earlier entries.', out('Forty days of blisters and bad jokes. Three things stand out: a cache "behind the split boulder", a drawing of a Pokémon nobody has named, and one line underlined twice: "the ridge path, only at dawn".', flag('expedition-clues'), room('lost-expedition-cache'))),
       ch('Search the tents.', out('Six tents. Five sleeping bags, still rolled out as if their owners stepped away for a moment. The sixth is missing. Somebody walked out of this camp carrying their bed.', flag('expedition-five'), room('lost-expedition-cache'))),
@@ -61,7 +61,7 @@ const SF31: Json[] = [
   },
   {
     id: 'ovc-lost-expedition-s2', name: 'The Lost Expedition: The Survivor', ...ROOM, minStage: 1, scene: { cast: [], tint: '#3a342a', effect: 'none' },
-    intro: 'The ridge path at dawn. A hut at the end, smoke from the chimney. An old woman with a cane comes out: Ilse Halverson. "You found the camp. Nobody has found the camp in twelve years. The others went down to tell the world. A rockslide took the path. I stayed. Someone had to keep the valley\'s secret." She points down. "Pokémon no one has named. If the world finds out, it ends. If it doesn\'t, the five of them died for nothing."',
+    intro: 'The ridge path at dawn. A hut at the end, smoke from the chimney. An old woman with a cane comes out: Ilse Halverson. "You found the camp. Nobody has found the camp in twelve years." A long breath. "The others went down to tell the world. A rockslide took the path. I stayed. Someone had to keep the valley\'s secret." She points down. "Pokémon no one has named. If the world finds out, it ends. If it doesn\'t, the five of them died for nothing."',
     choices: SURVIVOR,
     remembers: [rem('sealed', [SEALED], { notice: 'You left the crate sealed. Ilse knows: she checks it every spring.' })],
   },
@@ -262,7 +262,7 @@ const OPEN_ABOARD = withBr(ch('Open the chest. Take the anchor aboard.', out(CHE
 const SF37: Json[] = [
   {
     id: 'w4-dive', name: 'The Captain\'s Chest', ...DOOR(5), types: ['water'],
-    intro: 'Clear deep water. A wreck far below. Diving gear on the rocks, and an old diver, Odo, mending it. "Four breaths of air, and every room below costs one. A Water-type\'ll help you. The Silver Morrow went down with her captain\'s chest. Nobody\'s brought it up. Not for want of trying."',
+    intro: 'Clear deep water. A wreck far below. Diving gear on the rocks, and an old diver, Odo, mending it. "Four breaths of air, and every room below costs one. A Water-type\'ll help you." A nod at the water. "The Silver Morrow went down with her captain\'s chest. Nobody\'s brought it up. Not for want of trying."',
     choices: SHAFT,
     remembers: [rem('water', [WATER_LEAD], { notice: 'Your Water-type lead slips into the shallows and waits for you. With it beside you, you have two more breaths.' })],
   },

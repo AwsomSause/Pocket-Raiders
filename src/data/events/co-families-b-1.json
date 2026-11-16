@@ -97,7 +97,7 @@
    "requires": [],
    "callback": false,
    "room": true,
-   "intro": "Torn tents, a cold fire, a leather journal weighed down with a stone. The explorers who made this camp did not pack up. The last entry reads: \"Day 41. Found it. The valley is real. Pokémon there we have no names for. Ilse says we can't tell anyone. Bram says we must. We'll vote in the morning.\" There is no Day 42.",
+   "intro": "Torn tents, a cold fire, a leather journal weighed down with a stone. The explorers who made this camp did not pack up. The last entry reads: \"Day 41. Found it. The valley is real. Pokémon there we have no names for.\" The next line, in another hand: \"Ilse says we can't tell anyone. Bram says we must. We'll vote in the morning.\" There is no Day 42.",
    "choices": [
     {
      "label": "Read the earlier entries.",
@@ -267,7 +267,7 @@
     "effect": "none"
    },
    "room": true,
-   "intro": "The ridge path at dawn. A hut at the end, smoke from the chimney. An old woman with a cane comes out: Ilse Halverson. \"You found the camp. Nobody has found the camp in twelve years. The others went down to tell the world. A rockslide took the path. I stayed. Someone had to keep the valley's secret.\" She points down. \"Pokémon no one has named. If the world finds out, it ends. If it doesn't, the five of them died for nothing.\"",
+   "intro": "The ridge path at dawn. A hut at the end, smoke from the chimney. An old woman with a cane comes out: Ilse Halverson. \"You found the camp. Nobody has found the camp in twelve years.\" A long breath. \"The others went down to tell the world. A rockslide took the path. I stayed. Someone had to keep the valley's secret.\" She points down. \"Pokémon no one has named. If the world finds out, it ends. If it doesn't, the five of them died for nothing.\"",
    "choices": [
     {
      "label": "Show me the valley.",
@@ -2855,7 +2855,7 @@
    "room": false,
    "pseudo": true,
    "minStage": 5,
-   "intro": "Clear deep water. A wreck far below. Diving gear on the rocks, and an old diver, Odo, mending it. \"Four breaths of air, and every room below costs one. A Water-type'll help you. The Silver Morrow went down with her captain's chest. Nobody's brought it up. Not for want of trying.\"",
+   "intro": "Clear deep water. A wreck far below. Diving gear on the rocks, and an old diver, Odo, mending it. \"Four breaths of air, and every room below costs one. A Water-type'll help you.\" A nod at the water. \"The Silver Morrow went down with her captain's chest. Nobody's brought it up. Not for want of trying.\"",
    "choices": [
     {
      "label": "Dive.",
