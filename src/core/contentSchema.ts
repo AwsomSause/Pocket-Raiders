@@ -291,6 +291,8 @@ export const MoveSchema = z.object({
       proof: z.literal(true).optional(),
       /** Two Trainers (Greenneedle gn.24): the user's own first type; 100 power at maximum Bond. */
       twoTrainers: z.literal(true).optional(),
+      /** Greenneedle gn.45, the Champion's exclusive moves (core/greenneedle/champion.ts): Summit, The Long Game, With You, Seen It. */
+      champMove: z.enum(['summit', 'the-long-game', 'with-you', 'seen-it']).optional(),
       /** Magnet Rise: the user floats for five turns. */
       magnetRise: z.literal(true).optional(),
       /** Smack Down / Thousand Arrows: the target is brought to the ground. */

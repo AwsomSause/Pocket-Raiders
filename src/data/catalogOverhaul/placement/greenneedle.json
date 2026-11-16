@@ -182,6 +182,30 @@
   ],
   "tags": []
  },
+ "gn-45-field": {
+  "gn": "gn.45",
+  "shape": "Single",
+  "earliest": "A10",
+  "home": 11,
+  "window": [
+   9,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "The lesson A−1 (three Pokémon); the exam A+2 (six)",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Champion's Training Session",
+   "elsewhere": "The Champion's Training Session"
+  },
+  "note": "Badge: a laurel. Once per run, Reputation 3 or more. Instead of the battle. The Champion is the region's own (the cast League Champion once cast). Passing the exam teaches the ace Summit, The Long Game, With You or Seen It; at the real Champion battle that Champion opens with it.",
+  "kinds": [
+   "Companion Story"
+  ],
+  "tags": []
+ },
  "pp-cold-open": {
   "gn": "gn.01",
   "shape": "Chain",

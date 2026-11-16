@@ -16,5 +16,81 @@
   "effects": {
    "trapNext": true
   }
+ },
+ {
+  "id": "summit",
+  "name": "Summit",
+  "type": "normal",
+  "category": "physical",
+  "power": 85,
+  "accuracy": 90,
+  "pp": 10,
+  "priority": 0,
+  "critStage": 0,
+  "target": "enemy",
+  "flags": [
+   "contact"
+  ],
+  "effects": {
+   "attackFrom": "best",
+   "champMove": "summit"
+  }
+ },
+ {
+  "id": "the-long-game",
+  "name": "The Long Game",
+  "type": "normal",
+  "category": "physical",
+  "power": 85,
+  "accuracy": 100,
+  "pp": 10,
+  "priority": 0,
+  "critStage": 0,
+  "target": "enemy",
+  "flags": [
+   "contact"
+  ],
+  "effects": {
+   "attackFrom": "best",
+   "champMove": "the-long-game"
+  }
+ },
+ {
+  "id": "with-you",
+  "name": "With You",
+  "type": "normal",
+  "category": "physical",
+  "power": 85,
+  "accuracy": 100,
+  "pp": 10,
+  "priority": 0,
+  "critStage": 0,
+  "target": "enemy",
+  "flags": [
+   "contact"
+  ],
+  "effects": {
+   "attackFrom": "best",
+   "champMove": "with-you"
+  }
+ },
+ {
+  "id": "seen-it",
+  "name": "Seen It",
+  "type": "normal",
+  "category": "physical",
+  "power": 85,
+  "accuracy": 100,
+  "pp": 10,
+  "priority": 0,
+  "critStage": 0,
+  "target": "enemy",
+  "flags": [
+   "contact"
+  ],
+  "effects": {
+   "attackFrom": "best",
+   "champMove": "seen-it"
+  }
  }
 ]

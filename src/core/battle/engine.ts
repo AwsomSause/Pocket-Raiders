@@ -22,6 +22,7 @@ import { unflinching } from '../greenneedle/daycare';
 import { arenaTurn, arenaVerdict } from '../greenneedle/frontier';
 import { gavelFirst, gavelSpent } from '../greenneedle/auction';
 import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
+import { champPower, lessonTurn, seenItFirst, seenItSpend, summitSaves } from '../greenneedle/champion';
 import { earthLine, overchargeSelfHurt } from '../greenneedle/ridge';
 import { foresightBegin } from './foresight';
 import { CARE } from '../care/mods';
@@ -1219,6 +1220,11 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
   if (rule.gn === 'earthing' && rule.surviveTurns && !battle.outcome) {
     const line = earthLine(battle.turn - 1, rule.surviveTurns);
     if (line) events.push({ type: 'raid', tone: 'info', text: line });
+  }
+  // Greenneedle gn.45, the Champion's lesson: the Champion explains each decision; it ends once all three of theirs have been out.
+  if (rule.gn === 'champlesson' && content) {
+    lessonTurn(content, battle, mine, events, (text) => events.push({ type: 'raid', tone: 'info', text }), (m) => maxHp(content, m));
+    if (battle.outcome) return;
   }
   // Greenneedle gn.42, the Battle Frontier's Arena: the judges keep a tally each turn, and after the last one they decide.
   if ((rule.gn === 'arena' || rule.gn === 'brain-arena') && content && party) {
@@ -2757,6 +2763,8 @@ function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
   if (ability === 'three-faces' && c.vol.movesUsed.length === 0) return move.priority + 1;
   if ((ability === 'champions-fury' || ability === 'champions-entrance') && !c.vol.furyUsed && move.category !== 'status') return move.priority + 1;
   if (c.side === 'player' && c.vol.movesUsed.length === 0 && ctx.battle.storyEffects.includes(`kind:${c.mon.uid}`)) return move.priority + 1;
+  // Seen It (Greenneedle gn.45): once per battle, it goes first against a Pokémon that has only just come in.
+  if (seenItFirst(ctx.battle, c.mon, move.effects.champMove, (c.side === 'player' ? ctx.battle.enemyVolatile : ctx.battle.playerVolatile).turnsOut)) return move.priority + 1;
   // Samurai Slash: the first time it is used in a battle it strikes first (and flinches, see flinchFirstUse).
   if (move.effects.flinchFirstUse && !c.vol.movesUsed.includes(move.id)) return move.priority + 1;
   if (ability === 'gale-wings' && move.type === 'flying' && c.mon.hp >= calcStats(ctx.content, c.mon).hp) return move.priority + 1;
@@ -4195,7 +4203,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     return;
   }
   // S7 Blind Strike: the partner lands a missed attack while confused or with lowered accuracy.
-  if (targetsEnemy && rng.float() >= accuracy && !(baseAccuracy !== null && (user.stages.acc < 0 || user.vol.confusion > 0) && tryFeat(ctx, user, 'blind_strike'))) {
+  if (targetsEnemy && rng.float() >= accuracy && !(baseAccuracy !== null && (user.stages.acc < 0 || user.vol.confusion > 0) && tryFeat(ctx, user, 'blind_strike')) && !summitSaves(content, ctx.battle, user.mon, fx.champMove)) {
     events.push({ type: 'miss', side: user.side });
     Held.onMiss(ctx, user, events as Held.HeldEvent[]);
     if (user.side === 'enemy' && target.side === 'player') foeMissLesson(ctx, target, events);
@@ -4358,6 +4366,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (fx.beatUp && beaters.length > 0) power = Math.floor(getSpecies(content, beaters[Math.min(hit, beaters.length - 1)]!.speciesId).baseStats.atk / 10) + 5;
       if (fx.powerRule) power = powerFromRule(ctx, fx.powerRule, power, user, target, userStats, targetStats, movedFirst, hit) ?? power;
       if (fx.twoTrainers && user.mon.friendship >= content.balance.friendship.max) power = 100;
+      if (fx.champMove) {
+        // Greenneedle gn.45's exclusive moves: The Long Game and With You grow; Seen It is spent when it went first.
+        power = champPower(content, user.mon, fx.champMove, power, user.vol.turnsOut);
+        if (hit === 0) seenItSpend(ctx.battle, user.mon, fx.champMove, target.vol.turnsOut);
+      }
       power = teraPower(ctx.battle, user.mon, { ...move, type: moveType }, power);
       let stab = move.flags.includes('typeless') ? 1 : stabMultiplier(content, ctx.battle, user.mon, moveType);
       if (stab === 1 && user.vol.typeShift === moveType) stab = content.ruleset.stabMultiplier;

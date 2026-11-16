@@ -120,3 +120,158 @@ describe('gn.44 The 1v1 Championship', () => {
     expect(starPinch(content, char)).toBe(true);
   });
 });
+
+// ---------- gn.45 The Champion's Training Session ----------
+import { champPower, lessonAfterstory, lessonChampion, lessonMoveFor, lessonPupil, lessonTurn, PUPIL, seenItFirst, summitSaves } from '../../src/core/greenneedle/champion';
+import { calcStats, maxHp } from '../../src/core/pokemon';
+
+const region = (run: RunState): string => run.regionOrder[run.regionIndex]!;
+/** At the field, "Stand there.", and into the lesson. */
+function lesson(seed: string, prep?: (run: RunState) => void): RunState {
+  const run = gnRun(seed);
+  run.party = [...run.party, createPokemon(content, 'pidgey', 20, 'p-pidgey'), createPokemon(content, 'rattata', 20, 'p-rattata')];
+  setFlag(run, 'rep', 3);
+  prep?.(run);
+  open(run, 'gn-45-field');
+  return choose(run, 'gn-45-field', 'Stand there.').run;
+}
+
+describe('gn.45 The Champion\'s Training Session', () => {
+  it('needs Reputation 3 and happens once a run; the region\'s own Champion, named in the opening', () => {
+    const e = content.events.get('gn-45-field')!;
+    expect(JSON.stringify(e.requires)).toContain('rep');
+    const run = gnRun('t45-open');
+    const champ = content.bosses.get(lessonChampion(content, run, region(run)))!;
+    expect(scene(run, 'gn-45-field').intro).toContain(`It's ${champ.name}. The Champion.`);
+    const after = lesson('t45-open');
+    expect(flagOf(after, 'champ-lesson')).toBe(1);
+    expect(castOf(after, 'lesson-champion')).toBe(champ.id);
+    expect(opened(after, 'gn-45-lesson')).toBe(true);
+  });
+
+  it('the lesson: three of the Champion\'s own team at A−1, under their name; it ends once all three have been out', () => {
+    const run = lesson('t45-lesson');
+    const r = choose(run, 'gn-45-lesson', 'Battle.');
+    const b = r.run.battle!;
+    const champ = content.bosses.get(castOf(run, 'lesson-champion')!)!;
+    expect(b.enemyTeam.map((m) => m.speciesId)).toEqual(champ.signature.filter((s) => content.species.has(s)).slice(0, 3));
+    expect(b.trainer!.name).toBe(champ.name);
+    // Turn by turn: each line once, then the end.
+    const said: string[] = [];
+    const push = (t: string) => said.push(t);
+    const hp = (m: typeof b.enemyTeam[number]) => maxHp(content, m);
+    const mine = r.run.party[b.activeIndex]!;
+    lessonTurn(content, b, mine, [{ type: 'move', side: 'enemy', moveId: 'growl' }], push, hp);
+    expect(said.join(' ')).toContain('You\'re waiting for me to attack. So I won\'t.');
+    b.enemySwitches = 1;
+    b.enemyIndex = 1;
+    lessonTurn(content, b, mine, [], push, hp);
+    lessonTurn(content, b, mine, [], push, hp);
+    expect(said.filter((s) => s.includes('Those aren\'t the same thing.'))).toHaveLength(1);
+    expect(b.outcome).toBeFalsy();
+    b.enemyIndex = 2;
+    lessonTurn(content, b, mine, [], push, hp);
+    expect(b.outcome).toBeFalsy();
+    lessonTurn(content, b, mine, [], push, hp);
+    expect(b.outcome).toBe('win');
+    expect(said.at(-1)).toContain('That\'s the lesson.');
+  });
+
+  it('win or lose, the lesson leads to the montage; it singles one out, +10% to its lowest stat and Bond +1', () => {
+    let run = lesson('t45-montage', (r) => {
+      for (const m of r.party) m.friendship = 0;
+      r.party[1]!.friendship = 120; // Bond 2, never fought: the one it picks
+    });
+    const r = choose(run, 'gn-45-lesson', 'Battle.');
+    run = win(r.run);
+    expect(opened(run, 'gn-45-montage')).toBe(true);
+    const pupil = run.party.find((m) => m.gn?.includes(PUPIL))!;
+    expect(pupil.uid).toBe('p-pidgey');
+    expect(scene(run, 'gn-45-montage').intro).toContain(`It's your ${content.species.get(pupil.speciesId)!.name}.`);
+    const before = calcStats(content, pupil);
+    const keys = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const;
+    const low = keys.reduce((a, k) => (before[k] < before[a] ? k : a), 'hp' as (typeof keys)[number]);
+    const m = choose(run, 'gn-45-montage', 'Take it back.');
+    const after = m.run.party.find((x) => x.uid === 'p-pidgey')!;
+    expect(after.eventBoosts?.[low]).toBe(10);
+    expect(after.friendship).toBe(125);
+    expect(said(m)).toContain('rose by 10%');
+    expect(opened(m.run, 'gn-45-exam')).toBe(true);
+  });
+
+  it('the pick: highest Bond that fought least; else the one fainted most; else the newest', () => {
+    const run = gnRun('t45-pick');
+    run.party = [...run.party, createPokemon(content, 'pidgey', 20, 'a'), createPokemon(content, 'rattata', 20, 'b')];
+    for (const m of run.party) m.friendship = 0;
+    expect(lessonPupil(content, run)!.uid).toBe('b');
+    run.story.histories['a'] = { ...(run.story.histories['a'] ?? {}), knockoutsTaken: 2 } as never;
+    expect(lessonPupil(content, run)!.uid).toBe('a');
+    run.party[0]!.friendship = 60;
+    expect(lessonPupil(content, run)!.uid).toBe(run.party[0]!.uid);
+  });
+
+  it('the exam: "Not today." ends it; a loss heals the team, no cost; a win teaches the ace its move', () => {
+    let run = win(choose(lesson('t45-exam'), 'gn-45-lesson', 'Battle.').run);
+    run = choose(run, 'gn-45-montage', 'Take it back.').run;
+    expect(scene(run, 'gn-45-exam').labels).toEqual(['Yes.', 'Not today.']);
+    const no = choose(run, 'gn-45-exam', 'Not today.');
+    expect(no.text).toContain('I\'m off duty.');
+    run = choose(run, 'gn-45-exam', 'Yes.').run;
+    const fight = choose(run, 'gn-45-final', 'Battle.');
+    expect(fight.run.battle!.enemyTeam).toHaveLength(6);
+    const lost = lose(fight.run);
+    expect(lost.phase).toBe('map');
+    expect(opened(lost, 'gn-45-failed')).toBe(true);
+    expect(lost.party.every((m) => m.hp === maxHp(content, m))).toBe(true);
+    const won = win(fight.run);
+    expect(flagOf(won, 'champ-exam-passed')).toBe(1);
+    const move = castOf(won, 'lesson-move')!;
+    expect(['summit', 'the-long-game', 'with-you', 'seen-it']).toContain(move);
+    expect(won.party.some((m) => m.moves.some((x) => x.id === move))).toBe(true);
+    expect(scene(won, 'gn-45-passed').intro).toContain(content.moves.get(move)!.name);
+  });
+
+  it('the rival ahead (Lead +2) was here last week', () => {
+    const run = gnRun('t45-rival');
+    expect(scene(run, 'gn-45-exam').intro).not.toContain('Your friend was here last week');
+    run.story.rivals = [{ ...(run.story.rivals[0] ?? {}), id: 'r1', world: { lead: 2, badges: 0, region: 0, regionsDone: 0, wins: 0, defeats: 0, fame: 0, milestones: [] } } as never];
+    expect(scene(run, 'gn-45-exam').intro).toContain('Your friend was here last week');
+  });
+
+  it('the four moves: Summit can\'t miss at full HP (once), The Long Game and With You grow, Seen It goes first on a fresh arrival (once)', () => {
+    const run = gnRun('t45-moves');
+    const mon = run.party[0]!;
+    const battle = { storyEffects: [] as string[] } as unknown as NonNullable<RunState['battle']>;
+    mon.hp = maxHp(content, mon);
+    expect(summitSaves(content, battle, mon, 'summit')).toBe(true);
+    expect(summitSaves(content, battle, mon, 'summit')).toBe(false);
+    expect(champPower(content, mon, 'the-long-game', 85, 0)).toBe(85);
+    expect(champPower(content, mon, 'the-long-game', 85, 2)).toBe(105);
+    expect(champPower(content, mon, 'the-long-game', 85, 9)).toBe(125);
+    mon.friendship = 0;
+    expect(champPower(content, mon, 'with-you', 85, 0)).toBe(85);
+    mon.friendship = 255;
+    expect(champPower(content, mon, 'with-you', 85, 0)).toBe(100);
+    battle.storyEffects = [];
+    expect(seenItFirst(battle, run.party[0]!, 'seen-it', 0)).toBe(true);
+    expect(seenItFirst(battle, run.party[0]!, 'seen-it', 1)).toBe(false);
+    expect(lessonMoveFor(content, mon)).toBe('with-you');
+    for (const id of ['summit', 'the-long-game', 'with-you', 'seen-it']) expect(content.moves.get(id)?.power).toBe(85);
+  });
+
+  it('afterstory: at the real Champion battle, the Champion who taught it opens with the move', () => {
+    const run = gnRun('t45-after');
+    const champ = lessonChampion(content, run, region(run));
+    run.story.flags[`ev:cast-lesson-champion:${champ}`] = 1;
+    run.story.flags['ev:cast-lesson-move:seen-it'] = 1;
+    setFlag(run, 'champ-exam-passed', 1);
+    const lead = createPokemon(content, 'dragonite', 60, 'foe');
+    run.stage = { ...run.stage!, kind: 'league', leaderId: champ } as never;
+    run.battle = { kind: 'trainer', enemyTeam: [lead], enemyIndex: 0, storyEffects: [], trainer: { classId: 'champion', name: 'Champ', leaderId: champ } } as unknown as RunState['battle'];
+    expect(lessonAfterstory(content, run)).toBe('Champ: "Let\'s see if it took."');
+    expect(lead.moves.some((m) => m.id === 'seen-it')).toBe(true);
+    expect(run.battle!.lesson?.foeMove).toBe('seen-it');
+    run.battle!.trainer!.leaderId = 'someone-else';
+    expect(lessonAfterstory(content, run)).toBe('');
+  });
+});

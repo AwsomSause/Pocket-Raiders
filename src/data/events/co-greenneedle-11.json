@@ -1112,6 +1112,329 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-45-field",
+   "name": "The Champion's Training Session",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rep",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "champ-lesson",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "plums",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "champ-told-plums",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The lesson starts late. {lesson-champion} has been on the phone, sitting in the grass with their back to you. When they hang up, their eyes are wet, and they don't explain."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3f5a3a",
+    "effect": "none"
+   },
+   "intro": "*A training ground with nobody watching. A Pokémon from every poster you've ever seen lies in the grass with its eyes shut.*\n\nIts trainer is in old clothes, boots unlaced. It takes you a moment. It's {lesson-champion}. The Champion. Off duty.\n\n**{lesson-champion}:** \"You're the one they keep mentioning. Sit. No, don't sit. Stand there.\"\n\n\"I'll show you something, and I'll tell you why as I do it. Nobody ever tells you why.\"",
+   "choices": [
+    {
+     "label": "Stand there.",
+     "success": {
+      "text": "You stand there. The Champion nods, as if that was the first test, and you passed it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lessonArrive"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-45-lesson"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-45-lesson",
+   "name": "The Champion's Training Session: The Lesson",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3f5a3a",
+    "effect": "none"
+   },
+   "intro": "Three of theirs, a little under your level. Not their best. Not their worst. The ones that teach.\n\n**{lesson-champion}:** \"I'll talk while we fight. Everything I say is true. That's the only rule.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The Champion's Pokémon walks out like it's done this a thousand times. It has.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "lessonEnd"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-45-montage"
+        }
+       ],
+       "rule": {
+        "gn": "champlesson"
+       },
+       "name": "The Champion",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "lessonEnd"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-45-montage"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-45-montage",
+   "name": "The Champion's Training Session: This One",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3f5a3a",
+    "effect": "none"
+   },
+   "intro": "The Champion walks along your team, slowly, looking at each of them. They stop.\n\n**{lesson-champion}:** \"This one.\" It's your {cast:lesson-pupil}. Not your strongest. Not even close.\n\n\"You like it. You don't use it. It knows both things.\"\n\n**Morning.** It does a move, badly. The Champion says nothing, and waits.\n\n**Noon.** It does the move again. The Champion moves its foot an inch with the toe of their boot.\n\n**Dusk.** It does the move. The Champion's own ace, watching from the grass, opens one eye.",
+   "choices": [
+    {
+     "label": "Take it back.",
+     "success": {
+      "text": "Your {cast:lesson-pupil} walks back to you differently. Taller, somehow. It keeps glancing back at the Champion.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lessonBonus"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-45-exam"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-45-exam",
+   "name": "The Champion's Training Session: The Exam",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "remembers": [
+    {
+     "id": "rival",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "rivalAhead"
+      }
+     ],
+     "notice": "**{lesson-champion}:** \"Your friend was here last week. They passed the exam. Don't look like that; they needed it more.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3f5a3a",
+    "effect": "none"
+   },
+   "intro": "**{lesson-champion}:** \"That's the lesson. There's an exam.\"\n\n\"Nobody passes the exam. Do you want the exam?\"",
+   "choices": [
+    {
+     "label": "Yes.",
+     "success": {
+      "text": "The Champion whistles once. The Pokémon in the grass gets up. So do five others you hadn't seen.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-45-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "**{lesson-champion}:** \"Good answer, too. Most people can't say it.\" They lie back down in the grass. \"Go on. I'm off duty.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-45-final",
+   "name": "The Champion's Training Session: The Exam",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3f5a3a",
+    "effect": "none"
+   },
+   "intro": "Six of theirs, stronger than yours. No explaining now. The Champion doesn't say a word.\n\nYou've seen them do this on a screen. It's different from four metres away.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The Champion's face goes still. It's the face from the posters.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-45-failed"
+        }
+       ],
+       "rule": {
+        "gn": "champexam"
+       },
+       "name": "The Champion",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "lessonTeach"
+        },
+        {
+         "kind": "moment",
+         "text": "Passed the Champion's exam. Nobody passes the exam.",
+         "importance": 85
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-45-passed"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-45-passed",
+   "name": "The Champion's Training Session: Passed",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3f5a3a",
+    "effect": "none"
+   },
+   "intro": "The Champion looks at their last Pokémon for a long time. Then at yours. Then at you.\n\nThey kneel by your {cast:lesson-ace} and show it something. Slowly, twice. It's {cast:lesson-move}.\n\n**{lesson-champion}:** \"Not the one you'd have chosen. The one it would.\"",
+   "choices": [
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "\"See you at the League,\" they say. \"Officially.\" They're already lying back down in the grass.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-45-failed",
+   "name": "The Champion's Training Session: Not Yet",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3f5a3a",
+    "effect": "none"
+   },
+   "intro": "The Champion heals your team themself, one by one, with their own potions. They take their time with each.\n\n**{lesson-champion}:** \"Further than most. Come and find me when it's official.\"",
+   "choices": [
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You look back once. They're talking to your team's Poké Balls, very quietly, the way you'd talk to someone sleeping.",
+      "effects": []
+     }
+    }
+   ]
   }
  ]
 }

@@ -25,6 +25,7 @@ import { museumArrive } from './museum';
 import { daycareLeave, daycareReturn, eggShape, parentAndChild } from './daycare';
 import { eggMoveOptions, familyId } from '../mastery';
 import { pairBondLevel } from '../bond';
+import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
 import { CHAMPION_NAME, onevoneChampion, onevoneEnd, onevoneEnter, onevoneStart, entrantOf } from './onevone';
 import { GAVEL, auctionArrive, auctionOpen, auctionReturn, auctionRound, lotToken } from './auction';
 import { aceHere, bagBack, bagLeave, bench, brainRecord, brainStart, bring, frontierClear, leadInitiative, palaceShape, rent, swapIn, unbench } from './frontier';
@@ -48,12 +49,14 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   // {cast:<name>}: the species a story Pokémon was cast as (gn.42: the ace a Brain remembers).
   text = text.replace(/\{cast:([a-z0-9-]+)\}/g, (_, name: string) => {
     const id = castOf(run, name) ?? '';
-    return content.species.get(id)?.name ?? content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? 'that one';
+    return content.species.get(id)?.name ?? content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? content.bosses.get(id)?.name ?? content.moves.get(id)?.name ?? 'that one';
   });
   // gn.43: the auction catalogue ({lot:<n>:prov}, {lot:<n>:photo}) and a sum of money ({money:<key>}).
   text = text.replace(/\{lot:([1-6]):([a-z]+)\}/g, (_, n: string, part: string) => lotToken(run, Number(n), part));
   text = text.replace(/\{money:([a-z0-9-]+)\}/g, (_, k: string) => `₽${gnFlag(run, k).toLocaleString('en-GB')}`);
   // gn.44: the reigning 1v1 champion, a different trainer each region.
+  // gn.45: the region's Champion, off duty (cast when the lesson starts).
+  if (text.includes('{lesson-champion}')) text = text.replaceAll('{lesson-champion}', content.bosses.get(castOf(run, 'lesson-champion') ?? lessonChampion(content, run, run.regionOrder[run.regionIndex] ?? 'kanto'))?.name ?? 'The Champion');
   text = text.replaceAll('{onevone-champion}', CHAMPION_NAME[run.regionOrder[run.regionIndex] ?? 'kanto'] ?? CHAMPION_NAME.kanto!);
   // gn.44: what the next 1v1 opponent holds ({held:<n>}).
   text = text.replace(/\{held:([1-8])\}/g, (_, n: string) => {
@@ -175,6 +178,8 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   // gn.44: the 1v1 entrant is the Fighting Tournament's champion (gn.16); it is a Pokémon that came back (gn mark `came-back`).
   if (c.test === 'entrantChampion') return !!entrantOf(run)?.champion;
   if (c.test === 'entrantCameBack') return !!entrantOf(run)?.gn?.includes('came-back');
+  // gn.45: a rival is well ahead of you (Lead +2 or more).
+  if (c.test === 'rivalAhead') return run.story.rivals.some((r) => (r.world?.lead ?? 0) >= 2);
   if (c.test === 'eggMoveKnown') return run.party.some((m) => { const egg = new Set(eggMoveOptions(content, familyId(content, m.speciesId)).map((o) => o.id)); return m.moves.some((mv) => egg.has(mv.id)); });
   if (c.test === 'natureIs') return run.party.some((m) => m.nature === c.key);
   if (c.test === 'pairGetsOn') return run.party.some((a, i) => run.party.some((b, j) => j > i && pairBondLevel(run, a.uid, b.uid) >= 1));
@@ -520,6 +525,14 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return onevoneEnd(run, e.n ?? 0);
     case 'onevoneChampion':
       return onevoneChampion(content, run);
+    case 'lessonArrive':
+      return lessonArrive(content, run, host.region);
+    case 'lessonEnd':
+      return lessonEnd(content, run);
+    case 'lessonBonus':
+      return lessonBonus(content, run);
+    case 'lessonTeach':
+      return lessonTeach(content, run);
     case 'onevonePrize': {
       // Rounds four to seven: a held item for the entrant's type.
       const mon = entrantOf(run);
@@ -629,6 +642,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (rule?.startsWith('brain-')) brainStart(content, run, battle, rule.slice('brain-'.length), makeFull(content));
   // gn.44: the 1v1 Championship's drawn opponent, at the entrant's level.
   if (rule === 'onevone' && battle.eventRule?.slot) onevoneStart(content, run, battle, battle.eventRule.slot, makeFull(content));
+  // gn.45: the region's Champion, with their own team.
+  if (rule === 'champlesson' || rule === 'champexam') lessonStart(content, run, battle, makeFull(content));
   // gn.32: the Crystal Golem takes the type of the colour you carry most.
   if (battle.eventRule?.gn === 'golem') golemStart(run, battle);
   // gn.35: a friendly follower, drawn by a charged crystal: it walks alongside you, and is easier to catch (ridge.ts ridgeCatch).

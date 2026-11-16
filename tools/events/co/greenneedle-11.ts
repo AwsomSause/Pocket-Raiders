@@ -88,7 +88,72 @@ const gn44: Json[] = [
   ), [ch('Leave.', out('Ms. Brady hands you the form back, framed. "For its wall," she says.'))]),
 ];
 
-export const EVENTS: Json[] = [...gn44];
+// =====================================================================================================================
+// gn.45  THE CHAMPION'S TRAINING SESSION  (step 11, optional, window 9–14; instead of the battle; once per run, from A10, Reputation 3+).
+// The region's Champion, off duty (core/greenneedle/champion.ts). The lesson: three of theirs at A−1, each decision explained as it
+// happens. The montage: one of yours singled out (+10% to its lowest stat, Bond +1). The exam (optional): six at A+2, no loss cost;
+// a win teaches the ace one of four exclusive moves, and at the real Champion battle that Champion opens with it.
+// =====================================================================================================================
+const FIELD_TINT = '#3f5a3a';
+const field = (o: Json = {}): Json => ({ tint: FIELD_TINT, tags: ['Story', 'Trainer'], effect: 'none', ...o });
+const afterLesson: Json[] = [gn('lessonEnd'), scene('gn-45-montage')];
+
+const gn45: Json[] = [
+  gev('gn-45-field', 'The Champion\'s Training Session', field({ stop: 'event', rarity: 'rare', requires: [is('rep', 3), not('champ-lesson')], remembers: [
+    { id: 'plums', when: [is('champ-told-plums')], notice: 'The lesson starts late. {lesson-champion} has been on the phone, sitting in the grass with their back to you. When they hang up, their eyes are wet, and they don\'t explain.' },
+  ] }), say(
+    '*A training ground with nobody watching. A Pokémon from every poster you\'ve ever seen lies in the grass with its eyes shut.*',
+    'Its trainer is in old clothes, boots unlaced. It takes you a moment. It\'s {lesson-champion}. The Champion. Off duty.',
+    '**{lesson-champion}:** "You\'re the one they keep mentioning. Sit. No, don\'t sit. Stand there."',
+    '"I\'ll show you something, and I\'ll tell you why as I do it. Nobody ever tells you why."',
+  ), [
+    ch('Stand there.', out('You stand there. The Champion nods, as if that was the first test, and you passed it.', gn('lessonArrive'), scene('gn-45-lesson'))),
+  ]),
+  rm('gn-45-lesson', 'The Champion\'s Training Session: The Lesson', field({ tags: ['Combat', 'Trainer', 'Story'] }), say(
+    'Three of theirs, a little under your level. Not their best. Not their worst. The ones that teach.',
+    '**{lesson-champion}:** "I\'ll talk while we fight. Everything I say is true. That\'s the only rule."',
+  ), [
+    ch('Battle.', fight('The Champion\'s Pokémon walks out like it\'s done this a thousand times. It has.', { ...trainer('The Champion', { cls: 'ace-trainer', size: 3, lv: -1, friendly: true, rule: { gn: 'champlesson' }, win: afterLesson, lose: afterLesson }) })),
+  ]),
+  rm('gn-45-montage', 'The Champion\'s Training Session: This One', field({ tags: ['Story', 'Recovery'] }), say(
+    'The Champion walks along your team, slowly, looking at each of them. They stop.',
+    '**{lesson-champion}:** "This one." It\'s your {cast:lesson-pupil}. Not your strongest. Not even close.',
+    '"You like it. You don\'t use it. It knows both things."',
+    '**Morning.** It does a move, badly. The Champion says nothing, and waits.',
+    '**Noon.** It does the move again. The Champion moves its foot an inch with the toe of their boot.',
+    '**Dusk.** It does the move. The Champion\'s own ace, watching from the grass, opens one eye.',
+  ), [
+    ch('Take it back.', out('Your {cast:lesson-pupil} walks back to you differently. Taller, somehow. It keeps glancing back at the Champion.', gn('lessonBonus'), scene('gn-45-exam'))),
+  ]),
+  rm('gn-45-exam', 'The Champion\'s Training Session: The Exam', field({ remembers: [
+    { id: 'rival', when: [gnc('rivalAhead')], notice: '**{lesson-champion}:** "Your friend was here last week. They passed the exam. Don\'t look like that; they needed it more."' },
+  ] }), say(
+    '**{lesson-champion}:** "That\'s the lesson. There\'s an exam."',
+    '"Nobody passes the exam. Do you want the exam?"',
+  ), [
+    ch('Yes.', out('The Champion whistles once. The Pokémon in the grass gets up. So do five others you hadn\'t seen.', scene('gn-45-final'))),
+    ch('Not today.', out('**{lesson-champion}:** "Good answer, too. Most people can\'t say it." They lie back down in the grass. "Go on. I\'m off duty."')),
+  ]),
+  rm('gn-45-final', 'The Champion\'s Training Session: The Exam', field({ tags: ['Combat', 'Trainer', 'Story'] }), say(
+    'Six of theirs, stronger than yours. No explaining now. The Champion doesn\'t say a word.',
+    'You\'ve seen them do this on a screen. It\'s different from four metres away.',
+  ), [
+    ch('Battle.', fight('The Champion\'s face goes still. It\'s the face from the posters.', { ...trainer('The Champion', { cls: 'ace-trainer', size: 6, lv: 2, friendly: true, rule: { gn: 'champexam' },
+      win: [gn('lessonTeach'), moment('Passed the Champion\'s exam. Nobody passes the exam.', 85), scene('gn-45-passed')],
+      lose: [heal(1), scene('gn-45-failed')] }) })),
+  ]),
+  rm('gn-45-passed', 'The Champion\'s Training Session: Passed', field({ tags: ['Story'] }), say(
+    'The Champion looks at their last Pokémon for a long time. Then at yours. Then at you.',
+    'They kneel by your {cast:lesson-ace} and show it something. Slowly, twice. It\'s {cast:lesson-move}.',
+    '**{lesson-champion}:** "Not the one you\'d have chosen. The one it would."',
+  ), [ch('Leave.', out('"See you at the League," they say. "Officially." They\'re already lying back down in the grass.'))]),
+  rm('gn-45-failed', 'The Champion\'s Training Session: Not Yet', field({ tags: ['Story', 'Recovery'] }), say(
+    'The Champion heals your team themself, one by one, with their own potions. They take their time with each.',
+    '**{lesson-champion}:** "Further than most. Come and find me when it\'s official."',
+  ), [ch('Leave.', out('You look back once. They\'re talking to your team\'s Poké Balls, very quietly, the way you\'d talk to someone sleeping.'))]),
+];
+
+export const EVENTS: Json[] = [...gn44, ...gn45];
 export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
@@ -97,6 +162,12 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'All scaled to the Pokémon the player enters (same level; the champion one higher)', often: 'region', badge: 'own',
     dressing: { kanto: 'The 1v1 Championship', elsewhere: 'The 1v1 Championship' },
     note: 'Badge: a single star. Once per region. Gideon Tolland and Señora Dolores Vantongeren are always rounds 3 and 6, and remember the last entrant within the run (no memory across runs). Until towns exist it sits on step 15.',
+  },
+  'gn-45-field': {
+    gn: 'gn.45', shape: 'Single', earliest: 'A10', home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', tags: ['Companion Story'],
+    level: 'The lesson A−1 (three Pokémon); the exam A+2 (six)', often: 'run', badge: 'own',
+    dressing: { kanto: 'The Champion\'s Training Session', elsewhere: 'The Champion\'s Training Session' },
+    note: 'Badge: a laurel. Once per run, Reputation 3 or more. Instead of the battle. The Champion is the region\'s own (the cast League Champion once cast). Passing the exam teaches the ace Summit, The Long Game, With You or Seen It; at the real Champion battle that Champion opens with it.',
   },
 };
 

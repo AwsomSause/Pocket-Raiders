@@ -506,6 +506,18 @@
   {
    "key": "onevone-champion-at",
    "rule": "core/greenneedle/onevone.ts (gn.44)"
+  },
+  {
+   "key": "champ-lesson",
+   "rule": "core/greenneedle/champion.ts (gn.45)"
+  },
+  {
+   "key": "champ-exam-passed",
+   "rule": "core/greenneedle/champion.ts (gn.45)"
+  },
+  {
+   "key": "lesson-why",
+   "rule": "core/greenneedle/champion.ts (gn.45)"
   }
  ]
 }
