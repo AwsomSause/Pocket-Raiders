@@ -101,21 +101,29 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Rivals come back 2 levels stronger; rival rematches appear on the map more often.",
+   "ruleText": "Rivals come back 2 levels stronger and rival rematches appear more often. The Rival Circuit is open without qualifying, and your rival is waiting inside every pseudo-stage.",
    "modifiers": [
     {
      "kind": "rivalLevelOffset",
      "value": 2
+    },
+    {
+     "kind": "startFlag",
+     "key": "circuit-qualified",
+     "value": 1
+    },
+    {
+     "kind": "startFlag",
+     "key": "rivalry-week",
+     "value": 1
     }
    ],
    "mapEvents": [
-    "rival-rematch",
     "blue-taunt",
     "kieran-rivalry",
     "mirror-match",
-    "living-rival-clash",
-    "living-rival-clash-retired",
-    "rival-gauntlet-entry"
+    "rival-gauntlet-entry",
+    "tournament-entry"
    ],
    "objectives": [
     {
@@ -178,7 +186,7 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Boss Pokémon deal 15% more damage; gym scouts and ambushes appear more often.",
+   "ruleText": "Boss Pokémon deal 15% more damage; gym scouts and ambushes appear more often, and so do the Past Gym Leaders and Past Champions.",
    "modifiers": [
     {
      "kind": "bossDamageTakenMultiplier",
@@ -189,7 +197,27 @@
     "gym-scout",
     "gym-trainer-ambush",
     "trainers-test",
-    "champion-cup"
+    "champion-cup",
+    "face-leader-day-off",
+    "gym-janitor-challenge",
+    "mr-ancient-gym-a",
+    "r159-wild-gym-leader-pokemon",
+    "ovc-two-gym-feud-s1",
+    "ovc-the-borrowed-badge-s1",
+    "ovc-stolen-badge-s1",
+    "ovc-rebel-gym-s1",
+    "ovc-the-championship-that-wasnt-s1",
+    "ovc-tower-apprentice-s1",
+    "red-on-the-mountain",
+    "blue-taunt",
+    "face-champion-coffee",
+    "pc-dragon-master-last-flight",
+    "retired-champion-spar",
+    "mr-hall-champions",
+    "retired-champ-garage",
+    "ovc-champion-in-disguise-s1",
+    "face-champion-echo",
+    "ovc-champions-ghost-s1"
    ],
    "objectives": [
     {
@@ -403,7 +431,7 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Healing items restore 25% more HP; sleeping giants and alpha Pokémon appear more often.",
+   "ruleText": "Healing items restore 25% more HP; sleeping giants and Alpha Pokémon appear more often, and the Alpha questlines open more often.",
    "modifiers": [
     {
      "kind": "healingMultiplier",
@@ -411,10 +439,18 @@
     }
    ],
    "mapEvents": [
-    "alpha-pokemon",
     "sleeping-giant",
     "slumbering-snorlax",
-    "legendary-shadow"
+    "story-alpha-black-tide",
+    "story-alpha-frostbound",
+    "story-alpha-hushed-one",
+    "story-alpha-orchard-warden",
+    "story-alpha-quarry-king",
+    "story-alpha-rooftop-watcher",
+    "story-alpha-sleeper",
+    "story-alpha-static-choir",
+    "story-alpha-unwelcome-guest",
+    "story-alpha-weeping-lantern"
    ],
    "objectives": [
     {
@@ -478,7 +514,7 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Dragon moves deal 20% more damage and Dragon-types appear twice as often.",
+   "ruleText": "Dragon moves deal 20% more damage and Dragon-types appear twice as often. The dragon Legendaries' questlines (the Sky and the Sea, the Eon siblings, the Spear Pillar, Truth and Ideals) open more often.",
    "modifiers": [
     {
      "kind": "typeDamageMultiplier",
@@ -493,7 +529,11 @@
    ],
    "mapEvents": [
     "dragons-den",
-    "dragon-shrine"
+    "dragon-shrine",
+    "co-l6-towns",
+    "co-l7-shimmer",
+    "co-l9-lake-1",
+    "co-l10-stone"
    ],
    "objectives": [
     {
@@ -634,7 +674,7 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Enemy Pokémon are 1 level higher; prize money is 20% higher.",
+   "ruleText": "Enemy Pokémon are 1 level higher; prize money is 20% higher. Past Champions and Past Gym Leaders are on the road more often.",
    "modifiers": [
     {
      "kind": "enemyLevelOffset",
@@ -649,7 +689,27 @@
     "battle-tower-floor",
     "champion-lunch",
     "veteran-challenge",
-    "champion-cup"
+    "champion-cup",
+    "face-leader-day-off",
+    "gym-janitor-challenge",
+    "mr-ancient-gym-a",
+    "r159-wild-gym-leader-pokemon",
+    "ovc-two-gym-feud-s1",
+    "ovc-the-borrowed-badge-s1",
+    "ovc-stolen-badge-s1",
+    "ovc-rebel-gym-s1",
+    "ovc-the-championship-that-wasnt-s1",
+    "ovc-tower-apprentice-s1",
+    "red-on-the-mountain",
+    "blue-taunt",
+    "face-champion-coffee",
+    "pc-dragon-master-last-flight",
+    "retired-champion-spar",
+    "mr-hall-champions",
+    "retired-champ-garage",
+    "ovc-champion-in-disguise-s1",
+    "face-champion-echo",
+    "ovc-champions-ghost-s1"
    ],
    "objectives": [
     {
@@ -717,6 +777,16 @@
     {
      "kind": "xpMultiplier",
      "value": 1.1
+    },
+    {
+     "kind": "legendaryFocus",
+     "species": [
+      "raikou",
+      "entei",
+      "suicune"
+     ],
+     "weight": 12,
+     "gateChance": 0.5
     }
    ],
    "mapEvents": [
@@ -874,11 +944,17 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Three stops follow the operation from the supply route to the holding yard to the commander; what you do early changes the later fights.",
+   "ruleText": "Team Plasma is the run's evil team. Three stops follow the operation from the supply route to the holding yard to the commander; what you do early changes the later fights.",
    "modifiers": [
     {
      "kind": "moneyMultiplier",
      "value": 1.1
+    },
+    {
+     "kind": "evilTeamFocus",
+     "teams": [
+      "plasma"
+     ]
     }
    ],
    "mapEvents": [
@@ -4522,7 +4598,7 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Legendary and Mythical Pokémon appear four times as often and your Pokémon gain 50% more experience.",
+   "ruleText": "Legendary and Mythical Pokémon appear four times as often and your Pokémon gain 50% more experience. You start the run with one free Telling of a Mythical.",
    "modifiers": [
     {
      "kind": "encounterWeightMultiplier",
@@ -4532,6 +4608,10 @@
     {
      "kind": "xpMultiplier",
      "value": 1.5
+    },
+    {
+     "kind": "freeTelling",
+     "count": 1
     }
    ],
    "mapEvents": [],
@@ -6714,7 +6794,7 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Paradox Pokémon (Great Tusk to Iron Crown) appear five times as often.",
+   "ruleText": "Paradox Pokémon (Great Tusk to Iron Crown) appear five times as often. A blessing of Koraidon, Miraidon or Dialga (the Legendary of time) starts with 1 more Influence.",
    "modifiers": [
     {
      "kind": "speciesEncounterWeight",
@@ -6741,6 +6821,14 @@
       "iron-crown"
      ],
      "value": 5
+    },
+    {
+     "kind": "blessingWeek",
+     "species": [
+      "koraidon",
+      "miraidon",
+      "dialga"
+     ]
     }
    ],
    "mapEvents": [],
@@ -6808,7 +6896,7 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Trainers are 1 level higher and bosses pay 50% more prize money.",
+   "ruleText": "Trainers are 1 level higher and bosses pay 50% more prize money. Past Gym Leaders are on the road more often.",
    "modifiers": [
     {
      "kind": "enemyLevelOffset",
@@ -6819,7 +6907,18 @@
      "value": 1.5
     }
    ],
-   "mapEvents": [],
+   "mapEvents": [
+    "face-leader-day-off",
+    "gym-janitor-challenge",
+    "mr-ancient-gym-a",
+    "r159-wild-gym-leader-pokemon",
+    "ovc-two-gym-feud-s1",
+    "ovc-the-borrowed-badge-s1",
+    "ovc-stolen-badge-s1",
+    "ovc-rebel-gym-s1",
+    "ovc-the-championship-that-wasnt-s1",
+    "ovc-tower-apprentice-s1"
+   ],
    "objectives": [
     {
      "id": "gyms",
@@ -6884,7 +6983,7 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Elite Four members are 2 levels higher and bosses pay 50% more prize money.",
+   "ruleText": "Elite Four members are 2 levels higher and bosses pay 50% more prize money. Past Champions and Past Gym Leaders are on the road more often.",
    "modifiers": [
     {
      "kind": "eliteLevelOffset",
@@ -6895,7 +6994,28 @@
      "value": 1.5
     }
    ],
-   "mapEvents": [],
+   "mapEvents": [
+    "face-leader-day-off",
+    "gym-janitor-challenge",
+    "mr-ancient-gym-a",
+    "r159-wild-gym-leader-pokemon",
+    "ovc-two-gym-feud-s1",
+    "ovc-the-borrowed-badge-s1",
+    "ovc-stolen-badge-s1",
+    "ovc-rebel-gym-s1",
+    "ovc-the-championship-that-wasnt-s1",
+    "ovc-tower-apprentice-s1",
+    "red-on-the-mountain",
+    "blue-taunt",
+    "face-champion-coffee",
+    "pc-dragon-master-last-flight",
+    "retired-champion-spar",
+    "mr-hall-champions",
+    "retired-champ-garage",
+    "ovc-champion-in-disguise-s1",
+    "face-champion-echo",
+    "ovc-champions-ghost-s1"
+   ],
    "objectives": [
     {
      "id": "elite",
@@ -6960,14 +7080,35 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Champion battles pay triple prize money.",
+   "ruleText": "Champion battles pay triple prize money. Past Champions and Past Gym Leaders are on the road more often.",
    "modifiers": [
     {
      "kind": "championMoneyMultiplier",
      "value": 3
     }
    ],
-   "mapEvents": [],
+   "mapEvents": [
+    "face-leader-day-off",
+    "gym-janitor-challenge",
+    "mr-ancient-gym-a",
+    "r159-wild-gym-leader-pokemon",
+    "ovc-two-gym-feud-s1",
+    "ovc-the-borrowed-badge-s1",
+    "ovc-stolen-badge-s1",
+    "ovc-rebel-gym-s1",
+    "ovc-the-championship-that-wasnt-s1",
+    "ovc-tower-apprentice-s1",
+    "red-on-the-mountain",
+    "blue-taunt",
+    "face-champion-coffee",
+    "pc-dragon-master-last-flight",
+    "retired-champion-spar",
+    "mr-hall-champions",
+    "retired-champ-garage",
+    "ovc-champion-in-disguise-s1",
+    "face-champion-echo",
+    "ovc-champions-ghost-s1"
+   ],
    "objectives": [
     {
      "id": "champs",
@@ -7581,14 +7722,44 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Z-Moves deal 25% more damage.",
+   "ruleText": "Z-Moves deal 25% more damage. Island Trials and the Mega and Z Anomalies turn up more often.",
    "modifiers": [
     {
      "kind": "zMoveDamageMultiplier",
      "value": 1.25
     }
    ],
-   "mapEvents": [],
+   "mapEvents": [
+    "co-m1-absol",
+    "co-m2-harvest",
+    "co-m3-twins",
+    "co-m4-mirror",
+    "co-m5-tatsugiri",
+    "co-m6-flower",
+    "z-sigil-ruin",
+    "co-z3-cave",
+    "co-z4-night-1",
+    "co-z6-dojo",
+    "co-z7-hill",
+    "island-trial-normal",
+    "island-trial-fighting",
+    "island-trial-flying",
+    "island-trial-poison",
+    "island-trial-ground",
+    "island-trial-rock",
+    "island-trial-bug",
+    "island-trial-ghost",
+    "island-trial-steel",
+    "island-trial-fire",
+    "island-trial-water",
+    "island-trial-grass",
+    "island-trial-electric",
+    "island-trial-psychic",
+    "island-trial-ice",
+    "island-trial-dragon",
+    "island-trial-dark",
+    "island-trial-fairy"
+   ],
    "objectives": [
     {
      "id": "zmoves",
@@ -7653,7 +7824,7 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Mega Evolved Pokémon deal 20% more damage and crafting Mega Stones costs half.",
+   "ruleText": "Mega Evolved Pokémon deal 20% more damage and crafting Mega Stones costs half. Mega and Z Anomalies turn up more often.",
    "modifiers": [
     {
      "kind": "megaDamageMultiplier",
@@ -7664,7 +7835,19 @@
      "value": 0.5
     }
    ],
-   "mapEvents": [],
+   "mapEvents": [
+    "co-m1-absol",
+    "co-m2-harvest",
+    "co-m3-twins",
+    "co-m4-mirror",
+    "co-m5-tatsugiri",
+    "co-m6-flower",
+    "z-sigil-ruin",
+    "co-z3-cave",
+    "co-z4-night-1",
+    "co-z6-dojo",
+    "co-z7-hill"
+   ],
    "objectives": [
     {
      "id": "megas",
@@ -11823,20 +12006,30 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Rivals are 1 level higher. The listed map events turn up more often. Somebody is following you.",
+   "ruleText": "Rivals are 1 level higher and rival scenes turn up more often. The Rival Circuit is open without qualifying, and your rival is waiting inside every pseudo-stage. Somebody is following you.",
    "modifiers": [
     {
      "kind": "rivalLevelOffset",
      "value": 1
+    },
+    {
+     "kind": "startFlag",
+     "key": "circuit-qualified",
+     "value": 1
+    },
+    {
+     "kind": "startFlag",
+     "key": "rivalry-week",
+     "value": 1
     }
    ],
    "mapEvents": [
-    "rival-asks-help",
     "camp-rival-trail",
     "rival-views",
     "old-rival-old-friend",
     "rival-feud",
-    "w4-wandering-trainer"
+    "w4-wandering-trainer",
+    "tournament-entry"
    ],
    "objectives": [
     {
@@ -12273,7 +12466,7 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Crafting Mega Stones costs half, rare and epic rewards turn up twice as often, and Mega Evolved Pokémon deal 10% more damage.",
+   "ruleText": "Crafting Mega Stones costs half, rare and epic rewards turn up twice as often, and Mega Evolved Pokémon deal 10% more damage. Mega and Z Anomalies turn up more often.",
    "modifiers": [
     {
      "kind": "megaCraftCost",
@@ -12290,7 +12483,18 @@
    ],
    "mapEvents": [
     "mega-bazaar",
-    "stone-seller"
+    "stone-seller",
+    "co-m1-absol",
+    "co-m2-harvest",
+    "co-m3-twins",
+    "co-m4-mirror",
+    "co-m5-tatsugiri",
+    "co-m6-flower",
+    "z-sigil-ruin",
+    "co-z3-cave",
+    "co-z4-night-1",
+    "co-z6-dojo",
+    "co-z7-hill"
    ],
    "objectives": [
     {
@@ -12645,7 +12849,7 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Raid dens and giants appear more often; boss Pokémon deal 10% more damage. Your wins this week add to the town board.",
+   "ruleText": "Raid dens, giants and the Alpha questlines appear more often; boss Pokémon deal 10% more damage. Your wins this week add to the town board.",
    "modifiers": [
     {
      "kind": "bossDamageTakenMultiplier",
@@ -12653,10 +12857,18 @@
     }
    ],
    "mapEvents": [
-    "alpha-pokemon",
     "sleeping-giant",
     "slumbering-snorlax",
-    "legendary-shadow"
+    "story-alpha-black-tide",
+    "story-alpha-frostbound",
+    "story-alpha-hushed-one",
+    "story-alpha-orchard-warden",
+    "story-alpha-quarry-king",
+    "story-alpha-rooftop-watcher",
+    "story-alpha-sleeper",
+    "story-alpha-static-choir",
+    "story-alpha-unwelcome-guest",
+    "story-alpha-weeping-lantern"
    ],
    "objectives": [
     {

@@ -4,6 +4,7 @@
 // fight, caps and bans, one reward item, and a loss ejects back to the parent stage.
 
 import { endCrystals } from '../greenneedle/crystals';
+import { rivalInPseudo } from '../co/weeks';
 import { z } from 'zod';
 import json from '../../data/pseudoStages.json';
 import type { Content, EventDef } from '../contentSchema';
@@ -123,12 +124,13 @@ export function buildPseudoStage(r: PseudoRecord, parent: StageState): StageStat
 }
 
 /** Steps into a pseudo-stage from the current node: the parent stage is kept aside and the pseudo-stage's map takes its place. */
-export function enterPseudoStage(_content: Content, run: RunState, id: string): void {
+export function enterPseudoStage(content: Content, run: RunState, id: string): void {
   const rec = PSEUDO.records.find((r) => r.id === id);
   if (!rec) throw new Error(`Unknown pseudo-stage "${id}"`);
   if (!run.stage || run.stage.pseudo) return;
   run.pseudoParent = structuredClone(run.stage);
   run.stage = buildPseudoStage(rec, run.stage);
+  rivalInPseudo(content, run); // Rivalry weeks: the rival waits in every pseudo-stage
 }
 
 /** Back to the parent stage, standing on the node the pseudo-stage was opened from. A no-op when no pseudo-stage is being played. */
@@ -231,6 +233,7 @@ export function routeChainEvent(content: Content, run: RunState, eventId: string
     if (!chain || !opensNext(content.events.get(chain.entry)!, chain.team).includes(eventId)) return false;
     run.pseudoParent = structuredClone(st);
     run.stage = buildChainStage(content, chain, st);
+    rivalInPseudo(content, run); // Rivalry weeks: the rival waits in every pseudo-stage
     if (chain.start === 'opened') {
       // The entry's choice picked the route: stand on that room at once, and the map opens it.
       const first = run.stage.map.nodes.find((n) => n.roomEvent === eventId)!;

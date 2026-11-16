@@ -20,3 +20,13 @@ Source: `catalog_overhaul_pack/catalog_overhaul/QUESTLINES_ALPHAS_AND_ANOMALIES.
 ### Whole Run Events and Arceus
 - About one run in three now follows one long story from Stage 2 to the Champion: Guidance of Giratina, the Weather War, the Made One, the Seven Days, or the Weapon and the Flower. Ten beats each, choices that change how it ends, and an ending that changes the League. Switch it off under Settings > Gameplay > Whole Run Events.
 - Arceus (the Sixteen Pedestals) can now appear at the last rest before the League, if your Mythical Guest is still with you and you never broke its Promise.
+
+### Calendar weeks, the Shadow chain and your reputation (batch 5, row C)
+- Rivalry Week and Roadside Rival Week open the Rival Circuit without qualifying, and your rival waits for you inside every pseudo-stage (fight, team up, or walk past).
+- League weeks (Gym Circuit, Champion's Gauntlet, Gym Leader Rematch Week, Elite Four Sweep, Champion Cup Weekend) bring the Past Gym Leaders and Past Champions onto the road more often.
+- Legendary weeks: Raid Rally and World Boss Week bring the Alpha questlines, Dragon Week the dragon Legendaries' questlines, Legendary Beasts Chase sends Raikou, Entei and Suicune's gates. Mega Evolution Showcase, Mega Stone Hunt and Z-Move Trial bring the Mega and Z Anomalies.
+- Team Plasma Liberation Operation makes Team Plasma the run's team (the other team weeks already did this for theirs).
+- Paradox Tide: a Koraidon, Miraidon or Dialga blessing starts with 1 more Influence. Leap Day: one free Telling of a Mythical at run start.
+- The Shadow chain is part of the Shadow system now: sightings stir up the factions, the Sanctuary will look after a Shadow Pokémon (yours or a caged one) and give it back purified, steadying really soothes the Heart Gauge, The Haze Lifts purifies, and the Lieutenant who escapes a hideout comes back for you. Shadow Triad only appears when Team Plasma is hunting you.
+- "An Echo of What You Did": a stranger reads your reputation back to you, with the numbers.
+- Known limits: Koraidon and Miraidon blessings are not in the game yet, so Paradox Tide's bonus lands only on Dialga today. The Beasts (L1) and Tower of Legends (L16) questlines are still the older week events, not rebuilt from QUESTLINES_LEGENDARY.md.

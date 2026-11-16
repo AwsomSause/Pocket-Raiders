@@ -790,6 +790,12 @@ export const ArchetypeModifierSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('legendaryFocus'), species: z.array(z.string()).min(1), weight: z.number().positive(), gateChance: z.number().positive().max(1) }),
   /** A Team week: the evil team of the run is picked from these (by the run's seed) instead of from every team. */
   z.object({ kind: z.literal('evilTeamFocus'), teams: z.array(z.string()).min(1) }),
+  /** Catalog Overhaul (legends, row C): a calendar week sets this run flag at run start (Rivalry weeks open the Rival Circuit: `circuit-qualified`; `rivalry-week` brings the rival into every pseudo-stage). Core: co/weeks.ts. */
+  z.object({ kind: z.literal('startFlag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), value: z.number().int().min(1).max(99).default(1) }),
+  /** Catalog Overhaul (legends, row C): Leap Day's free Telling (a Mythical half-told, else a seeded one) at run start, when Mythical Promises are on. */
+  z.object({ kind: z.literal('freeTelling'), count: z.number().int().min(1).max(3).default(1) }),
+  /** Catalog Overhaul (legends, row C): a Legend week whose matching blessings are not a Legendary world event (Paradox Tide): the blessing's starting Influence is +1 when its Legendary is listed. */
+  z.object({ kind: z.literal('blessingWeek'), species: z.array(z.string()).min(1) }),
   /** Wild odds of a kind of species: dual-type, single-type, baby, pseudo-legend (600 BST, 3 stages), or the lines that start at the listed base species. */
   z.object({ kind: z.literal('speciesEncounterWeight'), trait: z.enum(['dual', 'mono', 'baby', 'pseudo', 'unevolved', 'fullyEvolved']).optional(), generation: z.number().int().min(1).max(9).optional(), lines: z.array(z.string()).min(1).optional(), value: z.number().positive() }),
   /** Shiny odds for wild Pokémon, event gifts and Eggs. */
@@ -3351,6 +3357,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Beta 0.6 E2: move the current region's world-state track (once per event id). */
   /** Beta 0.6 E3b: lowers every party Shadow Pokémon's corruption by `amount` (never below 1: the last step stays with its own key). */
   z.object({ kind: z.literal('shadowHeart'), amount: z.number().int().min(-20).max(0) }),
+  /** Catalog Overhaul (legends, row C, The Haze Lifts): the first party Shadow Pokémon that is ready (Heart Gauge at or under `ready`) is purified for good. A Named Shadow whose key is still waiting is eased to its last step instead (its key stays its own). Core: co/shadowChain.ts. */
+  z.object({ kind: z.literal('purifyShadow'), ready: z.number().int().min(1).max(100).default(100) }),
   /** Beta 0.7 Pidgey's Resolve: one step of the Rivalry of the Sky (core/sky/story.ts applySky). */
   z.object({ kind: z.literal('sky'), act: z.enum(['duel', 'meetSpar', 'sparWon', 'sparLost', 'giftBerry', 'giftItem', 'finaleGiftBerry', 'finaleGiftItem', 'meetAlone', 'aloneGift', 'joinBird', 'freeBird', 'overhead', 'rematchWon', 'rematchLost', 'passBy', /** gn.02 (catalog overhaul) */ 'watch', 'giftAny', 'aloneLeave', 'aloneCall']), side: z.enum(['pidgey', 'spearow']).optional(), bird: z.enum(['pidgeot', 'fearow']).optional() }),
   z.object({ kind: z.literal('track'), input: z.enum(['raidFailed', 'raidDeclined', 'climaxScheduled', 'raidSuccess', 'officerTurned']) }),

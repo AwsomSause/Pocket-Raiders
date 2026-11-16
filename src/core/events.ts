@@ -84,6 +84,7 @@ import { beginSwap, endSwap, swapReady } from './co/swap';
 import { anyFlagSet, eggWarm, hasEgg, itemForType, owePartner, quietWild, runPlaceMet, stageTypesMet, stageWeatherMet, stripFoeMoves } from './co/neRules';
 import { makeShadow, rollShadowHeart } from './shadow';
 import { addFlag } from './shadowWorld/world';
+import { purifyShadow } from './co/shadowChain';
 import { grantBlessing, makeBlissful } from './shadowWorld/blissful';
 import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
@@ -868,7 +869,8 @@ export function addEventStops(content: Content, run: RunState): void {
   if (coOpen.length > 0) {
     // A same-stage story's later beats are placed when they are earned (placeEarnedCoBeats), not at the start of the stage.
     const entries = coOpen.map((id) => ({ id, p: content.coPlacement!.get(id)!, door: content.events.get(id)!.pseudo })).filter((e) => !(SAME_STAGE.has(e.p.shape) && e.p.beat >= 2));
-    coPut(run, planCoStage(stage.map, entries, `${run.seed}::co-place::${stageKey(run)}`));
+    // Calendar weeks (legends, row C): the week's questline openings (its `mapEvents`) get first claim on the stage's budget.
+    coPut(run, planCoStage(stage.map, entries, `${run.seed}::co-place::${stageKey(run)}`, undefined, featuredMapEvents(content, run)));
     for (const id of coOpen) { taken.add(id); open.delete(id); }
   }
   // A run milestone (catalog 99) is offered at the middle stage of every region.
@@ -1463,6 +1465,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return '';
     case 'shadowHeart':
       return 'a Shadow Pokémon eases';
+    case 'purifyShadow':
+      return 'a Shadow Pokémon is purified';
     case 'sky':
       return '';
     case 'track':
@@ -1910,6 +1914,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       for (const m of run.party) if (m.shadow && m.shadow.heart > 1) { m.shadow.heart = Math.max(1, m.shadow.heart + e.amount); eased += 1; }
       return eased > 0 ? 'Their Shadow loosens its hold a little.' : '';
     }
+    case 'purifyShadow':
+      return purifyShadow(content, run, e.ready);
     case 'track': {
       // The key is this node, so one stop moves the track once however often it is replayed.
       const before = trackStep(run, currentRegion(content, run).id);
