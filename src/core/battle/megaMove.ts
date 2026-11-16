@@ -6,8 +6,9 @@
 import type { Content } from '../contentSchema';
 import type { PokemonInstance } from '../state';
 import megaMovesJson from '../../data/megaMoves.json';
+import jetSpeciesJson from '../../data/jetSpecies.json';
 
-const BY_FORM: Readonly<Record<string, string>> = megaMovesJson.byForm;
+const BY_FORM: Readonly<Record<string, string>> = { ...megaMovesJson.byForm, ...(jetSpeciesJson.megaMoves as Record<string, string>) };
 
 /** The signature move of a Mega form, or null when it has none (yet). */
 export function megaMoveFor(content: Content, formId: string): string | null {

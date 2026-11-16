@@ -57,7 +57,7 @@ test('the Hub shows the Bank, the Trainer Archive and the Achievement Hall', asy
   expect(errors).toEqual([]);
 });
 
-test('a lost run pays Bank Credits and earns achievements; a claimed trainer can start a run', async ({ page }) => {
+test('a lost run pays Bank Credits and earns achievements; an earned trainer can start a run', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/?seed=e2e-m5&debug=1');
@@ -110,35 +110,21 @@ test('a lost run pays Bank Credits and earns achievements; a claimed trainer can
   expect(p.achievements['first-steps']).toBeTruthy();
   expect(p.runHistory).toHaveLength(1);
 
-  // Meet Brock's requirement and give enough credits, then claim him in the Archive.
+  // Meet Brock's requirement: he joins on his own (no Bank Credit claim) and can then lead a run.
   await page.keyboard.press('Enter'); // Back to the Hub
   await waitForScene(page, 'Hub');
   await page.evaluate(() => {
     const { session } = (window as any).__pkr;
     session.profile.best.regionsClearedNoCharm = 1;
-    session.profile.bankCredits = 1000;
-    (window as any).__pkr.game.scene.getScene('Hub').scene.restart();
+    session.profile.counters.regionsClearedNoCharm = 1;
+    (window as any).__pkr.game.scene.getScene('Hub').scene.start('TrainerSelect');
   });
-  await waitForScene(page, 'Hub');
-  await page.waitForTimeout(300);
-  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').visit('arena')); // the Competitive Arena
-  await page.waitForTimeout(250);
-  await page.keyboard.press('Enter'); // Trainer Archive
-  await page.waitForTimeout(300);
-  for (let i = 0; i < 3; i++) await page.keyboard.press('ArrowRight'); // Red, Blue, Green, Brock
-  await page.keyboard.press('Enter'); // claim Brock
-  await expect.poll(async () => (await profile(page)).unlockedArchetypes).toContain('brock');
-  await waitForScene(page, 'Hub');
-  await page.screenshot({ path: 'test-results/m5-claimed.png' });
-
-  // The claim leaves the Arena page open: Esc back to town, where you still face the Run Prep Center.
-  await page.keyboard.press('Escape');
-  await page.waitForTimeout(400);
-  // The Arena Lobby keeps focus on the Arena tile after the Esc: move it back to Start a run.
-  await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('Hub').lobby?.focus('run', false));
-  await page.keyboard.press('Enter'); // Start a run
   await waitForScene(page, 'TrainerSelect');
-  // Only Red, Blue, Green, Hilda and Nate are playable, so the claimed Brock stays a profile unlock and the run starts as the first one, Red.
+  // Every trainer is listed now (not only the five starters); focus Brock and pick him.
+  await page.evaluate(() => {
+    const s = (window as any).__pkr.game.scene.getScene('TrainerSelect');
+    s.focus(s.slots.findIndex((x: any) => x?.archetype.id === 'brock'), false);
+  });
   await page.waitForTimeout(200);
   await page.screenshot({ path: 'test-results/m5-trainer-select.png' });
   await page.keyboard.press('Enter');
@@ -146,6 +132,6 @@ test('a lost run pays Bank Credits and earns achievements; a claimed trainer can
   await page.keyboard.press('Enter'); // Roll starters
   await waitForScene(page, 'StarterSelect');
   const r = await page.evaluate(() => (window as any).__pkr.session.run);
-  expect(r.archetypeId).toBe('red');
+  expect(r.archetypeId).toBe('brock');
   expect(errors).toEqual([]);
 });

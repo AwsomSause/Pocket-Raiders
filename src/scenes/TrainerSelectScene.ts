@@ -138,7 +138,8 @@ export class TrainerSelectScene extends Phaser.Scene {
   private applySort(): void {
     const { session } = services();
     const p = session.profile;
-    const all = [...session.content.archetypes.values()].filter((a) => isPlayerTrainer(a.id));
+    // Every trainer can be picked once owned; the five starting trainers lead the default order.
+    const all = [...session.content.archetypes.values()].sort((x, y) => Number(!isPlayerTrainer(x.id)) - Number(!isPlayerTrainer(y.id)));
     const data = all.filter((a) => !a.evolvedFrom).flatMap((a) => [a, ...all.filter((e) => e.evolvedFrom === a.id)]);
     const ordered = sortTrainers(data, this.sortKey, p, this.sortReverse);
     this.slots = ordered.map((a) => ({ archetype: a, status: trainerStatus(p, a) }));

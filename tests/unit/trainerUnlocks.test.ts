@@ -62,11 +62,8 @@ describe('challenge progress and claiming', () => {
     expect(half.met).toBe(false);
     expect(half.current).toBeGreaterThan(0);
     for (const part of parts.slice(1)) p.counters[part.counter!] = part.atLeast!;
-    expect(trainerStatus(p, brock)).toBe('claimable');
-    p.bankCredits = brock.unlockCost;
-    const claimed = claimTrainer(content, p, brock.id);
-    expect(trainerStatus(claimed, brock)).toBe('unlocked');
-    expect(claimed.bankCredits).toBe(0);
+    expect(trainerStatus(p, brock)).toBe('unlocked');
+    expect(() => claimTrainer(content, p, brock.id)).toThrow(/already/);
   });
 
   it('a "catch" part needs that species caught', () => {

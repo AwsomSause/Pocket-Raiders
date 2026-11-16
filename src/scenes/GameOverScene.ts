@@ -254,7 +254,7 @@ export class GameOverScene extends Phaser.Scene {
       for (const m of summary.modeRewards ?? []) lines.push(`${m.first ? 'New reward' : 'Repeat reward'}: ${m.text}`);
       const ups = summary.masteryUps ?? [];
       if (ups.length > 0) lines.push(`Mastery: ${ups.slice(0, 6).map((u) => `${session.content.species.get(u.speciesId)?.name ?? u.speciesId} ${RANK_NAMES[u.rank]}`).join(', ')}${ups.length > 6 ? ` and ${ups.length - 6} more` : ''}`);
-      if (summary.trainersReady.length) lines.push('', `Ready to claim in the Trainer Archive: ${summary.trainersReady.map((a) => a.name).join(', ')}`);
+      if (summary.trainersReady.length) lines.push('', `New trainers joined your roster: ${summary.trainersReady.map((a) => a.name).join(', ')}`);
       if (run && !campaignCounts(session.content.campaigns.get(run.campaignId)!, run.rules.modeId)) lines.push('', 'Test campaign: achievements and unlocks were not counted.');
       if (run && !run.rules.progressionEligible) lines.push('', 'Adventure run: no Bank Credits, Research Points, candies, unlocks or achievements were earned.');
     } else {

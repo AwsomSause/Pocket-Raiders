@@ -183,6 +183,7 @@ import { planSpeech, stripSpeechTags, type SpeechVoice } from '../ui/dialogue/sp
 import { AERO, moveFlagNames, bounceIn, breathe, categoryIcon, drawGlass, effectivenessIcon, effectivenessWord, slideIn, statusIcon, typeLabel, type MotionLevel } from '../ui/aero';
 import { typeEffectiveness } from '../core/battle/damage';
 import type { Move, TypeName } from '../core/contentSchema';
+import { rivalBossFor } from '../core/rivals/major';
 
 const MESSAGE_AUTO_ADVANCE_MS = 1400;
 const MESSAGE_DELAYS = { short: 700, normal: 1400, long: 2400 } as const;
@@ -1242,7 +1243,7 @@ export class BattleScene extends Phaser.Scene {
     if (mon) return { assetId: pokemonAssetIds(mon.assets).front, label: trainer.name };
     const cls = content.trainers.get(trainer.classId);
     // Beta 4.4: a rival is drawn as its own character (Silver, Hop, Nemona...), not always as Blue.
-    const character = trainer.classId === 'rival' ? content.bosses.get(trainer.name.toLowerCase()) : undefined;
+    const character = trainer.classId === 'rival' ? rivalBossFor(content, trainer.name) : undefined;
     if (cls && character) return { assetId: character.sprites.default, label: trainer.name };
     if (cls) return { assetId: cls.spriteAssetId, label: cls.name };
     // A boss's ace back as a nemesis: drawn as that boss (the battle itself is not a boss fight).
@@ -2501,7 +2502,7 @@ export class BattleScene extends Phaser.Scene {
   /** The rival's picture: its own character if it has one, else its trainer class. */
   private rivalArt(rival: { classId: string; name: string }): { assetId: string; label: string } | null {
     const content = services().session.content;
-    const character = rival.classId === 'rival' ? content.bosses.get(rival.name.toLowerCase()) : undefined;
+    const character = rival.classId === 'rival' ? rivalBossFor(content, rival.name) : undefined;
     if (character) return { assetId: character.sprites.default, label: rival.name };
     const cls = content.trainers.get(rival.classId);
     return cls ? { assetId: cls.spriteAssetId, label: rival.name } : null;

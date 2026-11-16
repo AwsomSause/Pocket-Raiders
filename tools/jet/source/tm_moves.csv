@@ -1088,3 +1088,2203 @@ hoopno,Protect,PROTECT,Normal
 hoopno,Substitute,SUBSTITUTE,Normal
 hoopno,Rest,REST,Psychic
 hoopno,Tera Blast,TERA_BLAST,Normal
+skyrake,Body Slam,BODY_SLAM,Normal
+skyrake,Hyper Voice,HYPER_VOICE,Normal
+skyrake,Brave Bird,BRAVE_BIRD,Flying
+skyrake,Air Slash,AIR_SLASH,Flying
+skyrake,Aerial Ace,AERIAL_ACE,Flying
+skyrake,Tailwind,TAILWIND,Flying
+skyrake,Protect,PROTECT,Normal
+skyrake,Substitute,SUBSTITUTE,Normal
+skyrake,Rest,REST,Psychic
+skyrake,Sleep Talk,SLEEP_TALK,Normal
+skyrake,Facade,FACADE,Normal
+skyrake,Tera Blast,TERA_BLAST,Normal
+mega_fearow,Body Slam,BODY_SLAM,Normal
+mega_fearow,Hyper Voice,HYPER_VOICE,Normal
+mega_fearow,Brave Bird,BRAVE_BIRD,Flying
+mega_fearow,Air Slash,AIR_SLASH,Flying
+mega_fearow,Aerial Ace,AERIAL_ACE,Flying
+mega_fearow,Tailwind,TAILWIND,Flying
+mega_fearow,Flash Cannon,FLASH_CANNON,Steel
+mega_fearow,Iron Head,IRON_HEAD,Steel
+mega_fearow,Heavy Slam,HEAVY_SLAM,Steel
+mega_fearow,Iron Defense,IRON_DEFENSE,Steel
+mega_fearow,Drill Run,DRILL_RUN,Ground
+mega_fearow,U-turn,U_TURN,Bug
+mega_fearow,Protect,PROTECT,Normal
+mega_fearow,Substitute,SUBSTITUTE,Normal
+mega_fearow,Rest,REST,Psychic
+mega_fearow,Sleep Talk,SLEEP_TALK,Normal
+mega_fearow,Facade,FACADE,Normal
+mega_fearow,Tera Blast,TERA_BLAST,Normal
+venomcoil,Sludge Bomb,SLUDGE_BOMB,Poison
+venomcoil,Poison Jab,POISON_JAB,Poison
+venomcoil,Gunk Shot,GUNK_SHOT,Poison
+venomcoil,Toxic,TOXIC,Poison
+venomcoil,Crunch,CRUNCH,Dark
+venomcoil,Dark Pulse,DARK_PULSE,Dark
+venomcoil,Knock Off,KNOCK_OFF,Dark
+venomcoil,Taunt,TAUNT,Dark
+venomcoil,Earthquake,EARTHQUAKE,Ground
+venomcoil,Protect,PROTECT,Normal
+venomcoil,Substitute,SUBSTITUTE,Normal
+venomcoil,Rest,REST,Psychic
+venomcoil,Sleep Talk,SLEEP_TALK,Normal
+venomcoil,Facade,FACADE,Normal
+venomcoil,Tera Blast,TERA_BLAST,Normal
+mega_sandslash,Earthquake,EARTHQUAKE,Ground
+mega_sandslash,Earth Power,EARTH_POWER,Ground
+mega_sandslash,Dig,DIG,Ground
+mega_sandslash,Bulldoze,BULLDOZE,Ground
+mega_sandslash,Flash Cannon,FLASH_CANNON,Steel
+mega_sandslash,Iron Head,IRON_HEAD,Steel
+mega_sandslash,Heavy Slam,HEAVY_SLAM,Steel
+mega_sandslash,Iron Defense,IRON_DEFENSE,Steel
+mega_sandslash,Swords Dance,SWORDS_DANCE,Normal
+mega_sandslash,Knock Off,KNOCK_OFF,Dark
+mega_sandslash,Protect,PROTECT,Normal
+mega_sandslash,Substitute,SUBSTITUTE,Normal
+mega_sandslash,Rest,REST,Psychic
+mega_sandslash,Sleep Talk,SLEEP_TALK,Normal
+mega_sandslash,Facade,FACADE,Normal
+mega_sandslash,Tera Blast,TERA_BLAST,Normal
+mega_nidoqueen,Sludge Bomb,SLUDGE_BOMB,Poison
+mega_nidoqueen,Poison Jab,POISON_JAB,Poison
+mega_nidoqueen,Gunk Shot,GUNK_SHOT,Poison
+mega_nidoqueen,Toxic,TOXIC,Poison
+mega_nidoqueen,Earthquake,EARTHQUAKE,Ground
+mega_nidoqueen,Earth Power,EARTH_POWER,Ground
+mega_nidoqueen,Dig,DIG,Ground
+mega_nidoqueen,Bulldoze,BULLDOZE,Ground
+mega_nidoqueen,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+mega_nidoqueen,Play Rough,PLAY_ROUGH,Normal
+mega_nidoqueen,Draining Kiss,DRAINING_KISS,Fairy
+mega_nidoqueen,Misty Terrain,MISTY_TERRAIN,Fairy
+mega_nidoqueen,Sludge Wave,SLUDGE_WAVE,Poison
+mega_nidoqueen,Stealth Rock,STEALTH_ROCK,Rock
+mega_nidoqueen,Toxic Spikes,TOXIC_SPIKES,Poison
+mega_nidoqueen,Protect,PROTECT,Normal
+mega_nidoqueen,Substitute,SUBSTITUTE,Normal
+mega_nidoqueen,Rest,REST,Psychic
+mega_nidoqueen,Sleep Talk,SLEEP_TALK,Normal
+mega_nidoqueen,Facade,FACADE,Normal
+mega_nidoqueen,Tera Blast,TERA_BLAST,Normal
+mega_nidoking,Sludge Bomb,SLUDGE_BOMB,Poison
+mega_nidoking,Poison Jab,POISON_JAB,Poison
+mega_nidoking,Gunk Shot,GUNK_SHOT,Poison
+mega_nidoking,Toxic,TOXIC,Poison
+mega_nidoking,Earthquake,EARTHQUAKE,Ground
+mega_nidoking,Earth Power,EARTH_POWER,Ground
+mega_nidoking,Dig,DIG,Ground
+mega_nidoking,Bulldoze,BULLDOZE,Ground
+mega_nidoking,Superpower,SUPERPOWER,Fighting
+mega_nidoking,Ice Punch,ICE_PUNCH,Ice
+mega_nidoking,Swords Dance,SWORDS_DANCE,Normal
+mega_nidoking,Protect,PROTECT,Normal
+mega_nidoking,Substitute,SUBSTITUTE,Normal
+mega_nidoking,Rest,REST,Psychic
+mega_nidoking,Sleep Talk,SLEEP_TALK,Normal
+mega_nidoking,Facade,FACADE,Normal
+mega_nidoking,Tera Blast,TERA_BLAST,Normal
+mega_ninetales,Flamethrower,FLAMETHROWER,Fire
+mega_ninetales,Fire Blast,FIRE_BLAST,Fire
+mega_ninetales,Will-O-Wisp,WILL_O_WISP,Fire
+mega_ninetales,Flare Blitz,FLARE_BLITZ,Fire
+mega_ninetales,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+mega_ninetales,Play Rough,PLAY_ROUGH,Normal
+mega_ninetales,Draining Kiss,DRAINING_KISS,Fairy
+mega_ninetales,Misty Terrain,MISTY_TERRAIN,Fairy
+mega_ninetales,Nasty Plot,NASTY_PLOT,Dark
+mega_ninetales,Psyshock,PSYSHOCK,Psychic
+mega_ninetales,Protect,PROTECT,Normal
+mega_ninetales,Substitute,SUBSTITUTE,Normal
+mega_ninetales,Rest,REST,Psychic
+mega_ninetales,Sleep Talk,SLEEP_TALK,Normal
+mega_ninetales,Facade,FACADE,Normal
+mega_ninetales,Tera Blast,TERA_BLAST,Normal
+serenatuff,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+serenatuff,Play Rough,PLAY_ROUGH,Normal
+serenatuff,Draining Kiss,DRAINING_KISS,Fairy
+serenatuff,Misty Terrain,MISTY_TERRAIN,Fairy
+serenatuff,Psychic,PSYCHIC,Psychic
+serenatuff,Psyshock,PSYSHOCK,Psychic
+serenatuff,Zen Headbutt,ZEN_HEADBUTT,Psychic
+serenatuff,Calm Mind,CALM_MIND,Psychic
+serenatuff,Hyper Voice,HYPER_VOICE,Normal
+serenatuff,Wish,WISH,Normal
+serenatuff,Protect,PROTECT,Normal
+serenatuff,Substitute,SUBSTITUTE,Normal
+serenatuff,Rest,REST,Psychic
+serenatuff,Sleep Talk,SLEEP_TALK,Normal
+serenatuff,Facade,FACADE,Normal
+serenatuff,Tera Blast,TERA_BLAST,Normal
+mega_vileplume,Energy Ball,ENERGY_BALL,Grass
+mega_vileplume,Giga Drain,GIGA_DRAIN,Grass
+mega_vileplume,Solar Beam,SOLAR_BEAM,Grass
+mega_vileplume,Seed Bomb,SEED_BOMB,Grass
+mega_vileplume,Sludge Bomb,SLUDGE_BOMB,Poison
+mega_vileplume,Poison Jab,POISON_JAB,Poison
+mega_vileplume,Gunk Shot,GUNK_SHOT,Poison
+mega_vileplume,Toxic,TOXIC,Poison
+mega_vileplume,Protect,PROTECT,Normal
+mega_vileplume,Substitute,SUBSTITUTE,Normal
+mega_vileplume,Rest,REST,Psychic
+mega_vileplume,Sleep Talk,SLEEP_TALK,Normal
+mega_vileplume,Facade,FACADE,Normal
+mega_vileplume,Tera Blast,TERA_BLAST,Normal
+mycelord,Energy Ball,ENERGY_BALL,Grass
+mycelord,Giga Drain,GIGA_DRAIN,Grass
+mycelord,Solar Beam,SOLAR_BEAM,Grass
+mycelord,Seed Bomb,SEED_BOMB,Grass
+mycelord,Shadow Ball,SHADOW_BALL,Ghost
+mycelord,Shadow Claw,SHADOW_CLAW,Ghost
+mycelord,Hex,HEX,Ghost
+mycelord,Will-O-Wisp,WILL_O_WISP,Fire
+mycelord,Swords Dance,SWORDS_DANCE,Normal
+mycelord,Poltergeist,POLTERGEIST,Ghost
+mycelord,Protect,PROTECT,Normal
+mycelord,Substitute,SUBSTITUTE,Normal
+mycelord,Rest,REST,Psychic
+mycelord,Sleep Talk,SLEEP_TALK,Normal
+mycelord,Facade,FACADE,Normal
+mycelord,Tera Blast,TERA_BLAST,Normal
+mega_mycelord,Energy Ball,ENERGY_BALL,Grass
+mega_mycelord,Giga Drain,GIGA_DRAIN,Grass
+mega_mycelord,Solar Beam,SOLAR_BEAM,Grass
+mega_mycelord,Seed Bomb,SEED_BOMB,Grass
+mega_mycelord,Shadow Ball,SHADOW_BALL,Ghost
+mega_mycelord,Shadow Claw,SHADOW_CLAW,Ghost
+mega_mycelord,Hex,HEX,Ghost
+mega_mycelord,Will-O-Wisp,WILL_O_WISP,Fire
+mega_mycelord,Swords Dance,SWORDS_DANCE,Normal
+mega_mycelord,Poltergeist,POLTERGEIST,Ghost
+mega_mycelord,Protect,PROTECT,Normal
+mega_mycelord,Substitute,SUBSTITUTE,Normal
+mega_mycelord,Rest,REST,Psychic
+mega_mycelord,Sleep Talk,SLEEP_TALK,Normal
+mega_mycelord,Facade,FACADE,Normal
+mega_mycelord,Tera Blast,TERA_BLAST,Normal
+mega_venomoth,X-Scissor,X_SCISSOR,Bug
+mega_venomoth,Bug Buzz,BUG_BUZZ,Bug
+mega_venomoth,U-turn,U_TURN,Bug
+mega_venomoth,Sludge Bomb,SLUDGE_BOMB,Poison
+mega_venomoth,Poison Jab,POISON_JAB,Poison
+mega_venomoth,Gunk Shot,GUNK_SHOT,Poison
+mega_venomoth,Toxic,TOXIC,Poison
+mega_venomoth,Psychic,PSYCHIC,Psychic
+mega_venomoth,Psyshock,PSYSHOCK,Psychic
+mega_venomoth,Zen Headbutt,ZEN_HEADBUTT,Psychic
+mega_venomoth,Calm Mind,CALM_MIND,Psychic
+mega_venomoth,Protect,PROTECT,Normal
+mega_venomoth,Substitute,SUBSTITUTE,Normal
+mega_venomoth,Rest,REST,Psychic
+mega_venomoth,Sleep Talk,SLEEP_TALK,Normal
+mega_venomoth,Facade,FACADE,Normal
+mega_venomoth,Tera Blast,TERA_BLAST,Normal
+imperion,Crunch,CRUNCH,Dark
+imperion,Dark Pulse,DARK_PULSE,Dark
+imperion,Knock Off,KNOCK_OFF,Dark
+imperion,Taunt,TAUNT,Dark
+imperion,Fake Out,FAKE_OUT,Normal
+imperion,Play Rough,PLAY_ROUGH,Normal
+imperion,U-turn,U_TURN,Bug
+imperion,Nasty Plot,NASTY_PLOT,Dark
+imperion,Protect,PROTECT,Normal
+imperion,Substitute,SUBSTITUTE,Normal
+imperion,Rest,REST,Psychic
+imperion,Sleep Talk,SLEEP_TALK,Normal
+imperion,Facade,FACADE,Normal
+imperion,Tera Blast,TERA_BLAST,Normal
+arcanox,Flamethrower,FLAMETHROWER,Fire
+arcanox,Fire Blast,FIRE_BLAST,Fire
+arcanox,Will-O-Wisp,WILL_O_WISP,Fire
+arcanox,Flare Blitz,FLARE_BLITZ,Fire
+arcanox,Body Slam,BODY_SLAM,Normal
+arcanox,Hyper Voice,HYPER_VOICE,Normal
+arcanox,Crunch,CRUNCH,Dark
+arcanox,Wild Charge,WILD_CHARGE,Electric
+arcanox,Close Combat,CLOSE_COMBAT,Fighting
+arcanox,Protect,PROTECT,Normal
+arcanox,Substitute,SUBSTITUTE,Normal
+arcanox,Rest,REST,Psychic
+arcanox,Sleep Talk,SLEEP_TALK,Normal
+arcanox,Facade,FACADE,Normal
+arcanox,Tera Blast,TERA_BLAST,Normal
+mega_arcanox,Flamethrower,FLAMETHROWER,Fire
+mega_arcanox,Fire Blast,FIRE_BLAST,Fire
+mega_arcanox,Will-O-Wisp,WILL_O_WISP,Fire
+mega_arcanox,Flare Blitz,FLARE_BLITZ,Fire
+mega_arcanox,Body Slam,BODY_SLAM,Normal
+mega_arcanox,Hyper Voice,HYPER_VOICE,Normal
+mega_arcanox,Crunch,CRUNCH,Dark
+mega_arcanox,Wild Charge,WILD_CHARGE,Electric
+mega_arcanox,Close Combat,CLOSE_COMBAT,Fighting
+mega_arcanox,Protect,PROTECT,Normal
+mega_arcanox,Substitute,SUBSTITUTE,Normal
+mega_arcanox,Rest,REST,Psychic
+mega_arcanox,Sleep Talk,SLEEP_TALK,Normal
+mega_arcanox,Facade,FACADE,Normal
+mega_arcanox,Tera Blast,TERA_BLAST,Normal
+mega_poliwrath,Surf,SURF,Water
+mega_poliwrath,Hydro Pump,HYDRO_PUMP,Water
+mega_poliwrath,Liquidation,LIQUIDATION,Water
+mega_poliwrath,Rain Dance,RAIN_DANCE,Water
+mega_poliwrath,Close Combat,CLOSE_COMBAT,Fighting
+mega_poliwrath,Brick Break,BRICK_BREAK,Fighting
+mega_poliwrath,Focus Blast,FOCUS_BLAST,Fighting
+mega_poliwrath,Bulk Up,BULK_UP,Fighting
+mega_poliwrath,Ice Punch,ICE_PUNCH,Ice
+mega_poliwrath,Drain Punch,DRAIN_PUNCH,Fighting
+mega_poliwrath,Protect,PROTECT,Normal
+mega_poliwrath,Substitute,SUBSTITUTE,Normal
+mega_poliwrath,Rest,REST,Psychic
+mega_poliwrath,Sleep Talk,SLEEP_TALK,Normal
+mega_poliwrath,Facade,FACADE,Normal
+mega_poliwrath,Tera Blast,TERA_BLAST,Normal
+dynamax_tentacruel,Surf,SURF,Water
+dynamax_tentacruel,Hydro Pump,HYDRO_PUMP,Water
+dynamax_tentacruel,Liquidation,LIQUIDATION,Water
+dynamax_tentacruel,Rain Dance,RAIN_DANCE,Water
+dynamax_tentacruel,Sludge Bomb,SLUDGE_BOMB,Poison
+dynamax_tentacruel,Poison Jab,POISON_JAB,Poison
+dynamax_tentacruel,Gunk Shot,GUNK_SHOT,Poison
+dynamax_tentacruel,Toxic,TOXIC,Poison
+dynamax_tentacruel,Toxic Spikes,TOXIC_SPIKES,Poison
+dynamax_tentacruel,Protect,PROTECT,Normal
+dynamax_tentacruel,Substitute,SUBSTITUTE,Normal
+dynamax_tentacruel,Rest,REST,Psychic
+dynamax_tentacruel,Sleep Talk,SLEEP_TALK,Normal
+dynamax_tentacruel,Facade,FACADE,Normal
+dynamax_tentacruel,Tera Blast,TERA_BLAST,Normal
+mega_golem,Stone Edge,STONE_EDGE,Rock
+mega_golem,Rock Slide,ROCK_SLIDE,Rock
+mega_golem,Stealth Rock,STEALTH_ROCK,Rock
+mega_golem,Power Gem,POWER_GEM,Rock
+mega_golem,Earthquake,EARTHQUAKE,Ground
+mega_golem,Earth Power,EARTH_POWER,Ground
+mega_golem,Dig,DIG,Ground
+mega_golem,Bulldoze,BULLDOZE,Ground
+mega_golem,Heavy Slam,HEAVY_SLAM,Steel
+mega_golem,Explosion,EXPLOSION,Normal
+mega_golem,Protect,PROTECT,Normal
+mega_golem,Substitute,SUBSTITUTE,Normal
+mega_golem,Rest,REST,Psychic
+mega_golem,Sleep Talk,SLEEP_TALK,Normal
+mega_golem,Facade,FACADE,Normal
+mega_golem,Tera Blast,TERA_BLAST,Normal
+solstallion,Flamethrower,FLAMETHROWER,Fire
+solstallion,Fire Blast,FIRE_BLAST,Fire
+solstallion,Will-O-Wisp,WILL_O_WISP,Fire
+solstallion,Flare Blitz,FLARE_BLITZ,Fire
+solstallion,Psychic,PSYCHIC,Psychic
+solstallion,Psyshock,PSYSHOCK,Psychic
+solstallion,Zen Headbutt,ZEN_HEADBUTT,Psychic
+solstallion,Calm Mind,CALM_MIND,Psychic
+solstallion,High Horsepower,HIGH_HORSEPOWER,Ground
+solstallion,Protect,PROTECT,Normal
+solstallion,Substitute,SUBSTITUTE,Normal
+solstallion,Rest,REST,Psychic
+solstallion,Sleep Talk,SLEEP_TALK,Normal
+solstallion,Facade,FACADE,Normal
+solstallion,Tera Blast,TERA_BLAST,Normal
+mega_solstallion,Flamethrower,FLAMETHROWER,Fire
+mega_solstallion,Fire Blast,FIRE_BLAST,Fire
+mega_solstallion,Will-O-Wisp,WILL_O_WISP,Fire
+mega_solstallion,Flare Blitz,FLARE_BLITZ,Fire
+mega_solstallion,Psychic,PSYCHIC,Psychic
+mega_solstallion,Psyshock,PSYSHOCK,Psychic
+mega_solstallion,Zen Headbutt,ZEN_HEADBUTT,Psychic
+mega_solstallion,Calm Mind,CALM_MIND,Psychic
+mega_solstallion,High Horsepower,HIGH_HORSEPOWER,Ground
+mega_solstallion,Protect,PROTECT,Normal
+mega_solstallion,Substitute,SUBSTITUTE,Normal
+mega_solstallion,Rest,REST,Psychic
+mega_solstallion,Sleep Talk,SLEEP_TALK,Normal
+mega_solstallion,Facade,FACADE,Normal
+mega_solstallion,Tera Blast,TERA_BLAST,Normal
+sprigfetch,Body Slam,BODY_SLAM,Normal
+sprigfetch,Hyper Voice,HYPER_VOICE,Normal
+sprigfetch,Brave Bird,BRAVE_BIRD,Flying
+sprigfetch,Air Slash,AIR_SLASH,Flying
+sprigfetch,Aerial Ace,AERIAL_ACE,Flying
+sprigfetch,Tailwind,TAILWIND,Flying
+sprigfetch,Protect,PROTECT,Normal
+sprigfetch,Substitute,SUBSTITUTE,Normal
+sprigfetch,Rest,REST,Psychic
+sprigfetch,Sleep Talk,SLEEP_TALK,Normal
+sprigfetch,Facade,FACADE,Normal
+sprigfetch,Tera Blast,TERA_BLAST,Normal
+katanetch_d,Close Combat,CLOSE_COMBAT,Fighting
+katanetch_d,Brick Break,BRICK_BREAK,Fighting
+katanetch_d,Focus Blast,FOCUS_BLAST,Fighting
+katanetch_d,Bulk Up,BULK_UP,Fighting
+katanetch_d,Brave Bird,BRAVE_BIRD,Flying
+katanetch_d,Air Slash,AIR_SLASH,Flying
+katanetch_d,Aerial Ace,AERIAL_ACE,Flying
+katanetch_d,Tailwind,TAILWIND,Flying
+katanetch_d,Swords Dance,SWORDS_DANCE,Normal
+katanetch_d,Protect,PROTECT,Normal
+katanetch_d,Substitute,SUBSTITUTE,Normal
+katanetch_d,Rest,REST,Psychic
+katanetch_d,Sleep Talk,SLEEP_TALK,Normal
+katanetch_d,Facade,FACADE,Normal
+katanetch_d,Tera Blast,TERA_BLAST,Normal
+mega_katanetch_d,Close Combat,CLOSE_COMBAT,Fighting
+mega_katanetch_d,Brick Break,BRICK_BREAK,Fighting
+mega_katanetch_d,Focus Blast,FOCUS_BLAST,Fighting
+mega_katanetch_d,Bulk Up,BULK_UP,Fighting
+mega_katanetch_d,Brave Bird,BRAVE_BIRD,Flying
+mega_katanetch_d,Air Slash,AIR_SLASH,Flying
+mega_katanetch_d,Aerial Ace,AERIAL_ACE,Flying
+mega_katanetch_d,Tailwind,TAILWIND,Flying
+mega_katanetch_d,Swords Dance,SWORDS_DANCE,Normal
+mega_katanetch_d,Protect,PROTECT,Normal
+mega_katanetch_d,Substitute,SUBSTITUTE,Normal
+mega_katanetch_d,Rest,REST,Psychic
+mega_katanetch_d,Sleep Talk,SLEEP_TALK,Normal
+mega_katanetch_d,Facade,FACADE,Normal
+mega_katanetch_d,Tera Blast,TERA_BLAST,Normal
+glacierge,Surf,SURF,Water
+glacierge,Hydro Pump,HYDRO_PUMP,Water
+glacierge,Liquidation,LIQUIDATION,Water
+glacierge,Rain Dance,RAIN_DANCE,Water
+glacierge,Ice Beam,ICE_BEAM,Ice
+glacierge,Blizzard,BLIZZARD,Ice
+glacierge,Icy Wind,ICY_WIND,Ice
+glacierge,Ice Punch,ICE_PUNCH,Ice
+glacierge,Protect,PROTECT,Normal
+glacierge,Substitute,SUBSTITUTE,Normal
+glacierge,Rest,REST,Psychic
+glacierge,Sleep Talk,SLEEP_TALK,Normal
+glacierge,Facade,FACADE,Normal
+glacierge,Tera Blast,TERA_BLAST,Normal
+mega_glacierge,Surf,SURF,Water
+mega_glacierge,Hydro Pump,HYDRO_PUMP,Water
+mega_glacierge,Liquidation,LIQUIDATION,Water
+mega_glacierge,Rain Dance,RAIN_DANCE,Water
+mega_glacierge,Ice Beam,ICE_BEAM,Ice
+mega_glacierge,Blizzard,BLIZZARD,Ice
+mega_glacierge,Icy Wind,ICY_WIND,Ice
+mega_glacierge,Ice Punch,ICE_PUNCH,Ice
+mega_glacierge,Protect,PROTECT,Normal
+mega_glacierge,Substitute,SUBSTITUTE,Normal
+mega_glacierge,Rest,REST,Psychic
+mega_glacierge,Sleep Talk,SLEEP_TALK,Normal
+mega_glacierge,Facade,FACADE,Normal
+mega_glacierge,Tera Blast,TERA_BLAST,Normal
+abysshell,Surf,SURF,Water
+abysshell,Hydro Pump,HYDRO_PUMP,Water
+abysshell,Liquidation,LIQUIDATION,Water
+abysshell,Rain Dance,RAIN_DANCE,Water
+abysshell,Crunch,CRUNCH,Dark
+abysshell,Dark Pulse,DARK_PULSE,Dark
+abysshell,Knock Off,KNOCK_OFF,Dark
+abysshell,Taunt,TAUNT,Dark
+abysshell,Protect,PROTECT,Normal
+abysshell,Substitute,SUBSTITUTE,Normal
+abysshell,Rest,REST,Psychic
+abysshell,Sleep Talk,SLEEP_TALK,Normal
+abysshell,Facade,FACADE,Normal
+abysshell,Tera Blast,TERA_BLAST,Normal
+cryostone,Ice Beam,ICE_BEAM,Ice
+cryostone,Blizzard,BLIZZARD,Ice
+cryostone,Icy Wind,ICY_WIND,Ice
+cryostone,Ice Punch,ICE_PUNCH,Ice
+cryostone,Stone Edge,STONE_EDGE,Rock
+cryostone,Rock Slide,ROCK_SLIDE,Rock
+cryostone,Stealth Rock,STEALTH_ROCK,Rock
+cryostone,Power Gem,POWER_GEM,Rock
+cryostone,Iron Defense,IRON_DEFENSE,Steel
+cryostone,Protect,PROTECT,Normal
+cryostone,Substitute,SUBSTITUTE,Normal
+cryostone,Rest,REST,Psychic
+cryostone,Sleep Talk,SLEEP_TALK,Normal
+cryostone,Facade,FACADE,Normal
+cryostone,Tera Blast,TERA_BLAST,Normal
+somnambulor,Psychic,PSYCHIC,Psychic
+somnambulor,Psyshock,PSYSHOCK,Psychic
+somnambulor,Zen Headbutt,ZEN_HEADBUTT,Psychic
+somnambulor,Calm Mind,CALM_MIND,Psychic
+somnambulor,Shadow Ball,SHADOW_BALL,Ghost
+somnambulor,Shadow Claw,SHADOW_CLAW,Ghost
+somnambulor,Hex,HEX,Ghost
+somnambulor,Will-O-Wisp,WILL_O_WISP,Fire
+somnambulor,Protect,PROTECT,Normal
+somnambulor,Substitute,SUBSTITUTE,Normal
+somnambulor,Rest,REST,Psychic
+somnambulor,Sleep Talk,SLEEP_TALK,Normal
+somnambulor,Facade,FACADE,Normal
+somnambulor,Tera Blast,TERA_BLAST,Normal
+mesmerian,Psychic,PSYCHIC,Psychic
+mesmerian,Psyshock,PSYSHOCK,Psychic
+mesmerian,Zen Headbutt,ZEN_HEADBUTT,Psychic
+mesmerian,Calm Mind,CALM_MIND,Psychic
+mesmerian,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+mesmerian,Play Rough,PLAY_ROUGH,Normal
+mesmerian,Draining Kiss,DRAINING_KISS,Fairy
+mesmerian,Misty Terrain,MISTY_TERRAIN,Fairy
+mesmerian,Wish,WISH,Normal
+mesmerian,Protect,PROTECT,Normal
+mesmerian,Substitute,SUBSTITUTE,Normal
+mesmerian,Rest,REST,Psychic
+mesmerian,Sleep Talk,SLEEP_TALK,Normal
+mesmerian,Facade,FACADE,Normal
+mesmerian,Tera Blast,TERA_BLAST,Normal
+crustar,Surf,SURF,Water
+crustar,Hydro Pump,HYDRO_PUMP,Water
+crustar,Liquidation,LIQUIDATION,Water
+crustar,Rain Dance,RAIN_DANCE,Water
+crustar,Close Combat,CLOSE_COMBAT,Fighting
+crustar,Brick Break,BRICK_BREAK,Fighting
+crustar,Focus Blast,FOCUS_BLAST,Fighting
+crustar,Bulk Up,BULK_UP,Fighting
+crustar,Ice Punch,ICE_PUNCH,Ice
+crustar,Drain Punch,DRAIN_PUNCH,Fighting
+crustar,Protect,PROTECT,Normal
+crustar,Substitute,SUBSTITUTE,Normal
+crustar,Rest,REST,Psychic
+crustar,Sleep Talk,SLEEP_TALK,Normal
+crustar,Facade,FACADE,Normal
+crustar,Tera Blast,TERA_BLAST,Normal
+mega_crustar,Surf,SURF,Water
+mega_crustar,Hydro Pump,HYDRO_PUMP,Water
+mega_crustar,Liquidation,LIQUIDATION,Water
+mega_crustar,Rain Dance,RAIN_DANCE,Water
+mega_crustar,Close Combat,CLOSE_COMBAT,Fighting
+mega_crustar,Brick Break,BRICK_BREAK,Fighting
+mega_crustar,Focus Blast,FOCUS_BLAST,Fighting
+mega_crustar,Bulk Up,BULK_UP,Fighting
+mega_crustar,Ice Punch,ICE_PUNCH,Ice
+mega_crustar,Drain Punch,DRAIN_PUNCH,Fighting
+mega_crustar,Protect,PROTECT,Normal
+mega_crustar,Substitute,SUBSTITUTE,Normal
+mega_crustar,Rest,REST,Psychic
+mega_crustar,Sleep Talk,SLEEP_TALK,Normal
+mega_crustar,Facade,FACADE,Normal
+mega_crustar,Tera Blast,TERA_BLAST,Normal
+abysskrab,Surf,SURF,Water
+abysskrab,Hydro Pump,HYDRO_PUMP,Water
+abysskrab,Liquidation,LIQUIDATION,Water
+abysskrab,Rain Dance,RAIN_DANCE,Water
+abysskrab,Crunch,CRUNCH,Dark
+abysskrab,Dark Pulse,DARK_PULSE,Dark
+abysskrab,Knock Off,KNOCK_OFF,Dark
+abysskrab,Taunt,TAUNT,Dark
+abysskrab,Swords Dance,SWORDS_DANCE,Normal
+abysskrab,X-Scissor,X_SCISSOR,Bug
+abysskrab,Protect,PROTECT,Normal
+abysskrab,Substitute,SUBSTITUTE,Normal
+abysskrab,Rest,REST,Psychic
+abysskrab,Sleep Talk,SLEEP_TALK,Normal
+abysskrab,Facade,FACADE,Normal
+abysskrab,Tera Blast,TERA_BLAST,Normal
+mega_abysskrab,Surf,SURF,Water
+mega_abysskrab,Hydro Pump,HYDRO_PUMP,Water
+mega_abysskrab,Liquidation,LIQUIDATION,Water
+mega_abysskrab,Rain Dance,RAIN_DANCE,Water
+mega_abysskrab,Crunch,CRUNCH,Dark
+mega_abysskrab,Dark Pulse,DARK_PULSE,Dark
+mega_abysskrab,Knock Off,KNOCK_OFF,Dark
+mega_abysskrab,Taunt,TAUNT,Dark
+mega_abysskrab,Swords Dance,SWORDS_DANCE,Normal
+mega_abysskrab,X-Scissor,X_SCISSOR,Bug
+mega_abysskrab,Protect,PROTECT,Normal
+mega_abysskrab,Substitute,SUBSTITUTE,Normal
+mega_abysskrab,Rest,REST,Psychic
+mega_abysskrab,Sleep Talk,SLEEP_TALK,Normal
+mega_abysskrab,Facade,FACADE,Normal
+mega_abysskrab,Tera Blast,TERA_BLAST,Normal
+electrolux,Thunderbolt,THUNDERBOLT,Electric
+electrolux,Thunder,THUNDER,Electric
+electrolux,Volt Switch,VOLT_SWITCH,Electric
+electrolux,Thunder Wave,THUNDER_WAVE,Electric
+electrolux,Flash Cannon,FLASH_CANNON,Steel
+electrolux,Iron Head,IRON_HEAD,Steel
+electrolux,Heavy Slam,HEAVY_SLAM,Steel
+electrolux,Iron Defense,IRON_DEFENSE,Steel
+electrolux,Explosion,EXPLOSION,Normal
+electrolux,Discharge,DISCHARGE,Electric
+electrolux,Protect,PROTECT,Normal
+electrolux,Substitute,SUBSTITUTE,Normal
+electrolux,Rest,REST,Psychic
+electrolux,Sleep Talk,SLEEP_TALK,Normal
+electrolux,Facade,FACADE,Normal
+electrolux,Tera Blast,TERA_BLAST,Normal
+ancient_exeggutor,Energy Ball,ENERGY_BALL,Grass
+ancient_exeggutor,Giga Drain,GIGA_DRAIN,Grass
+ancient_exeggutor,Solar Beam,SOLAR_BEAM,Grass
+ancient_exeggutor,Seed Bomb,SEED_BOMB,Grass
+ancient_exeggutor,Stone Edge,STONE_EDGE,Rock
+ancient_exeggutor,Rock Slide,ROCK_SLIDE,Rock
+ancient_exeggutor,Stealth Rock,STEALTH_ROCK,Rock
+ancient_exeggutor,Power Gem,POWER_GEM,Rock
+ancient_exeggutor,Earthquake,EARTHQUAKE,Ground
+ancient_exeggutor,Trick Room,TRICK_ROOM,Psychic
+ancient_exeggutor,Protect,PROTECT,Normal
+ancient_exeggutor,Substitute,SUBSTITUTE,Normal
+ancient_exeggutor,Rest,REST,Psychic
+ancient_exeggutor,Sleep Talk,SLEEP_TALK,Normal
+ancient_exeggutor,Facade,FACADE,Normal
+ancient_exeggutor,Tera Blast,TERA_BLAST,Normal
+nightmare_exeggutor,Energy Ball,ENERGY_BALL,Grass
+nightmare_exeggutor,Giga Drain,GIGA_DRAIN,Grass
+nightmare_exeggutor,Solar Beam,SOLAR_BEAM,Grass
+nightmare_exeggutor,Seed Bomb,SEED_BOMB,Grass
+nightmare_exeggutor,Shadow Ball,SHADOW_BALL,Ghost
+nightmare_exeggutor,Shadow Claw,SHADOW_CLAW,Ghost
+nightmare_exeggutor,Hex,HEX,Ghost
+nightmare_exeggutor,Will-O-Wisp,WILL_O_WISP,Fire
+nightmare_exeggutor,Protect,PROTECT,Normal
+nightmare_exeggutor,Substitute,SUBSTITUTE,Normal
+nightmare_exeggutor,Rest,REST,Psychic
+nightmare_exeggutor,Sleep Talk,SLEEP_TALK,Normal
+nightmare_exeggutor,Facade,FACADE,Normal
+nightmare_exeggutor,Tera Blast,TERA_BLAST,Normal
+bonemaw,Earthquake,EARTHQUAKE,Ground
+bonemaw,Earth Power,EARTH_POWER,Ground
+bonemaw,Dig,DIG,Ground
+bonemaw,Bulldoze,BULLDOZE,Ground
+bonemaw,Shadow Ball,SHADOW_BALL,Ghost
+bonemaw,Shadow Claw,SHADOW_CLAW,Ghost
+bonemaw,Hex,HEX,Ghost
+bonemaw,Will-O-Wisp,WILL_O_WISP,Fire
+bonemaw,Swords Dance,SWORDS_DANCE,Normal
+bonemaw,Stone Edge,STONE_EDGE,Rock
+bonemaw,Protect,PROTECT,Normal
+bonemaw,Substitute,SUBSTITUTE,Normal
+bonemaw,Rest,REST,Psychic
+bonemaw,Sleep Talk,SLEEP_TALK,Normal
+bonemaw,Facade,FACADE,Normal
+bonemaw,Tera Blast,TERA_BLAST,Normal
+mega_bonemaw,Earthquake,EARTHQUAKE,Ground
+mega_bonemaw,Earth Power,EARTH_POWER,Ground
+mega_bonemaw,Dig,DIG,Ground
+mega_bonemaw,Bulldoze,BULLDOZE,Ground
+mega_bonemaw,Shadow Ball,SHADOW_BALL,Ghost
+mega_bonemaw,Shadow Claw,SHADOW_CLAW,Ghost
+mega_bonemaw,Hex,HEX,Ghost
+mega_bonemaw,Will-O-Wisp,WILL_O_WISP,Fire
+mega_bonemaw,Swords Dance,SWORDS_DANCE,Normal
+mega_bonemaw,Stone Edge,STONE_EDGE,Rock
+mega_bonemaw,Protect,PROTECT,Normal
+mega_bonemaw,Substitute,SUBSTITUTE,Normal
+mega_bonemaw,Rest,REST,Psychic
+mega_bonemaw,Sleep Talk,SLEEP_TALK,Normal
+mega_bonemaw,Facade,FACADE,Normal
+mega_bonemaw,Tera Blast,TERA_BLAST,Normal
+fumegon,Sludge Bomb,SLUDGE_BOMB,Poison
+fumegon,Poison Jab,POISON_JAB,Poison
+fumegon,Gunk Shot,GUNK_SHOT,Poison
+fumegon,Toxic,TOXIC,Poison
+fumegon,Flamethrower,FLAMETHROWER,Fire
+fumegon,Fire Blast,FIRE_BLAST,Fire
+fumegon,Will-O-Wisp,WILL_O_WISP,Fire
+fumegon,Flare Blitz,FLARE_BLITZ,Fire
+fumegon,Toxic Spikes,TOXIC_SPIKES,Poison
+fumegon,Overheat,OVERHEAT,Fire
+fumegon,Protect,PROTECT,Normal
+fumegon,Substitute,SUBSTITUTE,Normal
+fumegon,Rest,REST,Psychic
+fumegon,Sleep Talk,SLEEP_TALK,Normal
+fumegon,Facade,FACADE,Normal
+fumegon,Tera Blast,TERA_BLAST,Normal
+dynamax_rhyperior,Earthquake,EARTHQUAKE,Ground
+dynamax_rhyperior,Earth Power,EARTH_POWER,Ground
+dynamax_rhyperior,Dig,DIG,Ground
+dynamax_rhyperior,Bulldoze,BULLDOZE,Ground
+dynamax_rhyperior,Stone Edge,STONE_EDGE,Rock
+dynamax_rhyperior,Rock Slide,ROCK_SLIDE,Rock
+dynamax_rhyperior,Stealth Rock,STEALTH_ROCK,Rock
+dynamax_rhyperior,Power Gem,POWER_GEM,Rock
+dynamax_rhyperior,Rock Polish,ROCK_POLISH,Rock
+dynamax_rhyperior,Protect,PROTECT,Normal
+dynamax_rhyperior,Substitute,SUBSTITUTE,Normal
+dynamax_rhyperior,Rest,REST,Psychic
+dynamax_rhyperior,Sleep Talk,SLEEP_TALK,Normal
+dynamax_rhyperior,Facade,FACADE,Normal
+dynamax_rhyperior,Tera Blast,TERA_BLAST,Normal
+mega_blissey,Body Slam,BODY_SLAM,Normal
+mega_blissey,Hyper Voice,HYPER_VOICE,Normal
+mega_blissey,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+mega_blissey,Play Rough,PLAY_ROUGH,Normal
+mega_blissey,Draining Kiss,DRAINING_KISS,Fairy
+mega_blissey,Misty Terrain,MISTY_TERRAIN,Fairy
+mega_blissey,Calm Mind,CALM_MIND,Psychic
+mega_blissey,Protect,PROTECT,Normal
+mega_blissey,Substitute,SUBSTITUTE,Normal
+mega_blissey,Rest,REST,Psychic
+mega_blissey,Sleep Talk,SLEEP_TALK,Normal
+mega_blissey,Facade,FACADE,Normal
+mega_blissey,Tera Blast,TERA_BLAST,Normal
+dynamax_tangrowth,Energy Ball,ENERGY_BALL,Grass
+dynamax_tangrowth,Giga Drain,GIGA_DRAIN,Grass
+dynamax_tangrowth,Solar Beam,SOLAR_BEAM,Grass
+dynamax_tangrowth,Seed Bomb,SEED_BOMB,Grass
+dynamax_tangrowth,Earthquake,EARTHQUAKE,Ground
+dynamax_tangrowth,Protect,PROTECT,Normal
+dynamax_tangrowth,Substitute,SUBSTITUTE,Normal
+dynamax_tangrowth,Rest,REST,Psychic
+dynamax_tangrowth,Sleep Talk,SLEEP_TALK,Normal
+dynamax_tangrowth,Facade,FACADE,Normal
+dynamax_tangrowth,Tera Blast,TERA_BLAST,Normal
+kangakid,Body Slam,BODY_SLAM,Normal
+kangakid,Hyper Voice,HYPER_VOICE,Normal
+kangakid,Fake Out,FAKE_OUT,Normal
+kangakid,Protect,PROTECT,Normal
+kangakid,Substitute,SUBSTITUTE,Normal
+kangakid,Rest,REST,Psychic
+kangakid,Sleep Talk,SLEEP_TALK,Normal
+kangakid,Facade,FACADE,Normal
+kangakid,Tera Blast,TERA_BLAST,Normal
+dracoral,Surf,SURF,Water
+dracoral,Hydro Pump,HYDRO_PUMP,Water
+dracoral,Liquidation,LIQUIDATION,Water
+dracoral,Rain Dance,RAIN_DANCE,Water
+dracoral,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+dracoral,Play Rough,PLAY_ROUGH,Normal
+dracoral,Draining Kiss,DRAINING_KISS,Fairy
+dracoral,Misty Terrain,MISTY_TERRAIN,Fairy
+dracoral,Dragon Pulse,DRAGON_PULSE,Dragon
+dracoral,Calm Mind,CALM_MIND,Psychic
+dracoral,Ice Beam,ICE_BEAM,Ice
+dracoral,Protect,PROTECT,Normal
+dracoral,Substitute,SUBSTITUTE,Normal
+dracoral,Rest,REST,Psychic
+dracoral,Sleep Talk,SLEEP_TALK,Normal
+dracoral,Facade,FACADE,Normal
+dracoral,Tera Blast,TERA_BLAST,Normal
+venomdra,Sludge Bomb,SLUDGE_BOMB,Poison
+venomdra,Poison Jab,POISON_JAB,Poison
+venomdra,Gunk Shot,GUNK_SHOT,Poison
+venomdra,Toxic,TOXIC,Poison
+venomdra,Dragon Pulse,DRAGON_PULSE,Dragon
+venomdra,Dragon Claw,DRAGON_CLAW,Dragon
+venomdra,Outrage,OUTRAGE,Dragon
+venomdra,Draco Meteor,DRACO_METEOR,Dragon
+venomdra,Hydro Pump,HYDRO_PUMP,Water
+venomdra,Protect,PROTECT,Normal
+venomdra,Substitute,SUBSTITUTE,Normal
+venomdra,Rest,REST,Psychic
+venomdra,Sleep Talk,SLEEP_TALK,Normal
+venomdra,Facade,FACADE,Normal
+venomdra,Tera Blast,TERA_BLAST,Normal
+mega_kingdra,Surf,SURF,Water
+mega_kingdra,Hydro Pump,HYDRO_PUMP,Water
+mega_kingdra,Liquidation,LIQUIDATION,Water
+mega_kingdra,Rain Dance,RAIN_DANCE,Water
+mega_kingdra,Dragon Pulse,DRAGON_PULSE,Dragon
+mega_kingdra,Dragon Claw,DRAGON_CLAW,Dragon
+mega_kingdra,Outrage,OUTRAGE,Dragon
+mega_kingdra,Draco Meteor,DRACO_METEOR,Dragon
+mega_kingdra,Dragon Dance,DRAGON_DANCE,Dragon
+mega_kingdra,Waterfall,WATERFALL,Water
+mega_kingdra,Protect,PROTECT,Normal
+mega_kingdra,Substitute,SUBSTITUTE,Normal
+mega_kingdra,Rest,REST,Psychic
+mega_kingdra,Sleep Talk,SLEEP_TALK,Normal
+mega_kingdra,Facade,FACADE,Normal
+mega_kingdra,Tera Blast,TERA_BLAST,Normal
+kingfisher,Surf,SURF,Water
+kingfisher,Hydro Pump,HYDRO_PUMP,Water
+kingfisher,Liquidation,LIQUIDATION,Water
+kingfisher,Rain Dance,RAIN_DANCE,Water
+kingfisher,Brave Bird,BRAVE_BIRD,Flying
+kingfisher,Air Slash,AIR_SLASH,Flying
+kingfisher,Aerial Ace,AERIAL_ACE,Flying
+kingfisher,Tailwind,TAILWIND,Flying
+kingfisher,Waterfall,WATERFALL,Water
+kingfisher,Drill Run,DRILL_RUN,Ground
+kingfisher,Swords Dance,SWORDS_DANCE,Normal
+kingfisher,Protect,PROTECT,Normal
+kingfisher,Substitute,SUBSTITUTE,Normal
+kingfisher,Rest,REST,Psychic
+kingfisher,Sleep Talk,SLEEP_TALK,Normal
+kingfisher,Facade,FACADE,Normal
+kingfisher,Tera Blast,TERA_BLAST,Normal
+mimejest,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+mimejest,Play Rough,PLAY_ROUGH,Normal
+mimejest,Draining Kiss,DRAINING_KISS,Fairy
+mimejest,Misty Terrain,MISTY_TERRAIN,Fairy
+mimejest,Crunch,CRUNCH,Dark
+mimejest,Dark Pulse,DARK_PULSE,Dark
+mimejest,Knock Off,KNOCK_OFF,Dark
+mimejest,Taunt,TAUNT,Dark
+mimejest,Nasty Plot,NASTY_PLOT,Dark
+mimejest,Trick,TRICK,Psychic
+mimejest,Protect,PROTECT,Normal
+mimejest,Substitute,SUBSTITUTE,Normal
+mimejest,Rest,REST,Psychic
+mimejest,Sleep Talk,SLEEP_TALK,Normal
+mimejest,Facade,FACADE,Normal
+mimejest,Tera Blast,TERA_BLAST,Normal
+pantomime,Psychic,PSYCHIC,Psychic
+pantomime,Psyshock,PSYSHOCK,Psychic
+pantomime,Zen Headbutt,ZEN_HEADBUTT,Psychic
+pantomime,Calm Mind,CALM_MIND,Psychic
+pantomime,Shadow Ball,SHADOW_BALL,Ghost
+pantomime,Shadow Claw,SHADOW_CLAW,Ghost
+pantomime,Hex,HEX,Ghost
+pantomime,Will-O-Wisp,WILL_O_WISP,Fire
+pantomime,Trick Room,TRICK_ROOM,Psychic
+pantomime,Reflect,REFLECT,Psychic
+pantomime,Protect,PROTECT,Normal
+pantomime,Substitute,SUBSTITUTE,Normal
+pantomime,Rest,REST,Psychic
+pantomime,Sleep Talk,SLEEP_TALK,Normal
+pantomime,Facade,FACADE,Normal
+pantomime,Tera Blast,TERA_BLAST,Normal
+mimeguard,Psychic,PSYCHIC,Psychic
+mimeguard,Psyshock,PSYSHOCK,Psychic
+mimeguard,Zen Headbutt,ZEN_HEADBUTT,Psychic
+mimeguard,Calm Mind,CALM_MIND,Psychic
+mimeguard,Flash Cannon,FLASH_CANNON,Steel
+mimeguard,Iron Head,IRON_HEAD,Steel
+mimeguard,Heavy Slam,HEAVY_SLAM,Steel
+mimeguard,Iron Defense,IRON_DEFENSE,Steel
+mimeguard,Light Screen,LIGHT_SCREEN,Psychic
+mimeguard,Reflect,REFLECT,Psychic
+mimeguard,Body Press,BODY_PRESS,Fighting
+mimeguard,Protect,PROTECT,Normal
+mimeguard,Substitute,SUBSTITUTE,Normal
+mimeguard,Rest,REST,Psychic
+mimeguard,Sleep Talk,SLEEP_TALK,Normal
+mimeguard,Facade,FACADE,Normal
+mimeguard,Tera Blast,TERA_BLAST,Normal
+scythling,X-Scissor,X_SCISSOR,Bug
+scythling,Bug Buzz,BUG_BUZZ,Bug
+scythling,U-turn,U_TURN,Bug
+scythling,Brave Bird,BRAVE_BIRD,Flying
+scythling,Air Slash,AIR_SLASH,Flying
+scythling,Aerial Ace,AERIAL_ACE,Flying
+scythling,Tailwind,TAILWIND,Flying
+scythling,Protect,PROTECT,Normal
+scythling,Substitute,SUBSTITUTE,Normal
+scythling,Rest,REST,Psychic
+scythling,Sleep Talk,SLEEP_TALK,Normal
+scythling,Facade,FACADE,Normal
+scythling,Tera Blast,TERA_BLAST,Normal
+empressia,Ice Beam,ICE_BEAM,Ice
+empressia,Blizzard,BLIZZARD,Ice
+empressia,Icy Wind,ICY_WIND,Ice
+empressia,Ice Punch,ICE_PUNCH,Ice
+empressia,Psychic,PSYCHIC,Psychic
+empressia,Psyshock,PSYSHOCK,Psychic
+empressia,Zen Headbutt,ZEN_HEADBUTT,Psychic
+empressia,Calm Mind,CALM_MIND,Psychic
+empressia,Protect,PROTECT,Normal
+empressia,Substitute,SUBSTITUTE,Normal
+empressia,Rest,REST,Psychic
+empressia,Sleep Talk,SLEEP_TALK,Normal
+empressia,Facade,FACADE,Normal
+empressia,Tera Blast,TERA_BLAST,Normal
+pinchit,X-Scissor,X_SCISSOR,Bug
+pinchit,Bug Buzz,BUG_BUZZ,Bug
+pinchit,U-turn,U_TURN,Bug
+pinchit,Bug Bite,BUG_BITE,Bug
+pinchit,Protect,PROTECT,Normal
+pinchit,Substitute,SUBSTITUTE,Normal
+pinchit,Rest,REST,Psychic
+pinchit,Sleep Talk,SLEEP_TALK,Normal
+pinchit,Facade,FACADE,Normal
+pinchit,Tera Blast,TERA_BLAST,Normal
+pincero,X-Scissor,X_SCISSOR,Bug
+pincero,Bug Buzz,BUG_BUZZ,Bug
+pincero,U-turn,U_TURN,Bug
+pincero,Close Combat,CLOSE_COMBAT,Fighting
+pincero,Brick Break,BRICK_BREAK,Fighting
+pincero,Focus Blast,FOCUS_BLAST,Fighting
+pincero,Bulk Up,BULK_UP,Fighting
+pincero,Swords Dance,SWORDS_DANCE,Normal
+pincero,Protect,PROTECT,Normal
+pincero,Substitute,SUBSTITUTE,Normal
+pincero,Rest,REST,Psychic
+pincero,Sleep Talk,SLEEP_TALK,Normal
+pincero,Facade,FACADE,Normal
+pincero,Tera Blast,TERA_BLAST,Normal
+calfros,Body Slam,BODY_SLAM,Normal
+calfros,Hyper Voice,HYPER_VOICE,Normal
+calfros,Protect,PROTECT,Normal
+calfros,Substitute,SUBSTITUTE,Normal
+calfros,Rest,REST,Psychic
+calfros,Sleep Talk,SLEEP_TALK,Normal
+calfros,Facade,FACADE,Normal
+calfros,Tera Blast,TERA_BLAST,Normal
+tauradon,Body Slam,BODY_SLAM,Normal
+tauradon,Hyper Voice,HYPER_VOICE,Normal
+tauradon,Earthquake,EARTHQUAKE,Ground
+tauradon,Earth Power,EARTH_POWER,Ground
+tauradon,Dig,DIG,Ground
+tauradon,Bulldoze,BULLDOZE,Ground
+tauradon,Double-Edge,DOUBLE_EDGE,Normal
+tauradon,Close Combat,CLOSE_COMBAT,Fighting
+tauradon,Bulk Up,BULK_UP,Fighting
+tauradon,Stone Edge,STONE_EDGE,Rock
+tauradon,Zen Headbutt,ZEN_HEADBUTT,Psychic
+tauradon,Protect,PROTECT,Normal
+tauradon,Substitute,SUBSTITUTE,Normal
+tauradon,Rest,REST,Psychic
+tauradon,Sleep Talk,SLEEP_TALK,Normal
+tauradon,Facade,FACADE,Normal
+tauradon,Tera Blast,TERA_BLAST,Normal
+lapling,Surf,SURF,Water
+lapling,Hydro Pump,HYDRO_PUMP,Water
+lapling,Liquidation,LIQUIDATION,Water
+lapling,Rain Dance,RAIN_DANCE,Water
+lapling,Ice Beam,ICE_BEAM,Ice
+lapling,Blizzard,BLIZZARD,Ice
+lapling,Icy Wind,ICY_WIND,Ice
+lapling,Ice Punch,ICE_PUNCH,Ice
+lapling,Water Pulse,WATER_PULSE,Water
+lapling,Protect,PROTECT,Normal
+lapling,Substitute,SUBSTITUTE,Normal
+lapling,Rest,REST,Psychic
+lapling,Sleep Talk,SLEEP_TALK,Normal
+lapling,Facade,FACADE,Normal
+lapling,Tera Blast,TERA_BLAST,Normal
+kabutyrant,Stone Edge,STONE_EDGE,Rock
+kabutyrant,Rock Slide,ROCK_SLIDE,Rock
+kabutyrant,Stealth Rock,STEALTH_ROCK,Rock
+kabutyrant,Power Gem,POWER_GEM,Rock
+kabutyrant,Crunch,CRUNCH,Dark
+kabutyrant,Dark Pulse,DARK_PULSE,Dark
+kabutyrant,Knock Off,KNOCK_OFF,Dark
+kabutyrant,Taunt,TAUNT,Dark
+kabutyrant,Swords Dance,SWORDS_DANCE,Normal
+kabutyrant,Liquidation,LIQUIDATION,Water
+kabutyrant,Protect,PROTECT,Normal
+kabutyrant,Substitute,SUBSTITUTE,Normal
+kabutyrant,Rest,REST,Psychic
+kabutyrant,Sleep Talk,SLEEP_TALK,Normal
+kabutyrant,Facade,FACADE,Normal
+kabutyrant,Tera Blast,TERA_BLAST,Normal
+snowman_snorlax,Ice Beam,ICE_BEAM,Ice
+snowman_snorlax,Blizzard,BLIZZARD,Ice
+snowman_snorlax,Icy Wind,ICY_WIND,Ice
+snowman_snorlax,Ice Punch,ICE_PUNCH,Ice
+snowman_snorlax,Body Slam,BODY_SLAM,Normal
+snowman_snorlax,Hyper Voice,HYPER_VOICE,Normal
+snowman_snorlax,Curse,CURSE,Ghost
+snowman_snorlax,Rest,REST,Psychic
+snowman_snorlax,Yawn,YAWN,Normal
+snowman_snorlax,Protect,PROTECT,Normal
+snowman_snorlax,Substitute,SUBSTITUTE,Normal
+snowman_snorlax,Sleep Talk,SLEEP_TALK,Normal
+snowman_snorlax,Facade,FACADE,Normal
+snowman_snorlax,Tera Blast,TERA_BLAST,Normal
+snorlord,Body Slam,BODY_SLAM,Normal
+snorlord,Hyper Voice,HYPER_VOICE,Normal
+snorlord,Earthquake,EARTHQUAKE,Ground
+snorlord,Earth Power,EARTH_POWER,Ground
+snorlord,Dig,DIG,Ground
+snorlord,Bulldoze,BULLDOZE,Ground
+snorlord,Curse,CURSE,Ghost
+snorlord,Rest,REST,Psychic
+snorlord,Heavy Slam,HEAVY_SLAM,Steel
+snorlord,Protect,PROTECT,Normal
+snorlord,Substitute,SUBSTITUTE,Normal
+snorlord,Sleep Talk,SLEEP_TALK,Normal
+snorlord,Facade,FACADE,Normal
+snorlord,Tera Blast,TERA_BLAST,Normal
+mega_articuno,Ice Beam,ICE_BEAM,Ice
+mega_articuno,Blizzard,BLIZZARD,Ice
+mega_articuno,Icy Wind,ICY_WIND,Ice
+mega_articuno,Ice Punch,ICE_PUNCH,Ice
+mega_articuno,Brave Bird,BRAVE_BIRD,Flying
+mega_articuno,Air Slash,AIR_SLASH,Flying
+mega_articuno,Aerial Ace,AERIAL_ACE,Flying
+mega_articuno,Tailwind,TAILWIND,Flying
+mega_articuno,Hurricane,HURRICANE,Flying
+mega_articuno,Calm Mind,CALM_MIND,Psychic
+mega_articuno,Protect,PROTECT,Normal
+mega_articuno,Substitute,SUBSTITUTE,Normal
+mega_articuno,Rest,REST,Psychic
+mega_articuno,Sleep Talk,SLEEP_TALK,Normal
+mega_articuno,Facade,FACADE,Normal
+mega_articuno,Tera Blast,TERA_BLAST,Normal
+mega_zapdos,Thunderbolt,THUNDERBOLT,Electric
+mega_zapdos,Thunder,THUNDER,Electric
+mega_zapdos,Volt Switch,VOLT_SWITCH,Electric
+mega_zapdos,Thunder Wave,THUNDER_WAVE,Electric
+mega_zapdos,Brave Bird,BRAVE_BIRD,Flying
+mega_zapdos,Air Slash,AIR_SLASH,Flying
+mega_zapdos,Aerial Ace,AERIAL_ACE,Flying
+mega_zapdos,Tailwind,TAILWIND,Flying
+mega_zapdos,Hurricane,HURRICANE,Flying
+mega_zapdos,Heat Wave,HEAT_WAVE,Fire
+mega_zapdos,Protect,PROTECT,Normal
+mega_zapdos,Substitute,SUBSTITUTE,Normal
+mega_zapdos,Rest,REST,Psychic
+mega_zapdos,Sleep Talk,SLEEP_TALK,Normal
+mega_zapdos,Facade,FACADE,Normal
+mega_zapdos,Tera Blast,TERA_BLAST,Normal
+mega_moltres,Flamethrower,FLAMETHROWER,Fire
+mega_moltres,Fire Blast,FIRE_BLAST,Fire
+mega_moltres,Will-O-Wisp,WILL_O_WISP,Fire
+mega_moltres,Flare Blitz,FLARE_BLITZ,Fire
+mega_moltres,Brave Bird,BRAVE_BIRD,Flying
+mega_moltres,Air Slash,AIR_SLASH,Flying
+mega_moltres,Aerial Ace,AERIAL_ACE,Flying
+mega_moltres,Tailwind,TAILWIND,Flying
+mega_moltres,Hurricane,HURRICANE,Flying
+mega_moltres,Protect,PROTECT,Normal
+mega_moltres,Substitute,SUBSTITUTE,Normal
+mega_moltres,Rest,REST,Psychic
+mega_moltres,Sleep Talk,SLEEP_TALK,Normal
+mega_moltres,Facade,FACADE,Normal
+mega_moltres,Tera Blast,TERA_BLAST,Normal
+mega_mewtwo_z,Psychic,PSYCHIC,Psychic
+mega_mewtwo_z,Psyshock,PSYSHOCK,Psychic
+mega_mewtwo_z,Zen Headbutt,ZEN_HEADBUTT,Psychic
+mega_mewtwo_z,Calm Mind,CALM_MIND,Psychic
+mega_mewtwo_z,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+mega_mewtwo_z,Play Rough,PLAY_ROUGH,Normal
+mega_mewtwo_z,Draining Kiss,DRAINING_KISS,Fairy
+mega_mewtwo_z,Misty Terrain,MISTY_TERRAIN,Fairy
+mega_mewtwo_z,Close Combat,CLOSE_COMBAT,Fighting
+mega_mewtwo_z,Bulk Up,BULK_UP,Fighting
+mega_mewtwo_z,Ice Punch,ICE_PUNCH,Ice
+mega_mewtwo_z,Protect,PROTECT,Normal
+mega_mewtwo_z,Substitute,SUBSTITUTE,Normal
+mega_mewtwo_z,Rest,REST,Psychic
+mega_mewtwo_z,Sleep Talk,SLEEP_TALK,Normal
+mega_mewtwo_z,Facade,FACADE,Normal
+mega_mewtwo_z,Tera Blast,TERA_BLAST,Normal
+mega_mew_z,Psychic,PSYCHIC,Psychic
+mega_mew_z,Psyshock,PSYSHOCK,Psychic
+mega_mew_z,Zen Headbutt,ZEN_HEADBUTT,Psychic
+mega_mew_z,Calm Mind,CALM_MIND,Psychic
+mega_mew_z,Dragon Pulse,DRAGON_PULSE,Dragon
+mega_mew_z,Dragon Claw,DRAGON_CLAW,Dragon
+mega_mew_z,Outrage,OUTRAGE,Dragon
+mega_mew_z,Draco Meteor,DRACO_METEOR,Dragon
+mega_mew_z,Nasty Plot,NASTY_PLOT,Dark
+mega_mew_z,Protect,PROTECT,Normal
+mega_mew_z,Substitute,SUBSTITUTE,Normal
+mega_mew_z,Rest,REST,Psychic
+mega_mew_z,Sleep Talk,SLEEP_TALK,Normal
+mega_mew_z,Facade,FACADE,Normal
+mega_mew_z,Tera Blast,TERA_BLAST,Normal
+ferretitan,Body Slam,BODY_SLAM,Normal
+ferretitan,Hyper Voice,HYPER_VOICE,Normal
+ferretitan,Close Combat,CLOSE_COMBAT,Fighting
+ferretitan,Brick Break,BRICK_BREAK,Fighting
+ferretitan,Focus Blast,FOCUS_BLAST,Fighting
+ferretitan,Bulk Up,BULK_UP,Fighting
+ferretitan,Double-Edge,DOUBLE_EDGE,Normal
+ferretitan,Knock Off,KNOCK_OFF,Dark
+ferretitan,U-turn,U_TURN,Bug
+ferretitan,Drain Punch,DRAIN_PUNCH,Fighting
+ferretitan,Protect,PROTECT,Normal
+ferretitan,Substitute,SUBSTITUTE,Normal
+ferretitan,Rest,REST,Psychic
+ferretitan,Sleep Talk,SLEEP_TALK,Normal
+ferretitan,Facade,FACADE,Normal
+ferretitan,Tera Blast,TERA_BLAST,Normal
+mega_ferretitan,Body Slam,BODY_SLAM,Normal
+mega_ferretitan,Hyper Voice,HYPER_VOICE,Normal
+mega_ferretitan,Close Combat,CLOSE_COMBAT,Fighting
+mega_ferretitan,Brick Break,BRICK_BREAK,Fighting
+mega_ferretitan,Focus Blast,FOCUS_BLAST,Fighting
+mega_ferretitan,Bulk Up,BULK_UP,Fighting
+mega_ferretitan,Double-Edge,DOUBLE_EDGE,Normal
+mega_ferretitan,Knock Off,KNOCK_OFF,Dark
+mega_ferretitan,U-turn,U_TURN,Bug
+mega_ferretitan,Drain Punch,DRAIN_PUNCH,Fighting
+mega_ferretitan,Protect,PROTECT,Normal
+mega_ferretitan,Substitute,SUBSTITUTE,Normal
+mega_ferretitan,Rest,REST,Psychic
+mega_ferretitan,Sleep Talk,SLEEP_TALK,Normal
+mega_ferretitan,Facade,FACADE,Normal
+mega_ferretitan,Tera Blast,TERA_BLAST,Normal
+astraladin,X-Scissor,X_SCISSOR,Bug
+astraladin,Bug Buzz,BUG_BUZZ,Bug
+astraladin,U-turn,U_TURN,Bug
+astraladin,Close Combat,CLOSE_COMBAT,Fighting
+astraladin,Brick Break,BRICK_BREAK,Fighting
+astraladin,Focus Blast,FOCUS_BLAST,Fighting
+astraladin,Bulk Up,BULK_UP,Fighting
+astraladin,Drain Punch,DRAIN_PUNCH,Fighting
+astraladin,Ice Punch,ICE_PUNCH,Ice
+astraladin,Thunder Punch,THUNDER_PUNCH,Electric
+astraladin,Protect,PROTECT,Normal
+astraladin,Substitute,SUBSTITUTE,Normal
+astraladin,Rest,REST,Psychic
+astraladin,Sleep Talk,SLEEP_TALK,Normal
+astraladin,Facade,FACADE,Normal
+astraladin,Tera Blast,TERA_BLAST,Normal
+mega_astraladin,X-Scissor,X_SCISSOR,Bug
+mega_astraladin,Bug Buzz,BUG_BUZZ,Bug
+mega_astraladin,U-turn,U_TURN,Bug
+mega_astraladin,Close Combat,CLOSE_COMBAT,Fighting
+mega_astraladin,Brick Break,BRICK_BREAK,Fighting
+mega_astraladin,Focus Blast,FOCUS_BLAST,Fighting
+mega_astraladin,Bulk Up,BULK_UP,Fighting
+mega_astraladin,Drain Punch,DRAIN_PUNCH,Fighting
+mega_astraladin,Ice Punch,ICE_PUNCH,Ice
+mega_astraladin,Thunder Punch,THUNDER_PUNCH,Electric
+mega_astraladin,Protect,PROTECT,Normal
+mega_astraladin,Substitute,SUBSTITUTE,Normal
+mega_astraladin,Rest,REST,Psychic
+mega_astraladin,Sleep Talk,SLEEP_TALK,Normal
+mega_astraladin,Facade,FACADE,Normal
+mega_astraladin,Tera Blast,TERA_BLAST,Normal
+widowraith,X-Scissor,X_SCISSOR,Bug
+widowraith,Bug Buzz,BUG_BUZZ,Bug
+widowraith,U-turn,U_TURN,Bug
+widowraith,Shadow Ball,SHADOW_BALL,Ghost
+widowraith,Shadow Claw,SHADOW_CLAW,Ghost
+widowraith,Hex,HEX,Ghost
+widowraith,Will-O-Wisp,WILL_O_WISP,Fire
+widowraith,Poltergeist,POLTERGEIST,Ghost
+widowraith,Protect,PROTECT,Normal
+widowraith,Substitute,SUBSTITUTE,Normal
+widowraith,Rest,REST,Psychic
+widowraith,Sleep Talk,SLEEP_TALK,Normal
+widowraith,Facade,FACADE,Normal
+widowraith,Tera Blast,TERA_BLAST,Normal
+mega_widowraith,X-Scissor,X_SCISSOR,Bug
+mega_widowraith,Bug Buzz,BUG_BUZZ,Bug
+mega_widowraith,U-turn,U_TURN,Bug
+mega_widowraith,Shadow Ball,SHADOW_BALL,Ghost
+mega_widowraith,Shadow Claw,SHADOW_CLAW,Ghost
+mega_widowraith,Hex,HEX,Ghost
+mega_widowraith,Will-O-Wisp,WILL_O_WISP,Fire
+mega_widowraith,Poltergeist,POLTERGEIST,Ghost
+mega_widowraith,Protect,PROTECT,Normal
+mega_widowraith,Substitute,SUBSTITUTE,Normal
+mega_widowraith,Rest,REST,Psychic
+mega_widowraith,Sleep Talk,SLEEP_TALK,Normal
+mega_widowraith,Facade,FACADE,Normal
+mega_widowraith,Tera Blast,TERA_BLAST,Normal
+mega_crobat,Sludge Bomb,SLUDGE_BOMB,Poison
+mega_crobat,Poison Jab,POISON_JAB,Poison
+mega_crobat,Gunk Shot,GUNK_SHOT,Poison
+mega_crobat,Toxic,TOXIC,Poison
+mega_crobat,Brave Bird,BRAVE_BIRD,Flying
+mega_crobat,Air Slash,AIR_SLASH,Flying
+mega_crobat,Aerial Ace,AERIAL_ACE,Flying
+mega_crobat,Tailwind,TAILWIND,Flying
+mega_crobat,U-turn,U_TURN,Bug
+mega_crobat,Taunt,TAUNT,Dark
+mega_crobat,Protect,PROTECT,Normal
+mega_crobat,Substitute,SUBSTITUTE,Normal
+mega_crobat,Rest,REST,Psychic
+mega_crobat,Sleep Talk,SLEEP_TALK,Normal
+mega_crobat,Facade,FACADE,Normal
+mega_crobat,Tera Blast,TERA_BLAST,Normal
+abyssolume,Surf,SURF,Water
+abyssolume,Hydro Pump,HYDRO_PUMP,Water
+abyssolume,Liquidation,LIQUIDATION,Water
+abyssolume,Rain Dance,RAIN_DANCE,Water
+abyssolume,Thunderbolt,THUNDERBOLT,Electric
+abyssolume,Thunder,THUNDER,Electric
+abyssolume,Volt Switch,VOLT_SWITCH,Electric
+abyssolume,Thunder Wave,THUNDER_WAVE,Electric
+abyssolume,Discharge,DISCHARGE,Electric
+abyssolume,Ice Beam,ICE_BEAM,Ice
+abyssolume,Protect,PROTECT,Normal
+abyssolume,Substitute,SUBSTITUTE,Normal
+abyssolume,Rest,REST,Psychic
+abyssolume,Sleep Talk,SLEEP_TALK,Normal
+abyssolume,Facade,FACADE,Normal
+abyssolume,Tera Blast,TERA_BLAST,Normal
+togemuse,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+togemuse,Play Rough,PLAY_ROUGH,Normal
+togemuse,Draining Kiss,DRAINING_KISS,Fairy
+togemuse,Misty Terrain,MISTY_TERRAIN,Fairy
+togemuse,Psychic,PSYCHIC,Psychic
+togemuse,Psyshock,PSYSHOCK,Psychic
+togemuse,Zen Headbutt,ZEN_HEADBUTT,Psychic
+togemuse,Calm Mind,CALM_MIND,Psychic
+togemuse,Wish,WISH,Normal
+togemuse,Protect,PROTECT,Normal
+togemuse,Substitute,SUBSTITUTE,Normal
+togemuse,Rest,REST,Psychic
+togemuse,Sleep Talk,SLEEP_TALK,Normal
+togemuse,Facade,FACADE,Normal
+togemuse,Tera Blast,TERA_BLAST,Normal
+mega_togemuse,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+mega_togemuse,Play Rough,PLAY_ROUGH,Normal
+mega_togemuse,Draining Kiss,DRAINING_KISS,Fairy
+mega_togemuse,Misty Terrain,MISTY_TERRAIN,Fairy
+mega_togemuse,Psychic,PSYCHIC,Psychic
+mega_togemuse,Psyshock,PSYSHOCK,Psychic
+mega_togemuse,Zen Headbutt,ZEN_HEADBUTT,Psychic
+mega_togemuse,Calm Mind,CALM_MIND,Psychic
+mega_togemuse,Wish,WISH,Normal
+mega_togemuse,Protect,PROTECT,Normal
+mega_togemuse,Substitute,SUBSTITUTE,Normal
+mega_togemuse,Rest,REST,Psychic
+mega_togemuse,Sleep Talk,SLEEP_TALK,Normal
+mega_togemuse,Facade,FACADE,Normal
+mega_togemuse,Tera Blast,TERA_BLAST,Normal
+oculatu,Psychic,PSYCHIC,Psychic
+oculatu,Psyshock,PSYSHOCK,Psychic
+oculatu,Zen Headbutt,ZEN_HEADBUTT,Psychic
+oculatu,Calm Mind,CALM_MIND,Psychic
+oculatu,Brave Bird,BRAVE_BIRD,Flying
+oculatu,Air Slash,AIR_SLASH,Flying
+oculatu,Aerial Ace,AERIAL_ACE,Flying
+oculatu,Tailwind,TAILWIND,Flying
+oculatu,Heat Wave,HEAT_WAVE,Fire
+oculatu,Protect,PROTECT,Normal
+oculatu,Substitute,SUBSTITUTE,Normal
+oculatu,Rest,REST,Psychic
+oculatu,Sleep Talk,SLEEP_TALK,Normal
+oculatu,Facade,FACADE,Normal
+oculatu,Tera Blast,TERA_BLAST,Normal
+mega_oculatu,Psychic,PSYCHIC,Psychic
+mega_oculatu,Psyshock,PSYSHOCK,Psychic
+mega_oculatu,Zen Headbutt,ZEN_HEADBUTT,Psychic
+mega_oculatu,Calm Mind,CALM_MIND,Psychic
+mega_oculatu,Brave Bird,BRAVE_BIRD,Flying
+mega_oculatu,Air Slash,AIR_SLASH,Flying
+mega_oculatu,Aerial Ace,AERIAL_ACE,Flying
+mega_oculatu,Tailwind,TAILWIND,Flying
+mega_oculatu,Heat Wave,HEAT_WAVE,Fire
+mega_oculatu,Protect,PROTECT,Normal
+mega_oculatu,Substitute,SUBSTITUTE,Normal
+mega_oculatu,Rest,REST,Psychic
+mega_oculatu,Sleep Talk,SLEEP_TALK,Normal
+mega_oculatu,Facade,FACADE,Normal
+mega_oculatu,Tera Blast,TERA_BLAST,Normal
+mega_bellossom,Energy Ball,ENERGY_BALL,Grass
+mega_bellossom,Giga Drain,GIGA_DRAIN,Grass
+mega_bellossom,Solar Beam,SOLAR_BEAM,Grass
+mega_bellossom,Seed Bomb,SEED_BOMB,Grass
+mega_bellossom,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+mega_bellossom,Play Rough,PLAY_ROUGH,Normal
+mega_bellossom,Draining Kiss,DRAINING_KISS,Fairy
+mega_bellossom,Misty Terrain,MISTY_TERRAIN,Fairy
+mega_bellossom,Protect,PROTECT,Normal
+mega_bellossom,Substitute,SUBSTITUTE,Normal
+mega_bellossom,Rest,REST,Psychic
+mega_bellossom,Sleep Talk,SLEEP_TALK,Normal
+mega_bellossom,Facade,FACADE,Normal
+mega_bellossom,Tera Blast,TERA_BLAST,Normal
+petrarbor,Stone Edge,STONE_EDGE,Rock
+petrarbor,Rock Slide,ROCK_SLIDE,Rock
+petrarbor,Stealth Rock,STEALTH_ROCK,Rock
+petrarbor,Power Gem,POWER_GEM,Rock
+petrarbor,Energy Ball,ENERGY_BALL,Grass
+petrarbor,Giga Drain,GIGA_DRAIN,Grass
+petrarbor,Solar Beam,SOLAR_BEAM,Grass
+petrarbor,Seed Bomb,SEED_BOMB,Grass
+petrarbor,Earthquake,EARTHQUAKE,Ground
+petrarbor,Protect,PROTECT,Normal
+petrarbor,Substitute,SUBSTITUTE,Normal
+petrarbor,Rest,REST,Psychic
+petrarbor,Sleep Talk,SLEEP_TALK,Normal
+petrarbor,Facade,FACADE,Normal
+petrarbor,Tera Blast,TERA_BLAST,Normal
+mega_politoed,Surf,SURF,Water
+mega_politoed,Hydro Pump,HYDRO_PUMP,Water
+mega_politoed,Liquidation,LIQUIDATION,Water
+mega_politoed,Rain Dance,RAIN_DANCE,Water
+mega_politoed,Psychic,PSYCHIC,Psychic
+mega_politoed,Psyshock,PSYSHOCK,Psychic
+mega_politoed,Zen Headbutt,ZEN_HEADBUTT,Psychic
+mega_politoed,Calm Mind,CALM_MIND,Psychic
+mega_politoed,Ice Beam,ICE_BEAM,Ice
+mega_politoed,Protect,PROTECT,Normal
+mega_politoed,Substitute,SUBSTITUTE,Normal
+mega_politoed,Rest,REST,Psychic
+mega_politoed,Sleep Talk,SLEEP_TALK,Normal
+mega_politoed,Facade,FACADE,Normal
+mega_politoed,Tera Blast,TERA_BLAST,Normal
+zephyloom,Energy Ball,ENERGY_BALL,Grass
+zephyloom,Giga Drain,GIGA_DRAIN,Grass
+zephyloom,Solar Beam,SOLAR_BEAM,Grass
+zephyloom,Seed Bomb,SEED_BOMB,Grass
+zephyloom,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+zephyloom,Play Rough,PLAY_ROUGH,Normal
+zephyloom,Draining Kiss,DRAINING_KISS,Fairy
+zephyloom,Misty Terrain,MISTY_TERRAIN,Fairy
+zephyloom,Protect,PROTECT,Normal
+zephyloom,Substitute,SUBSTITUTE,Normal
+zephyloom,Rest,REST,Psychic
+zephyloom,Sleep Talk,SLEEP_TALK,Normal
+zephyloom,Facade,FACADE,Normal
+zephyloom,Tera Blast,TERA_BLAST,Normal
+mega_jumpluff,Energy Ball,ENERGY_BALL,Grass
+mega_jumpluff,Giga Drain,GIGA_DRAIN,Grass
+mega_jumpluff,Solar Beam,SOLAR_BEAM,Grass
+mega_jumpluff,Seed Bomb,SEED_BOMB,Grass
+mega_jumpluff,Brave Bird,BRAVE_BIRD,Flying
+mega_jumpluff,Air Slash,AIR_SLASH,Flying
+mega_jumpluff,Aerial Ace,AERIAL_ACE,Flying
+mega_jumpluff,Tailwind,TAILWIND,Flying
+mega_jumpluff,Acrobatics,ACROBATICS,Flying
+mega_jumpluff,U-turn,U_TURN,Bug
+mega_jumpluff,Protect,PROTECT,Normal
+mega_jumpluff,Substitute,SUBSTITUTE,Normal
+mega_jumpluff,Rest,REST,Psychic
+mega_jumpluff,Sleep Talk,SLEEP_TALK,Normal
+mega_jumpluff,Facade,FACADE,Normal
+mega_jumpluff,Tera Blast,TERA_BLAST,Normal
+heliolux,Energy Ball,ENERGY_BALL,Grass
+heliolux,Giga Drain,GIGA_DRAIN,Grass
+heliolux,Solar Beam,SOLAR_BEAM,Grass
+heliolux,Seed Bomb,SEED_BOMB,Grass
+heliolux,Flamethrower,FLAMETHROWER,Fire
+heliolux,Fire Blast,FIRE_BLAST,Fire
+heliolux,Will-O-Wisp,WILL_O_WISP,Fire
+heliolux,Flare Blitz,FLARE_BLITZ,Fire
+heliolux,Sunny Day,SUNNY_DAY,Fire
+heliolux,Earth Power,EARTH_POWER,Ground
+heliolux,Protect,PROTECT,Normal
+heliolux,Substitute,SUBSTITUTE,Normal
+heliolux,Rest,REST,Psychic
+heliolux,Sleep Talk,SLEEP_TALK,Normal
+heliolux,Facade,FACADE,Normal
+heliolux,Tera Blast,TERA_BLAST,Normal
+mega_heliolux,Energy Ball,ENERGY_BALL,Grass
+mega_heliolux,Giga Drain,GIGA_DRAIN,Grass
+mega_heliolux,Solar Beam,SOLAR_BEAM,Grass
+mega_heliolux,Seed Bomb,SEED_BOMB,Grass
+mega_heliolux,Flamethrower,FLAMETHROWER,Fire
+mega_heliolux,Fire Blast,FIRE_BLAST,Fire
+mega_heliolux,Will-O-Wisp,WILL_O_WISP,Fire
+mega_heliolux,Flare Blitz,FLARE_BLITZ,Fire
+mega_heliolux,Sunny Day,SUNNY_DAY,Fire
+mega_heliolux,Earth Power,EARTH_POWER,Ground
+mega_heliolux,Protect,PROTECT,Normal
+mega_heliolux,Substitute,SUBSTITUTE,Normal
+mega_heliolux,Rest,REST,Psychic
+mega_heliolux,Sleep Talk,SLEEP_TALK,Normal
+mega_heliolux,Facade,FACADE,Normal
+mega_heliolux,Tera Blast,TERA_BLAST,Normal
+dracoptera,X-Scissor,X_SCISSOR,Bug
+dracoptera,Bug Buzz,BUG_BUZZ,Bug
+dracoptera,U-turn,U_TURN,Bug
+dracoptera,Dragon Pulse,DRAGON_PULSE,Dragon
+dracoptera,Dragon Claw,DRAGON_CLAW,Dragon
+dracoptera,Outrage,OUTRAGE,Dragon
+dracoptera,Draco Meteor,DRACO_METEOR,Dragon
+dracoptera,Air Slash,AIR_SLASH,Flying
+dracoptera,Protect,PROTECT,Normal
+dracoptera,Substitute,SUBSTITUTE,Normal
+dracoptera,Rest,REST,Psychic
+dracoptera,Sleep Talk,SLEEP_TALK,Normal
+dracoptera,Facade,FACADE,Normal
+dracoptera,Tera Blast,TERA_BLAST,Normal
+mega_dracoptera,X-Scissor,X_SCISSOR,Bug
+mega_dracoptera,Bug Buzz,BUG_BUZZ,Bug
+mega_dracoptera,U-turn,U_TURN,Bug
+mega_dracoptera,Dragon Pulse,DRAGON_PULSE,Dragon
+mega_dracoptera,Dragon Claw,DRAGON_CLAW,Dragon
+mega_dracoptera,Outrage,OUTRAGE,Dragon
+mega_dracoptera,Draco Meteor,DRACO_METEOR,Dragon
+mega_dracoptera,Air Slash,AIR_SLASH,Flying
+mega_dracoptera,Protect,PROTECT,Normal
+mega_dracoptera,Substitute,SUBSTITUTE,Normal
+mega_dracoptera,Rest,REST,Psychic
+mega_dracoptera,Sleep Talk,SLEEP_TALK,Normal
+mega_dracoptera,Facade,FACADE,Normal
+mega_dracoptera,Tera Blast,TERA_BLAST,Normal
+mirejaw,Surf,SURF,Water
+mirejaw,Hydro Pump,HYDRO_PUMP,Water
+mirejaw,Liquidation,LIQUIDATION,Water
+mirejaw,Rain Dance,RAIN_DANCE,Water
+mirejaw,Energy Ball,ENERGY_BALL,Grass
+mirejaw,Giga Drain,GIGA_DRAIN,Grass
+mirejaw,Solar Beam,SOLAR_BEAM,Grass
+mirejaw,Seed Bomb,SEED_BOMB,Grass
+mirejaw,Earthquake,EARTHQUAKE,Ground
+mirejaw,Crunch,CRUNCH,Dark
+mirejaw,Protect,PROTECT,Normal
+mirejaw,Substitute,SUBSTITUTE,Normal
+mirejaw,Rest,REST,Psychic
+mirejaw,Sleep Talk,SLEEP_TALK,Normal
+mirejaw,Facade,FACADE,Normal
+mirejaw,Tera Blast,TERA_BLAST,Normal
+mega_mirejaw,Surf,SURF,Water
+mega_mirejaw,Hydro Pump,HYDRO_PUMP,Water
+mega_mirejaw,Liquidation,LIQUIDATION,Water
+mega_mirejaw,Rain Dance,RAIN_DANCE,Water
+mega_mirejaw,Energy Ball,ENERGY_BALL,Grass
+mega_mirejaw,Giga Drain,GIGA_DRAIN,Grass
+mega_mirejaw,Solar Beam,SOLAR_BEAM,Grass
+mega_mirejaw,Seed Bomb,SEED_BOMB,Grass
+mega_mirejaw,Earthquake,EARTHQUAKE,Ground
+mega_mirejaw,Crunch,CRUNCH,Dark
+mega_mirejaw,Protect,PROTECT,Normal
+mega_mirejaw,Substitute,SUBSTITUTE,Normal
+mega_mirejaw,Rest,REST,Psychic
+mega_mirejaw,Sleep Talk,SLEEP_TALK,Normal
+mega_mirejaw,Facade,FACADE,Normal
+mega_mirejaw,Tera Blast,TERA_BLAST,Normal
+noctivane,Crunch,CRUNCH,Dark
+noctivane,Dark Pulse,DARK_PULSE,Dark
+noctivane,Knock Off,KNOCK_OFF,Dark
+noctivane,Taunt,TAUNT,Dark
+noctivane,Shadow Ball,SHADOW_BALL,Ghost
+noctivane,Shadow Claw,SHADOW_CLAW,Ghost
+noctivane,Hex,HEX,Ghost
+noctivane,Will-O-Wisp,WILL_O_WISP,Fire
+noctivane,Nasty Plot,NASTY_PLOT,Dark
+noctivane,Hurricane,HURRICANE,Flying
+noctivane,Protect,PROTECT,Normal
+noctivane,Substitute,SUBSTITUTE,Normal
+noctivane,Rest,REST,Psychic
+noctivane,Sleep Talk,SLEEP_TALK,Normal
+noctivane,Facade,FACADE,Normal
+noctivane,Tera Blast,TERA_BLAST,Normal
+mega_noctivane,Crunch,CRUNCH,Dark
+mega_noctivane,Dark Pulse,DARK_PULSE,Dark
+mega_noctivane,Knock Off,KNOCK_OFF,Dark
+mega_noctivane,Taunt,TAUNT,Dark
+mega_noctivane,Shadow Ball,SHADOW_BALL,Ghost
+mega_noctivane,Shadow Claw,SHADOW_CLAW,Ghost
+mega_noctivane,Hex,HEX,Ghost
+mega_noctivane,Will-O-Wisp,WILL_O_WISP,Fire
+mega_noctivane,Nasty Plot,NASTY_PLOT,Dark
+mega_noctivane,Hurricane,HURRICANE,Flying
+mega_noctivane,Protect,PROTECT,Normal
+mega_noctivane,Substitute,SUBSTITUTE,Normal
+mega_noctivane,Rest,REST,Psychic
+mega_noctivane,Sleep Talk,SLEEP_TALK,Normal
+mega_noctivane,Facade,FACADE,Normal
+mega_noctivane,Tera Blast,TERA_BLAST,Normal
+mega_honchkrow,Crunch,CRUNCH,Dark
+mega_honchkrow,Dark Pulse,DARK_PULSE,Dark
+mega_honchkrow,Knock Off,KNOCK_OFF,Dark
+mega_honchkrow,Taunt,TAUNT,Dark
+mega_honchkrow,Brave Bird,BRAVE_BIRD,Flying
+mega_honchkrow,Air Slash,AIR_SLASH,Flying
+mega_honchkrow,Aerial Ace,AERIAL_ACE,Flying
+mega_honchkrow,Tailwind,TAILWIND,Flying
+mega_honchkrow,Superpower,SUPERPOWER,Fighting
+mega_honchkrow,Protect,PROTECT,Normal
+mega_honchkrow,Substitute,SUBSTITUTE,Normal
+mega_honchkrow,Rest,REST,Psychic
+mega_honchkrow,Sleep Talk,SLEEP_TALK,Normal
+mega_honchkrow,Facade,FACADE,Normal
+mega_honchkrow,Tera Blast,TERA_BLAST,Normal
+lamentra,Shadow Ball,SHADOW_BALL,Ghost
+lamentra,Shadow Claw,SHADOW_CLAW,Ghost
+lamentra,Hex,HEX,Ghost
+lamentra,Will-O-Wisp,WILL_O_WISP,Fire
+lamentra,Psychic,PSYCHIC,Psychic
+lamentra,Psyshock,PSYSHOCK,Psychic
+lamentra,Zen Headbutt,ZEN_HEADBUTT,Psychic
+lamentra,Calm Mind,CALM_MIND,Psychic
+lamentra,Protect,PROTECT,Normal
+lamentra,Substitute,SUBSTITUTE,Normal
+lamentra,Rest,REST,Psychic
+lamentra,Sleep Talk,SLEEP_TALK,Normal
+lamentra,Facade,FACADE,Normal
+lamentra,Tera Blast,TERA_BLAST,Normal
+mega_lamentra,Shadow Ball,SHADOW_BALL,Ghost
+mega_lamentra,Shadow Claw,SHADOW_CLAW,Ghost
+mega_lamentra,Hex,HEX,Ghost
+mega_lamentra,Will-O-Wisp,WILL_O_WISP,Fire
+mega_lamentra,Psychic,PSYCHIC,Psychic
+mega_lamentra,Psyshock,PSYSHOCK,Psychic
+mega_lamentra,Zen Headbutt,ZEN_HEADBUTT,Psychic
+mega_lamentra,Calm Mind,CALM_MIND,Psychic
+mega_lamentra,Protect,PROTECT,Normal
+mega_lamentra,Substitute,SUBSTITUTE,Normal
+mega_lamentra,Rest,REST,Psychic
+mega_lamentra,Sleep Talk,SLEEP_TALK,Normal
+mega_lamentra,Facade,FACADE,Normal
+mega_lamentra,Tera Blast,TERA_BLAST,Normal
+eniglyph,Psychic,PSYCHIC,Psychic
+eniglyph,Psyshock,PSYSHOCK,Psychic
+eniglyph,Zen Headbutt,ZEN_HEADBUTT,Psychic
+eniglyph,Calm Mind,CALM_MIND,Psychic
+eniglyph,Stone Edge,STONE_EDGE,Rock
+eniglyph,Rock Slide,ROCK_SLIDE,Rock
+eniglyph,Stealth Rock,STEALTH_ROCK,Rock
+eniglyph,Power Gem,POWER_GEM,Rock
+eniglyph,Earth Power,EARTH_POWER,Ground
+eniglyph,Trick Room,TRICK_ROOM,Psychic
+eniglyph,Protect,PROTECT,Normal
+eniglyph,Substitute,SUBSTITUTE,Normal
+eniglyph,Rest,REST,Psychic
+eniglyph,Sleep Talk,SLEEP_TALK,Normal
+eniglyph,Facade,FACADE,Normal
+eniglyph,Tera Blast,TERA_BLAST,Normal
+mega_eniglyph,Psychic,PSYCHIC,Psychic
+mega_eniglyph,Psyshock,PSYSHOCK,Psychic
+mega_eniglyph,Zen Headbutt,ZEN_HEADBUTT,Psychic
+mega_eniglyph,Calm Mind,CALM_MIND,Psychic
+mega_eniglyph,Stone Edge,STONE_EDGE,Rock
+mega_eniglyph,Rock Slide,ROCK_SLIDE,Rock
+mega_eniglyph,Stealth Rock,STEALTH_ROCK,Rock
+mega_eniglyph,Power Gem,POWER_GEM,Rock
+mega_eniglyph,Earth Power,EARTH_POWER,Ground
+mega_eniglyph,Trick Room,TRICK_ROOM,Psychic
+mega_eniglyph,Protect,PROTECT,Normal
+mega_eniglyph,Substitute,SUBSTITUTE,Normal
+mega_eniglyph,Rest,REST,Psychic
+mega_eniglyph,Sleep Talk,SLEEP_TALK,Normal
+mega_eniglyph,Facade,FACADE,Normal
+mega_eniglyph,Tera Blast,TERA_BLAST,Normal
+rebounder,Psychic,PSYCHIC,Psychic
+rebounder,Psyshock,PSYSHOCK,Psychic
+rebounder,Zen Headbutt,ZEN_HEADBUTT,Psychic
+rebounder,Calm Mind,CALM_MIND,Psychic
+rebounder,Body Slam,BODY_SLAM,Normal
+rebounder,Protect,PROTECT,Normal
+rebounder,Substitute,SUBSTITUTE,Normal
+rebounder,Rest,REST,Psychic
+rebounder,Sleep Talk,SLEEP_TALK,Normal
+rebounder,Facade,FACADE,Normal
+rebounder,Tera Blast,TERA_BLAST,Normal
+bastionox,Flash Cannon,FLASH_CANNON,Steel
+bastionox,Iron Head,IRON_HEAD,Steel
+bastionox,Heavy Slam,HEAVY_SLAM,Steel
+bastionox,Iron Defense,IRON_DEFENSE,Steel
+bastionox,Stone Edge,STONE_EDGE,Rock
+bastionox,Rock Slide,ROCK_SLIDE,Rock
+bastionox,Stealth Rock,STEALTH_ROCK,Rock
+bastionox,Power Gem,POWER_GEM,Rock
+bastionox,Body Press,BODY_PRESS,Fighting
+bastionox,Protect,PROTECT,Normal
+bastionox,Substitute,SUBSTITUTE,Normal
+bastionox,Rest,REST,Psychic
+bastionox,Sleep Talk,SLEEP_TALK,Normal
+bastionox,Facade,FACADE,Normal
+bastionox,Tera Blast,TERA_BLAST,Normal
+mega_bastionox,Flash Cannon,FLASH_CANNON,Steel
+mega_bastionox,Iron Head,IRON_HEAD,Steel
+mega_bastionox,Heavy Slam,HEAVY_SLAM,Steel
+mega_bastionox,Iron Defense,IRON_DEFENSE,Steel
+mega_bastionox,Stone Edge,STONE_EDGE,Rock
+mega_bastionox,Rock Slide,ROCK_SLIDE,Rock
+mega_bastionox,Stealth Rock,STEALTH_ROCK,Rock
+mega_bastionox,Power Gem,POWER_GEM,Rock
+mega_bastionox,Body Press,BODY_PRESS,Fighting
+mega_bastionox,Protect,PROTECT,Normal
+mega_bastionox,Substitute,SUBSTITUTE,Normal
+mega_bastionox,Rest,REST,Psychic
+mega_bastionox,Sleep Talk,SLEEP_TALK,Normal
+mega_bastionox,Facade,FACADE,Normal
+mega_bastionox,Tera Blast,TERA_BLAST,Normal
+dunescorpion,Earthquake,EARTHQUAKE,Ground
+dunescorpion,Earth Power,EARTH_POWER,Ground
+dunescorpion,Dig,DIG,Ground
+dunescorpion,Bulldoze,BULLDOZE,Ground
+dunescorpion,X-Scissor,X_SCISSOR,Bug
+dunescorpion,Bug Buzz,BUG_BUZZ,Bug
+dunescorpion,U-turn,U_TURN,Bug
+dunescorpion,Poison Jab,POISON_JAB,Poison
+dunescorpion,Knock Off,KNOCK_OFF,Dark
+dunescorpion,Swords Dance,SWORDS_DANCE,Normal
+dunescorpion,Stealth Rock,STEALTH_ROCK,Rock
+dunescorpion,Protect,PROTECT,Normal
+dunescorpion,Substitute,SUBSTITUTE,Normal
+dunescorpion,Rest,REST,Psychic
+dunescorpion,Sleep Talk,SLEEP_TALK,Normal
+dunescorpion,Facade,FACADE,Normal
+dunescorpion,Tera Blast,TERA_BLAST,Normal
+mega_dunescorpion,Earthquake,EARTHQUAKE,Ground
+mega_dunescorpion,Earth Power,EARTH_POWER,Ground
+mega_dunescorpion,Dig,DIG,Ground
+mega_dunescorpion,Bulldoze,BULLDOZE,Ground
+mega_dunescorpion,X-Scissor,X_SCISSOR,Bug
+mega_dunescorpion,Bug Buzz,BUG_BUZZ,Bug
+mega_dunescorpion,U-turn,U_TURN,Bug
+mega_dunescorpion,Poison Jab,POISON_JAB,Poison
+mega_dunescorpion,Knock Off,KNOCK_OFF,Dark
+mega_dunescorpion,Swords Dance,SWORDS_DANCE,Normal
+mega_dunescorpion,Stealth Rock,STEALTH_ROCK,Rock
+mega_dunescorpion,Protect,PROTECT,Normal
+mega_dunescorpion,Substitute,SUBSTITUTE,Normal
+mega_dunescorpion,Rest,REST,Psychic
+mega_dunescorpion,Sleep Talk,SLEEP_TALK,Normal
+mega_dunescorpion,Facade,FACADE,Normal
+mega_dunescorpion,Tera Blast,TERA_BLAST,Normal
+razorwing,Sludge Bomb,SLUDGE_BOMB,Poison
+razorwing,Poison Jab,POISON_JAB,Poison
+razorwing,Gunk Shot,GUNK_SHOT,Poison
+razorwing,Toxic,TOXIC,Poison
+razorwing,Brave Bird,BRAVE_BIRD,Flying
+razorwing,Air Slash,AIR_SLASH,Flying
+razorwing,Aerial Ace,AERIAL_ACE,Flying
+razorwing,Tailwind,TAILWIND,Flying
+razorwing,Acrobatics,ACROBATICS,Flying
+razorwing,Swords Dance,SWORDS_DANCE,Normal
+razorwing,U-turn,U_TURN,Bug
+razorwing,Protect,PROTECT,Normal
+razorwing,Substitute,SUBSTITUTE,Normal
+razorwing,Rest,REST,Psychic
+razorwing,Sleep Talk,SLEEP_TALK,Normal
+razorwing,Facade,FACADE,Normal
+razorwing,Tera Blast,TERA_BLAST,Normal
+mega_razorwing,Sludge Bomb,SLUDGE_BOMB,Poison
+mega_razorwing,Poison Jab,POISON_JAB,Poison
+mega_razorwing,Gunk Shot,GUNK_SHOT,Poison
+mega_razorwing,Toxic,TOXIC,Poison
+mega_razorwing,Brave Bird,BRAVE_BIRD,Flying
+mega_razorwing,Air Slash,AIR_SLASH,Flying
+mega_razorwing,Aerial Ace,AERIAL_ACE,Flying
+mega_razorwing,Tailwind,TAILWIND,Flying
+mega_razorwing,Acrobatics,ACROBATICS,Flying
+mega_razorwing,Swords Dance,SWORDS_DANCE,Normal
+mega_razorwing,U-turn,U_TURN,Bug
+mega_razorwing,Protect,PROTECT,Normal
+mega_razorwing,Substitute,SUBSTITUTE,Normal
+mega_razorwing,Rest,REST,Psychic
+mega_razorwing,Sleep Talk,SLEEP_TALK,Normal
+mega_razorwing,Facade,FACADE,Normal
+mega_razorwing,Tera Blast,TERA_BLAST,Normal
+mega_gliscor,Earthquake,EARTHQUAKE,Ground
+mega_gliscor,Earth Power,EARTH_POWER,Ground
+mega_gliscor,Dig,DIG,Ground
+mega_gliscor,Bulldoze,BULLDOZE,Ground
+mega_gliscor,Brave Bird,BRAVE_BIRD,Flying
+mega_gliscor,Air Slash,AIR_SLASH,Flying
+mega_gliscor,Aerial Ace,AERIAL_ACE,Flying
+mega_gliscor,Tailwind,TAILWIND,Flying
+mega_gliscor,Knock Off,KNOCK_OFF,Dark
+mega_gliscor,Swords Dance,SWORDS_DANCE,Normal
+mega_gliscor,Toxic,TOXIC,Poison
+mega_gliscor,U-turn,U_TURN,Bug
+mega_gliscor,Protect,PROTECT,Normal
+mega_gliscor,Substitute,SUBSTITUTE,Normal
+mega_gliscor,Rest,REST,Psychic
+mega_gliscor,Sleep Talk,SLEEP_TALK,Normal
+mega_gliscor,Facade,FACADE,Normal
+mega_gliscor,Tera Blast,TERA_BLAST,Normal
+fangmarshal,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+fangmarshal,Play Rough,PLAY_ROUGH,Normal
+fangmarshal,Draining Kiss,DRAINING_KISS,Fairy
+fangmarshal,Misty Terrain,MISTY_TERRAIN,Fairy
+fangmarshal,Close Combat,CLOSE_COMBAT,Fighting
+fangmarshal,Brick Break,BRICK_BREAK,Fighting
+fangmarshal,Focus Blast,FOCUS_BLAST,Fighting
+fangmarshal,Bulk Up,BULK_UP,Fighting
+fangmarshal,Crunch,CRUNCH,Dark
+fangmarshal,Drain Punch,DRAIN_PUNCH,Fighting
+fangmarshal,Earthquake,EARTHQUAKE,Ground
+fangmarshal,Protect,PROTECT,Normal
+fangmarshal,Substitute,SUBSTITUTE,Normal
+fangmarshal,Rest,REST,Psychic
+fangmarshal,Sleep Talk,SLEEP_TALK,Normal
+fangmarshal,Facade,FACADE,Normal
+fangmarshal,Tera Blast,TERA_BLAST,Normal
+mega_fangmarshal,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+mega_fangmarshal,Play Rough,PLAY_ROUGH,Normal
+mega_fangmarshal,Draining Kiss,DRAINING_KISS,Fairy
+mega_fangmarshal,Misty Terrain,MISTY_TERRAIN,Fairy
+mega_fangmarshal,Close Combat,CLOSE_COMBAT,Fighting
+mega_fangmarshal,Brick Break,BRICK_BREAK,Fighting
+mega_fangmarshal,Focus Blast,FOCUS_BLAST,Fighting
+mega_fangmarshal,Bulk Up,BULK_UP,Fighting
+mega_fangmarshal,Crunch,CRUNCH,Dark
+mega_fangmarshal,Drain Punch,DRAIN_PUNCH,Fighting
+mega_fangmarshal,Earthquake,EARTHQUAKE,Ground
+mega_fangmarshal,Protect,PROTECT,Normal
+mega_fangmarshal,Substitute,SUBSTITUTE,Normal
+mega_fangmarshal,Rest,REST,Psychic
+mega_fangmarshal,Sleep Talk,SLEEP_TALK,Normal
+mega_fangmarshal,Facade,FACADE,Normal
+mega_fangmarshal,Tera Blast,TERA_BLAST,Normal
+spinetide,Surf,SURF,Water
+spinetide,Hydro Pump,HYDRO_PUMP,Water
+spinetide,Liquidation,LIQUIDATION,Water
+spinetide,Rain Dance,RAIN_DANCE,Water
+spinetide,Sludge Bomb,SLUDGE_BOMB,Poison
+spinetide,Poison Jab,POISON_JAB,Poison
+spinetide,Gunk Shot,GUNK_SHOT,Poison
+spinetide,Toxic,TOXIC,Poison
+spinetide,Toxic Spikes,TOXIC_SPIKES,Poison
+spinetide,Waterfall,WATERFALL,Water
+spinetide,Protect,PROTECT,Normal
+spinetide,Substitute,SUBSTITUTE,Normal
+spinetide,Rest,REST,Psychic
+spinetide,Sleep Talk,SLEEP_TALK,Normal
+spinetide,Facade,FACADE,Normal
+spinetide,Tera Blast,TERA_BLAST,Normal
+thalassodon,Surf,SURF,Water
+thalassodon,Hydro Pump,HYDRO_PUMP,Water
+thalassodon,Liquidation,LIQUIDATION,Water
+thalassodon,Rain Dance,RAIN_DANCE,Water
+thalassodon,Dragon Pulse,DRAGON_PULSE,Dragon
+thalassodon,Dragon Claw,DRAGON_CLAW,Dragon
+thalassodon,Outrage,OUTRAGE,Dragon
+thalassodon,Draco Meteor,DRACO_METEOR,Dragon
+thalassodon,Waterfall,WATERFALL,Water
+thalassodon,Earthquake,EARTHQUAKE,Ground
+thalassodon,Dragon Dance,DRAGON_DANCE,Dragon
+thalassodon,Poison Jab,POISON_JAB,Poison
+thalassodon,Protect,PROTECT,Normal
+thalassodon,Substitute,SUBSTITUTE,Normal
+thalassodon,Rest,REST,Psychic
+thalassodon,Sleep Talk,SLEEP_TALK,Normal
+thalassodon,Facade,FACADE,Normal
+thalassodon,Tera Blast,TERA_BLAST,Normal
+mega_thalassodon,Surf,SURF,Water
+mega_thalassodon,Hydro Pump,HYDRO_PUMP,Water
+mega_thalassodon,Liquidation,LIQUIDATION,Water
+mega_thalassodon,Rain Dance,RAIN_DANCE,Water
+mega_thalassodon,Dragon Pulse,DRAGON_PULSE,Dragon
+mega_thalassodon,Dragon Claw,DRAGON_CLAW,Dragon
+mega_thalassodon,Outrage,OUTRAGE,Dragon
+mega_thalassodon,Draco Meteor,DRACO_METEOR,Dragon
+mega_thalassodon,Waterfall,WATERFALL,Water
+mega_thalassodon,Earthquake,EARTHQUAKE,Ground
+mega_thalassodon,Dragon Dance,DRAGON_DANCE,Dragon
+mega_thalassodon,Poison Jab,POISON_JAB,Poison
+mega_thalassodon,Protect,PROTECT,Normal
+mega_thalassodon,Substitute,SUBSTITUTE,Normal
+mega_thalassodon,Rest,REST,Psychic
+mega_thalassodon,Sleep Talk,SLEEP_TALK,Normal
+mega_thalassodon,Facade,FACADE,Normal
+mega_thalassodon,Tera Blast,TERA_BLAST,Normal
+pebuckle,X-Scissor,X_SCISSOR,Bug
+pebuckle,Bug Buzz,BUG_BUZZ,Bug
+pebuckle,U-turn,U_TURN,Bug
+pebuckle,Stone Edge,STONE_EDGE,Rock
+pebuckle,Rock Slide,ROCK_SLIDE,Rock
+pebuckle,Stealth Rock,STEALTH_ROCK,Rock
+pebuckle,Power Gem,POWER_GEM,Rock
+pebuckle,Protect,PROTECT,Normal
+pebuckle,Substitute,SUBSTITUTE,Normal
+pebuckle,Rest,REST,Psychic
+pebuckle,Sleep Talk,SLEEP_TALK,Normal
+pebuckle,Facade,FACADE,Normal
+pebuckle,Tera Blast,TERA_BLAST,Normal
+bastuckle,Stone Edge,STONE_EDGE,Rock
+bastuckle,Rock Slide,ROCK_SLIDE,Rock
+bastuckle,Stealth Rock,STEALTH_ROCK,Rock
+bastuckle,Power Gem,POWER_GEM,Rock
+bastuckle,Energy Ball,ENERGY_BALL,Grass
+bastuckle,Giga Drain,GIGA_DRAIN,Grass
+bastuckle,Solar Beam,SOLAR_BEAM,Grass
+bastuckle,Seed Bomb,SEED_BOMB,Grass
+bastuckle,Toxic,TOXIC,Poison
+bastuckle,Iron Defense,IRON_DEFENSE,Steel
+bastuckle,Protect,PROTECT,Normal
+bastuckle,Substitute,SUBSTITUTE,Normal
+bastuckle,Rest,REST,Psychic
+bastuckle,Sleep Talk,SLEEP_TALK,Normal
+bastuckle,Facade,FACADE,Normal
+bastuckle,Tera Blast,TERA_BLAST,Normal
+mega_bastuckle,Stone Edge,STONE_EDGE,Rock
+mega_bastuckle,Rock Slide,ROCK_SLIDE,Rock
+mega_bastuckle,Stealth Rock,STEALTH_ROCK,Rock
+mega_bastuckle,Power Gem,POWER_GEM,Rock
+mega_bastuckle,Energy Ball,ENERGY_BALL,Grass
+mega_bastuckle,Giga Drain,GIGA_DRAIN,Grass
+mega_bastuckle,Solar Beam,SOLAR_BEAM,Grass
+mega_bastuckle,Seed Bomb,SEED_BOMB,Grass
+mega_bastuckle,Toxic,TOXIC,Poison
+mega_bastuckle,Iron Defense,IRON_DEFENSE,Steel
+mega_bastuckle,Protect,PROTECT,Normal
+mega_bastuckle,Substitute,SUBSTITUTE,Normal
+mega_bastuckle,Rest,REST,Psychic
+mega_bastuckle,Sleep Talk,SLEEP_TALK,Normal
+mega_bastuckle,Facade,FACADE,Normal
+mega_bastuckle,Tera Blast,TERA_BLAST,Normal
+hercub,X-Scissor,X_SCISSOR,Bug
+hercub,Bug Buzz,BUG_BUZZ,Bug
+hercub,U-turn,U_TURN,Bug
+hercub,Bug Bite,BUG_BITE,Bug
+hercub,Protect,PROTECT,Normal
+hercub,Substitute,SUBSTITUTE,Normal
+hercub,Rest,REST,Psychic
+hercub,Sleep Talk,SLEEP_TALK,Normal
+hercub,Facade,FACADE,Normal
+hercub,Tera Blast,TERA_BLAST,Normal
+herakid,X-Scissor,X_SCISSOR,Bug
+herakid,Bug Buzz,BUG_BUZZ,Bug
+herakid,U-turn,U_TURN,Bug
+herakid,Close Combat,CLOSE_COMBAT,Fighting
+herakid,Brick Break,BRICK_BREAK,Fighting
+herakid,Focus Blast,FOCUS_BLAST,Fighting
+herakid,Bulk Up,BULK_UP,Fighting
+herakid,Bug Bite,BUG_BITE,Bug
+herakid,Protect,PROTECT,Normal
+herakid,Substitute,SUBSTITUTE,Normal
+herakid,Rest,REST,Psychic
+herakid,Sleep Talk,SLEEP_TALK,Normal
+herakid,Facade,FACADE,Normal
+herakid,Tera Blast,TERA_BLAST,Normal
+nightharrow,Ice Beam,ICE_BEAM,Ice
+nightharrow,Blizzard,BLIZZARD,Ice
+nightharrow,Icy Wind,ICY_WIND,Ice
+nightharrow,Ice Punch,ICE_PUNCH,Ice
+nightharrow,Shadow Ball,SHADOW_BALL,Ghost
+nightharrow,Shadow Claw,SHADOW_CLAW,Ghost
+nightharrow,Hex,HEX,Ghost
+nightharrow,Will-O-Wisp,WILL_O_WISP,Fire
+nightharrow,Poltergeist,POLTERGEIST,Ghost
+nightharrow,Swords Dance,SWORDS_DANCE,Normal
+nightharrow,Knock Off,KNOCK_OFF,Dark
+nightharrow,Protect,PROTECT,Normal
+nightharrow,Substitute,SUBSTITUTE,Normal
+nightharrow,Rest,REST,Psychic
+nightharrow,Sleep Talk,SLEEP_TALK,Normal
+nightharrow,Facade,FACADE,Normal
+nightharrow,Tera Blast,TERA_BLAST,Normal
+mega_nightharrow,Ice Beam,ICE_BEAM,Ice
+mega_nightharrow,Blizzard,BLIZZARD,Ice
+mega_nightharrow,Icy Wind,ICY_WIND,Ice
+mega_nightharrow,Ice Punch,ICE_PUNCH,Ice
+mega_nightharrow,Shadow Ball,SHADOW_BALL,Ghost
+mega_nightharrow,Shadow Claw,SHADOW_CLAW,Ghost
+mega_nightharrow,Hex,HEX,Ghost
+mega_nightharrow,Will-O-Wisp,WILL_O_WISP,Fire
+mega_nightharrow,Poltergeist,POLTERGEIST,Ghost
+mega_nightharrow,Swords Dance,SWORDS_DANCE,Normal
+mega_nightharrow,Knock Off,KNOCK_OFF,Dark
+mega_nightharrow,Protect,PROTECT,Normal
+mega_nightharrow,Substitute,SUBSTITUTE,Normal
+mega_nightharrow,Rest,REST,Psychic
+mega_nightharrow,Sleep Talk,SLEEP_TALK,Normal
+mega_nightharrow,Facade,FACADE,Normal
+mega_nightharrow,Tera Blast,TERA_BLAST,Normal
+mega_magcargo,Flamethrower,FLAMETHROWER,Fire
+mega_magcargo,Fire Blast,FIRE_BLAST,Fire
+mega_magcargo,Will-O-Wisp,WILL_O_WISP,Fire
+mega_magcargo,Flare Blitz,FLARE_BLITZ,Fire
+mega_magcargo,Stone Edge,STONE_EDGE,Rock
+mega_magcargo,Rock Slide,ROCK_SLIDE,Rock
+mega_magcargo,Stealth Rock,STEALTH_ROCK,Rock
+mega_magcargo,Power Gem,POWER_GEM,Rock
+mega_magcargo,Earth Power,EARTH_POWER,Ground
+mega_magcargo,Protect,PROTECT,Normal
+mega_magcargo,Substitute,SUBSTITUTE,Normal
+mega_magcargo,Rest,REST,Psychic
+mega_magcargo,Sleep Talk,SLEEP_TALK,Normal
+mega_magcargo,Facade,FACADE,Normal
+mega_magcargo,Tera Blast,TERA_BLAST,Normal
+mega_mamoswine,Ice Beam,ICE_BEAM,Ice
+mega_mamoswine,Blizzard,BLIZZARD,Ice
+mega_mamoswine,Icy Wind,ICY_WIND,Ice
+mega_mamoswine,Ice Punch,ICE_PUNCH,Ice
+mega_mamoswine,Earthquake,EARTHQUAKE,Ground
+mega_mamoswine,Earth Power,EARTH_POWER,Ground
+mega_mamoswine,Dig,DIG,Ground
+mega_mamoswine,Bulldoze,BULLDOZE,Ground
+mega_mamoswine,Stealth Rock,STEALTH_ROCK,Rock
+mega_mamoswine,Knock Off,KNOCK_OFF,Dark
+mega_mamoswine,Protect,PROTECT,Normal
+mega_mamoswine,Substitute,SUBSTITUTE,Normal
+mega_mamoswine,Rest,REST,Psychic
+mega_mamoswine,Sleep Talk,SLEEP_TALK,Normal
+mega_mamoswine,Facade,FACADE,Normal
+mega_mamoswine,Tera Blast,TERA_BLAST,Normal
+coralith,Surf,SURF,Water
+coralith,Hydro Pump,HYDRO_PUMP,Water
+coralith,Liquidation,LIQUIDATION,Water
+coralith,Rain Dance,RAIN_DANCE,Water
+coralith,Stone Edge,STONE_EDGE,Rock
+coralith,Rock Slide,ROCK_SLIDE,Rock
+coralith,Stealth Rock,STEALTH_ROCK,Rock
+coralith,Power Gem,POWER_GEM,Rock
+coralith,Protect,PROTECT,Normal
+coralith,Substitute,SUBSTITUTE,Normal
+coralith,Rest,REST,Psychic
+coralith,Sleep Talk,SLEEP_TALK,Normal
+coralith,Facade,FACADE,Normal
+coralith,Tera Blast,TERA_BLAST,Normal
+atollord,Surf,SURF,Water
+atollord,Hydro Pump,HYDRO_PUMP,Water
+atollord,Liquidation,LIQUIDATION,Water
+atollord,Rain Dance,RAIN_DANCE,Water
+atollord,Psychic,PSYCHIC,Psychic
+atollord,Psyshock,PSYSHOCK,Psychic
+atollord,Zen Headbutt,ZEN_HEADBUTT,Psychic
+atollord,Calm Mind,CALM_MIND,Psychic
+atollord,Power Gem,POWER_GEM,Rock
+atollord,Ice Beam,ICE_BEAM,Ice
+atollord,Protect,PROTECT,Normal
+atollord,Substitute,SUBSTITUTE,Normal
+atollord,Rest,REST,Psychic
+atollord,Sleep Talk,SLEEP_TALK,Normal
+atollord,Facade,FACADE,Normal
+atollord,Tera Blast,TERA_BLAST,Normal
+bombardier,Surf,SURF,Water
+bombardier,Hydro Pump,HYDRO_PUMP,Water
+bombardier,Liquidation,LIQUIDATION,Water
+bombardier,Rain Dance,RAIN_DANCE,Water
+bombardier,Flash Cannon,FLASH_CANNON,Steel
+bombardier,Iron Head,IRON_HEAD,Steel
+bombardier,Heavy Slam,HEAVY_SLAM,Steel
+bombardier,Iron Defense,IRON_DEFENSE,Steel
+bombardier,Water Pulse,WATER_PULSE,Water
+bombardier,Gunk Shot,GUNK_SHOT,Poison
+bombardier,Ice Beam,ICE_BEAM,Ice
+bombardier,Protect,PROTECT,Normal
+bombardier,Substitute,SUBSTITUTE,Normal
+bombardier,Rest,REST,Psychic
+bombardier,Sleep Talk,SLEEP_TALK,Normal
+bombardier,Facade,FACADE,Normal
+bombardier,Tera Blast,TERA_BLAST,Normal
+mega_bombardier,Surf,SURF,Water
+mega_bombardier,Hydro Pump,HYDRO_PUMP,Water
+mega_bombardier,Liquidation,LIQUIDATION,Water
+mega_bombardier,Rain Dance,RAIN_DANCE,Water
+mega_bombardier,Flash Cannon,FLASH_CANNON,Steel
+mega_bombardier,Iron Head,IRON_HEAD,Steel
+mega_bombardier,Heavy Slam,HEAVY_SLAM,Steel
+mega_bombardier,Iron Defense,IRON_DEFENSE,Steel
+mega_bombardier,Water Pulse,WATER_PULSE,Water
+mega_bombardier,Gunk Shot,GUNK_SHOT,Poison
+mega_bombardier,Ice Beam,ICE_BEAM,Ice
+mega_bombardier,Protect,PROTECT,Normal
+mega_bombardier,Substitute,SUBSTITUTE,Normal
+mega_bombardier,Rest,REST,Psychic
+mega_bombardier,Sleep Talk,SLEEP_TALK,Normal
+mega_bombardier,Facade,FACADE,Normal
+mega_bombardier,Tera Blast,TERA_BLAST,Normal
+abyssillery,Surf,SURF,Water
+abyssillery,Hydro Pump,HYDRO_PUMP,Water
+abyssillery,Liquidation,LIQUIDATION,Water
+abyssillery,Rain Dance,RAIN_DANCE,Water
+abyssillery,Shadow Ball,SHADOW_BALL,Ghost
+abyssillery,Shadow Claw,SHADOW_CLAW,Ghost
+abyssillery,Hex,HEX,Ghost
+abyssillery,Will-O-Wisp,WILL_O_WISP,Fire
+abyssillery,Knock Off,KNOCK_OFF,Dark
+abyssillery,Protect,PROTECT,Normal
+abyssillery,Substitute,SUBSTITUTE,Normal
+abyssillery,Rest,REST,Psychic
+abyssillery,Sleep Talk,SLEEP_TALK,Normal
+abyssillery,Facade,FACADE,Normal
+abyssillery,Tera Blast,TERA_BLAST,Normal
+mega_abyssillery,Surf,SURF,Water
+mega_abyssillery,Hydro Pump,HYDRO_PUMP,Water
+mega_abyssillery,Liquidation,LIQUIDATION,Water
+mega_abyssillery,Rain Dance,RAIN_DANCE,Water
+mega_abyssillery,Shadow Ball,SHADOW_BALL,Ghost
+mega_abyssillery,Shadow Claw,SHADOW_CLAW,Ghost
+mega_abyssillery,Hex,HEX,Ghost
+mega_abyssillery,Will-O-Wisp,WILL_O_WISP,Fire
+mega_abyssillery,Knock Off,KNOCK_OFF,Dark
+mega_abyssillery,Protect,PROTECT,Normal
+mega_abyssillery,Substitute,SUBSTITUTE,Normal
+mega_abyssillery,Rest,REST,Psychic
+mega_abyssillery,Sleep Talk,SLEEP_TALK,Normal
+mega_abyssillery,Facade,FACADE,Normal
+mega_abyssillery,Tera Blast,TERA_BLAST,Normal
+glaciargift,Ice Beam,ICE_BEAM,Ice
+glaciargift,Blizzard,BLIZZARD,Ice
+glaciargift,Icy Wind,ICY_WIND,Ice
+glaciargift,Ice Punch,ICE_PUNCH,Ice
+glaciargift,Brave Bird,BRAVE_BIRD,Flying
+glaciargift,Air Slash,AIR_SLASH,Flying
+glaciargift,Aerial Ace,AERIAL_ACE,Flying
+glaciargift,Tailwind,TAILWIND,Flying
+glaciargift,Hurricane,HURRICANE,Flying
+glaciargift,U-turn,U_TURN,Bug
+glaciargift,Protect,PROTECT,Normal
+glaciargift,Substitute,SUBSTITUTE,Normal
+glaciargift,Rest,REST,Psychic
+glaciargift,Sleep Talk,SLEEP_TALK,Normal
+glaciargift,Facade,FACADE,Normal
+glaciargift,Tera Blast,TERA_BLAST,Normal
+mega_glaciargift,Ice Beam,ICE_BEAM,Ice
+mega_glaciargift,Blizzard,BLIZZARD,Ice
+mega_glaciargift,Icy Wind,ICY_WIND,Ice
+mega_glaciargift,Ice Punch,ICE_PUNCH,Ice
+mega_glaciargift,Brave Bird,BRAVE_BIRD,Flying
+mega_glaciargift,Air Slash,AIR_SLASH,Flying
+mega_glaciargift,Aerial Ace,AERIAL_ACE,Flying
+mega_glaciargift,Tailwind,TAILWIND,Flying
+mega_glaciargift,Hurricane,HURRICANE,Flying
+mega_glaciargift,U-turn,U_TURN,Bug
+mega_glaciargift,Protect,PROTECT,Normal
+mega_glaciargift,Substitute,SUBSTITUTE,Normal
+mega_glaciargift,Rest,REST,Psychic
+mega_glaciargift,Sleep Talk,SLEEP_TALK,Normal
+mega_glaciargift,Facade,FACADE,Normal
+mega_glaciargift,Tera Blast,TERA_BLAST,Normal
+yuleflare,Flamethrower,FLAMETHROWER,Fire
+yuleflare,Fire Blast,FIRE_BLAST,Fire
+yuleflare,Will-O-Wisp,WILL_O_WISP,Fire
+yuleflare,Flare Blitz,FLARE_BLITZ,Fire
+yuleflare,Body Slam,BODY_SLAM,Normal
+yuleflare,Hyper Voice,HYPER_VOICE,Normal
+yuleflare,U-turn,U_TURN,Bug
+yuleflare,Brave Bird,BRAVE_BIRD,Flying
+yuleflare,Fake Out,FAKE_OUT,Normal
+yuleflare,Protect,PROTECT,Normal
+yuleflare,Substitute,SUBSTITUTE,Normal
+yuleflare,Rest,REST,Psychic
+yuleflare,Sleep Talk,SLEEP_TALK,Normal
+yuleflare,Facade,FACADE,Normal
+yuleflare,Tera Blast,TERA_BLAST,Normal
+mega_yuleflare,Flamethrower,FLAMETHROWER,Fire
+mega_yuleflare,Fire Blast,FIRE_BLAST,Fire
+mega_yuleflare,Will-O-Wisp,WILL_O_WISP,Fire
+mega_yuleflare,Flare Blitz,FLARE_BLITZ,Fire
+mega_yuleflare,Body Slam,BODY_SLAM,Normal
+mega_yuleflare,Hyper Voice,HYPER_VOICE,Normal
+mega_yuleflare,U-turn,U_TURN,Bug
+mega_yuleflare,Brave Bird,BRAVE_BIRD,Flying
+mega_yuleflare,Fake Out,FAKE_OUT,Normal
+mega_yuleflare,Protect,PROTECT,Normal
+mega_yuleflare,Substitute,SUBSTITUTE,Normal
+mega_yuleflare,Rest,REST,Psychic
+mega_yuleflare,Sleep Talk,SLEEP_TALK,Normal
+mega_yuleflare,Facade,FACADE,Normal
+mega_yuleflare,Tera Blast,TERA_BLAST,Normal
+sleighdrake,Flash Cannon,FLASH_CANNON,Steel
+sleighdrake,Iron Head,IRON_HEAD,Steel
+sleighdrake,Heavy Slam,HEAVY_SLAM,Steel
+sleighdrake,Iron Defense,IRON_DEFENSE,Steel
+sleighdrake,Ice Beam,ICE_BEAM,Ice
+sleighdrake,Blizzard,BLIZZARD,Ice
+sleighdrake,Icy Wind,ICY_WIND,Ice
+sleighdrake,Ice Punch,ICE_PUNCH,Ice
+sleighdrake,Brave Bird,BRAVE_BIRD,Flying
+sleighdrake,Swords Dance,SWORDS_DANCE,Normal
+sleighdrake,Protect,PROTECT,Normal
+sleighdrake,Substitute,SUBSTITUTE,Normal
+sleighdrake,Rest,REST,Psychic
+sleighdrake,Sleep Talk,SLEEP_TALK,Normal
+sleighdrake,Facade,FACADE,Normal
+sleighdrake,Tera Blast,TERA_BLAST,Normal
+mega_sleighdrake,Flash Cannon,FLASH_CANNON,Steel
+mega_sleighdrake,Iron Head,IRON_HEAD,Steel
+mega_sleighdrake,Heavy Slam,HEAVY_SLAM,Steel
+mega_sleighdrake,Iron Defense,IRON_DEFENSE,Steel
+mega_sleighdrake,Ice Beam,ICE_BEAM,Ice
+mega_sleighdrake,Blizzard,BLIZZARD,Ice
+mega_sleighdrake,Icy Wind,ICY_WIND,Ice
+mega_sleighdrake,Ice Punch,ICE_PUNCH,Ice
+mega_sleighdrake,Brave Bird,BRAVE_BIRD,Flying
+mega_sleighdrake,Swords Dance,SWORDS_DANCE,Normal
+mega_sleighdrake,Protect,PROTECT,Normal
+mega_sleighdrake,Substitute,SUBSTITUTE,Normal
+mega_sleighdrake,Rest,REST,Psychic
+mega_sleighdrake,Sleep Talk,SLEEP_TALK,Normal
+mega_sleighdrake,Facade,FACADE,Normal
+mega_sleighdrake,Tera Blast,TERA_BLAST,Normal
+cerberound,Crunch,CRUNCH,Dark
+cerberound,Dark Pulse,DARK_PULSE,Dark
+cerberound,Knock Off,KNOCK_OFF,Dark
+cerberound,Taunt,TAUNT,Dark
+cerberound,Flamethrower,FLAMETHROWER,Fire
+cerberound,Fire Blast,FIRE_BLAST,Fire
+cerberound,Will-O-Wisp,WILL_O_WISP,Fire
+cerberound,Flare Blitz,FLARE_BLITZ,Fire
+cerberound,Nasty Plot,NASTY_PLOT,Dark
+cerberound,Protect,PROTECT,Normal
+cerberound,Substitute,SUBSTITUTE,Normal
+cerberound,Rest,REST,Psychic
+cerberound,Sleep Talk,SLEEP_TALK,Normal
+cerberound,Facade,FACADE,Normal
+cerberound,Tera Blast,TERA_BLAST,Normal
+mega_donphan,Earthquake,EARTHQUAKE,Ground
+mega_donphan,Earth Power,EARTH_POWER,Ground
+mega_donphan,Dig,DIG,Ground
+mega_donphan,Bulldoze,BULLDOZE,Ground
+mega_donphan,Flash Cannon,FLASH_CANNON,Steel
+mega_donphan,Iron Head,IRON_HEAD,Steel
+mega_donphan,Heavy Slam,HEAVY_SLAM,Steel
+mega_donphan,Iron Defense,IRON_DEFENSE,Steel
+mega_donphan,Knock Off,KNOCK_OFF,Dark
+mega_donphan,Stealth Rock,STEALTH_ROCK,Rock
+mega_donphan,Protect,PROTECT,Normal
+mega_donphan,Substitute,SUBSTITUTE,Normal
+mega_donphan,Rest,REST,Psychic
+mega_donphan,Sleep Talk,SLEEP_TALK,Normal
+mega_donphan,Facade,FACADE,Normal
+mega_donphan,Tera Blast,TERA_BLAST,Normal
+spectant,Shadow Ball,SHADOW_BALL,Ghost
+spectant,Shadow Claw,SHADOW_CLAW,Ghost
+spectant,Hex,HEX,Ghost
+spectant,Will-O-Wisp,WILL_O_WISP,Fire
+spectant,Psychic,PSYCHIC,Psychic
+spectant,Psyshock,PSYSHOCK,Psychic
+spectant,Zen Headbutt,ZEN_HEADBUTT,Psychic
+spectant,Calm Mind,CALM_MIND,Psychic
+spectant,Poltergeist,POLTERGEIST,Ghost
+spectant,Protect,PROTECT,Normal
+spectant,Substitute,SUBSTITUTE,Normal
+spectant,Rest,REST,Psychic
+spectant,Sleep Talk,SLEEP_TALK,Normal
+spectant,Facade,FACADE,Normal
+spectant,Tera Blast,TERA_BLAST,Normal
+mega_spectant,Shadow Ball,SHADOW_BALL,Ghost
+mega_spectant,Shadow Claw,SHADOW_CLAW,Ghost
+mega_spectant,Hex,HEX,Ghost
+mega_spectant,Will-O-Wisp,WILL_O_WISP,Fire
+mega_spectant,Psychic,PSYCHIC,Psychic
+mega_spectant,Psyshock,PSYSHOCK,Psychic
+mega_spectant,Zen Headbutt,ZEN_HEADBUTT,Psychic
+mega_spectant,Calm Mind,CALM_MIND,Psychic
+mega_spectant,Poltergeist,POLTERGEIST,Ghost
+mega_spectant,Protect,PROTECT,Normal
+mega_spectant,Substitute,SUBSTITUTE,Normal
+mega_spectant,Rest,REST,Psychic
+mega_spectant,Sleep Talk,SLEEP_TALK,Normal
+mega_spectant,Facade,FACADE,Normal
+mega_spectant,Tera Blast,TERA_BLAST,Normal
+doodlume,Body Slam,BODY_SLAM,Normal
+doodlume,Hyper Voice,HYPER_VOICE,Normal
+doodlume,Crunch,CRUNCH,Dark
+doodlume,Dark Pulse,DARK_PULSE,Dark
+doodlume,Knock Off,KNOCK_OFF,Dark
+doodlume,Taunt,TAUNT,Dark
+doodlume,Nasty Plot,NASTY_PLOT,Dark
+doodlume,Protect,PROTECT,Normal
+doodlume,Substitute,SUBSTITUTE,Normal
+doodlume,Rest,REST,Psychic
+doodlume,Sleep Talk,SLEEP_TALK,Normal
+doodlume,Facade,FACADE,Normal
+doodlume,Tera Blast,TERA_BLAST,Normal
+masterpiece,Body Slam,BODY_SLAM,Normal
+masterpiece,Hyper Voice,HYPER_VOICE,Normal
+masterpiece,Psychic,PSYCHIC,Psychic
+masterpiece,Psyshock,PSYSHOCK,Psychic
+masterpiece,Zen Headbutt,ZEN_HEADBUTT,Psychic
+masterpiece,Calm Mind,CALM_MIND,Psychic
+masterpiece,Shadow Ball,SHADOW_BALL,Ghost
+masterpiece,Protect,PROTECT,Normal
+masterpiece,Substitute,SUBSTITUTE,Normal
+masterpiece,Rest,REST,Psychic
+masterpiece,Sleep Talk,SLEEP_TALK,Normal
+masterpiece,Facade,FACADE,Normal
+masterpiece,Tera Blast,TERA_BLAST,Normal
+mega_masterpiece,Body Slam,BODY_SLAM,Normal
+mega_masterpiece,Hyper Voice,HYPER_VOICE,Normal
+mega_masterpiece,Psychic,PSYCHIC,Psychic
+mega_masterpiece,Psyshock,PSYSHOCK,Psychic
+mega_masterpiece,Zen Headbutt,ZEN_HEADBUTT,Psychic
+mega_masterpiece,Calm Mind,CALM_MIND,Psychic
+mega_masterpiece,Shadow Ball,SHADOW_BALL,Ghost
+mega_masterpiece,Protect,PROTECT,Normal
+mega_masterpiece,Substitute,SUBSTITUTE,Normal
+mega_masterpiece,Rest,REST,Psychic
+mega_masterpiece,Sleep Talk,SLEEP_TALK,Normal
+mega_masterpiece,Facade,FACADE,Normal
+mega_masterpiece,Tera Blast,TERA_BLAST,Normal
+mega_hitmontop,Close Combat,CLOSE_COMBAT,Fighting
+mega_hitmontop,Brick Break,BRICK_BREAK,Fighting
+mega_hitmontop,Focus Blast,FOCUS_BLAST,Fighting
+mega_hitmontop,Bulk Up,BULK_UP,Fighting
+mega_hitmontop,Flash Cannon,FLASH_CANNON,Steel
+mega_hitmontop,Iron Head,IRON_HEAD,Steel
+mega_hitmontop,Heavy Slam,HEAVY_SLAM,Steel
+mega_hitmontop,Iron Defense,IRON_DEFENSE,Steel
+mega_hitmontop,Protect,PROTECT,Normal
+mega_hitmontop,Substitute,SUBSTITUTE,Normal
+mega_hitmontop,Rest,REST,Psychic
+mega_hitmontop,Sleep Talk,SLEEP_TALK,Normal
+mega_hitmontop,Facade,FACADE,Normal
+mega_hitmontop,Tera Blast,TERA_BLAST,Normal
+calflet,Body Slam,BODY_SLAM,Normal
+calflet,Hyper Voice,HYPER_VOICE,Normal
+calflet,Protect,PROTECT,Normal
+calflet,Substitute,SUBSTITUTE,Normal
+calflet,Rest,REST,Psychic
+calflet,Sleep Talk,SLEEP_TALK,Normal
+calflet,Facade,FACADE,Normal
+calflet,Tera Blast,TERA_BLAST,Normal
+bovinia,Body Slam,BODY_SLAM,Normal
+bovinia,Hyper Voice,HYPER_VOICE,Normal
+bovinia,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+bovinia,Play Rough,PLAY_ROUGH,Normal
+bovinia,Draining Kiss,DRAINING_KISS,Fairy
+bovinia,Misty Terrain,MISTY_TERRAIN,Fairy
+bovinia,Earthquake,EARTHQUAKE,Ground
+bovinia,Bulk Up,BULK_UP,Fighting
+bovinia,Protect,PROTECT,Normal
+bovinia,Substitute,SUBSTITUTE,Normal
+bovinia,Rest,REST,Psychic
+bovinia,Sleep Talk,SLEEP_TALK,Normal
+bovinia,Facade,FACADE,Normal
+bovinia,Tera Blast,TERA_BLAST,Normal
+mega_raikou,Thunderbolt,THUNDERBOLT,Electric
+mega_raikou,Thunder,THUNDER,Electric
+mega_raikou,Volt Switch,VOLT_SWITCH,Electric
+mega_raikou,Thunder Wave,THUNDER_WAVE,Electric
+mega_raikou,Flash Cannon,FLASH_CANNON,Steel
+mega_raikou,Iron Head,IRON_HEAD,Steel
+mega_raikou,Heavy Slam,HEAVY_SLAM,Steel
+mega_raikou,Iron Defense,IRON_DEFENSE,Steel
+mega_raikou,Calm Mind,CALM_MIND,Psychic
+mega_raikou,Protect,PROTECT,Normal
+mega_raikou,Substitute,SUBSTITUTE,Normal
+mega_raikou,Rest,REST,Psychic
+mega_raikou,Sleep Talk,SLEEP_TALK,Normal
+mega_raikou,Facade,FACADE,Normal
+mega_raikou,Tera Blast,TERA_BLAST,Normal
+mega_entei,Flamethrower,FLAMETHROWER,Fire
+mega_entei,Fire Blast,FIRE_BLAST,Fire
+mega_entei,Will-O-Wisp,WILL_O_WISP,Fire
+mega_entei,Flare Blitz,FLARE_BLITZ,Fire
+mega_entei,Earthquake,EARTHQUAKE,Ground
+mega_entei,Earth Power,EARTH_POWER,Ground
+mega_entei,Dig,DIG,Ground
+mega_entei,Bulldoze,BULLDOZE,Ground
+mega_entei,Stone Edge,STONE_EDGE,Rock
+mega_entei,Protect,PROTECT,Normal
+mega_entei,Substitute,SUBSTITUTE,Normal
+mega_entei,Rest,REST,Psychic
+mega_entei,Sleep Talk,SLEEP_TALK,Normal
+mega_entei,Facade,FACADE,Normal
+mega_entei,Tera Blast,TERA_BLAST,Normal
+mega_suicune,Surf,SURF,Water
+mega_suicune,Hydro Pump,HYDRO_PUMP,Water
+mega_suicune,Liquidation,LIQUIDATION,Water
+mega_suicune,Rain Dance,RAIN_DANCE,Water
+mega_suicune,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+mega_suicune,Play Rough,PLAY_ROUGH,Normal
+mega_suicune,Draining Kiss,DRAINING_KISS,Fairy
+mega_suicune,Misty Terrain,MISTY_TERRAIN,Fairy
+mega_suicune,Calm Mind,CALM_MIND,Psychic
+mega_suicune,Ice Beam,ICE_BEAM,Ice
+mega_suicune,Protect,PROTECT,Normal
+mega_suicune,Substitute,SUBSTITUTE,Normal
+mega_suicune,Rest,REST,Psychic
+mega_suicune,Sleep Talk,SLEEP_TALK,Normal
+mega_suicune,Facade,FACADE,Normal
+mega_suicune,Tera Blast,TERA_BLAST,Normal
+mega_lugia,Psychic,PSYCHIC,Psychic
+mega_lugia,Psyshock,PSYSHOCK,Psychic
+mega_lugia,Zen Headbutt,ZEN_HEADBUTT,Psychic
+mega_lugia,Calm Mind,CALM_MIND,Psychic
+mega_lugia,Brave Bird,BRAVE_BIRD,Flying
+mega_lugia,Air Slash,AIR_SLASH,Flying
+mega_lugia,Aerial Ace,AERIAL_ACE,Flying
+mega_lugia,Tailwind,TAILWIND,Flying
+mega_lugia,Ice Beam,ICE_BEAM,Ice
+mega_lugia,Protect,PROTECT,Normal
+mega_lugia,Substitute,SUBSTITUTE,Normal
+mega_lugia,Rest,REST,Psychic
+mega_lugia,Sleep Talk,SLEEP_TALK,Normal
+mega_lugia,Facade,FACADE,Normal
+mega_lugia,Tera Blast,TERA_BLAST,Normal
+mega_ho_oh,Flamethrower,FLAMETHROWER,Fire
+mega_ho_oh,Fire Blast,FIRE_BLAST,Fire
+mega_ho_oh,Will-O-Wisp,WILL_O_WISP,Fire
+mega_ho_oh,Flare Blitz,FLARE_BLITZ,Fire
+mega_ho_oh,Brave Bird,BRAVE_BIRD,Flying
+mega_ho_oh,Air Slash,AIR_SLASH,Flying
+mega_ho_oh,Aerial Ace,AERIAL_ACE,Flying
+mega_ho_oh,Tailwind,TAILWIND,Flying
+mega_ho_oh,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+mega_ho_oh,Play Rough,PLAY_ROUGH,Normal
+mega_ho_oh,Draining Kiss,DRAINING_KISS,Fairy
+mega_ho_oh,Misty Terrain,MISTY_TERRAIN,Fairy
+mega_ho_oh,Earthquake,EARTHQUAKE,Ground
+mega_ho_oh,Protect,PROTECT,Normal
+mega_ho_oh,Substitute,SUBSTITUTE,Normal
+mega_ho_oh,Rest,REST,Psychic
+mega_ho_oh,Sleep Talk,SLEEP_TALK,Normal
+mega_ho_oh,Facade,FACADE,Normal
+mega_ho_oh,Tera Blast,TERA_BLAST,Normal
+chronoceli,Psychic,PSYCHIC,Psychic
+chronoceli,Psyshock,PSYSHOCK,Psychic
+chronoceli,Zen Headbutt,ZEN_HEADBUTT,Psychic
+chronoceli,Calm Mind,CALM_MIND,Psychic
+chronoceli,Energy Ball,ENERGY_BALL,Grass
+chronoceli,Giga Drain,GIGA_DRAIN,Grass
+chronoceli,Solar Beam,SOLAR_BEAM,Grass
+chronoceli,Seed Bomb,SEED_BOMB,Grass
+chronoceli,Leaf Storm,LEAF_STORM,Grass
+chronoceli,Protect,PROTECT,Normal
+chronoceli,Substitute,SUBSTITUTE,Normal
+chronoceli,Rest,REST,Psychic
+chronoceli,Sleep Talk,SLEEP_TALK,Normal
+chronoceli,Facade,FACADE,Normal
+chronoceli,Tera Blast,TERA_BLAST,Normal

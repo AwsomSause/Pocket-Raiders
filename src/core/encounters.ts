@@ -314,11 +314,21 @@ export function planTrainer(content: Content, archetype: Archetype, theme: Theme
  * (Kice, 2026-11-06: harder rivals). The opener is a second starter-line Pokémon at the player's level. Both
  * come from the same seeded stream as before, with the extra draw last, so the name and ace species never move.
  */
-export function planFirstRival(content: Content, seed: string, playerLevel: number = content.balance.rival.level): TrainerPlan {
+/** Rival names the player's own trainer rules out: a player who is Red never meets Red or Manga Red as a rival (same for Kris, Lyra and Green). */
+export function rivalNamesExcluded(content: Content, archetypeId: string | undefined): string[] {
+  const words: string[] = (content.archetypes.get(archetypeId ?? '')?.name ?? '').toLowerCase().match(/[a-z]+/g) ?? [];
+  const out: string[] = [];
+  if (words.includes('red')) out.push('Red', 'Manga Red');
+  for (const n of ['Kris', 'Lyra', 'Green']) if (words.includes(n.toLowerCase())) out.push(n);
+  return out;
+}
+
+export function planFirstRival(content: Content, seed: string, playerLevel: number = content.balance.rival.level, exclude: readonly string[] = []): TrainerPlan {
   const cfg = content.balance.rival;
   const r = new Rng(hashSeed(`${seed}::first-rival`));
   const aceRoll = r.int(0, cfg.starters.length - 1);
-  const name = r.pick(content.trainers.get(RIVAL_CLASS)!.names);
+  const allNames = content.trainers.get(RIVAL_CLASS)!.names;
+  const name = r.pick(exclude.length ? allNames.filter((n) => !exclude.includes(n)) : allNames);
   const others = cfg.starters.filter((id) => id !== cfg.starters[aceRoll]);
   const openerRoll = r.int(0, others.length - 1);
   // Kice 2026-11-07: the starter-line Pokémon come from the rival's home region; a signature Pokémon is the opener.

@@ -7,6 +7,7 @@ import type { Content, TypeName } from './contentSchema';
 import { TYPE_NAMES } from './contentSchema';
 import { LICENSES, type LicenseId } from './license';
 import { availableMentors, getMentor, mentorBlurb } from './mentors';
+import { ownsTrainer } from './progress';
 import { tokenAvailable, tokenLockText } from './runPrep';
 import { RUN_RULES, getMode, heatOf, type RulesChoice } from './rules';
 import type { Profile, RunPrep } from './state';
@@ -68,7 +69,7 @@ export function optionsFor(row: OptionRow, content: Content, profile: Profile, s
   const none = (label = 'None', detail = 'Nothing chosen.'): Opt => ({ id: NONE, label, detail, ok: true });
   switch (row) {
     case 'trainer': {
-      const options = [...content.archetypes.values()].filter((a) => a.available && (a.unlockedByDefault || profile.unlockedArchetypes.includes(a.id))).map((a) => ({ id: a.id, label: a.name, detail: a.description ?? '', ok: true }));
+      const options = [...content.archetypes.values()].filter((a) => a.available && ownsTrainer(profile, a)).map((a) => ({ id: a.id, label: a.name, detail: a.description ?? '', ok: true }));
       return { options, chosen: s.archetypeId, enabled: true };
     }
     case 'token': {

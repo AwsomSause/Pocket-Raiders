@@ -10,6 +10,7 @@
 //               until it is built (the list is in CHECKLIST.md, part C3)
 
 import type { BoostStat, StatusId, Terrain, TypeName, Weather } from '../contentSchema';
+import { JET_ABILITIES } from './jetAbilities';
 
 export type AbilityStatus = 'supported' | 'noEffect' | 'pending';
 
@@ -17,16 +18,19 @@ export type AbilityStatus = 'supported' | 'noEffect' | 'pending';
 export const PINCH: Record<string, TypeName> = { overgrow: 'grass', blaze: 'fire', torrent: 'water', swarm: 'bug' };
 
 /** Weather set when the Pokémon comes in. */
-export const WEATHER_SETTERS: Record<string, Weather> = { drizzle: 'rain', drought: 'sun', 'sand-stream': 'sand', 'snow-warning': 'snow', ashfall: 'sand' };
+export const WEATHER_SETTERS: Record<string, Weather> = { drizzle: 'rain', drought: 'sun', 'sand-stream': 'sand', 'snow-warning': 'snow', ashfall: 'sand',
+  // Jet Pokédex batch 5 (jetAbilities.ts has the rest of their rules; High Noon's sun lasts 8 turns).
+  'sun-sovereign': 'sun', 'high-noon': 'sun', 'frozen-throne': 'snow', 'eternal-winter': 'snow', whiteout: 'snow', 'storm-sovereign': 'rain', 'royal-chorus': 'rain', 'deep-sea-tempest': 'rain', 'sandstorm-shell': 'sand' };
 
 /** Terrain set when the Pokémon comes in. */
-export const TERRAIN_SETTERS: Record<string, Terrain> = { 'electric-surge': 'electric', 'grassy-surge': 'grassy', 'misty-surge': 'misty', 'psychic-surge': 'psychic' };
+export const TERRAIN_SETTERS: Record<string, Terrain> = { 'electric-surge': 'electric', 'grassy-surge': 'grassy', 'misty-surge': 'misty', 'psychic-surge': 'psychic', 'living-island': 'grassy', thunderclap: 'electric' };
 
 /** Speed doubles in this weather. */
-export const WEATHER_SPEED: Record<string, Weather[]> = { 'swift-swim': ['rain'], chlorophyll: ['sun'], 'sand-rush': ['sand'], 'slush-rush': ['snow', 'hail'] };
+export const WEATHER_SPEED: Record<string, Weather[]> = { 'swift-swim': ['rain'], chlorophyll: ['sun'], 'sand-rush': ['sand'], 'slush-rush': ['snow', 'hail'],
+  'solar-hooves': ['sun'], 'pollen-breeze': ['sun'], 'tidal-crown': ['rain'], 'royal-plumes': ['rain'], whiteout: ['snow', 'hail'], 'runner-blades': ['snow', 'hail'], 'downhill-run': ['snow', 'hail'] };
 
 /** Evasion: moves against it are 0.8× as accurate in this weather. */
-export const WEATHER_EVASION: Record<string, Weather[]> = { 'sand-veil': ['sand'], 'snow-cloak': ['snow', 'hail'] };
+export const WEATHER_EVASION: Record<string, Weather[]> = { 'sand-veil': ['sand'], 'snow-cloak': ['snow', 'hail'], 'frost-phantom': ['snow', 'hail'] };
 
 /** Not hurt by sandstorm or hail (Overcoat and Magic Guard by both). */
 export const WEATHER_DAMAGE_IMMUNE: Record<string, Weather[]> = {
@@ -38,6 +42,7 @@ export const WEATHER_DAMAGE_IMMUNE: Record<string, Weather[]> = {
   'ice-body': ['hail'],
   ashfall: ['sand'],
   'snow-cloak': ['hail'],
+  'polar-tusk': ['snow', 'hail'],
 };
 
 /**
@@ -45,7 +50,7 @@ export const WEATHER_DAMAGE_IMMUNE: Record<string, Weather[]> = {
  * too): it heals a fraction of its max HP, raises a stat, or (Flash Fire)
  * powers up its own Fire moves.
  */
-export const ABSORB: Record<string, { type: TypeName; heal?: number; boost?: { stat: BoostStat; stages: number }; flashFire?: true }> = {
+export const ABSORB: Record<string, { type: TypeName; heal?: number; boost?: { stat: BoostStat; stages: number }; flashFire?: true; smog?: true }> = {
   'volt-absorb': { type: 'electric', heal: 1 / 4 },
   'water-absorb': { type: 'water', heal: 1 / 4 },
   'dry-skin': { type: 'water', heal: 1 / 4 },
@@ -57,6 +62,10 @@ export const ABSORB: Record<string, { type: TypeName; heal?: number; boost?: { s
   'motor-drive': { type: 'electric', boost: { stat: 'spe', stages: 1 } },
   'well-baked-body': { type: 'fire', boost: { stat: 'def', stages: 2 } },
   'forge-body': { type: 'fire', boost: { stat: 'def', stages: 1 } },
+  // Jet Pokédex batch 5. Smog Furnace also poisons the attacker's side (jetHooks.ts).
+  'foxfire-veil': { type: 'fire', flashFire: true },
+  'orbital-charge': { type: 'electric', boost: { stat: 'spe', stages: 1 } },
+  'smog-furnace': { type: 'fire', smog: true },
 };
 
 /** Statuses it can't get. */
@@ -73,6 +82,11 @@ export const STATUS_IMMUNE: Record<string, StatusId[]> = {
   'magma-armor': ['frz'],
   'purifying-salt': ['brn', 'psn', 'par', 'slp', 'frz'],
   comatose: ['brn', 'psn', 'par', 'slp', 'frz'],
+  'foxfire-veil': ['brn'],
+  permafrost: ['frz'],
+  'soulfire-runes': ['brn'],
+  'festival-flame': ['frz'],
+  'warm-hearth': ['frz'],
 };
 
 /** Stat drops caused by the opponent that it ignores ('all' = every stat). */
@@ -89,6 +103,10 @@ export const DROP_GUARD: Record<string, BoostStat | 'all'> = {
   unbothered: 'all',
   // Greenneedle gn.new.14: the Arcade Cabinet's Porygon.
   debug: 'all',
+  'regal-poise': 'all',
+  'living-hillside': 'all',
+  'cotton-cloud': 'spe',
+  'drake-wings': 'spe',
 };
 
 /** Abilities that also stop Intimidate (Gen 8+). */
@@ -104,13 +122,16 @@ export const FLAG_BOOST: Record<string, { flag: 'contact' | 'punch' | 'bite' | '
   'punk-rock': { flag: 'sound', multiplier: 1.3 },
   'thorn-ballad': { flag: 'sound', multiplier: 1.2 },
   'dread-jaws': { flag: 'bite', multiplier: 1.3 },
+  'jaws-of-the-deep': { flag: 'bite', multiplier: 1.5 },
+  'iron-jaw': { flag: 'bite', multiplier: 1.5 },
+  'blade-storm': { flag: 'slicing', multiplier: 1.5 },
 };
 
 /** Normal moves become this type and are 1.2× as strong. */
 export const TYPE_CHANGE: Record<string, TypeName> = { pixilate: 'fairy', aerilate: 'flying', refrigerate: 'ice', galvanize: 'electric', dragonize: 'dragon', /** Pidgey's Resolve: Normal moves become Flying and 1.2x (it also never misses and cannot be missed: see engine noGuard). */ 'skys-resolve': 'flying' };
 
 /** A contact move on it may give the attacker this status (30%). */
-export const CONTACT_STATUS: Record<string, StatusId> = { static: 'par', 'flame-body': 'brn', 'poison-point': 'psn' };
+export const CONTACT_STATUS: Record<string, StatusId> = { static: 'par', 'flame-body': 'brn', 'poison-point': 'psn', 'blazing-mane': 'brn' };
 
 /** A contact move on it hurts the attacker by 1/8 of the attacker's max HP. */
 export const CONTACT_HURT = new Set(['rough-skin', 'iron-barbs', 'live-wire']);
@@ -142,7 +163,7 @@ export const AURAS: Record<string, TypeName> = { 'dark-aura': 'dark', 'fairy-aur
 export const ENTRY_BOOST: Record<string, BoostStat> = { 'intrepid-sword': 'atk', 'dauntless-shield': 'def' };
 
 /** The foe's priority moves fail against these. */
-export const PRIORITY_GUARD = new Set(['queenly-majesty', 'dazzling', 'armor-tail']);
+export const PRIORITY_GUARD = new Set(['queenly-majesty', 'dazzling', 'armor-tail', 'foresight-plumes']);
 
 /** Trace can't copy these; Mummy and Lingering Aroma don't overwrite them. */
 export const UNTRACEABLE = new Set(['trace', 'stance-change', 'schooling', 'disguise', 'battle-bond', 'power-construct', 'rks-system', 'zen-mode', 'imposter', 'illusion', 'comatose', 'receiver', 'power-of-alchemy', 'neutralizing-gas', 'gulp-missile', 'hunger-switch', 'ice-face', 'zero-to-hero', 'tera-shift', 'terashell', 'teraform-zero', 'commander', 'as-one-glastrier', 'as-one-spectrier']);
@@ -229,6 +250,7 @@ const SUPPORTED = new Set<string>([
   ...Object.keys(RUINS),
   ...TRAPPERS,
   ...Object.keys(HALF_HP_BOOST),
+  ...JET_ABILITIES,
   'neutralizing-gas', 'guard-dog', 'color-change', 'cursed-body', 'perish-body', 'cotton-down', 'toxic-debris',
   'piercing-drill', 'unseen-fist',
   'bulletproof', 'sharpness', 'wind-rider', 'wind-power', 'electromorphosis', 'desolate-land', 'primordial-sea', 'forecast', 'flower-gift',

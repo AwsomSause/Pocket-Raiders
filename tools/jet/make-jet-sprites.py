@@ -7,8 +7,10 @@ public/assets/images/pokemon/{,back/,shiny/,back/shiny/}custom/<id>.{png,json}. 
 the front mirrored and shiny is always the normal art. The Viking (one 152x168 picture) becomes a
 256x256 overworld sheet (4x4 frames of 64 px, every frame the same picture, so he stands and bobs).
 """
+import colorsys
 import json
 import os
+import re
 
 from PIL import Image, ImageOps
 
@@ -28,6 +30,27 @@ MONS = ['vine-riff', 'electric-oncore', 'pyro-spirit', 'neon-moon', 'bastiodoom'
         'hoopno']
 # The source file name differs from the game id for the Mega (the game calls it alolan-flygon-mega like the other Megas).
 OUT_ID = {'mega-alolan-flygon': 'alolan-flygon-mega'}
+
+# Batch 5 (jet-pokedex-data.zip, dex 63-207, + Kanto_Johto_sprites.zip + Backsprites.zip): every other pack entry. Megas are
+# <base>-mega (-x/-y/-z kept), Dynamax forms <base>-gmax, like build-jet-species.ts.
+def _name_id(n):
+    return n.lower().replace('.', '').replace("'", '').replace('\u2019', '').replace('_', '-').replace(' ', '-')
+
+
+_pack = json.load(open(os.path.join(src, 'pokedex.json')))['pokemon']
+_plain = {p['name']: p['id'].replace('_', '-') for p in _pack if p['evolution'].get('trigger') not in ('mega_evolution', 'dynamax')}
+for _p in _pack:
+    if _p['dexNumber'] <= 62:
+        continue
+    _key = _p['id'].replace('_', '-')
+    _t = _p['evolution'].get('trigger')
+    _base = _plain.get(_p['evolution'].get('from'), _name_id(_p['evolution'].get('from') or ''))
+    _m = re.search(r'-([xyz])$', _key)
+    if _t == 'mega_evolution':
+        OUT_ID[_key] = f"{_base}-mega" + (f"-{_m.group(1)}" if _m else '')
+    elif _t == 'dynamax':
+        OUT_ID[_key] = f"{_base}-gmax"
+    MONS.append(_key)
 
 
 def trim(im):
@@ -80,6 +103,26 @@ for key in MONS:
     back_shiny = [trim(Image.open(sbp).convert('RGBA'))] if os.path.exists(sbp) else back
     for folder, frames in (('', front), ('back', back), ('shiny', shiny), (os.path.join('back', 'shiny'), back_shiny)):
         write_atlas(frames, folder, OUT_ID.get(key, key))
+
+# Mega stone icons for batch 5: the Garchompite picture turned to the stone's main type colour.
+TYPE_HUE = {'normal': 0.1, 'fire': 0.0, 'water': 0.6, 'electric': 0.15, 'grass': 0.33, 'ice': 0.5, 'fighting': 0.03, 'poison': 0.8, 'ground': 0.1, 'flying': 0.65,
+            'psychic': 0.9, 'bug': 0.25, 'rock': 0.12, 'ghost': 0.75, 'dragon': 0.7, 'dark': 0.7, 'steel': 0.55, 'fairy': 0.93}
+stones_path = os.path.join(src, 'stones.json')
+if os.path.exists(stones_path):
+    base_icon = Image.open(os.path.join(out, 'items', 'garchompite.png')).convert('RGBA')
+    for st in json.load(open(stones_path)):
+        hue = TYPE_HUE.get(st['type'], 0.5)
+        px = base_icon.copy().load()
+        icon = base_icon.copy()
+        pix = icon.load()
+        for y in range(icon.height):
+            for x in range(icon.width):
+                r, g, b, a = pix[x, y]
+                if a:
+                    h, l, sat = colorsys.rgb_to_hls(r / 255, g / 255, b / 255)
+                    nr, ng, nb = colorsys.hls_to_rgb(hue, l, max(sat, 0.35))
+                    pix[x, y] = (round(nr * 255), round(ng * 255), round(nb * 255), a)
+        icon.save(os.path.join(out, 'items', st['id'].replace('-', '_') + '.png'), optimize=True)
 
 viking = trim(Image.open(os.path.join(src, 'viking.png')).convert('RGBA'))
 scale = 56 / viking.height

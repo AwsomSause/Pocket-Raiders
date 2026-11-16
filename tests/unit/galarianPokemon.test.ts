@@ -12,7 +12,7 @@ import { typesPool } from '../../src/core/themes';
 import { content } from './helpers';
 
 const root = join(__dirname, '..', '..');
-const pack = (JSON.parse(readFileSync(join(root, 'tools', 'jet', 'source', 'pokedex.json'), 'utf8')).pokemon as any[]).slice(23);
+const pack = (JSON.parse(readFileSync(join(root, 'tools', 'jet', 'source', 'pokedex.json'), 'utf8')).pokemon as any[]).slice(23, 62);
 const kebab = (s: string) => s.toLowerCase().replace(/[_ ]/g, '-');
 const ids = pack.map((p) => kebab(p.id));
 

@@ -138,7 +138,7 @@ export function storyGates(data: StoryData, content: Pick<Content, 'species' | '
 
   add('story-pose-set', 'Characters missing poses', 'Characters with fewer poses than their tier needs (Tier 1: 4, Tier 2: 2, Tier 3: 1).', data.characters.filter((c) => Object.keys(c.poses).length < POSES_FOR_TIER[c.tier]!).map((c) => `${c.id}: ${Object.keys(c.poses).length} of ${POSES_FOR_TIER[c.tier]}`));
 
-  add('story-look-lock', 'Look B unlocked too early', 'Look B enabled before its animation checklist is signed off.', ctx.lookB?.enabled && !ctx.lookB.checklistDone ? ['look_b is enabled but its checklist is not done'] : []);
+  add('story-look-lock', 'Nate unlocked too early', 'Nate enabled before its animation checklist is signed off.', ctx.lookB?.enabled && !ctx.lookB.checklistDone ? ['look_b is enabled but its checklist is not done'] : []);
 
   add('story-species-budget', 'Story species over the power budget', 'Remembrance species over the power class caps (extends over-power-budget).', ctx.overBudgetIds ? data.remembrances.flatMap((r) => r.line.filter((s) => ctx.overBudgetIds!.has(s)).map((s) => `${r.id}: ${s}`)) : []);
 
