@@ -6507,5 +6507,49 @@
    "Rival Episode"
   ],
   "tags": []
+ },
+ "gn-new-21": {
+  "gn": "gn.new.21",
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 9,
+  "window": [
+   7,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "None (no battles)",
+  "often": "region",
+  "badge": "own",
+  "note": "Badge: a stump. At dusk; fallback step 14. Once per region. A rhythm game of four sections (conduct) or the Pokégear recording (find the conductor). gn-new-21-night is the afterstory.",
+  "kinds": [
+   "Pokémon",
+   "Mystery"
+  ],
+  "tags": [
+   "forest"
+  ]
+ },
+ "gn-new-21-night": {
+  "gn": "gn.new.21",
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 1,
+  "window": [
+   1,
+   1
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "level": "None",
+  "often": "region",
+  "badge": "own",
+  "note": "Afterstory: the orchestra is heard faintly at Step 1 of every night stage for the rest of the region.",
+  "kinds": [
+   "Pokémon",
+   "Mystery"
+  ],
+  "tags": []
  }
 }

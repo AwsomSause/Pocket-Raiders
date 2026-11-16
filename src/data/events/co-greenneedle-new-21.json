@@ -1,0 +1,609 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-21",
+   "name": "The Orchestra",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "orchestra-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "kricketune",
+    "tint": "#7a5c8e",
+    "effect": "none"
+   },
+   "intro": "*Dusk in a meadow. Forty Kricketot tune up, a rustle of wings, a dozen small notes finding each other. Then, all at once, they stop.*\n\n*Every one of them turns, and looks at an empty tree stump.*\n\n*One in the back row plays a wrong note into the silence, and hides.*\n\n*In the long grass, an old Kricketune sits with its back to them.*",
+   "choices": [
+    {
+     "label": "Step up to the stump.",
+     "success": {
+      "text": "You step up. The stump is warm, as though someone only just left it. Forty small faces tilt up to you, and wait.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "orchestra-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "orchestra-conducted",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "orchestra-score",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-21-drones"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go and find the conductor.",
+     "success": {
+      "text": "You walk past the stump, into the long grass. The orchestra doesn't make a sound. It watches you go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "orchestra-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "orchestra-returned",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-21-return"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-21-drones",
+   "name": "The Orchestra: The Drones",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "kricketune",
+    "tint": "#7a5c8e",
+    "effect": "none"
+   },
+   "intro": "*Section 1 of 4.*\n\nThe low ones first. A dozen of them, shoulder to shoulder, humming a note so deep it comes up through your boots.",
+   "choices": [
+    {
+     "label": "Bring them in.",
+     "prompt": {
+      "id": "orchestra-drones",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "The drones come in together, one soft wave, and the whole meadow settles under them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "orchestra-score",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-21-chirps"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The drones come in ragged, half a beat early. Nobody minds. Nobody stops.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-21-chirps"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-21-chirps",
+   "name": "The Orchestra: The Chirps",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "kricketune",
+    "tint": "#7a5c8e",
+    "effect": "none"
+   },
+   "intro": "*Section 2 of 4.*\n\nNow the chirpers. They've been waiting for you, and they've been waiting a long time, and every one of them is trembling.",
+   "choices": [
+    {
+     "label": "Bring them in.",
+     "prompt": {
+      "id": "orchestra-chirps",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "The chirps fall in over the drones, bright and even. Somewhere a Kricketot is crying, quietly, with joy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "orchestra-score",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-21-trills"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The chirps trip over each other. A Kricketot laughs so hard it hiccups, and carries on.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-21-trills"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-21-trills",
+   "name": "The Orchestra: The Trills",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "kricketune",
+    "tint": "#7a5c8e",
+    "effect": "none"
+   },
+   "intro": "*Section 3 of 4.*\n\nThe fast ones now. Thin, high, impossible. Their wings blur. They look at you as if you were holding something they thought they'd lost.",
+   "choices": [
+    {
+     "label": "Bring them in.",
+     "prompt": {
+      "id": "orchestra-trills",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "The trills spin out, a thread of silver over everything. The grass itself seems to lean in to hear.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "orchestra-score",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-21-tutti"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The trills scatter. For a moment the meadow is nothing but wings and apologies. Then it finds itself again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-21-tutti"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-21-tutti",
+   "name": "The Orchestra: The Whole Meadow",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "kricketune",
+    "tint": "#7a5c8e",
+    "effect": "none"
+   },
+   "intro": "*Section 4 of 4.*\n\nAll forty. Every wing. You raise your hand and the whole meadow holds its breath, and in the long grass, someone else does too.",
+   "choices": [
+    {
+     "label": "Bring them in.",
+     "prompt": {
+      "id": "orchestra-tutti",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "All forty come in at once, and it is, for four beats, the loveliest thing you have ever heard.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "orchestra-score",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "orchestra-score",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-21-well"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "orchestra-score",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-21-bad"
+         }
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "All forty come in at once, and nearly together, and that will have to be enough.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "orchestra-score",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-21-well"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "orchestra-score",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-21-bad"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-21-well",
+   "name": "The Orchestra: The Last Movement",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "kricketune",
+    "tint": "#7a5c8e",
+    "effect": "none"
+   },
+   "intro": "*At the last movement, the old Kricketune walks out of the grass, slowly, on legs that have forgotten the way.*\n\n*It taps your knee, twice, the way you'd tap a student's shoulder when they've got it right. Then it takes the stump.*\n\n*The orchestra begins again, with the conductor back where it belongs. It plays like it has been waiting years to.*\n\n*The one from the back row hops onto your shoe, and stays.*",
+   "choices": [
+    {
+     "label": "Let the back-row one come.",
+     "success": {
+      "text": "It plays one soft, correct note, just for you. Then it settles against your ankle, and doesn't look back.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "kricketot"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "encore-performance"
+        ],
+        "asIs": true,
+        "mark": "back-row"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "orchestra-end",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "orchestra-heard"
+       },
+       {
+        "kind": "moment",
+        "text": "Conducted the meadow orchestra. Its old conductor took the stump back.",
+        "importance": 75
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-21-bad",
+   "name": "The Orchestra: Louder",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "kricketune",
+    "tint": "#7a5c8e",
+    "effect": "none"
+   },
+   "intro": "*The orchestra plays louder, to cover. Forty small wings, forty small hearts, and a great deal of sincerity.*\n\n*It is not good. It is, somehow, still wonderful.*\n\n*The one from the back row catches your eye, and winks. Then it hops down, as if that settles it.*",
+   "choices": [
+    {
+     "label": "Let the back-row one come.",
+     "success": {
+      "text": "It plays a wrong note, on purpose this time, and grins up at you. It is yours now, and it knows it.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "kricketot"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "encore-performance"
+        ],
+        "asIs": true,
+        "mark": "back-row"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "orchestra-end",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "orchestra-heard"
+       },
+       {
+        "kind": "moment",
+        "text": "Conducted a meadow orchestra badly, and loudly. Nobody minded.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-21-return",
+   "name": "The Orchestra: The Conductor",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "kricketune",
+    "tint": "#7a5c8e",
+    "effect": "none"
+   },
+   "intro": "*The old Kricketune doesn't turn. Its wings are worn thin, and its back is very straight.*\n\n*Your Pokégear has one recording on it that you never made: a meadow, at dusk, forty small voices, and one clear note leading all of them.*\n\n*You set the Pokégear down in the grass beside it, and press play.*",
+   "choices": [
+    {
+     "label": "Let it play.",
+     "success": {
+      "text": "It listens to the whole thing. Every note. When the last one fades it is quiet for a long time. Then it gets up.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "orchestra-end",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-21-bow"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-21-bow",
+   "name": "The Orchestra: The Bow",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "kricketune",
+    "tint": "#7a5c8e",
+    "effect": "none"
+   },
+   "intro": "*It walks to the stump, and stops. Then it turns, and bows to you.*\n\n*It bows to you before it bows to them.*\n\n*Forty Kricketot sit absolutely still, and the one from the back row is already coming through the grass toward you.*",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "You bow back. The conductor takes its stump. The back-row Kricketot climbs onto your shoe. Behind you the music begins, and it is perfect.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "kricketot"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "encore-performance"
+        ],
+        "asIs": true,
+        "mark": "back-row"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "orchestra-heard"
+       },
+       {
+        "kind": "moment",
+        "text": "Played a Kricketune its own old recording. It bowed to you first.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-21-night",
+   "name": "The Orchestra: At Night",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "orchestra-at"
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "orchestra-end",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "orchestra-heard"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "kricketune",
+    "tint": "#7a5c8e",
+    "effect": "none"
+   },
+   "intro": "*Night. Somewhere across the fields, faint, a long way off, forty small voices are tuning up.*\n\n*They find the first note together. They never miss it.*",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You stand a while and listen. The music is faint, and sure of itself, and for as long as it plays you are not the least bit alone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "orchestra-heard"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

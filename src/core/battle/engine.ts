@@ -2839,6 +2839,8 @@ function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
   if (c.side === 'player' && c.vol.movesUsed.length === 0 && ctx.battle.storyEffects.includes(`kind:${c.mon.uid}`)) return move.priority + 1;
   // Seen It (Greenneedle gn.45): once per battle, it goes first against a Pokémon that has only just come in.
   if (seenItFirst(ctx.battle, c.mon, move.effects.champMove, (c.side === 'player' ? ctx.battle.enemyVolatile : ctx.battle.playerVolatile).turnsOut)) return move.priority + 1;
+  // Encore Performance: the move it forces goes first.
+  if (c.vol.locked?.bonus && c.vol.locked.moveId === move.id) return move.priority + 1;
   // Samurai Slash: the first time it is used in a battle it strikes first (and flinches, see flinchFirstUse).
   if (move.effects.flinchFirstUse && !c.vol.movesUsed.includes(move.id)) return move.priority + 1;
   if (ability === 'gale-wings' && move.type === 'flying' && c.mon.hp >= calcStats(ctx.content, c.mon).hp) return move.priority + 1;
@@ -6732,6 +6734,13 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
   }
   if (fx.disrupt) {
     disrupt(ctx, user, target, fx.disrupt, events);
+    return;
+  }
+  // Encore Performance (Greenneedle gn.new.21): the user repeats its own last move next turn, with +1 priority. Fails twice in a row.
+  if (fx.encorePerformance) {
+    const before = user.vol.prevMove;
+    if (!before || before === move.id || user.vol.locked || user.vol.charging) events.push({ type: 'fail', side: user.side });
+    else user.vol.locked = { moveId: before, turns: 1, bonus: true };
     return;
   }
   if (fx.cure) {

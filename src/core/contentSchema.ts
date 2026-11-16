@@ -498,6 +498,8 @@ export const MoveSchema = z.object({
       firstTurnOnly: z.literal(true).optional(),
       /** The target flinches the first time the user uses this move in a stay on the field, whoever moves first (Samurai Slash). */
       flinchFirstUse: z.literal(true).optional(),
+      /** Encore Performance (Greenneedle gn.new.21): the user repeats its own last move next turn at +1 priority; fails used twice in a row. */
+      encorePerformance: z.literal(true).optional(),
       /** Goes through Protect (Feint, Phantom Force). */
       breaksProtect: z.literal(true).optional(),
       /** Breaks the target's Reflect, Light Screen and Aurora Veil before the hit (Bastion Fist). */
