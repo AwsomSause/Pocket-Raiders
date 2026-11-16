@@ -2341,6 +2341,26 @@
   ],
   "tags": []
  },
+ "gn-58-friend": {
+  "gn": "gn.58",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 13,
+  "window": [
+   11,
+   16
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "level": "A+0, wherever it is met",
+  "often": "region",
+  "badge": "own",
+  "note": "Badge: a pawprint. Two or more stages after a Pokémon was let go at the catch screen, in the same kind of place if the stage fits (any place after four stages). One friend an event; others follow if many were let go. Sets gn mark `came-back` on one that rejoins. Within one run.",
+  "kinds": [
+   "Reunion Episode"
+  ],
+  "tags": []
+ },
  "gn-26-door": {
   "gn": "gn.26",
   "shape": "Door",
